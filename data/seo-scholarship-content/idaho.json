@@ -1,0 +1,49 @@
+{
+  "seo_title": "Idaho Scholarships: Find Your Funding Opportunities",
+  "seo_description": "Explore 27 scholarships in Idaho with awards from $500 to $25,000. Check varying deadlines and requirements for each program.",
+  "intro": "If you're seeking financial support for your education in Idaho, you'll find a diverse range of 27 scholarships available. These opportunities cater to various fields, including education, STEM, and the arts, with award sizes ranging from approximately $500 to $25,000. Be mindful that deadlines vary, with some approaching quickly, so it's essential to check the specific dates for each scholarship you're interested in.",
+  "h1": "Explore 27 Scholarships Available in Idaho",
+  "supporting": "This list includes scholarships that may have different requirements, including some that require essays and others that do not. As you review the options, consider comparing the award amounts, eligibility criteria, and deadlines. This will help you identify the scholarships that best match your situation and goals, making your application process more efficient.",
+  "related_intro": "For more tailored options, check out related pages that focus on specific categories or requirements.",
+  "how_to_use": [
+    "Compare the deadlines for each scholarship",
+    "Scan the award amounts listed for potential funding",
+    "Read the requirements for each scholarship carefully",
+    "Visit the official pages for detailed information",
+    "Shortlist your top choices for application"
+  ],
+  "who_for": [
+    "Students pursuing education in Idaho",
+    "Applicants interested in STEM fields",
+    "Individuals seeking community-focused scholarships",
+    "Musicians and artists looking for funding",
+    "Students with disabilities seeking support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in Idaho?",
+      "answer": "The Idaho scholarship listings include a variety of categories such as community, education, miscellaneous, disability, STEM, and medicine. With 27 scholarships currently available, students can find opportunities that align with their specific fields of interest."
+    },
+    {
+      "question": "Are there any scholarship deadlines I should be aware of?",
+      "answer": "Yes, all 27 scholarships in this listing have deadlines, which vary by program. It's important to check the specific deadlines for each scholarship, as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "Do I need to write essays to apply for these scholarships?",
+      "answer": "Requirements for essays vary among the scholarships listed. While some scholarships may not require essays, others do, so it's essential to review the details of each scholarship to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for Idaho scholarships?",
+      "answer": "Award sizes for the scholarships available in Idaho can vary significantly, with amounts typically ranging from around $500 to $25,000. Be sure to check the specific award amounts for each scholarship as you explore your options."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "idaho",
+    "generatedAt": "2026-04-02T10:48:23.016Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 27,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

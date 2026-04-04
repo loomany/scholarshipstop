@@ -1,0 +1,47 @@
+{
+  "seo_title": "California Scholarships for First-Generation Students",
+  "seo_description": "Explore 5 scholarships for first-generation students in California. Award sizes vary; check deadlines and requirements for each listing.",
+  "intro": "For first-generation college students in California, there are 5 available scholarships that can provide valuable financial support. Award sizes typically range from $1,500 to $5,000, making them a significant resource for your educational journey. As deadlines vary across listings, it's important to check each opportunity promptly to ensure you don’t miss out on funding that could help you succeed in your academic pursuits.",
+  "h1": "First-Generation Scholarships in California",
+  "supporting": "This selection of scholarships includes opportunities across various categories such as community, education, and the arts. Many of these listings have lighter requirements, with several not requiring essays, which may simplify your application process. Take the time to compare the award amounts and deadlines to find the best fit for your needs.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that focus on scholarships for first-generation students or those available in specific California regions.",
+  "how_to_use": [
+    "Review each listing for specific award amounts and categories",
+    "Check deadlines closely, especially for upcoming opportunities",
+    "Look for scholarships that may not require essays",
+    "Shortlist your top choices based on eligibility and funding needs",
+    "Visit the official sponsor pages for the most accurate application details"
+  ],
+  "who_for": [
+    "First-generation college students in California",
+    "Students pursuing education in community or arts fields",
+    "Applicants looking for scholarships with minimal requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for first-generation students in California?",
+      "answer": "This filter currently lists 5 scholarships specifically for first-generation students in California, covering various categories such as community, education, and arts. Each scholarship may have different focuses and eligibility criteria, so it's essential to review each listing for specific details."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The scholarships in this selection generally offer awards ranging from approximately $1,500 to $5,000. However, each scholarship may have its own specific amount, so be sure to check the details for each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's important to verify each individual listing for specific requirements. While many scholarships in this category have lighter application processes, checking the details will ensure you meet all necessary criteria."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 5 scholarships in this filter have deadlines, but they vary from one listing to another. It's advisable to check the specific deadline for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "first-generation/california",
+    "generatedAt": "2026-04-02T10:50:46.943Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

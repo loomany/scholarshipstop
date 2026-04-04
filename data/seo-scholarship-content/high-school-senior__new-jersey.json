@@ -1,0 +1,49 @@
+{
+  "seo_title": "New Jersey Scholarships for High School Seniors",
+  "seo_description": "Explore 17 scholarships for New Jersey high school seniors, with awards ranging from $500 to $5,000. Check deadlines and requirements.",
+  "intro": "Navigating the scholarship landscape as a high school senior in New Jersey can be crucial for funding your education. With 17 available opportunities, you'll find a range of awards that can help alleviate the financial burden of college. Award sizes generally vary from around $500 to $5,000, and while many listings do not require essays, it's important to check each one for specific requirements and deadlines, which can differ significantly.",
+  "h1": "Scholarships for New Jersey High School Seniors",
+  "supporting": "This selection of scholarships covers diverse categories, including arts, education, and community service, allowing you to find options that align with your interests and achievements. Be sure to compare the award amounts and deadlines to identify which scholarships best fit your situation. Many listings may have lighter requirements, making them accessible to a broader range of applicants.",
+  "related_intro": "If you're interested in exploring more options, check out related pages for scholarships tailored to different education levels or specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find the best fit for your needs",
+    "Read requirement lines carefully to ensure eligibility",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals and verify details on sponsor sites"
+  ],
+  "who_for": [
+    "High school seniors in New Jersey",
+    "Students pursuing arts or community service",
+    "Applicants looking for scholarships with no essay requirement",
+    "Individuals interested in education or medical fields",
+    "Students with disabilities seeking financial support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in New Jersey?",
+      "answer": "There are 17 scholarships listed for high school seniors in New Jersey, covering a range of categories including Medicine, Education, Disability, Community, and Arts. This variety allows students to find opportunities that align with their interests and career goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require essays, though it's important to verify each individual listing for specific requirements. Many programs tend to have lighter application processes, making them accessible for students."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 17 scholarships listed have deadlines, but they vary from one program to another. It's advisable to check the details for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available to high school seniors in New Jersey generally range from approximately $500 to $5,000. Each listing will provide specific amounts, so be sure to review them for detailed information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/new-jersey",
+    "generatedAt": "2026-04-02T10:52:15.599Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 17,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

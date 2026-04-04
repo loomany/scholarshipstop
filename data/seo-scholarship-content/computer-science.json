@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Computer Science Scholarships in the USA",
+  "seo_description": "Explore 44 computer science scholarships with varying awards and deadlines. Check details to secure funding for your studies.",
+  "intro": "Finding financial support for your computer science education can be challenging, but there are 44 scholarships available that cater specifically to this field. Award sizes vary significantly, ranging from approximately $500 to $40,000, allowing you to explore options that best fit your needs. Be mindful that deadlines and requirements differ across listings, so it's essential to check each opportunity closely.",
+  "h1": "Computer Science Scholarships Available Now",
+  "supporting": "This collection of scholarships is particularly valuable for those pursuing studies in computer science, as it includes a mix of awards with varying levels of requirements. Some scholarships may ask for essays, while many do not, making it easier to find opportunities that suit your application style. Take the time to compare award amounts and deadlines to identify the best matches for your educational goals.",
+  "related_intro": "If you're interested in exploring other funding options, check out our pages on scholarships related to STEM, education, and technology.",
+  "how_to_use": [
+    "Compare deadlines to prioritize your applications",
+    "Scan award amounts to find the best fit for your financial needs",
+    "Read the requirements for each scholarship carefully",
+    "Open official pages for detailed information and updates",
+    "Shortlist your top choices for easier tracking"
+  ],
+  "who_for": [
+    "Undergraduate students in computer science",
+    "Graduate students pursuing advanced degrees in technology",
+    "Students seeking funding with minimal application requirements",
+    "Women and minorities in STEM fields",
+    "Applicants looking for scholarships with upcoming deadlines"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Computer Science students?",
+      "answer": "The current listing includes 44 scholarships tailored for Computer Science students, with a variety of categories such as STEM, Arts, Education, Disability, and Medicine. Award sizes vary significantly, with amounts ranging from approximately $500 to $40,000 USD."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements differ across the listings; while most scholarships do not require essays, there are some that do. It's important to review each scholarship's details to understand the specific requirements."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 44 scholarships listed have deadlines, but they vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    },
+    {
+      "question": "How do I verify the details of a specific scholarship?",
+      "answer": "To verify details such as award amounts, deadlines, and requirements, click on the individual scholarship listings. Each entry provides comprehensive information to help you assess eligibility and application processes."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "computer-science",
+    "generatedAt": "2026-04-02T10:33:24.842Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 44,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

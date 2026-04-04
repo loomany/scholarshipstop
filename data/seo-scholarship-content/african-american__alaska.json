@@ -1,0 +1,49 @@
+{
+  "seo_title": "Alaska Scholarships for African American Students",
+  "seo_description": "Explore 9 scholarships for African American students in Alaska. Award sizes vary; check deadlines and requirements for each.",
+  "intro": "Finding financial support tailored for African American students in Alaska can be challenging, but there are currently 9 scholarships available that cater specifically to this demographic. Award sizes vary, with amounts ranging from approximately $500 to $10,000. Each scholarship has unique eligibility requirements and deadlines, so it’s important to review the details carefully to identify the best fit for your needs.",
+  "h1": "Scholarships for African American Students in Alaska",
+  "supporting": "As you explore this list, take note of the diverse categories these scholarships cover, including education, community, and arts. Some scholarships may require essays, while others have lighter requirements, making it easier to apply. With deadlines approaching in the near future, be sure to check each listing for specific dates and details to maximize your chances of securing funding.",
+  "related_intro": "For additional opportunities, consider checking out related scholarships that focus on different demographics or locations, which may also align with your educational goals.",
+  "how_to_use": [
+    "Review each scholarship's award amount and category",
+    "Check deadlines and prioritize those coming up soon",
+    "Compare essay requirements to identify less intensive options",
+    "Open official scholarship pages for the most accurate information",
+    "Shortlist scholarships that align with your profile and goals"
+  ],
+  "who_for": [
+    "African American students in Alaska",
+    "Students pursuing education-related fields",
+    "Applicants interested in community service scholarships",
+    "Individuals seeking arts funding",
+    "High school seniors and college undergraduates"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for African American students in Alaska?",
+      "answer": "There are currently 9 scholarships listed that cater to African American students in Alaska, covering various categories such as education, community, and arts. Each scholarship may have different focuses and eligibility criteria, so it's important to review the details for each one."
+    },
+    {
+      "question": "Do these scholarships require essays?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, and a few have lighter application requirements. Be sure to check the specific details of each scholarship for accurate information."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category vary significantly, with amounts ranging approximately from $500 to $10,000. Each scholarship will specify its own award amount, so reviewing individual listings is essential."
+    },
+    {
+      "question": "Are there upcoming deadlines for these scholarships?",
+      "answer": "Yes, all 9 scholarships listed have deadlines, which vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "african-american/alaska",
+    "generatedAt": "2026-04-02T11:02:09.666Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

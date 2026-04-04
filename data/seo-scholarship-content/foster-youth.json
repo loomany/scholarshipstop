@@ -1,0 +1,49 @@
+{
+  "seo_title": "Foster Youth Scholarships | Find Your Funding",
+  "seo_description": "Explore 13 scholarships for foster youth with awards up to $10,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Foster youth face unique challenges when pursuing higher education, and scholarships can provide crucial financial support. This filter showcases 13 scholarship opportunities specifically designed for foster youth, with award sizes varying significantly. Many of these listings have no essay requirements, making them more accessible for applicants. Be sure to check individual deadlines, as they can differ widely among programs.",
+  "h1": "Scholarships for Foster Youth: 13 Opportunities",
+  "supporting": "When reviewing the scholarship listings, pay attention to the award amounts and specific eligibility criteria. Some programs may have lighter requirements, which could simplify the application process. It's essential to compare deadlines and verify details on the official sponsor websites to ensure you have the most accurate information before applying.",
+  "related_intro": "If you're interested in exploring more options, consider checking out related pages that focus on scholarships for specific education levels or categories.",
+  "how_to_use": [
+    "Sort listings by award amount or deadline",
+    "Read each requirement line carefully",
+    "Open the official pages for more details",
+    "Shortlist scholarships that match your profile",
+    "Verify deadlines and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "Foster youth seeking financial assistance",
+    "Students pursuing higher education opportunities",
+    "Individuals with a background in foster care",
+    "Young adults transitioning to independent living",
+    "Applicants looking for no-essay scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for foster youth?",
+      "answer": "The current catalog features 13 scholarships specifically for foster youth, covering various categories such as education, miscellaneous, and STEM. Award sizes vary, with amounts ranging from approximately $500 to $10,000."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially lighter for applicants. However, it's essential to check each individual listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 13 scholarships have deadlines, but they differ from one listing to another. Some deadlines are approaching within the next 45 days, so it's advisable to review the details promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "Who is eligible to apply for these scholarships?",
+      "answer": "These scholarships are specifically tailored for foster youth. To determine your eligibility and find the best fit, review the individual scholarship listings for any specific criteria or requirements."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "foster-youth",
+    "generatedAt": "2026-04-02T11:06:11.806Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 13,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

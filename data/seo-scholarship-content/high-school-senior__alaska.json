@@ -1,0 +1,49 @@
+{
+  "seo_title": "Alaska Scholarships for High School Seniors",
+  "seo_description": "Explore 14 scholarships for Alaska high school seniors. Award sizes vary, and deadlines differ—check listings for details.",
+  "intro": "Navigating the scholarship landscape as a high school senior in Alaska can be pivotal for your educational journey. With 14 available scholarships tailored to your needs, this selection offers a range of award sizes, typically between $500 and $4,000. Each listing comes with its own unique requirements and deadlines, so it’s essential to explore these options carefully and promptly, especially since some deadlines are approaching soon.",
+  "h1": "Scholarships for High School Seniors in Alaska",
+  "supporting": "When reviewing this list, pay attention to the variety of categories such as STEM, education, and community-focused scholarships. Many of these opportunities do not require essays, making them more accessible. Compare the award amounts and deadlines to find the best fit for your goals and ensure you meet all specific requirements outlined in each listing.",
+  "related_intro": "If you're interested in exploring more specific scholarship opportunities, consider checking related categories or different education levels tailored to your situation.",
+  "how_to_use": [
+    "Review the list for relevant scholarships based on your profile",
+    "Compare deadlines to prioritize your applications",
+    "Examine award amounts to gauge potential financial support",
+    "Read the requirements for each scholarship closely",
+    "Visit the official pages for detailed application instructions"
+  ],
+  "who_for": [
+    "High school seniors in Alaska",
+    "Students interested in STEM fields",
+    "Applicants seeking community-based scholarships",
+    "Individuals looking for education-focused funding",
+    "Students with disabilities seeking financial support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Alaska?",
+      "answer": "There are 14 scholarships listed for high school seniors in Alaska, covering various categories such as Community, Education, Disability, STEM, and Miscellaneous. This variety allows students to find opportunities that align with their interests and backgrounds."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, making the application process potentially simpler for many students. However, it's important to verify the specific requirements for each scholarship, as details can vary."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 14 scholarships have specific deadlines, which vary from one listing to another. It's advisable to check the individual listings promptly to ensure you don't miss any application dates, especially since some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The scholarships available for high school seniors in Alaska have award amounts ranging from approximately $500 to $4,000. Since each scholarship may have different funding levels, reviewing the details of each listing will provide the most accurate information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/alaska",
+    "generatedAt": "2026-04-02T10:57:53.153Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 14,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

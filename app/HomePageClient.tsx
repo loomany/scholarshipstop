@@ -1,0 +1,391 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import {
+  BookOpen,
+  Check,
+  Clock,
+  Heart,
+  Layers,
+  LayoutGrid,
+  Sparkles,
+  Timer,
+  TrendingUp,
+  Zap
+} from 'lucide-react';
+
+import ScholarshipPreviewList from '@/components/scholarships/ScholarshipPreviewList';
+
+/** Primary CTA — black solid, used for secondary sections */
+const primaryCtaClass =
+  'inline-flex w-full max-w-lg cursor-pointer items-center justify-center rounded-2xl bg-black px-8 py-4 text-center text-lg font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.45)] transition duration-200 ease-out hover:scale-[1.02] hover:bg-zinc-900 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.45)] active:scale-[0.99] sm:py-[1.125rem] sm:text-xl';
+
+/** Hero focal CTA — stronger depth for conversion */
+const heroPrimaryCtaClass =
+  'inline-flex w-full cursor-pointer items-center justify-center rounded-2xl bg-black px-8 py-4 text-center text-lg font-semibold text-white shadow-[0_10px_36px_-10px_rgba(0,0,0,0.55)] transition duration-200 ease-out hover:scale-[1.03] hover:bg-zinc-900 hover:shadow-[0_18px_48px_-12px_rgba(0,0,0,0.48)] active:scale-[0.99] sm:py-[1.25rem] sm:text-xl';
+
+const container = 'mx-auto w-full max-w-7xl';
+
+const h2Section =
+  'text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.35rem] lg:leading-[1.15] xl:text-[2.5rem]';
+
+/** Benefit cards block — slightly tighter line-height for the long headline */
+const h2EasyApplySection =
+  'text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.35rem] xl:text-[2.5rem] leading-[1.12] sm:leading-[1.1] lg:leading-[1.12] xl:leading-[1.11]';
+
+const ledeMuted =
+  'text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed';
+
+export type HomePageClientProps = {
+  /** From server: guest → /onboarding?step=3, authed → /scholarships */
+  primaryCtaHref: string;
+};
+
+export default function HomePageClient({
+  primaryCtaHref
+}: HomePageClientProps) {
+  const painSectionRef = useRef<HTMLDivElement>(null);
+  const [painSectionVisible, setPainSectionVisible] = useState(false);
+  const worksSectionRef = useRef<HTMLDivElement>(null);
+  const [worksSectionVisible, setWorksSectionVisible] = useState(false);
+
+  useEffect(() => {
+    const el = painSectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setPainSectionVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = worksSectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setWorksSectionVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -48px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const listIconClass = 'mt-1 h-6 w-6 shrink-0 text-gray-500';
+
+  return (
+    <div className="bg-white text-gray-900 antialiased">
+      {/* 1. Hero */}
+      <section className="border-b border-gray-100 bg-white px-4 pt-10 pb-6 sm:px-6 sm:pt-12 sm:pb-7 lg:pt-14 lg:pb-8 xl:pb-8">
+        <div className={`${container} max-w-4xl text-center`}>
+          <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 animate-home-fade-up sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
+            Find scholarships that actually fit you
+          </h1>
+          <p
+            className={`mx-auto mt-5 max-w-2xl opacity-0 animate-home-fade-up-delay-1 sm:mt-6 ${ledeMuted}`}
+          >
+            Stop wasting time on irrelevant opportunities. Discover scholarships
+            tailored to your profile and apply smarter.
+          </p>
+          <div className="mt-4 flex justify-center opacity-0 animate-home-fade-up-delay-1 sm:mt-5">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-800">
+              <Check
+                className="h-4 w-4 shrink-0 text-emerald-600 sm:h-[1.125rem] sm:w-[1.125rem]"
+                strokeWidth={2.5}
+                aria-hidden
+              />
+              <span>Verified scholarships • Updated regularly</span>
+            </div>
+          </div>
+
+          <div className="mx-auto mt-8 w-full max-w-md opacity-0 animate-home-fade-up-delay-2 sm:mt-9">
+            <div className="rounded-2xl border border-gray-200 bg-white px-6 py-6 text-center shadow-[0_12px_40px_-16px_rgba(15,23,42,0.14)] ring-1 ring-gray-100 sm:px-8 sm:py-7">
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-gray-400">
+                Quick start
+              </p>
+              <Link
+                id="onboarding-cta"
+                href={primaryCtaHref}
+                className={`${heroPrimaryCtaClass} mt-5`}
+              >
+                Find my matches →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Value strip */}
+      <section className="border-y border-gray-200/90 bg-gray-50 px-4 pb-3 pt-2 sm:px-6 sm:pb-4 sm:pt-3 lg:pb-4 lg:pt-3">
+        <div className={container}>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 sm:gap-x-8 sm:gap-y-7 lg:gap-x-12">
+            {[
+              { icon: LayoutGrid, label: 'Thousands of scholarships' },
+              { icon: Clock, label: 'Updated frequently' },
+              { icon: Sparkles, label: 'Personalized matches' },
+              { icon: Zap, label: 'Easy application process' }
+            ].map(({ icon: Icon, label }) => (
+              <div
+                key={label}
+                className="flex flex-col items-center gap-2.5 text-center sm:items-start sm:gap-2.5 sm:text-left"
+              >
+                <span
+                  className="flex h-9 w-9 shrink-0 items-center justify-center text-gray-900"
+                  aria-hidden
+                >
+                  <Icon
+                    className="h-7 w-7"
+                    strokeWidth={1.75}
+                    aria-hidden
+                  />
+                </span>
+                <p className="text-[0.9375rem] font-medium leading-snug text-pretty text-gray-900 sm:text-base sm:leading-[1.4]">
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Problem */}
+      <section
+        ref={painSectionRef}
+        className={`border-b border-gray-100 bg-white px-4 pt-10 pb-12 sm:px-6 sm:pt-11 sm:pb-14 lg:pt-12 lg:pb-16 xl:pt-14 xl:pb-20`}
+      >
+        <div
+          className={`${container} flex flex-col items-stretch gap-12 lg:flex-row lg:items-center lg:gap-16 xl:gap-24 ${
+            painSectionVisible ? 'animate-pain-fade-up' : 'opacity-0'
+          }`}
+        >
+          <div className="min-w-0 flex-1 text-left lg:max-w-2xl">
+            <h2 className={h2Section}>
+              Finding the right scholarships shouldn&apos;t feel overwhelming
+            </h2>
+            <div
+              className={`mt-7 space-y-4 text-lg leading-relaxed text-gray-600 sm:mt-8 sm:text-xl sm:leading-relaxed`}
+            >
+              <p>Thousands of listings — most won&apos;t match your profile.</p>
+              <p>
+                Hours go into searching and filtering; strong fits still get
+                missed.
+              </p>
+              <p>Deadlines slip. Good options disappear.</p>
+            </div>
+            <p className="mt-9 text-2xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-3xl">
+              We make it simple.
+            </p>
+            <Link
+              href={primaryCtaHref}
+              className={`${primaryCtaClass} mt-9 w-full max-w-none sm:mt-10 sm:w-auto sm:max-w-lg`}
+            >
+              Get my matches →
+            </Link>
+          </div>
+          <figure className="mx-auto w-full max-w-xl shrink-0 lg:mx-0 lg:max-w-[min(600px,50%)]">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-[0_28px_64px_-28px_rgba(15,23,42,0.3)] ring-1 ring-gray-200/80">
+              <Image
+                src="/hero-college-pain-solution.png"
+                alt="Student organizing scholarship search with a clearer path forward"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) min(100vw,640px), min(600px,50vw)"
+              />
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      {/* 4. Product demo */}
+      <section
+        ref={worksSectionRef}
+        className={`border-b border-gray-100 bg-gray-50 px-4 pt-10 pb-12 sm:px-6 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20`}
+      >
+        <div className={container}>
+          <div className="grid grid-cols-1 items-stretch gap-12 lg:grid-cols-2 lg:gap-20 xl:gap-24">
+            <div
+              className={`order-2 flex min-h-0 min-w-0 lg:order-1 ${
+                worksSectionVisible ? 'animate-works-mockup-in' : 'opacity-0'
+              }`}
+            >
+              <ScholarshipPreviewList />
+            </div>
+            <div
+              className={`order-1 flex min-h-0 min-w-0 flex-col lg:order-2 ${
+                worksSectionVisible ? 'animate-works-title-in' : 'opacity-0'
+              }`}
+            >
+              <h2 className={h2Section}>Everything in one place</h2>
+              <ul className="mt-8 space-y-5 text-lg text-gray-600 sm:mt-9 sm:space-y-6 sm:text-xl">
+                <li className="flex gap-4">
+                  <Check
+                    className={`${listIconClass} text-emerald-600`}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                  <span className="leading-snug">
+                    See scholarships that match your profile
+                  </span>
+                </li>
+                <li className="flex gap-4">
+                  <Heart
+                    className={`${listIconClass} text-emerald-600`}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                  <span className="leading-snug">Save the ones you like</span>
+                </li>
+                <li className="flex gap-4">
+                  <Layers className={listIconClass} strokeWidth={2} aria-hidden />
+                  <span className="leading-snug">
+                    Ignore what doesn&apos;t fit
+                  </span>
+                </li>
+                <li className="flex gap-4">
+                  <BookOpen
+                    className={`${listIconClass} text-orange-500`}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                  <span className="leading-snug">
+                    Stay focused on what matters
+                  </span>
+                </li>
+              </ul>
+              <div className="mt-12 sm:mt-14">
+                <Link
+                  href={primaryCtaHref}
+                  className={`${primaryCtaClass} w-full max-w-none sm:w-auto sm:max-w-lg`}
+                >
+                  Get started →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Easy apply */}
+      <section className={`border-b border-gray-100 bg-white px-4 pt-10 pb-12 sm:px-6 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20`}>
+        <div className={`${container} max-w-5xl text-center`}>
+          <h2
+            className={`mx-auto max-w-[36rem] text-pretty sm:max-w-[40rem] lg:max-w-[42rem] ${h2EasyApplySection}`}
+          >
+            Focus on scholarships you can actually apply to
+          </h2>
+          <div className="mx-auto mt-7 grid max-w-lg gap-6 sm:mt-8 sm:max-w-none sm:grid-cols-3 sm:gap-6 lg:mt-10 lg:gap-7">
+            {[
+              {
+                icon: Zap,
+                title: 'Easy applications',
+                body: 'Skip listings that are unlikely to work for you.'
+              },
+              {
+                icon: Timer,
+                title: 'Save time',
+                body: 'Spend less time filtering and more time applying.'
+              },
+              {
+                icon: TrendingUp,
+                title: 'Better-fit scholarships',
+                body: 'Focus on scholarships you can actually pursue.'
+              }
+            ].map((card) => (
+              <div
+                key={card.title}
+                className="group flex min-h-[200px] flex-col rounded-2xl border border-gray-200 bg-white p-7 text-left shadow-[0_4px_20px_-10px_rgba(15,23,42,0.07)] transition duration-200 hover:border-gray-300 hover:shadow-[0_10px_32px_-18px_rgba(15,23,42,0.11)] sm:min-h-[210px] sm:p-8"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-50 text-gray-900 ring-1 ring-gray-100 transition group-hover:bg-gray-100/90">
+                  <card.icon className="h-7 w-7" strokeWidth={2} aria-hidden />
+                </div>
+                <h3 className="mt-5 text-lg font-semibold leading-snug tracking-tight text-gray-900 sm:text-[1.125rem]">
+                  {card.title}
+                </h3>
+                <p className="mt-2.5 flex-1 text-left text-[0.9375rem] leading-relaxed text-pretty text-gray-600 sm:text-base sm:leading-relaxed">
+                  {card.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. How it works */}
+      <section className={`border-b border-gray-100 bg-gray-50 px-4 pt-10 pb-12 sm:px-6 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20`}>
+        <div className={`${container} max-w-5xl`}>
+          <h2 className={`text-center text-pretty ${h2Section}`}>How it works</h2>
+          <div className="mx-auto mt-7 grid max-w-lg gap-6 sm:mt-8 sm:max-w-none sm:grid-cols-3 sm:gap-6 lg:mt-10 lg:gap-7">
+            {[
+              {
+                step: '1',
+                title: 'Create your profile',
+                text: 'Share your background and goals.'
+              },
+              {
+                step: '2',
+                title: 'Get matched',
+                text: 'See scholarships that fit your profile.'
+              },
+              {
+                step: '3',
+                title: 'Track & apply',
+                text: 'Save favorites and stay ahead of deadlines.'
+              }
+            ].map((item) => (
+              <div
+                key={item.step}
+                className="rounded-2xl border border-gray-200 bg-white p-7 text-center shadow-[0_4px_20px_-10px_rgba(15,23,42,0.07)] transition hover:border-gray-300 hover:shadow-[0_10px_32px_-18px_rgba(15,23,42,0.09)] sm:p-8 sm:text-left"
+              >
+                <div
+                  className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border-2 border-gray-900 bg-white text-sm font-semibold tabular-nums leading-none text-gray-900 sm:mx-0"
+                  aria-hidden
+                >
+                  {item.step}
+                </div>
+                <h3 className="mt-5 text-lg font-semibold leading-snug text-pretty text-gray-900 sm:text-[1.125rem]">
+                  {item.title}
+                </h3>
+                <p className="mt-2.5 text-[0.9375rem] leading-relaxed text-pretty text-gray-600 sm:text-base sm:leading-relaxed">
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Final CTA */}
+      <section className="border-b border-gray-100 bg-white px-4 pt-8 pb-10 sm:px-6 sm:pt-9 sm:pb-11 lg:pt-10 lg:pb-12">
+        <div className={`${container} max-w-3xl text-center`}>
+          <h2 className="text-pretty text-[1.85rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl sm:leading-[1.06] lg:text-[2.65rem] lg:leading-[1.05] xl:text-[2.8rem]">
+            Find scholarships that fit you — faster
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg font-medium leading-snug text-gray-700 sm:mt-5 sm:text-xl sm:leading-snug">
+            Stop searching blindly. Start focusing on what matters.
+          </p>
+          <Link
+            href={primaryCtaHref}
+            className="mx-auto mt-9 inline-flex w-full max-w-md cursor-pointer items-center justify-center rounded-2xl bg-black px-8 py-[1.0625rem] text-center text-xl font-semibold text-white shadow-[0_6px_24px_-6px_rgba(0,0,0,0.22)] transition duration-200 ease-out hover:scale-[1.02] hover:bg-zinc-900 hover:shadow-[0_10px_30px_-8px_rgba(0,0,0,0.28)] active:scale-[0.99] sm:mt-10 sm:max-w-lg sm:px-9 sm:py-5 sm:text-2xl"
+          >
+            Find my matches →
+          </Link>
+          <p className="mx-auto mt-3.5 max-w-md text-base font-medium leading-snug text-gray-600 sm:mt-4">
+            Takes less than a minute
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}

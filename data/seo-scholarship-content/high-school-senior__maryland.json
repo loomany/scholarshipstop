@@ -1,0 +1,47 @@
+{
+  "seo_title": "Maryland Scholarships for High School Seniors",
+  "seo_description": "Explore 12 scholarships for Maryland high school seniors. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "Finding scholarships that cater specifically to high school seniors in Maryland can significantly ease the financial burden of higher education. This selection includes 12 opportunities, with award sizes generally ranging from $1,000 to $5,000. Each scholarship has its own unique requirements and deadlines, so it's essential to review the details closely to identify the best fits for your situation.",
+  "h1": "Scholarships for High School Seniors in Maryland",
+  "supporting": "As you explore this list, take note of the varying requirements, including some that may not require essays, which could simplify your application process. Be sure to compare the deadlines, as they differ across listings, with some approaching in the next few weeks. This targeted collection is a valuable resource for Maryland students seeking financial support for their educational journeys.",
+  "related_intro": "For additional options, consider looking into scholarships based on different criteria or other states that might align with your educational goals.",
+  "how_to_use": [
+    "Review each listing for specific award amounts and eligibility criteria",
+    "Compare deadlines to prioritize your applications",
+    "Check if an essay is required for each scholarship",
+    "Shortlist scholarships that match your profile",
+    "Visit the official sponsor pages for the most accurate information"
+  ],
+  "who_for": [
+    "High school seniors in Maryland",
+    "Students interested in community or STEM scholarships",
+    "Applicants seeking awards with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Maryland?",
+      "answer": "The current listings include a variety of scholarships categorized under education, community, STEM, and disability. With 12 scholarships available, students can find options that align with their interests and needs."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, the majority do not, so it's important to check the specific details for each scholarship."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships range approximately from $1,000 to $5,000. Be sure to review each listing for the exact amount offered."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All scholarships in this list have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/maryland",
+    "generatedAt": "2026-04-02T11:01:05.240Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

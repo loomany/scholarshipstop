@@ -1,0 +1,49 @@
+{
+  "seo_title": "Tennessee Graduate Scholarships for 2026",
+  "seo_description": "Explore 4 graduate scholarships in Tennessee with varying awards. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for graduate studies in Tennessee can be challenging, but there are currently 4 scholarships available that may help ease the burden. These opportunities cater to various fields, including STEM and community-focused initiatives, and offer a range of award sizes. As deadlines vary, it's important to check the specific dates for each scholarship to ensure you don't miss out.",
+  "h1": "Graduate Scholarships Available in Tennessee",
+  "supporting": "When reviewing the listings, pay attention to the award amounts and any specific requirements noted for each scholarship. Many of these opportunities do not require essays, making them more accessible. Comparing deadlines and eligibility criteria will help you prioritize which scholarships to apply for, so be sure to verify details on the official sponsor sites.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that feature scholarships for graduate students in other states or specific fields.",
+  "how_to_use": [
+    "Sort listings by award amount",
+    "Read the requirement lines carefully",
+    "Open official pages for more details",
+    "Shortlist scholarships that fit your profile",
+    "Verify deadlines on sponsor websites"
+  ],
+  "who_for": [
+    "Graduate students in Tennessee",
+    "STEM-focused graduate applicants",
+    "Community service-oriented students",
+    "Students with disabilities seeking funding",
+    "Applicants looking for lighter requirement scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Tennessee?",
+      "answer": "Currently, there are 4 scholarships listed for graduate students in Tennessee, covering categories such as STEM, disability, and community support. Each scholarship may have different eligibility requirements and focuses, so reviewing the details of each listing is essential."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 4 scholarships have specific deadlines, which vary from listing to listing. It's important to check the individual scholarship details promptly, as at least one listing has a deadline within the next 45 days."
+    },
+    {
+      "question": "Are essays required for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, but it's advisable to verify each individual listing for specific requirements. While many may have lighter application processes, confirming the details will ensure you meet all necessary criteria."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category generally range from approximately $2,200 to $3,500. However, since each scholarship may differ, it's best to check the specific amounts listed for each opportunity."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/tennessee",
+    "generatedAt": "2026-04-02T11:10:57.635Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

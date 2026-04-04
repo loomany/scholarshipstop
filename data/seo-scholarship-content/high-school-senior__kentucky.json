@@ -1,0 +1,49 @@
+{
+  "seo_title": "Kentucky Scholarships for High School Seniors",
+  "seo_description": "Explore 9 scholarships for Kentucky high school seniors with awards from $1,000 to $4,000. Check deadlines and requirements.",
+  "intro": "Finding financial support as a high school senior in Kentucky can be pivotal for your educational journey. This selection features 9 scholarships specifically for students in your state, with award amounts typically ranging from $1,000 to $4,000. While many of these opportunities do not require essays, it's essential to review each listing closely, as deadlines and requirements vary. Some deadlines are approaching soon, so timely action is crucial.",
+  "h1": "Scholarships for High School Seniors in Kentucky",
+  "supporting": "As you explore this list, consider comparing the award sizes and categories, which include community, education, and STEM-focused scholarships. Pay attention to the specific eligibility criteria and deadlines for each scholarship, as they can differ significantly. Shortlisting your top choices will help streamline your application process, ensuring you don't miss out on potential funding.",
+  "related_intro": "For more options, check out scholarships tailored to different education levels or categories that might fit your profile.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify the best financial fit",
+    "Read requirement lines carefully for eligibility details",
+    "Open official pages for each scholarship to verify information",
+    "Shortlist your favorite scholarships for easier tracking"
+  ],
+  "who_for": [
+    "High school seniors in Kentucky",
+    "Students interested in community service scholarships",
+    "Applicants seeking STEM-related funding",
+    "Individuals looking for lighter application requirements",
+    "Those aiming for awards without essay submissions"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Kentucky?",
+      "answer": "There are currently 9 scholarships listed for high school seniors in Kentucky, covering various categories such as community, education, miscellaneous, and STEM. Each scholarship may have different eligibility criteria and focus areas, so it's beneficial to review each listing for specifics."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary, with amounts typically ranging from approximately $1,000 to $4,000. Be sure to check individual listings for exact amounts and details."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's important to verify each listing as requirements can differ. Many programs may have lighter application processes, making them more accessible."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 9 scholarships have deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/kentucky",
+    "generatedAt": "2026-04-02T11:03:17.069Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

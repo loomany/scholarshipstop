@@ -1,0 +1,47 @@
+{
+  "seo_title": "Find Nationwide Engineering Scholarships",
+  "seo_description": "Explore 62 engineering scholarships with awards from $500 to $10,000. Check varied deadlines and requirements.",
+  "intro": "Finding financial support for your engineering studies can be daunting, but there are 62 scholarships available nationwide to help ease the burden. These awards range broadly, with amounts typically between $500 and $10,000, catering to a variety of engineering disciplines. Keep in mind that requirements and deadlines vary, so it's essential to review each listing carefully to identify the best fit for your situation.",
+  "h1": "62 Nationwide Engineering Scholarships Available",
+  "supporting": "This collection of scholarships is particularly valuable for engineering students, as it encompasses a wide array of opportunities with differing requirements. Some awards may require essays, while others have lighter application processes. With deadlines approaching for many listings, taking the time to compare award sizes and eligibility criteria can help you prioritize your applications effectively.",
+  "related_intro": "If you're interested in exploring more options, consider checking out related pages that focus on specific engineering fields or scholarship types.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize applications",
+    "Scan award amounts to find opportunities that meet your financial needs",
+    "Read the requirements for each listing to ensure eligibility",
+    "Open official pages for detailed information and updates",
+    "Shortlist scholarships that align with your academic and career goals"
+  ],
+  "who_for": [
+    "Engineering students seeking financial assistance",
+    "Applicants interested in STEM-related funding",
+    "Students looking for scholarships with varying application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in the Engineering category?",
+      "answer": "The Engineering scholarships listed here cover a range of topics, primarily within STEM, but also include opportunities related to Education and Law. With 62 scholarships currently available, you can find options that align with various engineering disciplines."
+    },
+    {
+      "question": "How can I determine the deadlines for these scholarships?",
+      "answer": "All 62 scholarships have specific deadlines, which vary from one listing to another. It's advisable to check each scholarship's details promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements differ among the scholarships, with some requiring essays and others not. Out of the 62 listings, approximately 11 have an essay requirement, so be sure to review the specifics for each scholarship you're interested in."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts generally ranging from around $500 to $10,000. Each listing will provide the exact award amount, so check the details for the scholarships you are considering."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/nationwide",
+    "generatedAt": "2026-04-02T10:33:38.652Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 62,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

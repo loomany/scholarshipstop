@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 30 Michigan Scholarships for Various Needs",
+  "seo_description": "Find 30 scholarships in Michigan with awards up to $10,000. Check varied deadlines and requirements to secure funding.",
+  "intro": "Finding financial support for education in Michigan can be a crucial step for students seeking to reduce their costs. With 30 scholarships available in this catalog, ranging from approximately $500 to $10,000, there are diverse opportunities tailored to various needs and backgrounds. Award amounts and requirements vary, so it’s wise to explore each listing carefully, especially since some deadlines are approaching.",
+  "h1": "30 Scholarships Available in Michigan",
+  "supporting": "This collection of scholarships includes options across multiple categories, such as education, STEM, community service, and more. While many programs may not require essays, a few do, so be sure to check the specific requirements for each scholarship. Comparing award sizes and deadlines will help you prioritize which opportunities to pursue.",
+  "related_intro": "If you’re interested in scholarships for specific fields or categories, consider exploring related pages that focus on education, community, or STEM funding.",
+  "how_to_use": [
+    "Review the list for award amounts and categories",
+    "Check each scholarship's specific requirements",
+    "Compare deadlines to prioritize applications",
+    "Shortlist scholarships that match your profile",
+    "Verify details on the official sponsor pages"
+  ],
+  "who_for": [
+    "Students pursuing education in Michigan",
+    "Individuals seeking community-focused scholarships",
+    "STEM majors looking for financial support",
+    "Students with disabilities needing assistance",
+    "Candidates for seminary education scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Michigan?",
+      "answer": "The Michigan scholarship listings include a variety of categories such as education, community, STEM, and medicine, among others. With 30 scholarships currently available, you can find options that align with your interests and needs."
+    },
+    {
+      "question": "How do I find out about deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 30 listings in this filter include specific dates. It's important to check the details promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the listings; while some scholarships may require essays, others do not. Approximately 25 of the 30 scholarships have lighter requirements, making them potentially easier to apply for."
+    },
+    {
+      "question": "What is the range of award amounts for Michigan scholarships?",
+      "answer": "Award sizes for scholarships in Michigan vary significantly, with amounts generally ranging from around $500 to $10,000. Be sure to review each listing for specific details on funding opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "michigan",
+    "generatedAt": "2026-04-02T10:49:14.017Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 30,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

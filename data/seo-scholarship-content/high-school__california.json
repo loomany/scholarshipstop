@@ -1,0 +1,49 @@
+{
+  "seo_title": "California High School Scholarships | Up to $15,000",
+  "seo_description": "Explore 19 California high school scholarships with awards from $400 to $15,000. Check deadlines and apply soon!",
+  "intro": "Finding financial support for high school students in California can be challenging, but there are currently 19 scholarships available that cater to various interests and needs. Award sizes range from approximately $400 to $15,000, providing a range of options for students. With deadlines that vary across listings, it's important to check each scholarship's specific requirements and due dates to ensure you don't miss out on opportunities.",
+  "h1": "High School Scholarships in California",
+  "supporting": "This collection of scholarships includes a mix of categories such as education, STEM, music, and community service, making it worthwhile to explore the diverse options available. Many of these listings do not require essays, which can simplify the application process. As you review the scholarships, consider comparing the award amounts and any specific eligibility criteria to find the best fit for your situation.",
+  "related_intro": "For more tailored opportunities, check out related pages that focus on specific categories like STEM or arts scholarships.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable options",
+    "Read through eligibility requirements carefully",
+    "Open official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school students in California",
+    "Students interested in STEM fields",
+    "Applicants seeking community service scholarships",
+    "Musically inclined students",
+    "Those looking for larger award amounts"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school students in California?",
+      "answer": "The current listings include a variety of scholarships categorized under education, community, STEM, music, and arts. With 19 scholarships available, students can find options that align with their interests and academic goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, making the application process potentially less daunting for students. However, it's advisable to verify the specific requirements for each scholarship, as details can vary."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 19 scholarships have deadlines, but they vary from listing to listing. It's important to check each scholarship's details promptly, especially since some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The scholarships available range from approximately $400 to $15,000, providing a variety of funding options for students. Be sure to review each listing for specific award amounts."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school/california",
+    "generatedAt": "2026-04-02T10:34:55.780Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 19,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

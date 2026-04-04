@@ -1,0 +1,47 @@
+{
+  "seo_title": "Scholarships for High School Seniors with GPA 3.0 Under $5,000",
+  "seo_description": "Explore 6 scholarships for high school seniors with a GPA of 3.0, offering awards up to $4,000. Check deadlines and requirements.",
+  "intro": "If you're a high school senior with a GPA of 3.0 looking for financial support, this selection of scholarships offers a range of opportunities to consider. With 6 listings available, award sizes vary from approximately $750 to $4,000, providing options for different needs. Be mindful that deadlines differ across these scholarships, so it's important to check the specific dates as you explore your choices.",
+  "h1": "6 Scholarships for High School Seniors with GPA 3.0 Under $5,000",
+  "supporting": "This list includes a mix of scholarships from various fields, such as education, STEM, and community initiatives. Some may require essays while others do not, giving you the chance to choose based on your comfort level with application requirements. Take the time to compare the awards and their specific criteria to find the best fit for your situation.",
+  "related_intro": "For more tailored options, consider exploring scholarships specifically for STEM fields or those with lighter application requirements.",
+  "how_to_use": [
+    "Check individual deadlines for each scholarship",
+    "Review award amounts and categories carefully",
+    "Look for essay requirements and prepare accordingly",
+    "Open official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors with a GPA of 3.0",
+    "Students seeking scholarships under $5,000",
+    "Applicants interested in education, STEM, and community scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors with a GPA of 3.0 or higher?",
+      "answer": "This filter includes a variety of scholarships, with categories spanning education, STEM, medicine, and community initiatives. Currently, there are 6 scholarships listed that cater to high school seniors meeting these criteria."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary, with amounts approximately ranging from $750 to $4,000. It's important to review each scholarship listing for specific details."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements differ among the scholarships; some may require essays while others do not. Check each listing carefully to understand the specific application requirements."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 6 listings in this category include deadline information. Be sure to check these dates promptly, as some deadlines are approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/gpa-3-0/under-5000",
+    "generatedAt": "2026-04-02T10:57:12.496Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "California Scholarships for High School Seniors",
+  "seo_description": "Explore 90 scholarships for California high school seniors. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "Finding financial support as a high school senior in California can be crucial for your educational journey. This catalog features 90 scholarships specifically for students in your situation, with award sizes varying significantly. With a mix of opportunities across various categories, including education, community, and STEM, there’s a good chance you’ll find a fitting option to help fund your studies.",
+  "h1": "Scholarships for High School Seniors in California",
+  "supporting": "As you explore these listings, pay attention to the varying award amounts and deadlines. Some scholarships may require essays, while others might have lighter requirements. It’s essential to read through each listing carefully and verify details on the sponsor's official site to ensure you meet all criteria and deadlines.",
+  "related_intro": "If you're interested in more specialized opportunities, consider checking out related pages that focus on specific categories or requirements.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts listed in rows",
+    "Read the requirement lines carefully",
+    "Open the official pages for details",
+    "Shortlist scholarships that interest you"
+  ],
+  "who_for": [
+    "High school seniors in California",
+    "Students pursuing STEM fields",
+    "Applicants seeking community-focused scholarships",
+    "Individuals looking for arts-related funding",
+    "Students with varying essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in California?",
+      "answer": "There are 90 scholarships listed for high school seniors in California, covering a range of categories including education, community, STEM, arts, and disability. This variety allows students to find opportunities that align with their interests and academic goals."
+    },
+    {
+      "question": "Do I need to write essays for these scholarships?",
+      "answer": "Requirements vary across the scholarships, with some requiring essays and others not. It's advisable to check the specific details of each listing to understand what is required for your application."
+    },
+    {
+      "question": "Are there specific deadlines I should be aware of?",
+      "answer": "All 90 scholarships have deadlines, but they differ from one another. Some deadlines are approaching within the next 45 days, so it's important to review each scholarship's timeline promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships available to high school seniors in California vary significantly, with amounts ranging approximately from $100 to $60,000. Be sure to check individual listings for specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/california",
+    "generatedAt": "2026-04-02T10:32:00.356Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 90,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

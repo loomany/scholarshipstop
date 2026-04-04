@@ -1,0 +1,49 @@
+{
+  "seo_title": "California Scholarships for Financial Need",
+  "seo_description": "Explore 166 scholarships in California for students with financial need. Check varying deadlines and award sizes up to $60,000.",
+  "intro": "Finding financial support can be a crucial step for students in California, especially those facing economic challenges. With 166 scholarships available in this category, award sizes vary significantly, ranging from around $150 to as much as $60,000. Each scholarship has its own requirements and deadlines, so it's essential to explore these options carefully to identify the best fit for your situation.",
+  "h1": "Scholarships for Financial Need in California",
+  "supporting": "This list includes a diverse range of scholarships across various fields, including education, STEM, and community service. As you review the listings, pay attention to the specific award amounts and any essay requirements, as these can differ widely. Some scholarships may have lighter application processes, making them more accessible. Be sure to check the deadlines closely, as they can vary, with some approaching in the near term.",
+  "related_intro": "For more tailored options, consider exploring scholarships based on specific fields of study or other eligibility criteria.",
+  "how_to_use": [
+    "Compare deadlines across different listings",
+    "Scan award amounts to find suitable options",
+    "Read the requirement lines for each scholarship",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "California students demonstrating financial need",
+    "Students pursuing education in STEM fields",
+    "Community-focused applicants seeking support",
+    "Students with disabilities looking for funding",
+    "Those interested in medical-related scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in California?",
+      "answer": "There are 166 scholarships listed that cater to students demonstrating financial need in California. These scholarships cover a variety of categories, including education, STEM, community service, medicine, and miscellaneous fields."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Requirements vary across the scholarships, with some requiring essays and others not. Approximately 26 of the listings indicate an essay requirement, so it's important to check the specific details for each scholarship you're interested in."
+    },
+    {
+      "question": "Are there deadlines I should be aware of for these scholarships?",
+      "answer": "Yes, all 166 scholarships listed have deadlines, but these dates vary by program. Some deadlines may be approaching within the next 45 days, so it's advisable to review the deadlines for each scholarship promptly."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships available in this category vary significantly, with amounts ranging from approximately $150 to $60,000. Be sure to check the specific award details for each scholarship to understand the financial support available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/california",
+    "generatedAt": "2026-04-02T10:31:11.118Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 166,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Colorado Scholarships for High School Seniors",
+  "seo_description": "Explore 13 scholarships for Colorado high school seniors with awards up to $64,000. Check deadlines and requirements.",
+  "intro": "High school seniors in Colorado have access to a diverse range of scholarship opportunities, with 13 listings currently available. These scholarships cater to various interests and fields, including education, STEM, and community service. Award sizes vary significantly, with amounts ranging from $500 to $64,000. Be mindful that deadlines for these scholarships differ, with some approaching quickly, so it's essential to check the specific dates for each listing.",
+  "h1": "Scholarships for High School Seniors in Colorado",
+  "supporting": "This collection of scholarships is worth exploring for its variety and potential financial support. Many listings do not require essays, making the application process more accessible. As you review the options, consider comparing the award amounts and requirements to find the best fit for your academic and career goals. Each scholarship has unique criteria, so take the time to read through the details carefully.",
+  "related_intro": "For more tailored options, check out related pages that focus on specific fields of study or scholarship types available to Colorado students.",
+  "how_to_use": [
+    "Review the list of scholarships carefully",
+    "Compare deadlines and prioritize those that are approaching",
+    "Examine award amounts to identify the best opportunities",
+    "Read the requirements for each scholarship",
+    "Visit the official pages for detailed application instructions"
+  ],
+  "who_for": [
+    "High school seniors in Colorado",
+    "Students pursuing STEM fields",
+    "Applicants seeking community-focused scholarships",
+    "Individuals interested in education-related funding",
+    "Students with disabilities looking for support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Colorado?",
+      "answer": "There are 13 scholarships listed for high school seniors in Colorado, covering various categories such as education, community, disability, STEM, and biology. This range provides options for students with different interests and needs."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships vary significantly, with amounts ranging from approximately $500 to $64,000. It's advisable to review each listing for specific details on the award amounts."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, but it’s important to check each individual listing for specific requirements. Many programs may have lighter application processes."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 13 scholarships have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's essential to verify the dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/colorado",
+    "generatedAt": "2026-04-02T10:58:06.953Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 13,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

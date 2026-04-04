@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Vermont Scholarships for Your Education",
+  "seo_description": "Explore 25 scholarships in Vermont with awards from $500 to $17,000. Check varying deadlines and requirements.",
+  "intro": "Finding financial support for education in Vermont can be a crucial step toward achieving your academic goals. With 25 scholarships available, ranging from approximately $500 to $17,000, there are diverse opportunities tailored to different needs and backgrounds. These awards come with varying requirements and deadlines, so it's essential to explore each option thoroughly to identify the best fit for you.",
+  "h1": "Vermont Scholarships: 25 Opportunities Available",
+  "supporting": "This collection includes scholarships across various categories, including community support and education, providing a wide array of choices. Some listings may require essays, while others have lighter application processes. Be sure to compare the specifics of each scholarship, including award amounts and deadlines, to maximize your chances of securing funding.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out scholarships in related categories or locations to broaden your search.",
+  "how_to_use": [
+    "Review the list for scholarship titles that resonate with your background",
+    "Compare deadlines to prioritize your applications",
+    "Examine award amounts to gauge potential financial support",
+    "Check for essay requirements and prepare accordingly",
+    "Visit official scholarship pages for the most accurate details"
+  ],
+  "who_for": [
+    "Vermont residents seeking educational funding",
+    "Students interested in community service scholarships",
+    "High school seniors planning to attend college",
+    "Undergraduate students pursuing education-related fields",
+    "Applicants comfortable with varying essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Vermont?",
+      "answer": "The Vermont scholarship listings include a variety of categories such as community, education, miscellaneous, and STEM. With 25 different opportunities, you can find scholarships that align with your interests and academic goals."
+    },
+    {
+      "question": "How can I find specific scholarship deadlines?",
+      "answer": "Each scholarship has its own deadline, and all 25 listings include this information. It's important to check the dates promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the scholarships listed. While some may require essays, many do not, so be sure to review the details for each individual scholarship to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for Vermont scholarships?",
+      "answer": "Award sizes for the scholarships in Vermont can vary significantly, with amounts ranging from approximately $500 to $17,000. This diversity allows you to find funding that meets your financial needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "vermont",
+    "generatedAt": "2026-04-02T10:53:31.354Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 25,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "PhD Scholarships in Florida - Explore 12 Opportunities",
+  "seo_description": "Discover 12 PhD scholarships in Florida with awards from $500 to $6,000. Check individual deadlines and requirements.",
+  "intro": "Finding financial support for your PhD studies in Florida can be challenging, but there are 12 scholarships available that cater specifically to your needs. These opportunities cover a range of categories, including education, STEM, and community-focused initiatives. While award sizes vary, many listings do not require essays, making them more accessible for applicants. Be sure to check the specific deadlines, as they can differ significantly among the scholarships.",
+  "h1": "Explore 12 PhD Scholarships Available in Florida",
+  "supporting": "When reviewing the scholarships, pay attention to the award amounts and the specific requirements for each listing. Some programs may have lighter application processes, which can save you time. It's also wise to verify details directly on the sponsor's website to ensure you have the most current information regarding deadlines and eligibility.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that focus on scholarships for different education levels or specific fields of study.",
+  "how_to_use": [
+    "Sort listings by award amount",
+    "Read the requirement lines carefully",
+    "Open the official pages for details",
+    "Shortlist scholarships that interest you",
+    "Verify deadlines on sponsor websites"
+  ],
+  "who_for": [
+    "PhD students in Florida",
+    "Applicants seeking STEM funding",
+    "Students interested in community scholarships",
+    "Individuals pursuing education-related degrees",
+    "Hispanic/Latinx students looking for support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for PhD students in Florida?",
+      "answer": "There are currently 12 scholarships listed for PhD students in Florida, covering various categories such as education, STEM, community, and music. This diverse range allows students to find opportunities that align with their specific fields of study and interests."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this listing vary significantly, with amounts ranging from approximately $500 to $6,000. It's important to review each scholarship's details to understand the specific funding available."
+    },
+    {
+      "question": "Are there any application deadlines I should be aware of?",
+      "answer": "Yes, all 12 scholarships have deadlines, which vary from one listing to another. Some deadlines are approaching within the next 45 days, so it's advisable to check each scholarship's specific date promptly to ensure timely applications."
+    },
+    {
+      "question": "Do I need to write an essay for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially less demanding. However, it's best to verify the requirements for each scholarship individually, as some may have different criteria."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "phd/florida",
+    "generatedAt": "2026-04-02T10:40:19.032Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Pennsylvania Scholarships for African American Students",
+  "seo_description": "Explore 6 scholarships for African American students in Pennsylvania with awards up to $5,000. Check deadlines and requirements.",
+  "intro": "Finding financial support tailored for African American students in Pennsylvania can significantly ease the burden of educational costs. This catalog features 6 scholarships specifically aimed at this demographic, with award amounts ranging from approximately $250 to $5,000. Each scholarship has varying requirements and deadlines, so it’s important to review them closely to identify the best fit for your situation.",
+  "h1": "African American Scholarships in Pennsylvania",
+  "supporting": "As you explore this list, consider comparing the award sizes and categories, which include STEM, education, and community-focused opportunities. Many of these scholarships do not require essays, making them more accessible. Keep an eye on the deadlines, as they vary and some are approaching quickly, ensuring you don’t miss out on potential funding.",
+  "related_intro": "If you're interested in similar opportunities, check out our listings for scholarships that cater to different backgrounds or fields of study.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to identify suitable funding",
+    "Read the requirements carefully for each listing",
+    "Open official pages for detailed scholarship information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "African American students in Pennsylvania",
+    "Students pursuing STEM or medical fields",
+    "Undergraduates seeking community-focused scholarships",
+    "Individuals looking for lighter application requirements",
+    "Those needing financial support for education"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for African American students in Pennsylvania?",
+      "answer": "This collection features six scholarships specifically for African American students in Pennsylvania, covering various categories such as STEM, education, community, and medicine. Each listing may have different eligibility criteria and award amounts, so it's important to review each one closely."
+    },
+    {
+      "question": "How can I find specific details about each scholarship?",
+      "answer": "You can click on each scholarship listing to view detailed information, including award amounts and deadlines. Note that while many of these scholarships do not require essays, it's best to verify the specifics for each program as requirements can vary."
+    },
+    {
+      "question": "Are there upcoming deadlines I should be aware of?",
+      "answer": "Yes, all six scholarships listed have deadlines, with at least one approaching within the next 45 days. Be sure to check the deadline for each scholarship individually to ensure you submit your application on time."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award amounts for the scholarships in this category vary, with some offering as little as $250 and others up to $5,000. It's advisable to look at each listing for the specific amount and any additional details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "african-american/pennsylvania",
+    "generatedAt": "2026-04-02T11:06:34.245Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

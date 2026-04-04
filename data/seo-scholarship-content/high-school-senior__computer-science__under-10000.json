@@ -1,0 +1,48 @@
+{
+  "seo_title": "Computer Science Scholarships for High School Seniors",
+  "seo_description": "Explore 11 scholarships under $10,000 for high school seniors in computer science. Check deadlines and requirements for each listing.",
+  "intro": "Navigating scholarship opportunities can be challenging, especially for high school seniors pursuing computer science. This catalog features 11 scholarships specifically tailored for students interested in this field, with award amounts ranging from $500 to $10,000. With varying deadlines and requirements, many of these listings do not require essays, making them more accessible for applicants. It's essential to check each scholarship's details promptly, as some deadlines are approaching soon.",
+  "h1": "High School Senior Computer Science Scholarships Under $10,000",
+  "supporting": "When reviewing this list, pay attention to the award amounts and the specific requirements for each scholarship. Compare the deadlines to prioritize your applications effectively. This selection includes various options that cater to different needs and backgrounds, so take the time to find the ones that best align with your qualifications and aspirations in computer science.",
+  "related_intro": "For more tailored opportunities, consider exploring scholarships focused on other STEM fields or those with unique eligibility criteria.",
+  "how_to_use": [
+    "Compare deadlines to prioritize your applications",
+    "Scan award amounts to find suitable funding",
+    "Read the requirement lines for eligibility details",
+    "Open official scholarship pages for the most accurate information",
+    "Shortlist the scholarships that best match your profile"
+  ],
+  "who_for": [
+    "High school seniors interested in computer science",
+    "Students seeking scholarships without essay requirements",
+    "Applicants looking for awards under $10,000",
+    "Individuals pursuing STEM-related funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors studying computer science?",
+      "answer": "This category includes 11 scholarships specifically for high school seniors interested in computer science. Award sizes vary, with amounts typically ranging from $500 to $10,000. Each listing may have different eligibility criteria and focus areas."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most scholarships in this listing do not require essays, but it's important to verify each specific listing for details. While many entries indicate lighter application requirements, a few may still ask for additional materials."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 11 scholarships listed have deadlines, but they vary by program. It's advisable to check each scholarship entry promptly to ensure you have the most accurate and up-to-date deadline information, especially since some deadlines are within the next 45 days."
+    },
+    {
+      "question": "What should I do if I need more information about a specific scholarship?",
+      "answer": "For detailed information, including eligibility and application procedures, click on each scholarship listing. This will provide you with the necessary specifics to help you prepare your application effectively."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/computer-science/under-10000",
+    "generatedAt": "2026-04-02T11:03:45.108Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 11,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

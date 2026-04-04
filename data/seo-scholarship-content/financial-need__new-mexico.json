@@ -1,0 +1,49 @@
+{
+  "seo_title": "Financial Need Scholarships in New Mexico",
+  "seo_description": "Explore 6 scholarships for financial need in New Mexico. Award sizes range from $1,000 to $5,500. Check deadlines and requirements.",
+  "intro": "Finding financial support can be a crucial step for students in New Mexico. This catalog features 6 scholarships specifically aimed at those demonstrating financial need. Award sizes vary, with opportunities ranging from community-focused programs to those in STEM and education. As deadlines differ across listings, it's important to check each one promptly to ensure you don't miss out.",
+  "h1": "Explore Financial Need Scholarships in New Mexico",
+  "supporting": "When reviewing the scholarships, pay attention to the varying award amounts and requirements. Some listings may require essays, while others do not, so be sure to read the details carefully. Comparing deadlines will help you prioritize which applications to tackle first. Always verify the information on the official sponsor sites for the most accurate details.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that focus on specific categories or other eligibility criteria.",
+  "how_to_use": [
+    "Sort scholarships by award amount",
+    "Read the requirement lines carefully",
+    "Open official pages for details",
+    "Shortlist your preferred scholarships",
+    "Compare deadlines to prioritize applications"
+  ],
+  "who_for": [
+    "Students demonstrating financial need",
+    "Residents of New Mexico",
+    "Individuals pursuing STEM degrees",
+    "Community-focused scholarship applicants",
+    "Students interested in education funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in New Mexico?",
+      "answer": "The current listings include a variety of scholarships categorized under community, STEM, education, and disability. With six scholarships available, you can find options that align with different interests and backgrounds."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes vary among the scholarships, with amounts ranging approximately from $1,000 to $5,500. It's important to check each listing for specific details on the award amount."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements differ across the scholarships; some may require essays while others do not. Be sure to review each scholarship's details to understand what is needed."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All six scholarships listed have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/new-mexico",
+    "generatedAt": "2026-04-02T11:15:11.147Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

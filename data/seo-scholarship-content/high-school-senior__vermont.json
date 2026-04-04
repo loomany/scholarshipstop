@@ -1,0 +1,49 @@
+{
+  "seo_title": "Vermont Scholarships for High School Seniors",
+  "seo_description": "Explore 9 scholarships for Vermont high school seniors with awards up to $17,000. Check deadlines and requirements now.",
+  "intro": "Finding financial support as a high school senior in Vermont can significantly ease the path to further education. This catalog features 9 scholarships specifically for students in your situation, with award amounts ranging from approximately $1,000 to $17,000. Each listing has varying deadlines and requirements, so it's essential to review them closely to identify the best opportunities for your needs.",
+  "h1": "Scholarships for High School Seniors in Vermont",
+  "supporting": "As you explore these scholarships, pay attention to the details such as award sizes and specific eligibility criteria. Many listings may not require essays, making them more accessible. Since deadlines vary, checking the dates promptly will help you stay on track and ensure you don’t miss out on potential funding.",
+  "related_intro": "If you're interested in exploring more options, consider checking scholarships in related categories like community, education, or STEM.",
+  "how_to_use": [
+    "Compare deadlines across listings",
+    "Scan award amounts to find suitable options",
+    "Read requirement lines for eligibility details",
+    "Open official pages for full application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High School Seniors in Vermont",
+    "Students interested in community-focused funding",
+    "Applicants seeking education-related scholarships",
+    "Individuals looking for lighter application requirements",
+    "Students aiming for STEM scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Vermont?",
+      "answer": "There are currently 9 scholarships listed for high school seniors in Vermont, covering categories such as community, education, miscellaneous, and STEM. Each scholarship may have different eligibility criteria and focus areas, so it's beneficial to review the details of each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require an essay, though it's important to verify each individual scholarship's requirements as they can vary. Many listings may have lighter application requirements, making them more accessible."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "All 9 scholarships listed have specific deadlines, which vary from one to another. It's advisable to check the deadlines promptly, as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category vary, with amounts ranging approximately from $1,000 to $17,000. Be sure to check the specific award details for each scholarship to understand what you might receive."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/vermont",
+    "generatedAt": "2026-04-02T11:03:31.147Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

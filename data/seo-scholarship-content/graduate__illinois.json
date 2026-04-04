@@ -1,0 +1,47 @@
+{
+  "seo_title": "Illinois Graduate Scholarships | Find Your Funding",
+  "seo_description": "Explore 4 graduate scholarships in Illinois with awards up to $6,000. Check deadlines and requirements for each opportunity.",
+  "intro": "If you’re hunting awards that fit “Graduate · Illinois scholarships,” this view keeps the signal high. You’ll see 4 matching programs in this view today—compact enough to scan quickly. Award wording varies row to row; treat dollar figures on cards as a starting point only. Deadlines and dollar lines differ row to row—use them to shortlist, then verify every rule on the sponsor’s site.",
+  "h1": "Graduate Scholarships in Illinois: 4 Opportunities Available",
+  "supporting": "Start with sort (deadline or amount) to surface what matters today, then read the requirement snippet under each title before you click through. When two listings look alike, compare their deadline and award rows side by side. Nothing here replaces the official program page: use this list to narrow, then re-read eligibility and dates at the source before you apply.",
+  "related_intro": "Below are related filter pages—different state, topic, or requirement angle—if you want to widen the net without losing this starting point.",
+  "how_to_use": [
+    "Pick a sort order so urgent deadlines or larger award text float to the top",
+    "Skim the requirement line on each card for a quick fit check",
+    "Open the official listing from the card and re-confirm dates, amounts, and eligibility",
+    "Keep a short shortlist instead of spreading thin across weak matches",
+    "Assume catalog fields can lag—treat sponsor pages as the final word"
+  ],
+  "who_for": [
+    "Anyone who wants a tighter set of options for Graduate · Illinois scholarships than the full open catalog",
+    "Students stacking several applications and needing a fast way to compare effort versus payoff",
+    "Applicants who like scanning structured rows before opening long sponsor pages"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Illinois?",
+      "answer": "There are currently 4 scholarships listed for graduate students in Illinois, spanning categories such as education and community. Each scholarship may have different eligibility criteria and focus areas, so it's important to review the details of each listing to find the best fit."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 4 scholarships have specific deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so be sure to check each scholarship's details promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "Are essays required for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's advisable to verify the requirements for each specific scholarship. While many listings may have lighter application processes, confirming the details will help you prepare effectively."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category generally range from approximately $1,000 to $6,000. However, since each scholarship can differ significantly, reviewing the specific amounts listed for each opportunity is essential."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/illinois",
+    "generatedAt": "2026-04-02T11:10:24.103Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "deterministic",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Maine Engineering Scholarships | Apply Now",
+  "seo_description": "Discover 5 scholarships for engineering students in Maine. Award sizes range from $500 to $2,500. Check deadlines and apply today!",
+  "intro": "Finding financial support for engineering studies in Maine can be crucial for aspiring students. This filter showcases 5 scholarships specifically tailored for engineering students in the state, with award sizes generally ranging from $500 to $2,500. Keep in mind that deadlines vary across listings, so it's important to check each one promptly to ensure you don’t miss out on these opportunities.",
+  "h1": "Explore Engineering Scholarships in Maine",
+  "supporting": "When reviewing the scholarships, consider the award amounts and specific eligibility criteria for each listing. Many of these scholarships do not require essays, which may simplify the application process. Take note of the different deadlines and be sure to verify the details on the official sponsor sites to ensure you have the most accurate information.",
+  "related_intro": "For more options, check out scholarships in related fields or broader categories that might align with your academic goals.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts to find suitable options",
+    "Read eligibility requirements carefully",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Engineering students in Maine",
+    "Students pursuing STEM degrees",
+    "Female engineering students",
+    "High school seniors planning to study engineering",
+    "Undergraduate students in engineering programs"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Maine?",
+      "answer": "There are currently five scholarships listed for engineering students in Maine, covering various categories including STEM and education. The award sizes range from approximately $500 to $2,500, providing a range of financial support options."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and it’s important to check these dates promptly as some deadlines are approaching within the next 45 days. You can find specific deadline information listed with each scholarship entry."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, though it's advisable to verify the details for each specific listing. Many of the scholarships have lighter application requirements, making them more accessible."
+    },
+    {
+      "question": "Who can apply for these scholarships?",
+      "answer": "These scholarships are primarily for students pursuing engineering degrees in Maine. Be sure to review the eligibility criteria for each scholarship to ensure you meet the requirements before applying."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/maine",
+    "generatedAt": "2026-04-02T10:50:36.173Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

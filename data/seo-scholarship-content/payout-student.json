@@ -1,0 +1,47 @@
+{
+  "seo_title": "Find Payout Student Scholarships in the USA",
+  "seo_description": "Explore 227 student scholarships with varying awards and deadlines. Check details for each opportunity to maximize your funding.",
+  "intro": "With 227 scholarships available specifically for students, this selection offers a diverse range of funding opportunities across various fields, including education, STEM, and community service. Award amounts vary significantly, with some scholarships providing funding as low as $250 and others reaching up to $44,000. Given the variability in requirements and deadlines—some approaching within the next 45 days—it’s essential to explore these options promptly.",
+  "h1": "Payout Student Scholarships: 227 Opportunities Available",
+  "supporting": "As you navigate this list, consider comparing the award amounts and requirements to find the best fit for your needs. While many scholarships have lighter application processes, some may require essays or additional documentation. Take note of the categories that resonate with your academic or career goals, as this can help streamline your search for the most relevant opportunities.",
+  "related_intro": "If you're interested in exploring more specific categories or types of scholarships, check out related pages that focus on particular fields or requirements.",
+  "how_to_use": [
+    "Check the deadlines listed for each scholarship to ensure timely applications",
+    "Compare the award amounts to prioritize higher-value opportunities",
+    "Review the requirements for each scholarship, noting any essay prompts",
+    "Visit the official pages linked for detailed application instructions",
+    "Shortlist scholarships that align with your goals and verify eligibility"
+  ],
+  "who_for": [
+    "Students pursuing degrees in education, STEM, or medical fields",
+    "Applicants seeking community-focused scholarship opportunities",
+    "Individuals with disabilities looking for targeted funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category includes a diverse range of scholarships, with 227 listings spanning fields such as education, STEM, medicine, community service, and more. Each scholarship may have different eligibility criteria and focus areas, so be sure to explore the specific details of each listing."
+    },
+    {
+      "question": "How can I find out the award amounts for these scholarships?",
+      "answer": "Award sizes vary widely among the scholarships in this category, with amounts ranging from approximately $250 to $44,000 USD. For specific figures, check the individual scholarship listings, as most provide detailed award information."
+    },
+    {
+      "question": "Are there deadlines I need to be aware of?",
+      "answer": "Yes, all 227 scholarships in this category have deadlines, but they vary significantly. It's important to check the deadline for each scholarship as some may be approaching quickly—at least one listing has a deadline within the next 45 days."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Essay requirements differ across the scholarships; while some may require essays, many do not. Out of the 227 listings, approximately 16 have an essay requirement, so review each scholarship's details to understand what is needed."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "payout-student",
+    "generatedAt": "2026-04-02T10:32:58.151Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 227,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

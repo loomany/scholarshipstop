@@ -1,0 +1,47 @@
+{
+  "seo_title": "Hispanic Scholarships Nationwide - Find Your Funding",
+  "seo_description": "Explore 8 Hispanic scholarships with awards from $750 to $10,000. Check varied deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support as a Hispanic student can be pivotal in achieving your educational goals. This selection features 8 scholarships available nationwide, with award amounts ranging from approximately $750 to $10,000. Each opportunity has unique eligibility requirements and deadlines, so it's essential to review the details carefully. Some scholarships may require essays, while others may have lighter requirements, making this a diverse pool to explore.",
+  "h1": "Hispanic Scholarships Available Nationwide",
+  "supporting": "As you navigate this list, consider comparing the scholarship amounts and the specific categories they support, such as community, education, and law. Pay attention to the varying deadlines, with some approaching soon, and ensure that you meet the eligibility criteria for each option. This filter slice is particularly valuable for Hispanic students seeking targeted funding opportunities that align with their academic pursuits.",
+  "related_intro": "If you're interested in exploring more opportunities tailored to specific fields or requirements, check out related pages that focus on scholarships by category or other demographics.",
+  "how_to_use": [
+    "Review the award amounts to find suitable options",
+    "Check deadlines closely, especially for upcoming submissions",
+    "Note the essay requirements for each scholarship",
+    "Open the official pages for complete details",
+    "Shortlist your favorites for easier tracking"
+  ],
+  "who_for": [
+    "Hispanic students seeking nationwide scholarships",
+    "Students pursuing degrees in community, law, or education fields",
+    "Applicants looking for scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category includes a variety of scholarships across multiple fields, such as community, law, education, humanities, arts, and miscellaneous areas. With 8 listings currently available, you can find opportunities that align with your interests and career goals."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. Some may require essays, while others do not, so it's important to check the specifics for each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 8 listings currently have deadline information available. Be sure to review the deadlines closely, as some may be approaching soon, and verify the details for each opportunity."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary, with amounts ranging approximately from $750 to $10,000. However, it's best to check each listing for the exact award amount associated with that specific scholarship."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "hispanic/nationwide",
+    "generatedAt": "2026-04-02T11:04:45.820Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 8,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

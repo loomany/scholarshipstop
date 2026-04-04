@@ -1,0 +1,49 @@
+{
+  "seo_title": "Nationwide Scholarships for Students with Disabilities",
+  "seo_description": "Explore 14 scholarships for students with disabilities. Award amounts range from $750 to $12,000. Check deadlines and requirements.",
+  "intro": "Finding financial support can be crucial for individuals with disabilities seeking education or training opportunities. In this nationwide catalog, you'll discover 14 scholarships specifically designed to assist those facing unique challenges. Award sizes vary significantly, ranging from around $750 to $12,000, with diverse eligibility criteria and requirements. Be mindful that deadlines vary among listings, so it's wise to check the specifics for each scholarship to ensure you don't miss out.",
+  "h1": "Scholarships for Students with Disabilities Nationwide",
+  "supporting": "This collection of scholarships reflects a blend of categories, including education, law, and community support. As you review the listings, compare the award amounts and consider the requirements, which may include essays or lighter documentation. This filter is particularly valuable for identifying opportunities that align with your goals and circumstances, helping you maximize your chances of securing funding.",
+  "related_intro": "If you're interested in exploring more tailored options, consider checking out related pages focused on specific categories or regional opportunities.",
+  "how_to_use": [
+    "Compare deadlines across different listings",
+    "Scan the award amounts to find suitable options",
+    "Read the requirement lines for each scholarship",
+    "Open official pages for detailed information",
+    "Shortlist promising opportunities and verify on sponsor sites"
+  ],
+  "who_for": [
+    "Students with disabilities seeking financial aid",
+    "Individuals pursuing education in law or community service",
+    "Applicants looking for scholarships with varying requirements",
+    "High school seniors and current college students",
+    "Those interested in awards with flexible deadlines"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category features 14 scholarships that focus on various themes including law, education, community, and safety, all tailored for individuals with disabilities. Each scholarship may have unique eligibility criteria and requirements, so it's essential to review the details for each listing."
+    },
+    {
+      "question": "How can I find out the specific deadlines for these scholarships?",
+      "answer": "All 14 scholarships listed have deadlines, but they vary from one program to another. It's advisable to check the specific deadline for each scholarship promptly, as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements for essays differ among the scholarships in this category. Approximately half of the listings may require essays, while the others might not, so be sure to verify the details for each individual scholarship."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The scholarships in this category offer a wide range of award sizes, with amounts typically between $750 and $12,000. However, it's important to check each listing for the specific award amount associated with that scholarship."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "disability/nationwide",
+    "generatedAt": "2026-04-02T10:56:22.628Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 14,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

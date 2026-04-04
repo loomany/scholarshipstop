@@ -1,0 +1,47 @@
+{
+  "seo_title": "California Scholarships for High School Seniors",
+  "seo_description": "Explore 6 scholarships for California high school seniors with awards from $1,000 to $2,000. Check deadlines and requirements.",
+  "intro": "Finding financial support as a high school senior in California can be a crucial step towards your future. In this category, you'll discover 6 scholarships specifically aimed at students in your situation. Award sizes typically range from $1,000 to $2,000, and while many listings may not require essays, it's important to check each one for specific details. Additionally, deadlines vary, with some approaching in the next 45 days, so prompt action is advisable.",
+  "h1": "Scholarships for California High School Seniors",
+  "supporting": "This selection of scholarships covers various categories, including disability, education, and arts, making it worthwhile to explore how your interests align with available funding. Pay attention to the specific requirements and deadlines for each listing, as they can differ significantly. Comparing award amounts and eligibility criteria will help you identify the best opportunities for your unique situation.",
+  "related_intro": "If you're interested in exploring more options, check out related pages that focus on scholarships for different education levels or specific fields of study.",
+  "how_to_use": [
+    "Review the scholarship amounts and categories listed",
+    "Check individual deadlines and apply promptly",
+    "Assess whether an essay is required for each scholarship",
+    "Visit the official pages for detailed requirements",
+    "Shortlist the scholarships that best match your profile"
+  ],
+  "who_for": [
+    "High school seniors in California seeking financial aid",
+    "Students interested in scholarships with lighter requirements",
+    "Applicants looking for awards in disability, education, and arts categories"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in California?",
+      "answer": "This selection includes six scholarships across various categories such as disability, education, medicine, arts, and community. Each listing may have different eligibility criteria and focus areas, so it's beneficial to review them closely."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, though it's important to check each individual listing for specific requirements. Many programs tend to have lighter application processes, but verifying details is essential."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The scholarships in this category generally range from approximately $1,000 to $2,000. However, award sizes can vary, so it's advisable to look at each listing for the exact amount."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All six scholarships listed have deadlines, but they vary from one to another. It’s recommended to check the specific dates for each scholarship promptly, especially since some deadlines may be approaching soon."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/payout-student/california",
+    "generatedAt": "2026-04-02T10:57:25.829Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

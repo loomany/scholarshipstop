@@ -1,0 +1,49 @@
+{
+  "seo_title": "Tennessee Scholarships: Find Your Funding",
+  "seo_description": "Explore 15 scholarships in Tennessee with awards from $1,000 to $9,000. Check varied deadlines and requirements.",
+  "intro": "If you're seeking financial support for your education in Tennessee, this selection of 15 scholarships offers a range of opportunities tailored to various fields and needs. Award sizes generally vary from around $1,000 to $9,000, with deadlines differing across listings, so it's important to check the specific dates as some may be approaching soon. The scholarships cover diverse categories, including education, STEM, and community initiatives, ensuring that you'll find options that resonate with your academic and personal goals.",
+  "h1": "Explore 15 Scholarships Available in Tennessee",
+  "supporting": "As you explore these scholarships, pay attention to the different requirements and essay stipulations. While many listings have lighter requirements, a few may ask for essays, so reviewing each one carefully will help you identify the best fits. Comparing award amounts and deadlines can also aid in prioritizing which scholarships to apply for first, especially those with nearer deadlines. This slice is particularly valuable for Tennessee residents looking to maximize their funding potential.",
+  "related_intro": "For more tailored options, consider checking out scholarships specific to your major or those that cater to unique interests and backgrounds.",
+  "how_to_use": [
+    "Compare award amounts to find the best fit for your needs",
+    "Scan for deadlines and prioritize applications accordingly",
+    "Read through requirement lines to understand what each scholarship entails",
+    "Open official pages for detailed information and updates",
+    "Shortlist scholarships that align with your goals and verify on sponsor sites"
+  ],
+  "who_for": [
+    "Tennessee residents seeking educational funding",
+    "Students pursuing degrees in STEM fields",
+    "Applicants interested in community-focused scholarships",
+    "Individuals with disabilities looking for financial support",
+    "Students requiring lighter application processes"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Tennessee?",
+      "answer": "The Tennessee scholarship listings include a variety of categories such as education, community, STEM, disability, and humanities. With 15 different opportunities currently available, you can find a scholarship that aligns with your field of study or personal circumstances."
+    },
+    {
+      "question": "Are there any specific requirements for these scholarships?",
+      "answer": "Requirements vary across the scholarships, with some requiring essays while others do not. It's important to review each listing for specific eligibility criteria and application details to ensure you meet the necessary qualifications."
+    },
+    {
+      "question": "What is the range of award amounts for Tennessee scholarships?",
+      "answer": "Award sizes for scholarships in Tennessee typically range from approximately $1,000 to $9,000. However, each scholarship may have its own specific amount, so be sure to check the individual listings for precise figures."
+    },
+    {
+      "question": "How do I find out the deadlines for these scholarships?",
+      "answer": "All 15 scholarship listings have deadlines, but they vary from one opportunity to another. Some deadlines may be coming up soon, so it's advisable to check the specific dates for each scholarship promptly to ensure you don’t miss out."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "tennessee",
+    "generatedAt": "2026-04-02T10:59:42.752Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 15,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

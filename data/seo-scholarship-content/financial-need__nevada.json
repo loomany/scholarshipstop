@@ -1,0 +1,48 @@
+{
+  "seo_title": "Nevada Scholarships for Financial Need Students",
+  "seo_description": "Explore 6 scholarships in Nevada for students with financial need. Award sizes range from $1,000 to $5,000. Check deadlines promptly.",
+  "intro": "Finding financial support can be crucial for students in Nevada facing economic challenges. This selection features 6 scholarships specifically aimed at those demonstrating financial need, with award amounts typically ranging from $1,000 to $5,000. Each scholarship has its own unique criteria and deadlines, so it's important to review the details carefully to identify the best fit for your situation.",
+  "h1": "Scholarships for Financial Need in Nevada",
+  "supporting": "As you explore these opportunities, consider comparing the award amounts and the specific requirements for each scholarship. Some may require essays, while others have lighter application processes. Be mindful of the varying deadlines, as at least one opportunity is approaching soon. This filter slice can help you identify potential funding sources tailored to your financial situation.",
+  "related_intro": "If you're interested in similar funding options, check out related pages that focus on scholarships for specific categories such as community support or education in Nevada.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize applications",
+    "Scan award amounts to identify the most beneficial opportunities",
+    "Read the requirement lines to understand what is needed for each application",
+    "Open official pages for detailed information and updates",
+    "Shortlist scholarships that align with your needs and verify on sponsor sites"
+  ],
+  "who_for": [
+    "Students in Nevada with demonstrated financial need",
+    "Applicants looking for community-focused scholarships",
+    "Individuals pursuing education-related funding",
+    "Students with disabilities seeking financial assistance"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Nevada?",
+      "answer": "This selection includes six scholarships specifically aimed at students demonstrating financial need. Categories range from community support to disability and education, providing diverse opportunities for applicants."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for these scholarships vary, with amounts generally ranging from approximately $1,000 to $5,000. It's important to check each listing for specific details, as not all scholarships will offer the same funding."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements differ among the scholarships listed. While some may require essays, others do not, so it's essential to review each scholarship's details to understand the specific application requirements."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All six scholarships have deadlines, but they vary from one program to another. Some deadlines are approaching within the next 45 days, so be sure to verify the dates for each scholarship to ensure timely applications."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/nevada",
+    "generatedAt": "2026-04-02T11:14:56.150Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "seo_title": "Undergraduate Scholarships in California",
+  "seo_description": "Explore available undergraduate scholarships in California. Award sizes vary, and deadlines are not currently specified.",
+  "intro": "Finding scholarships for undergraduate studies in California can be challenging, especially when navigating a landscape with few options currently available. While there are no listings in this particular catalog snapshot, it’s important to keep in mind that award sizes and deadlines can vary widely across different opportunities. Stay vigilant for new openings that may arise, as scholarship availability can change frequently.",
+  "h1": "Find Undergraduate Scholarships for California Students",
+  "supporting": "Even though this slice shows no current listings, it’s beneficial to regularly check for updates. Consider looking for scholarships that align with your specific interests or needs, as many opportunities may not be widely advertised. When new scholarships are posted, reviewing their requirements and deadlines will help you prioritize which ones to pursue.",
+  "how_to_use": [
+    "Check back frequently for new scholarship listings",
+    "Look for opportunities that match your field of study",
+    "Consider broader criteria beyond just California-based scholarships"
+  ],
+  "who_for": [
+    "Undergraduate students in California",
+    "Students seeking financial aid for college",
+    "Individuals interested in local scholarship opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for undergraduate students in California?",
+      "answer": "Currently, there are no specific listings for undergraduate scholarships in California. However, scholarship opportunities can vary widely based on factors such as academic performance, financial need, and community involvement."
+    },
+    {
+      "question": "How can I find out more about scholarship deadlines and requirements?",
+      "answer": "Since there are no active listings at this time, specific deadlines and requirements are not available. When scholarships are listed, details about deadlines and application requirements will be provided, so it's a good idea to check back regularly."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "The information regarding essay requirements is currently inconclusive. Once scholarships become available, details about whether an essay is needed will be included in the listing."
+    },
+    {
+      "question": "What should I do if I don't see any scholarships listed for California?",
+      "answer": "If no scholarships are currently listed, consider broadening your search criteria or checking other locations and categories. Additionally, keep an eye on this page for updates as new opportunities may become available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "undergraduate/california",
+    "generatedAt": "2026-04-02T11:08:43.040Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 0,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

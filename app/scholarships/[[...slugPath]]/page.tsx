@@ -1,0 +1,281 @@
+import { Suspense } from 'react';
+import { notFound, permanentRedirect } from 'next/navigation';
+
+import { createClient } from '@/utils/supabase/server';
+import LongTailScholarshipsPageClient from '@/app/scholarships/LongTailScholarshipsPageClient';
+import ScholarshipDetailPageClient from '@/app/scholarships/ScholarshipDetailPageClient';
+import ScholarshipsHubPageClient from '@/app/scholarships/ScholarshipsHubPageClient';
+import {
+  buildInitialListRequestKey,
+  createInitialScholarshipsPayload,
+  fetchInitialHubScholarshipsPayload,
+  fetchInitialLongTailScholarshipsPayload
+} from '@/app/scholarships/scholarshipListServerPayload';
+import {
+  getLongTailPreset,
+  isScholarshipDetailUuidParam,
+  normalizeScholarshipDynamicParam
+} from '@/app/scholarships/scholarshipLongTailPresets';
+import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
+import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
+import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
+import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
+
+type PageProps = { params: { slugPath?: string[] } };
+
+/** Set DEBUG_SEO_SCHOLARSHIP=1 to log which SEO bundle and copy the server picked. */
+function debugLogListingSeo(payload: Record<string, unknown>) {
+  if (process.env.DEBUG_SEO_SCHOLARSHIP !== '1') return;
+  console.info('[scholarships listing seo]', payload);
+}
+
+function seoHowWhoField(
+  v: string | string[] | undefined
+): string | string[] | null {
+  if (v == null) return null;
+  if (Array.isArray(v)) {
+    const a = v.map((x) => String(x).trim()).filter(Boolean);
+    return a.length ? a : null;
+  }
+  const t = String(v).trim();
+  return t || null;
+}
+
+export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
+  const rawSegments = params.slugPath ?? [];
+  const segments = rawSegments.map((s) =>
+    normalizeScholarshipDynamicParam(decodeURIComponent(s))
+  );
+
+  if (segments.length === 0) {
+    const supabase = createClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    const initialListPayload = await fetchInitialHubScholarshipsPayload(supabase);
+    return (
+      <ScholarshipsHubPageClient
+        isAuthenticated={Boolean(user)}
+        initialPayload={createInitialScholarshipsPayload(
+          buildInitialListRequestKey({
+            kind: 'hub',
+            routeKey: 'hub',
+            searchParamsString: ''
+          }),
+          initialListPayload
+        )}
+      />
+    );
+  }
+
+  if (segments.length === 1 && isScholarshipDetailUuidParam(segments[0]!)) {
+    const supabase = createClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    const scholarship = await getScholarshipDetailServer(segments[0]!);
+    return (
+      <Suspense
+        fallback={
+          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
+            <div className="mx-auto max-w-5xl">Loading…</div>
+          </section>
+        }
+      >
+        <ScholarshipDetailPageClient
+          isAuthenticated={Boolean(user)}
+          initialScholarship={scholarship}
+        />
+      </Suspense>
+    );
+  }
+
+  const resolved = resolveScholarshipSlugPath(segments);
+
+  if (resolved.kind === 'redirect_canonical') {
+    permanentRedirect(`/scholarships/${resolved.canonicalPath}`);
+  }
+
+  if (resolved.kind === 'not_found') {
+    notFound();
+  }
+
+  if (resolved.kind === 'scholarship_detail') {
+    const supabase = createClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    const scholarship = segments.length === 1
+      ? await getScholarshipDetailServer(segments[0]!)
+      : null;
+    return (
+      <Suspense
+        fallback={
+          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
+            <div className="mx-auto max-w-5xl">Loading…</div>
+          </section>
+        }
+      >
+        <ScholarshipDetailPageClient
+          isAuthenticated={Boolean(user)}
+          initialScholarship={scholarship}
+        />
+      </Suspense>
+    );
+  }
+
+  if (resolved.kind === 'legacy_long_tail') {
+    const supabase = createClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    const longTail = getLongTailPreset(resolved.slug);
+    if (!longTail) notFound();
+    const initialListPayload = await fetchInitialLongTailScholarshipsPayload(
+      supabase,
+      { type: 'legacy', slug: longTail.slug }
+    );
+    const seo = readLongTailSeoBundle(longTail.slug);
+    const pageTitle =
+      seo?.h1?.trim() || seo?.seo_title?.trim() || longTail.h1;
+    const introParagraph = seo?.intro?.trim() || null;
+    const supportingParagraph = seo?.supporting?.trim() || null;
+    const faqItems = seo?.faq;
+
+    debugLogListingSeo({
+      routeKind: 'legacy_long_tail',
+      slug: longTail.slug,
+      jsonPath: `data/long-tail-seo/${longTail.slug}.json`,
+      bundleFound: !!seo,
+      priority: 'long-tail-seo json → preset h1/meta',
+      propsFromBundle: seo
+        ? {
+            h1: seo.h1 ?? null,
+            seo_title: seo.seo_title ?? null,
+            introLen: seo.intro?.length ?? 0,
+            supportingLen: seo.supporting?.length ?? 0,
+            faqCount: faqItems?.length ?? 0
+          }
+        : null,
+      chosenH1OrTitle: pageTitle,
+      chosenIntroPreview: introParagraph?.slice(0, 120) ?? null
+    });
+
+    return (
+      <Suspense
+        fallback={
+          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
+            <div className="mx-auto max-w-5xl">Loading scholarships…</div>
+          </section>
+        }
+      >
+        <LongTailScholarshipsPageClient
+          listingMode={{ type: 'legacy', slug: longTail.slug }}
+          initialPayload={createInitialScholarshipsPayload(
+            buildInitialListRequestKey({
+              kind: 'long_tail',
+              routeKey: longTail.slug,
+              searchParamsString: ''
+            }),
+            initialListPayload
+          )}
+          pageTitle={pageTitle}
+          isAuthenticated={Boolean(user)}
+          introParagraph={introParagraph}
+          supportingParagraph={supportingParagraph}
+          faqItems={faqItems}
+          howToUseText={seoHowWhoField(seo?.how_to_use)}
+          whoForText={seoHowWhoField(seo?.who_for)}
+          pageData={seo?.page_data}
+          qualityBucket="SUPPORTING"
+          updatedAt={seo?._meta?.generatedAt ?? null}
+        />
+      </Suspense>
+    );
+  }
+
+  if (resolved.kind === 'manifest_seo') {
+    const supabase = createClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    const { entry, canonicalPath } = resolved;
+    const initialListPayload = await fetchInitialLongTailScholarshipsPayload(
+      supabase,
+      { type: 'manifest', canonicalPath, entry }
+    );
+
+    const seo = readScholarshipSeoContent(canonicalPath);
+    const pageTitle =
+      seo?.h1?.trim() ||
+      seo?.seo_title?.trim() ||
+      entry.h1Fallback;
+    const introParagraph =
+      seo?.intro?.trim() ||
+      `Browse scholarships in our USA catalog that match this topic (${entry.h1Fallback}). Compare deadlines, amounts, and requirements, then open each official listing to apply.`;
+    const supportingParagraph = seo?.supporting?.trim() || null;
+    const relatedIntroParagraph = seo?.related_intro?.trim() || null;
+    const faqItems = seo?.faq;
+
+    const safePath = canonicalPath.replace(/\//g, '__');
+    debugLogListingSeo({
+      routeKind: 'manifest_seo',
+      canonicalPath,
+      jsonPath: `data/seo-scholarship-content/${safePath}.json`,
+      bundleFound: !!seo,
+      priority:
+        'h1 from bundle → seo_title from bundle → entry.h1Fallback; intro from bundle → generic fallback',
+      propsFromBundle: seo
+        ? {
+            h1: seo.h1 ?? null,
+            seo_title: seo.seo_title ?? null,
+            introLen: seo.intro?.length ?? 0,
+            supportingLen: seo.supporting?.length ?? 0,
+            faqCount: faqItems?.length ?? 0
+          }
+        : null,
+      chosenH1OrTitle: pageTitle,
+      chosenIntroPreview: introParagraph?.slice(0, 120) ?? null
+    });
+
+    return (
+      <Suspense
+        fallback={
+          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
+            <div className="mx-auto max-w-5xl">Loading scholarships…</div>
+          </section>
+        }
+      >
+        <LongTailScholarshipsPageClient
+          listingMode={{
+            type: 'manifest',
+            canonicalPath,
+            entry
+          }}
+          initialPayload={createInitialScholarshipsPayload(
+            buildInitialListRequestKey({
+              kind: 'long_tail',
+              routeKey: canonicalPath,
+              searchParamsString: ''
+            }),
+            initialListPayload
+          )}
+          pageTitle={pageTitle}
+          isAuthenticated={Boolean(user)}
+          introParagraph={introParagraph}
+          supportingParagraph={supportingParagraph}
+          relatedIntroParagraph={relatedIntroParagraph}
+          faqItems={faqItems}
+          howToUseText={seoHowWhoField(seo?.how_to_use)}
+          whoForText={seoHowWhoField(seo?.who_for)}
+          pageData={seo?.page_data}
+          qualityBucket={entry.qualityBucket ?? null}
+          canonicalTarget={entry.canonicalTarget ?? null}
+          updatedAt={seo?._meta?.generatedAt ?? entry.lastEvaluatedAt ?? null}
+        />
+      </Suspense>
+    );
+  }
+
+  notFound();
+}

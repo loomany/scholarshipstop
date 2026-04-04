@@ -1,0 +1,787 @@
+{
+  "$schemaNote": "L2 subject mapping. Single-word needles use token boundaries (see assignSubjectCategories). titleKeywordRules = title-only, strongest. Facets stay in seo_tags text[].",
+  "version": 3,
+  "fallbackL2Slug": "open_subject",
+  "seoSubjectTagToL2": {
+    "engineering": "engineering",
+    "computer_science": "computer_science",
+    "stem": "stem_general"
+  },
+  "legacyUiCategoryIdToL2": {
+    "arts": "visual_arts",
+    "education": "education_k12_higher",
+    "humanities": "humanities",
+    "stem": "stem_general",
+    "medical": "medicine",
+    "law": "law_pre_law",
+    "biology": "biology_life_sciences",
+    "safety": "protective_services",
+    "music": "performing_arts_music",
+    "hobbies": "hobbies_personal"
+  },
+  "titleKeywordRules": [
+    {
+      "needles": [
+        "computer science",
+        "software engineering",
+        "software developer",
+        "web development",
+        "data science",
+        "machine learning",
+        "artificial intelligence",
+        "cybersecurity",
+        "information systems",
+        "informatics",
+        "computing",
+        "programming",
+        "full stack",
+        "frontend",
+        "backend",
+        "computer engineering",
+        "cs major",
+        "comp sci",
+        "coding bootcamp",
+        "software development"
+      ],
+      "l2": "computer_science",
+      "priority": 8
+    },
+    {
+      "needles": [
+        "engineering scholarship",
+        "engineering student",
+        "engineering major",
+        "mechanical engineering",
+        "electrical engineering",
+        "civil engineering",
+        "chemical engineering",
+        "biomedical engineering",
+        "aerospace engineering",
+        "industrial engineering",
+        "future engineer"
+      ],
+      "l2": "engineering",
+      "priority": 8
+    },
+    {
+      "needles": [
+        "business scholarship",
+        "business major",
+        "business student",
+        "mba scholarship",
+        "entrepreneurship",
+        "marketing student",
+        "accounting scholarship",
+        "finance scholarship",
+        "economics major"
+      ],
+      "l2": "business_general",
+      "priority": 9
+    },
+    {
+      "needles": [
+        "nursing scholarship",
+        "nursing student",
+        "nursing major",
+        "future nurse",
+        "bsn student",
+        "rn to bsn"
+      ],
+      "l2": "nursing_allied_health",
+      "priority": 8
+    },
+    {
+      "needles": [
+        "pre-med",
+        "premed",
+        "medical school",
+        "future physician",
+        "md student",
+        "health professions",
+        "dental student",
+        "pharmacy student",
+        "veterinary student"
+      ],
+      "l2": "medicine",
+      "priority": 8
+    },
+    {
+      "needles": [
+        "biology scholarship",
+        "biology major",
+        "life science",
+        "biochemistry",
+        "molecular biology",
+        "marine biology",
+        "microbiology student"
+      ],
+      "l2": "biology_life_sciences",
+      "priority": 9
+    },
+    {
+      "needles": [
+        "psychology major",
+        "psychology student",
+        "sociology",
+        "social work scholarship",
+        "anthropology",
+        "criminal justice",
+        "political science",
+        "international relations",
+        "public administration",
+        "human services"
+      ],
+      "l2": "social_sciences",
+      "priority": 10
+    },
+    {
+      "needles": [
+        "education major",
+        "teacher scholarship",
+        "teaching scholarship",
+        "future teacher",
+        "student teaching",
+        "elementary education",
+        "secondary education",
+        "special education",
+        "early childhood education",
+        "school counselor",
+        "education degree",
+        "community college",
+        "junior college",
+        "two-year college"
+      ],
+      "l2": "education_k12_higher",
+      "priority": 9
+    },
+    {
+      "needles": [
+        "music scholarship",
+        "band scholarship",
+        "orchestra",
+        "music major",
+        "theatre scholarship",
+        "theater scholarship",
+        "dance scholarship",
+        "performing arts"
+      ],
+      "l2": "performing_arts_music",
+      "priority": 10
+    },
+    {
+      "needles": [
+        "art scholarship",
+        "visual arts",
+        "fine arts",
+        "graphic design",
+        "studio art",
+        "digital media",
+        "film student",
+        "animation student",
+        "photography scholarship"
+      ],
+      "l2": "visual_arts",
+      "priority": 11
+    },
+    {
+      "needles": [
+        "journalism scholarship",
+        "communications major",
+        "media studies",
+        "broadcasting",
+        "public relations scholarship"
+      ],
+      "l2": "media_design_communication",
+      "priority": 11
+    },
+    {
+      "needles": [
+        "law school",
+        "pre-law",
+        "legal studies",
+        "paralegal"
+      ],
+      "l2": "law_pre_law",
+      "priority": 10
+    },
+    {
+      "needles": [
+        "stem scholarship",
+        "science and math",
+        "math scholarship",
+        "mathematics major",
+        "physics major",
+        "chemistry major",
+        "science major"
+      ],
+      "l2": "stem_general",
+      "priority": 14
+    },
+    {
+      "needles": [
+        "community foundation",
+        "nonprofit scholarship",
+        "501(c)(3)",
+        "civic engagement",
+        "community leadership program"
+      ],
+      "l2": "community_nonprofit",
+      "priority": 13
+    }
+  ],
+  "fieldOfStudyRules": [
+    {
+      "needles": [
+        "computer science",
+        "software",
+        "information technology",
+        "cybersecurity",
+        "data science",
+        "machine learning",
+        "artificial intelligence",
+        "programming",
+        "informatics",
+        "information systems",
+        "computer information",
+        "web development",
+        "computing"
+      ],
+      "l2": "computer_science",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "engineering",
+        "mechanical eng",
+        "electrical eng",
+        "civil eng",
+        "aerospace",
+        "industrial eng",
+        "chemical engineering",
+        "biomedical engineering",
+        "computer engineering"
+      ],
+      "l2": "engineering",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "nursing",
+        "rn ",
+        "lpn",
+        "bsn",
+        "msn"
+      ],
+      "l2": "nursing_allied_health",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "medicine",
+        "medical",
+        "pre-med",
+        "premed",
+        "physician",
+        "dentistry",
+        "pharmacy",
+        "veterinary",
+        "health science",
+        "allied health"
+      ],
+      "l2": "medicine",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "biology",
+        "biological",
+        "life science",
+        "biochemistry",
+        "genetics",
+        "microbiology",
+        "ecology",
+        "zoology",
+        "botany"
+      ],
+      "l2": "biology_life_sciences",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "public health",
+        "epidemiology",
+        "health promotion"
+      ],
+      "l2": "public_health",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "business administration",
+        "business management",
+        "marketing",
+        "entrepreneurship",
+        "human resources",
+        "hospitality management",
+        "supply chain",
+        "operations management"
+      ],
+      "l2": "business_general",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "mba",
+        "business"
+      ],
+      "l2": "business_general",
+      "priority": 22
+    },
+    {
+      "needles": [
+        "finance",
+        "accounting",
+        "economics",
+        "investment",
+        "actuarial"
+      ],
+      "l2": "finance_economics",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "legal studies",
+        "pre-law",
+        "paralegal",
+        "juris"
+      ],
+      "l2": "law_pre_law",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "law"
+      ],
+      "l2": "law_pre_law",
+      "priority": 24
+    },
+    {
+      "needles": [
+        "political science",
+        "public policy",
+        "international relations",
+        "government",
+        "public administration"
+      ],
+      "l2": "public_policy_government",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "teacher education",
+        "elementary education",
+        "secondary education",
+        "special education",
+        "early childhood education",
+        "curriculum and instruction",
+        "educational leadership",
+        "school counseling",
+        "higher education administration",
+        "community college"
+      ],
+      "l2": "education_k12_higher",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "student teaching",
+        "teacher preparation",
+        "educator preparation program"
+      ],
+      "l2": "education_k12_higher",
+      "priority": 22
+    },
+    {
+      "needles": [
+        "graphic design",
+        "visual arts",
+        "fine arts",
+        "illustration",
+        "industrial design",
+        "fashion design",
+        "interior design",
+        "architecture"
+      ],
+      "l2": "visual_arts",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "music",
+        "theatre",
+        "theater",
+        "dance",
+        "performing arts"
+      ],
+      "l2": "performing_arts_music",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "journalism",
+        "communications",
+        "media studies",
+        "film",
+        "broadcast",
+        "digital media",
+        "public relations",
+        "strategic communication"
+      ],
+      "l2": "media_design_communication",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "english",
+        "history",
+        "philosophy",
+        "literature",
+        "linguistics",
+        "foreign language",
+        "classical studies",
+        "religious studies"
+      ],
+      "l2": "humanities",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "psychology",
+        "sociology",
+        "anthropology",
+        "social work",
+        "criminal justice",
+        "human development",
+        "family studies",
+        "geography",
+        "urban studies"
+      ],
+      "l2": "social_sciences",
+      "priority": 15
+    },
+    {
+      "needles": [
+        "agriculture",
+        "agribusiness",
+        "horticulture",
+        "food science",
+        "animal science"
+      ],
+      "l2": "agriculture_food",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "environmental science",
+        "environmental studies",
+        "sustainability",
+        "forestry",
+        "natural resources"
+      ],
+      "l2": "environment_sustainability",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "welding",
+        "automotive",
+        "hvac",
+        "construction",
+        "carpentry",
+        "plumbing",
+        "electrician"
+      ],
+      "l2": "skilled_trades",
+      "priority": 16
+    },
+    {
+      "needles": [
+        "vocational",
+        "technical program",
+        "trade school"
+      ],
+      "l2": "technical_vocational",
+      "priority": 20
+    },
+    {
+      "needles": [
+        "stem",
+        "mathematics",
+        "physics",
+        "chemistry",
+        "applied science"
+      ],
+      "l2": "stem_general",
+      "priority": 48
+    }
+  ],
+  "keywordRules": [
+    {
+      "needles": [
+        "computer science",
+        "software engineering",
+        "software developer",
+        "web developer",
+        "data scientist",
+        "machine learning",
+        "cyber security",
+        "information technology",
+        "full-stack",
+        "full stack",
+        "coding ",
+        "programmer",
+        "computer programmer",
+        "cloud computing",
+        "database administrator",
+        "network engineer",
+        "systems analyst"
+      ],
+      "l2": "computer_science",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "engineering scholarship",
+        "engineering student",
+        "engineering major",
+        "future engineer",
+        "mechanical engineer",
+        "electrical engineer",
+        "civil engineer",
+        "chemical engineer",
+        "industrial engineer",
+        "aerospace"
+      ],
+      "l2": "engineering",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "nursing student",
+        "nursing scholarship",
+        "nursing program",
+        "future nurse",
+        "registered nurse",
+        "bsn "
+      ],
+      "l2": "nursing_allied_health",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "pre-med",
+        "medical school",
+        "future physician",
+        "health professions",
+        "medical student",
+        "dental school",
+        "pharmacy school",
+        "veterinary medicine",
+        "physician assistant",
+        "healthcare career"
+      ],
+      "l2": "medicine",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "biology major",
+        "life sciences",
+        "biochemistry",
+        "molecular biology",
+        "marine biology",
+        "biologist",
+        "biotechnology"
+      ],
+      "l2": "biology_life_sciences",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "business administration",
+        "business major",
+        "business student",
+        "entrepreneurship",
+        "marketing major",
+        "management major",
+        "retail management",
+        "small business"
+      ],
+      "l2": "business_general",
+      "priority": 31
+    },
+    {
+      "needles": [
+        "mba ",
+        "accounting major",
+        "finance major",
+        "economics major",
+        "investment banking",
+        "financial planning"
+      ],
+      "l2": "finance_economics",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "law school",
+        "pre-law",
+        "legal studies",
+        "paralegal",
+        "juris doctor"
+      ],
+      "l2": "law_pre_law",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "education major",
+        "future teacher",
+        "teaching scholarship",
+        "student teacher",
+        "k-12",
+        "elementary teacher",
+        "high school teacher",
+        "school principal",
+        "education degree",
+        "community college",
+        "junior college"
+      ],
+      "l2": "education_k12_higher",
+      "priority": 31
+    },
+    {
+      "needles": [
+        "psychology major",
+        "sociology major",
+        "social work student",
+        "anthropology",
+        "criminal justice major",
+        "political science major",
+        "international studies",
+        "public policy"
+      ],
+      "l2": "social_sciences",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "art scholarship",
+        "music scholarship",
+        "theatre",
+        "theater",
+        "dance team",
+        "marching band",
+        "choir "
+      ],
+      "l2": "performing_arts_music",
+      "priority": 32
+    },
+    {
+      "needles": [
+        "visual arts",
+        "fine arts",
+        "graphic design",
+        "studio art",
+        "digital art",
+        "illustration"
+      ],
+      "l2": "visual_arts",
+      "priority": 32
+    },
+    {
+      "needles": [
+        "journalism",
+        "communications major",
+        "film production",
+        "broadcast",
+        "media studies",
+        "public relations"
+      ],
+      "l2": "media_design_communication",
+      "priority": 32
+    },
+    {
+      "needles": [
+        "stem scholarship",
+        "science and math",
+        "mathematics scholarship",
+        "physics scholarship",
+        "chemistry scholarship",
+        "science fair",
+        "science student"
+      ],
+      "l2": "stem_general",
+      "priority": 52
+    },
+    {
+      "needles": [
+        "firefighter",
+        "police officer",
+        "law enforcement",
+        "ems ",
+        "emt ",
+        "paramedic",
+        "military scholarship",
+        "rotc",
+        "national guard",
+        "coast guard"
+      ],
+      "l2": "protective_services",
+      "priority": 30
+    },
+    {
+      "needles": [
+        "community foundation scholarship",
+        "nonprofit organization",
+        "501(c)(3)",
+        "civic leadership",
+        "community development scholarship",
+        "local foundation scholarship"
+      ],
+      "l2": "community_nonprofit",
+      "priority": 42
+    },
+    {
+      "needles": [
+        "athletic scholarship",
+        "student athlete",
+        "varsity ",
+        "ncaa "
+      ],
+      "l2": "sports_recreation",
+      "priority": 32
+    },
+    {
+      "needles": [
+        "sports management",
+        "kinesiology",
+        "exercise science",
+        "physical education",
+        "athletic training"
+      ],
+      "l2": "sports_recreation",
+      "priority": 31
+    },
+    {
+      "needles": [
+        "hobby",
+        "creative writing",
+        "photography",
+        "crafts"
+      ],
+      "l2": "hobbies_personal",
+      "priority": 45
+    }
+  ]
+}

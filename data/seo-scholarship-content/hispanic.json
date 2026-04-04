@@ -1,0 +1,47 @@
+{
+  "seo_title": "Hispanic Scholarships: $500 to $18,000 Available",
+  "seo_description": "Explore 50 Hispanic scholarships with varying deadlines and award amounts. Check details and apply promptly.",
+  "intro": "For Hispanic students seeking financial support, this collection of 50 scholarships offers a diverse range of opportunities. Award sizes vary significantly, with amounts ranging from approximately $500 to $18,000. Each listing presents unique eligibility criteria and requirements, making it essential to explore the specifics. With deadlines spread across various dates, including some approaching within the next 45 days, it's advisable to act promptly to secure funding for your educational journey.",
+  "h1": "Find 50 Hispanic Scholarships with Varied Awards",
+  "supporting": "This scholarship list is a valuable resource for understanding the options available to Hispanic students. As you review the listings, pay attention to the varying requirements, including the presence of essays in some cases and lighter requirements in others. Comparing award amounts and deadlines can help you prioritize which scholarships to apply for based on your needs and timeline.",
+  "related_intro": "If you're interested in exploring more targeted opportunities, check out related pages that focus on specific fields like STEM, arts, or community service scholarships.",
+  "how_to_use": [
+    "Review the list for scholarship amounts and categories",
+    "Compare deadlines to prioritize applications",
+    "Check for essay requirements and prepare accordingly",
+    "Open official pages for detailed eligibility and application instructions",
+    "Shortlist scholarships that align with your academic goals"
+  ],
+  "who_for": [
+    "Hispanic students pursuing higher education",
+    "Students interested in STEM and community-focused scholarships",
+    "Applicants looking for awards with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Hispanic students?",
+      "answer": "This collection features a diverse range of scholarships, including those focused on education, STEM, arts, law, and community service. With 50 listings, you can find opportunities tailored to various fields and interests."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the listings. While some scholarships may not require essays, others do. It's best to review each listing carefully to understand the specific requirements."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes vary significantly, with amounts ranging from approximately $500 to $18,000. Be sure to check individual listings for specific funding details."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 50 scholarships listed have deadlines, which vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to check the dates promptly and plan your applications accordingly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "hispanic",
+    "generatedAt": "2026-04-02T10:36:24.330Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 50,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "seo_title": "Ohio Scholarships for High School Seniors",
+  "seo_description": "Explore 9 scholarships for Ohio high school seniors, with awards ranging from $1,500 to $5,000. Check deadlines and requirements.",
+  "intro": "For high school seniors in Ohio, there are 9 scholarships available that can provide significant financial assistance for your educational journey. Award sizes typically range from $1,500 to $5,000, offering a variety of options to help cover tuition and other expenses. With deadlines varying across listings, it's essential to check the specific dates for each scholarship and act promptly, especially since some deadlines are approaching within the next 45 days.",
+  "h1": "Scholarships for High School Seniors in Ohio",
+  "supporting": "This selection of scholarships encompasses diverse categories such as education, STEM, and community initiatives. Many listings do not require essays, making them more accessible for students who may prefer a lighter application process. As you review these opportunities, compare the award amounts and requirements to find the best fit for your goals and circumstances.",
+  "related_intro": "If you're interested in exploring more scholarships tailored to different education levels or specific fields, check out the related pages for additional options.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship listing",
+    "Review the award amounts and eligibility criteria",
+    "Check for any essay requirements or application specifics",
+    "Visit the official scholarship pages for detailed information",
+    "Shortlist the scholarships that align with your educational goals"
+  ],
+  "who_for": [
+    "High school seniors in Ohio",
+    "Students interested in STEM fields",
+    "Applicants seeking community-focused scholarships",
+    "Those looking for scholarships with fewer application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Ohio?",
+      "answer": "There are 9 scholarships currently listed for high school seniors in Ohio, covering categories such as education, STEM, community, and miscellaneous. This variety allows students to find opportunities that align with their interests and career goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially simpler for applicants. However, it's important to check each listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 9 scholarships have deadlines, but they differ from one another. Be sure to review each listing carefully for its specific deadline, as some may be approaching soon—within the next 45 days."
+    },
+    {
+      "question": "What is the typical award size for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category range from approximately $1,500 to $5,000. Each listing will provide the exact amount, so be sure to check the details for each scholarship you're interested in."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/ohio",
+    "generatedAt": "2026-04-02T11:02:47.135Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

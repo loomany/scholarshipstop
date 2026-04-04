@@ -1,0 +1,49 @@
+{
+  "seo_title": "Financial Need Scholarships in Arizona | Find Funding",
+  "seo_description": "Explore 14 scholarships for financial need in Arizona. Award sizes vary, and deadlines differ—check listings for details.",
+  "intro": "Finding financial support can be crucial for students in Arizona, especially those facing economic challenges. This collection of 14 scholarships is specifically tailored for individuals demonstrating financial need. Award sizes vary, with amounts ranging from approximately $500 to $5,000. Each opportunity has its own unique requirements and deadlines, so it's essential to review them carefully to identify the best fit for your situation.",
+  "h1": "Arizona Scholarships for Financial Need",
+  "supporting": "As you explore this list, pay attention to the diverse categories, including education, community service, and STEM fields. Some scholarships may require essays, while others have lighter requirements, making it easier to apply. Given the varying deadlines—some approaching quickly—it's wise to act promptly and ensure you meet all necessary criteria before submitting your applications.",
+  "related_intro": "If you're interested in similar opportunities, consider checking out scholarships focused on specific fields or other financial need categories.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize applications",
+    "Scan award amounts to identify the most beneficial options",
+    "Read through requirement lines to understand what each scholarship entails",
+    "Open official pages for detailed information and updates",
+    "Shortlist scholarships that align with your educational goals"
+  ],
+  "who_for": [
+    "Students in Arizona demonstrating financial need",
+    "Individuals pursuing education in STEM fields",
+    "Community-focused applicants seeking support",
+    "Students interested in health care occupations",
+    "Applicants with disabilities looking for funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in Arizona?",
+      "answer": "The current listings include 14 scholarships that cover a variety of categories such as education, community, disability, STEM, and medicine. This range allows students to find opportunities that align with their specific fields of interest."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 14 scholarships have specific deadlines, which vary by program. It's important to check each listing for its exact deadline, as some may be approaching soon—within about 45 days."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Requirements differ among the scholarships; some may require essays while others do not. Be sure to review the details for each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes vary across the listings, with amounts generally ranging from approximately $500 to $5,000. Check individual scholarship details for specific award information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/arizona",
+    "generatedAt": "2026-04-02T11:07:18.520Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 14,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Top Scholarships for Women in the USA",
+  "seo_description": "Explore 199 scholarships for women, with awards from $400 to $40,000. Check varying deadlines and requirements.",
+  "intro": "Finding financial support tailored for women can significantly ease the path to achieving your educational goals. With 199 scholarships available, this collection offers a diverse range of opportunities across various fields, including education, STEM, arts, and more. Award sizes vary widely, with amounts ranging from approximately $400 to $40,000. Be mindful that deadlines differ, and at least one opportunity is approaching soon, so it’s wise to check the specific dates promptly.",
+  "h1": "199 Scholarships Available for Women",
+  "supporting": "As you explore this list, consider comparing the award amounts and requirements for each scholarship. Some may require essays while others do not, and many have lighter application processes. This variety allows you to find options that align with your strengths and availability. Pay attention to the categories that interest you, whether it's community service, technology, or the arts, to maximize your chances of securing funding.",
+  "related_intro": "For more tailored options, check out related pages that focus on specific fields or requirements to further narrow down your search.",
+  "how_to_use": [
+    "Compare deadlines listed for each scholarship",
+    "Scan the award amounts to find suitable options",
+    "Read the requirement details for essay and application specifics",
+    "Open official scholarship pages for complete information",
+    "Shortlist the scholarships that best match your profile"
+  ],
+  "who_for": [
+    "Women pursuing education in STEM fields",
+    "Women interested in arts and community projects",
+    "Women seeking scholarships with lighter application requirements",
+    "Women from diverse backgrounds looking for targeted funding",
+    "Women planning to apply for scholarships with upcoming deadlines"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women?",
+      "answer": "The current catalog features a diverse range of 199 scholarships for women across various categories, including Education, STEM, Community, Medicine, and Arts. This variety allows applicants to find opportunities that align with their specific interests and career goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While approximately 13 of the 199 scholarships require essays, the majority do not. It's important to check the specific requirements for each scholarship to understand what is needed."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 199 scholarships have deadlines, but these vary widely. Some deadlines are approaching within the next 45 days, so it's advisable to review the listings promptly to ensure you don’t miss any opportunities."
+    },
+    {
+      "question": "What are the typical award amounts for scholarships in this category?",
+      "answer": "Award sizes for the scholarships available to women can vary significantly, with amounts ranging from approximately $400 to $40,000 USD. Each scholarship listing will provide specific details on the award amount, so be sure to check individual entries."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women",
+    "generatedAt": "2026-04-02T10:29:51.070Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 199,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

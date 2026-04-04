@@ -1,0 +1,49 @@
+{
+  "seo_title": "Wisconsin Scholarships for High School Seniors",
+  "seo_description": "Explore 28 scholarships for high school seniors in Wisconsin. Award sizes range from $500 to $5,000. Check deadlines and requirements.",
+  "intro": "Finding financial support as a high school senior in Wisconsin can be crucial for your educational journey. With 28 scholarships available in this category, award sizes generally range from $500 to $5,000, offering a variety of funding opportunities. Keep in mind that requirements and deadlines vary, so it’s important to review each listing carefully to identify the best matches for your situation.",
+  "h1": "Scholarships for High School Seniors in Wisconsin",
+  "supporting": "This collection of scholarships includes options across several categories, such as education, medicine, and community service. Some scholarships may require essays, while many do not, providing a mix of application experiences. Take the time to compare the details of each scholarship, including deadlines, to ensure you don’t miss out on potential funding.",
+  "related_intro": "For more tailored opportunities, consider exploring scholarships specific to other education levels or states.",
+  "how_to_use": [
+    "Check each listing for specific deadlines",
+    "Compare award amounts to prioritize applications",
+    "Review requirement lines for essays or other materials",
+    "Open official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "High school seniors in Wisconsin",
+    "Students pursuing education-related fields",
+    "Applicants interested in community service scholarships",
+    "Individuals with medical or disability-related needs",
+    "Those seeking scholarships with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Wisconsin?",
+      "answer": "There are 28 scholarships listed for high school seniors in Wisconsin, covering a range of categories including community, education, medicine, disability, and STEM. This variety allows students to find opportunities that align with their interests and needs."
+    },
+    {
+      "question": "How can I find out the specific deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 28 listings include this information. It's important to check the dates promptly, as at least one scholarship has a deadline within the next 45 days."
+    },
+    {
+      "question": "Do I need to write essays for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's advisable to review each listing for specific requirements to understand what is needed."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available range from approximately $500 to $5,000. However, the exact amount can vary by scholarship, so it's best to check the individual listings for detailed information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/wisconsin",
+    "generatedAt": "2026-04-02T10:45:22.673Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 28,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

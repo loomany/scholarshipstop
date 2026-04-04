@@ -1,0 +1,48 @@
+{
+  "seo_title": "Florida High School Scholarships | Find Your Funding",
+  "seo_description": "Explore 4 Florida high school scholarships with varied awards and deadlines. Check details to secure your funding.",
+  "intro": "Finding financial support for high school students in Florida can be a crucial step toward achieving educational goals. This catalog features 4 scholarships specifically tailored for high school students in the state, with award sizes that vary. Many of these opportunities have different requirements and deadlines, so it’s important to explore each listing carefully to find the best fit for your needs.",
+  "h1": "High School Scholarships in Florida",
+  "supporting": "As you review the scholarships, pay attention to the specific details for each listing, including award amounts and any associated requirements. Some scholarships may not require essays, making them more accessible. Be sure to check the deadlines, as they can differ significantly, and verify all information on the official sponsor pages to ensure you have the most accurate details.",
+  "related_intro": "If you're interested in exploring more options, consider checking out related pages that focus on scholarships for different educational levels or specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts listed in rows",
+    "Read requirement lines for eligibility",
+    "Open official pages for more details",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "High school students in Florida",
+    "Students seeking STEM funding",
+    "Applicants looking for no-essay scholarships",
+    "Individuals interested in education-related awards"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school students in Florida?",
+      "answer": "In Florida, there are currently four scholarships listed that cater to high school students. These include opportunities in education and STEM fields, among others, providing a range of options based on your interests and academic focus."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making them potentially easier to apply for. However, it's important to verify the specific requirements for each scholarship, as they can vary."
+    },
+    {
+      "question": "What is the typical award size for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category generally range from approximately $1,000 to $2,500. Keep in mind that specific amounts can vary by scholarship, so check each listing for precise details."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All four scholarships listed have deadlines, but they differ from one another. It's advisable to check the specific deadline for each scholarship promptly, as at least one has a deadline approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school/florida",
+    "generatedAt": "2026-04-02T10:45:11.676Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

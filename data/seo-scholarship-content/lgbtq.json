@@ -1,0 +1,49 @@
+{
+  "seo_title": "LGBTQ Scholarships for Diverse Fields",
+  "seo_description": "Explore 16 LGBTQ scholarships with awards from $1,000 to $60,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support tailored for LGBTQ+ individuals can significantly ease the burden of education and related expenses. This catalog features 16 scholarships specifically for the LGBTQ+ community, with award sizes ranging from $1,000 to $60,000. The opportunities span various fields, including education, medicine, arts, and law, making it easier to find a match for your academic and professional goals. Keep in mind that deadlines and requirements vary, so it's important to review each listing carefully.",
+  "h1": "Find LGBTQ Scholarships with Varied Award Amounts",
+  "supporting": "As you explore these scholarships, pay attention to the specific fields and award amounts that resonate with your aspirations. Some scholarships may have lighter requirements, while others could necessitate essays or additional documentation. Given the diversity in deadlines, including some approaching in the next month, make sure to verify the details directly on the sponsor's site to ensure you don't miss out on any opportunities.",
+  "related_intro": "If you're interested in more funding options, consider checking out scholarships focused on specific fields or requirements that align with your interests.",
+  "how_to_use": [
+    "Compare deadlines across different listings",
+    "Scan award amounts to find suitable options",
+    "Read through requirement lines for each scholarship",
+    "Open official pages for the most accurate information",
+    "Shortlist scholarships that fit your profile and verify details"
+  ],
+  "who_for": [
+    "LGBTQ+ students pursuing education",
+    "Individuals seeking community support scholarships",
+    "Applicants interested in arts or law funding",
+    "Students in medical programs",
+    "Youth looking for leadership scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for LGBTQ individuals?",
+      "answer": "The current listing includes 16 scholarships across various categories, including community, education, medicine, law, arts, and miscellaneous fields. This diversity allows applicants to find opportunities that align with their specific interests and career paths."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's important to review the details of each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships range significantly, with amounts from approximately $1,000 to $60,000 across the listings. Be sure to check individual scholarship details for specific funding amounts."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 16 scholarships have varying deadlines, with some approaching in the near term. It's advisable to check the specific deadlines for each scholarship promptly to ensure you don’t miss any opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "lgbtq",
+    "generatedAt": "2026-04-02T10:45:45.685Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 16,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

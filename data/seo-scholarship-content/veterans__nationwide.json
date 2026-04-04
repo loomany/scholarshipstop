@@ -1,0 +1,49 @@
+{
+  "seo_title": "Nationwide Scholarships for Veterans | Find Your Funding",
+  "seo_description": "Explore 25 scholarships for veterans nationwide. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "Navigating funding opportunities can be challenging for veterans, but this collection of 25 scholarships tailored for veterans across the nation offers a range of options to support your educational goals. Award sizes vary significantly, with amounts typically ranging from $500 to $25,000. Keep in mind that while many listings have upcoming deadlines, they differ from one another, so it's wise to check the specific dates for each opportunity.",
+  "h1": "25 Scholarships for Veterans Across the USA",
+  "supporting": "As you explore this list, consider the diversity of categories, including education, STEM, and community-focused scholarships. Some opportunities may require essays, while others have lighter application requirements, making it easier to find a fit that suits your situation. Take the time to compare the award amounts and eligibility criteria to identify the scholarships that align best with your needs.",
+  "related_intro": "For additional resources, check out related pages that focus on specific scholarship categories or application tips tailored for veterans.",
+  "how_to_use": [
+    "Review the list for relevant categories and award sizes",
+    "Check individual deadlines to prioritize your applications",
+    "Examine the requirement details for each scholarship",
+    "Visit the official pages for complete application instructions",
+    "Shortlist your top choices for a more focused application process"
+  ],
+  "who_for": [
+    "Veterans pursuing higher education",
+    "Veterans interested in STEM fields",
+    "Veterans seeking community-focused scholarships",
+    "Veterans looking for lighter application requirements",
+    "Veterans in need of substantial financial support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for veterans?",
+      "answer": "This collection features a diverse range of scholarships categorized under education, STEM, humanities, community, and medicine. With 25 listings, you can find opportunities tailored to various fields and interests."
+    },
+    {
+      "question": "How can I find specific scholarship details?",
+      "answer": "Each scholarship listing includes important information such as award amounts and deadlines. Be sure to check each entry for specific requirements, as some may require essays while others do not."
+    },
+    {
+      "question": "Are there deadlines I should be aware of?",
+      "answer": "All 25 scholarships have deadlines, but they vary by program. It's advisable to review the deadlines closely, especially since some may be approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes vary significantly, with amounts ranging approximately from $500 to $25,000 across the listings. Make sure to check each scholarship for its specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "veterans/nationwide",
+    "generatedAt": "2026-04-02T10:45:51.425Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 25,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

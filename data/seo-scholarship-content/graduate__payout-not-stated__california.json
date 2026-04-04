@@ -1,0 +1,49 @@
+{
+  "seo_title": "California Graduate Scholarships with Varying Awards",
+  "seo_description": "Explore 10 California graduate scholarships with diverse awards and varying deadlines. Check details for each opportunity.",
+  "intro": "Finding funding for graduate studies in California can be challenging, but there are 10 scholarships available that cater to a variety of fields and interests. While the exact award amounts are not always specified, they generally range from $1,000 to $60,000. It's essential to note that deadlines for these scholarships vary, with some approaching in the next few weeks, so timely action is crucial.",
+  "h1": "California Graduate Scholarships: Payout Not Stated",
+  "supporting": "This list includes opportunities across diverse categories such as education, community, medicine, and the arts. Many of these scholarships do not require essays, making them more accessible for busy graduate students. As you explore the listings, pay close attention to the specific requirements and deadlines to ensure you meet all criteria for application.",
+  "related_intro": "For more tailored options, consider checking out related pages that focus on specific fields or scholarship types to maximize your chances of funding.",
+  "how_to_use": [
+    "Compare deadlines to prioritize your applications",
+    "Scan the award descriptions for relevant details",
+    "Read through the requirement lines carefully",
+    "Open official scholarship pages for the most accurate information",
+    "Shortlist your favorites and verify details on sponsor sites"
+  ],
+  "who_for": [
+    "Graduate students in California",
+    "Applicants seeking funding without essay requirements",
+    "Students pursuing degrees in education or community service",
+    "Individuals interested in medical or arts scholarships",
+    "Those looking for a range of award sizes"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this listing?",
+      "answer": "This selection includes 10 scholarships across various categories such as education, community, medicine, STEM, and arts. Each scholarship may have different focuses, so it's beneficial to review the details of each listing to find the best fit for your background and interests."
+    },
+    {
+      "question": "Are there any specific requirements for applying to these scholarships?",
+      "answer": "While many of the listings do not require an essay, it's important to check each individual scholarship for specific requirements. Some may have lighter application processes, but verifying details in the respective listings is essential."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "All 10 scholarships in this listing have deadlines, but they vary by program. It's advisable to check the deadline information for each scholarship promptly, especially since some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships listed here vary significantly, with amounts ranging approximately from $1,000 to $60,000. Each scholarship may have different funding levels, so reviewing the specific amounts in each listing is recommended."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/payout-not-stated/california",
+    "generatedAt": "2026-04-02T11:05:07.160Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 10,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

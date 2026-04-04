@@ -1,0 +1,49 @@
+{
+  "seo_title": "Florida Scholarships for Hispanic Students",
+  "seo_description": "Explore 5 scholarships for Hispanic students in Florida. Award amounts range from $500 to $2,500. Check deadlines and requirements.",
+  "intro": "Finding financial support as a Hispanic student in Florida can be pivotal for your educational journey. This collection features 5 scholarships specifically tailored for Hispanic students in the state, with award amounts ranging from approximately $500 to $2,500. Since deadlines vary, it's essential to check each listing promptly to ensure you don’t miss out on potential funding opportunities.",
+  "h1": "Hispanic Scholarships in Florida",
+  "supporting": "These scholarships cover a range of categories, including education, STEM, arts, and community initiatives. Many listings do not require essays, making them more accessible for applicants. As you review the options, consider comparing the award sizes and requirements to find the best fit for your needs.",
+  "related_intro": "For more tailored options, explore related scholarships that might align with your specific interests or fields of study.",
+  "how_to_use": [
+    "Check each listing for specific deadlines",
+    "Compare award amounts to prioritize applications",
+    "Review eligibility requirements carefully",
+    "Open official scholarship pages for detailed information",
+    "Shortlist your top choices for easier tracking"
+  ],
+  "who_for": [
+    "Hispanic students in Florida",
+    "Students pursuing education in STEM fields",
+    "Applicants interested in community-focused initiatives",
+    "Individuals seeking arts-related funding",
+    "Students looking for lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Hispanic students in Florida?",
+      "answer": "This filter showcases a total of 5 scholarships specifically for Hispanic students in Florida, covering various categories such as STEM, Education, Arts, and Community. Each listing may have different eligibility criteria and focus areas, so it's beneficial to review each one carefully."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from approximately $500 to $2,500. However, specific amounts can vary by listing, so it's important to check the details of each scholarship for exact figures."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, but it's wise to verify the specific requirements for each one. While many listings have lighter application processes, checking the details will ensure you meet all necessary criteria."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 5 scholarships in this filter have deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's advisable to check the individual listings promptly to ensure you don't miss any opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "hispanic/florida",
+    "generatedAt": "2026-04-02T10:51:01.646Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

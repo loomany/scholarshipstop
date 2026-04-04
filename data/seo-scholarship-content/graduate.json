@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 284 Graduate Scholarships in the USA",
+  "seo_description": "Find diverse graduate scholarships with awards from $250 to $100,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Navigating the landscape of graduate scholarships can be overwhelming, but there are 284 options available to help fund your advanced education. These scholarships cover a wide range of categories, from STEM and education to community initiatives and the arts, with award sizes that can vary significantly, reaching up to $100,000. As deadlines differ across listings, it's crucial to check each one promptly to ensure you don’t miss out on potential funding.",
+  "h1": "Discover Graduate Scholarships: 284 Opportunities Available",
+  "supporting": "When reviewing this list, consider what aligns best with your field of study and personal circumstances. Some scholarships may have lighter requirements, while others could involve essays or specific criteria. Take the time to compare award amounts and deadlines, as this can help you prioritize which opportunities to pursue. Each scholarship provides unique benefits, so examining the details closely will enhance your chances of success.",
+  "related_intro": "If you're interested in exploring more tailored funding options, consider checking out scholarships specifically for STEM fields or those that support community initiatives.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines for eligibility details",
+    "Open official pages for complete information",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Graduate students in STEM fields",
+    "Students pursuing education degrees",
+    "Applicants seeking community-focused scholarships",
+    "Individuals interested in arts funding",
+    "Medical and health-related graduate students"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students?",
+      "answer": "There are 284 graduate scholarships listed, covering a range of categories including Education, STEM, Community, Medicine, and Arts. This variety allows students to find funding opportunities that align with their specific fields of study."
+    },
+    {
+      "question": "How do I find the right scholarship for my needs?",
+      "answer": "You can use the filters to narrow down scholarships based on your field or specific requirements. Each listing provides details on award amounts and deadlines, so be sure to check those to find opportunities that suit your situation."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary across the listings; while some scholarships may require essays, many do not. It's important to review each scholarship's details to understand what is needed for your application."
+    },
+    {
+      "question": "How often are the scholarship deadlines?",
+      "answer": "All 284 scholarships have deadlines, but they vary significantly. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate",
+    "generatedAt": "2026-04-02T10:32:53.092Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 284,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

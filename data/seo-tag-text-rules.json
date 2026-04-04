@@ -1,0 +1,174 @@
+{
+  "$schemaNote": "Needles are matched as lowercase substrings on concatenated text fields. Extend per tag without code changes.",
+  "defaultFields": [
+    "title",
+    "summary_short",
+    "description",
+    "requirements_text",
+    "eligibility_text"
+  ],
+  "tags": {
+    "first_generation": {
+      "needles": [
+        "first generation",
+        "first-generation",
+        "first in family",
+        "first-generation student",
+        "first gen "
+      ]
+    },
+    "international_students": {
+      "needles": [
+        "international student",
+        "international students",
+        "f-1",
+        "f1 visa",
+        "non-u.s. citizen",
+        "non-us citizen",
+        "non u.s. citizen",
+        "foreign national",
+        "study in the u.s.",
+        "study in the us"
+      ]
+    },
+    "minority": {
+      "needles": [
+        "minority students",
+        "underrepresented",
+        "minority applicants"
+      ]
+    },
+    "women": {
+      "needles": [
+        "for women",
+        "female students",
+        "women applicants",
+        "women only",
+        "for female",
+        "open to women"
+      ]
+    },
+    "african_american": {
+      "needles": [
+        "african american",
+        "african-american",
+        "black students"
+      ]
+    },
+    "hispanic": {
+      "needles": ["hispanic", "latino", "latina", "latinx"]
+    },
+    "native_american": {
+      "needles": [
+        "native american",
+        "american indian",
+        "alaska native",
+        "tribal member"
+      ]
+    },
+    "veterans": {
+      "needles": [
+        "veteran",
+        "veterans",
+        "military service",
+        "armed forces",
+        "gi bill"
+      ]
+    },
+    "disability": {
+      "needles": [
+        "disability",
+        "disabled students",
+        "students with disabilities"
+      ]
+    },
+    "lgbtq": {
+      "needles": ["lgbtq", "lgbt", "queer students"]
+    },
+    "single_parent": {
+      "needles": ["single parent", "single mothers", "single fathers"]
+    },
+    "financial_need": {
+      "needles": [
+        "financial need",
+        "need-based",
+        "demonstrate need",
+        "fafsa",
+        "efc"
+      ]
+    },
+    "foster_youth": {
+      "needles": ["foster youth", "foster care", "former foster"]
+    },
+    "low_income": {
+      "needles": ["low income", "low-income", "economically disadvantaged"]
+    },
+    "engineering": {
+      "needles": [
+        "engineering",
+        "engineer major",
+        "mechanical engineering",
+        "electrical engineering"
+      ]
+    },
+    "computer_science": {
+      "needles": [
+        "computer science",
+        "software engineering",
+        "informatics",
+        "cs major",
+        "programming"
+      ]
+    },
+    "stem": {
+      "needles": [
+        "stem ",
+        "stem.",
+        "stem field",
+        "science technology engineering",
+        "s.t.e.m"
+      ]
+    },
+    "no_essay": {
+      "needles": [
+        "no essay",
+        "essay not required",
+        "without an essay",
+        "no personal statement",
+        "essay optional"
+      ]
+    },
+    "no_gpa_requirement": {
+      "needles": [
+        "no gpa",
+        "gpa not required",
+        "no minimum gpa",
+        "without a gpa",
+        "gpa requirement: none"
+      ]
+    },
+    "few_requirements": {
+      "needles": ["few requirements", "minimal requirements", "simple application"]
+    },
+    "phd": {
+      "needles": ["ph.d", "phd ", "doctoral", "doctorate"]
+    },
+    "graduate": {
+      "needles": [
+        "graduate student",
+        "master's degree",
+        "masters degree",
+        "mba student"
+      ]
+    },
+    "undergraduate": {
+      "needles": ["undergraduate", "undergrad ", "bachelor"]
+    },
+    "high_school": {
+      "needles": ["high school", "highschool", "grades 9-12"]
+    },
+    "high_school_senior": {
+      "needles": ["high school senior", "12th grade", "graduating senior"]
+    }
+  }
+}

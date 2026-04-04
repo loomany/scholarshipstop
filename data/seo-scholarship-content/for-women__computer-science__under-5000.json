@@ -1,0 +1,47 @@
+{
+  "seo_title": "Women in Computer Science Scholarships Under $5,000",
+  "seo_description": "Explore 8 scholarships for women in computer science with awards up to $5,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support in computer science can be challenging, especially for women pursuing their education. This collection features 8 scholarships specifically for women in the field, with award amounts typically ranging from $1,000 to $5,000. Each listing has its own unique requirements and deadlines, so it's important to review them carefully to find the best fit for your academic journey.",
+  "h1": "Scholarships for Women in Computer Science Under $5,000",
+  "supporting": "As you explore these opportunities, take note of the varying award sizes and deadlines. Many of these scholarships do not require essays, making them more accessible for applicants. It's worth comparing the specific eligibility criteria and application details for each listing to maximize your chances of receiving funding.",
+  "related_intro": "If you're interested in exploring additional funding options, consider checking out other scholarship categories for women in STEM or those with different award amounts.",
+  "how_to_use": [
+    "Review each listing for specific eligibility criteria",
+    "Compare award amounts to find the best options for your needs",
+    "Check deadlines closely, especially for upcoming opportunities",
+    "Read through any requirement lines for application details",
+    "Visit official sponsor pages for the most accurate information"
+  ],
+  "who_for": [
+    "Women pursuing degrees in computer science",
+    "Students seeking scholarships under $5,000",
+    "Applicants looking for opportunities with minimal requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women in computer science under $5,000?",
+      "answer": "This category includes a variety of scholarships specifically for women pursuing studies in computer science, with award amounts generally ranging from $1,000 to $5,000. There are currently 8 listings available, each with unique eligibility criteria and requirements."
+    },
+    {
+      "question": "How can I find specific details about each scholarship?",
+      "answer": "You can click on each scholarship listing to view detailed information, including eligibility requirements, application processes, and deadlines. Many of the scholarships in this category do not require essays, but it's important to verify the specifics for each listing."
+    },
+    {
+      "question": "Are there any upcoming deadlines I should be aware of?",
+      "answer": "All 8 scholarships listed have deadlines, with some approaching within the next 45 days. Be sure to check the individual deadlines for each scholarship to ensure you submit your applications on time."
+    },
+    {
+      "question": "What should I consider when applying for these scholarships?",
+      "answer": "Consider the specific eligibility requirements and any application materials needed for each scholarship. While many listings have lighter requirements, it’s essential to read through the details to understand what is expected for a successful application."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women/computer-science/under-5000",
+    "generatedAt": "2026-04-02T10:41:18.800Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 8,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

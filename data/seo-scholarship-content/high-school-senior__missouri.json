@@ -1,0 +1,49 @@
+{
+  "seo_title": "Missouri Scholarships for High School Seniors",
+  "seo_description": "Explore 24 scholarships for Missouri high school seniors with awards up to $12,000. Check deadlines and requirements.",
+  "intro": "Navigating the scholarship landscape can be overwhelming, especially for high school seniors in Missouri. With 24 available scholarships, this selection offers a range of opportunities to help fund your education. Award sizes vary significantly, with amounts typically ranging from $500 to $12,000. Many of these listings have no essay requirements, making them more accessible. However, deadlines differ, so it’s important to check each scholarship’s specific timeline as some may be approaching soon.",
+  "h1": "Scholarships for High School Seniors in Missouri",
+  "supporting": "This collection of scholarships covers various categories, including education, community, and medical fields. As you review the listings, consider comparing the award amounts and requirements to find the best fit for your needs. Pay attention to any specific eligibility criteria and be proactive in verifying details on the sponsor's official website. This approach will help you maximize your chances of securing funding.",
+  "related_intro": "If you're interested in exploring more scholarships tailored to specific fields or requirements, check out our related pages for additional opportunities.",
+  "how_to_use": [
+    "Compare award amounts across different listings",
+    "Scan for any specific eligibility requirements",
+    "Read through the deadline text for each scholarship",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors in Missouri",
+    "Students pursuing education in medical fields",
+    "Applicants looking for community-focused scholarships",
+    "Individuals seeking no-essay scholarship options",
+    "Students interested in STEM-related funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Missouri?",
+      "answer": "The current listing includes 24 scholarships across various categories such as education, community, law, disability, and medicine. This diversity allows students to find opportunities that align with their interests and career goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require essays, making the application process potentially simpler. However, it's important to verify the specific requirements for each scholarship, as there may be exceptions."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 24 scholarships listed have deadlines, with at least one approaching within the next 45 days. It's advisable to check the specific deadlines for each scholarship promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The scholarships available for high school seniors in Missouri offer a wide range of award amounts, with values typically between $500 and $12,000. This variety allows students to find funding that meets their financial needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/missouri",
+    "generatedAt": "2026-04-02T10:46:14.549Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 24,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

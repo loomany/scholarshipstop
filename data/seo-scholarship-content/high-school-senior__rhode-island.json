@@ -1,0 +1,49 @@
+{
+  "seo_title": "Rhode Island Scholarships for High School Seniors",
+  "seo_description": "Explore 17 scholarships for Rhode Island high school seniors with awards from $500 to $17,000. Check deadlines and requirements.",
+  "intro": "Navigating the scholarship landscape can be daunting, especially for high school seniors in Rhode Island. With 17 available scholarships, this selection offers a range of award sizes, from approximately $500 to $17,000. Many of these opportunities do not require essays, making them more accessible. However, be mindful that deadlines vary, with some approaching within the next 45 days, so reviewing each listing promptly is essential.",
+  "h1": "Scholarships for High School Seniors in Rhode Island",
+  "supporting": "This collection features scholarships across various categories, including community, education, STEM, and humanities. As you explore the listings, consider comparing the award amounts and specific eligibility requirements. Some scholarships may have lighter requirements, allowing for a smoother application process. Make sure to check the official pages for the most accurate details and updates.",
+  "related_intro": "If you're interested in exploring scholarships in other states or for different education levels, check out our related pages for more tailored options.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship listing",
+    "Scan the award amounts to identify potential funding",
+    "Read through the eligibility requirements carefully",
+    "Open the official scholarship pages for detailed information",
+    "Shortlist your favorites and verify details on sponsor sites"
+  ],
+  "who_for": [
+    "High school seniors in Rhode Island",
+    "Students interested in community-focused scholarships",
+    "Applicants seeking STEM funding opportunities",
+    "Individuals looking for education-related awards",
+    "Those who prefer scholarships with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Rhode Island?",
+      "answer": "The current listing includes 17 scholarships across various categories such as community, education, STEM, humanities, and arts. This diversity allows students to find opportunities that align with their interests and academic pursuits."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially less burdensome. However, it's important to verify the specific requirements for each scholarship, as some may have different criteria."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 17 scholarships have deadlines, but they vary by listing. It's advisable to check the details promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the typical award amounts for scholarships in this listing?",
+      "answer": "Award sizes for the scholarships can range from approximately $500 to $17,000. Each listing provides specific amounts, so reviewing them individually will give you a clearer picture of what to expect."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/rhode-island",
+    "generatedAt": "2026-04-02T10:53:09.515Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 17,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find 145 Scholarships in Connecticut",
+  "seo_description": "Explore 145 scholarships in Connecticut with varying awards and deadlines. Check individual listings for details.",
+  "intro": "Finding financial support for education in Connecticut can be a crucial step in your academic journey. With 145 scholarships available, ranging from $150 to $20,000, there are numerous opportunities tailored to various fields such as education, arts, STEM, and community service. The diversity in award amounts and requirements means that students from different backgrounds and disciplines can find suitable options. Be mindful that deadlines vary, with some approaching in the near future, so it's wise to check the specifics promptly.",
+  "h1": "Explore Scholarships Available in Connecticut",
+  "supporting": "This list features a mix of scholarships, some of which may require essays while others do not, providing options for those seeking lighter application processes. Take the time to compare award sizes and eligibility criteria to identify the best matches for your situation. Each listing includes unique details that can help you assess which opportunities align with your goals and needs.",
+  "related_intro": "For more tailored options, check out scholarships specific to other states or categories that might fit your profile.",
+  "how_to_use": [
+    "Review the list for scholarship titles that resonate with your field of study",
+    "Compare deadlines to prioritize applications",
+    "Examine award amounts to gauge potential financial support",
+    "Check for essay requirements and prepare accordingly",
+    "Visit official scholarship pages for the most accurate information"
+  ],
+  "who_for": [
+    "Students pursuing education-related degrees",
+    "Applicants interested in arts and community service",
+    "STEM majors looking for funding opportunities",
+    "High school seniors planning to attend college in Connecticut",
+    "Undergraduate students seeking financial aid"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Connecticut?",
+      "answer": "The scholarship listings for Connecticut include a variety of categories such as education, community, arts, STEM, and medicine. With 145 options available, you can find opportunities that align with your interests and academic goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, a significant number do not have this requirement, so it's important to check the details for each specific scholarship."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 145 scholarships in this listing have deadlines, but they differ from one another. It's advisable to review each scholarship's details promptly, especially since some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for Connecticut scholarships?",
+      "answer": "Award sizes for scholarships in Connecticut vary widely, with amounts ranging approximately from $150 to $20,000. Be sure to check individual listings for specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "connecticut",
+    "generatedAt": "2026-04-02T10:35:32.332Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 145,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

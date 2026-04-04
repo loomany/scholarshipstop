@@ -1,0 +1,49 @@
+{
+  "seo_title": "Texas Scholarships for High School Seniors",
+  "seo_description": "Explore 28 Texas scholarships for high school seniors, with awards ranging from $400 to $15,000. Check deadlines and requirements.",
+  "intro": "For high school seniors in Texas, there are 28 scholarship opportunities available that can help ease the financial burden of college. Award sizes vary significantly, ranging from around $400 to $15,000, making it worthwhile to explore each option. With many listings featuring no essay requirements, this could be a practical way to secure funding for your education. Be mindful that deadlines differ, so checking each listing promptly is essential.",
+  "h1": "Texas Scholarships for High School Seniors",
+  "supporting": "This collection of scholarships caters specifically to Texas high school seniors, offering a diverse range of categories, including education, community, and medicine. As you review the listings, consider comparing the award amounts and requirements to find the best fit for your situation. Some scholarships may have lighter requirements, which could simplify your application process. Always verify details on the official sponsor pages before applying.",
+  "related_intro": "If you're interested in more tailored options, consider checking out scholarships for specific majors or additional opportunities based on your location.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship listing",
+    "Scan award amounts and categories for alignment with your goals",
+    "Read through requirement lines for each scholarship",
+    "Open official pages for detailed application instructions",
+    "Shortlist potential scholarships that suit your profile"
+  ],
+  "who_for": [
+    "High school seniors in Texas",
+    "Students pursuing education-related degrees",
+    "Applicants interested in community-focused scholarships",
+    "Individuals seeking no-essay scholarship options",
+    "Students with interests in medical or arts fields"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Texas?",
+      "answer": "There are 28 scholarships listed for high school seniors in Texas, covering various categories such as education, community, medicine, disability, and arts. This diverse range allows students to find opportunities that align with their interests and backgrounds."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require essays, making the application process potentially easier for students. However, it's important to verify the specific requirements for each scholarship, as some may have different criteria."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 28 scholarships have deadlines, but they vary by listing. Be sure to check the specific deadline for each scholarship promptly, as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships listed range from approximately $400 to $15,000. Students should review each listing for detailed information on the specific amounts available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/texas",
+    "generatedAt": "2026-04-02T10:36:36.244Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 28,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

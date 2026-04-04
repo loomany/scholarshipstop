@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Texas Scholarships | 144 Opportunities Available",
+  "seo_description": "Explore 144 Texas scholarships with awards from $400 to $15,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for your education in Texas can be a crucial step in achieving your academic goals. With 144 scholarships available, ranging in award sizes from approximately $400 to $15,000, there are numerous opportunities tailored to various fields such as education, STEM, arts, and community service. Keep in mind that while many listings feature deadlines, they vary significantly, so it's wise to check them promptly to ensure you don't miss out on potential funding.",
+  "h1": "Explore 144 Scholarships for Texas Students",
+  "supporting": "As you explore this list, consider comparing the award amounts and the specific requirements for each scholarship. Some may require essays while others do not, and understanding these details can help you prioritize your applications. This filter slice is particularly valuable for Texas residents seeking diverse funding options across multiple disciplines, making it easier to find scholarships that align with your educational pursuits.",
+  "related_intro": "If you're interested in scholarships focused on specific fields or requirements, check out our related pages for more tailored opportunities.",
+  "how_to_use": [
+    "Review the list for scholarship titles that catch your interest",
+    "Compare award amounts and requirements for each listing",
+    "Check deadlines closely, especially for those approaching soon",
+    "Read through any essay requirements to prepare your applications",
+    "Visit official scholarship pages for the most accurate information"
+  ],
+  "who_for": [
+    "Texas residents seeking financial aid",
+    "Students pursuing STEM degrees",
+    "Applicants interested in community service scholarships",
+    "Individuals looking for arts-related funding",
+    "Those attending HBCUs in Texas"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Texas residents?",
+      "answer": "The Texas scholarship listings include a diverse range of categories such as Education, Music, STEM, Community, and Arts. With 144 scholarships currently available, you'll find options tailored to various interests and fields."
+    },
+    {
+      "question": "How do I find out about scholarship deadlines?",
+      "answer": "All 144 scholarships listed have specific deadlines, but these vary by program. It's important to check the details for each scholarship promptly, as some deadlines may be approaching soon."
+    },
+    {
+      "question": "Are there scholarships that require essays?",
+      "answer": "Requirements for essays vary among the scholarships in this listing. While many scholarships do not require essays, some do, so be sure to review the specific requirements for each opportunity you're interested in."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for the Texas scholarships range broadly, with amounts typically between $400 and $15,000. Each scholarship listing will provide the specific award amount, so you can find options that suit your financial needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "texas",
+    "generatedAt": "2026-04-02T10:30:45.183Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 144,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Nevada Scholarships for High School Seniors",
+  "seo_description": "Explore 9 scholarships for Nevada high school seniors with awards up to $3,000. Check deadlines and requirements for each listing.",
+  "intro": "Nevada high school seniors have access to a variety of scholarships, with 9 listings currently available. Award sizes vary, generally ranging from $500 to $3,000, making this an excellent opportunity to secure funding for your education. With all listings featuring deadlines, it's important to check each one promptly, as some may be approaching soon. Many of these scholarships do not require essays, which can simplify the application process for students.",
+  "h1": "Scholarships for High School Seniors in Nevada",
+  "supporting": "When reviewing the scholarship listings, pay attention to the specific award amounts and categories, such as STEM and community service. Each scholarship may have different eligibility criteria and deadlines, so it's beneficial to compare these details. This slice is particularly valuable for students looking to maximize their funding options while minimizing application complexity.",
+  "related_intro": "For more tailored opportunities, consider exploring scholarships based on specific categories or requirements that match your profile.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship listing",
+    "Scan award amounts to find suitable options",
+    "Read the eligibility requirements carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors in Nevada",
+    "Students interested in STEM fields",
+    "Applicants seeking community service scholarships",
+    "Individuals with disabilities",
+    "Students looking for no-essay scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Nevada?",
+      "answer": "There are currently 9 scholarships listed for high school seniors in Nevada. These opportunities cover various categories, including disability, community, and STEM, providing a range of options for applicants."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most scholarships in this listing do not require an essay, though it's important to verify each individual listing for specific requirements. Many programs tend to have lighter application processes."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships available in Nevada range from approximately $500 to $3,000. Each listing provides specific amounts, so be sure to check the details for each scholarship."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 9 scholarships listed have deadlines, but they vary by program. It's advisable to check the specific deadline for each scholarship promptly, as some may be approaching soon."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/nevada",
+    "generatedAt": "2026-04-02T11:02:31.155Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

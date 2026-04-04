@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Washington Scholarships | 111 Opportunities Available",
+  "seo_description": "Explore 111 scholarships in Washington with awards from $250 to $25,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for your education in Washington can be a significant step toward achieving your academic goals. With 111 scholarships available, ranging from $250 to $25,000, there's a variety of options to consider. These awards cater to diverse fields including education, arts, and community service, making it easier for you to find something that aligns with your interests and needs. Keep in mind that requirements and deadlines vary, so it's essential to check each listing carefully.",
+  "h1": "Washington Scholarships: 111 Opportunities Await",
+  "supporting": "As you explore this list of scholarships, pay attention to the award amounts and the specific eligibility criteria for each opportunity. Some scholarships may require essays, while many have lighter requirements, making them more accessible. This breadth of options allows you to compare and prioritize based on what fits your situation best. Don’t forget to verify the deadlines, especially since some opportunities may be approaching quickly.",
+  "related_intro": "If you're interested in exploring more specific categories or types of scholarships, check out our related pages for targeted opportunities.",
+  "how_to_use": [
+    "Compare deadlines across different scholarships",
+    "Scan award amounts to find suitable options",
+    "Read requirement lines carefully for eligibility",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Students pursuing education in Washington",
+    "Applicants seeking funding for arts programs",
+    "Individuals with disabilities looking for support",
+    "Community-focused students in need of financial assistance",
+    "Scholarship seekers with varying essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in Washington?",
+      "answer": "The scholarship listings for Washington cover a variety of categories, including Education, Community, Miscellaneous, STEM, Arts, and Disability. With 111 options available, students can find funding opportunities that align with their specific fields of study or personal circumstances."
+    },
+    {
+      "question": "How can I find out the award amounts for these scholarships?",
+      "answer": "Most scholarships in this collection have numeric award amounts, ranging approximately from $250 to $25,000. However, it's important to check each listing for specific details, as award sizes can vary significantly from one program to another."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements differ among the scholarships, with some requiring essays and others not. While around 10 of the listings indicate an essay requirement, the majority do not, so be sure to review the details of each scholarship to understand what is needed."
+    },
+    {
+      "question": "When should I check the deadlines for these scholarships?",
+      "answer": "All 111 scholarships have deadlines, but they vary by program. It's advisable to check the specific dates promptly, as some deadlines are approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "washington",
+    "generatedAt": "2026-04-02T10:36:47.738Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 111,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

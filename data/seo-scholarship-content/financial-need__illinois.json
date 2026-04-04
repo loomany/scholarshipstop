@@ -1,0 +1,47 @@
+{
+  "seo_title": "Illinois Scholarships for Financial Need",
+  "seo_description": "Explore 53 Illinois scholarships for financial need with varying award sizes and deadlines. Check details promptly.",
+  "intro": "Finding financial support for your education in Illinois is crucial, especially when navigating various costs. This collection features 53 scholarships aimed at students demonstrating financial need, with award sizes ranging from approximately $500 to $18,574. The opportunities span diverse categories, including education, STEM, and community initiatives. Keep in mind that requirements and deadlines vary, so it's essential to review each listing carefully to identify the best fit for your situation.",
+  "h1": "Explore Financial Need Scholarships in Illinois",
+  "supporting": "As you explore these scholarships, pay close attention to the specific eligibility criteria and application requirements. While many listings may have lighter demands, some could require essays or additional documentation. Given the variety of deadlines—some approaching quickly—it's advisable to prioritize your applications and verify details on the sponsor's official pages to ensure you don’t miss out on potential funding.",
+  "related_intro": "If you're interested in exploring more tailored options, check out related pages focusing on specific categories or broader financial aid resources available in Illinois.",
+  "how_to_use": [
+    "Compare deadlines to prioritize your applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines to understand what each scholarship entails",
+    "Open official pages for complete details and updates",
+    "Shortlist your top choices for easier management"
+  ],
+  "who_for": [
+    "Students in Illinois demonstrating financial need",
+    "Undergraduates pursuing education or STEM fields",
+    "Applicants looking for community-focused scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Illinois?",
+      "answer": "The current listing includes 53 scholarships categorized under education, miscellaneous, STEM, community, medicine, and disability. This variety allows students to find opportunities that align with their specific fields of study and personal circumstances."
+    },
+    {
+      "question": "How can I find specific deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 53 listings include deadline information. It's important to check the details for each scholarship promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Requirements vary among the scholarships, with some requiring essays and others not. Out of the 53 listings, approximately 51 do not have an essay requirement, but it's essential to verify the specifics for each scholarship you're interested in."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships vary significantly, with amounts ranging from around $500 to $18,574. Be sure to review each listing for exact figures and eligibility criteria."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/illinois",
+    "generatedAt": "2026-04-02T10:47:30.729Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 53,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Massachusetts Graduate Scholarships | $500 - $4,500 Awards",
+  "seo_description": "Explore 24 graduate scholarships in Massachusetts with varying deadlines and award sizes. Check listings for details.",
+  "intro": "Finding financial support for graduate studies in Massachusetts can be crucial for advancing your education. This catalog features 24 scholarships specifically tailored for graduate students, with award sizes ranging from approximately $500 to $4,500. While many listings do not require essays, it's important to note that deadlines can vary, with some approaching soon. Checking details promptly will help you maximize your opportunities.",
+  "h1": "Graduate Scholarships in Massachusetts",
+  "supporting": "As you explore this list, take note of the various categories, including education, STEM, and medical fields, which can help you identify scholarships that align with your academic focus. Comparing award amounts and requirements will also aid in prioritizing which opportunities to pursue. Given the variability in deadlines, ensure you verify each listing for the most accurate information.",
+  "related_intro": "For more options, consider looking at scholarships in related fields or other states that might also fit your graduate study plans.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find suitable funding options",
+    "Read the requirement lines for each scholarship carefully",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that best match your profile and goals"
+  ],
+  "who_for": [
+    "Graduate students in Massachusetts",
+    "Students pursuing degrees in STEM fields",
+    "Applicants seeking scholarships without essay requirements",
+    "Individuals focused on medical or health-related studies",
+    "Those interested in education-related funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Massachusetts?",
+      "answer": "The listings include a variety of categories such as education, STEM, medicine, arts, and humanities. With 24 scholarships currently available, students can find options that align with their specific fields of study."
+    },
+    {
+      "question": "How do I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 24 listings include this information. It's advisable to check the specific dates promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's important to verify each individual listing for specific requirements. Many scholarships may have lighter application processes, making them more accessible."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes vary across the listings, with amounts generally ranging from approximately $500 to $4,500. Be sure to check each scholarship for the exact award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/massachusetts",
+    "generatedAt": "2026-04-02T10:48:48.448Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 24,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

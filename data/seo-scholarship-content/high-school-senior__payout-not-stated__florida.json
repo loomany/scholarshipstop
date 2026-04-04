@@ -1,0 +1,47 @@
+{
+  "seo_title": "Florida Scholarships for High School Seniors",
+  "seo_description": "Explore 80 Florida scholarships for high school seniors with varying award sizes and deadlines. Check listings for details.",
+  "intro": "Finding financial support as a high school senior in Florida can be challenging, but there are 80 scholarships available in this category that may fit your needs. These opportunities cover a range of fields, including education, community service, STEM, and the arts. Award sizes vary significantly, with amounts reported from $500 to over $34,000. It's important to note that deadlines for these scholarships differ, so checking specific dates is essential for timely applications.",
+  "h1": "Florida Scholarships for High School Seniors with Varying Payouts",
+  "supporting": "This list offers a diverse array of scholarships, many of which do not require essays, making them more accessible for busy students. As you review the options, consider comparing the award amounts and the specific eligibility requirements to find the best fit for your situation. Be sure to verify details on the official pages of each scholarship, as this will provide the most accurate and up-to-date information.",
+  "related_intro": "If you're interested in exploring more funding options, check out related pages for scholarships tailored to different educational levels or specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines to prioritize your applications",
+    "Scan award amounts to identify the best financial fit",
+    "Read the eligibility requirements carefully for each listing",
+    "Open official scholarship pages for the latest information",
+    "Shortlist your top choices for a focused application strategy"
+  ],
+  "who_for": [
+    "High school seniors in Florida seeking financial aid",
+    "Students interested in STEM, arts, or community service scholarships",
+    "Applicants looking for opportunities with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Florida?",
+      "answer": "This listing features a variety of scholarships across different categories, including Education, Community, STEM, Miscellaneous, Arts, and Medicine. With 80 scholarships available, you can find opportunities that align with your interests and goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this list do not require an essay, though it's important to verify each listing for specific details. Many programs tend to have lighter requirements, making them more accessible."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 80 scholarships listed have deadlines, but they vary by program. It's advisable to check the specific deadline for each scholarship promptly, as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "While specific award amounts vary, the scholarships in this list range from approximately $500 to $34,345. Be sure to review each listing for detailed information on the potential funding available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/payout-not-stated/florida",
+    "generatedAt": "2026-04-02T10:51:47.946Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 80,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find 32 Scholarships in Rhode Island",
+  "seo_description": "Explore 32 scholarships in Rhode Island with awards from $100 to $17,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for education in Rhode Island is made easier with 32 scholarship opportunities available in this catalog. Award sizes vary significantly, ranging from approximately $100 to $17,000, catering to a diverse set of academic interests including education, medicine, and humanities. With varying deadlines, including some approaching in the next 45 days, it's essential to check each listing promptly to ensure you don’t miss out on potential funding.",
+  "h1": "Rhode Island Scholarships: 32 Opportunities Available",
+  "supporting": "This list offers a mix of scholarships that may have different requirements, including some that do not require essays. As you explore, consider comparing award amounts and deadlines to identify which opportunities align best with your educational goals. Pay attention to the specific eligibility criteria for each scholarship to ensure a good fit.",
+  "related_intro": "You may also want to explore scholarships based on specific fields or categories, such as STEM or community-focused funding, to find additional options that suit your needs.",
+  "how_to_use": [
+    "Check the deadlines for each scholarship to prioritize applications",
+    "Compare award amounts to identify the most beneficial options",
+    "Read the eligibility requirements carefully for each listing",
+    "Open the official pages linked for detailed application instructions",
+    "Shortlist scholarships that align with your academic and career goals"
+  ],
+  "who_for": [
+    "Students in Rhode Island pursuing higher education",
+    "Applicants seeking funding for community service projects",
+    "Individuals interested in medical or healthcare-related studies",
+    "Students focusing on humanities or liberal arts disciplines",
+    "Those looking for scholarships with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Rhode Island?",
+      "answer": "In Rhode Island, you can find a diverse range of scholarships categorized under education, community, medicine, STEM, and humanities. With 32 listings currently available, these scholarships cater to various fields and interests."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship listing has its own deadline, so it's important to check each one individually. Currently, all 32 scholarships have deadlines, with some approaching within the next 45 days, so be sure to verify the dates promptly."
+    },
+    {
+      "question": "Are there any scholarships that require essays?",
+      "answer": "Requirements vary among the scholarships, with some requiring essays and others not. While the majority of listings do not have essay requirements, it's advisable to review each scholarship's details to confirm what is needed."
+    },
+    {
+      "question": "What are the typical award amounts for Rhode Island scholarships?",
+      "answer": "Award sizes for scholarships in Rhode Island can vary significantly, with amounts ranging from approximately $100 to $17,000. Each scholarship listing will provide specific details on the award amount, so be sure to check those when applying."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "rhode-island",
+    "generatedAt": "2026-04-02T10:47:23.880Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 32,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

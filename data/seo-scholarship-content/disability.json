@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Disability Scholarships in the USA",
+  "seo_description": "Explore 59 disability scholarships with varying awards and deadlines. Check listings for details.",
+  "intro": "Finding financial support as a student with a disability can be challenging, but this selection of 59 scholarships offers a range of opportunities tailored to your needs. Award sizes vary significantly, with amounts typically between $250 and $12,000, allowing you to find options that fit your financial goals. Be mindful that deadlines differ across listings, so checking dates promptly is essential to ensure you don’t miss out on potential funding.",
+  "h1": "Explore 59 Disability Scholarships Available Now",
+  "supporting": "This list includes scholarships from diverse categories such as education, law, and community service, reflecting a wide array of interests and academic pursuits. Some programs may have lighter requirements, while others might ask for essays, so it’s wise to review each listing carefully. Comparing the specifics of each scholarship can help you identify the best fits for your situation, making the application process more efficient.",
+  "related_intro": "For additional funding options, consider exploring scholarships focused on education or community service, which may complement your search for disability-related support.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find scholarships that meet your needs",
+    "Read requirement lines to understand what each scholarship entails",
+    "Open official pages for detailed information and updates",
+    "Shortlist scholarships that align with your goals and eligibility"
+  ],
+  "who_for": [
+    "Students with documented disabilities",
+    "Individuals pursuing education in law or community service",
+    "Applicants interested in STEM fields",
+    "High school seniors and college students",
+    "Those seeking scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with disabilities?",
+      "answer": "There are 59 scholarships specifically for students with disabilities, covering various categories such as education, community, law, and STEM. Award sizes vary widely, with amounts ranging from approximately $250 to $12,000."
+    },
+    {
+      "question": "How can I find out about deadlines for these scholarships?",
+      "answer": "All 59 scholarships listed have deadlines, but they differ from one another. It's important to check each listing for specific dates, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships; some may require essays while others do not. Out of the listings, approximately 11 have an essay requirement, so be sure to review the details for each scholarship."
+    },
+    {
+      "question": "How do I verify the details of a specific scholarship?",
+      "answer": "To verify details, click on the individual scholarship listings. Each entry provides specific information about award amounts, deadlines, and requirements, ensuring you have the most accurate and up-to-date information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "disability",
+    "generatedAt": "2026-04-02T10:35:54.791Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 59,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

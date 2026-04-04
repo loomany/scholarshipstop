@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Louisiana Scholarships for Your Education",
+  "seo_description": "Explore 20 scholarships in Louisiana with awards from $500 to $5,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for your education in Louisiana is essential, and this collection of 20 scholarships offers a range of opportunities to help you fund your studies. Award sizes vary, typically between $500 and $5,000, and with all listings having deadlines, it's important to check each one promptly. Requirements also differ, with some scholarships requiring essays while others do not, so be sure to review the details carefully.",
+  "h1": "Scholarships Available in Louisiana",
+  "supporting": "As you navigate this list, consider comparing the award amounts and requirements to find the best fit for your situation. Pay attention to the varied deadlines, especially since some are approaching in the next few weeks. This selection includes scholarships across different categories such as education, STEM, and community, providing a broad spectrum of options to explore.",
+  "related_intro": "If you're interested in more specific categories or additional funding opportunities, check out our related pages for tailored scholarship options.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to identify suitable options",
+    "Read requirement lines for eligibility details",
+    "Open official pages for the most accurate information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Students pursuing education in Louisiana",
+    "STEM majors looking for funding",
+    "Community service-oriented applicants",
+    "Law students seeking scholarships",
+    "Individuals interested in miscellaneous funding opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Louisiana?",
+      "answer": "The current listing includes a variety of scholarships categorized under education, STEM, community, and law. With 20 different opportunities, you can find options that align with your academic interests and career goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's important to check the details for each specific scholarship to understand what is needed."
+    },
+    {
+      "question": "How much financial support can I expect from Louisiana scholarships?",
+      "answer": "Award sizes for the scholarships in this list range generally from $500 to $5,000. Each scholarship has its own amount, so reviewing the individual listings will provide the most accurate information."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All scholarships in this listing have deadlines, which vary from one opportunity to another. Be sure to check the specific deadlines for each scholarship, as some may be approaching quickly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "louisiana",
+    "generatedAt": "2026-04-02T10:56:02.793Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 20,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Kansas Scholarships for High School Seniors",
+  "seo_description": "Discover 5 scholarships for Kansas high school seniors with awards up to $2,000. Check deadlines and requirements for each listing.",
+  "intro": "For high school seniors in Kansas, there are 5 scholarship opportunities available that can help ease the financial burden of higher education. Award amounts for these scholarships typically range from $500 to $2,000, providing a valuable resource for students seeking assistance. Keep in mind that deadlines vary, with some listings requiring prompt attention, so be sure to check the specific dates for each scholarship.",
+  "h1": "Scholarships for High School Seniors in Kansas",
+  "supporting": "This selection includes a mix of scholarships across various categories, such as community service, law, and disability support. Many of these listings do not require essays, making them accessible to a broader range of applicants. As you review the options, consider comparing the award amounts and requirements to find the best fit for your situation.",
+  "related_intro": "If you're interested in exploring more scholarships tailored to specific fields or requirements, check out our related pages for additional opportunities.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship listing",
+    "Scan award amounts to identify potential funding",
+    "Read through the requirements for each opportunity",
+    "Open the official scholarship pages for complete details",
+    "Shortlist the scholarships that align with your profile"
+  ],
+  "who_for": [
+    "High School Seniors in Kansas",
+    "Students interested in community service scholarships",
+    "Applicants looking for law-related funding",
+    "Those seeking scholarships with lighter requirements",
+    "Students with disabilities seeking financial support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Kansas?",
+      "answer": "This filter currently lists 5 scholarships, with categories including community, law, disability, and safety. Each scholarship may have different focuses and eligibility criteria, so it's important to review the details of each listing."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this list range from approximately $500 to $2,000. However, specific amounts vary by scholarship, so check each listing for precise details."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most scholarships in this selection do not require an essay, although it's advisable to verify each listing for specific requirements. Many scholarships tend to have lighter application processes, making them more accessible."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 5 scholarships listed have deadlines, which vary among them. At least one scholarship has a deadline approaching within the next 45 days, so it's recommended to check the dates promptly to ensure you don't miss any opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/kansas",
+    "generatedAt": "2026-04-02T11:07:57.021Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

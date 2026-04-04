@@ -1,0 +1,49 @@
+{
+  "seo_title": "Payout College Scholarships | Find Your Funding",
+  "seo_description": "Explore 176 college scholarships with awards up to $20,000. Check varied deadlines and requirements to find your best fit.",
+  "intro": "Finding financial support for college can be challenging, but there are 176 scholarships available specifically for students pursuing higher education. Award sizes vary significantly, ranging from approximately $250 to $20,000, making it possible to find opportunities that fit your needs. Be mindful that requirements and deadlines differ across listings, so it's essential to check each one carefully to ensure you meet the criteria.",
+  "h1": "Explore 176 Payout College Scholarships",
+  "supporting": "This collection includes a diverse range of scholarships across categories like STEM, education, arts, and community service. Some opportunities may have lighter application requirements, while others might ask for essays. By comparing the details of each listing, you can identify the scholarships that best align with your academic goals and application readiness. Make sure to note any upcoming deadlines, as many listings require prompt action.",
+  "related_intro": "If you're interested in exploring scholarships by specific categories or requirements, check out our related pages for more tailored options.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find scholarships that meet your financial needs",
+    "Read through requirement lines to determine eligibility",
+    "Open official pages for detailed application instructions",
+    "Shortlist potential scholarships based on your profile and interests"
+  ],
+  "who_for": [
+    "Students pursuing degrees in STEM fields",
+    "First-generation college students",
+    "Applicants seeking community-focused scholarships",
+    "Students attending HBCUs",
+    "Individuals looking for scholarships with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this listing?",
+      "answer": "This collection features a variety of scholarships categorized under education, STEM, community, arts, miscellaneous, and disability. With 176 options currently available, you can find opportunities tailored to different fields and interests."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's important to check the specific details for each scholarship to understand what is needed."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "All 176 scholarships listed have deadlines, but they differ from one another. It's advisable to review each scholarship's details promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this listing range from approximately $250 to $20,000. Each scholarship has its own specific amount, so be sure to check the details for the exact figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "payout-college",
+    "generatedAt": "2026-04-02T10:33:17.645Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 176,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

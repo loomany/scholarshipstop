@@ -1,0 +1,715 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-04T13:56:06.736Z",
+  "promptVersion": "v1",
+  "routes": [
+    {
+      "canonicalPath": "for-women",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "women"
+        ]
+      },
+      "minCountSnapshot": 79,
+      "indexable": true,
+      "h1Fallback": "Scholarships for women",
+      "metaTitleFallback": "Scholarships for women 2026 | USA catalog",
+      "metaDescriptionFallback": "Browse USA scholarships that include women among eligible applicants. Filter by deadline, amount, and requirements in one place.",
+      "priority": 66,
+      "scholarshipsCount": 79,
+      "score": 65.941,
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualityBucket": "GOOD",
+      "qualitySnapshot": {
+        "exactCount": 79,
+        "renderedCount": 79,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.021,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 0,
+        "finalQualityScore": 65.941
+      },
+      "canonicalTarget": null,
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ]
+    },
+    {
+      "canonicalPath": "engineering",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "engineering"
+      ],
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Engineering scholarships",
+      "metaTitleFallback": "Engineering | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 328,
+      "minCountSnapshot": 328,
+      "score": 72.711,
+      "priority": 73,
+      "priorityBucket": "high",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 328,
+        "renderedCount": 328,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.086,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 12,
+        "finalQualityScore": 72.711
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "closing-soon",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "closing-soon"
+      ],
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Closing Soon scholarships",
+      "metaTitleFallback": "Closing Soon | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 108,
+      "minCountSnapshot": 108,
+      "score": 73.332,
+      "priority": 73,
+      "priorityBucket": "high",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 108,
+        "renderedCount": 108,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.028,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 8,
+        "finalQualityScore": 73.332
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "first-generation",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "first_generation"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "First Generation scholarships",
+      "metaTitleFallback": "First Generation | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 55,
+      "minCountSnapshot": 55,
+      "score": 76,
+      "priority": 76,
+      "priorityBucket": "high",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 55,
+        "renderedCount": 55,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.014,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 76
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "computer-science",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "computer-science"
+      ],
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Computer Science scholarships",
+      "metaTitleFallback": "Computer Science | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 53,
+      "minCountSnapshot": 53,
+      "score": 78,
+      "priority": 78,
+      "priorityBucket": "high",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 53,
+        "renderedCount": 53,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.014,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 12,
+        "finalQualityScore": 78
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "payout-student",
+      "pageType": "single",
+      "filters": {
+        "payoutStudent": true
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Payout Student scholarships",
+      "metaTitleFallback": "Payout Student | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 255,
+      "minCountSnapshot": 255,
+      "score": 62.244,
+      "priority": 62,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 255,
+        "renderedCount": 255,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.067,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 0,
+        "finalQualityScore": 62.244
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "payout-college",
+      "pageType": "single",
+      "filters": {
+        "payoutCollege": true
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Payout College scholarships",
+      "metaTitleFallback": "Payout College | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 199,
+      "minCountSnapshot": 199,
+      "score": 63.42,
+      "priority": 63,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 199,
+        "renderedCount": 199,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.052,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 0,
+        "finalQualityScore": 63.42
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "veterans",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "veterans"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Veterans scholarships",
+      "metaTitleFallback": "Veterans | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 101,
+      "minCountSnapshot": 101,
+      "score": 75.479,
+      "priority": 75,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 101,
+        "renderedCount": 101,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.027,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 75.479
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "phd",
+      "pageType": "single",
+      "filters": {
+        "includeEducationLevels": [
+          "phd"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Phd scholarships",
+      "metaTitleFallback": "Phd | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 91,
+      "minCountSnapshot": 91,
+      "score": 75.689,
+      "priority": 76,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 91,
+        "renderedCount": 91,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.024,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 75.689
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "international-students",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "International Students scholarships",
+      "metaTitleFallback": "International Students | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 12,
+      "minCountSnapshot": 12,
+      "score": 59.8,
+      "priority": 60,
+      "priorityBucket": "high",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 12,
+        "renderedCount": 12,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.003,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 59.8
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "low-income",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "low_income"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Low Income scholarships",
+      "metaTitleFallback": "Low Income | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 22,
+      "minCountSnapshot": 22,
+      "score": 56.3,
+      "priority": 56,
+      "priorityBucket": "high",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 22,
+        "renderedCount": 22,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.006,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 0,
+        "finalQualityScore": 56.3
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "african-american",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "african_american"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "African American scholarships",
+      "metaTitleFallback": "African American | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 66,
+      "minCountSnapshot": 66,
+      "score": 76,
+      "priority": 76,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 66,
+        "renderedCount": 66,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.017,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 76
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "hispanic",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "hispanic"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Hispanic scholarships",
+      "metaTitleFallback": "Hispanic | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 57,
+      "minCountSnapshot": 57,
+      "score": 76,
+      "priority": 76,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 57,
+        "renderedCount": 57,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.015,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 76
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "disability",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "disability"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Disability scholarships",
+      "metaTitleFallback": "Disability | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 40,
+      "minCountSnapshot": 40,
+      "score": 76,
+      "priority": 76,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 40,
+        "renderedCount": 40,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.011,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 76
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "minority",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "minority"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Minority scholarships",
+      "metaTitleFallback": "Minority | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 38,
+      "minCountSnapshot": 38,
+      "score": 76,
+      "priority": 76,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 38,
+        "renderedCount": 38,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.01,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 76
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "lgbtq",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "lgbtq"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Lgbtq scholarships",
+      "metaTitleFallback": "Lgbtq | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 26,
+      "minCountSnapshot": 26,
+      "score": 68.9,
+      "priority": 69,
+      "priorityBucket": "medium",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 26,
+        "renderedCount": 26,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.007,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 68.9
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "native-american",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "native_american"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Native American scholarships",
+      "metaTitleFallback": "Native American | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 48,
+      "minCountSnapshot": 48,
+      "score": 76,
+      "priority": 76,
+      "priorityBucket": "low",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 48,
+        "renderedCount": 48,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.013,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 76
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "single-parent",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "single_parent"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Single Parent scholarships",
+      "metaTitleFallback": "Single Parent | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 30,
+      "minCountSnapshot": 30,
+      "score": 71.5,
+      "priority": 72,
+      "priorityBucket": "low",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 30,
+        "renderedCount": 30,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.008,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 71.5
+      },
+      "canonicalTarget": null
+    },
+    {
+      "canonicalPath": "foster-youth",
+      "pageType": "single",
+      "filters": {
+        "includeEligibility": [
+          "foster_youth"
+        ]
+      },
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Foster Youth scholarships",
+      "metaTitleFallback": "Foster Youth | USA scholarships",
+      "metaDescriptionFallback": "Browse USA scholarships that match these filters in our catalog. Compare deadlines, award amounts, and requirements—then confirm every detail on each official program page.",
+      "source": "auto",
+      "scholarshipsCount": 16,
+      "minCountSnapshot": 16,
+      "score": 62.4,
+      "priority": 62,
+      "priorityBucket": "low",
+      "lastEvaluatedAt": "2026-04-04T13:56:06.736Z",
+      "qualitySnapshot": {
+        "exactCount": 16,
+        "renderedCount": 16,
+        "totalCatalog": 3809,
+        "selectivityRatio": 0.004,
+        "fallbackUsed": false,
+        "overlapScore": 18,
+        "overlapTarget": null,
+        "facetPenalty": 0,
+        "intentScore": 10,
+        "finalQualityScore": 62.4
+      },
+      "canonicalTarget": null
+    }
+  ]
+}

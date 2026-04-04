@@ -1,0 +1,47 @@
+{
+  "seo_title": "Kentucky Scholarships for Women - Find Your Funding",
+  "seo_description": "Explore 4 Kentucky scholarships for women with varying awards. Check deadlines and requirements to secure your funding.",
+  "intro": "If you’re hunting awards that fit “For Women · Kentucky scholarships,” this view keeps the signal high. You’ll see 4 matching programs in this view today—compact enough to scan quickly. Award wording varies row to row; treat dollar figures on cards as a starting point only. Deadlines and dollar lines differ row to row—use them to shortlist, then verify every rule on the sponsor’s site.",
+  "h1": "Scholarships for Women in Kentucky",
+  "supporting": "Start with sort (deadline or amount) to surface what matters today, then read the requirement snippet under each title before you click through. When two listings look alike, compare their deadline and award rows side by side. Nothing here replaces the official program page: use this list to narrow, then re-read eligibility and dates at the source before you apply.",
+  "related_intro": "Below are related filter pages—different state, topic, or requirement angle—if you want to widen the net without losing this starting point.",
+  "how_to_use": [
+    "Pick a sort order so urgent deadlines or larger award text float to the top",
+    "Skim the requirement line on each card for a quick fit check",
+    "Open the official listing from the card and re-confirm dates, amounts, and eligibility",
+    "Keep a short shortlist instead of spreading thin across weak matches",
+    "Assume catalog fields can lag—treat sponsor pages as the final word"
+  ],
+  "who_for": [
+    "Anyone who wants a tighter set of options for For Women · Kentucky scholarships than the full open catalog",
+    "Students stacking several applications and needing a fast way to compare effort versus payoff",
+    "Applicants who like scanning structured rows before opening long sponsor pages"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women in Kentucky?",
+      "answer": "There are currently four scholarships listed specifically for women in Kentucky. These scholarships cover a range of categories, including education, arts, humanities, and STEM."
+    },
+    {
+      "question": "What is the typical award size for these scholarships?",
+      "answer": "While the award sizes vary, the available scholarships in this category suggest a rough range of approximately $1,500 to $3,500. It's advisable to check each listing for specific amounts."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, though it's important to verify each individual listing for specific requirements, as some may have different criteria."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All four scholarships listed have deadlines, but they differ from one another. Be sure to check the specific dates for each scholarship, as at least one has a deadline approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women/kentucky",
+    "generatedAt": "2026-04-02T10:43:18.100Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "deterministic",
+    "generationMode": "rewrite"
+  }
+}

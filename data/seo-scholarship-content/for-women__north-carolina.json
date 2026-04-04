@@ -1,0 +1,49 @@
+{
+  "seo_title": "North Carolina Scholarships for Women | Up to $10,000",
+  "seo_description": "Discover 5 scholarships for women in North Carolina with awards up to $10,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support as a woman in North Carolina can be a crucial step toward achieving your educational goals. With 5 scholarships currently listed, ranging from approximately $1,000 to $10,000, there are various opportunities tailored specifically for women in this state. These awards cover categories such as education and STEM, and while many of the listings do not require essays, it’s important to check each scholarship's details for specific requirements and deadlines, which can vary significantly.",
+  "h1": "Scholarships for Women in North Carolina",
+  "supporting": "This selection of scholarships offers a mix of award sizes and application requirements, making it worthwhile to explore each option. Pay attention to the deadlines, as some may be approaching soon. Comparing the award amounts and categories can help you identify which scholarships align best with your academic pursuits. Additionally, many listings have lighter application requirements, providing a more accessible path to funding.",
+  "related_intro": "If you're interested in more opportunities, consider exploring scholarships focused on other demographics or fields of study in North Carolina.",
+  "how_to_use": [
+    "Check individual deadlines for each scholarship",
+    "Compare award amounts and categories",
+    "Read the requirement details carefully",
+    "Visit official scholarship pages for updates",
+    "Shortlist scholarships that fit your profile"
+  ],
+  "who_for": [
+    "Women pursuing education in North Carolina",
+    "Women interested in STEM fields",
+    "Local residents seeking financial aid",
+    "Students looking for lighter application requirements",
+    "Applicants targeting specific award amounts"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women in North Carolina?",
+      "answer": "This filter currently showcases five scholarships specifically for women in North Carolina, covering categories like STEM and education. Each listing varies in focus, so it's beneficial to review the details to find the best fit for your interests and goals."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's important to check each individual listing for specific requirements. While many programs may have lighter application processes, verifying the details will ensure you meet all necessary criteria."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All five scholarships in this category have deadlines, but they vary from one listing to another. Some deadlines are approaching soon, so it's advisable to check the specific dates for each scholarship promptly to ensure you don’t miss out."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships listed range from approximately $1,000 to $10,000. However, since each scholarship has its own funding amount, reviewing the individual listings will provide the most accurate information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women/north-carolina",
+    "generatedAt": "2026-04-02T10:43:30.352Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

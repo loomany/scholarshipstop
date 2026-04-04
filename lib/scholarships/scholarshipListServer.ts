@@ -1,0 +1,1456 @@
+import type { Database } from '@/types_db';
+import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import {
+  normalizeCategoryId,
+  SCHOLARSHIP_CATEGORY_ORDER,
+  type ScholarshipCategoryId
+} from '@/app/scholarships/scholarshipCategories';
+import {
+  cloneMoreFilters,
+  defaultMoreFiltersFromBounds,
+  type DeadlinePreset,
+  type MoreFiltersState
+} from '@/app/scholarships/moreFilters';
+import {
+  normalizeUsStateToCanonical,
+  US_STATE_NAME_TO_CODE
+} from '@/lib/constants/usStates';
+import type { SortOption } from '@/app/scholarships/scholarshipSort';
+import type { ScholarshipListTabId, ScholarshipSidebarCounts } from '@/app/scholarships/scholarshipTabs';
+import type { LongTailSlug } from '@/app/scholarships/scholarshipLongTailPresets';
+import {
+  buildCategorySeoRelaxAttempts,
+  buildLongTailSeoRelaxAttempts,
+  buildSeoNuclearListingRequest,
+  SEO_MIN_INDEXABLE_LIST_COUNT,
+  seoRequestHasCatalogStateGeo
+} from '@/lib/scholarships/seoScholarshipFallback';
+import {
+  LIST_CARD_SELECT,
+  mapScholarshipRow,
+  scholarshipListSelectWithCatalogSubjectJoin,
+  type ScholarshipRow
+} from '@/lib/scholarships/supabase';
+import type { ScholarshipProfileFilterSeed } from '@/lib/scholarships/profileFilterDefaults';
+import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
+import { isSeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
+import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
+import type { createClient } from '@/utils/supabase/server';
+
+type ServerSupabaseClient = ReturnType<typeof createClient>;
+
+export type ScholarshipListScope = 'personalized' | 'catalog';
+
+export type ScholarshipListQueryOpts = {
+  countOnly?: boolean;
+  includeMeta?: boolean;
+  includeCategoryCounts?: boolean;
+  isProSubscriber?: boolean;
+};
+
+export type ScholarshipListMeta = {
+  filterBounds: {
+    amountMin: number;
+    amountMax: number;
+    applicantsMin: number;
+    applicantsMax: number;
+  };
+  sidebarCounts: ScholarshipSidebarCounts;
+  categoryCounts: Record<ScholarshipCategoryId, number>;
+  /** Hub: filled when personalized match index is available. */
+  profileMatchSummary?: {
+    field: string;
+    level: string;
+    gpa: string;
+    citizenship: string;
+    state: string;
+  } | null;
+  /** Structured defaults for Best match filters UI (derived from saved profile). */
+  profileFilterSeed?: ScholarshipProfileFilterSeed | null;
+  /**
+   * Personalized hub: count in the “Matches” bucket after ignored + listing SQL filters (aligned with sidebar).
+   * Catalog / fallback: raw index bucket size after ignored only.
+   */
+  matchedTotal?: number;
+};
+
+export type ScholarshipListRequest = {
+  page: number;
+  limit: number;
+  sort: SortOption;
+  tab: ScholarshipListTabId;
+  q: string;
+  /** Multi-select category filter (OR semantics). */
+  categoryIds: Set<ScholarshipCategoryId>;
+  /** Narrow listing to one catalog slug (category page). */
+  categoryPageSlug: string | null;
+  deadline: DeadlinePreset;
+  stateCodes: string[];
+  ignored: string[];
+  saved: string[];
+  started: string[];
+  submitted: string[];
+  moreFilters: MoreFiltersState;
+  /** AND legacy long-tail base layers (SQL approximation). */
+  longTailLegacySlugs: LongTailSlug[];
+  /** When set, skip tab/matches logic and return similar rows. */
+  similarToId: string | null;
+  similarCategorySlug: string | null;
+  /** `catalog` = full directory (All); `personalized` = SQL profile-fit + tab scopes. */
+  listScope: ScholarshipListScope;
+  /** Legacy field; catalog-only listing ignores this. */
+  personalizedProfile?: ProfilesRow | null;
+  /**
+   * When non-empty, require `scholarships.seo_tags` to contain all listed canonical tags (AND).
+   * Used for manifest SEO listings; omit for hub / category / generic catalog.
+   */
+  requiredSeoTags: string[];
+  /**
+   * L2 browse taxonomy: filter via `scholarship_categories` inner join (not legacy `category_slug` / tags).
+   * Set by the API when `categories.slug` is an active level-2 row.
+   */
+  catalogSubjectCategoryId: string | null;
+};
+
+export type SeoListingFallbackMeta = {
+  used: boolean;
+  /** 0 = exact filters matched; ≥1 = Nth relax tier produced rows */
+  tier: number;
+  exactTotal: number;
+  /** True when displayed count is below SEO index threshold (noindex + canonical widen). */
+  thinListing: boolean;
+};
+
+export type ScholarshipListResult = {
+  scholarships: Scholarship[];
+  total: number;
+  page: number;
+  limit: number;
+  meta?: ScholarshipListMeta;
+  /** Free plan: extra matches exist beyond `visibleMax`. */
+  matchPaywall?: { lockedCount: number; visibleMax: number };
+  /** Long-tail / category SEO listing relax metadata (API only). */
+  seoFallback?: SeoListingFallbackMeta;
+};
+
+const DEFAULT_LIMIT = 12;
+const MAX_LIMIT = 50;
+const GLOBAL_FILTER_BOUNDS_TTL_MS = 5 * 60 * 1000;
+const LIST_META_CACHE_TTL_MS = 60 * 1000;
+let globalFilterBoundsCache:
+  | {
+      value: ScholarshipListMeta['filterBounds'];
+      expiresAt: number;
+    }
+  | null = null;
+const listMetaCache = new Map<
+  string,
+  {
+    value: ScholarshipListMeta;
+    expiresAt: number;
+  }
+>();
+
+function readTtlValue<T>(entry: { value: T; expiresAt: number } | null | undefined): T | null {
+  const now = Date.now();
+  if (!entry || entry.expiresAt <= now) return null;
+  return entry.value;
+}
+
+function writeTtlValue<T>(
+  cache: Map<string, { value: T; expiresAt: number }>,
+  key: string,
+  value: T,
+  ttlMs: number
+): void {
+  cache.set(key, {
+    value,
+    expiresAt: Date.now() + ttlMs
+  });
+}
+
+function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMeta {
+  return {
+    filterBounds: { ...meta.filterBounds },
+    sidebarCounts: { ...meta.sidebarCounts },
+    categoryCounts: { ...meta.categoryCounts },
+    profileMatchSummary: meta.profileMatchSummary
+      ? { ...meta.profileMatchSummary }
+      : meta.profileMatchSummary,
+    profileFilterSeed: meta.profileFilterSeed
+      ? {
+          ...meta.profileFilterSeed,
+          educationLevelIds: [...meta.profileFilterSeed.educationLevelIds],
+          gpaBucketIds: [...meta.profileFilterSeed.gpaBucketIds],
+          eligibilityIds: [...meta.profileFilterSeed.eligibilityIds]
+        }
+      : meta.profileFilterSeed,
+    matchedTotal: meta.matchedTotal
+  };
+}
+
+function clampInt(n: number, min: number, max: number): number {
+  if (!Number.isFinite(n)) return min;
+  return Math.min(max, Math.max(min, Math.floor(n)));
+}
+
+export function parseCommaUuids(raw: string | null | undefined): string[] {
+  if (!raw?.trim()) return [];
+  return raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => /^[0-9a-f-]{36}$/i.test(s));
+}
+
+export function parseCommaCategories(
+  raw: string | null | undefined
+): Set<ScholarshipCategoryId> {
+  const out = new Set<ScholarshipCategoryId>();
+  if (!raw?.trim()) return out;
+  for (const part of raw.split(',')) {
+    const id = normalizeCategoryId(part);
+    if (id) out.add(id);
+  }
+  return out;
+}
+
+export function parseCommaStateCodes(raw: string | null | undefined): string[] {
+  if (!raw?.trim()) return [];
+  return raw
+    .split(',')
+    .map((s) => s.trim().toUpperCase())
+    .filter((s) => /^[A-Z]{2}$/.test(s));
+}
+
+/** Allowlisted, deduped, sorted — safe for PostgREST `seo_tags` filter. */
+export function sanitizeRequiredSeoTagsInput(
+  raw: string[] | null | undefined
+): string[] {
+  if (!raw?.length) return [];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const s of raw) {
+    const t = String(s).trim();
+    if (!t || !isSeoCanonicalTag(t) || seen.has(t)) continue;
+    seen.add(t);
+    out.push(t);
+  }
+  out.sort();
+  return out;
+}
+
+/**
+ * Map `/scholarships/category/{slug}` to either legacy L1 (`category_slug`) or L2 join (`catalogSubjectCategoryId`).
+ */
+export async function resolveCatalogSubjectCategoryForPageSlug(
+  supabase: ServerSupabaseClient,
+  categoryPageSlug: string | null | undefined
+): Promise<{
+  legacyCategoryPageSlug: string | null;
+  catalogSubjectCategoryId: string | null;
+}> {
+  const raw = categoryPageSlug?.trim().toLowerCase();
+  if (!raw) {
+    return { legacyCategoryPageSlug: null, catalogSubjectCategoryId: null };
+  }
+  if (normalizeCategoryId(raw)) {
+    return { legacyCategoryPageSlug: raw, catalogSubjectCategoryId: null };
+  }
+  const { data, error } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('slug', raw)
+    .eq('level', 2)
+    .eq('is_active', true)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  const categoryRow = data as { id: string } | null;
+  if (categoryRow?.id) {
+    return { legacyCategoryPageSlug: null, catalogSubjectCategoryId: categoryRow.id };
+  }
+  return { legacyCategoryPageSlug: raw, catalogSubjectCategoryId: null };
+}
+
+/** URLSearchParams / JSON body → request (caller resolves sort/tab/deadline from existing parsers). */
+export function scholarshipListRequestFromParts(parts: {
+  page?: string | number | null;
+  limit?: string | number | null;
+  sort: SortOption;
+  tab: ScholarshipListTabId;
+  q?: string | null;
+  category?: string | null;
+  categoryPageSlug?: string | null;
+  deadline: DeadlinePreset;
+  state?: string | null;
+  ignored?: string | null;
+  saved?: string | null;
+  started?: string | null;
+  submitted?: string | null;
+  moreFilters: MoreFiltersState;
+  longTailLegacySlugs?: string[] | null;
+  similarTo?: string | null;
+  similarCategorySlug?: string | null;
+  listScope?: string | null;
+  requiredSeoTags?: string[] | null;
+  catalogSubjectCategoryId?: string | null;
+}): ScholarshipListRequest {
+  const page = clampInt(
+    typeof parts.page === 'number'
+      ? parts.page
+      : Number.parseInt(String(parts.page ?? '1'), 10),
+    1,
+    50000
+  );
+  const limit = clampInt(
+    typeof parts.limit === 'number'
+      ? parts.limit
+      : Number.parseInt(String(parts.limit ?? String(DEFAULT_LIMIT)), 10),
+    1,
+    MAX_LIMIT
+  );
+  const lt = (parts.longTailLegacySlugs ?? [])
+    .map((s) => String(s).trim().toLowerCase())
+    .filter(Boolean) as LongTailSlug[];
+
+  return {
+    page,
+    limit,
+    sort: parts.sort,
+    tab: parts.tab,
+    q: parts.q?.trim() ?? '',
+    categoryIds: parseCommaCategories(parts.category ?? null),
+    categoryPageSlug: parts.categoryPageSlug?.trim() || null,
+    deadline: parts.deadline,
+    stateCodes: parseCommaStateCodes(parts.state ?? null),
+    ignored: parseCommaUuids(parts.ignored ?? null),
+    saved: parseCommaUuids(parts.saved ?? null),
+    started: parseCommaUuids(parts.started ?? null),
+    submitted: parseCommaUuids(parts.submitted ?? null),
+    moreFilters: parts.moreFilters,
+    longTailLegacySlugs: lt,
+    similarToId: parts.similarTo?.trim() || null,
+    similarCategorySlug: parts.similarCategorySlug?.trim().toLowerCase() || null,
+    /** Hub/catalog listing is always catalog; `scope` URL param is ignored. */
+    listScope: 'catalog',
+    requiredSeoTags: sanitizeRequiredSeoTagsInput(parts.requiredSeoTags ?? null),
+    catalogSubjectCategoryId: parts.catalogSubjectCategoryId?.trim() || null
+  };
+}
+
+export async function fetchGlobalFilterBounds(
+  supabase: ServerSupabaseClient
+): Promise<ScholarshipListMeta['filterBounds']> {
+  const now = Date.now();
+  if (globalFilterBoundsCache && globalFilterBoundsCache.expiresAt > now) {
+    return globalFilterBoundsCache.value;
+  }
+  const fallback = {
+    amountMin: 0,
+    amountMax: 50000,
+    applicantsMin: 0,
+    applicantsMax: 200000
+  };
+  try {
+    const [{ data: minA }, { data: maxA }, { data: minP }, { data: maxP }] =
+      await Promise.all([
+        supabase
+          .from('scholarships')
+          .select('award_amount_numeric_sort')
+          .eq('is_active', true)
+          .not('award_amount_numeric_sort', 'is', null)
+          .order('award_amount_numeric_sort', { ascending: true, nullsFirst: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('scholarships')
+          .select('award_amount_numeric_sort')
+          .eq('is_active', true)
+          .not('award_amount_numeric_sort', 'is', null)
+          .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('scholarships')
+          .select('applicants_count')
+          .eq('is_active', true)
+          .not('applicants_count', 'is', null)
+          .order('applicants_count', { ascending: true, nullsFirst: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('scholarships')
+          .select('applicants_count')
+          .eq('is_active', true)
+          .not('applicants_count', 'is', null)
+          .order('applicants_count', { ascending: false, nullsFirst: false })
+          .limit(1)
+          .maybeSingle()
+      ]);
+    const amin = (minA as { award_amount_numeric_sort: number | null } | null)
+      ?.award_amount_numeric_sort;
+    const amax = (maxA as { award_amount_numeric_sort: number | null } | null)
+      ?.award_amount_numeric_sort;
+    const pmin = (minP as { applicants_count: number | null } | null)?.applicants_count;
+    const pmax = (maxP as { applicants_count: number | null } | null)?.applicants_count;
+    const value = {
+      amountMin: amin != null && Number.isFinite(Number(amin)) ? Math.floor(Number(amin)) : fallback.amountMin,
+      amountMax: amax != null && Number.isFinite(Number(amax)) ? Math.ceil(Number(amax)) : fallback.amountMax,
+      applicantsMin:
+        pmin != null && Number.isFinite(Number(pmin)) ? Math.floor(Number(pmin)) : fallback.applicantsMin,
+      applicantsMax:
+        pmax != null && Number.isFinite(Number(pmax)) ? Math.ceil(Number(pmax)) : fallback.applicantsMax
+    };
+    globalFilterBoundsCache = {
+      value,
+      expiresAt: now + GLOBAL_FILTER_BOUNDS_TTL_MS
+    };
+    return value;
+  } catch {
+    return fallback;
+  }
+}
+
+function applyCategoryOrFilter(q: any, slugKeys: string[]): any {
+  if (slugKeys.length === 0) return q;
+  const parts: string[] = [];
+  for (const k of slugKeys) {
+    parts.push(`category_slug.eq.${k}`);
+    parts.push(`tags.cs.${JSON.stringify([k])}`);
+  }
+  return q.or(parts.join(','));
+}
+
+function applySelectedCategoriesFilter(
+  q: any,
+  selected: Set<ScholarshipCategoryId>
+): any {
+  if (selected.size === 0) return q;
+  const parts: string[] = [];
+  for (const id of Array.from(selected)) {
+    parts.push(`category_slug.eq.${id}`);
+    parts.push(`tags.cs.${JSON.stringify([id])}`);
+  }
+  return q.or(parts.join(','));
+}
+
+function applyCategoryPageScope(q: any, slug: string): any {
+  const raw = slug.trim().toLowerCase();
+  if (!raw) return q;
+  const canonical = normalizeCategoryId(raw);
+  const keys = Array.from(
+    new Set([raw].concat(canonical ? [canonical] : []))
+  );
+  return applyCategoryOrFilter(q, keys);
+}
+
+/**
+ * Manifest `filters.includeEligibility` uses catalog tag ids. Some topics are only reflected
+ * in free text (title / summary / description), not in `eligibility_tags`.
+ * Strip those ids before `eligibility_tags.cs` and require a matching OR ilike instead.
+ */
+const ELIGIBILITY_TAG_TEXT_OR_ILIKE: Record<
+  string,
+  readonly { column: string; needle: string }[]
+> = {
+  first_generation: [
+    { column: 'title', needle: 'first generation' },
+    { column: 'title', needle: 'first-generation' },
+    { column: 'summary_short', needle: 'first generation' },
+    { column: 'summary_short', needle: 'first-generation' },
+    { column: 'description', needle: 'first generation' },
+    { column: 'requirements_text', needle: 'first generation' }
+  ]
+};
+
+function sanitizeIlikeFragment(raw: string): string {
+  return raw.replace(/[%_]/g, '').trim();
+}
+
+/** Mutates `moreFilters.includeEligibility`; returns `q` with an extra AND (OR ilike…) when needed. */
+function applyEligibilityTextSearchClauses(
+  q: any,
+  moreFilters: MoreFiltersState
+): any {
+  const orParts: string[] = [];
+  for (const tagId of Array.from(moreFilters.includeEligibility)) {
+    const clauses = ELIGIBILITY_TAG_TEXT_OR_ILIKE[tagId];
+    if (!clauses?.length) continue;
+    moreFilters.includeEligibility.delete(tagId);
+    for (const { column, needle } of clauses) {
+      const safe = sanitizeIlikeFragment(needle);
+      if (!safe) continue;
+      orParts.push(`${column}.ilike.%${safe}%`);
+    }
+  }
+  if (orParts.length === 0) return q;
+  return q.or(orParts.join(','));
+}
+
+function applyLegacyLongTailBase(q: any, slug: LongTailSlug): any {
+  switch (slug) {
+    case 'closing-soon':
+      return q.in('deadline_bucket', ['lt_1d', 'd1_7']);
+    case 'undergraduate':
+      return q.or(
+        [
+          'study_levels.cs.["undergraduate"]',
+          'study_levels.cs.["bachelor"]',
+          'study_levels.cs.["associate"]',
+          'title.ilike.%undergraduate%',
+          'summary_short.ilike.%undergraduate%'
+        ].join(',')
+      );
+    case 'high-school':
+      return q.or(
+        [
+          'study_levels.cs.["high school"]',
+          'title.ilike.%high school%',
+          'summary_short.ilike.%high school%'
+        ].join(',')
+      );
+    case 'international-students':
+      return q.or(
+        [
+          'title.ilike.%international student%',
+          'summary_short.ilike.%international student%',
+          'title.ilike.%f-1%',
+          'summary_short.ilike.%foreign national%'
+        ].join(',')
+      );
+    case 'engineering':
+      return q.or(
+        [
+          'field_of_study.cs.["engineering"]',
+          'title.ilike.%engineering%',
+          'summary_short.ilike.%engineering%'
+        ].join(',')
+      );
+    case 'computer-science':
+      return q.or(
+        [
+          'field_of_study.cs.["computer science"]',
+          'title.ilike.%computer science%',
+          'summary_short.ilike.%computer science%',
+          'title.ilike.%software%',
+          'summary_short.ilike.%programming%'
+        ].join(',')
+      );
+    default:
+      return q;
+  }
+}
+
+function applyDeadlinePreset(q: any, preset: DeadlinePreset): any {
+  if (preset === 'any') return q;
+  const map: Record<string, string> = {
+    lt1d: 'lt_1d',
+    d1_7: 'd1_7',
+    w1_4: 'd8_28',
+    gt4w: 'gt_28'
+  };
+  const b = map[preset];
+  return b ? q.eq('deadline_bucket', b) : q;
+}
+
+/**
+ * SEO listings use `seo_tags` as the primary audience/topic filter.
+ * Strip legacy include-* / payout / completeness / exclusions so we do not AND
+ * conflicting `eligibility_tags` / ILIKE / long-tail SQL on top of `requiredSeoTags`.
+ * Keeps: deadline, amount & applicants bounds, `includeLocationLabels` (state / nationwide).
+ */
+function moreFiltersReducedForSeoListing(base: MoreFiltersState): MoreFiltersState {
+  const f = cloneMoreFilters(base);
+  f.includeEligibility.clear();
+  f.includeEducationLevels.clear();
+  f.includeGpaBuckets.clear();
+  f.includeEasyApply.clear();
+  f.excludeRequirementTypes.clear();
+  f.dataCompleteness = {
+    low: false,
+    medium: false,
+    high: false,
+    verified: false
+  };
+  f.payout = {
+    college: false,
+    student: false,
+    nonMonetary: false,
+    notStated: false
+  };
+  return f;
+}
+
+function applyMoreFilters(q: any, f: MoreFiltersState): any {
+  q = applyDeadlinePreset(q, f.deadlinePreset);
+
+  const nonMonetaryOrAmount = `payout_method.eq.non_monetary,and(award_amount_numeric_sort.gte.${f.amountMin},award_amount_numeric_sort.lte.${f.amountMax})`;
+  q = q.or(nonMonetaryOrAmount);
+
+  q = q
+    .or(`applicants_count.is.null,and(applicants_count.gte.${f.applicantsMin},applicants_count.lte.${f.applicantsMax})`);
+
+  const excl = Array.from(f.excludeRequirementTypes);
+  const exclMap: Record<string, () => any> = {
+    essay: () => q.not('essay_required', 'eq', true),
+    document: () => q.not('document_required', 'eq', true),
+    photo: () => q.not('photo_required', 'eq', true),
+    video: () => q.not('video_required', 'eq', true),
+    personal_statement: () => q.not('goal_required', 'eq', true),
+    link: () => q.not('link_required', 'eq', true),
+    survey: () => q.not('survey_required', 'eq', true),
+    question: () => q.not('question_required', 'eq', true),
+    recommendation: () => q.not('recommendation_required', 'eq', true),
+    transcript: () => q.not('transcript_required', 'eq', true),
+    resume: () => q // resume inferred from text on client; not structured in DB
+  };
+  for (const id of excl) {
+    const fn = exclMap[id];
+    if (fn) q = fn();
+  }
+
+  const dc = f.dataCompleteness;
+  const dcAny = dc.low || dc.medium || dc.high || dc.verified;
+  if (dcAny) {
+    const parts: string[] = [];
+    if (dc.verified) parts.push('is_verified.eq.true');
+    if (dc.low) parts.push('listing_completeness_bucket.eq.basic');
+    if (dc.medium) parts.push('listing_completeness_bucket.eq.standard');
+    if (dc.high) parts.push('listing_completeness_bucket.eq.detailed');
+    if (parts.length > 0) q = q.or(parts.join(','));
+  }
+
+  const po = f.payout;
+  const poAny =
+    po.college || po.student || po.nonMonetary || po.notStated;
+  if (poAny) {
+    const parts: string[] = [];
+    if (po.college) parts.push('payout_method.eq.college');
+    if (po.student) parts.push('payout_method.eq.student');
+    if (po.nonMonetary) parts.push('payout_method.eq.non_monetary');
+    if (po.notStated) parts.push('payout_method.eq.not_stated');
+    q = q.or(parts.join(','));
+  }
+
+  const addIncludeCs = (col: string, sel: Set<string>) => {
+    if (sel.size === 0) return;
+    const parts = Array.from(sel).map((id) => `${col}.cs.${JSON.stringify([id])}`);
+    q = q.or(parts.join(','));
+  };
+  addIncludeCs('eligibility_tags', f.includeEligibility);
+  addIncludeCs('catalog_education_levels', f.includeEducationLevels);
+  if (f.includeGpaBuckets.size > 0) {
+    q = q.in('gpa_bucket', Array.from(f.includeGpaBuckets));
+  }
+  addIncludeCs('location_tags', f.includeLocationLabels);
+  addIncludeCs('easy_apply_flags', f.includeEasyApply);
+
+  const stateCanon = normalizeUsStateToCanonical(f.filterStateInput);
+  if (stateCanon) {
+    const code = US_STATE_NAME_TO_CODE[stateCanon];
+    if (code) {
+      q = q.or(`state_codes.cs.${JSON.stringify([code])}`);
+    }
+  }
+
+  return q;
+}
+
+function applySort(q: any, sort: SortOption): any {
+  switch (sort) {
+    case 'highest_amount':
+      return q
+        .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
+        .order('ranking_score', { ascending: false, nullsFirst: false });
+    case 'lowest_amount':
+      return q
+        .order('award_amount_numeric_sort', { ascending: true, nullsFirst: false })
+        .order('ranking_score', { ascending: false, nullsFirst: false });
+    case 'least_requirements':
+      return q
+        .order('requirement_signals_count', { ascending: true, nullsFirst: true })
+        .order('requirements_count', { ascending: true, nullsFirst: true });
+    case 'closest_deadline':
+      return q
+        .order('deadline_date', { ascending: true, nullsFirst: false })
+        .order('days_until_deadline', { ascending: true, nullsFirst: false });
+    case 'fewest_applicants':
+      return q
+        .order('applicants_count', { ascending: true, nullsFirst: true })
+        .order('ranking_score', { ascending: false, nullsFirst: false });
+    case 'most_recent':
+      return q
+        .order('updated_at', { ascending: false, nullsFirst: true })
+        .order('ranking_score', { ascending: false, nullsFirst: false });
+    case 'verified_first':
+      return q
+        .order('is_verified', { ascending: false, nullsFirst: true })
+        .order('ranking_score', { ascending: false, nullsFirst: false });
+    case 'magic':
+    case 'best_match':
+    default:
+      return q
+        .order('ranking_score', { ascending: false, nullsFirst: false })
+        .order('updated_at', { ascending: false, nullsFirst: true });
+  }
+}
+
+function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
+  const { tab, ignored, saved, started, submitted } = req;
+  switch (tab) {
+    case 'best-matches': {
+      let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
+      return nq.or('credibility_score.gte.90,is_verified.eq.true');
+    }
+    case 'matches':
+      if (ignored.length > 0) {
+        for (let i = 0; i < ignored.length; i += 120) {
+          const chunk = ignored.slice(i, i + 120);
+          q = q.not('id', 'in', `(${chunk.join(',')})`);
+        }
+      }
+      return q;
+    case 'saved':
+      if (saved.length === 0) return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      return q.in('id', saved);
+    case 'ignored':
+      if (ignored.length === 0) return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      return q.in('id', ignored);
+    case 'started':
+      if (started.length === 0) {
+        return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      }
+      return q.in('id', started);
+    case 'submitted':
+      if (submitted.length === 0) {
+        return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      }
+      return q.in('id', submitted);
+    case 'recommended': {
+      let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
+      return nq.or('is_verified.eq.true,credibility_score.gte.75');
+    }
+    case 'easy-apply': {
+      let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
+      const flag = (id: string) =>
+        `easy_apply_flags.cs.${JSON.stringify([id])}`;
+      return nq.or(
+        [
+          'and(or(essay_required.is.null,essay_required.eq.false),or(requirements_count.is.null,requirements_count.lte.2),or(requirement_signals_count.is.null,requirement_signals_count.lte.2))',
+          flag('no_essay'),
+          flag('few_requirements'),
+          flag('easy_apply'),
+          flag('quick_apply')
+        ].join(',')
+      );
+    }
+    default:
+      return q;
+  }
+}
+
+function baseSelect(
+  supabase: ServerSupabaseClient,
+  head: boolean,
+  req: Pick<ScholarshipListRequest, 'catalogSubjectCategoryId'>
+) {
+  const sel = req.catalogSubjectCategoryId
+    ? scholarshipListSelectWithCatalogSubjectJoin()
+    : LIST_CARD_SELECT;
+  if (head) {
+    return supabase.from('scholarships').select(sel, { count: 'exact', head: true });
+  }
+  return supabase.from('scholarships').select(sel, { count: 'exact' });
+}
+
+/**
+ * Hub/catalog text search: multi-field OR. Keeps ilike patterns simple; strips LIKE wildcards and commas
+ * (commas break PostgREST `.or()` parsing).
+ */
+function applyCatalogTextSearchFilter(q: any, rawQ: string): any {
+  const safe = rawQ.replace(/[%_,]/g, ' ').trim().replace(/\s+/g, ' ');
+  if (safe.length === 0) return q;
+  const pattern = `%${safe}%`;
+  const cols = [
+    'title',
+    'provider_name',
+    'summary_short',
+    'summary_long',
+    'requirements_text',
+    'eligibility_text',
+    'description',
+    'official_source_name',
+    'category'
+  ];
+  return q.or(cols.map((c) => `${c}.ilike.${pattern}`).join(','));
+}
+
+function applyCommonFilters(req: ScholarshipListRequest, q: any): any {
+  const seoListing = req.requiredSeoTags.length > 0;
+  q = q.eq('is_active', true);
+  if (seoListing) {
+    // eslint-disable-next-line no-console -- temporary SEO listing mode diagnostics
+    console.log('SEO MODE ACTIVE - using seo_tags only');
+    // eslint-disable-next-line no-console -- temporary SEO listing mode diagnostics
+    console.log('SEO TAG FILTER', req.requiredSeoTags);
+    // PostgREST `cs` for text[] expects a Postgres array literal `{a,b}`, not JSON `["a","b"]`.
+    // supabase-js `.contains(column, string[])` encodes `cs.{a,b}` correctly.
+    q = q.contains('seo_tags', req.requiredSeoTags);
+  }
+  if (!seoListing && req.q) {
+    q = applyCatalogTextSearchFilter(q, req.q);
+  }
+  if (req.catalogSubjectCategoryId) {
+    q = q.eq('scholarship_categories.category_id', req.catalogSubjectCategoryId);
+  } else if (req.categoryPageSlug) {
+    q = applyCategoryPageScope(q, req.categoryPageSlug);
+  } else if (req.categoryIds.size > 0) {
+    q = applySelectedCategoriesFilter(q, req.categoryIds);
+  }
+  if (req.stateCodes.length > 0) {
+    const parts = req.stateCodes.map(
+      (c) => `state_codes.cs.${JSON.stringify([c])}`
+    );
+    q = q.or(parts.join(','));
+  }
+  if (!seoListing) {
+    for (const slug of req.longTailLegacySlugs) {
+      q = applyLegacyLongTailBase(q, slug);
+    }
+  }
+  const moreFilters = seoListing
+    ? moreFiltersReducedForSeoListing(req.moreFilters)
+    : cloneMoreFilters(req.moreFilters);
+  if (!seoListing && req.deadline && req.deadline !== 'any') {
+    moreFilters.deadlinePreset = req.deadline;
+  }
+  if (!seoListing) {
+    q = applyEligibilityTextSearchClauses(q, moreFilters);
+  }
+  q = applyMoreFilters(q, moreFilters);
+  return q;
+}
+
+/**
+ * Legacy “global nav” basis: strips text search, categories, and resets moreFilters to defaults.
+ * Used only for **L1 category dropdown** counts (`categoryDropdownCountsRequest`), not sidebar tabs.
+ */
+function metaBasisRequest(
+  req: ScholarshipListRequest,
+  bounds: ScholarshipListMeta['filterBounds']
+): ScholarshipListRequest {
+  return {
+    ...req,
+    q: '',
+    categoryIds: new Set(),
+    categoryPageSlug: null,
+    catalogSubjectCategoryId: null,
+    moreFilters: defaultMoreFiltersFromBounds(bounds),
+    page: 1,
+    limit: 1
+  };
+}
+
+/**
+ * Sidebar tab counts must use the **same** filters as the main list (`buildScholarshipListFilterQuery`):
+ * q, categories, long-tail, moreFilters, state, ignored, profile fit, scope, etc.
+ * Only pagination is normalized (count queries ignore range anyway).
+ */
+function sidebarTabCountsListingAlignedRequest(req: ScholarshipListRequest): ScholarshipListRequest {
+  return {
+    ...req,
+    page: 1,
+    limit: 1
+  };
+}
+
+/**
+ * Hub legacy L1 category dropdown counts: align with catalog “All / matches” semantics (ignored + long-tail),
+ * not personalized `best-matches` / `recommended` SQL tab narrowing (which produced zeros vs live lists).
+ */
+function categoryDropdownCountsRequest(
+  req: ScholarshipListRequest,
+  bounds: ScholarshipListMeta['filterBounds']
+): ScholarshipListRequest {
+  return {
+    ...metaBasisRequest(req, bounds),
+    tab: 'matches',
+    listScope: 'catalog'
+  };
+}
+
+function tabUsesEmptyIdSet(
+  req: Pick<ScholarshipListRequest, 'ignored' | 'saved' | 'started' | 'submitted'>,
+  tab: ScholarshipListTabId
+): boolean {
+  switch (tab) {
+    case 'saved':
+      return req.saved.length === 0;
+    case 'ignored':
+      return req.ignored.length === 0;
+    case 'started':
+      return req.started.length === 0;
+    case 'submitted':
+      return req.submitted.length === 0;
+    default:
+      return false;
+  }
+}
+
+function buildListMetaCacheKey(
+  req: ScholarshipListRequest,
+  bounds: ScholarshipListMeta['filterBounds'],
+  includeCategoryCounts: boolean
+): string {
+  const stateCodes = Array.from(req.stateCodes).sort().join(',');
+  const ignored = Array.from(req.ignored).sort().join(',');
+  const saved = Array.from(req.saved).sort().join(',');
+  const started = Array.from(req.started).sort().join(',');
+  const submitted = Array.from(req.submitted).sort().join(',');
+  const longTailLegacySlugs = Array.from(req.longTailLegacySlugs).sort().join(',');
+  const requiredSeoTags = Array.from(req.requiredSeoTags).sort().join(',');
+  const boundsKey = [
+    bounds.amountMin,
+    bounds.amountMax,
+    bounds.applicantsMin,
+    bounds.applicantsMax
+  ].join(':');
+  const qNorm = req.q.trim().toLowerCase();
+  const categoryIds = Array.from(req.categoryIds)
+    .slice()
+    .sort()
+    .join(',');
+  const moreFiltersKey = JSON.stringify(moreFiltersToJson(req.moreFilters));
+  return [
+    req.tab,
+    req.deadline,
+    req.listScope,
+    'pf:none',
+    includeCategoryCounts ? 'cats:1' : 'cats:0',
+    `state:${stateCodes}`,
+    `ignored:${ignored}`,
+    `saved:${saved}`,
+    `started:${started}`,
+    `submitted:${submitted}`,
+    `lt:${longTailLegacySlugs}`,
+    `seo:${requiredSeoTags}`,
+    `bounds:${boundsKey}`,
+    `q:${qNorm}`,
+    `catIds:${categoryIds}`,
+    `catPage:${req.categoryPageSlug ?? ''}`,
+    `catSubj:${req.catalogSubjectCategoryId ?? ''}`,
+    `mf:${moreFiltersKey}`
+  ].join('|');
+}
+
+/** Single catalog pipeline: no personalized SQL branch. */
+function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRequest {
+  return { ...req, listScope: 'catalog', personalizedProfile: undefined };
+}
+
+const CATALOG_REDIRECT_TAB_IDS = new Set<ScholarshipListTabId>([
+  'best-matches',
+  'recommended',
+  'easy-apply'
+]);
+
+/**
+ * Normalize hub-style tabs that used to run separate personalized SQL into plain catalog `matches`.
+ * Call at the API boundary after parsing the request.
+ */
+export function applyCatalogOnlyListingNormalization(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  const tab = CATALOG_REDIRECT_TAB_IDS.has(req.tab) ? 'matches' : req.tab;
+  return { ...req, tab, listScope: 'catalog', personalizedProfile: undefined };
+}
+
+function buildScholarshipListFilterQuery(
+  supabase: ServerSupabaseClient,
+  head: boolean,
+  req: ScholarshipListRequest
+): any {
+  const r = effectiveListingRequest(req);
+  let q: any = baseSelect(supabase, head, r);
+  q = applyCommonFilters(r, q);
+  q = applyTabScopeFixed(r, q);
+  return q;
+}
+
+/** Head-count for a tab using the same SQL stack as the listing (for `matchedTotal` / diagnostics). */
+export async function countScholarshipsForTabRequest(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest,
+  tab: ScholarshipListTabId
+): Promise<number> {
+  if (tabUsesEmptyIdSet(req, tab)) return 0;
+  const r = { ...effectiveListingRequest(req), tab };
+  const q: any = buildScholarshipListFilterQuery(supabase, true, r);
+  const { error, count } = await q;
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
+export async function executeScholarshipListQuery(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest,
+  opts: ScholarshipListQueryOpts
+): Promise<ScholarshipListResult> {
+  /**
+   * Catalog “similar scholarships” must bypass personalized match ordering.
+   * Otherwise `similar_to` is ignored whenever a match bundle exists.
+   */
+  if (req.similarToId) {
+    let q = supabase
+      .from('scholarships')
+      .select(opts.countOnly ? 'id' : LIST_CARD_SELECT, {
+        count: 'exact',
+        head: opts.countOnly
+      })
+      .eq('is_active', true)
+      .neq('id', req.similarToId);
+    if (req.similarCategorySlug) {
+      const raw = req.similarCategorySlug.trim().toLowerCase();
+      const canon = normalizeCategoryId(raw);
+      const keys = Array.from(
+        new Set([raw].concat(canon ? [canon] : []))
+      );
+      q = applyCategoryOrFilter(q, keys);
+    }
+    if (!opts.countOnly) {
+      q = q
+        .order('deadline_date', { ascending: true, nullsFirst: false })
+        .order('updated_at', { ascending: false, nullsFirst: true })
+        .range(0, Math.max(0, req.limit - 1));
+    }
+    const { data, error, count } = await q;
+    if (error) throw new Error(error.message);
+    const total = count ?? 0;
+    if (opts.countOnly) {
+      return {
+        scholarships: [],
+        total,
+        page: 1,
+        limit: req.limit
+      };
+    }
+    const rows = (data ?? []) as ScholarshipRow[];
+    return {
+      scholarships: rows.map((r) => mapScholarshipRow(r)),
+      total,
+      page: 1,
+      limit: req.limit
+    };
+  }
+
+  const rEff = effectiveListingRequest(req);
+
+  let bounds: ScholarshipListMeta['filterBounds'] | undefined;
+  if (opts.includeMeta) {
+    bounds = await fetchGlobalFilterBounds(supabase);
+  }
+
+  if (opts.countOnly) {
+    const q: any = buildScholarshipListFilterQuery(supabase, true, rEff);
+    const { error, count } = await q;
+    if (error) throw new Error(error.message);
+    return {
+      scholarships: [],
+      total: count ?? 0,
+      page: req.page,
+      limit: req.limit
+    };
+  }
+
+  const buildListPageQuery = (fromIdx: number, toIdx: number) => {
+    let qn: any = buildScholarshipListFilterQuery(supabase, false, rEff);
+    qn = applySort(qn, rEff.sort);
+    return qn.range(fromIdx, toIdx);
+  };
+
+  let effectivePage = req.page;
+  let from = (effectivePage - 1) * req.limit;
+  let to = from + req.limit - 1;
+  const { data, error, count } = await buildListPageQuery(from, to);
+  if (error) throw new Error(error.message);
+  const rawTotal = count ?? 0;
+  const sqlTotalBeforePostProcessing = rawTotal;
+
+  let total = rawTotal;
+  let rows = (data ?? []) as ScholarshipRow[];
+
+  /** `page` past last page: empty `data` but `count` &gt; 0 — listing UI showed no cards. */
+  const maxPage = Math.max(1, Math.ceil(total / req.limit) || 1);
+  if (rows.length === 0 && total > 0 && req.page > maxPage) {
+    effectivePage = maxPage;
+    from = (effectivePage - 1) * req.limit;
+    to = from + req.limit - 1;
+    const r2 = await buildListPageQuery(from, to);
+    if (r2.error) throw new Error(r2.error.message);
+    rows = (r2.data ?? []) as ScholarshipRow[];
+  }
+
+  let meta: ScholarshipListMeta | undefined;
+  if (opts.includeMeta && bounds) {
+    meta = await fetchScholarshipListMeta(supabase, req, bounds, {
+      includeCategoryCounts: opts.includeCategoryCounts
+    });
+  }
+
+  const scholarships = rows.map((r) => mapScholarshipRow(r));
+
+  if (process.env.SCHOLARSHIPS_LIST_SYNC_DEBUG === '1') {
+    // eslint-disable-next-line no-console -- opt-in listing vs sidebar diagnostics
+    console.log('[scholarships-list-sync]', {
+      tab: rEff.tab,
+      listScope: rEff.listScope,
+      ignoredCount: rEff.ignored.length,
+      sqlTotal: sqlTotalBeforePostProcessing,
+      listTotal: total,
+      listRowsReturned: scholarships.length,
+      sidebarMatches: meta?.sidebarCounts.matches ?? null,
+      page: effectivePage,
+      limit: req.limit
+    });
+  }
+
+  return {
+    scholarships,
+    total,
+    page: effectivePage,
+    limit: req.limit,
+    meta
+  };
+}
+
+async function countFor(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest,
+  tab: ScholarshipListTabId
+): Promise<number> {
+  return countScholarshipsForTabRequest(supabase, req, tab);
+}
+
+async function countCategory(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest,
+  catId: ScholarshipCategoryId
+): Promise<number> {
+  const scoped: ScholarshipListRequest = {
+    ...req,
+    categoryIds: new Set(),
+    categoryPageSlug: null,
+    catalogSubjectCategoryId: null
+  };
+  if (tabUsesEmptyIdSet(scoped, scoped.tab)) {
+    return 0;
+  }
+  const eff = effectiveListingRequest(scoped);
+  let q: any = buildScholarshipListFilterQuery(supabase, true, eff);
+  q = applySelectedCategoriesFilter(q, new Set([catId]));
+  const { error, count } = await q;
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
+/**
+ * SEO listings: exact filters, then one deterministic relax chain (see `seoScholarshipFallback`).
+ * Always use with `listScope: catalog` on the client so SQL applies long_tail + moreFilters.
+ */
+export async function executeScholarshipListQueryWithSeoFallback(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest,
+  opts: ScholarshipListQueryOpts,
+  ctx: {
+    enable: boolean;
+    slugOnlyMoreFilters: MoreFiltersState | null;
+    bounds: ScholarshipListMeta['filterBounds'];
+    isCategorySeo: boolean;
+  }
+): Promise<ScholarshipListResult> {
+  const thin = (n: number) => n < SEO_MIN_INDEXABLE_LIST_COUNT;
+
+  const logFallbackCheck = (payload: {
+    resultsLength: number;
+    total: number;
+    fallbackUsed: boolean;
+  }) => {
+    // eslint-disable-next-line no-console -- SEO fallback diagnostics
+    console.log('FALLBACK CHECK', payload);
+  };
+
+  if (!ctx.enable) {
+    const full = await executeScholarshipListQuery(supabase, req, opts);
+    logFallbackCheck({
+      resultsLength: full.scholarships.length,
+      total: full.total,
+      fallbackUsed: false
+    });
+    return {
+      ...full,
+      seoFallback: {
+        used: false,
+        tier: 0,
+        exactTotal: full.total,
+        thinListing: thin(full.total)
+      }
+    };
+  }
+
+  /** Count-only: no row array — gate fallback on total only. */
+  if (opts.countOnly) {
+    const exactCountRes = await executeScholarshipListQuery(supabase, req, {
+      ...opts,
+      countOnly: true
+    });
+    const exactTotal = exactCountRes.total;
+    logFallbackCheck({
+      resultsLength: 0,
+      total: exactTotal,
+      fallbackUsed: false
+    });
+
+    if (exactTotal > 0) {
+      return {
+        ...exactCountRes,
+        seoFallback: {
+          used: false,
+          tier: 0,
+          exactTotal,
+          thinListing: thin(exactTotal)
+        }
+      };
+    }
+
+    const attempts = ctx.isCategorySeo
+      ? buildCategorySeoRelaxAttempts(req, ctx.bounds)
+      : buildLongTailSeoRelaxAttempts(req, ctx.bounds, ctx.slugOnlyMoreFilters);
+
+    for (let i = 0; i < attempts.length; i++) {
+      const tryReq = attempts[i]!;
+      const tryCount = await executeScholarshipListQuery(supabase, tryReq, {
+        ...opts,
+        countOnly: true
+      });
+      if (tryCount.total > 0) {
+        logFallbackCheck({
+          resultsLength: 0,
+          total: tryCount.total,
+          fallbackUsed: true
+        });
+        return {
+          ...tryCount,
+          seoFallback: {
+            used: true,
+            tier: i + 1,
+            exactTotal: 0,
+            thinListing: thin(tryCount.total)
+          }
+        };
+      }
+    }
+
+    let nuclear = buildSeoNuclearListingRequest(
+      req,
+      ctx.bounds,
+      ctx.isCategorySeo
+    );
+    let full = await executeScholarshipListQuery(supabase, nuclear, {
+      ...opts,
+      countOnly: true
+    });
+    if (
+      full.total === 0 &&
+      !ctx.isCategorySeo &&
+      seoRequestHasCatalogStateGeo(req)
+    ) {
+      nuclear = buildSeoNuclearListingRequest(req, ctx.bounds, false, {
+        dropGeo: true
+      });
+      full = await executeScholarshipListQuery(supabase, nuclear, {
+        ...opts,
+        countOnly: true
+      });
+    }
+    if (full.total === 0 && ctx.isCategorySeo) {
+      nuclear = buildSeoNuclearListingRequest(req, ctx.bounds, false);
+      full = await executeScholarshipListQuery(supabase, nuclear, {
+        ...opts,
+        countOnly: true
+      });
+    }
+    logFallbackCheck({
+      resultsLength: 0,
+      total: full.total,
+      fallbackUsed: true
+    });
+    return {
+      ...full,
+      seoFallback: {
+        used: true,
+        tier: attempts.length + 1,
+        exactTotal: 0,
+        thinListing: thin(full.total)
+      }
+    };
+  }
+
+  /**
+   * List response: must run fallback when the **current page** has zero rows.
+   * Previously we short-circuited on `countOnly` total &gt; 0, which skipped relax/nuclear
+   * when count and paged `data` disagreed (or other edge cases).
+   */
+  const exactFull = await executeScholarshipListQuery(supabase, req, opts);
+  const exactRowsLen = exactFull.scholarships.length;
+  const exactCatalogTotal = exactFull.total;
+
+  logFallbackCheck({
+    resultsLength: exactRowsLen,
+    total: exactCatalogTotal,
+    fallbackUsed: false
+  });
+
+  if (exactRowsLen > 0) {
+    return {
+      ...exactFull,
+      seoFallback: {
+        used: false,
+        tier: 0,
+        exactTotal: exactCatalogTotal,
+        thinListing: thin(exactFull.total)
+      }
+    };
+  }
+
+  const attempts = ctx.isCategorySeo
+    ? buildCategorySeoRelaxAttempts(req, ctx.bounds)
+    : buildLongTailSeoRelaxAttempts(req, ctx.bounds, ctx.slugOnlyMoreFilters);
+
+  for (let i = 0; i < attempts.length; i++) {
+    const tryReq = attempts[i]!;
+    const tryCount = await executeScholarshipListQuery(supabase, tryReq, {
+      ...opts,
+      countOnly: true
+    });
+    if (tryCount.total > 0) {
+      const full = await executeScholarshipListQuery(supabase, tryReq, opts);
+      if (full.scholarships.length === 0) {
+        continue;
+      }
+      logFallbackCheck({
+        resultsLength: full.scholarships.length,
+        total: full.total,
+        fallbackUsed: true
+      });
+      return {
+        ...full,
+        seoFallback: {
+          used: true,
+          tier: i + 1,
+          exactTotal: exactCatalogTotal,
+          thinListing: thin(full.total)
+        }
+      };
+    }
+  }
+
+  let nuclear = buildSeoNuclearListingRequest(
+    req,
+    ctx.bounds,
+    ctx.isCategorySeo
+  );
+  let full = await executeScholarshipListQuery(supabase, nuclear, opts);
+  if (
+    full.total === 0 &&
+    !ctx.isCategorySeo &&
+    seoRequestHasCatalogStateGeo(req)
+  ) {
+    nuclear = buildSeoNuclearListingRequest(req, ctx.bounds, false, {
+      dropGeo: true
+    });
+    full = await executeScholarshipListQuery(supabase, nuclear, opts);
+  }
+  if (full.total === 0 && ctx.isCategorySeo) {
+    nuclear = buildSeoNuclearListingRequest(req, ctx.bounds, false);
+    full = await executeScholarshipListQuery(supabase, nuclear, opts);
+  }
+  logFallbackCheck({
+    resultsLength: full.scholarships.length,
+    total: full.total,
+    fallbackUsed: true
+  });
+  return {
+    ...full,
+    seoFallback: {
+      used: true,
+      tier: attempts.length + 1,
+      exactTotal: exactCatalogTotal,
+      thinListing: thin(full.total)
+    }
+  };
+}
+
+export async function fetchScholarshipListMeta(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest,
+  bounds?: ScholarshipListMeta['filterBounds'],
+  opts?: { includeCategoryCounts?: boolean }
+): Promise<ScholarshipListMeta> {
+  const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
+  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+  const includeCategoryCounts = opts?.includeCategoryCounts !== false;
+  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v3`;
+  const cached = readTtlValue(listMetaCache.get(cacheKey));
+  if (cached) {
+    return cloneScholarshipListMeta(cached);
+  }
+
+  const categoryReq = categoryDropdownCountsRequest(req, b);
+
+  /** Catalog hub: only “browse” + user lists; no separate personalized tab counts. */
+  const tabs: ScholarshipListTabId[] = [
+    'matches',
+    'saved',
+    'started',
+    'submitted',
+    'ignored'
+  ];
+  const sidebarParts = await Promise.all(
+    tabs.map(async (t) => ({ t, n: await countFor(supabase, effectiveReq, t) }))
+  );
+  const sidebarCounts: ScholarshipSidebarCounts = {
+    bestMatches: 0,
+    recommended: 0,
+    easyApply: 0,
+    matches: 0,
+    saved: 0,
+    started: 0,
+    submitted: 0,
+    ignored: 0
+  };
+  for (const { t, n } of sidebarParts) {
+    if (t === 'matches') sidebarCounts.matches = n;
+    if (t === 'saved') sidebarCounts.saved = n;
+    if (t === 'started') sidebarCounts.started = n;
+    if (t === 'submitted') sidebarCounts.submitted = n;
+    if (t === 'ignored') sidebarCounts.ignored = n;
+  }
+
+  const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
+  if (includeCategoryCounts) {
+    const categoryParts = await Promise.all(
+      SCHOLARSHIP_CATEGORY_ORDER.map(async (id) => ({
+        id,
+        n: await countCategory(supabase, categoryReq, id)
+      }))
+    );
+    for (const { id, n } of categoryParts) categoryCounts[id] = n;
+  } else {
+    for (const id of SCHOLARSHIP_CATEGORY_ORDER) categoryCounts[id] = 0;
+  }
+
+  const meta = { filterBounds: b, sidebarCounts, categoryCounts };
+  writeTtlValue(listMetaCache, cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
+  return meta;
+}
+
+export { DEFAULT_LIMIT as SCHOLARSHIPS_API_DEFAULT_LIMIT, MAX_LIMIT as SCHOLARSHIPS_API_MAX_LIMIT };

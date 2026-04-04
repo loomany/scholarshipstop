@@ -1,0 +1,47 @@
+{
+  "seo_title": "Find Arkansas Scholarships for High School Seniors",
+  "seo_description": "Explore 5 scholarships for Arkansas high school seniors with awards from $1,750 to $3,500. Check deadlines and requirements.",
+  "intro": "For high school seniors in Arkansas, there are five scholarship opportunities available that can help ease the financial burden of education. Award sizes generally range from $1,750 to $3,500, providing a variety of options for students. It’s important to note that deadlines for these scholarships vary, with some approaching in the near future, so checking the specific dates is essential.",
+  "h1": "Arkansas Scholarships for High School Seniors",
+  "supporting": "This selection of scholarships includes a mix of categories such as education, arts, and community, which can cater to diverse interests and career paths. Many listings do not require essays, making them more accessible for students who may prefer a lighter application process. Take the time to compare the award amounts and requirements to find the best fit for your situation.",
+  "related_intro": "If you're interested in exploring more scholarships tailored to different education levels or locations, check out our related pages for additional opportunities.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify the best financial fit",
+    "Read through requirement lines for each scholarship",
+    "Open official pages for detailed information",
+    "Shortlist your top choices for easier tracking"
+  ],
+  "who_for": [
+    "High school seniors in Arkansas",
+    "Students pursuing education in arts or community fields",
+    "Applicants looking for scholarships with minimal requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Arkansas?",
+      "answer": "There are currently five scholarships listed for high school seniors in Arkansas, covering categories such as education, arts, and community. Each scholarship may have different focuses and eligibility criteria, so it's important to review the details of each listing."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All five scholarships have specific deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's advisable to check each scholarship's details promptly to ensure you don't miss any important dates."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, with many having lighter application requirements. However, it's essential to verify the specifics for each scholarship, as requirements can differ."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available range from approximately $1,750 to $3,500. Each scholarship may have a different amount, so be sure to check the individual listings for exact figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/arkansas",
+    "generatedAt": "2026-04-02T11:11:11.771Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

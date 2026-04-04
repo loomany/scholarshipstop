@@ -1,0 +1,47 @@
+{
+  "seo_title": "Alaska Scholarships for Native American Students",
+  "seo_description": "Explore 20 scholarships for Native Americans in Alaska. Award amounts range from $500 to $10,000 with varying deadlines.",
+  "intro": "Finding scholarships specifically for Native American students in Alaska can be key to easing the financial burden of education. This catalog features 20 opportunities that cater to various fields, including education, STEM, and medicine, with award amounts ranging from approximately $500 to $10,000. With a mix of requirements, including some that may not require essays, this list provides a solid starting point for eligible applicants looking to secure funding.",
+  "h1": "Scholarships for Native Americans in Alaska",
+  "supporting": "As you review these scholarships, pay attention to the diversity in award sizes and eligibility criteria. Some listings may have lighter requirements, which can simplify your application process. Be sure to check the specific deadlines, as they vary across the scholarships, and some may be approaching soon. This slice is worth scanning for its tailored opportunities that align with your educational goals.",
+  "related_intro": "For more tailored options, consider exploring scholarships that focus on specific fields like STEM or community service, which may also be available for Native American students.",
+  "how_to_use": [
+    "Compare the deadlines listed for each scholarship",
+    "Scan the award amounts to find suitable options",
+    "Read the requirement lines to understand what each scholarship entails",
+    "Open official pages for detailed information",
+    "Shortlist your favorites and verify details on the sponsor's site"
+  ],
+  "who_for": [
+    "Native American students in Alaska",
+    "Students pursuing education or STEM fields",
+    "Applicants seeking scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Native American students in Alaska?",
+      "answer": "The listings include a variety of scholarship categories such as education, STEM, medicine, arts, community, and miscellaneous. With 20 scholarships currently available, students can find options that align with their specific fields of interest."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships; while some may require essays, many do not. It's advisable to check the details of each individual listing to understand the specific application requirements."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category range from approximately $500 to $10,000. However, the exact amount can differ by scholarship, so reviewing each listing for specific details is important."
+    },
+    {
+      "question": "What should I know about deadlines for these scholarships?",
+      "answer": "All 20 scholarships listed have deadlines, which vary from one program to another. Some deadlines are approaching within the next 45 days, so it's recommended to verify the dates promptly for each scholarship you're interested in."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "native-american/alaska",
+    "generatedAt": "2026-04-02T11:06:26.976Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 20,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

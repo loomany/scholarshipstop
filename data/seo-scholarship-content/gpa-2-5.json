@@ -1,0 +1,49 @@
+{
+  "seo_title": "Scholarships for GPA 2.5 Students | 90 Opportunities",
+  "seo_description": "Explore 90 scholarships for students with a GPA of 2.5. Award sizes vary; check individual listings for deadlines and requirements.",
+  "intro": "Finding scholarships that accommodate a GPA of 2.5 can be challenging, but there are 90 options available that cater to a variety of fields, including education, STEM, and community initiatives. Award sizes in this category range from approximately $400 to $6,000, providing a range of financial support. With deadlines varying across listings, it's important to check the specific dates to ensure timely applications.",
+  "h1": "GPA 2.5 Scholarships: 90 Opportunities Available",
+  "supporting": "This scholarship list offers a mix of requirements, with some opportunities requiring essays while others do not. As you review the options, consider comparing the award amounts and the specific eligibility criteria to find the best fit for your situation. The diversity in categories means you can explore opportunities that align with your interests and career goals.",
+  "related_intro": "If you're interested in scholarships with different GPA requirements or specific fields of study, check out our related pages for more tailored options.",
+  "how_to_use": [
+    "Compare deadlines listed for each scholarship",
+    "Scan the award amounts to find suitable options",
+    "Read the requirement lines carefully to understand what is needed",
+    "Open the official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals and verify details on sponsor sites"
+  ],
+  "who_for": [
+    "Students with a GPA of 2.5",
+    "Applicants seeking funding in STEM fields",
+    "Individuals pursuing community-focused scholarships",
+    "Students interested in education-related funding",
+    "Those looking for scholarships with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with a GPA of 2.5?",
+      "answer": "There are currently 90 scholarships listed that cater to students with a GPA of 2.5. These scholarships span various categories including Education, STEM, Community, Law, and Humanities, providing a diverse range of opportunities."
+    },
+    {
+      "question": "Are there specific requirements for applying to these scholarships?",
+      "answer": "Requirements vary across the scholarships, with some requiring essays and others not. Approximately 22 of the listings require an essay, while the majority do not, so it's important to review each scholarship's details for specific application criteria."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 90 scholarships have deadlines, but they differ from one listing to another. Some deadlines are approaching within the next 45 days, so it's advisable to check each scholarship's page promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships listed generally range from around $400 to $6,000. However, it's important to verify the specific amounts for each scholarship as they can vary widely."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "gpa-2-5",
+    "generatedAt": "2026-04-02T10:34:10.896Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 90,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

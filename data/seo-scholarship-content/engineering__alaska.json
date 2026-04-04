@@ -1,0 +1,47 @@
+{
+  "seo_title": "Alaska Engineering Scholarships: $2K to $5K Awards",
+  "seo_description": "Explore 5 engineering scholarships in Alaska with awards ranging from $2,000 to $5,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding scholarships specifically for engineering students in Alaska can streamline your funding search. With 5 available listings, these opportunities cater to a range of needs and backgrounds, often with award amounts varying from $2,000 to $5,000. Keep in mind that while many listings may not require essays, the deadlines differ, so it’s important to check each one promptly to maximize your chances of receiving support.",
+  "h1": "Find Engineering Scholarships in Alaska",
+  "supporting": "This curated list of scholarships is a valuable resource for students pursuing engineering in Alaska. As you review the options, consider comparing the award amounts and any specific eligibility requirements. Some scholarships may have lighter application processes, making them more accessible. Pay close attention to the varying deadlines to ensure you don’t miss out on any opportunities.",
+  "related_intro": "If you’re interested in more funding options, check out related pages for scholarships in other STEM fields or additional opportunities in Alaska.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts to find suitable options",
+    "Review eligibility requirements carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Engineering students in Alaska",
+    "Students seeking STEM scholarships",
+    "Applicants interested in disability-related funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Alaska?",
+      "answer": "There are currently five scholarships listed specifically for engineering students in Alaska. These opportunities often cater to STEM fields and may also support students with disabilities."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category generally range from approximately $2,000 to $5,000. However, it's important to check each listing for specific amounts as they can vary."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Many of the scholarships listed do not require essays, but it's advisable to review each individual listing for specific requirements. Some programs may have lighter application processes."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All five scholarships have specific deadlines, which vary from one listing to another. Be sure to check the details promptly, as some deadlines are approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/alaska",
+    "generatedAt": "2026-04-02T10:54:23.426Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

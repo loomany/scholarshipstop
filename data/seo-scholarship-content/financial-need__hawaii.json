@@ -1,0 +1,47 @@
+{
+  "seo_title": "Hawaii Scholarships for Financial Need Students",
+  "seo_description": "Explore 9 scholarships in Hawaii for students with financial need. Award sizes vary; check deadlines and requirements for each.",
+  "intro": "For students in Hawaii facing financial challenges, there are 9 scholarships available that can help ease the burden of educational expenses. These awards range from approximately $1,500 to $5,000, providing valuable support for various fields such as education, community service, and STEM. With deadlines that vary, including some approaching in the next month, it's essential to review each listing promptly to ensure you don’t miss out on potential funding.",
+  "h1": "Hawaii Scholarships for Students with Financial Need",
+  "supporting": "This selection of scholarships features a mix of requirements, with some requiring essays and others being more straightforward. As you explore the listings, consider comparing the award amounts and categories to find the best fit for your situation. Each scholarship has unique eligibility criteria, so take the time to read through the details carefully to maximize your chances of success.",
+  "related_intro": "If you're interested in exploring more funding options, check out related scholarships that cater to different needs or locations.",
+  "how_to_use": [
+    "Check each scholarship's deadline to ensure timely applications",
+    "Compare award amounts to prioritize your applications",
+    "Read the eligibility criteria and requirements for each listing",
+    "Shortlist scholarships that align with your academic and personal goals",
+    "Visit official sponsor websites for the most accurate information"
+  ],
+  "who_for": [
+    "Students in Hawaii with demonstrated financial need",
+    "High school seniors seeking college funding",
+    "Undergraduate students pursuing education or STEM degrees"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Hawaii?",
+      "answer": "There are currently 9 scholarships listed that cater to financial need in Hawaii. These opportunities cover a variety of categories, including education, community, disability, STEM, and music."
+    },
+    {
+      "question": "How can I find specific details about each scholarship?",
+      "answer": "Each scholarship listing includes important details such as award amounts and deadlines. Requirements may vary, with some scholarships requiring essays while others do not, so it's essential to review each listing carefully."
+    },
+    {
+      "question": "Are there any upcoming deadlines I should be aware of?",
+      "answer": "Yes, all 9 scholarships have deadlines, with at least one approaching within the next 45 days. Be sure to check the specific deadline for each scholarship to ensure you apply on time."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from approximately $1,500 to $5,000. However, it's important to verify the exact amount listed for each scholarship, as they can differ."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/hawaii",
+    "generatedAt": "2026-04-02T11:12:34.178Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

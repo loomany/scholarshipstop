@@ -1,0 +1,49 @@
+{
+  "seo_title": "New York Scholarships for Financial Need Students",
+  "seo_description": "Explore 10 scholarships in New York for students with financial need. Award sizes range from $1,000 to $5,000. Check deadlines carefully.",
+  "intro": "Finding financial support for education in New York can be challenging, but there are 10 scholarships available specifically for those demonstrating financial need. These opportunities range in award amounts, typically between $1,000 and $5,000, and cater to various fields including education, community service, and STEM. With deadlines varying across the listings, it’s essential to review them promptly to ensure you don’t miss out on funding that could help you achieve your academic goals.",
+  "h1": "Financial Need Scholarships in New York",
+  "supporting": "This selection of scholarships offers a mix of requirements, with some requiring essays while others may not. As you explore these options, consider comparing the award sizes and eligibility criteria to find the best fit for your situation. Each listing provides unique insights into what the sponsors are looking for, making it worthwhile to read through the details carefully.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that focus on scholarships for specific fields or broader eligibility criteria.",
+  "how_to_use": [
+    "Review each listing for specific eligibility requirements",
+    "Compare award amounts to determine potential funding",
+    "Check deadlines and prioritize those approaching soon",
+    "Read through any essay requirements to prepare applications",
+    "Visit official pages for the most accurate and updated information"
+  ],
+  "who_for": [
+    "Students in New York with demonstrated financial need",
+    "Individuals pursuing education in STEM fields",
+    "Community-focused applicants seeking support",
+    "Students with disabilities looking for funding",
+    "Undergraduates and graduates seeking financial assistance"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in New York?",
+      "answer": "The current listing includes 10 scholarships that cater to various categories such as education, disability, community, STEM, and medicine. This diversity allows applicants to find opportunities that align with their specific interests and needs."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 10 listings currently show deadline information. It's important to check these dates promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships, with some requiring essays and others not. Be sure to review each listing carefully to understand what is needed for your application."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category range from approximately $1,000 to $5,000. However, specific amounts can vary by scholarship, so it's advisable to check the details for each listing."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/new-york",
+    "generatedAt": "2026-04-02T10:43:59.309Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 10,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

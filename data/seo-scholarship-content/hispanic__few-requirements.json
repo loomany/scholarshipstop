@@ -1,0 +1,47 @@
+{
+  "seo_title": "Hispanic Scholarships with Few Requirements",
+  "seo_description": "Explore 47 Hispanic scholarships with varying requirements and awards from $500 to $18,000. Check deadlines promptly.",
+  "intro": "Finding scholarships that cater to Hispanic students with minimal application requirements can significantly ease the financial burden of education. This catalog features 47 scholarships that vary in award sizes, ranging from approximately $500 to $18,000. With a mix of deadlines, including some approaching in the next 45 days, it’s essential to act promptly and explore the options that best fit your needs.",
+  "h1": "Hispanic Scholarships with Minimal Requirements",
+  "supporting": "This selection includes scholarships across diverse categories such as STEM, education, community, and arts, allowing you to find funding that aligns with your academic interests. While many listings have fewer requirements, be aware that some may still ask for essays. Review each scholarship carefully to compare award amounts and requirements, ensuring you choose the best opportunities for your situation.",
+  "related_intro": "For more tailored options, consider checking out related categories that focus on specific fields or application styles.",
+  "how_to_use": [
+    "Check deadlines for each scholarship to ensure timely applications",
+    "Compare award amounts to prioritize high-value opportunities",
+    "Review requirement details to understand what is needed for each application",
+    "Visit official scholarship pages for the most accurate information",
+    "Shortlist scholarships that align with your academic and career goals"
+  ],
+  "who_for": [
+    "Hispanic students seeking financial support",
+    "Applicants looking for scholarships with fewer requirements",
+    "Students interested in STEM, education, or community service fields"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are included in this list?",
+      "answer": "This collection features 47 scholarships specifically for Hispanic students with few application requirements. Categories include Education, STEM, Community, Arts, and Law, providing a diverse range of options."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While many do not require essays, some may ask for them, so it's important to check the specific details for each scholarship you're interested in."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 47 scholarships in this list have deadlines, but they differ from one another. Be sure to verify the deadline for each scholarship promptly, as some may be approaching soon."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for these scholarships vary widely, with amounts ranging from approximately $500 to $18,000. Each scholarship listing provides specific details on the award amount available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "hispanic/few-requirements",
+    "generatedAt": "2026-04-02T11:14:49.427Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 47,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "seo_title": "West Virginia Scholarships for Financial Need",
+  "seo_description": "Explore 5 scholarships in West Virginia for students with financial need. Award sizes range from $500 to $3,500.",
+  "intro": "Finding financial support can be crucial for students in West Virginia, especially those demonstrating financial need. This filter showcases 5 scholarships specifically aimed at helping students cover their educational expenses. Award sizes range from approximately $500 to $3,500, and while most listings have no essay requirement, it's important to verify the specifics for each opportunity. Be mindful that deadlines vary, with some approaching in the next 45 days.",
+  "h1": "Financial Need Scholarships in West Virginia",
+  "supporting": "As you review the available scholarships, consider comparing the award amounts and categories that align with your field of study or interests. Many listings may require minimal documentation, making them accessible for a wider range of applicants. This slice is particularly valuable for students seeking targeted financial assistance while navigating the diverse educational landscape in West Virginia.",
+  "related_intro": "If you're interested in exploring more options, check out related pages that focus on scholarships for specific fields or broader financial aid opportunities.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship listing",
+    "Scan award amounts to find suitable options",
+    "Read the requirements carefully for each opportunity",
+    "Open official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your educational goals"
+  ],
+  "who_for": [
+    "Students demonstrating financial need in West Virginia",
+    "Applicants pursuing education in STEM or community-focused fields",
+    "Individuals looking for scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in West Virginia?",
+      "answer": "There are currently five scholarships listed that cater to financial need in West Virginia. These include opportunities in various categories such as education, STEM, and community service, offering a range of award sizes."
+    },
+    {
+      "question": "How can I find out the specific deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, with some due as soon as within 45 days. It's important to check the individual listings for accurate deadline information to ensure you don't miss out."
+    },
+    {
+      "question": "Do these scholarships require essays or additional materials?",
+      "answer": "Most of the scholarships listed do not require essays, making the application process potentially easier. However, it's advisable to review each listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award amounts for the scholarships in this category generally range from approximately $500 to $3,500. Be sure to check the details of each scholarship for the exact amounts."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/west-virginia",
+    "generatedAt": "2026-04-02T11:15:34.058Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

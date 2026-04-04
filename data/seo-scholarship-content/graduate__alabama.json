@@ -1,0 +1,49 @@
+{
+  "seo_title": "Graduate Scholarships in Alabama - 5 Opportunities",
+  "seo_description": "Explore 5 graduate scholarships in Alabama with awards from $500 to $3,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for graduate studies in Alabama can be a crucial step in pursuing your academic goals. This selection features 5 scholarships specifically for graduate students, with award amounts ranging from approximately $500 to $3,000. While many listings may not require essays, it's important to note that deadlines vary, with at least one approaching within the next 45 days. Stay proactive in your search to maximize your opportunities.",
+  "h1": "Find Graduate Scholarships in Alabama",
+  "supporting": "As you explore these scholarship options, consider comparing the award amounts and requirements to identify the best fit for your situation. Some scholarships may have lighter application processes, making them more accessible. Be sure to check the specific deadlines for each listing, as they can differ significantly. This focused list can help streamline your search for funding tailored to your graduate studies in Alabama.",
+  "related_intro": "If you're interested in more scholarship opportunities, check out related pages that cover various categories and education levels.",
+  "how_to_use": [
+    "Compare the award amounts listed for each scholarship",
+    "Check the specific deadlines for each opportunity",
+    "Review the requirements for each scholarship carefully",
+    "Open the official pages for more detailed information",
+    "Shortlist the scholarships that best match your profile"
+  ],
+  "who_for": [
+    "Graduate students in Alabama",
+    "STEM-focused graduate students",
+    "Community-oriented graduate students",
+    "Students seeking education-related funding",
+    "Applicants looking for lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Alabama?",
+      "answer": "There are currently five scholarships listed for graduate students in Alabama, covering categories such as education, STEM, and community. Each scholarship may have unique eligibility criteria and focus areas, so it's important to review the details of each listing."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships available in this category range from approximately $500 to $3,000. However, it's advisable to check each individual listing for specific amounts and details, as funding can vary significantly."
+    },
+    {
+      "question": "Are there any essays required for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's wise to verify the requirements for each specific scholarship. While many listings may have lighter requirements, checking the details will ensure you are fully prepared."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All five scholarships have deadlines, which vary by listing. Some deadlines are approaching within the next 45 days, so it's important to review each scholarship's deadline promptly to ensure timely applications."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/alabama",
+    "generatedAt": "2026-04-02T11:09:44.080Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

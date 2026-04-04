@@ -1,0 +1,49 @@
+{
+  "seo_title": "Mississippi Scholarships: Find Your Funding",
+  "seo_description": "Explore 17 scholarships in Mississippi with awards from $1,000 to $5,000. Check deadlines and requirements to apply.",
+  "intro": "Finding financial support for your education in Mississippi can be crucial, especially with 17 scholarships currently available. These opportunities cater to a variety of fields, including education, STEM, and community service. Award sizes typically range from $1,000 to $5,000, but keep in mind that requirements and deadlines vary across listings. It's important to check each opportunity closely to ensure you meet the specific criteria and timelines.",
+  "h1": "Explore 17 Scholarships Available in Mississippi",
+  "supporting": "This collection of scholarships offers a mix of essay requirements, with some programs being more accessible than others. As you explore the listings, consider comparing the award amounts and the specific fields of study they support. This will help you identify which scholarships align best with your academic goals and financial needs. Make sure to verify details on the official scholarship pages, as deadlines may be approaching soon.",
+  "related_intro": "If you're interested in scholarships for specific fields or other states, consider checking related pages for more tailored opportunities.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship listing",
+    "Scan award amounts to identify the best fit",
+    "Read the requirement lines carefully for specifics",
+    "Open official pages for complete details",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Students pursuing education-related degrees",
+    "STEM majors seeking financial assistance",
+    "Community-focused individuals looking for support",
+    "Mississippi residents applying for local scholarships",
+    "Students comfortable with varying essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Mississippi?",
+      "answer": "The Mississippi scholarship listings include a variety of categories such as Education, STEM, and Community, among others. With 17 scholarships currently available, you can find options that align with different fields and interests."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and it's important to check the specific dates for each listing. Currently, all 17 scholarships have deadlines, with at least one approaching within the next 45 days, so be sure to verify the details promptly."
+    },
+    {
+      "question": "Do I need to write an essay for these scholarships?",
+      "answer": "Requirements vary across the scholarships listed. While some may require essays, others do not, so it’s advisable to review each scholarship's details to understand what is needed for your application."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in Mississippi generally range from around $1,000 to $5,000. However, specific amounts can vary by scholarship, so check the individual listings for precise figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "mississippi",
+    "generatedAt": "2026-04-02T10:58:32.926Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 17,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

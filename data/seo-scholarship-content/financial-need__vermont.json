@@ -1,0 +1,48 @@
+{
+  "seo_title": "Vermont Scholarships for Financial Need",
+  "seo_description": "Explore 10 Vermont scholarships for financial need, with awards up to $17,000. Check varying deadlines and requirements.",
+  "intro": "Finding financial support can be crucial for students in Vermont, especially those facing economic challenges. This catalog features 10 scholarships specifically aimed at individuals demonstrating financial need. Award sizes vary significantly, with opportunities ranging from smaller amounts to substantial funding, making it worthwhile to explore each option carefully. Keep in mind that deadlines for these scholarships differ, so timely action is essential.",
+  "h1": "Vermont Financial Need Scholarships",
+  "supporting": "As you review the listings, pay attention to the varying award amounts and requirements. Some scholarships may require essays, while others do not, so it's important to read the details closely. Comparing deadlines will help you prioritize which applications to tackle first. For the most accurate information, verify details directly on the sponsor's website.",
+  "related_intro": "If you're interested in more funding opportunities, consider checking out related pages that focus on specific categories or broader eligibility criteria.",
+  "how_to_use": [
+    "Sort scholarships by award amount",
+    "Read each listing's requirement line",
+    "Check deadlines for each scholarship",
+    "Open official pages for more details",
+    "Shortlist your top choices for applications"
+  ],
+  "who_for": [
+    "Vermont residents with financial need",
+    "Students pursuing higher education",
+    "Applicants looking for community support",
+    "Individuals seeking scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Vermont?",
+      "answer": "The listings include a variety of scholarships categorized under education, community, and miscellaneous. Each scholarship may have different focuses, so it’s beneficial to review the details of each listing to find the best fit for your situation."
+    },
+    {
+      "question": "How do I find out about deadlines for these scholarships?",
+      "answer": "All scholarships in this section have deadlines, but they vary by program. Be sure to check the specific deadline for each scholarship as some may be approaching soon—within about 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements differ across the scholarships listed. While some may require essays, others do not, so it's important to read the individual scholarship details to understand what is needed for your application."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes vary significantly, with amounts ranging approximately from $500 to $17,000 across the listed scholarships. Check each scholarship for its specific award amount and eligibility criteria."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/vermont",
+    "generatedAt": "2026-04-02T11:14:02.716Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 10,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

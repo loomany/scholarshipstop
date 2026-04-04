@@ -1,0 +1,47 @@
+{
+  "seo_title": "New Jersey Engineering Scholarships Available Now",
+  "seo_description": "Explore 4 engineering scholarships in New Jersey with varying award amounts and deadlines. Check details for each opportunity.",
+  "intro": "Finding financial support for engineering studies in New Jersey can be a crucial step for aspiring students. This collection features 4 scholarships specifically aimed at engineering students in the state, with award sizes generally ranging from $2,000 to $5,000. Since deadlines vary across listings, it's important to check the specific dates to ensure you don’t miss out on opportunities that could help fund your education.",
+  "h1": "Engineering Scholarships in New Jersey",
+  "supporting": "As you explore these scholarships, pay attention to the varying requirements and essay expectations. Some scholarships may have lighter application processes, making them more accessible. Comparing the award amounts and deadlines will help you prioritize which opportunities to pursue first. Each listing provides unique benefits, so take the time to review them closely.",
+  "related_intro": "If you're interested in other funding options, consider checking out scholarships in related fields or different locations to broaden your search.",
+  "how_to_use": [
+    "Compare deadlines for timely applications",
+    "Scan award amounts to find suitable options",
+    "Read requirement details to understand application needs",
+    "Open official pages for the most current information",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Engineering students in New Jersey",
+    "Applicants seeking STEM funding",
+    "Students looking for scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in New Jersey?",
+      "answer": "There are currently 4 scholarships listed for engineering students in New Jersey. These opportunities span various categories, primarily focusing on STEM fields, and may include additional considerations like arts and education."
+    },
+    {
+      "question": "How do I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 4 listings currently include deadline information. It's advisable to check the specific dates for each scholarship promptly, as at least one has a deadline within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "The scholarship listings show a mix of essay requirements. While some may not require an essay, others do, so it's important to verify the specifics for each scholarship you are interested in."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category vary, with a rough range of approximately $2,000 to $5,000 based on the available data. However, it's best to check each listing for the exact amount."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/new-jersey",
+    "generatedAt": "2026-04-02T10:55:13.150Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

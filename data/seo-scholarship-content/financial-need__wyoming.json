@@ -1,0 +1,49 @@
+{
+  "seo_title": "Wyoming Scholarships for Financial Need",
+  "seo_description": "Discover 6 scholarships in Wyoming for students with financial need. Check varying deadlines and award amounts up to $5,000.",
+  "intro": "If you're seeking financial support for your education in Wyoming, you'll find a selection of 6 scholarships specifically aimed at students with financial need. Award sizes for these opportunities generally range from $1,000 to $5,000, and while many listings do not require essays, it’s important to review each scholarship's specific requirements. Keep in mind that deadlines vary, so checking the dates promptly is crucial to ensure you don’t miss out on these potential funds.",
+  "h1": "Financial Need Scholarships in Wyoming",
+  "supporting": "This collection of scholarships covers a variety of categories, including community, education, and humanities. As you explore these options, consider comparing the award amounts and requirements to find the best fit for your situation. Some scholarships may have lighter application processes, making them easier to pursue. Be sure to verify details on the official scholarship pages to confirm eligibility and application steps.",
+  "related_intro": "For more tailored options, you might want to check out scholarships focused on specific fields or other states with similar financial need criteria.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize applications",
+    "Scan award amounts to identify the most beneficial options",
+    "Read through requirement lines for eligibility details",
+    "Open official scholarship pages for complete information",
+    "Shortlist your favorites and verify specifics on sponsor sites"
+  ],
+  "who_for": [
+    "Students in Wyoming seeking financial assistance",
+    "Undergraduates pursuing education-related programs",
+    "Applicants interested in community-focused scholarships",
+    "Individuals with disabilities looking for support",
+    "Students with varying financial needs"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in Wyoming?",
+      "answer": "In Wyoming, there are currently six scholarships tailored for students demonstrating financial need. These scholarships cover various categories, including community support, education, humanities, and disability."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships listed here vary, with amounts generally falling between $1,000 and $5,000. However, it's important to check each individual listing for specific details."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most scholarships in this selection do not require an essay, making the application process potentially lighter for many applicants. Still, it's advisable to review each listing for any specific requirements."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All six scholarships in this category have deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's best to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/wyoming",
+    "generatedAt": "2026-04-02T11:15:40.232Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Nationwide Scholarships for Women | Find Your Funding",
+  "seo_description": "Explore 48 nationwide scholarships for women, with awards from $400 to $5,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support can be a critical step for women pursuing their educational goals. This selection of 48 scholarships caters specifically to women across the nation, offering awards that generally range from $400 to $5,000. With a mix of requirements, including some that may not require essays, these opportunities can help ease the financial burden of education. Be sure to check the varying deadlines, as some scholarships may have approaching dates.",
+  "h1": "Nationwide Scholarships for Women: 48 Opportunities",
+  "supporting": "As you explore this list, consider comparing the award amounts and categories that align with your interests, such as STEM, law, or the arts. Each scholarship has unique eligibility criteria and application requirements, so take the time to read through the details. This filter is particularly valuable for women seeking targeted funding to support their academic pursuits.",
+  "related_intro": "If you're interested in more specialized opportunities, check out related pages that focus on specific fields or types of scholarships available for women.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find the best fit for your needs",
+    "Read requirement lines to understand eligibility",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Women pursuing degrees in STEM fields",
+    "Women studying law or the humanities",
+    "Women seeking community-focused scholarships",
+    "Women in education-related programs",
+    "Women looking for lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women nationwide?",
+      "answer": "This collection includes 48 scholarships across various categories such as Education, STEM, Law, Humanities, Arts, and Miscellaneous. Each scholarship has its own focus area, so you can find opportunities that align with your interests and career goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some scholarships may require essays, many do not, so it's important to check the specific details for each opportunity to understand what is needed."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for these scholarships range from approximately $400 to $5,000. However, the exact amount can vary by scholarship, so be sure to review each listing for specific funding details."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 48 scholarships listed have deadlines, but they vary from one program to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the dates promptly and plan your applications accordingly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women/nationwide",
+    "generatedAt": "2026-04-02T10:31:23.891Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 48,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

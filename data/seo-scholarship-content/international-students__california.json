@@ -1,0 +1,46 @@
+{
+  "seo_title": "Scholarship for International Students in California",
+  "seo_description": "Explore a $1,000 scholarship for international students in California. Check deadlines and eligibility details.",
+  "intro": "Finding financial support as an international student in California can be challenging, but there’s at least one opportunity available that could help ease your educational expenses. The Rosemary Clayton Memorial Scholarship offers an award of $1,000, making it a valuable resource for eligible students. Keep in mind that deadlines and requirements can vary, so it's wise to check the details promptly to ensure you don’t miss out.",
+  "h1": "California Scholarships for International Students",
+  "supporting": "This scholarship listing provides a clear option for international students looking to fund their studies in California. While there’s currently only one scholarship available, it’s important to review the specifics, including the potential for no essay requirement, which may simplify your application process. Make sure to compare the details against your own qualifications and needs.",
+  "how_to_use": [
+    "Check the deadline listed for the scholarship",
+    "Review the award amount and eligibility criteria",
+    "Look for any essay requirements or additional documentation needed",
+    "Visit the official scholarship page for the most accurate information",
+    "Consider adding this scholarship to your shortlist of funding options"
+  ],
+  "who_for": [
+    "International students studying in California",
+    "Students seeking community-focused scholarships",
+    "Applicants looking for low-essay opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students in California?",
+      "answer": "Currently, there is one scholarship listed specifically for international students in California. This scholarship falls under the community category, which often supports various initiatives and projects within local communities."
+    },
+    {
+      "question": "How can I find out more about the scholarship details?",
+      "answer": "To get the most accurate and up-to-date information, check the specific scholarship listing. It includes important details such as award amounts, deadlines, and any requirements like essays, which can vary by listing."
+    },
+    {
+      "question": "Are there deadlines I should be aware of?",
+      "answer": "Yes, there is a deadline associated with the available scholarship. It's advisable to review the listing promptly, as deadlines can approach quickly, with at least one scholarship having a deadline within the next 45 days."
+    },
+    {
+      "question": "What is the typical award size for scholarships in this category?",
+      "answer": "Award sizes can vary, but in the current listing, the scholarship amount is approximately $1,000. Keep in mind that this is just a hint, and checking individual listings will provide more specific information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "international-students/california",
+    "generatedAt": "2026-04-02T10:57:46.650Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 1,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

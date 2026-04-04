@@ -1,0 +1,47 @@
+{
+  "seo_title": "Nationwide Scholarships for Minority Students",
+  "seo_description": "Explore 17 nationwide scholarships for minority students with varying award amounts and deadlines. Check details promptly.",
+  "intro": "If you’re hunting awards that fit “Minority · Nationwide scholarships,” this view keeps the signal high. You’ll see 17 matching programs in this view today—compact enough to scan quickly. Where we have numeric award data in this slice, amounts in the sample run from about $500 to $10,000; always confirm on the sponsor site. Deadlines and dollar lines differ row to row—use them to shortlist, then verify every rule on the sponsor’s site.",
+  "h1": "17 Nationwide Scholarships for Minority Students",
+  "supporting": "Start with sort (deadline or amount) to surface what matters today, then read the requirement snippet under each title before you click through. When two listings look alike, compare their deadline and award rows side by side. Nothing here replaces the official program page: use this list to narrow, then re-read eligibility and dates at the source before you apply.",
+  "related_intro": "Below are related filter pages—different state, topic, or requirement angle—if you want to widen the net without losing this starting point.",
+  "how_to_use": [
+    "Pick a sort order so urgent deadlines or larger award text float to the top",
+    "Skim the requirement line on each card for a quick fit check",
+    "Open the official listing from the card and re-confirm dates, amounts, and eligibility",
+    "Keep a short shortlist instead of spreading thin across weak matches",
+    "Assume catalog fields can lag—treat sponsor pages as the final word"
+  ],
+  "who_for": [
+    "Anyone who wants a tighter set of options for Minority · Nationwide scholarships than the full open catalog",
+    "Students stacking several applications and needing a fast way to compare effort versus payoff",
+    "Applicants who like scanning structured rows before opening long sponsor pages"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This selection includes 17 scholarships that cater to minority students across various fields such as STEM, Education, Law, and Community initiatives. Each scholarship may have different eligibility criteria and focus areas, so reviewing individual listings is essential."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's important to check the specific details for each scholarship you're interested in."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All scholarships in this category have deadlines, but they differ from one to another. Be sure to check the deadline information for each listing, as some may be approaching quickly."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships vary, with amounts generally ranging from approximately $500 to $10,000. Specific amounts can be found in the details of each scholarship listing."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority/nationwide",
+    "generatedAt": "2026-04-02T10:52:26.765Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 17,
+    "model": "gpt-4o-mini",
+    "bodySource": "deterministic",
+    "generationMode": "rewrite"
+  }
+}

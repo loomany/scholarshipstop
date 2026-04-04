@@ -1,0 +1,49 @@
+{
+  "seo_title": "Financial Need Scholarships in Minnesota",
+  "seo_description": "Explore 10 scholarships for financial need in Minnesota. Award sizes vary from $750 to $8,000. Check deadlines and requirements.",
+  "intro": "For students in Minnesota facing financial challenges, there are 10 scholarships available that can help ease the burden of educational costs. These awards range from approximately $750 to $8,000, providing a variety of options tailored to different fields such as education, medicine, and STEM. With deadlines varying across the listings, it's essential to check the specific due dates promptly to maximize your chances of receiving support.",
+  "h1": "Scholarships for Financial Need in Minnesota",
+  "supporting": "This collection of scholarships features a mix of requirements, with some requiring essays and others offering lighter application processes. As you explore the options, consider comparing the award amounts and categories to find the best fit for your academic and career goals. Each listing provides unique opportunities, so take the time to review the details carefully.",
+  "related_intro": "If you're interested in exploring more funding opportunities, check out related pages that focus on specific fields or eligibility criteria.",
+  "how_to_use": [
+    "Compare deadlines across different scholarships",
+    "Scan award amounts to find suitable options",
+    "Read through requirement lines for application insights",
+    "Open official pages for detailed eligibility criteria",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Minnesota residents in need of financial assistance",
+    "Students pursuing education or medical degrees",
+    "Individuals interested in STEM-related scholarships",
+    "Applicants looking for varying essay requirements",
+    "High school seniors and college students"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in Minnesota?",
+      "answer": "The listings include a variety of categories such as education, medicine, disability, law, and STEM. With 10 scholarships currently available, students can find options that align with their specific fields of study."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the scholarships; while some may require essays, others do not. It's important to check the details for each listing to understand what is needed for your application."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes range significantly, with amounts noted between approximately $750 and $8,000. Each scholarship has its own specific funding level, so reviewing individual listings is essential."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All scholarships in this listing have deadlines, but they vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to verify the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/minnesota",
+    "generatedAt": "2026-04-02T11:14:31.691Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 10,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

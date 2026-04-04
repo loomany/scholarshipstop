@@ -1,0 +1,47 @@
+{
+  "seo_title": "Disability Scholarships in Washington | 4 Listings",
+  "seo_description": "Explore 4 disability scholarships in Washington. Award sizes vary, and deadlines differ—check details for each listing.",
+  "intro": "Finding financial support can be a crucial step for students with disabilities in Washington. This catalog features 4 scholarships specifically aimed at helping individuals in this community. Award sizes vary, with some listings indicating amounts between $1,500 and $2,500. Keep in mind that deadlines for these opportunities differ, so it's wise to check each listing promptly to ensure you don't miss out.",
+  "h1": "Washington Disability Scholarships: 4 Opportunities",
+  "supporting": "This selection of scholarships offers a mix of requirements, with many listings not requiring essays, making them potentially easier to apply for. As you review the options, consider comparing the award amounts, eligibility criteria, and deadlines. Each scholarship has unique features that could align with your educational goals or community involvement.",
+  "related_intro": "If you're interested in broader opportunities, consider exploring scholarships in related categories like education and community support.",
+  "how_to_use": [
+    "Check individual deadlines for each scholarship",
+    "Compare award amounts listed in the entries",
+    "Read the eligibility requirements carefully",
+    "Visit the official pages for detailed application instructions",
+    "Shortlist the scholarships that best fit your profile"
+  ],
+  "who_for": [
+    "Students with disabilities in Washington",
+    "Individuals seeking community-focused scholarships",
+    "Applicants looking for lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with disabilities in Washington?",
+      "answer": "There are currently four scholarships listed for students with disabilities in Washington. These opportunities span various categories, including education, community, and music, providing a range of options to consider."
+    },
+    {
+      "question": "How can I find out about the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all four listings include this information. It's advisable to check the specific dates promptly, as at least one scholarship has a deadline approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, although it's important to verify each individual listing for specific requirements. Many programs tend to have lighter application processes, making them more accessible."
+    },
+    {
+      "question": "What are the typical award amounts for scholarships in this category?",
+      "answer": "While award sizes can vary, three of the listings provide numeric amounts ranging from approximately $1,500 to $2,500. Always check the details of each scholarship for the most accurate information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "disability/washington",
+    "generatedAt": "2026-04-02T11:09:36.814Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

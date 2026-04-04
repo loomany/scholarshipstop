@@ -1,0 +1,49 @@
+{
+  "seo_title": "Idaho Scholarships for High School Seniors",
+  "seo_description": "Explore 12 scholarships for Idaho high school seniors with awards from $500 to $25,000. Check deadlines and requirements.",
+  "intro": "Idaho high school seniors have access to a diverse array of scholarships, with 12 listings currently available. Award sizes vary significantly, ranging from approximately $500 to $25,000, providing options for students across various fields such as arts, education, and STEM. With all listings having deadlines, it's crucial to check each one promptly to ensure you don't miss out on potential funding opportunities.",
+  "h1": "Scholarships for High School Seniors in Idaho",
+  "supporting": "This collection of scholarships caters to different interests and academic pursuits, making it worthwhile to compare the specifics of each listing. Many opportunities require minimal application effort, with several not requiring essays. Take note of the varying deadlines and award amounts, and consider how each scholarship aligns with your personal goals and qualifications.",
+  "related_intro": "For more tailored opportunities, consider exploring scholarships specifically for different majors or categories that might align with your interests.",
+  "how_to_use": [
+    "Check deadlines for each scholarship listing",
+    "Review award amounts and categories",
+    "Read through the requirements for each opportunity",
+    "Visit official scholarship pages for detailed information",
+    "Create a shortlist of preferred scholarships to apply for"
+  ],
+  "who_for": [
+    "High school seniors in Idaho",
+    "Students interested in arts and music",
+    "Individuals pursuing STEM fields",
+    "Applicants looking for community-focused scholarships",
+    "Students aiming for education-related funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Idaho?",
+      "answer": "There are 12 scholarships listed for high school seniors in Idaho, covering a range of categories including community, disability, STEM, education, arts, and miscellaneous. This variety allows students to find opportunities that align with their interests and backgrounds."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require an essay, making the application process potentially easier for many students. However, it's important to verify the specific requirements for each scholarship, as there may be exceptions."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available to high school seniors in Idaho vary significantly, with amounts ranging from approximately $500 to $25,000. Students should review each listing for specific details on funding."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 12 scholarships listed have deadlines, but they vary from one program to another. It's advisable to check the specific deadline for each scholarship promptly, as some may be approaching soon."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/idaho",
+    "generatedAt": "2026-04-02T10:58:13.478Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

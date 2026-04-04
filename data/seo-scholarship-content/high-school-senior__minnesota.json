@@ -1,0 +1,48 @@
+{
+  "seo_title": "Minnesota Scholarships for High School Seniors",
+  "seo_description": "Explore 9 scholarships for Minnesota high school seniors, with awards ranging from $500 to $8,000. Check deadlines and requirements.",
+  "intro": "High school seniors in Minnesota have access to a range of scholarship opportunities, with nine listings available that cater to various fields including education and medicine. Award sizes vary from approximately $500 to $8,000, providing potential financial support for your educational journey. Keep in mind that deadlines for these scholarships differ, with some approaching quickly, so it's essential to check each listing for specific dates and requirements.",
+  "h1": "Scholarships for High School Seniors in Minnesota",
+  "supporting": "This selection of scholarships offers a mix of requirements, with some programs requiring essays while others do not. By reviewing the details, you can find scholarships that align with your strengths and interests. It's worthwhile to compare the award amounts and deadlines to prioritize your applications effectively. Each listing provides unique opportunities that could significantly ease your financial burden as you transition to post-secondary education.",
+  "related_intro": "For more options, consider exploring scholarships in related fields or other states. Each category may have specific opportunities that fit your profile.",
+  "how_to_use": [
+    "Check each listing for specific deadlines",
+    "Compare award amounts to prioritize applications",
+    "Review requirement details to prepare your submissions",
+    "Open official scholarship pages for the most accurate information",
+    "Shortlist scholarships that best match your qualifications"
+  ],
+  "who_for": [
+    "High school seniors in Minnesota",
+    "Students pursuing education or medical fields",
+    "Applicants seeking financial support for college",
+    "Individuals interested in disability-related scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Minnesota?",
+      "answer": "The current listings include a variety of scholarships categorized under education, medicine, and disability, among others. With 9 scholarships available, you can find options that align with different interests and needs."
+    },
+    {
+      "question": "Do all scholarships require an essay?",
+      "answer": "Requirements vary across the scholarships. While some may require essays, others do not, so it's important to review each listing for specific application details."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes vary significantly, with amounts ranging approximately from $500 to $8,000. Check individual listings for exact figures and details."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All listed scholarships have deadlines, but they differ from one to another. It's advisable to check the specific dates for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/minnesota",
+    "generatedAt": "2026-04-02T11:02:24.270Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

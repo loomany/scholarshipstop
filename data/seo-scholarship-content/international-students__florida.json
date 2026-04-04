@@ -1,0 +1,49 @@
+{
+  "seo_title": "Florida Scholarships for International Students",
+  "seo_description": "Explore 8 scholarships for international students in Florida, with awards from $1,000 to $27,000. Check deadlines and requirements.",
+  "intro": "For international students in Florida, there are 8 scholarships available that can significantly ease the financial burden of education. Award sizes vary, ranging from approximately $1,000 to $27,000, providing a range of options depending on your needs. With deadlines approaching for all listings, it's important to act quickly and review each opportunity carefully to ensure you meet the requirements.",
+  "h1": "Scholarships for International Students in Florida",
+  "supporting": "This selection of scholarships includes various categories, such as STEM, community, and education, making it easier to find funding that aligns with your field of study. Many of these listings do not require essays, which can simplify the application process. Be sure to compare the award amounts and deadlines to identify the best opportunities for your situation.",
+  "related_intro": "If you're interested in exploring more options, consider checking out scholarships specifically for STEM fields or community-focused funding.",
+  "how_to_use": [
+    "Review the list to identify scholarships that match your profile",
+    "Compare deadlines to prioritize your applications",
+    "Check the award amounts to find suitable funding",
+    "Read the requirements for each scholarship carefully",
+    "Visit the official pages for the most accurate and detailed information"
+  ],
+  "who_for": [
+    "International students studying in Florida",
+    "Students pursuing STEM degrees",
+    "Applicants seeking community-focused scholarships",
+    "Undergraduate and graduate students",
+    "Students looking for lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students in Florida?",
+      "answer": "The current listings include a variety of scholarships categorized under STEM, community, education, and miscellaneous. With 8 scholarships available, you can find options that align with different academic interests and community involvement."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own specific deadline, and all 8 listings include deadline information. It's advisable to check the details promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially easier. However, it's important to verify the requirements for each scholarship individually, as details may vary."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The scholarships available range in award amounts, with values from approximately $1,000 to $27,000. Be sure to review each listing for specific amounts and eligibility criteria."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "international-students/florida",
+    "generatedAt": "2026-04-02T10:38:18.503Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 8,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

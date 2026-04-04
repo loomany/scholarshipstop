@@ -1,0 +1,49 @@
+{
+  "seo_title": "Florida Scholarships for Financial Need Students",
+  "seo_description": "Explore 125 Florida scholarships for students with financial need. Check award sizes and deadlines for each opportunity.",
+  "intro": "Finding financial support for education in Florida can be a crucial step for many students. This catalog features 125 scholarships designed to assist those demonstrating financial need. Award sizes vary significantly, ranging from around $164 to $20,000, and deadlines for applications differ, so it’s important to check each listing for the most accurate information. Many scholarships in this collection may not require essays, making them more accessible for applicants.",
+  "h1": "125 Scholarships for Financial Need in Florida",
+  "supporting": "As you explore this list, consider comparing the award amounts and categories, which include education, STEM, community, and more. Each scholarship has unique eligibility criteria and varying deadlines, so take the time to read the details carefully. Shortlisting those that align with your profile can help streamline your application process.",
+  "related_intro": "If you're interested in scholarships based on other criteria, check out our related pages for more tailored opportunities.",
+  "how_to_use": [
+    "Review the list for scholarship categories that match your interests",
+    "Compare award amounts to prioritize your applications",
+    "Check individual deadlines to ensure timely submissions",
+    "Read through eligibility requirements for each listing",
+    "Visit official scholarship pages for the most current details"
+  ],
+  "who_for": [
+    "Students in Florida with financial need",
+    "Undergraduates pursuing education or STEM fields",
+    "Community-focused applicants seeking support",
+    "High school seniors planning to attend college",
+    "Students looking for scholarships with fewer application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Florida?",
+      "answer": "The current listing includes 125 scholarships categorized under education, STEM, community, medicine, arts, and miscellaneous. This variety allows students to find opportunities that align with their specific interests and academic goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most scholarships in this list do not require an essay, making the application process potentially lighter for many applicants. However, it's important to verify the details of each listing, as requirements can vary."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 125 scholarships have deadlines, but they vary from one listing to another. Be sure to check the specific dates for each scholarship promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships vary significantly, with amounts ranging from approximately $164.43 to $20,000. This diverse range allows students with different financial needs to find suitable funding options."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/florida",
+    "generatedAt": "2026-04-02T10:31:17.370Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 125,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

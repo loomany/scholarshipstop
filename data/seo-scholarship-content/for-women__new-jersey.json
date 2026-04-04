@@ -1,0 +1,47 @@
+{
+  "seo_title": "New Jersey Scholarships for Women | Find Opportunities",
+  "seo_description": "Explore 5 scholarships for women in New Jersey with awards up to $7,500. Check individual deadlines and requirements.",
+  "intro": "Finding financial support as a woman in New Jersey can be pivotal for your educational journey. This selection features 5 scholarships specifically for women, with award amounts ranging from approximately $1,000 to $7,500. While many of these opportunities do not require essays, it's essential to review each listing for specific requirements and deadlines, which can vary significantly. Be sure to check the deadlines promptly, as some are approaching soon.",
+  "h1": "Scholarships for Women in New Jersey",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and categories, which include education, STEM, and law. This variety allows you to identify options that best align with your field of study or career goals. Pay attention to the details in each listing, as they will guide you on eligibility and application processes. Shortlisting the ones that resonate with you can streamline your application efforts.",
+  "related_intro": "For additional resources, check out related pages that focus on scholarships for women in other states or specific fields.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines for eligibility details",
+    "Open official pages for complete application instructions",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Women pursuing education in New Jersey",
+    "Students interested in STEM fields",
+    "Applicants looking for law-related scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women in New Jersey?",
+      "answer": "This listing features a variety of scholarships specifically for women in New Jersey, including opportunities in education, STEM, miscellaneous fields, and law. With five different scholarships currently available, applicants can find options that align with their academic and career goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, though it's important to verify the specific requirements for each opportunity. While many listings are lighter on requirements, checking the details of each scholarship will ensure you meet all necessary criteria."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, so it's crucial to check the details for each listing. Currently, all five scholarships have deadlines approaching within the next few months, so reviewing these dates promptly is recommended."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this listing vary, with amounts ranging approximately from $1,000 to $7,500. As each scholarship has its own funding level, be sure to check the specifics for the opportunities that interest you."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women/new-jersey",
+    "generatedAt": "2026-04-02T10:43:24.127Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

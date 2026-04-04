@@ -1,0 +1,47 @@
+{
+  "seo_title": "Massachusetts Scholarships for First Generation Students",
+  "seo_description": "Discover 5 scholarships for first generation students in Massachusetts with awards from $400 to $10,000. Check deadlines promptly.",
+  "intro": "Navigating funding opportunities as a first-generation student in Massachusetts can be challenging, but there are five scholarships available that cater specifically to your needs. These awards range from $400 to $10,000, offering a variety of options to support your educational journey. Be mindful that deadlines vary among listings, with some approaching in the next few weeks, so it's wise to check the details promptly.",
+  "h1": "First Generation Scholarships in Massachusetts",
+  "supporting": "This selection of scholarships includes options in STEM and education fields, with many listings requiring no essays, making them more accessible. As you review the opportunities, consider comparing the award amounts and specific eligibility criteria to find the best fit for your situation. Each scholarship has unique requirements, so take the time to read through the details carefully.",
+  "related_intro": "If you're interested in exploring more scholarships for first-generation students or related fields, check out our other pages tailored to your educational goals.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify funding that meets your needs",
+    "Read through eligibility requirements for each scholarship",
+    "Open official pages for the most accurate and detailed information",
+    "Shortlist your favorites for easy tracking and follow-up"
+  ],
+  "who_for": [
+    "First-generation college students in Massachusetts",
+    "Students pursuing degrees in STEM or education",
+    "Applicants looking for scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for first-generation students in Massachusetts?",
+      "answer": "There are currently five scholarships listed specifically for first-generation students in Massachusetts. These opportunities cover various fields, including STEM, Biology, and Education, providing a range of options depending on your area of interest."
+    },
+    {
+      "question": "How can I find out the specific deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, so it's important to check the details for each listing. At least one scholarship has a deadline approaching within the next 45 days, so reviewing the listings promptly is advisable."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's best to verify each individual listing for specific requirements. Generally, many of the scholarships in this category have lighter application requirements."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for these scholarships vary, with amounts ranging from approximately $400 to $10,000. Each listing will provide the specific award amount, so be sure to check those details as you explore your options."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "first-generation/massachusetts",
+    "generatedAt": "2026-04-02T10:50:54.465Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

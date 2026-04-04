@@ -1,0 +1,49 @@
+{
+  "seo_title": "Hawaii Scholarships for High School Seniors",
+  "seo_description": "Explore 15 scholarships for high school seniors in Hawaii. Award amounts range from $500 to $5,000. Check deadlines promptly.",
+  "intro": "High school seniors in Hawaii have access to a robust selection of scholarships, with 15 unique listings available to explore. These opportunities cater to various interests and fields, including STEM and community service. Award sizes generally range from $500 to $5,000, providing significant support for students pursuing higher education. Keep in mind that deadlines for these scholarships vary, so it's essential to check each listing for specific dates and requirements.",
+  "h1": "Scholarships for High School Seniors in Hawaii",
+  "supporting": "This collection of scholarships is particularly valuable for students looking to fund their education while minimizing application complexity. Many listings do not require essays, making the process more accessible. As you review the options, consider comparing the award amounts and categories to find the best fit for your goals. Be sure to verify details directly on the sponsor's site for the most accurate information.",
+  "related_intro": "If you're interested in scholarships tailored to other education levels or specific fields, check out our related pages for more targeted opportunities.",
+  "how_to_use": [
+    "Compare deadlines across different listings",
+    "Scan award amounts to find the best opportunities",
+    "Read through requirement lines for eligibility criteria",
+    "Open official pages for detailed application information",
+    "Shortlist your favorites for easy reference"
+  ],
+  "who_for": [
+    "High school seniors in Hawaii",
+    "Students interested in STEM fields",
+    "Applicants seeking community service scholarships",
+    "Individuals looking for no-essay opportunities",
+    "Those pursuing technical or vocational education"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Hawaii?",
+      "answer": "The current listings include a variety of scholarships categorized under STEM, Community, Disability, Education, and Miscellaneous. With 15 scholarships available, students can find options that align with their interests and strengths."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, making the application process potentially easier for many students. However, it's important to check each individual listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from $500 to $5,000. Be sure to review each listing for exact amounts and details."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 15 scholarships have deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's advisable to check the dates promptly and plan your applications accordingly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/hawaii",
+    "generatedAt": "2026-04-02T11:02:17.288Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 15,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Washington Graduate Scholarships: $1,500–$5,000 Awards",
+  "seo_description": "Explore 6 graduate scholarships in Washington with varying deadlines and award amounts. Check details to apply promptly.",
+  "intro": "Finding financial support for graduate studies in Washington can be challenging, but there are currently six scholarships available that cater to various fields, including STEM, education, and law. Award sizes typically range from $1,500 to $5,000, providing a valuable boost for your educational journey. With deadlines approaching in the coming months, it's essential to explore these opportunities promptly to ensure you don't miss out.",
+  "h1": "Graduate Scholarships in Washington",
+  "supporting": "This selection of scholarships features a mix of requirements, including some that may not require essays, making them accessible for a range of applicants. As you review the listings, consider comparing the award amounts and deadlines to identify which opportunities align best with your needs. Each scholarship has its own unique criteria, so be sure to read through the details carefully.",
+  "related_intro": "If you're interested in more options, check out related pages for additional scholarships available in Washington or tailored to specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan the award amounts listed",
+    "Read through the requirements for each opportunity",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that fit your profile"
+  ],
+  "who_for": [
+    "Graduate students in Washington",
+    "Applicants pursuing STEM fields",
+    "Students in education or law programs",
+    "Individuals with disabilities seeking support",
+    "Candidates looking for diverse scholarship opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Washington?",
+      "answer": "There are currently six scholarships listed for graduate students in Washington, covering various fields such as STEM, Education, Law, and Biology. Each scholarship has its own specific focus and eligibility criteria, so it's beneficial to review each listing carefully."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from approximately $1,500 to $5,000. However, the exact amount varies by scholarship, so be sure to check the individual listings for specific details."
+    },
+    {
+      "question": "Are there any deadlines I should be aware of?",
+      "answer": "Yes, all six scholarships have deadlines, but they vary from one listing to another. Some deadlines are approaching within the next 45 days, so it’s advisable to verify the dates promptly to ensure you don’t miss any opportunities."
+    },
+    {
+      "question": "Do I need to submit essays for these scholarships?",
+      "answer": "The scholarship listings show a mix of essay requirements; some may require essays while others do not. It's important to check the specific requirements for each scholarship to understand what is needed for your application."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/washington",
+    "generatedAt": "2026-04-02T11:07:49.695Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,254 @@
+[
+  {
+    "id": "fulbright-foreign-student-program",
+    "title": "Fulbright Foreign Student Program",
+    "country": "USA",
+    "provider": "U.S. Department of State",
+    "deadline": "Varies by country",
+    "description": "A prestigious program for international students pursuing master's or PhD studies in the United States.",
+    "eligibility": [
+      "Non-U.S. citizen with strong academic record",
+      "Bachelor's degree or equivalent",
+      "Meets English language requirements",
+      "Fulfills local Fulbright commission criteria"
+    ],
+    "benefits": "Tuition support, living stipend, health coverage, and travel allowance depending on country program.",
+    "howToApply": [
+      "Check your local Fulbright commission timeline and rules",
+      "Prepare transcripts, recommendation letters, and personal statement",
+      "Submit the application through the official Fulbright channel in your country"
+    ],
+    "applyLink": "https://foreign.fulbrightonline.org/",
+    "categories": [
+      "miscellaneous"
+    ]
+  },
+  {
+    "id": "knight-hennessy-scholars",
+    "title": "Knight-Hennessy Scholars",
+    "country": "USA",
+    "provider": "Stanford University",
+    "deadline": "Oct 2026",
+    "description": "Leadership-focused scholarship for graduate study at Stanford University across all eligible programs.",
+    "eligibility": [
+      "Applies to a full-time Stanford graduate degree",
+      "Demonstrates leadership and civic mindset",
+      "Strong academic profile",
+      "Meets Knight-Hennessy timeline requirements"
+    ],
+    "benefits": "Full funding for graduate study, leadership development, and cohort-based mentorship opportunities.",
+    "howToApply": [
+      "Apply separately to Stanford program and Knight-Hennessy",
+      "Prepare leadership essays and recommendations",
+      "Complete and submit online application before deadline"
+    ],
+    "applyLink": "https://knight-hennessy.stanford.edu/admission",
+    "categories": [
+      "miscellaneous"
+    ]
+  },
+  {
+    "id": "aauw-international-fellowships",
+    "title": "AAUW International Fellowships",
+    "country": "USA",
+    "deadline": "Nov 2026",
+    "description": "Fellowships for women who are not U.S. citizens or permanent residents to pursue graduate or postdoctoral study.",
+    "eligibility": [
+      "Identifies as woman and is not U.S. citizen/permanent resident",
+      "Holds a degree equivalent to U.S. bachelor's",
+      "Plans full-time study or research in the U.S.",
+      "Shows commitment to women and girls through leadership or service"
+    ],
+    "benefits": "Funding support for tuition, fees, and educational expenses based on award level.",
+    "howToApply": [
+      "Create account on AAUW application portal",
+      "Upload academic, professional, and recommendation documents",
+      "Submit completed fellowship application online"
+    ],
+    "applyLink": "https://www.aauw.org/resources/programs/fellowships-grants/current-opportunities/international/",
+    "categories": [
+      "humanities",
+      "disability"
+    ]
+  },
+  {
+    "id": "vanier-canada-graduate-scholarships",
+    "title": "Vanier Canada Graduate Scholarships",
+    "country": "Canada",
+    "deadline": "Nov 2026",
+    "description": "Highly competitive scholarship supporting doctoral students with research excellence and leadership.",
+    "eligibility": [
+      "Nominated by a Canadian institution with Vanier quota",
+      "Pursuing first doctoral degree",
+      "Outstanding academic achievements",
+      "Strong research potential and leadership"
+    ],
+    "benefits": "CAD 50,000 per year for three years during doctoral studies.",
+    "howToApply": [
+      "Confirm nomination process with target Canadian university",
+      "Prepare research contributions and leadership evidence",
+      "Submit application through the institution's Vanier workflow"
+    ],
+    "applyLink": "https://vanier.gc.ca/en/home-accueil.html"
+  },
+  {
+    "id": "lester-b-pearson-scholarship",
+    "title": "Lester B. Pearson International Scholarship",
+    "country": "Canada",
+    "deadline": "Jan 2027",
+    "description": "University of Toronto scholarship for exceptional international secondary-school students.",
+    "eligibility": [
+      "International student in final year of secondary school",
+      "Nominated by school",
+      "Applying to an undergraduate program at University of Toronto",
+      "Excellent academics and leadership profile"
+    ],
+    "benefits": "Covers tuition, books, incidental fees, and residence support for four years.",
+    "howToApply": [
+      "Receive school nomination for Pearson Scholarship",
+      "Apply to an eligible undergraduate program at U of T",
+      "Submit scholarship application within required timeline"
+    ],
+    "applyLink": "https://future.utoronto.ca/pearson/about/"
+  },
+  {
+    "id": "ubc-international-scholars",
+    "title": "UBC International Scholars Program",
+    "country": "Canada",
+    "deadline": "Nov 2026",
+    "description": "Need-and-merit based awards for international undergraduate students at the University of British Columbia.",
+    "eligibility": [
+      "International student entering first undergraduate degree",
+      "Demonstrates financial need",
+      "Strong academic achievement",
+      "Leadership and community involvement"
+    ],
+    "benefits": "Substantial funding that can cover a major portion of study and living costs based on need.",
+    "howToApply": [
+      "Apply for admission to UBC and submit required forms",
+      "Complete financial information and personal profile",
+      "Provide supporting documents before scholarship deadline"
+    ],
+    "applyLink": "https://you.ubc.ca/financial-planning/scholarships-awards-international-students/"
+  },
+  {
+    "id": "chevening-scholarships",
+    "title": "Chevening Scholarships",
+    "country": "UK",
+    "deadline": "Nov 2026",
+    "description": "UK government scholarship for future leaders to pursue a one-year master's degree in the UK.",
+    "eligibility": [
+      "Citizen of a Chevening-eligible country",
+      "Undergraduate degree qualifying for UK postgraduate entry",
+      "Demonstrated leadership potential",
+      "Meets work experience and return-home requirements"
+    ],
+    "benefits": "Tuition, monthly stipend, travel costs, and selected additional allowances.",
+    "howToApply": [
+      "Review Chevening country-specific eligibility",
+      "Prepare leadership essays and references",
+      "Submit online application through official portal"
+    ],
+    "applyLink": "https://www.chevening.org/scholarships/"
+  },
+  {
+    "id": "rhodes-scholarship",
+    "title": "Rhodes Scholarship",
+    "country": "UK",
+    "deadline": "Varies by constituency",
+    "description": "World-renowned scholarship enabling exceptional students to study at the University of Oxford.",
+    "eligibility": [
+      "Applies through an eligible Rhodes constituency",
+      "Outstanding academic achievement",
+      "Leadership and commitment to service",
+      "Meets Oxford admission requirements"
+    ],
+    "benefits": "Oxford University fees, living stipend, and travel support to and from the UK.",
+    "howToApply": [
+      "Check your Rhodes constituency requirements",
+      "Prepare academic documents and personal statement",
+      "Submit Rhodes application and complete interview process"
+    ],
+    "applyLink": "https://www.rhodeshouse.ox.ac.uk/scholarships/applications/"
+  },
+  {
+    "id": "gates-cambridge-scholarship",
+    "title": "Gates Cambridge Scholarship",
+    "country": "UK",
+    "deadline": "Dec 2026",
+    "description": "Scholarship for outstanding applicants outside the UK to pursue postgraduate study at Cambridge.",
+    "eligibility": [
+      "Non-UK citizen applying for eligible full-time postgraduate degree",
+      "Strong intellectual ability and leadership potential",
+      "Commitment to improving lives of others",
+      "Meets Cambridge admission standards"
+    ],
+    "benefits": "Full cost scholarship including tuition, maintenance allowance, and airfare support.",
+    "howToApply": [
+      "Select eligible Cambridge course and apply for admission",
+      "Complete Gates Cambridge statement and references",
+      "Submit by relevant round deadline"
+    ],
+    "applyLink": "https://www.gatescambridge.org/apply/"
+  },
+  {
+    "id": "australia-awards-scholarships",
+    "title": "Australia Awards Scholarships",
+    "country": "Australia",
+    "deadline": "Apr 2027",
+    "description": "Long-term development scholarships offered by the Australian Government for students from partner countries.",
+    "eligibility": [
+      "Citizen of eligible partner country",
+      "Meets country and program-specific criteria",
+      "Commitment to development outcomes in home country",
+      "Fulfills English and academic requirements"
+    ],
+    "benefits": "Full tuition, return airfare, establishment allowance, and living support during study period.",
+    "howToApply": [
+      "Check participating countries and approved institutions",
+      "Prepare academic and professional documents",
+      "Apply via Australia Awards portal before deadline"
+    ],
+    "applyLink": "https://www.australiaawards.gov.au/"
+  },
+  {
+    "id": "research-training-program-rtp",
+    "title": "Research Training Program (RTP)",
+    "country": "Australia",
+    "deadline": "Varies by university",
+    "description": "Australian government-supported funding for domestic and international postgraduate research students.",
+    "eligibility": [
+      "Applying for research master's or PhD at participating university",
+      "Strong academic and research background",
+      "Meets admission and language requirements",
+      "Satisfies university-specific RTP selection criteria"
+    ],
+    "benefits": "Tuition offset and/or stipend support depending on institutional RTP allocation.",
+    "howToApply": [
+      "Choose Australian university and research supervisor",
+      "Submit admission and scholarship documents",
+      "Complete RTP scholarship process through the university"
+    ],
+    "applyLink": "https://www.education.gov.au/research-block-grants/research-training-program"
+  },
+  {
+    "id": "destination-australia-scholarship",
+    "title": "Destination Australia Scholarship",
+    "country": "Australia",
+    "deadline": "Varies by provider",
+    "description": "Scholarship encouraging study in regional Australia through participating education providers.",
+    "eligibility": [
+      "Enrolled in eligible program at regional campus/provider",
+      "Meets provider-specific academic criteria",
+      "Can maintain study load requirements",
+      "Complies with visa and residency conditions when applicable"
+    ],
+    "benefits": "Up to AUD 15,000 per year to support study and living costs in regional Australia.",
+    "howToApply": [
+      "Find participating regional providers and eligible courses",
+      "Prepare provider-specific scholarship application",
+      "Submit all required documents before internal deadline"
+    ],
+    "applyLink": "https://www.education.gov.au/destination-australia-program"
+  }
+]

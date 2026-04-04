@@ -1,0 +1,49 @@
+{
+  "seo_title": "Connecticut Engineering Scholarships – Up to $10,000",
+  "seo_description": "Explore 11 engineering scholarships in Connecticut with awards from $500 to $10,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for engineering studies in Connecticut can be pivotal for your academic journey. With 11 scholarships available in this area, award sizes typically range from $500 to $10,000, offering a variety of options to suit different needs. Many of these scholarships have deadlines approaching soon, so it’s essential to check the specific dates and requirements for each opportunity.",
+  "h1": "Engineering Scholarships in Connecticut",
+  "supporting": "This collection of scholarships is tailored for students pursuing engineering in Connecticut. As you explore the listings, pay attention to the award amounts and the nature of the application process—many scholarships do not require essays, which may simplify your application efforts. Comparing the deadlines and eligibility criteria will help you identify the best matches for your situation.",
+  "related_intro": "If you're interested in more funding opportunities, consider checking out scholarships in related fields or other states.",
+  "how_to_use": [
+    "Review each listing for specific award amounts",
+    "Check deadlines closely, especially for upcoming opportunities",
+    "Note any application requirements, such as essays",
+    "Visit the official scholarship pages for complete details",
+    "Shortlist the scholarships that best fit your profile"
+  ],
+  "who_for": [
+    "Engineering students in Connecticut",
+    "Undergraduates seeking financial aid",
+    "Students interested in STEM fields",
+    "Applicants looking for lighter essay requirements",
+    "Those needing support for specific engineering programs"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Connecticut?",
+      "answer": "There are currently 11 scholarships listed specifically for engineering students in Connecticut. These scholarships cover a range of categories, including STEM, arts, and medical fields, providing diverse opportunities for applicants."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships available in this category vary, with amounts generally ranging from approximately $500 to $10,000. It's important to check each listing for specific award details."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially easier for many applicants. However, it's advisable to verify the requirements for each scholarship individually."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 11 scholarships currently listed have varying deadlines, with some due within the next 45 days. Be sure to check the specific deadlines for each scholarship to ensure timely submission."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/connecticut",
+    "generatedAt": "2026-04-02T10:40:51.813Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 11,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "First Generation Scholarships for USA Students",
+  "seo_description": "Explore 54 scholarships for first-generation students, with awards ranging from $250 to $10,000. Check deadlines and eligibility details.",
+  "intro": "Navigating the landscape of scholarships can be daunting, especially for first-generation college students seeking financial support. With 54 available scholarships in this category, you have a range of options to explore. Award sizes typically vary, with amounts generally falling between $250 and $10,000. As deadlines differ across listings, it’s essential to check these details promptly to maximize your chances of securing funding.",
+  "h1": "First Generation Scholarships: 54 Opportunities Await",
+  "supporting": "When reviewing this list, consider the specific requirements and categories that align with your educational goals. Many scholarships may not require essays, making them more accessible. Pay attention to the award amounts and deadlines to prioritize which opportunities to pursue. This focused selection is designed to support first-generation students, so take the time to find the best fit for your situation.",
+  "related_intro": "If you're interested in exploring more tailored options, check out our pages on scholarships for specific fields like STEM or community service, which may also align with your interests.",
+  "how_to_use": [
+    "Compare deadlines across listings to find opportunities you can apply for soon",
+    "Scan award amounts to identify which scholarships meet your financial needs",
+    "Read through the requirement lines for each scholarship to ensure eligibility",
+    "Open official scholarship pages for the most accurate and detailed information",
+    "Shortlist your favorites and verify details on the sponsor's site"
+  ],
+  "who_for": [
+    "First-generation college students",
+    "Students pursuing education in STEM fields",
+    "Individuals seeking community-focused scholarships",
+    "Applicants with disabilities",
+    "Those looking for scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for first-generation students?",
+      "answer": "There are currently 54 scholarships listed for first-generation students, covering a range of categories including education, STEM, community, disability, and arts. This variety allows students to find opportunities that align with their specific fields of interest."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this category do not require essays, though it's important to check each listing for specific requirements. Many programs tend to have lighter application processes, making it easier for applicants to apply."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 54 scholarships listed have deadlines, but they vary from one program to another. It's advisable to review the details for each scholarship promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for first-generation scholarships vary significantly, with amounts ranging from approximately $250 to $10,000. Each listing provides specific details, so be sure to check the individual scholarship for exact figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "first-generation",
+    "generatedAt": "2026-04-02T10:31:45.877Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 54,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

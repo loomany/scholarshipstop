@@ -1,0 +1,49 @@
+{
+  "seo_title": "Top Engineering Scholarships in Texas",
+  "seo_description": "Explore 9 engineering scholarships in Texas with awards up to $12,000. Check deadlines and requirements for each listing.",
+  "intro": "For engineering students in Texas, there are 9 scholarship opportunities available that can help ease the financial burden of your education. Award sizes vary significantly, ranging from approximately $500 to $12,000, making it important to explore each option thoroughly. With deadlines spread across the upcoming months, it’s wise to check these listings promptly to ensure you don’t miss out on potential funding.",
+  "h1": "Find Engineering Scholarships in Texas",
+  "supporting": "This collection of scholarships caters specifically to engineering majors and includes various funding amounts and requirements. Many of these listings do not require essays, which can simplify the application process. As you review your options, consider comparing award sizes, deadlines, and specific eligibility criteria to find the best fit for your needs.",
+  "related_intro": "If you're interested in scholarships beyond engineering, consider exploring related fields or categories that may also offer financial support tailored to your studies.",
+  "how_to_use": [
+    "Check the deadlines for each scholarship listing",
+    "Compare the award amounts to prioritize applications",
+    "Review eligibility requirements carefully",
+    "Open official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Engineering students in Texas",
+    "Undergraduates pursuing STEM degrees",
+    "Students seeking funding without essay requirements",
+    "Applicants interested in community-focused scholarships",
+    "Those looking for diverse scholarship opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Texas?",
+      "answer": "There are currently 9 scholarships specifically for engineering students in Texas, with award amounts ranging from approximately $500 to $12,000. These scholarships cover various categories, including STEM, law, and community-focused initiatives."
+    },
+    {
+      "question": "Are there deadlines I should be aware of for these scholarships?",
+      "answer": "Yes, all 9 scholarships listed have specific deadlines, which vary from one program to another. It's advisable to check the individual listings promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Most of the scholarships in this list do not require an essay, making the application process potentially easier. However, it's important to review each listing for specific requirements, as details may vary."
+    },
+    {
+      "question": "How can I find more information about each scholarship?",
+      "answer": "You can click on each scholarship listing to view detailed information, including eligibility criteria, application processes, and any specific requirements. This will help you determine which opportunities align best with your background and goals."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/texas",
+    "generatedAt": "2026-04-02T10:43:53.527Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

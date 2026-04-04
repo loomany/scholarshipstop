@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 461 Scholarships in Florida",
+  "seo_description": "Find diverse scholarships in Florida with awards from $110 to $34,345. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for your education in Florida is crucial, and this collection of 461 scholarships offers a wide range of opportunities to help you fund your studies. Award sizes vary significantly, with amounts ranging from approximately $110 to over $34,000. Since deadlines differ across listings, it's important to check each scholarship's specific date and requirements promptly, especially as some may be approaching soon.",
+  "h1": "Florida Scholarships: 461 Opportunities Available",
+  "supporting": "This scholarship list includes various categories such as education, STEM, and community-focused awards, making it easier to find options that align with your interests. Many listings do not require essays, and some have lighter application requirements, which can simplify the process. Take the time to compare the award amounts and eligibility criteria to identify the best fits for your situation.",
+  "related_intro": "If you're interested in scholarships specific to certain fields or requirements, consider exploring related pages that focus on those areas.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines for eligibility details",
+    "Open official pages for the most accurate information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Students pursuing education in Florida",
+    "STEM majors looking for funding",
+    "Community service-oriented applicants",
+    "International students seeking financial aid",
+    "Medical students in need of scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in Florida?",
+      "answer": "The Florida scholarship listings include a diverse range of categories such as Education, STEM, Medicine, Arts, and Community. With 461 opportunities currently available, students can find scholarships that align with their specific fields of interest."
+    },
+    {
+      "question": "How can I find scholarship deadlines?",
+      "answer": "Each scholarship listing has its own deadline, and all 461 rows in this category include deadline information. It's important to check each listing for specific dates, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are essays required for Florida scholarships?",
+      "answer": "Many of the scholarships listed do not require essays, but this can vary by program. It's advisable to review the details of each scholarship to confirm any specific requirements."
+    },
+    {
+      "question": "What are the typical award amounts for Florida scholarships?",
+      "answer": "Award sizes for scholarships in Florida can vary significantly, with amounts ranging from approximately $110 to $34,345. Be sure to check individual listings for specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "florida",
+    "generatedAt": "2026-04-02T10:30:22.812Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 461,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

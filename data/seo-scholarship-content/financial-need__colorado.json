@@ -1,0 +1,49 @@
+{
+  "seo_title": "Colorado Scholarships for Financial Need",
+  "seo_description": "Explore 21 scholarships for Colorado students with financial need. Award sizes range from $700 to $16,000. Check deadlines promptly.",
+  "intro": "Finding financial support for your education in Colorado can be challenging, but there are 21 scholarships available specifically for students with financial need. These opportunities range in award sizes from approximately $700 to $16,000, providing a variety of options to help ease the cost of tuition and related expenses. With deadlines that vary across listings, it's essential to check each scholarship's details promptly to ensure you don't miss out.",
+  "h1": "Financial Need Scholarships in Colorado",
+  "supporting": "This collection of scholarships covers diverse categories such as education, medicine, community service, and STEM fields, making it worthwhile to explore the specific criteria and award amounts for each listing. Many of these scholarships do not require essays, allowing for a more straightforward application process. Be sure to compare the requirements and deadlines to identify the best fits for your situation.",
+  "related_intro": "To further assist your search, consider exploring scholarships focused on specific fields or those that cater to different eligibility criteria.",
+  "how_to_use": [
+    "Check individual deadlines for each scholarship",
+    "Review award amounts to prioritize applications",
+    "Read the eligibility requirements carefully",
+    "Open official scholarship pages for detailed information",
+    "Shortlist potential scholarships that align with your needs"
+  ],
+  "who_for": [
+    "Students in Colorado with financial need",
+    "Undergraduates pursuing education or medical degrees",
+    "Community service-oriented individuals",
+    "STEM students seeking financial assistance",
+    "Students looking for scholarships with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Colorado?",
+      "answer": "This filter includes a diverse range of scholarships across 21 listings, covering categories such as education, medicine, community support, disability, and STEM fields. Each scholarship may have unique eligibility criteria and focus areas, so it's beneficial to explore the full list for options that align with your situation."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this category do not require essays, but it's important to verify the specific requirements for each listing. While many scholarships may have lighter application processes, checking the details for each opportunity will ensure you meet all necessary criteria."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 21 scholarships listed have varying deadlines, so it's crucial to check each one individually for specific dates. Some deadlines are approaching within the next 45 days, so reviewing the listings promptly will help you stay on track."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The scholarships in this category offer a wide range of award amounts, with some listings indicating funding from around $700 up to $16,000. Since award sizes can vary significantly, it's advisable to look at each scholarship's details to understand the financial support available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/colorado",
+    "generatedAt": "2026-04-02T11:03:02.746Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 21,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

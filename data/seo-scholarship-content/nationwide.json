@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 599 Nationwide Scholarships for All Fields",
+  "seo_description": "Find nationwide scholarships with awards from $100 to $50,000. Deadlines vary—check listings for details.",
+  "intro": "Finding funding for your education can be daunting, but with 599 nationwide scholarships available, there are numerous opportunities to explore. These scholarships cover a wide range of categories, including education, STEM, arts, and community initiatives, with award sizes varying significantly from $100 to $50,000. As deadlines vary across listings, it's important to check specific dates promptly, especially since some deadlines are approaching within the next 45 days.",
+  "h1": "599 Nationwide Scholarships Available Now",
+  "supporting": "This diverse selection of scholarships means you can find options that align with your academic interests and personal circumstances. Take note of the varying requirements, as some scholarships may require essays while others do not. Comparing award amounts and eligibility criteria can help you prioritize which scholarships to apply for. Be sure to review each listing carefully to understand what is needed for a successful application.",
+  "related_intro": "If you're interested in specific categories or types of scholarships, consider checking related pages that focus on education, STEM, or community funding.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify which scholarships meet your needs",
+    "Read the requirement lines to understand what you'll need to apply",
+    "Open official pages for detailed eligibility criteria and application processes",
+    "Shortlist scholarships that align with your academic goals and personal background"
+  ],
+  "who_for": [
+    "Students pursuing degrees in arts or STEM fields",
+    "Individuals seeking community-focused funding",
+    "Dependents of military personnel looking for educational support",
+    "Applicants interested in scholarships with lighter requirements",
+    "Those needing substantial financial assistance for their education"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this nationwide listing?",
+      "answer": "This nationwide scholarship listing includes a diverse range of categories such as Education, Miscellaneous, STEM, Community, and Arts. With 599 scholarships available, you can find opportunities that align with various interests and fields."
+    },
+    {
+      "question": "How can I find out the specific deadlines for these scholarships?",
+      "answer": "Deadlines vary across the 599 scholarships listed, so it's important to check each individual listing for its specific date. Some deadlines are approaching quickly, so reviewing the details promptly is advisable."
+    },
+    {
+      "question": "Are there scholarships that do not require essays?",
+      "answer": "Yes, among the scholarships listed, approximately 486 do not have essay requirements, while about 113 do. Be sure to read the requirements for each scholarship to confirm what is needed."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this listing can range from around $100 to $50,000. Since each scholarship has its own funding amount, check the details of individual listings for specific figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "nationwide",
+    "generatedAt": "2026-04-02T10:35:18.957Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 599,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

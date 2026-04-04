@@ -1,0 +1,47 @@
+{
+  "seo_title": "Hispanic Scholarships in Illinois - Find Your Funding",
+  "seo_description": "Explore 4 Hispanic scholarships in Illinois with varying award amounts. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support as a Hispanic student in Illinois can be challenging, but there are opportunities available specifically tailored for you. Currently, there are 4 scholarships listed that cater to your unique background and educational goals. Award sizes in this selection vary, with amounts generally ranging from $500 to $2,000. Be aware that deadlines differ among listings, so it’s important to check each one to ensure you don’t miss out.",
+  "h1": "Hispanic Scholarships Available in Illinois",
+  "supporting": "This collection of scholarships includes options across various fields such as education, STEM, law, and community service. Many of these listings do not require essays, making the application process potentially less daunting. Take the time to compare the award amounts and requirements, as this will help you identify which opportunities align best with your academic pursuits.",
+  "related_intro": "For more tailored options, consider exploring scholarships focused on specific majors or those available to students in other states.",
+  "how_to_use": [
+    "Check individual deadlines for each scholarship",
+    "Compare award amounts and eligibility requirements",
+    "Look for listings that do not require essays",
+    "Visit the official scholarship pages for detailed information",
+    "Shortlist the scholarships that best fit your profile"
+  ],
+  "who_for": [
+    "Hispanic students in Illinois",
+    "Students pursuing education or STEM fields",
+    "Undergraduates seeking community-based scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Hispanic students in Illinois?",
+      "answer": "The current listings include scholarships across various categories such as education, STEM, law, medicine, and community initiatives. With a total of four options available, students can find opportunities that align with their academic and career interests."
+    },
+    {
+      "question": "How can I find specific details about each scholarship?",
+      "answer": "Each scholarship listing includes important information like award amounts and deadlines. It's advisable to check the details for each program, as they can vary significantly, especially regarding application requirements and deadlines."
+    },
+    {
+      "question": "Are there any scholarships that do not require an essay?",
+      "answer": "Many of the scholarships listed do not have an essay requirement, making them potentially easier to apply for. However, it's essential to verify the specifics for each scholarship, as requirements can differ."
+    },
+    {
+      "question": "When should I check the deadlines for these scholarships?",
+      "answer": "All four scholarships have deadlines, with at least one approaching within the next 45 days. It's important to review the deadlines promptly to ensure you don't miss any opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "hispanic/illinois",
+    "generatedAt": "2026-04-02T11:11:33.228Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

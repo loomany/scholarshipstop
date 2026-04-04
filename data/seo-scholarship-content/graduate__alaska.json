@@ -1,0 +1,49 @@
+{
+  "seo_title": "Graduate Scholarships in Alaska - Explore 6 Options",
+  "seo_description": "Find 6 graduate scholarships in Alaska with awards from $1,000 to $5,000. Check individual listings for deadlines and requirements.",
+  "intro": "Finding financial support for graduate studies in Alaska can be a crucial step in advancing your education and career. With 6 scholarships available in this category, award sizes range from approximately $1,000 to $5,000. These opportunities often cater to various fields, including STEM, arts, and education, making it essential to explore each listing carefully. Be mindful of the varying deadlines, as some may be approaching soon.",
+  "h1": "Explore Graduate Scholarships in Alaska",
+  "supporting": "When reviewing the scholarships listed, consider the specific requirements and potential essay prompts, as many do not require essays. This could simplify your application process. Pay attention to the award amounts and categories to find the best fit for your academic focus and financial needs. Each listing provides unique opportunities, so take the time to assess which scholarships align with your goals.",
+  "related_intro": "For additional funding options, check out scholarships available for other education levels or explore opportunities specific to different fields of study.",
+  "how_to_use": [
+    "Review the deadlines and prioritize upcoming ones",
+    "Compare the award amounts to determine potential funding",
+    "Examine the requirements for each scholarship carefully",
+    "Open the official scholarship pages for detailed information",
+    "Create a shortlist of scholarships that meet your criteria"
+  ],
+  "who_for": [
+    "Graduate students in Alaska",
+    "Students pursuing STEM degrees",
+    "Applicants interested in arts or community-focused scholarships",
+    "Individuals seeking lighter application requirements",
+    "Those looking for scholarships with varying award amounts"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Alaska?",
+      "answer": "There are currently six scholarships listed for graduate students in Alaska, covering a range of categories including STEM, Arts, Education, and Community. This variety allows students to find opportunities that align with their specific fields of study and interests."
+    },
+    {
+      "question": "Are there any essays required for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require an essay, making the application process potentially lighter for applicants. However, it's important to check each individual listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships listed range from approximately $1,000 to $5,000. Since each scholarship has its own funding amount, be sure to review the details for each opportunity."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All six scholarships have deadlines, but they differ from one another. It's advisable to check the specific deadline for each scholarship promptly, especially since at least one has a deadline approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/alaska",
+    "generatedAt": "2026-04-02T11:09:52.503Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

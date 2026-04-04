@@ -1,0 +1,49 @@
+{
+  "seo_title": "Financial Need Scholarships for International Students",
+  "seo_description": "Explore 5 scholarships for international students with financial need. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "Finding financial support as an international student can be challenging, but there are options available. This selection features 5 scholarships specifically designed for those demonstrating financial need. Award sizes vary, with opportunities ranging from several hundred to several thousand dollars. Keep in mind that deadlines and requirements differ across listings, so it’s essential to review each one carefully.",
+  "h1": "Scholarships for International Students with Financial Need",
+  "supporting": "As you explore these scholarships, pay attention to the specific award amounts and eligibility criteria. Many listings may not require essays, making them more accessible. Compare deadlines to ensure you apply on time, and verify details on the official sponsor websites for the most accurate information.",
+  "related_intro": "If you're interested in similar opportunities, consider checking out related pages that focus on scholarships for international students or those based on specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Review award amounts listed in each row",
+    "Read the eligibility requirements carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "International students seeking financial aid",
+    "Students pursuing education in STEM fields",
+    "Applicants with demonstrated financial need",
+    "Individuals looking for community-focused scholarships",
+    "Students interested in lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students with financial need?",
+      "answer": "There are currently five scholarships listed that cater specifically to international students demonstrating financial need. These scholarships cover various categories, including education, STEM, and community-focused initiatives."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary, with amounts ranging approximately from $1,000 to $10,000. It's important to review each listing for specific details on the award amounts."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially lighter for many applicants. However, it's advisable to check each individual listing for specific requirements."
+    },
+    {
+      "question": "When are the deadlines for applying to these scholarships?",
+      "answer": "All five scholarships have upcoming deadlines, but they vary by listing. Some deadlines are within the next 45 days, so it's recommended to verify the exact dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/international-students",
+    "generatedAt": "2026-04-02T10:40:40.186Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

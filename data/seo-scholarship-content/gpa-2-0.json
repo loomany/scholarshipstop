@@ -1,0 +1,48 @@
+{
+  "seo_title": "Scholarships for GPA 2.0 Students | USA",
+  "seo_description": "Explore 34 scholarships for students with a GPA of 2.0. Award sizes vary; check individual listings for deadlines and requirements.",
+  "intro": "Finding scholarships that accept a GPA of 2.0 can open doors to financial support for your education. With 34 listings available, this selection includes a range of awards from various fields such as education, arts, and STEM. Award sizes vary significantly, with amounts typically ranging from $250 to $8,500. Keep in mind that deadlines and requirements differ across these opportunities, so it’s important to review each listing carefully.",
+  "h1": "34 Scholarships for Students with a GPA of 2.0",
+  "supporting": "This list features a mix of scholarship options, some of which may require essays while others do not. As you explore, compare the award amounts and categories to find the best fit for your needs. Given that all listings have deadlines, be sure to check the specific dates to ensure you don’t miss out on any opportunities.",
+  "related_intro": "If you're interested in exploring other scholarship options, consider checking out related categories that may align with your interests and qualifications.",
+  "how_to_use": [
+    "Check deadlines for each scholarship listing",
+    "Compare award amounts and categories",
+    "Review essay requirements for each opportunity",
+    "Open official scholarship pages for more details",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Students with a GPA of 2.0",
+    "Applicants seeking funding in arts or STEM fields",
+    "Individuals looking for community-focused scholarships",
+    "Students interested in education-related awards"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with a GPA of 2.0?",
+      "answer": "There are currently 34 scholarships listed that cater to students with a GPA of 2.0. These scholarships span various categories including education, STEM, arts, medicine, and community support."
+    },
+    {
+      "question": "Do all scholarships in this list require an essay?",
+      "answer": "Requirements vary among the scholarships. While approximately 4 of the 34 listings require an essay, the majority do not have this requirement. It's important to check each listing for specific details."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts ranging from approximately $250 to $8,500. Be sure to review individual listings for exact figures."
+    },
+    {
+      "question": "Are there any upcoming deadlines for these scholarships?",
+      "answer": "All 34 scholarships have deadlines, but they vary from one listing to another. Some deadlines may be approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "gpa-2-0",
+    "generatedAt": "2026-04-02T10:38:46.316Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 34,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

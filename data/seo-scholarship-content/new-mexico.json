@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find New Mexico Scholarships | Up to $5,500 Available",
+  "seo_description": "Explore 19 scholarships in New Mexico with awards up to $5,500. Check varied deadlines and requirements to find your best fit.",
+  "intro": "Navigating the landscape of scholarships in New Mexico reveals a diverse array of 19 opportunities, with award sizes ranging from approximately $500 to $5,500. These scholarships cater to various fields, including community service, education, medical studies, and more. Keep in mind that application requirements and deadlines vary, with some approaching in the next 45 days, making it essential to check details promptly.",
+  "h1": "Scholarships Available in New Mexico",
+  "supporting": "As you explore this list, consider comparing the award amounts and the specific categories that resonate with your academic or career goals. Some scholarships may have lighter requirements, while others may ask for essays. This variety allows you to tailor your applications to those that best fit your profile and aspirations.",
+  "related_intro": "If you're interested in similar funding opportunities, check out our pages on related scholarships that may align with your interests and qualifications.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify the best fits for your needs",
+    "Read the requirement lines for each scholarship carefully",
+    "Open the official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals and verify details"
+  ],
+  "who_for": [
+    "Students pursuing education or community service",
+    "Individuals with disabilities seeking financial assistance",
+    "Medical students looking for targeted funding",
+    "New Mexico residents studying STEM fields",
+    "Applicants interested in lighter requirement scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for New Mexico residents?",
+      "answer": "The current listing includes 19 scholarships that cover a variety of categories such as community, education, disability, STEM, medicine, and miscellaneous. This diverse range allows applicants to find opportunities that align with their specific interests and backgrounds."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 19 listings in this section include deadline information. It's important to check each listing promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Do these scholarships require essays?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, the majority do not, so it's advisable to review the specific details of each scholarship to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this list vary significantly, with amounts ranging approximately from $500 to $5,500. Be sure to check individual listings for exact award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "new-mexico",
+    "generatedAt": "2026-04-02T10:56:14.932Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 19,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Connecticut Graduate Scholarships | $1,500–$5,000 Awards",
+  "seo_description": "Explore 6 graduate scholarships in Connecticut with varying deadlines and award amounts. Check details for eligibility and requirements.",
+  "intro": "Finding financial support for graduate studies in Connecticut can be essential for easing the burden of tuition and related expenses. This catalog features 6 scholarships specifically for graduate students in the state, with award amounts generally ranging from $1,500 to $5,000. Keep in mind that while many of these opportunities do not require essays, the deadlines vary, so it's important to check each listing promptly to ensure you don’t miss out.",
+  "h1": "Graduate Scholarships in Connecticut: 6 Opportunities",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and categories, which include humanities, education, and STEM. This can help you identify which opportunities align best with your academic focus and financial needs. Pay attention to the specific requirements and deadlines for each scholarship, as these can differ significantly, influencing your application strategy.",
+  "related_intro": "For additional funding options, check out our listings for graduate scholarships in nearby states or explore specialized scholarships based on your field of study.",
+  "how_to_use": [
+    "Compare the deadlines for each scholarship carefully",
+    "Scan the award amounts to prioritize your applications",
+    "Read the requirement lines to understand eligibility",
+    "Open the official pages for detailed application instructions",
+    "Shortlist the scholarships that best match your profile"
+  ],
+  "who_for": [
+    "Graduate students in Connecticut",
+    "Candidates pursuing humanities degrees",
+    "Students focusing on education-related fields",
+    "Individuals seeking STEM funding",
+    "Applicants looking for lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Connecticut?",
+      "answer": "The current listings include scholarships across various categories such as education, humanities, and STEM. With a total of six scholarships available, you can find opportunities that align with your academic focus."
+    },
+    {
+      "question": "Are there any specific requirements for applying to these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, making the application process potentially lighter for many candidates. However, it's important to review each listing for specific eligibility criteria and requirements."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All six scholarships have deadlines, with some approaching within the next 45 days. Be sure to check the individual deadlines for each scholarship to ensure timely applications."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The scholarships available for graduate students in Connecticut offer varying award sizes, typically ranging from approximately $1,500 to $5,000. Each listing will provide specific amounts, so review them closely."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/connecticut",
+    "generatedAt": "2026-04-02T11:09:59.759Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

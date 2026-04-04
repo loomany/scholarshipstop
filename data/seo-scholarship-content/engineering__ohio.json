@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Engineering Scholarships in Ohio",
+  "seo_description": "Explore 8 engineering scholarships in Ohio with awards from $1,000 to $5,000. Check deadlines and requirements for each opportunity.",
+  "intro": "For students pursuing engineering in Ohio, there are currently 8 scholarships available that can help alleviate the financial burden of education. Award sizes typically range from $1,000 to $5,000, providing a variety of options to consider. Each listing has its own unique set of requirements and deadlines, so it's important to review them carefully to find the best fit for your situation.",
+  "h1": "Engineering Scholarships Available in Ohio",
+  "supporting": "This collection of scholarships encompasses various categories, including STEM, biology, and community support. As you explore the listings, pay attention to the specific award amounts and the differing requirements, such as whether an essay is needed. With deadlines spread across the upcoming months, it's wise to check these details promptly to ensure you don't miss out on potential funding.",
+  "related_intro": "If you're interested in broader opportunities, consider checking out related pages for additional scholarships in other fields or locations.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find the best financial fit",
+    "Read requirement lines to understand what each scholarship entails",
+    "Open official pages for complete details and updates",
+    "Shortlist potential scholarships and verify information on sponsor sites"
+  ],
+  "who_for": [
+    "Engineering students in Ohio",
+    "Students interested in STEM funding",
+    "Applicants seeking community-focused scholarships",
+    "Individuals pursuing careers in biology or safety",
+    "Students looking for varying essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Ohio?",
+      "answer": "There are currently 8 scholarships specifically for engineering students in Ohio, covering various categories such as STEM, biology, safety, disability, community, and medicine. Each scholarship may have different eligibility criteria and focus areas, so it's important to review the details of each listing."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships listed range from approximately $1,000 to $5,000. However, the exact amount varies by scholarship, so be sure to check the individual listings for specific funding details."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships; some may require essays while others do not. It's advisable to review each scholarship's listing for specific application requirements to ensure you submit a complete application."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 8 scholarships have deadlines, but they differ from one another. At least one scholarship has a deadline approaching within the next 45 days, so it's recommended to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/ohio",
+    "generatedAt": "2026-04-02T10:44:53.381Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 8,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

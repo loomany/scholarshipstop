@@ -1,0 +1,49 @@
+{
+  "seo_title": "Kentucky Engineering Scholarships | Up to $3,000",
+  "seo_description": "Explore 5 engineering scholarships in Kentucky with awards from $1,000 to $3,000. Check deadlines and requirements for each.",
+  "intro": "Finding financial support for engineering studies in Kentucky can be a crucial step in your academic journey. This catalog features 5 scholarships specifically tailored for engineering students, with award sizes generally ranging from $1,000 to $3,000. Each listing has varying deadlines and requirements, so it's important to review the details closely to identify opportunities that align with your situation.",
+  "h1": "Find Engineering Scholarships in Kentucky",
+  "supporting": "As you explore these scholarships, pay attention to the specific award amounts and the associated deadlines, which differ across listings. Some scholarships may require essays, while others might have lighter requirements. This variety allows you to assess which opportunities best fit your profile and application strategy, making it easier to prioritize your efforts.",
+  "related_intro": "If you're interested in other funding options or related fields, consider checking out scholarships in adjacent areas such as safety or arts, which may also support your educational goals.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify the best financial fit",
+    "Read through requirement lines to assess eligibility",
+    "Open official scholarship pages for the most accurate details",
+    "Shortlist scholarships that match your profile and goals"
+  ],
+  "who_for": [
+    "Engineering students in Kentucky",
+    "Undergraduates seeking financial support",
+    "Applicants looking for STEM funding",
+    "Students willing to write essays for scholarships",
+    "Those needing funding for specific engineering disciplines"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Kentucky?",
+      "answer": "There are currently five scholarships listed specifically for engineering students in Kentucky. These scholarships cover a range of award amounts, generally between $1,000 and $3,000, and may have varying eligibility criteria and requirements."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and it's important to check the specific dates for each listing. Some deadlines are approaching soon, so reviewing the details promptly will help ensure you don’t miss any opportunities."
+    },
+    {
+      "question": "Do these scholarships require essays or other application materials?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others might have lighter application requirements, so be sure to check the details of each scholarship to understand what is needed."
+    },
+    {
+      "question": "How do I verify the details of the scholarships listed?",
+      "answer": "You can verify the details of each scholarship by clicking on the individual listings. Each entry provides specific information about award amounts, deadlines, and application requirements, allowing you to make informed decisions."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/kentucky",
+    "generatedAt": "2026-04-02T10:50:30.630Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

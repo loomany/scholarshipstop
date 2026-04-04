@@ -1,0 +1,47 @@
+{
+  "seo_title": "Wisconsin Scholarships for Financial Need Students",
+  "seo_description": "Explore 26 scholarships in Wisconsin for students with financial need. Check varied deadlines and award amounts up to $6,000.",
+  "intro": "Navigating the financial landscape of higher education can be challenging, especially for those in Wisconsin facing financial need. This catalog features 26 scholarship opportunities tailored to support students who require financial assistance. Award sizes vary significantly, ranging from around $500 to $6,000, and deadlines differ across listings, so it's important to check each one closely for specific details and timelines.",
+  "h1": "Wisconsin Scholarships for Financial Need",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts, categories, and any essay requirements. Some listings may have lighter requirements, making them more accessible. With a diverse range of scholarships available in areas like education, STEM, and community service, this selection is worth your time to review thoroughly.",
+  "related_intro": "If you’re interested in more specific funding options, check out related pages for scholarships focused on different criteria or locations.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify the best fit for your needs",
+    "Review requirement lines for essay and eligibility details",
+    "Open official pages for the most accurate information",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Students in Wisconsin with financial need",
+    "Undergraduates pursuing education or STEM fields",
+    "Individuals involved in community service or athletics"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in Wisconsin?",
+      "answer": "There are 26 scholarships listed specifically for students demonstrating financial need in Wisconsin. These scholarships cover a range of categories including community, education, STEM, medicine, and law."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 26 listings include deadline information. It's important to check each scholarship's details promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Do I need to submit essays for these scholarships?",
+      "answer": "Requirements vary among the scholarships; some may require essays while others do not. Be sure to review the specific requirements for each listing to understand what is needed."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships range from approximately $500 to $6,000. However, the exact amount can vary by scholarship, so it's best to check the individual listings for specific details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/wisconsin",
+    "generatedAt": "2026-04-02T11:00:24.994Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 26,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

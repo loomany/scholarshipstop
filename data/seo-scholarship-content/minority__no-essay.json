@@ -1,0 +1,47 @@
+{
+  "seo_title": "No Essay Scholarships for Minority Students",
+  "seo_description": "Explore 65 no-essay scholarships for minority students with awards up to $16,000. Check deadlines and apply today.",
+  "intro": "Finding scholarships that support minority students without the burden of essay writing can significantly streamline your application process. This collection features 65 opportunities, with award amounts ranging from approximately $500 to $16,000. Each listing is designed to provide financial support while minimizing the effort typically associated with scholarship applications. Keep an eye on varying deadlines, as many listings may require prompt action.",
+  "h1": "No Essay Scholarships for Minority Students",
+  "supporting": "This filter showcases a diverse array of scholarships across categories like STEM, education, and medicine, all tailored for minority applicants. As you explore these options, consider comparing the award amounts and specific eligibility requirements to find the best fit for your educational goals. The absence of essay requirements in many listings means you can focus on meeting other criteria and submitting your applications efficiently.",
+  "related_intro": "For additional funding opportunities, check out related pages that highlight scholarships tailored for specific fields or application styles.",
+  "how_to_use": [
+    "Review the list for eligible scholarships",
+    "Compare award amounts to prioritize your applications",
+    "Check individual deadlines and requirements for each listing",
+    "Open official scholarship pages for more details",
+    "Shortlist your top choices for application"
+  ],
+  "who_for": [
+    "Minority students seeking financial support",
+    "Applicants looking for no-essay opportunities",
+    "Students interested in STEM, education, or medical fields"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category features 65 scholarships specifically for minority students that do not require essay submissions. The listings cover a variety of fields, including STEM, education, medicine, and community service."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 65 scholarships in this list have deadlines, but they vary by program. It's important to check each listing for specific dates, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships range significantly, with amounts typically between $500 and $16,000. Each listing provides specific details about the award amount, so be sure to review them individually."
+    },
+    {
+      "question": "Are there any application requirements for these scholarships?",
+      "answer": "Most scholarships in this category do not require essays, making the application process generally lighter. However, it's advisable to verify the requirements for each scholarship, as they may differ."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority/no-essay",
+    "generatedAt": "2026-04-02T10:35:46.593Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 65,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

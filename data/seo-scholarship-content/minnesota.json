@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 31 Scholarships in Minnesota",
+  "seo_description": "Find Minnesota scholarships with awards up to $8,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for your education in Minnesota can be a crucial step in achieving your goals. With 31 scholarships available, ranging from approximately $500 to $8,000, this selection offers diverse opportunities tailored to various fields such as education, medicine, and STEM. Keep in mind that award amounts, deadlines, and application requirements vary, so it’s essential to review each listing carefully to find the best fit for your needs.",
+  "h1": "31 Minnesota Scholarships Available Now",
+  "supporting": "As you explore these scholarships, consider comparing the award sizes and the specific categories that align with your interests or career aspirations. Some scholarships may have lighter application requirements, while others could require essays. Pay close attention to the deadlines, as they differ across listings, with some approaching soon. This selection is worth scanning to maximize your chances of securing funding.",
+  "related_intro": "For more tailored options, check out scholarships specifically for education, STEM, or medical fields, which can provide additional support aligned with your academic path.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify funding potential",
+    "Read the requirement lines for application specifics",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Students pursuing education degrees",
+    "Future professionals in STEM fields",
+    "Individuals seeking medical scholarships",
+    "Applicants with disabilities",
+    "Students involved in community service"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Minnesota?",
+      "answer": "The Minnesota scholarships include a diverse range of categories such as education, medicine, STEM, law, miscellaneous, and disability. With 31 listings currently available, you can find opportunities tailored to various fields and interests."
+    },
+    {
+      "question": "How do I check the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, so it's important to review the details for each listing. Many deadlines are approaching within the next 45 days, so be sure to check them promptly to ensure you don't miss out."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others may not, so it's essential to verify the specific requirements for each scholarship you're interested in."
+    },
+    {
+      "question": "What is the range of award amounts for Minnesota scholarships?",
+      "answer": "Award sizes for the scholarships in Minnesota vary significantly, with amounts ranging approximately from $500 to $8,000. Be sure to check each listing for the specific award amount associated with that scholarship."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minnesota",
+    "generatedAt": "2026-04-02T10:48:42.062Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 31,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}
