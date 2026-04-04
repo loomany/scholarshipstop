@@ -326,6 +326,7 @@ export async function updateName(formData: FormData) {
   }
 
   const { error: profileErr } = await supabase
+    .schema('public')
     .from('profiles')
     .update({
       first_name: first_name || null,

@@ -103,10 +103,12 @@ export const US_STATE_OPTIONS: { value: string; label: string }[] = [
   { value: 'WY', label: 'Wyoming' }
 ];
 
-const CITIZENSHIP_VALUES = new Set(
+const CITIZENSHIP_VALUES: Set<string> = new Set(
   CITIZENSHIP_OPTIONS.map((o) => o.value)
 );
-const COUNTRY_VALUES = new Set(COUNTRY_SELECT_OPTIONS.map((o) => o.value));
+const COUNTRY_VALUES: Set<string> = new Set(
+  COUNTRY_SELECT_OPTIONS.map((o) => o.value)
+);
 
 export function isValidCitizenshipSlug(v: string): boolean {
   return CITIZENSHIP_VALUES.has(v);

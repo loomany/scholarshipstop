@@ -112,7 +112,7 @@ export function simplerGrantsGovIntroParagraph(s: Scholarship): string | null {
 
 export function simplerGrantsGovRequirementsLines(s: Scholarship): string[] {
   const raw =
-    (s.requirementsTextClean ?? s.requirementsText ?? '').trim() || undefined;
+    (s.requirementsTextClean ?? '').trim() || undefined;
   if (!raw) return [];
   const cleaned = stripSimplerRequirementsFluff(
     cleanSimplerGrantsGovBoilerplate(raw)

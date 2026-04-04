@@ -334,6 +334,7 @@ export default function ScholarshipProfileForm({
       console.info('[account:profile] upsert payload (partial)', payload);
 
       const { data: saved, error } = await supabase
+        .schema('public')
         .from('profiles')
         .upsert(payload, { onConflict: 'id' })
         .select()

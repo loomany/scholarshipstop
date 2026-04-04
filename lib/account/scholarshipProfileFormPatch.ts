@@ -76,7 +76,7 @@ function normName(s: string): string | null {
   return t ? t : null;
 }
 
-function profileGpaAsNumber(gpa: ProfilesRow['gpa']): number | null {
+function profileGpaAsNumber(gpa: ProfilesRow['gpa'] | undefined): number | null {
   return gpaForProfileDb(
     gpa != null && gpa !== '' ? String(gpa) : ''
   );

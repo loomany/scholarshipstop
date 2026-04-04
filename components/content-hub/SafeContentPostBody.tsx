@@ -40,7 +40,7 @@ const SANITIZE_OPTIONS = {
   ],
   ALLOWED_ATTR: ['href', 'target', 'rel', 'colspan', 'rowspan'],
   ALLOW_DATA_ATTR: false
-} as const;
+};
 
 type SafeContentPostBodyProps = {
   html: string;

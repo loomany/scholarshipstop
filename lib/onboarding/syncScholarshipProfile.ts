@@ -61,6 +61,7 @@ export async function persistScholarshipProfile(
     ...row
   }) as Database['public']['Tables']['profiles']['Insert'];
   const { error: profileErr } = await supabase
+    .schema('public')
     .from('profiles')
     .upsert(payload, { onConflict: 'id' });
 

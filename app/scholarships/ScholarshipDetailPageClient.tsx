@@ -54,9 +54,7 @@ import {
   scholarshipSavedButtonClass,
   scholarshipSaveButtonClass
 } from '@/lib/constants/scholarshipActionUi';
-import LongTailScholarshipsPageClient from '@/app/scholarships/LongTailScholarshipsPageClient';
 import { useScholarshipDetailInitialData } from '@/app/scholarships/ScholarshipDetailInitialDataContext';
-import { getLongTailPreset } from '@/app/scholarships/scholarshipLongTailPresets';
 import { postScholarshipsList } from '@/app/scholarships/scholarshipListFetch';
 import { markScholarshipViewed } from '@/app/scholarships/viewedScholarships';
 import {
@@ -344,14 +342,6 @@ export default function ScholarshipDetailPageClient({
     return undefined;
   }, [params]);
 
-  const longTailPreset = useMemo(
-    () =>
-      routeParam != null && routeParam.length > 0
-        ? getLongTailPreset(routeParam)
-        : null,
-    [routeParam]
-  );
-
   useLayoutEffect(() => {
     if (!routeParam) return;
     window.scrollTo(0, 0);
@@ -395,10 +385,6 @@ export default function ScholarshipDetailPageClient({
     if (!routeParam) {
       setDetailLoadState('not_found');
       setScholarship(null);
-      return;
-    }
-
-    if (getLongTailPreset(routeParam)) {
       return;
     }
 
@@ -488,16 +474,6 @@ export default function ScholarshipDetailPageClient({
     () => (scholarship ? resolveScholarshipCategorySlug(scholarship) : null),
     [scholarship]
   );
-
-  if (longTailPreset) {
-    return (
-      <LongTailScholarshipsPageClient
-        listingMode={{ type: 'legacy', slug: longTailPreset.slug }}
-        pageTitle={longTailPreset.h1}
-        introParagraph={null}
-      />
-    );
-  }
 
   if (detailLoadState === 'loading') {
     return (

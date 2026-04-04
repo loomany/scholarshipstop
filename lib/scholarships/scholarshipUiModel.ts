@@ -12,7 +12,10 @@ export type NormalizedScholarshipUi = {
   eligibilityLines: string[];
   overviewPrimary: string;
   matchBadge: { label: string; title?: string } | null;
-  urgencyBadge: { label: string; variant: string } | null;
+  urgencyBadge: {
+    label: string;
+    variant: 'slate' | 'sky' | 'amber' | 'rose';
+  } | null;
   difficultyBadge: { label: string } | null;
   quickDecision: {
     bestFor: string[];

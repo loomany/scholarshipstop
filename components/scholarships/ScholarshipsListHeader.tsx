@@ -491,6 +491,11 @@ export default function ScholarshipsListHeader({
                 <button
                   type="button"
                   aria-label="Open more filters"
+                  title={
+                    !isAuthenticated
+                      ? 'Apply filters after you create a free account'
+                      : undefined
+                  }
                   onClick={() => {
                     setCategoriesOpen(false);
                     setSortOpen(false);
@@ -508,7 +513,6 @@ export default function ScholarshipsListHeader({
                       className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
                       strokeWidth={2}
                       aria-hidden
-                      title="Apply filters after you create a free account"
                     />
                   ) : null}
                   Filters
@@ -526,6 +530,11 @@ export default function ScholarshipsListHeader({
                   <button
                     type="button"
                     disabled={categoriesDisabled}
+                    title={
+                      !isAuthenticated
+                        ? 'Apply categories after you create a free account'
+                        : undefined
+                    }
                     onClick={() => {
                       if (categoriesDisabled) return;
                       setSortOpen(false);
@@ -548,7 +557,6 @@ export default function ScholarshipsListHeader({
                         className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
                         strokeWidth={2}
                         aria-hidden
-                        title="Apply categories after you create a free account"
                       />
                     ) : null}
                     Categories

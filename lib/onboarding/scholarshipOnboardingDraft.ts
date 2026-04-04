@@ -6,6 +6,12 @@ import type {
   OnboardingStep4DraftFields
 } from '@/lib/onboarding/onboardingFlowTypes';
 
+export type {
+  OnboardingStep2DraftFields,
+  OnboardingStep3DraftFields,
+  OnboardingStep4DraftFields
+};
+
 export const SCHOLARSHIP_ONBOARDING_DRAFT_KEY = 'scholarship_onboarding_draft_v2';
 
 export type OnboardingFormValues = {

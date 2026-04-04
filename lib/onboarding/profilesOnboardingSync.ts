@@ -186,6 +186,7 @@ export async function syncOnboardingToProfiles(
   console.info('[onboarding:profile] final profile payload', payload);
 
   const { data: saved, error: profileErr } = await supabase
+    .schema('public')
     .from('profiles')
     .upsert(payload, { onConflict: 'id' })
     .select()
@@ -240,6 +241,7 @@ export async function syncCitizenshipAndLocationToProfiles(
     return { ok: true };
   }
   const { error: profileErr } = await supabase
+    .schema('public')
     .from('profiles')
     .update(patch)
     .eq('id', userId);

@@ -955,6 +955,7 @@ function ScholarshipsPageInner({
                   <button
                     type="button"
                     onClick={setViewBest}
+                    title="Create a free account for personalized best matches"
                     className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-2 text-center text-sm font-semibold transition sm:gap-1.5 sm:px-3 ${
                       viewSegment === 'best'
                         ? 'bg-gray-900 text-white shadow-sm'
@@ -969,7 +970,6 @@ function ScholarshipsPageInner({
                       }`}
                       strokeWidth={2}
                       aria-hidden
-                      title="Create a free account for personalized best matches"
                     />
                     <span className="min-w-0">Best match</span>
                   </button>
@@ -987,6 +987,7 @@ function ScholarshipsPageInner({
                   <button
                     type="button"
                     onClick={setViewEasy}
+                    title="Create a free account to use Easy apply"
                     className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-2 text-center text-sm font-semibold transition sm:gap-1.5 sm:px-3 ${
                       viewSegment === 'easy'
                         ? 'bg-gray-900 text-white shadow-sm'
@@ -1001,7 +1002,6 @@ function ScholarshipsPageInner({
                       }`}
                       strokeWidth={2}
                       aria-hidden
-                      title="Create a free account to use Easy apply"
                     />
                     <span className="min-w-0">Easy apply</span>
                   </button>
@@ -1090,7 +1090,6 @@ function ScholarshipsPageInner({
         onApply={applyMoreFilters}
         previewCount={previewCount}
         locationOptions={[]}
-        isAuthenticated={isAuthenticated}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}

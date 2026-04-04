@@ -39,7 +39,7 @@ const SCHOLARSHIPS_DB_PAGE_SIZE = 1000;
 const UUID_PARAM_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-function jsonStringArray(value: Json | null | undefined): string[] {
+export function jsonStringArray(value: Json | null | undefined): string[] {
   if (!value || !Array.isArray(value)) return [];
   return value.filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
 }
@@ -511,7 +511,7 @@ export async function fetchScholarshipsByCategorySlug(
       .range(offset, offset + SCHOLARSHIPS_DB_PAGE_SIZE - 1);
 
     if (error) throw new Error(error.message);
-    const batch = (data ?? []) as ScholarshipRow[];
+    const batch = (data ?? []) as unknown as ScholarshipRow[];
     rows.push(...batch);
     if (batch.length < SCHOLARSHIPS_DB_PAGE_SIZE) break;
     offset += SCHOLARSHIPS_DB_PAGE_SIZE;
@@ -536,7 +536,7 @@ async function loadPagedActiveScholarships(
       .range(offset, offset + SCHOLARSHIPS_DB_PAGE_SIZE - 1);
 
     if (error) throw new Error(error.message);
-    const batch = (data ?? []) as ScholarshipRow[];
+    const batch = (data ?? []) as unknown as ScholarshipRow[];
     rows.push(...batch);
     if (batch.length < SCHOLARSHIPS_DB_PAGE_SIZE) break;
     offset += SCHOLARSHIPS_DB_PAGE_SIZE;

@@ -4,6 +4,7 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { Database } from '@/types_db';
 import {
   MATCH_SCORE_SELECT,
+  jsonStringArray,
   type ScholarshipMatchScoreRow
 } from '@/lib/scholarships/supabase';
 import { isEasyApplyFromCatalogEasyIds } from '@/lib/scholarships/easyApply';
@@ -52,7 +53,7 @@ function rowToMatchRow(r: ScholarshipMatchScoreRow): ScholarshipMatchRow {
 }
 
 function rowIsEasyApply(r: ScholarshipMatchScoreRow): boolean {
-  if (isEasyApplyFromCatalogEasyIds(r.easy_apply_flags ?? [])) return true;
+  if (isEasyApplyFromCatalogEasyIds(jsonStringArray(r.easy_apply_flags))) return true;
   if (r.essay_required) return false;
   const reqCount = r.requirements_count;
   const signalCount = r.requirement_signals_count;
@@ -86,7 +87,7 @@ export async function buildScholarshipMatchIndex(
       .eq('is_active', true)
       .range(offset, offset + PAGE - 1);
     if (error) throw new Error(error.message);
-    const batch = (data ?? []) as ScholarshipMatchScoreRow[];
+    const batch = (data ?? []) as unknown as ScholarshipMatchScoreRow[];
     for (const row of batch) {
       const mr = rowToMatchRow(row);
       const { score, reasons } = matchScholarship(profile, mr);

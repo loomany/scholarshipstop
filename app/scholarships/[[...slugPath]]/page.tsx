@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 
 import { createClient } from '@/utils/supabase/server';
-import LongTailScholarshipsPageClient from '@/app/scholarships/LongTailScholarshipsPageClient';
 import ScholarshipDetailPageClient from '@/app/scholarships/ScholarshipDetailPageClient';
 import ScholarshipsHubPageClient from '@/app/scholarships/ScholarshipsHubPageClient';
 import {
@@ -27,18 +26,6 @@ type PageProps = { params: { slugPath?: string[] } };
 function debugLogListingSeo(payload: Record<string, unknown>) {
   if (process.env.DEBUG_SEO_SCHOLARSHIP !== '1') return;
   console.info('[scholarships listing seo]', payload);
-}
-
-function seoHowWhoField(
-  v: string | string[] | undefined
-): string | string[] | null {
-  if (v == null) return null;
-  if (Array.isArray(v)) {
-    const a = v.map((x) => String(x).trim()).filter(Boolean);
-    return a.length ? a : null;
-  }
-  const t = String(v).trim();
-  return t || null;
 }
 
 export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
@@ -139,7 +126,6 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const pageTitle =
       seo?.h1?.trim() || seo?.seo_title?.trim() || longTail.h1;
     const introParagraph = seo?.intro?.trim() || null;
-    const supportingParagraph = seo?.supporting?.trim() || null;
     const faqItems = seo?.faq;
 
     debugLogListingSeo({
@@ -169,8 +155,8 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
           </section>
         }
       >
-        <LongTailScholarshipsPageClient
-          listingMode={{ type: 'legacy', slug: longTail.slug }}
+        <ScholarshipsHubPageClient
+          isAuthenticated={Boolean(user)}
           initialPayload={createInitialScholarshipsPayload(
             buildInitialListRequestKey({
               kind: 'long_tail',
@@ -179,16 +165,6 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
             }),
             initialListPayload
           )}
-          pageTitle={pageTitle}
-          isAuthenticated={Boolean(user)}
-          introParagraph={introParagraph}
-          supportingParagraph={supportingParagraph}
-          faqItems={faqItems}
-          howToUseText={seoHowWhoField(seo?.how_to_use)}
-          whoForText={seoHowWhoField(seo?.who_for)}
-          pageData={seo?.page_data}
-          qualityBucket="SUPPORTING"
-          updatedAt={seo?._meta?.generatedAt ?? null}
         />
       </Suspense>
     );
@@ -213,8 +189,6 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const introParagraph =
       seo?.intro?.trim() ||
       `Browse scholarships in our USA catalog that match this topic (${entry.h1Fallback}). Compare deadlines, amounts, and requirements, then open each official listing to apply.`;
-    const supportingParagraph = seo?.supporting?.trim() || null;
-    const relatedIntroParagraph = seo?.related_intro?.trim() || null;
     const faqItems = seo?.faq;
 
     const safePath = canonicalPath.replace(/\//g, '__');
@@ -246,12 +220,8 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
           </section>
         }
       >
-        <LongTailScholarshipsPageClient
-          listingMode={{
-            type: 'manifest',
-            canonicalPath,
-            entry
-          }}
+        <ScholarshipsHubPageClient
+          isAuthenticated={Boolean(user)}
           initialPayload={createInitialScholarshipsPayload(
             buildInitialListRequestKey({
               kind: 'long_tail',
@@ -260,18 +230,6 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
             }),
             initialListPayload
           )}
-          pageTitle={pageTitle}
-          isAuthenticated={Boolean(user)}
-          introParagraph={introParagraph}
-          supportingParagraph={supportingParagraph}
-          relatedIntroParagraph={relatedIntroParagraph}
-          faqItems={faqItems}
-          howToUseText={seoHowWhoField(seo?.how_to_use)}
-          whoForText={seoHowWhoField(seo?.who_for)}
-          pageData={seo?.page_data}
-          qualityBucket={entry.qualityBucket ?? null}
-          canonicalTarget={entry.canonicalTarget ?? null}
-          updatedAt={seo?._meta?.generatedAt ?? entry.lastEvaluatedAt ?? null}
         />
       </Suspense>
     );

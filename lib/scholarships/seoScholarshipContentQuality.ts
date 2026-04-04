@@ -184,9 +184,11 @@ export function validateSeoAiBody(
         'dollar amounts present with thin/missing numeric aggregate in context (prefer paraphrasing “award sizes vary”)'
       );
     } else {
-      const pad = (q.awardMaxUsd - q.awardMinUsd) * 0.15 + 500;
-      const lo = q.awardMinUsd! - pad;
-      const hi = q.awardMaxUsd! + pad;
+      const awardMinUsd = q.awardMinUsd!;
+      const awardMaxUsd = q.awardMaxUsd!;
+      const pad = (awardMaxUsd - awardMinUsd) * 0.15 + 500;
+      const lo = awardMinUsd - pad;
+      const hi = awardMaxUsd + pad;
       let bad = false;
       for (const d of dollars) {
         if (d < lo || d > hi) {

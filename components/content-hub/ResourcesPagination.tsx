@@ -21,7 +21,7 @@ function visiblePageItems(
   for (let i = current - delta; i <= current + delta; i++) {
     if (i >= 1 && i <= total) set.add(i);
   }
-  const sorted = [...set].sort((a, b) => a - b);
+  const sorted = Array.from(set).sort((a, b) => a - b);
   const out: (number | 'ellipsis')[] = [];
   let prev = 0;
   for (const n of sorted) {

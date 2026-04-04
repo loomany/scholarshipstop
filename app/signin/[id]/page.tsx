@@ -97,7 +97,6 @@ export default async function SignIn({
           )}
           {viewProp === 'forgot_password' && (
             <ForgotPassword
-              allowEmail={allowEmail}
               redirectMethod={redirectMethod}
               disableButton={searchParams.disable_button}
             />

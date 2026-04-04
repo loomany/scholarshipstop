@@ -214,7 +214,6 @@ export default function ScholarshipsSidebar({
                   }`}
                   strokeWidth={2}
                   aria-hidden
-                  title="Create a free account to unlock"
                 />
               ) : null}
               {item.id === 'matches' &&
@@ -248,7 +247,13 @@ export default function ScholarshipsSidebar({
           const link = gated ? (
             <button
               type="button"
-              title={useDarkTooltips ? undefined : tip}
+              title={
+                useDarkTooltips
+                  ? undefined
+                  : showGuestLock
+                    ? 'Create a free account to unlock'
+                    : tip
+              }
               onClick={() => onGuestRestrictedNav?.()}
               className={`${rowClass} w-full cursor-pointer text-left ${!isActive ? 'group' : ''}`}
             >
