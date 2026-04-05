@@ -544,7 +544,7 @@ export default function ScholarshipCategoryPageClient({
     ) {
       return true;
     }
-    if (moreFiltersApplied.excludeRequirementTypes.size > 0) return true;
+    if (moreFiltersApplied.includeRequirementTypes.size > 0) return true;
     const c = moreFiltersApplied.dataCompleteness;
     if (c.low || c.medium || c.high || c.verified) return true;
     if (moreFiltersApplied.includeEligibility.size > 0) return true;

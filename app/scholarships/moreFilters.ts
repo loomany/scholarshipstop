@@ -31,8 +31,8 @@ export type MoreFiltersState = {
   amountMax: number;
   applicantsMin: number;
   applicantsMax: number;
-  /** Hide scholarships that include this requirement type. */
-  excludeRequirementTypes: Set<string>;
+  /** Include-only: scholarship must match ≥1 selected requirement (OR). */
+  includeRequirementTypes: Set<string>;
   dataCompleteness: CredibilityFlags;
   payout: PayoutFlags;
   /** Include-only: scholarship must match ≥1 selected tag (OR). */
@@ -119,7 +119,7 @@ function scholarshipTextBlob(s: Scholarship): string {
   return parts.join(' ').toLowerCase();
 }
 
-function matchesExcludedRequirement(s: Scholarship, typeId: string): boolean {
+function matchesIncludedRequirement(s: Scholarship, typeId: string): boolean {
   const cat = getScholarshipCatalog(s);
   if (cat.requirementTypesNormalized.includes(typeId)) return true;
   const pat = REQUIREMENT_PATTERNS[typeId];
@@ -276,7 +276,7 @@ export function defaultMoreFiltersFromBounds(bounds: {
     amountMax: bounds.amountMax,
     applicantsMin: bounds.applicantsMin,
     applicantsMax: bounds.applicantsMax,
-    excludeRequirementTypes: new Set(),
+    includeRequirementTypes: new Set(),
     dataCompleteness: {
       low: false,
       medium: false,
@@ -350,9 +350,18 @@ export function scholarshipPassesMoreFilters(
     if (ap < f.applicantsMin || ap > f.applicantsMax) return false;
   }
 
-  const excludedTypes = Array.from(f.excludeRequirementTypes);
-  for (let i = 0; i < excludedTypes.length; i++) {
-    if (matchesExcludedRequirement(s, excludedTypes[i]!)) return false;
+  const includedTypes = Array.from(f.includeRequirementTypes).filter(
+    (typeId) => typeId !== 'resume'
+  );
+  if (includedTypes.length > 0) {
+    let matchedIncludedRequirement = false;
+    for (let i = 0; i < includedTypes.length; i++) {
+      if (matchesIncludedRequirement(s, includedTypes[i]!)) {
+        matchedIncludedRequirement = true;
+        break;
+      }
+    }
+    if (!matchedIncludedRequirement) return false;
   }
 
   if (!matchesDataCompletenessAndVerified(s, f.dataCompleteness)) return false;
@@ -370,7 +379,7 @@ export function scholarshipPassesMoreFilters(
 export function cloneMoreFilters(f: MoreFiltersState): MoreFiltersState {
   return {
     ...f,
-    excludeRequirementTypes: new Set(f.excludeRequirementTypes),
+    includeRequirementTypes: new Set(f.includeRequirementTypes),
     dataCompleteness: { ...f.dataCompleteness },
     payout: { ...f.payout },
     includeEligibility: new Set(f.includeEligibility),
@@ -394,7 +403,7 @@ export function countMoreFilterSelections(
   if (f.applicantsMin !== d.applicantsMin || f.applicantsMax !== d.applicantsMax) {
     n++;
   }
-  n += f.excludeRequirementTypes.size;
+  n += f.includeRequirementTypes.size;
   const dc = f.dataCompleteness;
   const dc0 = d.dataCompleteness;
   if (dc.low !== dc0.low) n++;
@@ -438,7 +447,7 @@ export function countMoreFilterDeltaFromBaseline(
   ) {
     n++;
   }
-  n += setSymmetricDiffCount(f.excludeRequirementTypes, baseline.excludeRequirementTypes);
+  n += setSymmetricDiffCount(f.includeRequirementTypes, baseline.includeRequirementTypes);
   const dc = f.dataCompleteness;
   const db = baseline.dataCompleteness;
   if (dc.low !== db.low) n++;

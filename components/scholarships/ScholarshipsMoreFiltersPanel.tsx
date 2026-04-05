@@ -149,11 +149,11 @@ export default function ScholarshipsMoreFiltersPanel({
   const setDeadline = (deadlinePreset: MoreFiltersState['deadlinePreset']) =>
     onChange({ ...value, deadlinePreset });
 
-  const toggleExclude = (id: string) => {
-    const next = new Set(value.excludeRequirementTypes);
+  const toggleRequirementType = (id: string) => {
+    const next = new Set(value.includeRequirementTypes);
     if (next.has(id)) next.delete(id);
     else next.add(id);
-    onChange({ ...value, excludeRequirementTypes: next });
+    onChange({ ...value, includeRequirementTypes: next });
   };
 
   const setDataComp = (
@@ -305,8 +305,7 @@ export default function ScholarshipsMoreFiltersPanel({
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>Application requirements</h3>
             <p className={sectionHint}>
-              Filter by application requirements — checked items are hidden from
-              the list.
+              Show scholarships that require the selected items.
             </p>
             <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
               {REQUIREMENT_TYPE_OPTIONS.map((opt) => (
@@ -316,8 +315,8 @@ export default function ScholarshipsMoreFiltersPanel({
                 >
                   <input
                     type="checkbox"
-                    checked={value.excludeRequirementTypes.has(opt.id)}
-                    onChange={() => toggleExclude(opt.id)}
+                    checked={value.includeRequirementTypes.has(opt.id)}
+                    onChange={() => toggleRequirementType(opt.id)}
                     className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
                   />
                   <span className="text-sm text-zinc-800">{opt.label}</span>

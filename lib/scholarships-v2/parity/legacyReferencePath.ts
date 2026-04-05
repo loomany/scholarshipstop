@@ -89,22 +89,25 @@ export function buildLegacyReferenceClausesFromCanonicalInput(
     addClause(out, 'and', 'gpa_bucket', `gpa_bucket.in.(${gpaBuckets.join(',')})`);
   }
 
-  for (const req of mf.excludeRequirementTypes) {
-    if (req === 'resume') continue;
-    const map: Record<string, string> = {
-      essay: 'essay_required',
-      document: 'document_required',
-      photo: 'photo_required',
-      video: 'video_required',
-      personal_statement: 'goal_required',
-      link: 'link_required',
-      survey: 'survey_required',
-      question: 'question_required',
-      recommendation: 'recommendation_required',
-      transcript: 'transcript_required'
-    };
-    const field = map[req];
-    if (field) addClause(out, 'and', field, `${field}.not.eq.true`);
+  const requirementMap: Record<string, string | null> = {
+    essay: 'essay_required',
+    document: 'document_required',
+    photo: 'photo_required',
+    video: 'video_required',
+    personal_statement: 'goal_required',
+    link: 'link_required',
+    survey: 'survey_required',
+    question: 'question_required',
+    recommendation: 'recommendation_required',
+    transcript: 'transcript_required',
+    resume: null
+  };
+  const requirementClauses = [...mf.includeRequirementTypes]
+    .map((req) => requirementMap[req])
+    .filter((field): field is string => Boolean(field))
+    .map((field) => `${field}.eq.true`);
+  if (requirementClauses.length > 0) {
+    addClause(out, 'or', 'requirement_flags', requirementClauses.join(','));
   }
 
   addClause(

@@ -69,9 +69,9 @@ export function mergeMoreFilterStates(
     amountMax: Math.min(a.amountMax, b.amountMax),
     applicantsMin: Math.max(a.applicantsMin, b.applicantsMin),
     applicantsMax: Math.min(a.applicantsMax, b.applicantsMax),
-    excludeRequirementTypes: new Set(
-      Array.from(a.excludeRequirementTypes).concat(
-        Array.from(b.excludeRequirementTypes)
+    includeRequirementTypes: new Set(
+      Array.from(a.includeRequirementTypes).concat(
+        Array.from(b.includeRequirementTypes)
       )
     ),
     dataCompleteness: {
@@ -174,7 +174,7 @@ function moreFiltersReducedForSeoListing(base: MoreFiltersState): MoreFiltersSta
   f.includeEducationLevels.clear();
   f.includeGpaBuckets.clear();
   f.includeEasyApply.clear();
-  f.excludeRequirementTypes.clear();
+  f.includeRequirementTypes.clear();
   f.dataCompleteness = {
     low: false,
     medium: false,
