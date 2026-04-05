@@ -1430,11 +1430,8 @@ export async function fetchScholarshipListMeta(
 
   const categoryReq = categoryDropdownCountsRequest(req, b);
 
-  /** Catalog hub sidebar counts: compute each visible tab over the same current filter context. */
+  /** Catalog hub: only “browse” + user lists; no separate personalized tab counts. */
   const tabs: ScholarshipListTabId[] = [
-    'best-matches',
-    'recommended',
-    'easy-apply',
     'matches',
     'saved',
     'started',
@@ -1455,9 +1452,6 @@ export async function fetchScholarshipListMeta(
     ignored: 0
   };
   for (const { t, n } of sidebarParts) {
-    if (t === 'best-matches') sidebarCounts.bestMatches = n;
-    if (t === 'recommended') sidebarCounts.recommended = n;
-    if (t === 'easy-apply') sidebarCounts.easyApply = n;
     if (t === 'matches') sidebarCounts.matches = n;
     if (t === 'saved') sidebarCounts.saved = n;
     if (t === 'started') sidebarCounts.started = n;
