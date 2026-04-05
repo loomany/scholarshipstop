@@ -65,5 +65,5 @@ test('applyV2ReadPathToLegacyRequest only rewrites URL-derived listing fields', 
   assert.deepEqual(out.saved, ['11111111-1111-1111-1111-111111111111']);
   assert.deepEqual(out.stateCodes, ['FL']);
   assert.equal(out.deadline, 'gt4w');
-  assert.equal(out.moreFilters, req.moreFilters);
+assert.equal(out.moreFilters, req.moreFilters);
 });

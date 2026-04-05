@@ -50,12 +50,13 @@ function withRuntimePathDebugHeaders(
   v2Eligible: boolean
 ): NextResponse {
   if (searchParams.get('debug_read_path') !== '1') return response;
+
   response.headers.set('X-Scholarships-Read-Path', runtimeReadPath);
   response.headers.set('X-Scholarships-V2-Flag', scholarshipsV2ReadPathEnabled() ? '1' : '0');
   response.headers.set('X-Scholarships-V2-Eligible', v2Eligible ? '1' : '0');
+
   return response;
 }
-
 /** Temporary: hub sidebar personalized counts (best/recommended) SSR vs client refresh. Remove after diagnosis. */
 function hubSidebarMetaDebugEnabled(): boolean {
   return (
@@ -246,7 +247,7 @@ async function handleList(
     !seoBody?.seoListingFallback &&
     !metaOnly &&
     !countOnly;
-  let runtimeReadPath: RuntimeReadPath = 'legacy';
+let runtimeReadPath: RuntimeReadPath = 'legacy';
 
   if (v2ReadPathEligible) {
     req = applyV2ReadPathToLegacyRequest({
@@ -254,7 +255,7 @@ async function handleList(
       searchParams,
       moreFilters: bodyMoreFilters
     });
-    runtimeReadPath = 'v2-bridge';
+
   }
 
   const hubDebugReqId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
