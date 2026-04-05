@@ -8,8 +8,7 @@ import { buildSqlClausesFromQuerySpec } from '@/lib/scholarships-v2/sqlSpec/buil
 function buildLegacyReferenceSqlClauses(input: {
   stateCodes: string[];
   deadlineBucket: string;
-  eligibilityClause: string;
-  educationClause: string;
+  eligibilityTag: string;
   gpaBucket: string;
   requirementFields: string[];
   applicantsMin: number;
@@ -19,8 +18,7 @@ function buildLegacyReferenceSqlClauses(input: {
 }): string[] {
   return [
     'is_active.eq.true',
-    input.eligibilityClause,
-    input.educationClause,
+    `eligibility_tags.cs.["${input.eligibilityTag}"]`,
     `gpa_bucket.in.(${input.gpaBucket})`,
     input.requirementFields.map((field) => `${field}.eq.true`).join(','),
     `applicants_count.is.null,and(applicants_count.gte.${input.applicantsMin},applicants_count.lte.${input.applicantsMax})`,
@@ -84,8 +82,7 @@ test('legacy input -> v2 querySpec -> SQL clauses parity for top facets', () => 
   const ref = buildLegacyReferenceSqlClauses({
     stateCodes: ['CA', 'NY'],
     deadlineBucket: 'gt_28',
-    eligibilityClause: 'eligibility_tags.cs.["veterans"]',
-    educationClause: 'catalog_education_levels.cs.["undergraduate"]',
+    eligibilityTag: 'veterans',
     gpaBucket: 'gpa_25',
     requirementFields: ['document_required'],
     applicantsMin: 10,
@@ -158,41 +155,6 @@ test('translator keeps resume as no-op and emits direct category/text clauses', 
     false
   );
   assert.equal(sql.stubs.length, 0);
-});
-
-test('translator keeps eligibility OR semantics across multiple ids and text fallback', () => {
-  const { sql } = clausesFor({
-    search: 'tab=matches',
-    more: {
-      deadlinePreset: 'any',
-      amountMin: 0,
-      amountMax: 1000,
-      applicantsMin: 0,
-      applicantsMax: 100,
-      includeRequirementTypes: [],
-      dataCompleteness: { low: false, medium: false, high: false, verified: false },
-      payout: { college: false, student: false, nonMonetary: false, notStated: false },
-      includeEligibility: ['women', 'first_generation'],
-      includeEducationLevels: ['graduate', 'undergraduate'],
-      includeGpaBuckets: [],
-      includeLocationLabels: [],
-      includeEasyApply: [],
-      filterStateInput: ''
-    }
-  });
-
-  const eligibility = sql.clauses.find((c) => c.sourceField === 'eligibility_tags');
-  assert.equal(eligibility?.boolean, 'or');
-  assert.ok(eligibility?.clause.includes('eligibility_tags.cs.["women"]'));
-  assert.ok(eligibility?.clause.includes('eligibility_tags.cs.["first_generation"]'));
-  assert.ok(eligibility?.clause.includes('title.ilike.%first generation%'));
-
-  const education = sql.clauses.find((c) => c.sourceField === 'catalog_education_levels');
-  assert.equal(education?.boolean, 'or');
-  assert.equal(
-    education?.clause,
-    'catalog_education_levels.cs.["graduate"],catalog_education_levels.cs.["undergraduate"]'
-  );
 });
 
 test('translator emits OR clause for multi-select requirement filters', () => {
