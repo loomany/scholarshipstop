@@ -51,11 +51,12 @@ export default function Navlinks({
   const pathname = usePathname() ?? '';
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  /** `undefined` = browser session not read yet (keep SSR `serverUser` for hydration). */
-  const [clientUser, setClientUser] = useState<User | null | undefined>(undefined);
+  const [isAuthResolved, setIsAuthResolved] = useState(false);
+  const [clientUser, setClientUser] = useState<User | null>(null);
   const menuId = useId();
 
-  const user = clientUser === undefined ? serverUser : clientUser;
+  const user = clientUser ?? (!isAuthResolved ? serverUser : null);
+  const showGuestAuthCta = isAuthResolved && !user;
 
   /** `undefined` = not loaded yet; use server name until then. */
   const [clientProfileDisplayName, setClientProfileDisplayName] = useState<
@@ -67,10 +68,12 @@ export default function Navlinks({
 
     void supabase.auth.getSession().then(({ data: { session } }) => {
       setClientUser(session?.user ?? null);
+      setIsAuthResolved(true);
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setClientUser(session?.user ?? null);
+      setIsAuthResolved(true);
     });
 
     return () => {
@@ -274,12 +277,26 @@ export default function Navlinks({
               </button>
             </>
           ) : (
-            <Link
-              href="/signin"
-              className={clsx(nav.dark, signInActive && nav.darkActive)}
-            >
-              Sign In
-            </Link>
+            <>
+              {showGuestAuthCta ? (
+                <Link
+                  href="/signin"
+                  className={clsx(nav.dark, signInActive && nav.darkActive)}
+                >
+                  Sign In
+                </Link>
+              ) : (
+                <span
+                  aria-hidden
+                  className={clsx(
+                    nav.dark,
+                    'pointer-events-none select-none text-transparent'
+                  )}
+                >
+                  Sign In
+                </span>
+              )}
+            </>
           )}
         </div>
       </div>

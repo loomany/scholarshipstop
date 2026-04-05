@@ -23,7 +23,9 @@ export default function PasswordSignIn({ redirectMethod }: PasswordSignInProps) 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitting(true);
-    await handleRequest(e, signInWithPassword, router);
+    await handleRequest(e, signInWithPassword, router, {
+      refreshAfterPush: true
+    });
     setIsSubmitting(false);
   };
 
