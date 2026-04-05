@@ -39,7 +39,6 @@ import {
 import { getStartedScholarshipIds } from '@/app/scholarships/startedScholarships';
 import { getSubmittedScholarshipIds } from '@/app/scholarships/submittedScholarships';
 import {
-  isGuestLockedSortOption,
   type SortOption
 } from '@/app/scholarships/scholarshipSort';
 import type { ScholarshipSidebarCounts } from '@/app/scholarships/scholarshipTabs';
@@ -213,24 +212,16 @@ export default function ScholarshipCategoryPageClient({
 
   const onApplyCategories = useCallback(
     (next: Set<ScholarshipCategoryId>) => {
-      if (!isAuthenticated) {
-        openRegistrationWall();
-        return;
-      }
       replaceListingParams({ categories: next, resetPage: true });
     },
-    [isAuthenticated, openRegistrationWall, replaceListingParams]
+    [replaceListingParams]
   );
 
   const onSortChange = useCallback(
     (value: SortOption) => {
-      if (!isAuthenticated && isGuestLockedSortOption(value)) {
-        openRegistrationWall();
-        return;
-      }
       replaceListingParams({ sort: value, resetPage: true });
     },
-    [isAuthenticated, openRegistrationWall, replaceListingParams]
+    [replaceListingParams]
   );
 
   useEffect(() => {
@@ -459,10 +450,6 @@ export default function ScholarshipCategoryPageClient({
   }, [filterBounds, moreFiltersApplied]);
 
   const applyMoreFilters = useCallback(() => {
-    if (!isAuthenticated) {
-      openRegistrationWall();
-      return;
-    }
     if (moreFiltersDraft) {
       const next = cloneMoreFilters(moreFiltersDraft);
       setMoreFiltersApplied(next);
@@ -473,9 +460,7 @@ export default function ScholarshipCategoryPageClient({
     }
     setMoreFiltersOpen(false);
   }, [
-    isAuthenticated,
     moreFiltersDraft,
-    openRegistrationWall,
     replaceListingParams
   ]);
 
@@ -688,10 +673,6 @@ export default function ScholarshipCategoryPageClient({
           <ScholarshipsSidebar
             counts={sidebarCounts}
             matchesNewIndicator={null}
-            guestMode={!isAuthenticated}
-            onGuestRestrictedNav={
-              !isAuthenticated ? openRegistrationWall : undefined
-            }
           />
         }
       >
@@ -718,7 +699,6 @@ export default function ScholarshipCategoryPageClient({
               activeListingChips.length > 0 ? clearAllListingChips : undefined
             }
             isAuthenticated={isAuthenticated}
-            onGuestSortBlocked={openRegistrationWall}
           />
 
           {isLoading ? (

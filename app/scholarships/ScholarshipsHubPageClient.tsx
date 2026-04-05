@@ -52,7 +52,7 @@ import {
 } from './savedScholarships';
 import { getStartedScholarshipIds } from './startedScholarships';
 import { getSubmittedScholarshipIds } from './submittedScholarships';
-import { isGuestLockedSortOption, type SortOption } from './scholarshipSort';
+import { type SortOption } from './scholarshipSort';
 import {
   parseHubScholarshipTabParam,
   scholarshipListLoadingText,
@@ -72,8 +72,7 @@ import {
 import {
   postScholarshipsList,
   postScholarshipsCount,
-  postScholarshipsMeta,
-  postScholarshipsMatchCounts
+  postScholarshipsMeta
 } from './scholarshipListFetch';
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
 import type { LongTailRouteScopePayload } from './scholarshipListServerPayload';
@@ -213,10 +212,6 @@ function ScholarshipsPageInner({
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
-  const [personalizedSidebarCounts, setPersonalizedSidebarCounts] = useState<{
-    bestMatches: number;
-    recommended: number;
-  } | null>(null);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
 
   const openRegistrationWall = useCallback(() => {
@@ -306,12 +301,11 @@ function ScholarshipsPageInner({
   /**
    * Guests: one-shot URL normalization (avoids races between multiple effects).
    * — default hub tab + catalog scope when `tab` is missing
-   * — strip personalized tabs, category filters, advanced deadline, and guest-locked sort from the URL
+   * — strip only unsupported guest params from the URL
    */
   useEffect(() => {
     if (isAuthenticated) return;
     const sp = new URLSearchParams(searchParamsString);
-    const parsed = parseScholarshipListUrl(sp);
     const tab = sp.get('tab');
     const badTab =
       tab === 'best-matches' ||
@@ -319,26 +313,17 @@ function ScholarshipsPageInner({
       tab === 'saved' ||
       tab === 'ignored';
     const needDefaultHubTab = !tab;
-    const hasCats = parsed.categories.size > 0;
-    const hasAdvDeadline = parsed.deadline != null && parsed.deadline !== 'any';
-    const lockedGuestSort = isGuestLockedSortOption(parsed.sort);
-    if (
-      !badTab &&
-      !needDefaultHubTab &&
-      !hasCats &&
-      !hasAdvDeadline &&
-      !lockedGuestSort
-    ) {
+    const parsedDeadline = parseDeadlineFromParam(sp.get('deadline'));
+    const hasAdvDeadline = parsedDeadline != null && parsedDeadline !== 'any';
+    if (!badTab && !needDefaultHubTab && !hasAdvDeadline) {
       return;
     }
-    const resetPage = badTab || hasCats || hasAdvDeadline || lockedGuestSort;
+    const resetPage = badTab || hasAdvDeadline;
     replaceListingParams({
       ...(needDefaultHubTab || badTab
         ? { tab: 'matches', scope: 'catalog' }
         : {}),
-      ...(hasCats ? { categories: new Set() } : {}),
       ...(hasAdvDeadline ? { deadline: 'any' } : {}),
-      ...(lockedGuestSort ? { sort: 'most_recent' } : {}),
       resetPage
     });
   }, [isAuthenticated, searchParamsString, replaceListingParams]);
@@ -369,24 +354,16 @@ function ScholarshipsPageInner({
 
   const onApplyCategories = useCallback(
     (next: Set<ScholarshipCategoryId>) => {
-      if (!isAuthenticated) {
-        openRegistrationWall();
-        return;
-      }
       replaceListingParams({ categories: next, resetPage: true });
     },
-    [isAuthenticated, openRegistrationWall, replaceListingParams]
+    [replaceListingParams]
   );
 
   const onSortChange = useCallback(
     (value: SortOption) => {
-      if (!isAuthenticated && isGuestLockedSortOption(value)) {
-        openRegistrationWall();
-        return;
-      }
       replaceListingParams({ sort: value, resetPage: true });
     },
-    [isAuthenticated, openRegistrationWall, replaceListingParams]
+    [replaceListingParams]
   );
 
   useEffect(() => {
@@ -454,22 +431,8 @@ function ScholarshipsPageInner({
       isCatalogBrowseTab && totalCount > 0
         ? totalCount
         : base.matches;
-    if (!isAuthenticated) {
-      return {
-        ...base,
-        bestMatches: 0,
-        recommended: 0,
-        matches: syncedMatches,
-        saved: 0,
-        ignored: 0,
-        started: 0,
-        submitted: 0
-      };
-    }
     return {
       ...base,
-      bestMatches: personalizedSidebarCounts?.bestMatches ?? 0,
-      recommended: personalizedSidebarCounts?.recommended ?? 0,
       matches: syncedMatches,
       saved: savedIds.length,
       started: startedIds.length,
@@ -477,49 +440,14 @@ function ScholarshipsPageInner({
       ignored: ignoredIds.length
     };
   }, [
-    isAuthenticated,
     activeTab,
     totalCount,
     listMeta?.sidebarCounts,
-    personalizedSidebarCounts,
     savedIds,
     startedIds,
     submittedIds,
     ignoredIds
   ]);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setPersonalizedSidebarCounts(null);
-      return;
-    }
-    let cancelled = false;
-    const run = async () => {
-      try {
-        const data = await postScholarshipsMatchCounts({
-          ignored: userListIdsRef.current.ignored
-        });
-        if (cancelled) return;
-        const counts = data.counts;
-        setPersonalizedSidebarCounts({
-          bestMatches: counts?.bestMatches ?? 0,
-          recommended: counts?.recommended ?? 0
-        });
-      } catch {
-        if (cancelled) return;
-        setPersonalizedSidebarCounts((prev) => prev ?? { bestMatches: 0, recommended: 0 });
-      }
-    };
-    run();
-    const onVis = () => {
-      if (document.visibilityState === 'visible') run();
-    };
-    document.addEventListener('visibilitychange', onVis);
-    return () => {
-      cancelled = true;
-      document.removeEventListener('visibilitychange', onVis);
-    };
-  }, [isAuthenticated, ignoredIds]);
 
   const categoryCounts = useMemo(() => {
     if (listMeta?.categoryCounts) return listMeta.categoryCounts;
@@ -763,10 +691,6 @@ function ScholarshipsPageInner({
   }, [moreFiltersApplied, emptyMoreFiltersState]);
 
   const applyMoreFilters = useCallback(() => {
-    if (!isAuthenticated) {
-      openRegistrationWall();
-      return;
-    }
     if (moreFiltersDraft) {
       const next = cloneMoreFilters(moreFiltersDraft);
       setMoreFiltersApplied(next);
@@ -777,9 +701,7 @@ function ScholarshipsPageInner({
     }
     setMoreFiltersOpen(false);
   }, [
-    isAuthenticated,
     moreFiltersDraft,
-    openRegistrationWall,
     replaceListingParams
   ]);
 
@@ -1033,10 +955,6 @@ function ScholarshipsPageInner({
           <ScholarshipsSidebar
             counts={sidebarCounts}
             matchesNewIndicator={null}
-            guestMode={!isAuthenticated}
-            onGuestRestrictedNav={
-              !isAuthenticated ? openRegistrationWall : undefined
-            }
           />
         }
       >
@@ -1062,7 +980,6 @@ function ScholarshipsPageInner({
             categoriesDisabled={!isLoading && totalCount === 0}
             moreFiltersActiveCount={moreFiltersActiveCount}
             isAuthenticated={isAuthenticated}
-            onGuestSortBlocked={openRegistrationWall}
             listingViewControls={
               !isAuthenticated ? (
                 <div
