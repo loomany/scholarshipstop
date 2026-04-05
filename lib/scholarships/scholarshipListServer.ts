@@ -591,16 +591,16 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
 
   const excl = Array.from(f.excludeRequirementTypes);
   const exclMap: Record<string, () => any> = {
-    essay: () => q.not('essay_required', 'eq', true),
-    document: () => q.not('document_required', 'eq', true),
-    photo: () => q.not('photo_required', 'eq', true),
-    video: () => q.not('video_required', 'eq', true),
-    personal_statement: () => q.not('goal_required', 'eq', true),
-    link: () => q.not('link_required', 'eq', true),
-    survey: () => q.not('survey_required', 'eq', true),
-    question: () => q.not('question_required', 'eq', true),
-    recommendation: () => q.not('recommendation_required', 'eq', true),
-    transcript: () => q.not('transcript_required', 'eq', true),
+    essay: () => q.not('essay_required', 'is', true),
+    document: () => q.not('document_required', 'is', true),
+    photo: () => q.not('photo_required', 'is', true),
+    video: () => q.not('video_required', 'is', true),
+    personal_statement: () => q.not('goal_required', 'is', true),
+    link: () => q.not('link_required', 'is', true),
+    survey: () => q.not('survey_required', 'is', true),
+    question: () => q.not('question_required', 'is', true),
+    recommendation: () => q.not('recommendation_required', 'is', true),
+    transcript: () => q.not('transcript_required', 'is', true),
     resume: () => q // resume inferred from text on client; not structured in DB
   };
   for (const id of excl) {
