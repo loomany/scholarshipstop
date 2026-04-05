@@ -11,8 +11,6 @@ import {
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { profileSupportsPersonalizedMatch } from '@/lib/scholarships/scholarshipMatch';
 
-const userMatchCacheBustToken = new Map<string, string>();
-
 export function scholarshipMatchProfileVersion(p: ProfilesRow): string {
   return [
     p.field_of_study ?? '',
@@ -25,17 +23,8 @@ export function scholarshipMatchProfileVersion(p: ProfilesRow): string {
     p.birth_day != null ? String(p.birth_day) : '',
     p.birth_year != null ? String(p.birth_year) : '',
     p.date_of_birth ?? '',
-    p.state_region ?? '',
-    p.updated_at ?? ''
+    p.state_region ?? ''
   ].join('|');
-}
-
-function getUserMatchCacheBustToken(userId: string): string {
-  return userMatchCacheBustToken.get(userId) ?? '0';
-}
-
-export function bumpScholarshipMatchCacheBust(userId: string): void {
-  userMatchCacheBustToken.set(userId, `${Date.now()}`);
 }
 
 /**
@@ -50,7 +39,7 @@ export async function getCachedScholarshipMatchIndex(
   userId: string,
   profile: ProfilesRow
 ): Promise<BuiltMatchIndex> {
-  const version = `${scholarshipMatchProfileVersion(profile)}|b:${getUserMatchCacheBustToken(userId)}`;
+  const version = scholarshipMatchProfileVersion(profile);
   const cached = unstable_cache(
     async () => buildScholarshipMatchIndex(supabase, profile),
     ['scholarship-match-index', userId, version],
