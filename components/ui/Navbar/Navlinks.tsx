@@ -62,18 +62,12 @@ export default function Navlinks({
     string | null | undefined
   >(undefined);
 
-  const syncClientSession = useCallback(async () => {
-    const supabase = createClient();
-    const {
-      data: { session }
-    } = await supabase.auth.getSession();
-    setClientUser(session?.user ?? null);
-  }, []);
-
   useEffect(() => {
     const supabase = createClient();
 
-    void syncClientSession();
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      setClientUser(session?.user ?? null);
+    });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setClientUser(session?.user ?? null);
@@ -82,30 +76,7 @@ export default function Navlinks({
     return () => {
       sub.subscription.unsubscribe();
     };
-  }, [syncClientSession]);
-
-  useEffect(() => {
-    void syncClientSession();
-  }, [pathname, syncClientSession]);
-
-  useEffect(() => {
-    const onFocus = () => {
-      void syncClientSession();
-    };
-    const onVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        void syncClientSession();
-      }
-    };
-
-    window.addEventListener('focus', onFocus);
-    document.addEventListener('visibilitychange', onVisibilityChange);
-
-    return () => {
-      window.removeEventListener('focus', onFocus);
-      document.removeEventListener('visibilitychange', onVisibilityChange);
-    };
-  }, [syncClientSession]);
+  }, []);
 
   useEffect(() => {
     const uid = user?.id;
