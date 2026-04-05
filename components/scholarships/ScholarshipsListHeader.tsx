@@ -105,24 +105,19 @@ function listingResultUnit(
 
 /** Порядок: сначала понятные дефолты, затем остальное; magic = рекомендации по скорингу. */
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: 'best_match', label: 'Best match' },
   { value: 'closest_deadline', label: 'Deadline soonest' },
-  { value: 'highest_amount', label: 'Amount high to low' },
-  { value: 'lowest_amount', label: 'Amount low to high' },
   { value: 'most_recent', label: 'Newest' },
-  { value: 'verified_first', label: 'Verified first' },
-  { value: 'magic', label: 'Recommended' },
-  { value: 'least_requirements', label: 'Fewest requirements' },
-  { value: 'fewest_applicants', label: 'Least applicants' }
+  { value: 'highest_amount', label: 'Amount high → low' },
+  { value: 'lowest_amount', label: 'Amount low → high' }
 ];
 
 const SORT_TRIGGER_LABEL: Record<SortOption, string> = {
   best_match: 'Best match',
   most_recent: 'Newest',
   closest_deadline: 'Deadline soonest',
-  highest_amount: 'Amount high to low',
+  highest_amount: 'Amount high → low',
   magic: 'Recommended',
-  lowest_amount: 'Amount low to high',
+  lowest_amount: 'Amount low → high',
   least_requirements: 'Fewest requirements',
   fewest_applicants: 'Least applicants',
   verified_first: 'Verified first'
