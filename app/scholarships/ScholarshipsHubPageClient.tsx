@@ -258,8 +258,6 @@ function ScholarshipsPageInner({
   >(null);
   const metaKeySynced = useRef('');
   const metaRequestInFlightRef = useRef<string | null>(null);
-  const skipNextApplyOnlyFetchRef = useRef(false);
-  const previewRequestSeqRef = useRef(0);
   const initialRequestKeyRef = useRef(initialPayload?.requestKey ?? null);
   const listMetaRef = useRef<ScholarshipListMeta | null>(listMeta);
   listMetaRef.current = listMeta;
@@ -567,12 +565,6 @@ function ScholarshipsPageInner({
         cancelled = true;
       };
     }
-    if (skipNextApplyOnlyFetchRef.current) {
-      skipNextApplyOnlyFetchRef.current = false;
-      return () => {
-        cancelled = true;
-      };
-    }
 
     const run = async () => {
       try {
@@ -777,14 +769,6 @@ function ScholarshipsPageInner({
     }
     if (moreFiltersDraft) {
       const next = cloneMoreFilters(moreFiltersDraft);
-      const nextSearchParams = buildScholarshipListSearchParams(
-        new URLSearchParams(searchParamsString),
-        {
-          deadline: next.deadlinePreset,
-          resetPage: true
-        }
-      ).toString();
-      skipNextApplyOnlyFetchRef.current = nextSearchParams !== searchParamsString;
       setMoreFiltersApplied(next);
       replaceListingParams({
         deadline: next.deadlinePreset,
@@ -796,8 +780,7 @@ function ScholarshipsPageInner({
     isAuthenticated,
     moreFiltersDraft,
     openRegistrationWall,
-    replaceListingParams,
-    searchParamsString
+    replaceListingParams
   ]);
 
   const clearMoreFiltersDraft = useCallback(() => {
@@ -810,7 +793,6 @@ function ScholarshipsPageInner({
       setPreviewCountLoading(false);
       return;
     }
-    const seq = ++previewRequestSeqRef.current;
     setPreviewCountLoading(true);
     let cancelled = false;
     const t = setTimeout(() => {
@@ -840,13 +822,13 @@ function ScholarshipsPageInner({
         slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters
       })
         .then((r) => {
-          if (cancelled || seq !== previewRequestSeqRef.current) return;
+          if (cancelled) return;
           setPreviewCount(r.total);
           setLastKnownPreviewCount(r.total);
           setPreviewCountLoading(false);
         })
         .catch(() => {
-          if (cancelled || seq !== previewRequestSeqRef.current) return;
+          if (cancelled) return;
           setPreviewCount(null);
           setPreviewCountLoading(false);
         });
@@ -1221,7 +1203,6 @@ function ScholarshipsPageInner({
         onChange={setMoreFiltersDraft}
         onClear={clearMoreFiltersDraft}
         onApply={applyMoreFilters}
-        applyPending={isLoading}
         previewCount={previewCount}
         previewCountLoading={previewCountLoading}
         previewCountFallback={lastKnownPreviewCount}
