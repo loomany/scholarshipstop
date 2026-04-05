@@ -145,24 +145,6 @@ function matchesPayout(s: Scholarship, p: PayoutFlags): boolean {
   return hitCollege || hitStudent || hitNon || hitUnstated;
 }
 
-function matchesEligibility(s: Scholarship, selected: Set<string>): boolean {
-  if (selected.size === 0) return true;
-  const cat = getScholarshipCatalog(s);
-  for (const id of Array.from(selected)) {
-    if (cat.eligibilityIds.includes(id)) return true;
-  }
-  return false;
-}
-
-function matchesEducation(s: Scholarship, selected: Set<string>): boolean {
-  if (selected.size === 0) return true;
-  const cat = getScholarshipCatalog(s);
-  for (const id of Array.from(selected)) {
-    if (cat.educationIds.includes(id)) return true;
-  }
-  return false;
-}
-
 function matchesGpaBuckets(s: Scholarship, selected: Set<string>): boolean {
   if (selected.size === 0) return true;
   const cat = getScholarshipCatalog(s);
@@ -321,8 +303,7 @@ export function scholarshipPassesMoreFilters(
 
   if (!matchesDataCompletenessAndVerified(s, f.dataCompleteness)) return false;
   if (!matchesPayout(s, f.payout)) return false;
-  if (!matchesEligibility(s, f.includeEligibility)) return false;
-  if (!matchesEducation(s, f.includeEducationLevels)) return false;
+  // Eligibility and education include filtering are server-only (SQL source of truth).
   if (!matchesGpaBuckets(s, f.includeGpaBuckets)) return false;
   if (!matchesLocation(s, f.includeLocationLabels)) return false;
   if (!matchesEasyApply(s, f.includeEasyApply)) return false;

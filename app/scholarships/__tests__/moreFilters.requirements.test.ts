@@ -36,3 +36,40 @@ test('client-side more-filters no longer filter by includeRequirementTypes', () 
   assert.equal(scholarshipPassesMoreFilters(scholarship, baseline), true);
   assert.equal(scholarshipPassesMoreFilters(scholarship, withRequirement), true);
 });
+test('client-side more-filters no longer filter by includeEligibility', () => {
+  const baseline = defaultMoreFiltersFromBounds({
+    amountMin: 0,
+    amountMax: 5000,
+    applicantsMin: 0,
+    applicantsMax: 500
+  });
+
+  const withEligibility = {
+    ...baseline,
+    includeEligibility: new Set(['women', 'veterans'])
+  };
+
+  const scholarship = scholarshipFixture();
+
+  assert.equal(scholarshipPassesMoreFilters(scholarship, baseline), true);
+  assert.equal(scholarshipPassesMoreFilters(scholarship, withEligibility), true);
+});
+
+test('client-side more-filters no longer filter by includeEducationLevels', () => {
+  const baseline = defaultMoreFiltersFromBounds({
+    amountMin: 0,
+    amountMax: 5000,
+    applicantsMin: 0,
+    applicantsMax: 500
+  });
+
+  const withEducation = {
+    ...baseline,
+    includeEducationLevels: new Set(['undergraduate', 'graduate'])
+  };
+
+  const scholarship = scholarshipFixture();
+
+  assert.equal(scholarshipPassesMoreFilters(scholarship, baseline), true);
+  assert.equal(scholarshipPassesMoreFilters(scholarship, withEducation), true);
+});

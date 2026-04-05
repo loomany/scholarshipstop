@@ -9,6 +9,7 @@ function buildLegacyReferenceSqlClauses(input: {
   stateCodes: string[];
   deadlineBucket: string;
   eligibilityTag: string;
+  educationLevel: string;
   gpaBucket: string;
   requirementFields: string[];
   applicantsMin: number;
@@ -19,6 +20,7 @@ function buildLegacyReferenceSqlClauses(input: {
   return [
     'is_active.eq.true',
     `eligibility_tags.cs.["${input.eligibilityTag}"]`,
+    `catalog_education_levels.cs.["${input.educationLevel}"]`,
     `gpa_bucket.in.(${input.gpaBucket})`,
     input.requirementFields.map((field) => `${field}.eq.true`).join(','),
     `applicants_count.is.null,and(applicants_count.gte.${input.applicantsMin},applicants_count.lte.${input.applicantsMax})`,
@@ -83,6 +85,7 @@ test('legacy input -> v2 querySpec -> SQL clauses parity for top facets', () => 
     stateCodes: ['CA', 'NY'],
     deadlineBucket: 'gt_28',
     eligibilityTag: 'veterans',
+    educationLevel: 'undergraduate',
     gpaBucket: 'gpa_25',
     requirementFields: ['document_required'],
     applicantsMin: 10,
@@ -181,4 +184,40 @@ test('translator emits OR clause for multi-select requirement filters', () => {
   const requirementClause = sql.clauses.find((c) => c.sourceField === 'requirement_flags');
   assert.equal(requirementClause?.boolean, 'or');
   assert.equal(requirementClause?.clause, 'essay_required.eq.true,question_required.eq.true');
+});
+
+test('translator emits OR clauses for multi-select eligibility and education filters', () => {
+  const { sql } = clausesFor({
+    search: 'tab=matches',
+    more: {
+      deadlinePreset: 'any',
+      amountMin: 0,
+      amountMax: 1000,
+      applicantsMin: 0,
+      applicantsMax: 100,
+      includeRequirementTypes: [],
+      dataCompleteness: { low: false, medium: false, high: false, verified: false },
+      payout: { college: false, student: false, nonMonetary: false, notStated: false },
+      includeEligibility: ['women', 'veterans', 'low_income'],
+      includeEducationLevels: ['undergraduate', 'graduate'],
+      includeGpaBuckets: [],
+      includeLocationLabels: [],
+      includeEasyApply: [],
+      filterStateInput: ''
+    }
+  });
+
+  const eligibilityClause = sql.clauses.find((c) => c.sourceField === 'eligibility_tags');
+  assert.equal(eligibilityClause?.boolean, 'or');
+  assert.equal(
+    eligibilityClause?.clause,
+    'eligibility_tags.cs.["low_income"],eligibility_tags.cs.["veterans"],eligibility_tags.cs.["women"]'
+  );
+
+  const educationClause = sql.clauses.find((c) => c.sourceField === 'catalog_education_levels');
+  assert.equal(educationClause?.boolean, 'or');
+  assert.equal(
+    educationClause?.clause,
+    'catalog_education_levels.cs.["graduate"],catalog_education_levels.cs.["undergraduate"]'
+  );
 });

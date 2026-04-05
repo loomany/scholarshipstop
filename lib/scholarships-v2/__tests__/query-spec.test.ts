@@ -35,6 +35,7 @@ test('legacy-like input -> v2 filters -> query spec includes top-priority facets
 
   const fields = spec.predicates.map((p) => p.field);
   assert.ok(fields.includes('eligibility_tags'));
+  assert.ok(fields.includes('catalog_education_levels'));
   assert.ok(fields.includes('gpa_bucket'));
   assert.ok(fields.includes('easy_apply_flags'));
   assert.ok(fields.includes('applicants_count'));
@@ -105,6 +106,7 @@ test('facet parity snapshot shape stays stable', () => {
     predicates: [
       { field: 'is_active', operator: 'equals' },
       { field: 'eligibility_tags', operator: 'containsAny' },
+      { field: 'catalog_education_levels', operator: 'containsAny' },
       { field: 'gpa_bucket', operator: 'in' },
       { field: 'requirement_flags', operator: 'or' },
       { field: 'applicants_count', operator: 'range' },
@@ -115,6 +117,38 @@ test('facet parity snapshot shape stays stable', () => {
       { field: 'deadline_bucket', operator: 'in' }
     ]
   });
+});
+
+test('eligibility and education include filters use OR semantics in query spec', () => {
+  const spec = buildScholarshipsQuerySpec(
+    buildV2FiltersFromLegacyInput({
+      searchParams: new URLSearchParams('tab=matches'),
+      moreFilters: {
+        deadlinePreset: 'any',
+        amountMin: 0,
+        amountMax: 1000,
+        applicantsMin: 0,
+        applicantsMax: 100,
+        includeRequirementTypes: [],
+        dataCompleteness: { low: false, medium: false, high: false, verified: false },
+        payout: { college: false, student: false, nonMonetary: false, notStated: false },
+        includeEligibility: ['women', 'veterans', 'low_income'],
+        includeEducationLevels: ['undergraduate', 'graduate'],
+        includeGpaBuckets: [],
+        includeLocationLabels: [],
+        includeEasyApply: [],
+        filterStateInput: ''
+      }
+    })
+  );
+
+  const eligibilityPredicate = spec.predicates.find((p) => p.field === 'eligibility_tags');
+  assert.equal(eligibilityPredicate?.operator, 'containsAny');
+  assert.deepEqual(new Set(eligibilityPredicate?.value as string[]), new Set(['women', 'veterans', 'low_income']));
+
+  const educationPredicate = spec.predicates.find((p) => p.field === 'catalog_education_levels');
+  assert.equal(educationPredicate?.operator, 'containsAny');
+  assert.deepEqual(new Set(educationPredicate?.value as string[]), new Set(['undergraduate', 'graduate']));
 });
 
 test('requirement filters use OR include semantics and skip resume-only selections', () => {

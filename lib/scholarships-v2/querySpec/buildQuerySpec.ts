@@ -103,6 +103,14 @@ export function buildScholarshipsQuerySpec(filters: EffectiveScholarshipFilters)
     }
   }
 
+  if (filters.educationLevelIds.length > 0) {
+    predicates.push({
+      field: 'catalog_education_levels',
+      operator: 'containsAny',
+      value: filters.educationLevelIds
+    });
+  }
+
   if (filters.includeGpaBuckets.length > 0) {
     predicates.push({ field: 'gpa_bucket', operator: 'in', value: filters.includeGpaBuckets });
   }
