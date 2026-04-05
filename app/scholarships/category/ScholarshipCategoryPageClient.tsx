@@ -789,6 +789,8 @@ export default function ScholarshipCategoryPageClient({
         onClear={clearMoreFiltersDraft}
         onApply={applyMoreFilters}
         previewCount={previewCount}
+        previewCountLoading={false}
+        previewCountFallback={null}
         locationOptions={[]}
       />
       <ScholarshipRegistrationWallModal

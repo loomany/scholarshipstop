@@ -29,7 +29,9 @@ type ScholarshipsMoreFiltersPanelProps = {
   onChange: (next: MoreFiltersState) => void;
   onClear: () => void;
   onApply: () => void;
-  previewCount: number;
+  previewCount: number | null;
+  previewCountLoading: boolean;
+  previewCountFallback?: number | null;
   /** State names from loaded scholarships (excludes unknown free text). */
   locationOptions: string[];
 };
@@ -120,6 +122,8 @@ export default function ScholarshipsMoreFiltersPanel({
   onClear,
   onApply,
   previewCount,
+  previewCountLoading,
+  previewCountFallback = null,
   locationOptions
 }: ScholarshipsMoreFiltersPanelProps) {
   useEffect(() => {
@@ -166,6 +170,13 @@ export default function ScholarshipsMoreFiltersPanel({
       ...value,
       payout: { ...value.payout, [key]: v }
     });
+
+  const previewLabel = (() => {
+    if (previewCountLoading) return 'Updating...';
+    const effectiveCount = previewCount ?? previewCountFallback;
+    if (effectiveCount == null) return 'See results';
+    return `See ${effectiveCount} results`;
+  })();
 
   return (
     <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
@@ -727,7 +738,7 @@ export default function ScholarshipsMoreFiltersPanel({
             onClick={onApply}
             className={scholarshipSeeResultsButtonClass}
           >
-            See {previewCount} results
+            {previewLabel}
           </button>
         </footer>
       </div>

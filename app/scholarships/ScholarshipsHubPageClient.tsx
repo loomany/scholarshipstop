@@ -66,6 +66,7 @@ import {
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
+import { buildMoreFiltersWithProfileDefaults } from '@/lib/scholarships/profileFilterDefaults';
 
 /** Temporary: trace hub meta overwrite. Remove after diagnosis. */
 function hubClientSidebarDebugEnabled(): boolean {
@@ -212,10 +213,12 @@ function ScholarshipsPageInner({
     );
   const [moreFiltersDraft, setMoreFiltersDraft] =
     useState<MoreFiltersState | null>(null);
-  const [previewCount, setPreviewCount] = useState(0);
+  const [previewCount, setPreviewCount] = useState<number | null>(null);
+  const [previewCountLoading, setPreviewCountLoading] = useState(false);
+  const [lastKnownPreviewCount, setLastKnownPreviewCount] =
+    useState<number | null>(null);
   const metaKeySynced = useRef('');
   const metaRequestInFlightRef = useRef<string | null>(null);
-  const prevTabRef = useRef<ScholarshipListTabId | null>(null);
   const initialRequestKeyRef = useRef(initialPayload?.requestKey ?? null);
   const listMetaRef = useRef<ScholarshipListMeta | null>(listMeta);
   listMetaRef.current = listMeta;
@@ -385,6 +388,15 @@ function ScholarshipsPageInner({
       }),
     [listMeta, searchParamsString]
   );
+  const profileSuggestedMoreFilters = useMemo(() => {
+    const baseline =
+      moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds);
+    const seed = listMeta?.profileFilterSeed;
+    if (!seed) return cloneMoreFilters(baseline);
+    const seeded = buildMoreFiltersWithProfileDefaults(filterBounds, seed);
+    seeded.deadlinePreset = baseline.deadlinePreset;
+    return seeded;
+  }, [filterBounds, listMeta?.profileFilterSeed, moreFiltersBaseline]);
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
     const base = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
@@ -429,16 +441,6 @@ function ScholarshipsPageInner({
     if (!moreFiltersApplied) return 'none';
     return JSON.stringify(moreFiltersToJson(moreFiltersApplied));
   }, [moreFiltersApplied]);
-
-  useEffect(() => {
-    if (!moreFiltersBaseline) return;
-    const tabChanged = prevTabRef.current !== activeTab;
-    prevTabRef.current = activeTab;
-    setMoreFiltersApplied((prev) => {
-      if (!tabChanged && prev) return prev;
-      return cloneMoreFilters(moreFiltersBaseline);
-    });
-  }, [activeTab, moreFiltersBaseline]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / SCHOLARSHIPS_PAGE_SIZE));
   const rawPageParam = new URLSearchParams(searchParamsString).get('page');
@@ -648,10 +650,10 @@ function ScholarshipsPageInner({
 
   const openMoreFilters = useCallback(() => {
     const basis =
-      moreFiltersApplied ?? moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds);
+      moreFiltersApplied ?? profileSuggestedMoreFilters;
     setMoreFiltersDraft(cloneMoreFilters(basis));
     setMoreFiltersOpen(true);
-  }, [filterBounds, moreFiltersApplied, moreFiltersBaseline]);
+  }, [moreFiltersApplied, profileSuggestedMoreFilters]);
 
   const applyMoreFilters = useCallback(() => {
     if (!isAuthenticated) {
@@ -675,18 +677,17 @@ function ScholarshipsPageInner({
   ]);
 
   const clearMoreFiltersDraft = useCallback(() => {
-    setMoreFiltersDraft(
-      cloneMoreFilters(
-        moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
-      )
-    );
-  }, [filterBounds, moreFiltersBaseline]);
+    setMoreFiltersDraft(cloneMoreFilters(profileSuggestedMoreFilters));
+  }, [profileSuggestedMoreFilters]);
 
   useEffect(() => {
     if (!moreFiltersOpen || !moreFiltersDraft) {
-      setPreviewCount(0);
+      setPreviewCount(null);
+      setPreviewCountLoading(false);
       return;
     }
+    setPreviewCountLoading(true);
+    let cancelled = false;
     const t = setTimeout(() => {
       const ids = userListIdsRef.current;
       const sp = buildHubListingSearchParams({
@@ -705,10 +706,22 @@ function ScholarshipsPageInner({
         moreFilters: moreFiltersToJson(moreFiltersDraft),
         longTailLegacySlugs: []
       })
-        .then((r) => setPreviewCount(r.total))
-        .catch(() => setPreviewCount(0));
+        .then((r) => {
+          if (cancelled) return;
+          setPreviewCount(r.total);
+          setLastKnownPreviewCount(r.total);
+          setPreviewCountLoading(false);
+        })
+        .catch(() => {
+          if (cancelled) return;
+          setPreviewCount(null);
+          setPreviewCountLoading(false);
+        });
     }, 320);
-    return () => clearTimeout(t);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
   }, [
     moreFiltersDraft,
     moreFiltersOpen,
@@ -778,12 +791,11 @@ function ScholarshipsPageInner({
         chips.push({
           id: 'more-filters',
           label: `Advanced filters (${n})`,
-          onDismiss: () =>
+          onDismiss: () => {
             setMoreFiltersApplied(
-              cloneMoreFilters(
-                moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
-              )
-            )
+              cloneMoreFilters(profileSuggestedMoreFilters)
+            );
+          }
         });
       }
     }
@@ -807,12 +819,8 @@ function ScholarshipsPageInner({
     }
     setQuery('');
     replaceListingParams({ q: '', categories: new Set(), resetPage: true });
-    setMoreFiltersApplied(
-      cloneMoreFilters(
-        moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
-      )
-    );
-  }, [filterBounds, moreFiltersBaseline, replaceListingParams]);
+    setMoreFiltersApplied(cloneMoreFilters(profileSuggestedMoreFilters));
+  }, [profileSuggestedMoreFilters, replaceListingParams]);
 
   const hasListingParams =
     parsedList.q.length > 0 ||
@@ -826,13 +834,9 @@ function ScholarshipsPageInner({
       queryDebounceRef.current = null;
     }
     setQuery('');
-    setMoreFiltersApplied(
-      cloneMoreFilters(
-        moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
-      )
-    );
+    setMoreFiltersApplied(cloneMoreFilters(profileSuggestedMoreFilters));
     router.replace('/scholarships', { scroll: false });
-  }, [router, filterBounds, moreFiltersBaseline]);
+  }, [router, profileSuggestedMoreFilters]);
 
   const viewSegment = useMemo<'best' | 'all' | 'easy'>(() => {
     if (!isAuthenticated) {
@@ -1143,13 +1147,15 @@ function ScholarshipsPageInner({
         bounds={filterBounds}
         value={
           moreFiltersDraft ??
-          moreFiltersBaseline ??
-          defaultMoreFiltersFromBounds(filterBounds)
+          moreFiltersApplied ??
+          profileSuggestedMoreFilters
         }
         onChange={setMoreFiltersDraft}
         onClear={clearMoreFiltersDraft}
         onApply={applyMoreFilters}
         previewCount={previewCount}
+        previewCountLoading={previewCountLoading}
+        previewCountFallback={lastKnownPreviewCount}
         locationOptions={[]}
       />
       <ScholarshipRegistrationWallModal
