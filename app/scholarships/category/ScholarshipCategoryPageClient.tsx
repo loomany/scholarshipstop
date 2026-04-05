@@ -67,6 +67,7 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   bestMatches: 0,
   recommended: 0,
   easyApply: 0,
+  quickApply: 0,
   matches: 0,
   saved: 0,
   started: 0,

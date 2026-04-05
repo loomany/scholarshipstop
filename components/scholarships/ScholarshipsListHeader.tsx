@@ -96,6 +96,7 @@ function listingResultUnit(
       return plural ? 'ignored scholarships' : 'ignored scholarship';
     case 'recommended':
     case 'easy-apply':
+    case 'quick-apply':
       return plural ? 'scholarships' : 'scholarship';
     case 'matches':
     default:

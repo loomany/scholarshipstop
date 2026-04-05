@@ -6,6 +6,7 @@ export type ScholarshipSidebarCounts = {
   /** Personalized: SQL tab scope (verified or strong credibility). */
   recommended: number;
   easyApply: number;
+  quickApply: number;
   /** Personalized: profile-fit SQL base + ignored filter; catalog: same without profile OR. */
   matches: number;
   saved: number;
@@ -18,6 +19,7 @@ export const SCHOLARSHIP_LIST_TAB_IDS = [
   'best-matches',
   'recommended',
   'easy-apply',
+  'quick-apply',
   'matches',
   'saved',
   'started',
@@ -119,6 +121,12 @@ export function scholarshipsInTab(
       return usa.filter(
         (s) => !ign.has(s.id) && (s.eligibility?.length ?? 0) === 0
       );
+    case 'quick-apply':
+      return usa.filter(
+        (s) =>
+          !ign.has(s.id) &&
+          (s.scholarshipCatalog?.easyApplyIds.includes('quick_apply') ?? false)
+      );
     case 'started':
       return usa.filter((s) => started.has(s.id));
     case 'submitted':
@@ -136,6 +144,7 @@ export function computeScholarshipSidebarCounts(
     bestMatches: scholarshipsInTab(usa, 'best-matches', ids).length,
     recommended: scholarshipsInTab(usa, 'recommended', ids).length,
     easyApply: scholarshipsInTab(usa, 'easy-apply', ids).length,
+    quickApply: scholarshipsInTab(usa, 'quick-apply', ids).length,
     matches: scholarshipsInTab(usa, 'matches', ids).length,
     saved: scholarshipsInTab(usa, 'saved', ids).length,
     started: scholarshipsInTab(usa, 'started', ids).length,
@@ -167,6 +176,8 @@ export function scholarshipListPageTitle(
       return guest ? 'Recommended' : 'Recommended scholarships';
     case 'easy-apply':
       return 'Easy apply scholarships';
+    case 'quick-apply':
+      return 'Quick apply scholarships';
     case 'started':
       return 'Started applications';
     case 'submitted':

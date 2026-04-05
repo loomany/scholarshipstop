@@ -10,6 +10,7 @@ import {
   Layers,
   Lock,
   Trophy,
+  Zap,
   type LucideIcon
 } from 'lucide-react';
 
@@ -39,7 +40,6 @@ type NavDef = {
 const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
   'best-matches',
   'recommended',
-  'easy-apply',
   'saved',
   'ignored'
 ]);
@@ -62,6 +62,12 @@ const NAV_DEFS: NavDef[] = [
     label: 'Easy apply',
     icon: Trophy,
     tooltip: 'Quick applications with fewer steps.'
+  },
+  {
+    id: 'quick-apply',
+    label: 'Quick apply',
+    icon: Zap,
+    tooltip: 'Fastest applications flagged as quick apply.'
   },
   {
     id: 'matches',
@@ -138,6 +144,9 @@ export default function ScholarshipsSidebar({
         break;
       case 'easy-apply':
         n = counts.easyApply;
+        break;
+      case 'quick-apply':
+        n = counts.quickApply;
         break;
       case 'matches':
         n = counts.matches;

@@ -767,6 +767,10 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
         ].join(',')
       );
     }
+    case 'quick-apply': {
+      let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
+      return nq.contains('easy_apply_flags', ['quick_apply']);
+    }
     default:
       return q;
   }
@@ -973,8 +977,7 @@ function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRe
 
 const CATALOG_REDIRECT_TAB_IDS = new Set<ScholarshipListTabId>([
   'best-matches',
-  'recommended',
-  'easy-apply'
+  'recommended'
 ]);
 
 /**
@@ -1432,6 +1435,8 @@ export async function fetchScholarshipListMeta(
 
   /** Catalog hub: only “browse” + user lists; no separate personalized tab counts. */
   const tabs: ScholarshipListTabId[] = [
+    'easy-apply',
+    'quick-apply',
     'matches',
     'saved',
     'started',
@@ -1445,6 +1450,7 @@ export async function fetchScholarshipListMeta(
     bestMatches: 0,
     recommended: 0,
     easyApply: 0,
+    quickApply: 0,
     matches: 0,
     saved: 0,
     started: 0,
@@ -1452,6 +1458,8 @@ export async function fetchScholarshipListMeta(
     ignored: 0
   };
   for (const { t, n } of sidebarParts) {
+    if (t === 'easy-apply') sidebarCounts.easyApply = n;
+    if (t === 'quick-apply') sidebarCounts.quickApply = n;
     if (t === 'matches') sidebarCounts.matches = n;
     if (t === 'saved') sidebarCounts.saved = n;
     if (t === 'started') sidebarCounts.started = n;

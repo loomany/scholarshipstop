@@ -71,7 +71,6 @@ function applyListingMetaGuestPatches(
 ) {
   meta.sidebarCounts.bestMatches = 0;
   meta.sidebarCounts.recommended = 0;
-  meta.sidebarCounts.easyApply = 0;
   delete meta.matchedTotal;
   if (!ctx.authUser) {
     meta.sidebarCounts.saved = 0;
@@ -276,7 +275,6 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     req.listScope === 'personalized' ||
     req.tab === 'best-matches' ||
     req.tab === 'recommended' ||
-    req.tab === 'easy-apply' ||
     req.saved.length > 0 ||
     req.ignored.length > 0 ||
     req.started.length > 0 ||

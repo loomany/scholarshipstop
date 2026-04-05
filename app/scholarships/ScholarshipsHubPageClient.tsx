@@ -72,7 +72,8 @@ import {
 import {
   postScholarshipsList,
   postScholarshipsCount,
-  postScholarshipsMeta
+  postScholarshipsMeta,
+  postScholarshipsMatchCounts
 } from './scholarshipListFetch';
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
 import type { LongTailRouteScopePayload } from './scholarshipListServerPayload';
@@ -96,6 +97,7 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   bestMatches: 0,
   recommended: 0,
   easyApply: 0,
+  quickApply: 0,
   matches: 0,
   saved: 0,
   started: 0,
@@ -213,6 +215,10 @@ function ScholarshipsPageInner({
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
+  const [personalizedSidebarCounts, setPersonalizedSidebarCounts] = useState<{
+    bestMatches: number;
+    recommended: number;
+  } | null>(null);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
 
   const openRegistrationWall = useCallback(() => {
@@ -445,11 +451,20 @@ function ScholarshipsPageInner({
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
     const base = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
+    const isCatalogBrowseTab =
+      activeTab === 'matches' ||
+      activeTab === 'best-matches' ||
+      activeTab === 'recommended';
+    const syncedMatches =
+      isCatalogBrowseTab && totalCount > 0
+        ? totalCount
+        : base.matches;
     if (!isAuthenticated) {
       return {
         ...base,
         bestMatches: 0,
         recommended: 0,
+        matches: syncedMatches,
         saved: 0,
         ignored: 0,
         started: 0,
@@ -458,8 +473,9 @@ function ScholarshipsPageInner({
     }
     return {
       ...base,
-      bestMatches: 0,
-      recommended: 0,
+      bestMatches: personalizedSidebarCounts?.bestMatches ?? 0,
+      recommended: personalizedSidebarCounts?.recommended ?? 0,
+      matches: syncedMatches,
       saved: savedIds.length,
       started: startedIds.length,
       submitted: submittedIds.length,
@@ -467,12 +483,48 @@ function ScholarshipsPageInner({
     };
   }, [
     isAuthenticated,
+    activeTab,
+    totalCount,
     listMeta?.sidebarCounts,
+    personalizedSidebarCounts,
     savedIds,
     startedIds,
     submittedIds,
     ignoredIds
   ]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setPersonalizedSidebarCounts(null);
+      return;
+    }
+    let cancelled = false;
+    const run = async () => {
+      try {
+        const data = await postScholarshipsMatchCounts({
+          ignored: userListIdsRef.current.ignored
+        });
+        if (cancelled) return;
+        const counts = data.counts;
+        setPersonalizedSidebarCounts({
+          bestMatches: counts?.bestMatches ?? 0,
+          recommended: counts?.recommended ?? 0
+        });
+      } catch {
+        if (cancelled) return;
+        setPersonalizedSidebarCounts((prev) => prev ?? { bestMatches: 0, recommended: 0 });
+      }
+    };
+    run();
+    const onVis = () => {
+      if (document.visibilityState === 'visible') run();
+    };
+    document.addEventListener('visibilitychange', onVis);
+    return () => {
+      cancelled = true;
+      document.removeEventListener('visibilitychange', onVis);
+    };
+  }, [isAuthenticated, ignoredIds]);
 
   const categoryCounts = useMemo(() => {
     if (listMeta?.categoryCounts) return listMeta.categoryCounts;
@@ -849,7 +901,7 @@ function ScholarshipsPageInner({
 
   const viewSegment = useMemo<'best' | 'all' | 'easy'>(() => {
     if (!isAuthenticated) {
-      if (activeTab === 'easy-apply') return 'easy';
+      if (activeTab === 'easy-apply' || activeTab === 'quick-apply') return 'easy';
       if (activeTab === 'matches') return 'all';
       if (activeTab === 'best-matches' || activeTab === 'recommended') {
         return 'best';
@@ -872,8 +924,12 @@ function ScholarshipsPageInner({
   }, [replaceListingParams]);
 
   const setViewEasy = useCallback(() => {
-    openRegistrationWall();
-  }, [openRegistrationWall]);
+    replaceListingParams({
+      scope: 'catalog',
+      tab: 'easy-apply',
+      resetPage: true
+    });
+  }, [replaceListingParams]);
 
   const showProfileWhy = false;
 
@@ -957,6 +1013,8 @@ function ScholarshipsPageInner({
         return 'No recommended scholarships match right now. Try Matches for the full list.';
       case 'easy-apply':
         return 'No easy-apply scholarships in this set. Try broadening categories or More filters.';
+      case 'quick-apply':
+        return 'No quick-apply scholarships in this set. Try broadening categories or More filters.';
       default:
         return 'No scholarships match your filters. Try adjusting search or filters.';
     }
@@ -1058,22 +1116,12 @@ function ScholarshipsPageInner({
                   <button
                     type="button"
                     onClick={setViewEasy}
-                    title="Create a free account to use Easy apply"
                     className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-2 text-center text-sm font-semibold transition sm:gap-1.5 sm:px-3 ${
                       viewSegment === 'easy'
                         ? 'bg-gray-900 text-white shadow-sm'
                         : 'text-gray-600 hover:bg-gray-200'
                     }`}
                   >
-                    <Lock
-                      className={`h-3.5 w-3.5 shrink-0 ${
-                        viewSegment === 'easy'
-                          ? 'text-white/85 stroke-white/85'
-                          : scholarshipGuestLockIconClass
-                      }`}
-                      strokeWidth={2}
-                      aria-hidden
-                    />
                     <span className="min-w-0">Easy apply</span>
                   </button>
                 </div>
