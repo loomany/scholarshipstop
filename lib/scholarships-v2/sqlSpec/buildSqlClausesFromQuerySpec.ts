@@ -48,6 +48,17 @@ function mapPredicateToSql(predicate: QuerySpecPredicate): {
       });
       return { clauses, stubs };
     }
+    case 'requirement_types': {
+      const fields = ((predicate.value as string[]) ?? []).slice().sort((a, b) => a.localeCompare(b));
+      if (fields.length > 0) {
+        clauses.push({
+          boolean: 'or',
+          clause: fields.map((field) => `${field}.eq.true`).join(','),
+          sourceField: predicate.field
+        });
+      }
+      return { clauses, stubs };
+    }
 
     case 'applicants_count': {
       const range = predicate.value as { min: number | null; max: number | null };

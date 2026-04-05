@@ -61,7 +61,7 @@ export function normalizeScholarshipFilters(
     applicantsMin: normalizeNullableNumber(partial?.applicantsMin),
     applicantsMax: normalizeNullableNumber(partial?.applicantsMax),
     includeEligibility: normalizeStringArray(partial?.includeEligibility),
-    excludeRequirementTypes: normalizeStringArray(partial?.excludeRequirementTypes),
+    includeRequirementTypes: normalizeStringArray(partial?.includeRequirementTypes),
     includeEasyApply: normalizeStringArray(partial?.includeEasyApply),
     dataCompleteness: {
       low: Boolean(partial?.dataCompleteness?.low),

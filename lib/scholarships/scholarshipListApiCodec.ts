@@ -4,14 +4,14 @@ import { defaultMoreFiltersFromBounds } from '@/app/scholarships/moreFilters';
 /** JSON-safe shape (no Sets) for POST body / localStorage. */
 export type MoreFiltersJson = Omit<
   MoreFiltersState,
-  | 'excludeRequirementTypes'
+  | 'includeRequirementTypes'
   | 'includeEligibility'
   | 'includeEducationLevels'
   | 'includeGpaBuckets'
   | 'includeLocationLabels'
   | 'includeEasyApply'
 > & {
-  excludeRequirementTypes: string[];
+  includeRequirementTypes: string[];
   includeEligibility: string[];
   includeEducationLevels: string[];
   includeGpaBuckets: string[];
@@ -22,7 +22,7 @@ export type MoreFiltersJson = Omit<
 export function moreFiltersToJson(f: MoreFiltersState): MoreFiltersJson {
   return {
     ...f,
-    excludeRequirementTypes: Array.from(f.excludeRequirementTypes),
+    includeRequirementTypes: Array.from(f.includeRequirementTypes),
     includeEligibility: Array.from(f.includeEligibility),
     includeEducationLevels: Array.from(f.includeEducationLevels),
     includeGpaBuckets: Array.from(f.includeGpaBuckets),
@@ -50,7 +50,10 @@ export function moreFiltersFromJson(
     amountMax: raw.amountMax ?? d.amountMax,
     applicantsMin: raw.applicantsMin ?? d.applicantsMin,
     applicantsMax: raw.applicantsMax ?? d.applicantsMax,
-    excludeRequirementTypes: new Set(raw.excludeRequirementTypes ?? []),
+    includeRequirementTypes: new Set(
+      raw.includeRequirementTypes ??
+        ((raw as unknown as { excludeRequirementTypes?: string[] }).excludeRequirementTypes ?? [])
+    ),
     dataCompleteness: {
       low: raw.dataCompleteness?.low ?? false,
       medium: raw.dataCompleteness?.medium ?? false,

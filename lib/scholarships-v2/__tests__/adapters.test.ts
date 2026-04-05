@@ -28,7 +28,7 @@ test('adaptLegacyMoreFiltersToV2 maps top-priority facet keys', () => {
     amountMax: 5000,
     applicantsMin: 1,
     applicantsMax: 1000,
-    excludeRequirementTypes: ['essay'],
+    includeRequirementTypes: ['essay'],
     dataCompleteness: { low: true, medium: false, high: false, verified: true },
     payout: { college: true, student: false, nonMonetary: false, notStated: false },
     includeEligibility: ['first_generation'],
@@ -39,7 +39,7 @@ test('adaptLegacyMoreFiltersToV2 maps top-priority facet keys', () => {
     filterStateInput: 'Florida'
   });
 
-  assert.deepEqual(out.excludeRequirementTypes, ['essay']);
+  assert.deepEqual(out.includeRequirementTypes, ['essay']);
   assert.deepEqual(out.includeEligibility, ['first_generation']);
   assert.deepEqual(out.includeGpaBuckets, ['gpa_3']);
   assert.deepEqual(out.includeEasyApply, ['no_essay']);
@@ -58,7 +58,7 @@ test('buildV2FiltersFromLegacyInput composes search params + more filters', () =
       amountMax: 1000,
       applicantsMin: 0,
       applicantsMax: 100,
-      excludeRequirementTypes: [],
+      includeRequirementTypes: [],
       dataCompleteness: { low: false, medium: false, high: false, verified: false },
       payout: { college: false, student: false, nonMonetary: false, notStated: false },
       includeEligibility: [],

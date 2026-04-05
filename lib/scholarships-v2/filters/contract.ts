@@ -19,7 +19,7 @@ export const DEFAULT_SCHOLARSHIP_FILTERS: ScholarshipFilterInput = {
   applicantsMin: null,
   applicantsMax: null,
   includeEligibility: [],
-  excludeRequirementTypes: [],
+  includeRequirementTypes: [],
   includeEasyApply: [],
   dataCompleteness: {
     low: false,

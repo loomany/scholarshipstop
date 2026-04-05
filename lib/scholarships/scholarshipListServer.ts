@@ -564,7 +564,7 @@ function moreFiltersReducedForSeoListing(base: MoreFiltersState): MoreFiltersSta
   f.includeEducationLevels.clear();
   f.includeGpaBuckets.clear();
   f.includeEasyApply.clear();
-  f.excludeRequirementTypes.clear();
+  f.includeRequirementTypes.clear();
   f.dataCompleteness = {
     low: false,
     medium: false,
@@ -589,23 +589,26 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   q = q
     .or(`applicants_count.is.null,and(applicants_count.gte.${f.applicantsMin},applicants_count.lte.${f.applicantsMax})`);
 
-  const excl = Array.from(f.excludeRequirementTypes);
-  const exclMap: Record<string, () => any> = {
-    essay: () => q.not('essay_required', 'eq', true),
-    document: () => q.not('document_required', 'eq', true),
-    photo: () => q.not('photo_required', 'eq', true),
-    video: () => q.not('video_required', 'eq', true),
-    personal_statement: () => q.not('goal_required', 'eq', true),
-    link: () => q.not('link_required', 'eq', true),
-    survey: () => q.not('survey_required', 'eq', true),
-    question: () => q.not('question_required', 'eq', true),
-    recommendation: () => q.not('recommendation_required', 'eq', true),
-    transcript: () => q.not('transcript_required', 'eq', true),
-    resume: () => q // resume inferred from text on client; not structured in DB
+  const includeRequirementTypes = Array.from(f.includeRequirementTypes);
+  const includeRequirementFieldMap: Record<string, string | null> = {
+    essay: 'essay_required',
+    document: 'document_required',
+    photo: 'photo_required',
+    video: 'video_required',
+    personal_statement: 'personal_statement_required',
+    link: 'link_required',
+    survey: 'survey_required',
+    question: 'question_required',
+    recommendation: 'recommendation_required',
+    transcript: 'transcript_required',
+    resume: null // resume inferred from text on client; not structured in DB
   };
-  for (const id of excl) {
-    const fn = exclMap[id];
-    if (fn) q = fn();
+  const includeRequirementClauses = includeRequirementTypes
+    .map((id) => includeRequirementFieldMap[id])
+    .filter((field): field is string => Boolean(field))
+    .map((field) => `${field}.eq.true`);
+  if (includeRequirementClauses.length > 0) {
+    q = q.or(includeRequirementClauses.join(','));
   }
 
   const dc = f.dataCompleteness;
