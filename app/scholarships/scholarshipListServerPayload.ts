@@ -18,6 +18,10 @@ import {
   type ScholarshipListResult
 } from '@/lib/scholarships/scholarshipListServer';
 import type { createClient } from '@/utils/supabase/server';
+import {
+  moreFiltersToJson,
+  type MoreFiltersJson
+} from '@/lib/scholarships/scholarshipListApiCodec';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
 
@@ -69,13 +73,24 @@ export async function fetchInitialHubScholarshipsPayload(
 export async function fetchInitialLongTailScholarshipsPayload(
   supabase: ServerSupabaseClient,
   mode: LongTailListingMode
-): Promise<ScholarshipListResult> {
+): Promise<{
+  result: ScholarshipListResult;
+  routeScope: LongTailRouteScopePayload;
+}> {
   const bounds = await fetchGlobalFilterBounds(supabase);
   const moreFilters =
     mode.type === 'legacy'
       ? buildLongTailMoreFiltersState(bounds, mode.slug)
       : buildMoreFiltersForManifestEntry(bounds, mode.entry);
   const slugOnly = buildSeoSlugOnlyMoreFilters(bounds, mode);
+  const longTailLegacySlugs =
+    mode.type === 'legacy'
+      ? [mode.slug]
+      : ((mode.entry.legacyBaseSlugs ?? []) as LongTailSlug[]);
+  const requiredSeoTags =
+    mode.type === 'manifest'
+      ? requiredSeoTagsForListingPath(mode.canonicalPath)
+      : requiredSeoTagsForListingPath(mode.slug);
   const req = scholarshipListRequestFromParts({
     page: 1,
     limit: 12,
@@ -92,19 +107,13 @@ export async function fetchInitialLongTailScholarshipsPayload(
     started: null,
     submitted: null,
     moreFilters,
-    longTailLegacySlugs:
-      mode.type === 'legacy'
-        ? [mode.slug]
-        : ((mode.entry.legacyBaseSlugs ?? []) as LongTailSlug[]),
+    longTailLegacySlugs,
     similarTo: null,
     similarCategorySlug: null,
     listScope: 'catalog',
-    requiredSeoTags:
-      mode.type === 'manifest'
-        ? requiredSeoTagsForListingPath(mode.canonicalPath)
-        : requiredSeoTagsForListingPath(mode.slug)
+    requiredSeoTags
   });
-  return executeScholarshipListQueryWithSeoFallback(
+  const result = await executeScholarshipListQueryWithSeoFallback(
     supabase,
     req,
     {
@@ -120,7 +129,25 @@ export async function fetchInitialLongTailScholarshipsPayload(
       isCategorySeo: false
     }
   );
+  return {
+    result,
+    routeScope: {
+      longTailLegacySlugs,
+      requiredSeoTags,
+      baseMoreFilters: moreFiltersToJson(moreFilters),
+      slugOnlyMoreFilters: moreFiltersToJson(slugOnly),
+      seoListingFallback: true
+    }
+  };
 }
+
+export type LongTailRouteScopePayload = {
+  longTailLegacySlugs: string[];
+  requiredSeoTags: string[];
+  baseMoreFilters: MoreFiltersJson;
+  slugOnlyMoreFilters: MoreFiltersJson;
+  seoListingFallback: boolean;
+};
 
 export async function fetchInitialCategoryScholarshipsPayload(
   supabase: ServerSupabaseClient,

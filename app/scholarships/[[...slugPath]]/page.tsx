@@ -32,7 +32,9 @@ function debugLogListingSeo(payload: Record<string, unknown>) {
   console.info('[scholarships listing seo]', payload);
 }
 
-function normalizeSeoTextLines(value: string | string[] | undefined): string[] | undefined {
+function normalizeSeoTextLines(
+  value: string | string[] | undefined
+): string[] | undefined {
   if (!value) return undefined;
   if (Array.isArray(value)) {
     const rows = value.map((line) => line.trim()).filter(Boolean);
@@ -61,7 +63,8 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const {
       data: { user }
     } = await supabase.auth.getUser();
-    const initialListPayload = await fetchInitialHubScholarshipsPayload(supabase);
+    const initialListPayload =
+      await fetchInitialHubScholarshipsPayload(supabase);
     return (
       <ScholarshipsHubPageClient
         isAuthenticated={Boolean(user)}
@@ -114,9 +117,10 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const {
       data: { user }
     } = await supabase.auth.getUser();
-    const scholarship = segments.length === 1
-      ? await getScholarshipDetailServer(segments[0]!)
-      : null;
+    const scholarship =
+      segments.length === 1
+        ? await getScholarshipDetailServer(segments[0]!)
+        : null;
     return (
       <Suspense
         fallback={
@@ -140,13 +144,13 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     } = await supabase.auth.getUser();
     const longTail = getLongTailPreset(resolved.slug);
     if (!longTail) notFound();
-    const initialListPayload = await fetchInitialLongTailScholarshipsPayload(
-      supabase,
-      { type: 'legacy', slug: longTail.slug }
-    );
+    const { result: initialListPayload, routeScope } =
+      await fetchInitialLongTailScholarshipsPayload(supabase, {
+        type: 'legacy',
+        slug: longTail.slug
+      });
     const seo = readLongTailSeoBundle(longTail.slug);
-    const pageTitle =
-      seo?.h1?.trim() || seo?.seo_title?.trim() || longTail.h1;
+    const pageTitle = seo?.h1?.trim() || seo?.seo_title?.trim() || longTail.h1;
     const introParagraph = seo?.intro?.trim() || null;
     const faqItems = seo?.faq;
 
@@ -187,6 +191,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
             }),
             initialListPayload
           )}
+          routeScope={routeScope}
         />
       </Suspense>
     );
@@ -198,16 +203,16 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
       data: { user }
     } = await supabase.auth.getUser();
     const { entry, canonicalPath } = resolved;
-    const initialListPayload = await fetchInitialLongTailScholarshipsPayload(
-      supabase,
-      { type: 'manifest', canonicalPath, entry }
-    );
+    const { result: initialListPayload, routeScope } =
+      await fetchInitialLongTailScholarshipsPayload(supabase, {
+        type: 'manifest',
+        canonicalPath,
+        entry
+      });
 
     const seo = readScholarshipSeoContent(canonicalPath);
     const pageTitle =
-      seo?.h1?.trim() ||
-      seo?.seo_title?.trim() ||
-      entry.h1Fallback;
+      seo?.h1?.trim() || seo?.seo_title?.trim() || entry.h1Fallback;
     const introParagraph =
       seo?.intro?.trim() ||
       `Browse scholarships in our USA catalog that match this topic (${entry.h1Fallback}). Compare deadlines, amounts, and requirements, then open each official listing to apply.`;
@@ -256,6 +261,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
             }),
             initialListPayload
           )}
+          routeScope={routeScope}
           leadContent={
             promotedChrome ? (
               <SeoScholarshipHero
@@ -264,7 +270,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
                 listLoading={false}
                 introHtml={introParagraph}
                 fallbackUsed={Boolean(initialListPayload.seoFallback?.used)}
-                thinListing={Boolean(initialListPayload.seoFallback?.thinListing)}
+                thinListing={Boolean(
+                  initialListPayload.seoFallback?.thinListing
+                )}
                 exactFilterMatchTotal={
                   initialListPayload.seoFallback?.exactTotal ?? null
                 }
