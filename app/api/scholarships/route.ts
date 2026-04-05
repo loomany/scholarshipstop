@@ -69,19 +69,17 @@ function applyListingMetaGuestPatches(
   meta: ScholarshipListMeta,
   ctx: { authUser: boolean }
 ) {
+  if (ctx.authUser) return;
   meta.sidebarCounts.bestMatches = 0;
   meta.sidebarCounts.recommended = 0;
   meta.sidebarCounts.easyApply = 0;
+  meta.sidebarCounts.saved = 0;
+  meta.sidebarCounts.ignored = 0;
+  meta.sidebarCounts.started = 0;
+  meta.sidebarCounts.submitted = 0;
+  delete meta.profileMatchSummary;
+  delete meta.profileFilterSeed;
   delete meta.matchedTotal;
-  if (!ctx.authUser) {
-    meta.sidebarCounts.saved = 0;
-    meta.sidebarCounts.ignored = 0;
-    meta.sidebarCounts.started = 0;
-    meta.sidebarCounts.submitted = 0;
-    delete meta.profileMatchSummary;
-    delete meta.profileFilterSeed;
-    delete meta.matchedTotal;
-  }
 }
 
 async function emptyListResult(
