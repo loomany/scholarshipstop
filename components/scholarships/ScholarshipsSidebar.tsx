@@ -133,9 +133,6 @@ export default function ScholarshipsSidebar({
   const suffix = (id: ScholarshipListTabId): string | undefined => {
     let n: number;
     switch (id) {
-      case 'easy-apply':
-        n = counts.easyApply;
-        break;
       case 'matches':
         n = counts.matches;
         break;
@@ -165,62 +162,18 @@ export default function ScholarshipsSidebar({
       <ul className="mt-2 space-y-0.5">
         {STATIC_TOP_ROWS.map((item) => {
           const Icon = item.icon;
-          const isEasyApply = item.id === 'easy-apply';
-          const isActiveEasyApply = isEasyApply && activeTab === 'easy-apply';
-          const easyApplyCount = counts.easyApply;
           return (
             <li key={item.id}>
-              {isEasyApply ? (
-                <Link
-                  href={buildScholarshipTabHref('easy-apply')}
-                  className={`flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
-                    isActiveEasyApply
-                      ? scholarshipSidebarActiveRowClass
-                      : 'border-transparent hover:bg-gray-50/80 group'
-                  }`}
-                  aria-current={isActiveEasyApply ? 'page' : undefined}
-                  title="Scholarships with a faster application flow."
-                >
-                  <Icon
-                    className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
-                      isActiveEasyApply
-                        ? 'text-white stroke-white'
-                        : 'text-[#FF7A1A] stroke-[#FF7A1A]'
-                    }`}
-                    aria-hidden
-                  />
-                  <span
-                    className={`min-w-0 flex-1 text-left text-sm ${
-                      isActiveEasyApply
-                        ? 'font-semibold text-white'
-                        : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
-                    }`}
-                  >
-                    {item.label}
-                    <span
-                      className={
-                        isActiveEasyApply
-                          ? 'font-normal text-white'
-                          : 'font-normal text-gray-400'
-                      }
-                    >
-                      {' '}
-                      ({easyApplyCount})
-                    </span>
-                  </span>
-                </Link>
-              ) : (
-                <div className="flex w-full items-center gap-3 rounded-lg border-l-2 border-transparent py-2.5 pr-2 pl-3">
-                  <Icon
-                    className="h-[18px] w-[18px] shrink-0 stroke-[1.75] text-[#FF7A1A] stroke-[#FF7A1A]"
-                    aria-hidden
-                  />
-                  <span className="min-w-0 flex-1 text-left text-sm font-medium text-gray-500">
-                    {item.label}
-                    <span className="font-normal text-gray-400"> (0)</span>
-                  </span>
-                </div>
-              )}
+              <div className="flex w-full items-center gap-3 rounded-lg border-l-2 border-transparent py-2.5 pr-2 pl-3">
+                <Icon
+                  className="h-[18px] w-[18px] shrink-0 stroke-[1.75] text-[#FF7A1A] stroke-[#FF7A1A]"
+                  aria-hidden
+                />
+                <span className="min-w-0 flex-1 text-left text-sm font-medium text-gray-500">
+                  {item.label}
+                  <span className="font-normal text-gray-400"> (0)</span>
+                </span>
+              </div>
             </li>
           );
         })}
