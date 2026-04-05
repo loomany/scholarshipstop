@@ -111,6 +111,11 @@ export type ScholarshipListRequest = {
    * Set by the API when `categories.slug` is an active level-2 row.
    */
   catalogSubjectCategoryId: string | null;
+  /** Personalized tab seeds from cached match index (already ignored-filtered). */
+  personalizedBestIds: string[];
+  personalizedRecommendedIds: string[];
+  /** True only when personalized tab seeds belong to current authenticated user/profile context. */
+  personalizedMode: boolean;
 };
 
 export type SeoListingFallbackMeta = {
@@ -345,7 +350,10 @@ export function scholarshipListRequestFromParts(parts: {
     /** Hub/catalog listing is always catalog; `scope` URL param is ignored. */
     listScope: 'catalog',
     requiredSeoTags: sanitizeRequiredSeoTagsInput(parts.requiredSeoTags ?? null),
-    catalogSubjectCategoryId: parts.catalogSubjectCategoryId?.trim() || null
+    catalogSubjectCategoryId: parts.catalogSubjectCategoryId?.trim() || null,
+    personalizedBestIds: [],
+    personalizedRecommendedIds: [],
+    personalizedMode: false
   };
 }
 
@@ -722,8 +730,11 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
   const { tab, ignored, saved, started, submitted } = req;
   switch (tab) {
     case 'best-matches': {
+      if (req.personalizedBestIds.length === 0) {
+        return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      }
       let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
-      return nq.or('credibility_score.gte.90,is_verified.eq.true');
+      return nq.in('id', req.personalizedBestIds);
     }
     case 'matches':
       if (ignored.length > 0) {
@@ -750,8 +761,11 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
       }
       return q.in('id', submitted);
     case 'recommended': {
+      if (req.personalizedRecommendedIds.length === 0) {
+        return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      }
       let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
-      return nq.or('is_verified.eq.true,credibility_score.gte.75');
+      return nq.in('id', req.personalizedRecommendedIds);
     }
     case 'easy-apply': {
       let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
@@ -903,10 +917,22 @@ function categoryDropdownCountsRequest(
 }
 
 function tabUsesEmptyIdSet(
-  req: Pick<ScholarshipListRequest, 'ignored' | 'saved' | 'started' | 'submitted'>,
+  req: Pick<
+    ScholarshipListRequest,
+    | 'ignored'
+    | 'saved'
+    | 'started'
+    | 'submitted'
+    | 'personalizedBestIds'
+    | 'personalizedRecommendedIds'
+  >,
   tab: ScholarshipListTabId
 ): boolean {
   switch (tab) {
+    case 'best-matches':
+      return req.personalizedBestIds.length === 0;
+    case 'recommended':
+      return req.personalizedRecommendedIds.length === 0;
     case 'saved':
       return req.saved.length === 0;
     case 'ignored':
@@ -962,7 +988,10 @@ function buildListMetaCacheKey(
     `catIds:${categoryIds}`,
     `catPage:${req.categoryPageSlug ?? ''}`,
     `catSubj:${req.catalogSubjectCategoryId ?? ''}`,
-    `mf:${moreFiltersKey}`
+    `mf:${moreFiltersKey}`,
+    `pm:${req.personalizedMode ? '1' : '0'}`,
+    `pb:${req.personalizedBestIds.join(',')}`,
+    `pr:${req.personalizedRecommendedIds.join(',')}`
   ].join('|');
 }
 
@@ -1082,6 +1111,59 @@ export async function executeScholarshipListQuery(
       total: count ?? 0,
       page: req.page,
       limit: req.limit
+    };
+  }
+
+  const personalizedTab = rEff.tab === 'best-matches' || rEff.tab === 'recommended';
+  const personalizedIds =
+    rEff.tab === 'best-matches'
+      ? rEff.personalizedBestIds
+      : rEff.tab === 'recommended'
+        ? rEff.personalizedRecommendedIds
+        : [];
+  if (personalizedTab) {
+    if (personalizedIds.length === 0) {
+      let meta: ScholarshipListMeta | undefined;
+      if (opts.includeMeta && bounds) {
+        meta = await fetchScholarshipListMeta(supabase, req, bounds, {
+          includeCategoryCounts: opts.includeCategoryCounts
+        });
+      }
+      return {
+        scholarships: [],
+        total: 0,
+        page: req.page,
+        limit: req.limit,
+        meta
+      };
+    }
+    let qAll: any = buildScholarshipListFilterQuery(supabase, false, rEff);
+    const defaultPersonalizedSort = rEff.sort === 'best_match' || rEff.sort === 'magic';
+    if (!defaultPersonalizedSort) {
+      qAll = applySort(qAll, rEff.sort);
+    }
+    const { data: fullData, error: fullError, count: fullCount } = await qAll;
+    if (fullError) throw new Error(fullError.message);
+    let rows = (fullData ?? []) as ScholarshipRow[];
+    if (defaultPersonalizedSort) {
+      const rank = new Map(personalizedIds.map((id, idx) => [id, idx]));
+      rows = rows.slice().sort((a, b) => (rank.get(a.id) ?? 999999) - (rank.get(b.id) ?? 999999));
+    }
+    const total = fullCount ?? rows.length;
+    const from = Math.max(0, (req.page - 1) * req.limit);
+    const paged = rows.slice(from, from + req.limit);
+    let meta: ScholarshipListMeta | undefined;
+    if (opts.includeMeta && bounds) {
+      meta = await fetchScholarshipListMeta(supabase, req, bounds, {
+        includeCategoryCounts: opts.includeCategoryCounts
+      });
+    }
+    return {
+      scholarships: paged.map((r) => mapScholarshipRow(r)),
+      total,
+      page: req.page,
+      limit: req.limit,
+      meta
     };
   }
 
@@ -1423,21 +1505,18 @@ export async function fetchScholarshipListMeta(
   const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
   const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v3`;
-  const cached = readTtlValue(listMetaCache.get(cacheKey));
-  if (cached) {
-    return cloneScholarshipListMeta(cached);
+  const useCache = !effectiveReq.personalizedMode;
+  if (useCache) {
+    const cached = readTtlValue(listMetaCache.get(cacheKey));
+    if (cached) {
+      return cloneScholarshipListMeta(cached);
+    }
   }
 
   const categoryReq = categoryDropdownCountsRequest(req, b);
 
-  /** Catalog hub: only “browse” + user lists; no separate personalized tab counts. */
-  const tabs: ScholarshipListTabId[] = [
-    'matches',
-    'saved',
-    'started',
-    'submitted',
-    'ignored'
-  ];
+  /** SQL-counted tabs (personalized buckets are seeded directly from match-index ids). */
+  const tabs: ScholarshipListTabId[] = ['matches', 'saved', 'started', 'submitted', 'ignored'];
   const sidebarParts = await Promise.all(
     tabs.map(async (t) => ({ t, n: await countFor(supabase, effectiveReq, t) }))
   );
@@ -1458,6 +1537,10 @@ export async function fetchScholarshipListMeta(
     if (t === 'submitted') sidebarCounts.submitted = n;
     if (t === 'ignored') sidebarCounts.ignored = n;
   }
+  if (effectiveReq.personalizedMode) {
+    sidebarCounts.bestMatches = effectiveReq.personalizedBestIds.length;
+    sidebarCounts.recommended = effectiveReq.personalizedRecommendedIds.length;
+  }
 
   const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
   if (includeCategoryCounts) {
@@ -1473,7 +1556,9 @@ export async function fetchScholarshipListMeta(
   }
 
   const meta = { filterBounds: b, sidebarCounts, categoryCounts };
-  writeTtlValue(listMetaCache, cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
+  if (useCache) {
+    writeTtlValue(listMetaCache, cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
+  }
   return meta;
 }
 
