@@ -62,8 +62,12 @@ export async function fetchInitialHubScholarshipsPayload(
 
   const result = await executeScholarshipListQuery(supabase, req, {
     countOnly: false,
-    includeMeta: false,
-    includeCategoryCounts: false,
+    /**
+     * Include list meta on first paint so category counters are populated even
+     * before client-side `/api/scholarships?meta=1` warms up.
+     */
+    includeMeta: true,
+    includeCategoryCounts: true,
     isProSubscriber: false
   });
 
@@ -119,7 +123,7 @@ export async function fetchInitialLongTailScholarshipsPayload(
     {
       countOnly: false,
       includeMeta: true,
-      includeCategoryCounts: false,
+      includeCategoryCounts: true,
       isProSubscriber: false
     },
     {
