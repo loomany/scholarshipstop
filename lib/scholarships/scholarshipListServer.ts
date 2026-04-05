@@ -1432,6 +1432,7 @@ export async function fetchScholarshipListMeta(
 
   /** Catalog hub: only “browse” + user lists; no separate personalized tab counts. */
   const tabs: ScholarshipListTabId[] = [
+    'easy-apply',
     'matches',
     'saved',
     'started',
@@ -1452,6 +1453,7 @@ export async function fetchScholarshipListMeta(
     ignored: 0
   };
   for (const { t, n } of sidebarParts) {
+    if (t === 'easy-apply') sidebarCounts.easyApply = n;
     if (t === 'matches') sidebarCounts.matches = n;
     if (t === 'saved') sidebarCounts.saved = n;
     if (t === 'started') sidebarCounts.started = n;
