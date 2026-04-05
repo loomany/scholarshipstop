@@ -61,23 +61,8 @@ export const REQUIREMENT_TYPE_OPTIONS: {
   { id: 'survey', label: 'Survey' },
   { id: 'question', label: 'Question' },
   { id: 'recommendation', label: 'Recommendation' },
-  { id: 'transcript', label: 'Transcript' },
-  { id: 'resume', label: 'Resume' }
+  { id: 'transcript', label: 'Transcript' }
 ];
-
-const REQUIREMENT_PATTERNS: Record<string, RegExp> = {
-  essay: /\bessay\b|personal statement|statement of purpose/i,
-  document: /\bdocument\b|upload|pdf|transcript|file/i,
-  photo: /\bphoto\b|image|picture/i,
-  video: /\bvideo\b|record/i,
-  personal_statement: /\bgoal\b|\bobjective\b|career\s+goal|personal\s+statement/i,
-  link: /\blink\b|url|website/i,
-  survey: /\bsurvey\b/i,
-  question: /\bquestion\b|short answer/i,
-  recommendation: /\brecommendation\b|\bletter\s+of\s+rec/i,
-  transcript: /\btranscript\b|\bacademic\s+record\b/i,
-  resume: /\bresume\b|\bcurriculum\s+vitae\b|\bcv\b/i
-};
 
 export function parseScholarshipAmount(s: Scholarship): number {
   if (
@@ -107,24 +92,6 @@ export function daysUntilDeadline(s: Scholarship): number | null {
   const ms = deadlineMs(s);
   if (ms === null) return null;
   return (ms - Date.now()) / 86400000;
-}
-
-function scholarshipTextBlob(s: Scholarship): string {
-  const parts = [
-    s.title,
-    s.description,
-    s.listRequirementsSummary,
-    ...(s.eligibility ?? [])
-  ];
-  return parts.join(' ').toLowerCase();
-}
-
-function matchesIncludedRequirement(s: Scholarship, typeId: string): boolean {
-  const cat = getScholarshipCatalog(s);
-  if (cat.requirementTypesNormalized.includes(typeId)) return true;
-  const pat = REQUIREMENT_PATTERNS[typeId];
-  if (!pat) return false;
-  return pat.test(scholarshipTextBlob(s));
 }
 
 /** Data completeness + verified source (not legacy credibility %). */
@@ -176,24 +143,6 @@ function matchesPayout(s: Scholarship, p: PayoutFlags): boolean {
       /information will be added|not stated|unspecified|tbd/i.test(w));
 
   return hitCollege || hitStudent || hitNon || hitUnstated;
-}
-
-function matchesEligibility(s: Scholarship, selected: Set<string>): boolean {
-  if (selected.size === 0) return true;
-  const cat = getScholarshipCatalog(s);
-  for (const id of Array.from(selected)) {
-    if (cat.eligibilityIds.includes(id)) return true;
-  }
-  return false;
-}
-
-function matchesEducation(s: Scholarship, selected: Set<string>): boolean {
-  if (selected.size === 0) return true;
-  const cat = getScholarshipCatalog(s);
-  for (const id of Array.from(selected)) {
-    if (cat.educationIds.includes(id)) return true;
-  }
-  return false;
 }
 
 function matchesGpaBuckets(s: Scholarship, selected: Set<string>): boolean {
@@ -350,24 +299,11 @@ export function scholarshipPassesMoreFilters(
     if (ap < f.applicantsMin || ap > f.applicantsMax) return false;
   }
 
-  const includedTypes = Array.from(f.includeRequirementTypes).filter(
-    (typeId) => typeId !== 'resume'
-  );
-  if (includedTypes.length > 0) {
-    let matchedIncludedRequirement = false;
-    for (let i = 0; i < includedTypes.length; i++) {
-      if (matchesIncludedRequirement(s, includedTypes[i]!)) {
-        matchedIncludedRequirement = true;
-        break;
-      }
-    }
-    if (!matchedIncludedRequirement) return false;
-  }
+  // Requirement-type include filtering is server-only (SQL source of truth).
 
   if (!matchesDataCompletenessAndVerified(s, f.dataCompleteness)) return false;
   if (!matchesPayout(s, f.payout)) return false;
-  if (!matchesEligibility(s, f.includeEligibility)) return false;
-  if (!matchesEducation(s, f.includeEducationLevels)) return false;
+  // Eligibility and education include filtering are server-only (SQL source of truth).
   if (!matchesGpaBuckets(s, f.includeGpaBuckets)) return false;
   if (!matchesLocation(s, f.includeLocationLabels)) return false;
   if (!matchesEasyApply(s, f.includeEasyApply)) return false;

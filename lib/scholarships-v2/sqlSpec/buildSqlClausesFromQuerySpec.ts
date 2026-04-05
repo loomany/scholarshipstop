@@ -29,6 +29,18 @@ function mapPredicateToSql(predicate: QuerySpecPredicate): {
       return { clauses, stubs };
     }
 
+    case 'catalog_education_levels': {
+      const vals = ((predicate.value as string[]) ?? []).slice().sort((a, b) => a.localeCompare(b));
+      if (vals.length > 0) {
+        clauses.push({
+          boolean: 'or',
+          clause: vals.map((v) => `catalog_education_levels.cs.${toJsonArrayLiteral([v])}`).join(','),
+          sourceField: predicate.field
+        });
+      }
+      return { clauses, stubs };
+    }
+
     case 'first_generation': {
       const cols = (predicate.value as string[]) ?? [];
       clauses.push({

@@ -1,24 +1,11 @@
 import type { EffectiveScholarshipFilters, ScholarshipsV2Mode } from '@/lib/scholarships-v2/types';
+import { requirementTypesToDbColumns } from '@/lib/scholarships/requirementTypeMapping';
 import type {
   QuerySpecPredicate,
   QuerySpecStub,
   ScholarshipsQuerySpec
 } from '@/lib/scholarships-v2/querySpec/types';
 import { resolveScholarshipsMode, resolveUserCollectionTab } from '@/lib/scholarships-v2/tabs/userCollections';
-
-const REQUIREMENT_FIELD_MAP: Record<string, string | null> = {
-  essay: 'essay_required',
-  document: 'document_required',
-  photo: 'photo_required',
-  video: 'video_required',
-  personal_statement: 'goal_required',
-  link: 'link_required',
-  survey: 'survey_required',
-  question: 'question_required',
-  recommendation: 'recommendation_required',
-  transcript: 'transcript_required',
-  resume: null
-};
 
 function deadlineBuckets(preset: EffectiveScholarshipFilters['deadlinePreset']): string[] {
   switch (preset) {
@@ -116,14 +103,20 @@ export function buildScholarshipsQuerySpec(filters: EffectiveScholarshipFilters)
     }
   }
 
+  if (filters.educationLevelIds.length > 0) {
+    predicates.push({
+      field: 'catalog_education_levels',
+      operator: 'containsAny',
+      value: filters.educationLevelIds
+    });
+  }
+
   if (filters.includeGpaBuckets.length > 0) {
     predicates.push({ field: 'gpa_bucket', operator: 'in', value: filters.includeGpaBuckets });
   }
 
   if (filters.includeRequirementTypes.length > 0) {
-    const requirementFields = filters.includeRequirementTypes
-      .map((requirement) => REQUIREMENT_FIELD_MAP[requirement])
-      .filter((field): field is string => Boolean(field));
+    const requirementFields = requirementTypesToDbColumns(filters.includeRequirementTypes);
     if (requirementFields.length > 0) {
       predicates.push({
         field: 'requirement_flags',

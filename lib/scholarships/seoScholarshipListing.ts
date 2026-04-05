@@ -174,7 +174,6 @@ function moreFiltersReducedForSeoListing(base: MoreFiltersState): MoreFiltersSta
   f.includeEducationLevels.clear();
   f.includeGpaBuckets.clear();
   f.includeEasyApply.clear();
-  f.includeRequirementTypes.clear();
   f.dataCompleteness = {
     low: false,
     medium: false,

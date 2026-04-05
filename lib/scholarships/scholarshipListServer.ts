@@ -34,6 +34,7 @@ import {
 import type { ScholarshipProfileFilterSeed } from '@/lib/scholarships/profileFilterDefaults';
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { isSeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
+import { requirementTypesToDbColumns } from '@/lib/scholarships/requirementTypeMapping';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { createClient } from '@/utils/supabase/server';
 
@@ -564,7 +565,6 @@ function moreFiltersReducedForSeoListing(base: MoreFiltersState): MoreFiltersSta
   f.includeEducationLevels.clear();
   f.includeGpaBuckets.clear();
   f.includeEasyApply.clear();
-  f.includeRequirementTypes.clear();
   f.dataCompleteness = {
     low: false,
     medium: false,
@@ -590,23 +590,9 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     .or(`applicants_count.is.null,and(applicants_count.gte.${f.applicantsMin},applicants_count.lte.${f.applicantsMax})`);
 
   const includedRequirementTypes = Array.from(f.includeRequirementTypes);
-  const requirementFieldMap: Record<string, string | null> = {
-    essay: 'essay_required',
-    document: 'document_required',
-    photo: 'photo_required',
-    video: 'video_required',
-    personal_statement: 'goal_required',
-    link: 'link_required',
-    survey: 'survey_required',
-    question: 'question_required',
-    recommendation: 'recommendation_required',
-    transcript: 'transcript_required',
-    resume: null // resume inferred from text on client; not structured in DB
-  };
-  const requirementOrParts = includedRequirementTypes
-    .map((id) => requirementFieldMap[id])
-    .filter((field): field is string => Boolean(field))
-    .map((field) => `${field}.eq.true`);
+  const requirementOrParts = requirementTypesToDbColumns(includedRequirementTypes).map(
+    (field) => `${field}.eq.true`
+  );
   if (requirementOrParts.length > 0) {
     q = q.or(requirementOrParts.join(','));
   }
