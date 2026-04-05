@@ -590,17 +590,19 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     .or(`applicants_count.is.null,and(applicants_count.gte.${f.applicantsMin},applicants_count.lte.${f.applicantsMax})`);
 
   const excl = Array.from(f.excludeRequirementTypes);
+  const excludeRequirementFalseOrNull = (field: string) =>
+    q.or(`${field}.is.null,${field}.eq.false`);
   const exclMap: Record<string, () => any> = {
-    essay: () => q.not('essay_required', 'eq', true),
-    document: () => q.not('document_required', 'eq', true),
-    photo: () => q.not('photo_required', 'eq', true),
-    video: () => q.not('video_required', 'eq', true),
-    personal_statement: () => q.not('goal_required', 'eq', true),
-    link: () => q.not('link_required', 'eq', true),
-    survey: () => q.not('survey_required', 'eq', true),
-    question: () => q.not('question_required', 'eq', true),
-    recommendation: () => q.not('recommendation_required', 'eq', true),
-    transcript: () => q.not('transcript_required', 'eq', true),
+    essay: () => excludeRequirementFalseOrNull('essay_required'),
+    document: () => excludeRequirementFalseOrNull('document_required'),
+    photo: () => excludeRequirementFalseOrNull('photo_required'),
+    video: () => excludeRequirementFalseOrNull('video_required'),
+    personal_statement: () => excludeRequirementFalseOrNull('goal_required'),
+    link: () => excludeRequirementFalseOrNull('link_required'),
+    survey: () => excludeRequirementFalseOrNull('survey_required'),
+    question: () => excludeRequirementFalseOrNull('question_required'),
+    recommendation: () => excludeRequirementFalseOrNull('recommendation_required'),
+    transcript: () => excludeRequirementFalseOrNull('transcript_required'),
     resume: () => q // resume inferred from text on client; not structured in DB
   };
   for (const id of excl) {
