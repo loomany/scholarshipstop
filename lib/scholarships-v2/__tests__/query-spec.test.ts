@@ -35,6 +35,7 @@ test('legacy-like input -> v2 filters -> query spec includes top-priority facets
 
   const fields = spec.predicates.map((p) => p.field);
   assert.ok(fields.includes('eligibility_tags'));
+  assert.ok(fields.includes('catalog_education_levels'));
   assert.ok(fields.includes('gpa_bucket'));
   assert.ok(fields.includes('easy_apply_flags'));
   assert.ok(fields.includes('applicants_count'));
@@ -105,6 +106,7 @@ test('facet parity snapshot shape stays stable', () => {
     predicates: [
       { field: 'is_active', operator: 'equals' },
       { field: 'eligibility_tags', operator: 'containsAny' },
+      { field: 'catalog_education_levels', operator: 'containsAny' },
       { field: 'gpa_bucket', operator: 'in' },
       { field: 'requirement_flags', operator: 'or' },
       { field: 'applicants_count', operator: 'range' },

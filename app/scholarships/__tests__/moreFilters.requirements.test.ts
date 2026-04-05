@@ -18,7 +18,7 @@ function scholarshipFixture(): Scholarship {
   } as unknown as Scholarship;
 }
 
-test('client-side more-filters no longer filter by includeRequirementTypes', () => {
+test('client-side more-filters no longer filter by include-only requirement/eligibility/education groups', () => {
   const baseline = defaultMoreFiltersFromBounds({
     amountMin: 0,
     amountMax: 5000,
@@ -30,9 +30,19 @@ test('client-side more-filters no longer filter by includeRequirementTypes', () 
     ...baseline,
     includeRequirementTypes: new Set(['essay'])
   };
+  const withEligibility = {
+    ...baseline,
+    includeEligibility: new Set(['women', 'veterans'])
+  };
+  const withEducation = {
+    ...baseline,
+    includeEducationLevels: new Set(['undergraduate', 'graduate'])
+  };
 
   const scholarship = scholarshipFixture();
 
   assert.equal(scholarshipPassesMoreFilters(scholarship, baseline), true);
   assert.equal(scholarshipPassesMoreFilters(scholarship, withRequirement), true);
+  assert.equal(scholarshipPassesMoreFilters(scholarship, withEligibility), true);
+  assert.equal(scholarshipPassesMoreFilters(scholarship, withEducation), true);
 });
