@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.redirect(
       getStatusRedirect(
-        `${requestUrl.origin}/account`,
+        `${requestUrl.origin}/scholarships`,
         'Success!',
         'You are now signed in.'
       )
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.redirect(
     getStatusRedirect(
-      `${requestUrl.origin}/account`,
+      `${requestUrl.origin}/scholarships`,
       'Success!',
       'You are now signed in.'
     )
