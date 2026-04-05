@@ -29,6 +29,7 @@ type ScholarshipsMoreFiltersPanelProps = {
   onChange: (next: MoreFiltersState) => void;
   onClear: () => void;
   onApply: () => void;
+  applyPending?: boolean;
   previewCount: number | null;
   previewCountLoading: boolean;
   previewCountFallback?: number | null;
@@ -121,6 +122,7 @@ export default function ScholarshipsMoreFiltersPanel({
   onChange,
   onClear,
   onApply,
+  applyPending = false,
   previewCount,
   previewCountLoading,
   previewCountFallback = null,
@@ -172,6 +174,7 @@ export default function ScholarshipsMoreFiltersPanel({
     });
 
   const previewLabel = (() => {
+    if (applyPending) return 'Updating...';
     if (previewCountLoading) return 'Updating...';
     const effectiveCount = previewCount ?? previewCountFallback;
     if (effectiveCount == null) return 'See results';
