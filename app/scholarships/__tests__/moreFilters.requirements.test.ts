@@ -36,7 +36,6 @@ test('client-side more-filters no longer filter by includeRequirementTypes', () 
   assert.equal(scholarshipPassesMoreFilters(scholarship, baseline), true);
   assert.equal(scholarshipPassesMoreFilters(scholarship, withRequirement), true);
 });
-
 test('client-side more-filters no longer filter by includeEligibility', () => {
   const baseline = defaultMoreFiltersFromBounds({
     amountMin: 0,
