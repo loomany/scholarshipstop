@@ -21,11 +21,6 @@ import type { Database } from '@/types_db';
 import { profileMatchSummaryFromRow } from '@/lib/scholarships/profileMatchMeta';
 import { buildScholarshipProfileFilterSeed } from '@/lib/scholarships/profileFilterDefaults';
 import { getSubscription } from '@/utils/supabase/queries';
-import {
-  canBuildPersonalizedMatchIndex,
-  getCachedScholarshipMatchIndex
-} from '@/lib/scholarships/scholarshipMatchCache';
-import { filterIdsByIgnored } from '@/lib/scholarships/scholarshipMatchIndex';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 import {
@@ -72,15 +67,13 @@ function hubSidebarMetaDebugEnabled(): boolean {
 
 function applyListingMetaGuestPatches(
   meta: ScholarshipListMeta,
-  ctx: {
-    authUser: boolean;
-    personalizedCounts?: { bestMatches: number; recommended: number } | null;
-  }
+  ctx: { authUser: boolean }
 ) {
+  meta.sidebarCounts.bestMatches = 0;
+  meta.sidebarCounts.recommended = 0;
+  meta.sidebarCounts.easyApply = 0;
+  delete meta.matchedTotal;
   if (!ctx.authUser) {
-    meta.sidebarCounts.bestMatches = 0;
-    meta.sidebarCounts.recommended = 0;
-    meta.sidebarCounts.easyApply = 0;
     meta.sidebarCounts.saved = 0;
     meta.sidebarCounts.ignored = 0;
     meta.sidebarCounts.started = 0;
@@ -88,12 +81,7 @@ function applyListingMetaGuestPatches(
     delete meta.profileMatchSummary;
     delete meta.profileFilterSeed;
     delete meta.matchedTotal;
-    return;
   }
-  meta.sidebarCounts.bestMatches = ctx.personalizedCounts?.bestMatches ?? 0;
-  meta.sidebarCounts.recommended = ctx.personalizedCounts?.recommended ?? 0;
-  meta.sidebarCounts.easyApply = 0;
-  delete meta.matchedTotal;
 }
 
 async function emptyListResult(
@@ -224,37 +212,34 @@ async function handleList(
   const tab = isHubPrimaryListing
     ? parseHubScholarshipTabParam(searchParams.get('tab'))
     : parseScholarshipTabParam(searchParams.get('tab'));
-  const personalizedTabRequested =
-    tab === 'best-matches' || tab === 'recommended';
 
   const { legacyCategoryPageSlug, catalogSubjectCategoryId } =
     await resolveCatalogSubjectCategoryForPageSlug(supabase, categoryPageParam);
 
-  const baseReq = scholarshipListRequestFromParts({
-    page,
-    limit,
-    sort,
-    tab,
-    q,
-    category,
-    categoryPageSlug: legacyCategoryPageSlug,
-    catalogSubjectCategoryId,
-    deadline,
-    state,
-    ignored,
-    saved,
-    started,
-    submitted,
-    moreFilters,
-    longTailLegacySlugs: lt.filter(Boolean),
-    similarTo,
-    similarCategorySlug,
-    listScope,
-    requiredSeoTags: seoBody?.requiredSeoTags
-  });
-  let req: ScholarshipListRequest = personalizedTabRequested
-    ? { ...baseReq, listScope: 'catalog', personalizedProfile: undefined }
-    : applyCatalogOnlyListingNormalization(baseReq);
+  let req: ScholarshipListRequest = applyCatalogOnlyListingNormalization(
+    scholarshipListRequestFromParts({
+      page,
+      limit,
+      sort,
+      tab,
+      q,
+      category,
+      categoryPageSlug: legacyCategoryPageSlug,
+      catalogSubjectCategoryId,
+      deadline,
+      state,
+      ignored,
+      saved,
+      started,
+      submitted,
+      moreFilters,
+      longTailLegacySlugs: lt.filter(Boolean),
+      similarTo,
+      similarCategorySlug,
+      listScope,
+      requiredSeoTags: seoBody?.requiredSeoTags
+    })
+  );
 
   const v2ReadPathEligible =
     scholarshipsV2ReadPathEnabled() &&
@@ -280,8 +265,6 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   let profileRow: ProfilesRow | null = null;
   let isProSubscriber = false;
   let profileFilterSeed = null as ReturnType<typeof buildScholarshipProfileFilterSeed>;
-  let personalizedCounts: { bestMatches: number; recommended: number } | null = null;
-  let personalizedTabScopedIds: string[] | null = null;
   /**
    * Load auth/profile only when the response actually needs personalized context.
    * This keeps base catalog filtering fast for signed-in users when they are
@@ -335,29 +318,6 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       profileFilterSeed = buildScholarshipProfileFilterSeed(prof);
       const subscription = await getSubscription(supabase);
       isProSubscriber = Boolean(subscription);
-      if (profileRow && canBuildPersonalizedMatchIndex(profileRow)) {
-        const bundle = await getCachedScholarshipMatchIndex(
-          supabase,
-          authUser.id,
-          profileRow
-        );
-        const idsBest = filterIdsByIgnored(bundle.idsBest, req.ignored);
-        const idsRecommended = filterIdsByIgnored(
-          bundle.idsRecommended,
-          req.ignored
-        );
-        personalizedCounts = {
-          bestMatches: idsBest.length,
-          recommended: idsRecommended.length
-        };
-        if (req.tab === 'best-matches') {
-          personalizedTabScopedIds = idsBest;
-        } else if (req.tab === 'recommended') {
-          personalizedTabScopedIds = idsRecommended;
-        }
-      } else if (req.tab === 'best-matches' || req.tab === 'recommended') {
-        personalizedTabScopedIds = [];
-      }
     }
   }
 
@@ -386,8 +346,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       meta.profileFilterSeed = profileFilterSeed;
     }
     applyListingMetaGuestPatches(meta, {
-      authUser: Boolean(authUser),
-      personalizedCounts
+      authUser: Boolean(authUser)
     });
     const response = NextResponse.json({
       meta,
@@ -504,19 +463,10 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     );
   }
 
-  const reqForQuery =
-    req.tab === 'best-matches' || req.tab === 'recommended'
-      ? {
-          ...req,
-          tab: 'saved' as const,
-          saved: personalizedTabScopedIds ?? []
-        }
-      : req;
-
   const result = seoFallbackEnabled
     ? await executeScholarshipListQueryWithSeoFallback(
         supabase,
-        reqForQuery,
+        req,
         {
           countOnly,
           includeMeta: includeMeta && !countOnly,
@@ -535,7 +485,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
           )
         }
       )
-    : await executeScholarshipListQuery(supabase, reqForQuery, {
+    : await executeScholarshipListQuery(supabase, req, {
         countOnly,
         includeMeta: includeMeta && !countOnly,
         includeCategoryCounts:
@@ -569,8 +519,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   }
   if (result.meta) {
     applyListingMetaGuestPatches(result.meta, {
-      authUser: Boolean(authUser),
-      personalizedCounts
+      authUser: Boolean(authUser)
     });
   }
   if (hubDbg && result.meta && !countOnly) {

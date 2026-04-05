@@ -120,7 +120,9 @@ function buildHubListingSearchParams(options: {
   sp.set('limit', String(SCHOLARSHIPS_PAGE_SIZE));
   if (options.meta) sp.set('meta', '1');
   else sp.delete('meta');
-  if (options.tab === 'matches') {
+  if (options.tab === 'best-matches') {
+    sp.delete('tab');
+  } else if (options.tab === 'matches') {
     sp.set('tab', 'matches');
   } else {
     sp.set('tab', options.tab);
@@ -456,6 +458,8 @@ function ScholarshipsPageInner({
     }
     return {
       ...base,
+      bestMatches: 0,
+      recommended: 0,
       saved: savedIds.length,
       started: startedIds.length,
       submitted: submittedIds.length,
