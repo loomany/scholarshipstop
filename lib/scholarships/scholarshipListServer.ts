@@ -644,11 +644,13 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   if (f.includeLocationLabels.size > 0) {
     /**
      * DB canonical values are USPS state codes in `location_tags` (e.g. "FL").
+
      */
     const normalizedLocationTags = new Set<string>();
     for (const raw of Array.from(f.includeLocationLabels)) {
       const trimmed = raw.trim();
       if (!trimmed) continue;
+
       const code = normalizeStateNameOrCodeToCode(trimmed);
       if (code) normalizedLocationTags.add(code);
     }
