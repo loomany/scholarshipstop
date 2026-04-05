@@ -265,9 +265,23 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   let profileRow: ProfilesRow | null = null;
   let isProSubscriber = false;
   let profileFilterSeed = null as ReturnType<typeof buildScholarshipProfileFilterSeed>;
-  /** Load auth + profile for subscription tier, filter seed meta, and user tab counts. */
-  const shouldLoadAuthAndProfile =
-    !anonymousCatalogFastPath || isHubPrimaryListing;
+  /**
+   * Load auth/profile only when the response actually needs personalized context.
+   * This keeps base catalog filtering fast for signed-in users when they are
+   * changing filters/sort/page in catalog scope.
+   */
+  const requiresPersonalizationContext =
+    includeMeta ||
+    metaOnly ||
+    req.listScope === 'personalized' ||
+    req.tab === 'best-matches' ||
+    req.tab === 'recommended' ||
+    req.tab === 'easy-apply' ||
+    req.saved.length > 0 ||
+    req.ignored.length > 0 ||
+    req.started.length > 0 ||
+    req.submitted.length > 0;
+  const shouldLoadAuthAndProfile = requiresPersonalizationContext;
 
   if (hubDbg) {
     // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
