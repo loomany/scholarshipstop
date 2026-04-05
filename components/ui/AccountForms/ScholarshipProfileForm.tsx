@@ -25,7 +25,6 @@ import {
 import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
 import { accountPagePrimaryButtonClass } from '@/lib/constants/scholarshipActionUi';
 import { pickAllowedProfilesUpsertFields } from '@/lib/onboarding/profilesOnboardingSync';
-import { triggerScholarshipMatchRefreshSignal } from '@/lib/scholarships/matchRefreshSignal';
 import {
   sanitizeBirthDayInput,
   sanitizeBirthYearInput,
@@ -362,7 +361,6 @@ export default function ScholarshipProfileForm({
       } else {
         setMessage({ type: 'ok', text: 'Changes saved.' });
       }
-      triggerScholarshipMatchRefreshSignal();
       router.refresh();
     },
     [router]

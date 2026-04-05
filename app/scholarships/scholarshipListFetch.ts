@@ -136,15 +136,3 @@ export async function postScholarshipsMatchCounts(body: {
   const data = (await res.json()) as ScholarshipsMatchCountsResponse;
   return data;
 }
-
-export async function postScholarshipsMatchInvalidateSignal(): Promise<void> {
-  try {
-    await fetch('/api/scholarships/match/invalidate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      cache: 'no-store'
-    });
-  } catch {
-    // best effort only
-  }
-}

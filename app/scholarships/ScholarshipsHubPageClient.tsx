@@ -72,7 +72,8 @@ import {
 import {
   postScholarshipsList,
   postScholarshipsCount,
-  postScholarshipsMeta
+  postScholarshipsMeta,
+  postScholarshipsMatchCounts
 } from './scholarshipListFetch';
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
 import type { LongTailRouteScopePayload } from './scholarshipListServerPayload';
@@ -120,7 +121,7 @@ function buildHubListingSearchParams(options: {
   if (options.meta) sp.set('meta', '1');
   else sp.delete('meta');
   if (options.tab === 'best-matches') {
-    sp.set('tab', 'best-matches');
+    sp.delete('tab');
   } else if (options.tab === 'matches') {
     sp.set('tab', 'matches');
   } else {
@@ -212,6 +213,10 @@ function ScholarshipsPageInner({
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
+  const [personalizedSidebarCounts, setPersonalizedSidebarCounts] = useState<{
+    bestMatches: number;
+    recommended: number;
+  } | null>(null);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
 
   const openRegistrationWall = useCallback(() => {
@@ -440,7 +445,15 @@ function ScholarshipsPageInner({
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
     const base = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
-    const syncedMatches = activeTab === 'matches' && totalCount > 0 ? totalCount : base.matches;
+    const isCatalogBrowseTab =
+      activeTab === 'matches' ||
+      activeTab === 'best-matches' ||
+      activeTab === 'recommended' ||
+      activeTab === 'easy-apply';
+    const syncedMatches =
+      isCatalogBrowseTab && totalCount > 0
+        ? totalCount
+        : base.matches;
     if (!isAuthenticated) {
       return {
         ...base,
@@ -455,8 +468,8 @@ function ScholarshipsPageInner({
     }
     return {
       ...base,
-      bestMatches: base.bestMatches,
-      recommended: base.recommended,
+      bestMatches: personalizedSidebarCounts?.bestMatches ?? 0,
+      recommended: personalizedSidebarCounts?.recommended ?? 0,
       matches: syncedMatches,
       saved: savedIds.length,
       started: startedIds.length,
@@ -468,11 +481,45 @@ function ScholarshipsPageInner({
     activeTab,
     totalCount,
     listMeta?.sidebarCounts,
+    personalizedSidebarCounts,
     savedIds,
     startedIds,
     submittedIds,
     ignoredIds
   ]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setPersonalizedSidebarCounts(null);
+      return;
+    }
+    let cancelled = false;
+    const run = async () => {
+      try {
+        const data = await postScholarshipsMatchCounts({
+          ignored: userListIdsRef.current.ignored
+        });
+        if (cancelled) return;
+        const counts = data.counts;
+        setPersonalizedSidebarCounts({
+          bestMatches: counts?.bestMatches ?? 0,
+          recommended: counts?.recommended ?? 0
+        });
+      } catch {
+        if (cancelled) return;
+        setPersonalizedSidebarCounts((prev) => prev ?? { bestMatches: 0, recommended: 0 });
+      }
+    };
+    run();
+    const onVis = () => {
+      if (document.visibilityState === 'visible') run();
+    };
+    document.addEventListener('visibilitychange', onVis);
+    return () => {
+      cancelled = true;
+      document.removeEventListener('visibilitychange', onVis);
+    };
+  }, [isAuthenticated, ignoredIds]);
 
   const categoryCounts = useMemo(() => {
     if (listMeta?.categoryCounts) return listMeta.categoryCounts;
