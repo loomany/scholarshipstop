@@ -223,6 +223,17 @@ export function parseCommaStateCodes(raw: string | null | undefined): string[] {
     .filter((s) => /^[A-Z]{2}$/.test(s));
 }
 
+function normalizeStateNameOrCodeToCode(raw: string | null | undefined): string | null {
+  const t = raw?.trim();
+  if (!t) return null;
+  const upper = t.toUpperCase();
+  if (/^[A-Z]{2}$/.test(upper)) return upper;
+  const canonicalName = normalizeUsStateToCanonical(t);
+  if (!canonicalName) return null;
+  const code = US_STATE_NAME_TO_CODE[canonicalName];
+  return code ? code.toUpperCase() : null;
+}
+
 /** Allowlisted, deduped, sorted — safe for PostgREST `seo_tags` filter. */
 export function sanitizeRequiredSeoTagsInput(
   raw: string[] | null | undefined
@@ -630,15 +641,24 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   if (f.includeGpaBuckets.size > 0) {
     q = q.in('gpa_bucket', Array.from(f.includeGpaBuckets));
   }
-  addIncludeCs('location_tags', f.includeLocationLabels);
+  if (f.includeLocationLabels.size > 0) {
+    /**
+     * DB canonical values are USPS state codes in `location_tags` (e.g. "FL").
+     */
+    const normalizedLocationTags = new Set<string>();
+    for (const raw of Array.from(f.includeLocationLabels)) {
+      const trimmed = raw.trim();
+      if (!trimmed) continue;
+      const code = normalizeStateNameOrCodeToCode(trimmed);
+      if (code) normalizedLocationTags.add(code);
+    }
+    addIncludeCs('location_tags', normalizedLocationTags);
+  }
   addIncludeCs('easy_apply_flags', f.includeEasyApply);
 
-  const stateCanon = normalizeUsStateToCanonical(f.filterStateInput);
-  if (stateCanon) {
-    const code = US_STATE_NAME_TO_CODE[stateCanon];
-    if (code) {
-      q = q.or(`state_codes.cs.${JSON.stringify([code])}`);
-    }
+  const stateCode = normalizeStateNameOrCodeToCode(f.filterStateInput);
+  if (stateCode) {
+    q = q.or(`state_codes.cs.${JSON.stringify([stateCode])}`);
   }
 
   return q;
