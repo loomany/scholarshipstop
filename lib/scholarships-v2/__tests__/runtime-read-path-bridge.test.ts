@@ -35,7 +35,7 @@ function baseRequest(): ScholarshipListRequest {
   };
 }
 
-test('applyV2ReadPathToLegacyRequest normalizes list request fields via v2 adapter', () => {
+test('applyV2ReadPathToLegacyRequest only rewrites URL-derived listing fields', () => {
   const req = baseRequest();
   const out = applyV2ReadPathToLegacyRequest({
     request: req,
@@ -65,8 +65,5 @@ test('applyV2ReadPathToLegacyRequest normalizes list request fields via v2 adapt
   assert.deepEqual(out.saved, ['11111111-1111-1111-1111-111111111111']);
   assert.deepEqual(out.stateCodes, ['FL']);
   assert.equal(out.deadline, 'gt4w');
-  assert.ok(out.moreFilters.excludeRequirementTypes.has('resume'));
-  assert.ok(out.moreFilters.excludeRequirementTypes.has('essay'));
-  assert.ok(out.moreFilters.includeEligibility.has('first_generation'));
-  assert.equal(out.moreFilters.filterStateInput, 'Florida');
+ assert.equal(out.moreFilters, req.moreFilters);
 });
