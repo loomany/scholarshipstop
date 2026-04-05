@@ -41,6 +41,22 @@ function scholarshipsV2ReadPathEnabled(): boolean {
   return process.env.SCHOLARSHIPS_V2_READ_PATH === '1';
 }
 
+type RuntimeReadPath = 'legacy' | 'v2-bridge';
+
+function withRuntimePathDebugHeaders(
+  response: NextResponse,
+  searchParams: URLSearchParams,
+  runtimeReadPath: RuntimeReadPath,
+  v2Eligible: boolean
+): NextResponse {
+  if (searchParams.get('debug_read_path') !== '1') return response;
+
+  response.headers.set('X-Scholarships-Read-Path', runtimeReadPath);
+  response.headers.set('X-Scholarships-V2-Flag', scholarshipsV2ReadPathEnabled() ? '1' : '0');
+  response.headers.set('X-Scholarships-V2-Eligible', v2Eligible ? '1' : '0');
+
+  return response;
+}
 /** Temporary: hub sidebar personalized counts (best/recommended) SSR vs client refresh. Remove after diagnosis. */
 function hubSidebarMetaDebugEnabled(): boolean {
   return (
@@ -231,6 +247,7 @@ async function handleList(
     !seoBody?.seoListingFallback &&
     !metaOnly &&
     !countOnly;
+let runtimeReadPath: RuntimeReadPath = 'legacy';
 
   if (v2ReadPathEligible) {
     req = applyV2ReadPathToLegacyRequest({
@@ -238,6 +255,7 @@ async function handleList(
       searchParams,
       moreFilters: bodyMoreFilters
     });
+
   }
 
   const hubDebugReqId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -322,7 +340,7 @@ async function handleList(
       limit: req.limit
     });
     response.headers.set('Cache-Control', 'private, no-store');
-    return response;
+    return withRuntimePathDebugHeaders(response, searchParams, runtimeReadPath, v2ReadPathEligible);
   }
 
   if (!similarTo && isEmptyIdTab(req)) {
@@ -341,15 +359,25 @@ async function handleList(
       });
     }
     if (countOnly) {
-      return NextResponse.json({ total: 0, page: req.page, limit: req.limit });
+      return withRuntimePathDebugHeaders(
+        NextResponse.json({ total: 0, page: req.page, limit: req.limit }),
+        searchParams,
+        runtimeReadPath,
+        v2ReadPathEligible
+      );
     }
-    return NextResponse.json({
-      scholarships: r.scholarships,
-      total: 0,
-      page: req.page,
-      limit: req.limit,
-      meta: r.meta
-    });
+    return withRuntimePathDebugHeaders(
+      NextResponse.json({
+        scholarships: r.scholarships,
+        total: 0,
+        page: req.page,
+        limit: req.limit,
+        meta: r.meta
+      }),
+      searchParams,
+      runtimeReadPath,
+      v2ReadPathEligible
+    );
   }
 
   const slugOnlyMf =
@@ -499,12 +527,17 @@ async function handleList(
       fallbackUsed: result.seoFallback?.used,
       tier: result.seoFallback?.tier
     });
-    return NextResponse.json({
-      total: result.total,
-      page: req.page,
-      limit: req.limit,
-      seoFallback: result.seoFallback
-    });
+    return withRuntimePathDebugHeaders(
+      NextResponse.json({
+        total: result.total,
+        page: req.page,
+        limit: req.limit,
+        seoFallback: result.seoFallback
+      }),
+      searchParams,
+      runtimeReadPath,
+      v2ReadPathEligible
+    );
   }
 
   // eslint-disable-next-line no-console -- temporary SEO list diagnostics
@@ -542,7 +575,7 @@ async function handleList(
   } else {
     response.headers.set('Cache-Control', 'private, no-store');
   }
-  return response;
+  return withRuntimePathDebugHeaders(response, searchParams, runtimeReadPath, v2ReadPathEligible);
 }
 
 /** GET /api/scholarships?page=&limit=&sort=&tab=&q=&category=&deadline=&state=&ignored=&saved=&…&meta=1&count_only=1&similar_to=&long_tail= */
