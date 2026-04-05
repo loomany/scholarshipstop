@@ -35,7 +35,7 @@ test('top-priority facets exist on effective filters', () => {
     explicitUrlFilters: {
       includeEligibility: ['women'],
       includeGpaBuckets: ['gpa_3'],
-      excludeRequirementTypes: ['essay'],
+      includeRequirementTypes: ['essay'],
       applicantsMin: 10,
       applicantsMax: 500,
       includeEasyApply: ['easy_apply'],
@@ -49,7 +49,7 @@ test('top-priority facets exist on effective filters', () => {
 
   assert.deepEqual(out.includeEligibility, ['women']);
   assert.deepEqual(out.includeGpaBuckets, ['gpa_3']);
-  assert.deepEqual(out.excludeRequirementTypes, ['essay']);
+  assert.deepEqual(out.includeRequirementTypes, ['essay']);
   assert.equal(out.applicantsMin, 10);
   assert.equal(out.applicantsMax, 500);
   assert.deepEqual(out.includeEasyApply, ['easy_apply']);

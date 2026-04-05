@@ -71,6 +71,20 @@ function mapPredicateToSql(predicate: QuerySpecPredicate): {
       return { clauses, stubs };
     }
 
+    case 'requirement_flags': {
+      const clausesList = ((predicate.value as { field: string; equals: boolean }[]) ?? [])
+        .filter((item) => item.field && item.equals === true)
+        .map((item) => `${item.field}.eq.true`);
+      if (clausesList.length > 0) {
+        clauses.push({
+          boolean: 'or',
+          clause: clausesList.join(','),
+          sourceField: predicate.field
+        });
+      }
+      return { clauses, stubs };
+    }
+
     case 'listing_completeness': {
       const v = predicate.value as {
         low?: boolean;

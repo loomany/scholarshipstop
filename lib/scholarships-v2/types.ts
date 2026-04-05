@@ -52,7 +52,7 @@ export type ScholarshipFilterInput = {
   applicantsMin: number | null;
   applicantsMax: number | null;
   includeEligibility: string[];
-  excludeRequirementTypes: string[];
+  includeRequirementTypes: string[];
   includeEasyApply: string[];
   dataCompleteness: DataCompletenessFlags;
   payout: PayoutFlags;

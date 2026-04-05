@@ -15,7 +15,7 @@ test('legacy-like input -> v2 filters -> query spec includes top-priority facets
       amountMax: 5000,
       applicantsMin: 0,
       applicantsMax: 1000,
-      excludeRequirementTypes: ['essay', 'resume'],
+      includeRequirementTypes: ['essay', 'resume'],
       dataCompleteness: { low: true, medium: false, high: false, verified: true },
       payout: { college: true, student: false, nonMonetary: false, notStated: false },
       includeEligibility: ['first_generation'],
@@ -73,7 +73,7 @@ test('facet parity snapshot shape stays stable', () => {
       amountMax: 2000,
       applicantsMin: 10,
       applicantsMax: 50,
-      excludeRequirementTypes: ['document'],
+      includeRequirementTypes: ['document'],
       dataCompleteness: { low: false, medium: true, high: false, verified: false },
       payout: { college: false, student: true, nonMonetary: false, notStated: false },
       includeEligibility: ['veterans'],
@@ -106,7 +106,7 @@ test('facet parity snapshot shape stays stable', () => {
       { field: 'is_active', operator: 'equals' },
       { field: 'eligibility_tags', operator: 'containsAny' },
       { field: 'gpa_bucket', operator: 'in' },
-      { field: 'document_required', operator: 'not' },
+      { field: 'requirement_flags', operator: 'or' },
       { field: 'applicants_count', operator: 'range' },
       { field: 'easy_apply_flags', operator: 'containsAny' },
       { field: 'listing_completeness', operator: 'or' },
@@ -115,4 +115,82 @@ test('facet parity snapshot shape stays stable', () => {
       { field: 'deadline_bucket', operator: 'in' }
     ]
   });
+});
+
+test('requirement filters use OR include semantics and skip resume-only selections', () => {
+  const filters = buildV2FiltersFromLegacyInput({
+    searchParams: new URLSearchParams('tab=matches'),
+    moreFilters: {
+      deadlinePreset: 'any',
+      amountMin: 0,
+      amountMax: 1000,
+      applicantsMin: 0,
+      applicantsMax: 100,
+      includeRequirementTypes: ['essay', 'question', 'resume'],
+      dataCompleteness: { low: false, medium: false, high: false, verified: false },
+      payout: { college: false, student: false, nonMonetary: false, notStated: false },
+      includeEligibility: [],
+      includeEducationLevels: [],
+      includeGpaBuckets: [],
+      includeLocationLabels: [],
+      includeEasyApply: [],
+      filterStateInput: ''
+    }
+  });
+  const spec = buildScholarshipsQuerySpec(filters);
+  const requirementPredicate = spec.predicates.find((p) => p.field === 'requirement_flags');
+  assert.deepEqual(requirementPredicate, {
+    field: 'requirement_flags',
+    operator: 'or',
+    value: [
+      { field: 'essay_required', equals: true },
+      { field: 'question_required', equals: true }
+    ]
+  });
+
+  const resumeOnly = buildScholarshipsQuerySpec(
+    buildV2FiltersFromLegacyInput({
+      searchParams: new URLSearchParams('tab=matches'),
+      moreFilters: {
+        deadlinePreset: 'any',
+        amountMin: 0,
+        amountMax: 1000,
+        applicantsMin: 0,
+        applicantsMax: 100,
+        includeRequirementTypes: ['resume'],
+        dataCompleteness: { low: false, medium: false, high: false, verified: false },
+        payout: { college: false, student: false, nonMonetary: false, notStated: false },
+        includeEligibility: [],
+        includeEducationLevels: [],
+        includeGpaBuckets: [],
+        includeLocationLabels: [],
+        includeEasyApply: [],
+        filterStateInput: ''
+      }
+    })
+  );
+  assert.equal(resumeOnly.predicates.some((p) => p.field === 'requirement_flags'), false);
+
+  const emptySelection = buildScholarshipsQuerySpec(
+    buildV2FiltersFromLegacyInput({
+      searchParams: new URLSearchParams('tab=matches'),
+      moreFilters: {
+        deadlinePreset: 'any',
+        amountMin: 0,
+        amountMax: 1000,
+        applicantsMin: 0,
+        applicantsMax: 100,
+        includeRequirementTypes: [],
+        dataCompleteness: { low: false, medium: false, high: false, verified: false },
+        payout: { college: false, student: false, nonMonetary: false, notStated: false },
+        includeEligibility: [],
+        includeEducationLevels: [],
+        includeGpaBuckets: [],
+        includeLocationLabels: [],
+        includeEasyApply: [],
+        filterStateInput: ''
+      }
+    })
+  );
+  assert.equal(emptySelection.predicates.some((p) => p.field === 'requirement_flags'), false);
 });

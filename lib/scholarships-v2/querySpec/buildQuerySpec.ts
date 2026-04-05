@@ -120,12 +120,16 @@ export function buildScholarshipsQuerySpec(filters: EffectiveScholarshipFilters)
     predicates.push({ field: 'gpa_bucket', operator: 'in', value: filters.includeGpaBuckets });
   }
 
-  if (filters.excludeRequirementTypes.length > 0) {
-    for (const requirement of filters.excludeRequirementTypes) {
-      const field = REQUIREMENT_FIELD_MAP[requirement];
-      if (field) {
-        predicates.push({ field, operator: 'not', value: true });
-      }
+  if (filters.includeRequirementTypes.length > 0) {
+    const requirementFields = filters.includeRequirementTypes
+      .map((requirement) => REQUIREMENT_FIELD_MAP[requirement])
+      .filter((field): field is string => Boolean(field));
+    if (requirementFields.length > 0) {
+      predicates.push({
+        field: 'requirement_flags',
+        operator: 'or',
+        value: requirementFields.map((field) => ({ field, equals: true }))
+      });
     }
   }
 

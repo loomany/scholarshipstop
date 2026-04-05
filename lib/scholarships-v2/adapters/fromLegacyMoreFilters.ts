@@ -16,7 +16,7 @@ export function adaptLegacyMoreFiltersToV2(
     educationLevelIds: [...(moreFilters.includeEducationLevels ?? [])],
     includeGpaBuckets: [...(moreFilters.includeGpaBuckets ?? [])],
     includeEasyApply: [...(moreFilters.includeEasyApply ?? [])],
-    excludeRequirementTypes: [...(moreFilters.excludeRequirementTypes ?? [])],
+    includeRequirementTypes: [...(moreFilters.includeRequirementTypes ?? [])],
     dataCompleteness: {
       low: Boolean(moreFilters.dataCompleteness?.low),
       medium: Boolean(moreFilters.dataCompleteness?.medium),

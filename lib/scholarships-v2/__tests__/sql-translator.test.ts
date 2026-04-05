@@ -10,7 +10,7 @@ function buildLegacyReferenceSqlClauses(input: {
   deadlineBucket: string;
   eligibilityTag: string;
   gpaBucket: string;
-  requirementField: string;
+  requirementFields: string[];
   applicantsMin: number;
   applicantsMax: number;
   easyApplyFlag: string;
@@ -20,7 +20,7 @@ function buildLegacyReferenceSqlClauses(input: {
     'is_active.eq.true',
     `eligibility_tags.cs.["${input.eligibilityTag}"]`,
     `gpa_bucket.in.(${input.gpaBucket})`,
-    `${input.requirementField}.not.eq.true`,
+    input.requirementFields.map((field) => `${field}.eq.true`).join(','),
     `applicants_count.is.null,and(applicants_count.gte.${input.applicantsMin},applicants_count.lte.${input.applicantsMax})`,
     `easy_apply_flags.cs.["${input.easyApplyFlag}"]`,
     'listing_completeness_bucket.eq.standard',
@@ -38,7 +38,7 @@ function clausesFor(input: {
     amountMax: number;
     applicantsMin: number;
     applicantsMax: number;
-    excludeRequirementTypes: string[];
+    includeRequirementTypes: string[];
     dataCompleteness: { low: boolean; medium: boolean; high: boolean; verified: boolean };
     payout: { college: boolean; student: boolean; nonMonetary: boolean; notStated: boolean };
     includeEligibility: string[];
@@ -67,7 +67,7 @@ test('legacy input -> v2 querySpec -> SQL clauses parity for top facets', () => 
       amountMax: 2000,
       applicantsMin: 10,
       applicantsMax: 50,
-      excludeRequirementTypes: ['document'],
+      includeRequirementTypes: ['document'],
       dataCompleteness: { low: false, medium: true, high: false, verified: false },
       payout: { college: false, student: true, nonMonetary: false, notStated: false },
       includeEligibility: ['veterans'],
@@ -84,7 +84,7 @@ test('legacy input -> v2 querySpec -> SQL clauses parity for top facets', () => 
     deadlineBucket: 'gt_28',
     eligibilityTag: 'veterans',
     gpaBucket: 'gpa_25',
-    requirementField: 'document_required',
+    requirementFields: ['document_required'],
     applicantsMin: 10,
     applicantsMax: 50,
     easyApplyFlag: 'easy_apply',
@@ -107,7 +107,7 @@ test('category and id-list semantics are translated', () => {
       amountMax: 1000,
       applicantsMin: 0,
       applicantsMax: 100,
-      excludeRequirementTypes: [],
+      includeRequirementTypes: [],
       dataCompleteness: { low: false, medium: false, high: false, verified: false },
       payout: { college: false, student: false, nonMonetary: false, notStated: false },
       includeEligibility: [],
@@ -136,7 +136,7 @@ test('translator keeps resume as no-op and emits direct category/text clauses', 
       amountMax: 1000,
       applicantsMin: 0,
       applicantsMax: 100,
-      excludeRequirementTypes: ['resume'],
+      includeRequirementTypes: ['resume'],
       dataCompleteness: { low: false, medium: false, high: false, verified: false },
       payout: { college: false, student: false, nonMonetary: false, notStated: false },
       includeEligibility: ['first_generation'],
@@ -150,5 +150,35 @@ test('translator keeps resume as no-op and emits direct category/text clauses', 
 
   const clauseStrings = sql.clauses.map((c) => c.clause);
   assert.ok(clauseStrings.includes('catalog_text.search.florida scholarship'));
+  assert.equal(
+    clauseStrings.some((clause) => clause.includes('resume_required') || clause.includes('resume')),
+    false
+  );
   assert.equal(sql.stubs.length, 0);
+});
+
+test('translator emits OR clause for multi-select requirement filters', () => {
+  const { sql } = clausesFor({
+    search: 'tab=matches',
+    more: {
+      deadlinePreset: 'any',
+      amountMin: 0,
+      amountMax: 1000,
+      applicantsMin: 0,
+      applicantsMax: 100,
+      includeRequirementTypes: ['essay', 'question'],
+      dataCompleteness: { low: false, medium: false, high: false, verified: false },
+      payout: { college: false, student: false, nonMonetary: false, notStated: false },
+      includeEligibility: [],
+      includeEducationLevels: [],
+      includeGpaBuckets: [],
+      includeLocationLabels: [],
+      includeEasyApply: [],
+      filterStateInput: ''
+    }
+  });
+
+  const requirementClause = sql.clauses.find((c) => c.sourceField === 'requirement_flags');
+  assert.equal(requirementClause?.boolean, 'or');
+  assert.equal(requirementClause?.clause, 'essay_required.eq.true,question_required.eq.true');
 });
