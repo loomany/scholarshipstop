@@ -5,6 +5,10 @@ import { createClient } from '@/utils/supabase/server';
 import ScholarshipDetailPageClient from '@/app/scholarships/ScholarshipDetailPageClient';
 import ScholarshipsHubPageClient from '@/app/scholarships/ScholarshipsHubPageClient';
 import {
+  SeoScholarshipHero,
+  SeoScholarshipPostListingSeo
+} from '@/components/scholarships/SeoScholarshipListingChrome';
+import {
   buildInitialListRequestKey,
   createInitialScholarshipsPayload,
   fetchInitialHubScholarshipsPayload,
@@ -26,6 +30,24 @@ type PageProps = { params: { slugPath?: string[] } };
 function debugLogListingSeo(payload: Record<string, unknown>) {
   if (process.env.DEBUG_SEO_SCHOLARSHIP !== '1') return;
   console.info('[scholarships listing seo]', payload);
+}
+
+function normalizeSeoTextLines(value: string | string[] | undefined): string[] | undefined {
+  if (!value) return undefined;
+  if (Array.isArray(value)) {
+    const rows = value.map((line) => line.trim()).filter(Boolean);
+    return rows.length > 0 ? rows : undefined;
+  }
+  const text = value.trim();
+  if (!text) return undefined;
+  return [text];
+}
+
+function isPromotedManifestSeoRoute(entry: {
+  indexable?: boolean;
+  qualityBucket?: string;
+}): boolean {
+  return entry.indexable === true && entry.qualityBucket === 'GOOD';
 }
 
 export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
@@ -192,6 +214,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const faqItems = seo?.faq;
 
     const safePath = canonicalPath.replace(/\//g, '__');
+    const promotedChrome = isPromotedManifestSeoRoute(entry);
+    const listingMode = { type: 'manifest', canonicalPath, entry } as const;
+
     debugLogListingSeo({
       routeKind: 'manifest_seo',
       canonicalPath,
@@ -209,7 +234,8 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
           }
         : null,
       chosenH1OrTitle: pageTitle,
-      chosenIntroPreview: introParagraph?.slice(0, 120) ?? null
+      chosenIntroPreview: introParagraph?.slice(0, 120) ?? null,
+      promotedChrome
     });
 
     return (
@@ -230,6 +256,41 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
             }),
             initialListPayload
           )}
+          leadContent={
+            promotedChrome ? (
+              <SeoScholarshipHero
+                heading={pageTitle}
+                scholarshipCount={initialListPayload.total}
+                listLoading={false}
+                introHtml={introParagraph}
+                fallbackUsed={Boolean(initialListPayload.seoFallback?.used)}
+                thinListing={Boolean(initialListPayload.seoFallback?.thinListing)}
+                exactFilterMatchTotal={
+                  initialListPayload.seoFallback?.exactTotal ?? null
+                }
+                qualityBucket={entry.qualityBucket ?? null}
+                pageData={seo?.page_data ?? null}
+                updatedAt={seo?._meta?.generatedAt ?? null}
+                canonicalTarget={entry.canonicalTarget ?? null}
+              />
+            ) : null
+          }
+          postListingContent={
+            promotedChrome ? (
+              <SeoScholarshipPostListingSeo
+                heading={pageTitle}
+                supportingParagraph={seo?.supporting ?? null}
+                relatedIntroParagraph={seo?.related_intro ?? null}
+                howToUseLines={normalizeSeoTextLines(seo?.how_to_use)}
+                whoForLines={normalizeSeoTextLines(seo?.who_for)}
+                faqItems={seo?.faq}
+                pageData={seo?.page_data ?? null}
+                qualityBucket={entry.qualityBucket ?? null}
+                updatedAt={seo?._meta?.generatedAt ?? null}
+                relatedMode={listingMode}
+              />
+            ) : null
+          }
         />
       </Suspense>
     );

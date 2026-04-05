@@ -5,7 +5,15 @@
  * Data: server-paginated POST /api/scholarships (no full catalog in memory).
  */
 
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode
+} from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Lock } from 'lucide-react';
@@ -145,10 +153,14 @@ function buildHubMoreFiltersBaseline(options: {
 
 function ScholarshipsPageInner({
   isAuthenticated,
-  initialPayload = null
+  initialPayload = null,
+  leadContent = null,
+  postListingContent = null
 }: {
   isAuthenticated: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
+  leadContent?: ReactNode;
+  postListingContent?: ReactNode;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -903,14 +915,16 @@ function ScholarshipsPageInner({
       <ScholarshipsTwoColumnLayout
         maxWidth="listing"
         lead={
-          <div className="space-y-5 sm:space-y-6">
-            <ScholarshipsEmailConfirmationBanner />
-            <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
-              {scholarshipListPageTitle(activeTab, {
-                guest: !isAuthenticated
-              })}
-            </h1>
-          </div>
+          leadContent ?? (
+            <div className="space-y-5 sm:space-y-6">
+              <ScholarshipsEmailConfirmationBanner />
+              <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
+                {scholarshipListPageTitle(activeTab, {
+                  guest: !isAuthenticated
+                })}
+              </h1>
+            </div>
+          )
         }
         sidebar={
           <ScholarshipsSidebar
@@ -1074,6 +1088,7 @@ function ScholarshipsPageInner({
               />
             </>
           )}
+          {postListingContent}
         </>
       </ScholarshipsTwoColumnLayout>
 
@@ -1104,10 +1119,14 @@ function ScholarshipsPageInner({
 
 export default function ScholarshipsHubPageClient({
   isAuthenticated = false,
-  initialPayload = null
+  initialPayload = null,
+  leadContent = null,
+  postListingContent = null
 }: {
   isAuthenticated?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
+  leadContent?: ReactNode;
+  postListingContent?: ReactNode;
 }) {
   return (
     <Suspense
@@ -1120,6 +1139,8 @@ export default function ScholarshipsHubPageClient({
       <ScholarshipsPageInner
         isAuthenticated={isAuthenticated}
         initialPayload={initialPayload}
+        leadContent={leadContent}
+        postListingContent={postListingContent}
       />
     </Suspense>
   );
