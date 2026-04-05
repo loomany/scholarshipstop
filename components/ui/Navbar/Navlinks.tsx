@@ -71,12 +71,25 @@ export default function Navlinks({
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setClientUser(session?.user ?? null);
+      router.refresh();
     });
 
     return () => {
       sub.subscription.unsubscribe();
     };
-  }, []);
+  }, [router]);
+
+  /**
+   * Keep browser state in sync with server-rendered auth state.
+   * This avoids stale "guest" nav UI when auth happened via server actions
+   * (where client `onAuthStateChange` may not fire immediately).
+   */
+  useEffect(() => {
+    if (clientUser === undefined) return;
+    if ((clientUser?.id ?? null) !== (serverUser?.id ?? null)) {
+      setClientUser(serverUser);
+    }
+  }, [clientUser, serverUser]);
 
   useEffect(() => {
     const uid = user?.id;
