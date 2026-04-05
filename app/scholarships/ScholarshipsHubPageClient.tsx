@@ -166,6 +166,16 @@ function buildHubMoreFiltersBaseline(options: {
   return mergeMoreFilterStates(routeScoped, base);
 }
 
+function withTabEnforcedMoreFilters(
+  filters: MoreFiltersState,
+  tab: ScholarshipListTabId
+): MoreFiltersState {
+  if (tab !== 'easy-apply') return filters;
+  const next = cloneMoreFilters(filters);
+  next.includeEasyApply.add('easy_apply');
+  return next;
+}
+
 function ScholarshipsPageInner({
   isAuthenticated,
   initialPayload = null,
@@ -466,8 +476,10 @@ function ScholarshipsPageInner({
 
   const moreFiltersFingerprint = useMemo(() => {
     if (!moreFiltersApplied) return 'none';
-    return JSON.stringify(moreFiltersToJson(moreFiltersApplied));
-  }, [moreFiltersApplied]);
+    return JSON.stringify(
+      moreFiltersToJson(withTabEnforcedMoreFilters(moreFiltersApplied, activeTab))
+    );
+  }, [moreFiltersApplied, activeTab]);
 
   const totalPages = Math.max(
     1,
@@ -556,10 +568,13 @@ function ScholarshipsPageInner({
           routeBaseMoreFilters && moreFiltersApplied
             ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied)
             : (moreFiltersApplied ?? routeBaseMoreFilters);
+        const tabAwareMoreFilters = effectiveMoreFilters
+          ? withTabEnforcedMoreFilters(effectiveMoreFilters, activeTab)
+          : undefined;
         const data = await postScholarshipsList({
           searchParams: sp.toString(),
-          moreFilters: effectiveMoreFilters
-            ? moreFiltersToJson(effectiveMoreFilters)
+          moreFilters: tabAwareMoreFilters
+            ? moreFiltersToJson(tabAwareMoreFilters)
             : undefined,
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
@@ -641,11 +656,14 @@ function ScholarshipsPageInner({
         const metaResponse = await postScholarshipsMeta({
           searchParams: sp.toString(),
           moreFilters: moreFiltersToJson(
-            routeBaseMoreFilters && moreFiltersApplied
-              ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied)
-              : (moreFiltersApplied ??
-                  routeBaseMoreFilters ??
-                  defaultMoreFiltersFromBounds(filterBounds))
+            withTabEnforcedMoreFilters(
+              routeBaseMoreFilters && moreFiltersApplied
+                ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied)
+                : (moreFiltersApplied ??
+                    routeBaseMoreFilters ??
+                    defaultMoreFiltersFromBounds(filterBounds)),
+              activeTab
+            )
           ),
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
@@ -693,10 +711,13 @@ function ScholarshipsPageInner({
   }, [isLoading, totalCount, totalPages, rawPageParam, replaceListingParams]);
 
   const openMoreFilters = useCallback(() => {
-    const basis = moreFiltersApplied ?? emptyMoreFiltersState;
+    const basis = withTabEnforcedMoreFilters(
+      moreFiltersApplied ?? emptyMoreFiltersState,
+      activeTab
+    );
     setMoreFiltersDraft(cloneMoreFilters(basis));
     setMoreFiltersOpen(true);
-  }, [moreFiltersApplied, emptyMoreFiltersState]);
+  }, [moreFiltersApplied, emptyMoreFiltersState, activeTab]);
 
   const applyMoreFilters = useCallback(() => {
     if (moreFiltersDraft) {
@@ -741,9 +762,12 @@ function ScholarshipsPageInner({
       postScholarshipsCount({
         searchParams: sp.toString(),
         moreFilters: moreFiltersToJson(
-          mergeMoreFilterStates(
-            routeBaseMoreFilters ?? defaultMoreFiltersFromBounds(filterBounds),
-            moreFiltersDraft
+          withTabEnforcedMoreFilters(
+            mergeMoreFilterStates(
+              routeBaseMoreFilters ?? defaultMoreFiltersFromBounds(filterBounds),
+              moreFiltersDraft
+            ),
+            activeTab
           )
         ),
         longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
