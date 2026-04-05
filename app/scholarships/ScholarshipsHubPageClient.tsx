@@ -33,7 +33,11 @@ import {
   type ScholarshipCategoryId
 } from './scholarshipCategories';
 import type { Scholarship } from './scholarshipsData';
-import { getIgnoredScholarshipIds, addIgnoredScholarship, removeIgnoredScholarship } from './ignoredScholarships';
+import {
+  getIgnoredScholarshipIds,
+  addIgnoredScholarship,
+  removeIgnoredScholarship
+} from './ignoredScholarships';
 import {
   cloneMoreFilters,
   countMoreFilterDeltaFromBaseline,
@@ -71,9 +75,14 @@ import {
   postScholarshipsMeta
 } from './scholarshipListFetch';
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
-import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
+import type { LongTailRouteScopePayload } from './scholarshipListServerPayload';
+import {
+  moreFiltersFromJson,
+  moreFiltersToJson
+} from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
 import { buildMoreFiltersWithProfileDefaults } from '@/lib/scholarships/profileFilterDefaults';
+import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
 
 /** Temporary: trace hub meta overwrite. Remove after diagnosis. */
 function hubClientSidebarDebugEnabled(): boolean {
@@ -129,7 +138,8 @@ function buildHubListingSearchParams(options: {
   else sp.delete('ignored');
   if (options.started.length) sp.set('started', options.started.join(','));
   else sp.delete('started');
-  if (options.submitted.length) sp.set('submitted', options.submitted.join(','));
+  if (options.submitted.length)
+    sp.set('submitted', options.submitted.join(','));
   else sp.delete('submitted');
   return sp;
 }
@@ -137,6 +147,7 @@ function buildHubListingSearchParams(options: {
 function buildHubMoreFiltersBaseline(options: {
   meta: ScholarshipListMeta | null;
   searchParamsString: string;
+  routeScope: LongTailRouteScopePayload | null;
 }): MoreFiltersState | null {
   if (!options.meta) return null;
   const base = defaultMoreFiltersFromBounds(options.meta.filterBounds);
@@ -148,17 +159,24 @@ function buildHubMoreFiltersBaseline(options: {
   if (deadline && deadline !== 'any') {
     base.deadlinePreset = deadline;
   }
-  return base;
+  if (!options.routeScope?.baseMoreFilters) return base;
+  const routeScoped = moreFiltersFromJson(
+    options.routeScope.baseMoreFilters,
+    options.meta.filterBounds
+  );
+  return mergeMoreFilterStates(routeScoped, base);
 }
 
 function ScholarshipsPageInner({
   isAuthenticated,
   initialPayload = null,
+  routeScope = null,
   leadContent = null,
   postListingContent = null
 }: {
   isAuthenticated: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
+  routeScope?: LongTailRouteScopePayload | null;
   leadContent?: ReactNode;
   postListingContent?: ReactNode;
 }) {
@@ -182,7 +200,9 @@ function ScholarshipsPageInner({
   const [scholarships, setScholarships] = useState<Scholarship[]>(
     initialPayload?.result.scholarships ?? []
   );
-  const [totalCount, setTotalCount] = useState(initialPayload?.result.total ?? 0);
+  const [totalCount, setTotalCount] = useState(
+    initialPayload?.result.total ?? 0
+  );
   const [listMeta, setListMeta] = useState<ScholarshipListMeta | null>(
     initialPayload?.result.meta ?? null
   );
@@ -221,15 +241,17 @@ function ScholarshipsPageInner({
     useState<MoreFiltersState | null>(() =>
       buildHubMoreFiltersBaseline({
         meta: initialPayload?.result.meta ?? null,
-        searchParamsString
+        searchParamsString,
+        routeScope
       })
     );
   const [moreFiltersDraft, setMoreFiltersDraft] =
     useState<MoreFiltersState | null>(null);
   const [previewCount, setPreviewCount] = useState<number | null>(null);
   const [previewCountLoading, setPreviewCountLoading] = useState(false);
-  const [lastKnownPreviewCount, setLastKnownPreviewCount] =
-    useState<number | null>(null);
+  const [lastKnownPreviewCount, setLastKnownPreviewCount] = useState<
+    number | null
+  >(null);
   const metaKeySynced = useRef('');
   const metaRequestInFlightRef = useRef<string | null>(null);
   const initialRequestKeyRef = useRef(initialPayload?.requestKey ?? null);
@@ -294,8 +316,7 @@ function ScholarshipsPageInner({
       tab === 'ignored';
     const needDefaultHubTab = !tab;
     const hasCats = parsed.categories.size > 0;
-    const hasAdvDeadline =
-      parsed.deadline != null && parsed.deadline !== 'any';
+    const hasAdvDeadline = parsed.deadline != null && parsed.deadline !== 'any';
     const lockedGuestSort = isGuestLockedSortOption(parsed.sort);
     if (
       !badTab &&
@@ -306,10 +327,11 @@ function ScholarshipsPageInner({
     ) {
       return;
     }
-    const resetPage =
-      badTab || hasCats || hasAdvDeadline || lockedGuestSort;
+    const resetPage = badTab || hasCats || hasAdvDeadline || lockedGuestSort;
     replaceListingParams({
-      ...((needDefaultHubTab || badTab) ? { tab: 'matches', scope: 'catalog' } : {}),
+      ...(needDefaultHubTab || badTab
+        ? { tab: 'matches', scope: 'catalog' }
+        : {}),
       ...(hasCats ? { categories: new Set() } : {}),
       ...(hasAdvDeadline ? { deadline: 'any' } : {}),
       ...(lockedGuestSort ? { sort: 'most_recent' } : {}),
@@ -393,13 +415,21 @@ function ScholarshipsPageInner({
     applicantsMin: 0,
     applicantsMax: 200000
   };
+  const routeBaseMoreFilters = useMemo(
+    () =>
+      routeScope?.baseMoreFilters
+        ? moreFiltersFromJson(routeScope.baseMoreFilters, filterBounds)
+        : null,
+    [routeScope?.baseMoreFilters, filterBounds]
+  );
   const moreFiltersBaseline = useMemo(
     () =>
       buildHubMoreFiltersBaseline({
         meta: listMeta,
-        searchParamsString
+        searchParamsString,
+        routeScope
       }),
-    [listMeta, searchParamsString]
+    [listMeta, searchParamsString, routeScope]
   );
   const profileSuggestedMoreFilters = useMemo(() => {
     const baseline =
@@ -456,7 +486,10 @@ function ScholarshipsPageInner({
     return JSON.stringify(moreFiltersToJson(moreFiltersApplied));
   }, [moreFiltersApplied]);
 
-  const totalPages = Math.max(1, Math.ceil(totalCount / SCHOLARSHIPS_PAGE_SIZE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(totalCount / SCHOLARSHIPS_PAGE_SIZE)
+  );
   const rawPageParam = new URLSearchParams(searchParamsString).get('page');
   const pageFromUrl = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
@@ -464,7 +497,9 @@ function ScholarshipsPageInner({
   useEffect(() => {
     let cancelled = false;
     const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
-    const currentRequestKey = `hub:hub:${searchParamsString}`;
+    const currentRequestKey = routeScope
+      ? `long_tail:${pathname.replace(/^\/scholarships\//, '')}:${searchParamsString}`
+      : `hub:hub:${searchParamsString}`;
     /**
      * Hub first paint: reuse SSR `initialPayload` when the URL matches the server request key
      * (`hub:hub:` + same search string). Avoids a duplicate POST /api/scholarships on hydration.
@@ -534,13 +569,19 @@ function ScholarshipsPageInner({
           });
         }
         const prevMeta = listMetaRef.current;
+        const effectiveMoreFilters =
+          routeBaseMoreFilters && moreFiltersApplied
+            ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied)
+            : (moreFiltersApplied ?? routeBaseMoreFilters);
         const data = await postScholarshipsList({
           searchParams: sp.toString(),
-          moreFilters:
-            moreFiltersApplied != null
-              ? moreFiltersToJson(moreFiltersApplied)
-              : undefined,
-          longTailLegacySlugs: []
+          moreFilters: effectiveMoreFilters
+            ? moreFiltersToJson(effectiveMoreFilters)
+            : undefined,
+          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+          seoListingFallback: routeScope?.seoListingFallback,
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters
         });
         if (cancelled) return;
         setScholarships(data.scholarships);
@@ -587,7 +628,10 @@ function ScholarshipsPageInner({
     pageFromUrl,
     activeTab,
     moreFiltersFingerprint,
-    catalogListScope
+    catalogListScope,
+    routeScope,
+    pathname,
+    routeBaseMoreFilters
   ]);
 
   useEffect(() => {
@@ -613,11 +657,17 @@ function ScholarshipsPageInner({
         });
         const metaResponse = await postScholarshipsMeta({
           searchParams: sp.toString(),
-          moreFilters:
-            moreFiltersApplied != null
-              ? moreFiltersToJson(moreFiltersApplied)
-              : undefined,
-          longTailLegacySlugs: []
+          moreFilters: moreFiltersToJson(
+            routeBaseMoreFilters && moreFiltersApplied
+              ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied)
+              : (moreFiltersApplied ??
+                  routeBaseMoreFilters ??
+                  defaultMoreFiltersFromBounds(filterBounds))
+          ),
+          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+          seoListingFallback: routeScope?.seoListingFallback,
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters
         });
         if (cancelled) return;
         if (metaResponse.meta) {
@@ -644,7 +694,10 @@ function ScholarshipsPageInner({
     searchParamsString,
     moreFiltersFingerprint,
     catalogListScope,
-    moreFiltersApplied
+    moreFiltersApplied,
+    routeScope,
+    filterBounds,
+    routeBaseMoreFilters
   ]);
 
   useEffect(() => {
@@ -654,17 +707,10 @@ function ScholarshipsPageInner({
     if (!Number.isFinite(requested) || requested < 1 || valid !== requested) {
       replaceListingParams({ page: valid, resetPage: false });
     }
-  }, [
-    isLoading,
-    totalCount,
-    totalPages,
-    rawPageParam,
-    replaceListingParams
-  ]);
+  }, [isLoading, totalCount, totalPages, rawPageParam, replaceListingParams]);
 
   const openMoreFilters = useCallback(() => {
-    const basis =
-      moreFiltersApplied ?? profileSuggestedMoreFilters;
+    const basis = moreFiltersApplied ?? profileSuggestedMoreFilters;
     setMoreFiltersDraft(cloneMoreFilters(basis));
     setMoreFiltersOpen(true);
   }, [moreFiltersApplied, profileSuggestedMoreFilters]);
@@ -717,8 +763,16 @@ function ScholarshipsPageInner({
       });
       postScholarshipsCount({
         searchParams: sp.toString(),
-        moreFilters: moreFiltersToJson(moreFiltersDraft),
-        longTailLegacySlugs: []
+        moreFilters: moreFiltersToJson(
+          mergeMoreFilterStates(
+            routeBaseMoreFilters ?? defaultMoreFiltersFromBounds(filterBounds),
+            moreFiltersDraft
+          )
+        ),
+        longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+        requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+        seoListingFallback: routeScope?.seoListingFallback,
+        slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters
       })
         .then((r) => {
           if (cancelled) return;
@@ -741,7 +795,10 @@ function ScholarshipsPageInner({
     moreFiltersOpen,
     searchParamsString,
     activeTab,
-    catalogListScope
+    catalogListScope,
+    routeScope,
+    filterBounds,
+    routeBaseMoreFilters
   ]);
 
   const buildPageHref = useCallback(
@@ -787,8 +844,8 @@ function ScholarshipsPageInner({
     }
     setQuery('');
     setMoreFiltersApplied(cloneMoreFilters(profileSuggestedMoreFilters));
-    router.replace('/scholarships', { scroll: false });
-  }, [router, profileSuggestedMoreFilters]);
+    router.replace(pathname, { scroll: false });
+  }, [router, profileSuggestedMoreFilters, pathname]);
 
   const viewSegment = useMemo<'best' | 'all' | 'easy'>(() => {
     if (!isAuthenticated) {
@@ -870,8 +927,7 @@ function ScholarshipsPageInner({
   );
 
   const resultCountForHeader = isLoading ? null : totalCount;
-  const showingFrom =
-    !isLoading && totalCount > 0 ? listStart + 1 : null;
+  const showingFrom = !isLoading && totalCount > 0 ? listStart + 1 : null;
   const showingTo =
     !isLoading && totalCount > 0
       ? Math.min(listStart + SCHOLARSHIPS_PAGE_SIZE, totalCount)
@@ -1097,9 +1153,7 @@ function ScholarshipsPageInner({
         onClose={() => setMoreFiltersOpen(false)}
         bounds={filterBounds}
         value={
-          moreFiltersDraft ??
-          moreFiltersApplied ??
-          profileSuggestedMoreFilters
+          moreFiltersDraft ?? moreFiltersApplied ?? profileSuggestedMoreFilters
         }
         onChange={setMoreFiltersDraft}
         onClear={clearMoreFiltersDraft}
@@ -1120,11 +1174,13 @@ function ScholarshipsPageInner({
 export default function ScholarshipsHubPageClient({
   isAuthenticated = false,
   initialPayload = null,
+  routeScope = null,
   leadContent = null,
   postListingContent = null
 }: {
   isAuthenticated?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
+  routeScope?: LongTailRouteScopePayload | null;
   leadContent?: ReactNode;
   postListingContent?: ReactNode;
 }) {
@@ -1139,6 +1195,7 @@ export default function ScholarshipsHubPageClient({
       <ScholarshipsPageInner
         isAuthenticated={isAuthenticated}
         initialPayload={initialPayload}
+        routeScope={routeScope}
         leadContent={leadContent}
         postListingContent={postListingContent}
       />
