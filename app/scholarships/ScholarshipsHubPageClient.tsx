@@ -58,7 +58,11 @@ import {
   parseScholarshipListUrl,
   SCHOLARSHIPS_PAGE_SIZE
 } from './scholarshipListUrl';
-import { postScholarshipsList, postScholarshipsCount } from './scholarshipListFetch';
+import {
+  postScholarshipsList,
+  postScholarshipsCount,
+  postScholarshipsMeta
+} from './scholarshipListFetch';
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
@@ -210,6 +214,7 @@ function ScholarshipsPageInner({
     useState<MoreFiltersState | null>(null);
   const [previewCount, setPreviewCount] = useState(0);
   const metaKeySynced = useRef('');
+  const metaRequestInFlightRef = useRef<string | null>(null);
   const prevTabRef = useRef<ScholarshipListTabId | null>(null);
   const initialRequestKeyRef = useRef(initialPayload?.requestKey ?? null);
   const listMetaRef = useRef<ScholarshipListMeta | null>(listMeta);
@@ -443,7 +448,6 @@ function ScholarshipsPageInner({
   useEffect(() => {
     let cancelled = false;
     const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
-    const includeMeta = metaKey !== metaKeySynced.current;
     const currentRequestKey = `hub:hub:${searchParamsString}`;
     /**
      * Hub first paint: reuse SSR `initialPayload` when the URL matches the server request key
@@ -473,7 +477,7 @@ function ScholarshipsPageInner({
           base: new URLSearchParams(searchParamsString),
           page: pageFromUrl,
           tab: activeTab,
-          meta: includeMeta,
+          meta: false,
           saved: ids.saved,
           ignored: ids.ignored,
           started: ids.started,
@@ -499,7 +503,7 @@ function ScholarshipsPageInner({
             activeTab,
             effectiveListScope: catalogListScope,
             q: parsedList.q,
-            includeMetaRequested: includeMeta,
+            includeMetaRequested: false,
             metaKey,
             metaKeySyncedBefore: metaKeySynced.current,
             idCounts: {
@@ -568,6 +572,63 @@ function ScholarshipsPageInner({
     activeTab,
     moreFiltersFingerprint,
     catalogListScope
+  ]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
+    if (metaKeySynced.current === metaKey) return;
+    if (metaRequestInFlightRef.current === metaKey) return;
+    metaRequestInFlightRef.current = metaKey;
+
+    const run = async () => {
+      try {
+        const ids = userListIdsRef.current;
+        const sp = buildHubListingSearchParams({
+          base: new URLSearchParams(searchParamsString),
+          page: 1,
+          tab: activeTab,
+          meta: true,
+          saved: ids.saved,
+          ignored: ids.ignored,
+          started: ids.started,
+          submitted: ids.submitted,
+          scope: catalogListScope
+        });
+        const metaResponse = await postScholarshipsMeta({
+          searchParams: sp.toString(),
+          moreFilters:
+            moreFiltersApplied != null
+              ? moreFiltersToJson(moreFiltersApplied)
+              : undefined,
+          longTailLegacySlugs: []
+        });
+        if (cancelled) return;
+        if (metaResponse.meta) {
+          setListMeta(metaResponse.meta);
+          metaKeySynced.current = metaKey;
+        }
+      } catch {
+        if (!cancelled) {
+          // no-op: keep fallback sidebar until next attempt
+        }
+      } finally {
+        if (metaRequestInFlightRef.current === metaKey) {
+          metaRequestInFlightRef.current = null;
+        }
+      }
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    activeTab,
+    searchParamsString,
+    moreFiltersFingerprint,
+    catalogListScope,
+    moreFiltersApplied
   ]);
 
   useEffect(() => {

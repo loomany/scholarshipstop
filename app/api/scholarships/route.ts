@@ -106,6 +106,34 @@ type SeoListBodyOpts = {
   requiredSeoTags?: string[];
 };
 
+function buildGuestPublicCacheControl(args: {
+  authUser: boolean;
+  isHubPrimaryListing: boolean;
+  includeMeta: boolean;
+  countOnly: boolean;
+  metaOnly: boolean;
+  req: ScholarshipListRequest;
+}): string | null {
+  if (args.authUser) return null;
+  if (!args.isHubPrimaryListing) return null;
+  if (args.countOnly || args.includeMeta || args.metaOnly) return null;
+  if (args.req.page !== 1 || args.req.limit !== 12) return null;
+  if (args.req.tab !== 'matches') return null;
+  if (args.req.q.trim().length > 0) return null;
+  if (args.req.categoryIds.size > 0) return null;
+  if (args.req.categoryPageSlug || args.req.catalogSubjectCategoryId) return null;
+  if (args.req.stateCodes.length > 0) return null;
+  if (args.req.longTailLegacySlugs.length > 0) return null;
+  if (args.req.similarToId) return null;
+  if (args.req.saved.length > 0) return null;
+  if (args.req.ignored.length > 0) return null;
+  if (args.req.started.length > 0) return null;
+  if (args.req.submitted.length > 0) return null;
+  if (args.req.requiredSeoTags.length > 0) return null;
+  if (args.req.deadline !== 'any') return null;
+  return 'public, s-maxage=45, stale-while-revalidate=300';
+}
+
 async function handleList(
   searchParams: URLSearchParams,
   bodyMoreFilters: MoreFiltersJson | undefined,
@@ -129,6 +157,7 @@ async function handleList(
   const submitted = searchParams.get('submitted');
   const countOnly = searchParams.get('count_only') === '1';
   const includeMeta = searchParams.get('meta') === '1';
+  const metaOnly = searchParams.get('meta_only') === '1';
   const similarTo = searchParams.get('similar_to');
   const similarCategorySlug = searchParams.get('similar_category_slug');
   const listScope = searchParams.get('scope');
@@ -248,6 +277,32 @@ async function handleList(
       authUserId: authUser?.id ?? null,
       profileExists: profileRow != null
     });
+  }
+
+  if (metaOnly) {
+    const includeCategoryCounts =
+      Boolean(isHubPrimaryListing) ||
+      !anonymousCatalogFastPath ||
+      Boolean(categoryPageParam?.trim());
+    const meta = await fetchScholarshipListMeta(supabase, req, bounds, {
+      includeCategoryCounts
+    });
+    if (profileRow) {
+      meta.profileMatchSummary = profileMatchSummaryFromRow(profileRow);
+      meta.profileFilterSeed = profileFilterSeed;
+    } else if (profileFilterSeed) {
+      meta.profileFilterSeed = profileFilterSeed;
+    }
+    applyListingMetaGuestPatches(meta, {
+      authUser: Boolean(authUser)
+    });
+    const response = NextResponse.json({
+      meta,
+      page: req.page,
+      limit: req.limit
+    });
+    response.headers.set('Cache-Control', 'private, no-store');
+    return response;
   }
 
   if (!similarTo && isEmptyIdTab(req)) {
@@ -441,7 +496,7 @@ async function handleList(
     tier: result.seoFallback?.tier
   });
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     scholarships: result.scholarships,
     /** Alias for clients expecting `results` (SEO fallback debugging). */
     results: result.scholarships,
@@ -453,6 +508,21 @@ async function handleList(
     isProSubscriber,
     seoFallback: result.seoFallback
   });
+  const cacheControl = buildGuestPublicCacheControl({
+    authUser: Boolean(authUser),
+    isHubPrimaryListing,
+    includeMeta,
+    countOnly,
+    metaOnly,
+    req
+  });
+  if (cacheControl) {
+    response.headers.set('Cache-Control', cacheControl);
+    response.headers.set('Vary', 'Accept-Encoding');
+  } else {
+    response.headers.set('Cache-Control', 'private, no-store');
+  }
+  return response;
 }
 
 /** GET /api/scholarships?page=&limit=&sort=&tab=&q=&category=&deadline=&state=&ignored=&saved=&…&meta=1&count_only=1&similar_to=&long_tail= */

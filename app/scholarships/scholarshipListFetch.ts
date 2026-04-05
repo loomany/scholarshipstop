@@ -84,3 +84,24 @@ export async function postScholarshipsCount(
   if (!res.ok) throw new Error('count failed');
   return res.json();
 }
+
+export async function postScholarshipsMeta(
+  body: ScholarshipsListPostBody
+): Promise<{ meta?: ScholarshipListMeta; page: number; limit: number }> {
+  const sp = new URLSearchParams(body.searchParams);
+  sp.set('meta_only', '1');
+  const res = await fetch('/api/scholarships', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      searchParams: sp.toString(),
+      moreFilters: body.moreFilters,
+      longTailLegacySlugs: body.longTailLegacySlugs,
+      seoListingFallback: body.seoListingFallback,
+      slugOnlyMoreFilters: body.slugOnlyMoreFilters,
+      requiredSeoTags: body.requiredSeoTags
+    })
+  });
+  if (!res.ok) throw new Error('meta failed');
+  return res.json();
+}
