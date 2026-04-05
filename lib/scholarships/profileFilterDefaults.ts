@@ -18,10 +18,10 @@ export type ScholarshipProfileFilterSeed = {
 function gpaBucketIdsFromProfileGpa(raw: ProfilesRow['gpa']): string[] {
   const gpa = parseUserGpa(raw);
   if (gpa == null) return [];
-  if (gpa >= 3.5) return ['gpa_35'];
-  if (gpa >= 3.0) return ['gpa_3'];
-  if (gpa >= 2.5) return ['gpa_25'];
-  if (gpa >= 2.0) return ['gpa_2'];
+  if (gpa >= 3.5) return ['gpa_3_5_plus'];
+  if (gpa >= 3.0) return ['gpa_3_0_plus'];
+  if (gpa >= 2.5) return ['gpa_2_5_plus'];
+  if (gpa >= 2.0) return ['gpa_2_0_plus'];
   return [];
 }
 

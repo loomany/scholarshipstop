@@ -42,6 +42,11 @@ export type SeoTagSourceRow = {
 };
 
 const GPA_BUCKET_TO_TAG: Record<string, SeoCanonicalTag> = {
+  no_gpa_requirement: 'no_gpa_requirement',
+  gpa_2_0_plus: 'gpa_2_0',
+  gpa_2_5_plus: 'gpa_2_5',
+  gpa_3_0_plus: 'gpa_3_0',
+  gpa_3_5_plus: 'gpa_3_5',
   gpa_none: 'no_gpa_requirement',
   gpa_2: 'gpa_2_0',
   gpa_25: 'gpa_2_5',
@@ -110,7 +115,7 @@ function tagsFromStructured(row: SeoTagSourceRow, out: Set<SeoCanonicalTag>): vo
 
   for (const f of jsonStringArray(row.easy_apply_flags)) {
     if (isSeoCanonicalTag(f)) out.add(f);
-    if (f === 'gpa_none') out.add('no_gpa_requirement');
+    if (f === 'gpa_none' || f === 'no_gpa_requirement') out.add('no_gpa_requirement');
   }
 
   const gb = row.gpa_bucket?.trim();

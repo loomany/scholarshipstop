@@ -56,11 +56,11 @@ export const EDUCATION_LEVEL_OPTIONS = [
 ] as const;
 
 export const GPA_BUCKET_OPTIONS = [
-  { id: 'gpa_none', label: 'No GPA Requirement' },
-  { id: 'gpa_2', label: 'GPA 2.0+' },
-  { id: 'gpa_25', label: 'GPA 2.5+' },
-  { id: 'gpa_3', label: 'GPA 3.0+' },
-  { id: 'gpa_35', label: 'GPA 3.5+' }
+  { id: 'no_gpa_requirement', label: 'No GPA Requirement' },
+  { id: 'gpa_2_0_plus', label: 'GPA 2.0+' },
+  { id: 'gpa_2_5_plus', label: 'GPA 2.5+' },
+  { id: 'gpa_3_0_plus', label: 'GPA 3.0+' },
+  { id: 'gpa_3_5_plus', label: 'GPA 3.5+' }
 ] as const;
 
 export const EASY_APPLY_OPTIONS = [
@@ -266,12 +266,12 @@ function parseGpaFromBlob(blob: string): number | null {
 }
 
 function gpaMinToBucketId(min: number | null): string | null {
-  if (min == null || Number.isNaN(min)) return 'gpa_none';
-  if (min >= 3.5) return 'gpa_35';
-  if (min >= 3.0) return 'gpa_3';
-  if (min >= 2.5) return 'gpa_25';
-  if (min >= 2.0) return 'gpa_2';
-  return 'gpa_none';
+  if (min == null || Number.isNaN(min)) return 'no_gpa_requirement';
+  if (min >= 3.5) return 'gpa_3_5_plus';
+  if (min >= 3.0) return 'gpa_3_0_plus';
+  if (min >= 2.5) return 'gpa_2_5_plus';
+  if (min >= 2.0) return 'gpa_2_0_plus';
+  return 'no_gpa_requirement';
 }
 
 function deriveGpa(
@@ -609,7 +609,7 @@ export function scholarshipCardChips(s: Scholarship, maxVisible = 6): {
   if (payout) add('payout', payout);
 
   const gpaL = gpaBucketLabel(cat.gpaBucketId);
-  if (gpaL && cat.gpaBucketId !== 'gpa_none') add('gpa', gpaL);
+  if (gpaL && cat.gpaBucketId !== 'no_gpa_requirement') add('gpa', gpaL);
 
   for (const loc of cat.locationLabels) {
     if (loc === NATIONWIDE_LOCATION) add('loc:nation', loc);
