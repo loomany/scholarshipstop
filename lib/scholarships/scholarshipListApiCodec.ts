@@ -19,6 +19,23 @@ export type MoreFiltersJson = Omit<
   includeEasyApply: string[];
 };
 
+function normalizeGpaBucketId(id: string): string {
+  switch (id) {
+    case 'gpa_none':
+      return 'no_gpa_requirement';
+    case 'gpa_2':
+      return 'gpa_2_0_plus';
+    case 'gpa_25':
+      return 'gpa_2_5_plus';
+    case 'gpa_3':
+      return 'gpa_3_0_plus';
+    case 'gpa_35':
+      return 'gpa_3_5_plus';
+    default:
+      return id;
+  }
+}
+
 export function moreFiltersToJson(f: MoreFiltersState): MoreFiltersJson {
   return {
     ...f,
@@ -65,7 +82,9 @@ export function moreFiltersFromJson(
     },
     includeEligibility: new Set(raw.includeEligibility ?? []),
     includeEducationLevels: new Set(raw.includeEducationLevels ?? []),
-    includeGpaBuckets: new Set(raw.includeGpaBuckets ?? []),
+    includeGpaBuckets: new Set(
+      (raw.includeGpaBuckets ?? []).map((id) => normalizeGpaBucketId(id))
+    ),
     includeLocationLabels: new Set(raw.includeLocationLabels ?? []),
     includeEasyApply: new Set(raw.includeEasyApply ?? []),
     filterStateInput:

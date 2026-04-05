@@ -91,11 +91,11 @@ export const SEO_ROUTE_EASY_APPLY_SEGMENTS: Record<string, string> = {
 };
 
 export const SEO_ROUTE_GPA_SEGMENTS: Record<string, string> = {
-  'no-gpa-requirement': 'gpa_none',
-  'gpa-2-0': 'gpa_2',
-  'gpa-2-5': 'gpa_25',
-  'gpa-3-0': 'gpa_3',
-  'gpa-3-5': 'gpa_35'
+  'no-gpa-requirement': 'no_gpa_requirement',
+  'gpa-2-0': 'gpa_2_0_plus',
+  'gpa-2-5': 'gpa_2_5_plus',
+  'gpa-3-0': 'gpa_3_0_plus',
+  'gpa-3-5': 'gpa_3_5_plus'
 };
 
 export const SEO_ROUTE_SEGMENT_TO_CANONICAL_TAG: Record<string, SeoCanonicalTag> = {
