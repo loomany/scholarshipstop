@@ -66,6 +66,7 @@ import {
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
+import { buildMoreFiltersWithProfileDefaults } from '@/lib/scholarships/profileFilterDefaults';
 
 /** Temporary: trace hub meta overwrite. Remove after diagnosis. */
 function hubClientSidebarDebugEnabled(): boolean {
@@ -141,6 +142,22 @@ function buildHubMoreFiltersBaseline(options: {
   return base;
 }
 
+function hasExplicitUserIntentFilters(searchParamsString: string): boolean {
+  const sp = new URLSearchParams(searchParamsString);
+  const hasQ = (sp.get('q') ?? '').trim().length > 0;
+  const hasCategory =
+    (sp.get('category') ?? '').trim().length > 0 ||
+    (sp.get('categories') ?? '').trim().length > 0;
+  const hasDeadline = (sp.get('deadline') ?? '').trim().length > 0;
+  /**
+   * Keep this guard narrow and intent-based.
+   * `sort`, `page`, `scope`, and hub `tab` are navigation/technical params.
+   * `state` is an explicit filter intent and should block profile-seed auto-apply.
+   */
+  const hasState = (sp.get('state') ?? '').trim().length > 0;
+  return hasQ || hasCategory || hasDeadline || hasState;
+}
+
 function ScholarshipsPageInner({
   isAuthenticated,
   initialPayload = null
@@ -212,12 +229,16 @@ function ScholarshipsPageInner({
     );
   const [moreFiltersDraft, setMoreFiltersDraft] =
     useState<MoreFiltersState | null>(null);
-  const [previewCount, setPreviewCount] = useState(0);
+  const [previewCount, setPreviewCount] = useState<number | null>(null);
+  const [previewCountLoading, setPreviewCountLoading] = useState(false);
+  const [lastKnownPreviewCount, setLastKnownPreviewCount] =
+    useState<number | null>(null);
   const metaKeySynced = useRef('');
   const metaRequestInFlightRef = useRef<string | null>(null);
-  const prevTabRef = useRef<ScholarshipListTabId | null>(null);
   const initialRequestKeyRef = useRef(initialPayload?.requestKey ?? null);
   const listMetaRef = useRef<ScholarshipListMeta | null>(listMeta);
+  const hasUserTouchedMoreFiltersRef = useRef(false);
+  const profileSeedAppliedRef = useRef(false);
   listMetaRef.current = listMeta;
 
   const userListIdsRef = useRef({
@@ -432,13 +453,43 @@ function ScholarshipsPageInner({
 
   useEffect(() => {
     if (!moreFiltersBaseline) return;
-    const tabChanged = prevTabRef.current !== activeTab;
-    prevTabRef.current = activeTab;
     setMoreFiltersApplied((prev) => {
-      if (!tabChanged && prev) return prev;
+      if (prev) return prev;
+      if (hasUserTouchedMoreFiltersRef.current) return prev;
       return cloneMoreFilters(moreFiltersBaseline);
     });
   }, [activeTab, moreFiltersBaseline]);
+
+  useEffect(() => {
+    if (profileSeedAppliedRef.current) return;
+    if (!isAuthenticated) {
+      profileSeedAppliedRef.current = true;
+      return;
+    }
+    const profileSeed = listMeta?.profileFilterSeed;
+    if (!profileSeed) return;
+    if (hasUserTouchedMoreFiltersRef.current) {
+      profileSeedAppliedRef.current = true;
+      return;
+    }
+    if (hasExplicitUserIntentFilters(searchParamsString)) {
+      profileSeedAppliedRef.current = true;
+      return;
+    }
+
+    const seeded = buildMoreFiltersWithProfileDefaults(filterBounds, profileSeed);
+    setMoreFiltersApplied((prev) => {
+      if (hasUserTouchedMoreFiltersRef.current) {
+        return prev;
+      }
+      if (!prev) return seeded;
+      const prevKey = JSON.stringify(moreFiltersToJson(prev));
+      const nextKey = JSON.stringify(moreFiltersToJson(seeded));
+      if (prevKey === nextKey) return prev;
+      return seeded;
+    });
+    profileSeedAppliedRef.current = true;
+  }, [isAuthenticated, listMeta?.profileFilterSeed, searchParamsString, filterBounds]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / SCHOLARSHIPS_PAGE_SIZE));
   const rawPageParam = new URLSearchParams(searchParamsString).get('page');
@@ -660,6 +711,7 @@ function ScholarshipsPageInner({
     }
     if (moreFiltersDraft) {
       const next = cloneMoreFilters(moreFiltersDraft);
+      hasUserTouchedMoreFiltersRef.current = true;
       setMoreFiltersApplied(next);
       replaceListingParams({
         deadline: next.deadlinePreset,
@@ -684,9 +736,12 @@ function ScholarshipsPageInner({
 
   useEffect(() => {
     if (!moreFiltersOpen || !moreFiltersDraft) {
-      setPreviewCount(0);
+      setPreviewCount(null);
+      setPreviewCountLoading(false);
       return;
     }
+    setPreviewCountLoading(true);
+    let cancelled = false;
     const t = setTimeout(() => {
       const ids = userListIdsRef.current;
       const sp = buildHubListingSearchParams({
@@ -705,10 +760,22 @@ function ScholarshipsPageInner({
         moreFilters: moreFiltersToJson(moreFiltersDraft),
         longTailLegacySlugs: []
       })
-        .then((r) => setPreviewCount(r.total))
-        .catch(() => setPreviewCount(0));
+        .then((r) => {
+          if (cancelled) return;
+          setPreviewCount(r.total);
+          setLastKnownPreviewCount(r.total);
+          setPreviewCountLoading(false);
+        })
+        .catch(() => {
+          if (cancelled) return;
+          setPreviewCount(null);
+          setPreviewCountLoading(false);
+        });
     }, 320);
-    return () => clearTimeout(t);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
   }, [
     moreFiltersDraft,
     moreFiltersOpen,
@@ -778,12 +845,14 @@ function ScholarshipsPageInner({
         chips.push({
           id: 'more-filters',
           label: `Advanced filters (${n})`,
-          onDismiss: () =>
+          onDismiss: () => {
+            hasUserTouchedMoreFiltersRef.current = true;
             setMoreFiltersApplied(
               cloneMoreFilters(
                 moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
               )
-            )
+            );
+          }
         });
       }
     }
@@ -807,6 +876,7 @@ function ScholarshipsPageInner({
     }
     setQuery('');
     replaceListingParams({ q: '', categories: new Set(), resetPage: true });
+    hasUserTouchedMoreFiltersRef.current = true;
     setMoreFiltersApplied(
       cloneMoreFilters(
         moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
@@ -826,6 +896,7 @@ function ScholarshipsPageInner({
       queryDebounceRef.current = null;
     }
     setQuery('');
+    hasUserTouchedMoreFiltersRef.current = true;
     setMoreFiltersApplied(
       cloneMoreFilters(
         moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
@@ -1150,6 +1221,8 @@ function ScholarshipsPageInner({
         onClear={clearMoreFiltersDraft}
         onApply={applyMoreFilters}
         previewCount={previewCount}
+        previewCountLoading={previewCountLoading}
+        previewCountFallback={lastKnownPreviewCount}
         locationOptions={[]}
       />
       <ScholarshipRegistrationWallModal
