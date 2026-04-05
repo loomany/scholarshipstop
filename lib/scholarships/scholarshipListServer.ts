@@ -973,7 +973,8 @@ function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRe
 
 const CATALOG_REDIRECT_TAB_IDS = new Set<ScholarshipListTabId>([
   'best-matches',
-  'recommended'
+  'recommended',
+  'easy-apply'
 ]);
 
 /**
@@ -1432,7 +1433,6 @@ export async function fetchScholarshipListMeta(
   /** Catalog hub: only “browse” + user lists; no separate personalized tab counts. */
   const tabs: ScholarshipListTabId[] = [
     'matches',
-    'easy-apply',
     'saved',
     'started',
     'submitted',
@@ -1453,7 +1453,6 @@ export async function fetchScholarshipListMeta(
   };
   for (const { t, n } of sidebarParts) {
     if (t === 'matches') sidebarCounts.matches = n;
-    if (t === 'easy-apply') sidebarCounts.easyApply = n;
     if (t === 'saved') sidebarCounts.saved = n;
     if (t === 'started') sidebarCounts.started = n;
     if (t === 'submitted') sidebarCounts.submitted = n;
