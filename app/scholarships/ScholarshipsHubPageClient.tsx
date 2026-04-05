@@ -72,7 +72,6 @@ import {
 import {
   postScholarshipsList,
   postScholarshipsCount,
-  postScholarshipsMatchCounts,
   postScholarshipsMeta
 } from './scholarshipListFetch';
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
@@ -216,10 +215,6 @@ function ScholarshipsPageInner({
   const [listMeta, setListMeta] = useState<ScholarshipListMeta | null>(
     initialPayload?.result.meta ?? null
   );
-  const [matchSidebarCounts, setMatchSidebarCounts] = useState<Pick<
-    ScholarshipSidebarCounts,
-    'bestMatches' | 'recommended' | 'easyApply' | 'matches'
-  > | null>(null);
   const [isLoading, setIsLoading] = useState(initialPayload == null);
   const [hasError, setHasError] = useState(false);
   const [query, setQuery] = useState(parsedList.q);
@@ -236,38 +231,6 @@ function ScholarshipsPageInner({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setMatchSidebarCounts(null);
-      return;
-    }
-    let cancelled = false;
-
-    const run = async () => {
-      try {
-        const res = await postScholarshipsMatchCounts({ ignored: ignoredIds });
-        if (cancelled) return;
-        if (!res.counts) {
-          setMatchSidebarCounts(null);
-          return;
-        }
-        setMatchSidebarCounts({
-          bestMatches: res.counts.bestMatches,
-          recommended: res.counts.recommended,
-          easyApply: res.counts.easyApply,
-          matches: res.counts.matches
-        });
-      } catch {
-        if (!cancelled) setMatchSidebarCounts(null);
-      }
-    };
-
-    run();
-    return () => {
-      cancelled = true;
-    };
-  }, [isAuthenticated, ignoredIds]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -473,26 +436,22 @@ function ScholarshipsPageInner({
 
     return {
       ...base,
-      bestMatches: matchSidebarCounts?.bestMatches ?? (
+      bestMatches:
         activeTab === 'best-matches' && syncedCatalogCount !== null
           ? syncedCatalogCount
-          : base.bestMatches
-      ),
-      recommended: matchSidebarCounts?.recommended ?? (
+          : base.bestMatches,
+      recommended:
         activeTab === 'recommended' && syncedCatalogCount !== null
           ? syncedCatalogCount
-          : base.recommended
-      ),
-      easyApply: matchSidebarCounts?.easyApply ?? (
+          : base.recommended,
+      easyApply:
         activeTab === 'easy-apply' && syncedCatalogCount !== null
           ? syncedCatalogCount
-          : base.easyApply
-      ),
-      matches: matchSidebarCounts?.matches ?? (
+          : base.easyApply,
+      matches:
         activeTab === 'matches' && syncedCatalogCount !== null
           ? syncedCatalogCount
-          : base.matches
-      ),
+          : base.matches,
       saved: savedIds.length,
       started: startedIds.length,
       submitted: submittedIds.length,
@@ -501,7 +460,6 @@ function ScholarshipsPageInner({
   }, [
     activeTab,
     totalCount,
-    matchSidebarCounts,
     listMeta?.sidebarCounts,
     savedIds,
     startedIds,
