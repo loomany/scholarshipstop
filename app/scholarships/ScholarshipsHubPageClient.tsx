@@ -21,7 +21,6 @@ import { ScholarshipsEmailConfirmationBanner } from '@/components/scholarships/S
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import { scholarshipGuestLockIconClass } from '@/lib/constants/scholarshipActionUi';
 import {
-  SCHOLARSHIP_CATEGORY_LABELS,
   SCHOLARSHIP_CATEGORY_ORDER,
   type ScholarshipCategoryId
 } from './scholarshipCategories';
@@ -133,6 +132,8 @@ function buildHubMoreFiltersBaseline(options: {
 }): MoreFiltersState | null {
   if (!options.meta) return null;
   const base = defaultMoreFiltersFromBounds(options.meta.filterBounds);
+  // Hub default: Easy apply is informational in the sidebar and not preselected.
+  base.includeEasyApply.clear();
   const deadline = parseDeadlineFromParam(
     new URLSearchParams(options.searchParamsString).get('deadline')
   );
@@ -394,6 +395,8 @@ function ScholarshipsPageInner({
     const seed = listMeta?.profileFilterSeed;
     if (!seed) return cloneMoreFilters(baseline);
     const seeded = buildMoreFiltersWithProfileDefaults(filterBounds, seed);
+    // Keep Easy apply opt-in only (user must explicitly choose it).
+    seeded.includeEasyApply = new Set();
     seeded.deadlinePreset = baseline.deadlinePreset;
     return seeded;
   }, [filterBounds, listMeta?.profileFilterSeed, moreFiltersBaseline]);
@@ -415,7 +418,6 @@ function ScholarshipsPageInner({
       ...base,
       bestMatches: 0,
       recommended: 0,
-      easyApply: 0,
       saved: savedIds.length,
       started: startedIds.length,
       submitted: submittedIds.length,
@@ -760,68 +762,6 @@ function ScholarshipsPageInner({
     return countMoreFilterSelections(moreFiltersApplied, filterBounds);
   }, [moreFiltersApplied, moreFiltersBaseline, filterBounds]);
 
-  const activeListingChips = useMemo(() => {
-    const chips: { id: string; label: string; onDismiss: () => void }[] = [];
-    const qv = parsedList.q.trim();
-    if (qv) {
-      const short = qv.length > 48 ? `${qv.slice(0, 48)}…` : qv;
-      chips.push({
-        id: 'q',
-        label: short,
-        onDismiss: () => {
-          setQuery('');
-          replaceListingParams({ q: '', resetPage: true });
-        }
-      });
-    }
-    appliedCategoryIds.forEach((id) => {
-      chips.push({
-        id: `cat:${id}`,
-        label: SCHOLARSHIP_CATEGORY_LABELS[id],
-        onDismiss: () => {
-          const next = new Set(appliedCategoryIds);
-          next.delete(id);
-          onApplyCategories(next);
-        }
-      });
-    });
-    if (moreFiltersApplied && moreFiltersOffDefault) {
-      const n = moreFiltersActiveCount;
-      if (n > 0) {
-        chips.push({
-          id: 'more-filters',
-          label: `Advanced filters (${n})`,
-          onDismiss: () => {
-            setMoreFiltersApplied(
-              cloneMoreFilters(profileSuggestedMoreFilters)
-            );
-          }
-        });
-      }
-    }
-    return chips;
-  }, [
-    parsedList.q,
-    appliedCategoryIds,
-    moreFiltersApplied,
-    moreFiltersOffDefault,
-    moreFiltersActiveCount,
-    filterBounds,
-    moreFiltersBaseline,
-    onApplyCategories,
-    replaceListingParams
-  ]);
-
-  const clearAllListingChips = useCallback(() => {
-    if (queryDebounceRef.current) {
-      clearTimeout(queryDebounceRef.current);
-      queryDebounceRef.current = null;
-    }
-    setQuery('');
-    replaceListingParams({ q: '', categories: new Set(), resetPage: true });
-    setMoreFiltersApplied(cloneMoreFilters(profileSuggestedMoreFilters));
-  }, [profileSuggestedMoreFilters, replaceListingParams]);
-
   const hasListingParams =
     parsedList.q.length > 0 ||
     parsedList.categories.size > 0 ||
@@ -1004,10 +944,6 @@ function ScholarshipsPageInner({
             listTab={activeTab}
             categoriesDisabled={!isLoading && totalCount === 0}
             moreFiltersActiveCount={moreFiltersActiveCount}
-            activeListingChips={activeListingChips}
-            onClearAllListingChips={
-              activeListingChips.length > 0 ? clearAllListingChips : undefined
-            }
             isAuthenticated={isAuthenticated}
             onGuestSortBlocked={openRegistrationWall}
             listingViewControls={
