@@ -35,34 +35,37 @@ type NavDef = {
   tooltip: string;
 };
 
+type StaticNavDef = {
+  id: 'easy-apply' | 'best-matches' | 'recommended';
+  label: string;
+  icon: LucideIcon;
+};
+
 /** Hub guests: these tabs open the registration wall instead of navigating. */
 const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
-  'best-matches',
-  'recommended',
-  'easy-apply',
   'saved',
   'ignored'
 ]);
 
-const NAV_DEFS: NavDef[] = [
-  {
-    id: 'best-matches',
-    label: 'Best matches',
-    icon: Flame,
-    tooltip: 'Highest match score for your profile (over 90%).'
-  },
-  {
-    id: 'recommended',
-    label: 'Recommended',
-    icon: Bookmark,
-    tooltip: 'Top picks for your profile (score 85% and up).'
-  },
+const STATIC_TOP_ROWS: StaticNavDef[] = [
   {
     id: 'easy-apply',
     label: 'Easy apply',
-    icon: Trophy,
-    tooltip: 'Quick applications with fewer steps.'
+    icon: Trophy
   },
+  {
+    id: 'best-matches',
+    label: 'Best recommendation',
+    icon: Flame
+  },
+  {
+    id: 'recommended',
+    label: 'Recommendation',
+    icon: Bookmark
+  }
+];
+
+const ACTION_NAV_DEFS: NavDef[] = [
   {
     id: 'matches',
     label: 'Matches',
@@ -130,15 +133,6 @@ export default function ScholarshipsSidebar({
   const suffix = (id: ScholarshipListTabId): string | undefined => {
     let n: number;
     switch (id) {
-      case 'best-matches':
-        n = counts.bestMatches;
-        break;
-      case 'recommended':
-        n = counts.recommended;
-        break;
-      case 'easy-apply':
-        n = counts.easyApply;
-        break;
       case 'matches':
         n = counts.matches;
         break;
@@ -166,7 +160,25 @@ export default function ScholarshipsSidebar({
       </div>
 
       <ul className="mt-2 space-y-0.5">
-        {NAV_DEFS.map((item) => {
+        {STATIC_TOP_ROWS.map((item) => {
+          const Icon = item.icon;
+          return (
+            <li key={item.id}>
+              <div className="flex w-full items-center gap-3 rounded-lg border-l-2 border-transparent py-2.5 pr-2 pl-3">
+                <Icon
+                  className="h-[18px] w-[18px] shrink-0 stroke-[1.75] text-[#FF7A1A] stroke-[#FF7A1A]"
+                  aria-hidden
+                />
+                <span className="min-w-0 flex-1 text-left text-sm font-medium text-gray-500">
+                  {item.label}
+                  <span className="font-normal text-gray-400"> (0)</span>
+                </span>
+              </div>
+            </li>
+          );
+        })}
+
+        {ACTION_NAV_DEFS.map((item) => {
           const isActive = activeTab === item.id;
           const Icon = item.icon;
           const href = buildScholarshipTabHref(item.id);
