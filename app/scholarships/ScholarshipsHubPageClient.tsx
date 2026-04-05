@@ -173,6 +173,7 @@ function withTabEnforcedMoreFilters(
   if (tab !== 'easy-apply') return filters;
   const next = cloneMoreFilters(filters);
   next.includeEasyApply.add('easy_apply');
+  next.includeEasyApply.add('quick_apply');
   return next;
 }
 
