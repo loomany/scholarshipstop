@@ -9,6 +9,7 @@ import {
   profilesRowOmitEmptyLocation,
   syncOnboardingToProfiles
 } from '@/lib/onboarding/profilesOnboardingSync';
+import { triggerScholarshipMatchRefreshSignal } from '@/lib/scholarships/matchRefreshSignal';
 
 export type { ProfilesOnboardingRow } from '@/lib/onboarding/profilesOnboardingSync';
 export {
@@ -69,6 +70,7 @@ export async function persistScholarshipProfile(
     return { ok: false, error: profileErr.message };
   }
 
+  triggerScholarshipMatchRefreshSignal();
   return { ok: true };
 }
 

@@ -7,7 +7,6 @@ import {
   parseScholarshipTabParam
 } from '@/app/scholarships/scholarshipTabs';
 import {
-  applyCatalogOnlyListingNormalization,
   executeScholarshipListQuery,
   executeScholarshipListQueryWithSeoFallback,
   fetchGlobalFilterBounds,
@@ -17,6 +16,11 @@ import {
   type ScholarshipListMeta,
   type ScholarshipListRequest
 } from '@/lib/scholarships/scholarshipListServer';
+import {
+  canBuildPersonalizedMatchIndex,
+  getCachedScholarshipMatchIndex
+} from '@/lib/scholarships/scholarshipMatchCache';
+import { filterIdsByIgnored } from '@/lib/scholarships/scholarshipMatchIndex';
 import type { Database } from '@/types_db';
 import { profileMatchSummaryFromRow } from '@/lib/scholarships/profileMatchMeta';
 import { buildScholarshipProfileFilterSeed } from '@/lib/scholarships/profileFilterDefaults';
@@ -67,10 +71,12 @@ function hubSidebarMetaDebugEnabled(): boolean {
 
 function applyListingMetaGuestPatches(
   meta: ScholarshipListMeta,
-  ctx: { authUser: boolean }
+  ctx: { authUser: boolean; personalizedEnabled: boolean }
 ) {
-  meta.sidebarCounts.bestMatches = 0;
-  meta.sidebarCounts.recommended = 0;
+  if (!ctx.personalizedEnabled) {
+    meta.sidebarCounts.bestMatches = 0;
+    meta.sidebarCounts.recommended = 0;
+  }
   meta.sidebarCounts.easyApply = 0;
   delete meta.matchedTotal;
   if (!ctx.authUser) {
@@ -87,14 +93,15 @@ function applyListingMetaGuestPatches(
 async function emptyListResult(
   req: ScholarshipListRequest,
   includeMeta: boolean,
-  authUser: boolean
+  authUser: boolean,
+  personalizedEnabled: boolean
 ) {
   const supabase = createClient() as any;
   let meta: ScholarshipListMeta | undefined = undefined;
   if (includeMeta) {
     const bounds = await fetchGlobalFilterBounds(supabase);
     meta = await fetchScholarshipListMeta(supabase, req, bounds);
-    applyListingMetaGuestPatches(meta, { authUser });
+    applyListingMetaGuestPatches(meta, { authUser, personalizedEnabled });
   }
   return {
     scholarships: [],
@@ -216,30 +223,28 @@ async function handleList(
   const { legacyCategoryPageSlug, catalogSubjectCategoryId } =
     await resolveCatalogSubjectCategoryForPageSlug(supabase, categoryPageParam);
 
-  let req: ScholarshipListRequest = applyCatalogOnlyListingNormalization(
-    scholarshipListRequestFromParts({
-      page,
-      limit,
-      sort,
-      tab,
-      q,
-      category,
-      categoryPageSlug: legacyCategoryPageSlug,
-      catalogSubjectCategoryId,
-      deadline,
-      state,
-      ignored,
-      saved,
-      started,
-      submitted,
-      moreFilters,
-      longTailLegacySlugs: lt.filter(Boolean),
-      similarTo,
-      similarCategorySlug,
-      listScope,
-      requiredSeoTags: seoBody?.requiredSeoTags
-    })
-  );
+  let req: ScholarshipListRequest = scholarshipListRequestFromParts({
+    page,
+    limit,
+    sort,
+    tab,
+    q,
+    category,
+    categoryPageSlug: legacyCategoryPageSlug,
+    catalogSubjectCategoryId,
+    deadline,
+    state,
+    ignored,
+    saved,
+    started,
+    submitted,
+    moreFilters,
+    longTailLegacySlugs: lt.filter(Boolean),
+    similarTo,
+    similarCategorySlug,
+    listScope,
+    requiredSeoTags: seoBody?.requiredSeoTags
+  });
 
   const v2ReadPathEligible =
     scholarshipsV2ReadPathEnabled() &&
@@ -331,6 +336,29 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     });
   }
 
+  const personalizedTabRequested =
+    req.tab === 'best-matches' || req.tab === 'recommended';
+  if (authUser?.id && profileRow && canBuildPersonalizedMatchIndex(profileRow)) {
+    const shouldSeedPersonalized =
+      includeMeta || metaOnly || personalizedTabRequested;
+    if (shouldSeedPersonalized) {
+      const bundle = await getCachedScholarshipMatchIndex(
+        supabase,
+        authUser.id,
+        profileRow
+      );
+      req.personalizedMode = true;
+      req.personalizedBestIds = filterIdsByIgnored(bundle.idsBest, req.ignored);
+      req.personalizedRecommendedIds = filterIdsByIgnored(
+        bundle.idsRecommended,
+        req.ignored
+      );
+    }
+  }
+  if (personalizedTabRequested && !req.personalizedMode) {
+    req.tab = 'matches';
+  }
+
   if (metaOnly) {
     const includeCategoryCounts =
       Boolean(isHubPrimaryListing) ||
@@ -346,7 +374,8 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       meta.profileFilterSeed = profileFilterSeed;
     }
     applyListingMetaGuestPatches(meta, {
-      authUser: Boolean(authUser)
+      authUser: Boolean(authUser),
+      personalizedEnabled: req.personalizedMode
     });
     const response = NextResponse.json({
       meta,
@@ -361,7 +390,8 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     const r = await emptyListResult(
       req,
       includeMeta && !countOnly,
-      Boolean(authUser)
+      Boolean(authUser),
+      req.personalizedMode
     );
     if (hubDbg) {
       // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
@@ -519,7 +549,8 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   }
   if (result.meta) {
     applyListingMetaGuestPatches(result.meta, {
-      authUser: Boolean(authUser)
+      authUser: Boolean(authUser),
+      personalizedEnabled: req.personalizedMode
     });
   }
   if (hubDbg && result.meta && !countOnly) {
