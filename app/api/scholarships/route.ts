@@ -33,8 +33,13 @@ import {
   mapScholarshipRow,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
+import { applyV2ReadPathToLegacyRequest } from '@/lib/scholarships-v2/runtime/applyV2ReadPathToLegacyRequest';
 
 export const dynamic = 'force-dynamic';
+
+function scholarshipsV2ReadPathEnabled(): boolean {
+  return process.env.SCHOLARSHIPS_V2_READ_PATH === '1';
+}
 
 /** Temporary: hub sidebar personalized counts (best/recommended) SSR vs client refresh. Remove after diagnosis. */
 function hubSidebarMetaDebugEnabled(): boolean {
@@ -219,6 +224,21 @@ async function handleList(
       requiredSeoTags: seoBody?.requiredSeoTags
     })
   );
+
+  const v2ReadPathEligible =
+    scholarshipsV2ReadPathEnabled() &&
+    !similarTo?.trim() &&
+    !seoBody?.seoListingFallback &&
+    !metaOnly &&
+    !countOnly;
+
+  if (v2ReadPathEligible) {
+    req = applyV2ReadPathToLegacyRequest({
+      request: req,
+      searchParams,
+      moreFilters: bodyMoreFilters
+    });
+  }
 
   const hubDebugReqId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   const hubDbg = hubSidebarMetaDebugEnabled() && isHubPrimaryListing;
