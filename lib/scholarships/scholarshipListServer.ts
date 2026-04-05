@@ -660,7 +660,18 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
 
   const stateCode = normalizeStateNameOrCodeToCode(f.filterStateInput);
   if (stateCode) {
-    q = q.or(`state_codes.cs.${JSON.stringify([stateCode])}`);
+    /**
+     * `filterStateInput` comes from the state autocomplete (full names like "Florida").
+     *
+     * Data is currently split across two geo fields:
+     * - `state_codes` (jsonb array)
+     * - `location_tags` (jsonb array; canonical USPS codes such as "FL")
+     *
+     * Restricting this input to only `state_codes` can return false-empty results when
+     * a row only has `location_tags`. Keep this as an OR across both.
+     */
+    const stateJson = JSON.stringify([stateCode]);
+    q = q.or(`state_codes.cs.${stateJson},location_tags.cs.${stateJson}`);
   }
 
   return q;
