@@ -611,12 +611,14 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   const dc = f.dataCompleteness;
   const dcAny = dc.low || dc.medium || dc.high || dc.verified;
   if (dcAny) {
-    const parts: string[] = [];
-    if (dc.verified) parts.push('is_verified.eq.true');
-    if (dc.low) parts.push('listing_completeness_bucket.eq.basic');
-    if (dc.medium) parts.push('listing_completeness_bucket.eq.standard');
-    if (dc.high) parts.push('listing_completeness_bucket.eq.detailed');
-    if (parts.length > 0) q = q.or(parts.join(','));
+    const buckets: string[] = [];
+    if (dc.low) buckets.push('basic_info');
+    if (dc.medium) buckets.push('standard_detail');
+    if (dc.high) buckets.push('detailed_listing');
+    if (dc.verified) buckets.push('verified_listing');
+    if (buckets.length > 0) {
+      q = q.in('listing_completeness_bucket', buckets);
+    }
   }
 
   const po = f.payout;
