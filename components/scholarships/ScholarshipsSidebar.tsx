@@ -35,34 +35,40 @@ type NavDef = {
   tooltip: string;
 };
 
+type StaticNavDef = {
+  id: 'best-matches' | 'recommended';
+  label: string;
+  icon: LucideIcon;
+};
+
 /** Hub guests: these tabs open the registration wall instead of navigating. */
 const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
-  'best-matches',
-  'recommended',
   'easy-apply',
   'saved',
   'ignored'
 ]);
 
-const NAV_DEFS: NavDef[] = [
+const STATIC_TOP_ROWS: StaticNavDef[] = [
   {
     id: 'best-matches',
-    label: 'Best matches',
-    icon: Flame,
-    tooltip: 'Highest match score for your profile (over 90%).'
+    label: 'Best recommendation',
+    icon: Flame
   },
   {
     id: 'recommended',
-    label: 'Recommended',
-    icon: Bookmark,
-    tooltip: 'Top picks for your profile (score 85% and up).'
-  },
-  {
-    id: 'easy-apply',
-    label: 'Easy apply',
-    icon: Trophy,
-    tooltip: 'Quick applications with fewer steps.'
-  },
+    label: 'Recommendation',
+    icon: Bookmark
+  }
+];
+
+const EASY_APPLY_NAV: NavDef = {
+  id: 'easy-apply',
+  label: 'Easy apply',
+  icon: Trophy,
+  tooltip: 'Quick applications with fewer steps.'
+};
+
+const ACTION_NAV_DEFS: NavDef[] = [
   {
     id: 'matches',
     label: 'Matches',
@@ -130,12 +136,6 @@ export default function ScholarshipsSidebar({
   const suffix = (id: ScholarshipListTabId): string | undefined => {
     let n: number;
     switch (id) {
-      case 'best-matches':
-        n = counts.bestMatches;
-        break;
-      case 'recommended':
-        n = counts.recommended;
-        break;
       case 'easy-apply':
         n = counts.easyApply;
         break;
@@ -166,7 +166,135 @@ export default function ScholarshipsSidebar({
       </div>
 
       <ul className="mt-2 space-y-0.5">
-        {NAV_DEFS.map((item) => {
+        {[EASY_APPLY_NAV].map((item) => {
+          const isActive = activeTab === item.id;
+          const Icon = item.icon;
+          const href = buildScholarshipTabHref(item.id);
+          const countSuffix = suffix(item.id);
+          const showGuestLock =
+            guestMode && GUEST_GATED_TAB_IDS.has(item.id);
+
+          const content = (
+            <>
+              <Icon
+                className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
+                  isActive
+                    ? 'text-white stroke-white'
+                    : 'text-[#FF7A1A] stroke-[#FF7A1A]'
+                }`}
+                aria-hidden
+              />
+              <span
+                className={`min-w-0 flex-1 text-left text-sm ${
+                  isActive
+                    ? 'font-semibold text-white'
+                    : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
+                }`}
+              >
+                {item.label}
+                {countSuffix ? (
+                  <span
+                    className={
+                      isActive
+                        ? 'font-normal text-white'
+                        : 'font-normal text-gray-400'
+                    }
+                  >
+                    {' '}
+                    {countSuffix}
+                  </span>
+                ) : null}
+              </span>
+              {showGuestLock ? (
+                <Lock
+                  className={`h-3.5 w-3.5 shrink-0 ${
+                    isActive
+                      ? 'text-white stroke-white'
+                      : 'text-[#FF7A1A] stroke-[#FF7A1A]'
+                  }`}
+                  strokeWidth={2}
+                  aria-hidden
+                />
+              ) : null}
+            </>
+          );
+
+          const rowClass = `flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
+            isActive
+              ? scholarshipSidebarActiveRowClass
+              : 'border-transparent hover:bg-gray-50/80'
+          }`;
+
+          const tip = item.tooltip;
+
+          const gated =
+            guestMode &&
+            GUEST_GATED_TAB_IDS.has(item.id) &&
+            typeof onGuestRestrictedNav === 'function';
+
+          const link = gated ? (
+            <button
+              type="button"
+              title={
+                useDarkTooltips
+                  ? undefined
+                  : showGuestLock
+                    ? 'Create a free account to unlock'
+                    : tip
+              }
+              onClick={() => onGuestRestrictedNav?.()}
+              className={`${rowClass} w-full cursor-pointer text-left ${!isActive ? 'group' : ''}`}
+            >
+              {content}
+            </button>
+          ) : (
+            <Link
+              href={href}
+              title={useDarkTooltips ? undefined : tip}
+              className={`${rowClass} ${!isActive ? 'group' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {content}
+            </Link>
+          );
+
+          return (
+            <li key={item.id}>
+              {useDarkTooltips && tip ? (
+                <DarkTooltip
+                  content={tip}
+                  side="right"
+                  align="center"
+                  className="block w-full"
+                >
+                  {link}
+                </DarkTooltip>
+              ) : (
+                link
+              )}
+            </li>
+          );
+        })}
+
+        {STATIC_TOP_ROWS.map((item) => {
+          const Icon = item.icon;
+          return (
+            <li key={item.id}>
+              <div className="flex w-full items-center gap-3 rounded-lg border-l-2 border-transparent py-2.5 pr-2 pl-3">
+                <Icon
+                  className="h-[18px] w-[18px] shrink-0 stroke-[1.75] text-[#FF7A1A] stroke-[#FF7A1A]"
+                  aria-hidden
+                />
+                <span className="min-w-0 flex-1 text-left text-sm font-medium text-gray-500">
+                  {item.label}
+                  <span className="font-normal text-gray-400"> (0)</span>
+                </span>
+              </div>
+            </li>
+          );
+        })}
+
+        {ACTION_NAV_DEFS.map((item) => {
           const isActive = activeTab === item.id;
           const Icon = item.icon;
           const href = buildScholarshipTabHref(item.id);
