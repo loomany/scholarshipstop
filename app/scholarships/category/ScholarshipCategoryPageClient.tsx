@@ -154,6 +154,7 @@ export default function ScholarshipCategoryPageClient({
   const [moreFiltersDraft, setMoreFiltersDraft] =
     useState<MoreFiltersState | null>(null);
   const [previewCount, setPreviewCount] = useState(0);
+  const [previewCountLoading, setPreviewCountLoading] = useState(false);
   const [seoFallbackMeta, setSeoFallbackMeta] =
     useState<SeoListingFallbackMeta | null>(null);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
@@ -168,6 +169,8 @@ export default function ScholarshipCategoryPageClient({
 
   const metaKeySynced = useRef('');
   const listFetchSeqRef = useRef(0);
+  const skipNextApplyOnlyFetchRef = useRef(false);
+  const previewRequestSeqRef = useRef(0);
   const prevSlugRef = useRef<string | null>(null);
   const initialRequestKeyRef = useRef(initialPayload?.requestKey ?? null);
 
@@ -368,6 +371,12 @@ export default function ScholarshipCategoryPageClient({
         cancelled = true;
       };
     }
+    if (skipNextApplyOnlyFetchRef.current) {
+      skipNextApplyOnlyFetchRef.current = false;
+      return () => {
+        cancelled = true;
+      };
+    }
 
     const run = async () => {
       try {
@@ -465,6 +474,14 @@ export default function ScholarshipCategoryPageClient({
     }
     if (moreFiltersDraft) {
       const next = cloneMoreFilters(moreFiltersDraft);
+      const nextSearchParams = buildScholarshipCategoryPageSearchParams(
+        new URLSearchParams(searchParamsString),
+        {
+          deadline: next.deadlinePreset,
+          resetPage: true
+        }
+      ).toString();
+      skipNextApplyOnlyFetchRef.current = nextSearchParams !== searchParamsString;
       setMoreFiltersApplied(next);
       replaceListingParams({
         deadline: next.deadlinePreset,
@@ -476,7 +493,8 @@ export default function ScholarshipCategoryPageClient({
     isAuthenticated,
     moreFiltersDraft,
     openRegistrationWall,
-    replaceListingParams
+    replaceListingParams,
+    searchParamsString
   ]);
 
   const clearMoreFiltersDraft = useCallback(() => {
@@ -486,8 +504,12 @@ export default function ScholarshipCategoryPageClient({
   useEffect(() => {
     if (!moreFiltersOpen || !moreFiltersDraft) {
       setPreviewCount(0);
+      setPreviewCountLoading(false);
       return;
     }
+    const seq = ++previewRequestSeqRef.current;
+    setPreviewCountLoading(true);
+    let cancelled = false;
     const t = setTimeout(() => {
       const sp = buildCategoryListingSearchParams({
         base: new URLSearchParams(searchParamsString),
@@ -505,10 +527,21 @@ export default function ScholarshipCategoryPageClient({
         longTailLegacySlugs: [],
         seoListingFallback: true
       })
-        .then((r) => setPreviewCount(r.total))
-        .catch(() => setPreviewCount(0));
+        .then((r) => {
+          if (cancelled || seq !== previewRequestSeqRef.current) return;
+          setPreviewCount(r.total);
+          setPreviewCountLoading(false);
+        })
+        .catch(() => {
+          if (cancelled || seq !== previewRequestSeqRef.current) return;
+          setPreviewCount(0);
+          setPreviewCountLoading(false);
+        });
     }, 320);
-    return () => clearTimeout(t);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
   }, [
     moreFiltersDraft,
     moreFiltersOpen,
@@ -788,8 +821,9 @@ export default function ScholarshipCategoryPageClient({
         onChange={setMoreFiltersDraft}
         onClear={clearMoreFiltersDraft}
         onApply={applyMoreFilters}
+        applyPending={isLoading}
         previewCount={previewCount}
-        previewCountLoading={false}
+        previewCountLoading={previewCountLoading}
         previewCountFallback={null}
         locationOptions={[]}
       />
