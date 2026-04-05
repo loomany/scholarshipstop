@@ -67,33 +67,22 @@ export function buildLegacyReferenceClausesFromCanonicalInput(
 
   if (mf.includeEligibility.length > 0) {
     const eligibility = [...mf.includeEligibility].sort((a, b) => a.localeCompare(b));
-    const eligibilityOrClauses = eligibility.map((id) => `eligibility_tags.cs.["${id}"]`);
-    if (eligibility.includes('first_generation')) {
-      eligibilityOrClauses.push(
-        'title.ilike.%first generation%',
-        'title.ilike.%first-generation%',
-        'summary_short.ilike.%first generation%',
-        'summary_short.ilike.%first-generation%',
-        'description.ilike.%first generation%',
-        'requirements_text.ilike.%first generation%'
-      );
-    }
     addClause(
       out,
       'or',
       'eligibility_tags',
-      eligibilityOrClauses.join(',')
+      eligibility.map((id) => `eligibility_tags.cs.["${id}"]`).join(',')
     );
-  }
-
-  if (mf.includeEducationLevels.length > 0) {
-    const levels = [...mf.includeEducationLevels].sort((a, b) => a.localeCompare(b));
-    addClause(
-      out,
-      'or',
-      'catalog_education_levels',
-      levels.map((id) => `catalog_education_levels.cs.["${id}"]`).join(',')
-    );
+    if (eligibility.includes('first_generation')) {
+      addClause(
+        out,
+        'or',
+        'first_generation',
+        ['title', 'summary_short', 'description', 'requirements_text']
+          .map((c) => `${c}.ilike.%first generation%`)
+          .join(',')
+      );
+    }
   }
 
   if (mf.includeGpaBuckets.length > 0) {

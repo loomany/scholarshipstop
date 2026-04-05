@@ -20,35 +20,22 @@ function mapPredicateToSql(predicate: QuerySpecPredicate): {
     case 'eligibility_tags': {
       const vals = ((predicate.value as string[]) ?? []).slice().sort((a, b) => a.localeCompare(b));
       if (vals.length > 0) {
-        const parts = vals.map((v) => `eligibility_tags.cs.${toJsonArrayLiteral([v])}`);
-        if (vals.includes('first_generation')) {
-          parts.push(
-            'title.ilike.%first generation%',
-            'title.ilike.%first-generation%',
-            'summary_short.ilike.%first generation%',
-            'summary_short.ilike.%first-generation%',
-            'description.ilike.%first generation%',
-            'requirements_text.ilike.%first generation%'
-          );
-        }
         clauses.push({
           boolean: 'or',
-          clause: parts.join(','),
+          clause: vals.map((v) => `eligibility_tags.cs.${toJsonArrayLiteral([v])}`).join(','),
           sourceField: predicate.field
         });
       }
       return { clauses, stubs };
     }
 
-    case 'catalog_education_levels': {
-      const vals = ((predicate.value as string[]) ?? []).slice().sort((a, b) => a.localeCompare(b));
-      if (vals.length > 0) {
-        clauses.push({
-          boolean: 'or',
-          clause: vals.map((v) => `catalog_education_levels.cs.${toJsonArrayLiteral([v])}`).join(','),
-          sourceField: predicate.field
-        });
-      }
+    case 'first_generation': {
+      const cols = (predicate.value as string[]) ?? [];
+      clauses.push({
+        boolean: 'or',
+        clause: cols.map((c) => `${c}.ilike.%first generation%`).join(','),
+        sourceField: predicate.field
+      });
       return { clauses, stubs };
     }
 

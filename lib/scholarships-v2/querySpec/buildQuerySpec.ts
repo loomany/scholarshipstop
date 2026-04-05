@@ -93,14 +93,14 @@ export function buildScholarshipsQuerySpec(filters: EffectiveScholarshipFilters)
       operator: 'containsAny',
       value: filters.includeEligibility
     });
-  }
-
-  if (filters.educationLevelIds.length > 0) {
-    predicates.push({
-      field: 'catalog_education_levels',
-      operator: 'containsAny',
-      value: filters.educationLevelIds
-    });
+    if (filters.includeEligibility.includes('first_generation')) {
+      predicates.push({
+        field: 'first_generation',
+        operator: 'textFallback',
+        value: ['title', 'summary_short', 'description', 'requirements_text'],
+        note: 'Legacy has text fallback clauses for selected eligibility tags.'
+      });
+    }
   }
 
   if (filters.includeGpaBuckets.length > 0) {

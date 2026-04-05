@@ -467,19 +467,24 @@ function sanitizeIlikeFragment(raw: string): string {
   return raw.replace(/[%_]/g, '').trim();
 }
 
-function eligibilityOrClauses(selected: Set<string>): string[] {
-  const out: string[] = [];
-  for (const tagId of Array.from(selected)) {
-    out.push(`eligibility_tags.cs.${JSON.stringify([tagId])}`);
+/** Mutates `moreFilters.includeEligibility`; returns `q` with an extra AND (OR ilike…) when needed. */
+function applyEligibilityTextSearchClauses(
+  q: any,
+  moreFilters: MoreFiltersState
+): any {
+  const orParts: string[] = [];
+  for (const tagId of Array.from(moreFilters.includeEligibility)) {
     const clauses = ELIGIBILITY_TAG_TEXT_OR_ILIKE[tagId];
     if (!clauses?.length) continue;
+    moreFilters.includeEligibility.delete(tagId);
     for (const { column, needle } of clauses) {
       const safe = sanitizeIlikeFragment(needle);
       if (!safe) continue;
-      out.push(`${column}.ilike.%${safe}%`);
+      orParts.push(`${column}.ilike.%${safe}%`);
     }
   }
-  return out;
+  if (orParts.length === 0) return q;
+  return q.or(orParts.join(','));
 }
 
 function applyLegacyLongTailBase(q: any, slug: LongTailSlug): any {
@@ -620,12 +625,7 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     const parts = Array.from(sel).map((id) => `${col}.cs.${JSON.stringify([id])}`);
     q = q.or(parts.join(','));
   };
-
-  const eligibilityParts = eligibilityOrClauses(f.includeEligibility);
-  if (eligibilityParts.length > 0) {
-    q = q.or(eligibilityParts.join(','));
-  }
-
+  addIncludeCs('eligibility_tags', f.includeEligibility);
   addIncludeCs('catalog_education_levels', f.includeEducationLevels);
   if (f.includeGpaBuckets.size > 0) {
     q = q.in('gpa_bucket', Array.from(f.includeGpaBuckets));
@@ -811,6 +811,9 @@ function applyCommonFilters(req: ScholarshipListRequest, q: any): any {
     : cloneMoreFilters(req.moreFilters);
   if (!seoListing && req.deadline && req.deadline !== 'any') {
     moreFilters.deadlinePreset = req.deadline;
+  }
+  if (!seoListing) {
+    q = applyEligibilityTextSearchClauses(q, moreFilters);
   }
   q = applyMoreFilters(q, moreFilters);
   return q;
