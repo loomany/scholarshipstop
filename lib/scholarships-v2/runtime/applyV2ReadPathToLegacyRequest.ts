@@ -12,13 +12,11 @@ export function applyV2ReadPathToLegacyRequest(args: {
     moreFilters: args.moreFilters
   });
 
-/**
- * Runtime safety: rewrite only URL-derived listing fields that have stable parity.
- * Keep moreFilters from legacy request untouched to avoid lossy round-trips
- * (some legacy runtime facets are not fully represented in v2 bridge contract yet).
- */
-return {
-  ...args.request,
+  /**
+   * Runtime safety: rewrite only URL-derived listing fields that have stable parity.
+   * Keep moreFilters from legacy request untouched to avoid lossy round-trips
+   * (some legacy runtime facets are not fully represented in v2 bridge contract yet).
+   */
   return {
     ...args.request,
     q: filters.q ?? '',
@@ -28,6 +26,6 @@ return {
     ignored: [...filters.ignoredIds],
     started: [...filters.startedIds],
     submitted: [...filters.submittedIds],
-tab: filters.userCollectionTab ?? args.request.tab
+    tab: filters.userCollectionTab ?? args.request.tab
   };
 }
