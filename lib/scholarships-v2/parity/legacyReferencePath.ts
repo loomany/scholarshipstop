@@ -1,6 +1,7 @@
 import type { CanonicalLegacyLikeInput } from '@/lib/scholarships-v2/parity/types';
 import type { SqlClause } from '@/lib/scholarships-v2/sqlSpec/types';
 import { normalizeDeadlinePreset, parseCommaStateCodes } from '@/lib/scholarships-v2/normalization/legacy';
+import { requirementTypesToDbColumns } from '@/lib/scholarships/requirementTypeMapping';
 
 function addClause(out: SqlClause[], boolean: 'and' | 'or', sourceField: string, clause: string): void {
   out.push({ boolean, sourceField, clause });
@@ -89,22 +90,7 @@ export function buildLegacyReferenceClausesFromCanonicalInput(
     addClause(out, 'and', 'gpa_bucket', `gpa_bucket.in.(${gpaBuckets.join(',')})`);
   }
 
-  const requirementMap: Record<string, string | null> = {
-    essay: 'essay_required',
-    document: 'document_required',
-    photo: 'photo_required',
-    video: 'video_required',
-    personal_statement: 'goal_required',
-    link: 'link_required',
-    survey: 'survey_required',
-    question: 'question_required',
-    recommendation: 'recommendation_required',
-    transcript: 'transcript_required',
-    resume: null
-  };
-  const requirementClauses = [...mf.includeRequirementTypes]
-    .map((req) => requirementMap[req])
-    .filter((field): field is string => Boolean(field))
+  const requirementClauses = requirementTypesToDbColumns(mf.includeRequirementTypes)
     .map((field) => `${field}.eq.true`);
   if (requirementClauses.length > 0) {
     addClause(out, 'or', 'requirement_flags', requirementClauses.join(','));
