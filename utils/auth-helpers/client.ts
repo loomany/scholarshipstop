@@ -9,7 +9,11 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 export async function handleRequest(
   e: React.FormEvent<HTMLFormElement>,
   requestFunc: (formData: FormData) => Promise<string>,
-  router: AppRouterInstance | null = null
+  router: AppRouterInstance | null = null,
+  options: {
+    /** Force an RSC re-fetch after client push (useful right after auth state changes). */
+    refreshAfterPush?: boolean;
+  } = {}
 ): Promise<boolean | void> {
   // Prevent default form submission refresh
   e.preventDefault();
@@ -19,7 +23,13 @@ export async function handleRequest(
 
   if (router) {
     // If client-side router is provided, use it to redirect
-    return router.push(redirectUrl);
+    router.push(redirectUrl);
+
+    if (options.refreshAfterPush) {
+      router.refresh();
+    }
+
+    return;
   } else {
     // Otherwise, redirect server-side
     return await redirectToPath(redirectUrl);
