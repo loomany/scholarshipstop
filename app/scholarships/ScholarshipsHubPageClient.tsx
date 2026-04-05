@@ -82,7 +82,6 @@ import {
   moreFiltersToJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
-import { buildMoreFiltersWithProfileDefaults } from '@/lib/scholarships/profileFilterDefaults';
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
 
 /** Temporary: trace hub meta overwrite. Remove after diagnosis. */
@@ -436,17 +435,13 @@ function ScholarshipsPageInner({
       }),
     [listMeta, searchParamsString, routeScope]
   );
-  const profileSuggestedMoreFilters = useMemo(() => {
-    const baseline =
-      moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds);
-    const seed = listMeta?.profileFilterSeed;
-    if (!seed) return cloneMoreFilters(baseline);
-    const seeded = buildMoreFiltersWithProfileDefaults(filterBounds, seed);
-    // Keep Easy apply opt-in only (user must explicitly choose it).
-    seeded.includeEasyApply = new Set();
-    seeded.deadlinePreset = baseline.deadlinePreset;
-    return seeded;
-  }, [filterBounds, listMeta?.profileFilterSeed, moreFiltersBaseline]);
+  const emptyMoreFiltersState = useMemo(
+    () =>
+      cloneMoreFilters(
+        moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
+      ),
+    [moreFiltersBaseline, filterBounds]
+  );
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
     const base = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
@@ -762,10 +757,10 @@ function ScholarshipsPageInner({
   }, [isLoading, totalCount, totalPages, rawPageParam, replaceListingParams]);
 
   const openMoreFilters = useCallback(() => {
-    const basis = moreFiltersApplied ?? profileSuggestedMoreFilters;
+    const basis = moreFiltersApplied ?? emptyMoreFiltersState;
     setMoreFiltersDraft(cloneMoreFilters(basis));
     setMoreFiltersOpen(true);
-  }, [moreFiltersApplied, profileSuggestedMoreFilters]);
+  }, [moreFiltersApplied, emptyMoreFiltersState]);
 
   const applyMoreFilters = useCallback(() => {
     if (!isAuthenticated) {
@@ -789,8 +784,8 @@ function ScholarshipsPageInner({
   ]);
 
   const clearMoreFiltersDraft = useCallback(() => {
-    setMoreFiltersDraft(cloneMoreFilters(profileSuggestedMoreFilters));
-  }, [profileSuggestedMoreFilters]);
+    setMoreFiltersDraft(cloneMoreFilters(emptyMoreFiltersState));
+  }, [emptyMoreFiltersState]);
 
   useEffect(() => {
     if (!moreFiltersOpen || !moreFiltersDraft) {
@@ -895,9 +890,9 @@ function ScholarshipsPageInner({
       queryDebounceRef.current = null;
     }
     setQuery('');
-    setMoreFiltersApplied(cloneMoreFilters(profileSuggestedMoreFilters));
+    setMoreFiltersApplied(cloneMoreFilters(emptyMoreFiltersState));
     router.replace(pathname, { scroll: false });
-  }, [router, profileSuggestedMoreFilters, pathname]);
+  }, [router, emptyMoreFiltersState, pathname]);
 
   const viewSegment = useMemo<'best' | 'all' | 'easy'>(() => {
     if (!isAuthenticated) {
@@ -1204,9 +1199,7 @@ function ScholarshipsPageInner({
         open={moreFiltersOpen}
         onClose={() => setMoreFiltersOpen(false)}
         bounds={filterBounds}
-        value={
-          moreFiltersDraft ?? moreFiltersApplied ?? profileSuggestedMoreFilters
-        }
+        value={moreFiltersDraft ?? moreFiltersApplied ?? emptyMoreFiltersState}
         onChange={setMoreFiltersDraft}
         onClear={clearMoreFiltersDraft}
         onApply={applyMoreFilters}
