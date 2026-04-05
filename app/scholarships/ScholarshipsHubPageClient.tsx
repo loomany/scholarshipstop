@@ -422,18 +422,26 @@ function ScholarshipsPageInner({
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
     const base = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
-    const isCatalogBrowseTab =
-      activeTab === 'matches' ||
-      activeTab === 'best-matches' ||
-      activeTab === 'recommended' ||
-      activeTab === 'easy-apply';
-    const syncedMatches =
-      isCatalogBrowseTab && totalCount > 0
-        ? totalCount
-        : base.matches;
+    const syncedCatalogCount = totalCount > 0 ? totalCount : null;
+
     return {
       ...base,
-      matches: syncedMatches,
+      bestMatches:
+        activeTab === 'best-matches' && syncedCatalogCount !== null
+          ? syncedCatalogCount
+          : base.bestMatches,
+      recommended:
+        activeTab === 'recommended' && syncedCatalogCount !== null
+          ? syncedCatalogCount
+          : base.recommended,
+      easyApply:
+        activeTab === 'easy-apply' && syncedCatalogCount !== null
+          ? syncedCatalogCount
+          : base.easyApply,
+      matches:
+        activeTab === 'matches' && syncedCatalogCount !== null
+          ? syncedCatalogCount
+          : base.matches,
       saved: savedIds.length,
       started: startedIds.length,
       submitted: submittedIds.length,
