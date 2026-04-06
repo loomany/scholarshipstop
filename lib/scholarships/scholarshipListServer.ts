@@ -36,6 +36,12 @@ import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { isSeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
 import { requirementTypesToDbColumns } from '@/lib/scholarships/requirementTypeMapping';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
+import {
+  canBuildPersonalizedMatchIndex,
+  getCachedScholarshipMatchIndex,
+  scholarshipMatchProfileVersion
+} from '@/lib/scholarships/scholarshipMatchCache';
+import { filterIdsByIgnored } from '@/lib/scholarships/scholarshipMatchIndex';
 import type { createClient } from '@/utils/supabase/server';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
@@ -68,6 +74,8 @@ export type ScholarshipListMeta = {
   } | null;
   /** Structured defaults for Best match filters UI (derived from saved profile). */
   profileFilterSeed?: ScholarshipProfileFilterSeed | null;
+  /** True when profile has enough signals for personalized bucket matching. */
+  personalizedMatchReady?: boolean;
   /**
    * Personalized hub: count in the “Matches” bucket after ignored + listing SQL filters (aligned with sidebar).
    * Catalog / fallback: raw index bucket size after ignored only.
@@ -186,6 +194,7 @@ function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMet
           eligibilityIds: [...meta.profileFilterSeed.eligibilityIds]
         }
       : meta.profileFilterSeed,
+    personalizedMatchReady: meta.personalizedMatchReady,
     matchedTotal: meta.matchedTotal
   };
 }
@@ -944,11 +953,14 @@ function buildListMetaCacheKey(
     .sort()
     .join(',');
   const moreFiltersKey = JSON.stringify(moreFiltersToJson(req.moreFilters));
+  const profileKey = req.personalizedProfile
+    ? `${req.personalizedProfile.id}:${scholarshipMatchProfileVersion(req.personalizedProfile)}`
+    : 'none';
   return [
     req.tab,
     req.deadline,
     req.listScope,
-    'pf:none',
+    `pf:${profileKey}`,
     includeCategoryCounts ? 'cats:1' : 'cats:0',
     `state:${stateCodes}`,
     `ignored:${ignored}`,
@@ -971,20 +983,11 @@ function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRe
   return { ...req, listScope: 'catalog', personalizedProfile: undefined };
 }
 
-const CATALOG_REDIRECT_TAB_IDS = new Set<ScholarshipListTabId>([
-  'best-matches',
-  'recommended'
-]);
-
-/**
- * Normalize hub-style tabs that used to run separate personalized SQL into plain catalog `matches`.
- * Call at the API boundary after parsing the request.
- */
+/** Canonical pipeline is catalog SQL; keep tab selection intact. */
 export function applyCatalogOnlyListingNormalization(
   req: ScholarshipListRequest
 ): ScholarshipListRequest {
-  const tab = CATALOG_REDIRECT_TAB_IDS.has(req.tab) ? 'matches' : req.tab;
-  return { ...req, tab, listScope: 'catalog', personalizedProfile: undefined };
+  return { ...req, listScope: 'catalog' };
 }
 
 function buildScholarshipListFilterQuery(
@@ -1018,6 +1021,26 @@ export async function executeScholarshipListQuery(
   req: ScholarshipListRequest,
   opts: ScholarshipListQueryOpts
 ): Promise<ScholarshipListResult> {
+  if (req.tab === 'best-matches' || req.tab === 'recommended') {
+    const ids = await personalizedBucketIds(supabase, req, req.tab);
+    const listReq: ScholarshipListRequest = {
+      ...req,
+      tab: 'saved',
+      saved: ids
+    };
+    const result = await executeScholarshipListQuery(supabase, listReq, {
+      ...opts,
+      includeMeta: false
+    });
+    if (opts.includeMeta) {
+      const bounds = await fetchGlobalFilterBounds(supabase);
+      result.meta = await fetchScholarshipListMeta(supabase, req, bounds, {
+        includeCategoryCounts: opts.includeCategoryCounts
+      });
+    }
+    return result;
+  }
+
   /**
    * Catalog “similar scholarships” must bypass personalized match ordering.
    * Otherwise `similar_to` is ignored whenever a match bundle exists.
@@ -1151,6 +1174,101 @@ async function countFor(
   tab: ScholarshipListTabId
 ): Promise<number> {
   return countScholarshipsForTabRequest(supabase, req, tab);
+}
+
+async function personalizedBucketIds(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest,
+  tab: 'best-matches' | 'recommended'
+): Promise<string[]> {
+  const profile = req.personalizedProfile ?? null;
+  if (!canBuildPersonalizedMatchIndex(profile)) return [];
+  const bundle = await getCachedScholarshipMatchIndex(
+    supabase as any,
+    profile.id,
+    profile
+  );
+  const raw = tab === 'best-matches' ? bundle.idsBest : bundle.idsRecommended;
+  return filterIdsByIgnored(raw, req.ignored);
+}
+
+function easyApplyListCanonicalRequest(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  const moreFilters = cloneMoreFilters(req.moreFilters);
+  moreFilters.includeEasyApply.add('easy_apply');
+  return {
+    ...req,
+    moreFilters
+  };
+}
+
+/**
+ * Stable sidebar counts source of truth.
+ * Intentionally decoupled from active list tab/page/sort/list total.
+ */
+export async function fetchScholarshipSidebarCounts(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest
+): Promise<ScholarshipSidebarCounts> {
+  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+  const tabs: ScholarshipListTabId[] = [
+    'best-matches',
+    'recommended',
+    'easy-apply',
+    'matches',
+    'saved',
+    'started',
+    'submitted',
+    'ignored'
+  ];
+  const sidebarParts = await Promise.all(
+    tabs.map(async (t) => ({
+      t,
+      n:
+        t === 'best-matches' || t === 'recommended'
+          ? await (async () => {
+              const ids = await personalizedBucketIds(supabase, effectiveReq, t);
+              return countFor(
+                supabase,
+                {
+                  ...effectiveReq,
+                  tab: 'saved',
+                  saved: ids
+                },
+                'saved'
+              );
+            })()
+          : await countFor(
+              supabase,
+              t === 'easy-apply'
+                ? easyApplyListCanonicalRequest(effectiveReq)
+                : effectiveReq,
+              t
+            )
+    }))
+  );
+  const sidebarCounts: ScholarshipSidebarCounts = {
+    bestMatches: 0,
+    recommended: 0,
+    easyApply: 0,
+    matches: 0,
+    saved: 0,
+    started: 0,
+    submitted: 0,
+    ignored: 0
+  };
+  for (const { t, n } of sidebarParts) {
+    if (t === 'best-matches') sidebarCounts.bestMatches = n;
+    if (t === 'recommended') sidebarCounts.recommended = n;
+    if (t === 'easy-apply') sidebarCounts.easyApply = n;
+    if (t === 'matches') sidebarCounts.matches = n;
+    if (t === 'saved') sidebarCounts.saved = n;
+    if (t === 'started') sidebarCounts.started = n;
+    if (t === 'submitted') sidebarCounts.submitted = n;
+    if (t === 'ignored') sidebarCounts.ignored = n;
+  }
+  return sidebarCounts;
 }
 
 async function countCategory(
@@ -1419,46 +1537,16 @@ export async function fetchScholarshipListMeta(
   opts?: { includeCategoryCounts?: boolean }
 ): Promise<ScholarshipListMeta> {
   const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
-  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
-  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v3`;
+  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v5`;
   const cached = readTtlValue(listMetaCache.get(cacheKey));
   if (cached) {
     return cloneScholarshipListMeta(cached);
   }
 
   const categoryReq = categoryDropdownCountsRequest(req, b);
-
-  /** Catalog hub: easy-apply + browse + user-list tab counts via the same SQL stack. */
-  const tabs: ScholarshipListTabId[] = [
-    'easy-apply',
-    'matches',
-    'saved',
-    'started',
-    'submitted',
-    'ignored'
-  ];
-  const sidebarParts = await Promise.all(
-    tabs.map(async (t) => ({ t, n: await countFor(supabase, effectiveReq, t) }))
-  );
-  const sidebarCounts: ScholarshipSidebarCounts = {
-    bestMatches: 0,
-    recommended: 0,
-    easyApply: 0,
-    matches: 0,
-    saved: 0,
-    started: 0,
-    submitted: 0,
-    ignored: 0
-  };
-  for (const { t, n } of sidebarParts) {
-    if (t === 'easy-apply') sidebarCounts.easyApply = n;
-    if (t === 'matches') sidebarCounts.matches = n;
-    if (t === 'saved') sidebarCounts.saved = n;
-    if (t === 'started') sidebarCounts.started = n;
-    if (t === 'submitted') sidebarCounts.submitted = n;
-    if (t === 'ignored') sidebarCounts.ignored = n;
-  }
+  const sidebarCounts = await fetchScholarshipSidebarCounts(supabase, req);
 
   const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
   if (includeCategoryCounts) {
@@ -1473,7 +1561,14 @@ export async function fetchScholarshipListMeta(
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) categoryCounts[id] = 0;
   }
 
-  const meta = { filterBounds: b, sidebarCounts, categoryCounts };
+  const meta: ScholarshipListMeta = {
+    filterBounds: b,
+    sidebarCounts,
+    categoryCounts,
+    personalizedMatchReady: canBuildPersonalizedMatchIndex(
+      req.personalizedProfile ?? null
+    )
+  };
   writeTtlValue(listMetaCache, cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
   return meta;
 }

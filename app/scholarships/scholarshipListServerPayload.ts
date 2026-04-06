@@ -17,6 +17,7 @@ import {
   scholarshipListRequestFromParts,
   type ScholarshipListResult
 } from '@/lib/scholarships/scholarshipListServer';
+import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import type { createClient } from '@/utils/supabase/server';
 import {
   moreFiltersToJson,
@@ -29,7 +30,8 @@ type ServerSupabaseClient = ReturnType<typeof createClient>;
  * Hub `/scholarships` first paint: same catalog pipeline for signed-in and anonymous users.
  */
 export async function fetchInitialHubScholarshipsPayload(
-  supabase: ServerSupabaseClient
+  supabase: ServerSupabaseClient,
+  profile?: ProfilesRow | null
 ): Promise<ScholarshipListResult> {
   const defaultBounds = {
     amountMin: 0,
@@ -60,16 +62,20 @@ export async function fetchInitialHubScholarshipsPayload(
     requiredSeoTags: []
   });
 
-  const result = await executeScholarshipListQuery(supabase, req, {
-    countOnly: false,
-    /**
-     * Include list meta on first paint so category counters are populated even
-     * before client-side `/api/scholarships?meta=1` warms up.
-     */
-    includeMeta: true,
-    includeCategoryCounts: true,
-    isProSubscriber: false
-  });
+  const result = await executeScholarshipListQuery(
+    supabase,
+    profile ? { ...req, personalizedProfile: profile } : req,
+    {
+      countOnly: false,
+      /**
+       * Include list meta on first paint so category counters are populated even
+       * before client-side `/api/scholarships?meta=1` warms up.
+       */
+      includeMeta: true,
+      includeCategoryCounts: true,
+      isProSubscriber: false
+    }
+  );
 
   return result;
 }
