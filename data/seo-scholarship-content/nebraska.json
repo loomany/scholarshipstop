@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Nebraska Scholarships | 14 Opportunities Available",
+  "seo_description": "Explore 14 Nebraska scholarships with awards from $500 to $2,500. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for education in Nebraska can be challenging, but there are 14 scholarships available that cater to various needs and backgrounds. These opportunities cover a range of categories, including education, community service, and medical fields. Award sizes vary, and deadlines differ, so it’s important to review each listing carefully to identify the best fit for your situation.",
+  "h1": "Nebraska Scholarships: 14 Funding Opportunities",
+  "supporting": "As you explore these scholarships, take note of the specific requirements and deadlines associated with each one. Some may require essays, while others have lighter application processes. Comparing award amounts and eligibility criteria can help you prioritize which scholarships to apply for. Always verify details on the official sponsor pages to ensure you have the most accurate information.",
+  "related_intro": "For more tailored options, consider checking out related pages that focus on specific categories or requirements that might align with your interests.",
+  "how_to_use": [
+    "Sort scholarships by award amount",
+    "Read the requirement lines carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile",
+    "Check deadlines and prepare applications promptly"
+  ],
+  "who_for": [
+    "High school seniors in Nebraska",
+    "Undergraduate students pursuing education",
+    "Students with community service experience",
+    "Individuals seeking medical field scholarships",
+    "Students with disabilities looking for support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Nebraska?",
+      "answer": "The Nebraska scholarship listings include a variety of categories such as education, community, medicine, music, and disability. With 14 scholarships currently available, you can find options that align with different interests and needs."
+    },
+    {
+      "question": "How do I find scholarship deadlines?",
+      "answer": "All 14 scholarships listed have specific deadlines, which vary by program. It's important to check each listing promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Essay requirements differ among the scholarships in Nebraska. While some may require essays, others do not, so it's advisable to review the details of each scholarship to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for Nebraska scholarships?",
+      "answer": "The award sizes for scholarships in Nebraska vary, with amounts typically ranging from approximately $500 to $2,500. Be sure to check individual listings for specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "nebraska",
+    "generatedAt": "2026-04-02T11:00:37.533Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 14,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

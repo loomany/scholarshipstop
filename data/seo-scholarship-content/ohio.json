@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Ohio Scholarships | Up to $9,000 Available",
+  "seo_description": "Explore 80 scholarships in Ohio with awards from $500 to $9,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for your education in Ohio is crucial, especially with 80 scholarships available that cater to a variety of fields and needs. Award sizes vary significantly, ranging approximately from $500 to $9,000, offering options for students at different stages. Keep in mind that deadlines for these scholarships differ, with some approaching in the next few weeks, so it's important to check each listing promptly.",
+  "h1": "Ohio Scholarships: 80 Opportunities Awaiting You",
+  "supporting": "This collection of scholarships covers diverse categories, including education, STEM, and community initiatives. As you review the listings, take note of the varying requirements—while many scholarships have lighter application processes, some may require essays. Comparing the award amounts and deadlines can help you identify the best opportunities for your situation.",
+  "related_intro": "For additional options, consider exploring related pages that focus on specific fields or scholarship types relevant to your interests.",
+  "how_to_use": [
+    "Check each scholarship's deadline and apply early",
+    "Compare award amounts to prioritize applications",
+    "Review requirement details for each listing",
+    "Shortlist scholarships that align with your goals",
+    "Visit official pages for the most accurate information"
+  ],
+  "who_for": [
+    "Students pursuing education-related degrees",
+    "STEM majors looking for funding",
+    "Community service volunteers seeking scholarships",
+    "Trade school applicants in Ohio",
+    "Students with disabilities applying for support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Ohio?",
+      "answer": "The Ohio scholarship listings include a variety of categories such as Education, Miscellaneous, Community, STEM, Medicine, and Law. With 80 scholarships currently available, you can find options tailored to different fields and interests."
+    },
+    {
+      "question": "How can I find scholarship deadlines?",
+      "answer": "All 80 scholarships listed have specific deadlines, but these vary by program. It's important to check the individual listings promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements for essays vary among the scholarships in Ohio. While some listings do not require essays, approximately 9 of the scholarships do include an essay component, so be sure to review each listing for specific details."
+    },
+    {
+      "question": "What are the award amounts for Ohio scholarships?",
+      "answer": "Award sizes for scholarships in Ohio range from approximately $500 to $9,000. Each scholarship has its own funding amount, so it's advisable to check the details of each listing for precise figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "ohio",
+    "generatedAt": "2026-04-02T10:38:41.144Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 80,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

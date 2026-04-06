@@ -1,0 +1,49 @@
+{
+  "seo_title": "North Carolina Scholarships for Financial Need",
+  "seo_description": "Explore 17 scholarships for financial need in North Carolina. Award sizes vary and deadlines differ—check details for each program.",
+  "intro": "Finding financial support as a student in North Carolina can be challenging, but this collection of 17 scholarships specifically designed for those with financial need offers a solid starting point. Award sizes vary, with opportunities ranging from $500 to $10,000. Keep in mind that application requirements and deadlines differ across listings, so it's essential to review each one carefully to identify the best fit for your situation.",
+  "h1": "Financial Need Scholarships in North Carolina",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and application requirements. Some scholarships may require essays, while others may have lighter requirements, making them easier to apply for. Pay attention to the deadlines, especially since some opportunities may be approaching quickly—it's advisable to check the dates and ensure your applications are submitted on time.",
+  "related_intro": "For more tailored options, you might find it helpful to check out scholarships based on specific categories or other eligibility criteria.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan the award amounts to prioritize applications",
+    "Read through requirement lines for each opportunity",
+    "Open official scholarship pages for more details",
+    "Shortlist scholarships that align with your profile and needs"
+  ],
+  "who_for": [
+    "Students with demonstrated financial need",
+    "North Carolina residents",
+    "High school seniors and current college students",
+    "Applicants interested in community service or education",
+    "Those seeking scholarships with varying application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in North Carolina?",
+      "answer": "There are currently 17 scholarships listed that cater to students demonstrating financial need in North Carolina. These scholarships cover a variety of categories, including community, education, humanities, and STEM."
+    },
+    {
+      "question": "Do all scholarships require essays?",
+      "answer": "Requirements vary across the scholarships; while some may require essays, others do not. It's important to check the specific details for each scholarship to understand what is needed."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 17 scholarships listed have deadlines, but they differ from one another. Be sure to review each listing carefully to note the specific deadline, especially as some may be approaching soon."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category vary, with amounts ranging approximately from $500 to $10,000. Each listing will provide the specific amount associated with that scholarship."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/north-carolina",
+    "generatedAt": "2026-04-02T11:05:22.033Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 17,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

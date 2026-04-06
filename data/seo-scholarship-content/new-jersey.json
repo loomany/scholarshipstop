@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 58 New Jersey Scholarships for Students",
+  "seo_description": "Discover New Jersey scholarships ranging from $500 to $10,000. Check individual deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for education in New Jersey can be a crucial step toward achieving your academic goals. With 58 scholarships listed, ranging from $500 to $10,000, there are diverse opportunities available across various categories such as education, arts, community, and STEM. Each scholarship has its own unique requirements and deadlines, so it's important to explore these listings closely to identify the best fits for your needs and timeline.",
+  "h1": "New Jersey Scholarships: 58 Opportunities Available",
+  "supporting": "As you review the available scholarships, pay attention to the specific award amounts and the varying requirements, including some that may not require essays. This variety allows you to prioritize scholarships that align with your strengths and application preferences. With deadlines that differ among listings, checking them promptly will ensure you don’t miss out on potential funding.",
+  "related_intro": "For additional opportunities, consider exploring related categories such as arts or community scholarships, which may offer even more funding options tailored to your interests.",
+  "how_to_use": [
+    "Compare deadlines across different listings",
+    "Scan award amounts to find suitable options",
+    "Read the requirement lines for each scholarship",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Students pursuing education in New Jersey",
+    "Applicants interested in arts or STEM fields",
+    "Individuals seeking community-focused scholarships",
+    "Students with varying essay requirements",
+    "Those looking for awards with flexible amounts"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in New Jersey?",
+      "answer": "The New Jersey scholarship listings include a variety of categories such as Education, Community, Medicine, Arts, and STEM. With 58 scholarships currently available, you can find options that align with different interests and fields of study."
+    },
+    {
+      "question": "How can I find scholarship deadlines?",
+      "answer": "Each scholarship has its own deadline, and all 58 listings include specific dates. It's important to check these deadlines promptly, as some may be coming up within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the scholarships, with some requiring essays and others not. Out of the current listings, approximately 6 scholarships require an essay, while the majority do not, so be sure to review the details for each individual scholarship."
+    },
+    {
+      "question": "What are the award amounts for New Jersey scholarships?",
+      "answer": "Award sizes for New Jersey scholarships vary widely, with amounts ranging from approximately $500 to $10,000. Each listing provides specific details on the award amount, so check the individual scholarships for exact figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "new-jersey",
+    "generatedAt": "2026-04-02T10:39:50.248Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 58,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

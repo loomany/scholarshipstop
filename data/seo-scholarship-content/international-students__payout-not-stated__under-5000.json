@@ -1,0 +1,47 @@
+{
+  "seo_title": "Under $5,000 Scholarships for International Students",
+  "seo_description": "Explore 21 scholarships for international students with awards under $5,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support as an international student can be challenging, but there are options available that cater to your needs. This catalog features 21 scholarships specifically for international students, with award amounts generally ranging from $400 to $4,000. While many listings do not require essays, it's important to review each scholarship's details, as requirements and deadlines can vary significantly.",
+  "h1": "Scholarships Under $5,000 for International Students",
+  "supporting": "When exploring this list, pay attention to the specific categories such as STEM, education, and community, which may align with your background or interests. Since all listings have deadlines, some of which are approaching, it's advisable to check the dates promptly. Comparing the award amounts and requirements can help you prioritize which scholarships to apply for.",
+  "related_intro": "If you're interested in more tailored opportunities, consider checking out related categories focusing on specific fields or award types.",
+  "how_to_use": [
+    "Review the list for scholarship categories that match your profile",
+    "Check each listing for specific deadlines and requirements",
+    "Compare award amounts to identify the best opportunities",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that fit your needs and verify on sponsor sites"
+  ],
+  "who_for": [
+    "International students seeking financial assistance",
+    "Students interested in STEM or education fields",
+    "Applicants looking for scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students with payouts not stated?",
+      "answer": "This filter includes 21 scholarships across various categories such as STEM, Education, Community, and Miscellaneous. Each listing may have different eligibility criteria and focus areas, so it's important to review the details of each scholarship."
+    },
+    {
+      "question": "How can I find out the specific award amounts for these scholarships?",
+      "answer": "While the exact payout amounts are not stated for each scholarship, the range for the listings generally falls between $400 and $4,000. You can check individual scholarship listings for more specific information."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Many of the scholarships listed do not require an essay, making them potentially easier to apply for. However, it's advisable to verify the requirements for each specific scholarship as they can vary."
+    },
+    {
+      "question": "What should I know about deadlines for these scholarships?",
+      "answer": "All 21 scholarships in this category have deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's a good idea to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "international-students/payout-not-stated/under-5000",
+    "generatedAt": "2026-04-02T11:01:41.733Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 21,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

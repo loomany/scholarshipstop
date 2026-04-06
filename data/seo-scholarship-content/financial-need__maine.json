@@ -1,0 +1,49 @@
+{
+  "seo_title": "Maine Scholarships for Financial Need | Up to $20,000",
+  "seo_description": "Explore 13 Maine scholarships for financial need, with awards from $1,000 to $20,000. Check varied deadlines and requirements.",
+  "intro": "Finding financial support for education in Maine can be challenging, especially for those facing financial need. This catalog features 13 scholarships specifically designed to assist students in Maine, with award sizes ranging from approximately $1,000 to $20,000. Each scholarship has unique requirements and deadlines, so it’s essential to review them closely to identify the best fit for your situation.",
+  "h1": "Maine Financial Need Scholarships: 13 Opportunities",
+  "supporting": "As you explore this list, pay attention to the diverse categories, including education, community, and law. Some scholarships may require essays, while others have lighter requirements, making it easier to apply. With deadlines varying across the listings, it's wise to check them promptly to ensure you don’t miss any opportunities.",
+  "related_intro": "If you're interested in similar funding options, consider checking out our other scholarship categories focused on specific fields or criteria.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize applications",
+    "Scan award amounts to find scholarships that meet your financial needs",
+    "Read requirement lines carefully to understand what is expected",
+    "Open official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your qualifications and goals"
+  ],
+  "who_for": [
+    "Students in Maine with demonstrated financial need",
+    "High school seniors and current college students",
+    "Applicants pursuing education in law or community service",
+    "Individuals looking for scholarships with varying requirements",
+    "Students interested in awards with significant funding potential"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Maine?",
+      "answer": "This collection includes 13 scholarships that cater to various categories such as education, community, law, and safety. Each scholarship has different eligibility criteria and focuses, so it's important to review the details of each listing to find the best fit for your situation."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for these scholarships vary, with amounts ranging approximately from $1,000 to $20,000. However, specific award amounts depend on the individual scholarship, so be sure to check each listing for precise figures."
+    },
+    {
+      "question": "Are there deadlines I need to be aware of?",
+      "answer": "Yes, all 13 scholarships listed have specific deadlines, which vary from one program to another. It's advisable to check the deadlines promptly, as at least one scholarship has a deadline within the next 45 days."
+    },
+    {
+      "question": "Do these scholarships require essays?",
+      "answer": "Requirements differ among the scholarships; while some may require essays, others do not. Out of the 13 listings, approximately three have essay requirements, so it's essential to review each scholarship's details for specific application instructions."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/maine",
+    "generatedAt": "2026-04-02T11:09:14.556Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 13,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

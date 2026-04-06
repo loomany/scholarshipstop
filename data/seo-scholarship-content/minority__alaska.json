@@ -1,0 +1,49 @@
+{
+  "seo_title": "Alaska Scholarships for Minority Students",
+  "seo_description": "Explore 6 scholarships for minority students in Alaska. Award sizes vary; check deadlines and requirements for each opportunity.",
+  "intro": "Alaska's minority students have access to a variety of scholarships aimed at supporting their educational goals. With six distinct opportunities available, award sizes range from approximately $500 to $10,000. These scholarships cover diverse categories such as education, community, and the arts, providing options for students with different interests and needs. Keep in mind that application requirements and deadlines vary, so it's essential to review each listing carefully to find the best fit for you.",
+  "h1": "Minority Scholarships in Alaska",
+  "supporting": "As you explore these scholarships, pay attention to the specific details of each listing. Some may require essays while others do not, and the deadlines are not uniform across the board. By comparing the award amounts and requirements, you can identify which scholarships align best with your profile and timeline. This focused approach will help you maximize your chances of securing funding for your education.",
+  "related_intro": "For more tailored options, consider checking out scholarships specifically for other minority groups or different regions. These related pages can help broaden your search for financial support.",
+  "how_to_use": [
+    "Review each listing for specific award amounts and categories",
+    "Compare deadlines to prioritize your applications",
+    "Check whether essays are required for each scholarship",
+    "Open the official pages for detailed application instructions",
+    "Shortlist the scholarships that best match your profile and needs"
+  ],
+  "who_for": [
+    "Minority students in Alaska",
+    "Students pursuing education in arts or community fields",
+    "Individuals seeking scholarships with varying requirements",
+    "Students interested in larger award amounts",
+    "Applicants looking for opportunities with upcoming deadlines"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for minorities in Alaska?",
+      "answer": "The current listings include a variety of scholarships categorized under education, community, and arts. With 6 scholarships available, you can find opportunities tailored to different interests and fields."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships. While some listings may not require essays, others do, so it's important to check each scholarship's details for specific application requirements."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category range from approximately $500 to $10,000. Each listing provides specific amounts, so reviewing individual entries will give you the best understanding of what to expect."
+    },
+    {
+      "question": "How should I check the deadlines for these scholarships?",
+      "answer": "All scholarships in this listing have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to verify the dates promptly by checking each scholarship's details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority/alaska",
+    "generatedAt": "2026-04-02T11:07:03.753Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

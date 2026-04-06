@@ -1,0 +1,49 @@
+{
+  "seo_title": "Nevada Scholarships: Find Your Funding Opportunities",
+  "seo_description": "Explore 20 scholarships in Nevada with awards from $500 to $9,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support in Nevada can be crucial for students pursuing their education. This catalog features 20 scholarships that cater to various fields, including STEM, education, and community service. Award sizes vary, providing opportunities for different needs and goals. With deadlines that differ across listings, it's important to check each scholarship's specific timeline to ensure you don’t miss out.",
+  "h1": "Explore 20 Scholarships Available in Nevada",
+  "supporting": "As you explore these scholarships, take note of the varying requirements and award amounts. Some programs may require essays, while others have lighter application processes. Compare the deadlines and read the details carefully to understand what each scholarship entails. Verifying information on the sponsor's official site can also provide additional insights.",
+  "related_intro": "If you're interested in more tailored options, consider checking out related pages that focus on specific fields or requirements.",
+  "how_to_use": [
+    "Sort scholarships by award amount",
+    "Read the requirement lines carefully",
+    "Open the official pages for details",
+    "Shortlist scholarships that fit your profile",
+    "Verify deadlines and eligibility criteria"
+  ],
+  "who_for": [
+    "Students pursuing STEM degrees",
+    "Individuals with disabilities seeking support",
+    "Community-focused scholarship applicants",
+    "Students in need of financial assistance",
+    "Those looking for education-related funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in Nevada?",
+      "answer": "The Nevada scholarship listings include a variety of categories such as disability, community, education, STEM, medicine, and biology. With 20 scholarships currently available, students can find opportunities that align with their specific fields of interest."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 20 listings include deadline information. It's important to check these dates promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for the scholarships?",
+      "answer": "Requirements vary among the scholarships. While some may require essays, many listings indicate lighter requirements, so it's advisable to review each scholarship's details to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in Nevada vary, with amounts generally ranging from approximately $500 to $9,000. Be sure to check the specific award details for each scholarship as you explore your options."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "nevada",
+    "generatedAt": "2026-04-02T10:53:25.518Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 20,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Scholarships for Single Parents in the USA",
+  "seo_description": "Explore 16 scholarships for single parents with awards from $500 to $44,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support as a single parent can be challenging, but there are 16 scholarships specifically designed to help. These awards, which range from around $500 to $44,000, cater to various fields including education, medicine, and law. Since deadlines vary, it's essential to check them promptly, especially with some approaching within the next 45 days. This selection offers a mix of requirements, with many options that may not require extensive essays.",
+  "h1": "Single Parent Scholarships: 16 Opportunities Available",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and the specific fields they support. Some listings may have lighter requirements, making them more accessible. Pay attention to the deadlines and ensure you verify each scholarship's details on the official site to maximize your chances of securing funding.",
+  "related_intro": "If you're interested in more tailored opportunities, check out our listings for scholarships focused on education, healthcare, or other specific areas.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan the award amounts listed",
+    "Read through the requirement lines carefully",
+    "Open the official scholarship pages for more details",
+    "Shortlist the scholarships that best fit your profile"
+  ],
+  "who_for": [
+    "Single parents pursuing higher education",
+    "Applicants interested in STEM fields",
+    "Individuals seeking funding for medical studies",
+    "Those looking for scholarships with lighter requirements",
+    "Students in need of financial assistance for law programs"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for single parents?",
+      "answer": "There are 16 scholarships listed specifically for single parents, covering a range of categories including education, medicine, STEM, and law. Each scholarship may have different eligibility requirements and focuses, so it's beneficial to review each listing carefully."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships vary significantly, with amounts ranging from approximately $500 to $44,000. Be sure to check the specific details for each scholarship to understand the funding available."
+    },
+    {
+      "question": "Are there deadlines I need to be aware of?",
+      "answer": "Yes, all 16 scholarships have specific deadlines, which vary by program. It's important to check the individual listings for the most accurate deadline information, as some may be approaching soon."
+    },
+    {
+      "question": "Do I need to submit an essay for these scholarships?",
+      "answer": "Requirements for essays differ among the scholarships. While some may not require an essay, others do, so it’s essential to verify the requirements for each scholarship you are interested in."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "single-parent",
+    "generatedAt": "2026-04-02T10:58:39.578Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 16,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Oregon Scholarships for Students | Find Your Funding",
+  "seo_description": "Explore 29 scholarships in Oregon with awards from $500 to $10,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for education in Oregon can be a crucial step for many students. This collection features 29 scholarships, with award amounts typically ranging from $500 to $10,000. Each listing has varying requirements and deadlines, so it's important to review them carefully. Some opportunities may have deadlines approaching in the next few weeks, making it essential to act promptly if you find a suitable match.",
+  "h1": "Find Scholarships in Oregon: 29 Opportunities Available",
+  "supporting": "As you explore this list, consider comparing the award sizes and requirements to identify which scholarships align best with your educational goals and circumstances. While many options may not require essays, there are a few that do, so be sure to check the specifics for each listing. This range of scholarships covers various fields, including education, community service, and STEM, providing a broad spectrum of opportunities.",
+  "related_intro": "If you're interested in scholarships specific to certain fields or additional regional options, check out our related pages for more tailored opportunities.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find suitable financial support",
+    "Read the requirements for each scholarship carefully",
+    "Open official scholarship pages for detailed information",
+    "Shortlist potential scholarships to apply for"
+  ],
+  "who_for": [
+    "Students pursuing education in Oregon",
+    "Applicants interested in community service scholarships",
+    "Individuals studying STEM fields",
+    "Students with disabilities seeking financial aid",
+    "Medical students looking for funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in Oregon?",
+      "answer": "The Oregon scholarship listings include a variety of categories such as education, community, miscellaneous, disability, medicine, and STEM. With 29 options currently available, students can find scholarships that align with their specific fields of study and personal circumstances."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and it's important to check the specific dates listed for each opportunity. Currently, all 29 scholarships have deadlines, with some approaching within the next 45 days, so reviewing them promptly is advisable."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, the majority do not, so it's essential to review the details for each scholarship to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for Oregon scholarships?",
+      "answer": "Award sizes for the scholarships in Oregon vary, with amounts generally ranging from approximately $500 to $10,000. Each listing provides specific details about the award amount, so be sure to check individual scholarships for exact figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "oregon",
+    "generatedAt": "2026-04-02T10:47:44.335Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 29,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

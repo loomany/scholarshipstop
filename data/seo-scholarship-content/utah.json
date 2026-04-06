@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 15 Scholarships for Utah Students",
+  "seo_description": "Find Utah scholarships ranging from $500 to $9,000. Deadlines vary, so check listings for details.",
+  "intro": "Finding financial support in Utah is essential for many students, and this catalog features 15 scholarships that cater to a range of needs and fields. Award sizes vary significantly, with amounts typically ranging from $500 to $9,000. You'll find opportunities across categories such as education, STEM, community service, and medical fields. With varied deadlines, including some approaching within the next 45 days, it's important to check each listing promptly to ensure you don’t miss out.",
+  "h1": "Scholarships Available for Utah Students",
+  "supporting": "As you explore these scholarship options, pay attention to the specific requirements and deadlines associated with each. Some listings may require essays, while others have lighter requirements, making it easier for you to apply. Comparing award amounts and eligibility criteria can help you identify the best fits for your situation. This slice of scholarships is particularly valuable for students in Utah looking to alleviate the financial burden of their education.",
+  "related_intro": "If you're interested in more tailored options, consider checking out related pages that focus on specific categories like STEM or community service scholarships.",
+  "how_to_use": [
+    "Compare deadlines for timely applications",
+    "Scan award amounts to identify suitable options",
+    "Read requirement details for each scholarship",
+    "Open official pages for more information",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Students pursuing education degrees",
+    "Individuals focused on STEM fields",
+    "Community service-oriented applicants",
+    "Students with disabilities",
+    "Those seeking medical scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Utah?",
+      "answer": "The scholarship listings in Utah cover a variety of categories, including Disability, STEM, Community, Education, and Medicine. With 15 different options currently available, you can find scholarships that align with your specific needs and interests."
+    },
+    {
+      "question": "How do I find the right scholarship for me?",
+      "answer": "To find a suitable scholarship, review the categories and award amounts listed for each option. Keep in mind that requirements, including essay submissions, may vary, so it's important to check the details for each scholarship to ensure a good fit."
+    },
+    {
+      "question": "Are there any upcoming deadlines I should be aware of?",
+      "answer": "Yes, all 15 scholarships listed have deadlines, which vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly to ensure you don’t miss out."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for scholarships in Utah range from approximately $500 to $9,000. Each listing provides specific amounts, so be sure to review them to find opportunities that meet your financial needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "utah",
+    "generatedAt": "2026-04-02T10:59:50.313Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 15,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

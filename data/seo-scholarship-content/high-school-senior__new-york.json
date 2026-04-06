@@ -1,0 +1,48 @@
+{
+  "seo_title": "New York Scholarships for High School Seniors",
+  "seo_description": "Explore 11 scholarships for New York high school seniors. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "High school seniors in New York have access to a diverse array of scholarship opportunities, with 11 listings currently available. These scholarships range from $500 to $20,000, supporting various fields such as education, arts, and disability services. With deadlines varying across the listings, it’s essential to check each one promptly, especially since some deadlines are approaching in the next few weeks.",
+  "h1": "Scholarships for High School Seniors in New York",
+  "supporting": "This collection of scholarships is particularly valuable for students looking to ease the financial burden of college. Many of the listings do not require essays, making them more accessible. As you review the options, consider comparing the award amounts and specific eligibility requirements to find the best fit for your situation.",
+  "related_intro": "For more tailored options, you might also explore scholarships based on different criteria, such as specific fields of study or additional support categories.",
+  "how_to_use": [
+    "Review each listing for specific award amounts",
+    "Check the deadlines for each scholarship carefully",
+    "Compare eligibility requirements to find suitable options",
+    "Open the official pages for detailed application instructions",
+    "Shortlist your favorites and verify details with sponsors"
+  ],
+  "who_for": [
+    "High school seniors in New York",
+    "Students interested in arts and education funding",
+    "Applicants seeking scholarships with lighter requirements",
+    "Individuals looking for disability-related scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in New York?",
+      "answer": "There are 11 scholarships listed for high school seniors in New York, covering a range of categories including education, arts, medicine, and disability. Each scholarship may have different eligibility criteria and focus areas, so it's beneficial to review the specific details for each listing."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 11 scholarships have specific deadlines, which vary from one listing to another. It's important to check the individual scholarship details promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most scholarships in this listing do not require essays, but this can vary by program. It's advisable to verify the requirements for each scholarship to ensure you meet all necessary criteria."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships range from approximately $500 to $20,000. Each scholarship has its own amount, so reviewing the specific details will provide clarity on what you can expect."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/new-york",
+    "generatedAt": "2026-04-02T10:42:03.952Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 11,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

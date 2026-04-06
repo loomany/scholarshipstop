@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Arizona Scholarships - Up to $9,000 Available",
+  "seo_description": "Explore 28 scholarships in Arizona with awards from $500 to $9,000. Check individual deadlines and requirements.",
+  "intro": "Finding scholarships in Arizona can be a strategic way to fund your education, especially with 28 options available in this catalog. Award sizes vary, ranging from approximately $500 to $9,000, and requirements differ across listings. Many of these opportunities are tied to specific fields like education, STEM, and community service, making it essential to explore your fit and the potential for support based on your background and interests.",
+  "h1": "Explore 28 Scholarships Available in Arizona",
+  "supporting": "As you review the scholarships, pay attention to the diverse requirements and deadlines that accompany each listing. Some scholarships may require essays, while others may not, allowing for a range of application efforts. With deadlines spread across the upcoming months, it's advisable to check these dates promptly to ensure you don’t miss out on any opportunities.",
+  "related_intro": "If you're interested in exploring more specific categories or types of scholarships, consider checking related pages that focus on particular fields or requirements.",
+  "how_to_use": [
+    "Compare deadlines across different scholarships",
+    "Scan the award amounts listed for each opportunity",
+    "Read the requirement lines carefully for essay needs",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Students pursuing education-related degrees",
+    "Applicants interested in STEM fields",
+    "Community service advocates",
+    "Individuals with disabilities seeking support",
+    "High school and college students in Arizona"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Arizona?",
+      "answer": "The Arizona scholarship listings include a variety of categories such as education, disability, community, STEM, and medicine. With 28 different opportunities, you can find funding that aligns with your specific interests and needs."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's important to review the details of each scholarship to understand what is expected."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 28 scholarships have specific deadlines, but these vary from one listing to another. Be sure to check the individual scholarship details promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for scholarships in Arizona can vary significantly, with amounts ranging approximately from $500 to $9,000. Each scholarship listing will provide specific details about the award amount."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "arizona",
+    "generatedAt": "2026-04-02T10:48:16.870Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 28,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

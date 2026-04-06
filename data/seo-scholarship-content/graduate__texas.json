@@ -1,0 +1,49 @@
+{
+  "seo_title": "Texas Graduate Scholarships: Explore 6 Opportunities",
+  "seo_description": "Discover 6 graduate scholarships in Texas with awards up to $10,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for graduate studies in Texas can be pivotal to your academic journey. This selection features 6 scholarships specifically for graduate students, with award amounts typically ranging from $1,000 to $10,000. While many listings have straightforward requirements and often do not require essays, it's essential to review each scholarship's details carefully, as deadlines and criteria can vary significantly.",
+  "h1": "Graduate Scholarships in Texas: 6 Listings Available",
+  "supporting": "As you explore these opportunities, consider comparing the award sizes and the specific fields they support, such as STEM, education, and community initiatives. Pay close attention to the deadlines, as some scholarships may have approaching dates. This targeted list can help you identify funding sources that align with your goals and timeline, making your search more efficient.",
+  "related_intro": "For more tailored options, check out scholarships focused on specific fields like STEM or education, or explore opportunities available to students in other states.",
+  "how_to_use": [
+    "Compare award amounts across listings",
+    "Review the specific requirements for each scholarship",
+    "Check deadlines promptly, especially for near-term opportunities",
+    "Open official scholarship pages for complete details",
+    "Shortlist scholarships that fit your profile and needs"
+  ],
+  "who_for": [
+    "Graduate students in Texas",
+    "Students pursuing STEM degrees",
+    "Future educators seeking financial support",
+    "Community-focused graduate students",
+    "Law students in Texas"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Texas?",
+      "answer": "There are currently six scholarships listed for graduate students in Texas, covering a range of categories including STEM, Community, Education, and Law. Each scholarship has its own focus and eligibility criteria, so it's important to review the details for each listing."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships listed range from approximately $1,000 to $10,000 USD. However, the exact amount can vary by scholarship, so be sure to check the specific funding details for each opportunity."
+    },
+    {
+      "question": "Are there any essays required for these scholarships?",
+      "answer": "Most of the scholarships in this list do not require essays, making the application process potentially easier. However, it's advisable to verify the requirements for each scholarship, as they can differ."
+    },
+    {
+      "question": "What should I know about deadlines for these scholarships?",
+      "answer": "All six scholarships listed have deadlines, which vary from one to another. Some deadlines are approaching within the next 45 days, so it's a good idea to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/texas",
+    "generatedAt": "2026-04-02T10:48:11.203Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

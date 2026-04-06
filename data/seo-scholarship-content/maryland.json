@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 33 Scholarships in Maryland",
+  "seo_description": "Find diverse scholarships in Maryland with awards from $500 to $7,500. Check individual deadlines and requirements.",
+  "intro": "Finding financial support for your education in Maryland can be a crucial step toward achieving your academic goals. This catalog features 33 scholarships specifically for students in the state, with award amounts ranging from approximately $500 to $7,500. As you explore these opportunities, keep in mind that requirements and deadlines vary, so it's essential to check each listing for specific details.",
+  "h1": "Maryland Scholarships: 33 Opportunities Available",
+  "supporting": "When reviewing the scholarships, consider comparing the award amounts and categories to identify the best fit for your needs. Some listings may require essays, while others have lighter requirements, making it easier to apply. Be proactive about checking the deadlines, especially since some opportunities may be approaching quickly.",
+  "related_intro": "For additional options, you might want to look at scholarships in neighboring states or explore categories like STEM or community-focused awards.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find scholarships that meet your needs",
+    "Read the requirements carefully to understand what is needed",
+    "Open official pages for detailed application instructions",
+    "Shortlist your favorites for a streamlined application process"
+  ],
+  "who_for": [
+    "Students pursuing education in Maryland",
+    "Applicants interested in community service scholarships",
+    "Individuals seeking STEM-related funding",
+    "Trade school students in need of financial assistance",
+    "Students with varying essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Maryland?",
+      "answer": "The Maryland scholarship listings include a variety of categories such as Education, Miscellaneous, Community, STEM, and Arts, with a total of 33 options to explore. This diversity allows applicants to find opportunities that align with their specific interests and needs."
+    },
+    {
+      "question": "How do I find the right scholarship for me?",
+      "answer": "You can filter the scholarships based on categories that interest you, such as STEM or Arts. Additionally, be sure to review each listing for specific requirements and deadlines, as these can vary significantly from one scholarship to another."
+    },
+    {
+      "question": "Are there any scholarships that do not require essays?",
+      "answer": "Yes, while many scholarships in this list do require essays, there are also several that do not. It's important to check the requirements for each scholarship individually to determine what is needed."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 33 scholarships listed have varying deadlines, with some approaching within the next 45 days. It's advisable to check the specific deadlines for each scholarship promptly to ensure you don't miss any opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "maryland",
+    "generatedAt": "2026-04-02T10:46:20.955Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 33,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

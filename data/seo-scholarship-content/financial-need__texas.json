@@ -1,0 +1,49 @@
+{
+  "seo_title": "Texas Scholarships for Financial Need | 48 Options",
+  "seo_description": "Explore 48 Texas scholarships based on financial need. Award sizes vary, and deadlines differ—check details for each listing.",
+  "intro": "Finding financial support can be a critical step for students in Texas, especially those facing economic challenges. This collection features 48 scholarships specifically aimed at addressing financial need, with award sizes ranging from approximately $400 to $12,000. Each listing has varying requirements and deadlines, making it essential to review them closely to identify the best opportunities for your situation.",
+  "h1": "Find Financial Need Scholarships in Texas",
+  "supporting": "As you explore these scholarships, pay attention to the specific eligibility criteria and award amounts, which reflect a diverse range of fields including education, STEM, and community service. With all listings including deadlines, some of which are approaching, it’s advisable to act quickly and verify details directly on the sponsors' websites to ensure you meet all necessary requirements.",
+  "related_intro": "If you're interested in similar funding opportunities, consider checking out related pages focusing on scholarships by category or location.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize your applications",
+    "Scan award amounts to identify the best fit for your financial needs",
+    "Read through the requirement lines to understand what each scholarship entails",
+    "Open official pages for more details and updates from scholarship sponsors",
+    "Shortlist potential scholarships that align with your background and goals"
+  ],
+  "who_for": [
+    "Texas residents with financial need",
+    "Students pursuing education in STEM fields",
+    "Community service-oriented applicants",
+    "Undergraduates and graduates seeking financial assistance",
+    "Students applying to HBCUs in Texas"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in Texas?",
+      "answer": "There are currently 48 scholarships listed that cater to students with financial need in Texas. These scholarships cover a range of categories including education, community, STEM, and arts, providing diverse opportunities for applicants."
+    },
+    {
+      "question": "How can I find specific details about each scholarship?",
+      "answer": "Each scholarship listing includes important details such as award amounts, deadlines, and category classifications. It's essential to review each entry carefully, as requirements and deadlines vary significantly across the scholarships."
+    },
+    {
+      "question": "Are there any scholarships that do not require essays?",
+      "answer": "Yes, among the 48 scholarships, some do not require essays, while others do. It's advisable to check the specific requirements for each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "When should I check the deadlines for these scholarships?",
+      "answer": "All 48 scholarships have deadlines, and it's important to check them promptly as some deadlines may be approaching within the next 45 days. Make sure to verify the exact date listed for each scholarship to ensure timely applications."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/texas",
+    "generatedAt": "2026-04-02T10:34:19.037Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 48,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

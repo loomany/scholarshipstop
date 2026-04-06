@@ -1,0 +1,47 @@
+{
+  "seo_title": "Financial Need Scholarships in Indiana",
+  "seo_description": "Explore 7 scholarships for financial need in Indiana. Check award sizes and deadlines to find the right fit for you.",
+  "intro": "Finding financial support for your education in Indiana can feel overwhelming, but there are options available specifically for students demonstrating financial need. This catalog features 7 scholarships, with award amounts ranging from approximately $750 to $10,600. Each listing varies in its requirements and deadlines, so it's essential to review them closely to find the best fit for your situation.",
+  "h1": "Indiana Scholarships for Financial Need",
+  "supporting": "As you explore these scholarships, pay attention to the diverse categories they cover, including education and community initiatives. Some may require essays, while others might have lighter requirements, making it easier to apply. Given the varying deadlines, it's wise to check the dates promptly to ensure you don’t miss out on any opportunities.",
+  "related_intro": "If you're interested in other funding options, consider checking out related pages that focus on scholarships for different needs or locations.",
+  "how_to_use": [
+    "Review the list for award amounts and categories",
+    "Check each scholarship's specific requirements",
+    "Compare deadlines to prioritize applications",
+    "Shortlist scholarships that align with your goals",
+    "Visit official sponsor pages for the most accurate details"
+  ],
+  "who_for": [
+    "Indiana residents demonstrating financial need",
+    "Students pursuing education or community-focused programs",
+    "Applicants looking for scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Indiana?",
+      "answer": "The current listings include a variety of scholarships categorized under education, community, miscellaneous, and medicine. This diverse range allows applicants to find opportunities that align with their specific interests and backgrounds."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts ranging from approximately $750 to $10,600. Be sure to check individual listings for specific award details."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed; some may require essays while others do not. It's important to review each scholarship's details to understand what is needed for your application."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All scholarships in this category have deadlines, but they differ from one listing to another. At least one scholarship has a deadline within the next 45 days, so it's advisable to check the specific dates for each opportunity promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/indiana",
+    "generatedAt": "2026-04-02T11:15:59.282Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

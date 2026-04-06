@@ -1,0 +1,49 @@
+{
+  "seo_title": "Florida Scholarships for Women with Varying Awards",
+  "seo_description": "Explore 22 Florida scholarships for women. Award sizes vary; check individual listings for deadlines and requirements.",
+  "intro": "Finding financial support as a woman in Florida can be a crucial step toward achieving your educational goals. This catalog features 22 scholarships specifically for women, with award sizes ranging from approximately $500 to $20,000. While many listings have no essay requirements, it's important to review each opportunity carefully, as deadlines and specific eligibility criteria can vary significantly.",
+  "h1": "Florida Scholarships for Women: Payout Not Stated",
+  "supporting": "As you explore these scholarship options, consider comparing the award amounts and requirements to identify the best fit for your needs. Pay attention to the diverse categories, including STEM, education, and community initiatives, which may align with your interests and career aspirations. Be sure to check the deadlines promptly, as some listings may have approaching dates.",
+  "related_intro": "If you're interested in more specific opportunities, consider checking related pages focused on STEM scholarships or those with no essay requirements.",
+  "how_to_use": [
+    "Compare deadlines across listings",
+    "Scan award amounts to find suitable options",
+    "Read requirement details for each scholarship",
+    "Open official pages for complete eligibility information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Women pursuing education in Florida",
+    "Students interested in STEM fields",
+    "Applicants looking for community-focused scholarships",
+    "Individuals seeking larger award amounts",
+    "Those who prefer scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women in Florida?",
+      "answer": "This filter showcases 22 scholarships specifically for women in Florida, covering various categories such as STEM, education, community, medicine, and arts. Each listing may have different eligibility criteria and focus areas, so it's a good idea to review them closely."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, although it's important to check each individual listing for specific requirements. Many programs may have lighter application processes, but verifying details for each scholarship is recommended."
+    },
+    {
+      "question": "How do I find out the deadlines for these scholarships?",
+      "answer": "All 22 scholarships in this category have deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this filter vary significantly, with amounts ranging approximately from $500 to $20,000. Since the payout is not explicitly stated for each listing, reviewing the details for each scholarship will provide the most accurate information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women/payout-not-stated/florida",
+    "generatedAt": "2026-04-02T11:01:29.022Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 22,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

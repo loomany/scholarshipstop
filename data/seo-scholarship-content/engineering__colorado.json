@@ -1,0 +1,49 @@
+{
+  "seo_title": "Top Engineering Scholarships in Colorado",
+  "seo_description": "Explore 5 engineering scholarships in Colorado with awards from $1,200 to $5,000. Check deadlines and requirements for each.",
+  "intro": "Finding financial support for engineering studies in Colorado can be a crucial step toward achieving your academic goals. With five scholarships currently available, ranging from approximately $1,200 to $5,000, students can explore a variety of options tailored to different needs and backgrounds. Be aware that deadlines vary, with some opportunities requiring prompt action, so it's wise to check the specific details for each listing.",
+  "h1": "Engineering Scholarships Available in Colorado",
+  "supporting": "This selection of scholarships includes a mix of requirements, with some programs asking for essays while others may have lighter demands. As you review the listings, consider comparing the award amounts and eligibility criteria to identify the best fit for your situation. Each scholarship has unique aspects that could align with your academic and personal profile, making this a valuable resource.",
+  "related_intro": "If you're interested in other funding opportunities, consider checking related pages for additional scholarships in engineering or those available in different states.",
+  "how_to_use": [
+    "Check individual deadlines for each scholarship",
+    "Compare award amounts to find the best opportunities",
+    "Read through eligibility requirements carefully",
+    "Open the official scholarship pages for detailed information",
+    "Shortlist the scholarships that align with your qualifications"
+  ],
+  "who_for": [
+    "Engineering students in Colorado",
+    "Students seeking STEM-related scholarships",
+    "Applicants looking for awards with varying requirements",
+    "Individuals interested in scholarships that may require essays",
+    "Students pursuing degrees in biology or medical fields"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Colorado?",
+      "answer": "There are currently five scholarships listed for engineering students in Colorado, covering various categories such as STEM, education, disability, and biology. Each scholarship may have different eligibility criteria and focus areas, so it's beneficial to review the details of each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the available scholarships. While some may require essays, others may not, so it's important to check the specific requirements for each scholarship to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category range from approximately $1,200 to $5,000. However, it's advisable to verify the exact amounts and details directly from each scholarship listing."
+    },
+    {
+      "question": "When should I check for scholarship deadlines?",
+      "answer": "All five scholarships listed have deadlines, and they differ from one another. Some deadlines are approaching within the next 45 days, so it's recommended to check the specific dates promptly to ensure you don't miss any opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/colorado",
+    "generatedAt": "2026-04-02T10:50:24.233Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

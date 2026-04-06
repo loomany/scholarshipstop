@@ -1,0 +1,49 @@
+{
+  "seo_title": "Scholarships in Indiana - 29 Opportunities Available",
+  "seo_description": "Explore 29 scholarships in Indiana with award sizes from $500 to $10,600. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for education in Indiana can be a crucial step for many students. With 29 scholarships available in this catalog, award sizes range from approximately $500 to $10,600, offering a variety of options tailored to different fields and needs. Keep in mind that each scholarship has its own set of requirements and deadlines, so it’s important to review the details carefully to identify the best fit for your situation.",
+  "h1": "Find 29 Scholarships Available in Indiana",
+  "supporting": "This selection of Indiana scholarships includes opportunities across various categories, such as education, STEM, and medical fields. Some scholarships may require essays, while others have lighter requirements, making it easier for applicants to find suitable options. As you explore the listings, compare award amounts and deadlines to prioritize which scholarships to pursue, ensuring you don’t miss out on timely opportunities.",
+  "related_intro": "If you're interested in more tailored options, check out related pages for scholarships based on specific fields or requirements.",
+  "how_to_use": [
+    "Review the list and note scholarship categories",
+    "Compare award amounts and deadlines for each option",
+    "Check for any essay requirements or application specifics",
+    "Open official pages for detailed eligibility criteria",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Students pursuing education in Indiana",
+    "Applicants interested in STEM funding",
+    "Medical students seeking financial aid",
+    "Individuals looking for community-based scholarships",
+    "High school graduates planning to attend college"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Indiana?",
+      "answer": "The Indiana scholarship listings include a variety of categories such as Education, STEM, Community, Medicine, and Law. With 29 scholarships currently available, you can find options that align with your academic and career interests."
+    },
+    {
+      "question": "How do I find specific scholarship details?",
+      "answer": "Each scholarship listing provides important information, including award amounts and deadlines. Be sure to check the details for each scholarship individually, as requirements and deadlines vary significantly across the listings."
+    },
+    {
+      "question": "Are there scholarships that require essays?",
+      "answer": "Yes, the scholarship requirements vary, with some listings requiring essays while others do not. Out of the current 29 scholarships, a few may have lighter requirements, so it's a good idea to review each listing for specific details."
+    },
+    {
+      "question": "When should I check scholarship deadlines?",
+      "answer": "Since all 29 scholarships have deadlines, it's advisable to check them promptly. Some deadlines are approaching within the next 45 days, so make sure to verify the dates for the scholarships you are interested in."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "indiana",
+    "generatedAt": "2026-04-02T10:55:56.395Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 29,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "seo_title": "Illinois Scholarships for Women | Find Your Funding",
+  "seo_description": "Explore 11 scholarships for women in Illinois with awards up to $15,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support can be a crucial step for women pursuing their education in Illinois. This curated list features 11 scholarships specifically for women, with award amounts ranging from approximately $500 to $15,000. With varying deadlines and requirements, many of these opportunities do not require essays, making them more accessible. It's important to check the details promptly, especially as some deadlines approach within the next month.",
+  "h1": "Scholarships for Women in Illinois",
+  "supporting": "As you explore these scholarships, consider comparing the award sizes and categories, which include education, STEM, and medical fields. Each listing may have unique eligibility criteria and application processes, so take the time to read through the requirements carefully. This selection is particularly valuable for women looking to enhance their educational journey without the burden of extensive application processes.",
+  "related_intro": "If you're interested in more opportunities, check out related pages that focus on scholarships for women in different states or fields.",
+  "how_to_use": [
+    "Check deadlines for each scholarship",
+    "Compare award amounts and categories",
+    "Read through eligibility requirements",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that fit your profile"
+  ],
+  "who_for": [
+    "Women pursuing education in Illinois",
+    "Students interested in STEM or medical fields",
+    "Applicants seeking scholarships with minimal requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women in Illinois?",
+      "answer": "This collection features 11 scholarships specifically for women in Illinois, covering a range of categories including education, STEM, medicine, and humanities. Each scholarship may have different eligibility criteria and focus areas, so be sure to review the details for each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's important to check each individual listing for specific requirements. While many scholarships may have lighter application processes, verifying details for each opportunity is recommended."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 11 scholarships in this category have deadlines, but they vary from one listing to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly to ensure you don’t miss any opportunities."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this collection range from approximately $500 to $15,000, depending on the specific program. Since each scholarship can vary significantly, it's best to look at the details for each listing to understand the potential financial support available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women/illinois",
+    "generatedAt": "2026-04-02T10:37:11.382Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 11,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

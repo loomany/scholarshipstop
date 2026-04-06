@@ -1,0 +1,48 @@
+{
+  "seo_title": "Disability Scholarships in New Jersey",
+  "seo_description": "Explore 5 scholarships for students with disabilities in New Jersey. Check award amounts and deadlines to find your fit.",
+  "intro": "Navigating scholarship opportunities can be challenging, especially for students with disabilities in New Jersey. This catalog features 5 scholarships specifically designed to support individuals facing these unique challenges. Award sizes vary, generally ranging from $1,500 to $5,000, and deadlines differ across listings, so it’s important to check each one carefully to find the best fit for your needs.",
+  "h1": "Scholarships for Students with Disabilities in New Jersey",
+  "supporting": "As you explore these scholarships, pay attention to the specific requirements and whether essays are needed, as they can vary significantly. Some listings may have lighter requirements, making them more accessible. Comparing the award amounts and deadlines will help you prioritize which opportunities to pursue first and ensure you don’t miss out on timely applications.",
+  "related_intro": "For more tailored options, check out related pages that focus on disability scholarships in other states or explore additional categories that might suit your educational goals.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to identify suitable funding",
+    "Read requirement lines for specific eligibility criteria",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Students with disabilities in New Jersey",
+    "High school seniors seeking financial support",
+    "Undergraduate students pursuing education-related fields",
+    "Community-focused applicants interested in local scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with disabilities in New Jersey?",
+      "answer": "There are currently five scholarships listed for students with disabilities in New Jersey. These scholarships cover various categories, including education, law, and community support."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from approximately $1,500 to $5,000. However, specific amounts can vary by scholarship, so it's important to check each listing for details."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. Some may require essays, while others do not, so be sure to review the specific requirements for each scholarship you're interested in."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All five scholarships have deadlines, but they differ from one another. It's advisable to check the specific deadline for each scholarship as some may be approaching soon, within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "disability/new-jersey",
+    "generatedAt": "2026-04-02T11:07:41.809Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

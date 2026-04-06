@@ -1,0 +1,47 @@
+{
+  "seo_title": "Florida Scholarships for Single Parents",
+  "seo_description": "Explore 5 scholarships for single parents in Florida, with awards ranging from $500 to $2,500. Find the right opportunity today.",
+  "intro": "Finding financial support as a single parent in Florida can be challenging, but there are opportunities available to help ease the burden. This catalog features 5 scholarships specifically for single parents, with award amounts ranging from approximately $500 to $2,500. Each listing has its own unique focus, spanning fields like education and medicine, providing a range of options to suit different career paths and aspirations.",
+  "h1": "Scholarships for Single Parents in Florida",
+  "supporting": "As you explore these scholarships, take note of their varying award amounts and requirements. Many of the listings do not require essays, which can simplify the application process. Be sure to check the specific eligibility criteria and deadlines for each scholarship to ensure you meet all necessary conditions. This slice offers a valuable chance to secure funding tailored to your situation as a single parent.",
+  "related_intro": "If you're interested in more options, consider checking out related scholarships for single parents or those focused on specific fields like nursing or education.",
+  "how_to_use": [
+    "Compare award amounts across different listings",
+    "Review eligibility criteria for each scholarship",
+    "Check for specific deadlines and application requirements",
+    "Open official scholarship pages for more details",
+    "Shortlist the scholarships that best fit your needs"
+  ],
+  "who_for": [
+    "Single parents residing in Florida",
+    "Individuals pursuing education or nursing careers",
+    "Applicants seeking scholarships with no essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for single parents in Florida?",
+      "answer": "The current listings include scholarships across various categories such as education and medicine. With a total of five scholarships available, you can find options that align with your field of study or career goals."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes vary among the listings, with amounts ranging approximately from $500 to $2,500. Each scholarship has its own specific funding, so be sure to check the details for each listing."
+    },
+    {
+      "question": "Do these scholarships require essays or additional documentation?",
+      "answer": "Many of the scholarships listed do not require essays, making them potentially easier to apply for. However, it's important to verify the requirements for each scholarship, as they can differ."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All five scholarships listed have deadlines, but specific dates are not provided in the sample. It's advisable to check each scholarship's details for the most accurate deadline information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "single-parent/florida",
+    "generatedAt": "2026-04-02T10:51:07.820Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

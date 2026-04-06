@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 27 Scholarships in New Hampshire",
+  "seo_description": "Find New Hampshire scholarships with awards from $1,000 to $17,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for education in New Hampshire is made easier with 27 scholarship opportunities available. These programs cater to a variety of fields, including education, community service, and STEM. Award sizes vary, with some scholarships offering substantial funding. As deadlines differ across listings, it's important to check each one promptly to ensure you don’t miss out on potential support.",
+  "h1": "Scholarships Available in New Hampshire",
+  "supporting": "When reviewing the scholarships, pay attention to the specific requirements and deadlines for each listing. Some may require essays, while others have lighter application processes. Comparing award amounts can help you prioritize which opportunities align best with your financial needs. Always verify details on the official sponsor sites to ensure you have the most accurate information.",
+  "related_intro": "If you're interested in exploring more options, consider checking related pages that focus on specific fields or types of scholarships available in New Hampshire.",
+  "how_to_use": [
+    "Sort scholarships by award size or category",
+    "Read the requirement lines carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile",
+    "Verify deadlines to ensure timely applications"
+  ],
+  "who_for": [
+    "New Hampshire residents seeking financial aid",
+    "Students pursuing education or STEM degrees",
+    "High school seniors planning for college",
+    "Community-focused individuals looking for support",
+    "Applicants interested in scholarship programs with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in New Hampshire?",
+      "answer": "The New Hampshire scholarship listings include a variety of categories such as education, community, STEM, humanities, and law. With 27 scholarships currently available, you can find opportunities that align with your academic and personal interests."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so be sure to check each listing for specific details regarding application requirements."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "All 27 scholarships have deadlines, but they differ from one another. It's important to review each listing promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for New Hampshire scholarships?",
+      "answer": "Award sizes for the scholarships in New Hampshire vary significantly, with amounts ranging approximately from $1,000 to $17,000. Be sure to check the individual listings for specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "new-hampshire",
+    "generatedAt": "2026-04-02T10:51:40.023Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 27,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

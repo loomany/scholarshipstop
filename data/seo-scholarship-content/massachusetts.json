@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find 132 Scholarships in Massachusetts",
+  "seo_description": "Explore 132 scholarships available in Massachusetts with varying award sizes and deadlines. Check details for each opportunity.",
+  "intro": "Finding financial support in Massachusetts can be crucial for students navigating the costs of education. With 132 scholarships available, this selection offers a range of award sizes, from approximately $250 to $40,000. Many of these opportunities have varying requirements and deadlines, so it's essential to explore each listing carefully. Notably, a significant number of scholarships do not require essays, making the application process potentially more accessible.",
+  "h1": "Explore Scholarships Available in Massachusetts",
+  "supporting": "As you review the available scholarships, take note of the diverse categories, including education, community, and STEM. This variety allows you to target your applications based on your specific interests and academic focus. Be sure to compare award amounts and check the deadlines, as they can differ significantly from one scholarship to another. This list is a valuable resource for students seeking to maximize their funding options in Massachusetts.",
+  "related_intro": "If you're interested in scholarships beyond Massachusetts, consider exploring opportunities in nearby states or specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines across different scholarships",
+    "Scan award amounts to prioritize high-value options",
+    "Read requirement lines to identify eligibility criteria",
+    "Open official pages for detailed application instructions",
+    "Shortlist potential scholarships for focused applications"
+  ],
+  "who_for": [
+    "Students pursuing education degrees in Massachusetts",
+    "Community-focused applicants seeking financial aid",
+    "STEM majors looking for scholarship support",
+    "Out-of-state students planning to study in Massachusetts",
+    "Students needing funding with minimal application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Massachusetts?",
+      "answer": "The Massachusetts scholarship listings include a variety of categories such as Education, STEM, Community, Medicine, and Biology. With 132 options to choose from, you can find scholarships tailored to different fields and interests."
+    },
+    {
+      "question": "Are there deadlines I should be aware of?",
+      "answer": "Yes, all 132 scholarship listings have specific deadlines, which vary across the programs. It's important to check the details for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for scholarships in Massachusetts range significantly, with amounts reported from approximately $250 to $40,000. However, individual listings may vary, so review each scholarship for its specific award details."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Most scholarship listings in this collection do not require an essay, making the application process potentially easier. However, it's advisable to verify the requirements for each scholarship, as some may have different criteria."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "massachusetts",
+    "generatedAt": "2026-04-02T10:36:07.768Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 132,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

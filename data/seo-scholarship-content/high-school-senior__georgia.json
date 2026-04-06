@@ -1,0 +1,49 @@
+{
+  "seo_title": "Top Georgia Scholarships for High School Seniors",
+  "seo_description": "Explore 11 scholarships for Georgia high school seniors. Award amounts range from $250 to $4,000. Check deadlines and requirements.",
+  "intro": "High school seniors in Georgia have access to a diverse range of scholarships, with 11 options available in this catalog. Award sizes vary significantly, with amounts ranging from approximately $250 to $4,000. This selection includes opportunities across various categories, such as education and STEM, and many listings do not require essays, making them more accessible. Be mindful that deadlines differ, with some approaching within the next 45 days, so it's essential to check each listing promptly.",
+  "h1": "Georgia Scholarships for High School Seniors",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and requirements to find the best fit for your needs. Pay attention to the specific categories each scholarship targets, as this can help you align your strengths and interests with the opportunities available. Since many listings have lighter requirements, you might find options that suit your situation well. Always verify details on the official sponsor pages to ensure you have the most accurate and up-to-date information.",
+  "related_intro": "For more tailored opportunities, check out related pages that focus on different education levels or specific fields of study in Georgia.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts to find the best options",
+    "Read the requirement lines for eligibility criteria",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that match your profile and needs"
+  ],
+  "who_for": [
+    "High school seniors in Georgia",
+    "Students interested in STEM fields",
+    "Applicants seeking no-essay scholarships",
+    "Future educators looking for funding",
+    "Students needing financial assistance for college"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Georgia?",
+      "answer": "There are 11 scholarships listed for high school seniors in Georgia, covering a range of categories including education, STEM, and community support. Each scholarship has its own focus and eligibility criteria, so it's beneficial to review the details of each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this list do not require an essay, making the application process potentially easier for many applicants. However, it's important to verify the specific requirements for each scholarship, as they can vary."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "All 11 scholarships have listed deadlines, but they vary from one program to another. Be sure to check the individual listings for specific dates, as some deadlines may be approaching soon."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category range from approximately $250 to $4,000. Each scholarship will specify its own amount, so reviewing the details is essential to understand what you might receive."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/georgia",
+    "generatedAt": "2026-04-02T11:00:58.601Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 11,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

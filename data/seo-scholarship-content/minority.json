@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 72 Minority Scholarships for Diverse Students",
+  "seo_description": "Find 72 minority scholarships with awards from $500 to $16,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding scholarships that support minority students can significantly ease the financial burden of education. This catalog features 72 opportunities tailored for individuals from diverse backgrounds, with award amounts ranging from approximately $500 to $16,000. With a variety of categories including STEM, education, and medicine, these scholarships cater to a wide array of academic pursuits. Keep in mind that deadlines and requirements vary, so it's important to check each listing for specific details.",
+  "h1": "72 Minority Scholarships with Varied Award Sizes",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and categories that align with your field of study. Some opportunities may have lighter application requirements, while others might include essay submissions. By reviewing the details carefully, you can identify which scholarships best fit your situation and maximize your chances of receiving funding.",
+  "related_intro": "For more tailored options, check out scholarships focused on specific fields or requirements that may suit your profile.",
+  "how_to_use": [
+    "Compare deadlines listed for each scholarship",
+    "Scan award amounts to identify the best fit for your needs",
+    "Read through requirement lines to understand what each scholarship entails",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your academic and personal profile"
+  ],
+  "who_for": [
+    "Students from minority backgrounds",
+    "Individuals pursuing degrees in STEM fields",
+    "Applicants interested in education and community service",
+    "Students seeking medical scholarships",
+    "Those looking for opportunities with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for minority students?",
+      "answer": "This collection includes 72 scholarships that cater to minority students across various fields such as STEM, education, medicine, and community service. Each listing may have different eligibility criteria and requirements, so it's important to review the details for each scholarship."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, approximately 65 of the listings do not have this requirement. Be sure to check the specific details for each scholarship to understand what is needed."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category range from approximately $500 to $16,000. Each scholarship has its own funding amount, so reviewing individual listings will provide the most accurate information."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 72 scholarships listed have deadlines, which vary from one program to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority",
+    "generatedAt": "2026-04-02T10:34:49.587Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 72,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

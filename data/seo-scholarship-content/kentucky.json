@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 34 Scholarships in Kentucky",
+  "seo_description": "Find Kentucky scholarships with awards from $500 to $5,000. Check varying deadlines and requirements for your opportunities.",
+  "intro": "Finding financial support for your education in Kentucky can be a crucial step in achieving your academic goals. With 34 scholarships available, ranging from $500 to $5,000, there are diverse opportunities tailored to various fields, including education, STEM, and community service. Each scholarship has its own unique requirements and deadlines, so it's important to explore these options promptly to maximize your chances of securing funding.",
+  "h1": "Scholarships Available for Kentucky Students",
+  "supporting": "As you review the list of scholarships, take note of the varying award sizes and application requirements. Some scholarships may require essays while others do not, providing options for different preferences and strengths. Be sure to compare deadlines closely, as they differ across listings, and check the official pages for the most accurate and up-to-date information.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out related scholarships in nearby states or specific fields of study that align with your interests.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines for specific eligibility criteria",
+    "Open official scholarship pages for detailed information",
+    "Shortlist your top choices for a focused application strategy"
+  ],
+  "who_for": [
+    "Kentucky residents seeking financial aid",
+    "Students pursuing education or STEM degrees",
+    "Community service-oriented applicants",
+    "High school seniors and current college students",
+    "Applicants looking for both essay and no-essay scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Kentucky?",
+      "answer": "The Kentucky scholarship listings include a variety of categories such as education, STEM, community, medicine, and miscellaneous. With 34 options currently available, you can find funding opportunities tailored to different fields and interests."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements for essays vary among the scholarships listed. While some programs may not require an essay, others do, so it's important to check the specific details for each scholarship you're interested in."
+    },
+    {
+      "question": "What is the range of award amounts for Kentucky scholarships?",
+      "answer": "Award sizes for scholarships in Kentucky generally range from approximately $500 to $5,000. However, specific amounts can vary by program, so reviewing individual listings is essential for accurate information."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 34 scholarships listed have deadlines, but they differ from one program to another. It's advisable to check the deadlines promptly, as some may be approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "kentucky",
+    "generatedAt": "2026-04-02T10:47:17.025Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 34,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

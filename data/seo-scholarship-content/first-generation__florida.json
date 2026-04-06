@@ -1,0 +1,49 @@
+{
+  "seo_title": "First Generation Scholarships in Florida",
+  "seo_description": "Explore 7 scholarships for first-generation students in Florida. Award sizes range from $500 to $3,000. Check deadlines promptly.",
+  "intro": "Navigating the world of scholarships can be especially challenging for first-generation college students in Florida. This curated list features 7 scholarships specifically for those who are blazing new trails in higher education. Award sizes typically range from $500 to $3,000, and while many listings have lighter requirements, it's important to check each one for specific details. With deadlines varying across the board, some opportunities may require prompt action, so reviewing the dates is crucial.",
+  "h1": "Florida Scholarships for First-Generation Students",
+  "supporting": "This selection of scholarships covers a variety of categories, including STEM and education, offering a range of funding options for eligible students. As you explore these listings, pay attention to the award amounts and any unique requirements that might apply. Comparing different scholarships can help you find the best fit for your educational journey, and many of these opportunities do not require essays, making the application process potentially smoother.",
+  "related_intro": "For more options, consider checking out related scholarship categories that may align with your interests or qualifications.",
+  "how_to_use": [
+    "Review the list for scholarship titles that resonate with your goals",
+    "Compare deadlines to ensure timely applications",
+    "Examine award amounts to prioritize funding opportunities",
+    "Check requirement lines for specific eligibility criteria",
+    "Visit official pages for the most accurate and detailed information"
+  ],
+  "who_for": [
+    "First-generation college students in Florida",
+    "Students pursuing STEM fields",
+    "Individuals interested in community-focused scholarships",
+    "Undergraduate and graduate students",
+    "Students seeking scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for first-generation students in Florida?",
+      "answer": "There are currently 7 scholarships listed specifically for first-generation students in Florida. These scholarships cover various categories, including STEM, Education, and Community, allowing applicants to find opportunities that align with their interests and goals."
+    },
+    {
+      "question": "Do these scholarships require essays?",
+      "answer": "Most of the scholarships in this listing do not require essays, making the application process potentially easier for many applicants. However, it's important to verify the specific requirements for each scholarship, as details can vary."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships range from approximately $500 to $3,000. Each scholarship may have different amounts, so it's advisable to review the individual listings for specific details."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 7 scholarships listed have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's crucial to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "first-generation/florida",
+    "generatedAt": "2026-04-02T10:48:05.024Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

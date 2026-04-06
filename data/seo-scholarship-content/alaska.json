@@ -1,0 +1,47 @@
+{
+  "seo_title": "Find 41 Scholarships in Alaska",
+  "seo_description": "Explore 41 Alaska scholarships with awards from $500 to $25,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for education in Alaska can be pivotal for students aiming to achieve their academic goals. This collection features 41 scholarships specifically for Alaskan residents, with award sizes ranging from $500 to $25,000. With a mix of options across various categories such as education, arts, and STEM, you can discover opportunities that align with your interests and needs. Keep in mind that deadlines vary, and some listings may require essays or have lighter application processes.",
+  "h1": "Alaska Scholarships: 41 Opportunities Await",
+  "supporting": "To make the most of this scholarship list, consider comparing the award amounts and requirements for each opportunity. Some scholarships may have more flexible criteria, which could simplify your application process. Take note of the deadlines, especially since at least one is approaching within the next 45 days. Shortlisting your favorites can help streamline your applications and ensure you meet all necessary criteria.",
+  "related_intro": "If you're interested in exploring more options, check out related pages for scholarships by category or specific requirements.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find the best fit for your needs",
+    "Read through the requirement lines for each scholarship",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your background and goals"
+  ],
+  "who_for": [
+    "Alaska residents seeking financial aid",
+    "Students pursuing degrees in arts or STEM fields",
+    "Applicants looking for community or disability scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in Alaska?",
+      "answer": "The scholarship listings for Alaska include a variety of categories such as education, community, miscellaneous, STEM, disability, and arts. With 41 options currently available, students can find opportunities that align with their specific interests and needs."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, the majority do not. It's important to check the details for each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 41 scholarships have specific deadlines, which vary from one program to another. Be sure to review each listing carefully to note the deadlines, especially since some may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the typical award amounts for scholarships in Alaska?",
+      "answer": "Award sizes for the scholarships in Alaska range significantly, with amounts typically between $500 and $25,000. Each scholarship listing provides specific details on the award amount, so check individual entries for precise figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "alaska",
+    "generatedAt": "2026-04-02T10:45:41.103Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 41,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

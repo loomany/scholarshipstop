@@ -1,0 +1,49 @@
+{
+  "seo_title": "Scholarships for High School Seniors in Utah",
+  "seo_description": "Explore 5 scholarships for Utah high school seniors, with awards from $500 to $5,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support as a high school senior in Utah can significantly ease the transition to college. This selection features 5 scholarships specifically for students in your state, with award amounts ranging from approximately $500 to $5,000. Each opportunity has unique requirements and deadlines, so it’s essential to review them closely to identify the best fit for your situation.",
+  "h1": "Utah Scholarships for High School Seniors",
+  "supporting": "As you explore these scholarships, consider comparing the award sizes and the specific categories they support, such as STEM or community service. Many listings do not require essays, making them more accessible. Be mindful of the varying deadlines; at least one scholarship has a deadline coming up within 45 days, so checking these details promptly is crucial.",
+  "related_intro": "For more tailored options, you might also want to look at scholarships focused on specific fields like STEM or community service, or explore opportunities available to students with disabilities.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan the award amounts listed",
+    "Read through the specific requirements for each opportunity",
+    "Open the official scholarship pages for more details",
+    "Shortlist the scholarships that best match your profile"
+  ],
+  "who_for": [
+    "High school seniors in Utah",
+    "Students interested in STEM fields",
+    "Applicants seeking community service scholarships",
+    "Individuals with disabilities",
+    "Students looking for no-essay scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Utah?",
+      "answer": "There are currently five scholarships listed for high school seniors in Utah, covering categories such as STEM, community service, and disability support. Each scholarship may have specific eligibility criteria and focus areas, so it's important to review the details of each listing."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships vary, with amounts ranging approximately from $500 to $5,000. Make sure to check the specific award details for each scholarship to understand the financial support available."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's wise to verify each individual listing for specific application requirements. While many scholarships may have lighter requirements, always check the details to ensure you meet all criteria."
+    },
+    {
+      "question": "When are the application deadlines for these scholarships?",
+      "answer": "Deadlines for the scholarships vary, with all five listings currently having specific submission dates. It's advisable to check the deadlines promptly, as some may be approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/utah",
+    "generatedAt": "2026-04-02T11:08:05.772Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 5,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

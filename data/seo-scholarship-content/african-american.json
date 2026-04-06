@@ -1,0 +1,47 @@
+{
+  "seo_title": "African American Scholarships - 61 Opportunities",
+  "seo_description": "Explore 61 scholarships for African American students with awards from $250 to $15,000. Check deadlines and requirements carefully.",
+  "intro": "Finding financial support as an African American student can be pivotal to achieving your educational goals. With 61 scholarships available in this category, you have a range of opportunities to explore, from awards in education and STEM to arts and community initiatives. Award sizes vary significantly, with amounts generally ranging from $250 to $15,000. Be mindful that deadlines differ across listings, so it's essential to check them promptly to ensure you don’t miss out.",
+  "h1": "Scholarships for African American Students",
+  "supporting": "This collection of scholarships is not only diverse in funding amounts but also in requirements. While most listings have lighter application processes, some may require essays. Take the time to compare the details of each scholarship, focusing on what aligns best with your academic pursuits and personal circumstances. This approach will help you identify the most suitable opportunities for your needs.",
+  "related_intro": "If you're interested in exploring more funding options, check out related pages that focus on scholarships for specific fields or demographics.",
+  "how_to_use": [
+    "Review the list for scholarships that match your field of study",
+    "Compare award amounts to prioritize your applications",
+    "Check individual deadlines and plan your submissions accordingly",
+    "Read through the requirements to see if essays are needed",
+    "Visit official scholarship pages for the most accurate information"
+  ],
+  "who_for": [
+    "African American students pursuing higher education",
+    "Undergraduate and graduate students seeking financial aid",
+    "Students interested in STEM, arts, or community-focused scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for African American students?",
+      "answer": "The current catalog features 61 scholarships specifically for African American students, covering a range of categories including education, STEM, arts, medicine, and community initiatives. This diversity allows applicants to find opportunities that align with their academic and career goals."
+    },
+    {
+      "question": "Do all scholarships require essays?",
+      "answer": "Requirements vary among the scholarships listed. While about 58 of the 61 scholarships do not require an essay, there are a few that do. It's important to check the specific details for each scholarship to understand the application requirements."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 61 scholarships have specific deadlines, which vary from one listing to another. Some deadlines are approaching within the next 45 days, so it's advisable to review the listings promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category range significantly, with amounts typically between $250 and $15,000. Each scholarship has its own specific award amount, so be sure to check the details for the scholarships you are interested in."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "african-american",
+    "generatedAt": "2026-04-02T10:35:39.388Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 61,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

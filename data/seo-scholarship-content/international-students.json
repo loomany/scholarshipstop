@@ -1,0 +1,47 @@
+{
+  "seo_title": "Scholarships for International Students in the USA",
+  "seo_description": "Explore 28 scholarships for international students with awards from $400 to $27,000. Check varied deadlines and requirements.",
+  "intro": "Finding financial support as an international student can be challenging, but there are 28 scholarships available that cater specifically to your needs. These awards vary significantly in size, ranging from approximately $400 to $27,000, and cover a diverse array of fields including STEM, education, arts, and law. With deadlines that differ across listings, it's essential to check each opportunity promptly to ensure you don't miss out.",
+  "h1": "Explore 28 Scholarships for International Students",
+  "supporting": "When reviewing this list, pay attention to the varying award amounts and requirements. Some scholarships may require essays, while many do not, offering a lighter application process. Comparing the specific fields and categories can help you identify the best fit for your academic and career goals. Make sure to verify the details on the official scholarship pages to get the most accurate information.",
+  "related_intro": "For more tailored options, consider exploring scholarships focused on specific fields like STEM or arts, or those with lighter application requirements.",
+  "how_to_use": [
+    "Review the list for scholarship amounts and categories",
+    "Check individual deadlines to prioritize applications",
+    "Compare essay requirements to find less intensive options",
+    "Open official scholarship pages for detailed information",
+    "Shortlist your top choices based on fit and requirements"
+  ],
+  "who_for": [
+    "International students seeking financial aid",
+    "Students pursuing degrees in STEM, arts, or law",
+    "Applicants looking for scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students?",
+      "answer": "There are currently 28 scholarships listed specifically for international students, covering a range of categories including STEM, Education, Community, Arts, and Law. Each scholarship may have different eligibility criteria and focus areas, so it's beneficial to review the details of each listing."
+    },
+    {
+      "question": "How can I find out about the deadlines for these scholarships?",
+      "answer": "All 28 scholarships have varying deadlines, with some approaching within the next 45 days. It's important to check the specific deadline for each scholarship as they differ, ensuring you submit your application on time."
+    },
+    {
+      "question": "Do these scholarships require essays?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's essential to read the details of each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available to international students can vary significantly, with amounts ranging from approximately $400 to $27,000 USD. Be sure to check the specific award amount for each scholarship as you explore your options."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "international-students",
+    "generatedAt": "2026-04-02T10:31:35.267Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 28,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

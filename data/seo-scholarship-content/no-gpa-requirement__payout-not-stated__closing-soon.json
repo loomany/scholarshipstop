@@ -1,0 +1,49 @@
+{
+  "seo_title": "Closing Soon Scholarships: No GPA Required",
+  "seo_description": "Explore 87 scholarships with no GPA requirement and varying awards. Check deadlines as they are closing soon.",
+  "intro": "Finding scholarships that don't require a GPA can be a game-changer, especially when you're facing tight deadlines. With 87 options available in this category, including awards in education, STEM, and community fields, there's a diverse range of opportunities to explore. While award sizes vary, many listings feature amounts between approximately $203 and $10,000. Be sure to check individual deadlines, as they differ across scholarships and some are closing soon.",
+  "h1": "No GPA Requirement Scholarships Closing Soon",
+  "supporting": "This list provides a valuable resource for applicants seeking funding without the pressure of GPA requirements. As you review the options, pay attention to the award amounts and any essay requirements, which can vary significantly. This slice is particularly worth scanning if you're looking for scholarships that may have lighter application processes, allowing you to focus on your studies while securing financial support.",
+  "related_intro": "If you're interested in more options, consider checking out related pages that focus on specific categories or other scholarship types.",
+  "how_to_use": [
+    "Compare deadlines across different listings",
+    "Scan award amounts to find suitable options",
+    "Read the requirement details for each scholarship",
+    "Open official pages for the most accurate information",
+    "Shortlist scholarships that match your profile and needs"
+  ],
+  "who_for": [
+    "Students without GPA requirements",
+    "Applicants seeking funding in STEM fields",
+    "Individuals looking for community-focused scholarships",
+    "Those who prefer lighter application requirements",
+    "Students needing scholarships with approaching deadlines"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are included in this list?",
+      "answer": "This list features 87 scholarships that do not require a GPA and have unspecified payout amounts. Categories include Education, Community, Miscellaneous, STEM, Medicine, and Arts, providing a diverse range of opportunities."
+    },
+    {
+      "question": "How can I find out the specific deadlines for these scholarships?",
+      "answer": "All 87 scholarships listed have deadlines, but they vary from row to row. It's important to check each individual listing for its specific deadline, as some may close within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships; while some may require essays, the majority do not. Be sure to review the details of each scholarship to understand its specific requirements."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes vary significantly, with amounts for 84 of the 87 scholarships ranging approximately from $203 to $10,000. Check each listing for the exact amount associated with that scholarship."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "no-gpa-requirement/payout-not-stated/closing-soon",
+    "generatedAt": "2026-04-02T10:49:00.214Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 87,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

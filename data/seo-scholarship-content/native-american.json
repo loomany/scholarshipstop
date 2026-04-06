@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 34 Native American Scholarships Available",
+  "seo_description": "Find Native American scholarships with awards from $500 to $10,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support tailored for Native American students can be a crucial step in pursuing higher education. This selection features 34 scholarships specifically designed for Native American applicants, with award amounts generally ranging from $500 to $10,000. With a variety of categories including education, STEM, and medicine, these opportunities can help ease the financial burden of college. Be mindful that deadlines vary, and some scholarships may require essays, so it's important to review each listing carefully.",
+  "h1": "Native American Scholarships: 34 Opportunities Available",
+  "supporting": "As you explore this list, consider comparing the award amounts and categories that align with your academic interests. Some scholarships may have lighter requirements, making them more accessible. Pay attention to the varying deadlines, especially since some opportunities may close soon. This slice is worth scanning for its diverse options and potential for significant financial aid.",
+  "related_intro": "If you're interested in exploring more scholarship opportunities, consider checking out related categories focused on education, STEM, or community support.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read the requirements for each scholarship carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Native American undergraduate students",
+    "Students pursuing degrees in STEM fields",
+    "Applicants interested in medical or health-related studies",
+    "Individuals seeking scholarships with lighter requirements",
+    "Students looking for opportunities in the arts"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Native American students?",
+      "answer": "There are 34 scholarships listed specifically for Native American students, covering a range of categories including education, STEM, medicine, arts, and community initiatives. Each scholarship may have unique eligibility criteria and focus areas, so it's beneficial to review the details of each listing."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships; while some may require essays, others do not. It's important to check the specific details for each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 34 scholarships have deadlines, but they differ from one listing to another. Be sure to verify the deadlines for each scholarship promptly, as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships available range from approximately $500 to $10,000, though specific amounts can vary by program. Check each listing for exact award details to see what fits your needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "native-american",
+    "generatedAt": "2026-04-02T10:49:57.209Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 34,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

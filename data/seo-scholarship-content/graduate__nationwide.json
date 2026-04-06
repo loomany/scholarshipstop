@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 13 Graduate Scholarships Nationwide",
+  "seo_description": "Find graduate scholarships ranging from $1,000 to $5,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding funding for graduate studies can be challenging, but there are 13 scholarships available nationwide that cater to a variety of fields. Award sizes typically range from $1,000 to $5,000, providing valuable financial support for your educational journey. Keep in mind that requirements and deadlines vary across these opportunities, so it’s important to review each listing closely to find the best fit for your situation.",
+  "h1": "Graduate Scholarships Available Nationwide",
+  "supporting": "This selection of scholarships includes options across various categories such as education, law, STEM, and disability. Some listings may require essays, while others have lighter requirements, making it easier to apply. Take the time to compare the details of each scholarship, especially the deadlines, as some may be approaching quickly.",
+  "related_intro": "If you’re interested in exploring more specialized opportunities, consider checking out related pages that focus on specific fields or funding types.",
+  "how_to_use": [
+    "Compare deadlines across listings",
+    "Scan award amounts for best fit",
+    "Read through requirement details carefully",
+    "Open official pages for full application instructions",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Graduate students in education fields",
+    "Applicants pursuing law degrees",
+    "STEM graduate candidates",
+    "Students with disabilities",
+    "Those seeking miscellaneous funding opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this listing?",
+      "answer": "This collection features 13 scholarships across various categories, including Education, Law, STEM, Arts, and Disability. Each scholarship has its own focus, so you can find opportunities that align with your specific field of study."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for these scholarships vary, with amounts generally ranging from approximately $1,000 to $5,000. Be sure to check the specific details for each scholarship to understand the funding available."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements differ among the scholarships listed; while some may require essays, others do not. It's important to review each scholarship's details to confirm what is needed for your application."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All scholarships in this listing have deadlines, which vary from one to another. Some deadlines are approaching soon, so it's advisable to check the specific dates for each scholarship and apply promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/nationwide",
+    "generatedAt": "2026-04-02T11:00:44.372Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 13,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

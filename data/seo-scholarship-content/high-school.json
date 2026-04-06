@@ -1,0 +1,49 @@
+{
+  "seo_title": "High School Scholarships in the USA",
+  "seo_description": "Explore 65 high school scholarships with awards up to $15,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Navigating the landscape of scholarships can be daunting, especially for high school students eager to fund their education. With 65 available opportunities, this collection spans various categories including education, STEM, and arts, offering awards that generally range from $400 to $15,000. It's crucial to note that requirements and deadlines vary, so exploring each option thoroughly will help you find the best fit for your needs.",
+  "h1": "Find 65 High School Scholarships Available Now",
+  "supporting": "As you review the listings, pay attention to the specific award amounts and any essay requirements. While many scholarships may have lighter application processes, some will require essays, so it's wise to gauge how much effort each application will entail. Additionally, with all listings having deadlines, be sure to check the dates promptly, especially since some deadlines are approaching soon.",
+  "related_intro": "If you're interested in exploring more tailored options, consider checking out scholarships focused on specific fields or criteria that might align with your interests or circumstances.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines to understand application needs",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "High school students seeking financial aid",
+    "Students interested in STEM-related scholarships",
+    "Applicants looking for community-focused funding",
+    "Individuals with disabilities seeking support",
+    "Students passionate about arts and education"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school students?",
+      "answer": "The current catalog features a diverse range of 65 scholarships categorized under education, miscellaneous, community, STEM, disability, and arts. This variety allows students to find opportunities that align with their interests and backgrounds."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary across the listings; while some scholarships may require essays, many do not. It's important to review the specific details of each scholarship to understand what is needed."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships listed range from approximately $400 to $15,000. Each scholarship has its own funding amount, so be sure to check the individual listings for specifics."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 65 scholarships currently have deadlines, which vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the listings promptly and plan your applications accordingly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school",
+    "generatedAt": "2026-04-02T10:30:53.020Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 65,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

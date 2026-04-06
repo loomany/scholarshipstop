@@ -1,0 +1,47 @@
+{
+  "seo_title": "Florida Graduate Engineering Scholarships",
+  "seo_description": "Explore 7 scholarships for Florida graduate engineering students. Check award amounts and deadlines to apply.",
+  "intro": "For graduate students in engineering based in Florida, there are currently 7 scholarships available that can help offset your educational expenses. Award sizes typically range from $1,000 to $3,500, giving you a variety of options to consider. Each scholarship has its own unique requirements and deadlines, so it's essential to review the details carefully to find the best fit for your situation.",
+  "h1": "Graduate Engineering Scholarships in Florida",
+  "supporting": "This collection of scholarships is particularly valuable for students pursuing advanced degrees in engineering. Many of the listings do not require essays, which can simplify the application process. Be sure to compare the award amounts and deadlines, as they can vary significantly from one scholarship to another, making it crucial to prioritize those that align with your academic timeline and financial needs.",
+  "related_intro": "If you're interested in exploring more opportunities, consider checking out scholarships in related fields or other categories that support graduate students in Florida.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to identify suitable options",
+    "Read through requirement lines for each scholarship",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Graduate students in engineering programs",
+    "Residents of Florida pursuing advanced degrees",
+    "Students seeking scholarships with minimal application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate engineering students in Florida?",
+      "answer": "There are currently 7 scholarships listed specifically for graduate engineering students in Florida. These opportunities primarily fall under STEM and community categories, with award amounts generally ranging from $1,000 to $3,500."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require an essay, making them potentially easier to apply for. However, it's important to verify the specific requirements for each scholarship, as they can vary."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 7 listings currently include deadline information. Be sure to check these dates promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What should I do if I want more information about a specific scholarship?",
+      "answer": "For detailed information about each scholarship, including eligibility and application procedures, refer directly to the listing. Each entry provides essential details that can help you understand what is required and how to apply."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/engineering/florida",
+    "generatedAt": "2026-04-02T10:53:53.509Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

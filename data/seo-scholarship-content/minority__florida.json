@@ -1,0 +1,49 @@
+{
+  "seo_title": "Florida Minority Scholarships - Up to $16,000 Available",
+  "seo_description": "Explore 8 Florida scholarships for minority students. Award sizes vary; check individual listings for deadlines and requirements.",
+  "intro": "Finding financial support as a minority student in Florida can be crucial for your educational journey. This catalog features 8 scholarships specifically aimed at helping minority students pursue their academic goals. Award sizes vary significantly, with opportunities ranging from smaller amounts to substantial funding, making it worthwhile to explore each option carefully. Be mindful of the varying deadlines associated with these listings, as some may require prompt action.",
+  "h1": "Explore Minority Scholarships in Florida",
+  "supporting": "As you review the scholarships, pay attention to the specific requirements and categories associated with each listing. Many of these opportunities may not require essays, which can simplify the application process. Comparing the award amounts and deadlines will help you prioritize which scholarships to pursue. Always verify details on the official sponsor sites for the most accurate and up-to-date information.",
+  "related_intro": "If you're interested in exploring more options, consider checking out related scholarships that cater to different eligibility criteria or locations.",
+  "how_to_use": [
+    "Sort scholarships by award amount",
+    "Read the requirement lines carefully",
+    "Open official pages for details",
+    "Shortlist your top choices",
+    "Verify deadlines and eligibility criteria"
+  ],
+  "who_for": [
+    "Minority students in Florida",
+    "Undergraduate and graduate applicants",
+    "Students pursuing STEM fields",
+    "High school seniors seeking funding",
+    "Vocational and trade school candidates"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for minority students in Florida?",
+      "answer": "This collection includes a variety of scholarships categorized under education, STEM, and community support. With 8 listings, you can find opportunities that cater to different academic levels and fields of study."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this selection do not require essays, making the application process potentially easier. However, it's important to check each listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes vary significantly, with amounts ranging from approximately $500 to $16,000. Be sure to review the details of each scholarship to understand the financial support available."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 8 scholarships listed have specific deadlines, which vary from one opportunity to another. It's advisable to check the dates promptly, as some deadlines are approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority/florida",
+    "generatedAt": "2026-04-02T10:46:07.552Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 8,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

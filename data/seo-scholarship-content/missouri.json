@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 40 Scholarships in Missouri",
+  "seo_description": "Find diverse scholarships in Missouri with awards from $500 to $12,000. Check varying deadlines and requirements.",
+  "intro": "Finding financial support for education in Missouri can be a crucial step toward achieving your academic goals. With 40 scholarship opportunities available, ranging from $500 to $12,000, there are diverse options to consider. These scholarships cater to various fields, including education, STEM, and community service, making it easier to find one that aligns with your interests and needs. Be aware that requirements and deadlines vary, so it's important to check each listing carefully.",
+  "h1": "Scholarships Available in Missouri",
+  "supporting": "As you explore this list, take note of the different award amounts and categories. Some scholarships may require essays, while others do not, allowing for a range of application experiences. Comparing deadlines is also essential, as many scholarships have upcoming due dates. This slice offers a robust selection of funding opportunities, making it worthwhile to identify those that best fit your profile and timeline.",
+  "related_intro": "For additional options, consider checking out scholarships focused on specific fields or those with lighter application requirements.",
+  "how_to_use": [
+    "Compare deadlines across different scholarships",
+    "Scan the award amounts to find suitable options",
+    "Read the requirement lines for each scholarship carefully",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals and verify details on sponsor sites"
+  ],
+  "who_for": [
+    "Students pursuing degrees in education or STEM fields",
+    "Individuals seeking community-focused scholarships",
+    "Applicants with disabilities looking for financial support",
+    "Community college students transferring to four-year institutions",
+    "High school seniors planning to continue their education"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Missouri?",
+      "answer": "The Missouri scholarship listings include a variety of categories such as Education, Miscellaneous, Community, STEM, Disability, and Law. With 40 options currently available, you can find opportunities tailored to different fields and needs."
+    },
+    {
+      "question": "How can I find out about deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 40 listings in this section include deadline information. It's important to check the specific dates for each scholarship, as some may have approaching deadlines within the next 45 days."
+    },
+    {
+      "question": "Are there scholarships that require essays?",
+      "answer": "Requirements vary among the scholarships, with some requiring essays and others not. Out of the current listings, approximately 3 have an essay requirement, while the majority do not, so be sure to verify the details for each individual scholarship."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for Missouri scholarships vary significantly, with amounts ranging from approximately $500 to $12,000. You can explore the specific award details for each scholarship listed to find options that fit your financial needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "missouri",
+    "generatedAt": "2026-04-02T10:44:34.943Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 40,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-03-31T00:00:00.000Z",
+  "slug_source": "app/scholarships/scholarshipLongTailPresets.ts → LONG_TAIL_SLUGS",
+  "sitemap_note": "app/sitemap.ts → getLongTailSitemapSlugs().map; LONG_TAIL_SITEMAP_SLUGS empty ⇒ LONG_TAIL_SLUGS",
+  "entries": [
+    {
+      "slug": "no-essay",
+      "url": "/scholarships/no-essay",
+      "title": "No Essay Scholarships 2026 USA | Find & Apply",
+      "has_seo_json": true,
+      "is_routed": true,
+      "is_in_sitemap": true
+    },
+    {
+      "slug": "closing-soon",
+      "url": "/scholarships/closing-soon",
+      "title": "Scholarships Closing Soon 2026 USA | Apply Fast",
+      "has_seo_json": true,
+      "is_routed": true,
+      "is_in_sitemap": true
+    },
+    {
+      "slug": "undergraduate",
+      "url": "/scholarships/undergraduate",
+      "title": "Undergraduate Scholarships 2026",
+      "has_seo_json": false,
+      "is_routed": true,
+      "is_in_sitemap": true
+    },
+    {
+      "slug": "under-5000",
+      "url": "/scholarships/under-5000",
+      "title": "Scholarships Under $5,000 USA 2026 | Browse & Apply",
+      "has_seo_json": true,
+      "is_routed": true,
+      "is_in_sitemap": true
+    },
+    {
+      "slug": "international-students",
+      "url": "/scholarships/international-students",
+      "title": "International Student Scholarships 2026 USA | Explore",
+      "has_seo_json": true,
+      "is_routed": true,
+      "is_in_sitemap": true
+    },
+    {
+      "slug": "high-school",
+      "url": "/scholarships/high-school",
+      "title": "High School Scholarships 2026 USA | Find Awards",
+      "has_seo_json": true,
+      "is_routed": true,
+      "is_in_sitemap": true
+    },
+    {
+      "slug": "engineering",
+      "url": "/scholarships/engineering",
+      "title": "Engineering Scholarships 2026 USA | Explore & Apply",
+      "has_seo_json": true,
+      "is_routed": true,
+      "is_in_sitemap": true
+    },
+    {
+      "slug": "computer-science",
+      "url": "/scholarships/computer-science",
+      "title": "Computer Science Scholarships 2026 USA | Browse CS",
+      "has_seo_json": true,
+      "is_routed": true,
+      "is_in_sitemap": true
+    },
+    {
+      "slug": "under-10000",
+      "url": "/scholarships/under-10000",
+      "title": "Scholarships Under $10,000 USA 2026 | Find & Apply",
+      "has_seo_json": true,
+      "is_routed": true,
+      "is_in_sitemap": true
+    }
+  ]
+}

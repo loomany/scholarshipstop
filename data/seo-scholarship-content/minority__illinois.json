@@ -1,0 +1,49 @@
+{
+  "seo_title": "Illinois Scholarships for Minority Students",
+  "seo_description": "Explore 7 scholarships for minority students in Illinois, with awards from $1,000 to $5,000. Check deadlines and requirements carefully.",
+  "intro": "Illinois offers a variety of scholarship opportunities specifically for minority students, with 7 listings available in this category. Award sizes typically range from $1,000 to $5,000, making these scholarships a valuable resource for funding your education. Deadlines vary across the listings, so it's important to check each one promptly to ensure you don't miss out on potential funding.",
+  "h1": "Minority Scholarships in Illinois",
+  "supporting": "When reviewing these scholarships, consider the specific categories each award targets, such as STEM, community service, or medical fields. Many of these listings do not require essays, which can simplify the application process. Take note of the varying deadlines and award amounts to find the best fit for your needs and timeline.",
+  "related_intro": "For more tailored opportunities, check out related scholarship pages that focus on specific fields or broader eligibility criteria.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find suitable funding options",
+    "Read requirement lines for eligibility details",
+    "Open official pages for complete application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Minority students in Illinois",
+    "Students pursuing STEM degrees",
+    "Community service-oriented applicants",
+    "Those seeking medical field scholarships",
+    "Undergraduate and junior college students"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for minority students in Illinois?",
+      "answer": "This selection includes 7 scholarships specifically for minority students in Illinois, with categories spanning STEM, community involvement, and medicine. Each listing may have unique eligibility criteria and focus areas, so it's beneficial to review the details of each scholarship."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this list do not require an essay, although it's important to check individual listings for specific requirements. Many programs tend to have lighter application processes, but confirming details for each scholarship is recommended."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for these scholarships range from approximately $1,000 to $5,000. However, the exact amount can vary by scholarship, so reviewing each listing will provide the most accurate information."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 7 scholarships listed have deadlines, but they differ from one another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority/illinois",
+    "generatedAt": "2026-04-02T11:04:52.366Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

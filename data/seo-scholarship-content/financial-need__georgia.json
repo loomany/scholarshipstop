@@ -1,0 +1,49 @@
+{
+  "seo_title": "Georgia Scholarships for Financial Need Students",
+  "seo_description": "Explore 23 scholarships in Georgia for students with financial need. Check varying deadlines and award amounts up to $5,000.",
+  "intro": "For students in Georgia facing financial challenges, this collection of 23 scholarships offers a range of opportunities to help alleviate educational costs. Award sizes vary, typically ranging from $1,000 to $5,000, making it essential to explore each option carefully. With deadlines spread across various dates, including some approaching in the next 45 days, timely action is key to securing funding.",
+  "h1": "Scholarships for Financial Need in Georgia",
+  "supporting": "As you navigate this list, pay attention to the specific requirements and award amounts for each scholarship. Some may have lighter application processes, while others could require essays. Comparing deadlines and eligibility criteria will help you prioritize which scholarships to pursue based on your situation and needs.",
+  "related_intro": "If you're interested in exploring more funding options, check out related categories like Community, Arts, and STEM scholarships available in Georgia.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines for eligibility details",
+    "Open official pages for full application instructions",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Georgia residents with financial need",
+    "Students pursuing education in STEM fields",
+    "Applicants interested in community service scholarships",
+    "Individuals seeking funding for arts education",
+    "Students with specific scholarship essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Georgia?",
+      "answer": "The current listing includes 23 scholarships that cater to various fields such as education, community service, arts, STEM, and law. This range allows students to find opportunities that align with their specific interests and career goals."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 23 listings include this information. It's advisable to check the specific dates for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the scholarships; some may require essays while others do not. It's important to review each scholarship listing for detailed application requirements to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships listed typically range from approximately $1,000 to $5,000. However, each scholarship may have different amounts, so be sure to check the details for each one."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/georgia",
+    "generatedAt": "2026-04-02T11:01:56.252Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 23,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

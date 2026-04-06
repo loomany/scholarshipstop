@@ -1,0 +1,49 @@
+{
+  "seo_title": "California Graduate Scholarships | $1,000 - $60,000",
+  "seo_description": "Explore 13 graduate scholarships in California with varying awards and deadlines. Check details for each opportunity.",
+  "intro": "Finding funding for graduate studies in California can be a crucial step in achieving your academic goals. With 13 available scholarships, this selection offers a range of award sizes, from $1,000 to $60,000, catering to various fields such as education, community service, STEM, and the arts. Be mindful that deadlines vary, with some approaching soon, so it’s important to check each listing for specific details.",
+  "h1": "Graduate Scholarships in California: 13 Listings Available",
+  "supporting": "As you explore these scholarships, consider comparing award amounts and the specific requirements for each opportunity. Many listings do not require essays, which can simplify the application process. Take note of the categories that align with your interests, as this can help you prioritize which scholarships to pursue. Each listing provides unique insights into eligibility criteria and application expectations.",
+  "related_intro": "For more tailored options, consider checking out related pages that focus on specific fields or additional funding opportunities in California.",
+  "how_to_use": [
+    "Review the list for scholarship amounts and categories",
+    "Check deadlines for each scholarship to ensure timely applications",
+    "Note any specific eligibility requirements",
+    "Open official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your academic goals"
+  ],
+  "who_for": [
+    "Graduate students in California",
+    "Applicants interested in education and community service",
+    "STEM-focused graduate students",
+    "Students pursuing arts-related degrees",
+    "Individuals seeking scholarships with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in California?",
+      "answer": "There are 13 scholarships listed for graduate students in California, covering a range of categories including education, community, medicine, arts, and STEM. Each scholarship may have different eligibility criteria and focus areas, so it's important to review the details of each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require an essay, though it's advisable to check each individual listing for specific application requirements. Many programs tend to have lighter application processes, but verifying the details is key."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 13 scholarships listed have specific deadlines, which vary from one to another. Some deadlines are approaching quickly, so it's recommended to check the individual listings promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category vary significantly, with amounts ranging from approximately $1,000 to $60,000. Each scholarship has its own funding level, so reviewing the individual listings will provide the most accurate information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/california",
+    "generatedAt": "2026-04-02T10:41:06.036Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 13,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

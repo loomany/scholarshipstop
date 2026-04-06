@@ -1,0 +1,297 @@
+[
+  {
+    "id": "mock-honor-society",
+    "title": "$1,000 Honor Society® Scholarship",
+    "country": "USA",
+    "deadline": "in 8 days",
+    "listRequirementsSummary": "0 requirements: No requirements",
+    "description": "The $1,000 Honor Society® Scholarship is open to all students looking for financial help with their education. This scholarship is for those who are dedicated to their academic journey and committed to making the most of their opportunities. We're here to support students working hard to reach their goals!",
+    "eligibility": [],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/honor-society",
+    "provider": "Honor Society®",
+    "amount": "$1,000",
+    "applicantCount": 102542,
+    "verified": true,
+    "recurring": true,
+    "featured": true,
+    "winnerPayment": "Funds are paid to the student",
+    "providerMission": "Honor Society® recognizes academic and professional achievements, empowering members to reach their potential. Membership offers exclusive benefits, discounts, scholarships, and connections to career and graduate school opportunities.",
+    "socialLinks": {
+      "facebook": "https://www.facebook.com/honorsociety/",
+      "instagram": "https://www.instagram.com/honorsociety/",
+      "linkedin": "https://www.linkedin.com/company/honorsociety/"
+    },
+    "categories": [
+      "community"
+    ]
+  },
+  {
+    "id": "mock-solo-funds",
+    "title": "The $1,000 Empower SoLo Funds Scholarship",
+    "country": "USA",
+    "deadline": "in 17 days",
+    "listRequirementsSummary": "0 requirements: No requirements",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/solo",
+    "provider": "SoLo Funds",
+    "amount": "$1,000",
+    "applicantCount": 8720,
+    "verified": true,
+    "recurring": false,
+    "categories": [
+      "hobbies",
+      "miscellaneous"
+    ]
+  },
+  {
+    "id": "mock-arcamax",
+    "title": "Education Advice $1,000 Scholarship",
+    "country": "USA",
+    "deadline": "in 25 days",
+    "listRequirementsSummary": "0 requirements: No requirements",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/arcamax",
+    "provider": "Arcamax",
+    "amount": "$1,000",
+    "applicantCount": 24009,
+    "verified": true,
+    "recurring": true,
+    "categories": [
+      "humanities"
+    ]
+  },
+  {
+    "id": "mock-exact-insight",
+    "title": "$1,000 Chrome Insiders Student Scholarship 💡",
+    "country": "USA",
+    "deadline": "in 4 days",
+    "listRequirementsSummary": "1 requirement: Special eligibility",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [
+      "Special eligibility"
+    ],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/exact-insight",
+    "provider": "Exact Insight",
+    "amount": "$1,000",
+    "applicantCount": 7496,
+    "verified": true,
+    "recurring": false,
+    "categories": [
+      "stem"
+    ]
+  },
+  {
+    "id": "mock-kikoff",
+    "title": "💸 Kikoff Your Credit Glow-Up Scholarship! 💸",
+    "country": "USA",
+    "deadline": "in 8 days",
+    "listRequirementsSummary": "1 requirement: Special eligibility",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [
+      "Special eligibility"
+    ],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/kikoff",
+    "provider": "Kikoff",
+    "amount": "$1,000",
+    "applicantCount": 6052,
+    "verified": true,
+    "recurring": true,
+    "categories": [
+      "hobbies",
+      "safety"
+    ]
+  },
+  {
+    "id": "mock-yougov",
+    "title": "YouGov Voice of the Future Scholarship: Get Paid for Your Thoughts! 💸",
+    "country": "USA",
+    "deadline": "in 12 days",
+    "listRequirementsSummary": "1 requirement: Special eligibility",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [
+      "Special eligibility"
+    ],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/yougov",
+    "provider": "YouGov",
+    "amount": "$1,000",
+    "applicantCount": 9517,
+    "verified": true,
+    "recurring": true,
+    "categories": [
+      "biology"
+    ]
+  },
+  {
+    "id": "mock-fund-com",
+    "title": "Fund.com $1,000 Smart Money for Students Scholarship",
+    "country": "USA",
+    "deadline": "in 25 days",
+    "listRequirementsSummary": "1 requirement: Special eligibility",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [
+      "Special eligibility"
+    ],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/fund",
+    "provider": "Fund.com",
+    "amount": "$1,000",
+    "applicantCount": 6273,
+    "verified": true,
+    "recurring": true,
+    "categories": [
+      "law"
+    ]
+  },
+  {
+    "id": "mock-brain-fm",
+    "title": "🧠 Brain.fm's Soundtrack to Success 🎶",
+    "country": "USA",
+    "deadline": "in 19 days",
+    "listRequirementsSummary": "1 requirement: Special eligibility",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [
+      "Special eligibility"
+    ],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/brain-fm",
+    "provider": "Brain.fm",
+    "amount": "$1,000",
+    "applicantCount": 4415,
+    "verified": false,
+    "recurring": false,
+    "credibilityLabel": "Credibility 99%",
+    "categories": [
+      "music",
+      "arts"
+    ]
+  },
+  {
+    "id": "mock-lemonade",
+    "title": "Lemonade Make It Happen $1,000 Scholarship",
+    "country": "USA",
+    "deadline": "in 1 month",
+    "listRequirementsSummary": "1 requirement: Special eligibility",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [
+      "Special eligibility"
+    ],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/lemonade",
+    "provider": "Lemonade",
+    "amount": "$1,000",
+    "applicantCount": 18,
+    "verified": false,
+    "recurring": true,
+    "credibilityLabel": "Credibility 99%",
+    "featured": true,
+    "categories": [
+      "medical",
+      "disability",
+      "safety"
+    ]
+  },
+  {
+    "id": "mock-owl-no-essay",
+    "title": "$2,026 ScholarshipOwl No Essay Scholarship",
+    "country": "USA",
+    "deadline": "in 1 day",
+    "listRequirementsSummary": "0 requirements: No requirements",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [],
+    "benefits": "Up to $2,026 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/owl-no-essay",
+    "provider": "ScholarshipOwl",
+    "amount": "$2,026",
+    "applicantCount": 31972,
+    "verified": true,
+    "recurring": true,
+    "categories": [
+      "miscellaneous"
+    ]
+  },
+  {
+    "id": "mock-owl-personalized",
+    "title": "$1,000 ScholarshipOwl Personalized Scholarship",
+    "country": "USA",
+    "deadline": "in 18 days",
+    "listRequirementsSummary": "0 requirements: No requirements",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/owl-personalized",
+    "provider": "ScholarshipOwl",
+    "amount": "$1,000",
+    "applicantCount": 12682,
+    "verified": true,
+    "recurring": true,
+    "categories": [
+      "education"
+    ]
+  },
+  {
+    "id": "mock-women-inspire",
+    "title": "$1,000 Women Who Inspire Us Scholarship",
+    "country": "USA",
+    "deadline": "in 2 days",
+    "listRequirementsSummary": "1 requirement: Question",
+    "description": "Temporary UI mock — competitor-style scholarship card.",
+    "eligibility": [
+      "Question"
+    ],
+    "benefits": "Up to $1,000 award.",
+    "howToApply": [
+      "Visit the provider website to apply."
+    ],
+    "applyLink": "https://example.com/women-inspire",
+    "provider": "ScholarshipOwl",
+    "amount": "$1,000",
+    "applicantCount": 6317,
+    "verified": true,
+    "recurring": false,
+    "categories": [
+      "arts",
+      "disability"
+    ]
+  }
+]

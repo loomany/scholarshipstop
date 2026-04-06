@@ -1,0 +1,47 @@
+{
+  "seo_title": "Find Engineering Scholarships in New Mexico",
+  "seo_description": "Explore 4 engineering scholarships in New Mexico. Award sizes vary, and deadlines differ—check details for each opportunity.",
+  "intro": "Finding financial support for engineering studies in New Mexico can be crucial for students aiming to advance in this field. With 4 scholarships available, you have a variety of options that cater to different needs and backgrounds. Award sizes vary, with some offering amounts between $1,000 and $2,000. Keep in mind that requirements and deadlines differ across listings, so it’s important to review each one carefully.",
+  "h1": "Engineering Scholarships Available in New Mexico",
+  "supporting": "This list includes scholarships that may require essays or have lighter application processes, giving you flexibility in how you apply. As you explore these opportunities, consider comparing the award amounts and deadlines to identify which scholarships align best with your situation. Be sure to check the specifics for each listing, as some may have upcoming deadlines that require prompt attention.",
+  "related_intro": "If you're interested in other funding opportunities, consider checking out our pages on related fields or regional scholarships to broaden your search.",
+  "how_to_use": [
+    "Review the award amounts and deadlines for each scholarship",
+    "Check for essay requirements and application details",
+    "Shortlist scholarships that fit your profile",
+    "Visit official scholarship pages for the most accurate information"
+  ],
+  "who_for": [
+    "Engineering students in New Mexico",
+    "High school seniors pursuing engineering",
+    "Students seeking STEM-related scholarships",
+    "Applicants looking for lighter essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in New Mexico?",
+      "answer": "There are currently 4 scholarships listed specifically for engineering students in New Mexico. These scholarships cover various categories, including STEM, education, and humanities, providing a range of opportunities for eligible applicants."
+    },
+    {
+      "question": "How can I find specific details about each scholarship?",
+      "answer": "Each scholarship listing includes important details such as award amounts and deadlines. Be sure to check each entry for specific requirements, as some may require essays while others do not."
+    },
+    {
+      "question": "Are there any upcoming deadlines I should be aware of?",
+      "answer": "All scholarships in this category have deadlines, with at least one approaching within the next 45 days. It's advisable to review the listings promptly to ensure you don’t miss any important dates."
+    },
+    {
+      "question": "What is the typical award size for these scholarships?",
+      "answer": "The scholarships available in this filter have award amounts ranging from approximately $1,000 to $2,000. However, it's important to verify the exact amounts listed for each scholarship, as they can vary."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/new-mexico",
+    "generatedAt": "2026-04-02T10:55:19.367Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

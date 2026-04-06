@@ -1,0 +1,19 @@
+.root {
+  @apply sticky top-0 bg-black z-[100] transition-all duration-150 h-16 md:h-20;
+}
+
+.logo {
+  @apply flex cursor-pointer items-center transform duration-100 ease-in-out rounded-sm border-0 bg-transparent;
+}
+
+/* Глобальный *:focus в main.css даёт ring-offset-zinc-50 — на чёрном фоне выглядит как белая рамка */
+.logo:focus,
+.logo:focus-visible,
+.logo:active {
+  @apply border-0 !shadow-none !ring-0 !ring-offset-0 outline-none;
+}
+
+/* Desktop: same horizontal rhythm as logo → first link (parent uses gap-2 sm:gap-3) */
+.inlineNav {
+  @apply hidden items-center gap-2 sm:gap-3 lg:flex;
+}

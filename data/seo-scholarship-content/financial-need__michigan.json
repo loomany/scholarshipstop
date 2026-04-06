@@ -1,0 +1,49 @@
+{
+  "seo_title": "Michigan Scholarships for Financial Need Students",
+  "seo_description": "Explore 11 scholarships in Michigan for students with financial need. Check varying deadlines and award amounts up to $10,000.",
+  "intro": "For students in Michigan facing financial challenges, there are 11 scholarships available that can help alleviate educational costs. These awards vary significantly in size, ranging from approximately $750 to $10,000, and cover a range of fields including STEM, education, arts, and community service. As deadlines differ among listings, it's important to check them promptly to ensure you don’t miss out on potential funding.",
+  "h1": "Financial Need Scholarships in Michigan",
+  "supporting": "When reviewing this list, pay attention to the specific requirements for each scholarship, as they can include essay submissions or be lighter on documentation. Comparing the award amounts and deadlines will help you prioritize which opportunities align best with your situation. This diverse selection is worth exploring, especially if you are committed to furthering your education despite financial constraints.",
+  "related_intro": "If you’re interested in exploring more options, consider checking out scholarships specifically for STEM fields or community service initiatives in Michigan.",
+  "how_to_use": [
+    "Check individual deadlines to avoid missing out",
+    "Compare award sizes to find the best fit for your needs",
+    "Review requirement details for each scholarship",
+    "Open official scholarship pages for the most accurate information",
+    "Shortlist your top choices for easy tracking"
+  ],
+  "who_for": [
+    "Students demonstrating financial need in Michigan",
+    "Individuals pursuing education in STEM or arts",
+    "Community-focused applicants seeking support",
+    "Seminary students looking for leadership funding",
+    "High school or college students needing scholarship assistance"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in Michigan?",
+      "answer": "The current listing features 11 scholarships that cater to various fields, including STEM, education, community service, arts, and law. This diversity allows students to find opportunities that align with their academic and career interests."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary, with amounts ranging approximately from $750 to $10,000. It's important to review each listing for specific details on the funding offered."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements differ among the scholarships, with some requiring essays while others do not. Be sure to check the individual listings for the specific application requirements associated with each scholarship."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 11 scholarships listed have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to verify the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/michigan",
+    "generatedAt": "2026-04-02T11:12:15.609Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 11,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

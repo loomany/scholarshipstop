@@ -1,0 +1,49 @@
+{
+  "seo_title": "Virginia Scholarships for High School Seniors",
+  "seo_description": "Explore 31 scholarships for Virginia high school seniors with awards ranging from $500 to $20,000. Check deadlines promptly.",
+  "intro": "Virginia high school seniors seeking financial support for their education will find a diverse array of 31 scholarships available in this catalog. Award sizes vary significantly, with amounts ranging from $500 to $20,000, providing options for different needs and aspirations. Keep in mind that deadlines for these scholarships vary, with some approaching in the next 45 days, so timely action is essential.",
+  "h1": "Scholarships for High School Seniors in Virginia",
+  "supporting": "This collection includes scholarships across various categories, including education, STEM, arts, and community service. Many listings do not require essays, making them accessible for students who prefer a lighter application process. As you review the options, consider comparing the award amounts, eligibility criteria, and specific deadlines to identify the best fits for your situation.",
+  "related_intro": "For additional opportunities, check out related pages that focus on scholarships for specific fields or other states.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines for eligibility details",
+    "Open official pages for the most accurate information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors in Virginia",
+    "Students interested in STEM fields",
+    "Applicants seeking no-essay scholarships",
+    "Individuals pursuing arts and community service funding",
+    "Those looking for substantial awards"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Virginia?",
+      "answer": "The current listings include a variety of scholarships categorized under education, STEM, arts, community, and medicine. With 31 scholarships available, students can find opportunities that align with their interests and future goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Many of the scholarships listed do not require an essay, making the application process potentially easier for applicants. However, it's important to check each individual listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 31 scholarships have deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's advisable to review the details promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts ranging from approximately $500 to $20,000. Each listing provides specific details on the award amount, so be sure to check those for the scholarships you're interested in."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/virginia",
+    "generatedAt": "2026-04-02T10:45:16.999Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 31,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

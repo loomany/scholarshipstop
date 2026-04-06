@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Graduate Scholarships in Rhode Island",
+  "seo_description": "Explore 6 graduate scholarships in Rhode Island with awards from $1,000 to $10,000. Check deadlines and requirements today.",
+  "intro": "Finding financial support for graduate studies in Rhode Island can be crucial for your academic journey. This catalog features 6 scholarships specifically for graduate students, with award amounts ranging from approximately $1,000 to $10,000. Each listing has varying deadlines, so it's important to check them promptly, especially since some deadlines are approaching in the next few weeks. Many of these opportunities may not require essays, making them more accessible for busy students.",
+  "h1": "Graduate Scholarships Available in Rhode Island",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and categories, which include education, medicine, and STEM fields. Pay attention to the specific requirements for each listing, as many have lighter touch signals, potentially easing your application process. It's a good idea to shortlist the scholarships that resonate with your goals and verify details on the official sponsor pages.",
+  "related_intro": "For more options, check out related pages that focus on scholarships for specific fields or other states, which may offer additional opportunities.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts to find suitable funding",
+    "Read through requirement lines carefully",
+    "Open official pages for detailed information",
+    "Shortlist your top choices for application"
+  ],
+  "who_for": [
+    "Graduate students in Rhode Island",
+    "Applicants seeking education-related funding",
+    "Students pursuing STEM degrees",
+    "Individuals interested in medical scholarships",
+    "Those looking for scholarships with minimal application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Rhode Island?",
+      "answer": "In Rhode Island, there are currently 6 scholarships listed for graduate students. These opportunities span various categories, including Education, Miscellaneous, Medicine, and STEM."
+    },
+    {
+      "question": "Are there any specific requirements for applying to these scholarships?",
+      "answer": "While many of the scholarships do not require essays, it's important to check each listing for specific application requirements. The scholarship details may also indicate varying levels of documentation needed, so reviewing each one closely is advisable."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 6 scholarships listed have specific deadlines, which vary from one to another. Some deadlines are approaching within the next 45 days, so it's recommended to verify the dates promptly to ensure timely applications."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available in Rhode Island generally vary, with amounts ranging from approximately $1,000 to $10,000. However, be sure to check the individual listings for precise figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/rhode-island",
+    "generatedAt": "2026-04-02T11:10:44.808Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

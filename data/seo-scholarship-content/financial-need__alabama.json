@@ -1,0 +1,47 @@
+{
+  "seo_title": "Alabama Scholarships for Financial Need Students",
+  "seo_description": "Explore 12 Alabama scholarships for students in financial need. Award amounts range from $500 to $5,000. Check deadlines and requirements.",
+  "intro": "Finding financial support can be a crucial step for students in Alabama seeking to further their education. With 12 scholarships specifically aimed at those demonstrating financial need, there are various opportunities available to help ease the burden of tuition and other expenses. Award sizes generally range from $500 to $5,000, and while many listings have upcoming deadlines, it's important to check each one for specific dates and requirements as they vary.",
+  "h1": "Alabama Scholarships for Students with Financial Need",
+  "supporting": "This collection of scholarships includes a mix of opportunities across different fields, such as education, STEM, and community-focused initiatives. Some programs may have lighter application requirements, while others could involve essays. Reviewing the details for each scholarship will help you identify which ones align best with your goals and circumstances, making it easier to prioritize your applications.",
+  "related_intro": "If you're exploring more options, consider checking out related pages for scholarships based on different criteria or specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines for timely applications",
+    "Scan award amounts to identify suitable options",
+    "Read requirement lines to understand application expectations",
+    "Open official pages for detailed scholarship information",
+    "Shortlist scholarships that match your profile and needs"
+  ],
+  "who_for": [
+    "Students in Alabama demonstrating financial need",
+    "Undergraduates pursuing education or STEM fields",
+    "Community-focused applicants seeking local opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in Alabama with financial need?",
+      "answer": "There are currently 12 scholarships listed that cater to students in Alabama, focusing on various categories such as education, STEM, and community support. Award sizes vary, with amounts ranging from approximately $500 to $5,000."
+    },
+    {
+      "question": "How can I find specific deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 12 listings include this information. It's important to check the individual listings promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Do these scholarships require essays or other application materials?",
+      "answer": "Requirements vary among the scholarships; while some may require essays, many do not. It's advisable to review the details for each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "Who is eligible to apply for these scholarships?",
+      "answer": "These scholarships are specifically for students who demonstrate financial need and are located in Alabama. Be sure to review the eligibility criteria for each scholarship to confirm your qualifications."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/alabama",
+    "generatedAt": "2026-04-02T11:11:57.935Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

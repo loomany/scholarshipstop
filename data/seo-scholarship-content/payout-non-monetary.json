@@ -1,0 +1,49 @@
+{
+  "seo_title": "Non-Monetary Scholarships in the USA",
+  "seo_description": "Explore 9 non-monetary scholarships with varying awards and deadlines. Check details for each opportunity.",
+  "intro": "Finding non-monetary scholarships can be a strategic way to enhance your educational journey without the burden of financial awards. This catalog features 9 opportunities that offer a range of benefits, from mentorship to resources, with award sizes typically between $500 and $5,000. Keep in mind that requirements and deadlines vary, so it’s important to review each listing carefully to find the best fit for your needs.",
+  "h1": "Explore Non-Monetary Scholarships in the USA",
+  "supporting": "As you explore these non-monetary scholarships, pay attention to the specific benefits they offer, as well as their varying requirements, which may include essays or other criteria. This slice includes options across categories like STEM and education, making it worthwhile to compare what each scholarship entails. Checking the deadlines promptly is also crucial, as some may be approaching soon.",
+  "related_intro": "For additional opportunities, consider looking at related pages that focus on specific fields or scholarship types that may align with your interests.",
+  "how_to_use": [
+    "Compare deadlines listed for each scholarship",
+    "Scan the award details for specific benefits",
+    "Read the requirement lines for eligibility criteria",
+    "Open official pages for the most accurate information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Students pursuing STEM fields",
+    "Individuals seeking educational resources",
+    "Applicants interested in mentorship opportunities",
+    "Students with disabilities looking for support",
+    "Those wanting to enhance their academic profile"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are included in the non-monetary payout category?",
+      "answer": "This category features a diverse range of scholarships, including those focused on STEM, education, miscellaneous fields, and disability support. With a total of 9 listings, you can find opportunities tailored to various interests and backgrounds."
+    },
+    {
+      "question": "Do all scholarships in this category require essays?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, so it's important to check the specific details for each scholarship to understand what is needed."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 9 listings in this category include deadline information. Be sure to review the details promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for the scholarships in this category?",
+      "answer": "Award sizes vary across the listings, with amounts ranging approximately from $500 to $5,000. For exact figures, refer to the individual scholarship details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "payout-non-monetary",
+    "generatedAt": "2026-04-02T10:52:35.329Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 9,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

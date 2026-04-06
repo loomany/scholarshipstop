@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Engineering Scholarships Under $5,000",
+  "seo_description": "Explore 6 engineering scholarships under $5,000 with varying deadlines and requirements. Check details for eligibility.",
+  "intro": "Finding scholarships in engineering that fit your budget can be challenging, but this selection of six opportunities offers awards ranging from $1,500 to $5,000. With various deadlines and requirements, including some with lighter essay expectations, these scholarships can help you fund your education without overwhelming financial strain. Be sure to check the specific details for each listing as you explore your options.",
+  "h1": "Engineering Scholarships Under $5,000",
+  "supporting": "This list showcases a diverse range of scholarships tailored for engineering students. As you review the entries, consider comparing the award amounts and deadlines to identify which opportunities align best with your financial needs and timeline. Keep in mind that while some scholarships may require essays, others might have fewer requirements, making it easier to apply.",
+  "related_intro": "If you're interested in more engineering scholarships or different funding amounts, check out related pages for additional options.",
+  "how_to_use": [
+    "Compare deadlines across the listed scholarships",
+    "Scan award amounts to find suitable options",
+    "Review requirement details for each scholarship",
+    "Open official pages for complete application instructions",
+    "Shortlist your favorites and verify details on sponsor sites"
+  ],
+  "who_for": [
+    "Engineering students seeking financial aid",
+    "Applicants looking for awards under $5,000",
+    "Students comfortable with varying application requirements",
+    "Individuals interested in STEM-related funding",
+    "Those needing scholarships with upcoming deadlines"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category features six scholarships specifically for engineering students, with award amounts ranging from approximately $1,500 to $5,000. These scholarships cover various fields, including STEM, Arts, Community, and Education."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, so it's important to check the specific details for each scholarship."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All six scholarships in this category have deadlines, but they differ from one another. Be sure to review each listing for the specific deadline, as at least one scholarship has a deadline approaching within the next 45 days."
+    },
+    {
+      "question": "Who can apply for these scholarships?",
+      "answer": "These scholarships are primarily for students pursuing engineering degrees. If you meet the eligibility criteria outlined in each listing, you can apply."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/payout-student/under-5000",
+    "generatedAt": "2026-04-02T10:58:58.879Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

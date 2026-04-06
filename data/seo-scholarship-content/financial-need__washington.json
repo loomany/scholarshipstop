@@ -1,0 +1,49 @@
+{
+  "seo_title": "Washington Scholarships for Financial Need",
+  "seo_description": "Explore 45 scholarships for financial need in Washington. Award sizes vary; check individual listings for deadlines and requirements.",
+  "intro": "Finding financial support for your education in Washington can be a crucial step in achieving your academic goals. This catalog features 45 scholarships specifically aimed at students with financial need, with award sizes ranging from approximately $500 to $25,000. Since deadlines and requirements vary across listings, it's essential to review each opportunity carefully to identify the best fit for your situation.",
+  "h1": "Find Financial Need Scholarships in Washington",
+  "supporting": "As you explore this selection, consider comparing the award amounts, deadlines, and specific eligibility criteria. Some scholarships may require essays, while others have lighter requirements, allowing for a more straightforward application process. This diverse range of options ensures that you can find opportunities that align with your educational path and financial needs.",
+  "related_intro": "If you're interested in scholarships based on different criteria or locations, check out our related pages for more tailored opportunities.",
+  "how_to_use": [
+    "Review the list for scholarship amounts and categories",
+    "Check individual deadlines for timely applications",
+    "Look for lighter requirement options to streamline your applications",
+    "Open official pages for detailed eligibility and application instructions",
+    "Shortlist scholarships that best match your profile and needs"
+  ],
+  "who_for": [
+    "Students with financial need in Washington",
+    "Undergraduates pursuing education-related fields",
+    "High school seniors planning to attend college",
+    "Students interested in arts and community service",
+    "Applicants seeking scholarships with varying essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in Washington?",
+      "answer": "There are 45 scholarships listed that cater to students with financial need in Washington. These scholarships cover a variety of categories, including education, community service, STEM, disability, and medicine."
+    },
+    {
+      "question": "How do I find specific scholarship details, including deadlines and requirements?",
+      "answer": "Each scholarship listing includes unique details such as deadlines and application requirements. While all 45 listings have deadlines, they vary by program, so it's important to check each one promptly for the most accurate information."
+    },
+    {
+      "question": "Are there scholarships that require essays?",
+      "answer": "Scholarship requirements vary, with some listings requiring essays and others not. Out of the 45 scholarships, approximately 6 have essay requirements, while the majority do not, so be sure to review each listing carefully."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts generally ranging from around $500 to $25,000. Specific details can be found in each individual listing."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/washington",
+    "generatedAt": "2026-04-02T10:52:41.912Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 45,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

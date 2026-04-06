@@ -1,0 +1,47 @@
+{
+  "seo_title": "Arizona Scholarships for High School Seniors",
+  "seo_description": "Explore 12 scholarships for Arizona high school seniors. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "Navigating scholarship opportunities as a high school senior in Arizona can be a crucial step toward funding your education. With 12 available listings, this selection offers a range of awards from $500 to $5,000, catering to various interests and backgrounds. Many of these scholarships have no essay requirements, making them more accessible. However, deadlines vary, so it's important to check each listing promptly to ensure you don’t miss out.",
+  "h1": "Scholarships for High School Seniors in Arizona",
+  "supporting": "This collection includes scholarships across diverse categories such as education, STEM, community service, and law. As you review the listings, pay attention to the award amounts and specific eligibility criteria, which can help you identify the best fits for your situation. Comparing deadlines and requirements will also assist you in prioritizing your applications effectively.",
+  "related_intro": "For more tailored options, consider exploring scholarships specific to different fields or those with unique requirements that might suit your profile.",
+  "how_to_use": [
+    "Check each scholarship listing for specific deadlines",
+    "Compare award amounts to find the best financial fit",
+    "Read the eligibility requirements carefully",
+    "Shortlist scholarships that align with your interests",
+    "Visit the official sponsor pages for the most current information"
+  ],
+  "who_for": [
+    "High school seniors in Arizona seeking funding for college",
+    "Students interested in STEM or community service scholarships",
+    "Applicants looking for scholarships with no essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Arizona?",
+      "answer": "There are currently 12 scholarships listed for high school seniors in Arizona, covering a range of categories including education, community service, disability, STEM, and law. Each scholarship may have different eligibility criteria and focus areas, so it's beneficial to review the details of each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require an essay, but it's important to check each individual scholarship for specific requirements. While many listings are lighter on application demands, verifying the details will ensure you meet all necessary criteria."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 12 scholarships listed have specific deadlines, which vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to check the exact dates for each scholarship promptly to ensure you don't miss out."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available range from approximately $500 to $5,000. However, it's essential to look at each listing for the specific amount offered, as this can vary significantly between programs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/arizona",
+    "generatedAt": "2026-04-02T10:57:59.340Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

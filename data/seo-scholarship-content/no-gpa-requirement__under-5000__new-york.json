@@ -1,0 +1,47 @@
+{
+  "seo_title": "New York Scholarships Under $5,000 - No GPA Needed",
+  "seo_description": "Explore 37 New York scholarships under $5,000 with varying deadlines and requirements. Check details for your best fit.",
+  "intro": "Finding scholarships that don't require a GPA can be a game changer for many students in New York. With 37 options available in this category, you can explore a variety of awards ranging from $500 to $5,000. This selection includes opportunities across different fields such as education, STEM, and community service, making it easier to find funding that aligns with your interests and needs. Keep in mind that deadlines and requirements vary, so it's wise to check each listing closely.",
+  "h1": "Find New York Scholarships Under $5,000 with No GPA Requirement",
+  "supporting": "This list offers a diverse array of scholarships, some of which may have lighter requirements or no essay components. As you review the options, pay attention to the specific award amounts and categories that resonate with you. Comparing deadlines and eligibility criteria will help you prioritize which scholarships to pursue. Given the variability in requirements, be sure to verify details on the official pages linked in each listing.",
+  "related_intro": "If you're interested in more tailored opportunities, consider checking out scholarships based on specific fields or other criteria that may fit your profile.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize applications",
+    "Scan award amounts to find the best fit for your needs",
+    "Read through requirement lines to understand what each scholarship entails",
+    "Open official pages for the most accurate and detailed information",
+    "Shortlist scholarships that align with your goals and verify on sponsor sites"
+  ],
+  "who_for": [
+    "Students in New York seeking funding without GPA requirements",
+    "Individuals pursuing education or vocational training",
+    "Applicants interested in community service or STEM fields"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category features 37 scholarships from various fields, including education, STEM, arts, community, and disability. Each listing offers unique opportunities for students without GPA requirements."
+    },
+    {
+      "question": "How can I find specific deadlines for these scholarships?",
+      "answer": "All 37 scholarships in this list have deadlines, but they vary by program. It's important to check each listing for its specific deadline, as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the listings; some scholarships may require essays while others do not. Review the details of each scholarship to understand what is needed for your application."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The scholarships in this category generally offer awards ranging from approximately $500 to $5,000. However, each scholarship has its own specific amount, so be sure to check the individual listings for exact figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "no-gpa-requirement/under-5000/new-york",
+    "generatedAt": "2026-04-02T11:03:58.881Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 37,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

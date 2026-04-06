@@ -1,0 +1,47 @@
+{
+  "seo_title": "Find PhD Scholarships Nationwide | $1,000 to $35,000",
+  "seo_description": "Explore 6 PhD scholarships available nationwide. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "If you’re hunting awards that fit “Phd · Nationwide scholarships,” this view keeps the signal high. You’ll see 6 matching programs in this view today—compact enough to scan quickly. Award wording varies row to row; treat dollar figures on cards as a starting point only. Deadlines and dollar lines differ row to row—use them to shortlist, then verify every rule on the sponsor’s site.",
+  "h1": "Nationwide PhD Scholarships: 6 Opportunities Available",
+  "supporting": "Start with sort (deadline or amount) to surface what matters today, then read the requirement snippet under each title before you click through. When two listings look alike, compare their deadline and award rows side by side. Nothing here replaces the official program page: use this list to narrow, then re-read eligibility and dates at the source before you apply.",
+  "related_intro": "Below are related filter pages—different state, topic, or requirement angle—if you want to widen the net without losing this starting point.",
+  "how_to_use": [
+    "Pick a sort order so urgent deadlines or larger award text float to the top",
+    "Skim the requirement line on each card for a quick fit check",
+    "Open the official listing from the card and re-confirm dates, amounts, and eligibility",
+    "Keep a short shortlist instead of spreading thin across weak matches",
+    "Assume catalog fields can lag—treat sponsor pages as the final word"
+  ],
+  "who_for": [
+    "Anyone who wants a tighter set of options for Phd · Nationwide scholarships than the full open catalog",
+    "Students stacking several applications and needing a fast way to compare effort versus payoff",
+    "Applicants who like scanning structured rows before opening long sponsor pages"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for PhD students nationwide?",
+      "answer": "The current listings include a variety of scholarships categorized under disability, community, medicine, STEM, education, and miscellaneous fields. With 6 scholarships available, students can find opportunities tailored to different areas of study and personal circumstances."
+    },
+    {
+      "question": "How do I find out the specific deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 6 listings currently include deadline information. It's advisable to check the details promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the listed scholarships; some may require essays while others do not. Be sure to review each scholarship's details to understand the specific application requirements."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The scholarships listed offer a wide range of award amounts, with examples showing values from approximately $1,000 to $35,000. However, the exact amount can differ by scholarship, so it's important to check each listing for specific details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "phd/nationwide",
+    "generatedAt": "2026-04-02T11:08:21.854Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "deterministic",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Arkansas Scholarships | 17 Opportunities Available",
+  "seo_description": "Explore 17 scholarships in Arkansas with awards from $500 to $6,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support as a student in Arkansas can be a crucial step toward achieving your educational goals. With 17 scholarships available, ranging from $500 to $6,000, there are diverse opportunities tailored to various fields, including education, STEM, arts, and community service. Many of these listings have no essay requirements, making them more accessible for applicants. Be mindful that deadlines vary, with some approaching in the near future, so it's wise to check the specific dates for each scholarship.",
+  "h1": "Explore 17 Scholarships Available in Arkansas",
+  "supporting": "This collection of scholarships offers a mix of award sizes and requirements, allowing you to identify options that best fit your needs. As you review the listings, consider comparing the award amounts and any specific eligibility criteria. Some scholarships may have lighter requirements, which could streamline your application process. Make sure to verify each listing for the most accurate details and deadlines.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out scholarships in related categories or neighboring states.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts to find suitable options",
+    "Read eligibility requirements carefully",
+    "Open official scholarship pages for more details",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Students pursuing degrees in education",
+    "Applicants interested in STEM fields",
+    "Individuals involved in community service projects",
+    "Artists seeking financial support for their studies",
+    "High school seniors planning to attend college"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Arkansas?",
+      "answer": "The Arkansas scholarship listings include a variety of categories such as education, STEM, arts, and community. With 17 scholarships currently available, you can find options that align with different interests and fields of study."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, making the application process potentially simpler. However, it's important to check each individual listing for specific requirements, as some may vary."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All scholarships in this Arkansas listing have deadlines, but they vary by program. It's advisable to review each scholarship's details promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for scholarships in Arkansas?",
+      "answer": "Award sizes for the scholarships in Arkansas range from approximately $500 to $6,000. Each scholarship may have different funding levels, so be sure to check the specific amounts listed for each opportunity."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "arkansas",
+    "generatedAt": "2026-04-02T10:59:30.142Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 17,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

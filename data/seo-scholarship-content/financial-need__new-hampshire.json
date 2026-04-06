@@ -1,0 +1,49 @@
+{
+  "seo_title": "Financial Need Scholarships in New Hampshire",
+  "seo_description": "Explore 11 scholarships for financial need in New Hampshire with awards up to $17,000. Check deadlines and requirements.",
+  "intro": "Finding financial support can be challenging, especially for students in New Hampshire. This catalog features 11 scholarships specifically aimed at individuals demonstrating financial need. Award sizes vary significantly, with some opportunities reaching up to $17,000. With a range of deadlines and requirements, it’s essential to explore these options thoroughly to identify the best fit for your educational goals.",
+  "h1": "Financial Need Scholarships in New Hampshire",
+  "supporting": "As you review the listings, pay attention to the varying award amounts and the specific eligibility criteria for each scholarship. Some may require essays while others do not, so be sure to check the details carefully. Comparing deadlines is crucial, especially since some opportunities may have approaching due dates. Always verify information on the official sponsor sites for the most accurate details.",
+  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that focus on specific fields of study or other eligibility criteria.",
+  "how_to_use": [
+    "Sort listings by award amount or deadline",
+    "Read the requirement lines carefully",
+    "Open the official scholarship pages for details",
+    "Shortlist scholarships that match your profile",
+    "Verify eligibility criteria on sponsor websites"
+  ],
+  "who_for": [
+    "Students pursuing education in New Hampshire",
+    "Individuals demonstrating financial need",
+    "Community-focused scholarship applicants",
+    "STEM major candidates seeking funding",
+    "Students interested in law and safety programs"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in New Hampshire?",
+      "answer": "There are currently 11 scholarships listed that cater to students demonstrating financial need in New Hampshire. These scholarships span various categories, including education, community, STEM, humanities, and law."
+    },
+    {
+      "question": "How can I find out the specific deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 11 listings include this information. It's important to check the specific dates for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "The scholarship requirements vary, with some programs requiring essays while others do not. Be sure to review the details for each scholarship to understand the specific application requirements."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships vary, with amounts ranging approximately from $1,000 to $17,000. Each scholarship listing will provide the exact award amount, so check the details for the specific scholarships you are interested in."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/new-hampshire",
+    "generatedAt": "2026-04-02T11:13:08.851Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 11,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

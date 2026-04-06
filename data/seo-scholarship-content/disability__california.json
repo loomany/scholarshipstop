@@ -1,0 +1,49 @@
+{
+  "seo_title": "California Scholarships for Students with Disabilities",
+  "seo_description": "Explore 4 scholarships for California students with disabilities. Check varying deadlines and award amounts up to $12,000.",
+  "intro": "Finding financial support as a student with a disability in California can be crucial for your educational journey. This catalog features 4 scholarships specifically tailored for individuals facing these challenges. Award sizes vary, ranging from approximately $500 to $12,000, and deadlines differ among the listings, so it’s essential to check each one promptly to ensure you don’t miss out on any opportunities.",
+  "h1": "California Disability Scholarships: 4 Opportunities Available",
+  "supporting": "As you explore this list, pay attention to the specific requirements and award amounts associated with each scholarship. Some may require essays, while others might have lighter documentation needs. Comparing these factors can help you identify which scholarships align best with your situation and strengths, making your application process more efficient.",
+  "related_intro": "For more options, consider checking out related scholarships that cater to various needs and backgrounds in California.",
+  "how_to_use": [
+    "Check each listing for specific deadlines",
+    "Compare award amounts and categories",
+    "Review the requirements for essays and documentation",
+    "Visit official scholarship pages for the latest updates",
+    "Shortlist scholarships that best fit your profile"
+  ],
+  "who_for": [
+    "Students with disabilities in California",
+    "Applicants seeking community-focused funding",
+    "Individuals pursuing education in the arts or law",
+    "High school seniors and college students",
+    "Those looking for scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with disabilities in California?",
+      "answer": "There are currently four scholarships listed that cater specifically to students with disabilities in California. These scholarships span various categories, including law, community, arts, and education, providing a range of opportunities tailored to different interests and needs."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, so it's important to check the specific details for each listing. Currently, all four scholarships include deadlines within the next few months, so reviewing them promptly will ensure you don't miss any opportunities."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "The scholarship listings show a mix of essay requirements; some may require essays while others do not. It's advisable to review each scholarship's details to understand the specific requirements and prepare accordingly."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category vary, with amounts ranging approximately from $500 to $12,000 based on the current listings. Be sure to check each scholarship for its specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "disability/california",
+    "generatedAt": "2026-04-02T10:54:17.703Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

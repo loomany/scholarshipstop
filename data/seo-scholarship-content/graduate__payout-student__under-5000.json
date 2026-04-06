@@ -1,0 +1,49 @@
+{
+  "seo_title": "Graduate Scholarships Under $5,000 | USA Directory",
+  "seo_description": "Explore 10 graduate scholarships under $5,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for graduate studies can be challenging, especially when looking for awards under $5,000. This collection features 10 scholarships specifically designed for students across various fields, including community, STEM, arts, and education. With award amounts ranging from approximately $500 to $5,000, these opportunities can help alleviate some of the financial burdens of advanced education. Be mindful that deadlines vary, with some approaching soon, so it's important to check each listing promptly.",
+  "h1": "Graduate Scholarships for Students: Under $5,000",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and requirements to identify the best fit for your situation. Many listings do not require essays, making the application process potentially quicker and easier. Pay attention to the specific categories each scholarship targets, as this can help you align your application with the funders' goals. Each entry includes unique deadlines, so reviewing them carefully will ensure you don't miss out on any opportunities.",
+  "related_intro": "If you’re interested in more targeted options, check out related pages focusing on specific fields or award sizes that might suit your needs.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find the best financial fit",
+    "Read requirement lines to understand eligibility criteria",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your academic and career goals"
+  ],
+  "who_for": [
+    "Graduate students seeking financial aid under $5,000",
+    "Students interested in community-focused scholarships",
+    "STEM graduate students looking for funding opportunities",
+    "Applicants pursuing arts-related scholarships",
+    "Students in education fields needing financial support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category features 10 scholarships aimed at graduate students with award amounts ranging from approximately $500 to $5,000. The scholarships cover various fields, including community, STEM, arts, education, and medicine."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "Each scholarship in this listing has its own deadline, so it's important to check the specific date for each one. Some deadlines are approaching within the next 45 days, so reviewing the listings promptly is advisable."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making them potentially easier to apply for. However, it's best to verify the details for each scholarship, as requirements can vary."
+    },
+    {
+      "question": "How can I use this list effectively?",
+      "answer": "To make the most of this scholarship list, filter by your specific interests or needs, and pay attention to the categories that align with your background. Review each scholarship's details, including deadlines and requirements, to ensure a complete application."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/payout-student/under-5000",
+    "generatedAt": "2026-04-02T11:06:20.854Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 10,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

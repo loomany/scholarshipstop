@@ -1,0 +1,49 @@
+{
+  "seo_title": "Top Engineering Scholarships in Massachusetts",
+  "seo_description": "Explore 10 engineering scholarships in Massachusetts with awards up to $40,000. Check deadlines and requirements for each listing.",
+  "intro": "Navigating the landscape of scholarships for engineering students in Massachusetts reveals a robust selection of 10 opportunities. These awards cater to a diverse range of applicants, with amounts varying significantly from $500 to $40,000. Many listings feature lighter requirements, often without the need for essays, making them accessible to a broader audience. It's essential to check the individual deadlines, as they differ across listings, with some approaching quickly.",
+  "h1": "Engineering Scholarships Available in Massachusetts",
+  "supporting": "This collection of scholarships is particularly valuable for those pursuing engineering, as it encompasses various funding sources aimed at supporting students in STEM fields. When reviewing the options, consider comparing the award amounts and specific eligibility criteria to find the best fit for your situation. Pay attention to the varying deadlines to ensure you don't miss out on any opportunities.",
+  "related_intro": "If you're interested in exploring more scholarships tailored to specific criteria or broader categories, check out our related pages for additional funding opportunities.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to identify potential funding",
+    "Read requirement lines for eligibility details",
+    "Open official pages for the most accurate information",
+    "Shortlist your favorites and verify details on sponsor sites"
+  ],
+  "who_for": [
+    "Engineering students in Massachusetts",
+    "Undergraduate students seeking STEM funding",
+    "Women pursuing careers in science and technology",
+    "Students with a focus on biology or medical fields",
+    "Applicants looking for scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Massachusetts?",
+      "answer": "There are currently 10 scholarships listed for engineering students in Massachusetts, covering various fields within STEM, including biology and medicine. Award sizes vary significantly, with amounts ranging from approximately $500 to $40,000."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 10 listings include specific dates. It's advisable to check the details of each scholarship promptly, as some deadlines are within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially lighter for applicants. However, it's important to verify the requirements for each individual listing to ensure you have the most accurate information."
+    },
+    {
+      "question": "How can I use this list to find the right scholarship for me?",
+      "answer": "You can filter through the scholarships based on your specific needs and interests in engineering. Review the details for each listing, including award amounts and deadlines, to determine which opportunities align best with your goals."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/massachusetts",
+    "generatedAt": "2026-04-02T10:41:58.029Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 10,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

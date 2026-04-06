@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find PhD Scholarships in the USA",
+  "seo_description": "Explore 58 PhD scholarships with varying awards and deadlines. Check requirements and apply promptly for funding.",
+  "intro": "Finding funding for your PhD can be challenging, but there are 58 scholarships available that cater to a variety of fields and needs. Award sizes range from approximately $400 to $35,000, providing a spectrum of financial support. Keep in mind that application requirements and deadlines vary, so it's essential to review each opportunity closely to identify the best fit for your academic journey.",
+  "h1": "Explore 58 PhD Scholarships Available Now",
+  "supporting": "This list includes scholarships across diverse categories such as education, STEM, medicine, and community service. As you explore these options, compare the award amounts and note the specific requirements, which can vary significantly—some may require essays while others do not. Be sure to check the deadlines, as some scholarships may be approaching soon.",
+  "related_intro": "If you're interested in exploring more specific funding options, consider checking related pages that focus on scholarships by category or field of study.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts to find suitable options",
+    "Read through requirement lines for clarity",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "PhD candidates in STEM fields",
+    "Students pursuing advanced degrees in medicine",
+    "Applicants seeking community-focused scholarships",
+    "Individuals with disabilities looking for funding",
+    "Those interested in education-related scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of PhD scholarships are available?",
+      "answer": "The current listing includes a diverse range of 58 scholarships categorized under education, STEM, medicine, community, and disability. Each scholarship may have unique eligibility criteria and focus areas, so it's beneficial to explore the details of each listing."
+    },
+    {
+      "question": "How can I find out about the deadlines for these scholarships?",
+      "answer": "All 58 scholarships listed have deadlines, but they vary significantly from one program to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements for essays differ among the scholarships; while some may not require an essay, others do. Out of the 58 listings, approximately 6 indicate an essay requirement, so be sure to read the details for each scholarship to understand what is needed."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The scholarship amounts vary widely, with awards ranging from approximately $400 to $35,000 USD. Each listing provides specific details about the award size, so reviewing individual entries will give you a clearer picture of what to expect."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "phd",
+    "generatedAt": "2026-04-02T10:36:30.584Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 58,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

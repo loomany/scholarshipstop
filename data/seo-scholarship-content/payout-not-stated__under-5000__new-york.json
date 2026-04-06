@@ -1,0 +1,49 @@
+{
+  "seo_title": "New York Scholarships Under $5,000 with Varying Requirements",
+  "seo_description": "Explore 30 New York scholarships under $5,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for education in New York can be challenging, but there are 30 scholarships available in this catalog that offer awards under $5,000. While specific payout amounts are not stated for each listing, the range typically spans from $500 to $5,000. Keep in mind that requirements and deadlines vary across these opportunities, so it’s important to review each scholarship carefully.",
+  "h1": "New York Scholarships: Payout Not Stated, Under $5,000",
+  "supporting": "As you explore this list, consider comparing the different categories such as education, STEM, and community-focused scholarships. Some listings may have lighter requirements, and while many do not require essays, a few might. Be sure to check the deadlines, as they can differ significantly, with some approaching in the next 45 days. This slice of scholarships is a valuable resource for New York students seeking financial assistance.",
+  "related_intro": "If you’re interested in exploring additional funding options, check out related pages that focus on scholarships with specific themes or larger award amounts.",
+  "how_to_use": [
+    "Review the list for scholarship categories that match your interests",
+    "Compare the deadlines to prioritize applications",
+    "Check award amounts to gauge potential funding",
+    "Read through the requirements for each scholarship",
+    "Visit the official pages for the most accurate and detailed information"
+  ],
+  "who_for": [
+    "New York students pursuing higher education",
+    "Applicants seeking scholarships under $5,000",
+    "Individuals interested in community or STEM scholarships",
+    "Students looking for lighter application requirements",
+    "Those needing funding for education-related expenses"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category includes 30 scholarships with a variety of focuses, such as education, STEM, community service, medicine, and disability. Each scholarship may have different eligibility criteria and requirements, so it's important to review the details for each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, so be sure to check the specific requirements for each scholarship you are interested in."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 30 scholarships in this list have deadlines, but they differ from one another. Some deadlines are approaching within the next 45 days, so it's advisable to verify the dates for each scholarship promptly."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The scholarships in this category generally range from approximately $500 to $5,000. However, specific award amounts may vary, so it's best to check each listing for precise information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "payout-not-stated/under-5000/new-york",
+    "generatedAt": "2026-04-02T11:05:58.871Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 30,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

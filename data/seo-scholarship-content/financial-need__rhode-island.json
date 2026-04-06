@@ -1,0 +1,49 @@
+{
+  "seo_title": "Rhode Island Scholarships for Financial Need",
+  "seo_description": "Explore 8 scholarships in Rhode Island for students with financial need. Check deadlines and award amounts up to $17,000.",
+  "intro": "Finding financial support can be crucial for students in Rhode Island, especially those facing economic challenges. This selection features 8 scholarships specifically aimed at individuals with financial need. Award sizes vary significantly, with opportunities available across diverse fields such as education, medicine, and the arts. With deadlines approaching for all listings, it's essential to act promptly to secure funding for your educational journey.",
+  "h1": "Scholarships for Financial Need in Rhode Island",
+  "supporting": "As you explore these scholarships, pay attention to the specific requirements and award amounts associated with each listing. Many of these opportunities do not require essays, making them more accessible. Compare deadlines carefully, as they can differ significantly, and ensure you verify all details on the official sponsor sites to maximize your chances of success.",
+  "related_intro": "If you're interested in more tailored options, check out related pages that focus on specific fields or types of scholarships available in Rhode Island.",
+  "how_to_use": [
+    "Review each scholarship listing carefully",
+    "Compare award amounts and deadlines",
+    "Check for essay requirements or other criteria",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Students with financial need",
+    "Rhode Island residents pursuing higher education",
+    "Individuals interested in community service scholarships",
+    "Students in medical or nursing programs",
+    "First-generation college students"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Rhode Island?",
+      "answer": "There are currently 8 scholarships listed that cater to financial need in Rhode Island. These opportunities span various categories, including medicine, education, arts, community, and STEM."
+    },
+    {
+      "question": "How can I find specific details about each scholarship?",
+      "answer": "Each scholarship listing includes important details such as award amounts and deadlines. It's advisable to check each listing individually, as deadlines vary and some may be approaching soon."
+    },
+    {
+      "question": "Are essays required for these scholarships?",
+      "answer": "Most of the scholarships in this category do not require essays, but it's important to verify the specific requirements for each listing, as they can differ."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships listed can vary significantly, with amounts ranging from around $500 to $17,000. Review each scholarship for its specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/rhode-island",
+    "generatedAt": "2026-04-02T11:14:44.519Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 8,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

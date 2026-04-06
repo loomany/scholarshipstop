@@ -1,0 +1,47 @@
+{
+  "seo_title": "Michigan Engineering Scholarships for Students",
+  "seo_description": "Explore 4 Michigan engineering scholarships with awards up to $5,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for engineering studies in Michigan can be crucial for many students. This filter showcases 4 scholarships specifically tailored for aspiring engineers in the state. Award sizes vary, with some listings indicating amounts around $1,500 to $5,000. Keep in mind that deadlines and requirements differ across these opportunities, so it's important to review each listing closely.",
+  "h1": "Find Engineering Scholarships in Michigan",
+  "supporting": "As you explore these scholarships, pay attention to the specific award amounts, deadlines, and eligibility criteria. Many of these listings may not require essays, making them more accessible. Comparing the details will help you identify which scholarships align best with your academic goals and financial needs. Always verify the information on the official sponsor pages for the most accurate updates.",
+  "related_intro": "If you're interested in more opportunities, check out related pages for additional scholarships in engineering or other fields available in Michigan.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Review award amounts listed in each row",
+    "Check eligibility requirements carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that fit your profile"
+  ],
+  "who_for": [
+    "Engineering students in Michigan",
+    "Undergraduate students seeking financial aid",
+    "Students with a focus on STEM disciplines"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Michigan?",
+      "answer": "There are currently 4 scholarships listed specifically for engineering students in Michigan. These scholarships cover a range of categories including STEM, arts, and disability, providing various funding opportunities tailored to different needs."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require an essay, although it's important to check each individual listing for specific requirements. While many entries indicate a lighter touch in terms of application materials, verifying details for each scholarship is recommended."
+    },
+    {
+      "question": "What is the typical award size for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category generally range from approximately $1,500 to $5,000. However, since each scholarship may vary, it's best to review the specific amounts listed for each opportunity."
+    },
+    {
+      "question": "When should I check for scholarship deadlines?",
+      "answer": "All scholarships listed have deadlines, with at least one approaching within the next 45 days. It's advisable to check the deadlines promptly to ensure you don’t miss any application opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/michigan",
+    "generatedAt": "2026-04-02T10:54:49.707Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

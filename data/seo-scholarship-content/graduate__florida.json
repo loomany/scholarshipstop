@@ -1,0 +1,49 @@
+{
+  "seo_title": "Florida Graduate Scholarships: 37 Opportunities Available",
+  "seo_description": "Explore 37 graduate scholarships in Florida with awards from $500 to $16,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for graduate studies in Florida can be a crucial step in your academic journey. With 37 scholarships available, this selection offers a range of award sizes, typically between $500 and $16,000. Each listing has varying deadlines, so it's important to check the specific dates for each opportunity. Many of these scholarships also feature lighter application requirements, with several not requiring essays, making them more accessible for busy students.",
+  "h1": "Explore 37 Graduate Scholarships in Florida",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and categories that align with your field of study, whether it's education, STEM, or community service. Pay close attention to the unique requirements and deadlines for each listing, as they can differ significantly. This can help you prioritize which scholarships to apply for based on your eligibility and timeline.",
+  "related_intro": "If you're interested in scholarships specific to other states or educational levels, check out our related pages for more tailored opportunities.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts to find suitable options",
+    "Read the requirement lines carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Graduate students in Florida",
+    "Students pursuing STEM degrees",
+    "Applicants interested in community service scholarships",
+    "Those looking for lighter application requirements",
+    "Individuals seeking substantial financial awards"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Florida?",
+      "answer": "The scholarship listings for graduate students in Florida include a variety of categories such as Education, STEM, Community, Medicine, and Arts. With 37 scholarships currently available, you can find options that align with your specific field of study or interests."
+    },
+    {
+      "question": "How do I find deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 37 listings include specific deadline information. It's important to check these dates promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially less time-consuming. However, it's advisable to review each listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available range from approximately $500 to $16,000. Since each scholarship has its own funding level, be sure to check the details for the specific amounts offered."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/florida",
+    "generatedAt": "2026-04-02T10:36:18.984Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 37,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "seo_title": "Maine Scholarships for High School Seniors",
+  "seo_description": "Explore 12 scholarships for Maine high school seniors with awards up to $17,000. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support as a high school senior in Maine can be crucial for your educational journey. This catalog features 12 scholarships specifically for students in your situation, with award sizes varying significantly. With a mix of community, education, and STEM-focused opportunities, you have a range of options to explore that can help ease the financial burden of college expenses.",
+  "h1": "Scholarships for High School Seniors in Maine",
+  "supporting": "As you review the listings, pay attention to the varying award amounts and requirements, which may include essays or other criteria. Some scholarships have deadlines approaching soon, so it's wise to check the specific dates for each opportunity. Make sure to visit the official pages of the sponsors for the most accurate and detailed information.",
+  "related_intro": "If you're interested in more options, consider exploring scholarships tailored to specific fields or community-focused programs that might align with your interests.",
+  "how_to_use": [
+    "Sort scholarships by award size",
+    "Read the requirement lines carefully",
+    "Open official pages for details",
+    "Shortlist scholarships that interest you",
+    "Verify deadlines and eligibility criteria"
+  ],
+  "who_for": [
+    "High school seniors in Maine",
+    "Students pursuing STEM fields",
+    "Applicants seeking community support",
+    "Individuals interested in education funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Maine?",
+      "answer": "There are 12 scholarships listed for high school seniors in Maine, categorized into community, education, miscellaneous, and STEM. Each scholarship may have different eligibility criteria and focus areas, so it's worth exploring each one to find the best fit."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "The scholarship listings show a mix of requirements, with some scholarships requiring essays while others do not. It's important to review the details of each scholarship individually to understand what is needed for your application."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships available to high school seniors in Maine vary, with amounts ranging approximately from $1,000 to $17,000. Be sure to check the specific award details for each scholarship to see what is offered."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 12 scholarships listed have deadlines, but they vary by program. Some deadlines are coming up within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly to ensure you don't miss out."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/maine",
+    "generatedAt": "2026-04-02T10:59:16.052Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

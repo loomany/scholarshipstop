@@ -1,0 +1,49 @@
+{
+  "seo_title": "Wyoming Scholarships: Explore 22 Opportunities",
+  "seo_description": "Discover 22 scholarships in Wyoming with awards ranging from $300 to $25,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for education in Wyoming is crucial, and there are currently 22 scholarships available that cater to various fields and needs. Award amounts vary significantly, with opportunities ranging from approximately $300 to $25,000. Each scholarship has its own unique requirements and deadlines, so it's essential to review the details carefully to identify the best fits for your situation.",
+  "h1": "Explore 22 Scholarships Available in Wyoming",
+  "supporting": "This collection of scholarships encompasses a diverse array of categories, including community, education, disability, STEM, and the arts. When exploring the listings, consider comparing the award amounts and examining the requirements, particularly regarding essay submissions, which vary among the scholarships. With deadlines approaching for many of these opportunities, prompt action is advisable to ensure you don’t miss out.",
+  "related_intro": "For further opportunities, check out scholarships focused on specific fields or those that cater to unique circumstances. Exploring these related pages can expand your options.",
+  "how_to_use": [
+    "Compare deadlines listed for each scholarship",
+    "Scan award amounts to find suitable options",
+    "Read through requirement lines carefully",
+    "Open official scholarship pages for complete details",
+    "Shortlist scholarships that align with your profile"
+  ],
+  "who_for": [
+    "Students in Wyoming seeking financial aid",
+    "Applicants interested in arts and education funding",
+    "Individuals with disabilities looking for support",
+    "STEM students searching for scholarships",
+    "Community-focused applicants needing assistance"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Wyoming?",
+      "answer": "The Wyoming scholarship listings include a variety of categories such as community, education, disability, STEM, and arts. With 22 options currently available, you can find scholarships tailored to different interests and needs."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for Wyoming scholarships vary widely, with amounts ranging from approximately $300 to $25,000. It's important to check individual listings for specific award details."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements differ among the scholarships, with some requiring essays and others not. Out of the current listings, about 19 have lighter requirements, so be sure to review each scholarship's details for specific criteria."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 22 scholarships have deadlines, but they vary from one listing to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "wyoming",
+    "generatedAt": "2026-04-02T10:53:40.613Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 22,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

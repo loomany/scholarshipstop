@@ -1,0 +1,47 @@
+{
+  "seo_title": "Mississippi Scholarships for Financial Need",
+  "seo_description": "Explore 10 scholarships for financial need in Mississippi. Award amounts range from $1,500 to $5,000. Check deadlines and requirements.",
+  "intro": "Finding financial support in Mississippi is essential for many students, and this collection of 10 scholarships can help bridge that gap. Award sizes vary, with amounts ranging from approximately $1,500 to $5,000. Each scholarship has its own set of requirements and deadlines, so it's important to review them carefully to identify the best matches for your situation. Some opportunities may require essays, while others have lighter requirements, making this a diverse selection for those in need.",
+  "h1": "Scholarships for Financial Need in Mississippi",
+  "supporting": "As you explore these scholarships, take note of the varying deadlines and award amounts. Each listing provides unique criteria, so compare the details closely. This slice includes a mix of categories, including STEM and education, which can help you focus your search based on your field of interest. Be sure to check the official pages for the most accurate information and updates.",
+  "related_intro": "If you're interested in more options, consider looking into scholarships based on other criteria, such as specific fields of study or additional financial need categories.",
+  "how_to_use": [
+    "Compare deadlines to prioritize your applications",
+    "Scan award amounts to identify your potential funding",
+    "Read through requirement lines to understand what each scholarship entails",
+    "Open official pages for detailed information and updates",
+    "Shortlist scholarships that align with your profile and needs"
+  ],
+  "who_for": [
+    "Students in Mississippi with demonstrated financial need",
+    "Individuals pursuing degrees in STEM or education fields",
+    "Applicants looking for scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in Mississippi with financial need?",
+      "answer": "In Mississippi, there are 10 scholarships specifically for students demonstrating financial need. These include opportunities in various categories such as STEM, education, and community-focused initiatives."
+    },
+    {
+      "question": "How do I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 10 listings in this category include specific dates. It's advisable to check each listing promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, so it's important to review each scholarship's details to understand what is needed for your application."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The award sizes for scholarships in this category generally range from approximately $1,500 to $5,000. However, specific amounts can vary by scholarship, so be sure to check the details for each opportunity."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/mississippi",
+    "generatedAt": "2026-04-02T11:12:51.135Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 10,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

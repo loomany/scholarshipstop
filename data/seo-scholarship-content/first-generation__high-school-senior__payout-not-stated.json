@@ -1,0 +1,49 @@
+{
+  "seo_title": "First Generation Scholarships for High School Seniors",
+  "seo_description": "Explore 15 scholarships for first-generation high school seniors with varying awards. Check deadlines and requirements for each listing.",
+  "intro": "Navigating the path to higher education can be particularly challenging for first-generation high school seniors. With 15 scholarships available in this category, you may find opportunities that can help ease the financial burden of college. Award sizes vary, with amounts generally ranging from $1,000 to $10,000. Be mindful that deadlines for these scholarships differ, so it's important to check each listing promptly to ensure you don’t miss out.",
+  "h1": "15 First Generation Scholarships for High School Seniors",
+  "supporting": "This list includes a mix of scholarships that often have lighter requirements, making them accessible for first-generation students. Many of the listings do not require essays, which can save you time and effort. As you review the options, consider comparing the award amounts and deadlines to find the best fit for your needs. Each scholarship may have unique criteria, so take a moment to read through the details carefully.",
+  "related_intro": "If you're interested in exploring more scholarships tailored for first-generation students or specific fields of study, check out our related pages for additional resources.",
+  "how_to_use": [
+    "Compare deadlines across different listings",
+    "Scan award amounts to prioritize your applications",
+    "Read the requirement lines for eligibility criteria",
+    "Open official scholarship pages for more information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "First-Generation High School Seniors",
+    "Students Pursuing STEM Fields",
+    "Applicants Seeking Community Support",
+    "Individuals Interested in Education Scholarships",
+    "High School Seniors with No Essay Requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for first-generation high school seniors?",
+      "answer": "This filter currently lists 15 scholarships specifically for first-generation high school seniors. The categories include education, STEM, community, and miscellaneous, providing a range of options to explore based on your interests."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 15 scholarships in this listing have deadlines, but they vary by program. It's important to check each individual listing for specific dates, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this category do not require an essay, but it's advisable to review each listing for specific application requirements. Many programs may have lighter application processes, making them more accessible."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The scholarships listed here generally offer a range of award amounts, with some examples showing values between $1,000 and $10,000. However, since payout details are not uniformly stated, be sure to check each scholarship for its specific award size."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "first-generation/high-school-senior/payout-not-stated",
+    "generatedAt": "2026-04-02T10:58:26.590Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 15,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

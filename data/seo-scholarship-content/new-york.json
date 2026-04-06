@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find 44 Scholarships in New York",
+  "seo_description": "Explore 44 New York scholarships with awards up to $20,000. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for education in New York can be a daunting task, but there are 44 scholarships available that cater to a variety of needs and backgrounds. Award sizes for these scholarships range from approximately $500 to $20,000, providing options for students at different levels of study. With deadlines spread across various dates, it’s essential to act promptly and explore the specific requirements for each opportunity, as they can differ significantly.",
+  "h1": "Explore New York Scholarships with Diverse Opportunities",
+  "supporting": "This selection of scholarships covers a broad spectrum of categories, including education, STEM, arts, and more. As you review the listings, pay attention to the award amounts and the nature of the requirements—while many may not require essays, some do. Comparing deadlines and eligibility criteria will help you identify which scholarships align best with your profile and timeline.",
+  "related_intro": "For more tailored options, consider checking out scholarships specific to certain fields or requirements, such as those for STEM or community service.",
+  "how_to_use": [
+    "Check individual deadlines for each scholarship",
+    "Compare award amounts to find the best fit",
+    "Review requirement details for essay and application needs",
+    "Open official scholarship pages for the most accurate information",
+    "Shortlist scholarships that match your qualifications and goals"
+  ],
+  "who_for": [
+    "Students pursuing education in New York",
+    "Applicants seeking STEM-related funding",
+    "Individuals with disabilities looking for support",
+    "Community-focused scholars in New York",
+    "Artists seeking financial assistance for education"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students in New York?",
+      "answer": "The scholarship listings for New York cover a variety of categories, including Education, STEM, Arts, Community, Disability, and Miscellaneous. With 44 options currently available, students can find opportunities that align with their specific interests and needs."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, the majority do not, making it easier for students to apply. It's important to check the details of each scholarship to understand what is needed."
+    },
+    {
+      "question": "How much funding can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in New York range from approximately $500 to $20,000. Since each scholarship has its own funding amount, be sure to review the specific details for each listing to find the right fit for your financial needs."
+    },
+    {
+      "question": "When are the application deadlines for these scholarships?",
+      "answer": "All 44 scholarships listed have varying deadlines, with some approaching in the next 45 days. Be sure to check the individual deadlines for each scholarship to ensure timely submissions."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "new-york",
+    "generatedAt": "2026-04-02T10:33:32.747Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 44,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

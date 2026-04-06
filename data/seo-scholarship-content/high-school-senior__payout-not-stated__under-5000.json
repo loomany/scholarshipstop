@@ -1,0 +1,49 @@
+{
+  "seo_title": "Under $5,000 Scholarships for High School Seniors",
+  "seo_description": "Explore 781 scholarships under $5,000 for high school seniors. Check varied deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support as a high school senior can be challenging, especially when award amounts are not clearly stated. Here, you’ll discover 781 scholarships under $5,000, offering a range of opportunities across various categories like education, community, STEM, and arts. While the specific payout for each scholarship varies, many provide substantial support for your educational journey. Be mindful that deadlines differ, so it's essential to check each listing for timely applications.",
+  "h1": "High School Seniors: Scholarships Under $5,000",
+  "supporting": "This collection of scholarships is particularly valuable for students seeking options that may have lighter requirements or flexible criteria. As you review the listings, consider comparing the categories that align with your interests and strengths. Pay attention to the deadlines and the specific requirements for each scholarship, as these can significantly impact your application strategy. With a mix of essay and no-essay options, you can find opportunities that fit your comfort level.",
+  "related_intro": "If you're interested in exploring more targeted funding options, check out related pages that focus on specific categories or scholarship types.",
+  "how_to_use": [
+    "Compare deadlines to prioritize your applications",
+    "Scan award text for potential funding amounts",
+    "Read requirement lines to understand application expectations",
+    "Open official pages for detailed scholarship information",
+    "Shortlist scholarships that align with your profile and needs"
+  ],
+  "who_for": [
+    "High school seniors seeking financial aid",
+    "Students interested in community or STEM scholarships",
+    "Applicants looking for awards under $5,000",
+    "Individuals open to varying application requirements",
+    "Those who prefer opportunities with diverse funding sources"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors with payouts not stated?",
+      "answer": "There are 781 scholarships listed for high school seniors that fall under the 'payout not stated' category, covering a variety of topics including education, community, STEM, medicine, and the arts. This diverse range allows students to find opportunities that align with their interests and career goals."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 781 scholarships in this category have deadlines, but they vary from one listing to another. It's important to check each scholarship's details promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements for essays vary among the scholarships listed. While approximately 768 of the 781 scholarships do not require essays, some may have this requirement, so it's advisable to review the specific details for each scholarship you're interested in."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The scholarships in this category generally range from $100 to $5,000. However, since the payout amounts are not explicitly stated for every scholarship, it's best to check individual listings for specific award information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/payout-not-stated/under-5000",
+    "generatedAt": "2026-04-02T10:42:10.139Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 781,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

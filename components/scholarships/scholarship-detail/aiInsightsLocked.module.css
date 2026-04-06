@@ -1,0 +1,147 @@
+/* Quick decision / AI insights — locked blur + glass overlay (product spec) */
+
+.card {
+  border-radius: 20px;
+  background: #fff;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: #18181b;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f3f4f6;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #27272a;
+}
+
+.locked {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.content {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.contentLocked {
+  filter: blur(6px);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.9)
+  );
+}
+
+.lockBox {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 280px;
+  width: 100%;
+  animation: aiInsightsFadeUp 0.4s ease;
+}
+
+@keyframes aiInsightsFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lockIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  width: fit-content;
+}
+
+/* Outline padlock — vibrant orange, matches reference (#FF6600) */
+.lockSvg {
+  width: 36px;
+  height: 36px;
+  color: #ff6600;
+  flex-shrink: 0;
+}
+
+.lockBox p {
+  font-size: 14px;
+  margin: 0 0 12px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.unlockBtn {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.unlockBtn:hover {
+  opacity: 0.85;
+}
+
+.unlockBtn:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}

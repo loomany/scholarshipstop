@@ -1,0 +1,49 @@
+{
+  "seo_title": "Financial Need Scholarships in the USA",
+  "seo_description": "Explore 1,274 scholarships for financial need. Award sizes vary, and deadlines differ—check listings for details.",
+  "intro": "Finding financial support for your education can be challenging, but there are 1,274 scholarships available specifically for students demonstrating financial need. These opportunities cover a wide range of categories, including education, STEM, arts, and community initiatives, with award sizes varying significantly, from around $150 to $60,000. With deadlines that differ across listings, it's important to check each scholarship's requirements and dates promptly to maximize your chances of securing funding.",
+  "h1": "Explore 1,274 Financial Need Scholarships",
+  "supporting": "When exploring this list, consider comparing the award amounts and the specific eligibility criteria for each scholarship. Some may require essays, while many others have lighter requirements, making it easier to apply. This diverse selection allows you to find scholarships that align with your field of study or personal interests, so take the time to review the details thoroughly.",
+  "related_intro": "If you're interested in scholarships tailored to specific fields or requirements, check out related pages that focus on categories like STEM or arts funding.",
+  "how_to_use": [
+    "Compare deadlines listed for each scholarship",
+    "Scan award amounts to identify suitable options",
+    "Read through requirement lines for eligibility criteria",
+    "Open official pages for comprehensive details",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Students demonstrating financial need",
+    "Applicants interested in STEM fields",
+    "Art students seeking financial support",
+    "Community-focused scholarship seekers",
+    "HBCU students looking for educational funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for those with financial need?",
+      "answer": "This filter includes a diverse range of scholarships, totaling 1,274 listings across categories such as Education, STEM, Arts, Community, and Medicine. Each scholarship may have different eligibility criteria and focus areas, so it's beneficial to explore the details of each listing."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships in this category. While the majority do not require essays, approximately 94 listings do include an essay component. Be sure to check the specific requirements for each scholarship you are interested in."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 1,274 scholarships listed have deadlines, but they differ widely. Some deadlines may be approaching within the next 45 days, so it's advisable to review the dates promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships vary significantly, with amounts ranging from approximately $150 to $60,000 USD. Each listing will provide specific details about the award amount, so be sure to check the individual entries for accurate information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need",
+    "generatedAt": "2026-04-02T10:35:13.019Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 1274,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

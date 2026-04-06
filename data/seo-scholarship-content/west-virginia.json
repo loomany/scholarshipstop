@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 14 Scholarships in West Virginia",
+  "seo_description": "Find 14 scholarships in West Virginia with awards from $500 to $9,000. Check deadlines and requirements for each listing.",
+  "intro": "Finding financial support for your education in West Virginia can be a crucial step in achieving your academic goals. With 14 scholarships currently available, ranging from $500 to $9,000, there are diverse opportunities tailored to various fields such as education, medicine, and community service. Many of these listings have varying requirements and deadlines, so it's important to review each one carefully to identify which best fits your situation.",
+  "h1": "Scholarships Available in West Virginia",
+  "supporting": "As you explore this list, consider comparing the award amounts and the specific eligibility criteria for each scholarship. Many opportunities may not require essays, and some could have lighter application processes. Given that all listings have deadlines, be sure to check those dates promptly to ensure you don’t miss out on potential funding.",
+  "related_intro": "For more tailored options, consider looking at scholarships specific to other states or categories that align with your interests and background.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize applications",
+    "Scan award amounts to gauge potential financial support",
+    "Read the eligibility requirements for each listing carefully",
+    "Open the official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your academic and career goals"
+  ],
+  "who_for": [
+    "Students pursuing education in West Virginia",
+    "Individuals interested in community service scholarships",
+    "Applicants seeking funding for medical studies",
+    "Trade school students in West Virginia",
+    "High school seniors looking for local scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in West Virginia?",
+      "answer": "The West Virginia scholarship listings include a variety of categories such as education, medicine, STEM, community service, and law. With 14 scholarships currently available, you can find options that align with your field of study or interests."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most scholarships in this selection do not require an essay, but it's important to verify each listing for specific requirements. Many programs are designed to be accessible, often featuring lighter application processes."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 14 scholarships listed have deadlines, but they vary by program. It's advisable to check the specific deadline for each scholarship promptly, as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the typical award amounts for scholarships in West Virginia?",
+      "answer": "Award sizes for scholarships in this category range from approximately $500 to $9,000. Each listing provides specific amounts, so be sure to review them for detailed information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "west-virginia",
+    "generatedAt": "2026-04-02T10:59:56.553Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 14,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

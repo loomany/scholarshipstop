@@ -1,0 +1,49 @@
+{
+  "seo_title": "Washington Scholarships for High School Seniors",
+  "seo_description": "Explore 48 scholarships for high school seniors in Washington, with awards from $250 to $20,000. Check deadlines and requirements.",
+  "intro": "Finding financial support as a high school senior in Washington can be pivotal for your educational journey. With 48 scholarships available, you have a range of options to explore, from community-focused awards to those supporting STEM and medical fields. Award sizes vary significantly, with amounts ranging from approximately $250 to $20,000. Many of these opportunities do not require essays, making them more accessible. Be mindful that deadlines differ, so it's important to check each listing for specific dates.",
+  "h1": "Scholarships for High School Seniors in Washington",
+  "supporting": "This collection of scholarships offers a valuable opportunity to compare various funding options tailored for Washington high school seniors. Consider factors such as award amounts, eligibility requirements, and deadlines when reviewing the listings. With many scholarships requiring minimal application effort, you might find several that fit your profile without the need for extensive essays. Keep an eye on the deadlines, especially those approaching within the next few weeks.",
+  "related_intro": "If you're interested in exploring more scholarship options, check out related pages that focus on different educational levels or specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable funding",
+    "Read requirement lines for eligibility criteria",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors in Washington",
+    "Students interested in STEM fields",
+    "Applicants looking for community-focused scholarships",
+    "Individuals seeking no-essay scholarship options",
+    "Students pursuing medical or nursing programs"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Washington?",
+      "answer": "There are 48 scholarships listed for high school seniors in Washington, covering a variety of categories such as education, community, STEM, disability, and medicine. This diverse range allows students to find opportunities that align with their interests and backgrounds."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 48 listings include deadline information. It's important to check these dates promptly, as some deadlines are approaching within the next 45 days."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially easier for many students. However, it's advisable to verify the specific requirements for each scholarship, as they can vary."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships available to high school seniors in Washington vary significantly, with amounts ranging from approximately $250 to $20,000. Students should review individual listings for specific award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/washington",
+    "generatedAt": "2026-04-02T10:40:08.169Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 48,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

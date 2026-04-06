@@ -1,0 +1,47 @@
+{
+  "seo_title": "New Jersey Scholarships for Financial Need",
+  "seo_description": "Explore 24 scholarships in New Jersey for students with financial need. Check varying deadlines and award amounts up to $10,000.",
+  "intro": "Finding financial support for education in New Jersey can be challenging, but there are 24 scholarships available specifically for students demonstrating financial need. These awards range from approximately $500 to $10,000, providing a variety of options to help cover tuition and other educational expenses. With deadlines varying across listings, it's essential to review each opportunity carefully and act promptly, especially since some deadlines are approaching within the next 45 days.",
+  "h1": "Financial Need Scholarships in New Jersey",
+  "supporting": "This collection of scholarships includes opportunities across diverse categories such as education, community, and medicine, among others. Some listings may require essays, while many have lighter application requirements, making it easier to apply. As you explore these options, consider comparing award amounts and eligibility criteria to find the best fit for your situation.",
+  "related_intro": "For more tailored opportunities, check out related pages that focus on scholarships by category or other eligibility criteria.",
+  "how_to_use": [
+    "Review each listing for specific award amounts and categories",
+    "Check individual deadlines and prioritize those approaching soon",
+    "Compare the requirements, noting which scholarships require essays",
+    "Shortlist your top choices and verify details on the sponsor's official site",
+    "Gather necessary documents before starting your applications"
+  ],
+  "who_for": [
+    "New Jersey residents demonstrating financial need",
+    "Students pursuing education in community service or healthcare fields",
+    "Applicants interested in scholarships with varying requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in New Jersey?",
+      "answer": "There are 24 scholarships listed for students with financial need in New Jersey, covering a range of categories including education, community, and medicine. Award sizes vary, with amounts typically ranging from approximately $500 to $10,000."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 24 scholarships have specific deadlines, which vary by program. It's important to check each listing for the exact dates, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Do these scholarships require essays or other application materials?",
+      "answer": "Requirements vary among the scholarships; while many do not require essays, there are some that do. Review each scholarship listing carefully to understand the specific application requirements."
+    },
+    {
+      "question": "How can I verify the details of each scholarship?",
+      "answer": "You can click on each scholarship listing to access detailed information, including eligibility criteria, award amounts, and application requirements. This ensures you have the most accurate and up-to-date information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/new-jersey",
+    "generatedAt": "2026-04-02T11:02:02.637Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 24,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

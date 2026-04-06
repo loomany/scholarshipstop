@@ -1,0 +1,49 @@
+{
+  "seo_title": "Nationwide Scholarships for Financial Need Students",
+  "seo_description": "Explore 232 scholarships for students with financial need. Check diverse award amounts and varying deadlines.",
+  "intro": "Finding scholarships that prioritize financial need can significantly ease the burden of educational expenses. This collection features 232 scholarships available nationwide, aimed at supporting students who require financial assistance. With award sizes varying widely, it's essential to explore each opportunity to discover the best fit for your needs. Keep in mind that deadlines and requirements differ across listings, so thorough review is crucial.",
+  "h1": "Scholarships for Students with Financial Need Nationwide",
+  "supporting": "As you navigate this list, pay attention to the varying award amounts and the specific eligibility criteria outlined for each scholarship. Some may require essays while others do not, providing options for different preferences. Take the time to compare deadlines and ensure you verify details on the official sponsor pages to maximize your chances of securing funding.",
+  "related_intro": "For additional options, consider exploring scholarships in specific categories such as STEM, education, or community service. Each category may offer unique opportunities tailored to different interests and backgrounds.",
+  "how_to_use": [
+    "Sort listings by award amount or deadline",
+    "Read the requirement lines carefully",
+    "Open official pages for detailed information",
+    "Shortlist scholarships that match your profile",
+    "Verify all details on sponsor websites"
+  ],
+  "who_for": [
+    "Students with demonstrated financial need",
+    "Undergraduates pursuing various fields",
+    "High school graduates entering college",
+    "Community college students seeking transfer",
+    "Non-traditional students returning to education"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in the financial need category?",
+      "answer": "There are 232 scholarships listed under the financial need category, covering a range of fields such as Education, STEM, Community, Law, and Humanities. This variety allows students to find opportunities that align with their specific interests and career goals."
+    },
+    {
+      "question": "How do I find the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 232 listings include deadline information. It's advisable to check the specific dates for each scholarship promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for the scholarships?",
+      "answer": "Requirements vary among the scholarships; approximately 41 of the listings require an essay, while the majority do not. Be sure to review the details for each scholarship to understand the specific application requirements."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts ranging from around $500 to $25,000. As you explore the listings, you can find specific details for each scholarship to determine which ones might be the best fit for your financial needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/nationwide",
+    "generatedAt": "2026-04-02T10:38:13.285Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 232,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

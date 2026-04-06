@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Scholarships in Illinois | 231 Opportunities",
+  "seo_description": "Explore 231 scholarships in Illinois with varying award sizes and deadlines. Check requirements and apply promptly.",
+  "intro": "Finding financial support for education in Illinois is crucial, and with 231 scholarships available, there are plenty of options to explore. Award amounts vary significantly, ranging from around $200 to over $18,000, catering to a wide array of fields including education, STEM, and community service. Be mindful that deadlines are diverse, with some approaching soon, making it important to check each listing promptly.",
+  "h1": "Illinois Scholarships: 231 Opportunities Await",
+  "supporting": "This collection of scholarships offers a variety of requirements, with some programs requiring essays while many do not. As you review the listings, compare the award sizes and specific eligibility criteria to identify the best fit for your needs. This slice is particularly valuable for those seeking targeted funding opportunities in Illinois, whether for undergraduate or graduate studies.",
+  "related_intro": "For more tailored options, consider checking out scholarships specific to various fields or those with lighter requirements.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find suitable funding levels",
+    "Read eligibility requirements carefully for each scholarship",
+    "Open official pages for the most current details",
+    "Shortlist potential scholarships for easy tracking"
+  ],
+  "who_for": [
+    "Students pursuing education in Illinois",
+    "STEM majors looking for financial aid",
+    "Community service advocates seeking funding",
+    "Individuals interested in medical fields",
+    "Arts students needing scholarship support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Illinois?",
+      "answer": "The Illinois scholarship listings include a variety of categories such as Education, STEM, Medicine, Community, and Arts. With a total of 231 scholarships, you can find options that align with your academic interests and career goals."
+    },
+    {
+      "question": "How do I find specific scholarship deadlines?",
+      "answer": "Each scholarship in this list has its own deadline, so it's important to check the details for each one. Given that all 231 rows include deadline information, you should verify these dates promptly, especially since some may be approaching within the next 45 days."
+    },
+    {
+      "question": "Are there scholarships that require essays?",
+      "answer": "Requirements for essays vary among the scholarships listed. While most scholarships do not require essays, about six of them do, so be sure to review the specific requirements for each scholarship to understand what is needed."
+    },
+    {
+      "question": "What is the range of award amounts for scholarships in Illinois?",
+      "answer": "Award sizes for Illinois scholarships vary significantly, with amounts reported between approximately $200 and $18,574. Since 230 of the 231 listings include numeric award amounts, you can explore options that fit your financial needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "illinois",
+    "generatedAt": "2026-04-02T10:35:25.649Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 231,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

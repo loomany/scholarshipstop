@@ -1,0 +1,47 @@
+{
+  "seo_title": "California Scholarships for Women | Up to $10,000",
+  "seo_description": "Explore 23 scholarships for women in California. Award sizes vary, and deadlines differ—check listings for details.",
+  "intro": "Finding scholarships specifically for women in California can open doors to funding opportunities that support your educational goals. With 23 listings available, you'll discover a range of awards designed to empower women across various fields, including education, law, and community service. Award sizes vary significantly, with amounts generally ranging from $400 to $10,000, and deadlines differ among the listings, so it's wise to check them promptly.",
+  "h1": "23 Scholarships for Women in California",
+  "supporting": "This collection of scholarships offers a unique chance to compare options based on your interests and needs. Many listings do not require essays, making the application process potentially less daunting. Review the categories and amounts to identify which scholarships align with your goals, and ensure you take note of the specific requirements and deadlines for each opportunity.",
+  "related_intro": "For more tailored options, consider exploring scholarships focused on specific fields or broader categories that might also fit your profile.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find the best fit for your financial needs",
+    "Read requirement lines carefully to understand eligibility",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your academic and career goals"
+  ],
+  "who_for": [
+    "Women pursuing higher education in California",
+    "Students interested in law or community service",
+    "Women seeking scholarships without essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for women in California?",
+      "answer": "The listings include a variety of scholarships across different categories such as education, community, STEM, medicine, and law. With 23 scholarships currently available, you can find options that align with your academic and career goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially simpler. However, it's important to verify the specific requirements for each scholarship as they may vary."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 23 scholarships have listed deadlines, but they differ from one another. It's advisable to check the deadlines promptly, especially since some may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes vary significantly among the scholarships, with amounts ranging approximately from $400 to $10,000. Be sure to review each listing for the specific award amount associated with it."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "for-women/california",
+    "generatedAt": "2026-04-02T10:34:03.162Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 23,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

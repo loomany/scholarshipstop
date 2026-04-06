@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 18 Scholarships in the District of Columbia",
+  "seo_description": "Find 18 scholarships in DC with awards from $1,000 to $7,500. Check varying deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for your education in the District of Columbia is crucial, especially with 18 scholarships available that cater to various needs and backgrounds. These awards range from $1,000 to $7,500, with deadlines that vary widely, so it’s important to check each listing promptly. Some scholarships may have lighter requirements, while others could involve essays, making it essential to review the details carefully.",
+  "h1": "Scholarships Available in the District of Columbia",
+  "supporting": "This collection of scholarships includes opportunities across different categories, such as education, community service, STEM, and humanities. As you navigate the listings, pay attention to the specific award amounts and deadline details, which can help you prioritize your applications. Comparing requirements can also reveal which scholarships align best with your strengths and circumstances.",
+  "related_intro": "For more tailored options, consider exploring scholarships based on specific categories or requirements that match your profile.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to find suitable options",
+    "Read requirement lines for clarity on submissions",
+    "Open official pages for detailed eligibility criteria",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Students pursuing education in the District of Columbia",
+    "Community-oriented individuals seeking funding",
+    "STEM majors looking for financial assistance",
+    "Humanities students interested in scholarship opportunities",
+    "LGBTQ+ youth seeking leadership scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in the District of Columbia?",
+      "answer": "The District of Columbia offers a variety of scholarships across multiple categories, including education, community, STEM, humanities, and arts. Currently, there are 18 scholarships listed, each with unique focus areas and eligibility criteria."
+    },
+    {
+      "question": "How do the award amounts vary among the scholarships?",
+      "answer": "Award sizes for scholarships in this category range from approximately $1,000 to $7,500. Each scholarship has its own specific amount, so it's important to review the details of each listing to understand the financial support available."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements for essays vary among the scholarships listed. While some scholarships may not require an essay, others do, so it's advisable to check the specific details for each scholarship to know what is needed."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All scholarships in this list have deadlines, but they differ from one another. Some deadlines are approaching within the next 45 days, so it's recommended to verify the specific dates for each scholarship promptly to ensure timely applications."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "district-of-columbia",
+    "generatedAt": "2026-04-02T10:57:32.729Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 18,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

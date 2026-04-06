@@ -1,0 +1,49 @@
+{
+  "seo_title": "California Engineering Scholarships | Up to $16,000",
+  "seo_description": "Explore 18 engineering scholarships in California with awards ranging from $500 to $16,000. Check deadlines and requirements carefully.",
+  "intro": "Finding financial support for engineering studies in California can be crucial for many students. With 18 scholarships available in this category, award sizes vary significantly, offering opportunities for a range of applicants. Keep in mind that requirements and deadlines differ across listings, so it's important to review each option carefully to identify the best fit for your needs.",
+  "h1": "Find Engineering Scholarships in California",
+  "supporting": "As you explore these scholarships, pay attention to the specific award amounts and any essay requirements. Some programs may have lighter application processes, while others could require more detailed submissions. Check the deadlines closely, as they can vary, and always verify details on the official sponsor sites to ensure you have the most accurate information.",
+  "related_intro": "If you're interested in other funding options, consider checking out scholarships in related fields or locations. This could broaden your search and increase your chances of finding the right opportunity.",
+  "how_to_use": [
+    "Sort scholarships by award amount",
+    "Read the requirement lines carefully",
+    "Open the official pages for details",
+    "Shortlist scholarships that match your profile",
+    "Verify deadlines and eligibility criteria"
+  ],
+  "who_for": [
+    "California residents pursuing engineering",
+    "Students interested in STEM fields",
+    "Undergraduates seeking financial aid",
+    "Applicants looking for community-focused scholarships",
+    "Individuals with diverse backgrounds in engineering"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in California?",
+      "answer": "There are 18 scholarships listed for engineering students in California, covering a range of categories including STEM, medical, community, and education. Award sizes vary significantly, with amounts ranging from approximately $500 to $16,000."
+    },
+    {
+      "question": "How can I find out about deadlines for these scholarships?",
+      "answer": "All 18 scholarships have specific deadlines, which vary from one listing to another. It's advisable to check the individual listings promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Do these scholarships require essays or other application materials?",
+      "answer": "Requirements differ across the scholarships, with some requiring essays while others do not. Review each listing carefully to understand the specific application requirements and any additional materials needed."
+    },
+    {
+      "question": "Who can apply for these scholarships?",
+      "answer": "These scholarships are primarily aimed at students pursuing engineering degrees in California. Make sure to check the eligibility criteria for each scholarship to ensure you meet the necessary qualifications."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/california",
+    "generatedAt": "2026-04-02T10:38:27.426Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 18,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Nationwide High School Scholarships Available Now",
+  "seo_description": "Explore 7 nationwide scholarships for high school students with awards from $400 to $10,000. Check deadlines and requirements.",
+  "intro": "Finding financial support for high school students can be challenging, but there are 7 scholarships available nationwide that cater to various educational pursuits. Award sizes for these opportunities range from approximately $400 to $10,000, reflecting a diverse set of options. With varying deadlines, including some approaching within the next 45 days, it's essential to stay informed and act promptly to secure funding for your education.",
+  "h1": "High School Scholarships Across the USA",
+  "supporting": "This list features scholarships that may require essays or have lighter application processes, so it's worth reviewing each opportunity carefully. Compare the award amounts and deadlines to identify which scholarships align best with your academic goals and timelines. By focusing on the specific requirements listed, you can streamline your application process and enhance your chances of success.",
+  "related_intro": "If you're interested in exploring more options, consider checking out related scholarships that cater to specific fields or requirements.",
+  "how_to_use": [
+    "Review the list for scholarship details and eligibility",
+    "Compare deadlines to prioritize applications",
+    "Examine award amounts to gauge potential funding",
+    "Check specific requirements for each scholarship",
+    "Visit official pages for the most accurate information"
+  ],
+  "who_for": [
+    "High school students seeking financial aid",
+    "Students interested in STEM and education fields",
+    "Athletes looking for scholarship opportunities",
+    "Students with disabilities seeking support",
+    "Community-focused individuals pursuing scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This selection features a variety of scholarships categorized under education, STEM, community, and disability. With seven listings currently available, you can find opportunities that align with different interests and backgrounds."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, so it's important to check the specific details for each opportunity."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships range from approximately $400 to $10,000. Each scholarship has its own funding level, so reviewing the individual listings will provide the most accurate information."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All seven scholarships listed have deadlines, but they differ from one another. Some deadlines are coming up within the next 45 days, so it's advisable to verify the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school/nationwide",
+    "generatedAt": "2026-04-02T10:39:21.999Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

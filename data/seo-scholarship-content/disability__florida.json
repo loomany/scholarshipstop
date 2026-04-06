@@ -1,0 +1,49 @@
+{
+  "seo_title": "Florida Scholarships for Students with Disabilities",
+  "seo_description": "Explore 6 scholarships in Florida for students with disabilities, with awards ranging from $400 to $5,000. Check deadlines and requirements.",
+  "intro": "Finding financial support as a student with a disability in Florida can be challenging, but there are six scholarships available that cater specifically to your needs. Award sizes for these opportunities range from approximately $400 to $5,000, providing a variety of options to help alleviate educational costs. Be mindful that deadlines vary among these listings, so it’s important to check them promptly to ensure you don’t miss out.",
+  "h1": "Scholarships for Disabilities in Florida",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and eligibility requirements to find the best fit for your situation. Many of these listings do not require essays, making them more accessible for applicants. This filter provides a focused view of opportunities that can significantly support your educational journey, so take the time to review each option carefully.",
+  "related_intro": "If you’re interested in more scholarships related to disability or specific to other states, check out our related pages for additional opportunities.",
+  "how_to_use": [
+    "Compare the award amounts listed for each scholarship",
+    "Check the deadlines to ensure timely applications",
+    "Review eligibility requirements for each opportunity",
+    "Open the official pages for detailed application instructions",
+    "Shortlist the scholarships that best match your profile"
+  ],
+  "who_for": [
+    "Students with disabilities in Florida",
+    "Applicants looking for scholarships without essay requirements",
+    "Individuals pursuing education in law or safety fields",
+    "Students seeking financial aid for college expenses",
+    "Residents of Florida looking for local scholarship opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for individuals with disabilities in Florida?",
+      "answer": "There are currently six scholarships listed for individuals with disabilities in Florida. These range across various categories, including education and law, and offer a variety of award amounts."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, so it's important to check the specific details for each listing. Some deadlines are approaching within the next 45 days, so reviewing the dates promptly is advisable."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, though it's wise to verify each individual listing for specific requirements. Many scholarships in this category tend to have lighter application requirements."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category vary, with amounts ranging approximately from $400 to $5,000. Be sure to check each listing for the exact award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "disability/florida",
+    "generatedAt": "2026-04-02T10:47:50.892Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 6,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

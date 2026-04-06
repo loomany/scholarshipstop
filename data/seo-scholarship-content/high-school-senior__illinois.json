@@ -1,0 +1,49 @@
+{
+  "seo_title": "Illinois Scholarships for High School Seniors",
+  "seo_description": "Explore 122 scholarships for Illinois high school seniors. Award sizes vary; check deadlines and requirements for each opportunity.",
+  "intro": "High school seniors in Illinois have access to a diverse range of scholarships, with 122 options available in this catalog. Award sizes vary significantly, with amounts ranging from approximately $200 to $12,000. As deadlines differ across listings, it's important to check them regularly, especially since some opportunities may be approaching soon. This variety allows students to find financial support tailored to their academic and personal interests.",
+  "h1": "Scholarships for High School Seniors in Illinois",
+  "supporting": "When exploring this list, take note of the scholarship categories, which include education, community, STEM, and arts. Some scholarships may require essays, while others have lighter requirements, so it's worth reviewing each listing carefully. Consider comparing the award amounts and eligibility criteria to find the best fit for your situation.",
+  "related_intro": "For more tailored options, check out scholarships specifically for different fields or interests available in Illinois.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify the best opportunities",
+    "Read the requirements carefully to understand eligibility",
+    "Open official scholarship pages for detailed information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors in Illinois",
+    "Students interested in STEM fields",
+    "Applicants seeking community-focused scholarships",
+    "Individuals pursuing arts-related funding",
+    "Those looking for significant financial awards"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Illinois?",
+      "answer": "The current catalog includes 122 scholarships across various categories such as Education, Miscellaneous, STEM, Medicine, Community, and Arts. This diverse range allows students to find opportunities that align with their interests and academic goals."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, the majority do not, so it's important to review each listing for specific details regarding application requirements."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 122 scholarships have deadlines, but they differ from one another. It's advisable to check the individual listings promptly, as at least one scholarship has a deadline within the next 45 days."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships range from approximately $200 to $12,000. Each scholarship has its own specific amount, so be sure to check the details for each listing to understand the financial support available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/illinois",
+    "generatedAt": "2026-04-02T10:34:43.153Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 122,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

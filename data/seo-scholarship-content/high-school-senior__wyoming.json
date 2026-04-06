@@ -1,0 +1,49 @@
+{
+  "seo_title": "Wyoming Scholarships for High School Seniors",
+  "seo_description": "Explore 7 scholarships for Wyoming high school seniors, with awards from $300 to $25,000. Check individual deadlines and requirements.",
+  "intro": "For high school seniors in Wyoming, there are currently 7 scholarship opportunities available that cater to a range of interests and fields. Award sizes vary significantly, with amounts ranging from around $300 to $25,000. Many of these listings do not require essays, making them more accessible for students looking to secure funding for their education. Keep an eye on the deadlines, as they differ across the scholarships, with some approaching in the next few weeks.",
+  "h1": "Scholarships for High School Seniors in Wyoming",
+  "supporting": "This selection of scholarships includes options in areas such as arts, STEM, community service, and education, providing diverse avenues for financial support. When reviewing the listings, consider comparing the award amounts and specific requirements to find the best fit for your qualifications and interests. Be sure to check the official pages for the most accurate information regarding deadlines and eligibility criteria.",
+  "related_intro": "If you're interested in exploring more scholarships tailored to different education levels or locations, check out our related pages for additional opportunities.",
+  "how_to_use": [
+    "Compare deadlines to prioritize applications",
+    "Scan award amounts to identify funding potential",
+    "Read requirement lines for eligibility details",
+    "Open official pages for complete application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors in Wyoming",
+    "Students interested in arts and music scholarships",
+    "Applicants seeking STEM-related funding",
+    "Individuals looking for community service awards",
+    "Students with disabilities seeking financial support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Wyoming?",
+      "answer": "The current listings include a variety of scholarships across categories such as arts, education, STEM, community service, and disability. With a total of seven scholarships available, students can find opportunities that align with their interests and backgrounds."
+    },
+    {
+      "question": "How can I find out about deadlines for these scholarships?",
+      "answer": "Each scholarship listing has its own deadline, and it's important to check these dates promptly, as at least one deadline is within the next 45 days. Make sure to verify the specific deadline for each scholarship you are interested in."
+    },
+    {
+      "question": "Are essays required for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, but this can vary by program. It's advisable to review each scholarship's details to understand the application requirements fully."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships available range from approximately $300 to $25,000. However, the exact amount can differ by scholarship, so check each listing for specific details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/wyoming",
+    "generatedAt": "2026-04-02T11:04:36.828Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Minority Scholarships with Few Requirements",
+  "seo_description": "Explore 67 minority scholarships with minimal requirements. Check varied deadlines and award amounts up to $16,000.",
+  "intro": "Finding scholarships that cater to minority students with minimal application requirements can significantly ease the financial burden of education. This catalog features 67 scholarships designed for individuals who identify as part of minority groups and prefer a straightforward application process. Award sizes vary, with amounts ranging from approximately $500 to $16,000, and deadlines differ across listings, so it's advisable to check details promptly.",
+  "h1": "67 Minority Scholarships with Few Requirements",
+  "supporting": "This selection includes a mix of scholarships across various fields, including STEM, education, and medicine, among others. With a majority of listings requiring little to no essays, this filter is particularly useful for those looking for accessible funding options. Review the descriptions carefully to compare award amounts and eligibility criteria, ensuring you find the best fit for your needs.",
+  "related_intro": "For more tailored options, consider exploring scholarships that focus on specific fields or those with unique requirements.",
+  "how_to_use": [
+    "Check deadlines for each scholarship to ensure timely applications",
+    "Compare award amounts to prioritize higher funding opportunities",
+    "Review requirement details to understand what is needed for each application",
+    "Open official scholarship pages for the most accurate information",
+    "Shortlist your favorites for easy tracking and follow-up"
+  ],
+  "who_for": [
+    "Minority students seeking financial assistance",
+    "Applicants looking for scholarships with few requirements",
+    "Students interested in STEM, education, or medical fields",
+    "Individuals who prefer straightforward application processes",
+    "Those needing funding for undergraduate or graduate studies"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are included in this category?",
+      "answer": "This category features a diverse range of scholarships specifically for minority students with few application requirements. You can find opportunities in fields such as STEM, education, medicine, and community service."
+    },
+    {
+      "question": "How can I find specific deadlines for these scholarships?",
+      "answer": "Each scholarship listed has its own deadline, and it's important to check the details for each one. Currently, all 67 scholarships in this category have deadlines, with some approaching within the next 45 days, so be sure to verify the dates promptly."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships in this category. While many have few requirements, some may include essay submissions, so it's advisable to review each listing for specific application details."
+    },
+    {
+      "question": "What is the range of award amounts for these scholarships?",
+      "answer": "The award sizes for scholarships in this category vary significantly, with amounts ranging from approximately $500 to $16,000. Be sure to check individual listings for the specific award amounts associated with each scholarship."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority/few-requirements",
+    "generatedAt": "2026-04-02T11:12:24.920Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 67,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

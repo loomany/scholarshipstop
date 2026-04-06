@@ -1,0 +1,249 @@
+/**
+ * Unified site nav links: text + thin brand accent underline (::after scale-x).
+ * Variants: dark (header / drawer on black), light (footer), lightPanel (About dropdown),
+ * legal (Back to home on support pages).
+ */
+
+/* --- Dark: header inline, Sign In, Sign out, account --- */
+.dark {
+  @apply relative inline-flex max-w-full cursor-pointer items-center whitespace-nowrap rounded-md px-1 py-1 text-sm font-medium leading-6 text-zinc-200 transition-colors duration-200 ease-out xl:text-base;
+}
+
+.dark::after {
+  content: '';
+  position: absolute;
+  left: 0.25rem;
+  right: 0.25rem;
+  bottom: 0.125rem;
+  height: 2px;
+  border-radius: 9999px;
+  background-color: rgb(251 146 60);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease-out;
+}
+
+.dark:hover {
+  @apply text-zinc-100;
+}
+
+.dark:hover::after,
+.dark:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.dark:focus-visible {
+  @apply text-zinc-100 outline-none ring-0 ring-offset-0;
+}
+
+.darkActive {
+  @apply text-orange-300;
+}
+
+.darkActive::after {
+  transform: scaleX(1);
+}
+
+.darkAccount {
+  @apply max-w-[10rem] truncate sm:max-w-[14rem] md:max-w-[18rem];
+}
+
+.darkAsButton {
+  @apply appearance-none border-0 bg-transparent;
+}
+
+/* --- Dark drawer: primary rows (About, Scholarships) --- */
+.darkDrawer {
+  @apply relative block w-fit max-w-[calc(100%-0.5rem)] cursor-pointer rounded-lg px-3 py-3 text-left text-base font-medium text-zinc-200 transition-colors duration-200;
+}
+
+.darkDrawer::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.5rem;
+  height: 2px;
+  border-radius: 9999px;
+  background-color: rgb(251 146 60);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease-out;
+}
+
+.darkDrawer:hover {
+  @apply text-zinc-50;
+}
+
+.darkDrawer:hover::after,
+.darkDrawer:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.darkDrawer:focus-visible {
+  @apply text-zinc-50 outline-none ring-0 ring-offset-0;
+}
+
+.darkDrawerActive {
+  @apply text-orange-300;
+}
+
+.darkDrawerActive::after {
+  transform: scaleX(1);
+}
+
+/* --- Dark drawer: nested items under About --- */
+.darkDrawerSub {
+  @apply relative mb-0.5 block w-fit max-w-full cursor-pointer rounded-lg py-2 pl-1 pr-3 text-left text-sm font-medium text-zinc-300 transition-colors duration-200;
+}
+
+.darkDrawerSub::after {
+  content: '';
+  position: absolute;
+  left: 0.25rem;
+  right: 0.25rem;
+  bottom: 0.3rem;
+  height: 2px;
+  border-radius: 9999px;
+  background-color: rgb(251 146 60);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease-out;
+}
+
+.darkDrawerSub:hover {
+  @apply text-zinc-50;
+}
+
+.darkDrawerSub:hover::after,
+.darkDrawerSub:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.darkDrawerSub:focus-visible {
+  @apply text-zinc-50 outline-none ring-0 ring-offset-0;
+}
+
+.darkDrawerSubActive {
+  @apply text-orange-300;
+}
+
+.darkDrawerSubActive::after {
+  transform: scaleX(1);
+}
+
+/* --- Light: footer --- */
+.light {
+  @apply relative inline-flex cursor-pointer items-center whitespace-nowrap font-medium leading-none text-gray-700 transition-colors duration-200;
+}
+
+.light::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  border-radius: 9999px;
+  background-color: rgb(251 146 60);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease-out;
+}
+
+.light:hover {
+  @apply text-gray-900;
+}
+
+.light:hover::after,
+.light:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.light:focus-visible {
+  @apply text-gray-900 outline-none ring-0 ring-offset-0;
+}
+
+.lightActive {
+  @apply text-gray-900;
+}
+
+.lightActive::after {
+  transform: scaleX(1);
+}
+
+.lightXs {
+  @apply text-xs sm:text-sm;
+}
+
+/* --- Light panel: About dropdown on white --- */
+.lightPanel {
+  @apply relative flex w-full cursor-pointer rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-700 transition-colors duration-200;
+}
+
+.lightPanel::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.35rem;
+  height: 2px;
+  border-radius: 9999px;
+  background-color: rgb(251 146 60);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease-out;
+}
+
+.lightPanel:hover {
+  @apply text-gray-900;
+}
+
+.lightPanel:hover::after,
+.lightPanel:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.lightPanel:focus-visible {
+  @apply text-gray-900 outline-none ring-0 ring-offset-0;
+}
+
+.lightPanelActive {
+  @apply text-gray-900;
+}
+
+.lightPanelActive::after {
+  transform: scaleX(1);
+}
+
+/* --- Legal / support pages: Back to home --- */
+.legal {
+  @apply relative inline-flex items-center text-sm font-medium text-gray-600 transition-colors duration-200;
+}
+
+.legal::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  border-radius: 9999px;
+  background-color: rgb(251 146 60);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease-out;
+}
+
+.legal:hover {
+  @apply text-gray-900;
+}
+
+.legal:hover::after,
+.legal:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.legal:focus-visible {
+  @apply text-gray-900 outline-none ring-0 ring-offset-0;
+}

@@ -1,0 +1,48 @@
+{
+  "seo_title": "Graduate Scholarships in Georgia - 4 Opportunities",
+  "seo_description": "Explore 4 graduate scholarships in Georgia. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "Finding financial support for graduate studies in Georgia can be a strategic move for your academic journey. Currently, there are 4 scholarships available that cater to various fields, including STEM and community-focused initiatives. Award sizes generally range from $2,500 to $3,500, but keep in mind that the specifics can vary significantly among listings. Additionally, deadlines are diverse, with some approaching within the next 45 days, so it's wise to check each listing promptly.",
+  "h1": "4 Graduate Scholarships Available in Georgia",
+  "supporting": "This selection of scholarships offers a mix of opportunities that may require little to no essay submissions, making them accessible for busy graduate students. As you review the listings, pay attention to the unique requirements and categories associated with each scholarship. Comparing the award amounts and deadlines can help you prioritize which opportunities to pursue based on your needs and timeline.",
+  "related_intro": "If you're exploring more options, consider looking into related scholarships that may also align with your field of study or location.",
+  "how_to_use": [
+    "Check deadlines for each scholarship",
+    "Compare award amounts and categories",
+    "Read through the application requirements",
+    "Visit official scholarship pages for more details",
+    "Shortlist the scholarships that best fit your profile"
+  ],
+  "who_for": [
+    "Graduate students in Georgia",
+    "STEM-focused graduate students",
+    "Community-oriented graduate scholars",
+    "Students seeking minimal application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for graduate students in Georgia?",
+      "answer": "There are currently 4 scholarships listed for graduate students in Georgia, covering categories such as STEM, Community, and Education. Each scholarship may have different eligibility criteria and focus areas, so it's important to review each listing carefully."
+    },
+    {
+      "question": "How can I find out about the deadlines for these scholarships?",
+      "answer": "All 4 scholarships have specific deadlines, which vary from listing to listing. Some deadlines are approaching within the next 45 days, so be sure to check the details promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but it's wise to verify each individual listing for specific requirements. While many programs may have lighter application processes, checking the details will provide the most accurate information."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available in Georgia generally range from approximately $2,500 to $3,500. However, since this is based on a limited subset, it's best to review each scholarship listing for the exact amounts."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "graduate/georgia",
+    "generatedAt": "2026-04-02T11:10:09.503Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

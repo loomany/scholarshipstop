@@ -1,0 +1,47 @@
+{
+  "seo_title": "District of Columbia Scholarships for Financial Need",
+  "seo_description": "Explore 7 scholarships in DC for students with financial need. Award sizes vary from $1,500 to $7,500. Check deadlines promptly.",
+  "intro": "Finding financial support can be a crucial step for students in the District of Columbia, especially those facing economic challenges. This selection features 7 scholarships specifically aimed at individuals demonstrating financial need. Award sizes vary, with amounts ranging from approximately $1,500 to $7,500. Keep in mind that deadlines differ across listings, so it’s important to check each one promptly to ensure you don’t miss out on potential funding opportunities.",
+  "h1": "Financial Need Scholarships in the District of Columbia",
+  "supporting": "As you review these scholarships, pay attention to the different categories, including community, education, STEM, and law. Many listings may not require essays, making them more accessible for applicants. Compare the award amounts and deadlines to find the best fit for your needs. Each scholarship has unique requirements, so be sure to read through the details carefully before applying.",
+  "related_intro": "For additional options, consider exploring scholarships related to specific fields or those with varying eligibility criteria that might align with your situation.",
+  "how_to_use": [
+    "Check individual deadlines for each scholarship",
+    "Compare award amounts to identify the best opportunities",
+    "Read the requirements carefully to understand eligibility",
+    "Visit official scholarship pages for the most accurate information",
+    "Shortlist scholarships that align with your academic goals"
+  ],
+  "who_for": [
+    "Students demonstrating financial need",
+    "Residents of the District of Columbia",
+    "Applicants interested in community, education, STEM, or law scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in the District of Columbia?",
+      "answer": "There are currently 7 scholarships listed that cater to financial need in the District of Columbia. These opportunities span various categories, including community, education, STEM, and law."
+    },
+    {
+      "question": "How can I find out the specific deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, so it's important to check the details for each listing. At least one scholarship has a deadline within the next 45 days, so reviewing the dates promptly is advisable."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Many of the scholarships listed do not require an essay, but it's best to verify the specific requirements for each one. The listings indicate that most have lighter application requirements, making them more accessible."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships in this category vary, with amounts ranging approximately from $1,500 to $7,500. However, it's essential to check each individual listing for the exact amount offered."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/district-of-columbia",
+    "generatedAt": "2026-04-02T11:14:17.077Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 41 Scholarships in Delaware",
+  "seo_description": "Find 41 scholarships in Delaware with awards from $500 to $7,500. Check deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support in Delaware can be a crucial step for students pursuing their education. With 41 scholarships available, ranging in award sizes from approximately $500 to $7,500, there are various opportunities tailored to different fields, including STEM, education, and the arts. As deadlines vary across listings, it’s important to check each scholarship's due date to ensure you don’t miss out on potential funding.",
+  "h1": "41 Scholarships Available for Delaware Students",
+  "supporting": "When reviewing the available scholarships, consider the specific requirements for each listing, as they can differ significantly. Some may require essays while others do not, providing options for students with varying levels of application effort. This diverse selection allows you to compare award amounts and eligibility criteria, helping you identify the best fits for your academic and financial needs.",
+  "related_intro": "If you're interested in exploring more options, consider checking out scholarships by category or by specific fields of study relevant to your interests.",
+  "how_to_use": [
+    "Compare deadlines across different listings",
+    "Scan award amounts to find suitable financial aid",
+    "Read the requirement lines carefully for each scholarship",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "Students pursuing degrees in STEM fields",
+    "Individuals seeking funding for education-related programs",
+    "Applicants looking for arts scholarships",
+    "Community-focused students in Delaware",
+    "Those interested in medical scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Delaware?",
+      "answer": "The scholarship listings for Delaware include a variety of categories such as STEM, Education, Medicine, Arts, and Community. With 41 options to choose from, you can find opportunities that align with your field of study or interests."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the listings. While some scholarships may require essays, many do not, so it's important to review each scholarship's details to understand what is needed."
+    },
+    {
+      "question": "How can I find out about deadlines for these scholarships?",
+      "answer": "All 41 scholarships have deadlines, but they differ from one listing to another. It's advisable to check the specific deadlines for each scholarship promptly, as some may be approaching soon."
+    },
+    {
+      "question": "What is the range of award amounts for Delaware scholarships?",
+      "answer": "Award sizes for scholarships in Delaware vary significantly, with amounts ranging approximately from $500 to $7,500. Be sure to check individual listings for exact award details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "delaware",
+    "generatedAt": "2026-04-02T10:44:29.714Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 41,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

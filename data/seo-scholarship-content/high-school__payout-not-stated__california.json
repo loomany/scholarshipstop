@@ -1,0 +1,49 @@
+{
+  "seo_title": "California High School Scholarships with Varying Awards",
+  "seo_description": "Explore 17 California high school scholarships with varying award amounts. Check individual listings for deadlines and requirements.",
+  "intro": "Finding scholarships can significantly ease the financial burden of high school education in California. This collection features 17 scholarships with varying award sizes, from approximately $400 to $15,000. While many listings do not require essays, it's important to note that deadlines and specific eligibility criteria differ across each opportunity. Be sure to check the details closely to identify options that align with your needs and timelines.",
+  "h1": "California High School Scholarships with Unspecified Payouts",
+  "supporting": "As you explore these scholarships, consider comparing the award amounts and the categories they fall into, such as education, STEM, and the arts. Since all listings include deadlines, reviewing these dates promptly will help you stay on track. Some scholarships may have lighter requirements, making them more accessible for applicants. Take the time to read through each listing to find the best fit for your situation.",
+  "related_intro": "If you're interested in more targeted opportunities, check out related pages for specific categories or scholarship types that might suit your profile.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan the award amounts listed",
+    "Read through the eligibility requirements",
+    "Open official scholarship pages for more details",
+    "Shortlist scholarships that match your criteria"
+  ],
+  "who_for": [
+    "High school students in California",
+    "Students interested in STEM fields",
+    "Applicants seeking no-essay scholarships",
+    "Individuals looking for community-focused funding",
+    "Students pursuing arts or music scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in this category?",
+      "answer": "This category includes 17 scholarships that cover a range of fields such as education, STEM, music, arts, and community service. Each listing may have different focuses, so it's worth reviewing the details to find the best fit for your interests."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this list do not require essays, making the application process potentially easier for applicants. However, it's important to check each listing for specific requirements, as they can vary."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 17 scholarships listed have deadlines, but they vary from one to another. Be sure to check the individual listings promptly, as at least one has a deadline approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for these scholarships vary widely, with amounts ranging from approximately $400 to $15,000. Review each listing for the specific award amount associated with it."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school/payout-not-stated/california",
+    "generatedAt": "2026-04-02T11:04:59.688Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 17,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

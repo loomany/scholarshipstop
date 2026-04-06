@@ -1,0 +1,49 @@
+{
+  "seo_title": "Pennsylvania Scholarships for Minority Students",
+  "seo_description": "Explore 15 scholarships for minority students in Pennsylvania. Award sizes vary from $1,000 to $5,000. Check deadlines and details.",
+  "intro": "Finding financial support as a minority student in Pennsylvania can be a crucial step toward achieving your educational goals. This collection features 15 scholarships tailored specifically for minority applicants, with award amounts ranging from approximately $1,000 to $5,000. Many of these opportunities have varying deadlines, so it's important to check each listing for the most accurate information and act promptly, especially with some deadlines approaching in the near future.",
+  "h1": "15 Minority Scholarships Available in Pennsylvania",
+  "supporting": "As you explore these scholarship listings, consider the diversity of fields represented, including STEM, education, and law. Many of these scholarships do not require essays, making them more accessible if you're looking for lighter application processes. Take the time to compare award amounts and requirements to find the best fit for your needs and aspirations.",
+  "related_intro": "For more tailored opportunities, check out related pages focusing on scholarships for specific majors or other eligibility criteria.",
+  "how_to_use": [
+    "Review each listing for specific award amounts and eligibility criteria",
+    "Check deadlines closely, especially for upcoming opportunities",
+    "Compare the focus areas of scholarships to align with your educational goals",
+    "Read through the requirements to ensure you meet all criteria",
+    "Visit the official pages linked in the listings for the most current information"
+  ],
+  "who_for": [
+    "Minority students in Pennsylvania",
+    "Students pursuing STEM degrees",
+    "Applicants interested in law or community service",
+    "Undergraduates and graduates seeking funding",
+    "Individuals looking for scholarships with fewer requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for minority students in Pennsylvania?",
+      "answer": "The current catalog features 15 scholarships specifically for minority students in Pennsylvania, covering various categories such as STEM, Education, Law, and Community. Each scholarship may have different focus areas and eligibility criteria, so it's beneficial to review the details of each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, although it's important to verify each specific listing for any unique requirements. Generally, many of these opportunities have lighter application processes, making them more accessible."
+    },
+    {
+      "question": "How much financial support can I expect from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category typically range from approximately $1,000 to $5,000. However, specific amounts can vary by scholarship, so be sure to check the individual listings for exact figures."
+    },
+    {
+      "question": "When should I apply for these scholarships?",
+      "answer": "All 15 scholarships listed have deadlines, but they differ from one another. It's advisable to check the deadlines promptly, as some may be approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority/pennsylvania",
+    "generatedAt": "2026-04-02T10:55:37.845Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 15,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

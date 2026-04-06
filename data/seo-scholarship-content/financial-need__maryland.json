@@ -1,0 +1,49 @@
+{
+  "seo_title": "Maryland Scholarships for Financial Need Students",
+  "seo_description": "Explore 11 scholarships for Maryland students with financial need. Award sizes range from $500 to $7,500. Check deadlines and requirements.",
+  "intro": "If you're seeking financial support for your education in Maryland, this collection of 11 scholarships specifically designed for students with financial need could be a valuable resource. Award sizes range from approximately $500 to $7,500, reflecting a variety of funding levels to suit different educational pursuits. With deadlines varying across the listings, it's advisable to check the specific dates promptly to ensure you don't miss out on potential funding opportunities.",
+  "h1": "Financial Need Scholarships in Maryland",
+  "supporting": "This list features scholarships across diverse categories, including education, community service, and disability support. Some programs may require essays while others do not, offering a mix of application processes. Take the time to compare the scholarship details, including award amounts and requirements, to find the best fit for your needs and goals.",
+  "related_intro": "For more tailored options, consider exploring scholarships based on specific fields of study or additional eligibility criteria.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize applications",
+    "Scan award amounts to identify funding that meets your needs",
+    "Read the requirement lines to understand what each scholarship entails",
+    "Open official pages for detailed criteria and application instructions",
+    "Shortlist scholarships that align with your educational goals"
+  ],
+  "who_for": [
+    "Students in Maryland with demonstrated financial need",
+    "Individuals pursuing education in STEM fields",
+    "Community service-oriented applicants",
+    "Students with disabilities seeking financial support",
+    "Those looking for scholarships with varying application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Maryland?",
+      "answer": "The Maryland scholarships listed for financial need cover a range of categories, including education, community support, STEM, medicine, and disability. With 11 options currently available, you can find opportunities that align with various interests and backgrounds."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 11 listings in this category include deadline information. It's advisable to check the specific dates promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Do these scholarships require essays?",
+      "answer": "Requirements for essays vary among the scholarships listed. While some may not require an essay, others do, so it's important to review each scholarship's details to understand what is needed for your application."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the Maryland scholarships range from approximately $500 to $7,500, though this can vary by program. Be sure to check the specific amounts listed for each scholarship to find the best fit for your financial needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/maryland",
+    "generatedAt": "2026-04-02T11:12:07.723Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 11,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

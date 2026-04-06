@@ -1,0 +1,47 @@
+{
+  "seo_title": "Delaware Scholarships for Financial Need Students",
+  "seo_description": "Explore 12 Delaware scholarships for students in need. Award sizes vary, and deadlines differ—check listings for details.",
+  "intro": "For students in Delaware facing financial challenges, there are 12 scholarship opportunities available that can help ease the burden of educational costs. These awards vary in size, ranging from approximately $500 to $5,000, providing essential support across various fields like medicine, education, STEM, and law. With deadlines that differ for each scholarship, it's important to check the specific dates to ensure timely applications.",
+  "h1": "Scholarships for Financial Need in Delaware",
+  "supporting": "This selection of scholarships is particularly valuable for those who may not have extensive application requirements, as many listings feature lighter essay demands. When reviewing the options, consider comparing the award amounts and categories to find the best fit for your academic pursuits and financial needs. Each listing includes unique eligibility criteria, so be sure to read the details carefully.",
+  "related_intro": "If you're interested in exploring more funding options, check out related pages that focus on other financial need scholarships or specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship to prioritize your applications",
+    "Scan award amounts to identify which opportunities best meet your needs",
+    "Read the eligibility requirements carefully to ensure a good match",
+    "Open the official pages for each scholarship to verify details",
+    "Shortlist your favorites for a more focused application process"
+  ],
+  "who_for": [
+    "Delaware residents seeking financial assistance",
+    "Students pursuing degrees in medicine, education, or STEM",
+    "Applicants looking for scholarships with lighter essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for financial need in Delaware?",
+      "answer": "The current listing includes 12 scholarships that cater to various fields such as Medicine, Education, STEM, Community, and Law. This diverse range allows students to find opportunities that align with their specific academic and career interests."
+    },
+    {
+      "question": "How do I find out the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, with all 12 rows in this listing containing deadline information. It's advisable to check the specific dates promptly, as at least one scholarship has a deadline within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements vary across the scholarships listed; some may require essays while others do not. Out of the 12 scholarships, approximately 10 do not have essay requirements, but it's important to verify the details for each specific opportunity."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this listing generally range from about $500 to $5,000. However, specific amounts can vary, so be sure to check the details of each scholarship for the exact figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/delaware",
+    "generatedAt": "2026-04-02T11:09:06.035Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

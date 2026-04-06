@@ -1,0 +1,49 @@
+{
+  "seo_title": "Explore 31 Scholarships in Hawaii",
+  "seo_description": "Find scholarships in Hawaii with awards from $500 to $5,000. Check individual deadlines and requirements for each opportunity.",
+  "intro": "Finding financial support for your education in Hawaii can be a crucial step toward achieving your academic goals. With 31 scholarships available in this catalog, you have a variety of options to explore. Award sizes vary, and while some may require essays, many have lighter requirements. Be sure to check the specific details for each opportunity, as deadlines and eligibility criteria can differ significantly.",
+  "h1": "Hawaii Scholarships: 31 Opportunities Available",
+  "supporting": "As you review the listings, pay attention to the award amounts and the specific categories they fall under, such as STEM, community service, or education. Comparing deadlines is essential, especially since some scholarships may have upcoming due dates. For the most accurate information, visit the official pages of the scholarships to confirm details and ensure you meet all requirements.",
+  "related_intro": "If you're interested in exploring more opportunities, consider checking out related scholarship categories that may align with your interests and qualifications.",
+  "how_to_use": [
+    "Sort scholarships by award amount",
+    "Read the requirement lines carefully",
+    "Open the official scholarship pages",
+    "Shortlist scholarships that interest you",
+    "Verify deadlines and eligibility criteria"
+  ],
+  "who_for": [
+    "Students pursuing STEM degrees",
+    "Community service-oriented individuals",
+    "Those with disabilities seeking support",
+    "Education majors looking for funding",
+    "Residents of Hawaii seeking scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Hawaii?",
+      "answer": "The Hawaii scholarship listings include a variety of categories such as STEM, Community, Education, Disability, and Medicine. With 31 scholarships currently available, you can find options that align with different fields and interests."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's important to check the specific details for each scholarship to understand what is needed."
+    },
+    {
+      "question": "How much funding can I expect from Hawaii scholarships?",
+      "answer": "Award sizes for the scholarships in Hawaii generally range from approximately $500 to $5,000. However, specific amounts can vary by scholarship, so reviewing individual listings is recommended for precise information."
+    },
+    {
+      "question": "When should I check the deadlines for these scholarships?",
+      "answer": "All 31 scholarships listed have deadlines, which vary from one to another. It's advisable to check the deadlines promptly, as some may be approaching within the next 45 days."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "hawaii",
+    "generatedAt": "2026-04-02T10:49:47.823Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 31,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

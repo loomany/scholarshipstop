@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Scholarships Under $10,000 | 3,500+ Options",
+  "seo_description": "Explore over 3,500 scholarships under $10,000. Check varying deadlines, award amounts, and requirements to find your fit.",
+  "intro": "With over 3,500 scholarships available, this collection focuses on awards ranging from $100 to $10,000, catering to a variety of educational paths and interests. Whether you're pursuing a degree in STEM, the arts, or community service, you'll find opportunities that fit your needs. Keep in mind that requirements and deadlines vary across listings, so it's important to check each one carefully to find the best fit for you.",
+  "h1": "Explore 3,500+ Scholarships Under $10,000",
+  "supporting": "As you explore this list, take note of the diverse categories represented, including education, medicine, and miscellaneous fields. Comparing award sizes and reading through the specific requirements will help you identify which scholarships align with your background and goals. Some listings may require essays, while many have lighter requirements, making this a practical resource for students seeking financial support.",
+  "related_intro": "If you're interested in more targeted options, consider checking out our pages on scholarships for specific fields or those with no essay requirements.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to find scholarships that meet your financial needs",
+    "Read through requirement lines to understand eligibility",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that resonate with your academic and personal goals"
+  ],
+  "who_for": [
+    "Students pursuing degrees in STEM fields",
+    "Community-focused individuals seeking educational funding",
+    "Arts majors looking for financial assistance",
+    "Medical students applying for scholarships",
+    "Out-of-state students needing housing support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in the under $10,000 category?",
+      "answer": "In the under $10,000 category, you'll find a diverse range of scholarships across 3502 listings. These include opportunities in education, STEM, community service, medicine, and the arts, allowing you to explore various fields and interests."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships listed. While approximately 262 of the offerings require essays, the majority—around 3240—do not have this requirement. It's best to check the specifics for each scholarship to understand what is needed."
+    },
+    {
+      "question": "How can I find deadlines for these scholarships?",
+      "answer": "Most scholarships in this category have deadlines, with 3501 out of 3502 listings including deadline information. Since these dates can vary significantly, it’s important to review each listing promptly to ensure you don’t miss any opportunities."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes in this category generally range from $100 to $10,000 USD, with 3482 listings providing specific amounts. However, since individual awards may differ, be sure to check each scholarship for its exact funding details."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "under-10000",
+    "generatedAt": "2026-04-02T10:30:03.428Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 3502,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

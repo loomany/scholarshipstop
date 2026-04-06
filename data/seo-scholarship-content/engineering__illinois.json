@@ -1,0 +1,49 @@
+{
+  "seo_title": "Illinois Engineering Scholarships | Up to $10,000",
+  "seo_description": "Explore 14 engineering scholarships in Illinois with awards up to $10,000. Check individual deadlines and requirements.",
+  "intro": "Finding financial support for engineering studies in Illinois can be a pivotal step toward achieving your academic goals. With 14 scholarships available, ranging from $500 to $10,000, you have a variety of options to explore. These awards cater to different needs and backgrounds, with some requiring essays and others offering lighter application processes. Be sure to check the specific deadlines, as they vary across listings, and some may be approaching soon.",
+  "h1": "Find Engineering Scholarships in Illinois",
+  "supporting": "This collection of scholarships is an excellent resource for engineering students in Illinois. When reviewing the listings, pay attention to the award amounts and eligibility criteria, as they can significantly differ. Some scholarships may focus on community involvement or specific engineering disciplines, while others could prioritize academic excellence. Take the time to compare the requirements and deadlines to find the best fit for your situation.",
+  "related_intro": "For more tailored opportunities, consider exploring scholarships focused on specific engineering disciplines or those available to students from particular communities in Illinois.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify scholarships that meet your needs",
+    "Read the requirement lines for specific eligibility criteria",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your background and goals"
+  ],
+  "who_for": [
+    "Engineering students in Illinois",
+    "Students seeking STEM-related funding",
+    "Applicants looking for community-focused scholarships",
+    "Students with varying essay requirements",
+    "Undergraduates pursuing engineering degrees"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Illinois?",
+      "answer": "There are 14 scholarships listed specifically for engineering students in Illinois, covering a range of categories including STEM, education, and community. Award sizes vary, with amounts generally ranging from approximately $500 to $10,000."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships; while some may require essays, the majority do not. It's important to check the details for each individual scholarship to understand the specific requirements."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 14 scholarships listed have deadlines, but they differ from one to another. Be sure to verify the specific deadline for each scholarship, as at least one has a deadline approaching within the next 45 days."
+    },
+    {
+      "question": "What should I do if I need more information about a specific scholarship?",
+      "answer": "For detailed information on each scholarship, including eligibility criteria and application processes, refer to the individual listings. Each entry provides essential information that can help you determine if it's a good fit for your needs."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/illinois",
+    "generatedAt": "2026-04-02T10:39:03.284Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 14,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

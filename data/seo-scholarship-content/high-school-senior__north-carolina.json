@@ -1,0 +1,49 @@
+{
+  "seo_title": "North Carolina Scholarships for High School Seniors",
+  "seo_description": "Explore 22 scholarships for North Carolina high school seniors with awards up to $10,000. Check deadlines and requirements now.",
+  "intro": "High school seniors in North Carolina have access to a diverse array of 22 scholarships designed to support their educational journeys. Award sizes typically range from $500 to $10,000, with many listings featuring no essay requirements, making them more accessible. As deadlines vary across these opportunities, it's essential to check each listing promptly, especially since some deadlines are approaching within the next 45 days.",
+  "h1": "Scholarships for High School Seniors in North Carolina",
+  "supporting": "This collection includes scholarships from various categories such as education, community, STEM, and the arts. When reviewing the listings, consider comparing award amounts and requirements to find the best fit for your situation. Many scholarships may have lighter requirements, so take the time to read through the details and ensure you meet the eligibility criteria before applying.",
+  "related_intro": "For more tailored options, consider exploring scholarships specific to other education levels or regions.",
+  "how_to_use": [
+    "Compare deadlines listed for each scholarship",
+    "Scan the award amounts to prioritize applications",
+    "Read through requirement lines for eligibility",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors in North Carolina",
+    "Students interested in community service scholarships",
+    "Applicants pursuing STEM-related funding",
+    "Those seeking scholarships with no essay requirements",
+    "Individuals looking for awards in the arts or humanities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in North Carolina?",
+      "answer": "There are 22 scholarships listed for high school seniors in North Carolina, covering a range of categories including education, community, STEM, arts, and humanities. This variety allows students to find opportunities that align with their interests and goals."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships vary, with amounts ranging approximately from $500 to $10,000. Each listing provides specific details about the award amount, so it's important to review them individually."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially easier for many students. However, it's advisable to check each scholarship's specific requirements as they can differ."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 22 scholarships have deadlines, which vary from one listing to another. Some deadlines are approaching within the next 45 days, so it's recommended to verify the dates promptly to ensure timely applications."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/north-carolina",
+    "generatedAt": "2026-04-02T10:48:54.718Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 22,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

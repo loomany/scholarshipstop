@@ -1,0 +1,49 @@
+{
+  "seo_title": "North Carolina Scholarships: Explore 39 Opportunities",
+  "seo_description": "Discover 39 scholarships in North Carolina with awards from $500 to $10,000. Check deadlines and requirements for each program.",
+  "intro": "Finding financial support for education in North Carolina is crucial for many students. With 39 scholarships available, ranging from $500 to $10,000, there are diverse opportunities to explore. These scholarships cover various fields including education, community service, STEM, and the arts. Keep in mind that the requirements and deadlines vary, so it’s beneficial to start reviewing the listings soon, especially since some deadlines are approaching within the next 45 days.",
+  "h1": "Explore 39 Scholarships in North Carolina",
+  "supporting": "When examining the scholarships, pay attention to the award amounts and the specific eligibility criteria. Some scholarships may require essays, while many do not, allowing for a less intensive application process. Make sure to compare the details of each listing, as they can provide insights into which opportunities align best with your background and goals. This slice offers a rich selection for students in North Carolina looking to ease their financial burden.",
+  "related_intro": "If you're interested in exploring more tailored options, consider checking out scholarships based on specific fields of study or other criteria.",
+  "how_to_use": [
+    "Review the list of scholarships available in North Carolina",
+    "Compare the deadlines and award amounts for each opportunity",
+    "Check for essay requirements and other application details",
+    "Shortlist scholarships that align with your interests and qualifications",
+    "Visit the official scholarship pages for the most accurate information"
+  ],
+  "who_for": [
+    "Students pursuing education-related degrees",
+    "Community service advocates in North Carolina",
+    "STEM majors looking for financial assistance",
+    "Arts students seeking funding opportunities",
+    "Students interested in scholarships with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in North Carolina?",
+      "answer": "The North Carolina scholarship listings include a variety of categories such as education, community, STEM, arts, and humanities. With 39 scholarships currently available, you can find options that align with different interests and fields of study."
+    },
+    {
+      "question": "Are there deadlines I should be aware of for these scholarships?",
+      "answer": "Yes, all 39 scholarships listed have deadlines, but they vary by program. It's important to check the specific deadline for each scholarship as some may be approaching within the next 45 days."
+    },
+    {
+      "question": "Do I need to write essays for these scholarships?",
+      "answer": "Requirements for essays vary among the scholarships. While some may require essays, many do not, so be sure to review the details of each listing to understand what is needed."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for scholarships in North Carolina range from approximately $500 to $10,000. Each scholarship listing will provide specific amounts, so check individual entries for precise figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "north-carolina",
+    "generatedAt": "2026-04-02T10:44:41.256Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 39,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

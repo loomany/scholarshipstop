@@ -1,0 +1,130 @@
+import 'server-only';
+
+import { cache } from 'react';
+
+import type { Database } from '@/types_db';
+import { createClient } from '@/utils/supabase/server';
+
+export type ContentPostRow = Database['public']['Tables']['content_posts']['Row'];
+
+export type ContentPostListFields = Pick<
+  ContentPostRow,
+  'id' | 'title' | 'slug' | 'cover_image_url' | 'meta_description' | 'published_at'
+>;
+
+const publishedWithSlugSelect =
+  'id, title, slug, cover_image_url, meta_description, published_at' as const;
+
+function publishedPostsWithSlugQuery() {
+  const supabase = createClient();
+  return supabase
+    .from('content_posts')
+    .select(publishedWithSlugSelect)
+    .eq('status', 'published')
+    .not('slug', 'is', null)
+    .neq('slug', '');
+}
+
+/** Total published posts that have a non-empty slug (listable on `/resources`). */
+export async function countPublishedContentPostsWithSlug(): Promise<number> {
+  const supabase = createClient();
+  const { count, error } = await supabase
+    .from('content_posts')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'published')
+    .not('slug', 'is', null)
+    .neq('slug', '');
+
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
+/**
+ * One-based page index. Only posts with a slug are included (same as public index).
+ */
+export async function fetchPublishedContentPostsPage(
+  page: number,
+  pageSize: number
+): Promise<ContentPostListFields[]> {
+  const safePage = Math.max(1, Math.floor(page));
+  const size = Math.max(1, Math.floor(pageSize));
+  const from = (safePage - 1) * size;
+  const to = from + size - 1;
+
+  const { data, error } = await publishedPostsWithSlugQuery()
+    .order('published_at', { ascending: false, nullsFirst: false })
+    .order('updated_at', { ascending: false, nullsFirst: false })
+    .range(from, to);
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as ContentPostListFields[];
+}
+
+const RESOURCES_INDEX_FETCH_BATCH = 500;
+
+/** All published posts with slug (for `/resources` filtering). Batched for large catalogs. */
+export async function fetchAllPublishedContentPostsListFields(): Promise<
+  ContentPostListFields[]
+> {
+  const out: ContentPostListFields[] = [];
+  let page = 1;
+  for (;;) {
+    const batch = await fetchPublishedContentPostsPage(
+      page,
+      RESOURCES_INDEX_FETCH_BATCH
+    );
+    out.push(...batch);
+    if (batch.length < RESOURCES_INDEX_FETCH_BATCH) break;
+    page += 1;
+  }
+  return out;
+}
+
+/** @deprecated Prefer `fetchPublishedContentPostsPage` for the resources index. */
+export async function fetchPublishedContentPosts(
+  limit = 12
+): Promise<ContentPostListFields[]> {
+  return fetchPublishedContentPostsPage(1, limit);
+}
+
+export const fetchPublishedContentPostBySlug = cache(
+  async (slug: string): Promise<ContentPostRow | null> => {
+    const raw = slug.trim();
+    if (!raw) return null;
+
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('content_posts')
+      .select('*')
+      .eq('slug', raw)
+      .eq('status', 'published')
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    return data as ContentPostRow | null;
+  }
+);
+
+export async function fetchRelatedPublishedContentPosts(
+  excludeSlug: string,
+  limit = 3
+): Promise<ContentPostListFields[]> {
+  const raw = excludeSlug.trim();
+  const supabase = createClient();
+  let q = supabase
+    .from('content_posts')
+    .select(
+      'id, title, slug, cover_image_url, meta_description, published_at'
+    )
+    .eq('status', 'published')
+    .order('published_at', { ascending: false, nullsFirst: false })
+    .order('updated_at', { ascending: false, nullsFirst: false })
+    .limit(limit + 1);
+
+  if (raw) q = q.neq('slug', raw);
+
+  const { data, error } = await q;
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as ContentPostListFields[];
+  return rows.slice(0, limit);
+}

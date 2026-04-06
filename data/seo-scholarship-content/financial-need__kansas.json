@@ -1,0 +1,49 @@
+{
+  "seo_title": "Kansas Scholarships for Financial Need Students",
+  "seo_description": "Explore 13 Kansas scholarships for students with financial need. Check award amounts and varying deadlines.",
+  "intro": "Finding financial support can be a challenge, but Kansas offers a variety of scholarships aimed at students with financial need. This catalog features 13 scholarships, with award sizes generally ranging from $1,000 to $5,000. It's important to note that application requirements and deadlines vary, so be sure to review the details carefully to identify the best opportunities for your situation.",
+  "h1": "Financial Need Scholarships in Kansas",
+  "supporting": "When exploring this list, consider comparing the award amounts and the specific eligibility criteria for each scholarship. Some may require essays while others do not, and deadlines can differ significantly. This slice is particularly valuable for students in Kansas looking to ease their financial burden while pursuing their education.",
+  "related_intro": "For more tailored options, check out related pages that focus on specific categories like STEM or community scholarships in Kansas.",
+  "how_to_use": [
+    "Review the list for scholarship details and eligibility",
+    "Compare award amounts to prioritize your applications",
+    "Check the specific requirements for each scholarship",
+    "Note the varying deadlines and plan your applications accordingly",
+    "Visit the official sponsor pages for the most accurate information"
+  ],
+  "who_for": [
+    "Kansas residents seeking financial assistance",
+    "Students pursuing education in law or community service",
+    "Individuals interested in STEM-related funding",
+    "Applicants with specific health conditions",
+    "High school seniors and current college students"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for students with financial need in Kansas?",
+      "answer": "There are 13 scholarships listed specifically for students in Kansas who demonstrate financial need. These scholarships cover a range of categories, including education, community, law, STEM, and safety."
+    },
+    {
+      "question": "How can I find specific details about each scholarship?",
+      "answer": "Each scholarship listing includes important details such as award amounts and deadlines. Make sure to check each entry for specific requirements, as some may require essays while others do not."
+    },
+    {
+      "question": "Are there deadlines I should be aware of?",
+      "answer": "Yes, all 13 scholarships have varying deadlines, with some approaching within the next 45 days. It's important to review the individual listings to ensure you submit your application on time."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from approximately $1,000 to $5,000. However, specific amounts can vary by scholarship, so be sure to check each listing for precise figures."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "financial-need/kansas",
+    "generatedAt": "2026-04-02T11:08:49.542Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 13,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Texas Scholarships for High School Seniors",
+  "seo_description": "Explore 21 Texas scholarships for high school seniors with varying award sizes and deadlines. Check listings for details.",
+  "intro": "For high school seniors in Texas seeking financial assistance, this selection of 21 scholarships offers a range of opportunities, though specific award amounts are not always stated. With potential awards ranging from approximately $400 to $15,000, many listings may not require essays, making them accessible for a variety of applicants. Be aware that deadlines vary, with some approaching in the near future, so it's essential to check each listing promptly.",
+  "h1": "Texas Scholarships for High School Seniors with Unstated Payouts",
+  "supporting": "This collection includes scholarships across diverse categories such as education, community, and medical fields. When reviewing the listings, consider comparing award amounts, eligibility criteria, and deadlines to find the best fit for your situation. Many of these scholarships may have lighter requirements, allowing for a more straightforward application process, but it's important to verify details on the official sponsor sites.",
+  "related_intro": "If you're interested in exploring more options, check out related pages for scholarships with specific award amounts or those tailored to different educational levels.",
+  "how_to_use": [
+    "Compare deadlines for timely applications",
+    "Scan award text for potential funding amounts",
+    "Read requirement lines for eligibility details",
+    "Open official pages for complete information",
+    "Shortlist scholarships that align with your goals"
+  ],
+  "who_for": [
+    "High school seniors in Texas",
+    "Students pursuing education-related fields",
+    "Applicants interested in community service scholarships",
+    "Individuals seeking STEM-related funding",
+    "Students with disabilities looking for support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Texas with unspecified payout amounts?",
+      "answer": "This listing includes 21 scholarships across various categories such as education, community, medicine, disability, and STEM. While the specific award amounts are not stated for every entry, they can range significantly, with some scholarships offering up to $15,000."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this selection do not require an essay, making them potentially easier to apply for. However, it's important to verify each listing for specific requirements, as some may have different criteria."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 21 scholarships listed have deadlines, but they vary by program. Be sure to check the individual listings promptly, as some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "Can I apply for multiple scholarships from this list?",
+      "answer": "Yes, you can apply for multiple scholarships from this list. Each scholarship has its own eligibility criteria and application process, so review the details carefully to maximize your opportunities."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/payout-not-stated/texas",
+    "generatedAt": "2026-04-02T10:41:13.162Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 21,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

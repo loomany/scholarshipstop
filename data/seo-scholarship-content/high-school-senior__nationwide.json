@@ -1,0 +1,49 @@
+{
+  "seo_title": "Nationwide Scholarships for High School Seniors",
+  "seo_description": "Explore 36 scholarships for high school seniors across the USA. Award sizes range from $100 to $25,000. Check deadlines and requirements.",
+  "intro": "High school seniors across the nation have access to a diverse array of scholarships, with 36 options currently available. These scholarships cover various categories, including education, community support, and STEM fields, with award sizes ranging from approximately $100 to $25,000. As deadlines vary, it's important to check each listing promptly to ensure you don’t miss out on potential funding opportunities.",
+  "h1": "Scholarships for High School Seniors Nationwide",
+  "supporting": "When exploring this list, consider comparing the award amounts and the specific requirements for each scholarship. Some may require essays, while others might have lighter requirements, making it easier to apply. Pay attention to the deadlines, as they differ across listings, and prioritize those that are approaching soon. This selection is worth scanning for its breadth and the potential for significant financial support.",
+  "related_intro": "If you're interested in more tailored options, check out related pages that focus on specific fields or requirements.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify the best fits for your needs",
+    "Read through requirement lines to understand what each scholarship entails",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your goals and verify details on sponsor sites"
+  ],
+  "who_for": [
+    "High school seniors seeking financial aid",
+    "Students interested in STEM scholarships",
+    "Applicants looking for community-focused funding",
+    "Individuals with disabilities applying for support",
+    "Those pursuing education-related scholarships"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors?",
+      "answer": "There are 36 scholarships listed for high school seniors, covering various categories such as education, community, disability, medicine, and STEM. Each scholarship has its own focus and eligibility criteria, so it's worth exploring the details of each listing."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Requirements vary among the scholarships; some may require essays while others do not. Out of the 36 listings, approximately 8 have an essay requirement, so be sure to check the specifics for each scholarship you're interested in."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 36 scholarships have deadlines listed, but they differ from one another. It's important to review the deadline for each scholarship individually, especially since some deadlines may be approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "Award sizes for these scholarships vary significantly, with amounts ranging approximately from $100 to $25,000. Be sure to check the specific award amount for each scholarship as you review the listings."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/nationwide",
+    "generatedAt": "2026-04-02T10:42:35.461Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 36,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

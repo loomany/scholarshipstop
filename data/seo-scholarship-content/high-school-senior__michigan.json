@@ -1,0 +1,49 @@
+{
+  "seo_title": "Michigan Scholarships for High School Seniors",
+  "seo_description": "Explore 7 scholarships for Michigan high school seniors, with awards ranging from $750 to $2,500. Check deadlines and requirements.",
+  "intro": "For high school seniors in Michigan, there are currently 7 scholarship opportunities available that can help ease the financial burden of education. Award sizes vary, with amounts ranging approximately from $750 to $2,500. Each listing has its own unique requirements and deadlines, so it's essential to review these details carefully, especially since some deadlines are approaching within the next 45 days.",
+  "h1": "Scholarships for High School Seniors in Michigan",
+  "supporting": "This selection includes a mix of scholarships across various categories, such as education, community, and disability. Many of the listings do not require essays, making them potentially easier to apply for. As you explore the options, pay attention to the specific eligibility criteria and deadlines to ensure you don’t miss out on any opportunities that fit your profile.",
+  "related_intro": "If you're interested in similar scholarships or other educational resources, check out our related pages for more tailored options.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan the award amounts listed",
+    "Read through the eligibility requirements carefully",
+    "Open the official scholarship pages for more details",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "High school seniors in Michigan",
+    "Students interested in community service scholarships",
+    "Applicants seeking disability-related funding",
+    "Individuals pursuing education-focused awards",
+    "Students looking for lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Michigan?",
+      "answer": "There are currently 7 scholarships listed for high school seniors in Michigan, covering various categories such as community, disability, education, and medicine. This variety allows students to find opportunities that align with their interests and backgrounds."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially simpler for applicants. However, it's important to verify the specific requirements for each scholarship, as details can vary."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "Each scholarship has its own deadline, and all 7 listings currently include deadline information. Be sure to check these dates promptly, as at least one scholarship has a deadline within the next 45 days."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available range from approximately $750 to $2,500. However, it's advisable to review each listing for the exact amounts and details, as these can differ significantly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/michigan",
+    "generatedAt": "2026-04-02T11:04:21.776Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

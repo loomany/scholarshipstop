@@ -1,0 +1,49 @@
+{
+  "seo_title": "Delaware Scholarships for Minority Students",
+  "seo_description": "Explore 14 scholarships for minority students in Delaware. Award sizes vary, and deadlines differ—check details promptly.",
+  "intro": "Finding financial support as a minority student in Delaware can be crucial for your academic journey. This selection features 14 scholarships specifically aimed at supporting minority students, with award sizes generally ranging from $2,000 to $3,000. Each listing has its own unique requirements and deadlines, so it's important to review them closely to identify the best opportunities for you.",
+  "h1": "Minority Scholarships in Delaware",
+  "supporting": "This list includes a variety of scholarships across fields like STEM, education, and law, many of which do not require essays, making them more accessible. As you explore these options, pay attention to the specific eligibility criteria and deadlines, as they can vary significantly. This could be a valuable resource for securing funding that aligns with your academic goals.",
+  "related_intro": "If you’re interested in exploring more scholarships for minority students, consider checking out related pages that focus on different states or categories.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Scan award amounts to find suitable options",
+    "Read the eligibility requirements carefully",
+    "Open the official scholarship pages for details",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "Minority students in Delaware",
+    "Students pursuing STEM fields",
+    "Future educators seeking funding",
+    "Individuals interested in law scholarships",
+    "Students looking for lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for minority students in Delaware?",
+      "answer": "There are currently 14 scholarships listed that cater to minority students in Delaware. These scholarships cover various fields, including STEM, Education, and Law, providing a range of options depending on your area of interest."
+    },
+    {
+      "question": "What is the typical award size for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from approximately $2,000 to $3,000. However, it's important to check each listing for specific amounts, as they can vary."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require essays, making them more accessible for applicants. However, it's advisable to verify the details of each scholarship, as requirements can differ."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 14 scholarships in this listing have deadlines, but they vary by program. Be sure to check the specific deadline for each scholarship, as some may be approaching soon."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "minority/delaware",
+    "generatedAt": "2026-04-02T10:56:28.373Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 14,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "seo_title": "Find Scholarships in Wisconsin | 55 Opportunities",
+  "seo_description": "Explore 55 scholarships in Wisconsin with awards from $500 to $12,000. Check varying deadlines and requirements to apply.",
+  "intro": "Navigating the landscape of scholarships in Wisconsin reveals a robust selection of 55 options, tailored to support students across various fields. With award sizes ranging from approximately $500 to $12,000, there's potential for significant financial assistance. As deadlines vary, including some approaching within the next 45 days, it's essential to stay vigilant and check specific dates for each opportunity.",
+  "h1": "Scholarships Available in Wisconsin: 55 Options",
+  "supporting": "This collection encompasses a diverse array of scholarships, primarily focused on education but also spanning categories like community, medicine, STEM, and humanities. Be sure to compare the requirements, as some scholarships may have lighter application processes while others might ask for essays. This variability can help you identify which opportunities align best with your strengths and schedule.",
+  "related_intro": "For additional funding options, consider exploring scholarships specific to other states or categories that might complement your search in Wisconsin.",
+  "how_to_use": [
+    "Check deadlines promptly to ensure timely applications",
+    "Compare award amounts to prioritize funding opportunities",
+    "Review requirement lines to gauge application effort",
+    "Open official pages for detailed eligibility criteria",
+    "Shortlist promising scholarships for focused applications"
+  ],
+  "who_for": [
+    "Students pursuing education-related degrees",
+    "Residents of Wisconsin seeking local scholarships",
+    "Applicants looking for STEM funding opportunities",
+    "Individuals interested in community-focused scholarships",
+    "Students with varying requirement preferences"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available in Wisconsin?",
+      "answer": "The Wisconsin scholarships catalog features a variety of opportunities across several categories, including Education, Community, Medicine, STEM, and Humanities. With 55 listings currently available, you can find scholarships tailored to different fields and interests."
+    },
+    {
+      "question": "How do I find scholarship deadlines?",
+      "answer": "All 55 scholarships in this listing have specific deadlines, but these vary by program. It's important to check each listing for its individual deadline, as some may be approaching soon—within the next 45 days."
+    },
+    {
+      "question": "Are there essay requirements for these scholarships?",
+      "answer": "Requirements for essays differ among the scholarships listed. While some may not require an essay, others do, so it's essential to review the details for each scholarship to understand what is expected."
+    },
+    {
+      "question": "What are the typical award amounts for Wisconsin scholarships?",
+      "answer": "Award sizes for the scholarships in this catalog vary widely, with amounts ranging from approximately $500 to $12,000. Be sure to check the specific award details for each scholarship to understand the financial support available."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "wisconsin",
+    "generatedAt": "2026-04-02T10:40:30.266Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 55,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

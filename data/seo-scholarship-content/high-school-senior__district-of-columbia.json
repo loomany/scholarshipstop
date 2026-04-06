@@ -1,0 +1,49 @@
+{
+  "seo_title": "Scholarships for High School Seniors in DC",
+  "seo_description": "Explore 12 scholarships for high school seniors in the District of Columbia. Award sizes vary; check deadlines for each listing.",
+  "intro": "High school seniors in the District of Columbia have access to a diverse selection of 12 scholarships, with award sizes generally ranging from $1,000 to $5,000. These opportunities cater to various interests, including community service, STEM, and education, providing a solid foundation for funding your post-secondary education. With deadlines varying across listings, it’s important to stay informed and act promptly to maximize your chances of securing financial support.",
+  "h1": "Available Scholarships for DC High School Seniors",
+  "supporting": "As you review the scholarships available, pay close attention to the specific requirements and deadlines associated with each listing. Many of these opportunities do not require essays, making them potentially easier to apply for. Comparing the award amounts and categories can help you identify which scholarships align best with your goals and qualifications. Be sure to verify details on the official sponsor pages.",
+  "related_intro": "For more tailored options, consider exploring scholarships based on specific interests or categories, such as STEM or community service.",
+  "how_to_use": [
+    "Review the list for scholarship categories that match your interests",
+    "Compare award amounts to prioritize applications",
+    "Check each listing for specific deadlines and requirements",
+    "Open official pages for detailed information and updates",
+    "Shortlist scholarships that align with your profile and goals"
+  ],
+  "who_for": [
+    "High school seniors in the District of Columbia",
+    "Students interested in community service scholarships",
+    "Those pursuing STEM-related funding",
+    "Applicants looking for education-focused awards",
+    "Students seeking no-essay scholarship opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in the District of Columbia?",
+      "answer": "There are 12 scholarships listed specifically for high school seniors in the District of Columbia. These opportunities cover a range of categories including community, STEM, education, humanities, and law."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships in this listing do not require an essay, but it's important to verify each individual listing for specific requirements. Many programs tend to have lighter application processes."
+    },
+    {
+      "question": "How can I find out the deadlines for these scholarships?",
+      "answer": "All 12 scholarships listed have deadlines, but they vary by program. Be sure to check the specific deadlines for each scholarship, as at least one has a deadline approaching within the next 45 days."
+    },
+    {
+      "question": "What are the award amounts for these scholarships?",
+      "answer": "The award sizes for the scholarships available range from approximately $1,000 to $5,000. However, it's advisable to review each listing for the exact amount associated with each scholarship."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/district-of-columbia",
+    "generatedAt": "2026-04-02T10:59:05.554Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

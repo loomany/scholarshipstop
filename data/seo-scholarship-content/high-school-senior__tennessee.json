@@ -1,0 +1,48 @@
+{
+  "seo_title": "Tennessee Scholarships for High School Seniors",
+  "seo_description": "Explore 4 scholarships for Tennessee high school seniors. Award sizes vary; check deadlines and requirements for each listing.",
+  "intro": "Finding scholarships can be a crucial step for high school seniors in Tennessee looking to ease the financial burden of college. This catalog features 4 scholarships specifically for students in this state, with award sizes varying across listings. Many of these opportunities may not require essays, making them more accessible for applicants. Be sure to check the specific deadlines for each scholarship, as they can differ significantly.",
+  "h1": "Scholarships for High School Seniors in Tennessee",
+  "supporting": "As you explore these listings, pay attention to the details provided for each scholarship, including award amounts and eligibility criteria. Comparing deadlines is essential, especially since some scholarships may have approaching due dates. Verify all information on the sponsor's official site to ensure you have the most accurate and up-to-date details before applying.",
+  "related_intro": "If you're interested in more options, consider checking out related scholarships available for high school seniors in other states or those focusing on specific fields of study.",
+  "how_to_use": [
+    "Compare deadlines for each scholarship",
+    "Review award amounts listed for each program",
+    "Read eligibility requirements carefully",
+    "Open official pages for more details",
+    "Shortlist scholarships that match your profile"
+  ],
+  "who_for": [
+    "High school seniors in Tennessee",
+    "Students interested in STEM fields",
+    "Applicants seeking community-focused scholarships",
+    "Individuals looking for education-related funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in Tennessee?",
+      "answer": "In Tennessee, there are currently 4 scholarships available for high school seniors, categorized under education, STEM, and community. Each scholarship may have different focus areas, so it's beneficial to explore each listing for specific eligibility criteria."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships listed range roughly from $1,000 to $3,500. However, it's important to check the specific details of each scholarship, as amounts can vary significantly."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, but this can vary by program. It's advisable to review each scholarship's requirements directly to confirm what is needed for your application."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 4 scholarships have deadlines, but they differ from one another. Some deadlines are approaching within the next 45 days, so be sure to check the specific dates for each scholarship to ensure timely submission."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/tennessee",
+    "generatedAt": "2026-04-02T11:11:26.117Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 4,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

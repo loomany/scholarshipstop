@@ -1,0 +1,49 @@
+{
+  "seo_title": "Florida Scholarships for Veterans | Find Your Funding",
+  "seo_description": "Explore 17 scholarships for veterans in Florida. Award sizes range from $500 to $5,000. Check deadlines and requirements for each listing.",
+  "intro": "Veterans in Florida have access to a diverse range of scholarship opportunities, with 17 listings currently available. These awards, which can vary significantly in size from approximately $500 to $5,000, cater to various fields including STEM, community service, law, and more. As deadlines for these scholarships differ, it's essential to check the specific dates to ensure timely applications.",
+  "h1": "Explore 17 Scholarships for Veterans in Florida",
+  "supporting": "When exploring this list, consider comparing the award amounts and categories that align with your interests or career goals. Many listings may not require essays, making the application process potentially less daunting. Take note of the requirement details for each scholarship to find the best fit for your situation.",
+  "related_intro": "For more tailored options, check out related pages that focus on scholarships for veterans in specific fields or regions.",
+  "how_to_use": [
+    "Compare deadlines across listings to prioritize applications",
+    "Scan award amounts to identify the most beneficial opportunities",
+    "Read the requirement lines for each scholarship carefully",
+    "Open official pages for detailed application instructions",
+    "Shortlist scholarships that align with your educational goals"
+  ],
+  "who_for": [
+    "Veterans residing in Florida",
+    "Individuals seeking scholarships with minimal application requirements",
+    "Students pursuing degrees in STEM or law",
+    "Community-focused veterans looking for funding",
+    "Veterans and spouses interested in educational support"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for veterans in Florida?",
+      "answer": "The listings include a variety of scholarship categories such as STEM, Education, Community, Law, and Miscellaneous. With 17 scholarships currently available, you can find options that align with your specific interests and career goals."
+    },
+    {
+      "question": "Are there any essays required for these scholarships?",
+      "answer": "Most of the scholarships in this selection do not require essays, making them potentially easier to apply for. However, it's important to check the specific requirements for each listing, as some may have different criteria."
+    },
+    {
+      "question": "How can I find the deadlines for these scholarships?",
+      "answer": "All 17 scholarships listed have deadlines, but they vary by program. Be sure to review each listing carefully to note the specific deadline, especially since some are approaching within the next 45 days."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships range from approximately $500 to $5,000. Each listing will provide the specific amount, so it's beneficial to explore the details of each scholarship you're interested in."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "veterans/florida",
+    "generatedAt": "2026-04-02T10:38:36.626Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 17,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

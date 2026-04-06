@@ -1,0 +1,47 @@
+{
+  "seo_title": "California Scholarships for African American Students",
+  "seo_description": "Explore 10 scholarships for African American students in California. Award sizes range from $500 to $5,000. Check deadlines promptly.",
+  "intro": "Finding financial support as an African American student in California can be crucial for your educational journey. This collection features 10 scholarships specifically designed for African American students in the state, with award amounts ranging from $500 to $5,000. Each listing has its own unique requirements and deadlines, so it's essential to explore them thoroughly to find the best fit for your needs.",
+  "h1": "Scholarships for African Americans in California",
+  "supporting": "As you review these scholarships, pay attention to the specific categories they fall under, such as community, education, and arts. Many of these opportunities do not require essays, making them more accessible. Since deadlines vary, some approaching within the next 45 days, it’s wise to act promptly and verify details directly on the sponsor's website.",
+  "related_intro": "For additional opportunities, consider exploring scholarships that cater to different demographics or fields of study within California.",
+  "how_to_use": [
+    "Compare deadlines for timely applications",
+    "Scan award amounts to find suitable options",
+    "Read requirement lines for eligibility details",
+    "Open official scholarship pages for complete information",
+    "Shortlist your favorites for easy reference"
+  ],
+  "who_for": [
+    "African American students in California",
+    "Students seeking community-focused scholarships",
+    "Individuals pursuing education or arts funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for African American students in California?",
+      "answer": "The current listings include a variety of scholarships across different categories such as community, education, miscellaneous, and arts. With a total of 10 scholarships available, students can find opportunities that align with their interests and needs."
+    },
+    {
+      "question": "Do I need to write an essay to apply for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially easier for many applicants. However, it's important to check the specific requirements for each scholarship, as details may vary."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All 10 scholarships listed have deadlines, but they vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to review each listing promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "What are the typical award amounts for these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from approximately $500 to $5,000. However, it's best to check each listing for specific amounts, as they can differ significantly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "african-american/california",
+    "generatedAt": "2026-04-02T10:41:52.236Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 10,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

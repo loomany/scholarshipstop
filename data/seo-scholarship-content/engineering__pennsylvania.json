@@ -1,0 +1,49 @@
+{
+  "seo_title": "Engineering Scholarships in Pennsylvania",
+  "seo_description": "Explore 12 engineering scholarships in Pennsylvania with awards from $1,000 to $8,000. Check varied deadlines and requirements.",
+  "intro": "For aspiring engineers in Pennsylvania, there are 12 scholarship opportunities available that can help alleviate the financial burden of your education. Award sizes range from approximately $1,000 to $8,000, giving you a variety of options to consider. Keep in mind that deadlines vary across these listings, with some approaching within the next 45 days, so it’s important to act promptly and review each opportunity carefully.",
+  "h1": "Pennsylvania Engineering Scholarships Available Now",
+  "supporting": "This collection of scholarships features a mix of requirements, including both essay and no-essay options, allowing you to find opportunities that best match your strengths. As you explore the listings, compare the award amounts and specific eligibility criteria to identify which scholarships align with your academic and personal profile. This targeted approach will help you maximize your chances of securing funding.",
+  "related_intro": "If you're interested in scholarships beyond engineering, consider checking out our listings for related fields like Arts and Law, which may also offer valuable funding opportunities.",
+  "how_to_use": [
+    "Compare deadlines to prioritize your applications",
+    "Scan award amounts to find the best fit for your needs",
+    "Read through the requirement details for each scholarship",
+    "Open official scholarship pages for the most accurate information",
+    "Shortlist opportunities that align with your profile and goals"
+  ],
+  "who_for": [
+    "Engineering students in Pennsylvania",
+    "Undergraduate and graduate engineering majors",
+    "Students seeking scholarships with varying requirements",
+    "Applicants looking for substantial financial support",
+    "Individuals interested in STEM-related funding"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for engineering students in Pennsylvania?",
+      "answer": "There are currently 12 scholarships listed for engineering students in Pennsylvania. These opportunities cover a range of categories, including STEM, arts, education, and law, providing diverse options for applicants."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships in this category generally range from approximately $1,000 to $8,000. However, specific amounts can vary by scholarship, so it's important to check the details of each listing."
+    },
+    {
+      "question": "Are there deadlines I need to be aware of?",
+      "answer": "Yes, all 12 scholarships have varying deadlines. At least one scholarship has a deadline within the next 45 days, so it's advisable to review the listings promptly to ensure you don't miss any opportunities."
+    },
+    {
+      "question": "Do I need to write essays to apply for these scholarships?",
+      "answer": "Requirements vary among the scholarships, with some requiring essays and others not. Out of the 12 listings, approximately 10 do not have essay requirements, but it's essential to verify the specifics for each scholarship."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering/pennsylvania",
+    "generatedAt": "2026-04-02T10:40:59.397Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 12,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

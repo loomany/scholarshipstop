@@ -1,0 +1,49 @@
+{
+  "seo_title": "New Mexico Scholarships for High School Seniors",
+  "seo_description": "Explore 7 scholarships for New Mexico high school seniors with awards up to $5,500. Check deadlines and requirements now.",
+  "intro": "Finding financial support as a high school senior in New Mexico can be a crucial step toward your future. With 7 scholarships currently available, ranging from $500 to $5,500, there are various opportunities tailored to different interests and needs. These scholarships often have diverse requirements and deadlines, so it's important to review each listing carefully to ensure you meet the criteria and submit your applications on time.",
+  "h1": "Scholarships for High School Seniors in New Mexico",
+  "supporting": "This collection of scholarships includes options in various categories such as community service and education, with many listings requiring no essays, making them more accessible. As you explore these opportunities, consider comparing the award amounts, deadlines, and specific eligibility requirements. Each scholarship presents a unique chance to alleviate some of the financial burdens of higher education, so take the time to find the best fit for you.",
+  "related_intro": "For more tailored options, check out our listings for scholarships specific to other education levels or locations.",
+  "how_to_use": [
+    "Review each scholarship listing for specific eligibility criteria",
+    "Compare the award amounts to determine potential financial support",
+    "Check deadlines closely, as they vary by scholarship",
+    "Look for listings that do not require essays for easier applications",
+    "Visit the official scholarship pages for the most accurate information"
+  ],
+  "who_for": [
+    "High school seniors in New Mexico",
+    "Students interested in community service scholarships",
+    "Applicants seeking education-focused funding",
+    "Individuals with disabilities looking for support",
+    "Students aiming for multi-year scholarship opportunities"
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for high school seniors in New Mexico?",
+      "answer": "The current listings include a variety of scholarships categorized under community, disability, and education, among others. There are 7 scholarships available, each with unique eligibility criteria and focus areas."
+    },
+    {
+      "question": "How much can I expect to receive from these scholarships?",
+      "answer": "Award sizes for the scholarships listed range approximately from $500 to $5,500. However, specific amounts vary by scholarship, so it's important to review each listing for detailed information."
+    },
+    {
+      "question": "Are there any essay requirements for these scholarships?",
+      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially simpler. However, it's advisable to check each scholarship's details, as requirements can differ."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "All scholarships in this listing have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's recommended to verify the specific dates for each scholarship promptly."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "high-school-senior/new-mexico",
+    "generatedAt": "2026-04-02T11:06:48.033Z",
+    "promptVersion": "v3",
+    "scholarshipsCount": 7,
+    "model": "gpt-4o-mini",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}
