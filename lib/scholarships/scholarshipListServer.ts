@@ -74,6 +74,8 @@ export type ScholarshipListMeta = {
   } | null;
   /** Structured defaults for Best match filters UI (derived from saved profile). */
   profileFilterSeed?: ScholarshipProfileFilterSeed | null;
+  /** True when profile has enough signals for personalized bucket matching. */
+  personalizedMatchReady?: boolean;
   /**
    * Personalized hub: count in the “Matches” bucket after ignored + listing SQL filters (aligned with sidebar).
    * Catalog / fallback: raw index bucket size after ignored only.
@@ -192,6 +194,7 @@ function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMet
           eligibilityIds: [...meta.profileFilterSeed.eligibilityIds]
         }
       : meta.profileFilterSeed,
+    personalizedMatchReady: meta.personalizedMatchReady,
     matchedTotal: meta.matchedTotal
   };
 }
@@ -1558,7 +1561,14 @@ export async function fetchScholarshipListMeta(
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) categoryCounts[id] = 0;
   }
 
-  const meta = { filterBounds: b, sidebarCounts, categoryCounts };
+  const meta: ScholarshipListMeta = {
+    filterBounds: b,
+    sidebarCounts,
+    categoryCounts,
+    personalizedMatchReady: canBuildPersonalizedMatchIndex(
+      req.personalizedProfile ?? null
+    )
+  };
   writeTtlValue(listMetaCache, cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
   return meta;
 }

@@ -73,6 +73,7 @@ function applyListingMetaGuestPatches(
   if (!ctx.authUser) {
     meta.sidebarCounts.bestMatches = 0;
     meta.sidebarCounts.recommended = 0;
+    meta.personalizedMatchReady = false;
     meta.sidebarCounts.saved = 0;
     meta.sidebarCounts.ignored = 0;
     meta.sidebarCounts.started = 0;
