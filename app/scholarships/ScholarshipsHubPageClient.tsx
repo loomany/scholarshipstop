@@ -485,6 +485,12 @@ function ScholarshipsPageInner({
   useEffect(() => {
     let cancelled = false;
     const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
+    /**
+     * Keep visible list stable on membership mutations (save/ignore/restore):
+     * collection changes are handled optimistically in local state and should not
+     * invalidate this effect.
+     */
+    const requestCacheKey = metaKey;
     const currentRequestKey = routeScope
       ? `long_tail:${pathname.replace(/^\/scholarships\//, '')}:${searchParamsString}`
       : `hub:hub:${searchParamsString}`;
@@ -499,7 +505,7 @@ function ScholarshipsPageInner({
     ) {
       initialRequestKeyRef.current = null;
       if (initialPayload.result.meta) {
-        metaKeySynced.current = metaKey;
+        metaKeySynced.current = requestCacheKey;
       }
       setIsLoading(false);
       return () => {
@@ -543,7 +549,7 @@ function ScholarshipsPageInner({
             effectiveListScope: catalogListScope,
             q: parsedList.q,
             includeMetaRequested: false,
-            metaKey,
+            requestCacheKey,
             metaKeySyncedBefore: metaKeySynced.current,
             idCounts: {
               saved: ids.saved.length,
@@ -598,7 +604,7 @@ function ScholarshipsPageInner({
         }
         if (data.meta) {
           setListMeta(data.meta);
-          metaKeySynced.current = metaKey;
+          metaKeySynced.current = requestCacheKey;
         }
       } catch (e) {
         // eslint-disable-next-line no-console -- list fetch diagnostics
