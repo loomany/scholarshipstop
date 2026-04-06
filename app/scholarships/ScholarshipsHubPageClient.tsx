@@ -444,8 +444,10 @@ function ScholarshipsPageInner({
         activeTab === 'recommended' && syncedCatalogCount !== null
           ? syncedCatalogCount
           : base.recommended,
-      /** Easy apply sidebar count must stay a stable cross-tab meta bucket. */
-      easyApply: base.easyApply,
+      easyApply:
+        activeTab === 'easy-apply' && syncedCatalogCount !== null
+          ? syncedCatalogCount
+          : base.easyApply,
       matches:
         activeTab === 'matches' && syncedCatalogCount !== null
           ? syncedCatalogCount
