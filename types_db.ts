@@ -150,6 +150,7 @@ export interface Database {
           field_of_study_label: string | null
           first_name: string | null
           gpa: number | string | null
+          is_subscribed: boolean
           last_name: string | null
           onboarding_completed: boolean | null
           school_level: string | null
@@ -173,6 +174,7 @@ export interface Database {
           field_of_study_label?: string | null
           first_name?: string | null
           gpa?: number | string | null
+          is_subscribed?: boolean
           last_name?: string | null
           onboarding_completed?: boolean | null
           school_level?: string | null
@@ -196,6 +198,7 @@ export interface Database {
           field_of_study_label?: string | null
           first_name?: string | null
           gpa?: number | string | null
+          is_subscribed?: boolean
           last_name?: string | null
           onboarding_completed?: boolean | null
           school_level?: string | null

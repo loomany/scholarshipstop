@@ -20,7 +20,7 @@ import {
 import type { Database } from '@/types_db';
 import { profileMatchSummaryFromRow } from '@/lib/scholarships/profileMatchMeta';
 import { buildScholarshipProfileFilterSeed } from '@/lib/scholarships/profileFilterDefaults';
-import { getSubscription } from '@/utils/supabase/queries';
+import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 import {
@@ -316,8 +316,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
         .maybeSingle();
       profileRow = prof;
       profileFilterSeed = buildScholarshipProfileFilterSeed(prof);
-      const subscription = await getSubscription(supabase);
-      isProSubscriber = Boolean(subscription);
+      isProSubscriber = await getUserSubscriptionStatus(supabase, authUser.id);
     }
   }
   if (profileRow) {

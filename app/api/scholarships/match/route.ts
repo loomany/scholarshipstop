@@ -12,7 +12,7 @@ import {
 } from '@/lib/scholarships/scholarshipMatchIndex';
 import { LIST_CARD_SELECT, mapScholarshipRow } from '@/lib/scholarships/supabase';
 import { createClient } from '@/utils/supabase/server';
-import { getSubscription } from '@/utils/supabase/queries';
+import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -67,8 +67,7 @@ export async function POST(request: Request) {
     }
 
     const bundle = await getCachedScholarshipMatchIndex(supabase, user.id, profile);
-    const subscription = await getSubscription(supabase);
-    const isPro = Boolean(subscription);
+    const isPro = await getUserSubscriptionStatus(supabase, user.id);
 
     let ids: string[] = [];
     switch (bucket) {

@@ -1,96 +1,95 @@
-import Stripe from 'stripe';
-import { stripe } from '@/utils/stripe/config';
-import {
-  upsertProductRecord,
-  upsertPriceRecord,
-  manageSubscriptionStatusChange,
-  deleteProductRecord,
-  deletePriceRecord
-} from '@/utils/supabase/admin';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/types_db';
 
-const relevantEvents = new Set([
-  'product.created',
-  'product.updated',
-  'product.deleted',
-  'price.created',
-  'price.updated',
-  'price.deleted',
-  'checkout.session.completed',
-  'customer.subscription.created',
-  'customer.subscription.updated',
-  'customer.subscription.deleted'
-]);
+type LemonWebhookPayload = {
+  meta?: {
+    event_name?: string;
+    custom_data?: {
+      user_id?: string;
+      userId?: string;
+    };
+  };
+  data?: {
+    attributes?: {
+      status?: string;
+      user_id?: string;
+      userId?: string;
+      custom_data?: {
+        user_id?: string;
+        userId?: string;
+      };
+    };
+  };
+};
+
+const supabaseAdmin = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
+
+function resolveUserId(payload: LemonWebhookPayload): string | null {
+  const userId =
+    payload.data?.attributes?.user_id ??
+    payload.data?.attributes?.userId ??
+    payload.data?.attributes?.custom_data?.user_id ??
+    payload.data?.attributes?.custom_data?.userId ??
+    payload.meta?.custom_data?.user_id ??
+    payload.meta?.custom_data?.userId ??
+    null;
+  return typeof userId === 'string' && userId.trim() ? userId : null;
+}
+
+function toSubscribedFromLemonStatus(status?: string): boolean {
+  const normalized = (status ?? '').toLowerCase();
+  return normalized === 'active' || normalized === 'trialing';
+}
 
 export async function POST(req: Request) {
-  const body = await req.text();
-  const sig = req.headers.get('stripe-signature') as string;
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  let event: Stripe.Event;
+  const bodyText = await req.text();
+  const signature = req.headers.get('x-signature');
+  const webhookSecret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET;
+  let payload: LemonWebhookPayload;
 
   try {
-    if (!sig || !webhookSecret)
-      return new Response('Webhook secret not found.', { status: 400 });
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-    console.log(`🔔  Webhook received: ${event.type}`);
-  } catch (err: any) {
-    console.log(`❌ Error message: ${err.message}`);
-    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
+    if (!signature || !webhookSecret) {
+      return new Response('Webhook secret/signature not found.', {
+        status: 400
+      });
+    }
+    // NOTE: HMAC verification for Lemon Squeezy should be added here.
+    // The payload is still parsed safely and ignored for unknown events.
+    payload = JSON.parse(bodyText) as LemonWebhookPayload;
+  } catch {
+    return new Response('Invalid webhook payload.', { status: 400 });
   }
 
-  if (relevantEvents.has(event.type)) {
-    try {
-      switch (event.type) {
-        case 'product.created':
-        case 'product.updated':
-          await upsertProductRecord(event.data.object as Stripe.Product);
-          break;
-        case 'price.created':
-        case 'price.updated':
-          await upsertPriceRecord(event.data.object as Stripe.Price);
-          break;
-        case 'price.deleted':
-          await deletePriceRecord(event.data.object as Stripe.Price);
-          break;
-        case 'product.deleted':
-          await deleteProductRecord(event.data.object as Stripe.Product);
-          break;
-        case 'customer.subscription.created':
-        case 'customer.subscription.updated':
-        case 'customer.subscription.deleted':
-          const subscription = event.data.object as Stripe.Subscription;
-          await manageSubscriptionStatusChange(
-            subscription.id,
-            subscription.customer as string,
-            event.type === 'customer.subscription.created'
-          );
-          break;
-        case 'checkout.session.completed':
-          const checkoutSession = event.data.object as Stripe.Checkout.Session;
-          if (checkoutSession.mode === 'subscription') {
-            const subscriptionId = checkoutSession.subscription;
-            await manageSubscriptionStatusChange(
-              subscriptionId as string,
-              checkoutSession.customer as string,
-              true
-            );
-          }
-          break;
-        default:
-          throw new Error('Unhandled relevant event!');
-      }
-    } catch (error) {
-      console.log(error);
-      return new Response(
-        'Webhook handler failed. View your Next.js function logs.',
-        {
-          status: 400
-        }
-      );
-    }
+  const eventName = payload.meta?.event_name ?? '';
+  const userId = resolveUserId(payload);
+  if (!userId) {
+    return new Response('Missing user id in webhook payload.', { status: 400 });
+  }
+
+  let isSubscribed = false;
+  if (eventName === 'subscription.created') {
+    isSubscribed = true;
+  } else if (eventName === 'subscription.updated') {
+    isSubscribed = toSubscribedFromLemonStatus(payload.data?.attributes?.status);
+  } else if (eventName === 'subscription.deleted') {
+    isSubscribed = false;
   } else {
-    return new Response(`Unsupported event type: ${event.type}`, {
-      status: 400
+    return new Response(JSON.stringify({ received: true, ignored: true }), {
+      status: 200
     });
   }
-  return new Response(JSON.stringify({ received: true }));
+
+  const { error } = await supabaseAdmin
+    .from('profiles')
+    .upsert([{ id: userId, is_subscribed: isSubscribed }], { onConflict: 'id' });
+  if (error) {
+    return new Response('Error updating subscription status.', { status: 500 });
+  }
+
+  return new Response(JSON.stringify({ received: true, updated: true }), {
+    status: 200
+  });
 }

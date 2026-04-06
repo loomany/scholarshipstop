@@ -272,6 +272,18 @@ const manageSubscriptionStatusChange = async (
     `Inserted/updated subscription [${subscription.id}] for user [${uuid}]`
   );
 
+  const isSubscribed =
+    subscription.status === 'active' || subscription.status === 'trialing';
+  const { error: profileUpsertError } = await supabaseAdmin
+    .from('profiles')
+    .upsert([{ id: uuid, is_subscribed: isSubscribed }], { onConflict: 'id' });
+  if (profileUpsertError) {
+    throw new Error(
+      `Profile subscription status update failed: ${profileUpsertError.message}`
+    );
+  }
+  console.log(`Updated profile subscription status for user [${uuid}]: ${isSubscribed}`);
+
   // For a new subscription copy the billing details to the customer object.
   // NOTE: This is a costly operation and should happen at the very end.
   if (createAction && subscription.default_payment_method && uuid)

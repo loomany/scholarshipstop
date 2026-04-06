@@ -20,6 +20,18 @@ export const getSubscription = cache(async (supabase: ServerSupabaseClient) => {
   return subscription;
 });
 
+export const getUserSubscriptionStatus = cache(
+  async (supabase: ServerSupabaseClient, userId: string) => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('is_subscribed')
+      .eq('id', userId)
+      .maybeSingle();
+
+    return Boolean(profile?.is_subscribed);
+  }
+);
+
 export const getProducts = cache(async (supabase: ServerSupabaseClient) => {
   const { data: products, error } = await supabase
     .from('products')
