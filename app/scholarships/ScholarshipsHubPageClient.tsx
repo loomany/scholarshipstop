@@ -655,15 +655,17 @@ function ScholarshipsPageInner({
         });
         const metaResponse = await postScholarshipsMeta({
           searchParams: sp.toString(),
+          /**
+           * Sidebar meta counts are cross-tab numbers (matches/saved/ignored/easy).
+           * Do not inject tab-enforced Easy apply filter here, otherwise `matches`
+           * gets narrowed by the active tab's extra filter when tab=easy-apply.
+           */
           moreFilters: moreFiltersToJson(
-            withTabEnforcedMoreFilters(
-              routeBaseMoreFilters && moreFiltersApplied
-                ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied)
-                : (moreFiltersApplied ??
-                    routeBaseMoreFilters ??
-                    defaultMoreFiltersFromBounds(filterBounds)),
-              activeTab
-            )
+            routeBaseMoreFilters && moreFiltersApplied
+              ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied)
+              : (moreFiltersApplied ??
+                  routeBaseMoreFilters ??
+                  defaultMoreFiltersFromBounds(filterBounds))
           ),
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
