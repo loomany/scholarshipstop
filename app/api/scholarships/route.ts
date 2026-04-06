@@ -71,7 +71,6 @@ function applyListingMetaGuestPatches(
 ) {
   meta.sidebarCounts.bestMatches = 0;
   meta.sidebarCounts.recommended = 0;
-  meta.sidebarCounts.easyApply = 0;
   delete meta.matchedTotal;
   if (!ctx.authUser) {
     meta.sidebarCounts.saved = 0;
