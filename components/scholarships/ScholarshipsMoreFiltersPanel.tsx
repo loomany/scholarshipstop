@@ -1,13 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Lock, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 import type { MoreFiltersState } from '@/app/scholarships/moreFilters';
-import {
-  scholarshipGuestLockIconClass,
-  scholarshipSeeResultsButtonClass
-} from '@/lib/constants/scholarshipActionUi';
+import { scholarshipSeeResultsButtonClass } from '@/lib/constants/scholarshipActionUi';
 import { REQUIREMENT_TYPE_OPTIONS } from '@/app/scholarships/moreFilters';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
 import {
@@ -37,8 +34,6 @@ type ScholarshipsMoreFiltersPanelProps = {
   previewCountFallback?: number | null;
   /** State names from loaded scholarships (excludes unknown free text). */
   locationOptions: string[];
-  isAuthenticated?: boolean;
-  onGuestLockedAction?: () => void;
 };
 
 function DualRangeSlider({
@@ -129,9 +124,7 @@ export default function ScholarshipsMoreFiltersPanel({
   previewCount,
   previewCountLoading,
   previewCountFallback = null,
-  locationOptions,
-  isAuthenticated = true,
-  onGuestLockedAction
+  locationOptions
 }: ScholarshipsMoreFiltersPanelProps) {
   useEffect(() => {
     if (!open) return;
@@ -734,40 +727,16 @@ export default function ScholarshipsMoreFiltersPanel({
         <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-zinc-200 bg-white px-4 py-4">
           <button
             type="button"
-            onClick={() => {
-              if (!isAuthenticated) {
-                onGuestLockedAction?.();
-                return;
-              }
-              onClear();
-            }}
+            onClick={onClear}
             className="rounded-md text-sm font-semibold text-zinc-700 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 focus-visible:ring-offset-0"
           >
             Clear
           </button>
           <button
             type="button"
-            onClick={() => {
-              if (!isAuthenticated) {
-                onGuestLockedAction?.();
-                return;
-              }
-              onApply();
-            }}
-            title={
-              !isAuthenticated
-                ? 'Apply filters after you create a free account'
-                : undefined
-            }
-            className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
+            onClick={onApply}
+            className={scholarshipSeeResultsButtonClass}
           >
-            {!isAuthenticated ? (
-              <Lock
-                className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
-                strokeWidth={2}
-                aria-hidden
-              />
-            ) : null}
             {previewLabel}
           </button>
         </footer>
