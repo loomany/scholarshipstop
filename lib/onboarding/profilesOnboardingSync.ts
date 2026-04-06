@@ -1,5 +1,7 @@
 import { citizenshipLabelForValue } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import { gpaForProfileDb } from '@/lib/constants/scholarshipGpaOptions';
+import type { SupabaseClient } from '@supabase/supabase-js';
+
 import type { Database } from '@/types_db';
 import type { UserProfile } from '@/lib/onboarding/userProfile';
 import type { createClient as createBrowserClient } from '@/utils/supabase/client';
@@ -7,7 +9,8 @@ import type { createClient as createServerClient } from '@/utils/supabase/server
 
 type AppSupabaseClient =
   | ReturnType<typeof createBrowserClient>
-  | ReturnType<typeof createServerClient>;
+  | ReturnType<typeof createServerClient>
+  | SupabaseClient<Database>;
 
 /** Only these keys are sent to `public.profiles` upsert. */
 export const PROFILES_UPSERT_ALLOWED_KEYS = new Set([
@@ -204,21 +207,57 @@ export async function syncOnboardingToProfiles(
   return { ok: true };
 }
 
+function scholarshipProfileRecordFromMetadata(
+  raw: unknown
+): Record<string, unknown> | null {
+  if (raw != null && typeof raw === 'object' && !Array.isArray(raw)) {
+    return raw as Record<string, unknown>;
+  }
+  if (typeof raw === 'string' && raw.trim()) {
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      if (parsed != null && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return parsed as Record<string, unknown>;
+      }
+    } catch {
+      console.warn(
+        '[onboarding:profile] scholarship_profile in user_metadata is not valid JSON'
+      );
+    }
+  }
+  return null;
+}
+
 /**
  * After email confirmation: copy `scholarship_profile` from user_metadata into public.profiles.
+ * Expects camelCase keys matching `UserProfile` — either a JSON object or a JSON string (signUp stores a string).
  */
 export async function syncOnboardingFromMetadataIfPresent(
   supabase: AppSupabaseClient,
   userId: string,
   metadata: Record<string, unknown> | undefined
 ): Promise<void> {
-  if (!metadata?.scholarship_profile || typeof metadata.scholarship_profile !== 'object') {
+  const parsed = scholarshipProfileRecordFromMetadata(metadata?.scholarship_profile);
+  if (!parsed) {
+    if (metadata && Object.prototype.hasOwnProperty.call(metadata, 'scholarship_profile')) {
+      console.info(
+        '[onboarding:profile] scholarship_profile missing or unusable; user_metadata keys:',
+        Object.keys(metadata)
+      );
+    }
     return;
   }
-  const profile = userProfileFromAuthMetadata(
-    metadata.scholarship_profile as Record<string, unknown>
+
+  console.info(
+    '[onboarding:profile] scholarship_profile parsed; top-level keys:',
+    Object.keys(parsed)
   );
-  await syncOnboardingToProfiles(supabase, userId, profile);
+
+  const profile = userProfileFromAuthMetadata(parsed);
+  const result = await syncOnboardingToProfiles(supabase, userId, profile);
+  if (!result.ok) {
+    console.error('[onboarding:profile] sync from metadata failed', result.error);
+  }
 }
 
 export type ProfileCitizenshipLocationRow = {

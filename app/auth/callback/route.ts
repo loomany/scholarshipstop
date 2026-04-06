@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
@@ -60,7 +61,7 @@ export async function GET(request: NextRequest) {
     }
   );
 
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  const { data: authData, error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
     return NextResponse.redirect(
@@ -72,16 +73,52 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
+  /**
+   * Same-request pitfall: `exchangeCodeForSession` persists the session via `set` on the
+   * redirect Response, but `getUser()` / `getSession()` read **request** cookies only.
+   * Until the browser stores those cookies, storage looks empty — PostgREST then uses the
+   * anon key, RLS blocks `profiles` upsert, and onboarding never syncs from metadata.
+   * Use the user + access_token returned from the token exchange for this step.
+   */
+  const session = authData?.session;
+  const user = authData?.user ?? session?.user;
+  const metadata = user?.user_metadata;
+  const metaObj =
+    metadata && typeof metadata === 'object' && !Array.isArray(metadata)
+      ? (metadata as Record<string, unknown>)
+      : undefined;
 
-  if (user?.user_metadata && typeof user.user_metadata === 'object') {
-    await syncOnboardingFromMetadataIfPresent(
-      supabase,
-      user.id,
-      user.user_metadata as Record<string, unknown>
+  if (metaObj) {
+    const sp = metaObj.scholarship_profile;
+    console.info('[auth:callback] post-exchange metadata snapshot', {
+      userId: user?.id ?? null,
+      metadataKeys: Object.keys(metaObj),
+      hasScholarshipProfile: Object.prototype.hasOwnProperty.call(metaObj, 'scholarship_profile'),
+      scholarshipProfileType: typeof sp,
+      scholarshipProfileLen:
+        typeof sp === 'string' ? sp.length : sp != null && typeof sp === 'object' ? 'object' : null
+    });
+  } else {
+    console.info('[auth:callback] no usable user_metadata object after exchange', {
+      userId: user?.id ?? null,
+      metadataType: metadata === undefined ? 'undefined' : typeof metadata
+    });
+  }
+
+  if (user && session?.access_token && metaObj) {
+    const syncClient = createClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        accessToken: async () => session.access_token,
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+          detectSessionInUrl: false
+        }
+      }
     );
+    await syncOnboardingFromMetadataIfPresent(syncClient, user.id, metaObj);
   }
 
   return response;

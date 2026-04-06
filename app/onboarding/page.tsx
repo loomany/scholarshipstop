@@ -229,13 +229,19 @@ function OnboardingWizard() {
       let signUpData: Awaited<ReturnType<typeof supabase.auth.signUp>>['data'];
       let signUpError: Awaited<ReturnType<typeof supabase.auth.signUp>>['error'];
       try {
+        // GoTrue often omits nested objects from raw_user_meta_data; a JSON string is stored reliably.
+        const scholarshipProfilePayload = JSON.stringify(built.profile);
+        console.info('[onboarding:auth] signUp metadata payload', {
+          builtProfile: built.profile,
+          scholarship_profile_string_length: scholarshipProfilePayload.length
+        });
         const result = await supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo,
             data: {
-              scholarship_profile: built.profile as unknown as Record<string, unknown>
+              scholarship_profile: scholarshipProfilePayload
             }
           }
         });
