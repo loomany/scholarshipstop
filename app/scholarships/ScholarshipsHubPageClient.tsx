@@ -485,7 +485,12 @@ function ScholarshipsPageInner({
   useEffect(() => {
     let cancelled = false;
     const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
-    const requestCacheKey = `${metaKey}|${userCollectionsFingerprint}`;
+    /**
+     * Keep visible list stable on membership mutations (save/ignore/restore):
+     * collection changes are handled optimistically in local state and should not
+     * invalidate this effect.
+     */
+    const requestCacheKey = metaKey;
     const currentRequestKey = routeScope
       ? `long_tail:${pathname.replace(/^\/scholarships\//, '')}:${searchParamsString}`
       : `hub:hub:${searchParamsString}`;
@@ -620,7 +625,6 @@ function ScholarshipsPageInner({
     pageFromUrl,
     activeTab,
     moreFiltersFingerprint,
-    userCollectionsFingerprint,
     catalogListScope,
     routeScope,
     pathname,
