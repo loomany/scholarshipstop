@@ -101,6 +101,10 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   submitted: 0,
   ignored: 0
 };
+const SAVED_STORAGE_KEY = 'savedScholarships';
+const IGNORED_STORAGE_KEY = 'scholarshipIgnored';
+const STARTED_STORAGE_KEY = 'startedScholarships';
+const SUBMITTED_STORAGE_KEY = 'submittedScholarships';
 
 function buildHubListingSearchParams(options: {
   base: URLSearchParams;
@@ -222,6 +226,14 @@ function ScholarshipsPageInner({
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
 
+  const syncUserCollectionIdsFromStorage = useCallback(() => {
+    if (!isAuthenticated) return;
+    setSavedIds(getSavedScholarshipIds());
+    setIgnoredIds(getIgnoredScholarshipIds());
+    setStartedIds(getStartedScholarshipIds());
+    setSubmittedIds(getSubmittedScholarshipIds());
+  }, [isAuthenticated]);
+
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
   }, []);
@@ -238,11 +250,8 @@ function ScholarshipsPageInner({
       setSubmittedIds([]);
       return;
     }
-    setSavedIds(getSavedScholarshipIds());
-    setIgnoredIds(getIgnoredScholarshipIds());
-    setStartedIds(getStartedScholarshipIds());
-    setSubmittedIds(getSubmittedScholarshipIds());
-  }, [isAuthenticated]);
+    syncUserCollectionIdsFromStorage();
+  }, [isAuthenticated, syncUserCollectionIdsFromStorage]);
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const [moreFiltersApplied, setMoreFiltersApplied] =
     useState<MoreFiltersState | null>(() =>
@@ -383,10 +392,19 @@ function ScholarshipsPageInner({
       if (e.key === 'scholarshipViewedIds' || e.key === null) {
         setViewedIds(getViewedScholarshipIds());
       }
+      if (
+        e.key === SAVED_STORAGE_KEY ||
+        e.key === IGNORED_STORAGE_KEY ||
+        e.key === STARTED_STORAGE_KEY ||
+        e.key === SUBMITTED_STORAGE_KEY ||
+        e.key === null
+      ) {
+        syncUserCollectionIdsFromStorage();
+      }
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
-  }, []);
+  }, [syncUserCollectionIdsFromStorage]);
 
   useEffect(() => {
     const onVis = () => {
@@ -445,6 +463,16 @@ function ScholarshipsPageInner({
       moreFiltersToJson(withTabEnforcedMoreFilters(moreFiltersApplied, activeTab))
     );
   }, [moreFiltersApplied, activeTab]);
+  const userCollectionsFingerprint = useMemo(
+    () =>
+      JSON.stringify({
+        saved: savedIds,
+        ignored: ignoredIds,
+        started: startedIds,
+        submitted: submittedIds
+      }),
+    [savedIds, ignoredIds, startedIds, submittedIds]
+  );
 
   const totalPages = Math.max(
     1,
@@ -457,6 +485,7 @@ function ScholarshipsPageInner({
   useEffect(() => {
     let cancelled = false;
     const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
+    const requestCacheKey = `${metaKey}|${userCollectionsFingerprint}`;
     const currentRequestKey = routeScope
       ? `long_tail:${pathname.replace(/^\/scholarships\//, '')}:${searchParamsString}`
       : `hub:hub:${searchParamsString}`;
@@ -471,7 +500,7 @@ function ScholarshipsPageInner({
     ) {
       initialRequestKeyRef.current = null;
       if (initialPayload.result.meta) {
-        metaKeySynced.current = metaKey;
+        metaKeySynced.current = requestCacheKey;
       }
       setIsLoading(false);
       return () => {
@@ -515,7 +544,7 @@ function ScholarshipsPageInner({
             effectiveListScope: catalogListScope,
             q: parsedList.q,
             includeMetaRequested: false,
-            metaKey,
+            requestCacheKey,
             metaKeySyncedBefore: metaKeySynced.current,
             idCounts: {
               saved: ids.saved.length,
@@ -570,7 +599,7 @@ function ScholarshipsPageInner({
         }
         if (data.meta) {
           setListMeta(data.meta);
-          metaKeySynced.current = metaKey;
+          metaKeySynced.current = requestCacheKey;
         }
       } catch (e) {
         // eslint-disable-next-line no-console -- list fetch diagnostics
@@ -591,6 +620,7 @@ function ScholarshipsPageInner({
     pageFromUrl,
     activeTab,
     moreFiltersFingerprint,
+    userCollectionsFingerprint,
     catalogListScope,
     routeScope,
     pathname,
@@ -599,7 +629,7 @@ function ScholarshipsPageInner({
 
   useEffect(() => {
     let cancelled = false;
-    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
+    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}|${userCollectionsFingerprint}`;
     if (metaKeySynced.current === metaKey) return;
     if (metaRequestInFlightRef.current === metaKey) return;
     metaRequestInFlightRef.current = metaKey;
@@ -661,6 +691,7 @@ function ScholarshipsPageInner({
     activeTab,
     searchParamsString,
     moreFiltersFingerprint,
+    userCollectionsFingerprint,
     catalogListScope,
     moreFiltersApplied,
     routeScope,
@@ -860,6 +891,17 @@ function ScholarshipsPageInner({
         setTotalCount((c) => Math.max(0, c - 1));
       }
       setSavedIds(wasSaved ? removeScholarship(id) : saveScholarship(id));
+      setListMeta((prev) =>
+        prev
+          ? {
+              ...prev,
+              sidebarCounts: {
+                ...prev.sidebarCounts,
+                saved: Math.max(0, prev.sidebarCounts.saved + (wasSaved ? -1 : 1))
+              }
+            }
+          : prev
+      );
     },
     [activeTab, isAuthenticated, openRegistrationWall, savedIds]
   );
@@ -871,6 +913,17 @@ function ScholarshipsPageInner({
         return;
       }
       setIgnoredIds(addIgnoredScholarship(id));
+      setListMeta((prev) =>
+        prev
+          ? {
+              ...prev,
+              sidebarCounts: {
+                ...prev.sidebarCounts,
+                ignored: prev.sidebarCounts.ignored + 1
+              }
+            }
+          : prev
+      );
       if (activeTab !== 'ignored') {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
@@ -886,6 +939,17 @@ function ScholarshipsPageInner({
         return;
       }
       setIgnoredIds(removeIgnoredScholarship(id));
+      setListMeta((prev) =>
+        prev
+          ? {
+              ...prev,
+              sidebarCounts: {
+                ...prev.sidebarCounts,
+                ignored: Math.max(0, prev.sidebarCounts.ignored - 1)
+              }
+            }
+          : prev
+      );
       if (activeTab === 'ignored') {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
