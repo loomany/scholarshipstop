@@ -36,7 +36,7 @@ type NavDef = {
 };
 
 type StaticNavDef = {
-  id: 'easy-apply' | 'best-matches' | 'recommended';
+  id: 'best-matches' | 'recommended';
   label: string;
   icon: LucideIcon;
 };
@@ -48,11 +48,6 @@ const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
 ]);
 
 const STATIC_TOP_ROWS: StaticNavDef[] = [
-  {
-    id: 'easy-apply',
-    label: 'Easy apply',
-    icon: Trophy
-  },
   {
     id: 'best-matches',
     label: 'Best recommendation',
@@ -66,6 +61,12 @@ const STATIC_TOP_ROWS: StaticNavDef[] = [
 ];
 
 const ACTION_NAV_DEFS: NavDef[] = [
+  {
+    id: 'easy-apply',
+    label: 'Easy apply',
+    icon: Trophy,
+    tooltip: 'Scholarships with lighter application effort.'
+  },
   {
     id: 'matches',
     label: 'Matches',
@@ -135,6 +136,9 @@ export default function ScholarshipsSidebar({
     switch (id) {
       case 'matches':
         n = counts.matches;
+        break;
+      case 'easy-apply':
+        n = counts.easyApply;
         break;
       case 'saved':
         n = counts.saved;
