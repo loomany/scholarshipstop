@@ -108,7 +108,12 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'closest_deadline', label: 'Deadline soonest' },
   { value: 'most_recent', label: 'Newest' },
   { value: 'highest_amount', label: 'Amount high → low' },
-  { value: 'lowest_amount', label: 'Amount low → high' }
+  { value: 'lowest_amount', label: 'Amount low → high' },
+  { value: 'best_match', label: 'Best match' },
+  { value: 'magic', label: 'Recommended' },
+  { value: 'verified_first', label: 'Verified first' },
+  { value: 'least_requirements', label: 'Fewest requirements' },
+  { value: 'fewest_applicants', label: 'Least applicants' }
 ];
 
 const SORT_TRIGGER_LABEL: Record<SortOption, string> = {

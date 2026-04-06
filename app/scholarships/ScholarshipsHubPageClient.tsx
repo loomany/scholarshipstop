@@ -1024,6 +1024,8 @@ function ScholarshipsPageInner({
           <ScholarshipsSidebar
             counts={sidebarCounts}
             matchesNewIndicator={null}
+            guestMode={!isAuthenticated}
+            onGuestRestrictedNav={!isAuthenticated ? openRegistrationWall : undefined}
           />
         }
       >
@@ -1049,6 +1051,7 @@ function ScholarshipsPageInner({
             categoriesDisabled={!isLoading && totalCount === 0}
             moreFiltersActiveCount={moreFiltersActiveCount}
             isAuthenticated={isAuthenticated}
+            onGuestSortBlocked={!isAuthenticated ? openRegistrationWall : undefined}
             listingViewControls={
               !isAuthenticated ? (
                 <div

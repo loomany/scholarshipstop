@@ -24,7 +24,10 @@ import {
   parseHubScholarshipTabParamForGuest
 } from '@/app/scholarships/scholarshipTabs';
 import { DarkTooltip } from '@/components/ui/DarkTooltip';
-import { scholarshipSidebarActiveRowClass } from '@/lib/constants/scholarshipActionUi';
+import {
+  scholarshipGuestLockIconClass,
+  scholarshipSidebarActiveRowClass
+} from '@/lib/constants/scholarshipActionUi';
 
 export type { ScholarshipSidebarCounts };
 
@@ -43,6 +46,9 @@ type StaticNavDef = {
 
 /** Hub guests: these tabs open the registration wall instead of navigating. */
 const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
+  'best-matches',
+  'recommended',
+  'easy-apply',
   'saved',
   'ignored'
 ]);
@@ -175,48 +181,98 @@ export default function ScholarshipsSidebar({
           const isActive = activeTab === item.id;
           const href = buildScholarshipTabHref(item.id);
           const countSuffix = suffix(item.id);
+          const showGuestLock =
+            guestMode && GUEST_GATED_TAB_IDS.has(item.id);
+          const baseClass = `group flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
+            isActive
+              ? scholarshipSidebarActiveRowClass
+              : 'border-transparent hover:bg-gray-50/80'
+          }`;
           return (
             <li key={item.id}>
-              <Link
-                href={href}
-                prefetch={false}
-                className={`group flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
-                  isActive
-                    ? scholarshipSidebarActiveRowClass
-                    : 'border-transparent hover:bg-gray-50/80'
-                }`}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                <Icon
-                  className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
-                    isActive
-                      ? 'text-white stroke-white'
-                      : 'text-[#FF7A1A] stroke-[#FF7A1A]'
-                  }`}
-                  aria-hidden
-                />
-                <span
-                  className={`min-w-0 flex-1 text-left text-sm ${
-                    isActive
-                      ? 'font-semibold text-white'
-                      : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
-                  }`}
+              {showGuestLock ? (
+                <button
+                  type="button"
+                  onClick={onGuestRestrictedNav}
+                  className={baseClass}
+                  title="Create a free account to unlock this section"
+                  aria-label={`Create a free account to unlock ${item.label}`}
                 >
-                  {item.label}
-                  {countSuffix ? (
-                    <span
-                      className={
-                        isActive
-                          ? 'font-normal text-white'
-                          : 'font-normal text-gray-400'
-                      }
-                    >
-                      {' '}
-                      {countSuffix}
-                    </span>
-                  ) : null}
-                </span>
-              </Link>
+                  <Icon
+                    className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
+                      isActive
+                        ? 'text-white stroke-white'
+                        : 'text-[#FF7A1A] stroke-[#FF7A1A]'
+                    }`}
+                    aria-hidden
+                  />
+                  <span
+                    className={`min-w-0 flex-1 text-left text-sm ${
+                      isActive
+                        ? 'font-semibold text-white'
+                        : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
+                    }`}
+                  >
+                    {item.label}
+                    {countSuffix ? (
+                      <span
+                        className={
+                          isActive
+                            ? 'font-normal text-white'
+                            : 'font-normal text-gray-400'
+                        }
+                      >
+                        {' '}
+                        {countSuffix}
+                      </span>
+                    ) : null}
+                  </span>
+                  <Lock
+                    className={`h-3.5 w-3.5 shrink-0 ${
+                      isActive ? 'text-white/85 stroke-white/85' : scholarshipGuestLockIconClass
+                    }`}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                </button>
+              ) : (
+                <Link
+                  href={href}
+                  prefetch={false}
+                  className={baseClass}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <Icon
+                    className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
+                      isActive
+                        ? 'text-white stroke-white'
+                        : 'text-[#FF7A1A] stroke-[#FF7A1A]'
+                    }`}
+                    aria-hidden
+                  />
+                  <span
+                    className={`min-w-0 flex-1 text-left text-sm ${
+                      isActive
+                        ? 'font-semibold text-white'
+                        : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
+                    }`}
+                  >
+                    {item.label}
+                    {countSuffix ? (
+                      <span
+                        className={
+                          isActive
+                            ? 'font-normal text-white'
+                            : 'font-normal text-gray-400'
+                        }
+                      >
+                        {' '}
+                        {countSuffix}
+                      </span>
+                    ) : null}
+                  </span>
+                </Link>
+              )}
             </li>
           );
         })}
