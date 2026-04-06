@@ -142,8 +142,6 @@ export function buildScholarshipListSearchParams(
   if (patch.tab !== undefined) {
     if (patch.tab === null || patch.tab === '') {
       p.delete('tab');
-    } else if (patch.tab === 'best-matches') {
-      p.delete('tab');
     } else if (patch.tab === 'matches') {
       p.set('tab', 'matches');
     } else {

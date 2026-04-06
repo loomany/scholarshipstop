@@ -69,10 +69,11 @@ function applyListingMetaGuestPatches(
   meta: ScholarshipListMeta,
   ctx: { authUser: boolean }
 ) {
-  meta.sidebarCounts.bestMatches = 0;
-  meta.sidebarCounts.recommended = 0;
   delete meta.matchedTotal;
   if (!ctx.authUser) {
+    meta.sidebarCounts.bestMatches = 0;
+    meta.sidebarCounts.recommended = 0;
+    meta.personalizedMatchReady = false;
     meta.sidebarCounts.saved = 0;
     meta.sidebarCounts.ignored = 0;
     meta.sidebarCounts.started = 0;
@@ -318,6 +319,9 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       const subscription = await getSubscription(supabase);
       isProSubscriber = Boolean(subscription);
     }
+  }
+  if (profileRow) {
+    req = { ...req, personalizedProfile: profileRow };
   }
 
   if (hubDbg) {
