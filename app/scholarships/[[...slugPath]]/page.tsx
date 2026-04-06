@@ -63,8 +63,17 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const {
       data: { user }
     } = await supabase.auth.getUser();
+    const profile = user?.id
+      ? (
+          await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .maybeSingle()
+        ).data
+      : null;
     const initialListPayload =
-      await fetchInitialHubScholarshipsPayload(supabase);
+      await fetchInitialHubScholarshipsPayload(supabase, profile);
     return (
       <ScholarshipsHubPageClient
         isAuthenticated={Boolean(user)}

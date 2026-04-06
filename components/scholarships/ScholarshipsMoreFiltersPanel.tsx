@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
-import { X } from 'lucide-react';
+import { Lock, X } from 'lucide-react';
 
 import type { MoreFiltersState } from '@/app/scholarships/moreFilters';
-import { scholarshipSeeResultsButtonClass } from '@/lib/constants/scholarshipActionUi';
+import {
+  scholarshipGuestLockIconClass,
+  scholarshipSeeResultsButtonClass
+} from '@/lib/constants/scholarshipActionUi';
 import { REQUIREMENT_TYPE_OPTIONS } from '@/app/scholarships/moreFilters';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
 import {
@@ -34,6 +37,8 @@ type ScholarshipsMoreFiltersPanelProps = {
   previewCountFallback?: number | null;
   /** State names from loaded scholarships (excludes unknown free text). */
   locationOptions: string[];
+  isAuthenticated?: boolean;
+  onGuestLockedAction?: () => void;
 };
 
 function DualRangeSlider({
@@ -124,7 +129,9 @@ export default function ScholarshipsMoreFiltersPanel({
   previewCount,
   previewCountLoading,
   previewCountFallback = null,
-  locationOptions
+  locationOptions,
+  isAuthenticated = true,
+  onGuestLockedAction
 }: ScholarshipsMoreFiltersPanelProps) {
   useEffect(() => {
     if (!open) return;
@@ -734,9 +741,27 @@ export default function ScholarshipsMoreFiltersPanel({
           </button>
           <button
             type="button"
-            onClick={onApply}
-            className={scholarshipSeeResultsButtonClass}
+            onClick={() => {
+              if (!isAuthenticated) {
+                onGuestLockedAction?.();
+                return;
+              }
+              onApply();
+            }}
+            title={
+              !isAuthenticated
+                ? 'Apply filters after you create a free account'
+                : undefined
+            }
+            className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
           >
+            {!isAuthenticated ? (
+              <Lock
+                className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
+                strokeWidth={2}
+                aria-hidden
+              />
+            ) : null}
             {previewLabel}
           </button>
         </footer>

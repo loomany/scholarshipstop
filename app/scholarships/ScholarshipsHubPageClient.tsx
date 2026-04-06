@@ -101,6 +101,10 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   submitted: 0,
   ignored: 0
 };
+const SAVED_STORAGE_KEY = 'savedScholarships';
+const IGNORED_STORAGE_KEY = 'scholarshipIgnored';
+const STARTED_STORAGE_KEY = 'startedScholarships';
+const SUBMITTED_STORAGE_KEY = 'submittedScholarships';
 
 function buildHubListingSearchParams(options: {
   base: URLSearchParams;
@@ -119,9 +123,7 @@ function buildHubListingSearchParams(options: {
   sp.set('limit', String(SCHOLARSHIPS_PAGE_SIZE));
   if (options.meta) sp.set('meta', '1');
   else sp.delete('meta');
-  if (options.tab === 'best-matches') {
-    sp.delete('tab');
-  } else if (options.tab === 'matches') {
+  if (options.tab === 'matches') {
     sp.set('tab', 'matches');
   } else {
     sp.set('tab', options.tab);
@@ -224,6 +226,14 @@ function ScholarshipsPageInner({
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
 
+  const syncUserCollectionIdsFromStorage = useCallback(() => {
+    if (!isAuthenticated) return;
+    setSavedIds(getSavedScholarshipIds());
+    setIgnoredIds(getIgnoredScholarshipIds());
+    setStartedIds(getStartedScholarshipIds());
+    setSubmittedIds(getSubmittedScholarshipIds());
+  }, [isAuthenticated]);
+
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
   }, []);
@@ -240,11 +250,8 @@ function ScholarshipsPageInner({
       setSubmittedIds([]);
       return;
     }
-    setSavedIds(getSavedScholarshipIds());
-    setIgnoredIds(getIgnoredScholarshipIds());
-    setStartedIds(getStartedScholarshipIds());
-    setSubmittedIds(getSubmittedScholarshipIds());
-  }, [isAuthenticated]);
+    syncUserCollectionIdsFromStorage();
+  }, [isAuthenticated, syncUserCollectionIdsFromStorage]);
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const [moreFiltersApplied, setMoreFiltersApplied] =
     useState<MoreFiltersState | null>(() =>
@@ -385,10 +392,19 @@ function ScholarshipsPageInner({
       if (e.key === 'scholarshipViewedIds' || e.key === null) {
         setViewedIds(getViewedScholarshipIds());
       }
+      if (
+        e.key === SAVED_STORAGE_KEY ||
+        e.key === IGNORED_STORAGE_KEY ||
+        e.key === STARTED_STORAGE_KEY ||
+        e.key === SUBMITTED_STORAGE_KEY ||
+        e.key === null
+      ) {
+        syncUserCollectionIdsFromStorage();
+      }
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
-  }, []);
+  }, [syncUserCollectionIdsFromStorage]);
 
   useEffect(() => {
     const onVis = () => {
@@ -431,41 +447,8 @@ function ScholarshipsPageInner({
   );
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
-    const base = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
-    const syncedCatalogCount = totalCount > 0 ? totalCount : null;
-
-    return {
-      ...base,
-      bestMatches:
-        activeTab === 'best-matches' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.bestMatches,
-      recommended:
-        activeTab === 'recommended' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.recommended,
-      easyApply:
-        activeTab === 'easy-apply' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.easyApply,
-      matches:
-        activeTab === 'matches' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.matches,
-      saved: savedIds.length,
-      started: startedIds.length,
-      submitted: submittedIds.length,
-      ignored: ignoredIds.length
-    };
-  }, [
-    activeTab,
-    totalCount,
-    listMeta?.sidebarCounts,
-    savedIds,
-    startedIds,
-    submittedIds,
-    ignoredIds
-  ]);
+    return listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
+  }, [listMeta?.sidebarCounts]);
 
   const categoryCounts = useMemo(() => {
     if (listMeta?.categoryCounts) return listMeta.categoryCounts;
@@ -480,6 +463,16 @@ function ScholarshipsPageInner({
       moreFiltersToJson(withTabEnforcedMoreFilters(moreFiltersApplied, activeTab))
     );
   }, [moreFiltersApplied, activeTab]);
+  const userCollectionsFingerprint = useMemo(
+    () =>
+      JSON.stringify({
+        saved: savedIds,
+        ignored: ignoredIds,
+        started: startedIds,
+        submitted: submittedIds
+      }),
+    [savedIds, ignoredIds, startedIds, submittedIds]
+  );
 
   const totalPages = Math.max(
     1,
@@ -634,7 +627,7 @@ function ScholarshipsPageInner({
 
   useEffect(() => {
     let cancelled = false;
-    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
+    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}|${userCollectionsFingerprint}`;
     if (metaKeySynced.current === metaKey) return;
     if (metaRequestInFlightRef.current === metaKey) return;
     metaRequestInFlightRef.current = metaKey;
@@ -696,6 +689,7 @@ function ScholarshipsPageInner({
     activeTab,
     searchParamsString,
     moreFiltersFingerprint,
+    userCollectionsFingerprint,
     catalogListScope,
     moreFiltersApplied,
     routeScope,
@@ -895,6 +889,17 @@ function ScholarshipsPageInner({
         setTotalCount((c) => Math.max(0, c - 1));
       }
       setSavedIds(wasSaved ? removeScholarship(id) : saveScholarship(id));
+      setListMeta((prev) =>
+        prev
+          ? {
+              ...prev,
+              sidebarCounts: {
+                ...prev.sidebarCounts,
+                saved: Math.max(0, prev.sidebarCounts.saved + (wasSaved ? -1 : 1))
+              }
+            }
+          : prev
+      );
     },
     [activeTab, isAuthenticated, openRegistrationWall, savedIds]
   );
@@ -906,6 +911,17 @@ function ScholarshipsPageInner({
         return;
       }
       setIgnoredIds(addIgnoredScholarship(id));
+      setListMeta((prev) =>
+        prev
+          ? {
+              ...prev,
+              sidebarCounts: {
+                ...prev.sidebarCounts,
+                ignored: prev.sidebarCounts.ignored + 1
+              }
+            }
+          : prev
+      );
       if (activeTab !== 'ignored') {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
@@ -921,6 +937,17 @@ function ScholarshipsPageInner({
         return;
       }
       setIgnoredIds(removeIgnoredScholarship(id));
+      setListMeta((prev) =>
+        prev
+          ? {
+              ...prev,
+              sidebarCounts: {
+                ...prev.sidebarCounts,
+                ignored: Math.max(0, prev.sidebarCounts.ignored - 1)
+              }
+            }
+          : prev
+      );
       if (activeTab === 'ignored') {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
@@ -955,9 +982,9 @@ function ScholarshipsPageInner({
       case 'ignored':
         return 'No ignored scholarships. Use “Not relevant” on a card to hide a grant from your matches.';
       case 'best-matches':
-        return 'No best matches yet. Complete your profile or try the full catalog (All) for more results.';
+        return 'No best recommendations for the current filters. Try broadening your search or opening Matches.';
       case 'recommended':
-        return 'No recommended scholarships match right now. Try Matches for the full list.';
+        return 'No recommendations in the current context. Adjust filters or open Matches for a broader list.';
       case 'easy-apply':
         return 'No easy-apply scholarships in this set. Try broadening categories or More filters.';
       default:
@@ -968,6 +995,12 @@ function ScholarshipsPageInner({
   const guestPersonalizedEmpty =
     !isAuthenticated &&
     (activeTab === 'best-matches' || activeTab === 'recommended');
+  const profileIncompletePersonalizedEmpty =
+    isAuthenticated &&
+    totalCount === 0 &&
+    !isLoading &&
+    (activeTab === 'best-matches' || activeTab === 'recommended') &&
+    listMeta?.personalizedMatchReady === false;
 
   return (
     <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 text-left text-zinc-900 sm:px-5 md:py-12 lg:px-8">
@@ -989,6 +1022,8 @@ function ScholarshipsPageInner({
           <ScholarshipsSidebar
             counts={sidebarCounts}
             matchesNewIndicator={null}
+            guestMode={!isAuthenticated}
+            onGuestRestrictedNav={!isAuthenticated ? openRegistrationWall : undefined}
           />
         }
       >
@@ -1014,6 +1049,8 @@ function ScholarshipsPageInner({
             categoriesDisabled={!isLoading && totalCount === 0}
             moreFiltersActiveCount={moreFiltersActiveCount}
             isAuthenticated={isAuthenticated}
+            onGuestSortBlocked={!isAuthenticated ? openRegistrationWall : undefined}
+            onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
             listingViewControls={
               !isAuthenticated ? (
                 <div
@@ -1101,6 +1138,27 @@ function ScholarshipsPageInner({
                     Create a free account
                   </Link>
                 </p>
+              ) : profileIncompletePersonalizedEmpty ? (
+                <div className="mx-auto mt-5 max-w-xl rounded-2xl border border-[#FFD9B3] bg-gradient-to-b from-[#FFF8F1] to-white p-6 text-left shadow-sm">
+                  <h3 className="text-base font-semibold text-[#7A3B00] sm:text-lg">
+                    {activeTab === 'best-matches'
+                      ? 'Complete your profile to unlock best matches'
+                      : 'Complete your profile to see recommendations'}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#8C5A2B]">
+                    {activeTab === 'best-matches'
+                      ? 'Add your school level, field of study, citizenship, GPA, and location so we can show scholarships that fit you better.'
+                      : 'Fill in your academic and eligibility details so we can recommend scholarships that match your background.'}
+                  </p>
+                  <div className="mt-4">
+                    <Link
+                      href="https://scholarshiptop.com/account"
+                      className="inline-flex items-center justify-center rounded-xl bg-[#FF7A1A] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2"
+                    >
+                      Complete profile
+                    </Link>
+                  </div>
+                </div>
               ) : null}
               {showClearFilters ? (
                 <p className="mt-4">
@@ -1158,6 +1216,8 @@ function ScholarshipsPageInner({
         previewCountLoading={previewCountLoading}
         previewCountFallback={lastKnownPreviewCount}
         locationOptions={[]}
+        isAuthenticated={isAuthenticated}
+        onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
