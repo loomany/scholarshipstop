@@ -431,41 +431,8 @@ function ScholarshipsPageInner({
   );
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
-    const base = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
-    const syncedCatalogCount = totalCount > 0 ? totalCount : null;
-
-    return {
-      ...base,
-      bestMatches:
-        activeTab === 'best-matches' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.bestMatches,
-      recommended:
-        activeTab === 'recommended' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.recommended,
-      easyApply:
-        activeTab === 'easy-apply' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.easyApply,
-      matches:
-        activeTab === 'matches' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.matches,
-      saved: savedIds.length,
-      started: startedIds.length,
-      submitted: submittedIds.length,
-      ignored: ignoredIds.length
-    };
-  }, [
-    activeTab,
-    totalCount,
-    listMeta?.sidebarCounts,
-    savedIds,
-    startedIds,
-    submittedIds,
-    ignoredIds
-  ]);
+    return listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
+  }, [listMeta?.sidebarCounts]);
 
   const categoryCounts = useMemo(() => {
     if (listMeta?.categoryCounts) return listMeta.categoryCounts;
