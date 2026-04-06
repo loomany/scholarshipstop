@@ -28,7 +28,8 @@ export const getUserSubscriptionStatus = cache(
       .eq('id', userId)
       .maybeSingle();
 
-    return Boolean(profile?.is_subscribed);
+    const typedProfile = profile as { is_subscribed?: boolean | null } | null;
+    return Boolean(typedProfile?.is_subscribed);
   }
 );
 
