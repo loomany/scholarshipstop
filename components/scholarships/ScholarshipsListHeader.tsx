@@ -79,6 +79,7 @@ type ScholarshipsListHeaderProps = {
    */
   isAuthenticated?: boolean;
   onGuestSortBlocked?: () => void;
+  onGuestLockedAction?: () => void;
 };
 
 function listingResultUnit(
@@ -184,7 +185,8 @@ export default function ScholarshipsListHeader({
   onClearAllListingChips,
   listingViewControls = null,
   isAuthenticated = true,
-  onGuestSortBlocked
+  onGuestSortBlocked,
+  onGuestLockedAction
 }: ScholarshipsListHeaderProps) {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
@@ -348,6 +350,10 @@ export default function ScholarshipsListHeader({
             type="button"
             className={scholarshipCategoriesApplyButtonClass}
             onClick={() => {
+              if (!isAuthenticated) {
+                onGuestLockedAction?.();
+                return;
+              }
               onApplyCategories(new Set(draftCategories));
               setCategoriesOpen(false);
             }}
@@ -402,11 +408,39 @@ export default function ScholarshipsListHeader({
                 />
                 <input
                   value={query}
-                  onChange={(e) => onQueryChange(e.target.value)}
+                  onChange={(e) => {
+                    if (!isAuthenticated) return;
+                    onQueryChange(e.target.value);
+                  }}
+                  onFocus={(e) => {
+                    if (isAuthenticated) return;
+                    e.currentTarget.blur();
+                    onGuestLockedAction?.();
+                  }}
+                  onMouseDown={(e) => {
+                    if (isAuthenticated) return;
+                    e.preventDefault();
+                    onGuestLockedAction?.();
+                  }}
+                  readOnly={!isAuthenticated}
                   placeholder="Search by keyword"
                   aria-label="Search by keyword"
-                  className={CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS}
+                  title={
+                    !isAuthenticated
+                      ? 'Search by keyword after you create a free account'
+                      : undefined
+                  }
+                  className={`${CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS} ${
+                    !isAuthenticated ? 'cursor-pointer bg-gray-50 pr-10' : ''
+                  }`}
                 />
+                {!isAuthenticated ? (
+                  <Lock
+                    className={`pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 ${scholarshipGuestLockIconClass}`}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                ) : null}
               </div>
               <div
                 className="relative w-full shrink-0 sm:w-auto sm:min-w-[11rem]"
@@ -497,6 +531,10 @@ export default function ScholarshipsListHeader({
                       : undefined
                   }
                   onClick={() => {
+                    if (!isAuthenticated) {
+                      onGuestLockedAction?.();
+                      return;
+                    }
                     setCategoriesOpen(false);
                     setSortOpen(false);
                     onOpenMoreFilters?.();
@@ -537,6 +575,10 @@ export default function ScholarshipsListHeader({
                     }
                     onClick={() => {
                       if (categoriesDisabled) return;
+                      if (!isAuthenticated) {
+                        onGuestLockedAction?.();
+                        return;
+                      }
                       setSortOpen(false);
                       setCategoriesOpen((o) => {
                         const next = !o;

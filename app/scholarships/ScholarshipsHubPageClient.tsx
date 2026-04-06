@@ -1052,6 +1052,7 @@ function ScholarshipsPageInner({
             moreFiltersActiveCount={moreFiltersActiveCount}
             isAuthenticated={isAuthenticated}
             onGuestSortBlocked={!isAuthenticated ? openRegistrationWall : undefined}
+            onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
             listingViewControls={
               !isAuthenticated ? (
                 <div
@@ -1217,6 +1218,8 @@ function ScholarshipsPageInner({
         previewCountLoading={previewCountLoading}
         previewCountFallback={lastKnownPreviewCount}
         locationOptions={[]}
+        isAuthenticated={isAuthenticated}
+        onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
