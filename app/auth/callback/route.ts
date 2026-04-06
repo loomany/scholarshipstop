@@ -1,8 +1,9 @@
-import { createClient } from '@/utils/supabase/server';
-import { NextResponse } from 'next/server';
-import { NextRequest } from 'next/server';
-import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
+
 import { syncOnboardingFromMetadataIfPresent } from '@/lib/onboarding/profilesOnboardingSync';
+import type { Database } from '@/types_db';
+import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
 
 function safeAppPath(next: string | null): string | null {
   if (!next) return null;
@@ -17,56 +18,71 @@ function safeAppPath(next: string | null): string | null {
   return path;
 }
 
+/**
+ * PKCE email-confirm / OAuth callback.
+ * Must attach session cookies to the **redirect** Response (Route Handler cannot rely on
+ * `cookies()` from `next/headers` for this — sets are often dropped).
+ */
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const origin = requestUrl.origin;
   const nextPath = safeAppPath(requestUrl.searchParams.get('next'));
 
-  if (code) {
-    const supabase = createClient();
+  if (!code) {
+    return NextResponse.redirect(new URL('/signin', origin));
+  }
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+  const defaultSuccessUrl = getStatusRedirect(
+    `${origin}/dashboard`,
+    'Success!',
+    'You are now signed in.'
+  );
+  const successUrl = nextPath ? `${origin}${nextPath}` : defaultSuccessUrl;
 
-    if (error) {
-      return NextResponse.redirect(
-        getErrorRedirect(
-          `${requestUrl.origin}/signin`,
-          error.name,
-          "Sorry, we weren't able to log you in. Please try again."
-        )
-      );
+  const response = NextResponse.redirect(successUrl);
+
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          response.cookies.set({ name, value, ...options });
+        },
+        remove(name: string, options: CookieOptions) {
+          response.cookies.set({ name, value: '', ...options, maxAge: 0 });
+        }
+      }
     }
+  );
 
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (user?.user_metadata && typeof user.user_metadata === 'object') {
-      await syncOnboardingFromMetadataIfPresent(
-        supabase,
-        user.id,
-        user.user_metadata as Record<string, unknown>
-      );
-    }
-
-    if (nextPath) {
-      return NextResponse.redirect(`${requestUrl.origin}${nextPath}`);
-    }
-
+  if (error) {
     return NextResponse.redirect(
-      getStatusRedirect(
-        `${requestUrl.origin}/scholarships`,
-        'Success!',
-        'You are now signed in.'
+      getErrorRedirect(
+        `${origin}/signin`,
+        error.name,
+        "Sorry, we weren't able to log you in. Please try again."
       )
     );
   }
 
-  return NextResponse.redirect(
-    getStatusRedirect(
-      `${requestUrl.origin}/scholarships`,
-      'Success!',
-      'You are now signed in.'
-    )
-  );
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (user?.user_metadata && typeof user.user_metadata === 'object') {
+    await syncOnboardingFromMetadataIfPresent(
+      supabase,
+      user.id,
+      user.user_metadata as Record<string, unknown>
+    );
+  }
+
+  return response;
 }

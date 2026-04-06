@@ -2,7 +2,7 @@ import { validateScholarshipOnboarding } from '@/lib/validation/scholarshipOnboa
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 
-const MAX_STEP = 4 as const;
+const MAX_STEP = 5 as const;
 
 /**
  * Furthest URL step: after basics (step 1) user may open 2–4 only as far as `activeStep`
@@ -36,7 +36,7 @@ export function clampOnboardingStepToProgress(
 }
 
 export function normalizeOnboardingStepParam(n: number): OnboardingStep | null {
-  if (n === 1 || n === 2 || n === 3 || n === 4) return n;
+  if (n === 1 || n === 2 || n === 3 || n === 4 || n === 5) return n;
   return null;
 }
 

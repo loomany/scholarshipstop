@@ -4,11 +4,11 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
-import { getURL } from '@/utils/helpers';
 import { ScholarshipOnboardingStep1 } from '@/components/onboarding/ScholarshipOnboardingStep1';
 import { ScholarshipOnboardingStep2 } from '@/components/onboarding/ScholarshipOnboardingStep2';
 import { ScholarshipOnboardingStep3Gpa } from '@/components/onboarding/ScholarshipOnboardingStep3Gpa';
 import { ScholarshipOnboardingStep4State } from '@/components/onboarding/ScholarshipOnboardingStep4State';
+import { ScholarshipOnboardingStep5EmailConfirm } from '@/components/onboarding/ScholarshipOnboardingStep5EmailConfirm';
 import { buildCompleteScholarshipUserProfile } from '@/lib/onboarding/buildScholarshipUserProfile';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import {
@@ -25,11 +25,22 @@ import {
   type OnboardingFormValues,
   type StoredOnboardingDraft
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
-import { isEmailAlreadyRegisteredMessage } from '@/lib/onboarding/onboardingAuthErrors';
 import { syncOnboardingToProfiles } from '@/lib/onboarding/syncScholarshipProfile';
 import { validateScholarshipOnboardingStep2 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
 
 const POST_ONBOARDING_PATH = '/scholarships';
+
+/** GoTrue returns human text (e.g. "Error sending confirmation email"); add code/status for support logs. */
+function formatSupabaseAuthErrorMessage(err: {
+  message: string;
+  status?: number;
+  code?: string;
+}): string {
+  const parts = [err.message];
+  if (err.code) parts.push(`Code: ${err.code}.`);
+  if (err.status != null) parts.push(`HTTP ${err.status}.`);
+  return parts.join(' ');
+}
 
 function emptyDraft(): StoredOnboardingDraft {
   return {
@@ -175,9 +186,7 @@ function OnboardingWizard() {
       setLoading(true);
       const supabase = createClient();
       const email = base.step2.email.trim();
-      const callbackUrl = getURL(
-        `auth/callback?next=${encodeURIComponent(POST_ONBOARDING_PATH)}`
-      );
+      const emailRedirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(POST_ONBOARDING_PATH)}`;
 
       const {
         data: { session: existingSession }
@@ -217,13 +226,27 @@ function OnboardingWizard() {
         return;
       }
 
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: callbackUrl
-        }
-      });
+      let signUpData: Awaited<ReturnType<typeof supabase.auth.signUp>>['data'];
+      let signUpError: Awaited<ReturnType<typeof supabase.auth.signUp>>['error'];
+      try {
+        const result = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo,
+            data: {
+              scholarship_profile: built.profile as unknown as Record<string, unknown>
+            }
+          }
+        });
+        signUpData = result.data;
+        signUpError = result.error;
+      } catch {
+        setLoading(false);
+        finalizeInFlight.current = false;
+        setFinalError('Something went wrong. Check your connection and try again.');
+        return;
+      }
 
       console.info('[onboarding:auth] signUp result', {
         error: signUpError?.message ?? null,
@@ -232,51 +255,23 @@ function OnboardingWizard() {
       });
 
       if (signUpError) {
-        if (isEmailAlreadyRegisteredMessage(signUpError.message)) {
-          const signIn = await supabase.auth.signInWithPassword({
-            email,
-            password
-          });
-          console.info('[onboarding:auth] signIn (email already registered)', {
-            error: signIn.error?.message ?? null,
-            hasSession: Boolean(signIn.data.session),
-            userId: signIn.data.session?.user?.id ?? null
-          });
-          if (signIn.error) {
-            setLoading(false);
-            finalizeInFlight.current = false;
-            setFinalError(
-              signIn.error.message ||
-                'This email is already registered. Sign in with your password or reset it.'
-            );
-            return;
-          }
-          session = signIn.data.session;
-          const ok = await finishWithSession();
-          if (!ok) return;
-          return;
-        }
+        console.error('[onboarding:auth] signUp error (full)', {
+          message: signUpError.message,
+          status: signUpError.status,
+          code: signUpError.code,
+          name: signUpError.name
+        });
         setLoading(false);
         finalizeInFlight.current = false;
-        setFinalError(signUpError.message);
+        setFinalError(
+          signUpError.message
+            ? formatSupabaseAuthErrorMessage(signUpError)
+            : 'Something went wrong. Check your connection and try again.'
+        );
         return;
       }
 
       session = signUpData.session;
-      if (!session?.user && signUpData.user) {
-        const signIn = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-        console.info('[onboarding:auth] signIn after signup (no immediate session)', {
-          error: signIn.error?.message ?? null,
-          hasSession: Boolean(signIn.data.session),
-          userId: signIn.data.session?.user?.id ?? null
-        });
-        if (!signIn.error) {
-          session = signIn.data.session;
-        }
-      }
 
       if (session?.user) {
         const ok = await finishWithSession();
@@ -284,13 +279,22 @@ function OnboardingWizard() {
         return;
       }
 
+      const latest = loadStoredOnboardingDraft() ?? base;
+      persistFull({
+        ...latest,
+        v: 7,
+        activeStep: 5,
+        step2: {
+          firstName: latest.step2.firstName.trim(),
+          lastName: latest.step2.lastName.trim(),
+          email
+        }
+      });
       setLoading(false);
       finalizeInFlight.current = false;
-      setFinalError(
-        'No active session after signup. In the Supabase dashboard, open Authentication → Providers → Email and disable “Confirm email” so new users are signed in immediately. Then try again, or use Sign In if you already have an account.'
-      );
+      router.push(onboardingStepHref(5));
     },
-    [router]
+    [persistFull, router]
   );
 
   const handleAccountSubmit = useCallback(
@@ -327,25 +331,6 @@ function OnboardingWizard() {
 
   return (
     <div className="min-h-[calc(100dvh-4rem)] bg-zinc-50 px-4 py-10 sm:py-14">
-      {loading ? (
-        <div
-          className="fixed inset-0 z-[115] flex flex-col items-center justify-center bg-white/90 px-6 backdrop-blur-md"
-          role="status"
-          aria-live="polite"
-          aria-busy="true"
-        >
-          <div className="mx-auto max-w-sm text-center">
-            <div
-              className="mx-auto mb-8 h-10 w-10 animate-pulse rounded-full border-2 border-orange-500 bg-zinc-900 shadow-[0_6px_24px_-6px_rgba(0,0,0,0.35)]"
-              aria-hidden
-            />
-            <p className="text-sm font-medium text-zinc-700 sm:text-base">
-              Creating account &amp; saving profile…
-            </p>
-          </div>
-        </div>
-      ) : null}
-
       <div className="mx-auto w-full max-w-lg">
         <Link
           href="/"
@@ -381,11 +366,15 @@ function OnboardingWizard() {
           {step === 4 ? (
             <ScholarshipOnboardingStep2
               disabled={loading}
+              isSubmitting={loading}
               initialStep2={draft.step2}
               submitError={finalError}
               onBack={() => handleBack(3)}
               onContinue={handleAccountSubmit}
             />
+          ) : null}
+          {step === 5 ? (
+            <ScholarshipOnboardingStep5EmailConfirm email={draft.step2.email} />
           ) : null}
         </div>
       </div>

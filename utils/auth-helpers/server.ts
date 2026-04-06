@@ -175,7 +175,7 @@ export async function signUp(formData: FormData) {
   let redirectPath: string;
 
   if (!isValidEmail(email)) {
-    redirectPath = getErrorRedirect(
+    return getErrorRedirect(
       '/signin/signup',
       'Invalid email address.',
       'Please try again.'

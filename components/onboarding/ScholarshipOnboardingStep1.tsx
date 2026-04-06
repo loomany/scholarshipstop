@@ -145,7 +145,7 @@ export function ScholarshipOnboardingStep1({
     >
       <div className="mx-auto max-w-lg text-center">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
-          Step 1 of 4 · Basics
+          Step 1 of 5 · Basics
         </p>
         <h1 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
           Tell us about you

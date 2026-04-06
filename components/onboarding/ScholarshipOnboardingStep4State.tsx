@@ -69,7 +69,7 @@ export function ScholarshipOnboardingStep4State({
       </button>
       <div className="mx-auto max-w-lg text-center">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
-          Step 2 of 4 · State
+          Step 2 of 5 · State
         </p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
           What state are you in?
