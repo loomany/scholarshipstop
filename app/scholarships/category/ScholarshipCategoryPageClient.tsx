@@ -699,6 +699,8 @@ export default function ScholarshipCategoryPageClient({
               activeListingChips.length > 0 ? clearAllListingChips : undefined
             }
             isAuthenticated={isAuthenticated}
+            onGuestSortBlocked={!isAuthenticated ? openRegistrationWall : undefined}
+            onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
           />
 
           {isLoading ? (
@@ -772,6 +774,8 @@ export default function ScholarshipCategoryPageClient({
         previewCountLoading={false}
         previewCountFallback={null}
         locationOptions={[]}
+        isAuthenticated={isAuthenticated}
+        onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
