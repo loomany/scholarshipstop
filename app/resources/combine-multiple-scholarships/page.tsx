@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: 'Can You Combine Multiple Scholarships?',
   description:
     'Find out whether you can combine multiple scholarships, how stacking works with school policy, what limitations apply, and which questions to ask before accepting several awards.',
+  alternates: {
+    canonical: '/resources/combine-multiple-scholarships'
+  },
   openGraph: {
     title: 'Can You Combine Multiple Scholarships?',
     description:

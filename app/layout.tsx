@@ -22,9 +22,36 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
+  const siteUrl = getURL().replace(/\/$/, '');
+  const siteSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        name: 'ScholarshipTop',
+        url: siteUrl,
+        email: 'support@scholarshiptop.com'
+      },
+      {
+        '@type': 'WebSite',
+        name: 'ScholarshipTop',
+        url: siteUrl,
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: `${siteUrl}/scholarships?q={search_term_string}`,
+          'query-input': 'required name=search_term_string'
+        }
+      }
+    ]
+  };
+
   return (
     <html lang="en" className={fontSans.variable}>
       <body className={`${fontSans.className} bg-zinc-50 text-zinc-900`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
+        />
         <Navbar />
         <main
           id="skip"

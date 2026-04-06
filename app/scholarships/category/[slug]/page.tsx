@@ -40,8 +40,11 @@ function resolveCategorySlugParam(slug: string): {
 }
 
 export async function generateMetadata({
-  params
-}: PageProps): Promise<Metadata> {
+  params,
+  searchParams
+}: PageProps & {
+  searchParams?: Record<string, string | string[] | undefined>;
+}): Promise<Metadata> {
   const raw = decodeURIComponent(params.slug ?? '').trim();
   const lower = raw.toLowerCase();
   const id = normalizeCategoryId(lower);
@@ -57,6 +60,17 @@ export async function generateMetadata({
       canonical: `/scholarships/category/${canonicalSlug}`
     }
   };
+  const hasNonCanonicalQuery =
+    Boolean(searchParams?.q) ||
+    Boolean(searchParams?.category) ||
+    Boolean(searchParams?.sort) ||
+    Boolean(searchParams?.page) ||
+    Boolean(searchParams?.deadline) ||
+    Boolean(searchParams?.tab);
+  if (hasNonCanonicalQuery) {
+    meta.robots = { index: false, follow: true };
+    return meta;
+  }
   if (!categoryIsPromotedSeo(canonicalSlug)) {
     meta.robots = { index: false, follow: true };
     return meta;
@@ -88,28 +102,58 @@ export default async function ScholarshipCategoryPage({ params }: PageProps) {
     supabase,
     canonicalSlug
   );
+  const breadcrumbsSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: '/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Find Scholarships',
+        item: '/scholarships'
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: pageTitle,
+        item: `/scholarships/category/${canonicalSlug}`
+      }
+    ]
+  };
 
   return (
-    <Suspense
-      fallback={
-        <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
-          <div className="mx-auto max-w-5xl">Loading scholarships…</div>
-        </section>
-      }
-    >
-      <ScholarshipCategoryPageClient
-        categorySlug={canonicalSlug}
-        pageTitle={pageTitle}
-        isAuthenticated={Boolean(user)}
-        initialPayload={createInitialScholarshipsPayload(
-          buildInitialListRequestKey({
-            kind: 'category',
-            routeKey: canonicalSlug,
-            searchParamsString: ''
-          }),
-          initialListPayload
-        )}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
       />
-    </Suspense>
+      <Suspense
+        fallback={
+          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
+            <div className="mx-auto max-w-5xl">Loading scholarships…</div>
+          </section>
+        }
+      >
+        <ScholarshipCategoryPageClient
+          categorySlug={canonicalSlug}
+          pageTitle={pageTitle}
+          isAuthenticated={Boolean(user)}
+          initialPayload={createInitialScholarshipsPayload(
+            buildInitialListRequestKey({
+              kind: 'category',
+              routeKey: canonicalSlug,
+              searchParamsString: ''
+            }),
+            initialListPayload
+          )}
+        />
+      </Suspense>
+    </>
   );
 }

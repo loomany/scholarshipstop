@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
+import type { Metadata } from 'next';
 
 import { createClient } from '@/utils/supabase/server';
 import ScholarshipDetailPageClient from '@/app/scholarships/ScholarshipDetailPageClient';
@@ -25,6 +26,39 @@ import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetail
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
 
 type PageProps = { params: { slugPath?: string[] } };
+
+export function generateMetadata({
+  params,
+  searchParams
+}: PageProps & {
+  searchParams?: Record<string, string | string[] | undefined>;
+}): Metadata {
+  const segments = (params.slugPath ?? []).map((s) =>
+    normalizeScholarshipDynamicParam(decodeURIComponent(s))
+  );
+  if (segments.length > 0) return {};
+
+  const hasNonCanonicalQuery =
+    Boolean(searchParams?.q) ||
+    Boolean(searchParams?.category) ||
+    Boolean(searchParams?.sort) ||
+    Boolean(searchParams?.page) ||
+    Boolean(searchParams?.deadline) ||
+    Boolean(searchParams?.tab);
+
+  return {
+    title: 'Find Scholarships',
+    alternates: { canonical: '/scholarships' },
+    ...(hasNonCanonicalQuery
+      ? {
+          robots: {
+            index: false,
+            follow: true
+          }
+        }
+      : {})
+  };
+}
 
 /** Set DEBUG_SEO_SCHOLARSHIP=1 to log which SEO bundle and copy the server picked. */
 function debugLogListingSeo(payload: Record<string, unknown>) {
@@ -95,19 +129,25 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
       data: { user }
     } = await supabase.auth.getUser();
     const scholarship = await getScholarshipDetailServer(segments[0]!);
+    if (!scholarship) {
+      notFound();
+    }
     return (
-      <Suspense
+      <>
+        <h1 className="sr-only">{scholarship.title}</h1>
+        <Suspense
         fallback={
           <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
             <div className="mx-auto max-w-5xl">Loading…</div>
           </section>
         }
       >
-        <ScholarshipDetailPageClient
-          isAuthenticated={Boolean(user)}
-          initialScholarship={scholarship}
-        />
-      </Suspense>
+          <ScholarshipDetailPageClient
+            isAuthenticated={Boolean(user)}
+            initialScholarship={scholarship}
+          />
+        </Suspense>
+      </>
     );
   }
 
@@ -130,19 +170,25 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
       segments.length === 1
         ? await getScholarshipDetailServer(segments[0]!)
         : null;
+    if (!scholarship) {
+      notFound();
+    }
     return (
-      <Suspense
+      <>
+        <h1 className="sr-only">{scholarship.title}</h1>
+        <Suspense
         fallback={
           <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
             <div className="mx-auto max-w-5xl">Loading…</div>
           </section>
         }
       >
-        <ScholarshipDetailPageClient
-          isAuthenticated={Boolean(user)}
-          initialScholarship={scholarship}
-        />
-      </Suspense>
+          <ScholarshipDetailPageClient
+            isAuthenticated={Boolean(user)}
+            initialScholarship={scholarship}
+          />
+        </Suspense>
+      </>
     );
   }
 
@@ -253,63 +299,66 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     });
 
     return (
-      <Suspense
+      <>
+        <h1 className="sr-only">{pageTitle}</h1>
+        <Suspense
         fallback={
           <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
             <div className="mx-auto max-w-5xl">Loading scholarships…</div>
           </section>
         }
       >
-        <ScholarshipsHubPageClient
-          isAuthenticated={Boolean(user)}
-          initialPayload={createInitialScholarshipsPayload(
-            buildInitialListRequestKey({
-              kind: 'long_tail',
-              routeKey: canonicalPath,
-              searchParamsString: ''
-            }),
-            initialListPayload
-          )}
-          routeScope={routeScope}
-          leadContent={
-            promotedChrome ? (
-              <SeoScholarshipHero
-                heading={pageTitle}
-                scholarshipCount={initialListPayload.total}
-                listLoading={false}
-                introHtml={introParagraph}
-                fallbackUsed={Boolean(initialListPayload.seoFallback?.used)}
-                thinListing={Boolean(
-                  initialListPayload.seoFallback?.thinListing
-                )}
-                exactFilterMatchTotal={
-                  initialListPayload.seoFallback?.exactTotal ?? null
-                }
-                qualityBucket={entry.qualityBucket ?? null}
-                pageData={seo?.page_data ?? null}
-                updatedAt={seo?._meta?.generatedAt ?? null}
-                canonicalTarget={entry.canonicalTarget ?? null}
-              />
-            ) : null
-          }
-          postListingContent={
-            promotedChrome ? (
-              <SeoScholarshipPostListingSeo
-                heading={pageTitle}
-                supportingParagraph={seo?.supporting ?? null}
-                relatedIntroParagraph={seo?.related_intro ?? null}
-                howToUseLines={normalizeSeoTextLines(seo?.how_to_use)}
-                whoForLines={normalizeSeoTextLines(seo?.who_for)}
-                faqItems={seo?.faq}
-                pageData={seo?.page_data ?? null}
-                qualityBucket={entry.qualityBucket ?? null}
-                updatedAt={seo?._meta?.generatedAt ?? null}
-                relatedMode={listingMode}
-              />
-            ) : null
-          }
-        />
-      </Suspense>
+          <ScholarshipsHubPageClient
+            isAuthenticated={Boolean(user)}
+            initialPayload={createInitialScholarshipsPayload(
+              buildInitialListRequestKey({
+                kind: 'long_tail',
+                routeKey: canonicalPath,
+                searchParamsString: ''
+              }),
+              initialListPayload
+            )}
+            routeScope={routeScope}
+            leadContent={
+              promotedChrome ? (
+                <SeoScholarshipHero
+                  heading={pageTitle}
+                  scholarshipCount={initialListPayload.total}
+                  listLoading={false}
+                  introHtml={introParagraph}
+                  fallbackUsed={Boolean(initialListPayload.seoFallback?.used)}
+                  thinListing={Boolean(
+                    initialListPayload.seoFallback?.thinListing
+                  )}
+                  exactFilterMatchTotal={
+                    initialListPayload.seoFallback?.exactTotal ?? null
+                  }
+                  qualityBucket={entry.qualityBucket ?? null}
+                  pageData={seo?.page_data ?? null}
+                  updatedAt={seo?._meta?.generatedAt ?? null}
+                  canonicalTarget={entry.canonicalTarget ?? null}
+                />
+              ) : null
+            }
+            postListingContent={
+              promotedChrome ? (
+                <SeoScholarshipPostListingSeo
+                  heading={pageTitle}
+                  supportingParagraph={seo?.supporting ?? null}
+                  relatedIntroParagraph={seo?.related_intro ?? null}
+                  howToUseLines={normalizeSeoTextLines(seo?.how_to_use)}
+                  whoForLines={normalizeSeoTextLines(seo?.who_for)}
+                  faqItems={seo?.faq}
+                  pageData={seo?.page_data ?? null}
+                  qualityBucket={entry.qualityBucket ?? null}
+                  updatedAt={seo?._meta?.generatedAt ?? null}
+                  relatedMode={listingMode}
+                />
+              ) : null
+            }
+          />
+        </Suspense>
+      </>
     );
   }
 

@@ -31,7 +31,8 @@ type PageProps = { params: { slug: string } };
 export async function generateMetadata({
   params
 }: PageProps): Promise<Metadata> {
-  const post = await fetchPublishedContentPostBySlug(params.slug);
+  const slug = decodeURIComponent(params.slug).trim();
+  const post = await fetchPublishedContentPostBySlug(slug);
   if (!post) {
     return { title: 'Article | ScholarshipTop' };
   }
@@ -42,6 +43,9 @@ export async function generateMetadata({
   return {
     title,
     description,
+    alternates: {
+      canonical: resourcesArticlePath(slug)
+    },
     openGraph: {
       title,
       description,
@@ -69,9 +73,38 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
 
   const related = await fetchRelatedPublishedContentPosts(post.slug, 3);
   const relatedWithSlug = related.filter((r) => r.slug?.trim());
+  const articlePath = resourcesArticlePath(post.slug.trim());
+  const breadcrumbsSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: '/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: RESOURCES_PAGE_TITLE,
+        item: RESOURCES_SECTION_PATH
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title?.trim() || 'Article',
+        item: articlePath
+      }
+    ]
+  };
 
   return (
     <div className="bg-white text-gray-900 antialiased">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
       <article className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <p>
           <Link
@@ -134,7 +167,11 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={post.cover_image_url.trim()}
-              alt=""
+              alt={
+                post.title?.trim()
+                  ? `Cover image for ${post.title.trim()}`
+                  : 'Article cover image'
+              }
               className="aspect-[16/9] w-full object-cover"
             />
           </div>

@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: 'How to Apply for Scholarships in 2026',
   description:
     'Step-by-step guide on how to apply for scholarships: where to look, what to prepare, mistakes to skip, and tips to submit stronger applications and improve your odds of funding.',
+  alternates: {
+    canonical: '/resources/how-to-apply-for-scholarships'
+  },
   openGraph: {
     title: 'How to Apply for Scholarships in 2026',
     description:

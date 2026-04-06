@@ -37,8 +37,36 @@ export default function ResourceGuideShell({
   faq,
   endReading
 }: ResourceGuideShellProps) {
+  const breadcrumbsSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: '/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: RESOURCES_PAGE_TITLE,
+        item: RESOURCES_SECTION_PATH
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: title
+      }
+    ]
+  };
+
   return (
     <div className="min-h-[calc(100dvh-5rem)] bg-zinc-50 pb-16 pt-10 sm:pb-24 sm:pt-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
       <article className="mx-auto max-w-3xl px-5 sm:px-6">
         <nav className="mb-8 text-sm" aria-label="Breadcrumb">
           <Link href="/" className={clsx(nav.legal, 'inline-block')}>

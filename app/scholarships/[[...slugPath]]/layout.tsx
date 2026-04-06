@@ -28,6 +28,7 @@ import { resolveScholarshipCategorySlug } from '@/lib/scholarships/similarSchola
 type LayoutProps = {
   children: React.ReactNode;
   params: { slugPath?: string[] };
+  searchParams?: Record<string, string | string[] | undefined>;
 };
 
 function applySafeNoindexFallback(meta: Metadata, canonical?: string | null): Metadata {
@@ -229,13 +230,28 @@ function jsonLdDocument(s: Scholarship) {
 }
 
 export async function generateMetadata({
-  params
-}: Pick<LayoutProps, 'params'>): Promise<Metadata> {
+  params,
+  searchParams
+}: Pick<LayoutProps, 'params' | 'searchParams'>): Promise<Metadata> {
   const segments = (params.slugPath ?? []).map((s) =>
     normalizeScholarshipDynamicParam(decodeURIComponent(s))
   );
   if (segments.length === 0) {
-    return { title: 'Find Scholarships' };
+    const hasNonCanonicalQuery =
+      Boolean(searchParams?.q) ||
+      Boolean(searchParams?.category) ||
+      Boolean(searchParams?.sort) ||
+      Boolean(searchParams?.page) ||
+      Boolean(searchParams?.deadline) ||
+      Boolean(searchParams?.tab);
+
+    return hasNonCanonicalQuery
+      ? {
+          title: 'Find Scholarships',
+          alternates: { canonical: '/scholarships' },
+          robots: { index: false, follow: true }
+        }
+      : { title: 'Find Scholarships' };
   }
 
   const resolved = resolveScholarshipSlugPath(segments);

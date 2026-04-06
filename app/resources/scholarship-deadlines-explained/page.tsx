@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Scholarship Deadlines Explained: Don't Miss Your Chance",
   description:
     'Learn how scholarship deadlines really work—fixed vs rolling dates, when to start, how to track them, and habits so you do not miss important scholarship opportunities.',
+  alternates: {
+    canonical: '/resources/scholarship-deadlines-explained'
+  },
   openGraph: {
     title: "Scholarship Deadlines Explained: Don't Miss Your Chance",
     description:

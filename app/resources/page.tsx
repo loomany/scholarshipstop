@@ -31,11 +31,34 @@ const baseTitle = `${RESOURCES_PAGE_TITLE} — Guides & Tips | ScholarshipTop`;
 const baseDescription =
   'Guides and expert tips to help you find scholarships, write stronger applications, and stay organized.';
 
-export const metadata: Metadata = {
-  title: baseTitle,
-  description: baseDescription,
-  openGraph: { title: baseTitle, description: baseDescription }
-};
+export function generateMetadata({
+  searchParams
+}: {
+  searchParams?: Record<string, string | string[] | undefined>;
+}): Metadata {
+  const queryState = parseResourcesIndexSearchParams(searchParams);
+  const hasNonCanonicalView =
+    queryState.page > 1 ||
+    queryState.q.length > 0 ||
+    queryState.categoryId != null ||
+    queryState.subcategoryIds.size > 0 ||
+    queryState.sort !== 'latest';
+
+  return {
+    title: baseTitle,
+    description: baseDescription,
+    openGraph: { title: baseTitle, description: baseDescription },
+    alternates: { canonical: RESOURCES_SECTION_PATH },
+    ...(hasNonCanonicalView
+      ? {
+          robots: {
+            index: false,
+            follow: true
+          }
+        }
+      : {})
+  };
+}
 
 function ResourcesGrid({ posts }: { posts: ContentPostListFields[] }) {
   const withSlug = posts.filter((p) => p.slug?.trim());
@@ -64,7 +87,11 @@ function ResourcesGrid({ posts }: { posts: ContentPostListFields[] }) {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={post.cover_image_url.trim()}
-                    alt=""
+                    alt={
+                      post.title?.trim()
+                        ? `Cover image for ${post.title.trim()}`
+                        : 'Article cover image'
+                    }
                     className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
                   />
                 ) : (
@@ -141,9 +168,31 @@ export default async function ResourcesIndexPage({
     total === 0 ? 0 : Math.min(currentPage * pageSize, total);
 
   const hasAnyPublished = allPosts.some((p) => p.slug?.trim());
+  const breadcrumbsSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: '/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: RESOURCES_PAGE_TITLE,
+        item: RESOURCES_SECTION_PATH
+      }
+    ]
+  };
 
   return (
     <div className="bg-white text-gray-900 antialiased">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
       <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <nav className="text-sm text-gray-500" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
