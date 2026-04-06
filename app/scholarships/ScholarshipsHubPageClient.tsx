@@ -119,9 +119,7 @@ function buildHubListingSearchParams(options: {
   sp.set('limit', String(SCHOLARSHIPS_PAGE_SIZE));
   if (options.meta) sp.set('meta', '1');
   else sp.delete('meta');
-  if (options.tab === 'best-matches') {
-    sp.delete('tab');
-  } else if (options.tab === 'matches') {
+  if (options.tab === 'matches') {
     sp.set('tab', 'matches');
   } else {
     sp.set('tab', options.tab);
@@ -431,41 +429,8 @@ function ScholarshipsPageInner({
   );
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
-    const base = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
-    const syncedCatalogCount = totalCount > 0 ? totalCount : null;
-
-    return {
-      ...base,
-      bestMatches:
-        activeTab === 'best-matches' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.bestMatches,
-      recommended:
-        activeTab === 'recommended' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.recommended,
-      easyApply:
-        activeTab === 'easy-apply' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.easyApply,
-      matches:
-        activeTab === 'matches' && syncedCatalogCount !== null
-          ? syncedCatalogCount
-          : base.matches,
-      saved: savedIds.length,
-      started: startedIds.length,
-      submitted: submittedIds.length,
-      ignored: ignoredIds.length
-    };
-  }, [
-    activeTab,
-    totalCount,
-    listMeta?.sidebarCounts,
-    savedIds,
-    startedIds,
-    submittedIds,
-    ignoredIds
-  ]);
+    return listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
+  }, [listMeta?.sidebarCounts]);
 
   const categoryCounts = useMemo(() => {
     if (listMeta?.categoryCounts) return listMeta.categoryCounts;
@@ -955,9 +920,9 @@ function ScholarshipsPageInner({
       case 'ignored':
         return 'No ignored scholarships. Use “Not relevant” on a card to hide a grant from your matches.';
       case 'best-matches':
-        return 'No best matches yet. Complete your profile or try the full catalog (All) for more results.';
+        return 'No best recommendations for the current filters. Try broadening your search or opening Matches.';
       case 'recommended':
-        return 'No recommended scholarships match right now. Try Matches for the full list.';
+        return 'No recommendations in the current context. Adjust filters or open Matches for a broader list.';
       case 'easy-apply':
         return 'No easy-apply scholarships in this set. Try broadening categories or More filters.';
       default:
@@ -968,6 +933,12 @@ function ScholarshipsPageInner({
   const guestPersonalizedEmpty =
     !isAuthenticated &&
     (activeTab === 'best-matches' || activeTab === 'recommended');
+  const profileIncompletePersonalizedEmpty =
+    isAuthenticated &&
+    totalCount === 0 &&
+    !isLoading &&
+    (activeTab === 'best-matches' || activeTab === 'recommended') &&
+    listMeta?.personalizedMatchReady === false;
 
   return (
     <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 text-left text-zinc-900 sm:px-5 md:py-12 lg:px-8">
@@ -1101,6 +1072,27 @@ function ScholarshipsPageInner({
                     Create a free account
                   </Link>
                 </p>
+              ) : profileIncompletePersonalizedEmpty ? (
+                <div className="mx-auto mt-5 max-w-xl rounded-2xl border border-[#FFD9B3] bg-gradient-to-b from-[#FFF8F1] to-white p-6 text-left shadow-sm">
+                  <h3 className="text-base font-semibold text-[#7A3B00] sm:text-lg">
+                    {activeTab === 'best-matches'
+                      ? 'Complete your profile to unlock best matches'
+                      : 'Complete your profile to see recommendations'}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#8C5A2B]">
+                    {activeTab === 'best-matches'
+                      ? 'Add your school level, field of study, citizenship, GPA, and location so we can show scholarships that fit you better.'
+                      : 'Fill in your academic and eligibility details so we can recommend scholarships that match your background.'}
+                  </p>
+                  <div className="mt-4">
+                    <Link
+                      href="https://scholarshiptop.com/account"
+                      className="inline-flex items-center justify-center rounded-xl bg-[#FF7A1A] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2"
+                    >
+                      Complete profile
+                    </Link>
+                  </div>
+                </div>
               ) : null}
               {showClearFilters ? (
                 <p className="mt-4">
