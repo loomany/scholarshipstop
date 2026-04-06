@@ -485,6 +485,7 @@ function ScholarshipsPageInner({
   useEffect(() => {
     let cancelled = false;
     const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
+    const requestCacheKey = `${metaKey}|${userCollectionsFingerprint}`;
     const currentRequestKey = routeScope
       ? `long_tail:${pathname.replace(/^\/scholarships\//, '')}:${searchParamsString}`
       : `hub:hub:${searchParamsString}`;
@@ -499,7 +500,7 @@ function ScholarshipsPageInner({
     ) {
       initialRequestKeyRef.current = null;
       if (initialPayload.result.meta) {
-        metaKeySynced.current = metaKey;
+        metaKeySynced.current = requestCacheKey;
       }
       setIsLoading(false);
       return () => {
@@ -543,7 +544,7 @@ function ScholarshipsPageInner({
             effectiveListScope: catalogListScope,
             q: parsedList.q,
             includeMetaRequested: false,
-            metaKey,
+            requestCacheKey,
             metaKeySyncedBefore: metaKeySynced.current,
             idCounts: {
               saved: ids.saved.length,
@@ -598,7 +599,7 @@ function ScholarshipsPageInner({
         }
         if (data.meta) {
           setListMeta(data.meta);
-          metaKeySynced.current = metaKey;
+          metaKeySynced.current = requestCacheKey;
         }
       } catch (e) {
         // eslint-disable-next-line no-console -- list fetch diagnostics
@@ -619,6 +620,7 @@ function ScholarshipsPageInner({
     pageFromUrl,
     activeTab,
     moreFiltersFingerprint,
+    userCollectionsFingerprint,
     catalogListScope,
     routeScope,
     pathname,
