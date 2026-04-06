@@ -18,10 +18,7 @@ import {
   buildBirthMonthSelectOptions
 } from '@/lib/constants/scholarshipProfileOptions';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
-import {
-  US_STATE_AUTOCOMPLETE_PLACEHOLDER,
-  US_STATE_PROFILE_HELPER_TEXT
-} from '@/lib/constants/usStates';
+import { US_STATE_AUTOCOMPLETE_PLACEHOLDER } from '@/lib/constants/usStates';
 import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
 import { accountPagePrimaryButtonClass } from '@/lib/constants/scholarshipActionUi';
 import { pickAllowedProfilesUpsertFields } from '@/lib/onboarding/profilesOnboardingSync';
@@ -31,6 +28,7 @@ import {
   validateBirthDateFields
 } from '@/lib/validation/birthDateFields';
 import type { Database } from '@/types_db';
+import { updateEmail } from '@/utils/auth-helpers/server';
 import { createClient } from '@/utils/supabase/client';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
@@ -146,9 +144,12 @@ const SAAS_SECTION_ACTION_ROW =
 
 export default function ScholarshipProfileForm({
   profile,
+  userEmail,
   variant = 'default'
 }: {
   profile: ProfilesRow | null;
+  /** Session email for /account personal block; change triggers verification flow on Save. */
+  userEmail?: string | null;
   /** `account`: compact card on /account (page supplies section heading). `saas`: split profile cards, no outer Card. */
   variant?: 'default' | 'account' | 'saas';
 }) {
@@ -173,6 +174,7 @@ export default function ScholarshipProfileForm({
   const [stateRegionInput, setStateRegionInput] = useState(
     () => profile?.state_region?.trim() ?? ''
   );
+  const [emailInput, setEmailInput] = useState(() => userEmail?.trim() ?? '');
 
   const profileSnapshot = useMemo(
     () =>
@@ -212,6 +214,10 @@ export default function ScholarshipProfileForm({
     );
     setStateRegionInput(profile.state_region?.trim() ?? '');
   }, [profile, profileSnapshot]);
+
+  useEffect(() => {
+    setEmailInput(userEmail?.trim() ?? '');
+  }, [userEmail]);
 
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(
@@ -282,6 +288,38 @@ export default function ScholarshipProfileForm({
   const birthDateError = liveBirthErrors.birthDate;
   const birthAgeError = liveBirthErrors.age;
 
+  const upsertProfilesRow = useCallback(
+    async (
+      userId: string,
+      patch: Record<string, unknown>
+    ): Promise<{ ok: true } | { ok: false; message: string }> => {
+      if (Object.keys(patch).length === 0) return { ok: true };
+      const supabase = createClient();
+      const payload = pickAllowedProfilesUpsertFields({
+        id: userId,
+        updated_at: new Date().toISOString(),
+        ...patch
+      }) as Database['public']['Tables']['profiles']['Insert'];
+
+      console.info('[account:profile] upsert payload (partial)', payload);
+
+      const { data: saved, error } = await supabase
+        .schema('public')
+        .from('profiles')
+        .upsert(payload, { onConflict: 'id' })
+        .select()
+        .maybeSingle();
+
+      if (error) {
+        console.error('[account:profile] Supabase error', error.message, error);
+        return { ok: false, message: error.message };
+      }
+      console.info('[account:profile] saved row', saved);
+      return { ok: true };
+    },
+    []
+  );
+
   const performProfilePatch = useCallback(
     async (
       patch: Record<string, unknown>,
@@ -325,45 +363,28 @@ export default function ScholarshipProfileForm({
         return;
       }
 
-      const payload = pickAllowedProfilesUpsertFields({
-        id: user.id,
-        updated_at: new Date().toISOString(),
-        ...patch
-      }) as Database['public']['Tables']['profiles']['Insert'];
-
-      console.info('[account:profile] upsert payload (partial)', payload);
-
-      const { data: saved, error } = await supabase
-        .schema('public')
-        .from('profiles')
-        .upsert(payload, { onConflict: 'id' })
-        .select()
-        .maybeSingle();
-
+      const result = await upsertProfilesRow(user.id, patch);
       setSubmitting(false);
-      if (error) {
-        console.error('[account:profile] Supabase error', error.message, error);
+      if (!result.ok) {
         if (section) {
           setSectionFeedback((f) => ({
             ...f,
-            [section]: { type: 'err', text: error.message }
+            [section]: { type: 'err', text: result.message }
           }));
         } else {
-          setMessage({ type: 'err', text: error.message });
+          setMessage({ type: 'err', text: result.message });
         }
         return;
       }
-      console.info('[account:profile] saved row', saved);
-      const savedOk =
-        'Saved. Your profile was updated — refresh the page anytime to confirm.';
+      const savedOk = 'Saved.';
       if (section) {
         setSectionFeedback((f) => ({ ...f, [section]: { type: 'ok', text: savedOk } }));
       } else {
-        setMessage({ type: 'ok', text: 'Changes saved.' });
+        setMessage({ type: 'ok', text: savedOk });
       }
       router.refresh();
     },
-    [router]
+    [router, upsertProfilesRow]
   );
 
   const onSubmit = useCallback(
@@ -403,11 +424,87 @@ export default function ScholarshipProfileForm({
       }));
       return;
     }
+
     const patch = buildScholarshipProfileFormPatch(profile, formValues);
-    await performProfilePatch(pickPatchKeys(patch, PERSONAL_PATCH_KEYS), {
-      section: 'personal'
+    const personalPatch = pickPatchKeys(patch, PERSONAL_PATCH_KEYS);
+    const emailTrimmed = emailInput.trim();
+    const currentEmail = (userEmail ?? '').trim();
+    const emailChanged = emailTrimmed !== currentEmail;
+
+    if (emailChanged && emailTrimmed === '') {
+      setSectionFeedback((prev) => ({
+        ...prev,
+        personal: { type: 'err', text: 'Email is required.' }
+      }));
+      return;
+    }
+
+    if (Object.keys(personalPatch).length === 0 && !emailChanged) {
+      setSectionFeedback((prev) => ({
+        ...prev,
+        personal: { type: 'ok', text: 'No changes to save.' }
+      }));
+      return;
+    }
+
+    setSectionFeedback((prev) => {
+      const next = { ...prev };
+      delete next.personal;
+      return next;
     });
-  }, [birthDay, birthMonth, birthYear, formValues, performProfilePatch, profile]);
+
+    setSubmitting(true);
+    try {
+      const supabase = createClient();
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setSectionFeedback((f) => ({
+          ...f,
+          personal: { type: 'err', text: 'Not signed in.' }
+        }));
+        return;
+      }
+
+      if (Object.keys(personalPatch).length > 0) {
+        const result = await upsertProfilesRow(user.id, personalPatch);
+        if (!result.ok) {
+          setSectionFeedback((f) => ({
+            ...f,
+            personal: { type: 'err', text: result.message }
+          }));
+          return;
+        }
+      }
+
+      if (emailChanged) {
+        const fd = new FormData();
+        fd.append('newEmail', emailTrimmed);
+        const redirectUrl = await updateEmail(fd);
+        router.push(redirectUrl);
+        return;
+      }
+
+      setSectionFeedback((f) => ({
+        ...f,
+        personal: { type: 'ok', text: 'Saved.' }
+      }));
+      router.refresh();
+    } finally {
+      setSubmitting(false);
+    }
+  }, [
+    birthDay,
+    birthMonth,
+    birthYear,
+    emailInput,
+    formValues,
+    profile,
+    router,
+    upsertProfilesRow,
+    userEmail
+  ]);
 
   const onSaveEducation = useCallback(async () => {
     const patch = buildScholarshipProfileFormPatch(profile, formValues);
@@ -652,10 +749,6 @@ export default function ScholarshipProfileForm({
         <div className="grid gap-6">
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
             <h3 className="text-base font-semibold text-zinc-900">Personal info</h3>
-            <p className="mt-1 text-sm leading-relaxed text-zinc-500">
-              Keep these details up to date so we can show scholarship cards that better match
-              you.
-            </p>
             <div className="mt-4 space-y-1">
               <label className={lc} htmlFor="spf-first_name">
                 First name
@@ -680,16 +773,25 @@ export default function ScholarshipProfileForm({
                 autoComplete="family-name"
               />
               {birthDateFields}
+              <label className={lc} htmlFor="spf-email">
+                Email
+              </label>
+              <input
+                id="spf-email"
+                type="email"
+                className={ic}
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                autoComplete="email"
+                maxLength={320}
+                disabled={submitting}
+              />
             </div>
             {sectionSaveRow('personal', onSavePersonal)}
           </div>
 
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
             <h3 className="text-base font-semibold text-zinc-900">Education</h3>
-            <p className="mt-1 text-sm leading-relaxed text-zinc-500">
-              We recommend filling this in so we can show scholarship cards that better match
-              your academic background.
-            </p>
             <div className="mt-4 space-y-1">
               <label className={lc} htmlFor="spf-school">
                 School level
@@ -722,10 +824,6 @@ export default function ScholarshipProfileForm({
 
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
             <h3 className="text-base font-semibold text-zinc-900">Eligibility</h3>
-            <p className="mt-1 text-sm leading-relaxed text-zinc-500">
-              We recommend filling this in so we can surface scholarship cards that better fit
-              your eligibility profile.
-            </p>
             <div className="mt-4 space-y-1">
               <label className={lc} htmlFor="spf-citizenship">
                 Citizenship
@@ -753,7 +851,6 @@ export default function ScholarshipProfileForm({
                 suggestionListZIndexClass="z-[60]"
                 disabled={submitting}
               />
-              <p className="mt-2 text-sm text-zinc-500">{US_STATE_PROFILE_HELPER_TEXT}</p>
               <label className={lc} htmlFor="spf-gpa">
                 GPA
               </label>
