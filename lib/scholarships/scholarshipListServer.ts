@@ -1163,7 +1163,6 @@ function easyApplyListCanonicalRequest(
     moreFilters
   };
 }
-
 /**
  * Stable sidebar counts source of truth.
  * Intentionally decoupled from active list tab/page/sort/list total.
@@ -1182,16 +1181,16 @@ export async function fetchScholarshipSidebarCounts(
     'ignored'
   ];
   const sidebarParts = await Promise.all(
-    tabs.map(async (t) => ({
-      t,
-      n: await countFor(
-        supabase,
-        t === 'easy-apply'
-          ? easyApplyListCanonicalRequest(effectiveReq)
-          : effectiveReq,
-        t
-      )
-    }))
+tabs.map(async (t) => ({
+  t,
+  n: await countFor(
+    supabase,
+    t === 'easy-apply'
+      ? easyApplyListCanonicalRequest(effectiveReq)
+      : effectiveReq,
+    t
+  )
+}));
   );
   const sidebarCounts: ScholarshipSidebarCounts = {
     bestMatches: 0,
@@ -1479,13 +1478,16 @@ export async function fetchScholarshipListMeta(
   bounds?: ScholarshipListMeta['filterBounds'],
   opts?: { includeCategoryCounts?: boolean }
 ): Promise<ScholarshipListMeta> {
-  const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
-  const includeCategoryCounts = opts?.includeCategoryCounts !== false;
-  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
-  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v5`;
-  const cached = readTtlValue(listMetaCache.get(cacheKey));
-  if (cached) {
-    return cloneScholarshipListMeta(cached);
+ const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
+const includeCategoryCounts = opts?.includeCategoryCounts !== false;
+const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+
+const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v5`;
+
+const cached = readTtlValue(listMetaCache.get(cacheKey));
+if (cached) {
+  return cloneScholarshipListMeta(cached);
+}
   }
 
   const categoryReq = categoryDropdownCountsRequest(req, b);
