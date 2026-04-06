@@ -1153,6 +1153,67 @@ async function countFor(
   return countScholarshipsForTabRequest(supabase, req, tab);
 }
 
+function easyApplyListCanonicalRequest(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  const moreFilters = cloneMoreFilters(req.moreFilters);
+  moreFilters.includeEasyApply.add('easy_apply');
+  return {
+    ...req,
+    moreFilters
+  };
+}
+
+/**
+ * Stable sidebar counts source of truth.
+ * Intentionally decoupled from active list tab/page/sort/list total.
+ */
+export async function fetchScholarshipSidebarCounts(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest
+): Promise<ScholarshipSidebarCounts> {
+  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+  const tabs: ScholarshipListTabId[] = [
+    'easy-apply',
+    'matches',
+    'saved',
+    'started',
+    'submitted',
+    'ignored'
+  ];
+  const sidebarParts = await Promise.all(
+    tabs.map(async (t) => ({
+      t,
+      n: await countFor(
+        supabase,
+        t === 'easy-apply'
+          ? easyApplyListCanonicalRequest(effectiveReq)
+          : effectiveReq,
+        t
+      )
+    }))
+  );
+  const sidebarCounts: ScholarshipSidebarCounts = {
+    bestMatches: 0,
+    recommended: 0,
+    easyApply: 0,
+    matches: 0,
+    saved: 0,
+    started: 0,
+    submitted: 0,
+    ignored: 0
+  };
+  for (const { t, n } of sidebarParts) {
+    if (t === 'easy-apply') sidebarCounts.easyApply = n;
+    if (t === 'matches') sidebarCounts.matches = n;
+    if (t === 'saved') sidebarCounts.saved = n;
+    if (t === 'started') sidebarCounts.started = n;
+    if (t === 'submitted') sidebarCounts.submitted = n;
+    if (t === 'ignored') sidebarCounts.ignored = n;
+  }
+  return sidebarCounts;
+}
+
 async function countCategory(
   supabase: ServerSupabaseClient,
   req: ScholarshipListRequest,
@@ -1419,46 +1480,16 @@ export async function fetchScholarshipListMeta(
   opts?: { includeCategoryCounts?: boolean }
 ): Promise<ScholarshipListMeta> {
   const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
-  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
-  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v3`;
+  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v5`;
   const cached = readTtlValue(listMetaCache.get(cacheKey));
   if (cached) {
     return cloneScholarshipListMeta(cached);
   }
 
   const categoryReq = categoryDropdownCountsRequest(req, b);
-
-  /** Catalog hub: easy-apply + browse + user-list tab counts via the same SQL stack. */
-  const tabs: ScholarshipListTabId[] = [
-    'easy-apply',
-    'matches',
-    'saved',
-    'started',
-    'submitted',
-    'ignored'
-  ];
-  const sidebarParts = await Promise.all(
-    tabs.map(async (t) => ({ t, n: await countFor(supabase, effectiveReq, t) }))
-  );
-  const sidebarCounts: ScholarshipSidebarCounts = {
-    bestMatches: 0,
-    recommended: 0,
-    easyApply: 0,
-    matches: 0,
-    saved: 0,
-    started: 0,
-    submitted: 0,
-    ignored: 0
-  };
-  for (const { t, n } of sidebarParts) {
-    if (t === 'easy-apply') sidebarCounts.easyApply = n;
-    if (t === 'matches') sidebarCounts.matches = n;
-    if (t === 'saved') sidebarCounts.saved = n;
-    if (t === 'started') sidebarCounts.started = n;
-    if (t === 'submitted') sidebarCounts.submitted = n;
-    if (t === 'ignored') sidebarCounts.ignored = n;
-  }
+  const sidebarCounts = await fetchScholarshipSidebarCounts(supabase, req);
 
   const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
   if (includeCategoryCounts) {
