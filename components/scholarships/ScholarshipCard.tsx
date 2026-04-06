@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Info, Star } from 'lucide-react';
+import { Info, Lock, Star } from 'lucide-react';
 import {
   formatDeadlineTooltipText,
   formatScholarshipAwardDisplay,
@@ -15,6 +15,7 @@ import {
   SCHOLARSHIP_ACTION_FOCUS_VISIBLE
 } from '@/lib/constants/scholarshipActionUi';
 import {
+  getScholarshipCatalog,
   payoutMethodChipLabel,
   scholarshipCardChips
 } from '@/lib/scholarships/scholarshipCatalog';
@@ -37,6 +38,10 @@ type ScholarshipCardProps = {
    * Use inside narrow containers (e.g. landing preview) where `xl:` grid would break layout.
    */
   stackedListing?: boolean;
+  /** Signed-in user without active subscription. */
+  subscriptionLocked?: boolean;
+  /** Open subscription modal when premium category chip is clicked. */
+  onSubscriptionLockedCategoryClick?: (categoryId: string) => void;
 };
 
 const METRIC_LABEL =
@@ -73,7 +78,9 @@ export default function ScholarshipCard({
   ignoreAction = 'hide',
   showPersonalizedMatch = false,
   showCardActions = true,
-  stackedListing = false
+  stackedListing = false,
+  subscriptionLocked = false,
+  onSubscriptionLockedCategoryClick
 }: ScholarshipCardProps) {
   const detailHref = scholarshipPublicPath(scholarship);
 
@@ -170,6 +177,14 @@ export default function ScholarshipCard({
 
   const { visible: catalogChips, overflow: catalogOverflow } =
     scholarshipCardChips(scholarship);
+  const LOCKED_CARD_CATEGORY_IDS = new Set([
+    'easy_apply',
+    'quick_apply'
+  ]);
+  const easyApplyIds = getScholarshipCatalog(scholarship).easyApplyIds;
+  const showTopRightLockBadge =
+    subscriptionLocked &&
+    easyApplyIds.some((id) => LOCKED_CARD_CATEGORY_IDS.has(id));
   const payoutLine = payoutMethodChipLabel(scholarship.payoutMethod);
 
   const hasApplicants =
@@ -252,6 +267,22 @@ export default function ScholarshipCard({
         aria-hidden
       />
 
+      {showTopRightLockBadge ? (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onSubscriptionLockedCategoryClick?.('easy_apply');
+          }}
+          className="absolute right-4 top-4 z-[30] pointer-events-auto inline-flex h-[22px] w-[34px] items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm transition hover:bg-[#E6670C]"
+          title="Start your free access to unlock this category"
+          aria-label="Locked category. Start free access to unlock."
+        >
+          <Lock className="h-3.5 w-3.5" strokeWidth={2.2} aria-hidden />
+        </button>
+      ) : null}
+
       <div className={`${gridShell} relative z-[1] pointer-events-none`}>
         <div className={titleCell}>
           <div className="flex min-w-0 items-center justify-between gap-2 text-xs font-medium text-gray-500 sm:text-[13px]">
@@ -284,14 +315,16 @@ export default function ScholarshipCard({
                 </span>
               ) : null}
             </div>
-            {isUnread ? (
-              <span
-                className="pointer-events-none shrink-0 rounded-md bg-[#FF7A1A] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm"
-                aria-label="New — not opened yet"
-              >
-                NEW
-              </span>
-            ) : null}
+            <div className="flex shrink-0 items-center gap-1.5">
+              {isUnread ? (
+                <span
+                  className="pointer-events-none inline-flex h-[20px] items-center rounded-md bg-[#FF7A1A] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm"
+                  aria-label="New — not opened yet"
+                >
+                  NEW
+                </span>
+              ) : null}
+            </div>
           </div>
           <h2
             className="mt-1 min-w-0 overflow-hidden text-base font-semibold leading-snug tracking-tight text-gray-900 group-hover:text-gray-800 sm:text-[1.0625rem] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"

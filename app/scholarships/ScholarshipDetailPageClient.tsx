@@ -23,6 +23,7 @@ import {
   DarkTooltipProvider
 } from '@/components/ui/DarkTooltip';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
@@ -73,6 +74,7 @@ import {
   resolveScholarshipCategorySlug,
   scholarshipDeadlineHasPassed
 } from '@/lib/scholarships/similarScholarships';
+import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import {
   filterApplicationTipsForUi,
   filterFaqForOnPageDisplay,
@@ -321,9 +323,11 @@ type DetailLoadState = 'loading' | 'ok' | 'not_found' | 'error';
 
 export default function ScholarshipDetailPageClient({
   isAuthenticated = true,
+  hasSubscription = false,
   initialScholarship = null
 }: {
   isAuthenticated?: boolean;
+  hasSubscription?: boolean;
   initialScholarship?: Scholarship | null;
 } = {}) {
   const layoutInitialScholarship = useScholarshipDetailInitialData();
@@ -359,11 +363,18 @@ export default function ScholarshipDetailPageClient({
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
   }, []);
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
+  }, []);
+  const openSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(true);
+  }, []);
+  const closeSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(false);
   }, []);
   const syncIdsFromStorage = useCallback(() => {
     setSavedIds(getSavedScholarshipIds());
@@ -467,6 +478,12 @@ export default function ScholarshipDetailPageClient({
     <ScholarshipRegistrationWallModal
       open={registrationWallOpen}
       onClose={closeRegistrationWall}
+    />
+  );
+  const subscriptionOfferModal = (
+    <ScholarshipSubscriptionOfferModal
+      open={subscriptionOfferOpen}
+      onClose={closeSubscriptionOffer}
     />
   );
 
@@ -854,6 +871,19 @@ export default function ScholarshipDetailPageClient({
     hasImportantNotes ||
     showProviderSection ||
     showOverviewSection;
+  const easyApplyIds = getScholarshipCatalog(scholarship).easyApplyIds;
+  const isEasyApplySubscriptionLocked =
+    isAuthenticated &&
+    !hasSubscription &&
+    (easyApplyIds.includes('easy_apply') || easyApplyIds.includes('quick_apply'));
+  const isApplySubscriptionLocked = isAuthenticated && !hasSubscription;
+  const hasDetailAccess = isAuthenticated && !isEasyApplySubscriptionLocked;
+  const openLockedAccessWall = isEasyApplySubscriptionLocked
+    ? openSubscriptionOffer
+    : openRegistrationWall;
+  const openApplyAccessWall = isApplySubscriptionLocked
+    ? openSubscriptionOffer
+    : openRegistrationWall;
 
   return (
     <DarkTooltipProvider>
@@ -958,8 +988,8 @@ export default function ScholarshipDetailPageClient({
         </div>
 
         <ScholarshipDetailGuestLockSection
-          locked={!isAuthenticated && hasLockedDetailStack}
-          onSignIn={openRegistrationWall}
+          locked={!hasDetailAccess && hasLockedDetailStack}
+          onSignIn={openLockedAccessWall}
         >
         {panelPick.showQuickDecision ? (
           <ScholarshipQuickDecisionGrid
@@ -1536,7 +1566,7 @@ export default function ScholarshipDetailPageClient({
               <ul className="mt-4 flex list-none flex-col gap-3 p-0 sm:flex-row sm:items-stretch sm:gap-3">
                 {applyHref ? (
                   <li className="min-w-0 flex-1 basis-0">
-                    {isAuthenticated ? (
+                    {isAuthenticated && !isApplySubscriptionLocked ? (
                       <a
                         href={applyHref}
                         target="_blank"
@@ -1549,8 +1579,12 @@ export default function ScholarshipDetailPageClient({
                       <button
                         type="button"
                         className={detailApplyPrimaryClass}
-                        onClick={openRegistrationWall}
-                        title="Create a free account to apply on the official site"
+                        onClick={openApplyAccessWall}
+                        title={
+                          isApplySubscriptionLocked
+                            ? 'Start your free access to apply on the official site'
+                            : 'Create a free account to apply on the official site'
+                        }
                       >
                         <Lock
                           className="h-4 w-4 shrink-0 text-white stroke-white"
@@ -1563,7 +1597,7 @@ export default function ScholarshipDetailPageClient({
                   </li>
                 ) : null}
                 <li className="min-w-0 flex-1 basis-0">
-                  {isAuthenticated ? (
+                  {hasDetailAccess ? (
                     <button
                       type="button"
                       aria-pressed={savedIds.includes(scholarship.id)}
@@ -1592,9 +1626,17 @@ export default function ScholarshipDetailPageClient({
                     <button
                       type="button"
                       className={`${detailOfficialSavePillClass} flex h-11 min-h-[2.75rem] items-center justify-center gap-2`}
-                      onClick={openRegistrationWall}
-                      title="Create a free account to save scholarships"
-                      aria-label="Create a free account to save scholarships"
+                      onClick={openLockedAccessWall}
+                      title={
+                        isEasyApplySubscriptionLocked
+                          ? 'Start your free access to save scholarships'
+                          : 'Create a free account to save scholarships'
+                      }
+                      aria-label={
+                        isEasyApplySubscriptionLocked
+                          ? 'Start your free access to save scholarships'
+                          : 'Create a free account to save scholarships'
+                      }
                     >
                       <Lock
                         className="h-4 w-4 shrink-0 text-white stroke-white"
@@ -1607,7 +1649,7 @@ export default function ScholarshipDetailPageClient({
                 </li>
                 <li className="min-w-0 flex-1 basis-0">
                   {ignoredIds.includes(scholarship.id) ? (
-                    isAuthenticated ? (
+                    hasDetailAccess ? (
                       <button
                         type="button"
                         className={`${detailOfficialRestorePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
@@ -1624,9 +1666,17 @@ export default function ScholarshipDetailPageClient({
                       <button
                         type="button"
                         className={`${detailOfficialRestorePillClass} flex h-11 min-h-[2.75rem] items-center justify-center gap-2`}
-                        onClick={openRegistrationWall}
-                        title="Create a free account to restore this scholarship to matches"
-                        aria-label="Create a free account to restore this scholarship to matches"
+                        onClick={openLockedAccessWall}
+                        title={
+                          isEasyApplySubscriptionLocked
+                            ? 'Start your free access to restore this scholarship to matches'
+                            : 'Create a free account to restore this scholarship to matches'
+                        }
+                        aria-label={
+                          isEasyApplySubscriptionLocked
+                            ? 'Start your free access to restore this scholarship to matches'
+                            : 'Create a free account to restore this scholarship to matches'
+                        }
                       >
                         <Lock
                           className="h-4 w-4 shrink-0 text-white stroke-white"
@@ -1636,7 +1686,7 @@ export default function ScholarshipDetailPageClient({
                         Restore to matches
                       </button>
                     )
-                  ) : isAuthenticated ? (
+                  ) : hasDetailAccess ? (
                     <button
                       type="button"
                       className={`${detailOfficialNotRelevantPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
@@ -1651,9 +1701,17 @@ export default function ScholarshipDetailPageClient({
                     <button
                       type="button"
                       className={`${detailOfficialNotRelevantPillClass} flex h-11 min-h-[2.75rem] items-center justify-center gap-2`}
-                      onClick={openRegistrationWall}
-                      title="Create a free account to hide scholarships from matches"
-                      aria-label="Create a free account to hide scholarships from matches"
+                      onClick={openLockedAccessWall}
+                      title={
+                        isEasyApplySubscriptionLocked
+                          ? 'Start your free access to hide scholarships from matches'
+                          : 'Create a free account to hide scholarships from matches'
+                      }
+                      aria-label={
+                        isEasyApplySubscriptionLocked
+                          ? 'Start your free access to hide scholarships from matches'
+                          : 'Create a free account to hide scholarships from matches'
+                      }
                     >
                       <Lock
                         className="h-4 w-4 shrink-0 text-white stroke-white"
@@ -1709,77 +1767,108 @@ export default function ScholarshipDetailPageClient({
               {similarScholarships.map((s, i) => {
                 const deadlinePassed = scholarshipDeadlineHasPassed(s);
                 const simDd = getScholarshipDeadlineDisplayParts(s);
+                const similarEasyApplyIds = getScholarshipCatalog(s).easyApplyIds;
+                const similarSubscriptionLocked =
+                  isAuthenticated &&
+                  !hasSubscription &&
+                  (similarEasyApplyIds.includes('easy_apply') ||
+                    similarEasyApplyIds.includes('quick_apply'));
                 const matchScore =
                   s.aiMatchScore != null && !Number.isNaN(s.aiMatchScore)
                     ? Math.max(0, Math.min(100, Math.round(s.aiMatchScore)))
                     : null;
-                return (
-                  <li key={s.id} className="min-w-0">
-                    <Link
-                      href={scholarshipPublicPath(s)}
-                      className={similarScholarshipCardClassName(i)}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="min-w-0 flex-1">
-                          <span className="block text-base font-semibold leading-snug text-zinc-900">
-                            {s.title}
+                const similarCardInner = (
+                  <div className="relative">
+                    <div className="flex items-start gap-3">
+                      <div className="min-w-0 flex-1">
+                        <span className="block text-base font-semibold leading-snug text-zinc-900">
+                          {s.title}
+                        </span>
+                        {s.provider ? (
+                          <span className="mt-1.5 block text-sm text-zinc-600">
+                            {s.provider}
                           </span>
-                          {s.provider ? (
-                            <span className="mt-1.5 block text-sm text-zinc-600">
-                              {s.provider}
-                            </span>
-                          ) : null}
-                          <span className="mt-2 block text-sm font-semibold text-zinc-800">
-                            {formatScholarshipAwardLine(s)}
+                        ) : null}
+                        <span className="mt-2 block text-sm font-semibold text-zinc-800">
+                          {formatScholarshipAwardLine(s)}
+                        </span>
+                        <span
+                          className={
+                            deadlinePassed
+                              ? 'mt-1.5 block text-xs font-normal italic text-zinc-400'
+                              : 'mt-1.5 block text-xs font-medium text-zinc-700'
+                          }
+                        >
+                          <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
+                            {deadlinePassed ? 'Deadline passed' : 'Deadline'}
                           </span>
                           <span
-                            className={
-                              deadlinePassed
-                                ? 'mt-1.5 block text-xs font-normal italic text-zinc-400'
-                                : 'mt-1.5 block text-xs font-medium text-zinc-700'
-                            }
+                            className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
                           >
-                            <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
-                              {deadlinePassed ? 'Deadline passed' : 'Deadline'}
-                            </span>
-                            <span
-                              className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
-                            >
-                              {simDd.primary}
-                            </span>
-                            {simDd.secondary && !deadlinePassed ? (
-                              <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
-                                {simDd.secondary}
-                              </span>
-                            ) : null}
+                            {simDd.primary}
                           </span>
-                        </div>
-                        {i === 0 || matchScore != null ? (
-                          <div
-                            className="flex shrink-0 flex-col items-end gap-1.5"
-                            aria-label="Scholarship tags"
-                          >
-                            {i === 0 ? (
-                              <span className="whitespace-nowrap rounded-full bg-teal-600 px-2.5 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
-                                Best match
-                              </span>
-                            ) : null}
-                            {matchScore != null ? (
-                              <span
-                                className="whitespace-nowrap rounded-full bg-violet-100 px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide text-violet-900"
-                                title={
-                                  s.aiMatchBand?.trim()
-                                    ? `Band: ${s.aiMatchBand}`
-                                    : 'Match score'
-                                }
-                              >
-                                Match {matchScore}
-                              </span>
-                            ) : null}
-                          </div>
-                        ) : null}
+                          {simDd.secondary && !deadlinePassed ? (
+                            <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
+                              {simDd.secondary}
+                            </span>
+                          ) : null}
+                        </span>
                       </div>
-                    </Link>
+                      {i === 0 || matchScore != null ? (
+                        <div
+                          className="flex shrink-0 flex-col items-end gap-1.5"
+                          aria-label="Scholarship tags"
+                        >
+                          {i === 0 ? (
+                            <span className="whitespace-nowrap rounded-full bg-teal-600 px-2.5 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
+                              Best match
+                            </span>
+                          ) : null}
+                          {matchScore != null ? (
+                            <span
+                              className="whitespace-nowrap rounded-full bg-violet-100 px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide text-violet-900"
+                              title={
+                                s.aiMatchBand?.trim()
+                                  ? `Band: ${s.aiMatchBand}`
+                                  : 'Match score'
+                              }
+                            >
+                              Match {matchScore}
+                            </span>
+                          ) : null}
+                        </div>
+                      ) : null}
+                    </div>
+                    {similarSubscriptionLocked ? (
+                      <span
+                        className="pointer-events-none absolute bottom-1.5 right-1.5 inline-flex h-[22px] w-[34px] items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
+                        aria-hidden
+                      >
+                        <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
+                      </span>
+                    ) : null}
+                  </div>
+                );
+                return (
+                  <li key={s.id} className="min-w-0">
+                    {similarSubscriptionLocked ? (
+                      <button
+                        type="button"
+                        className={similarScholarshipCardClassName(i)}
+                        onClick={openSubscriptionOffer}
+                        title="Start your free access to open this scholarship"
+                        aria-label="Locked scholarship. Start free access to open."
+                      >
+                        {similarCardInner}
+                      </button>
+                    ) : (
+                      <Link
+                        href={scholarshipPublicPath(s)}
+                        className={similarScholarshipCardClassName(i)}
+                      >
+                        {similarCardInner}
+                      </Link>
+                    )}
                   </li>
                 );
               })}
@@ -1805,6 +1894,7 @@ export default function ScholarshipDetailPageClient({
         </div>
     </section>
     {registrationWallModal}
+    {subscriptionOfferModal}
     </DarkTooltipProvider>
   );
 }

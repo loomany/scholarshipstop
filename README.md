@@ -11,6 +11,11 @@
 - Integration with [Stripe Checkout](https://stripe.com/docs/payments/checkout) and the [Stripe customer portal](https://stripe.com/docs/billing/subscriptions/customer-portal)
 - Automatic syncing of pricing plans and subscription statuses via [Stripe webhooks](https://stripe.com/docs/webhooks)
 
+## Subscription docs
+
+- Lemon Squeezy webhook setup: `docs/lemon-webhooks.md`
+- Subscription access verification checklist: `docs/subscription-access-verification.md`
+
 ## Demo
 
 - https://subscription-payments.vercel.app/

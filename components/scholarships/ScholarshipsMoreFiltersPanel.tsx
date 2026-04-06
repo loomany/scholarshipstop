@@ -39,6 +39,8 @@ type ScholarshipsMoreFiltersPanelProps = {
   locationOptions: string[];
   isAuthenticated?: boolean;
   onGuestLockedAction?: () => void;
+  hasSubscription?: boolean;
+  onSubscriptionLockedAction?: () => void;
 };
 
 function DualRangeSlider({
@@ -47,7 +49,8 @@ function DualRangeSlider({
   low,
   high,
   onLow,
-  onHigh
+  onHigh,
+  disabled = false
 }: {
   minBound: number;
   maxBound: number;
@@ -55,6 +58,7 @@ function DualRangeSlider({
   high: number;
   onLow: (n: number) => void;
   onHigh: (n: number) => void;
+  disabled?: boolean;
 }) {
   const span = Math.max(maxBound - minBound, 1);
   const p1 = ((low - minBound) / span) * 100;
@@ -76,7 +80,10 @@ function DualRangeSlider({
           min={minBound}
           max={maxBound}
           value={low}
+          disabled={disabled}
+          tabIndex={disabled ? -1 : 0}
           onChange={(e) => {
+            if (disabled) return;
             const v = Number(e.target.value);
             onLow(Math.min(v, high));
           }}
@@ -88,7 +95,10 @@ function DualRangeSlider({
           min={minBound}
           max={maxBound}
           value={high}
+          disabled={disabled}
+          tabIndex={disabled ? -1 : 0}
           onChange={(e) => {
+            if (disabled) return;
             const v = Number(e.target.value);
             onHigh(Math.max(v, low));
           }}
@@ -131,7 +141,9 @@ export default function ScholarshipsMoreFiltersPanel({
   previewCountFallback = null,
   locationOptions,
   isAuthenticated = true,
-  onGuestLockedAction
+  onGuestLockedAction,
+  hasSubscription = true,
+  onSubscriptionLockedAction
 }: ScholarshipsMoreFiltersPanelProps) {
   useEffect(() => {
     if (!open) return;
@@ -152,6 +164,14 @@ export default function ScholarshipsMoreFiltersPanel({
   }, [open, onClose]);
 
   if (!open) return null;
+  const easyApplyLocked = isAuthenticated && !hasSubscription;
+  const amountLocked = isAuthenticated && !hasSubscription;
+  const eligibilityLocked = isAuthenticated && !hasSubscription;
+  const applicantsLocked = isAuthenticated && !hasSubscription;
+  const SUBSCRIPTION_LOCKED_EASY_APPLY_IDS = new Set([
+    'easy_apply',
+    'quick_apply'
+  ]);
 
   const setDeadline = (deadlinePreset: MoreFiltersState['deadlinePreset']) =>
     onChange({ ...value, deadlinePreset });
@@ -249,64 +269,90 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Filter by scholarship amount</h3>
-            <div className="mt-4 flex items-center gap-2">
-              <div className="relative min-w-0 flex-1">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-400">
-                  $
+            <h3 className={sectionTitle}>
+              Filter by scholarship amount
+              {amountLocked ? (
+                <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+                  <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
+                  Locked
                 </span>
-                <input
-                  type="number"
-                  min={bounds.amountMin}
-                  max={bounds.amountMax}
-                  value={value.amountMin}
-                  onChange={(e) =>
-                    onChange({
-                      ...value,
-                      amountMin: Math.min(
-                        Number(e.target.value) || 0,
-                        value.amountMax
-                      )
-                    })
-                  }
-                  className="w-full rounded-lg border border-zinc-200 py-2 pl-7 pr-2 text-sm text-zinc-900"
+              ) : null}
+            </h3>
+            <div className="relative mt-4">
+              {amountLocked ? (
+                <button
+                  type="button"
+                  aria-label="Start your free access to use amount filter"
+                  title="Start your free access to use amount filter"
+                  onClick={() => onSubscriptionLockedAction?.()}
+                  className="absolute inset-0 z-10 cursor-pointer rounded-lg"
                 />
+              ) : null}
+              <div className="flex items-center gap-2">
+                <div className="relative min-w-0 flex-1">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-400">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    min={bounds.amountMin}
+                    max={bounds.amountMax}
+                    value={value.amountMin}
+                    readOnly={amountLocked}
+                    tabIndex={amountLocked ? -1 : 0}
+                    onChange={(e) => {
+                      if (amountLocked) return;
+                      onChange({
+                        ...value,
+                        amountMin: Math.min(
+                          Number(e.target.value) || 0,
+                          value.amountMax
+                        )
+                      });
+                    }}
+                    className="w-full rounded-lg border border-zinc-200 py-2 pl-7 pr-2 text-sm text-zinc-900"
+                  />
+                </div>
+                <span className="text-zinc-400">—</span>
+                <div className="relative min-w-0 flex-1">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-400">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    min={bounds.amountMin}
+                    max={bounds.amountMax}
+                    value={value.amountMax}
+                    readOnly={amountLocked}
+                    tabIndex={amountLocked ? -1 : 0}
+                    onChange={(e) => {
+                      if (amountLocked) return;
+                      onChange({
+                        ...value,
+                        amountMax: Math.max(
+                          Number(e.target.value) || 0,
+                          value.amountMin
+                        )
+                      });
+                    }}
+                    className="w-full rounded-lg border border-zinc-200 py-2 pl-7 pr-2 text-sm text-zinc-900"
+                  />
+                </div>
               </div>
-              <span className="text-zinc-400">—</span>
-              <div className="relative min-w-0 flex-1">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-400">
-                  $
-                </span>
-                <input
-                  type="number"
-                  min={bounds.amountMin}
-                  max={bounds.amountMax}
-                  value={value.amountMax}
-                  onChange={(e) =>
-                    onChange({
-                      ...value,
-                      amountMax: Math.max(
-                        Number(e.target.value) || 0,
-                        value.amountMin
-                      )
-                    })
-                  }
-                  className="w-full rounded-lg border border-zinc-200 py-2 pl-7 pr-2 text-sm text-zinc-900"
-                />
-              </div>
+              <DualRangeSlider
+                minBound={bounds.amountMin}
+                maxBound={bounds.amountMax}
+                low={value.amountMin}
+                high={value.amountMax}
+                disabled={amountLocked}
+                onLow={(n) =>
+                  onChange({ ...value, amountMin: Math.min(n, value.amountMax) })
+                }
+                onHigh={(n) =>
+                  onChange({ ...value, amountMax: Math.max(n, value.amountMin) })
+                }
+              />
             </div>
-            <DualRangeSlider
-              minBound={bounds.amountMin}
-              maxBound={bounds.amountMax}
-              low={value.amountMin}
-              high={value.amountMax}
-              onLow={(n) =>
-                onChange({ ...value, amountMin: Math.min(n, value.amountMax) })
-              }
-              onHigh={(n) =>
-                onChange({ ...value, amountMax: Math.max(n, value.amountMin) })
-              }
-            />
           </section>
 
           <section className={`py-5 ${divider}`}>
@@ -333,92 +379,148 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Filter by number of applicants</h3>
-            <div className="mt-4 flex items-center gap-2">
-              <input
-                type="number"
-                min={bounds.applicantsMin}
-                max={bounds.applicantsMax}
-                value={value.applicantsMin}
-                onChange={(e) =>
+            <h3 className={sectionTitle}>
+              Filter by number of applicants
+              {applicantsLocked ? (
+                <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+                  <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
+                  Locked
+                </span>
+              ) : null}
+            </h3>
+            <div className="relative mt-4">
+              {applicantsLocked ? (
+                <button
+                  type="button"
+                  aria-label="Start your free access to use applicants filter"
+                  title="Start your free access to use applicants filter"
+                  onClick={() => onSubscriptionLockedAction?.()}
+                  className="absolute inset-0 z-10 cursor-pointer rounded-lg"
+                />
+              ) : null}
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min={bounds.applicantsMin}
+                  max={bounds.applicantsMax}
+                  value={value.applicantsMin}
+                  readOnly={applicantsLocked}
+                  tabIndex={applicantsLocked ? -1 : 0}
+                  onChange={(e) => {
+                    if (applicantsLocked) return;
+                    onChange({
+                      ...value,
+                      applicantsMin: Math.min(
+                        Number(e.target.value) || 0,
+                        value.applicantsMax
+                      )
+                    });
+                  }}
+                  className="min-w-0 flex-1 rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                />
+                <span className="text-zinc-400">—</span>
+                <input
+                  type="number"
+                  min={bounds.applicantsMin}
+                  max={bounds.applicantsMax}
+                  value={value.applicantsMax}
+                  readOnly={applicantsLocked}
+                  tabIndex={applicantsLocked ? -1 : 0}
+                  onChange={(e) => {
+                    if (applicantsLocked) return;
+                    onChange({
+                      ...value,
+                      applicantsMax: Math.max(
+                        Number(e.target.value) || 0,
+                        value.applicantsMin
+                      )
+                    });
+                  }}
+                  className="min-w-0 flex-1 rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                />
+              </div>
+              <DualRangeSlider
+                minBound={bounds.applicantsMin}
+                maxBound={bounds.applicantsMax}
+                low={value.applicantsMin}
+                high={value.applicantsMax}
+                disabled={applicantsLocked}
+                onLow={(n) =>
                   onChange({
                     ...value,
-                    applicantsMin: Math.min(
-                      Number(e.target.value) || 0,
-                      value.applicantsMax
-                    )
+                    applicantsMin: Math.min(n, value.applicantsMax)
                   })
                 }
-                className="min-w-0 flex-1 rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-              />
-              <span className="text-zinc-400">—</span>
-              <input
-                type="number"
-                min={bounds.applicantsMin}
-                max={bounds.applicantsMax}
-                value={value.applicantsMax}
-                onChange={(e) =>
+                onHigh={(n) =>
                   onChange({
                     ...value,
-                    applicantsMax: Math.max(
-                      Number(e.target.value) || 0,
-                      value.applicantsMin
-                    )
+                    applicantsMax: Math.max(n, value.applicantsMin)
                   })
                 }
-                className="min-w-0 flex-1 rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
               />
             </div>
-            <DualRangeSlider
-              minBound={bounds.applicantsMin}
-              maxBound={bounds.applicantsMax}
-              low={value.applicantsMin}
-              high={value.applicantsMax}
-              onLow={(n) =>
-                onChange({
-                  ...value,
-                  applicantsMin: Math.min(n, value.applicantsMax)
-                })
-              }
-              onHigh={(n) =>
-                onChange({
-                  ...value,
-                  applicantsMax: Math.max(n, value.applicantsMin)
-                })
-              }
-            />
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Eligibility</h3>
+            <h3 className={sectionTitle}>
+              Eligibility
+              {eligibilityLocked ? (
+                <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+                  <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
+                  Locked
+                </span>
+              ) : null}
+            </h3>
             <p className={sectionHint}>
               Show scholarships that mention any of these audiences (OR). Empty
               = no filter.
             </p>
-            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {ELIGIBILITY_OPTIONS.map((opt) => (
-                <label
-                  key={opt.id}
-                  className="flex cursor-pointer items-start gap-2"
-                >
-                  <input
-                    type="checkbox"
-                    checked={value.includeEligibility.has(opt.id)}
-                    onChange={(e) =>
-                      onChange({
-                        ...value,
-                        includeEligibility: toggleInSet(
-                          value.includeEligibility,
-                          opt.id,
-                          e.target.checked
-                        )
-                      })
-                    }
-                    className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
-                  />
-                  <span className="text-sm text-zinc-800">{opt.label}</span>
-                </label>
-              ))}
+            <div className="relative mt-4">
+              {eligibilityLocked ? (
+                <button
+                  type="button"
+                  aria-label="Start your free access to use eligibility filter"
+                  title="Start your free access to use eligibility filter"
+                  onClick={() => onSubscriptionLockedAction?.()}
+                  className="absolute inset-0 z-10 cursor-pointer rounded-lg"
+                />
+              ) : null}
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {ELIGIBILITY_OPTIONS.map((opt) => (
+                  <label
+                    key={opt.id}
+                    className="flex cursor-pointer items-start gap-2"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={value.includeEligibility.has(opt.id)}
+                      tabIndex={eligibilityLocked ? -1 : 0}
+                      onChange={(e) => {
+                        if (eligibilityLocked) return;
+                        onChange({
+                          ...value,
+                          includeEligibility: toggleInSet(
+                            value.includeEligibility,
+                            opt.id,
+                            e.target.checked
+                          )
+                        });
+                      }}
+                      className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
+                    />
+                    <span className="inline-flex items-center gap-1 text-sm text-zinc-800">
+                      {opt.label}
+                      {eligibilityLocked ? (
+                        <Lock
+                          className={`h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
+                          strokeWidth={2}
+                          aria-hidden
+                        />
+                      ) : null}
+                    </span>
+                  </label>
+                ))}
+              </div>
             </div>
           </section>
 
@@ -536,13 +638,26 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Easy apply</h3>
+            <h3 className={sectionTitle}>
+              Easy apply
+              {easyApplyLocked ? (
+                <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+                  <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
+                  Locked
+                </span>
+              ) : null}
+            </h3>
             <p className={sectionHint}>
               Highlights no-essay and lighter applications when we can detect
               them (OR).
             </p>
             <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {EASY_APPLY_OPTIONS.map((opt) => (
+                (() => {
+                  const optionLocked =
+                    easyApplyLocked &&
+                    SUBSCRIPTION_LOCKED_EASY_APPLY_IDS.has(opt.id);
+                  return (
                 <label
                   key={opt.id}
                   className="flex cursor-pointer items-start gap-2"
@@ -550,7 +665,11 @@ export default function ScholarshipsMoreFiltersPanel({
                   <input
                     type="checkbox"
                     checked={value.includeEasyApply.has(opt.id)}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      if (optionLocked) {
+                        onSubscriptionLockedAction?.();
+                        return;
+                      }
                       onChange({
                         ...value,
                         includeEasyApply: toggleInSet(
@@ -558,12 +677,19 @@ export default function ScholarshipsMoreFiltersPanel({
                           opt.id,
                           e.target.checked
                         )
-                      })
-                    }
+                      });
+                    }}
                     className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
                   />
-                  <span className="text-sm text-zinc-800">{opt.label}</span>
+                  <span className="inline-flex items-center gap-1 text-sm text-zinc-800">
+                    {opt.label}
+                    {optionLocked ? (
+                      <Lock className={`h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`} strokeWidth={2} aria-hidden />
+                    ) : null}
+                  </span>
                 </label>
+                  );
+                })()
               ))}
             </div>
           </section>

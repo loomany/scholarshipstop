@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Lock } from 'lucide-react';
 
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
 import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagination';
@@ -77,11 +79,22 @@ type Props = {
   categorySlug: string;
   pageTitle: string;
   isAuthenticated?: boolean;
+  hasSubscription?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
 };
 
 /** SEO category POST must not send saved/ignored/started/submitted — they skew SQL / fallback. */
 const SEO_LIST_FETCH_ID_LISTS: string[] = [];
+const LOCKED_CATEGORY_SLUGS_FOR_UNSUBSCRIBED = new Set([
+  'no-essay',
+  'easy-apply',
+  'quick-apply',
+  'few-requirements',
+  'no_essay',
+  'easy_apply',
+  'quick_apply',
+  'few_requirements'
+]);
 
 function buildCategoryListingSearchParams(options: {
   base: URLSearchParams;
@@ -117,6 +130,7 @@ export default function ScholarshipCategoryPageClient({
   categorySlug,
   pageTitle,
   isAuthenticated = false,
+  hasSubscription = false,
   initialPayload = null
 }: Props) {
   const pathname = usePathname();
@@ -156,6 +170,15 @@ export default function ScholarshipCategoryPageClient({
   const [seoFallbackMeta, setSeoFallbackMeta] =
     useState<SeoListingFallbackMeta | null>(null);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const isSubscriptionLocked = isAuthenticated && !hasSubscription;
+  const isLockedPremiumCategory = useMemo(() => {
+    const normalized = categorySlug.trim().toLowerCase().replace(/_/g, '-');
+    return (
+      isSubscriptionLocked &&
+      LOCKED_CATEGORY_SLUGS_FOR_UNSUBSCRIBED.has(normalized)
+    );
+  }, [categorySlug, isSubscriptionLocked]);
 
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
@@ -164,6 +187,16 @@ export default function ScholarshipCategoryPageClient({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
+  const openSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(true);
+  }, []);
+  const closeSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(false);
+  }, []);
+  useEffect(() => {
+    if (!isLockedPremiumCategory) return;
+    openSubscriptionOffer();
+  }, [isLockedPremiumCategory, openSubscriptionOffer]);
 
   const metaKeySynced = useRef('');
   const listFetchSeqRef = useRef(0);
@@ -341,6 +374,13 @@ export default function ScholarshipCategoryPageClient({
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
 
   useEffect(() => {
+    if (isLockedPremiumCategory) {
+      setIsLoading(false);
+      setHasError(false);
+      setScholarships([]);
+      setTotalCount(0);
+      return;
+    }
     let cancelled = false;
     const seq = ++listFetchSeqRef.current;
     const metaKey = `cat:${categorySlug}`;
@@ -422,7 +462,8 @@ export default function ScholarshipCategoryPageClient({
     pageFromUrl,
     categorySlug,
     moreFiltersApplied,
-    replaceListingParams
+    replaceListingParams,
+    isLockedPremiumCategory
   ]);
 
   useEffect(() => {
@@ -673,6 +714,8 @@ export default function ScholarshipCategoryPageClient({
           <ScholarshipsSidebar
             counts={sidebarCounts}
             matchesNewIndicator={null}
+            subscriptionLocked={isSubscriptionLocked}
+            onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
           />
         }
       >
@@ -699,11 +742,39 @@ export default function ScholarshipCategoryPageClient({
               activeListingChips.length > 0 ? clearAllListingChips : undefined
             }
             isAuthenticated={isAuthenticated}
+            hasSubscription={hasSubscription}
             onGuestSortBlocked={!isAuthenticated ? openRegistrationWall : undefined}
+            onSubscriptionSortBlocked={
+              isSubscriptionLocked ? openSubscriptionOffer : undefined
+            }
             onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
           />
 
-          {isLoading ? (
+          {isLockedPremiumCategory ? (
+            <div className="max-w-3xl rounded-xl border border-zinc-200 bg-white px-5 py-10 text-left text-slate-600 shadow-sm">
+              <div className="flex items-start gap-3">
+                <Lock
+                  className="mt-0.5 h-5 w-5 shrink-0 text-[#FF7A1A]"
+                  aria-hidden
+                />
+                <div>
+                  <p className="text-base font-semibold text-zinc-900">
+                    This category is available for subscribers only.
+                  </p>
+                  <p className="mt-2 text-sm text-zinc-600">
+                    Start your free access to unlock No Essay, Easy Apply, Quick Apply, and Few Requirements categories.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={openSubscriptionOffer}
+                    className="mt-4 inline-flex items-center rounded-xl bg-[#FF7A1A] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#E6670C]"
+                  >
+                    Get Free Access
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : isLoading ? (
             <div className="text-slate-600">Loading scholarships...</div>
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
@@ -747,6 +818,10 @@ export default function ScholarshipCategoryPageClient({
                     ignoreAction="hide"
                     reported={reportedIds.includes(s.id)}
                     onToggleReport={toggleReport}
+                    subscriptionLocked={isSubscriptionLocked}
+                    onSubscriptionLockedCategoryClick={
+                      isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
+                    }
                   />
                 ))}
               </div>
@@ -776,10 +851,16 @@ export default function ScholarshipCategoryPageClient({
         locationOptions={[]}
         isAuthenticated={isAuthenticated}
         onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
+        hasSubscription={hasSubscription}
+        onSubscriptionLockedAction={isSubscriptionLocked ? openSubscriptionOffer : undefined}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+      />
+      <ScholarshipSubscriptionOfferModal
+        open={subscriptionOfferOpen}
+        onClose={closeSubscriptionOffer}
       />
     </section>
   );

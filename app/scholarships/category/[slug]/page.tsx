@@ -18,6 +18,7 @@ import {
   fetchInitialCategoryScholarshipsPayload
 } from '@/app/scholarships/scholarshipListServerPayload';
 import ScholarshipCategoryPageClient from '../ScholarshipCategoryPageClient';
+import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
 
 type PageProps = { params: { slug: string } };
 
@@ -98,6 +99,9 @@ export default async function ScholarshipCategoryPage({ params }: PageProps) {
   const {
     data: { user }
   } = await supabase.auth.getUser();
+  const hasSubscription = user?.id
+    ? await getUserSubscriptionStatus(supabase, user.id)
+    : false;
   const initialListPayload = await fetchInitialCategoryScholarshipsPayload(
     supabase,
     canonicalSlug
@@ -144,6 +148,7 @@ export default async function ScholarshipCategoryPage({ params }: PageProps) {
           categorySlug={canonicalSlug}
           pageTitle={pageTitle}
           isAuthenticated={Boolean(user)}
+          hasSubscription={hasSubscription}
           initialPayload={createInitialScholarshipsPayload(
             buildInitialListRequestKey({
               kind: 'category',

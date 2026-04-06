@@ -20,6 +20,12 @@ export const GUEST_LOCKED_SORT_OPTIONS = new Set<SortOption>([
   'fewest_applicants'
 ]);
 
+/** Signed-in users without subscription: only premium ranking sorts are gated. */
+export const SUBSCRIPTION_LOCKED_SORT_OPTIONS = new Set<SortOption>([
+  'best_match',
+  'magic'
+]);
+
 export function isGuestLockedSortOption(sort: SortOption): boolean {
   return GUEST_LOCKED_SORT_OPTIONS.has(sort);
 }

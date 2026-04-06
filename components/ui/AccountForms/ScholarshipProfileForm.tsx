@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ArrowRight, CheckCircle2, X } from 'lucide-react';
 
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
@@ -522,6 +523,7 @@ export default function ScholarshipProfileForm({
 
   const isAccount = variant === 'account';
   const isSaas = variant === 'saas';
+  const isSubscribed = Boolean(profile?.is_subscribed);
   const ic = isSaas ? inputClassSaaS : inputClass;
   const lc = isSaas ? labelClassSaaS : labelClass;
   const selectWrapClass = isSaas ? 'mt-2 w-full' : 'mt-2 w-full max-w-xl';
@@ -747,6 +749,45 @@ export default function ScholarshipProfileForm({
         }}
       >
         <div className="grid gap-6">
+          <div className="rounded-2xl border border-zinc-100 bg-white px-6 py-4 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
+            <p className="text-sm font-semibold text-zinc-900">Subscription status</p>
+            <p
+              id="subscription-status"
+              className={`mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold ${
+                isSubscribed
+                  ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+                  : 'bg-orange-50 text-orange-700 ring-1 ring-orange-200'
+              }`}
+            >
+              {isSubscribed ? (
+                <CheckCircle2 className="h-4 w-4" strokeWidth={2} aria-hidden />
+              ) : (
+                <X className="h-4 w-4" strokeWidth={2.5} aria-hidden />
+              )}
+              {isSubscribed
+                ? 'Subscription active'
+                : 'Subscription inactive'}
+            </p>
+            <p className="mt-3 text-sm text-zinc-700">
+              Want access to all premium features?
+            </p>
+            <p className="mt-1 text-sm text-zinc-600">
+              {isSubscribed
+                ? 'Your premium access is active. You can review plan details and billing on the subscription page.'
+                : 'Activate your subscription to unlock full functionality and premium tools.'}
+            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => router.push('/subscription')}
+                className={accountPagePrimaryButtonClass}
+              >
+                {isSubscribed ? 'Manage subscription' : 'Activate subscription'}
+                <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden />
+              </button>
+            </div>
+          </div>
+
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
             <h3 className="text-base font-semibold text-zinc-900">Personal info</h3>
             <div className="mt-4 space-y-1">

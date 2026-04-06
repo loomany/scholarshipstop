@@ -31,7 +31,8 @@
     "patch-manifest-broad-noindex": "npx tsx scripts/patch-manifest-broad-noindex.ts",
     "audit:seo-full-poststeps": "npx tsx scripts/seo-full-poststeps-audit.ts --full",
     "debug:first-gen-tags": "npx tsx scripts/debug-eligibility-first-generation.ts",
-    "content:reprocess-articles": "npx tsx scripts/reprocess-content-posts.ts"
+    "content:reprocess-articles": "npx tsx scripts/reprocess-content-posts.ts",
+    "test:webhooks": "npx tsx --test lib/payments/__tests__/lemonWebhookSignature.test.ts lib/payments/__tests__/lemonSubscriptionState.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-toast": "^1.1.5",

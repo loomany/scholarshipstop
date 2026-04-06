@@ -53,6 +53,13 @@ const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
   'ignored'
 ]);
 
+/** Paid-only tabs for signed-in users without active subscription. */
+const SUBSCRIPTION_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
+  'best-matches',
+  'recommended',
+  'easy-apply'
+]);
+
 const STATIC_TOP_ROWS: StaticNavDef[] = [
   {
     id: 'best-matches',
@@ -124,6 +131,10 @@ type ScholarshipsSidebarProps = {
   guestMode?: boolean;
   /** When set, gated sidebar rows call this instead of navigating (guest only). */
   onGuestRestrictedNav?: () => void;
+  /** Signed-in user has no active subscription; show lock for paid tabs. */
+  subscriptionLocked?: boolean;
+  /** When set, subscription-gated rows call this instead of navigating. */
+  onSubscriptionRestrictedNav?: () => void;
 };
 
 export default function ScholarshipsSidebar({
@@ -131,7 +142,9 @@ export default function ScholarshipsSidebar({
   matchesNewIndicator,
   useDarkTooltips = false,
   guestMode = false,
-  onGuestRestrictedNav
+  onGuestRestrictedNav,
+  subscriptionLocked = false,
+  onSubscriptionRestrictedNav
 }: ScholarshipsSidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -183,6 +196,9 @@ export default function ScholarshipsSidebar({
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);
+          const showSubscriptionLock =
+            subscriptionLocked && SUBSCRIPTION_GATED_TAB_IDS.has(item.id);
+          const gated = showGuestLock || showSubscriptionLock;
           const baseClass = `group flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
             isActive
               ? scholarshipSidebarActiveRowClass
@@ -190,13 +206,25 @@ export default function ScholarshipsSidebar({
           }`;
           return (
             <li key={item.id}>
-              {showGuestLock ? (
+              {gated ? (
                 <button
                   type="button"
-                  onClick={onGuestRestrictedNav}
+                  onClick={() =>
+                    showSubscriptionLock
+                      ? onSubscriptionRestrictedNav?.()
+                      : onGuestRestrictedNav?.()
+                  }
                   className={baseClass}
-                  title="Create a free account to unlock this section"
-                  aria-label={`Create a free account to unlock ${item.label}`}
+                  title={
+                    showSubscriptionLock
+                      ? 'Start your free access to unlock this section'
+                      : 'Create a free account to unlock this section'
+                  }
+                  aria-label={
+                    showSubscriptionLock
+                      ? `Start free access to unlock ${item.label}`
+                      : `Create a free account to unlock ${item.label}`
+                  }
                 >
                   <Icon
                     className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
@@ -227,13 +255,15 @@ export default function ScholarshipsSidebar({
                       </span>
                     ) : null}
                   </span>
-                  <Lock
-                    className={`h-3.5 w-3.5 shrink-0 ${
-                      isActive ? 'text-white/85 stroke-white/85' : scholarshipGuestLockIconClass
-                    }`}
-                    strokeWidth={2}
-                    aria-hidden
-                  />
+                  {(showGuestLock || showSubscriptionLock) ? (
+                    <Lock
+                      className={`h-3.5 w-3.5 shrink-0 ${
+                        isActive ? 'text-white/85 stroke-white/85' : scholarshipGuestLockIconClass
+                      }`}
+                      strokeWidth={2}
+                      aria-hidden
+                    />
+                  ) : null}
                 </button>
               ) : (
                 <Link
@@ -284,6 +314,8 @@ export default function ScholarshipsSidebar({
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);
+          const showSubscriptionLock =
+            subscriptionLocked && SUBSCRIPTION_GATED_TAB_IDS.has(item.id);
 
           const content = (
             <>
@@ -316,7 +348,7 @@ export default function ScholarshipsSidebar({
                   </span>
                 ) : null}
               </span>
-              {showGuestLock ? (
+              {(showGuestLock || showSubscriptionLock) ? (
                 <Lock
                   className={`h-3.5 w-3.5 shrink-0 ${
                     isActive
@@ -350,10 +382,15 @@ export default function ScholarshipsSidebar({
 
           const tip = item.tooltip;
 
-          const gated =
+          const guestGated =
             guestMode &&
             GUEST_GATED_TAB_IDS.has(item.id) &&
             typeof onGuestRestrictedNav === 'function';
+          const subscriptionGated =
+            subscriptionLocked &&
+            SUBSCRIPTION_GATED_TAB_IDS.has(item.id) &&
+            typeof onSubscriptionRestrictedNav === 'function';
+          const gated = guestGated || subscriptionGated;
 
           const link = gated ? (
             <button
@@ -363,9 +400,15 @@ export default function ScholarshipsSidebar({
                   ? undefined
                   : showGuestLock
                     ? 'Create a free account to unlock'
+                    : showSubscriptionLock
+                      ? 'Start your free access to unlock'
                     : tip
               }
-              onClick={() => onGuestRestrictedNav?.()}
+              onClick={() =>
+                subscriptionGated
+                  ? onSubscriptionRestrictedNav?.()
+                  : onGuestRestrictedNav?.()
+              }
               className={`${rowClass} w-full cursor-pointer text-left ${!isActive ? 'group' : ''}`}
             >
               {content}

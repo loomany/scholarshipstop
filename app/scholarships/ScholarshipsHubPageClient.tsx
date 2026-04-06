@@ -27,6 +27,7 @@ import ScholarshipsSidebar from '@/components/scholarships/ScholarshipsSidebar';
 import ScholarshipsTwoColumnLayout from '@/components/scholarships/ScholarshipsTwoColumnLayout';
 import { ScholarshipsEmailConfirmationBanner } from '@/components/scholarships/ScholarshipsEmailConfirmationBanner';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import { scholarshipGuestLockIconClass } from '@/lib/constants/scholarshipActionUi';
 import {
   SCHOLARSHIP_CATEGORY_ORDER,
@@ -180,12 +181,14 @@ function withTabEnforcedMoreFilters(
 
 function ScholarshipsPageInner({
   isAuthenticated,
+  hasSubscription = false,
   initialPayload = null,
   routeScope = null,
   leadContent = null,
   postListingContent = null
 }: {
   isAuthenticated: boolean;
+  hasSubscription?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
   leadContent?: ReactNode;
@@ -225,6 +228,12 @@ function ScholarshipsPageInner({
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const isSubscriptionLocked = isAuthenticated && !hasSubscription;
+  const LOCKED_TABS_FOR_UNSUBSCRIBED = useMemo(
+    () => new Set<ScholarshipListTabId>(['best-matches', 'recommended', 'easy-apply']),
+    []
+  );
 
   const syncUserCollectionIdsFromStorage = useCallback(() => {
     if (!isAuthenticated) return;
@@ -242,6 +251,30 @@ function ScholarshipsPageInner({
     setRegistrationWallOpen(false);
   }, []);
 
+  const openSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(true);
+  }, []);
+
+  const closeSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(false);
+  }, []);
+
+  const replaceListingParams = useCallback(
+    (
+      patch: Parameters<typeof buildScholarshipListSearchParams>[1],
+      options?: { scroll?: boolean }
+    ) => {
+      const p = buildScholarshipListSearchParams(
+        new URLSearchParams(searchParams.toString()),
+        patch
+      );
+      const qs = p.toString();
+      const url = qs ? `${pathname}?${qs}` : pathname;
+      router.replace(url, { scroll: options?.scroll ?? false });
+    },
+    [pathname, router, searchParams]
+  );
+
   useEffect(() => {
     if (!isAuthenticated) {
       setSavedIds([]);
@@ -252,6 +285,57 @@ function ScholarshipsPageInner({
     }
     syncUserCollectionIdsFromStorage();
   }, [isAuthenticated, syncUserCollectionIdsFromStorage]);
+  const routeScopeHasLockedEasyApplyCategory = useMemo(() => {
+    if (!routeScope) return false;
+    const premiumLegacySlugs = new Set([
+      'no-essay',
+      'easy-apply',
+      'quick-apply',
+      'few-requirements'
+    ]);
+    const hasPremiumLegacySlug = routeScope.longTailLegacySlugs.some((slug) =>
+      premiumLegacySlugs.has(slug)
+    );
+    if (hasPremiumLegacySlug) return true;
+    const requiredTags = new Set(routeScope.requiredSeoTags);
+    return (
+      requiredTags.has('no_essay') ||
+      requiredTags.has('easy_apply') ||
+      requiredTags.has('quick_apply') ||
+      requiredTags.has('few_requirements')
+    );
+  }, [routeScope]);
+  useEffect(() => {
+    if (!isSubscriptionLocked) return;
+    if (!LOCKED_TABS_FOR_UNSUBSCRIBED.has(activeTab)) return;
+    openSubscriptionOffer();
+    replaceListingParams({
+      tab: 'matches',
+      scope: 'catalog',
+      resetPage: true
+    });
+  }, [
+    activeTab,
+    isSubscriptionLocked,
+    openSubscriptionOffer,
+    replaceListingParams,
+    LOCKED_TABS_FOR_UNSUBSCRIBED
+  ]);
+  useEffect(() => {
+    if (!isSubscriptionLocked) return;
+    if (!routeScopeHasLockedEasyApplyCategory) return;
+    openSubscriptionOffer();
+    replaceListingParams({
+      tab: 'matches',
+      scope: 'catalog',
+      resetPage: true
+    });
+  }, [
+    isSubscriptionLocked,
+    routeScopeHasLockedEasyApplyCategory,
+    openSubscriptionOffer,
+    replaceListingParams
+  ]);
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const [moreFiltersApplied, setMoreFiltersApplied] =
     useState<MoreFiltersState | null>(() =>
@@ -286,22 +370,6 @@ function ScholarshipsPageInner({
     started: startedIds,
     submitted: submittedIds
   };
-
-  const replaceListingParams = useCallback(
-    (
-      patch: Parameters<typeof buildScholarshipListSearchParams>[1],
-      options?: { scroll?: boolean }
-    ) => {
-      const p = buildScholarshipListSearchParams(
-        new URLSearchParams(searchParams.toString()),
-        patch
-      );
-      const qs = p.toString();
-      const url = qs ? `${pathname}?${qs}` : pathname;
-      router.replace(url, { scroll: options?.scroll ?? false });
-    },
-    [pathname, router, searchParams]
-  );
 
   /** Strip hidden hub tabs from the URL (Started / Submitted still exist in types & API). */
   useEffect(() => {
@@ -863,8 +931,25 @@ function ScholarshipsPageInner({
   }, [isAuthenticated, activeTab]);
 
   const setViewBest = useCallback(() => {
-    openRegistrationWall();
-  }, [openRegistrationWall]);
+    if (!isAuthenticated) {
+      openRegistrationWall();
+      return;
+    }
+    if (isSubscriptionLocked) {
+      openSubscriptionOffer();
+      return;
+    }
+    replaceListingParams({
+      tab: 'best-matches',
+      resetPage: true
+    });
+  }, [
+    isAuthenticated,
+    isSubscriptionLocked,
+    openRegistrationWall,
+    openSubscriptionOffer,
+    replaceListingParams
+  ]);
 
   const setViewAll = useCallback(() => {
     replaceListingParams({
@@ -875,8 +960,25 @@ function ScholarshipsPageInner({
   }, [replaceListingParams]);
 
   const setViewEasy = useCallback(() => {
-    openRegistrationWall();
-  }, [openRegistrationWall]);
+    if (!isAuthenticated) {
+      openRegistrationWall();
+      return;
+    }
+    if (isSubscriptionLocked) {
+      openSubscriptionOffer();
+      return;
+    }
+    replaceListingParams({
+      tab: 'easy-apply',
+      resetPage: true
+    });
+  }, [
+    isAuthenticated,
+    isSubscriptionLocked,
+    openRegistrationWall,
+    openSubscriptionOffer,
+    replaceListingParams
+  ]);
 
   const showProfileWhy = false;
 
@@ -1030,6 +1132,8 @@ function ScholarshipsPageInner({
             matchesNewIndicator={null}
             guestMode={!isAuthenticated}
             onGuestRestrictedNav={!isAuthenticated ? openRegistrationWall : undefined}
+            subscriptionLocked={isSubscriptionLocked}
+            onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
           />
         }
       >
@@ -1055,7 +1159,11 @@ function ScholarshipsPageInner({
             categoriesDisabled={!isLoading && totalCount === 0}
             moreFiltersActiveCount={moreFiltersActiveCount}
             isAuthenticated={isAuthenticated}
+            hasSubscription={hasSubscription}
             onGuestSortBlocked={!isAuthenticated ? openRegistrationWall : undefined}
+            onSubscriptionSortBlocked={
+              isSubscriptionLocked ? openSubscriptionOffer : undefined
+            }
             onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
             listingViewControls={
               !isAuthenticated ? (
@@ -1196,6 +1304,10 @@ function ScholarshipsPageInner({
                     ignoreAction={activeTab === 'ignored' ? 'restore' : 'hide'}
                     showPersonalizedMatch={showPersonalizedMatchOnCards}
                     showCardActions={scholarshipTabShowsCardActions(activeTab)}
+                    subscriptionLocked={isSubscriptionLocked}
+                    onSubscriptionLockedCategoryClick={
+                      isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
+                    }
                   />
                 ))}
               </div>
@@ -1224,10 +1336,16 @@ function ScholarshipsPageInner({
         locationOptions={[]}
         isAuthenticated={isAuthenticated}
         onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
+        hasSubscription={hasSubscription}
+        onSubscriptionLockedAction={isSubscriptionLocked ? openSubscriptionOffer : undefined}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+      />
+      <ScholarshipSubscriptionOfferModal
+        open={subscriptionOfferOpen}
+        onClose={closeSubscriptionOffer}
       />
     </section>
   );
@@ -1235,12 +1353,14 @@ function ScholarshipsPageInner({
 
 export default function ScholarshipsHubPageClient({
   isAuthenticated = false,
+  hasSubscription = false,
   initialPayload = null,
   routeScope = null,
   leadContent = null,
   postListingContent = null
 }: {
   isAuthenticated?: boolean;
+  hasSubscription?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
   leadContent?: ReactNode;
@@ -1256,6 +1376,7 @@ export default function ScholarshipsHubPageClient({
     >
       <ScholarshipsPageInner
         isAuthenticated={isAuthenticated}
+        hasSubscription={hasSubscription}
         initialPayload={initialPayload}
         routeScope={routeScope}
         leadContent={leadContent}

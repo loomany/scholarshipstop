@@ -24,6 +24,7 @@ import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
 import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
+import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
 
 type PageProps = { params: { slugPath?: string[] } };
 
@@ -106,11 +107,15 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
             .maybeSingle()
         ).data
       : null;
+    const hasSubscription = user?.id
+      ? await getUserSubscriptionStatus(supabase, user.id)
+      : false;
     const initialListPayload =
       await fetchInitialHubScholarshipsPayload(supabase, profile);
     return (
       <ScholarshipsHubPageClient
         isAuthenticated={Boolean(user)}
+        hasSubscription={hasSubscription}
         initialPayload={createInitialScholarshipsPayload(
           buildInitialListRequestKey({
             kind: 'hub',
@@ -128,6 +133,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const {
       data: { user }
     } = await supabase.auth.getUser();
+    const hasSubscription = user?.id
+      ? await getUserSubscriptionStatus(supabase, user.id)
+      : false;
     const scholarship = await getScholarshipDetailServer(segments[0]!);
     if (!scholarship) {
       notFound();
@@ -144,6 +152,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
       >
           <ScholarshipDetailPageClient
             isAuthenticated={Boolean(user)}
+            hasSubscription={hasSubscription}
             initialScholarship={scholarship}
           />
         </Suspense>
@@ -166,6 +175,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const {
       data: { user }
     } = await supabase.auth.getUser();
+    const hasSubscription = user?.id
+      ? await getUserSubscriptionStatus(supabase, user.id)
+      : false;
     const scholarship =
       segments.length === 1
         ? await getScholarshipDetailServer(segments[0]!)
@@ -185,6 +197,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
       >
           <ScholarshipDetailPageClient
             isAuthenticated={Boolean(user)}
+            hasSubscription={hasSubscription}
             initialScholarship={scholarship}
           />
         </Suspense>
@@ -199,6 +212,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     } = await supabase.auth.getUser();
     const longTail = getLongTailPreset(resolved.slug);
     if (!longTail) notFound();
+    const hasSubscription = user?.id
+      ? await getUserSubscriptionStatus(supabase, user.id)
+      : false;
     const { result: initialListPayload, routeScope } =
       await fetchInitialLongTailScholarshipsPayload(supabase, {
         type: 'legacy',
@@ -238,6 +254,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
       >
         <ScholarshipsHubPageClient
           isAuthenticated={Boolean(user)}
+          hasSubscription={hasSubscription}
           initialPayload={createInitialScholarshipsPayload(
             buildInitialListRequestKey({
               kind: 'long_tail',
@@ -264,6 +281,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
         canonicalPath,
         entry
       });
+    const hasSubscription = user?.id
+      ? await getUserSubscriptionStatus(supabase, user.id)
+      : false;
 
     const seo = readScholarshipSeoContent(canonicalPath);
     const pageTitle =
@@ -310,6 +330,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
       >
           <ScholarshipsHubPageClient
             isAuthenticated={Boolean(user)}
+            hasSubscription={hasSubscription}
             initialPayload={createInitialScholarshipsPayload(
               buildInitialListRequestKey({
                 kind: 'long_tail',

@@ -34,6 +34,7 @@ import {
 } from '@/lib/constants/scholarshipActionUi';
 import {
   GUEST_LOCKED_SORT_OPTIONS,
+  SUBSCRIPTION_LOCKED_SORT_OPTIONS,
   type SortOption
 } from '@/app/scholarships/scholarshipSort';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
@@ -78,7 +79,9 @@ type ScholarshipsListHeaderProps = {
    * instead of changing sort (hub guests).
    */
   isAuthenticated?: boolean;
+  hasSubscription?: boolean;
   onGuestSortBlocked?: () => void;
+  onSubscriptionSortBlocked?: () => void;
   onGuestLockedAction?: () => void;
 };
 
@@ -185,7 +188,9 @@ export default function ScholarshipsListHeader({
   onClearAllListingChips,
   listingViewControls = null,
   isAuthenticated = true,
+  hasSubscription = true,
   onGuestSortBlocked,
+  onSubscriptionSortBlocked,
   onGuestLockedAction
 }: ScholarshipsListHeaderProps) {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
@@ -474,9 +479,15 @@ export default function ScholarshipsListHeader({
                     className="absolute left-0 z-[200] mt-2 w-full min-w-[12rem] max-w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-xl border border-gray-200 bg-white py-2 shadow-lg ring-1 ring-gray-900/5 sm:left-auto sm:right-0 sm:w-max"
                   >
                     {SORT_OPTIONS.map((opt) => {
-                      const sortLocked =
+                      const guestSortLocked =
                         !isAuthenticated &&
                         GUEST_LOCKED_SORT_OPTIONS.has(opt.value);
+                      const subscriptionSortLocked =
+                        isAuthenticated &&
+                        !hasSubscription &&
+                        SUBSCRIPTION_LOCKED_SORT_OPTIONS.has(opt.value);
+                      const sortLocked =
+                        guestSortLocked || subscriptionSortLocked;
                       return (
                         <li
                           key={opt.value}
@@ -486,15 +497,17 @@ export default function ScholarshipsListHeader({
                           <button
                             type="button"
                             className={`flex w-full items-center gap-2 whitespace-nowrap px-4 py-2.5 text-left text-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 ${
-                              sortLocked ? 'opacity-[0.72]' : ''
-                            } ${
                               sortBy === opt.value
                                 ? optionSelectedClass
                                 : optionDefaultClass
                             }`}
                             onClick={() => {
-                              if (sortLocked) {
+                              if (guestSortLocked) {
                                 onGuestSortBlocked?.();
+                                return;
+                              }
+                              if (subscriptionSortLocked) {
+                                onSubscriptionSortBlocked?.();
                                 return;
                               }
                               onSortChange(opt.value);
