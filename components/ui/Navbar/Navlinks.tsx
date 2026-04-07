@@ -127,6 +127,11 @@ export default function Navlinks({
     [pathname]
   );
 
+  const providersActive = useMemo(
+    () => pathname === '/providers' || pathname.startsWith('/providers/'),
+    [pathname]
+  );
+
   const signInActive = useMemo(
     () => pathname === '/signin' || pathname.startsWith('/signin/'),
     [pathname]
@@ -239,6 +244,12 @@ export default function Navlinks({
               Find Scholarships
             </Link>
             <Link
+              href="/providers"
+              className={clsx(nav.dark, providersActive && nav.darkActive)}
+            >
+              Providers
+            </Link>
+            <Link
               href={RESOURCES_SECTION_PATH}
               className={clsx(
                 nav.dark,
@@ -346,6 +357,16 @@ export default function Navlinks({
                 onClick={closeMenu}
               >
                 Find Scholarships
+              </Link>
+              <Link
+                href="/providers"
+                className={clsx(
+                  nav.darkDrawer,
+                  providersActive && nav.darkDrawerActive
+                )}
+                onClick={closeMenu}
+              >
+                Providers
               </Link>
               <Link
                 href={RESOURCES_SECTION_PATH}

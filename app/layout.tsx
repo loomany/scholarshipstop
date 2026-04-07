@@ -62,7 +62,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <Suspense fallback={null}>
           <ConditionalFooter />
         </Suspense>
-        <Suspense>
+        <Suspense fallback={null}>
           <Toaster />
         </Suspense>
       </body>

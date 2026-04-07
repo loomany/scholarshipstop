@@ -1,7 +1,14 @@
 import 'server-only';
 
-import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import { cache } from 'react';
+
 import { enrichProviderData } from '@/lib/providers/enrichProviderData';
+import { PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE } from '@/lib/providers/providerProfilePagination';
+import type {
+  ProviderFaqItem,
+  ProviderProfilePayload,
+  SimilarProviderSummary
+} from '@/lib/providers/providerProfileTypes';
 import {
   LIST_CARD_SELECT,
   mapScholarshipRow,
@@ -14,27 +21,7 @@ import { createClient } from '@/utils/supabase/server';
 const UUID_PARAM_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-export type ProviderFaqItem = { question: string; answer: string };
-
-export type SimilarProviderSummary = {
-  slug: string;
-  displayName: string;
-  scholarshipCount: number;
-};
-
-export type ProviderProfilePayload = {
-  id: string;
-  slug: string;
-  displayName: string;
-  officialUrl: string | null;
-  aiDescription: string | null;
-  aiSources: string[];
-  aiFaq: ProviderFaqItem[];
-  isEnriched: boolean;
-  totalScholarshipCount: number;
-  scholarships: Scholarship[];
-  similarProviders: SimilarProviderSummary[];
-};
+export type { ProviderFaqItem, ProviderProfilePayload, SimilarProviderSummary };
 
 function faqFromJson(value: Json | null | undefined): ProviderFaqItem[] {
   if (!value || !Array.isArray(value)) return [];
@@ -60,6 +47,15 @@ function sourcesFromJson(value: Json | null | undefined): string[] {
   return value.filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
 }
 
+type ProviderScholarshipStatRow = {
+  slug: string;
+  display_name: string | null;
+  scholarship_count: number;
+};
+
+/** PostgREST view — typings omit `Views` in this repo's Supabase client; keep row shape explicit. */
+const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships';
+
 function pickDisplayName(names: (string | null | undefined)[], fallback: string): string {
   const counts = new Map<string, number>();
   for (const n of names) {
@@ -80,31 +76,9 @@ function pickDisplayName(names: (string | null | undefined)[], fallback: string)
 
 type ProviderRow = Database['public']['Tables']['providers']['Row'];
 
-function rowToPayload(
-  row: ProviderRow,
-  extras: {
-    totalScholarshipCount: number;
-    scholarships: Scholarship[];
-    similarProviders: SimilarProviderSummary[];
-  }
-): ProviderProfilePayload {
-  return {
-    id: row.id,
-    slug: row.slug,
-    displayName: row.display_name,
-    officialUrl: row.official_url,
-    aiDescription: row.ai_description,
-    aiSources: sourcesFromJson(row.ai_sources),
-    aiFaq: faqFromJson(row.ai_faq),
-    isEnriched: row.is_enriched,
-    totalScholarshipCount: extras.totalScholarshipCount,
-    scholarships: extras.scholarships,
-    similarProviders: extras.similarProviders
-  };
-}
-
 export async function loadProviderProfilePage(
-  rawParam: string
+  rawParam: string,
+  scholarshipsPage: number = 1
 ): Promise<ProviderProfilePayload | null> {
   const param = decodeURIComponent(rawParam || '').trim();
   if (!param) return null;
@@ -127,15 +101,17 @@ export async function loadProviderProfilePage(
   const slugForScholarships = providerRow?.slug ?? (byUuid ? null : param);
   if (!slugForScholarships) return null;
 
-  const { data: statRow, error: statError } = await supabase
-    .from('provider_scholarship_stats')
+  const { data: statRowRaw, error: statError } = await supabase
+    .from(PROVIDER_STATS)
     .select('slug, display_name, scholarship_count')
     .eq('slug', slugForScholarships)
     .maybeSingle();
 
-  if (statError || !statRow?.scholarship_count) return null;
+  const statRow = statRowRaw as ProviderScholarshipStatRow | null;
 
-  const totalScholarshipCount = statRow.scholarship_count;
+  if (statError || !statRow) return null;
+
+  const totalScholarshipCount = Number(statRow.scholarship_count) || 0;
   const fallbackName =
     (statRow.display_name && statRow.display_name.trim()) || slugForScholarships;
 
@@ -179,62 +155,72 @@ export async function loadProviderProfilePage(
     if (!insErr && inserted) providerRow = inserted;
   }
 
-  if (!providerRow) {
-    providerRow = {
-      id: '00000000-0000-0000-0000-000000000000',
-      slug: slugForScholarships,
-      display_name: fallbackName,
-      official_url: null,
-      ai_description: null,
-      ai_sources: [],
-      ai_faq: [],
-      is_enriched: false,
-      created_at: new Date().toISOString(),
-      updated_at: null
-    } as ProviderRow;
-  }
+  let providerId: string | null = providerRow?.id ?? null;
+  let displayName = providerRow?.display_name ?? fallbackName;
+  let officialUrl = providerRow?.official_url ?? null;
+  let aiDescription = providerRow?.ai_description ?? null;
+  let aiSources = providerRow ? sourcesFromJson(providerRow.ai_sources) : [];
+  let aiFaq = providerRow ? faqFromJson(providerRow.ai_faq) : [];
+  let isEnriched = providerRow?.is_enriched ?? false;
 
-  if (!providerRow.is_enriched && admin && providerRow.id !== '00000000-0000-0000-0000-000000000000') {
-    const enriched = await enrichProviderData(providerRow.display_name);
+  if (providerId && admin && !isEnriched) {
+    const enriched = await enrichProviderData(displayName);
     await admin
       .from('providers')
       .update({
         ai_description: enriched.description,
         ai_sources: enriched.sources,
         ai_faq: enriched.faq,
+        state: enriched.state,
         is_enriched: true,
         updated_at: new Date().toISOString()
       })
-      .eq('id', providerRow.id);
+      .eq('id', providerId);
 
     const { data: refreshed } = await admin
       .from('providers')
       .select('*')
-      .eq('id', providerRow.id)
+      .eq('id', providerId)
       .single();
-    if (refreshed) providerRow = refreshed;
+    if (refreshed) {
+      aiDescription = refreshed.ai_description;
+      aiSources = sourcesFromJson(refreshed.ai_sources);
+      aiFaq = faqFromJson(refreshed.ai_faq);
+      isEnriched = refreshed.is_enriched;
+      displayName = refreshed.display_name;
+      officialUrl = refreshed.official_url;
+    }
   }
 
-  const { data: scholarshipRows } = await supabase
-    .from('scholarships')
-    .select(LIST_CARD_SELECT)
-    .eq('provider_slug', slugForScholarships)
-    .eq('is_active', true)
-    .order('ranking_score', { ascending: false, nullsFirst: false })
-    .limit(24);
+  const page = Math.max(1, Math.floor(scholarshipsPage) || 1);
+  const pageSize = PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE;
+  const offset = (page - 1) * pageSize;
+
+  const { data: scholarshipRows } =
+    totalScholarshipCount > 0
+      ? await supabase
+          .from('scholarships')
+          .select(LIST_CARD_SELECT)
+          .eq('provider_slug', slugForScholarships)
+          .eq('is_active', true)
+          .order('ranking_score', { ascending: false, nullsFirst: false })
+          .range(offset, offset + pageSize - 1)
+      : { data: [] as ScholarshipRow[] };
 
   const scholarships = (scholarshipRows ?? []).map((r) =>
     mapScholarshipRow(r as ScholarshipRow)
   );
 
-  const { data: similarRows } = await supabase
-    .from('provider_scholarship_stats')
+  const { data: similarRowsRaw } = await supabase
+    .from(PROVIDER_STATS)
     .select('slug, display_name, scholarship_count')
     .neq('slug', slugForScholarships)
     .order('scholarship_count', { ascending: false })
     .limit(12);
 
-  const similarProviders: SimilarProviderSummary[] = (similarRows ?? [])
+  const similarRows = (similarRowsRaw ?? []) as ProviderScholarshipStatRow[];
+
+  const similarProviders: SimilarProviderSummary[] = similarRows
     .filter((r) => r.slug && r.slug !== slugForScholarships)
     .slice(0, 4)
     .map((r) => ({
@@ -244,9 +230,20 @@ export async function loadProviderProfilePage(
       scholarshipCount: r.scholarship_count ?? 0
     }));
 
-  return rowToPayload(providerRow, {
+  return {
+    providerId,
+    slug: slugForScholarships,
+    displayName,
+    officialUrl,
+    aiDescription,
+    aiSources,
+    aiFaq,
+    isEnriched,
     totalScholarshipCount,
     scholarships,
     similarProviders
-  });
+  };
 }
+
+/** Dedupes provider resolution + enrichment when `generateMetadata` and the page run in the same request. */
+export const getCachedProviderProfilePage = cache(loadProviderProfilePage);

@@ -764,6 +764,10 @@ export default function ScholarshipDetailPageClient({
   );
 
   const providerName = scholarship.provider?.trim();
+  const providerSlugTrimmed = scholarship.providerSlug?.trim() ?? '';
+  const providerProfileHref = providerSlugTrimmed
+    ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
+    : null;
   const providerMissionRaw = scholarship.providerMission?.trim() ?? '';
   const hasMission = Boolean(providerMissionRaw);
   const showMissionCompact =
@@ -1539,47 +1543,92 @@ export default function ScholarshipDetailPageClient({
           <div className="mt-10">
             <SectionLabel variant="support">About the provider</SectionLabel>
             <div className={scholarshipDetailCardSupportClass}>
-              <div className="flex min-w-0 gap-3 sm:gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
-                  {logoUrl ? (
-                    <img
-                      src={logoUrl}
-                      alt={
-                        providerName
-                          ? `${providerName} logo`
-                          : 'Scholarship provider logo'
-                      }
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <Shield
-                      className="h-5 w-5 text-zinc-500"
-                      strokeWidth={1.5}
+              <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
+                {providerProfileHref ? (
+                  <Link
+                    href={providerProfileHref}
+                    className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 sm:gap-4"
+                    aria-label={
+                      providerName
+                        ? `View provider profile: ${providerName}`
+                        : 'View provider profile'
+                    }
+                  >
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm transition group-hover:border-emerald-200/80">
+                      {logoUrl ? (
+                        <img
+                          src={logoUrl}
+                          alt={
+                            providerName
+                              ? `${providerName} logo`
+                              : 'Scholarship provider logo'
+                          }
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <Shield
+                          className="h-5 w-5 text-zinc-500 transition group-hover:text-emerald-700"
+                          strokeWidth={1.5}
+                          aria-hidden
+                        />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      {providerName ? (
+                        <p className="text-lg font-semibold text-zinc-900 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
+                          {providerName}
+                        </p>
+                      ) : (
+                        <p className="text-sm font-medium text-zinc-600 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
+                          View provider profile
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="flex min-w-0 gap-3 sm:gap-4">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
+                      {logoUrl ? (
+                        <img
+                          src={logoUrl}
+                          alt={
+                            providerName
+                              ? `${providerName} logo`
+                              : 'Scholarship provider logo'
+                          }
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <Shield
+                          className="h-5 w-5 text-zinc-500"
+                          strokeWidth={1.5}
+                          aria-hidden
+                        />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      {providerName ? (
+                        <p className="text-lg font-semibold text-zinc-900">
+                          {providerName}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                )}
+                {providerUrlRaw ? (
+                  <a
+                    href={providerUrlRaw}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-fit items-center gap-1 text-sm font-medium text-sky-700 underline-offset-2 hover:underline sm:ml-14"
+                  >
+                    <ExternalLink
+                      className="h-3.5 w-3.5 shrink-0"
                       aria-hidden
                     />
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  {providerName ? (
-                    <p className="text-lg font-semibold text-zinc-900">
-                      {providerName}
-                    </p>
-                  ) : null}
-                  {providerUrlRaw ? (
-                    <a
-                      href={providerUrlRaw}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-sky-700 underline-offset-2 hover:underline"
-                    >
-                      <ExternalLink
-                        className="h-3.5 w-3.5 shrink-0"
-                        aria-hidden
-                      />
-                      Provider website
-                    </a>
-                  ) : null}
-                </div>
+                    Provider website
+                  </a>
+                ) : null}
               </div>
               {showMissionCompact ? (
                 <p className="mt-4 text-sm leading-relaxed text-zinc-600">

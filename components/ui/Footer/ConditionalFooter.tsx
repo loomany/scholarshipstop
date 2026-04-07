@@ -1,11 +1,10 @@
-'use client';
+import { headers } from 'next/headers';
 
-import { usePathname } from 'next/navigation';
 import SiteFooter from './SiteFooter';
 
 /** Site footer only on the homepage; hidden on all other routes. */
-export default function ConditionalFooter() {
-  const pathname = usePathname();
+export default async function ConditionalFooter() {
+  const pathname = headers().get('x-pathname') ?? '';
   if (pathname !== '/') return null;
   return <SiteFooter />;
 }

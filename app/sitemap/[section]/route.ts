@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 
 import { buildSitemapBuckets, sitemapBaseUrl } from '@/lib/seo/sitemaps';
 
+/** Align with `app/sitemap.ts` so drip-feed limits refresh roughly hourly at the CDN. */
+export const revalidate = 3600;
+
 type SitemapSection = 'core' | 'resources' | 'categories' | 'seo' | 'scholarships';
 
 const VALID_SECTIONS: SitemapSection[] = [

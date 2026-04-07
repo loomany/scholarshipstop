@@ -198,6 +198,10 @@ export default function ScholarshipCard({
     !Number.isNaN(scholarship.applicantCount);
 
   const providerLine = scholarship.provider?.trim() || '';
+  const providerSlugTrimmed = scholarship.providerSlug?.trim() ?? '';
+  const providerProfileHref = providerSlugTrimmed
+    ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
+    : null;
 
   const deadlineTooltipText = formatDeadlineTooltipText(scholarship);
 
@@ -309,13 +313,28 @@ export default function ScholarshipCard({
                 </span>
               ) : null}
               {providerLine ? (
-                <>
-                  <Info
-                    className="h-3.5 w-3.5 shrink-0 text-gray-400"
-                    aria-hidden
-                  />
-                  <span className="min-w-0 truncate">{providerLine}</span>
-                </>
+                providerProfileHref ? (
+                  <Link
+                    href={providerProfileHref}
+                    className="group relative z-10 inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-md text-gray-500 outline-none transition pointer-events-auto hover:text-emerald-700 hover:underline decoration-emerald-600/40 underline-offset-2 focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1"
+                    onClick={(e) => e.stopPropagation()}
+                    aria-label={`View provider: ${providerLine}`}
+                  >
+                    <Info
+                      className="h-3.5 w-3.5 shrink-0 text-gray-400 transition group-hover:text-emerald-600"
+                      aria-hidden
+                    />
+                    <span className="min-w-0 truncate">{providerLine}</span>
+                  </Link>
+                ) : (
+                  <>
+                    <Info
+                      className="h-3.5 w-3.5 shrink-0 text-gray-400"
+                      aria-hidden
+                    />
+                    <span className="min-w-0 truncate">{providerLine}</span>
+                  </>
+                )
               ) : null}
               {scholarship.verified ? (
                 <span

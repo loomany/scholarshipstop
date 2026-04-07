@@ -23,6 +23,7 @@ import {
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
 import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
+import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
 import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
 
@@ -163,6 +164,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
   const resolved = resolveScholarshipSlugPath(segments);
 
   if (resolved.kind === 'redirect_canonical') {
+    if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
+      notFound();
+    }
     permanentRedirect(`/scholarships/${resolved.canonicalPath}`);
   }
 
@@ -206,6 +210,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
   }
 
   if (resolved.kind === 'legacy_long_tail') {
+    if (shouldBlockScholarshipListingForDrip(resolved.slug)) {
+      notFound();
+    }
     const supabase = createClient();
     const {
       data: { user }
@@ -270,6 +277,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
   }
 
   if (resolved.kind === 'manifest_seo') {
+    if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
+      notFound();
+    }
     const supabase = createClient();
     const {
       data: { user }

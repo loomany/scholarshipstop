@@ -4,6 +4,10 @@ type ResourcesPaginationProps = {
   currentPage: number;
   totalPages: number;
   buildHref: (page: number) => string;
+  /** Override outer nav layout (e.g. margin). Defaults match the Resources index. */
+  navClassName?: string;
+  /** Default `true`. Set `false` for hash URLs so Next does not scroll to top. */
+  linkScroll?: boolean;
 };
 
 function visiblePageItems(
@@ -43,10 +47,15 @@ const activeClass =
 const disabledClass =
   'pointer-events-none border-gray-100 bg-gray-50 text-gray-400 shadow-none';
 
+const defaultNavClassName =
+  'mt-10 flex flex-col items-center gap-3 sm:mt-12';
+
 export default function ResourcesPagination({
   currentPage,
   totalPages,
-  buildHref
+  buildHref,
+  navClassName = defaultNavClassName,
+  linkScroll = true
 }: ResourcesPaginationProps) {
   if (totalPages <= 1) {
     return null;
@@ -57,10 +66,7 @@ export default function ResourcesPagination({
   const nextDisabled = currentPage >= totalPages;
 
   return (
-    <nav
-      className="mt-10 flex flex-col items-center gap-3 sm:mt-12"
-      aria-label="Articles pagination"
-    >
+    <nav className={navClassName} aria-label="Pagination">
       <p className="text-sm text-gray-500">
         Page {currentPage} of {totalPages}
       </p>
@@ -76,7 +82,7 @@ export default function ResourcesPagination({
           <Link
             href={buildHref(currentPage - 1)}
             className={linkClass}
-            scroll
+            scroll={linkScroll}
             prefetch={false}
           >
             Previous
@@ -98,7 +104,7 @@ export default function ResourcesPagination({
               href={buildHref(item)}
               className={`${linkClass} ${item === currentPage ? activeClass : ''}`}
               aria-current={item === currentPage ? 'page' : undefined}
-              scroll
+              scroll={linkScroll}
               prefetch={false}
             >
               {item}
@@ -117,7 +123,7 @@ export default function ResourcesPagination({
           <Link
             href={buildHref(currentPage + 1)}
             className={linkClass}
-            scroll
+            scroll={linkScroll}
             prefetch={false}
           >
             Next

@@ -119,6 +119,11 @@ export const US_STATE_NAME_TO_CODE: Record<string, string> = {
   Wyoming: 'WY'
 };
 
+/** USPS code → canonical full name (50 states). */
+export const US_STATE_CODE_TO_NAME: Record<string, string> = Object.fromEntries(
+  Object.entries(US_STATE_NAME_TO_CODE).map(([name, code]) => [code, name])
+);
+
 export function filterUsStateNames(query: string, limit = 8): string[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];

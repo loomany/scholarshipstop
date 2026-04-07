@@ -24,6 +24,12 @@ const ITEMS: {
       p === '/scholarships' || p.startsWith('/scholarships/')
   },
   {
+    href: '/providers',
+    label: 'Providers',
+    isActive: (p) =>
+      p === '/providers' || p.startsWith('/providers/')
+  },
+  {
     href: '/help',
     label: 'Help',
     isActive: (p) => p === '/help' || p.startsWith('/help/')

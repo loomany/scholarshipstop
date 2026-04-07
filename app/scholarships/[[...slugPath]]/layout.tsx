@@ -7,6 +7,7 @@ import {
 } from '@/app/scholarships/scholarshipLongTailPresets';
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
+import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import {
   getSeoListingEntry,
   resolveScholarshipSlugPath
@@ -241,6 +242,12 @@ export async function generateMetadata({
   const resolved = resolveScholarshipSlugPath(segments);
 
   if (resolved.kind === 'redirect_canonical') {
+    if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
+      return applySafeNoindexFallback(
+        { title: 'Find Scholarships' },
+        `/scholarships/${resolved.canonicalPath}`
+      );
+    }
     const entry = getSeoListingEntry(resolved.canonicalPath);
     if (entry) {
       const path = `/scholarships/${resolved.canonicalPath}`;
@@ -323,6 +330,12 @@ export async function generateMetadata({
   }
 
   if (resolved.kind === 'legacy_long_tail') {
+    if (shouldBlockScholarshipListingForDrip(resolved.slug)) {
+      return applySafeNoindexFallback(
+        { title: 'Find Scholarships' },
+        `/scholarships/${resolved.slug}`
+      );
+    }
     const longTail = getLongTailPreset(resolved.slug);
     if (!longTail) return { title: 'Find Scholarships' };
     const path = `/scholarships/${longTail.slug}`;
@@ -371,6 +384,12 @@ export async function generateMetadata({
   }
 
   if (resolved.kind === 'manifest_seo') {
+    if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
+      return applySafeNoindexFallback(
+        { title: 'Find Scholarships' },
+        `/scholarships/${resolved.canonicalPath}`
+      );
+    }
     const path = `/scholarships/${resolved.canonicalPath}`;
     const seo = readScholarshipSeoContent(resolved.canonicalPath);
     const title = seo?.seo_title ?? resolved.entry.h1Fallback;

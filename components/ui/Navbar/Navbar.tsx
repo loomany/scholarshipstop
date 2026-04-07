@@ -1,5 +1,3 @@
-import { Suspense } from 'react';
-
 import { profileDisplayNameFromRow } from '@/lib/nav/accountDisplayName';
 import { createClient } from '@/utils/supabase/server';
 import { getUserDetails } from '@/utils/supabase/queries';
@@ -22,13 +20,7 @@ export default async function Navbar() {
         Skip to content
       </a>
       <div className="max-w-6xl px-6 mx-auto">
-        <Suspense
-          fallback={
-            <div className="flex h-14 items-center md:h-16" aria-hidden />
-          }
-        >
-          <Navlinks user={user ?? null} profileDisplayName={profileDisplayName} />
-        </Suspense>
+        <Navlinks user={user ?? null} profileDisplayName={profileDisplayName} />
       </div>
     </nav>
   );

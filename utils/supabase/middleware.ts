@@ -1,11 +1,21 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
+/** Forward pathname for server components (e.g. footer visibility) without client `usePathname`. */
+function requestHeadersWithPathname(
+  request: NextRequest,
+  base: Headers
+): Headers {
+  const h = new Headers(base);
+  h.set('x-pathname', request.nextUrl.pathname);
+  return h;
+}
+
 export const createClient = (request: NextRequest) => {
   // Create an unmodified response
   let response = NextResponse.next({
     request: {
-      headers: request.headers
+      headers: requestHeadersWithPathname(request, request.headers)
     }
   });
 
@@ -26,7 +36,7 @@ export const createClient = (request: NextRequest) => {
           });
           response = NextResponse.next({
             request: {
-              headers: request.headers
+              headers: requestHeadersWithPathname(request, request.headers)
             }
           });
           response.cookies.set({
@@ -44,7 +54,7 @@ export const createClient = (request: NextRequest) => {
           });
           response = NextResponse.next({
             request: {
-              headers: request.headers
+              headers: requestHeadersWithPathname(request, request.headers)
             }
           });
           response.cookies.set({
@@ -77,7 +87,7 @@ export const updateSession = async (request: NextRequest) => {
     // Verify Supabase env vars and Next.js setup.
     return NextResponse.next({
       request: {
-        headers: request.headers
+        headers: requestHeadersWithPathname(request, request.headers)
       }
     });
   }

@@ -219,6 +219,48 @@ export interface Database {
           }
         ]
       }
+      providers: {
+        Row: {
+          id: string
+          slug: string
+          display_name: string
+          official_url: string | null
+          state: string | null
+          ai_description: string | null
+          ai_sources: Json
+          ai_faq: Json
+          is_enriched: boolean
+          created_at: string
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          slug: string
+          display_name: string
+          official_url?: string | null
+          state?: string | null
+          ai_description?: string | null
+          ai_sources?: Json
+          ai_faq?: Json
+          is_enriched?: boolean
+          created_at?: string
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          slug?: string
+          display_name?: string
+          official_url?: string | null
+          state?: string | null
+          ai_description?: string | null
+          ai_sources?: Json
+          ai_faq?: Json
+          is_enriched?: boolean
+          created_at?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       scholarships: {
         Row: {
           id: string
@@ -796,7 +838,36 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      provider_hub_listing: {
+        Row: {
+          slug: string
+          display_name: string | null
+          scholarship_count: number
+          state: string | null
+          ai_description: string | null
+        }
+        Insert: {
+          [_ in never]: never
+        }
+        Update: {
+          [_ in never]: never
+        }
+        Relationships: []
+      }
+      provider_scholarship_stats: {
+        Row: {
+          slug: string
+          display_name: string | null
+          scholarship_count: number
+        }
+        Insert: {
+          [_ in never]: never
+        }
+        Update: {
+          [_ in never]: never
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

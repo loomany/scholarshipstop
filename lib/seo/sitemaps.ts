@@ -1,16 +1,22 @@
 import type { MetadataRoute } from 'next';
 
-import { RESOURCE_GUIDE_SLUGS } from '@/lib/scholarships/resourceGuideRoutes';
 import { SCHOLARSHIP_CATEGORY_ORDER } from '@/app/scholarships/scholarshipCategories';
 import { getLongTailSitemapSlugs } from '@/app/scholarships/scholarshipLongTailPresets';
+import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { getPromotedSeoCategorySlugs } from '@/lib/scholarships/categorySeoAllowlist';
+import { RESOURCE_GUIDE_SLUGS } from '@/lib/scholarships/resourceGuideRoutes';
+import {
+  canonicalPathAllowedInSeoSitemap,
+  getVisibleSeoRoutes as getVisibleSeoRoutesFromDrip
+} from '@/lib/seo/seoDripFeed';
 import {
   getAllIndexableSeoManifestPaths,
   getSeoManifestRoute
 } from '@/lib/scholarships/seoScholarshipResolve';
-import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { fetchActiveScholarships } from '@/lib/scholarships/supabase';
 import { getURL } from '@/utils/helpers';
+
+export { isSeoDripFeedActive } from '@/lib/seo/seoDripFeed';
 
 type SitemapBucket =
   | 'core'
@@ -50,6 +56,14 @@ export function sitemapBaseUrl(): string {
   return getURL().replace(/\/$/, '');
 }
 
+/**
+ * Drip-feed SEO: canonical listing paths (under `/scholarships/`) allowed this hour.
+ * Empty when `SEO_DRIP_*` env is unset — callers treat that as “no drip gating”.
+ */
+export function getVisibleSeoRoutes(): string[] {
+  return getVisibleSeoRoutesFromDrip();
+}
+
 export async function buildSitemapBuckets(): Promise<SitemapBuckets> {
   const base = sitemapBaseUrl();
 
@@ -72,7 +86,9 @@ export async function buildSitemapBuckets(): Promise<SitemapBuckets> {
     lastModified: new Date()
   }));
 
-  const manifestSeoPaths = getAllIndexableSeoManifestPaths();
+  const manifestSeoPaths = getAllIndexableSeoManifestPaths().filter((p) =>
+    canonicalPathAllowedInSeoSitemap(p)
+  );
   const manifestPathSet = new Set(manifestSeoPaths);
   const manifestSeoPages: MetadataRoute.Sitemap = manifestSeoPaths.map((path) => ({
     url: `${base}/scholarships/${path}`,
@@ -81,6 +97,7 @@ export async function buildSitemapBuckets(): Promise<SitemapBuckets> {
 
   const longTailPages: MetadataRoute.Sitemap = getLongTailSitemapSlugs()
     .filter((slug) => {
+      if (!canonicalPathAllowedInSeoSitemap(slug)) return false;
       const manifestEntry = getSeoManifestRoute(slug);
       if (!manifestEntry) return true;
       if (manifestPathSet.has(slug)) return false;
