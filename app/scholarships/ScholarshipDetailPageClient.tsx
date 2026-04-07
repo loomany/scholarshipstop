@@ -208,9 +208,11 @@ function formatDeadlinePreciseTooltip(s: Scholarship): string {
   return formatDeadlineTooltipText(s);
 }
 
-/** Compact, consistent similar cards; first cell highlighted as best match unless expired. */
+/**
+ * Similar cards: optional teal ring on the primary open pick (first actionable recommendation).
+ */
 function similarScholarshipCardClassName(
-  index: number,
+  highlightPrimary: boolean,
   deadlinePassed: boolean
 ): string {
   const interactive =
@@ -221,9 +223,154 @@ function similarScholarshipCardClassName(
   }
 
   const base = `${interactive} border-zinc-200/90 bg-white hover:border-teal-300/80 hover:shadow-md`;
-  return index === 0
+  return highlightPrimary
     ? `${base} border-teal-200/90 ring-1 ring-teal-100/80`
     : base;
+}
+
+const similarScholarshipsGridClass =
+  'grid list-none grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3';
+
+function SimilarScholarshipDetailListItem({
+  scholarship: s,
+  highlightPrimary,
+  showBestMatchChip,
+  isAuthenticated,
+  hasSubscription,
+  onSubscriptionOffer
+}: {
+  scholarship: Scholarship;
+  highlightPrimary: boolean;
+  showBestMatchChip: boolean;
+  isAuthenticated: boolean;
+  hasSubscription: boolean;
+  onSubscriptionOffer: () => void;
+}) {
+  const deadlinePassed = scholarshipDeadlineHasPassed(s);
+  const simDd = getScholarshipDeadlineDisplayParts(s);
+  const similarEasyApplyIds = getScholarshipCatalog(s).easyApplyIds;
+  const similarSubscriptionLocked =
+    isAuthenticated &&
+    !hasSubscription &&
+    (similarEasyApplyIds.includes('easy_apply') ||
+      similarEasyApplyIds.includes('quick_apply'));
+  const matchScore =
+    s.aiMatchScore != null && !Number.isNaN(s.aiMatchScore)
+      ? Math.max(0, Math.min(100, Math.round(s.aiMatchScore)))
+      : null;
+  const showBadgeColumn = showBestMatchChip || matchScore != null;
+
+  const cardInner = (
+    <div className="relative">
+      <div className="flex items-start gap-3">
+        <div className="min-w-0 flex-1">
+          <span
+            className={`block text-base font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'}`}
+          >
+            {s.title}
+          </span>
+          {s.provider ? (
+            <span
+              className={`mt-1.5 block text-sm ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'}`}
+            >
+              {s.provider}
+            </span>
+          ) : null}
+          <span
+            className={`mt-2 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-800'}`}
+          >
+            {formatScholarshipAwardLine(s)}
+          </span>
+          <span
+            className={
+              deadlinePassed
+                ? 'mt-1.5 block text-xs font-normal italic text-zinc-400'
+                : 'mt-1.5 block text-xs font-medium text-zinc-700'
+            }
+          >
+            <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
+              {deadlinePassed ? 'Deadline passed' : 'Deadline'}
+            </span>
+            <span
+              className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
+            >
+              {simDd.primary}
+            </span>
+            {simDd.secondary && !deadlinePassed ? (
+              <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
+                {simDd.secondary}
+              </span>
+            ) : null}
+          </span>
+        </div>
+        {showBadgeColumn ? (
+          <div
+            className="flex shrink-0 flex-col items-end gap-1.5"
+            aria-label="Scholarship tags"
+          >
+            {showBestMatchChip ? (
+              <span
+                className={`whitespace-nowrap rounded-full px-2.5 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide shadow-sm ${
+                  deadlinePassed
+                    ? 'bg-zinc-300 text-zinc-700'
+                    : 'bg-teal-600 text-white'
+                }`}
+              >
+                Best match
+              </span>
+            ) : null}
+            {matchScore != null ? (
+              <span
+                className={`whitespace-nowrap rounded-full px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide ${
+                  deadlinePassed
+                    ? 'bg-zinc-200/90 text-zinc-600'
+                    : 'bg-violet-100 text-violet-900'
+                }`}
+                title={
+                  s.aiMatchBand?.trim()
+                    ? `Band: ${s.aiMatchBand}`
+                    : 'Match score (0–100)'
+                }
+              >
+                Match {matchScore}%
+              </span>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+      {similarSubscriptionLocked ? (
+        <span
+          className="pointer-events-none absolute bottom-1.5 right-1.5 inline-flex h-[22px] w-[34px] items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
+          aria-hidden
+        >
+          <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
+        </span>
+      ) : null}
+    </div>
+  );
+
+  return (
+    <li className="min-w-0">
+      {similarSubscriptionLocked ? (
+        <button
+          type="button"
+          className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
+          onClick={onSubscriptionOffer}
+          title="Start your free access to open this scholarship"
+          aria-label="Locked scholarship. Start free access to open."
+        >
+          {cardInner}
+        </button>
+      ) : (
+        <Link
+          href={scholarshipPublicPath(s)}
+          className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
+        >
+          {cardInner}
+        </Link>
+      )}
+    </li>
+  );
 }
 
 type SectionLabelVariant = 'primary' | 'support';
@@ -816,6 +963,17 @@ export default function ScholarshipDetailPageClient({
         deadlinePrimary
       })
     : [];
+
+  const similarOpenList = similarScholarships.filter(
+    (s) => !scholarshipDeadlineHasPassed(s)
+  );
+  const similarClosedList = similarScholarships.filter((s) =>
+    scholarshipDeadlineHasPassed(s)
+  );
+  const similarSplitIntoSections =
+    similarOpenList.length > 0 && similarClosedList.length > 0;
+  const similarFirstOpenId = similarOpenList[0]?.id ?? null;
+
   const eligibilityFromAi = hasNonEmptyArray(scholarship.aiEligibilitySummary);
 
   /** Never show `official_source_name` here — it often mirrors the data feed (e.g. BigFuture), not the sponsor. Real sponsor stays under “About the provider”. */
@@ -1757,16 +1915,21 @@ export default function ScholarshipDetailPageClient({
               showUsefulFaqPage && faqItemsOnPage.length >= 2
                 ? 'mt-4'
                 : 'mt-3'
-            } border-t border-zinc-200 pt-3`}
+            } border-t border-zinc-200 pt-4`}
           >
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-              <div className="min-w-0">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+              <div className="min-w-0 space-y-2">
                 <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
                   Similar scholarships
                 </h2>
-                <p className="mt-0.5 text-sm text-zinc-600">
-                  Based on category:{' '}
-                  <span className="font-medium text-zinc-800">
+                <p className="text-sm leading-relaxed text-zinc-600">
+                  <span className="font-semibold text-zinc-800">Open deadlines first</span>{' '}
+                  — same category when possible, then active picks from the catalog. Up to three closed
+                  grants from this category are shown at the end for context.
+                </p>
+                <p className="text-xs font-medium text-zinc-500">
+                  Category:{' '}
+                  <span className="text-zinc-700">
                     {categorySlugForLinks
                       ? breadcrumbCategoryLabel(categorySlugForLinks)
                       : 'All scholarships'}
@@ -1781,136 +1944,83 @@ export default function ScholarshipDetailPageClient({
                 ← Back to Matches
               </Link>
             </div>
-            <ul
-              className="mt-3 grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3"
-              role="list"
-            >
-              {similarScholarships.map((s, i) => {
-                const deadlinePassed = scholarshipDeadlineHasPassed(s);
-                const simDd = getScholarshipDeadlineDisplayParts(s);
-                const similarEasyApplyIds = getScholarshipCatalog(s).easyApplyIds;
-                const similarSubscriptionLocked =
-                  isAuthenticated &&
-                  !hasSubscription &&
-                  (similarEasyApplyIds.includes('easy_apply') ||
-                    similarEasyApplyIds.includes('quick_apply'));
-                const matchScore =
-                  s.aiMatchScore != null && !Number.isNaN(s.aiMatchScore)
-                    ? Math.max(0, Math.min(100, Math.round(s.aiMatchScore)))
-                    : null;
-                const similarCardInner = (
-                  <div className="relative">
-                    <div className="flex items-start gap-3">
-                      <div className="min-w-0 flex-1">
-                        <span
-                          className={`block text-base font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'}`}
-                        >
-                          {s.title}
-                        </span>
-                        {s.provider ? (
-                          <span
-                            className={`mt-1.5 block text-sm ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'}`}
-                          >
-                            {s.provider}
-                          </span>
-                        ) : null}
-                        <span
-                          className={`mt-2 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-800'}`}
-                        >
-                          {formatScholarshipAwardLine(s)}
-                        </span>
-                        <span
-                          className={
-                            deadlinePassed
-                              ? 'mt-1.5 block text-xs font-normal italic text-zinc-400'
-                              : 'mt-1.5 block text-xs font-medium text-zinc-700'
-                          }
-                        >
-                          <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
-                            {deadlinePassed ? 'Deadline passed' : 'Deadline'}
-                          </span>
-                          <span
-                            className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
-                          >
-                            {simDd.primary}
-                          </span>
-                          {simDd.secondary && !deadlinePassed ? (
-                            <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
-                              {simDd.secondary}
-                            </span>
-                          ) : null}
-                        </span>
-                      </div>
-                      {i === 0 || matchScore != null ? (
-                        <div
-                          className="flex shrink-0 flex-col items-end gap-1.5"
-                          aria-label="Scholarship tags"
-                        >
-                          {i === 0 ? (
-                            <span
-                              className={`whitespace-nowrap rounded-full px-2.5 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide shadow-sm ${
-                                deadlinePassed
-                                  ? 'bg-zinc-300 text-zinc-700'
-                                  : 'bg-teal-600 text-white'
-                              }`}
-                            >
-                              Best match
-                            </span>
-                          ) : null}
-                          {matchScore != null ? (
-                            <span
-                              className={`whitespace-nowrap rounded-full px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide ${
-                                deadlinePassed
-                                  ? 'bg-zinc-200/90 text-zinc-600'
-                                  : 'bg-violet-100 text-violet-900'
-                              }`}
-                              title={
-                                s.aiMatchBand?.trim()
-                                  ? `Band: ${s.aiMatchBand}`
-                                  : 'Match score'
-                              }
-                            >
-                              Match {matchScore}%
-                            </span>
-                          ) : null}
-                        </div>
-                      ) : null}
-                    </div>
-                    {similarSubscriptionLocked ? (
-                      <span
-                        className="pointer-events-none absolute bottom-1.5 right-1.5 inline-flex h-[22px] w-[34px] items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
-                        aria-hidden
-                      >
-                        <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
-                      </span>
-                    ) : null}
+
+            {similarSplitIntoSections ? (
+              <div className="mt-6 space-y-8">
+                <section aria-labelledby="similar-open-heading">
+                  <div className="flex flex-wrap items-end justify-between gap-2 border-b border-emerald-200/70 pb-2.5">
+                    <h3
+                      id="similar-open-heading"
+                      className="text-sm font-semibold tracking-tight text-emerald-900"
+                    >
+                      Open now
+                    </h3>
+                    <span className="text-xs font-medium tabular-nums text-emerald-800/80">
+                      {similarOpenList.length}{' '}
+                      {similarOpenList.length === 1 ? 'scholarship' : 'scholarships'}
+                    </span>
                   </div>
-                );
-                return (
-                  <li key={s.id} className="min-w-0">
-                    {similarSubscriptionLocked ? (
-                      <button
-                        type="button"
-                        className={similarScholarshipCardClassName(i, deadlinePassed)}
-                        onClick={openSubscriptionOffer}
-                        title="Start your free access to open this scholarship"
-                        aria-label="Locked scholarship. Start free access to open."
-                      >
-                        {similarCardInner}
-                      </button>
-                    ) : (
-                      <Link
-                        href={scholarshipPublicPath(s)}
-                        className={similarScholarshipCardClassName(i, deadlinePassed)}
-                      >
-                        {similarCardInner}
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="mt-4 border-t border-zinc-100 pt-4">
+                  <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
+                    {similarOpenList.map((s) => (
+                      <SimilarScholarshipDetailListItem
+                        key={s.id}
+                        scholarship={s}
+                        highlightPrimary={s.id === similarFirstOpenId}
+                        showBestMatchChip={s.id === similarFirstOpenId}
+                        isAuthenticated={isAuthenticated}
+                        hasSubscription={hasSubscription}
+                        onSubscriptionOffer={openSubscriptionOffer}
+                      />
+                    ))}
+                  </ul>
+                </section>
+
+                <section aria-labelledby="similar-closed-heading">
+                  <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-2.5">
+                    <h3
+                      id="similar-closed-heading"
+                      className="text-sm font-semibold tracking-tight text-zinc-600"
+                    >
+                      Past deadline
+                    </h3>
+                    <span className="text-xs text-zinc-500">Same category · reference only</span>
+                  </div>
+                  <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
+                    {similarClosedList.map((s) => (
+                      <SimilarScholarshipDetailListItem
+                        key={s.id}
+                        scholarship={s}
+                        highlightPrimary={false}
+                        showBestMatchChip={false}
+                        isAuthenticated={isAuthenticated}
+                        hasSubscription={hasSubscription}
+                        onSubscriptionOffer={openSubscriptionOffer}
+                      />
+                    ))}
+                  </ul>
+                </section>
+              </div>
+            ) : (
+              <ul className={`${similarScholarshipsGridClass} mt-5`} role="list">
+                {similarScholarships.map((s) => {
+                  const isOpen = !scholarshipDeadlineHasPassed(s);
+                  const isPrimaryOpen = isOpen && s.id === similarFirstOpenId;
+                  return (
+                    <SimilarScholarshipDetailListItem
+                      key={s.id}
+                      scholarship={s}
+                      highlightPrimary={Boolean(isPrimaryOpen)}
+                      showBestMatchChip={Boolean(isPrimaryOpen)}
+                      isAuthenticated={isAuthenticated}
+                      hasSubscription={hasSubscription}
+                      onSubscriptionOffer={openSubscriptionOffer}
+                    />
+                  );
+                })}
+              </ul>
+            )}
+
+            <div className="mt-6 border-t border-zinc-100 pt-4">
               <Link
                 href={SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}
                 scroll

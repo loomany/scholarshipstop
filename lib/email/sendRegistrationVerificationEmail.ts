@@ -1,7 +1,16 @@
 import 'server-only';
 
 import { createEmailVerificationToken } from '@/lib/auth/emailVerificationToken';
+import {
+  buildConfirmSignupEmailHtml,
+  EMAIL_SUBJECT_CONFIRM_SIGNUP
+} from '@/lib/email/templates/premiumTemplates';
 import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
+
+export type SendRegistrationVerificationOptions = {
+  /** Shown in “Hi {name}!” — optional first name from profile. */
+  displayName?: string | null;
+};
 
 /**
  * Sends “verify when convenient” email via Resend HTTP API.
@@ -9,7 +18,8 @@ import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
  */
 export async function sendRegistrationVerificationEmail(
   toEmail: string,
-  userId: string
+  userId: string,
+  options?: SendRegistrationVerificationOptions
 ): Promise<{ ok: boolean; skipped?: string }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = process.env.RESEND_FROM?.trim();
@@ -24,6 +34,12 @@ export async function sendRegistrationVerificationEmail(
   const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
   const link = `${origin}/auth/verify-email?token=${encodeURIComponent(token)}`;
 
+  const html = buildConfirmSignupEmailHtml({
+    name: options?.displayName?.trim() || 'there',
+    confirmationUrl: link,
+    siteOrigin: origin
+  });
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -33,12 +49,8 @@ export async function sendRegistrationVerificationEmail(
     body: JSON.stringify({
       from,
       to: [toEmail],
-      subject: 'Confirm your ScholarshipTop email (when you’re ready)',
-      html: `<p>Thanks for signing up for <b>ScholarshipTop</b>.</p>
-<p>You’re already signed in on the site. When you have a moment, please confirm this email address:</p>
-<p><a href="${link}" style="display:inline-block;background:#111;color:#fff;padding:12px 20px;border-radius:10px;text-decoration:none;font-weight:600;">Confirm email</a></p>
-<p style="font-size:14px;color:#666;">If the button doesn’t work, copy this link:<br/>${link}</p>
-<p style="font-size:14px;color:#666;">If you didn’t create an account, you can ignore this message.</p>`
+      subject: EMAIL_SUBJECT_CONFIRM_SIGNUP,
+      html
     })
   });
 

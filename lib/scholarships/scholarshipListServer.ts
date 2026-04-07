@@ -1,6 +1,7 @@
 import type { Database } from '@/types_db';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
+  isScholarshipUSA,
   normalizeCategoryId,
   SCHOLARSHIP_CATEGORY_ORDER,
   type ScholarshipCategoryId
@@ -42,6 +43,7 @@ import {
   scholarshipMatchProfileVersion
 } from '@/lib/scholarships/scholarshipMatchCache';
 import { filterIdsByIgnored } from '@/lib/scholarships/scholarshipMatchIndex';
+import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import type { createClient } from '@/utils/supabase/server';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
@@ -1016,6 +1018,92 @@ export async function countScholarshipsForTabRequest(
   return count ?? 0;
 }
 
+/**
+ * Similar block: at most this many “deadline passed” cards.
+ * Final order is always: open listings first (same category, then catalog backfill), then expired (for context).
+ */
+const SIMILAR_LIST_MAX_EXPIRED = 3;
+
+async function fetchSimilarListFillerScholarships(
+  supabase: ServerSupabaseClient,
+  excludeIds: string[],
+  need: number
+): Promise<Scholarship[]> {
+  if (need <= 0) return [];
+  const todayIso = new Date().toISOString().slice(0, 10);
+  let q: any = supabase
+    .from('scholarships')
+    .select(LIST_CARD_SELECT)
+    .eq('is_active', true)
+    .or(`deadline_date.gte.${todayIso},deadline_date.is.null`)
+    .order('ranking_score', { ascending: false, nullsFirst: false })
+    .order('updated_at', { ascending: false, nullsFirst: true });
+
+  const uniqueExclude = Array.from(new Set(excludeIds.filter(Boolean)));
+  for (let i = 0; i < uniqueExclude.length; i += 120) {
+    const chunk = uniqueExclude.slice(i, i + 120);
+    q = q.not('id', 'in', `(${chunk.join(',')})`);
+  }
+
+  const windowSize = Math.min(160, Math.max(need * 8, 32));
+  const { data, error } = await q.range(0, windowSize - 1);
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as ScholarshipRow[];
+  const mapped = rows.map((r) => mapScholarshipRow(r));
+  const out: Scholarship[] = [];
+  for (const s of mapped) {
+    if (out.length >= need) break;
+    if (scholarshipDeadlineHasPassed(s)) continue;
+    if (!isScholarshipUSA(s.country)) continue;
+    out.push(s);
+  }
+  return out;
+}
+
+async function finalizeSimilarScholarshipsList(
+  supabase: ServerSupabaseClient,
+  fromCategoryOrdered: Scholarship[],
+  similarToId: string,
+  limit: number
+): Promise<Scholarship[]> {
+  const openFromCategory: Scholarship[] = [];
+  const closedFromCategory: Scholarship[] = [];
+  for (const s of fromCategoryOrdered) {
+    if (scholarshipDeadlineHasPassed(s)) closedFromCategory.push(s);
+    else openFromCategory.push(s);
+  }
+
+  const out: Scholarship[] = [];
+
+  for (const s of openFromCategory) {
+    if (out.length >= limit) break;
+    out.push(s);
+  }
+
+  let need = limit - out.length;
+  if (need > 0) {
+    const filler = await fetchSimilarListFillerScholarships(
+      supabase,
+      [similarToId, ...out.map((x) => x.id)],
+      need
+    );
+    for (const s of filler) {
+      if (out.length >= limit) break;
+      out.push(s);
+    }
+  }
+
+  let expiredAdded = 0;
+  for (const s of closedFromCategory) {
+    if (out.length >= limit) break;
+    if (expiredAdded >= SIMILAR_LIST_MAX_EXPIRED) break;
+    out.push(s);
+    expiredAdded += 1;
+  }
+
+  return out;
+}
+
 export async function executeScholarshipListQuery(
   supabase: ServerSupabaseClient,
   req: ScholarshipListRequest,
@@ -1063,10 +1151,11 @@ export async function executeScholarshipListQuery(
       q = applyCategoryOrFilter(q, keys);
     }
     if (!opts.countOnly) {
+      const similarPoolSize = Math.min(120, Math.max(req.limit * 6, 36));
       q = q
         .order('deadline_date', { ascending: true, nullsFirst: false })
         .order('updated_at', { ascending: false, nullsFirst: true })
-        .range(0, Math.max(0, req.limit - 1));
+        .range(0, Math.max(0, similarPoolSize - 1));
     }
     const { data, error, count } = await q;
     if (error) throw new Error(error.message);
@@ -1080,9 +1169,16 @@ export async function executeScholarshipListQuery(
       };
     }
     const rows = (data ?? []) as ScholarshipRow[];
+    const fromCategory = rows.map((r) => mapScholarshipRow(r));
+    const scholarships = await finalizeSimilarScholarshipsList(
+      supabase,
+      fromCategory,
+      req.similarToId,
+      req.limit
+    );
     return {
-      scholarships: rows.map((r) => mapScholarshipRow(r)),
-      total,
+      scholarships,
+      total: scholarships.length,
       page: 1,
       limit: req.limit
     };
