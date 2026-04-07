@@ -2,7 +2,7 @@ import AccountDashboardClient from '@/components/account/AccountDashboardClient'
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import { getUserDetails, getUser } from '@/utils/supabase/queries';
+import { getSubscription, getUserDetails, getUser } from '@/utils/supabase/queries';
 
 export const metadata: Metadata = {
   title: 'Account',
@@ -19,7 +19,10 @@ export default async function Account() {
     return redirect('/signin');
   }
 
-  const userDetails = await getUserDetails(supabase, user.id);
+  const [userDetails, subscription] = await Promise.all([
+    getUserDetails(supabase, user.id),
+    getSubscription(supabase)
+  ]);
 
-  return <AccountDashboardClient user={user} profile={userDetails} />;
+  return <AccountDashboardClient user={user} profile={userDetails} subscription={subscription} />;
 }

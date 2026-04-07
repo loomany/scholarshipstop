@@ -157,6 +157,12 @@ export interface Database {
           school_level: string | null
           school_level_label: string | null
           state_region: string | null
+          subscription_debug_now: string | null
+          subscription_debug_plan: string | null
+          subscription_debug_renews_at: string | null
+          subscription_debug_status: string | null
+          subscription_debug_trial_ends_at: string | null
+          subscription_plan: string
           updated_at: string | null
         }
         Insert: {
@@ -182,6 +188,12 @@ export interface Database {
           school_level?: string | null
           school_level_label?: string | null
           state_region?: string | null
+          subscription_debug_now?: string | null
+          subscription_debug_plan?: string | null
+          subscription_debug_renews_at?: string | null
+          subscription_debug_status?: string | null
+          subscription_debug_trial_ends_at?: string | null
+          subscription_plan?: string
           updated_at?: string | null
         }
         Update: {
@@ -207,6 +219,12 @@ export interface Database {
           school_level?: string | null
           school_level_label?: string | null
           state_region?: string | null
+          subscription_debug_now?: string | null
+          subscription_debug_plan?: string | null
+          subscription_debug_renews_at?: string | null
+          subscription_debug_status?: string | null
+          subscription_debug_trial_ends_at?: string | null
+          subscription_plan?: string
           updated_at?: string | null
         }
         Relationships: [
@@ -746,9 +764,20 @@ export interface Database {
           ended_at: string | null
           id: string
           metadata: Json | null
+          plan_code: string | null
+          provider: string
+          provider_customer_id: string | null
+          provider_order_id: string | null
+          provider_product_id: string | null
+          provider_product_name: string | null
+          provider_variant_id: string | null
+          provider_variant_name: string | null
           price_id: string | null
           quantity: number | null
+          raw_payload: Json | null
+          renews_at: string | null
           status: Database["public"]["Enums"]["subscription_status"] | null
+          test_mode: boolean
           trial_end: string | null
           trial_start: string | null
           user_id: string
@@ -763,9 +792,20 @@ export interface Database {
           ended_at?: string | null
           id: string
           metadata?: Json | null
+          plan_code?: string | null
+          provider?: string
+          provider_customer_id?: string | null
+          provider_order_id?: string | null
+          provider_product_id?: string | null
+          provider_product_name?: string | null
+          provider_variant_id?: string | null
+          provider_variant_name?: string | null
           price_id?: string | null
           quantity?: number | null
+          raw_payload?: Json | null
+          renews_at?: string | null
           status?: Database["public"]["Enums"]["subscription_status"] | null
+          test_mode?: boolean
           trial_end?: string | null
           trial_start?: string | null
           user_id: string
@@ -780,9 +820,20 @@ export interface Database {
           ended_at?: string | null
           id?: string
           metadata?: Json | null
+          plan_code?: string | null
+          provider?: string
+          provider_customer_id?: string | null
+          provider_order_id?: string | null
+          provider_product_id?: string | null
+          provider_product_name?: string | null
+          provider_variant_id?: string | null
+          provider_variant_name?: string | null
           price_id?: string | null
           quantity?: number | null
+          raw_payload?: Json | null
+          renews_at?: string | null
           status?: Database["public"]["Enums"]["subscription_status"] | null
+          test_mode?: boolean
           trial_end?: string | null
           trial_start?: string | null
           user_id?: string
@@ -879,11 +930,14 @@ export interface Database {
         | "trialing"
         | "active"
         | "canceled"
+        | "cancelled"
         | "incomplete"
         | "incomplete_expired"
         | "past_due"
         | "unpaid"
         | "paused"
+        | "on_trial"
+        | "expired"
     }
     CompositeTypes: {
       [_ in never]: never

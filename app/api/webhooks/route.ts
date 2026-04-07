@@ -52,10 +52,23 @@ export async function POST(req: Request) {
       });
     }
 
+    const { error: subscriptionError } = await supabaseAdmin
+      .from('subscriptions')
+      .upsert([decision.subscription], { onConflict: 'id' });
+    if (subscriptionError) {
+      return new Response('Error syncing subscription record.', { status: 500 });
+    }
+
     const { error } = await supabaseAdmin
       .from('profiles')
       .upsert(
-        [{ id: decision.userId, is_subscribed: decision.isSubscribed }],
+        [
+          {
+            id: decision.userId,
+            is_subscribed: decision.isSubscribed,
+            subscription_plan: decision.subscriptionPlan
+          }
+        ],
         { onConflict: 'id' }
       );
     if (error) {

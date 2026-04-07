@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Check, CheckCircle2, X } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
@@ -28,11 +28,17 @@ import {
   sanitizeBirthYearInput,
   validateBirthDateFields
 } from '@/lib/validation/birthDateFields';
-import type { Database } from '@/types_db';
+import {
+  deriveSubscriptionPresentation,
+  type SubscriptionWithPriceAndProduct
+} from '@/lib/payments/subscriptionEntitlements';
+import type { Database, Tables } from '@/types_db';
 import { updateEmail } from '@/utils/auth-helpers/server';
 import { createClient } from '@/utils/supabase/client';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
+type Subscription = Tables<'subscriptions'>;
+type SubscriptionType = 'none' | 'trial' | 'monthly' | 'quarterly' | 'yearly';
 
 function birthPartsFromProfile(p: ProfilesRow | null): {
   month: string;
@@ -146,13 +152,69 @@ type SectionFeedback = { type: 'ok' | 'err'; text: string };
 const SAAS_SECTION_ACTION_ROW =
   'mt-6 border-t border-zinc-100 pt-5';
 
+const subscriptionButtonBaseClass =
+  'group w-full md:w-auto px-8 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 inline-flex items-center justify-center gap-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60';
+
+const compactUpgradeButtonBaseClass =
+  'rounded-xl px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-60';
+
+const compactUpgradeRowClass =
+  'flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4';
+
+const premiumPerks = [
+  'Unlimited Scholarship Matches',
+  'AI-Powered Application Assistant',
+  'Early Access to New Grants'
+] as const;
+
+const freePlanPrecisionPerks = [
+  'AI-Precision Matching: We filter out the noise. See only grants you actually qualify for.',
+  'Precision Filters: Field of study, nationality, intent—sort instantly without the headache.',
+  'Time-Saver: Stop wasting 20+ hours on manual research every single week.'
+] as const;
+
+function formatPlanDate(dateValue: string | null | undefined) {
+  if (!dateValue) return null;
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(date);
+}
+
+function getDaysRemaining(dateValue: string | null | undefined) {
+  if (!dateValue) return null;
+  const now = Date.now();
+  const target = new Date(dateValue).getTime();
+  if (Number.isNaN(target)) return null;
+  return Math.max(0, Math.ceil((target - now) / (1000 * 60 * 60 * 24)));
+}
+
+function getRemainingProgressPercent(
+  startValue: string | null | undefined,
+  endValue: string | null | undefined
+) {
+  if (!startValue || !endValue) return null;
+  const start = new Date(startValue).getTime();
+  const end = new Date(endValue).getTime();
+  const now = Date.now();
+  if (Number.isNaN(start) || Number.isNaN(end) || end <= start) return null;
+  const total = end - start;
+  const remaining = Math.min(Math.max(end - now, 0), total);
+  return Math.max(6, Math.min(100, (remaining / total) * 100));
+}
+
 export default function ScholarshipProfileForm({
   profile,
+  subscription = null,
   userEmail,
   emailConfirmed,
   variant = 'default'
 }: {
   profile: ProfilesRow | null;
+  subscription?: SubscriptionWithPriceAndProduct | null;
   /** Session email for /account personal block; change triggers verification flow on Save. */
   userEmail?: string | null;
   /**
@@ -235,6 +297,13 @@ export default function ScholarshipProfileForm({
   const [sectionFeedback, setSectionFeedback] = useState<
     Partial<Record<ProfileSectionKey, SectionFeedback>>
   >({});
+  const [trialEmailGateMessage, setTrialEmailGateMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (emailConfirmed === true) {
+      setTrialEmailGateMessage(null);
+    }
+  }, [emailConfirmed]);
 
   useEffect(() => {
     const keys = (['personal', 'education', 'eligibility'] as const).filter(
@@ -529,9 +598,56 @@ export default function ScholarshipProfileForm({
     });
   }, [formValues, performProfilePatch, profile]);
 
+  const onStartTrial = useCallback(async () => {
+    const supabase = createClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      setTrialEmailGateMessage(null);
+      router.push('/signin');
+      return;
+    }
+
+    // Must match UI / parent: only `emailConfirmed === true` (see AccountDashboardClient).
+    // Do not OR with `user.email_confirmed_at` here — that bypassed profile.email_verified === false.
+    if (emailConfirmed !== true) {
+      setTrialEmailGateMessage(
+        'Please confirm your email before starting your free trial. Check your inbox for the confirmation link, then return here.'
+      );
+      return;
+    }
+
+    setTrialEmailGateMessage(null);
+
+    router.push('/subscription');
+  }, [emailConfirmed, router]);
+
+  const onSwitchPlan = useCallback(() => {
+    router.push('/subscription');
+  }, [router]);
+
   const isAccount = variant === 'account';
   const isSaas = variant === 'saas';
-  const isSubscribed = Boolean(profile?.is_subscribed);
+  const subscriptionPresentation = useMemo(
+    () => deriveSubscriptionPresentation(profile, subscription),
+    [profile, subscription]
+  );
+  const subscriptionType = useMemo<SubscriptionType>(() => {
+    switch (subscriptionPresentation.plan) {
+      case 'trial':
+        return 'trial';
+      case 'monthly_pro':
+        return 'monthly';
+      case 'quarterly_pro':
+        return 'quarterly';
+      case 'yearly_pro':
+        return 'yearly';
+      default:
+        return 'none';
+    }
+  }, [subscriptionPresentation.plan]);
   const ic = isSaas ? inputClassSaaS : inputClass;
   const lc = isSaas ? labelClassSaaS : labelClass;
   const selectWrapClass = isSaas ? 'mt-2 w-full' : 'mt-2 w-full max-w-xl';
@@ -718,6 +834,63 @@ export default function ScholarshipProfileForm({
   if (isSaas) {
     const showSaasEmailStatus =
       userEmail != null && emailConfirmed !== undefined;
+    const subscriptionStatusUi = (() => {
+      switch (subscriptionType) {
+        case 'trial':
+          return {
+            badgeLabel: subscriptionPresentation.label,
+            badgeClass: 'bg-orange-100 text-orange-700 font-medium ring-1 ring-orange-200',
+            title: 'Keep Premium Access Active',
+            subtitle: subscriptionPresentation.countdownLabel ?? 'Expires soon',
+            buttonLabel: 'Upgrade to Pro',
+            buttonClass:
+              'bg-orange-500 text-white shadow-sm hover:bg-orange-600 hover:shadow-md',
+            showTrialProgress: subscriptionPresentation.progressPercent != null
+          };
+        case 'monthly':
+          return {
+            badgeLabel: subscriptionPresentation.label,
+            badgeClass: 'bg-emerald-100 text-emerald-700 font-medium ring-1 ring-emerald-200',
+            title: 'Premium Precision Active',
+            subtitle: 'You are saving 20+ hours of manual research this month.',
+            hidePrimaryAction: true
+          };
+        case 'quarterly':
+          return {
+            badgeLabel: subscriptionPresentation.label,
+            badgeClass: 'bg-blue-100 text-blue-700 font-medium ring-1 ring-blue-200',
+            title: 'Smart Searching, Better Results',
+            subtitle: '',
+            hidePrimaryAction: true
+          };
+        case 'yearly':
+          return {
+            badgeLabel: subscriptionPresentation.label,
+            badgeClass:
+              'border border-amber-300 bg-violet-100 text-violet-800 font-medium ring-1 ring-violet-200',
+            title: 'Elite Access Unlocked',
+            subtitle: 'You have top-tier priority for all AI-curated matches.',
+            hidePrimaryAction: true
+          };
+        case 'none':
+        default:
+          return {
+            badgeLabel: 'Free Plan',
+            badgeClass: 'bg-slate-100 text-slate-600 font-medium',
+            title: 'Unlock Premium Access',
+            subtitle: 'Start 3-Day Free Trial, then as low as $12/mo.',
+            buttonLabel: 'Start 3-Day Free Trial',
+            buttonClass:
+              'bg-orange-500 text-white shadow-lg shadow-orange-200 hover:bg-orange-600 hover:shadow-orange-200',
+            buttonSubtext: 'Full access. No commitment. Cancel anytime.'
+          };
+      }
+    })();
+
+    const compactSubscriptionCardLayout =
+      subscriptionType === 'quarterly' ||
+      subscriptionType === 'trial' ||
+      subscriptionType === 'none';
 
     const sectionSaveRow = (
       section: ProfileSectionKey,
@@ -760,43 +933,289 @@ export default function ScholarshipProfileForm({
         }}
       >
         <div className="grid gap-6">
-          <div className="rounded-2xl border border-zinc-100 bg-white px-6 py-4 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
-            <p className="text-sm font-semibold text-zinc-900">Subscription status</p>
-            <p
-              id="subscription-status"
-              className={`mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold ${
-                isSubscribed
-                  ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
-                  : 'bg-orange-50 text-orange-700 ring-1 ring-orange-200'
+          <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
+            {subscriptionType === 'monthly' ? (
+              <div>
+                <div className="border-b border-slate-100 px-5 py-2.5 md:px-7 md:py-3">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-6">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">Subscription status</p>
+                      <div
+                        id="subscription-status"
+                        className={`mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs uppercase tracking-wider ${subscriptionStatusUi.badgeClass}`}
+                      >
+                        {subscriptionStatusUi.badgeLabel}
+                      </div>
+                    </div>
+                    <div className="max-w-xl">
+                      <h3 className="text-2xl font-bold tracking-tight text-slate-900">
+                        {subscriptionStatusUi.title}
+                      </h3>
+                      <p className="mt-1.5 text-sm text-slate-500">
+                        {subscriptionStatusUi.subtitle}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid items-stretch gap-2 px-5 py-2.5 md:grid-cols-2 md:px-7 md:py-3">
+                  <div className="flex min-h-0 items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-slate-900">Quarterly</p>
+                      <p className="mt-1 text-sm text-slate-500">$19/mo</p>
+                    </div>
+                    <div className="flex shrink-0 flex-col items-end gap-1.5 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void onSwitchPlan();
+                        }}
+                        className={`${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
+                      >
+                        Upgrade
+                      </button>
+                      <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
+                        Save 24%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex min-h-0 items-center justify-between gap-3 rounded-xl border-2 border-slate-300 bg-white p-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-slate-900">Yearly</p>
+                      <p className="mt-1 text-sm text-slate-500">$12/mo</p>
+                    </div>
+                    <div className="flex shrink-0 flex-col items-end gap-1.5 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void onSwitchPlan();
+                        }}
+                        className={`${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
+                      >
+                        Upgrade
+                      </button>
+                      <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
+                        Save 52%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+            <div
+              className={`grid grid-cols-1 gap-0 md:grid-cols-2 ${
+                compactSubscriptionCardLayout
+                  ? 'md:items-center'
+                  : subscriptionType === 'yearly'
+                    ? 'md:items-start'
+                    : ''
               }`}
             >
-              {isSubscribed ? (
-                <CheckCircle2 className="h-4 w-4" strokeWidth={2} aria-hidden />
-              ) : (
-                <X className="h-4 w-4" strokeWidth={2.5} aria-hidden />
-              )}
-              {isSubscribed
-                ? 'Subscription active'
-                : 'Subscription inactive'}
-            </p>
-            <p className="mt-3 text-sm text-zinc-700">
-              Want access to all premium features?
-            </p>
-            <p className="mt-1 text-sm text-zinc-600">
-              {isSubscribed
-                ? 'Your premium access is active. You can review plan details and billing on the subscription page.'
-                : 'Activate your subscription to unlock full functionality and premium tools.'}
-            </p>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={() => router.push('/subscription')}
-                className={accountPagePrimaryButtonClass}
+              <div
+                className={`${
+                  compactSubscriptionCardLayout
+                    ? 'px-5 py-1.5 md:px-7 md:py-2'
+                    : subscriptionType === 'yearly'
+                      ? 'px-6 py-2.5 md:px-8 md:py-3'
+                      : 'p-6 md:p-8'
+                }`}
               >
-                {isSubscribed ? 'Manage subscription' : 'Activate subscription'}
-                <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden />
-              </button>
+                <p className="text-sm font-semibold text-slate-900">Subscription status</p>
+                <div
+                  id="subscription-status"
+                  className={`${
+                    compactSubscriptionCardLayout
+                      ? 'mt-2'
+                      : subscriptionType === 'yearly'
+                        ? 'mt-2.5'
+                        : 'mt-4'
+                  } inline-flex items-center rounded-full px-3 py-1 text-xs uppercase tracking-wider ${subscriptionStatusUi.badgeClass}`}
+                >
+                  {subscriptionStatusUi.badgeLabel}
+                </div>
+                <h3
+                  className={`${
+                    compactSubscriptionCardLayout
+                      ? 'mt-2'
+                      : subscriptionType === 'yearly'
+                        ? 'mt-2'
+                        : 'mt-4'
+                  } text-2xl font-bold tracking-tight text-slate-900`}
+                >
+                  {subscriptionStatusUi.title}
+                </h3>
+                {subscriptionStatusUi.subtitle ? (
+                  <p
+                    className={`${
+                      subscriptionType === 'yearly' || compactSubscriptionCardLayout
+                        ? 'mt-1.5'
+                        : 'mt-2'
+                    } text-sm text-slate-500`}
+                  >
+                    {subscriptionStatusUi.subtitle}
+                  </p>
+                ) : null}
+                {subscriptionType === 'none' && trialEmailGateMessage ? (
+                  <div
+                    role="alert"
+                    className="mt-3 max-w-md rounded-xl border border-amber-200 bg-amber-50/90 px-3 py-2.5 text-sm font-medium leading-snug text-amber-950 shadow-sm"
+                  >
+                    {trialEmailGateMessage}
+                  </div>
+                ) : null}
+                {subscriptionStatusUi.showTrialProgress ? (
+                  <div
+                    className={`max-w-md ${
+                      subscriptionType === 'trial' ? 'mt-2.5' : 'mt-4'
+                    }`}
+                  >
+                    <div
+                      className={`flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-orange-700 ${
+                        subscriptionType === 'trial' ? 'mb-1.5' : 'mb-2'
+                      }`}
+                    >
+                      <span>Trial countdown</span>
+                      <span>
+                        {subscriptionPresentation.remainingHours != null &&
+                        subscriptionPresentation.remainingHours < 48
+                          ? `${subscriptionPresentation.remainingHours}h left`
+                          : `${subscriptionPresentation.remainingDays ?? 0} days left`}
+                      </span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-orange-100">
+                      <div
+                        className="h-full rounded-full bg-orange-500 transition-all"
+                        style={{ width: `${subscriptionPresentation.progressPercent ?? 0}%` }}
+                      />
+                    </div>
+                  </div>
+                ) : null}
+                {!subscriptionStatusUi.hidePrimaryAction ? (
+                  <div
+                    className={`flex flex-col gap-3 sm:flex-row sm:items-center ${
+                      subscriptionType === 'none' || subscriptionType === 'trial'
+                        ? 'mt-3'
+                        : 'mt-5'
+                    }`}
+                  >
+                    <div className="relative inline-flex">
+                      <button
+                        type="button"
+                        onClick={
+                          subscriptionType === 'none'
+                            ? () => {
+                                void onStartTrial();
+                              }
+                            : () => router.push('/subscription')
+                        }
+                        className={`${subscriptionButtonBaseClass} ${subscriptionStatusUi.buttonClass}`}
+                      >
+                        <span>{subscriptionStatusUi.buttonLabel}</span>
+                        <ArrowRight
+                          className="h-4 w-4 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+                          strokeWidth={2}
+                          aria-hidden
+                        />
+                      </button>
+                    </div>
+                  </div>
+                ) : subscriptionType === 'yearly' || subscriptionType === 'quarterly' ? null : (
+                  <div className="mt-8" />
+                )}
+                {subscriptionStatusUi.buttonSubtext ? (
+                  <p
+                    className={`text-sm text-slate-400 ${
+                      subscriptionType === 'none' || subscriptionType === 'trial'
+                        ? 'mt-2'
+                        : 'mt-3'
+                    }`}
+                  >
+                    {subscriptionStatusUi.buttonSubtext}
+                  </p>
+                ) : null}
+              </div>
+              <div
+                className={`flex flex-col border-t border-slate-100 bg-gradient-to-br from-slate-50 to-white md:border-l md:border-t-0 ${
+                  compactSubscriptionCardLayout
+                    ? 'justify-center px-5 py-1.5 md:px-6 md:py-2'
+                    : subscriptionType === 'yearly'
+                      ? 'justify-start px-6 py-2.5 md:px-7 md:py-3'
+                      : 'h-full justify-center px-8 py-6'
+                }`}
+              >
+                {subscriptionType === 'none' || subscriptionType === 'trial' || subscriptionType === 'yearly' ? (
+                  <p
+                    className={`text-xs font-bold uppercase tracking-[0.18em] text-slate-700 ${
+                      subscriptionType === 'yearly' ? 'text-center' : ''
+                    }`}
+                  >
+                    {subscriptionType === 'yearly'
+                      ? 'CURRENT STATUS'
+                      : 'Stop Searching. Start Winning.'}
+                  </p>
+                ) : null}
+                {subscriptionType === 'quarterly' ? (
+                  <div>
+                    <div className="flex min-h-[108px] flex-col rounded-xl border-2 border-slate-300 bg-white px-2 pt-1.5 pb-1">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="min-w-0 flex-1 self-center">
+                          <p className="text-sm font-medium text-slate-900">Yearly</p>
+                          <p className="mt-1 text-sm text-slate-500">$12/mo</p>
+                        </div>
+                        <div className="flex shrink-0 flex-col items-end gap-1.5 pt-0.5">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              void onSwitchPlan();
+                            }}
+                            className={`${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
+                          >
+                            Upgrade
+                          </button>
+                          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
+                            Save 52%
+                          </span>
+                        </div>
+                      </div>
+                      <p className="mt-auto pt-0.5 text-[13px] leading-snug text-slate-500">
+                        Best long-term value for consistent access all year.
+                      </p>
+                    </div>
+                  </div>
+                ) : subscriptionType === 'yearly' ? (
+                  <div className="mt-3 space-y-2">
+                    <div className="rounded-xl border border-slate-200 bg-white p-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-900">Current plan</p>
+                          <p className="mt-1 text-sm text-slate-500">Best Value</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => router.push('/subscription')}
+                          className={`${compactUpgradeButtonBaseClass} bg-slate-900 text-white hover:bg-slate-800`}
+                        >
+                          Manage Subscription
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-3 space-y-3">
+                    {(subscriptionType === 'none' || subscriptionType === 'trial'
+                      ? freePlanPrecisionPerks
+                      : premiumPerks
+                    ).map((perk) => (
+                      <div key={perk} className="text-sm leading-6 text-slate-500">
+                        <span>{perk}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
+            )}
           </div>
 
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">

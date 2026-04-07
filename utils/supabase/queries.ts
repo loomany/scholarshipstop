@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { hasActiveSubscriptionAccess } from '@/lib/payments/subscriptionEntitlements';
 import type { createClient } from '@/utils/supabase/server';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
@@ -14,7 +15,8 @@ export const getSubscription = cache(async (supabase: ServerSupabaseClient) => {
   const { data: subscription, error } = await supabase
     .from('subscriptions')
     .select('*, prices(*, products(*))')
-    .in('status', ['trialing', 'active'])
+    .in('status', ['trialing', 'on_trial', 'active', 'cancelled', 'canceled', 'paused', 'past_due'])
+    .order('created', { ascending: false })
     .maybeSingle();
 
   return subscription;
@@ -22,14 +24,16 @@ export const getSubscription = cache(async (supabase: ServerSupabaseClient) => {
 
 export const getUserSubscriptionStatus = cache(
   async (supabase: ServerSupabaseClient, userId: string) => {
-    const { data: profile } = await supabase
+    const [{ data: profile }, subscription] = await Promise.all([
+      supabase
       .from('profiles')
-      .select('is_subscribed')
+      .select('*')
       .eq('id', userId)
-      .maybeSingle();
+        .maybeSingle(),
+      getSubscription(supabase)
+    ]);
 
-    const typedProfile = profile as { is_subscribed?: boolean | null } | null;
-    return Boolean(typedProfile?.is_subscribed);
+    return hasActiveSubscriptionAccess(profile, subscription);
   }
 );
 

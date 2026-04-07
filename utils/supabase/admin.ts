@@ -232,9 +232,20 @@ const manageSubscriptionStatusChange = async (
   const subscriptionData: TablesInsert<'subscriptions'> = {
     id: subscription.id,
     user_id: uuid,
+    provider: 'stripe',
+    provider_customer_id: customerId,
     metadata: subscription.metadata,
     status: subscription.status,
     price_id: subscription.items.data[0].price.id,
+    plan_code:
+      subscription.status === 'trialing'
+        ? 'trial'
+        : subscription.items.data[0].price.recurring?.interval === 'year'
+          ? 'yearly_pro'
+          : subscription.items.data[0].price.recurring?.interval === 'month' &&
+              subscription.items.data[0].price.recurring?.interval_count === 3
+            ? 'quarterly_pro'
+            : 'monthly_pro',
     //TODO check quantity on subscription
     // @ts-ignore
     quantity: subscription.quantity,
@@ -261,6 +272,9 @@ const manageSubscriptionStatusChange = async (
     trial_end: subscription.trial_end
       ? toDateTime(subscription.trial_end).toISOString()
       : null
+    ,
+    renews_at: toDateTime(subscription.current_period_end).toISOString(),
+    test_mode: false
   };
 
   const { error: upsertError } = await supabaseAdmin
@@ -274,9 +288,21 @@ const manageSubscriptionStatusChange = async (
 
   const isSubscribed =
     subscription.status === 'active' || subscription.status === 'trialing';
+  const subscriptionPlan =
+    subscription.status === 'trialing'
+      ? 'trial'
+      : subscription.items.data[0].price.recurring?.interval === 'year'
+        ? 'yearly_pro'
+        : subscription.items.data[0].price.recurring?.interval === 'month' &&
+            subscription.items.data[0].price.recurring?.interval_count === 3
+          ? 'quarterly_pro'
+          : 'monthly_pro';
   const { error: profileUpsertError } = await supabaseAdmin
     .from('profiles')
-    .upsert([{ id: uuid, is_subscribed: isSubscribed }], { onConflict: 'id' });
+    .upsert(
+      [{ id: uuid, is_subscribed: isSubscribed, subscription_plan: subscriptionPlan }],
+      { onConflict: 'id' }
+    );
   if (profileUpsertError) {
     throw new Error(
       `Profile subscription status update failed: ${profileUpsertError.message}`

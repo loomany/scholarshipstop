@@ -4,23 +4,41 @@ import Link from 'next/link';
 import type { User } from '@supabase/supabase-js';
 
 import ScholarshipProfileForm from '@/components/ui/AccountForms/ScholarshipProfileForm';
-import type { Database } from '@/types_db';
+import type { Database, Tables } from '@/types_db';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
+type Subscription = Tables<'subscriptions'>;
+type Price = Tables<'prices'>;
+type Product = Tables<'products'>;
+type SubscriptionWithPriceAndProduct = Subscription & {
+  prices:
+    | (Price & {
+        products: Product | null;
+      })
+    | null;
+};
 
 export default function AccountDashboardClient({
   user,
-  profile
+  profile,
+  subscription
 }: {
   user: User;
   profile: ProfilesRow | null;
+  subscription: SubscriptionWithPriceAndProduct | null;
 }) {
-  const emailConfirmedForUi =
+  /** Confirmed only if Auth says so AND profile does not explicitly say unverified. */
+  const authEmailVerified = Boolean(user.email_confirmed_at);
+  const emailConfirmedForUi: boolean | undefined =
     profile === null
-      ? undefined
+      ? authEmailVerified
+        ? true
+        : false
       : profile.email_verified === false
         ? false
-        : true;
+        : authEmailVerified
+          ? true
+          : false;
 
   return (
     <div className="min-h-screen bg-zinc-50/90">
@@ -28,6 +46,7 @@ export default function AccountDashboardClient({
         <section id="account-section-profile" className="scroll-mt-20 space-y-6 pb-16">
           <ScholarshipProfileForm
             profile={profile}
+            subscription={subscription}
             userEmail={user.email}
             emailConfirmed={emailConfirmedForUi}
             variant="saas"

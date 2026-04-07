@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import SubscriptionDebug from '@/components/debug/SubscriptionDebug';
 import ConditionalFooter from '@/components/ui/Footer/ConditionalFooter';
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
@@ -64,6 +65,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         </Suspense>
         <Suspense fallback={null}>
           <Toaster />
+        </Suspense>
+        <Suspense fallback={null}>
+          <SubscriptionDebug />
         </Suspense>
       </body>
     </html>
