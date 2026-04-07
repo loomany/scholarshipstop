@@ -8,7 +8,7 @@ export default function ScholarshipPreviewList() {
     <div className="mx-auto flex h-full min-h-0 w-full max-w-2xl flex-col lg:mx-0">
       <div
         className="pointer-events-none flex min-h-[300px] flex-1 cursor-default flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_32px_80px_-32px_rgba(15,23,42,0.35)] ring-1 ring-gray-200/70 select-none lg:min-h-[320px] lg:flex-row"
-        aria-label="Product interface preview (non-interactive)"
+        aria-label="Product interface preview; Apply now opens the scholarship directory"
       >
         <ScholarshipsSidebarPreview />
 

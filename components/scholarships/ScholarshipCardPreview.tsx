@@ -1,6 +1,10 @@
+import Link from 'next/link';
 import { Info, Star } from 'lucide-react';
 
 import { cn } from '@/utils/cn';
+
+/** Listing page; relative path works on any deployed host (e.g. production → scholarshiptop.com/scholarships). */
+export const SCHOLARSHIPS_BROWSE_HREF = '/scholarships' as const;
 
 const DEMO_TAGS = ['No Essay', 'Easy Apply', 'Verified'] as const;
 
@@ -9,7 +13,7 @@ export type ScholarshipCardPreviewProps = {
 };
 
 /**
- * Static landing-only product mock — no links, no clicks, not used on /scholarships.
+ * Landing-only product mock — “Apply now” links to the real scholarship directory.
  */
 export default function ScholarshipCardPreview({
   className = ''
@@ -20,7 +24,6 @@ export default function ScholarshipCardPreview({
         'flex min-h-[280px] w-full max-w-md flex-1 cursor-default overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm select-none',
         className
       )}
-      aria-hidden
     >
       <div
         className="w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] bg-gray-900"
@@ -75,12 +78,13 @@ export default function ScholarshipCardPreview({
           </div>
         </div>
 
-        <div
-          className="w-full shrink-0 rounded-xl bg-emerald-500 px-5 py-2.5 text-center text-sm font-medium text-white"
-          aria-hidden
+        <Link
+          href={SCHOLARSHIPS_BROWSE_HREF}
+          className="pointer-events-auto w-full shrink-0 cursor-pointer rounded-xl bg-emerald-500 px-5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+          aria-label="Browse scholarships"
         >
           Apply now
-        </div>
+        </Link>
       </div>
     </article>
   );
