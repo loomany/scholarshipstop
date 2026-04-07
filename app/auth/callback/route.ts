@@ -27,7 +27,7 @@ function safeAppPath(next: string | null): string | null {
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
-  const origin = getURL();
+  const origin = requestUrl.origin;
   const nextPath = safeAppPath(requestUrl.searchParams.get('next'));
 
   if (!code) {

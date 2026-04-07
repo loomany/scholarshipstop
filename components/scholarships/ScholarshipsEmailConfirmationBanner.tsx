@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/client';
+import { getURL } from '@/utils/helpers';
 
 function shouldPromptEmailConfirmation(user: User | null): boolean {
   if (!user?.email) return false;
@@ -43,13 +44,13 @@ export function ScholarshipsEmailConfirmationBanner() {
     setBusy(true);
     setMsg(null);
     const supabase = createClient();
+    const redirect = getURL(
+      `auth/callback?next=${encodeURIComponent('/scholarships')}`
+    );
     const { error } = await supabase.auth.resend({
       type: 'signup',
       email,
-      options: {
-        emailRedirectTo:
-          'https://scholarshiptop.com/auth/callback?next=%2Fscholarships'
-      }
+      options: { emailRedirectTo: redirect }
     });
     setBusy(false);
     if (error) setMsg(error.message);
