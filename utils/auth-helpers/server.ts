@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { getPasswordPolicyError } from '@/lib/validation/passwordPolicy';
 import {
   getServerAuthCallbackUrl,
   getServerAuthResetPasswordUrl,
@@ -182,6 +183,11 @@ export async function signUp(formData: FormData) {
     );
   }
 
+  const pwdPolicy = getPasswordPolicyError(password);
+  if (pwdPolicy) {
+    return getErrorRedirect('/signin/signup', 'Sign up failed.', pwdPolicy);
+  }
+
   const supabase = createClient();
   const { error, data } = await supabase.auth.signUp({
     email,
@@ -229,17 +235,25 @@ export async function signUp(formData: FormData) {
 export async function updatePassword(formData: FormData) {
   const password = String(formData.get('password')).trim();
   const passwordConfirm = String(formData.get('passwordConfirm')).trim();
-  let redirectPath: string;
 
-  // Check that the password and confirmation match
   if (password !== passwordConfirm) {
-    redirectPath = getErrorRedirect(
+    return getErrorRedirect(
       '/signin/update_password',
       'Your password could not be updated.',
       'Passwords do not match.'
     );
   }
 
+  const pwdPolicy = getPasswordPolicyError(password);
+  if (pwdPolicy) {
+    return getErrorRedirect(
+      '/signin/update_password',
+      'Your password could not be updated.',
+      pwdPolicy
+    );
+  }
+
+  let redirectPath: string;
   const supabase = createClient();
   const { error, data } = await supabase.auth.updateUser({
     password

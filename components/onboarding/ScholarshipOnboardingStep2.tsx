@@ -7,6 +7,7 @@ import {
   type OnboardingStep2DraftFields
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
+import { PASSWORD_POLICY_HINT } from '@/lib/validation/passwordPolicy';
 import {
   validateScholarshipOnboardingStep2,
   type Step2FormValues,
@@ -224,6 +225,9 @@ export function ScholarshipOnboardingStep2({
             ) : null}
           </div>
         </div>
+        {!errors.password ? (
+          <p className="text-center text-xs text-zinc-500">{PASSWORD_POLICY_HINT}</p>
+        ) : null}
 
         {submitError ? (
           <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">

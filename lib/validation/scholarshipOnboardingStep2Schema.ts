@@ -1,4 +1,5 @@
 import type { OnboardingStep2DraftFields } from '@/lib/onboarding/onboardingFlowTypes';
+import { getPasswordPolicyError } from '@/lib/validation/passwordPolicy';
 
 export type Step2FormValues = {
   firstName: string;
@@ -58,10 +59,9 @@ export function validateScholarshipOnboardingStep2(
   });
   const errors: Step2FieldErrors = draft.ok ? {} : { ...draft.errors };
 
-  if (!values.password) {
-    errors.password = 'Password must be at least 8 characters';
-  } else if (values.password.length < 8) {
-    errors.password = 'Password must be at least 8 characters';
+  const pwdMsg = getPasswordPolicyError(values.password);
+  if (pwdMsg) {
+    errors.password = pwdMsg;
   }
   if (values.password !== values.confirmPassword) {
     errors.confirmPassword = 'Passwords do not match';

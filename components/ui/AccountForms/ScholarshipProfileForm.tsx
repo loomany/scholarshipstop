@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowRight, CheckCircle2, X } from 'lucide-react';
+import { ArrowRight, Check, CheckCircle2, X } from 'lucide-react';
 
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
@@ -66,6 +66,9 @@ const inputClass =
   'mt-2 w-full max-w-xl rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20';
 const inputClassSaaS =
   'mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-500/20';
+/** SaaS email field: full width inside a relative wrapper; extra right padding when status chip is shown. */
+const emailInputSaaSClass =
+  'w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-500/20 disabled:cursor-not-allowed disabled:opacity-50 read-only:cursor-default read-only:bg-zinc-50 read-only:focus:border-zinc-200 read-only:focus:bg-zinc-50 read-only:focus:ring-0';
 const birthDateInputBaseClass =
   'w-full rounded-xl border bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm outline-none transition-all duration-200 placeholder:text-zinc-400 focus:border-teal-400 focus:ring-2 focus:ring-teal-500/25 disabled:cursor-not-allowed disabled:opacity-50';
 const labelClass = 'mt-4 block text-sm font-medium text-zinc-700 first:mt-0';
@@ -711,6 +714,9 @@ export default function ScholarshipProfileForm({
   );
 
   if (isSaas) {
+    const showSaasEmailStatus =
+      userEmail != null && emailConfirmed !== undefined;
+
     const sectionSaveRow = (
       section: ProfileSectionKey,
       onSave: () => void
@@ -817,41 +823,61 @@ export default function ScholarshipProfileForm({
                 autoComplete="family-name"
               />
               {birthDateFields}
-              <div className="flex flex-wrap items-center gap-2">
-                <label className={`${lc} mb-0`} htmlFor="spf-email">
-                  Email
-                </label>
-                {userEmail != null && emailConfirmed !== undefined ? (
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+              <label className={lc} htmlFor="spf-email">
+                Email
+              </label>
+              <div className="relative mt-2 max-w-lg">
+                <input
+                  id="spf-email"
+                  type="email"
+                  className={`${emailInputSaaSClass} ${
+                    showSaasEmailStatus
+                      ? emailConfirmed
+                        ? 'pr-[6.75rem]'
+                        : 'pr-[8.25rem]'
+                      : ''
+                  }`}
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  autoComplete="email"
+                  maxLength={320}
+                  disabled={submitting}
+                  readOnly={emailConfirmed === true}
+                  aria-describedby={
+                    showSaasEmailStatus ? 'spf-email-status' : undefined
+                  }
+                />
+                {showSaasEmailStatus ? (
+                  <div
+                    id="spf-email-status"
+                    className={`pointer-events-none absolute right-2.5 top-1/2 flex -translate-y-1/2 items-center gap-1 rounded-full border px-2 py-0.5 ${
                       emailConfirmed
-                        ? 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200'
-                        : 'bg-amber-50 text-amber-950 ring-1 ring-amber-200'
+                        ? 'border-emerald-100 bg-[rgba(16,185,129,0.1)]'
+                        : 'border-amber-100 bg-amber-50/90'
                     }`}
+                    role="status"
                   >
                     {emailConfirmed ? (
                       <>
-                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                        Confirmed
+                        <Check
+                          className="h-3.5 w-3.5 shrink-0 text-emerald-600"
+                          strokeWidth={3}
+                          aria-hidden
+                        />
+                        <span className="text-[11px] font-bold uppercase tracking-tight text-emerald-700">
+                          Confirmed
+                        </span>
                       </>
                     ) : (
-                      <>Not confirmed</>
+                      <span className="text-[11px] font-semibold uppercase tracking-tight text-amber-900">
+                        Not confirmed
+                      </span>
                     )}
-                  </span>
+                  </div>
                 ) : null}
               </div>
-              <input
-                id="spf-email"
-                type="email"
-                className={ic}
-                value={emailInput}
-                onChange={(e) => setEmailInput(e.target.value)}
-                autoComplete="email"
-                maxLength={320}
-                disabled={submitting}
-              />
               {emailConfirmed === false && userEmail ? (
-                <p className="mt-1 text-xs text-zinc-500">
+                <p className="mt-2 max-w-lg text-xs text-zinc-500">
                   Check your inbox for the confirmation link. You can still browse; some actions may
                   stay limited until you confirm.
                 </p>
