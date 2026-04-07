@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Star } from 'lucide-react';
+import { Sparkles, Star } from 'lucide-react';
 
 import { SCHOLARSHIP_ACTION_FOCUS_VISIBLE } from '@/lib/constants/scholarshipActionUi';
 import { cn } from '@/utils/cn';
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 /** Compact trial note — same language as `ScholarshipsEmailConfirmationBanner`. */
 function PlanTrialBetweenFeaturesAndCta() {
   return (
-    <div className="flex w-full shrink-0 flex-col justify-center border-t border-gray-100 pt-4 lg:w-[12rem] lg:min-w-[10.5rem] lg:max-w-[13rem] lg:border-l lg:border-t-0 lg:pl-4 lg:pr-1 lg:pt-0 xl:w-[13rem]">
+    <div className="flex w-full shrink-0 flex-col justify-center border-t border-gray-100 pt-4 lg:w-[12rem] lg:min-w-[10.5rem] lg:max-w-[13rem] lg:border-l lg:border-t-0 lg:pl-3 lg:pr-0 lg:pt-0 xl:w-[13rem]">
       <div
         className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-xs shadow-sm sm:text-sm"
         role="status"
@@ -79,7 +79,7 @@ function PlanGrantCard({
 }: PlanRowProps) {
   return (
     <article
-      className={`group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition duration-200 hover:border-gray-300 hover:shadow-lg focus-within:border-gray-300 focus-within:shadow-lg ${
+      className={`group relative flex w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition duration-200 hover:border-gray-300 hover:shadow-lg focus-within:border-gray-300 focus-within:shadow-lg lg:w-fit ${
         featured ? 'shadow-md' : ''
       }`}
     >
@@ -88,7 +88,7 @@ function PlanGrantCard({
         className="relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] bg-gray-900"
         aria-hidden
       />
-      <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 sm:gap-5 sm:px-5 sm:py-5 lg:flex-row lg:items-stretch">
+      <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 sm:gap-5 sm:px-5 sm:py-5 lg:flex-row lg:items-stretch lg:gap-3">
         {/* Left: plan + price */}
         <div className="min-w-0 shrink-0 lg:w-[200px] xl:w-[220px]">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -106,15 +106,15 @@ function PlanGrantCard({
           <p className="mt-0.5 text-sm text-gray-500">{billing}</p>
         </div>
 
-        {/* Middle: progressive features */}
-        <div className="min-w-0 flex-1 border-t border-gray-100 pt-4 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+        {/* Middle: progressive features — no flex-1 on lg so trial sits closer to copy */}
+        <div className="min-w-0 w-full flex-1 border-t border-gray-100 pt-4 lg:w-auto lg:max-w-[min(100%,22rem)] lg:flex-none lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
           <PlanFeatureList items={features} />
         </div>
 
         <PlanTrialBetweenFeaturesAndCta />
 
         {/* Right: optional label + CTA */}
-        <div className="flex w-full shrink-0 flex-col gap-2 border-t border-gray-100 pt-4 lg:w-44 lg:max-w-[11rem] lg:justify-center lg:border-t-0 lg:border-l lg:pl-4 lg:pt-0">
+        <div className="flex w-full shrink-0 flex-col gap-2 border-t border-gray-100 pt-4 lg:w-44 lg:max-w-[11rem] lg:justify-center lg:border-t-0 lg:border-l lg:pl-3 lg:pt-0">
           {ctaAbove}
           <Link
             href={href}
@@ -155,7 +155,7 @@ export default function SubscriptionPage() {
 
   return (
     <section className="min-h-screen bg-zinc-50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-5xl">
         <header className="text-center">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Unlock Premium Precision
@@ -165,7 +165,7 @@ export default function SubscriptionPage() {
           </p>
         </header>
 
-        <div className="mx-auto mt-10 flex max-w-6xl flex-col gap-4">
+        <div className="mx-auto mt-10 flex max-w-full flex-col items-center gap-4">
           <PlanGrantCard
             title="Monthly"
             price="$25"
@@ -215,6 +215,19 @@ export default function SubscriptionPage() {
             features={YEARLY_FEATURES}
             href={trialHref}
             buttonClassName="border border-emerald-500 bg-emerald-500 text-white shadow-sm hover:border-emerald-600 hover:bg-emerald-600"
+            ctaAbove={
+              <span
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-emerald-50/95 px-3 py-1 text-xs font-semibold text-emerald-900 ring-1 ring-emerald-200/70"
+                aria-label="Smart choice plan"
+              >
+                <Sparkles
+                  className="h-3 w-3 shrink-0 text-emerald-600"
+                  strokeWidth={2.2}
+                  aria-hidden
+                />
+                Smart Choice
+              </span>
+            }
           />
         </div>
 
