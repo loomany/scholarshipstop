@@ -22,6 +22,7 @@ export default function AccountDashboardClient({
           <ScholarshipProfileForm
             profile={profile}
             userEmail={user.email}
+            emailConfirmed={Boolean(user.email_confirmed_at)}
             variant="saas"
           />
 

@@ -2,7 +2,8 @@ import { validateScholarshipOnboarding } from '@/lib/validation/scholarshipOnboa
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 
-const MAX_STEP = 5 as const;
+/** Last onboarding screen in the wizard (account creation). Email confirm is no longer a step. */
+const UI_MAX_STEP = 4 as OnboardingStep;
 
 /**
  * Furthest URL step: after basics (step 1) user may open 2–4 only as far as `activeStep`
@@ -12,8 +13,8 @@ export function getMaxAllowedOnboardingStep(
   draft: StoredOnboardingDraft
 ): OnboardingStep {
   if (!validateScholarshipOnboarding(draft.step1).ok) return 1;
-  const furthest = draft.activeStep;
-  const cap = Math.min(MAX_STEP, Math.max(2, furthest)) as OnboardingStep;
+  const furthest = Math.min(draft.activeStep, UI_MAX_STEP) as OnboardingStep;
+  const cap = Math.min(UI_MAX_STEP, Math.max(2, furthest)) as OnboardingStep;
   return cap;
 }
 
@@ -30,9 +31,9 @@ export function clampOnboardingStepToProgress(
 ): OnboardingStep {
   const maxAllowed = getMaxAllowedOnboardingStep(draft);
   if (requested < 1) return 1;
-  if (requested > MAX_STEP) return MAX_STEP;
-  if (requested > maxAllowed) return maxAllowed;
-  return requested;
+  const r = Math.min(requested, UI_MAX_STEP) as OnboardingStep;
+  if (r > maxAllowed) return maxAllowed;
+  return r;
 }
 
 export function normalizeOnboardingStepParam(n: number): OnboardingStep | null {

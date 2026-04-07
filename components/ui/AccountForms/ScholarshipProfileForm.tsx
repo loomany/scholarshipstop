@@ -146,11 +146,14 @@ const SAAS_SECTION_ACTION_ROW =
 export default function ScholarshipProfileForm({
   profile,
   userEmail,
+  emailConfirmed,
   variant = 'default'
 }: {
   profile: ProfilesRow | null;
   /** Session email for /account personal block; change triggers verification flow on Save. */
   userEmail?: string | null;
+  /** From Supabase `user.email_confirmed_at` — shown next to email on /account (saas). */
+  emailConfirmed?: boolean;
   /** `account`: compact card on /account (page supplies section heading). `saas`: split profile cards, no outer Card. */
   variant?: 'default' | 'account' | 'saas';
 }) {
@@ -814,9 +817,29 @@ export default function ScholarshipProfileForm({
                 autoComplete="family-name"
               />
               {birthDateFields}
-              <label className={lc} htmlFor="spf-email">
-                Email
-              </label>
+              <div className="flex flex-wrap items-center gap-2">
+                <label className={`${lc} mb-0`} htmlFor="spf-email">
+                  Email
+                </label>
+                {userEmail != null && emailConfirmed !== undefined ? (
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                      emailConfirmed
+                        ? 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200'
+                        : 'bg-amber-50 text-amber-950 ring-1 ring-amber-200'
+                    }`}
+                  >
+                    {emailConfirmed ? (
+                      <>
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                        Confirmed
+                      </>
+                    ) : (
+                      <>Not confirmed</>
+                    )}
+                  </span>
+                ) : null}
+              </div>
               <input
                 id="spf-email"
                 type="email"
@@ -827,6 +850,12 @@ export default function ScholarshipProfileForm({
                 maxLength={320}
                 disabled={submitting}
               />
+              {emailConfirmed === false && userEmail ? (
+                <p className="mt-1 text-xs text-zinc-500">
+                  Check your inbox for the confirmation link. You can still browse; some actions may
+                  stay limited until you confirm.
+                </p>
+              ) : null}
             </div>
             {sectionSaveRow('personal', onSavePersonal)}
           </div>

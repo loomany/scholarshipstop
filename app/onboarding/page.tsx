@@ -9,7 +9,6 @@ import { ScholarshipOnboardingStep1 } from '@/components/onboarding/ScholarshipO
 import { ScholarshipOnboardingStep2 } from '@/components/onboarding/ScholarshipOnboardingStep2';
 import { ScholarshipOnboardingStep3Gpa } from '@/components/onboarding/ScholarshipOnboardingStep3Gpa';
 import { ScholarshipOnboardingStep4State } from '@/components/onboarding/ScholarshipOnboardingStep4State';
-import { ScholarshipOnboardingStep5EmailConfirm } from '@/components/onboarding/ScholarshipOnboardingStep5EmailConfirm';
 import { buildCompleteScholarshipUserProfile } from '@/lib/onboarding/buildScholarshipUserProfile';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import {
@@ -288,20 +287,11 @@ function OnboardingWizard() {
         return;
       }
 
-      const latest = loadStoredOnboardingDraft() ?? base;
-      persistFull({
-        ...latest,
-        v: 7,
-        activeStep: 5,
-        step2: {
-          firstName: latest.step2.firstName.trim(),
-          lastName: latest.step2.lastName.trim(),
-          email
-        }
-      });
+      clearScholarshipOnboardingDraft();
       setLoading(false);
       finalizeInFlight.current = false;
-      router.push(onboardingStepHref(5));
+      router.refresh();
+      router.push(POST_ONBOARDING_PATH);
     },
     [persistFull, router]
   );
@@ -381,9 +371,6 @@ function OnboardingWizard() {
               onBack={() => handleBack(3)}
               onContinue={handleAccountSubmit}
             />
-          ) : null}
-          {step === 5 ? (
-            <ScholarshipOnboardingStep5EmailConfirm email={draft.step2.email} />
           ) : null}
         </div>
       </div>

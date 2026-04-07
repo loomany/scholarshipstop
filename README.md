@@ -44,6 +44,8 @@ Should the automatic setup fail, please [create a Supabase account](https://app.
 
 Follow [this guide](https://supabase.com/docs/guides/auth/social-login/auth-github) to set up an OAuth app with GitHub and configure Supabase to use it as an auth provider.
 
+**Optional — sign in before confirming email:** In the Supabase dashboard open **Authentication → Providers → Email** and turn **off** “Confirm email” (wording may be “Enable email confirmations”). When it is on, password sign-in returns *Email not confirmed* until the user clicks the link in the message. When it is off, users can use the site immediately; you can still show a “confirm your email” reminder in the app (e.g. on `/account`).
+
 In your Supabase project, navigate to [auth > URL configuration](https://app.supabase.com/project/_/auth/url-configuration) and set your main production URL (e.g. https://your-deployment-url.vercel.app) as the site url.
 
 Next, in your Vercel deployment settings, add a new **Production** environment variable called `NEXT_PUBLIC_SITE_URL` and set it to the same URL. Make sure to deselect preview and development environments to make sure that preview branches and local development work correctly.

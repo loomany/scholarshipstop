@@ -88,8 +88,37 @@ export async function GET(request: NextRequest) {
    * Use the user + access_token returned from the token exchange for this step.
    */
   const session = authData?.session;
-  const user = authData?.user ?? session?.user;
-  const metadata = user?.user_metadata;
+  const userFromExchange = authData?.user ?? session?.user;
+
+  /**
+   * `exchangeCodeForSession` sometimes returns a slim `user` without full `user_metadata`
+   * (e.g. `scholarship_profile` missing). GoTrue’s `getUser(jwt)` returns the canonical user
+   * record — required to copy onboarding data into `public.profiles` after email confirm.
+   */
+  let userForSync = userFromExchange;
+  if (session?.access_token && userFromExchange) {
+    const authReader = createClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+          detectSessionInUrl: false
+        }
+      }
+    );
+    const { data: jwtUserData, error: jwtUserErr } = await authReader.auth.getUser(
+      session.access_token
+    );
+    if (!jwtUserErr && jwtUserData?.user) {
+      userForSync = jwtUserData.user;
+    } else if (jwtUserErr) {
+      console.warn('[auth:callback] getUser(jwt) after exchange failed', jwtUserErr.message);
+    }
+  }
+
+  const metadata = userForSync?.user_metadata;
   const metaObj =
     metadata && typeof metadata === 'object' && !Array.isArray(metadata)
       ? (metadata as Record<string, unknown>)
@@ -97,8 +126,8 @@ export async function GET(request: NextRequest) {
 
   if (metaObj) {
     const sp = metaObj.scholarship_profile;
-    console.info('[auth:callback] post-exchange metadata snapshot', {
-      userId: user?.id ?? null,
+    console.info('[auth:callback] metadata snapshot (after getUser jwt)', {
+      userId: userForSync?.id ?? null,
       metadataKeys: Object.keys(metaObj),
       hasScholarshipProfile: Object.prototype.hasOwnProperty.call(metaObj, 'scholarship_profile'),
       scholarshipProfileType: typeof sp,
@@ -106,13 +135,13 @@ export async function GET(request: NextRequest) {
         typeof sp === 'string' ? sp.length : sp != null && typeof sp === 'object' ? 'object' : null
     });
   } else {
-    console.info('[auth:callback] no usable user_metadata object after exchange', {
-      userId: user?.id ?? null,
+    console.info('[auth:callback] no usable user_metadata after exchange/getUser', {
+      userId: userForSync?.id ?? null,
       metadataType: metadata === undefined ? 'undefined' : typeof metadata
     });
   }
 
-  if (user && session?.access_token && metaObj) {
+  if (userForSync && session?.access_token && metaObj) {
     const syncClient = createClient<Database>(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -125,7 +154,7 @@ export async function GET(request: NextRequest) {
         }
       }
     );
-    await syncOnboardingFromMetadataIfPresent(syncClient, user.id, metaObj);
+    await syncOnboardingFromMetadataIfPresent(syncClient, userForSync.id, metaObj);
   }
 
   return response;

@@ -113,7 +113,7 @@ export function ScholarshipOnboardingStep2({
       </button>
       <div className="mx-auto max-w-lg text-center">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
-          Step 4 of 5 · Account
+          Step 4 of 4 · Account
         </p>
         <h2
           id="onboarding-step2-title"

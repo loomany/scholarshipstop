@@ -88,7 +88,7 @@ export function ScholarshipOnboardingStep3Gpa({
       </button>
       <div className="mx-auto max-w-lg text-center">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
-          Step 3 of 5 · GPA
+          Step 3 of 4 · GPA
         </p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
           What&apos;s your GPA?
