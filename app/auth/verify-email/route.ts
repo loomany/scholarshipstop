@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { parseEmailVerificationToken } from '@/lib/auth/emailVerificationToken';
 import type { Database } from '@/types_db';
 import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.redirect(
     getStatusRedirect(
-      `${origin}/account`,
+      `${origin}${SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}`,
       'Email confirmed',
       'Thanks — your email is verified.'
     )

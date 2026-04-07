@@ -31,7 +31,10 @@ export type PremiumEmailLayoutOptions = {
   siteOrigin: string;
   /** One-click preferences; defaults to /account. */
   unsubscribeUrl: string;
-  /** Plain fallback URL under the button. */
+  /**
+   * Plain HTML under the CTA. Default: “If the button doesn’t work…” + link.
+   * Pass `''` to omit that block (button only).
+   */
   secondaryLinkNote?: string;
 };
 
@@ -62,10 +65,12 @@ export function buildScholarshipTopPremiumEmailHtml(
       </table>`
     : '';
 
-  const secondary =
-    opts.secondaryLinkNote ??
-    `If the button doesn&rsquo;t work, copy and paste this link into your browser:<br/>
+  const secondaryDefault = `If the button doesn&rsquo;t work, copy and paste this link into your browser:<br/>
     <a href="${escapeHtml(opts.ctaHref)}" style="color:#10b981;word-break:break-all;">${escapeHtml(opts.ctaHref)}</a>`;
+  const secondary =
+    opts.secondaryLinkNote === ''
+      ? ''
+      : (opts.secondaryLinkNote ?? secondaryDefault);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -114,9 +119,13 @@ export function buildScholarshipTopPremiumEmailHtml(
                         </td>
                       </tr>
                     </table>
-                    <p style="margin:20px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.55;color:#6b7280;">
+                    ${
+                      secondary
+                        ? `<p style="margin:20px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.55;color:#6b7280;">
                       ${secondary}
-                    </p>
+                    </p>`
+                        : ''
+                    }
                   </td>
                 </tr>
               </table>

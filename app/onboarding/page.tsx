@@ -26,10 +26,11 @@ import {
   type StoredOnboardingDraft
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { enqueueRegistrationVerificationEmail } from '@/app/actions/registrationVerification';
+import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { syncOnboardingToProfiles } from '@/lib/onboarding/syncScholarshipProfile';
 import { validateScholarshipOnboardingStep2 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
 
-const POST_ONBOARDING_PATH = '/scholarships';
+const POST_ONBOARDING_PATH = SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
 
 /** GoTrue returns human text (e.g. "Error sending confirmation email"); add code/status for support logs. */
 function formatSupabaseAuthErrorMessage(err: {

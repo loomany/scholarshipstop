@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
 
+import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
 import { createClient } from '@/utils/supabase/client';
 import { getURL } from '@/utils/helpers';
@@ -32,7 +33,7 @@ export function ScholarshipOnboardingStep5EmailConfirm({ email, disabled = false
     try {
       const supabase = createClient();
       const emailRedirectTo = getURL(
-        `auth/callback?next=${encodeURIComponent('/scholarships')}`
+        `auth/callback?next=${encodeURIComponent(SCHOLARSHIPS_HUB_ALL_MATCHES_HREF)}`
       );
       const { error } = await supabase.auth.resend({
         type: 'signup',

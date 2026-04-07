@@ -45,7 +45,8 @@ export function buildConfirmSignupEmailHtml(params: ConfirmSignupEmailParams): s
     ctaHref: params.confirmationUrl,
     ctaLabel: 'Confirm email',
     siteOrigin: origin,
-    unsubscribeUrl: unsub
+    unsubscribeUrl: unsub,
+    secondaryLinkNote: ''
   });
 }
 

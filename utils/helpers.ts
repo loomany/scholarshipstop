@@ -97,7 +97,8 @@ const getToastRedirect = (
 ): string => {
   const [nameKey, descriptionKey] = toastKeyMap[toastType];
 
-  let redirectPath = `${path}?${nameKey}=${encodeURIComponent(toastName)}`;
+  const sep = path.includes('?') ? '&' : '?';
+  let redirectPath = `${path}${sep}${nameKey}=${encodeURIComponent(toastName)}`;
 
   if (toastDescription) {
     redirectPath += `&${descriptionKey}=${encodeURIComponent(toastDescription)}`;
