@@ -74,6 +74,7 @@ function loadOrderedQueuePaths(): string[] {
   } catch {
     return [];
   }
+  if (!raw.trim()) return [];
   try {
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
@@ -90,6 +91,12 @@ function loadOrderedQueuePaths(): string[] {
   } catch {
     return [];
   }
+}
+
+/** Logs once when the Node server process starts (see root `instrumentation.ts`). */
+export function logSeoQueueLoadedOnStartup(): void {
+  const count = loadOrderedQueuePaths().length;
+  console.log(`SEO Queue loaded: ${count} URLs found`);
 }
 
 export function isSeoDripFeedActive(): boolean {

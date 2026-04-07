@@ -64,6 +64,11 @@ export function getVisibleSeoRoutes(): string[] {
   return getVisibleSeoRoutesFromDrip();
 }
 
+/**
+ * SEO listing URLs use {@link canonicalPathAllowedInSeoSitemap}, which matches the drip window
+ * from {@link getVisibleSeoRoutes} / `SEO_DRIP_START_DATE` + `SEO_PAGES_PER_HOUR`.
+ * `app/sitemap.ts` calls `getVisibleSeoRoutes()` so the drip module runs on each sitemap build.
+ */
 export async function buildSitemapBuckets(): Promise<SitemapBuckets> {
   const base = sitemapBaseUrl();
 

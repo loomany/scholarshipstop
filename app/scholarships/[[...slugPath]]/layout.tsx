@@ -39,6 +39,11 @@ function applySafeNoindexFallback(meta: Metadata, canonical?: string | null): Me
   return meta;
 }
 
+function withExplicitIndexFollowWhenUnset(meta: Metadata): Metadata {
+  if (meta.robots !== undefined) return meta;
+  return { ...meta, robots: { index: true, follow: true } };
+}
+
 function metaDescription(s: Scholarship): string {
   const seo = s.seoExcerpt?.trim();
   if (seo && seo.length >= 40) {
@@ -319,7 +324,7 @@ export async function generateMetadata({
               })
         );
       }
-      return meta;
+      return withExplicitIndexFollowWhenUnset(meta);
     }
     return {
       title: 'Find Scholarships',
@@ -380,7 +385,7 @@ export async function generateMetadata({
         })
       );
     }
-    return meta;
+    return withExplicitIndexFollowWhenUnset(meta);
   }
 
   if (resolved.kind === 'manifest_seo') {
@@ -460,7 +465,7 @@ export async function generateMetadata({
             })
       );
     }
-    return meta;
+    return withExplicitIndexFollowWhenUnset(meta);
   }
 
   if (
@@ -505,7 +510,7 @@ export async function generateMetadata({
     meta.robots = { index: false, follow: true };
   }
 
-  return meta;
+  return withExplicitIndexFollowWhenUnset(meta);
 }
 
 export default async function ScholarshipsSlugPathLayout({

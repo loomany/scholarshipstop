@@ -58,9 +58,17 @@ export function generateMetadata({
             follow: true
           }
         }
-      : {})
+      : {
+          robots: {
+            index: true,
+            follow: true
+          }
+        })
   };
 }
+
+// Drip: URLs in data/seo-pending-queue.json before their SEO_DRIP_* window hit `notFound()` in
+// this page’s listing branches. Slug metadata (robots index/follow for open pages) is in layout.tsx.
 
 /** Set DEBUG_SEO_SCHOLARSHIP=1 to log which SEO bundle and copy the server picked. */
 function debugLogListingSeo(payload: Record<string, unknown>) {
