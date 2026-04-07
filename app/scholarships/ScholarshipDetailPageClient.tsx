@@ -208,10 +208,19 @@ function formatDeadlinePreciseTooltip(s: Scholarship): string {
   return formatDeadlineTooltipText(s);
 }
 
-/** Compact, consistent similar cards; first cell highlighted as best match. */
-function similarScholarshipCardClassName(index: number): string {
-  const base =
-    'block h-full min-w-0 rounded-xl border border-zinc-200/90 bg-white p-3 shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 hover:border-teal-300/80 hover:shadow-md md:p-3.5';
+/** Compact, consistent similar cards; first cell highlighted as best match unless expired. */
+function similarScholarshipCardClassName(
+  index: number,
+  deadlinePassed: boolean
+): string {
+  const interactive =
+    'block h-full min-w-0 rounded-xl border p-3 shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 md:p-3.5';
+
+  if (deadlinePassed) {
+    return `${interactive} border-zinc-200 bg-zinc-100/90 hover:border-zinc-300 hover:shadow-sm`;
+  }
+
+  const base = `${interactive} border-zinc-200/90 bg-white hover:border-teal-300/80 hover:shadow-md`;
   return index === 0
     ? `${base} border-teal-200/90 ring-1 ring-teal-100/80`
     : base;
@@ -1736,8 +1745,20 @@ export default function ScholarshipDetailPageClient({
           </div>
         ) : null}
 
+        {showUsefulFaqPage && faqItemsOnPage.length >= 2 ? (
+          <div className="mt-3 border-t border-zinc-200 pt-4">
+            <ScholarshipFaqAccordion items={faqItemsOnPage} />
+          </div>
+        ) : null}
+
         {similarScholarships.length > 0 ? (
-          <div className="mt-3 border-t border-zinc-200 pt-3">
+          <div
+            className={`${
+              showUsefulFaqPage && faqItemsOnPage.length >= 2
+                ? 'mt-4'
+                : 'mt-3'
+            } border-t border-zinc-200 pt-3`}
+          >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
               <div className="min-w-0">
                 <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
@@ -1781,15 +1802,21 @@ export default function ScholarshipDetailPageClient({
                   <div className="relative">
                     <div className="flex items-start gap-3">
                       <div className="min-w-0 flex-1">
-                        <span className="block text-base font-semibold leading-snug text-zinc-900">
+                        <span
+                          className={`block text-base font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'}`}
+                        >
                           {s.title}
                         </span>
                         {s.provider ? (
-                          <span className="mt-1.5 block text-sm text-zinc-600">
+                          <span
+                            className={`mt-1.5 block text-sm ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'}`}
+                          >
                             {s.provider}
                           </span>
                         ) : null}
-                        <span className="mt-2 block text-sm font-semibold text-zinc-800">
+                        <span
+                          className={`mt-2 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-800'}`}
+                        >
                           {formatScholarshipAwardLine(s)}
                         </span>
                         <span
@@ -1820,20 +1847,30 @@ export default function ScholarshipDetailPageClient({
                           aria-label="Scholarship tags"
                         >
                           {i === 0 ? (
-                            <span className="whitespace-nowrap rounded-full bg-teal-600 px-2.5 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
+                            <span
+                              className={`whitespace-nowrap rounded-full px-2.5 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide shadow-sm ${
+                                deadlinePassed
+                                  ? 'bg-zinc-300 text-zinc-700'
+                                  : 'bg-teal-600 text-white'
+                              }`}
+                            >
                               Best match
                             </span>
                           ) : null}
                           {matchScore != null ? (
                             <span
-                              className="whitespace-nowrap rounded-full bg-violet-100 px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide text-violet-900"
+                              className={`whitespace-nowrap rounded-full px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide ${
+                                deadlinePassed
+                                  ? 'bg-zinc-200/90 text-zinc-600'
+                                  : 'bg-violet-100 text-violet-900'
+                              }`}
                               title={
                                 s.aiMatchBand?.trim()
                                   ? `Band: ${s.aiMatchBand}`
                                   : 'Match score'
                               }
                             >
-                              Match {matchScore}
+                              Match {matchScore}%
                             </span>
                           ) : null}
                         </div>
@@ -1854,7 +1891,7 @@ export default function ScholarshipDetailPageClient({
                     {similarSubscriptionLocked ? (
                       <button
                         type="button"
-                        className={similarScholarshipCardClassName(i)}
+                        className={similarScholarshipCardClassName(i, deadlinePassed)}
                         onClick={openSubscriptionOffer}
                         title="Start your free access to open this scholarship"
                         aria-label="Locked scholarship. Start free access to open."
@@ -1864,7 +1901,7 @@ export default function ScholarshipDetailPageClient({
                     ) : (
                       <Link
                         href={scholarshipPublicPath(s)}
-                        className={similarScholarshipCardClassName(i)}
+                        className={similarScholarshipCardClassName(i, deadlinePassed)}
                       >
                         {similarCardInner}
                       </Link>
@@ -1882,12 +1919,6 @@ export default function ScholarshipDetailPageClient({
                 ← Back to Matches
               </Link>
             </div>
-          </div>
-        ) : null}
-
-        {showUsefulFaqPage && faqItemsOnPage.length >= 2 ? (
-          <div className="mt-4 border-t border-zinc-200 pt-4">
-            <ScholarshipFaqAccordion items={faqItemsOnPage} />
           </div>
         ) : null}
 

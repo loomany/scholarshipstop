@@ -20,4 +20,9 @@ export type UserProfile = {
   city: string | null;
   gpa: string | null;
   onboardingCompleted: boolean;
+  /**
+   * When false, first profiles upsert sets `email_verified = false` (custom verify link).
+   * Omit on later saves so the column is not overwritten.
+   */
+  emailVerified?: boolean;
 };

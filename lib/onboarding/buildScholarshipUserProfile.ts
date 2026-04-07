@@ -32,7 +32,8 @@ export function buildCompleteScholarshipUserProfile(
       stateRegion,
       city: null,
       gpa: gpaForProfile(draft.step3.gpa),
-      onboardingCompleted: true
+      onboardingCompleted: true,
+      emailVerified: false
     }
   };
 }

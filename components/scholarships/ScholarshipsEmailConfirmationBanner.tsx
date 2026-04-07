@@ -2,36 +2,66 @@
 
 import { useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
+import { resendRegistrationVerificationEmail } from '@/app/actions/registrationVerification';
+import type { Database } from '@/types_db';
 import { createClient } from '@/utils/supabase/client';
 import { getURL } from '@/utils/helpers';
 
-function shouldPromptEmailConfirmation(user: User | null): boolean {
-  if (!user?.email) return false;
-  return user.email_confirmed_at == null || user.email_confirmed_at === '';
+type ProfileEmailVerified = Pick<
+  Database['public']['Tables']['profiles']['Row'],
+  'email_verified'
+>;
+
+type ResendMode = 'app' | 'supabase';
+
+function pickResendMode(
+  user: User,
+  profileEmailVerified: boolean | null | undefined
+): ResendMode | null {
+  if (profileEmailVerified === false) return 'app';
+  if (user.email_confirmed_at == null || user.email_confirmed_at === '') {
+    return 'supabase';
+  }
+  return null;
 }
 
 export function ScholarshipsEmailConfirmationBanner() {
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
+  const [resendMode, setResendMode] = useState<ResendMode | null>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
 
-    const apply = (user: User | null) => {
-      const show = shouldPromptEmailConfirmation(user);
+    const apply = async (user: User | null) => {
+      if (!user?.email) {
+        setVisible(false);
+        setEmail(null);
+        setResendMode(null);
+        return;
+      }
+      setEmail(user.email);
+      const { data: prof } = await supabase
+        .from('profiles')
+        .select('email_verified')
+        .eq('id', user.id)
+        .maybeSingle();
+      const row = prof as ProfileEmailVerified | null;
+      const mode = pickResendMode(user, row?.email_verified);
+      const show = mode != null;
       setVisible(show);
-      setEmail(user?.email ?? null);
+      setResendMode(mode);
       if (!show) setMsg(null);
     };
 
     void supabase.auth.getSession().then(({ data: { session } }) => {
-      apply(session?.user ?? null);
+      void apply(session?.user ?? null);
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      apply(session?.user ?? null);
+      void apply(session?.user ?? null);
     });
 
     return () => {
@@ -43,18 +73,27 @@ export function ScholarshipsEmailConfirmationBanner() {
     if (!email) return;
     setBusy(true);
     setMsg(null);
-    const supabase = createClient();
-    const emailRedirectTo = getURL(
-      `auth/callback?next=${encodeURIComponent('/scholarships')}`
-    );
-    const { error } = await supabase.auth.resend({
-      type: 'signup',
-      email,
-      options: { emailRedirectTo }
-    });
-    setBusy(false);
-    if (error) setMsg(error.message);
-    else setMsg('Check your inbox for the link.');
+    try {
+      if (resendMode === 'app') {
+        const r = await resendRegistrationVerificationEmail();
+        if (!r.ok) setMsg(r.error ?? 'Could not send email.');
+        else setMsg('Check your inbox for the link.');
+      } else if (resendMode === 'supabase') {
+        const supabase = createClient();
+        const emailRedirectTo = getURL(
+          `auth/callback?next=${encodeURIComponent('/scholarships')}`
+        );
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email,
+          options: { emailRedirectTo }
+        });
+        if (error) setMsg(error.message);
+        else setMsg('Check your inbox for the link.');
+      }
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (!visible) return null;

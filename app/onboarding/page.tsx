@@ -25,6 +25,7 @@ import {
   type OnboardingFormValues,
   type StoredOnboardingDraft
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
+import { enqueueRegistrationVerificationEmail } from '@/app/actions/registrationVerification';
 import { syncOnboardingToProfiles } from '@/lib/onboarding/syncScholarshipProfile';
 import { validateScholarshipOnboardingStep2 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
 
@@ -214,6 +215,10 @@ function OnboardingWizard() {
               'We could not save your profile. Check your database columns or try again from Account.'
           );
           return false;
+        }
+        const addr = session.user.email?.trim();
+        if (addr) {
+          void enqueueRegistrationVerificationEmail(addr, session.user.id);
         }
         clearScholarshipOnboardingDraft();
         finalizeInFlight.current = false;

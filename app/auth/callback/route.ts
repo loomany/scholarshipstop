@@ -157,5 +157,24 @@ export async function GET(request: NextRequest) {
     await syncOnboardingFromMetadataIfPresent(syncClient, userForSync.id, metaObj);
   }
 
+  if (userForSync?.email_confirmed_at) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (url && key) {
+      const admin = createClient<Database>(url, key);
+      const { error: evErr } = await admin
+        .schema('public')
+        .from('profiles')
+        .update({
+          email_verified: true,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userForSync.id);
+      if (evErr) {
+        console.warn('[auth:callback] profiles email_verified sync', evErr.message);
+      }
+    }
+  }
+
   return response;
 }

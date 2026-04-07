@@ -15,6 +15,13 @@ export default function AccountDashboardClient({
   user: User;
   profile: ProfilesRow | null;
 }) {
+  const emailConfirmedForUi =
+    profile === null
+      ? undefined
+      : profile.email_verified === false
+        ? false
+        : true;
+
   return (
     <div className="min-h-screen bg-zinc-50/90">
       <main className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 lg:px-8">
@@ -22,7 +29,7 @@ export default function AccountDashboardClient({
           <ScholarshipProfileForm
             profile={profile}
             userEmail={user.email}
-            emailConfirmed={Boolean(user.email_confirmed_at)}
+            emailConfirmed={emailConfirmedForUi}
             variant="saas"
           />
 

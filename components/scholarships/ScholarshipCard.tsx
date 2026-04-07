@@ -19,6 +19,7 @@ import {
   payoutMethodChipLabel,
   scholarshipCardChips
 } from '@/lib/scholarships/scholarshipCatalog';
+import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 
 type ScholarshipCardProps = {
   scholarship: Scholarship;
@@ -83,6 +84,7 @@ export default function ScholarshipCard({
   onSubscriptionLockedCategoryClick
 }: ScholarshipCardProps) {
   const detailHref = scholarshipPublicPath(scholarship);
+  const deadlinePassed = scholarshipDeadlineHasPassed(scholarship);
 
   const gridShell = stackedListing
     ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5'
@@ -155,7 +157,11 @@ export default function ScholarshipCard({
 
   const requirementsMetricInner = (
     <>
-      <p className="break-words text-sm font-semibold leading-snug text-gray-900 sm:text-[0.9375rem]">
+      <p
+        className={`break-words text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
+          deadlinePassed ? 'text-gray-600' : 'text-gray-900'
+        }`}
+      >
         {requirementsMetric}
       </p>
       <p className={`${METRIC_LABEL} text-left`}>Requirements</p>
@@ -253,8 +259,12 @@ export default function ScholarshipCard({
       </>
     );
 
+  const cardArticleClass = deadlinePassed
+    ? 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50/95 shadow-sm transition-all duration-200 hover:border-zinc-300 hover:shadow-md focus-within:border-zinc-300 focus-within:shadow-md'
+    : 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg focus-within:border-gray-300 focus-within:shadow-lg';
+
   return (
-    <article className="group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg focus-within:border-gray-300 focus-within:shadow-lg">
+    <article className={cardArticleClass}>
       <Link
         href={detailHref}
         className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-500/55"
@@ -263,7 +273,7 @@ export default function ScholarshipCard({
         <span className="sr-only">Open scholarship details</span>
       </Link>
       <div
-        className="relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] bg-gray-900 pointer-events-none"
+        className={`relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] pointer-events-none ${deadlinePassed ? 'bg-zinc-400' : 'bg-gray-900'}`}
         aria-hidden
       />
 
@@ -327,7 +337,11 @@ export default function ScholarshipCard({
             </div>
           </div>
           <h2
-            className="mt-1 min-w-0 overflow-hidden text-base font-semibold leading-snug tracking-tight text-gray-900 group-hover:text-gray-800 sm:text-[1.0625rem] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
+            className={`mt-1 min-w-0 overflow-hidden text-base font-semibold leading-snug tracking-tight sm:text-[1.0625rem] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
+              deadlinePassed
+                ? 'text-gray-600 group-hover:text-gray-600'
+                : 'text-gray-900 group-hover:text-gray-800'
+            }`}
             title={scholarship.title}
           >
             {scholarship.title}
@@ -407,11 +421,19 @@ export default function ScholarshipCard({
           >
             {hasDeadline ? (
               <div className={metricTextAlign}>
-                <p className="min-w-0 break-words text-sm font-semibold tabular-nums leading-snug text-gray-900 sm:text-[0.9375rem]">
+                <p
+                  className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
+                    deadlinePassed ? 'text-gray-500' : 'text-gray-900'
+                  }`}
+                >
                   {deadlineParts.primary}
                 </p>
                 {deadlineParts.secondary ? (
-                  <p className="mt-0.5 text-[11px] font-medium leading-snug text-gray-500 sm:text-xs">
+                  <p
+                    className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
+                      deadlinePassed ? 'text-gray-400' : 'text-gray-500'
+                    }`}
+                  >
                     {deadlineParts.secondary}
                   </p>
                 ) : null}
@@ -430,8 +452,12 @@ export default function ScholarshipCard({
         <div className={awardMetricsWrap}>
           <div className={awardMetricAlign}>
             <p
-              className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug text-gray-900 sm:text-[0.9375rem] ${
-                !hasAmount ? 'text-gray-400' : ''
+              className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
+                !hasAmount
+                  ? 'text-gray-400'
+                  : deadlinePassed
+                    ? 'text-gray-600'
+                    : 'text-gray-900'
               }`}
             >
               {awardCell}

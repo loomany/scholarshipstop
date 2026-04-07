@@ -30,6 +30,7 @@ export const PROFILES_UPSERT_ALLOWED_KEYS = new Set([
   'gpa',
   'state_region',
   'onboarding_completed',
+  'email_verified',
   'updated_at'
 ]);
 
@@ -61,6 +62,7 @@ export type ProfilesOnboardingRow = {
   gpa: number | null;
   state_region: string | null;
   onboarding_completed: boolean;
+  email_verified?: boolean;
   updated_at: string;
 };
 
@@ -126,6 +128,7 @@ export function profileToProfilesOnboardingRow(profile: UserProfile): ProfilesOn
     gpa: gpaForProfileDb(profile.gpa),
     state_region: profile.stateRegion?.trim() || null,
     onboarding_completed: profile.onboardingCompleted,
+    ...(profile.emailVerified === false ? { email_verified: false } : {}),
     updated_at: new Date().toISOString()
   };
 }
@@ -172,7 +175,8 @@ function userProfileFromAuthMetadata(
     stateRegion: p.stateRegion ?? null,
     city: p.city ?? null,
     gpa: p.gpa ?? null,
-    onboardingCompleted: Boolean(p.onboardingCompleted)
+    onboardingCompleted: Boolean(p.onboardingCompleted),
+    ...(p.emailVerified === false ? { emailVerified: false } : {})
   };
 }
 

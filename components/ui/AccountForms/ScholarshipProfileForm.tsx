@@ -155,7 +155,9 @@ export default function ScholarshipProfileForm({
   profile: ProfilesRow | null;
   /** Session email for /account personal block; change triggers verification flow on Save. */
   userEmail?: string | null;
-  /** From Supabase `user.email_confirmed_at` — shown next to email on /account (saas). */
+  /**
+   * SaaS email badge: `true` / `false` from `profiles.email_verified` (via parent); `undefined` if no profile row yet.
+   */
   emailConfirmed?: boolean;
   /** `account`: compact card on /account (page supplies section heading). `saas`: split profile cards, no outer Card. */
   variant?: 'default' | 'account' | 'saas';

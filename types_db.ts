@@ -146,6 +146,7 @@ export interface Database {
           country_code: string | null
           created_at: string
           date_of_birth: string | null
+          email_verified: boolean
           field_of_study: string | null
           field_of_study_label: string | null
           first_name: string | null
@@ -170,6 +171,7 @@ export interface Database {
           country_code?: string | null
           created_at?: string
           date_of_birth?: string | null
+          email_verified?: boolean
           field_of_study?: string | null
           field_of_study_label?: string | null
           first_name?: string | null
@@ -194,6 +196,7 @@ export interface Database {
           country_code?: string | null
           created_at?: string
           date_of_birth?: string | null
+          email_verified?: boolean
           field_of_study?: string | null
           field_of_study_label?: string | null
           first_name?: string | null

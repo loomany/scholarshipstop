@@ -242,7 +242,7 @@ export function getMatchBadge(s: Scholarship): {
       bandRaw ||
       (clamped >= 67 ? 'High' : clamped >= 34 ? 'Medium' : 'Low');
     return {
-      label: `Match ${clamped}`,
+      label: `Match ${clamped}%`,
       title: explain ? `${band} fit — ${explain}` : `${band} fit (0–100)`
     };
   }
