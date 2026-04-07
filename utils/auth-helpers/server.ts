@@ -34,6 +34,7 @@ export async function SignOut(formData: FormData) {
 
 export async function signInWithEmail(formData: FormData) {
   const cookieStore = cookies();
+  const callbackURL = getURL('/auth/callback');
 
   const email = String(formData.get('email')).trim();
   let redirectPath: string;
@@ -48,7 +49,7 @@ export async function signInWithEmail(formData: FormData) {
 
   const supabase = createClient();
   let options = {
-    emailRedirectTo: 'https://scholarshiptop.com/auth/callback',
+    emailRedirectTo: callbackURL,
     shouldCreateUser: true
   };
 
@@ -86,6 +87,8 @@ export async function signInWithEmail(formData: FormData) {
 }
 
 export async function requestPasswordUpdate(formData: FormData) {
+  const callbackURL = getURL('/auth/reset_password');
+
   // Get form data
   const email = String(formData.get('email')).trim();
   let redirectPath: string;
@@ -101,7 +104,7 @@ export async function requestPasswordUpdate(formData: FormData) {
   const supabase = createClient();
 
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://scholarshiptop.com/auth/reset_password'
+    redirectTo: callbackURL
   });
 
   if (error) {
@@ -165,6 +168,8 @@ export async function signInWithPassword(formData: FormData) {
 }
 
 export async function signUp(formData: FormData) {
+  const callbackURL = getURL('/auth/callback');
+
   const email = String(formData.get('email')).trim();
   const password = String(formData.get('password')).trim();
   let redirectPath: string;
@@ -182,7 +187,7 @@ export async function signUp(formData: FormData) {
     email,
     password,
     options: {
-      emailRedirectTo: 'https://scholarshiptop.com/auth/callback'
+      emailRedirectTo: callbackURL
     }
   });
 

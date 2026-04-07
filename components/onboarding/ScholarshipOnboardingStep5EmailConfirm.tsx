@@ -30,13 +30,11 @@ export function ScholarshipOnboardingStep5EmailConfirm({ email, disabled = false
     setResending(true);
     try {
       const supabase = createClient();
+      const emailRedirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent('/scholarships')}`;
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email: trimmed,
-        options: {
-          emailRedirectTo:
-            'https://scholarshiptop.com/auth/callback?next=%2Fscholarships'
-        }
+        options: { emailRedirectTo }
       });
       if (error) {
         setResendError(error.message);
