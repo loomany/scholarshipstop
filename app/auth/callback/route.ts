@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import { syncOnboardingFromMetadataIfPresent } from '@/lib/onboarding/profilesOnboardingSync';
 import type { Database } from '@/types_db';
+import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
 import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
 
 function safeAppPath(next: string | null): string | null {
@@ -27,19 +28,24 @@ function safeAppPath(next: string | null): string | null {
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
-  const origin = requestUrl.origin;
+  /**
+   * Must follow the browser’s public host (x-forwarded-host), not `getURL()` / NEXT_PUBLIC_SITE_URL
+   * alone — a mis-set env like https://localhost:8080 on Railway would otherwise redirect users
+   * off the real domain after auth.
+   */
+  const publicOrigin = getServerAuthSiteOrigin().replace(/\/+$/, '');
   const nextPath = safeAppPath(requestUrl.searchParams.get('next'));
 
   if (!code) {
-    return NextResponse.redirect(new URL('/signin', origin));
+    return NextResponse.redirect(new URL('/signin', publicOrigin));
   }
 
   const defaultSuccessUrl = getStatusRedirect(
-    `${origin}/dashboard`,
+    `${publicOrigin}/dashboard`,
     'Success!',
     'You are now signed in.'
   );
-  const successUrl = nextPath ? `${origin}${nextPath}` : defaultSuccessUrl;
+  const successUrl = nextPath ? `${publicOrigin}${nextPath}` : defaultSuccessUrl;
 
   const response = NextResponse.redirect(successUrl);
 
@@ -66,7 +72,7 @@ export async function GET(request: NextRequest) {
   if (error) {
     return NextResponse.redirect(
       getErrorRedirect(
-        `${origin}/signin`,
+        `${publicOrigin}/signin`,
         error.name,
         "Sorry, we weren't able to log you in. Please try again."
       )

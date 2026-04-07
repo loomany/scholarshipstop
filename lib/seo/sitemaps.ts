@@ -10,6 +10,7 @@ import {
 } from '@/lib/scholarships/seoScholarshipResolve';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { fetchActiveScholarships } from '@/lib/scholarships/supabase';
+import { getURL } from '@/utils/helpers';
 
 type SitemapBucket =
   | 'core'
@@ -46,9 +47,7 @@ function dedupeSitemapEntries(
 }
 
 export function sitemapBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'http://localhost:3000'
-  );
+  return getURL().replace(/\/$/, '');
 }
 
 export async function buildSitemapBuckets(): Promise<SitemapBuckets> {

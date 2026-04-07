@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import { getURL } from '@/utils/helpers';
 import { ScholarshipOnboardingStep1 } from '@/components/onboarding/ScholarshipOnboardingStep1';
 import { ScholarshipOnboardingStep2 } from '@/components/onboarding/ScholarshipOnboardingStep2';
 import { ScholarshipOnboardingStep3Gpa } from '@/components/onboarding/ScholarshipOnboardingStep3Gpa';
@@ -186,7 +187,9 @@ function OnboardingWizard() {
       setLoading(true);
       const supabase = createClient();
       const email = base.step2.email.trim();
-      const emailRedirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(POST_ONBOARDING_PATH)}`;
+      const emailRedirectTo = getURL(
+        `auth/callback?next=${encodeURIComponent(POST_ONBOARDING_PATH)}`
+      );
 
       const {
         data: { session: existingSession }

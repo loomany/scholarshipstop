@@ -2,29 +2,43 @@ import type { Tables } from '@/types_db';
 
 type Price = Tables<'prices'>;
 
-export const getURL = (path: string = '') => {
-  // Check if NEXT_PUBLIC_SITE_URL is set and non-empty. Set this to your site URL in production env.
-  let url =
-    process?.env?.NEXT_PUBLIC_SITE_URL &&
-    process.env.NEXT_PUBLIC_SITE_URL.trim() !== ''
-      ? process.env.NEXT_PUBLIC_SITE_URL
-      : // If not set, check for NEXT_PUBLIC_VERCEL_URL, which is automatically set by Vercel.
-        process?.env?.NEXT_PUBLIC_VERCEL_URL &&
-          process.env.NEXT_PUBLIC_VERCEL_URL.trim() !== ''
-        ? process.env.NEXT_PUBLIC_VERCEL_URL
-        : // If neither is set, default to localhost for local development.
-          'http://localhost:3000/';
+/** Used on the server when `NEXT_PUBLIC_SITE_URL` is missing (Railway, misconfigured builds). */
+const SITE_ORIGIN_FALLBACK = 'https://scholarshiptop.com';
 
-  // Trim the URL and remove trailing slash if exists.
-  url = url.replace(/\/+$/, '');
-  // Make sure to include `https://` when not localhost.
-  url = url.includes('http') ? url : `https://${url}`;
-  // Ensure path starts without a slash to avoid double slashes in the final URL.
+export const getURL = (path: string = '') => {
   path = path.replace(/^\/+/, '');
 
-  // Concatenate the URL and the path.
+  const base =
+    typeof window !== 'undefined'
+      ? window.location.origin.replace(/\/+$/, '')
+      : (() => {
+          const site = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+          return site ? site.replace(/\/+$/, '') : SITE_ORIGIN_FALLBACK;
+        })();
+
+  const url = base.startsWith('http') ? base : `https://${base}`;
   return path ? `${url}/${path}` : url;
 };
+
+/**
+ * OAuth `redirectTo`: prefer `NEXT_PUBLIC_SITE_URL` from the client bundle so production logins
+ * always return to the public domain (not a preview host, wrong port, or stale tab origin).
+ * If unset (typical local dev), use the current page origin.
+ */
+export function getOAuthRedirectURL(path: string = '/auth/callback'): string {
+  path = path.replace(/^\/+/, '');
+  if (typeof window === 'undefined') {
+    return getURL(path);
+  }
+  const site = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  const base = site
+    ? (() => {
+        const s = site.replace(/\/+$/, '');
+        return s.startsWith('http') ? s : `https://${s}`;
+      })()
+    : window.location.origin.replace(/\/+$/, '');
+  return path ? `${base}/${path}` : base;
+}
 
 export const postData = async ({
   url,

@@ -44,13 +44,13 @@ export function ScholarshipsEmailConfirmationBanner() {
     setBusy(true);
     setMsg(null);
     const supabase = createClient();
-    const redirect = getURL(
+    const emailRedirectTo = getURL(
       `auth/callback?next=${encodeURIComponent('/scholarships')}`
     );
     const { error } = await supabase.auth.resend({
       type: 'signup',
       email,
-      options: { emailRedirectTo: redirect }
+      options: { emailRedirectTo }
     });
     setBusy(false);
     if (error) setMsg(error.message);

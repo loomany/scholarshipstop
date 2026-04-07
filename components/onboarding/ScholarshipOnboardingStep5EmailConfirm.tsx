@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
 import { createClient } from '@/utils/supabase/client';
+import { getURL } from '@/utils/helpers';
 
 const secondaryButtonClass =
   'inline-flex w-full cursor-pointer items-center justify-center rounded-2xl border border-zinc-300 bg-white px-6 py-4 text-center text-base font-semibold text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:pointer-events-none disabled:opacity-60';
@@ -30,7 +31,9 @@ export function ScholarshipOnboardingStep5EmailConfirm({ email, disabled = false
     setResending(true);
     try {
       const supabase = createClient();
-      const emailRedirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent('/scholarships')}`;
+      const emailRedirectTo = getURL(
+        `auth/callback?next=${encodeURIComponent('/scholarships')}`
+      );
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email: trimmed,
