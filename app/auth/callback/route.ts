@@ -40,10 +40,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/signin', publicOrigin));
   }
 
+  /** No `next` param (typical email confirm / OAuth): land on site home, not /dashboard. */
   const defaultSuccessUrl = getStatusRedirect(
-    `${publicOrigin}/dashboard`,
+    `${publicOrigin}/`,
     'Success!',
-    'You are now signed in.'
+    'Your email is confirmed. You are signed in.'
   );
   const successUrl = nextPath ? `${publicOrigin}${nextPath}` : defaultSuccessUrl;
 
