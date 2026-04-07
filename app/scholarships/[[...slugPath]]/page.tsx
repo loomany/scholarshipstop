@@ -21,6 +21,7 @@ import {
   normalizeScholarshipDynamicParam
 } from '@/app/scholarships/scholarshipLongTailPresets';
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
+import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
 import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
 import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
@@ -94,6 +95,18 @@ function isPromotedManifestSeoRoute(entry: {
   qualityBucket?: string;
 }): boolean {
   return entry.indexable === true && entry.qualityBucket === 'GOOD';
+}
+
+/**
+ * Hero + post-listing SEO chrome: curated GOOD manifest rows, or any route with a valid
+ * `data/seo-scholarship-content/*.json` bundle (e.g. AI long-tail paths not yet in the manifest).
+ */
+function shouldShowManifestSeoPromotedChrome(
+  entry: { indexable?: boolean; qualityBucket?: string },
+  seo: LongTailSeoBundle | null
+): boolean {
+  if (isPromotedManifestSeoRoute(entry)) return true;
+  return Boolean(seo);
 }
 
 export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
@@ -312,7 +325,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     const faqItems = seo?.faq;
 
     const safePath = canonicalPath.replace(/\//g, '__');
-    const promotedChrome = isPromotedManifestSeoRoute(entry);
+    const promotedChrome = shouldShowManifestSeoPromotedChrome(entry, seo);
     const listingMode = { type: 'manifest', canonicalPath, entry } as const;
 
     debugLogListingSeo({

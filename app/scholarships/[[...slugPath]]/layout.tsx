@@ -44,6 +44,28 @@ function withExplicitIndexFollowWhenUnset(meta: Metadata): Metadata {
   return { ...meta, robots: { index: true, follow: true } };
 }
 
+/**
+ * Valid `data/seo-scholarship-content/{path}.json` ⇒ full landing page for crawlers: always
+ * `index, follow` and self canonical, even when the manifest row is dynamic / SUPPORTING or
+ * thin-listing heuristics would noindex.
+ */
+function applyScholarshipContentBundleIndexingPolicy(
+  meta: Metadata,
+  canonicalPath: string
+): Metadata {
+  if (!readScholarshipSeoContent(canonicalPath)) return meta;
+  const selfPath = `/scholarships/${canonicalPath}`;
+  const next: Metadata = {
+    ...meta,
+    robots: { index: true, follow: true },
+    alternates: { canonical: selfPath }
+  };
+  if (meta.openGraph && typeof meta.openGraph === 'object') {
+    next.openGraph = { ...meta.openGraph, url: selfPath };
+  }
+  return next;
+}
+
 function metaDescription(s: Scholarship): string {
   const seo = s.seoExcerpt?.trim();
   if (seo && seo.length >= 40) {
@@ -324,7 +346,9 @@ export async function generateMetadata({
               })
         );
       }
-      return withExplicitIndexFollowWhenUnset(meta);
+      return withExplicitIndexFollowWhenUnset(
+        applyScholarshipContentBundleIndexingPolicy(meta, resolved.canonicalPath)
+      );
     }
     return {
       title: 'Find Scholarships',
@@ -465,7 +489,9 @@ export async function generateMetadata({
             })
       );
     }
-    return withExplicitIndexFollowWhenUnset(meta);
+    return withExplicitIndexFollowWhenUnset(
+      applyScholarshipContentBundleIndexingPolicy(meta, resolved.canonicalPath)
+    );
   }
 
   if (
