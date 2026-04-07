@@ -46,9 +46,7 @@ function dedupeSitemapEntries(
 }
 
 export function sitemapBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'http://localhost:3000'
-  );
+  return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://scholarshiptop.com';
 }
 
 export async function buildSitemapBuckets(): Promise<SitemapBuckets> {
@@ -115,4 +113,3 @@ export async function buildSitemapBuckets(): Promise<SitemapBuckets> {
     scholarships: dedupeSitemapEntries(scholarships)
   };
 }
-

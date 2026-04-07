@@ -186,7 +186,8 @@ function OnboardingWizard() {
       setLoading(true);
       const supabase = createClient();
       const email = base.step2.email.trim();
-      const emailRedirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(POST_ONBOARDING_PATH)}`;
+      const emailRedirectTo =
+        'https://scholarshiptop.com/auth/callback?next=%2Fscholarships';
 
       const {
         data: { session: existingSession }
