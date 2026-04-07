@@ -18,8 +18,11 @@ export async function handleRequest(
   const redirectUrl: string = await requestFunc(formData);
 
   if (router) {
-    // If client-side router is provided, use it to redirect
-    return router.push(redirectUrl);
+    // Server actions set auth cookies; without `refresh`, root layout / Navbar RSC cache
+    // and `Navlinks` client state can stay stale until a hard reload.
+    await router.push(redirectUrl);
+    router.refresh();
+    return;
   } else {
     // Otherwise, redirect server-side
     return await redirectToPath(redirectUrl);

@@ -64,19 +64,20 @@ export default function Navlinks({
 
   useEffect(() => {
     const supabase = createClient();
-
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      setClientUser(session?.user ?? null);
-    });
-
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setClientUser(session?.user ?? null);
     });
-
     return () => {
       sub.subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      setClientUser(session?.user ?? null);
+    });
+  }, [pathname, serverUser?.id]);
 
   useEffect(() => {
     const uid = user?.id;
