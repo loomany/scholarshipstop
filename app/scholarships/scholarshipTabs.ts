@@ -1,3 +1,4 @@
+import { matchesDeadlinePreset } from './moreFilters';
 import type { Scholarship } from './scholarshipsData';
 
 export type ScholarshipSidebarCounts = {
@@ -6,6 +7,8 @@ export type ScholarshipSidebarCounts = {
   /** Personalized: SQL tab scope (verified or strong credibility). */
   recommended: number;
   easyApply: number;
+  /** Deadlines within ~7 days (`lt_1d` + `d1_7` buckets). */
+  hotDeadlines: number;
   /** Personalized: profile-fit SQL base + ignored filter; catalog: same without profile OR. */
   matches: number;
   saved: number;
@@ -18,6 +21,7 @@ export const SCHOLARSHIP_LIST_TAB_IDS = [
   'best-matches',
   'recommended',
   'easy-apply',
+  'hot-deadlines',
   'matches',
   'saved',
   'started',
@@ -119,6 +123,12 @@ export function scholarshipsInTab(
       return usa.filter(
         (s) => !ign.has(s.id) && (s.eligibility?.length ?? 0) === 0
       );
+    case 'hot-deadlines':
+      return usa.filter(
+        (s) =>
+          !ign.has(s.id) &&
+          (matchesDeadlinePreset(s, 'lt1d') || matchesDeadlinePreset(s, 'd1_7'))
+      );
     case 'started':
       return usa.filter((s) => started.has(s.id));
     case 'submitted':
@@ -136,6 +146,7 @@ export function computeScholarshipSidebarCounts(
     bestMatches: scholarshipsInTab(usa, 'best-matches', ids).length,
     recommended: scholarshipsInTab(usa, 'recommended', ids).length,
     easyApply: scholarshipsInTab(usa, 'easy-apply', ids).length,
+    hotDeadlines: scholarshipsInTab(usa, 'hot-deadlines', ids).length,
     matches: scholarshipsInTab(usa, 'matches', ids).length,
     saved: scholarshipsInTab(usa, 'saved', ids).length,
     started: scholarshipsInTab(usa, 'started', ids).length,
@@ -167,6 +178,8 @@ export function scholarshipListPageTitle(
       return guest ? 'Recommended' : 'Recommended scholarships';
     case 'easy-apply':
       return 'Easy apply scholarships';
+    case 'hot-deadlines':
+      return 'Hot deadlines';
     case 'started':
       return 'Started applications';
     case 'submitted':
@@ -182,5 +195,6 @@ export function scholarshipListPageTitle(
 export function scholarshipListLoadingText(tab: ScholarshipListTabId): string {
   if (tab === 'saved') return 'Loading saved…';
   if (tab === 'best-matches') return 'Loading best matches…';
+  if (tab === 'hot-deadlines') return 'Loading hot deadlines…';
   return 'Loading matches…';
 }

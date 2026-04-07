@@ -96,6 +96,7 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   bestMatches: 0,
   recommended: 0,
   easyApply: 0,
+  hotDeadlines: 0,
   matches: 0,
   saved: 0,
   started: 0,
@@ -173,10 +174,17 @@ function withTabEnforcedMoreFilters(
   filters: MoreFiltersState,
   tab: ScholarshipListTabId
 ): MoreFiltersState {
-  if (tab !== 'easy-apply') return filters;
-  const next = cloneMoreFilters(filters);
-  next.includeEasyApply.add('easy_apply');
-  return next;
+  if (tab === 'easy-apply') {
+    const next = cloneMoreFilters(filters);
+    next.includeEasyApply.add('easy_apply');
+    return next;
+  }
+  if (tab === 'hot-deadlines') {
+    const next = cloneMoreFilters(filters);
+    next.deadlinePreset = 'any';
+    return next;
+  }
+  return filters;
 }
 
 function ScholarshipsPageInner({
@@ -231,7 +239,13 @@ function ScholarshipsPageInner({
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
   const isSubscriptionLocked = isAuthenticated && !hasSubscription;
   const LOCKED_TABS_FOR_UNSUBSCRIBED = useMemo(
-    () => new Set<ScholarshipListTabId>(['best-matches', 'recommended', 'easy-apply']),
+    () =>
+      new Set<ScholarshipListTabId>([
+        'best-matches',
+        'recommended',
+        'easy-apply',
+        'hot-deadlines'
+      ]),
     []
   );
 
@@ -395,6 +409,7 @@ function ScholarshipsPageInner({
     const badTab =
       tab === 'best-matches' ||
       tab === 'recommended' ||
+      tab === 'hot-deadlines' ||
       tab === 'saved' ||
       tab === 'ignored';
     const needDefaultHubTab = !tab;
@@ -921,6 +936,7 @@ function ScholarshipsPageInner({
   const viewSegment = useMemo<'best' | 'all' | 'easy'>(() => {
     if (!isAuthenticated) {
       if (activeTab === 'easy-apply') return 'easy';
+      if (activeTab === 'hot-deadlines') return 'easy';
       if (activeTab === 'matches') return 'all';
       if (activeTab === 'best-matches' || activeTab === 'recommended') {
         return 'best';
@@ -1095,6 +1111,8 @@ function ScholarshipsPageInner({
         return 'No recommendations in the current context. Adjust filters or open Matches for a broader list.';
       case 'easy-apply':
         return 'No easy-apply scholarships in this set. Try broadening categories or More filters.';
+      case 'hot-deadlines':
+        return 'No scholarships with deadlines in the next week in this set. Try Matches or broaden filters.';
       default:
         return 'No scholarships match your filters. Try adjusting search or filters.';
     }
@@ -1305,6 +1323,7 @@ function ScholarshipsPageInner({
                     showPersonalizedMatch={showPersonalizedMatchOnCards}
                     showCardActions={scholarshipTabShowsCardActions(activeTab)}
                     subscriptionLocked={isSubscriptionLocked}
+                    listingTab={activeTab}
                     onSubscriptionLockedCategoryClick={
                       isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
                     }

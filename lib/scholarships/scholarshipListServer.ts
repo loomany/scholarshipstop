@@ -778,6 +778,10 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
         ].join(',')
       );
     }
+    case 'hot-deadlines': {
+      const nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
+      return nq.in('deadline_bucket', ['lt_1d', 'd1_7']);
+    }
     default:
       return q;
   }
@@ -982,7 +986,8 @@ function buildListMetaCacheKey(
 
 /** Single catalog pipeline: no personalized SQL branch. */
 function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRequest {
-  return { ...req, listScope: 'catalog', personalizedProfile: undefined };
+  const n = normalizeTabScopedMoreFilters(req);
+  return { ...n, listScope: 'catalog', personalizedProfile: undefined };
 }
 
 /** Canonical pipeline is catalog SQL; keep tab selection intact. */
@@ -1299,6 +1304,27 @@ function easyApplyListCanonicalRequest(
   };
 }
 
+function hotDeadlinesListCanonicalRequest(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  const moreFilters = cloneMoreFilters(req.moreFilters);
+  moreFilters.deadlinePreset = 'any';
+  return {
+    ...req,
+    deadline: 'any',
+    moreFilters
+  };
+}
+
+/** Align `moreFilters` / URL deadline with tab-only SQL (easy-apply, hot-deadlines). */
+function normalizeTabScopedMoreFilters(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  if (req.tab === 'easy-apply') return easyApplyListCanonicalRequest(req);
+  if (req.tab === 'hot-deadlines') return hotDeadlinesListCanonicalRequest(req);
+  return req;
+}
+
 /**
  * Stable sidebar counts source of truth.
  * Intentionally decoupled from active list tab/page/sort/list total.
@@ -1312,6 +1338,7 @@ export async function fetchScholarshipSidebarCounts(
     'best-matches',
     'recommended',
     'easy-apply',
+    'hot-deadlines',
     'matches',
     'saved',
     'started',
@@ -1339,7 +1366,9 @@ export async function fetchScholarshipSidebarCounts(
               supabase,
               t === 'easy-apply'
                 ? easyApplyListCanonicalRequest(effectiveReq)
-                : effectiveReq,
+                : t === 'hot-deadlines'
+                  ? hotDeadlinesListCanonicalRequest(effectiveReq)
+                  : effectiveReq,
               t
             )
     }))
@@ -1348,6 +1377,7 @@ export async function fetchScholarshipSidebarCounts(
     bestMatches: 0,
     recommended: 0,
     easyApply: 0,
+    hotDeadlines: 0,
     matches: 0,
     saved: 0,
     started: 0,
@@ -1358,6 +1388,7 @@ export async function fetchScholarshipSidebarCounts(
     if (t === 'best-matches') sidebarCounts.bestMatches = n;
     if (t === 'recommended') sidebarCounts.recommended = n;
     if (t === 'easy-apply') sidebarCounts.easyApply = n;
+    if (t === 'hot-deadlines') sidebarCounts.hotDeadlines = n;
     if (t === 'matches') sidebarCounts.matches = n;
     if (t === 'saved') sidebarCounts.saved = n;
     if (t === 'started') sidebarCounts.started = n;

@@ -9,6 +9,7 @@ import {
   Heart,
   Layers,
   Lock,
+  Timer,
   Trophy,
   type LucideIcon
 } from 'lucide-react';
@@ -49,6 +50,7 @@ const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
   'best-matches',
   'recommended',
   'easy-apply',
+  'hot-deadlines',
   'saved',
   'ignored'
 ]);
@@ -57,7 +59,8 @@ const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
 const SUBSCRIPTION_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
   'best-matches',
   'recommended',
-  'easy-apply'
+  'easy-apply',
+  'hot-deadlines'
 ]);
 
 const STATIC_TOP_ROWS: StaticNavDef[] = [
@@ -79,6 +82,12 @@ const ACTION_NAV_DEFS: NavDef[] = [
     label: 'Easy apply',
     icon: Trophy,
     tooltip: 'Scholarships with lighter application effort.'
+  },
+  {
+    id: 'hot-deadlines',
+    label: 'Hot Deadlines',
+    icon: Timer,
+    tooltip: 'Deadlines in the next week — under 1 day or 1–7 days out.'
   },
   {
     id: 'matches',
@@ -164,6 +173,9 @@ export default function ScholarshipsSidebar({
         break;
       case 'easy-apply':
         n = counts.easyApply;
+        break;
+      case 'hot-deadlines':
+        n = counts.hotDeadlines;
         break;
       case 'saved':
         n = counts.saved;

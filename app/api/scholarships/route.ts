@@ -277,6 +277,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     req.tab === 'best-matches' ||
     req.tab === 'recommended' ||
     req.tab === 'easy-apply' ||
+    req.tab === 'hot-deadlines' ||
     req.saved.length > 0 ||
     req.ignored.length > 0 ||
     req.started.length > 0 ||

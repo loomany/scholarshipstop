@@ -228,5 +228,6 @@ export function buildScholarshipCategoryPageSearchParams(
 export function buildScholarshipTabHref(id: ScholarshipListTabId): string {
   if (id === 'best-matches') return '/scholarships?tab=best-matches';
   if (id === 'matches') return '/scholarships?scope=catalog&tab=matches';
+  if (id === 'hot-deadlines') return '/scholarships?tab=hot-deadlines';
   return `/scholarships?tab=${encodeURIComponent(id)}`;
 }

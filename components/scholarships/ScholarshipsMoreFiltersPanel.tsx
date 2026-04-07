@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { Lock, X } from 'lucide-react';
 
-import type { MoreFiltersState } from '@/app/scholarships/moreFilters';
+import type { DeadlinePreset, MoreFiltersState } from '@/app/scholarships/moreFilters';
 import {
   scholarshipGuestLockIconClass,
   scholarshipSeeResultsButtonClass
@@ -168,9 +168,14 @@ export default function ScholarshipsMoreFiltersPanel({
   const amountLocked = isAuthenticated && !hasSubscription;
   const eligibilityLocked = isAuthenticated && !hasSubscription;
   const applicantsLocked = isAuthenticated && !hasSubscription;
+  const deadlineShortRangeLocked = isAuthenticated && !hasSubscription;
   const SUBSCRIPTION_LOCKED_EASY_APPLY_IDS = new Set([
     'easy_apply',
     'quick_apply'
+  ]);
+  const SUBSCRIPTION_LOCKED_DEADLINE_PRESETS = new Set<DeadlinePreset>([
+    'lt1d',
+    'd1_7'
   ]);
 
   const setDeadline = (deadlinePreset: MoreFiltersState['deadlinePreset']) =>
@@ -241,7 +246,15 @@ export default function ScholarshipsMoreFiltersPanel({
 
         <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-28">
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Filter by time until deadline</h3>
+            <h3 className={sectionTitle}>
+              Filter by time until deadline
+              {deadlineShortRangeLocked ? (
+                <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+                  <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
+                  Locked
+                </span>
+              ) : null}
+            </h3>
             <ul className="mt-4 space-y-3">
               {(
                 [
@@ -251,20 +264,41 @@ export default function ScholarshipsMoreFiltersPanel({
                   ['w1_4', '1 - 4 weeks'],
                   ['gt4w', 'More than 4 weeks']
                 ] as const
-              ).map(([id, label]) => (
-                <li key={id}>
-                  <label className="flex cursor-pointer items-center gap-3">
-                    <input
-                      type="radio"
-                      name="deadline-preset"
-                      checked={value.deadlinePreset === id}
-                      onChange={() => setDeadline(id)}
-                      className="scholarship-deadline-radio h-4 w-4 shrink-0"
-                    />
-                    <span className="text-sm text-zinc-800">{label}</span>
-                  </label>
-                </li>
-              ))}
+              ).map(([id, label]) => {
+                const presetId = id as DeadlinePreset;
+                const optionLocked =
+                  deadlineShortRangeLocked &&
+                  SUBSCRIPTION_LOCKED_DEADLINE_PRESETS.has(presetId);
+                return (
+                  <li key={id}>
+                    <label className="flex cursor-pointer items-center gap-3">
+                      <input
+                        type="radio"
+                        name="deadline-preset"
+                        checked={value.deadlinePreset === id}
+                        onChange={() => {
+                          if (optionLocked) {
+                            onSubscriptionLockedAction?.();
+                            return;
+                          }
+                          setDeadline(presetId);
+                        }}
+                        className="scholarship-deadline-radio h-4 w-4 shrink-0"
+                      />
+                      <span className="inline-flex items-center gap-1.5 text-sm text-zinc-800">
+                        {label}
+                        {optionLocked ? (
+                          <Lock
+                            className={`h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
+                            strokeWidth={2}
+                            aria-hidden
+                          />
+                        ) : null}
+                      </span>
+                    </label>
+                  </li>
+                );
+              })}
             </ul>
           </section>
 

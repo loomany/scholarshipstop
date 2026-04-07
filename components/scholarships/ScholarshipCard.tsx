@@ -20,6 +20,7 @@ import {
   scholarshipCardChips
 } from '@/lib/scholarships/scholarshipCatalog';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
+import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 
 type ScholarshipCardProps = {
   scholarship: Scholarship;
@@ -41,6 +42,8 @@ type ScholarshipCardProps = {
   stackedListing?: boolean;
   /** Signed-in user without active subscription. */
   subscriptionLocked?: boolean;
+  /** Hub listing tab — used for Hot Deadlines lock affordance. */
+  listingTab?: ScholarshipListTabId;
   /** Open subscription modal when premium category chip is clicked. */
   onSubscriptionLockedCategoryClick?: (categoryId: string) => void;
 };
@@ -81,6 +84,7 @@ export default function ScholarshipCard({
   showCardActions = true,
   stackedListing = false,
   subscriptionLocked = false,
+  listingTab,
   onSubscriptionLockedCategoryClick
 }: ScholarshipCardProps) {
   const detailHref = scholarshipPublicPath(scholarship);
@@ -188,9 +192,14 @@ export default function ScholarshipCard({
     'quick_apply'
   ]);
   const easyApplyIds = getScholarshipCatalog(scholarship).easyApplyIds;
-  const showTopRightLockBadge =
+  const showHotDeadlinesLockBadge =
+    subscriptionLocked && listingTab === 'hot-deadlines';
+  const showEasyApplyLockBadge =
     subscriptionLocked &&
+    !showHotDeadlinesLockBadge &&
     easyApplyIds.some((id) => LOCKED_CARD_CATEGORY_IDS.has(id));
+  const showTopRightLockBadge =
+    showHotDeadlinesLockBadge || showEasyApplyLockBadge;
   const payoutLine = payoutMethodChipLabel(scholarship.payoutMethod);
 
   const hasApplicants =
@@ -287,7 +296,9 @@ export default function ScholarshipCard({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            onSubscriptionLockedCategoryClick?.('easy_apply');
+            onSubscriptionLockedCategoryClick?.(
+              showHotDeadlinesLockBadge ? 'hot_deadlines' : 'easy_apply'
+            );
           }}
           className="absolute right-4 top-4 z-[30] pointer-events-auto inline-flex h-[22px] w-[34px] items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm transition hover:bg-[#E6670C]"
           title="Start your free access to unlock this category"
