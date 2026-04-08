@@ -38,7 +38,17 @@ const SANITIZE_OPTIONS = {
     'td',
     'caption'
   ],
-  ALLOWED_ATTR: ['href', 'target', 'rel', 'colspan', 'rowspan'],
+  ALLOWED_ATTR: [
+    'href',
+    'target',
+    'rel',
+    'colspan',
+    'rowspan',
+    'class',
+    'style',
+    'title',
+    'aria-label'
+  ],
   ALLOW_DATA_ATTR: false
 };
 
