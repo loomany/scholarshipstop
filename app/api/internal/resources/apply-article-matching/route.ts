@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 import { runArticleScholarshipMatchingPipeline } from '@/lib/content-hub/articleScholarshipMatching';
+import { enqueueGoogleIndexingUrls, resourceIndexingUrl } from '@/lib/seo/googleIndexingQueue';
 import type { Database } from '@/types_db';
 
 export const dynamic = 'force-dynamic';
@@ -92,6 +93,14 @@ export async function POST(request: Request) {
 
     if (upErr) {
       return NextResponse.json({ error: upErr.message }, { status: 500 });
+    }
+
+    if (post.slug?.trim()) {
+      enqueueGoogleIndexingUrls({
+        kind: 'resource',
+        urls: [resourceIndexingUrl(post.slug.trim())],
+        source: 'internal:resources:apply-article-matching'
+      });
     }
 
     return NextResponse.json({

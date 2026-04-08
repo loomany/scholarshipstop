@@ -2,7 +2,6 @@ import 'server-only';
 
 import { cache } from 'react';
 
-import { enrichProviderData } from '@/lib/providers/enrichProviderData';
 import { PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE } from '@/lib/providers/providerProfilePagination';
 import type {
   ProviderFaqItem,
@@ -14,9 +13,8 @@ import {
   mapScholarshipRow,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
-import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
-import { createClient } from '@/utils/supabase/server';
+import { createPublicClient } from '@/utils/supabase/public';
 
 const UUID_PARAM_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -53,28 +51,26 @@ type ProviderScholarshipStatRow = {
   scholarship_count: number;
 };
 
-/** PostgREST view — typings omit `Views` in this repo's Supabase client; keep row shape explicit. */
 const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships';
 
-function pickDisplayName(names: (string | null | undefined)[], fallback: string): string {
-  const counts = new Map<string, number>();
-  for (const n of names) {
-    const t = n?.trim();
-    if (!t) continue;
-    counts.set(t, (counts.get(t) ?? 0) + 1);
-  }
-  let best = fallback;
-  let bestN = 0;
-  for (const [name, c] of counts) {
-    if (c > bestN) {
-      best = name;
-      bestN = c;
-    }
-  }
-  return best;
-}
-
 type ProviderRow = Database['public']['Tables']['providers']['Row'];
+
+export const resolveProviderProfileSlug = cache(
+  async (rawParam: string): Promise<string | null> => {
+    const param = decodeURIComponent(rawParam || '').trim();
+    if (!param) return null;
+    if (!UUID_PARAM_RE.test(param)) return param;
+
+    const supabase = createPublicClient();
+    const { data } = await supabase
+      .from('providers')
+      .select('slug')
+      .eq('id', param)
+      .maybeSingle();
+
+    return data?.slug?.trim() || null;
+  }
+);
 
 export async function loadProviderProfilePage(
   rawParam: string,
@@ -83,14 +79,13 @@ export async function loadProviderProfilePage(
   const param = decodeURIComponent(rawParam || '').trim();
   if (!param) return null;
 
-  const supabase = createClient();
-  const admin = createServiceRoleSupabaseClient();
+  const supabase = createPublicClient();
 
   const byUuid = UUID_PARAM_RE.test(param);
   let providerRow: ProviderRow | null = null;
 
-  if (byUuid && admin) {
-    const { data } = await admin
+  if (byUuid) {
+    const { data } = await supabase
       .from('providers')
       .select('*')
       .eq('id', param)
@@ -107,7 +102,7 @@ export async function loadProviderProfilePage(
     .eq('slug', slugForScholarships)
     .maybeSingle();
 
-  const statRow = statRowRaw as ProviderScholarshipStatRow | null;
+  const statRow = statRowRaw as unknown as ProviderScholarshipStatRow | null;
 
   if (statError || !statRow) return null;
 
@@ -124,73 +119,13 @@ export async function loadProviderProfilePage(
     providerRow = bySlug;
   }
 
-  if (!providerRow && admin) {
-    const { data: sample } = await admin
-      .from('scholarships')
-      .select('provider_name, provider_url')
-      .eq('provider_slug', slugForScholarships)
-      .eq('is_active', true)
-      .limit(80);
-
-    const displayName = pickDisplayName(
-      (sample ?? []).map((r) => r.provider_name),
-      fallbackName
-    );
-    const officialUrl =
-      (sample ?? []).map((r) => r.provider_url?.trim()).find(Boolean) ?? null;
-
-    const { data: inserted, error: insErr } = await admin
-      .from('providers')
-      .insert({
-        slug: slugForScholarships,
-        display_name: displayName,
-        official_url: officialUrl,
-        is_enriched: false,
-        ai_sources: [],
-        ai_faq: []
-      })
-      .select('*')
-      .single();
-
-    if (!insErr && inserted) providerRow = inserted;
-  }
-
-  let providerId: string | null = providerRow?.id ?? null;
-  let displayName = providerRow?.display_name ?? fallbackName;
-  let officialUrl = providerRow?.official_url ?? null;
-  let aiDescription = providerRow?.ai_description ?? null;
-  let aiSources = providerRow ? sourcesFromJson(providerRow.ai_sources) : [];
-  let aiFaq = providerRow ? faqFromJson(providerRow.ai_faq) : [];
-  let isEnriched = providerRow?.is_enriched ?? false;
-
-  if (providerId && admin && !isEnriched) {
-    const enriched = await enrichProviderData(displayName);
-    await admin
-      .from('providers')
-      .update({
-        ai_description: enriched.description,
-        ai_sources: enriched.sources,
-        ai_faq: enriched.faq,
-        state: enriched.state,
-        is_enriched: true,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', providerId);
-
-    const { data: refreshed } = await admin
-      .from('providers')
-      .select('*')
-      .eq('id', providerId)
-      .single();
-    if (refreshed) {
-      aiDescription = refreshed.ai_description;
-      aiSources = sourcesFromJson(refreshed.ai_sources);
-      aiFaq = faqFromJson(refreshed.ai_faq);
-      isEnriched = refreshed.is_enriched;
-      displayName = refreshed.display_name;
-      officialUrl = refreshed.official_url;
-    }
-  }
+  const providerId: string | null = providerRow?.id ?? null;
+  const displayName = providerRow?.display_name ?? fallbackName;
+  const officialUrl = providerRow?.official_url ?? null;
+  const aiDescription = providerRow?.ai_description ?? null;
+  const aiSources = providerRow ? sourcesFromJson(providerRow.ai_sources) : [];
+  const aiFaq = providerRow ? faqFromJson(providerRow.ai_faq) : [];
+  const isEnriched = providerRow?.is_enriched ?? false;
 
   const page = Math.max(1, Math.floor(scholarshipsPage) || 1);
   const pageSize = PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE;
@@ -218,7 +153,7 @@ export async function loadProviderProfilePage(
     .order('scholarship_count', { ascending: false })
     .limit(12);
 
-  const similarRows = (similarRowsRaw ?? []) as ProviderScholarshipStatRow[];
+  const similarRows = (similarRowsRaw ?? []) as unknown as ProviderScholarshipStatRow[];
 
   const similarProviders: SimilarProviderSummary[] = similarRows
     .filter((r) => r.slug && r.slug !== slugForScholarships)

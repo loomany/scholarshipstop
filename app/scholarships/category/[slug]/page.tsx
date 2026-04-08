@@ -11,14 +11,15 @@ import {
   evaluateCategorySeoListingThin,
   seoThinCanonicalHref
 } from '@/lib/scholarships/seoListingMetadataPolicy';
-import { createClient } from '@/utils/supabase/server';
 import {
   buildInitialListRequestKey,
   createInitialScholarshipsPayload,
   fetchInitialCategoryScholarshipsPayload
 } from '@/app/scholarships/scholarshipListServerPayload';
-import ScholarshipCategoryPageClient from '../ScholarshipCategoryPageClient';
-import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
+import ScholarshipCategoryPageAuthBridge from '../ScholarshipCategoryPageAuthBridge';
+import { createPublicClient } from '@/utils/supabase/public';
+
+export const revalidate = 300;
 
 type PageProps = { params: { slug: string } };
 
@@ -95,13 +96,7 @@ export async function generateMetadata({
 
 export default async function ScholarshipCategoryPage({ params }: PageProps) {
   const { canonicalSlug, pageTitle } = resolveCategorySlugParam(params.slug);
-  const supabase = createClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-  const hasSubscription = user?.id
-    ? await getUserSubscriptionStatus(supabase, user.id)
-    : false;
+  const supabase = createPublicClient();
   const initialListPayload = await fetchInitialCategoryScholarshipsPayload(
     supabase,
     canonicalSlug
@@ -144,11 +139,9 @@ export default async function ScholarshipCategoryPage({ params }: PageProps) {
           </section>
         }
       >
-        <ScholarshipCategoryPageClient
+        <ScholarshipCategoryPageAuthBridge
           categorySlug={canonicalSlug}
           pageTitle={pageTitle}
-          isAuthenticated={Boolean(user)}
-          hasSubscription={hasSubscription}
           initialPayload={createInitialScholarshipsPayload(
             buildInitialListRequestKey({
               kind: 'category',

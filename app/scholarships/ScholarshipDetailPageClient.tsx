@@ -490,10 +490,12 @@ type DetailLoadState = 'loading' | 'ok' | 'not_found' | 'error';
 export default function ScholarshipDetailPageClient({
   isAuthenticated = true,
   hasSubscription = false,
+  authResolved = true,
   initialScholarship = null
 }: {
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
+  authResolved?: boolean;
   initialScholarship?: Scholarship | null;
 } = {}) {
   const layoutInitialScholarship = useScholarshipDetailInitialData();
@@ -548,6 +550,12 @@ export default function ScholarshipDetailPageClient({
     setStartedIds(getStartedScholarshipIds());
     setSubmittedIds(getSubmittedScholarshipIds());
   }, []);
+  const easyApplyIds = scholarship ? getScholarshipCatalog(scholarship).easyApplyIds : [];
+  const isEasyApplySubscriptionLocked =
+    isAuthenticated &&
+    !hasSubscription &&
+    (easyApplyIds.includes('easy_apply') || easyApplyIds.includes('quick_apply'));
+  const hasDetailAccess = isAuthenticated && !isEasyApplySubscriptionLocked;
 
   useEffect(() => {
     syncIdsFromStorage();
@@ -574,7 +582,11 @@ export default function ScholarshipDetailPageClient({
     if (initialMatchesRoute) {
       setScholarship(serverScholarship);
       setDetailLoadState('ok');
-      return;
+      const needsHydratedPremiumFields =
+        Boolean(serverScholarship?.premiumFieldsRedacted) && hasDetailAccess;
+      if (!needsHydratedPremiumFields) {
+        return;
+      }
     }
 
     let cancelled = false;
@@ -613,7 +625,7 @@ export default function ScholarshipDetailPageClient({
     return () => {
       cancelled = true;
     };
-  }, [routeParam, serverScholarship]);
+  }, [routeParam, serverScholarship, hasDetailAccess]);
 
   useEffect(() => {
     if (!scholarship?.id) {
@@ -1052,13 +1064,9 @@ export default function ScholarshipDetailPageClient({
     hasImportantNotes ||
     showProviderSection ||
     showOverviewSection;
-  const easyApplyIds = getScholarshipCatalog(scholarship).easyApplyIds;
-  const isEasyApplySubscriptionLocked =
-    isAuthenticated &&
-    !hasSubscription &&
-    (easyApplyIds.includes('easy_apply') || easyApplyIds.includes('quick_apply'));
   const isApplySubscriptionLocked = isAuthenticated && !hasSubscription;
-  const hasDetailAccess = isAuthenticated && !isEasyApplySubscriptionLocked;
+  const showLockedDetailOverlay =
+    authResolved && !hasDetailAccess && hasLockedDetailStack;
   const openLockedAccessWall = isEasyApplySubscriptionLocked
     ? openSubscriptionOffer
     : openRegistrationWall;
@@ -1169,7 +1177,7 @@ export default function ScholarshipDetailPageClient({
         </div>
 
         <ScholarshipDetailGuestLockSection
-          locked={!hasDetailAccess && hasLockedDetailStack}
+          locked={showLockedDetailOverlay}
           onSignIn={openLockedAccessWall}
         >
         {panelPick.showQuickDecision ? (

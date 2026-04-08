@@ -23,6 +23,7 @@ import {
   type SeoTagTextRulesFile
 } from '../lib/scholarships/seoTags/deriveSeoTagsFromRow';
 import type { SeoCanonicalTag } from '../lib/scholarships/seoTags/vocabulary';
+import { enqueueScholarshipUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
 
 const ROOT = path.resolve(__dirname, '..');
@@ -296,11 +297,18 @@ async function main() {
     const BATCH = 40;
     let ok = 0;
     let fail = 0;
+    const updatedRows: Array<{ id: string; slug?: string | null }> = [];
     for (let i = 0; i < pendingUpdates.length; i += BATCH) {
       const chunk = pendingUpdates.slice(i, i + BATCH);
       const results = await Promise.all(
-        chunk.map(({ id, seo_tags }) =>
-          supabase.from('scholarships').update({ seo_tags }).eq('id', id)
+        chunk.map(({ id, slug, seo_tags }) =>
+          supabase
+            .from('scholarships')
+            .update({ seo_tags })
+            .eq('id', id)
+            .select('id, slug')
+            .maybeSingle()
+            .then((result) => ({ ...result, inputId: id, inputSlug: slug }))
         )
       );
       for (const r of results) {
@@ -309,10 +317,23 @@ async function main() {
           console.error('Update error:', r.error.message);
         } else {
           ok += 1;
+          updatedRows.push({
+            id: r.data?.id ?? r.inputId,
+            slug: r.data?.slug ?? r.inputSlug ?? null
+          });
         }
       }
     }
     console.log(`update calls succeeded: ${ok}, failed batches/calls: ${fail}`);
+    if (updatedRows.length > 0) {
+      const queue = enqueueScholarshipUrlsForScript(
+        updatedRows,
+        'script:backfill-scholarship-seo-tags'
+      );
+      console.log(
+        `google indexing queue: +${queue.enqueued} scholarship URL(s), total queued ${queue.total}`
+      );
+    }
     const verifyRow = pendingUpdates[0];
     if (verifyRow) {
       const { data, error } = await supabase

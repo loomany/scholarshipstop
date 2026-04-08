@@ -15,6 +15,7 @@ import {
   RESOURCES_SECTION_PATH,
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
+import { getURL } from '@/utils/helpers';
 import {
   splitForMidCtaInRemainder,
   splitForPrimaryCtaInsertion
@@ -24,7 +25,7 @@ import {
   fetchRelatedPublishedContentPosts
 } from '@/lib/content-hub/contentPostsServer';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 type PageProps = { params: { slug: string } };
 
@@ -63,9 +64,6 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     post.related_scholarships
   );
   const bodyHtml = post.body_html?.trim() ?? '';
-  console.log('[resources/article] body_html tail', bodyHtml.slice(-500));
-  const bodyMarkdownTail = (post as { body_markdown?: string | null }).body_markdown?.slice(-500) ?? '';
-  console.log('[resources/article] body_markdown tail', bodyMarkdownTail);
   const primarySplit = bodyHtml
     ? splitForPrimaryCtaInsertion(bodyHtml)
     : null;
@@ -77,6 +75,11 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   const related = await fetchRelatedPublishedContentPosts(post.slug, 3);
   const relatedWithSlug = related.filter((r) => r.slug?.trim());
   const articlePath = resourcesArticlePath(post.slug.trim());
+  const articleUrl = getURL(articlePath);
+  const articleDescription =
+    post.meta_description?.trim() ||
+    post.title?.trim() ||
+    'ScholarshipTop resource article';
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -101,12 +104,38 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
       }
     ]
   };
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    mainEntityOfPage: articleUrl,
+    headline: post.title?.trim() || 'Article',
+    description: articleDescription,
+    url: articleUrl,
+    datePublished: post.published_at || undefined,
+    dateModified: post.updated_at || post.published_at || undefined,
+    ...(post.cover_image_url?.trim()
+      ? { image: [post.cover_image_url.trim()] }
+      : {}),
+    author: {
+      '@type': 'Organization',
+      name: 'ScholarshipTop'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ScholarshipTop',
+      url: getURL()
+    }
+  };
 
   return (
     <div className="bg-white text-gray-900 antialiased">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       <article className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <p>

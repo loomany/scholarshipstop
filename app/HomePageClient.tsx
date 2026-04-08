@@ -16,6 +16,7 @@ import {
   Zap
 } from 'lucide-react';
 
+import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import ScholarshipPreviewList from '@/components/scholarships/ScholarshipPreviewList';
 
 /** Primary CTA — black solid, used for secondary sections */
@@ -42,14 +43,7 @@ const h2EasyApplySection =
 const ledeMuted =
   'text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed';
 
-export type HomePageClientProps = {
-  /** From server: guest → /onboarding?step=3, authed → /scholarships */
-  primaryCtaHref: string;
-};
-
-export default function HomePageClient({
-  primaryCtaHref
-}: HomePageClientProps) {
+export default function HomePageClient() {
   const painSectionRef = useRef<HTMLDivElement>(null);
   const [painSectionVisible, setPainSectionVisible] = useState(false);
   const worksSectionRef = useRef<HTMLDivElement>(null);
@@ -124,13 +118,12 @@ export default function HomePageClient({
               <p className="text-xs font-medium uppercase tracking-[0.12em] text-gray-400">
                 Quick start
               </p>
-              <Link
+              <HomePrimaryCtaClient
                 id="onboarding-cta"
-                href={primaryCtaHref}
                 className={`${heroPrimaryCtaClass} mt-5`}
               >
                 Find my matches →
-              </Link>
+              </HomePrimaryCtaClient>
             </div>
           </div>
         </div>
@@ -200,12 +193,11 @@ export default function HomePageClient({
             <p className="mt-9 text-center text-2xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-3xl lg:text-left">
               We make it simple.
             </p>
-            <Link
-              href={primaryCtaHref}
+            <HomePrimaryCtaClient
               className={`${primaryCtaClass} mt-9 w-full max-w-none sm:mt-10 sm:w-auto sm:max-w-lg`}
             >
               Get my matches →
-            </Link>
+            </HomePrimaryCtaClient>
           </div>
           <figure className="mx-auto w-full max-w-xl shrink-0 lg:mx-0 lg:max-w-[min(600px,50%)]">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-[0_28px_64px_-28px_rgba(15,23,42,0.3)] ring-1 ring-gray-200/80">
@@ -278,12 +270,11 @@ export default function HomePageClient({
                 </li>
               </ul>
               <div className="mt-12 sm:mt-14">
-                <Link
-                  href={primaryCtaHref}
+                <HomePrimaryCtaClient
                   className={`${primaryCtaClass} w-full max-w-none sm:w-auto sm:max-w-lg`}
                 >
                   Get started →
-                </Link>
+                </HomePrimaryCtaClient>
               </div>
             </div>
           </div>

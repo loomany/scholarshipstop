@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import { enrichProviderData } from '@/lib/providers/enrichProviderDataCore';
 import { isProvidersBulkEnrichUiEnabled } from '@/lib/providers/providerHubServer';
+import { enqueueGoogleIndexingUrls, providerIndexingUrl } from '@/lib/seo/googleIndexingQueue';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 
 export type BulkEnrichResult =
@@ -42,6 +43,11 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
   for (const row of rows) {
     const name = row.display_name?.trim();
     if (!name) {
+      const { data: providerRow } = await admin
+        .from('providers')
+        .select('slug')
+        .eq('id', row.id)
+        .maybeSingle();
       await admin
         .from('providers')
         .update({
@@ -49,6 +55,13 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
           updated_at: new Date().toISOString()
         })
         .eq('id', row.id);
+      if (providerRow?.slug?.trim()) {
+        enqueueGoogleIndexingUrls({
+          kind: 'provider',
+          urls: [providerIndexingUrl(providerRow.slug.trim())],
+          source: 'server-action:providers:bulk-enrich'
+        });
+      }
       processed += 1;
       continue;
     }
@@ -65,6 +78,18 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
         updated_at: new Date().toISOString()
       })
       .eq('id', row.id);
+    const { data: providerRow } = await admin
+      .from('providers')
+      .select('slug')
+      .eq('id', row.id)
+      .maybeSingle();
+    if (providerRow?.slug?.trim()) {
+      enqueueGoogleIndexingUrls({
+        kind: 'provider',
+        urls: [providerIndexingUrl(providerRow.slug.trim())],
+        source: 'server-action:providers:bulk-enrich'
+      });
+    }
     processed += 1;
   }
 

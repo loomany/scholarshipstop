@@ -45,8 +45,9 @@ import {
 import { filterIdsByIgnored } from '@/lib/scholarships/scholarshipMatchIndex';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import type { createClient } from '@/utils/supabase/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-type ServerSupabaseClient = ReturnType<typeof createClient>;
+type ServerSupabaseClient = SupabaseClient<Database>;
 
 export type ScholarshipListScope = 'personalized' | 'catalog';
 
@@ -1053,7 +1054,7 @@ async function fetchSimilarListFillerScholarships(
   const windowSize = Math.min(160, Math.max(need * 8, 32));
   const { data, error } = await q.range(0, windowSize - 1);
   if (error) throw new Error(error.message);
-  const rows = (data ?? []) as ScholarshipRow[];
+  const rows = (data ?? []) as unknown as ScholarshipRow[];
   const mapped = rows.map((r) => mapScholarshipRow(r));
   const out: Scholarship[] = [];
   for (const s of mapped) {
@@ -1173,7 +1174,7 @@ export async function executeScholarshipListQuery(
         limit: req.limit
       };
     }
-    const rows = (data ?? []) as ScholarshipRow[];
+    const rows = (data ?? []) as unknown as ScholarshipRow[];
     const fromCategory = rows.map((r) => mapScholarshipRow(r));
     const scholarships = await finalizeSimilarScholarshipsList(
       supabase,
@@ -1223,7 +1224,7 @@ export async function executeScholarshipListQuery(
   const sqlTotalBeforePostProcessing = rawTotal;
 
   let total = rawTotal;
-  let rows = (data ?? []) as ScholarshipRow[];
+  let rows = (data ?? []) as unknown as ScholarshipRow[];
 
   /** `page` past last page: empty `data` but `count` &gt; 0 — listing UI showed no cards. */
   const maxPage = Math.max(1, Math.ceil(total / req.limit) || 1);
@@ -1233,7 +1234,7 @@ export async function executeScholarshipListQuery(
     to = from + req.limit - 1;
     const r2 = await buildListPageQuery(from, to);
     if (r2.error) throw new Error(r2.error.message);
-    rows = (r2.data ?? []) as ScholarshipRow[];
+    rows = (r2.data ?? []) as unknown as ScholarshipRow[];
   }
 
   let meta: ScholarshipListMeta | undefined;

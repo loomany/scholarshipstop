@@ -21,6 +21,7 @@ import path from 'path';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 import { runArticleScholarshipMatchingPipeline } from '../lib/content-hub/articleScholarshipMatching/runArticleScholarshipMatchingCore';
+import { enqueueResourceUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
 
 const BATCH = 100;
@@ -156,6 +157,19 @@ async function processPost(
         .eq('id', post.id);
 
       if (upErr) throw new Error(upErr.message);
+      if (post.slug?.trim()) {
+        const queue = enqueueResourceUrlsForScript(
+          [post.slug.trim()],
+          'script:reprocess-content-posts'
+        );
+        console.log(
+          JSON.stringify({
+            slug,
+            indexingQueued: queue.enqueued,
+            indexingQueueTotal: queue.total
+          })
+        );
+      }
     }
 
     console.log(

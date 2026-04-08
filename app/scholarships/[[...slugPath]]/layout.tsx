@@ -23,7 +23,10 @@ import {
   scholarshipPublicPath
 } from '@/app/scholarships/scholarshipsData';
 import { ScholarshipDetailInitialDataProvider } from '@/app/scholarships/ScholarshipDetailInitialDataContext';
-import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
+import {
+  getScholarshipDetailServer,
+  redactPremiumScholarshipFields
+} from '@/lib/scholarships/scholarshipDetailServer';
 import { resolveScholarshipCategorySlug } from '@/lib/scholarships/similarScholarships';
 
 type LayoutProps = {
@@ -93,6 +96,31 @@ function payoutMethodLabel(method: string | null | undefined): string | null {
     not_stated: 'Not stated on the listing'
   };
   return map[m] ?? null;
+}
+
+function scholarshipSchemaDescription(s: Scholarship): string | undefined {
+  const raw =
+    s.seoOverview?.trim() ||
+    s.summaryLong?.trim() ||
+    s.summaryShort?.trim() ||
+    s.description?.trim();
+  if (!raw) return undefined;
+  return raw.length > 2000 ? `${raw.slice(0, 1997)}…` : raw;
+}
+
+function scholarshipDeadlineIso(s: Scholarship): string | null {
+  const iso = s.deadlineAt?.trim();
+  if (iso) {
+    const parsed = new Date(iso);
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.toISOString();
+    }
+  }
+  const raw = s.deadline?.trim();
+  if (!raw || raw === '—') return null;
+  const parsedMs = Date.parse(raw);
+  if (Number.isNaN(parsedMs)) return null;
+  return new Date(parsedMs).toISOString();
 }
 
 function legacyFaqItems(s: Scholarship): { question: string; answer: string }[] {
@@ -182,23 +210,24 @@ function jsonLdDocument(s: Scholarship) {
   const path = scholarshipPublicPath(s);
   const faqs = faqItems(s);
   const graph: Record<string, unknown>[] = [];
+  const funderId = s.provider?.trim() ? `${path}#funder` : null;
+  const grantId = `${path}#grant`;
+  const scholarshipDescription = scholarshipSchemaDescription(s);
 
   const grant: Record<string, unknown> = {
+    '@id': grantId,
     '@type': 'Grant',
     name: s.title,
-    description:
-      s.seoOverview?.trim() ||
-      s.summaryLong?.trim() ||
-      s.summaryShort?.trim() ||
-      s.description?.trim().slice(0, 2000) ||
-      undefined,
+    description: scholarshipDescription,
     url: path
   };
-  if (s.provider?.trim()) {
-    grant.funder = {
+  if (funderId) {
+    graph.push({
+      '@id': funderId,
       '@type': 'Organization',
-      name: s.provider.trim()
-    };
+      name: s.provider!.trim()
+    });
+    grant.funder = { '@id': funderId };
   }
   if (
     s.awardAmountNumericSort != null &&
@@ -212,6 +241,30 @@ function jsonLdDocument(s: Scholarship) {
     };
   }
   graph.push(grant);
+
+  const deadlineIso = scholarshipDeadlineIso(s);
+  if (deadlineIso) {
+    const applicationEvent: Record<string, unknown> = {
+      '@type': 'Event',
+      '@id': `${path}#application-deadline`,
+      name: `Application deadline for ${s.title}`,
+      description:
+        scholarshipDescription ||
+        `Application deadline information for ${s.title}.`,
+      startDate: deadlineIso,
+      endDate: deadlineIso,
+      url: path,
+      about: { '@id': grantId },
+      location: {
+        '@type': 'VirtualLocation',
+        url: path
+      }
+    };
+    if (funderId) {
+      applicationEvent.organizer = { '@id': funderId };
+    }
+    graph.push(applicationEvent);
+  }
 
   const categorySlug = resolveScholarshipCategorySlug(s);
   const crumbItems: { name: string; item: string }[] = [
@@ -575,7 +628,9 @@ export default async function ScholarshipsSlugPathLayout({
   const json = JSON.stringify(jsonLdDocument(record));
 
   return (
-    <ScholarshipDetailInitialDataProvider value={record}>
+    <ScholarshipDetailInitialDataProvider
+      value={redactPremiumScholarshipFields(record)}
+    >
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger

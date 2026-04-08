@@ -32,6 +32,7 @@ import {
   mapScholarshipRow,
   type ScholarshipRow
 } from '../lib/scholarships/supabase';
+import { enqueueScholarshipUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
 
 const ROOT = path.resolve(__dirname, '..');
@@ -274,13 +275,20 @@ async function main() {
   const BATCH = 40;
   let ok = 0;
   let fail = 0;
+  const updatedRows: Array<{ id: string; slug?: string | null }> = [];
 
   console.log(`\n--- applying ${pending.length} updates ---`);
   for (let i = 0; i < pending.length; i += BATCH) {
     const chunk = pending.slice(i, i + BATCH);
     const results = await Promise.all(
-      chunk.map(({ id, state_codes }) =>
-        supabase.from('scholarships').update({ state_codes }).eq('id', id)
+      chunk.map(({ id, slug, state_codes }) =>
+        supabase
+          .from('scholarships')
+          .update({ state_codes })
+          .eq('id', id)
+          .select('id, slug')
+          .maybeSingle()
+          .then((result) => ({ ...result, inputId: id, inputSlug: slug }))
       )
     );
     for (const r of results) {
@@ -289,10 +297,23 @@ async function main() {
         console.error('Update error:', r.error.message);
       } else {
         ok += 1;
+        updatedRows.push({
+          id: r.data?.id ?? r.inputId,
+          slug: r.data?.slug ?? r.inputSlug ?? null
+        });
       }
     }
   }
   console.log(`update calls: ${ok} ok, ${fail} failed`);
+  if (updatedRows.length > 0) {
+    const queue = enqueueScholarshipUrlsForScript(
+      updatedRows,
+      'script:backfill-state-codes'
+    );
+    console.log(
+      `google indexing queue: +${queue.enqueued} scholarship URL(s), total queued ${queue.total}`
+    );
+  }
 }
 
 main().catch((e) => {

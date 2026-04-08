@@ -9,6 +9,7 @@ import { buildScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import type { ScholarshipDbCatalogFields } from '@/lib/scholarships/scholarshipCatalogTypes';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/server';
+import { createPublicClient } from '@/utils/supabase/public';
 
 export type ScholarshipRow = Database['public']['Tables']['scholarships']['Row'];
 export type ScholarshipMatchScoreRow = Pick<
@@ -577,7 +578,7 @@ export async function fetchActiveScholarshipsForScript(): Promise<Scholarship[]>
 export async function fetchScholarshipById(
   id: string
 ): Promise<Scholarship | null> {
-  const supabase = createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('scholarships')
     .select(DETAIL_SELECT)
@@ -586,13 +587,13 @@ export async function fetchScholarshipById(
 
   if (error) throw new Error(error.message);
   if (!data) return null;
-  return mapScholarshipRow(data as ScholarshipRow);
+  return mapScholarshipRow(data as unknown as ScholarshipRow);
 }
 
 export async function fetchScholarshipBySlug(
   slug: string
 ): Promise<Scholarship | null> {
-  const supabase = createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from('scholarships')
     .select(DETAIL_SELECT)
@@ -601,7 +602,7 @@ export async function fetchScholarshipBySlug(
 
   if (error) throw new Error(error.message);
   if (!data) return null;
-  return mapScholarshipRow(data as ScholarshipRow);
+  return mapScholarshipRow(data as unknown as ScholarshipRow);
 }
 
 export async function fetchScholarshipBySlugOrId(

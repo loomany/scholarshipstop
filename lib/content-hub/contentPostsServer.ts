@@ -3,7 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 
 import type { Database } from '@/types_db';
-import { createClient } from '@/utils/supabase/server';
+import { createPublicClient } from '@/utils/supabase/public';
 
 export type ContentPostRow = Database['public']['Tables']['content_posts']['Row'];
 
@@ -16,7 +16,7 @@ const publishedWithSlugSelect =
   'id, title, slug, cover_image_url, meta_description, published_at' as const;
 
 function publishedPostsWithSlugQuery() {
-  const supabase = createClient();
+  const supabase = createPublicClient();
   return supabase
     .from('content_posts')
     .select(publishedWithSlugSelect)
@@ -27,7 +27,7 @@ function publishedPostsWithSlugQuery() {
 
 /** Total published posts that have a non-empty slug (listable on `/resources`). */
 export async function countPublishedContentPostsWithSlug(): Promise<number> {
-  const supabase = createClient();
+  const supabase = createPublicClient();
   const { count, error } = await supabase
     .from('content_posts')
     .select('id', { count: 'exact', head: true })
@@ -92,7 +92,7 @@ export const fetchPublishedContentPostBySlug = cache(
     const raw = slug.trim();
     if (!raw) return null;
 
-    const supabase = createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('content_posts')
       .select('*')
@@ -110,7 +110,7 @@ export async function fetchRelatedPublishedContentPosts(
   limit = 3
 ): Promise<ContentPostListFields[]> {
   const raw = excludeSlug.trim();
-  const supabase = createClient();
+  const supabase = createPublicClient();
   let q = supabase
     .from('content_posts')
     .select(

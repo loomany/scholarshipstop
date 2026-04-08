@@ -1,23 +1,25 @@
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { Check, ExternalLink, Info } from 'lucide-react';
 import type { Metadata } from 'next';
 
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import MobileSplitHeading from '@/components/ui/MobileSplitHeading';
+import ProviderProfilePageAuthBridge from '@/app/providers/ProviderProfilePageAuthBridge';
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
-import { ProviderProfileScholarshipsList } from '@/components/providers/ProviderProfileScholarshipsList';
 import { ProviderProfileScholarshipsScroll } from '@/components/providers/ProviderProfileScholarshipsScroll';
-import { getCachedProviderProfilePage } from '@/lib/providers/providerProfileServer';
+import {
+  getCachedProviderProfilePage,
+  resolveProviderProfileSlug
+} from '@/lib/providers/providerProfileServer';
+import { getURL } from '@/utils/helpers';
 import {
   buildProviderProfileScholarshipsHref,
   parseProviderProfilePageParam,
   PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE
 } from '@/lib/providers/providerProfilePagination';
-import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
-import { createClient } from '@/utils/supabase/server';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 function normalizeAiSourceHref(url: string): string {
   const trimmed = url.trim();
@@ -44,7 +46,8 @@ type PageProps = {
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const data = await getCachedProviderProfilePage(params.id, 1);
+  const slug = await resolveProviderProfileSlug(params.id);
+  const data = slug ? await getCachedProviderProfilePage(slug, 1) : null;
   if (!data) {
     return { title: 'Provider | ScholarshipTop' };
   }
@@ -59,7 +62,13 @@ export default async function ProviderProfilePage({
   searchParams
 }: PageProps) {
   const currentPage = parseProviderProfilePageParam(searchParams?.page);
-  const data = await getCachedProviderProfilePage(params.id, currentPage);
+  const slug = await resolveProviderProfileSlug(params.id);
+  if (!slug) notFound();
+  if (slug !== decodeURIComponent(params.id).trim()) {
+    permanentRedirect(buildProviderProfileScholarshipsHref(slug, currentPage));
+  }
+
+  const data = await getCachedProviderProfilePage(slug, currentPage);
   if (!data) notFound();
 
   const totalPages =
@@ -70,16 +79,8 @@ export default async function ProviderProfilePage({
         );
 
   if (data.totalScholarshipCount > 0 && currentPage > totalPages) {
-    redirect(buildProviderProfileScholarshipsHref(params.id, totalPages));
+    redirect(buildProviderProfileScholarshipsHref(slug, totalPages));
   }
-
-  const supabase = createClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-  const hasSubscription = user?.id
-    ? await getUserSubscriptionStatus(supabase, user.id)
-    : false;
 
   const showingFrom =
     data.totalScholarshipCount === 0
@@ -100,9 +101,26 @@ export default async function ProviderProfilePage({
       scope: 'catalog',
       q: data.displayName
     }).toString();
+  const providerPath = `/providers/${encodeURIComponent(data.slug)}`;
+  const providerUrl = getURL(providerPath);
+  const providerSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: data.displayName,
+    url: data.officialUrl?.trim() || providerUrl,
+    mainEntityOfPage: providerUrl,
+    description:
+      data.aiDescription?.trim() ||
+      `Scholarship provider profile for ${data.displayName}.`,
+    ...(data.officialUrl?.trim() ? { sameAs: [data.officialUrl.trim()] } : {})
+  };
 
   return (
     <div className="min-h-screen bg-[#f9fafb] pb-16 pt-8 sm:pt-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(providerSchema) }}
+      />
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="rounded-2xl border border-gray-100 bg-white px-6 py-8 shadow-sm sm:px-10 sm:py-10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -229,16 +247,12 @@ export default async function ProviderProfilePage({
                 {data.totalScholarshipCount.toLocaleString()} scholarships
               </p>
               <div className="mt-6 flex w-full min-w-0 flex-col gap-4">
-                <ProviderProfileScholarshipsList
-                  scholarships={data.scholarships}
-                  isAuthenticated={Boolean(user)}
-                  hasSubscription={hasSubscription}
-                />
+                <ProviderProfilePageAuthBridge scholarships={data.scholarships} />
               </div>
               <ResourcesPagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                buildHref={(p) => buildProviderProfileScholarshipsHref(params.id, p)}
+                buildHref={(p) => buildProviderProfileScholarshipsHref(slug, p)}
                 linkScroll={false}
                 navClassName="mt-4 flex flex-col items-center gap-2 sm:mt-12 sm:gap-3"
               />

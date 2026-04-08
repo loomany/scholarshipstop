@@ -2,9 +2,10 @@ import { Suspense } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 
-import { createClient } from '@/utils/supabase/server';
 import ScholarshipDetailPageClient from '@/app/scholarships/ScholarshipDetailPageClient';
+import ScholarshipDetailPageAuthBridge from '@/app/scholarships/ScholarshipDetailPageAuthBridge';
 import ScholarshipsHubPageClient from '@/app/scholarships/ScholarshipsHubPageClient';
+import ScholarshipsHubPageAuthBridge from '@/app/scholarships/ScholarshipsHubPageAuthBridge';
 import {
   SeoScholarshipHero,
   SeoScholarshipPostListingSeo
@@ -23,10 +24,15 @@ import {
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
-import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
+import {
+  getScholarshipDetailServer,
+  redactPremiumScholarshipFields
+} from '@/lib/scholarships/scholarshipDetailServer';
 import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
-import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
+import { createPublicClient } from '@/utils/supabase/public';
+
+export const revalidate = 300;
 
 type PageProps = { params: { slugPath?: string[] } };
 
@@ -116,28 +122,11 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
   );
 
   if (segments.length === 0) {
-    const supabase = createClient();
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-    const profile = user?.id
-      ? (
-          await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .maybeSingle()
-        ).data
-      : null;
-    const hasSubscription = user?.id
-      ? await getUserSubscriptionStatus(supabase, user.id)
-      : false;
+    const supabase = createPublicClient();
     const initialListPayload =
-      await fetchInitialHubScholarshipsPayload(supabase, profile);
+      await fetchInitialHubScholarshipsPayload(supabase, null);
     return (
-      <ScholarshipsHubPageClient
-        isAuthenticated={Boolean(user)}
-        hasSubscription={hasSubscription}
+      <ScholarshipsHubPageAuthBridge
         initialPayload={createInitialScholarshipsPayload(
           buildInitialListRequestKey({
             kind: 'hub',
@@ -151,13 +140,6 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
   }
 
   if (segments.length === 1 && isScholarshipDetailUuidParam(segments[0]!)) {
-    const supabase = createClient();
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-    const hasSubscription = user?.id
-      ? await getUserSubscriptionStatus(supabase, user.id)
-      : false;
     const scholarship = await getScholarshipDetailServer(segments[0]!);
     if (!scholarship) {
       notFound();
@@ -172,10 +154,8 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
           </section>
         }
       >
-          <ScholarshipDetailPageClient
-            isAuthenticated={Boolean(user)}
-            hasSubscription={hasSubscription}
-            initialScholarship={scholarship}
+          <ScholarshipDetailPageAuthBridge
+            initialScholarship={redactPremiumScholarshipFields(scholarship)}
           />
         </Suspense>
       </>
@@ -196,13 +176,6 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
   }
 
   if (resolved.kind === 'scholarship_detail') {
-    const supabase = createClient();
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-    const hasSubscription = user?.id
-      ? await getUserSubscriptionStatus(supabase, user.id)
-      : false;
     const scholarship =
       segments.length === 1
         ? await getScholarshipDetailServer(segments[0]!)
@@ -220,10 +193,8 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
           </section>
         }
       >
-          <ScholarshipDetailPageClient
-            isAuthenticated={Boolean(user)}
-            hasSubscription={hasSubscription}
-            initialScholarship={scholarship}
+          <ScholarshipDetailPageAuthBridge
+            initialScholarship={redactPremiumScholarshipFields(scholarship)}
           />
         </Suspense>
       </>
@@ -234,15 +205,9 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     if (shouldBlockScholarshipListingForDrip(resolved.slug)) {
       notFound();
     }
-    const supabase = createClient();
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
+    const supabase = createPublicClient();
     const longTail = getLongTailPreset(resolved.slug);
     if (!longTail) notFound();
-    const hasSubscription = user?.id
-      ? await getUserSubscriptionStatus(supabase, user.id)
-      : false;
     const { result: initialListPayload, routeScope } =
       await fetchInitialLongTailScholarshipsPayload(supabase, {
         type: 'legacy',
@@ -280,9 +245,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
           </section>
         }
       >
-        <ScholarshipsHubPageClient
-          isAuthenticated={Boolean(user)}
-          hasSubscription={hasSubscription}
+        <ScholarshipsHubPageAuthBridge
           initialPayload={createInitialScholarshipsPayload(
             buildInitialListRequestKey({
               kind: 'long_tail',
@@ -292,6 +255,8 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
             initialListPayload
           )}
           routeScope={routeScope}
+          leadContent={null}
+          postListingContent={null}
         />
       </Suspense>
     );
@@ -301,10 +266,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
     if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
       notFound();
     }
-    const supabase = createClient();
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
+    const supabase = createPublicClient();
     const { entry, canonicalPath } = resolved;
     const { result: initialListPayload, routeScope } =
       await fetchInitialLongTailScholarshipsPayload(supabase, {
@@ -312,9 +274,6 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
         canonicalPath,
         entry
       });
-    const hasSubscription = user?.id
-      ? await getUserSubscriptionStatus(supabase, user.id)
-      : false;
 
     const seo = readScholarshipSeoContent(canonicalPath);
     const pageTitle =
@@ -359,9 +318,7 @@ export default async function ScholarshipsCatchAllPage({ params }: PageProps) {
           </section>
         }
       >
-          <ScholarshipsHubPageClient
-            isAuthenticated={Boolean(user)}
-            hasSubscription={hasSubscription}
+          <ScholarshipsHubPageAuthBridge
             initialPayload={createInitialScholarshipsPayload(
               buildInitialListRequestKey({
                 kind: 'long_tail',

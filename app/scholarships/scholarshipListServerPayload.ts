@@ -23,8 +23,10 @@ import {
   moreFiltersToJson,
   type MoreFiltersJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '@/types_db';
 
-type ServerSupabaseClient = ReturnType<typeof createClient>;
+type ServerSupabaseClient = SupabaseClient<Database>;
 
 /**
  * Hub `/scholarships` first paint: same catalog pipeline for signed-in and anonymous users.

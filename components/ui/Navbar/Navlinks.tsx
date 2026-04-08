@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import type { User } from '@supabase/supabase-js';
+import { usePathname } from 'next/navigation';
 import {
   useCallback,
   useEffect,
@@ -17,16 +16,10 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import Logo from '@/components/icons/Logo';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import {
-  accountNavbarLabel,
-  accountNavbarLabelMobile,
-  profileDisplayNameFromRow,
-  profileFirstNameFromRow
-} from '@/lib/nav/accountDisplayName';
-import {
   RESOURCES_SECTION_LABEL,
   RESOURCES_SECTION_PATH
 } from '@/lib/content-hub/resourcesSection';
-import { createClient } from '@/utils/supabase/client';
+import NavbarUserSlot from './NavbarUserSlot';
 import s from './Navbar.module.css';
 
 const ABOUT_SUBLINKS = [
@@ -40,114 +33,11 @@ function sublinkActive(href: string, pathname: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-interface NavlinksProps {
-  user: User | null;
-  /** From `public.profiles` first/last (server). */
-  profileDisplayName: string | null;
-  /** From `public.profiles.first_name` (server). */
-  profileFirstName: string | null;
-}
-
-export default function Navlinks({
-  user: serverUser,
-  profileDisplayName: serverProfileDisplayName,
-  profileFirstName: serverProfileFirstName
-}: NavlinksProps) {
+export default function Navlinks() {
   const pathname = usePathname() ?? '';
-  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
-  /** `undefined` = browser session not read yet (keep SSR `serverUser` for hydration). */
-  const [clientUser, setClientUser] = useState<User | null | undefined>(undefined);
   const menuId = useId();
-
-  const user = clientUser === undefined ? serverUser : clientUser;
-
-  /** `undefined` = not loaded yet; use server name until then. */
-  const [clientProfileDisplayName, setClientProfileDisplayName] = useState<
-    string | null | undefined
-  >(undefined);
-  const [clientProfileFirstName, setClientProfileFirstName] = useState<
-    string | null | undefined
-  >(undefined);
-
-  useEffect(() => {
-    const supabase = createClient();
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setClientUser(session?.user ?? null);
-    });
-    return () => {
-      sub.subscription.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    const supabase = createClient();
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      setClientUser(session?.user ?? null);
-    });
-  }, [pathname, serverUser?.id]);
-
-  useEffect(() => {
-    const uid = user?.id;
-    if (!uid) {
-      setClientProfileDisplayName(undefined);
-      setClientProfileFirstName(undefined);
-      return;
-    }
-    let cancelled = false;
-    const supabase = createClient();
-    void supabase
-      .from('profiles')
-      .select('first_name,last_name')
-      .eq('id', uid)
-      .maybeSingle()
-      .then(({ data, error }) => {
-        if (cancelled || error) return;
-        setClientProfileDisplayName(profileDisplayNameFromRow(data));
-        setClientProfileFirstName(profileFirstNameFromRow(data));
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [user?.id, serverProfileDisplayName, pathname]);
-
-  const accountLabel = useMemo(() => {
-    if (!user) return '';
-    const fromProfile =
-      clientProfileDisplayName === undefined
-        ? serverProfileDisplayName
-        : clientProfileDisplayName;
-    return accountNavbarLabel(fromProfile, user);
-  }, [clientProfileDisplayName, serverProfileDisplayName, user]);
-
-  const accountLabelMobile = useMemo(() => {
-    if (!user) return '';
-    const firstName =
-      clientProfileFirstName === undefined
-        ? serverProfileFirstName
-        : clientProfileFirstName;
-    const fromProfile =
-      clientProfileDisplayName === undefined
-        ? serverProfileDisplayName
-        : clientProfileDisplayName;
-    return accountNavbarLabelMobile(firstName, fromProfile, user);
-  }, [
-    clientProfileFirstName,
-    clientProfileDisplayName,
-    serverProfileDisplayName,
-    serverProfileFirstName,
-    user
-  ]);
-
-  const signOut = useCallback(async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    setClientUser(null);
-    setClientProfileDisplayName(undefined);
-    setClientProfileFirstName(undefined);
-    router.refresh();
-  }, [router]);
 
   const aboutSectionActive = useMemo(() => {
     if (pathname === '/about' || pathname.startsWith('/about/')) return true;
@@ -169,16 +59,6 @@ export default function Navlinks({
 
   const providersActive = useMemo(
     () => pathname === '/providers' || pathname.startsWith('/providers/'),
-    [pathname]
-  );
-
-  const signInActive = useMemo(
-    () => pathname === '/signin' || pathname.startsWith('/signin/'),
-    [pathname]
-  );
-
-  const accountActive = useMemo(
-    () => pathname === '/account' || pathname.startsWith('/account/'),
     [pathname]
   );
 
@@ -307,32 +187,7 @@ export default function Navlinks({
           </nav>
         </div>
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3">
-          {user ? (
-            <>
-              <Link
-                href="/account"
-                className={clsx(nav.dark, nav.darkAccount, accountActive && nav.darkActive)}
-                title={accountLabel}
-              >
-                <span className="lg:hidden">{accountLabelMobile}</span>
-                <span className="hidden lg:inline">{accountLabel}</span>
-              </Link>
-              <button
-                type="button"
-                className={clsx(nav.dark, nav.darkAsButton, 'hidden lg:inline-flex')}
-                onClick={() => void signOut()}
-              >
-                Sign out
-              </button>
-            </>
-          ) : (
-            <Link
-              href="/signin"
-              className={clsx(nav.dark, signInActive && nav.darkActive)}
-            >
-              Sign In
-            </Link>
-          )}
+          <NavbarUserSlot pathname={pathname} variant="header" />
         </div>
       </div>
 
@@ -465,31 +320,11 @@ export default function Navlinks({
               >
                 {RESOURCES_SECTION_LABEL}
               </Link>
-              {user ? (
-                <>
-                  <div className="my-2 border-t border-white/15" role="separator" />
-                  <Link
-                    href="/account"
-                    className={clsx(
-                      nav.darkDrawer,
-                      accountActive && nav.darkDrawerActive
-                    )}
-                    onClick={closeMenu}
-                  >
-                    Account
-                  </Link>
-                  <button
-                    type="button"
-                    className={clsx(nav.darkDrawer, nav.darkAsButton, 'w-full text-left')}
-                    onClick={() => {
-                      void signOut();
-                      closeMenu();
-                    }}
-                  >
-                    Sign out
-                  </button>
-                </>
-              ) : null}
+              <NavbarUserSlot
+                pathname={pathname}
+                variant="drawer"
+                onNavigate={closeMenu}
+              />
             </nav>
           </div>
         </>

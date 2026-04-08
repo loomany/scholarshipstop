@@ -3,6 +3,7 @@ import type { ScholarshipCatalogView } from '@/lib/scholarships/scholarshipCatal
 export type ScholarshipSeoFaqItem = { question: string; answer: string };
 
 export type Scholarship = {
+  premiumFieldsRedacted?: boolean;
   seoTags?: string[];
   id: string;
   title: string;

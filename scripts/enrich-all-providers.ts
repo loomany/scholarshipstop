@@ -15,6 +15,7 @@ import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 
 import { enrichProviderData } from '../lib/providers/enrichProviderDataCore';
+import { enqueueProviderUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
 
 function loadEnvFiles() {
@@ -124,6 +125,7 @@ async function main() {
   });
 
   let synced = 0;
+  const syncedProviderSlugs: string[] = [];
   if (dryRun) {
     synced = upsertRows.length;
     console.log(
@@ -142,6 +144,7 @@ async function main() {
         process.exit(1);
       }
       synced += chunk.length;
+      syncedProviderSlugs.push(...chunk.map((row) => row.slug));
       console.log(
         `Upserted batch ${Math.floor(i / BATCH) + 1} (${chunk.length} rows), cumulative ${synced}/${upsertRows.length}`
       );
@@ -149,6 +152,15 @@ async function main() {
     console.log(
       'Sync done: new slugs inserted; existing slugs left unchanged (ignoreDuplicates).'
     );
+    if (syncedProviderSlugs.length > 0) {
+      const queue = enqueueProviderUrlsForScript(
+        syncedProviderSlugs,
+        'script:enrich-all-providers:sync'
+      );
+      console.log(
+        `google indexing queue: +${queue.enqueued} provider URL(s), total queued ${queue.total}`
+      );
+    }
   } else {
     console.log('No rows from stats to sync.');
   }
@@ -180,16 +192,22 @@ async function main() {
   }
 
   let done = 0;
+  const enrichedProviderSlugs: string[] = [];
   for (const row of queue) {
     const name = row.display_name?.trim();
     if (!name) {
-      await supabase
+      const { data: updated } = await supabase
         .from('providers')
         .update({
           is_enriched: true,
           updated_at: new Date().toISOString()
         })
-        .eq('id', row.id);
+        .eq('id', row.id)
+        .select('slug')
+        .maybeSingle();
+      if (updated?.slug?.trim()) {
+        enrichedProviderSlugs.push(updated.slug.trim());
+      }
       done += 1;
       continue;
     }
@@ -211,6 +229,14 @@ async function main() {
     if (upErr) {
       console.log('FAIL', upErr.message);
     } else {
+      const { data: updated } = await supabase
+        .from('providers')
+        .select('slug')
+        .eq('id', row.id)
+        .maybeSingle();
+      if (updated?.slug?.trim()) {
+        enrichedProviderSlugs.push(updated.slug.trim());
+      }
       console.log('ok');
     }
     done += 1;
@@ -218,6 +244,15 @@ async function main() {
   }
 
   console.log(`Finished. Updated ${done} row(s).`);
+  if (enrichedProviderSlugs.length > 0) {
+    const queue = enqueueProviderUrlsForScript(
+      enrichedProviderSlugs,
+      'script:enrich-all-providers:enrich'
+    );
+    console.log(
+      `google indexing queue: +${queue.enqueued} provider URL(s), total queued ${queue.total}`
+    );
+  }
 }
 
 main().catch((e) => {

@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { createClient } from '@/utils/supabase/server';
+import { createPublicClient } from '@/utils/supabase/public';
 import {
   buildLongTailMoreFiltersState,
   type LongTailSlug
@@ -134,7 +134,7 @@ export async function evaluateManifestSeoListingThin(
   ].join('|');
   const cached = readTtlCache(manifestThinCache, cacheKey);
   if (cached) return cached;
-  const supabase = createClient() as any;
+  const supabase = createPublicClient() as any;
   const bounds = await fetchGlobalFilterBounds(supabase);
   const mode: LongTailListingMode = {
     type: 'manifest',
@@ -196,7 +196,7 @@ export async function evaluateLegacyPresetSeoListingThin(
 ): Promise<BasicThinResult> {
   const cached = readTtlCache(legacyThinCache, slug);
   if (cached) return cached;
-  const supabase = createClient() as any;
+  const supabase = createPublicClient() as any;
   const bounds = await fetchGlobalFilterBounds(supabase);
   const mf = buildLongTailMoreFiltersState(bounds, slug);
   const mode: LongTailListingMode = { type: 'legacy', slug };
@@ -235,7 +235,7 @@ export async function evaluateCategorySeoListingThin(
 ): Promise<BasicThinResult> {
   const cached = readTtlCache(categoryThinCache, categorySlug);
   if (cached) return cached;
-  const supabase = createClient() as any;
+  const supabase = createPublicClient() as any;
   const bounds = await fetchGlobalFilterBounds(supabase);
   const resolved = await resolveCatalogSubjectCategoryForPageSlug(
     supabase,
