@@ -228,8 +228,10 @@ export default function SubscriptionDebug() {
       <aside
         id="subscription-debug-drawer"
         aria-hidden={!open}
-        className={`fixed inset-y-0 right-0 z-[9999] flex w-[min(80dvw,350px)] max-w-[100dvw] flex-col border-l border-slate-200 bg-white shadow-2xl transition-transform duration-300 ease-out ${
-          open ? 'translate-x-0' : 'translate-x-full pointer-events-none'
+        className={`fixed inset-y-0 right-0 z-[9999] flex flex-col bg-white shadow-2xl transition-[width,opacity,transform] duration-300 ease-out ${
+          open
+            ? 'w-[min(80%,350px)] max-w-full translate-x-0 border-l border-slate-200 opacity-100'
+            : 'pointer-events-none w-0 max-w-0 translate-x-0 overflow-hidden border-0 opacity-0'
         }`}
       >
         <div className="flex shrink-0 items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">

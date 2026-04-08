@@ -349,7 +349,7 @@ export default function Navlinks({
             role="dialog"
             aria-modal="true"
             aria-label="Site menu"
-            className="fixed left-0 top-16 z-[96] flex h-[calc(100dvh-4rem)] w-[min(100dvw,18rem)] max-w-[100dvw] flex-col border-r border-zinc-800 bg-zinc-950 shadow-2xl lg:hidden md:top-20 md:h-[calc(100dvh-5rem)] sm:w-[19rem]"
+            className="fixed left-0 top-16 z-[96] flex h-[calc(100dvh-4rem)] w-[min(100%,18rem)] max-w-full flex-col border-r border-zinc-800 bg-zinc-950 shadow-2xl lg:hidden md:top-20 md:h-[calc(100dvh-5rem)] sm:w-[19rem]"
             style={
               {
                 paddingTop: 'env(safe-area-inset-top, 0px)'

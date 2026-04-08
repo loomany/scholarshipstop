@@ -59,16 +59,23 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
-        <Navbar />
-        <main
-          id="skip"
-          className="min-h-[calc(100dvh-4rem)] w-full min-w-0 max-w-[100%] overflow-x-clip md:min-h-[calc(100dvh-5rem)]"
-        >
-          {children}
-        </main>
-        <Suspense fallback={null}>
-          <ConditionalFooter />
-        </Suspense>
+        {/*
+          Width boundary for header + main + footer (overflow-x is html/body — avoid
+          overflow-x-clip here so sticky navbar is not turned into a nested scroll box).
+          Toaster + SubscriptionDebug stay outside so position:fixed stays viewport-relative.
+        */}
+        <div className="w-full min-w-0 max-w-full">
+          <Navbar />
+          <main
+            id="skip"
+            className="min-h-[calc(100dvh-4rem)] w-full min-w-0 md:min-h-[calc(100dvh-5rem)]"
+          >
+            {children}
+          </main>
+          <Suspense fallback={null}>
+            <ConditionalFooter />
+          </Suspense>
+        </div>
         <Suspense fallback={null}>
           <Toaster />
         </Suspense>

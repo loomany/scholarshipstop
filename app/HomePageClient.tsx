@@ -236,12 +236,12 @@ export default function HomePageClient({
               <ScholarshipPreviewList />
             </div>
             <div
-              className={`order-1 flex min-h-0 min-w-0 flex-col lg:order-2 ${
+              className={`order-1 flex min-h-0 min-w-0 flex-col items-center text-center lg:order-2 lg:items-stretch lg:text-left ${
                 worksSectionVisible ? 'animate-works-title-in' : 'opacity-0'
               }`}
             >
-              <h2 className={h2Section}>Everything in one place</h2>
-              <ul className="mt-8 space-y-5 text-lg text-gray-600 sm:mt-9 sm:space-y-6 sm:text-xl">
+              <h2 className={`text-pretty ${h2Section}`}>Everything in one place</h2>
+              <ul className="mt-8 w-full max-w-lg space-y-5 text-left text-lg text-gray-600 sm:mt-9 sm:space-y-6 sm:text-xl lg:max-w-none">
                 <li className="flex gap-4">
                   <Check
                     className={`${listIconClass} text-emerald-600`}
