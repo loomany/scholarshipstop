@@ -76,19 +76,6 @@ function normName(s: string): string | null {
   return t ? t : null;
 }
 
-function profileGpaAsNumber(gpa: ProfilesRow['gpa'] | undefined): number | null {
-  return gpaForProfileDb(
-    gpa != null && gpa !== '' ? String(gpa) : ''
-  );
-}
-
-function sameGpa(a: number | null, b: number | null): boolean {
-  if (a === b) return true;
-  if (a == null && b == null) return true;
-  if (a == null || b == null) return false;
-  return Math.abs(a - b) < 1e-9;
-}
-
 function birthEqual(
   a: ReturnType<typeof buildBirthDbFields>,
   b: ReturnType<typeof buildBirthDbFields>
@@ -115,8 +102,9 @@ export type ScholarshipProfileFormValues = {
 };
 
 /**
- * Returns only columns that differ from `profile` (or from an empty baseline when `profile` is null).
- * Omits unchanged keys so `.upsert` / partial writes do not null out unrelated columns.
+ * Returns normalized profile payload for all account-form-managed columns.
+ * Intentionally explicit (not diff-only): Save must be able to clear stale DB values
+ * such as derived labels that can keep personalized matching active.
  */
 export function buildScholarshipProfileFormPatch(
   profile: ProfilesRow | null,
@@ -126,58 +114,44 @@ export function buildScholarshipProfileFormPatch(
 
   const fn = normName(v.firstName);
   const ln = normName(v.lastName);
-  if (normName(profile?.first_name ?? '') !== fn) {
-    patch.first_name = fn;
-  }
-  if (normName(profile?.last_name ?? '') !== ln) {
-    patch.last_name = ln;
-  }
+  patch.first_name = fn;
+  patch.last_name = ln;
 
   const formBirth = buildBirthDbFields(v.birthMonth, v.birthDay, v.birthYear);
   const profBirth = profileBirthDbFields(profile);
-  if (!birthEqual(formBirth, profBirth)) {
-    Object.assign(patch, formBirth);
-  }
+  const useBirth = birthEqual(formBirth, profBirth) ? profBirth : formBirth;
+  Object.assign(patch, useBirth);
 
   const school_level = v.schoolLevel || null;
   const school_level_label = v.schoolLevel
     ? schoolLevelLabelForValue(v.schoolLevel) ?? null
     : null;
-  if ((profile?.school_level ?? null) !== school_level) {
-    patch.school_level = school_level;
-    patch.school_level_label = school_level_label;
-  }
+  patch.school_level = school_level;
+  /** Safety: derived label must be null when base value is null. */
+  patch.school_level_label = school_level ? school_level_label : null;
 
   const field_of_study = v.fieldOfStudy || null;
   const field_of_study_label = v.fieldOfStudy
     ? fieldOfStudyLabelForValue(v.fieldOfStudy) ?? null
     : null;
-  if ((profile?.field_of_study ?? null) !== field_of_study) {
-    patch.field_of_study = field_of_study;
-    patch.field_of_study_label = field_of_study_label;
-  }
+  patch.field_of_study = field_of_study;
+  /** Safety: derived label must be null when base value is null. */
+  patch.field_of_study_label = field_of_study ? field_of_study_label : null;
 
   const citizenship_status = v.citizenshipStatus.trim() || null;
   const citizenship_status_label = citizenship_status
     ? citizenshipLabelForValue(citizenship_status)
     : null;
-  if ((profile?.citizenship_status ?? null) !== citizenship_status) {
-    patch.citizenship_status = citizenship_status;
-    patch.citizenship_status_label = citizenship_status_label;
-  }
+  patch.citizenship_status = citizenship_status;
+  patch.citizenship_status_label = citizenship_status_label;
 
   const formGpa = gpaForProfileDb(v.gpaChoice);
-  if (!sameGpa(formGpa, profileGpaAsNumber(profile?.gpa))) {
-    patch.gpa = formGpa;
-  }
+  /** `prefer_not_to_say` must always persist as `null` in DB. */
+  patch.gpa = formGpa;
 
   const formState =
     normalizeUsStateToCanonical(v.stateRegionInput) || null;
-  const profState =
-    normalizeUsStateToCanonical(profile?.state_region?.trim() ?? '') || null;
-  if (formState !== profState) {
-    patch.state_region = formState;
-  }
+  patch.state_region = formState;
 
   return patch;
 }
