@@ -144,6 +144,41 @@ function pickPatchKeys(
   return out;
 }
 
+function sanitizeProfilesPatch(
+  patch: Record<string, unknown>
+): Record<string, unknown> {
+  const out = { ...patch };
+
+  if (
+    Object.prototype.hasOwnProperty.call(out, 'school_level') &&
+    (out.school_level == null || out.school_level === '')
+  ) {
+    out.school_level = null;
+    out.school_level_label = null;
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(out, 'field_of_study') &&
+    (out.field_of_study == null || out.field_of_study === '')
+  ) {
+    out.field_of_study = null;
+    out.field_of_study_label = null;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(out, 'gpa')) {
+    const gpaRaw = out.gpa;
+    if (
+      gpaRaw == null ||
+      gpaRaw === '' ||
+      (typeof gpaRaw === 'number' && !Number.isFinite(gpaRaw))
+    ) {
+      out.gpa = null;
+    }
+  }
+
+  return out;
+}
+
 type ProfileSectionKey = 'personal' | 'education' | 'eligibility';
 
 type SectionFeedback = { type: 'ok' | 'err'; text: string };
@@ -371,12 +406,13 @@ export default function ScholarshipProfileForm({
       userId: string,
       patch: Record<string, unknown>
     ): Promise<{ ok: true } | { ok: false; message: string }> => {
-      if (Object.keys(patch).length === 0) return { ok: true };
+      const sanitizedPatch = sanitizeProfilesPatch(patch);
+      if (Object.keys(sanitizedPatch).length === 0) return { ok: true };
       const supabase = createClient();
       const payload = pickAllowedProfilesUpsertFields({
         id: userId,
         updated_at: new Date().toISOString(),
-        ...patch
+        ...sanitizedPatch
       }) as Database['public']['Tables']['profiles']['Insert'];
 
       console.info('[account:profile] upsert payload (partial)', payload);
