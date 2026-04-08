@@ -1,8 +1,56 @@
 'use client';
 
+import { useMemo } from 'react';
 import clsx from 'clsx';
+import DOMPurify from 'isomorphic-dompurify';
 
 import { contentHubProseClassName } from '@/lib/content-hub/contentHubProseClassName';
+import { absolutizeResourceGuideLinksInHtml } from '@/lib/scholarships/resourceGuideRoutes';
+
+const SANITIZE_OPTIONS = {
+  ALLOWED_TAGS: [
+    'p',
+    'br',
+    'hr',
+    'strong',
+    'em',
+    'b',
+    'i',
+    'u',
+    'sub',
+    'sup',
+    'ul',
+    'ol',
+    'li',
+    'a',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'blockquote',
+    'div',
+    'span',
+    'table',
+    'thead',
+    'tbody',
+    'tr',
+    'th',
+    'td',
+    'caption'
+  ],
+  ALLOWED_ATTR: [
+    'href',
+    'target',
+    'rel',
+    'colspan',
+    'rowspan',
+    'class',
+    'style',
+    'title',
+    'aria-label'
+  ],
+  ALLOW_DATA_ATTR: false
+};
 
 type SafeContentPostBodyProps = {
   html: string;
@@ -14,7 +62,16 @@ export default function SafeContentPostBody({
   html,
   tightTop = false
 }: SafeContentPostBodyProps) {
-  if (!html.trim()) return null;
+  const clean = useMemo(
+    () =>
+      DOMPurify.sanitize(
+        absolutizeResourceGuideLinksInHtml(html),
+        SANITIZE_OPTIONS
+      ),
+    [html]
+  );
+
+  if (!clean.trim()) return null;
 
   return (
     <div
@@ -25,7 +82,7 @@ export default function SafeContentPostBody({
     >
       <div
         className={contentHubProseClassName}
-        dangerouslySetInnerHTML={{ __html: html }}
+        dangerouslySetInnerHTML={{ __html: clean }}
       />
     </div>
   );
