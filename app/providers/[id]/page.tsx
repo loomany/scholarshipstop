@@ -240,14 +240,15 @@ export default async function ProviderProfilePage({
                 totalPages={totalPages}
                 buildHref={(p) => buildProviderProfileScholarshipsHref(params.id, p)}
                 linkScroll={false}
+                navClassName="mt-4 flex flex-col items-center gap-2 sm:mt-12 sm:gap-3"
               />
             </>
           )}
         </section>
 
         {data.similarProviders.length > 0 ? (
-          <section className="mt-14 border-t border-gray-200/80 pt-12">
-            <h2 className="mb-6 text-xl font-bold text-gray-900">
+          <section className="mt-4 border-t border-gray-200/80 pt-4 sm:mt-14 sm:pt-12">
+            <h2 className="mb-3 text-xl font-bold text-gray-900 sm:mb-6">
               Explore similar organizations
             </h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

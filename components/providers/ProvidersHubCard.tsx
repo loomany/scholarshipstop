@@ -25,6 +25,18 @@ export function ProvidersHubCard({ row }: Props) {
   const snippet = descriptionSnippet(row.ai_description);
   const headingId = `provider-hub-card-title-${row.slug}`;
 
+  const renderActiveScholarshipsBadge = (placement: 'mobile' | 'desktop') => (
+    <span
+      className={
+        placement === 'mobile'
+          ? 'inline-flex shrink-0 items-center rounded-full bg-emerald-50 px-2.5 py-1 text-right text-[10px] font-semibold leading-none text-emerald-600 ring-1 ring-emerald-100'
+          : 'inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold leading-none text-emerald-600 ring-1 ring-emerald-100'
+      }
+    >
+      {count.toLocaleString()} Active {count === 1 ? 'Scholarship' : 'Scholarships'}
+    </span>
+  );
+
   return (
     <li className="h-full">
       <Link
@@ -33,12 +45,17 @@ export function ProvidersHubCard({ row }: Props) {
         className="group flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm outline-none transition duration-300 ease-out hover:-translate-y-1 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-2 sm:p-8"
       >
         <article className="flex min-h-0 flex-1 flex-col">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-            {region}
-          </p>
+          <div className="flex items-center justify-between gap-2 sm:block">
+            <p className="min-w-0 flex-1 text-[11px] font-semibold uppercase leading-none tracking-wider text-zinc-500 sm:flex-none sm:leading-normal">
+              {region}
+            </p>
+            <div className="flex shrink-0 items-center sm:hidden">
+              {renderActiveScholarshipsBadge('mobile')}
+            </div>
+          </div>
           <h2
             id={headingId}
-            className="mt-4 line-clamp-2 text-xl font-bold leading-snug tracking-tight text-zinc-900 sm:text-2xl sm:leading-snug"
+            className="mt-3 line-clamp-2 text-xl font-bold leading-snug tracking-tight text-zinc-900 sm:mt-4 sm:text-2xl sm:leading-snug"
           >
             {title}
           </h2>
@@ -51,11 +68,8 @@ export function ProvidersHubCard({ row }: Props) {
               Profile details will appear after enrichment.
             </p>
           )}
-          <div className="mt-6">
-            <span className="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600 ring-1 ring-emerald-100">
-              {count.toLocaleString()} Active{' '}
-              {count === 1 ? 'Scholarship' : 'Scholarships'}
-            </span>
+          <div className="mt-6 hidden sm:block">
+            {renderActiveScholarshipsBadge('desktop')}
           </div>
           <span className="mt-8 inline-flex w-full items-center justify-center rounded-xl border border-zinc-200 bg-white py-2.5 text-sm font-semibold text-zinc-900 transition group-hover:border-zinc-300 group-hover:bg-zinc-50">
             View Profile

@@ -259,54 +259,30 @@ function SimilarScholarshipDetailListItem({
       ? Math.max(0, Math.min(100, Math.round(s.aiMatchScore)))
       : null;
   const showBadgeColumn = showBestMatchChip || matchScore != null;
+  const showRightHeader =
+    showBadgeColumn || similarSubscriptionLocked;
 
   const cardInner = (
-    <div className="relative">
+    <div className="relative text-left">
       <div className="flex items-start gap-3">
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 text-left">
           <span
-            className={`block text-base font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'}`}
+            className={`block text-left text-base font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'}`}
           >
             {s.title}
           </span>
           {s.provider ? (
             <span
-              className={`mt-1.5 block text-sm ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'}`}
+              className={`mt-1.5 block text-left text-sm ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'}`}
             >
               {s.provider}
             </span>
           ) : null}
-          <span
-            className={`mt-2 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-800'}`}
-          >
-            {formatScholarshipAwardLine(s)}
-          </span>
-          <span
-            className={
-              deadlinePassed
-                ? 'mt-1.5 block text-xs font-normal italic text-zinc-400'
-                : 'mt-1.5 block text-xs font-medium text-zinc-700'
-            }
-          >
-            <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
-              {deadlinePassed ? 'Deadline passed' : 'Deadline'}
-            </span>
-            <span
-              className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
-            >
-              {simDd.primary}
-            </span>
-            {simDd.secondary && !deadlinePassed ? (
-              <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
-                {simDd.secondary}
-              </span>
-            ) : null}
-          </span>
         </div>
-        {showBadgeColumn ? (
+        {showRightHeader ? (
           <div
             className="flex shrink-0 flex-col items-end gap-1.5"
-            aria-label="Scholarship tags"
+            aria-label={showBadgeColumn ? 'Scholarship tags' : undefined}
           >
             {showBestMatchChip ? (
               <span
@@ -319,33 +295,67 @@ function SimilarScholarshipDetailListItem({
                 Best match
               </span>
             ) : null}
-            {matchScore != null ? (
-              <span
-                className={`whitespace-nowrap rounded-full px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide ${
-                  deadlinePassed
-                    ? 'bg-zinc-200/90 text-zinc-600'
-                    : 'bg-violet-100 text-violet-900'
-                }`}
-                title={
-                  s.aiMatchBand?.trim()
-                    ? `Band: ${s.aiMatchBand}`
-                    : 'Match score (0–100)'
-                }
-              >
-                Match {matchScore}%
-              </span>
+            {similarSubscriptionLocked || matchScore != null ? (
+              <div className="flex items-center justify-end gap-1.5">
+                {similarSubscriptionLocked ? (
+                  <span
+                    className="pointer-events-none inline-flex h-[22px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
+                    aria-hidden
+                  >
+                    <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
+                  </span>
+                ) : null}
+                {matchScore != null ? (
+                  <span
+                    className={`whitespace-nowrap rounded-full px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide ${
+                      deadlinePassed
+                        ? 'bg-zinc-200/90 text-zinc-600'
+                        : 'bg-violet-100 text-violet-900'
+                    }`}
+                    title={
+                      s.aiMatchBand?.trim()
+                        ? `Band: ${s.aiMatchBand}`
+                        : 'Match score (0–100)'
+                    }
+                  >
+                    Match {matchScore}%
+                  </span>
+                ) : null}
+              </div>
             ) : null}
           </div>
         ) : null}
       </div>
-      {similarSubscriptionLocked ? (
-        <span
-          className="pointer-events-none absolute bottom-1.5 right-1.5 inline-flex h-[22px] w-[34px] items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
-          aria-hidden
+      <div className="mt-2 flex w-full min-w-0 items-center justify-between gap-2 sm:gap-3">
+        <div className="min-w-0 flex-1 pr-2 text-left">
+          <span
+            className={`block text-sm font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-800'}`}
+          >
+            {formatScholarshipAwardLine(s)}
+          </span>
+        </div>
+        <div
+          className={
+            deadlinePassed
+              ? 'w-max min-w-0 shrink-0 text-right text-xs font-normal italic text-zinc-400'
+              : 'w-max min-w-0 shrink-0 text-right text-xs font-medium text-zinc-700'
+          }
         >
-          <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
-        </span>
-      ) : null}
+          <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
+            {deadlinePassed ? 'Deadline passed' : 'Deadline'}
+          </span>
+          <span
+            className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
+          >
+            {simDd.primary}
+          </span>
+          {simDd.secondary && !deadlinePassed ? (
+            <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
+              {simDd.secondary}
+            </span>
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 

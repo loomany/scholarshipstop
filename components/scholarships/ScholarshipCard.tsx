@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { Info, Lock, Star } from 'lucide-react';
 import {
   formatDeadlineTooltipText,
@@ -21,6 +22,7 @@ import {
 } from '@/lib/scholarships/scholarshipCatalog';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
+import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCatalogChipRow';
 
 type ScholarshipCardProps = {
   scholarship: Scholarship;
@@ -99,20 +101,14 @@ export default function ScholarshipCard({
     ? 'min-w-0 text-left'
     : 'min-w-0 text-left xl:col-start-1 xl:row-start-1 xl:row-span-2';
 
-  /** Deadline only (xl row 1 col 2). Requirements are a separate grid row on xl. */
-  const deadlineBlockWrap = stackedListing
-    ? 'min-w-0 border-t border-gray-200 pt-3'
-    : 'min-w-0 border-t border-gray-200 pt-3 xl:col-start-2 xl:row-start-1 xl:border-0 xl:pt-0';
+  /** Stacked/narrow listing only — catalog hub uses a mobile combined row + xl grid columns on inner wrappers. */
+  const deadlineBlockWrap = 'min-w-0 border-t border-gray-200 pt-3';
+  const awardMetricsWrap = 'min-w-0 border-t border-gray-200 pt-3';
 
-  /** Award metrics only (xl row 1 col 3). */
-  const awardMetricsWrap = stackedListing
-    ? 'min-w-0 border-t border-gray-200 pt-3'
-    : 'min-w-0 border-t border-gray-200 pt-3 xl:col-start-3 xl:row-start-1 xl:w-full xl:max-w-[200px] xl:justify-self-start xl:border-0 xl:pt-0';
-
-  /** Save / Not relevant — xl row 2 col 3, vertically centered with requirements. */
+  /** Save / Not relevant — under award when stacked; inside award row on catalog mobile. */
   const cardActionsWrap = stackedListing
     ? 'relative z-10 mt-2.5 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto'
-    : 'relative z-10 mt-2.5 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto xl:col-start-3 xl:row-start-2 xl:mt-0 xl:w-[128px] xl:max-w-none xl:self-center xl:justify-self-start';
+    : 'relative z-10 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto xl:mt-0 xl:w-[128px] xl:max-w-none xl:self-center';
 
   /** Award metrics: left-aligned (reads toward deadline). */
   const awardMetricAlign = 'text-left';
@@ -120,8 +116,8 @@ export default function ScholarshipCard({
 
   const deadlineInner = 'min-w-0';
 
-  const metricTextAlign = stackedListing ? 'text-left' : 'text-center xl:text-left';
-  const metricTextAlignTight = stackedListing ? 'text-left' : 'text-center xl:text-left';
+  /** Left-aligned on all breakpoints (matches requirements / award on mobile). */
+  const deadlineMetricAlign = 'text-left';
 
   /** Compact vertical stack under award (right column on xl). */
   const cardActionBtnBase = `w-full rounded-lg px-2.5 py-1.5 text-center text-xs font-semibold text-white transition ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
@@ -168,7 +164,7 @@ export default function ScholarshipCard({
       >
         {requirementsMetric}
       </p>
-      <p className={`${METRIC_LABEL} text-left`}>Requirements</p>
+      <p className={METRIC_LABEL}>Requirements</p>
     </>
   );
 
@@ -176,17 +172,13 @@ export default function ScholarshipCard({
     <div className="mt-2 min-w-0 text-left">{requirementsMetricInner}</div>
   );
 
-  const requirementsXlRow = (
-    <div className="min-w-0 border-t border-gray-200 pt-3 text-left xl:border-0 xl:pt-0 xl:col-start-2 xl:row-start-2 xl:self-center">
-      {requirementsMetricInner}
-    </div>
-  );
-
   const summaryLine =
     scholarship.summaryShort?.trim() || requirementsSummary;
 
-  const { visible: catalogChips, overflow: catalogOverflow } =
-    scholarshipCardChips(scholarship);
+  const catalogChips = useMemo(
+    () => scholarshipCardChips(scholarship).visible,
+    [scholarship]
+  );
   const LOCKED_CARD_CATEGORY_IDS = new Set([
     'easy_apply',
     'quick_apply'
@@ -290,24 +282,6 @@ export default function ScholarshipCard({
         aria-hidden
       />
 
-      {showTopRightLockBadge ? (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onSubscriptionLockedCategoryClick?.(
-              showHotDeadlinesLockBadge ? 'hot_deadlines' : 'easy_apply'
-            );
-          }}
-          className="absolute right-4 top-4 z-[30] pointer-events-auto inline-flex h-[22px] w-[34px] items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm transition hover:bg-[#E6670C]"
-          title="Start your free access to unlock this category"
-          aria-label="Locked category. Start free access to unlock."
-        >
-          <Lock className="h-3.5 w-3.5" strokeWidth={2.2} aria-hidden />
-        </button>
-      ) : null}
-
       <div className={`${gridShell} relative z-[1] pointer-events-none`}>
         <div className={titleCell}>
           <div className="flex min-w-0 items-center justify-between gap-2 text-xs font-medium text-gray-500 sm:text-[13px]">
@@ -355,14 +329,31 @@ export default function ScholarshipCard({
                 </span>
               ) : null}
             </div>
-            <div className="flex shrink-0 items-center gap-1.5">
+            <div className="flex shrink-0 items-center gap-1.5 self-start">
               {isUnread ? (
                 <span
-                  className="pointer-events-none inline-flex h-[20px] items-center rounded-md bg-[#FF7A1A] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm"
+                  className="pointer-events-none inline-flex h-5 shrink-0 items-center rounded-md bg-[#FF7A1A] px-2 text-[10px] font-bold uppercase leading-none tracking-wide text-white shadow-sm"
                   aria-label="New — not opened yet"
                 >
                   NEW
                 </span>
+              ) : null}
+              {showTopRightLockBadge ? (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onSubscriptionLockedCategoryClick?.(
+                      showHotDeadlinesLockBadge ? 'hot_deadlines' : 'easy_apply'
+                    );
+                  }}
+                  className="relative z-30 inline-flex h-5 w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-1 pointer-events-auto"
+                  title="Start your free access to unlock this category"
+                  aria-label="Locked category. Start free access to unlock."
+                >
+                  <Lock className="h-3 w-3" strokeWidth={2.2} aria-hidden />
+                </button>
               ) : null}
             </div>
           </div>
@@ -444,92 +435,204 @@ export default function ScholarshipCard({
           ) : null}
         </div>
 
-        <div className={deadlineBlockWrap}>
-          <div
-            className={deadlineInner}
-            title={hasDeadline ? deadlineTooltipText : undefined}
-          >
-            {hasDeadline ? (
-              <div className={metricTextAlign}>
+        {stackedListing ? (
+          <>
+            <div className={deadlineBlockWrap}>
+              <div
+                className={deadlineInner}
+                title={hasDeadline ? deadlineTooltipText : undefined}
+              >
+                {hasDeadline ? (
+                  <div className={deadlineMetricAlign}>
+                    <p
+                      className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
+                        deadlinePassed ? 'text-gray-500' : 'text-gray-900'
+                      }`}
+                    >
+                      {deadlineParts.primary}
+                    </p>
+                    {deadlineParts.secondary ? (
+                      <p
+                        className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
+                          deadlinePassed ? 'text-gray-400' : 'text-gray-500'
+                        }`}
+                      >
+                        {deadlineParts.secondary}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className={deadlineMetricAlign}>
+                    <p className="text-sm font-semibold text-gray-400">—</p>
+                  </div>
+                )}
+              </div>
+              {requirementsStackedUnderDeadline}
+            </div>
+            <div className={awardMetricsWrap}>
+              <div className={awardMetricAlign}>
                 <p
                   className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
-                    deadlinePassed ? 'text-gray-500' : 'text-gray-900'
+                    !hasAmount
+                      ? 'text-gray-400'
+                      : deadlinePassed
+                        ? 'text-gray-600'
+                        : 'text-gray-900'
                   }`}
                 >
-                  {deadlineParts.primary}
+                  {awardCell}
                 </p>
-                {deadlineParts.secondary ? (
+                <p className={METRIC_LABEL}>Award Amount</p>
+                {payoutLine ? (
                   <p
-                    className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
-                      deadlinePassed ? 'text-gray-400' : 'text-gray-500'
-                    }`}
+                    className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
                   >
-                    {deadlineParts.secondary}
+                    {payoutLine}
                   </p>
                 ) : null}
               </div>
-            ) : (
-              <div className={metricTextAlign}>
-                <p className="text-sm font-semibold text-gray-400">—</p>
-              </div>
-            )}
-          </div>
-          {stackedListing ? requirementsStackedUnderDeadline : null}
-        </div>
-
-        {stackedListing ? null : requirementsXlRow}
-
-        <div className={awardMetricsWrap}>
-          <div className={awardMetricAlign}>
-            <p
-              className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
-                !hasAmount
-                  ? 'text-gray-400'
-                  : deadlinePassed
-                    ? 'text-gray-600'
-                    : 'text-gray-900'
-              }`}
-            >
-              {awardCell}
-            </p>
-            <p className={METRIC_LABEL}>Award Amount</p>
-            {payoutLine ? (
-              <p
-                className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
-              >
-                {payoutLine}
-              </p>
-            ) : null}
-          </div>
-          {stackedListing && showCardActions ? (
-            <div className={cardActionsWrap}>{cardActionControls}</div>
-          ) : null}
-        </div>
-
-        {!stackedListing && showCardActions ? (
-          <div className={cardActionsWrap}>{cardActionControls}</div>
-        ) : null}
-
-        {catalogChips.length > 0 || catalogOverflow > 0 ? (
-          <div
-            className="col-span-full flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 border-t border-gray-200 pt-2.5 xl:row-start-3"
-            aria-label="Scholarship tags"
-          >
-            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5">
-              {catalogChips.map((c) => (
-                <span
-                  key={c.key}
-                  className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600 ring-1 ring-gray-200/80"
-                >
-                  {c.label}
-                </span>
-              ))}
-              {catalogOverflow > 0 ? (
-                <span className="shrink-0 text-[10px] font-semibold text-gray-500">
-                  +{catalogOverflow} more
-                </span>
+              {showCardActions ? (
+                <div className={cardActionsWrap}>{cardActionControls}</div>
               ) : null}
             </div>
+          </>
+        ) : (
+          <>
+            <div className="col-span-full space-y-3 border-t border-gray-200 pt-3 xl:hidden">
+              <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:gap-3">
+                <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
+                  <p
+                    className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
+                      !hasAmount
+                        ? 'text-gray-400'
+                        : deadlinePassed
+                          ? 'text-gray-600'
+                          : 'text-gray-900'
+                    }`}
+                  >
+                    {awardCell}
+                  </p>
+                  <p className={METRIC_LABEL}>Award Amount</p>
+                  {payoutLine ? (
+                    <p
+                      className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
+                    >
+                      {payoutLine}
+                    </p>
+                  ) : null}
+                </div>
+                <div
+                  className={`${deadlineInner} min-w-0 max-w-[min(11rem,52%)] shrink-0 text-right`}
+                  title={hasDeadline ? deadlineTooltipText : undefined}
+                >
+                  {hasDeadline ? (
+                    <div className="text-right">
+                      <p
+                        className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
+                          deadlinePassed ? 'text-gray-500' : 'text-gray-900'
+                        }`}
+                      >
+                        {deadlineParts.primary}
+                      </p>
+                      {deadlineParts.secondary ? (
+                        <p
+                          className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
+                            deadlinePassed ? 'text-gray-400' : 'text-gray-500'
+                          }`}
+                        >
+                          {deadlineParts.secondary}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div className="text-right">
+                      <p className="text-sm font-semibold text-gray-400">—</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3">
+                <div className="min-w-0 flex-1 text-left">
+                  {requirementsMetricInner}
+                </div>
+                {showCardActions ? (
+                  <div className={cardActionsWrap}>{cardActionControls}</div>
+                ) : null}
+              </div>
+            </div>
+            <div className="hidden min-w-0 xl:col-start-2 xl:row-start-1 xl:row-span-2 xl:block xl:self-start xl:border-0 xl:pt-0">
+              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-stretch xl:gap-2">
+                <div
+                  className={`${deadlineInner} min-w-0 flex-1`}
+                  title={hasDeadline ? deadlineTooltipText : undefined}
+                >
+                  {hasDeadline ? (
+                    <div className={deadlineMetricAlign}>
+                      <p
+                        className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
+                          deadlinePassed ? 'text-gray-500' : 'text-gray-900'
+                        }`}
+                      >
+                        {deadlineParts.primary}
+                      </p>
+                      {deadlineParts.secondary ? (
+                        <p
+                          className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
+                            deadlinePassed ? 'text-gray-400' : 'text-gray-500'
+                          }`}
+                        >
+                          {deadlineParts.secondary}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div className={deadlineMetricAlign}>
+                      <p className="text-sm font-semibold text-gray-400">—</p>
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0 max-w-[min(11rem,46%)] shrink-0 text-right xl:max-w-none xl:w-full xl:shrink xl:text-left">
+                  {requirementsMetricInner}
+                </div>
+              </div>
+            </div>
+            <div className="hidden min-w-0 xl:col-start-3 xl:row-start-1 xl:row-span-2 xl:block xl:w-full xl:max-w-[200px] xl:justify-self-start xl:self-start xl:border-0 xl:pt-0">
+              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-stretch xl:gap-2">
+                <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
+                  <p
+                    className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
+                      !hasAmount
+                        ? 'text-gray-400'
+                        : deadlinePassed
+                          ? 'text-gray-600'
+                          : 'text-gray-900'
+                    }`}
+                  >
+                    {awardCell}
+                  </p>
+                  <p className={METRIC_LABEL}>Award Amount</p>
+                  {payoutLine ? (
+                    <p
+                      className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
+                    >
+                      {payoutLine}
+                    </p>
+                  ) : null}
+                </div>
+                {showCardActions ? (
+                  <div className={cardActionsWrap}>{cardActionControls}</div>
+                ) : null}
+              </div>
+            </div>
+          </>
+        )}
+
+        {catalogChips.length > 0 ? (
+          <div
+            className="col-span-full min-w-0 border-t border-gray-200 pt-2.5 xl:row-start-3"
+            aria-label="Scholarship tags"
+          >
+            <ScholarshipCatalogChipRow chips={catalogChips} />
           </div>
         ) : null}
       </div>

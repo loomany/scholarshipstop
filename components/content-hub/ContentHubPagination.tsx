@@ -3,6 +3,14 @@
 import Link from 'next/link';
 
 import {
+  sitePaginationActiveClass,
+  sitePaginationDisabledClass,
+  sitePaginationEllipsisClass,
+  sitePaginationLinkClass,
+  sitePaginationNavOuterClassName,
+  sitePaginationPageMetaClass
+} from '@/lib/pagination/sitePaginationClasses';
+import {
   paginationControlsRowClassName,
   visiblePaginationItems
 } from '@/lib/pagination/visiblePaginationItems';
@@ -13,15 +21,9 @@ type ContentHubPaginationProps = {
   buildHref: (page: number) => string;
 };
 
-/** Matches `ScholarshipsPagination` for visual consistency across the site. */
-const linkClass =
-  'inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-slate-200/90 bg-white px-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 focus-visible:ring-offset-1';
-
-const activeClass =
-  'border-teal-500 bg-teal-50 font-semibold text-teal-900 ring-1 ring-teal-500/30';
-
-const disabledClass =
-  'pointer-events-none border-slate-100 bg-slate-50 text-slate-400 shadow-none';
+const linkClass = sitePaginationLinkClass;
+const activeClass = sitePaginationActiveClass;
+const disabledClass = sitePaginationDisabledClass;
 
 export default function ContentHubPagination({
   currentPage,
@@ -38,9 +40,13 @@ export default function ContentHubPagination({
 
   return (
     <nav
-      className={`mt-8 ${paginationControlsRowClassName}`}
+      className={sitePaginationNavOuterClassName}
       aria-label="Articles pagination"
     >
+      <p className={sitePaginationPageMetaClass}>
+        Page {currentPage} of {totalPages}
+      </p>
+      <div className={paginationControlsRowClassName}>
       {prevDisabled ? (
         <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
           Previous
@@ -60,7 +66,7 @@ export default function ContentHubPagination({
         item === 'ellipsis' ? (
           <span
             key={`e-${i}`}
-            className="px-1 text-sm font-medium text-slate-400"
+            className={sitePaginationEllipsisClass}
             aria-hidden
           >
             …
@@ -93,6 +99,7 @@ export default function ContentHubPagination({
           Next
         </Link>
       )}
+      </div>
     </nav>
   );
 }

@@ -1,6 +1,14 @@
 import Link from 'next/link';
 
 import {
+  sitePaginationActiveClass,
+  sitePaginationDisabledClass,
+  sitePaginationEllipsisClass,
+  sitePaginationLinkClass,
+  sitePaginationNavOuterClassName,
+  sitePaginationPageMetaClass
+} from '@/lib/pagination/sitePaginationClasses';
+import {
   paginationControlsRowClassName,
   visiblePaginationItems
 } from '@/lib/pagination/visiblePaginationItems';
@@ -15,17 +23,10 @@ type ResourcesPaginationProps = {
   linkScroll?: boolean;
 };
 
-const linkClass =
-  'inline-flex min-h-9 min-w-9 items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/50 focus-visible:ring-offset-1';
-
-const activeClass =
-  'border-orange-500 bg-orange-50 font-semibold text-orange-900 ring-1 ring-orange-500/25';
-
-const disabledClass =
-  'pointer-events-none border-gray-100 bg-gray-50 text-gray-400 shadow-none';
-
-const defaultNavClassName =
-  'mt-10 flex flex-col items-center gap-3 sm:mt-12';
+const linkClass = sitePaginationLinkClass;
+const activeClass = sitePaginationActiveClass;
+const disabledClass = sitePaginationDisabledClass;
+const defaultNavClassName = sitePaginationNavOuterClassName;
 
 export default function ResourcesPagination({
   currentPage,
@@ -44,7 +45,7 @@ export default function ResourcesPagination({
 
   return (
     <nav className={navClassName} aria-label="Pagination">
-      <p className="text-sm text-gray-500">
+      <p className={sitePaginationPageMetaClass}>
         Page {currentPage} of {totalPages}
       </p>
       <div className={paginationControlsRowClassName}>
@@ -70,7 +71,7 @@ export default function ResourcesPagination({
           item === 'ellipsis' ? (
             <span
               key={`e-${i}`}
-              className="px-1 text-sm font-medium text-gray-400"
+              className={sitePaginationEllipsisClass}
               aria-hidden
             >
               …

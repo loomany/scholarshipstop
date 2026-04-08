@@ -568,8 +568,14 @@ export function payoutMethodChipLabel(method: string | null | undefined): string
 
 export type CardChip = { key: string; label: string };
 
-/** Up to 6 visible chips + overflow; priority per product spec. */
-export function scholarshipCardChips(s: Scholarship, maxVisible = 6): {
+/**
+ * All catalog chips in priority order. Pass `maxVisible` to cap count + overflow (legacy).
+ * Default: return every chip; UI (e.g. ScholarshipCatalogChipRow) trims to one row by width.
+ */
+export function scholarshipCardChips(
+  s: Scholarship,
+  maxVisible?: number
+): {
   visible: CardChip[];
   overflow: number;
 } {
@@ -581,7 +587,7 @@ export function scholarshipCardChips(s: Scholarship, maxVisible = 6): {
     chips.push({ key, label });
   };
 
-  for (const slug of cat.categorySlugs.slice(0, 2)) {
+  for (const slug of cat.categorySlugs) {
     const id = normalizeCategoryId(slug);
     if (id) {
       add(`cat:${slug}`, SCHOLARSHIP_CATEGORY_LABELS[id] ?? slug);
@@ -593,12 +599,12 @@ export function scholarshipCardChips(s: Scholarship, maxVisible = 6): {
     add(`easy:${o.id}`, o.label);
   }
 
-  for (const id of cat.eligibilityIds.slice(0, 2)) {
+  for (const id of cat.eligibilityIds) {
     const o = ELIGIBILITY_OPTIONS.find((e) => e.id === id);
     if (o) add(`elig:${id}`, o.label);
   }
 
-  for (const id of cat.educationIds.slice(0, 1)) {
+  for (const id of cat.educationIds) {
     const o = EDUCATION_LEVEL_OPTIONS.find((e) => e.id === id);
     if (o) add(`edu:${id}`, o.label);
   }
@@ -616,7 +622,11 @@ export function scholarshipCardChips(s: Scholarship, maxVisible = 6): {
     else add(`loc:${loc}`, loc);
   }
 
-  const visible = chips.slice(0, maxVisible);
-  const overflow = Math.max(0, chips.length - maxVisible);
-  return { visible, overflow };
+  if (maxVisible != null && maxVisible >= 0) {
+    const visible = chips.slice(0, maxVisible);
+    const overflow = Math.max(0, chips.length - maxVisible);
+    return { visible, overflow };
+  }
+
+  return { visible: chips, overflow: 0 };
 }
