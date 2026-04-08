@@ -63,6 +63,9 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     post.related_scholarships
   );
   const bodyHtml = post.body_html?.trim() ?? '';
+  console.log('[resources/article] body_html tail', bodyHtml.slice(-500));
+  const bodyMarkdownTail = (post as { body_markdown?: string | null }).body_markdown?.slice(-500) ?? '';
+  console.log('[resources/article] body_markdown tail', bodyMarkdownTail);
   const primarySplit = bodyHtml
     ? splitForPrimaryCtaInsertion(bodyHtml)
     : null;
