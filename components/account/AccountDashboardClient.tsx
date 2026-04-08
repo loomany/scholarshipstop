@@ -42,7 +42,7 @@ export default function AccountDashboardClient({
 
   return (
     <div className="min-h-screen bg-zinc-50/90">
-      <main className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 lg:px-8">
         <section id="account-section-profile" className="scroll-mt-20 space-y-6 pb-16">
           <ScholarshipProfileForm
             profile={profile}
@@ -61,7 +61,7 @@ export default function AccountDashboardClient({
             </Link>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }

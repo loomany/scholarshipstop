@@ -938,16 +938,20 @@ export default function ScholarshipProfileForm({
               <div>
                 <div className="border-b border-slate-100 px-5 py-2.5 md:px-7 md:py-3">
                   <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-6">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">Subscription status</p>
-                      <div
-                        id="subscription-status"
-                        className={`mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs uppercase tracking-wider ${subscriptionStatusUi.badgeClass}`}
-                      >
-                        {subscriptionStatusUi.badgeLabel}
+                    <div className="min-w-0 w-full md:w-auto">
+                      <div className="flex flex-row items-center justify-between gap-2 md:flex-col md:items-center md:justify-start md:gap-2">
+                        <p className="min-w-0 text-sm font-semibold text-slate-900 md:text-center md:whitespace-nowrap">
+                          Subscription status
+                        </p>
+                        <div
+                          id="subscription-status"
+                          className={`inline-flex shrink-0 items-center justify-center rounded-full px-3 py-1 text-center text-xs uppercase leading-none tracking-wider md:whitespace-nowrap md:px-2.5 md:text-[11px] md:tracking-wide ${subscriptionStatusUi.badgeClass}`}
+                        >
+                          {subscriptionStatusUi.badgeLabel}
+                        </div>
                       </div>
                     </div>
-                    <div className="max-w-xl">
+                    <div className="max-w-xl text-center md:text-left">
                       <h3 className="text-2xl font-bold tracking-tight text-slate-900">
                         {subscriptionStatusUi.title}
                       </h3>
@@ -970,7 +974,7 @@ export default function ScholarshipProfileForm({
                         onClick={() => {
                           void onSwitchPlan();
                         }}
-                        className={`${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
+                        className={`inline-flex items-center justify-center ${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
                       >
                         Upgrade
                       </button>
@@ -991,7 +995,7 @@ export default function ScholarshipProfileForm({
                         onClick={() => {
                           void onSwitchPlan();
                         }}
-                        className={`${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
+                        className={`inline-flex items-center justify-center ${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
                       >
                         Upgrade
                       </button>
@@ -1015,33 +1019,47 @@ export default function ScholarshipProfileForm({
               <div
                 className={`${
                   compactSubscriptionCardLayout
-                    ? 'px-5 py-1.5 md:px-7 md:py-2'
+                    ? 'px-5 py-4 md:px-7 md:py-2'
                     : subscriptionType === 'yearly'
                       ? 'px-6 py-2.5 md:px-8 md:py-3'
                       : 'p-6 md:p-8'
                 }`}
               >
-                <p className="text-sm font-semibold text-slate-900">Subscription status</p>
                 <div
-                  id="subscription-status"
-                  className={`${
-                    compactSubscriptionCardLayout
-                      ? 'mt-2'
-                      : subscriptionType === 'yearly'
-                        ? 'mt-2.5'
-                        : 'mt-4'
-                  } inline-flex items-center rounded-full px-3 py-1 text-xs uppercase tracking-wider ${subscriptionStatusUi.badgeClass}`}
+                  className={`flex w-full min-w-0 flex-row items-center justify-between gap-3 ${
+                    compactSubscriptionCardLayout || subscriptionType === 'yearly'
+                      ? 'md:flex-col md:items-start md:justify-start md:gap-1.5'
+                      : 'md:items-center md:gap-8'
+                  }`}
                 >
-                  {subscriptionStatusUi.badgeLabel}
+                  <p
+                    className={`min-w-0 text-sm font-semibold leading-snug text-slate-900 ${
+                      compactSubscriptionCardLayout || subscriptionType === 'yearly'
+                        ? 'md:whitespace-nowrap'
+                        : 'md:shrink-0 md:whitespace-nowrap'
+                    }`}
+                  >
+                    Subscription status
+                  </p>
+                  <div
+                    id="subscription-status"
+                    className={`inline-flex shrink-0 items-center justify-center rounded-full px-3 py-1 text-center text-xs uppercase leading-none tracking-wider md:self-start md:px-2.5 md:py-1 md:text-[11px] md:leading-none md:tracking-wide md:whitespace-nowrap ${subscriptionStatusUi.badgeClass}`}
+                  >
+                    {subscriptionStatusUi.badgeLabel}
+                  </div>
                 </div>
                 <h3
                   className={`${
                     compactSubscriptionCardLayout
-                      ? 'mt-2'
+                      ? 'mt-4 md:mt-2.5'
                       : subscriptionType === 'yearly'
                         ? 'mt-2'
                         : 'mt-4'
-                  } text-2xl font-bold tracking-tight text-slate-900`}
+                  } text-center font-bold tracking-tight text-slate-900 md:text-left ${
+                    subscriptionType === 'yearly'
+                      ? 'text-2xl md:text-lg md:whitespace-nowrap md:leading-tight'
+                      : 'text-2xl'
+                  }`}
                 >
                   {subscriptionStatusUi.title}
                 </h3>
@@ -1049,9 +1067,9 @@ export default function ScholarshipProfileForm({
                   <p
                     className={`${
                       subscriptionType === 'yearly' || compactSubscriptionCardLayout
-                        ? 'mt-1.5'
+                        ? 'mt-2.5 md:mt-1.5'
                         : 'mt-2'
-                    } text-sm text-slate-500`}
+                    } text-center text-sm text-slate-500 md:text-left`}
                   >
                     {subscriptionStatusUi.subtitle}
                   </p>
@@ -1059,7 +1077,7 @@ export default function ScholarshipProfileForm({
                 {subscriptionType === 'none' && trialEmailGateMessage ? (
                   <div
                     role="alert"
-                    className="mt-3 max-w-md rounded-xl border border-amber-200 bg-amber-50/90 px-3 py-2.5 text-sm font-medium leading-snug text-amber-950 shadow-sm"
+                    className="mt-4 max-w-md rounded-xl border border-amber-200 bg-amber-50/90 px-3 py-2.5 text-sm font-medium leading-snug text-amber-950 shadow-sm md:mt-3"
                   >
                     {trialEmailGateMessage}
                   </div>
@@ -1093,13 +1111,23 @@ export default function ScholarshipProfileForm({
                 ) : null}
                 {!subscriptionStatusUi.hidePrimaryAction ? (
                   <div
-                    className={`flex flex-col gap-3 sm:flex-row sm:items-center ${
+                    className={`flex flex-col items-center gap-4 sm:flex-row sm:items-center md:gap-3 ${
+                      subscriptionType === 'trial'
+                        ? 'md:items-center'
+                        : 'md:items-start'
+                    } ${
                       subscriptionType === 'none' || subscriptionType === 'trial'
-                        ? 'mt-3'
+                        ? 'mt-5 md:mt-3'
                         : 'mt-5'
                     }`}
                   >
-                    <div className="relative inline-flex">
+                    <div
+                      className={
+                        subscriptionType === 'trial'
+                          ? 'relative w-full max-w-md md:mx-auto'
+                          : 'relative inline-flex w-full max-w-md justify-center sm:w-auto sm:max-w-none sm:justify-start'
+                      }
+                    >
                       <button
                         type="button"
                         onClick={
@@ -1109,14 +1137,32 @@ export default function ScholarshipProfileForm({
                               }
                             : () => router.push('/subscription')
                         }
-                        className={`${subscriptionButtonBaseClass} ${subscriptionStatusUi.buttonClass}`}
+                        className={
+                          subscriptionType === 'trial'
+                            ? `group relative w-full px-8 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 inline-flex items-center justify-center text-center text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${subscriptionStatusUi.buttonClass}`
+                            : `${subscriptionButtonBaseClass} ${subscriptionStatusUi.buttonClass}${
+                                subscriptionType === 'none'
+                                  ? ' md:whitespace-nowrap md:px-6 md:py-2.5 md:text-[0.8125rem] md:leading-tight'
+                                  : ''
+                              }`
+                        }
                       >
                         <span>{subscriptionStatusUi.buttonLabel}</span>
-                        <ArrowRight
-                          className="h-4 w-4 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
-                          strokeWidth={2}
-                          aria-hidden
-                        />
+                        {subscriptionType === 'trial' ? (
+                          <ArrowRight
+                            className="pointer-events-none absolute right-5 top-1/2 h-4 w-4 -translate-y-1/2 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+                            strokeWidth={2}
+                            aria-hidden
+                          />
+                        ) : (
+                          <ArrowRight
+                            className={`h-4 w-4 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100${
+                              subscriptionType === 'none' ? ' md:h-3.5 md:w-3.5' : ''
+                            }`}
+                            strokeWidth={2}
+                            aria-hidden
+                          />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -1125,9 +1171,9 @@ export default function ScholarshipProfileForm({
                 )}
                 {subscriptionStatusUi.buttonSubtext ? (
                   <p
-                    className={`text-sm text-slate-400 ${
+                    className={`text-center text-sm text-slate-400 md:text-left ${
                       subscriptionType === 'none' || subscriptionType === 'trial'
-                        ? 'mt-2'
+                        ? 'mt-3.5 md:mt-2'
                         : 'mt-3'
                     }`}
                   >
@@ -1138,21 +1184,15 @@ export default function ScholarshipProfileForm({
               <div
                 className={`flex flex-col border-t border-slate-100 bg-gradient-to-br from-slate-50 to-white md:border-l md:border-t-0 ${
                   compactSubscriptionCardLayout
-                    ? 'justify-center px-5 py-1.5 md:px-6 md:py-2'
+                    ? 'justify-center px-5 pb-6 pt-5 md:px-6 md:py-2 md:pb-2 md:pt-2'
                     : subscriptionType === 'yearly'
                       ? 'justify-start px-6 py-2.5 md:px-7 md:py-3'
                       : 'h-full justify-center px-8 py-6'
                 }`}
               >
-                {subscriptionType === 'none' || subscriptionType === 'trial' || subscriptionType === 'yearly' ? (
-                  <p
-                    className={`text-xs font-bold uppercase tracking-[0.18em] text-slate-700 ${
-                      subscriptionType === 'yearly' ? 'text-center' : ''
-                    }`}
-                  >
-                    {subscriptionType === 'yearly'
-                      ? 'CURRENT STATUS'
-                      : 'Stop Searching. Start Winning.'}
+                {subscriptionType === 'none' || subscriptionType === 'trial' ? (
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-700 text-center md:text-left">
+                    Stop Searching. Start Winning.
                   </p>
                 ) : null}
                 {subscriptionType === 'quarterly' ? (
@@ -1184,17 +1224,20 @@ export default function ScholarshipProfileForm({
                     </div>
                   </div>
                 ) : subscriptionType === 'yearly' ? (
-                  <div className="mt-3 space-y-2">
+                  <div className="mt-0 space-y-2 md:mt-3">
                     <div className="rounded-xl border border-slate-200 bg-white p-3">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-semibold text-slate-900">Current plan</p>
-                          <p className="mt-1 text-sm text-slate-500">Best Value</p>
-                        </div>
+                      <div className="flex flex-col gap-3 md:items-center">
+                        <p className="text-sm leading-snug md:text-center md:whitespace-nowrap">
+                          <span className="font-semibold text-slate-900">Current plan</span>
+                          <span className="mx-2 text-slate-300" aria-hidden>
+                            ·
+                          </span>
+                          <span className="font-medium text-slate-500">Best Value</span>
+                        </p>
                         <button
                           type="button"
                           onClick={() => router.push('/subscription')}
-                          className={`${compactUpgradeButtonBaseClass} bg-slate-900 text-white hover:bg-slate-800`}
+                          className={`inline-flex w-full items-center justify-center md:w-auto md:self-center ${compactUpgradeButtonBaseClass} bg-slate-900 text-white hover:bg-slate-800 md:whitespace-nowrap`}
                         >
                           Manage Subscription
                         </button>
@@ -1202,12 +1245,12 @@ export default function ScholarshipProfileForm({
                     </div>
                   </div>
                 ) : (
-                  <div className="mt-3 space-y-3">
+                  <div className="mt-4 space-y-4 text-center md:mt-3 md:space-y-3 md:text-left">
                     {(subscriptionType === 'none' || subscriptionType === 'trial'
                       ? freePlanPrecisionPerks
                       : premiumPerks
                     ).map((perk) => (
-                      <div key={perk} className="text-sm leading-6 text-slate-500">
+                      <div key={perk} className="text-sm leading-relaxed text-slate-500">
                         <span>{perk}</span>
                       </div>
                     ))}

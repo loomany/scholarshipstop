@@ -18,18 +18,6 @@ const ITEMS: {
     isActive: (p) => p === '/about' || p.startsWith('/about/')
   },
   {
-    href: '/scholarships',
-    label: 'Find Scholarships',
-    isActive: (p) =>
-      p === '/scholarships' || p.startsWith('/scholarships/')
-  },
-  {
-    href: '/providers',
-    label: 'Providers',
-    isActive: (p) =>
-      p === '/providers' || p.startsWith('/providers/')
-  },
-  {
     href: '/help',
     label: 'Help',
     isActive: (p) => p === '/help' || p.startsWith('/help/')

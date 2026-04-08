@@ -30,7 +30,7 @@ function getErrorMessage(error: unknown): string {
 /** Compact trial note — same language as `ScholarshipsEmailConfirmationBanner`. */
 function PlanTrialBetweenFeaturesAndCta() {
   return (
-    <div className="flex w-full shrink-0 flex-col justify-center border-t border-gray-100 pt-4 lg:w-[12rem] lg:min-w-[10.5rem] lg:max-w-[13rem] lg:border-l lg:border-t-0 lg:pl-3 lg:pr-0 lg:pt-0 xl:w-[13rem]">
+    <div className="flex w-full max-w-md shrink-0 flex-col items-center justify-center border-t border-gray-100 pt-4 lg:w-[12rem] lg:max-w-[13rem] lg:min-w-[10.5rem] lg:items-stretch lg:border-l lg:border-t-0 lg:pl-3 lg:pr-0 lg:pt-0 xl:w-[13rem]">
       <div
         className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-xs shadow-sm sm:text-sm"
         role="status"
@@ -51,7 +51,7 @@ function PlanTrialBetweenFeaturesAndCta() {
 function PlanFeatureList({ items }: { items: string[] }) {
   return (
     <ul
-      className="flex flex-col justify-center gap-1.5 text-left"
+      className="flex w-full flex-col justify-center gap-1.5 text-left"
       role="list"
     >
       {items.map((line) => (
@@ -112,9 +112,9 @@ function PlanGrantCard({
         className="relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] bg-gray-900"
         aria-hidden
       />
-      <div className="flex min-w-0 flex-1 flex-col gap-4 p-4 sm:gap-5 sm:px-5 sm:py-5 lg:flex-row lg:items-stretch lg:gap-3">
-        <div className="min-w-0 shrink-0 lg:w-[200px] xl:w-[220px]">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+      <div className="flex min-w-0 flex-1 flex-col items-center gap-4 p-4 sm:gap-5 sm:px-5 sm:py-5 lg:flex-row lg:items-stretch lg:gap-3">
+        <div className="min-w-0 w-full shrink-0 text-center lg:w-[200px] lg:text-left xl:w-[220px]">
+          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 lg:justify-start">
             <h2 className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
               {title}
             </h2>
@@ -135,7 +135,7 @@ function PlanGrantCard({
 
         <PlanTrialBetweenFeaturesAndCta />
 
-        <div className="flex w-full shrink-0 flex-col gap-2 border-t border-gray-100 pt-4 lg:w-44 lg:max-w-[11rem] lg:justify-center lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0">
+        <div className="flex w-full max-w-md shrink-0 flex-col items-center gap-2 border-t border-gray-100 pt-4 lg:max-w-none lg:w-44 lg:items-stretch lg:justify-center lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0">
           {ctaAbove}
           <Button
             type="button"

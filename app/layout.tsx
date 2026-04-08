@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import SubscriptionDebug from '@/components/debug/SubscriptionDebug';
-import ConditionalFooter from '@/components/ui/Footer/ConditionalFooter';
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
 import { fontSans } from '@/lib/fonts';
@@ -60,8 +59,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
         {/*
-          Width boundary for header + main + footer (overflow-x is html/body — avoid
+          Width boundary for header + main (overflow-x is html/body — avoid
           overflow-x-clip here so sticky navbar is not turned into a nested scroll box).
+          Home page includes its own footer + final CTA in `app/page.tsx` only.
           Toaster + SubscriptionDebug stay outside so position:fixed stays viewport-relative.
         */}
         <div className="w-full min-w-0 max-w-full">
@@ -72,9 +72,6 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           >
             {children}
           </main>
-          <Suspense fallback={null}>
-            <ConditionalFooter />
-          </Suspense>
         </div>
         <Suspense fallback={null}>
           <Toaster />
