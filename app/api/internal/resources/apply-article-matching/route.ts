@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-import { runArticleScholarshipMatchingPipeline } from '@/lib/content-hub/articleScholarshipMatching';
+import { applyArticleMatchingToPost } from '@/lib/content-hub/articleScholarshipMatching/applyArticleMatchingToPost';
 import type { Database } from '@/types_db';
 
 export const dynamic = 'force-dynamic';
@@ -14,7 +14,8 @@ export const dynamic = 'force-dynamic';
  * Loads the row, runs deterministic matching, writes body_html, related_scholarships,
  * article_match_diagnostics, and clears legacy scholarship_links.
  *
- * Not invoked automatically from this repo: call after publish (cron, CMS webhook, or manual).
+ * Manual/utility endpoint. For automatic publish-time runs use:
+ * POST /api/internal/resources/on-content-post-published
  * Legacy alias: POST /api/internal/content-hub/apply-article-matching
  */
 export async function POST(request: Request) {
@@ -63,43 +64,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Post not found' }, { status: 404 });
   }
 
-  const title = post.title?.trim() || 'Article';
-  const bodyHtml = post.body_html?.trim() ?? '';
-  if (!bodyHtml) {
-    return NextResponse.json(
-      { error: 'Post has empty body_html' },
-      { status: 400 }
-    );
-  }
-
   try {
-    const result = await runArticleScholarshipMatchingPipeline(supabase, {
-      title,
-      metaTitle: post.meta_title,
-      metaDescription: post.meta_description,
-      bodyHtml
-    });
-
-    const { error: upErr } = await supabase
-      .from('content_posts')
-      .update({
-        body_html: result.bodyHtml,
-        related_scholarships: result.relatedJson,
-        article_match_diagnostics: result.diagnosticsJson,
-        scholarship_links: null
-      })
-      .eq('id', post.id);
-
-    if (upErr) {
-      return NextResponse.json({ error: upErr.message }, { status: 500 });
-    }
-
+    const result = await applyArticleMatchingToPost(
+      supabase,
+      post as Database['public']['Tables']['content_posts']['Row']
+    );
     return NextResponse.json({
       ok: true,
-      postId: post.id,
-      inlineLinksInserted: result.diagnostics.inlineLinksInserted,
-      inlineFallbackUsed: result.diagnostics.inlineFallbackUsed,
-      relatedCount: result.relatedScholarships.length
+      ...result
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
