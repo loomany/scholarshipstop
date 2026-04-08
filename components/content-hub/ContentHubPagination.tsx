@@ -2,39 +2,16 @@
 
 import Link from 'next/link';
 
+import {
+  paginationControlsRowClassName,
+  visiblePaginationItems
+} from '@/lib/pagination/visiblePaginationItems';
+
 type ContentHubPaginationProps = {
   currentPage: number;
   totalPages: number;
   buildHref: (page: number) => string;
 };
-
-function visiblePageItems(
-  current: number,
-  total: number
-): (number | 'ellipsis')[] {
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  const delta = 1;
-  const set = new Set<number>();
-  set.add(1);
-  set.add(total);
-  for (let i = current - delta; i <= current + delta; i++) {
-    if (i >= 1 && i <= total) set.add(i);
-  }
-  const sorted = Array.from(set).sort((a, b) => a - b);
-  const out: (number | 'ellipsis')[] = [];
-  let prev = 0;
-  for (const n of sorted) {
-    if (prev && n - prev > 1) {
-      out.push('ellipsis');
-    }
-    out.push(n);
-    prev = n;
-  }
-  return out;
-}
 
 /** Matches `ScholarshipsPagination` for visual consistency across the site. */
 const linkClass =
@@ -55,13 +32,13 @@ export default function ContentHubPagination({
     return null;
   }
 
-  const items = visiblePageItems(currentPage, totalPages);
+  const items = visiblePaginationItems(currentPage, totalPages);
   const prevDisabled = currentPage <= 1;
   const nextDisabled = currentPage >= totalPages;
 
   return (
     <nav
-      className="mt-8 flex flex-wrap items-center justify-center gap-2"
+      className={`mt-8 ${paginationControlsRowClassName}`}
       aria-label="Articles pagination"
     >
       {prevDisabled ? (

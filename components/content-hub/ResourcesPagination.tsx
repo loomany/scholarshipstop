@@ -1,5 +1,10 @@
 import Link from 'next/link';
 
+import {
+  paginationControlsRowClassName,
+  visiblePaginationItems
+} from '@/lib/pagination/visiblePaginationItems';
+
 type ResourcesPaginationProps = {
   currentPage: number;
   totalPages: number;
@@ -9,34 +14,6 @@ type ResourcesPaginationProps = {
   /** Default `true`. Set `false` for hash URLs so Next does not scroll to top. */
   linkScroll?: boolean;
 };
-
-function visiblePageItems(
-  current: number,
-  total: number
-): (number | 'ellipsis')[] {
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  const delta = 1;
-  const set = new Set<number>();
-  set.add(1);
-  set.add(total);
-  for (let i = current - delta; i <= current + delta; i++) {
-    if (i >= 1 && i <= total) set.add(i);
-  }
-  const sorted = Array.from(set).sort((a, b) => a - b);
-  const out: (number | 'ellipsis')[] = [];
-  let prev = 0;
-  for (const n of sorted) {
-    if (prev && n - prev > 1) {
-      out.push('ellipsis');
-    }
-    out.push(n);
-    prev = n;
-  }
-  return out;
-}
 
 const linkClass =
   'inline-flex min-h-9 min-w-9 items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/50 focus-visible:ring-offset-1';
@@ -61,7 +38,7 @@ export default function ResourcesPagination({
     return null;
   }
 
-  const items = visiblePageItems(currentPage, totalPages);
+  const items = visiblePaginationItems(currentPage, totalPages);
   const prevDisabled = currentPage <= 1;
   const nextDisabled = currentPage >= totalPages;
 
@@ -70,7 +47,7 @@ export default function ResourcesPagination({
       <p className="text-sm text-gray-500">
         Page {currentPage} of {totalPages}
       </p>
-      <div className="flex flex-wrap items-center justify-center gap-2">
+      <div className={paginationControlsRowClassName}>
         {prevDisabled ? (
           <span
             className={`${linkClass} ${disabledClass}`}

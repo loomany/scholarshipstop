@@ -20,6 +20,7 @@ export default function ScholarshipCardPreview({
 }: ScholarshipCardPreviewProps) {
   return (
     <article
+      data-scholarship-card
       className={cn(
         'flex min-h-[280px] w-full max-w-md flex-1 cursor-default overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm select-none',
         className

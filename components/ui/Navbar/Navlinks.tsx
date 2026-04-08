@@ -221,13 +221,6 @@ export default function Navlinks({
     <>
       <div className="relative flex flex-row items-center justify-between gap-3 py-3 md:py-4">
         <div className="relative z-0 flex min-w-0 min-h-[2.5rem] flex-1 items-center gap-2 sm:gap-3 md:min-h-[2.75rem]">
-          <Link
-            href="/"
-            className={`${s.logo} relative z-[1] shrink-0`}
-            aria-label="ScholarshipTop — Home"
-          >
-            <Logo variant="header" />
-          </Link>
           <button
             type="button"
             className="relative z-0 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-zinc-100 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:hidden md:h-11 md:w-11"
@@ -242,6 +235,13 @@ export default function Navlinks({
               <Menu className="h-6 w-6" strokeWidth={2} aria-hidden />
             )}
           </button>
+          <Link
+            href="/"
+            className={`${s.logo} relative z-[1] shrink-0`}
+            aria-label="ScholarshipTop — Home"
+          >
+            <Logo variant="header" />
+          </Link>
           <nav
             className={s.inlineNav}
             aria-label="Main navigation"

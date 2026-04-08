@@ -2,39 +2,16 @@
 
 import Link from 'next/link';
 
+import {
+  paginationControlsRowClassName,
+  visiblePaginationItems
+} from '@/lib/pagination/visiblePaginationItems';
+
 type ScholarshipsPaginationProps = {
   currentPage: number;
   totalPages: number;
   buildHref: (page: number) => string;
 };
-
-function visiblePageItems(
-  current: number,
-  total: number
-): (number | 'ellipsis')[] {
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  const delta = 1;
-  const set = new Set<number>();
-  set.add(1);
-  set.add(total);
-  for (let i = current - delta; i <= current + delta; i++) {
-    if (i >= 1 && i <= total) set.add(i);
-  }
-  const sorted = Array.from(set).sort((a, b) => a - b);
-  const out: (number | 'ellipsis')[] = [];
-  let prev = 0;
-  for (const n of sorted) {
-    if (prev && n - prev > 1) {
-      out.push('ellipsis');
-    }
-    out.push(n);
-    prev = n;
-  }
-  return out;
-}
 
 const linkClass =
   'inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-slate-200/90 bg-white px-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40 focus-visible:ring-offset-1';
@@ -54,13 +31,13 @@ export default function ScholarshipsPagination({
     return null;
   }
 
-  const items = visiblePageItems(currentPage, totalPages);
+  const items = visiblePaginationItems(currentPage, totalPages);
   const prevDisabled = currentPage <= 1;
   const nextDisabled = currentPage >= totalPages;
 
   return (
     <nav
-      className="mt-8 flex flex-wrap items-center justify-center gap-2"
+      className={`mt-8 ${paginationControlsRowClassName}`}
       aria-label="Scholarship list pagination"
     >
       {prevDisabled ? (

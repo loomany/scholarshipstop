@@ -4,6 +4,7 @@ import { Check, ExternalLink, Info } from 'lucide-react';
 import type { Metadata } from 'next';
 
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
+import MobileSplitHeading from '@/components/ui/MobileSplitHeading';
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
 import { ProviderProfileScholarshipsList } from '@/components/providers/ProviderProfileScholarshipsList';
 import { ProviderProfileScholarshipsScroll } from '@/components/providers/ProviderProfileScholarshipsScroll';
@@ -17,6 +18,25 @@ import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
 import { createClient } from '@/utils/supabase/server';
 
 export const dynamic = 'force-dynamic';
+
+function normalizeAiSourceHref(url: string): string {
+  const trimmed = url.trim();
+  if (!trimmed) return url;
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
+/** Link text: hostname only. */
+function aiSourceDisplayLabel(url: string): string {
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+  try {
+    return new URL(normalizeAiSourceHref(trimmed)).hostname;
+  } catch {
+    const stripped = trimmed.replace(/^https?:\/\//i, '');
+    const host = stripped.split('/')[0] ?? '';
+    return host.replace(/:\d+$/, '') || stripped;
+  }
+}
 
 type PageProps = {
   params: { id: string };
@@ -87,11 +107,11 @@ export default async function ProviderProfilePage({
         <header className="rounded-2xl border border-gray-100 bg-white px-6 py-8 shadow-sm sm:px-10 sm:py-10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 space-y-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+                <h1 className="text-balance text-3xl font-bold tracking-tight text-gray-900 max-sm:w-full max-sm:text-center sm:text-4xl">
                   {data.displayName}
                 </h1>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/80">
+                <span className="inline-flex w-fit shrink-0 items-center gap-1.5 self-start rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/80 sm:self-center">
                   <Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={2.5} aria-hidden />
                   Verified Provider
                 </span>
@@ -146,12 +166,13 @@ export default async function ProviderProfilePage({
                     <span key={url}>
                       {i > 0 ? ', ' : null}
                       <a
-                        href={url}
+                        href={normalizeAiSourceHref(url)}
+                        title={normalizeAiSourceHref(url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-medium text-emerald-700 underline decoration-emerald-600/30 underline-offset-2 hover:text-emerald-800"
                       >
-                        {url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                        {aiSourceDisplayLabel(url)}
                       </a>
                     </span>
                   ))}
@@ -170,12 +191,13 @@ export default async function ProviderProfilePage({
         >
           <ProviderProfileScholarshipsScroll page={currentPage} />
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <h2
+            <MobileSplitHeading
+              as="h2"
               id="provider-scholarships-heading"
               className="text-xl font-bold text-gray-900"
-            >
-              Active scholarships by {data.displayName}
-            </h2>
+              firstOnMobile={<>Active scholarships by </>}
+              secondOnMobile={data.displayName}
+            />
             <Link
               href={findMatchesHref}
               className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"

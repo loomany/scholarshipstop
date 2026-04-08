@@ -67,6 +67,40 @@
     outline: none;
     @apply ring-2 ring-emerald-500/45 ring-offset-0 rounded-md;
   }
+
+  /**
+   * Mobile: center page-style headings site-wide. Opt out with
+   * data-heading-mobile-align="start" or Tailwind text-left on the heading.
+   * Card / editorial exceptions below.
+   */
+  @media (max-width: 639px) {
+    /* h3+ left as subsection labels inside cards; center display titles via h1/h2 */
+    main :where(h1, h2):not(.sr-only):not([data-heading-mobile-align='start']) {
+      text-align: center;
+    }
+
+    main a :where(h1, h2) {
+      text-align: left;
+    }
+
+    main .sa-rich :where(h2, h3, h4, h5, h6) {
+      text-align: left;
+    }
+
+    main article[data-scholarship-card] :where(h1, h2) {
+      text-align: left;
+    }
+
+    /* Hero row: h1 + badge/chips — center the block on narrow screens */
+    main .flex.flex-wrap:has(> h1) {
+      justify-content: center;
+    }
+
+    main .flex.flex-wrap:has(> h1) > h1 {
+      flex-basis: 100%;
+      text-align: center;
+    }
+  }
 }
 
 html {

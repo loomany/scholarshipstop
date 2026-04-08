@@ -277,7 +277,7 @@ export default function ScholarshipCard({
     : 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg focus-within:border-gray-300 focus-within:shadow-lg';
 
   return (
-    <article className={cardArticleClass}>
+    <article className={cardArticleClass} data-scholarship-card>
       <Link
         href={detailHref}
         className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-500/55"
