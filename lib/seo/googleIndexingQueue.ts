@@ -79,6 +79,18 @@ function normalizeIndexingUrl(value: string): string | null {
   return getURL(raw.startsWith('/') ? raw : `/${raw}`);
 }
 
+function inferGoogleIndexingKindFromUrl(url: string): GoogleIndexingContentKind | null {
+  try {
+    const pathname = new URL(url).pathname.replace(/\/+$/, '');
+    if (pathname.startsWith('/scholarships/')) return 'scholarship';
+    if (pathname.startsWith('/resources/')) return 'resource';
+    if (pathname.startsWith('/providers/')) return 'provider';
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 function queueKey(item: {
   url: string;
   notificationType: GoogleIndexingNotificationType;
@@ -122,6 +134,34 @@ export function resourceIndexingUrl(slug: string): string {
 
 export function providerIndexingUrl(providerRouteId: string): string {
   return getURL(buildProviderProfileScholarshipsHref(providerRouteId, 1).replace(/#.*$/, ''));
+}
+
+export function addToIndexingQueue(
+  url: string,
+  input?: {
+    kind?: GoogleIndexingContentKind;
+    notificationType?: GoogleIndexingNotificationType;
+    source?: string;
+  }
+) {
+  const normalized = normalizeIndexingUrl(url);
+  if (!normalized) {
+    throw new Error('addToIndexingQueue: invalid URL');
+  }
+
+  const kind = input?.kind ?? inferGoogleIndexingKindFromUrl(normalized);
+  if (!kind) {
+    throw new Error(
+      `addToIndexingQueue: could not infer content kind for URL "${normalized}"`
+    );
+  }
+
+  return enqueueGoogleIndexingUrls({
+    urls: [normalized],
+    kind,
+    notificationType: input?.notificationType,
+    source: input?.source ?? 'auto:add-to-indexing-queue'
+  });
 }
 
 export function enqueueGoogleIndexingUrls(input: {

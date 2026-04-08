@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 import { runArticleScholarshipMatchingPipeline } from '@/lib/content-hub/articleScholarshipMatching';
-import { enqueueGoogleIndexingUrls, resourceIndexingUrl } from '@/lib/seo/googleIndexingQueue';
+import { addToIndexingQueue, resourceIndexingUrl } from '@/lib/seo/googleIndexingQueue';
 import type { Database } from '@/types_db';
 
 export const dynamic = 'force-dynamic';
@@ -96,9 +96,7 @@ export async function POST(request: Request) {
     }
 
     if (post.slug?.trim()) {
-      enqueueGoogleIndexingUrls({
-        kind: 'resource',
-        urls: [resourceIndexingUrl(post.slug.trim())],
+      addToIndexingQueue(resourceIndexingUrl(post.slug.trim()), {
         source: 'internal:resources:apply-article-matching'
       });
     }

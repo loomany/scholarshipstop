@@ -6,10 +6,13 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
+import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Mapping
+from urllib.parse import quote
 
 from supabase import Client, create_client
 
@@ -18,6 +21,15 @@ from scholarship_db_columns import SCHOLARSHIP_UPSERT_PAYLOAD_KEYS
 # Имена переменных окружения (как в Supabase Dashboard → Settings → API)
 ENV_URL = "SUPABASE_URL"
 ENV_KEY = "SUPABASE_SERVICE_ROLE_KEY"
+QUEUE_FILE = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "data",
+    "google-indexing-queue.json",
+)
+UUID_LIKE_RE = re.compile(
+    r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+    re.IGNORECASE,
+)
 
 
 def get_client() -> Client:
@@ -62,6 +74,92 @@ def build_text_fingerprint(record: Mapping[str, Any]) -> str:
 def _now_iso() -> str:
     """Время в ISO для timestamptz (UTC)."""
     return datetime.now(timezone.utc).isoformat()
+
+
+def _site_origin() -> str:
+    raw = os.environ.get("NEXT_PUBLIC_SITE_URL", "").strip()
+    if not raw:
+        return "https://scholarshiptop.com"
+    raw = raw.rstrip("/")
+    return raw if raw.startswith("http") else f"https://{raw}"
+
+
+def scholarship_public_url(row: Mapping[str, Any]) -> str:
+    row_id = str(row.get("id") or "").strip()
+    slug = str(row.get("slug") or "").strip()
+    if slug and not UUID_LIKE_RE.match(slug):
+        suffix = quote(slug, safe="")
+    else:
+        suffix = row_id
+    if not suffix:
+        raise ValueError("Нельзя построить публичный URL без id или slug")
+    return f"{_site_origin()}/scholarships/{suffix}"
+
+
+def add_to_indexing_queue(url: str) -> None:
+    raw = str(url).strip()
+    if not raw:
+        return
+
+    try:
+        with open(QUEUE_FILE, "r", encoding="utf-8") as fh:
+            existing = json.load(fh)
+            items = existing if isinstance(existing, list) else []
+    except FileNotFoundError:
+        items = []
+    except json.JSONDecodeError:
+        items = []
+
+    now = _now_iso()
+    key = f"URL_UPDATED:{raw}"
+    by_key: dict[str, dict[str, Any]] = {}
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        item_url = item.get("url")
+        if not isinstance(item_url, str) or not item_url.strip():
+            continue
+        notification_type = item.get("notificationType")
+        if not isinstance(notification_type, str) or not notification_type.strip():
+            notification_type = "URL_UPDATED"
+        by_key[f"{notification_type}:{item_url}"] = item
+
+    prev = by_key.get(key, {})
+    by_key[key] = {
+        "url": raw,
+        "kind": "scholarship",
+        "notificationType": "URL_UPDATED",
+        "source": "parser:scholarships:new",
+        "status": "pending",
+        "enqueuedAt": now,
+        "attemptCount": prev.get("attemptCount", 0),
+        **(
+            {"lastAttemptAt": prev["lastAttemptAt"]}
+            if isinstance(prev.get("lastAttemptAt"), str)
+            else {}
+        ),
+        **({"sentAt": prev["sentAt"]} if isinstance(prev.get("sentAt"), str) else {}),
+    }
+
+    ordered = [by_key[key]]
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        item_url = item.get("url")
+        if not isinstance(item_url, str) or not item_url.strip():
+            continue
+        notification_type = item.get("notificationType")
+        if not isinstance(notification_type, str) or not notification_type.strip():
+            notification_type = "URL_UPDATED"
+        item_key = f"{notification_type}:{item_url}"
+        if item_key == key:
+            continue
+        ordered.append(by_key[item_key])
+
+    os.makedirs(os.path.dirname(QUEUE_FILE), exist_ok=True)
+    with open(QUEUE_FILE, "w", encoding="utf-8") as fh:
+        json.dump(ordered, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
 
 
 def _find_id_by_source_url(client: Client, source: str, url: str) -> str | None:
@@ -248,7 +346,12 @@ def upsert_scholarship(record: Mapping[str, Any]) -> dict[str, Any]:
             rows = check.data or []
         if not rows:
             raise RuntimeError("INSERT не вернул строку: проверь ответ API и RLS.")
-        return rows[0]
+        inserted = rows[0]
+        try:
+            add_to_indexing_queue(scholarship_public_url(inserted))
+        except Exception as exc:
+            print(f"[indexing-queue] warning: failed to enqueue new scholarship: {exc}")
+        return inserted
 
     # Обновление существующей
     res = (

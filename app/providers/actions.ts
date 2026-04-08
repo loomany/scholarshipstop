@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import { enrichProviderData } from '@/lib/providers/enrichProviderDataCore';
 import { isProvidersBulkEnrichUiEnabled } from '@/lib/providers/providerHubServer';
-import { enqueueGoogleIndexingUrls, providerIndexingUrl } from '@/lib/seo/googleIndexingQueue';
+import { addToIndexingQueue, providerIndexingUrl } from '@/lib/seo/googleIndexingQueue';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 
 export type BulkEnrichResult =
@@ -56,9 +56,7 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
         })
         .eq('id', row.id);
       if (providerRow?.slug?.trim()) {
-        enqueueGoogleIndexingUrls({
-          kind: 'provider',
-          urls: [providerIndexingUrl(providerRow.slug.trim())],
+        addToIndexingQueue(providerIndexingUrl(providerRow.slug.trim()), {
           source: 'server-action:providers:bulk-enrich'
         });
       }
@@ -84,9 +82,7 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
       .eq('id', row.id)
       .maybeSingle();
     if (providerRow?.slug?.trim()) {
-      enqueueGoogleIndexingUrls({
-        kind: 'provider',
-        urls: [providerIndexingUrl(providerRow.slug.trim())],
+      addToIndexingQueue(providerIndexingUrl(providerRow.slug.trim()), {
         source: 'server-action:providers:bulk-enrich'
       });
     }

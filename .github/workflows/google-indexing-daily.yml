@@ -1,0 +1,43 @@
+name: Daily Google Indexing Flush
+
+on:
+  schedule:
+    # GitHub Actions cron uses UTC.
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  flush-google-indexing-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Flush Google indexing queue
+        env:
+          SITE_URL: https://scholarshiptop.com
+          GOOGLE_INDEXING_SECRET: ${{ secrets.GOOGLE_INDEXING_SECRET }}
+        run: |
+          if [ -z "$GOOGLE_INDEXING_SECRET" ]; then
+            echo "Missing required GitHub secret: GOOGLE_INDEXING_SECRET" >&2
+            exit 1
+          fi
+
+          response_file="$(mktemp)"
+          http_code="$(
+            curl \
+              --silent \
+              --show-error \
+              --output "$response_file" \
+              --write-out '%{http_code}' \
+              --request POST \
+              --url "${SITE_URL}/api/internal/google-indexing" \
+              --header "Authorization: Bearer ${GOOGLE_INDEXING_SECRET}" \
+              --header "Content-Type: application/json" \
+              --data '{"action":"flush","limit":200}'
+          )"
+
+          cat "$response_file"
+
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+            echo "Google indexing flush failed with HTTP ${http_code}" >&2
+            exit 1
+          fi
