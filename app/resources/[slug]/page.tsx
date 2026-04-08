@@ -16,10 +16,6 @@ import {
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
 import {
-  splitForMidCtaInRemainder,
-  splitForPrimaryCtaInsertion
-} from '@/lib/content-hub/splitContentPostHtml';
-import {
   fetchPublishedContentPostBySlug,
   fetchRelatedPublishedContentPosts
 } from '@/lib/content-hub/contentPostsServer';
@@ -63,16 +59,6 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     post.related_scholarships
   );
   const bodyHtml = post.body_html?.trim() ?? '';
-  console.log('[resources/article] body_html tail', bodyHtml.slice(-500));
-  const bodyMarkdownTail = (post as { body_markdown?: string | null }).body_markdown?.slice(-500) ?? '';
-  console.log('[resources/article] body_markdown tail', bodyMarkdownTail);
-  const primarySplit = bodyHtml
-    ? splitForPrimaryCtaInsertion(bodyHtml)
-    : null;
-  const midSplit =
-    primarySplit != null
-      ? splitForMidCtaInRemainder(primarySplit.after)
-      : null;
 
   const related = await fetchRelatedPublishedContentPosts(post.slug, 3);
   const relatedWithSlug = related.filter((r) => r.slug?.trim());
@@ -180,53 +166,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           </div>
         ) : null}
 
-        {bodyHtml ? (
-          primarySplit ? (
-            <>
-              <SafeContentPostBody html={primarySplit.before} />
-              <ContentHubScholarshipCta
-                className="mt-4 sm:mt-5"
-                title="🎯 Find scholarships that match your goals"
-                description="Browse real scholarships and discover opportunities that fit your background, degree level, and study plans."
-                buttonText="Browse Scholarships"
-              />
-              {midSplit ? (
-                <>
-                  <SafeContentPostBody html={midSplit.before} tightTop />
-                  <ContentHubScholarshipCta
-                    className="mt-4 sm:mt-5"
-                    title="💡 See scholarships you may qualify for"
-                    description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
-                    buttonText="Explore Scholarships"
-                  />
-                  <SafeContentPostBody html={midSplit.after} tightTop />
-                </>
-              ) : (
-                <>
-                  <SafeContentPostBody html={primarySplit.after} tightTop />
-                  {primarySplit.after.length > 650 ? (
-                    <ContentHubScholarshipCta
-                      className="mt-4 sm:mt-5"
-                      title="💡 See scholarships you may qualify for"
-                      description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
-                      buttonText="Explore Scholarships"
-                    />
-                  ) : null}
-                </>
-              )}
-            </>
-          ) : (
-            <>
-              <SafeContentPostBody html={bodyHtml} />
-              <ContentHubScholarshipCta
-                className="mt-4 sm:mt-5"
-                title="💡 See scholarships you may qualify for"
-                description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
-                buttonText="Explore Scholarships"
-              />
-            </>
-          )
-        ) : null}
+        {bodyHtml ? <SafeContentPostBody html={bodyHtml} /> : null}
 
         {faq.length > 0 ? (
           <section
