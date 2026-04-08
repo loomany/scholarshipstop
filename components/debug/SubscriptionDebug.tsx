@@ -1,6 +1,6 @@
 'use client';
 
-import { Settings, Terminal } from 'lucide-react';
+import { Settings, Terminal, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -36,6 +36,7 @@ export default function SubscriptionDebug() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') return;
@@ -78,6 +79,15 @@ export default function SubscriptionDebug() {
 
     void loadProfile();
   }, [supabase]);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   if (process.env.NODE_ENV !== 'development') {
     return null;
@@ -203,76 +213,119 @@ export default function SubscriptionDebug() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-[80] w-[320px] rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-xl backdrop-blur">
-      <div className="flex items-center gap-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
-          <Settings className="h-4 w-4" aria-hidden />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-slate-900">Subscription Debug</p>
-          <p className="flex items-center gap-1 text-xs text-slate-500">
-            <Terminal className="h-3.5 w-3.5" aria-hidden />
-            Development only
-          </p>
-        </div>
-      </div>
+    <>
+      {/* Overlay */}
+      <div
+        role="presentation"
+        aria-hidden={!open}
+        className={`fixed inset-0 z-[9998] bg-black/40 transition-opacity duration-300 ease-out ${
+          open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        onClick={() => setOpen(false)}
+      />
 
-      <div className="mt-4 space-y-3">
-        <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
-          subscription_plan
-        </label>
-        <select
-          value={selectedPlan}
-          onChange={(e) => setSelectedPlan(e.target.value as DebugPlan)}
-          disabled={isLoading || isSaving}
-          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20"
-        >
-          {PLAN_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-
-        <button
-          type="button"
-          onClick={handleApplyPlan}
-          disabled={isLoading || isSaving}
-          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSaving ? 'Applying...' : 'Apply Debug Plan'}
-        </button>
-
-        <div className="grid gap-2 sm:grid-cols-2">
+      {/* Drawer */}
+      <aside
+        id="subscription-debug-drawer"
+        aria-hidden={!open}
+        className={`fixed inset-y-0 right-0 z-[9999] flex w-[min(80dvw,350px)] max-w-[100dvw] flex-col border-l border-slate-200 bg-white shadow-2xl transition-transform duration-300 ease-out ${
+          open ? 'translate-x-0' : 'translate-x-full pointer-events-none'
+        }`}
+      >
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+              <Settings className="h-4 w-4" aria-hidden />
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-slate-900">Subscription Debug</p>
+              <p className="flex items-center gap-1 text-xs text-slate-500">
+                <Terminal className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                Development only
+              </p>
+            </div>
+          </div>
           <button
             type="button"
-            onClick={handleTrial3Days}
-            disabled={isLoading || isSaving}
-            className="rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+            onClick={() => setOpen(false)}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            aria-label="Close subscription debug"
           >
-            Set Trial: 3 Days
-          </button>
-          <button
-            type="button"
-            onClick={handleTrialExpired}
-            disabled={isLoading || isSaving}
-            className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            Set Trial: Expired
+            <X className="h-5 w-5" aria-hidden />
           </button>
         </div>
 
-        <button
-          type="button"
-          onClick={handleResetDebug}
-          disabled={isLoading || isSaving}
-          className="w-full rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          Reset Debug
-        </button>
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+          <div className="space-y-3">
+            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
+              subscription_plan
+            </label>
+            <select
+              value={selectedPlan}
+              onChange={(e) => setSelectedPlan(e.target.value as DebugPlan)}
+              disabled={isLoading || isSaving}
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20"
+            >
+              {PLAN_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
 
-        {message ? <p className="text-xs font-medium text-slate-500">{message}</p> : null}
-      </div>
-    </div>
+            <button
+              type="button"
+              onClick={handleApplyPlan}
+              disabled={isLoading || isSaving}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSaving ? 'Applying...' : 'Apply Debug Plan'}
+            </button>
+
+            <div className="grid gap-2 sm:grid-cols-1">
+              <button
+                type="button"
+                onClick={handleTrial3Days}
+                disabled={isLoading || isSaving}
+                className="rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Set Trial: 3 Days
+              </button>
+              <button
+                type="button"
+                onClick={handleTrialExpired}
+                disabled={isLoading || isSaving}
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Set Trial: Expired
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleResetDebug}
+              disabled={isLoading || isSaving}
+              className="w-full rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Reset Debug
+            </button>
+
+            {message ? <p className="text-xs font-medium text-slate-500">{message}</p> : null}
+          </div>
+        </div>
+      </aside>
+
+      {/* FAB — above overlay/drawer */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="fixed bottom-6 right-4 z-[10000] flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-800/50 text-white shadow-lg backdrop-blur-md transition hover:bg-slate-800/70 focus:outline-none focus:ring-2 focus:ring-orange-400/60"
+        aria-label={open ? 'Close subscription debug' : 'Open subscription debug'}
+        aria-expanded={open}
+        aria-controls="subscription-debug-drawer"
+      >
+        <Settings className="h-5 w-5" aria-hidden />
+      </button>
+    </>
   );
 }

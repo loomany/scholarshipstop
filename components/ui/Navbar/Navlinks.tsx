@@ -12,13 +12,15 @@ import {
   type CSSProperties
 } from 'react';
 import clsx from 'clsx';
-import { Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
 
 import Logo from '@/components/icons/Logo';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import {
   accountNavbarLabel,
-  profileDisplayNameFromRow
+  accountNavbarLabelMobile,
+  profileDisplayNameFromRow,
+  profileFirstNameFromRow
 } from '@/lib/nav/accountDisplayName';
 import {
   RESOURCES_SECTION_LABEL,
@@ -42,15 +44,19 @@ interface NavlinksProps {
   user: User | null;
   /** From `public.profiles` first/last (server). */
   profileDisplayName: string | null;
+  /** From `public.profiles.first_name` (server). */
+  profileFirstName: string | null;
 }
 
 export default function Navlinks({
   user: serverUser,
-  profileDisplayName: serverProfileDisplayName
+  profileDisplayName: serverProfileDisplayName,
+  profileFirstName: serverProfileFirstName
 }: NavlinksProps) {
   const pathname = usePathname() ?? '';
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [aboutExpanded, setAboutExpanded] = useState(false);
   /** `undefined` = browser session not read yet (keep SSR `serverUser` for hydration). */
   const [clientUser, setClientUser] = useState<User | null | undefined>(undefined);
   const menuId = useId();
@@ -59,6 +65,9 @@ export default function Navlinks({
 
   /** `undefined` = not loaded yet; use server name until then. */
   const [clientProfileDisplayName, setClientProfileDisplayName] = useState<
+    string | null | undefined
+  >(undefined);
+  const [clientProfileFirstName, setClientProfileFirstName] = useState<
     string | null | undefined
   >(undefined);
 
@@ -83,6 +92,7 @@ export default function Navlinks({
     const uid = user?.id;
     if (!uid) {
       setClientProfileDisplayName(undefined);
+      setClientProfileFirstName(undefined);
       return;
     }
     let cancelled = false;
@@ -95,6 +105,7 @@ export default function Navlinks({
       .then(({ data, error }) => {
         if (cancelled || error) return;
         setClientProfileDisplayName(profileDisplayNameFromRow(data));
+        setClientProfileFirstName(profileFirstNameFromRow(data));
       });
     return () => {
       cancelled = true;
@@ -109,6 +120,34 @@ export default function Navlinks({
         : clientProfileDisplayName;
     return accountNavbarLabel(fromProfile, user);
   }, [clientProfileDisplayName, serverProfileDisplayName, user]);
+
+  const accountLabelMobile = useMemo(() => {
+    if (!user) return '';
+    const firstName =
+      clientProfileFirstName === undefined
+        ? serverProfileFirstName
+        : clientProfileFirstName;
+    const fromProfile =
+      clientProfileDisplayName === undefined
+        ? serverProfileDisplayName
+        : clientProfileDisplayName;
+    return accountNavbarLabelMobile(firstName, fromProfile, user);
+  }, [
+    clientProfileFirstName,
+    clientProfileDisplayName,
+    serverProfileDisplayName,
+    serverProfileFirstName,
+    user
+  ]);
+
+  const signOut = useCallback(async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setClientUser(null);
+    setClientProfileDisplayName(undefined);
+    setClientProfileFirstName(undefined);
+    router.refresh();
+  }, [router]);
 
   const aboutSectionActive = useMemo(() => {
     if (pathname === '/about' || pathname.startsWith('/about/')) return true;
@@ -171,6 +210,12 @@ export default function Navlinks({
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
   }, []);
+
+  useEffect(() => {
+    if (menuOpen) {
+      setAboutExpanded(aboutSectionActive);
+    }
+  }, [menuOpen, aboutSectionActive]);
 
   return (
     <>
@@ -269,18 +314,13 @@ export default function Navlinks({
                 className={clsx(nav.dark, nav.darkAccount, accountActive && nav.darkActive)}
                 title={accountLabel}
               >
-                {accountLabel}
+                <span className="lg:hidden">{accountLabelMobile}</span>
+                <span className="hidden lg:inline">{accountLabel}</span>
               </Link>
               <button
                 type="button"
-                className={clsx(nav.dark, nav.darkAsButton)}
-                onClick={async () => {
-                  const supabase = createClient();
-                  await supabase.auth.signOut();
-                  setClientUser(null);
-                  setClientProfileDisplayName(undefined);
-                  router.refresh();
-                }}
+                className={clsx(nav.dark, nav.darkAsButton, 'hidden lg:inline-flex')}
+                onClick={() => void signOut()}
               >
                 Sign out
               </button>
@@ -309,7 +349,7 @@ export default function Navlinks({
             role="dialog"
             aria-modal="true"
             aria-label="Site menu"
-            className="fixed left-0 top-16 z-[96] flex h-[calc(100dvh-4rem)] w-[min(100vw,18rem)] flex-col border-r border-zinc-800 bg-zinc-950 shadow-2xl lg:hidden md:top-20 md:h-[calc(100dvh-5rem)] sm:w-[19rem]"
+            className="fixed left-0 top-16 z-[96] flex h-[calc(100dvh-4rem)] w-[min(100dvw,18rem)] max-w-[100dvw] flex-col border-r border-zinc-800 bg-zinc-950 shadow-2xl lg:hidden md:top-20 md:h-[calc(100dvh-5rem)] sm:w-[19rem]"
             style={
               {
                 paddingTop: 'env(safe-area-inset-top, 0px)'
@@ -317,37 +357,83 @@ export default function Navlinks({
             }
           >
             <nav className="flex flex-col gap-0.5 p-3 pt-4" aria-label="Main">
-              <Link
-                href="/about"
-                className={clsx(
-                  nav.darkDrawer,
-                  aboutSectionActive && nav.darkDrawerActive
-                )}
-                onClick={closeMenu}
-              >
-                About
-              </Link>
-              <div
-                className="mb-1 ml-3 flex flex-col gap-0.5 border-l border-white/15 pl-3"
-                role="group"
-                aria-label="Help and legal"
-              >
-                {ABOUT_SUBLINKS.map(({ href, label }) => {
-                  const active = sublinkActive(href, pathname);
-                  return (
-                    <Link
-                      key={href}
-                      href={href}
+              <div className="w-full max-w-full">
+                <div
+                  className="flex w-full min-w-0 items-stretch overflow-hidden rounded-lg"
+                  onMouseEnter={() => {
+                    if (
+                      typeof window !== 'undefined' &&
+                      window.matchMedia('(hover: hover)').matches
+                    ) {
+                      setAboutExpanded(true);
+                    }
+                  }}
+                >
+                  <Link
+                    href="/about"
+                    className={clsx(
+                      nav.darkDrawer,
+                      'min-w-0 flex-1 rounded-none rounded-l-lg py-3 pl-3 pr-2',
+                      aboutSectionActive && nav.darkDrawerActive
+                    )}
+                    onClick={closeMenu}
+                  >
+                    About
+                  </Link>
+                  <button
+                    type="button"
+                    className="flex w-11 shrink-0 items-center justify-center rounded-none rounded-r-lg border-0 bg-transparent text-zinc-300 transition hover:bg-white/10 hover:text-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                    aria-expanded={aboutExpanded}
+                    aria-controls={`${menuId}-about-sub`}
+                    id={`${menuId}-about-chevron`}
+                    aria-label={
+                      aboutExpanded ? 'Collapse About submenu' : 'Expand About submenu'
+                    }
+                    onClick={() => setAboutExpanded((o) => !o)}
+                  >
+                    <ChevronDown
                       className={clsx(
-                        nav.darkDrawerSub,
-                        active && nav.darkDrawerSubActive
+                        'h-5 w-5 shrink-0 transition-transform duration-200 ease-out',
+                        aboutExpanded && 'rotate-180'
                       )}
-                      onClick={closeMenu}
+                      aria-hidden
+                    />
+                  </button>
+                </div>
+                <div
+                  id={`${menuId}-about-sub`}
+                  role="region"
+                  aria-label="About section links"
+                  className={clsx(
+                    'grid transition-[grid-template-rows] duration-200 ease-out',
+                    aboutExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <div
+                      className="mb-1 ml-3 mt-0.5 flex flex-col gap-0.5 border-l border-white/15 pl-3"
+                      role="group"
+                      aria-label="Help and legal"
                     >
-                      {label}
-                    </Link>
-                  );
-                })}
+                      {ABOUT_SUBLINKS.map(({ href, label }) => {
+                        const active = sublinkActive(href, pathname);
+                        return (
+                          <Link
+                            key={href}
+                            href={href}
+                            className={clsx(
+                              nav.darkDrawerSub,
+                              active && nav.darkDrawerSubActive
+                            )}
+                            onClick={closeMenu}
+                          >
+                            {label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
               </div>
               <Link
                 href="/scholarships"
@@ -379,6 +465,31 @@ export default function Navlinks({
               >
                 {RESOURCES_SECTION_LABEL}
               </Link>
+              {user ? (
+                <>
+                  <div className="my-2 border-t border-white/15" role="separator" />
+                  <Link
+                    href="/account"
+                    className={clsx(
+                      nav.darkDrawer,
+                      accountActive && nav.darkDrawerActive
+                    )}
+                    onClick={closeMenu}
+                  >
+                    Account
+                  </Link>
+                  <button
+                    type="button"
+                    className={clsx(nav.darkDrawer, nav.darkAsButton, 'w-full text-left')}
+                    onClick={() => {
+                      void signOut();
+                      closeMenu();
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : null}
             </nav>
           </div>
         </>

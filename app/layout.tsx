@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import SubscriptionDebug from '@/components/debug/SubscriptionDebug';
 import ConditionalFooter from '@/components/ui/Footer/ConditionalFooter';
 import Navbar from '@/components/ui/Navbar';
@@ -20,6 +20,12 @@ export const metadata: Metadata = {
     title: title,
     description: description
   }
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover'
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
@@ -56,7 +62,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <Navbar />
         <main
           id="skip"
-          className="min-h-[calc(100dvh-4rem)] md:min-h-[calc(100dvh-5rem)]"
+          className="min-h-[calc(100dvh-4rem)] w-full min-w-0 max-w-[100%] overflow-x-clip md:min-h-[calc(100dvh-5rem)]"
         >
           {children}
         </main>

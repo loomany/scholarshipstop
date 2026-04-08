@@ -13,7 +13,7 @@ export default function ScholarshipPreviewList() {
         <ScholarshipsSidebarPreview />
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col border-t border-gray-100 bg-gray-50/90 lg:border-l lg:border-t-0">
-          <div className="flex shrink-0 items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-3 sm:px-5">
+          <div className="hidden shrink-0 items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-3 sm:px-5 lg:flex">
             <p className="text-sm font-semibold tracking-tight text-gray-900">
               Matches for you
             </p>

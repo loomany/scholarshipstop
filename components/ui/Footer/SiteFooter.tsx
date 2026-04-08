@@ -13,9 +13,9 @@ export default function SiteFooter() {
 
   return (
     <footer className="border-t border-gray-200 bg-gray-50">
-      <div className="mx-auto max-w-6xl px-4 py-2.5 sm:px-6 sm:py-3">
-        <div className="flex justify-center">
-          <div className="flex max-w-full flex-col items-center gap-3 sm:flex-row sm:items-start sm:gap-x-3">
+      <div className="mx-auto max-w-6xl py-2.5 pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pb-[max(0.625rem,env(safe-area-inset-bottom,0px))] sm:px-6 sm:py-3 sm:pb-3">
+        <div className="flex justify-start sm:justify-center">
+          <div className="flex max-w-full flex-col items-start gap-3 sm:flex-row sm:items-start sm:gap-x-3">
             <div className="shrink-0 -translate-x-0.5 sm:-translate-x-1">
               <Link
                 href="/"
@@ -25,11 +25,11 @@ export default function SiteFooter() {
                 <Logo variant="footer" />
               </Link>
             </div>
-            <div className="flex flex-col items-center gap-1.5 sm:items-start sm:gap-2">
-              <div className="flex w-full justify-center sm:w-auto sm:justify-start">
+            <div className="flex w-full min-w-0 flex-col items-start gap-1.5 sm:w-auto sm:gap-2">
+              <div className="flex w-full justify-start">
                 <SiteFooterNav />
               </div>
-              <p className="max-w-3xl text-center text-xs leading-snug text-gray-600 sm:text-left sm:text-sm">
+              <p className="max-w-3xl text-left text-xs leading-snug text-gray-600 sm:text-sm">
                 Helping students find the right scholarships faster.{' '}
                 <span className="text-gray-500 tabular-nums">
                   | © {year} ScholarshipTop

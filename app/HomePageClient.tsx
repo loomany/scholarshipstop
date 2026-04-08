@@ -28,6 +28,10 @@ const heroPrimaryCtaClass =
 
 const container = 'mx-auto w-full max-w-7xl';
 
+/** ~430px-style rhythm on 320–430px phones + safe-area (notch / home indicator) */
+const homeSectionPadX =
+  'pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6';
+
 const h2Section =
   'text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.35rem] lg:leading-[1.15] xl:text-[2.5rem]';
 
@@ -88,16 +92,21 @@ export default function HomePageClient({
   return (
     <div className="bg-white text-gray-900 antialiased">
       {/* 1. Hero */}
-      <section className="border-b border-gray-100 bg-white px-4 pt-10 pb-6 sm:px-6 sm:pt-12 sm:pb-7 lg:pt-14 lg:pb-8 xl:pb-8">
+      <section
+        className={`border-b border-gray-100 bg-white pt-10 pb-6 sm:pt-12 sm:pb-7 lg:pt-14 lg:pb-8 xl:pb-8 ${homeSectionPadX}`}
+      >
         <div className={`${container} max-w-4xl text-center`}>
-          <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 animate-home-fade-up sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
-            Find scholarships that actually fit you
+          <h1 className="text-pretty text-[clamp(1.8125rem,5.25vw+0.8rem,2.25rem)] font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 animate-home-fade-up sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
+            Find scholarships{' '}
+            <br className="sm:hidden" aria-hidden />
+            that actually fit you
           </h1>
           <p
-            className={`mx-auto mt-5 max-w-2xl opacity-0 animate-home-fade-up-delay-1 sm:mt-6 ${ledeMuted}`}
+            className={`mx-auto mt-5 max-w-2xl text-pretty opacity-0 animate-home-fade-up-delay-1 sm:mt-6 ${ledeMuted}`}
           >
-            Stop wasting time on irrelevant opportunities. Discover scholarships
-            tailored to your profile and apply smarter.
+            Stop wasting time on irrelevant opportunities.{' '}
+            <br className="sm:hidden" aria-hidden />
+            Discover scholarships tailored to your profile and apply smarter.
           </p>
           <div className="mt-4 flex justify-center opacity-0 animate-home-fade-up-delay-1 sm:mt-5">
             <div className="inline-flex items-center gap-2.5 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-800">
@@ -128,7 +137,9 @@ export default function HomePageClient({
       </section>
 
       {/* 2. Value strip */}
-      <section className="border-y border-gray-200/90 bg-gray-50 px-4 pb-3 pt-2 sm:px-6 sm:pb-4 sm:pt-3 lg:pb-4 lg:pt-3">
+      <section
+        className={`border-y border-gray-200/90 bg-gray-50 pb-3 pt-2 sm:pb-4 sm:pt-3 lg:pb-4 lg:pt-3 ${homeSectionPadX}`}
+      >
         <div className={container}>
           <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 sm:gap-x-8 sm:gap-y-7 lg:gap-x-12">
             {[
@@ -163,19 +174,21 @@ export default function HomePageClient({
       {/* 3. Problem */}
       <section
         ref={painSectionRef}
-        className={`border-b border-gray-100 bg-white px-4 pt-10 pb-12 sm:px-6 sm:pt-11 sm:pb-14 lg:pt-12 lg:pb-16 xl:pt-14 xl:pb-20`}
+        className={`border-b border-gray-100 bg-white pt-10 pb-12 sm:pt-11 sm:pb-14 lg:pt-12 lg:pb-16 xl:pt-14 xl:pb-20 ${homeSectionPadX}`}
       >
         <div
           className={`${container} flex flex-col items-stretch gap-12 lg:flex-row lg:items-center lg:gap-16 xl:gap-24 ${
             painSectionVisible ? 'animate-pain-fade-up' : 'opacity-0'
           }`}
         >
-          <div className="min-w-0 flex-1 text-left lg:max-w-2xl">
-            <h2 className={h2Section}>
-              Finding the right scholarships shouldn&apos;t feel overwhelming
+          <div className="min-w-0 flex-1 text-center lg:max-w-2xl lg:text-left">
+            <h2 className={`text-pretty ${h2Section}`}>
+              Finding the right scholarships{' '}
+              <br className="lg:hidden" aria-hidden />
+              shouldn&apos;t feel overwhelming
             </h2>
             <div
-              className={`mt-7 space-y-4 text-lg leading-relaxed text-gray-600 sm:mt-8 sm:text-xl sm:leading-relaxed`}
+              className={`mt-7 space-y-4 text-pretty text-lg leading-relaxed text-gray-600 sm:mt-8 sm:text-xl sm:leading-relaxed`}
             >
               <p>Thousands of listings — most won&apos;t match your profile.</p>
               <p>
@@ -184,7 +197,7 @@ export default function HomePageClient({
               </p>
               <p>Deadlines slip. Good options disappear.</p>
             </div>
-            <p className="mt-9 text-2xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-3xl">
+            <p className="mt-9 text-center text-2xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-3xl lg:text-left">
               We make it simple.
             </p>
             <Link
@@ -211,7 +224,7 @@ export default function HomePageClient({
       {/* 4. Product demo */}
       <section
         ref={worksSectionRef}
-        className={`border-b border-gray-100 bg-gray-50 px-4 pt-10 pb-12 sm:px-6 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20`}
+        className={`border-b border-gray-100 bg-gray-50 pt-10 pb-12 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20 ${homeSectionPadX}`}
       >
         <div className={container}>
           <div className="grid grid-cols-1 items-stretch gap-12 lg:grid-cols-2 lg:gap-20 xl:gap-24">
@@ -278,7 +291,9 @@ export default function HomePageClient({
       </section>
 
       {/* 5. Easy apply */}
-      <section className={`border-b border-gray-100 bg-white px-4 pt-10 pb-12 sm:px-6 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20`}>
+      <section
+        className={`border-b border-gray-100 bg-white pt-10 pb-12 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20 ${homeSectionPadX}`}
+      >
         <div className={`${container} max-w-5xl text-center`}>
           <h2
             className={`mx-auto max-w-[36rem] text-pretty sm:max-w-[40rem] lg:max-w-[42rem] ${h2EasyApplySection}`}
@@ -305,15 +320,15 @@ export default function HomePageClient({
             ].map((card) => (
               <div
                 key={card.title}
-                className="group flex min-h-[200px] flex-col rounded-2xl border border-gray-200 bg-white p-7 text-left shadow-[0_4px_20px_-10px_rgba(15,23,42,0.07)] transition duration-200 hover:border-gray-300 hover:shadow-[0_10px_32px_-18px_rgba(15,23,42,0.11)] sm:min-h-[210px] sm:p-8"
+                className="group flex min-h-[200px] flex-col rounded-2xl border border-gray-200 bg-white p-7 text-center shadow-[0_4px_20px_-10px_rgba(15,23,42,0.07)] transition duration-200 hover:border-gray-300 hover:shadow-[0_10px_32px_-18px_rgba(15,23,42,0.11)] sm:min-h-[210px] sm:p-8 sm:text-left"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-50 text-gray-900 ring-1 ring-gray-100 transition group-hover:bg-gray-100/90">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-gray-50 text-gray-900 ring-1 ring-gray-100 transition group-hover:bg-gray-100/90 sm:mx-0">
                   <card.icon className="h-7 w-7" strokeWidth={2} aria-hidden />
                 </div>
                 <h3 className="mt-5 text-lg font-semibold leading-snug tracking-tight text-gray-900 sm:text-[1.125rem]">
                   {card.title}
                 </h3>
-                <p className="mt-2.5 flex-1 text-left text-[0.9375rem] leading-relaxed text-pretty text-gray-600 sm:text-base sm:leading-relaxed">
+                <p className="mt-2.5 flex-1 text-[0.9375rem] leading-relaxed text-pretty text-gray-600 sm:text-base sm:leading-relaxed sm:text-left">
                   {card.body}
                 </p>
               </div>
@@ -323,7 +338,9 @@ export default function HomePageClient({
       </section>
 
       {/* 6. How it works */}
-      <section className={`border-b border-gray-100 bg-gray-50 px-4 pt-10 pb-12 sm:px-6 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20`}>
+      <section
+        className={`border-b border-gray-100 bg-gray-50 pt-10 pb-12 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20 ${homeSectionPadX}`}
+      >
         <div className={`${container} max-w-5xl`}>
           <h2 className={`text-center text-pretty ${h2Section}`}>How it works</h2>
           <div className="mx-auto mt-7 grid max-w-lg gap-6 sm:mt-8 sm:max-w-none sm:grid-cols-3 sm:gap-6 lg:mt-10 lg:gap-7">
@@ -367,13 +384,19 @@ export default function HomePageClient({
       </section>
 
       {/* 7. Final CTA */}
-      <section className="border-b border-gray-100 bg-white px-4 pt-8 pb-10 sm:px-6 sm:pt-9 sm:pb-11 lg:pt-10 lg:pb-12">
+      <section
+        className={`border-b border-gray-100 bg-white pt-8 pb-[max(2.5rem,env(safe-area-inset-bottom,0px))] sm:pt-9 sm:pb-11 lg:pt-10 lg:pb-12 ${homeSectionPadX}`}
+      >
         <div className={`${container} max-w-3xl text-center`}>
           <h2 className="text-pretty text-[1.85rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl sm:leading-[1.06] lg:text-[2.65rem] lg:leading-[1.05] xl:text-[2.8rem]">
-            Find scholarships that fit you — faster
+            Find scholarships{' '}
+            <br className="sm:hidden" aria-hidden />
+            that fit you — faster
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg font-medium leading-snug text-gray-700 sm:mt-5 sm:text-xl sm:leading-snug">
-            Stop searching blindly. Start focusing on what matters.
+            Stop searching blindly.{' '}
+            <br className="sm:hidden" aria-hidden />
+            Start focusing on what matters.
           </p>
           <Link
             href={primaryCtaHref}
