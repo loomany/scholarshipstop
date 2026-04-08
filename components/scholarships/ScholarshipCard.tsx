@@ -108,7 +108,7 @@ export default function ScholarshipCard({
   /** Save / Not relevant — under award when stacked; inside award row on catalog mobile. */
   const cardActionsWrap = stackedListing
     ? 'relative z-10 mt-2.5 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto'
-    : 'relative z-10 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto xl:mt-0 xl:w-[128px] xl:max-w-none xl:self-center';
+    : 'relative z-10 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto xl:mt-0 xl:w-full xl:max-w-[148px] xl:self-start';
 
   /** Award metrics: left-aligned (reads toward deadline). */
   const awardMetricAlign = 'text-left';
