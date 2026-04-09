@@ -126,12 +126,12 @@ export default function TermsPage() {
             <p className={pClass}>
               ScholarshipTop offers paid subscriptions and premium features
               through IE Daur Mussatay (FREEBEE). All payments are processed by
-              Paddle, our Merchant of Record.
+              LemonSqueezy, our Merchant of Record.
             </p>
             <p className={pClass}>
-              By purchasing a subscription, you authorize Paddle to charge the
-              applicable subscription fees, taxes, and renewal charges according
-              to the plan you select.
+              By purchasing a subscription, you authorize LemonSqueezy to charge
+              the applicable subscription fees, taxes, and renewal charges
+              according to the plan you select.
             </p>
             <p className={pClass}>
               Subscription cancellations, billing disputes, and refund handling

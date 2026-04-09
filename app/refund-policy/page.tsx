@@ -75,7 +75,7 @@ export default function RefundPolicyPage() {
               4. Processing
             </h2>
             <p className={pClass}>
-              Refunds are processed via our payment provider, Paddle.
+              Refunds are processed via our payment provider, LemonSqueezy.
             </p>
           </section>
         </div>

@@ -117,16 +117,16 @@ export default function PrivacyPolicyPage() {
               database, and payment providers, only as needed to run the service.
             </p>
             <p className={pClass}>
-              We use Paddle for payment processing. We do not store your credit
-              card details. Your personal data shared with Paddle is processed
+              We use LemonSqueezy for payment processing. We do not store your credit
+              card details. Your personal data shared with LemonSqueezy is processed
               according to{' '}
               <a
-                href="https://www.paddle.com/legal/privacy"
+                href="https://www.lemonsqueezy.com/privacy"
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-500"
               >
-                Paddle&apos;s Privacy Policy
+                LemonSqueezy&apos;s Privacy Policy
               </a>
               .
             </p>

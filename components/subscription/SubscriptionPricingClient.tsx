@@ -8,15 +8,6 @@ import Button from '@/components/ui/Button';
 import { SCHOLARSHIP_ACTION_FOCUS_VISIBLE } from '@/lib/constants/scholarshipActionUi';
 import { cn } from '@/utils/cn';
 
-function parseVariantId(value: string | undefined): number | null {
-  if (!value) {
-    return null;
-  }
-
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
 /** Compact trial note — same language as `ScholarshipsEmailConfirmationBanner`. */
 function PlanTrialBetweenFeaturesAndCta() {
   return (
@@ -66,12 +57,12 @@ type PlanRowProps = {
   billing: string;
   features: string[];
   buttonClassName: string;
-  variantId: number | null;
+  checkoutUrl: string;
   featured?: boolean;
   ctaAbove?: ReactNode;
   isLoading: boolean;
   isBusy: boolean;
-  onSelect: (variantId: number | null) => void;
+  onSelect: (checkoutUrl: string, title: string) => void;
 };
 
 type PlanConfig = Omit<PlanRowProps, 'isLoading' | 'isBusy' | 'onSelect'>;
@@ -83,14 +74,14 @@ function PlanGrantCard({
   billing,
   features,
   buttonClassName,
-  variantId,
+  checkoutUrl,
   featured = false,
   ctaAbove,
   isLoading,
   isBusy,
   onSelect
 }: PlanRowProps) {
-  const isDisabled = variantId === null || isBusy;
+  const isDisabled = !checkoutUrl || isBusy;
 
   return (
     <article
@@ -132,7 +123,7 @@ function PlanGrantCard({
             variant="slim"
             loading={isLoading}
             disabled={isDisabled}
-            onClick={() => onSelect(variantId)}
+            onClick={() => onSelect(checkoutUrl, title)}
             className={cn(
               'inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-center text-sm font-semibold transition focus:outline-none disabled:cursor-not-allowed disabled:opacity-70',
               SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
@@ -171,7 +162,8 @@ const PLANS: PlanConfig[] = [
     price: '$25',
     billing: 'Billed $25 every month.',
     features: MONTHLY_FEATURES,
-    variantId: parseVariantId(process.env.NEXT_PUBLIC_LS_MONTHLY_VARIANT_ID),
+    checkoutUrl:
+      'https://pay.scholarshiptop.com/checkout/buy/9936e580-f4a7-41e7-a16d-a1f40cbbbbc1?logo=0&discount=0',
     buttonClassName:
       'border border-gray-300 bg-white text-gray-900 hover:bg-gray-50'
   },
@@ -180,7 +172,8 @@ const PLANS: PlanConfig[] = [
     price: '$19',
     billing: 'Billed $57 every 3 months.',
     features: QUARTERLY_FEATURES,
-    variantId: parseVariantId(process.env.NEXT_PUBLIC_LS_QUARTERLY_VARIANT_ID),
+    checkoutUrl:
+      'https://pay.scholarshiptop.com/checkout/buy/2d5e0a58-9d08-42d5-8930-3e7cfcaa3f88?logo=0&discount=0',
     buttonClassName:
       'border border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm hover:border-[#E6670C] hover:bg-[#E6670C] focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2',
     badge: (
@@ -207,7 +200,8 @@ const PLANS: PlanConfig[] = [
     price: '$12',
     billing: 'Billed $144 annually.',
     features: YEARLY_FEATURES,
-    variantId: parseVariantId(process.env.NEXT_PUBLIC_LS_YEARLY_VARIANT_ID),
+    checkoutUrl:
+      'https://pay.scholarshiptop.com/checkout/buy/4ab30a9b-b95c-43c4-907e-41a3e7bce609?logo=0&discount=0',
     buttonClassName:
       'border border-emerald-500 bg-emerald-500 text-white shadow-sm hover:border-emerald-600 hover:bg-emerald-600',
     featured: true,
@@ -233,17 +227,12 @@ const PLANS: PlanConfig[] = [
 ];
 
 export default function SubscriptionPricingClient() {
-  const [activeVariantId, setActiveVariantId] = useState<string | null>(null);
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const isBusy = activeVariantId !== null;
+  const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
+  const isBusy = activePlanTitle !== null;
 
-  const handleCheckout = (variantId: number | null) => {
-    const selectedPlan = PLANS.find((plan) => plan.variantId === variantId);
-    setActiveVariantId(selectedPlan?.title ?? 'plan');
-    setCheckoutError(
-      `The ${selectedPlan?.title ?? 'selected'} plan is temporarily unavailable while checkout is being updated.`
-    );
-    window.setTimeout(() => setActiveVariantId(null), 250);
+  const handleCheckout = (checkoutUrl: string, title: string) => {
+    setActivePlanTitle(title);
+    window.location.href = checkoutUrl;
   };
 
   return (
@@ -256,23 +245,17 @@ export default function SubscriptionPricingClient() {
             price={plan.price}
             billing={plan.billing}
             features={plan.features}
-            variantId={plan.variantId}
+            checkoutUrl={plan.checkoutUrl}
             buttonClassName={plan.buttonClassName}
             badge={plan.badge}
             featured={plan.featured}
             ctaAbove={plan.ctaAbove}
-            isLoading={activeVariantId === plan.title}
+            isLoading={activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}
           />
         ))}
       </div>
-
-      {checkoutError ? (
-        <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-red-600">
-          {checkoutError}
-        </p>
-      ) : null}
     </>
   );
 }
