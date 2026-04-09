@@ -103,6 +103,15 @@ function getProgressPercent(
 
 function normalizeProviderStatus(status: string | null | undefined) {
   const normalized = (status ?? '').toLowerCase();
+  if (normalized === 'subscription_cancelled') return 'cancelled';
+  if (normalized === 'subscription_canceled') return 'canceled';
+  if (normalized === 'subscription_resumed') return 'active';
+  if (normalized === 'subscription_payment_recovered') return 'active';
+  if (normalized === 'subscription_payment_success') return 'active';
+  if (normalized === 'subscription_payment_failed') return 'past_due';
+  if (normalized === 'subscription_expired') return 'expired';
+  if (normalized === 'subscription_paused') return 'paused';
+  if (normalized === 'subscription_unpaused') return 'active';
   if (!normalized) return 'inactive';
   return normalized;
 }
@@ -237,10 +246,12 @@ export function deriveSubscriptionPresentation(
       : plan !== 'free'
     : plan !== 'free' &&
       (providerStatus === 'active' ||
+        providerStatus === 'subscription_created' ||
+        providerStatus === 'subscription_updated' ||
         providerStatus === 'trialing' ||
         providerStatus === 'on_trial' ||
         isWithinGracePeriod(effectiveSubscription, nowValue) ||
-        profile?.is_subscribed === true);
+        false);
 
   return {
     plan,

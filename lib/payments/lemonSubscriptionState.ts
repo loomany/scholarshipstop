@@ -101,6 +101,10 @@ function getLemonAttributes(payload: LemonWebhookPayload) {
   return payload.data?.attributes ?? payload.attributes;
 }
 
+function isOrderPayload(payload: LemonWebhookPayload): boolean {
+  return (payload.data as { type?: string } | undefined)?.type === 'orders';
+}
+
 export function toSubscribedFromLemonStatus(status?: string): boolean {
   const normalized = (status ?? '').toLowerCase();
   return normalized === 'active' || normalized === 'trialing' || normalized === 'on_trial';
@@ -109,14 +113,32 @@ export function toSubscribedFromLemonStatus(status?: string): boolean {
 function normalizeLemonEventName(eventName?: string) {
   const normalized = (eventName ?? '').trim();
   switch (normalized) {
+    case 'order.created':
+      return 'order_created';
     case 'subscription.created':
       return 'subscription_created';
     case 'subscription.updated':
       return 'subscription_updated';
     case 'subscription.deleted':
       return 'subscription_deleted';
+    case 'subscription.cancelled':
+      return 'subscription_cancelled';
+    case 'subscription.resumed':
+      return 'subscription_resumed';
+    case 'subscription.expired':
+      return 'subscription_expired';
+    case 'subscription.paused':
+      return 'subscription_paused';
+    case 'subscription.unpaused':
+      return 'subscription_unpaused';
+    case 'subscription.payment_failed':
+      return 'subscription_payment_failed';
+    case 'subscription.payment_recovered':
+      return 'subscription_payment_recovered';
+    case 'subscription.payment_success':
+      return 'subscription_payment_success';
     default:
-      return normalized;
+      return normalized.replace(/\./g, '_');
   }
 }
 
@@ -219,39 +241,23 @@ export function decideSubscriptionUpdate(
   payload: LemonWebhookPayload
 ): LemonSubscriptionDecision {
   const eventName = normalizeLemonEventName(payload.meta?.event_name);
+  if (eventName === 'order_created' && isOrderPayload(payload)) {
+    return { kind: 'ignored', eventName };
+  }
   const userId = resolveUserId(payload);
   const isSubscribed = toSubscribedFromLemonStatus(getLemonAttributes(payload)?.status);
   const subscriptionPlan = derivePlanCode(payload);
 
-  if (eventName === 'subscription_created' || eventName === 'subscription.updated') {
-    if (!userId) throw new Error('Missing user id in webhook payload.');
-    return {
-      kind: 'upsert',
-      userId,
-      isSubscribed,
-      eventName,
-      subscription: buildSubscriptionUpsert(payload, userId, eventName),
-      subscriptionPlan,
-    };
-  }
-  if (eventName === 'subscription_updated' || eventName === 'subscription.created') {
-    if (!userId) throw new Error('Missing user id in webhook payload.');
-    return {
-      kind: 'upsert',
-      userId,
-      isSubscribed,
-      eventName,
-      subscription: buildSubscriptionUpsert(payload, userId, eventName),
-      subscriptionPlan
-    };
-  }
   if (
+    eventName === 'subscription_created' ||
+    eventName === 'subscription_updated' ||
     eventName === 'subscription_deleted' ||
-    eventName === 'subscription.deleted' ||
     eventName === 'subscription_cancelled' ||
+    eventName === 'subscription_resumed' ||
     eventName === 'subscription_expired' ||
     eventName === 'subscription_paused' ||
     eventName === 'subscription_unpaused' ||
+    eventName === 'subscription_payment_success' ||
     eventName === 'subscription_payment_failed' ||
     eventName === 'subscription_payment_recovered'
   ) {

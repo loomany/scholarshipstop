@@ -82,14 +82,41 @@ test('throws on missing user id for subscription events', () => {
   );
 });
 
-test('ignores unrelated events', () => {
+test('ignores order_created because subscription_created carries the access state', () => {
   const payload = {
-    meta: { event_name: 'order.created' }
+    meta: { event_name: 'order_created', custom_data: { user_id: 'user-111' } },
+    data: {
+      type: 'orders',
+      id: 'order_123',
+      attributes: {
+        status: 'paid'
+      }
+    }
   };
 
   const decision = decideSubscriptionUpdate(payload);
   assert.deepEqual(decision, {
     kind: 'ignored',
-    eventName: 'order.created'
+    eventName: 'order_created'
   });
+});
+
+test('maps dotted subscription event names to normalized snake_case', () => {
+  const payload = {
+    meta: { event_name: 'subscription.updated' },
+    data: {
+      id: 'sub_dotted',
+      attributes: {
+        user_id: 'user-dotted',
+        status: 'active',
+        variant_name: 'Monthly Pro'
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.eventName, 'subscription_updated');
+  assert.equal(decision.isSubscribed, true);
 });

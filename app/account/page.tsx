@@ -21,7 +21,7 @@ export default async function Account() {
 
   const [userDetails, subscription] = await Promise.all([
     getUserDetails(supabase, user.id),
-    getSubscription(supabase)
+    getSubscription(supabase, user.id)
   ]);
 
   return <AccountDashboardClient user={user} profile={userDetails} subscription={subscription} />;

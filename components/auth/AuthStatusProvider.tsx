@@ -33,12 +33,22 @@ export default function AuthStatusProvider({
         setAuthResolved(true);
         return;
       }
-      const { data: profile } = await supabase
+      const [{ data: profile }, { data: subscriptions }] = await Promise.all([
+        supabase
         .from('profiles')
         .select('*')
         .eq('id', nextUser.id)
-        .maybeSingle<Database['public']['Tables']['profiles']['Row']>();
-      setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, null));
+        .maybeSingle<Database['public']['Tables']['profiles']['Row']>(),
+        supabase
+          .from('subscriptions')
+          .select('*, prices(*, products(*))')
+          .eq('user_id', nextUser.id)
+          .in('status', ['trialing', 'on_trial', 'active', 'cancelled', 'canceled', 'paused', 'past_due'])
+          .order('created', { ascending: false })
+          .limit(1)
+      ]);
+      const subscription = subscriptions?.[0] ?? null;
+      setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
       setAuthResolved(true);
     };
 

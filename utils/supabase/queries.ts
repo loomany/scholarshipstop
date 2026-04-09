@@ -11,10 +11,11 @@ export const getUser = cache(async (supabase: ServerSupabaseClient) => {
   return user;
 });
 
-export const getSubscription = cache(async (supabase: ServerSupabaseClient) => {
+export const getSubscription = cache(async (supabase: ServerSupabaseClient, userId: string) => {
   const { data: subscription, error } = await supabase
     .from('subscriptions')
     .select('*, prices(*, products(*))')
+    .eq('user_id', userId)
     .in('status', ['trialing', 'on_trial', 'active', 'cancelled', 'canceled', 'paused', 'past_due'])
     .order('created', { ascending: false })
     .maybeSingle();
@@ -30,7 +31,7 @@ export const getUserSubscriptionStatus = cache(
       .select('*')
       .eq('id', userId)
         .maybeSingle(),
-      getSubscription(supabase)
+      getSubscription(supabase, userId)
     ]);
 
     return hasActiveSubscriptionAccess(profile, subscription);

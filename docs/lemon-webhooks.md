@@ -1,6 +1,7 @@
 # Lemon Squeezy Webhooks
 
-This project updates `public.profiles.is_subscribed` from Lemon Squeezy subscription events.
+This project creates Lemon Squeezy overlay checkouts, verifies webhooks, syncs
+`public.subscriptions`, and updates `public.profiles` entitlement fields.
 
 ## Endpoint
 
@@ -8,6 +9,12 @@ This project updates `public.profiles.is_subscribed` from Lemon Squeezy subscrip
 
 ## Required env vars
 
+- `LEMONSQUEEZY_API_KEY`
+- `LEMONSQUEEZY_STORE_ID`
+- `LEMONSQUEEZY_MONTHLY_VARIANT_ID`
+- `LEMONSQUEEZY_QUARTERLY_VARIANT_ID`
+- `LEMONSQUEEZY_YEARLY_VARIANT_ID`
+- `LEMONSQUEEZY_SUCCESS_URL` (optional, defaults to `/scholarships`)
 - `LEMON_SQUEEZY_SECRET` (preferred)
 - `LEMON_SQUEEZY_WEBHOOK_SECRET` (fallback)
 - `SUPABASE_SERVICE_ROLE_KEY`
@@ -22,11 +29,31 @@ The webhook handler verifies `x-signature` using HMAC SHA256 over the raw reques
 
 ## Handled events
 
-- `subscription.created` -> `is_subscribed = true`
-- `subscription.updated` -> `true` only when status is `active` or `trialing`
-- `subscription.deleted` -> `is_subscribed = false`
+- `order_created` -> acknowledged, but ignored for entitlement sync because
+  `subscription_created` carries the subscription state
+- `subscription_created`
+- `subscription_updated`
+- `subscription_deleted`
+- `subscription_cancelled`
+- `subscription_resumed`
+- `subscription_expired`
+- `subscription_paused`
+- `subscription_unpaused`
+- `subscription_payment_success`
+- `subscription_payment_failed`
+- `subscription_payment_recovered`
 
 Unknown events are acknowledged with `{ received: true, ignored: true }`.
+
+## Checkout flow
+
+- Frontend loads `https://app.lemonsqueezy.com/js/lemon.js`
+- Pricing buttons open Lemon overlay with a server-created checkout URL
+- Checkout creation embeds:
+  - `checkoutData.email`
+  - `checkoutData.custom.user_id`
+  - `checkoutOptions.embed = true`
+  - `productOptions.redirectUrl` pointing to the success URL
 
 ## User id resolution
 

@@ -52,6 +52,20 @@ export async function POST(req: Request) {
       });
     }
 
+    const { data: existingSubscription } = await supabaseAdmin
+      .from('subscriptions')
+      .select('id, raw_payload')
+      .eq('id', decision.subscription.id)
+      .maybeSingle();
+    if (
+      existingSubscription?.raw_payload &&
+      JSON.stringify(existingSubscription.raw_payload) === JSON.stringify(payload)
+    ) {
+      return new Response(JSON.stringify({ received: true, duplicate: true }), {
+        status: 200
+      });
+    }
+
     const { error: subscriptionError } = await supabaseAdmin
       .from('subscriptions')
       .upsert([decision.subscription], { onConflict: 'id' });

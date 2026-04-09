@@ -1,12 +1,27 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { Sparkles, Star } from 'lucide-react';
 
 import Button from '@/components/ui/Button';
 import { SCHOLARSHIP_ACTION_FOCUS_VISIBLE } from '@/lib/constants/scholarshipActionUi';
 import { cn } from '@/utils/cn';
+import { type BillingPlanKey, getCheckoutURL } from '@/app/actions/billing';
+
+declare global {
+  interface Window {
+    LemonSqueezy?: {
+      Setup?: (options: {
+        eventHandler?: (event: { event?: string }) => void;
+      }) => void;
+      Refresh?: () => void;
+      Url?: {
+        Open?: (url: string) => void;
+      };
+    };
+  }
+}
 
 /** Compact trial note — same language as `ScholarshipsEmailConfirmationBanner`. */
 function PlanTrialBetweenFeaturesAndCta() {
@@ -57,12 +72,12 @@ type PlanRowProps = {
   billing: string;
   features: string[];
   buttonClassName: string;
-  checkoutUrl: string;
+  planKey: BillingPlanKey;
   featured?: boolean;
   ctaAbove?: ReactNode;
   isLoading: boolean;
   isBusy: boolean;
-  onSelect: (checkoutUrl: string, title: string) => void;
+  onSelect: (planKey: BillingPlanKey, title: string) => void;
 };
 
 type PlanConfig = Omit<PlanRowProps, 'isLoading' | 'isBusy' | 'onSelect'>;
@@ -74,14 +89,14 @@ function PlanGrantCard({
   billing,
   features,
   buttonClassName,
-  checkoutUrl,
+  planKey,
   featured = false,
   ctaAbove,
   isLoading,
   isBusy,
   onSelect
 }: PlanRowProps) {
-  const isDisabled = !checkoutUrl || isBusy;
+  const isDisabled = isBusy;
 
   return (
     <article
@@ -123,8 +138,9 @@ function PlanGrantCard({
             variant="slim"
             loading={isLoading}
             disabled={isDisabled}
-            onClick={() => onSelect(checkoutUrl, title)}
+            onClick={() => onSelect(planKey, title)}
             className={cn(
+              'lemonsqueezy-button',
               'inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-center text-sm font-semibold transition focus:outline-none disabled:cursor-not-allowed disabled:opacity-70',
               SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
               buttonClassName
@@ -159,21 +175,19 @@ const YEARLY_FEATURES: string[] = [
 const PLANS: PlanConfig[] = [
   {
     title: 'Monthly',
+    planKey: 'monthly',
     price: '$25',
     billing: 'Billed $25 every month.',
     features: MONTHLY_FEATURES,
-    checkoutUrl:
-      'https://pay.scholarshiptop.com/checkout/buy/9936e580-f4a7-41e7-a16d-a1f40cbbbbc1?logo=0&discount=0',
     buttonClassName:
       'border border-gray-300 bg-white text-gray-900 hover:bg-gray-50'
   },
   {
     title: 'Quarterly',
+    planKey: 'quarterly',
     price: '$19',
     billing: 'Billed $57 every 3 months.',
     features: QUARTERLY_FEATURES,
-    checkoutUrl:
-      'https://pay.scholarshiptop.com/checkout/buy/2d5e0a58-9d08-42d5-8930-3e7cfcaa3f88?logo=0&discount=0',
     buttonClassName:
       'border border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm hover:border-[#E6670C] hover:bg-[#E6670C] focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2',
     badge: (
@@ -197,11 +211,10 @@ const PLANS: PlanConfig[] = [
   },
   {
     title: 'Yearly',
+    planKey: 'yearly',
     price: '$12',
     billing: 'Billed $144 annually.',
     features: YEARLY_FEATURES,
-    checkoutUrl:
-      'https://pay.scholarshiptop.com/checkout/buy/4ab30a9b-b95c-43c4-907e-41a3e7bce609?logo=0&discount=0',
     buttonClassName:
       'border border-emerald-500 bg-emerald-500 text-white shadow-sm hover:border-emerald-600 hover:bg-emerald-600',
     featured: true,
@@ -227,12 +240,45 @@ const PLANS: PlanConfig[] = [
 ];
 
 export default function SubscriptionPricingClient() {
+  const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const isBusy = activePlanTitle !== null;
 
-  const handleCheckout = (checkoutUrl: string, title: string) => {
+  useEffect(() => {
+    window.LemonSqueezy?.Setup?.({
+      eventHandler: (event) => {
+        if (event?.event === 'Checkout.Success') {
+          setActivePlanTitle(null);
+          setCheckoutError(null);
+          window.location.assign('/scholarships');
+        }
+      }
+    });
+    window.LemonSqueezy?.Refresh?.();
+  }, []);
+
+  const handleCheckout = (planKey: BillingPlanKey, title: string) => {
     setActivePlanTitle(title);
-    window.location.href = checkoutUrl;
+    setCheckoutError(null);
+    startTransition(async () => {
+      try {
+        const checkoutUrl = await getCheckoutURL(planKey);
+        const opened =
+          typeof window !== 'undefined' &&
+          typeof window.LemonSqueezy?.Url?.Open === 'function';
+        if (opened) {
+          window.LemonSqueezy!.Url!.Open!(checkoutUrl);
+          return;
+        }
+        window.location.assign(checkoutUrl);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Failed to start checkout.';
+        setCheckoutError(message);
+        setActivePlanTitle(null);
+      }
+    });
   };
 
   return (
@@ -245,17 +291,22 @@ export default function SubscriptionPricingClient() {
             price={plan.price}
             billing={plan.billing}
             features={plan.features}
-            checkoutUrl={plan.checkoutUrl}
+            planKey={plan.planKey}
             buttonClassName={plan.buttonClassName}
             badge={plan.badge}
             featured={plan.featured}
             ctaAbove={plan.ctaAbove}
-            isLoading={activePlanTitle === plan.title}
+            isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}
           />
         ))}
       </div>
+      {checkoutError ? (
+        <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-red-600">
+          {checkoutError}
+        </p>
+      ) : null}
     </>
   );
 }

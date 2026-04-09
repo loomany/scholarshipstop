@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import SubscriptionDebug from '@/components/debug/SubscriptionDebug';
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
@@ -54,6 +55,11 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className={fontSans.variable}>
       <body className={`${fontSans.className} bg-zinc-50 text-zinc-900`}>
+        <Script
+          id="lemonsqueezy-js"
+          src="https://app.lemonsqueezy.com/js/lemon.js"
+          strategy="afterInteractive"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
