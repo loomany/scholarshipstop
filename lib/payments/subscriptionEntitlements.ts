@@ -182,39 +182,15 @@ function getFallbackPlan(profile: Profile | null): AppSubscriptionPlan {
   }
 }
 
-function getEffectiveNow(profile: Profile | null) {
-  return profile?.subscription_debug_now ?? null;
-}
-
 export function deriveSubscriptionPresentation(
   profile: Profile | null,
   subscription: SubscriptionWithPriceAndProduct | null
 ): AppSubscriptionPresentation {
-  const nowValue = getEffectiveNow(profile);
-  const debugPlan = profile?.subscription_debug_plan;
-  const effectiveSubscription: SubscriptionWithPriceAndProduct | null = subscription
-    ? {
-        ...subscription,
-        status:
-          (profile?.subscription_debug_status as Subscription['status'] | null | undefined) ??
-          subscription.status,
-        trial_end: profile?.subscription_debug_trial_ends_at ?? subscription.trial_end,
-        renews_at: profile?.subscription_debug_renews_at ?? subscription.renews_at
-      }
-    : null;
-
+  const nowValue = null;
+  const effectiveSubscription = subscription;
   const fallbackPlan = getFallbackPlan(profile);
-  const plan =
-    debugPlan === 'free' ||
-    debugPlan === 'trial' ||
-    debugPlan === 'monthly_pro' ||
-    debugPlan === 'quarterly_pro' ||
-    debugPlan === 'yearly_pro'
-      ? debugPlan
-      : derivePlanFromSubscription(effectiveSubscription, fallbackPlan, nowValue);
-
-  const trialEndsAt =
-    profile?.subscription_debug_trial_ends_at ?? effectiveSubscription?.trial_end ?? null;
+  const plan = derivePlanFromSubscription(effectiveSubscription, fallbackPlan, nowValue);
+  const trialEndsAt = effectiveSubscription?.trial_end ?? null;
   const { remainingDays, remainingHours } = getRemainingTime(trialEndsAt, nowValue);
   const countdownLabel = plan === 'trial' ? getCountdownLabel(trialEndsAt, nowValue) : null;
   const progressPercent =
@@ -226,32 +202,19 @@ export function deriveSubscriptionPresentation(
         )
       : null;
   const nextBillingDate = formatDate(
-    profile?.subscription_debug_renews_at ??
-      effectiveSubscription?.renews_at ??
-      effectiveSubscription?.current_period_end
+    effectiveSubscription?.renews_at ?? effectiveSubscription?.current_period_end
   );
   const endsAt = formatDate(effectiveSubscription?.ended_at ?? effectiveSubscription?.cancel_at);
-  const providerStatus = normalizeProviderStatus(
-    profile?.subscription_debug_status ?? effectiveSubscription?.status
-  );
-  const hasDebugOverride =
-    debugPlan === 'free' ||
-    debugPlan === 'trial' ||
-    debugPlan === 'monthly_pro' ||
-    debugPlan === 'quarterly_pro' ||
-    debugPlan === 'yearly_pro';
-  const isSubscribed = hasDebugOverride
-    ? plan === 'trial'
-      ? Boolean(parseDate(trialEndsAt) && (parseDate(nowValue ?? null) ?? new Date()) < (parseDate(trialEndsAt) ?? new Date()))
-      : plan !== 'free'
-    : plan !== 'free' &&
-      (providerStatus === 'active' ||
-        providerStatus === 'subscription_created' ||
-        providerStatus === 'subscription_updated' ||
-        providerStatus === 'trialing' ||
-        providerStatus === 'on_trial' ||
-        isWithinGracePeriod(effectiveSubscription, nowValue) ||
-        false);
+  const providerStatus = normalizeProviderStatus(effectiveSubscription?.status);
+  const isSubscribed =
+    plan !== 'free' &&
+    (providerStatus === 'active' ||
+      providerStatus === 'subscription_created' ||
+      providerStatus === 'subscription_updated' ||
+      providerStatus === 'trialing' ||
+      providerStatus === 'on_trial' ||
+      isWithinGracePeriod(effectiveSubscription, nowValue) ||
+      (!effectiveSubscription && Boolean(profile?.is_subscribed)));
 
   return {
     plan,

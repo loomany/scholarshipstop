@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import SubscriptionDebug from '@/components/debug/SubscriptionDebug';
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
 import { fontSans } from '@/lib/fonts';
@@ -68,7 +67,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           Width boundary for header + main (overflow-x is html/body — avoid
           overflow-x-clip here so sticky navbar is not turned into a nested scroll box).
           Home page includes its own footer + final CTA in `app/page.tsx` only.
-          Toaster + SubscriptionDebug stay outside so position:fixed stays viewport-relative.
+          Toaster stays outside so position:fixed stays viewport-relative.
         */}
         <div className="w-full min-w-0 max-w-full">
           <Navbar />
@@ -81,9 +80,6 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         </div>
         <Suspense fallback={null}>
           <Toaster />
-        </Suspense>
-        <Suspense fallback={null}>
-          <SubscriptionDebug />
         </Suspense>
       </body>
     </html>
