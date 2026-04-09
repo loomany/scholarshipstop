@@ -126,19 +126,19 @@ export function ScholarshipOnboardingStep3Gpa({
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
           <button
+            type="submit"
+            disabled={disabled}
+            className={`${ONBOARDING_PRIMARY_BUTTON_CLASS} sm:order-2 sm:w-1/2`}
+          >
+            Continue →
+          </button>
+          <button
             type="button"
             disabled={disabled}
             onClick={handleSkip}
-            className="w-full rounded-xl border border-zinc-300 bg-white px-6 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 disabled:opacity-50 sm:w-1/2"
+            className="w-full rounded-xl border border-zinc-300 bg-white px-6 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 disabled:opacity-50 sm:order-1 sm:w-1/2"
           >
             Skip
-          </button>
-          <button
-            type="submit"
-            disabled={disabled}
-            className={`${ONBOARDING_PRIMARY_BUTTON_CLASS} sm:w-1/2`}
-          >
-            Continue →
           </button>
         </div>
       </form>
