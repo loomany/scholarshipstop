@@ -5,6 +5,7 @@ import {
   BadgeDollarSign,
   HelpCircle,
   MessageCircleQuestion,
+  ReceiptText,
   Scale,
   Shield
 } from 'lucide-react';
@@ -56,8 +57,17 @@ const CARDS = [
     icon: MessageCircleQuestion
   },
   {
+    href: '/refund-policy',
+    title: 'Refund Policy',
+    shortText:
+      'Review how free trials, subscription cancellations, and refund requests are handled.',
+    expandedText:
+      'See the 3-day trial terms, how to cancel your subscription, and when refund requests may be reviewed.',
+    icon: ReceiptText
+  },
+  {
     href: '/subscription',
-    title: 'Price',
+    title: 'Pricing',
     shortText:
       'See ScholarshipTop plans, free trial details, and which premium features are included.',
     expandedText:

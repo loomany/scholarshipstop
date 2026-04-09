@@ -23,7 +23,7 @@ export default function SubscriptionPage() {
           <SubscriptionPricingClient />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">
-            Secure payments processed by Lemon Squeezy.
+            Payments are securely processed by Paddle, our Merchant of Record.
           </p>
         </div>
       </section>

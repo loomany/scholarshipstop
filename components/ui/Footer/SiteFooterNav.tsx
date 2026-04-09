@@ -30,8 +30,13 @@ const ITEMS: {
   },
   {
     href: '/terms',
-    label: 'Terms',
+    label: 'Terms of Service',
     isActive: (p) => p === '/terms' || p.startsWith('/terms/')
+  },
+  {
+    href: '/refund-policy',
+    label: 'Refund Policy',
+    isActive: (p) => p === '/refund-policy' || p.startsWith('/refund-policy/')
   },
   { href: '/faq', label: 'FAQ', isActive: (p) => p === '/faq' || p.startsWith('/faq/') }
 ];
