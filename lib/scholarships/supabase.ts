@@ -1,6 +1,7 @@
 import type { Database, Json } from '@/types_db';
 import type {
   Scholarship,
+  ScholarshipDocumentLink,
   ScholarshipSeoFaqItem
 } from '@/app/scholarships/scholarshipsData';
 import { normalizeCategoryId } from '@/app/scholarships/scholarshipCategories';
@@ -43,6 +44,25 @@ const UUID_PARAM_RE =
 export function jsonStringArray(value: Json | null | undefined): string[] {
   if (!value || !Array.isArray(value)) return [];
   return value.filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
+}
+
+function documentLinksFromJson(
+  value: Json | null | undefined
+): ScholarshipDocumentLink[] {
+  if (!value || !Array.isArray(value)) return [];
+  const out: ScholarshipDocumentLink[] = [];
+  for (const item of value) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
+    const obj = item as Record<string, unknown>;
+    const url = typeof obj.url === 'string' ? obj.url.trim() : '';
+    if (!/^https?:\/\//i.test(url)) continue;
+    const title = typeof obj.title === 'string' ? obj.title.trim() : '';
+    out.push({
+      url,
+      title: title || undefined
+    });
+  }
+  return out;
 }
 
 function seoFaqFromJson(value: Json | null | undefined): ScholarshipSeoFaqItem[] {
@@ -209,6 +229,7 @@ export const DETAIL_SELECT = [
   'who_can_apply',
   'notification_details',
   'documents_required',
+  'document_urls',
   'requirements_text_clean',
   'official_source_name',
   'number_of_awards',
@@ -422,6 +443,7 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     notificationDetails: row.notification_details?.trim() || undefined,
     paymentDetails: row.payment_details?.trim() || undefined,
     documentsRequired: jsonStringArray(row.documents_required),
+    documentUrls: documentLinksFromJson(row.document_urls),
     requirementsTextClean: row.requirements_text_clean?.trim() || undefined,
     officialSourceName: row.official_source_name?.trim() || undefined,
     lastVerifiedAt: row.last_verified_at ?? undefined,

@@ -14,6 +14,7 @@ import {
   Linkedin,
   Lock,
   Mail,
+  Paperclip,
   Phone,
   Shield
 } from 'lucide-react';
@@ -168,6 +169,32 @@ function payoutMethodDetailLabel(
     not_stated: 'Not stated on the listing'
   };
   return map[m] ?? method;
+}
+
+function isGenericDocumentLinkTitle(
+  title: string | null | undefined,
+  url: string
+): boolean {
+  const normalized = title?.trim().toLowerCase().replace(/\s+/g, ' ') ?? '';
+  if (!normalized) return true;
+  if (normalized === url.trim().toLowerCase()) return true;
+  return (
+    normalized === 'document' ||
+    normalized === 'official document' ||
+    normalized === 'download' ||
+    normalized === 'download pdf' ||
+    normalized === 'pdf' ||
+    /^document\s+\d+$/.test(normalized) ||
+    /^download(?:\s+document)?$/.test(normalized)
+  );
+}
+
+function officialDocumentLinkLabel(
+  title: string | null | undefined,
+  url: string
+): string {
+  if (!isGenericDocumentLinkTitle(title, url)) return title!.trim();
+  return /\.pdf(?:$|[?#])/i.test(url) ? 'Download PDF' : 'Official Document';
 }
 
 function requirementChips(s: Scholarship): string[] {
@@ -841,6 +868,25 @@ export default function ScholarshipDetailPageClient({
   const showSupport = Boolean(supportEmail) || Boolean(supportPhone);
 
   const docs = scholarship.documentsRequired?.filter(Boolean) ?? [];
+  const officialDocumentLinks = (scholarship.documentUrls ?? [])
+    .map((item, index) => {
+      const url = item.url?.trim();
+      if (!url) return null;
+      return {
+        key: `${url}-${index}`,
+        url,
+        label: officialDocumentLinkLabel(item.title, url)
+      };
+    })
+    .filter(
+      (
+        item
+      ): item is {
+        key: string;
+        url: string;
+        label: string;
+      } => item !== null
+    );
   const locationQuickFact = formatQuickFactsLocation(
     stateTerritoryText,
     locationScope,
@@ -1461,7 +1507,7 @@ export default function ScholarshipDetailPageClient({
               </div>
             ) : null}
 
-            {docs.length > 0 ? (
+            {docs.length > 0 || officialDocumentLinks.length > 0 ? (
               <div className="mt-10">
                 <SectionLabel>Required documents</SectionLabel>
                 <div className={scholarshipDetailCardPrimaryClass}>
@@ -1470,11 +1516,35 @@ export default function ScholarshipDetailPageClient({
                       ? 'Document list from the listing; confirm the latest version on the official opportunity page.'
                       : 'Materials you may need to upload or submit; check the official application for the final list.'}
                   </p>
-                  <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-                    {docs.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
+                  {docs.length > 0 ? (
+                    <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
+                      {docs.map((d) => (
+                        <li key={d}>{d}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  {officialDocumentLinks.length > 0 ? (
+                    <ol
+                      className={`${docs.length > 0 ? 'mt-4 ' : ''}list-decimal space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base`}
+                    >
+                      {officialDocumentLinks.map((doc) => (
+                        <li key={doc.key}>
+                          <a
+                            href={doc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-start gap-2 font-medium text-sky-700 underline-offset-2 transition hover:text-sky-800 hover:underline"
+                          >
+                            <Paperclip
+                              className="mt-0.5 h-4 w-4 shrink-0"
+                              aria-hidden
+                            />
+                            <span>{doc.label}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  ) : null}
                 </div>
               </div>
             ) : null}

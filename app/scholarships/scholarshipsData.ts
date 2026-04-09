@@ -1,6 +1,7 @@
 import type { ScholarshipCatalogView } from '@/lib/scholarships/scholarshipCatalogTypes';
 
 export type ScholarshipSeoFaqItem = { question: string; answer: string };
+export type ScholarshipDocumentLink = { title?: string | null; url: string };
 
 export type Scholarship = {
   premiumFieldsRedacted?: boolean;
@@ -104,6 +105,7 @@ export type Scholarship = {
   notificationDetails?: string | null;
   paymentDetails?: string | null;
   documentsRequired?: string[];
+  documentUrls?: ScholarshipDocumentLink[];
   requirementsTextClean?: string | null;
   officialSourceName?: string | null;
   lastVerifiedAt?: string | null;

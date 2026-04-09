@@ -365,6 +365,7 @@ export interface Database {
           notification_details: string | null
           payment_details: string | null
           documents_required: Json | null
+          document_urls: Json | null
           requirements_text_clean: string | null
           official_source_name: string | null
           last_verified_at: string | null
@@ -494,6 +495,7 @@ export interface Database {
           notification_details?: string | null
           payment_details?: string | null
           documents_required?: Json | null
+          document_urls?: Json | null
           requirements_text_clean?: string | null
           official_source_name?: string | null
           last_verified_at?: string | null
@@ -623,6 +625,7 @@ export interface Database {
           notification_details?: string | null
           payment_details?: string | null
           documents_required?: Json | null
+          document_urls?: Json | null
           requirements_text_clean?: string | null
           official_source_name?: string | null
           last_verified_at?: string | null
