@@ -8,6 +8,14 @@ export async function middleware(request: NextRequest) {
     url.pathname = pathname.replace(/^\/content-hub/, '/resources');
     return NextResponse.redirect(url, 308);
   }
+  if (
+    pathname === '/signin' ||
+    pathname.startsWith('/signin/') ||
+    pathname === '/auth' ||
+    pathname.startsWith('/auth/')
+  ) {
+    return NextResponse.next();
+  }
   return await updateSession(request);
 }
 

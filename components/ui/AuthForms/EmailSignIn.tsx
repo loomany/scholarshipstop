@@ -4,8 +4,10 @@ import Button from '@/components/ui/Button';
 import Link from 'next/link';
 
 import { SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF } from '@/lib/onboarding/onboardingResume';
-import { signInWithEmail } from '@/utils/auth-helpers/server';
-import { handleRequest } from '@/utils/auth-helpers/client';
+import {
+  handleRequest,
+  signInWithEmailClient
+} from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -26,7 +28,7 @@ export default function EmailSignIn({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitting(true); // Disable the button while the request is being handled
-    await handleRequest(e, signInWithEmail, router);
+    await handleRequest(e, signInWithEmailClient, router);
     setIsSubmitting(false);
   };
 

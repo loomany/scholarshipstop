@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
 import { SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF } from '@/lib/onboarding/onboardingResume';
-import { signInWithPassword } from '@/utils/auth-helpers/server';
-import { handleRequest } from '@/utils/auth-helpers/client';
+import {
+  handleRequest,
+  signInWithPasswordClient
+} from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -23,7 +25,7 @@ export default function PasswordSignIn({ redirectMethod }: PasswordSignInProps) 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitting(true);
-    await handleRequest(e, signInWithPassword, router);
+    await handleRequest(e, signInWithPasswordClient, router);
     setIsSubmitting(false);
   };
 

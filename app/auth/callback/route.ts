@@ -7,6 +7,11 @@ import type { Database } from '@/types_db';
 import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
 import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
 
+function withNoStore(response: NextResponse) {
+  response.headers.set('Cache-Control', 'private, no-store');
+  return response;
+}
+
 function safeAppPath(next: string | null): string | null {
   if (!next) return null;
   let path: string;
@@ -37,7 +42,7 @@ export async function GET(request: NextRequest) {
   const nextPath = safeAppPath(requestUrl.searchParams.get('next'));
 
   if (!code) {
-    return NextResponse.redirect(new URL('/signin', publicOrigin));
+    return withNoStore(NextResponse.redirect(new URL('/signin', publicOrigin)));
   }
 
   /** No `next` param (typical email confirm / OAuth): land on site home, not /dashboard. */
@@ -48,7 +53,7 @@ export async function GET(request: NextRequest) {
   );
   const successUrl = nextPath ? `${publicOrigin}${nextPath}` : defaultSuccessUrl;
 
-  const response = NextResponse.redirect(successUrl);
+  const response = withNoStore(NextResponse.redirect(successUrl));
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -71,11 +76,13 @@ export async function GET(request: NextRequest) {
   const { data: authData, error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    return NextResponse.redirect(
+    return withNoStore(
+      NextResponse.redirect(
       getErrorRedirect(
         `${publicOrigin}/signin`,
         error.name,
         "Sorry, we weren't able to log you in. Please try again."
+      )
       )
     );
   }
@@ -176,5 +183,5 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return response;
+  return withNoStore(response);
 }
