@@ -32,8 +32,9 @@ export default function TermsPage() {
         <div className="pt-10">
           <p className="text-base leading-relaxed text-zinc-700">
             These Terms of Service govern your access to and use of
-            ScholarshipTop and its related services. By using ScholarshipTop, you
-            agree to these Terms.
+            ScholarshipTop, a service operated by IE Daur Mussatay (FREEBEE), and
+            its related services. By using ScholarshipTop, you agree to these
+            Terms.
           </p>
 
           <section className={sectionClass} aria-labelledby="t1">
@@ -123,8 +124,9 @@ export default function TermsPage() {
               7. Paid Features and Billing
             </h2>
             <p className={pClass}>
-              ScholarshipTop offers paid subscriptions and premium features. All
-              payments are processed by Paddle, our Merchant of Record.
+              ScholarshipTop offers paid subscriptions and premium features
+              through IE Daur Mussatay (FREEBEE). All payments are processed by
+              Paddle, our Merchant of Record.
             </p>
             <p className={pClass}>
               By purchasing a subscription, you authorize Paddle to charge the
@@ -150,8 +152,9 @@ export default function TermsPage() {
             </h2>
             <p className={pClass}>
               The ScholarshipTop website, design, text, branding, and related
-              content are owned by ScholarshipTop or used with permission. You may
-              not reproduce or distribute protected content without authorization.
+              content are owned by IE Daur Mussatay (FREEBEE) or used with
+              permission. You may not reproduce or distribute protected content
+              without authorization.
             </p>
           </section>
 
@@ -160,9 +163,10 @@ export default function TermsPage() {
               9. Disclaimer
             </h2>
             <p className={pClass}>
-              ScholarshipTop is provided on an &quot;as is&quot; and &quot;as
-              available&quot; basis. We do not guarantee uninterrupted access,
-              error-free performance, or specific results from using the service.
+              ScholarshipTop, operated by IE Daur Mussatay (FREEBEE), is provided
+              on an &quot;as is&quot; and &quot;as available&quot; basis. We do not
+              guarantee uninterrupted access, error-free performance, or specific
+              results from using the service.
             </p>
           </section>
 
@@ -171,9 +175,10 @@ export default function TermsPage() {
               10. Limitation of Liability
             </h2>
             <p className={pClass}>
-              To the maximum extent permitted by law, ScholarshipTop will not be
-              liable for indirect, incidental, special, consequential, or
-              reliance-based damages arising out of your use of the service.
+              To the maximum extent permitted by law, IE Daur Mussatay (FREEBEE)
+              will not be liable for indirect, incidental, special,
+              consequential, or reliance-based damages arising out of your use of
+              the service.
             </p>
           </section>
 

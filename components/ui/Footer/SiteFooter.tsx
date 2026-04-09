@@ -32,7 +32,7 @@ export default function SiteFooter() {
               <p className="max-w-3xl text-left text-xs leading-snug text-gray-600 sm:text-sm">
                 Helping students find the right scholarships faster.{' '}
                 <span className="text-gray-500 tabular-nums">
-                  | © {year} ScholarshipTop
+                  | © {year} IE Daur Mussatay (FREEBEE)
                 </span>
               </p>
             </div>

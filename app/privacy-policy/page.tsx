@@ -31,9 +31,10 @@ export default function PrivacyPolicyPage() {
 
         <div className="pt-10">
           <p className="text-base leading-relaxed text-zinc-700">
-            ScholarshipTop values your privacy. This Privacy Policy explains what
-            information we collect, how we use it, and how we protect it when you
-            use our website and related services.
+            ScholarshipTop, operated by IE Daur Mussatay (FREEBEE), values your
+            privacy. This Privacy Policy explains what information we collect, how
+            we use it, and how we protect it when you use our website and related
+            services.
           </p>
 
           <section className={sectionClass} aria-labelledby="s1">
