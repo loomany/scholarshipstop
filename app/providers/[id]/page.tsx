@@ -19,7 +19,21 @@ import {
   PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE
 } from '@/lib/providers/providerProfilePagination';
 
-export const revalidate = 300;
+export const revalidate = 60;
+
+function providerMetaDescription(
+  aiDescription: string | null | undefined,
+  displayName: string
+): string {
+  const trimmed = aiDescription?.trim();
+  if (!trimmed) {
+    return `Scholarships and profile for ${displayName} on ScholarshipTop.`;
+  }
+  const singleLine = trimmed.replace(/\s+/g, ' ').trim();
+  return singleLine.length <= 160
+    ? singleLine
+    : `${singleLine.slice(0, 157).trimEnd()}...`;
+}
 
 function normalizeAiSourceHref(url: string): string {
   const trimmed = url.trim();
@@ -53,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
   return {
     title: `${data.displayName} | Scholarship Provider`,
-    description: `Scholarships and profile for ${data.displayName} on ScholarshipTop.`
+    description: providerMetaDescription(data.aiDescription, data.displayName)
   };
 }
 
@@ -109,9 +123,7 @@ export default async function ProviderProfilePage({
     name: data.displayName,
     url: data.officialUrl?.trim() || providerUrl,
     mainEntityOfPage: providerUrl,
-    description:
-      data.aiDescription?.trim() ||
-      `Scholarship provider profile for ${data.displayName}.`,
+    description: providerMetaDescription(data.aiDescription, data.displayName),
     ...(data.officialUrl?.trim() ? { sameAs: [data.officialUrl.trim()] } : {})
   };
 
@@ -159,11 +171,15 @@ export default async function ProviderProfilePage({
 
         <section className="mt-10 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-lg font-bold text-gray-900">About the provider</h2>
-          {data.aiDescription ? (
+          {data.aiDescription?.trim() ? (
             <div className="mt-4 space-y-4 text-sm leading-relaxed text-gray-700 sm:text-[0.9375rem]">
-              {data.aiDescription.split(/\n\n+/).map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
+              {data.aiDescription
+                .split(/\n\n+/)
+                .map((para) => para.trim())
+                .filter(Boolean)
+                .map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
             </div>
           ) : (
             <p className="mt-4 text-sm text-gray-500">

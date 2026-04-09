@@ -21,6 +21,13 @@ const UUID_PARAM_RE =
 
 export type { ProviderFaqItem, ProviderProfilePayload, SimilarProviderSummary };
 
+function normalizeProviderAiDescription(
+  value: string | null | undefined
+): string | null {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}
+
 function faqFromJson(value: Json | null | undefined): ProviderFaqItem[] {
   if (!value || !Array.isArray(value)) return [];
   const out: ProviderFaqItem[] = [];
@@ -122,7 +129,7 @@ export async function loadProviderProfilePage(
   const providerId: string | null = providerRow?.id ?? null;
   const displayName = providerRow?.display_name ?? fallbackName;
   const officialUrl = providerRow?.official_url ?? null;
-  const aiDescription = providerRow?.ai_description ?? null;
+  const aiDescription = normalizeProviderAiDescription(providerRow?.ai_description);
   const aiSources = providerRow ? sourcesFromJson(providerRow.ai_sources) : [];
   const aiFaq = providerRow ? faqFromJson(providerRow.ai_faq) : [];
   const isEnriched = providerRow?.is_enriched ?? false;
