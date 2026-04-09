@@ -43,32 +43,21 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
   for (const row of rows) {
     const name = row.display_name?.trim();
     if (!name) {
-      const { data: providerRow } = await admin
-        .from('providers')
-        .select('slug')
-        .eq('id', row.id)
-        .maybeSingle();
-      await admin
-        .from('providers')
-        .update({
-          is_enriched: true,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', row.id);
-      if (providerRow?.slug?.trim()) {
-        addToIndexingQueue(providerIndexingUrl(providerRow.slug.trim()), {
-          source: 'server-action:providers:bulk-enrich'
-        });
-      }
       processed += 1;
       continue;
     }
 
     const enriched = await enrichProviderData(name);
-    await admin
+    const description = enriched.description?.trim() || '';
+    if (!description) {
+      processed += 1;
+      continue;
+    }
+
+    const { error: updateError } = await admin
       .from('providers')
       .update({
-        ai_description: enriched.description,
+        ai_description: description,
         ai_sources: enriched.sources,
         ai_faq: enriched.faq,
         state: enriched.state,
@@ -76,6 +65,10 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
         updated_at: new Date().toISOString()
       })
       .eq('id', row.id);
+    if (updateError) {
+      processed += 1;
+      continue;
+    }
     const { data: providerRow } = await admin
       .from('providers')
       .select('slug')

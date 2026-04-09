@@ -260,30 +260,27 @@ async function main() {
       `[${done + 1}/${queue.length}] Processing provider: ${name || '(missing display name)'} (${slug})`
     );
     if (!name) {
-      const { data: updated } = await supabase
-        .from('providers')
-        .update({
-          is_enriched: true,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', row.id)
-        .select('slug')
-        .maybeSingle();
-      if (updated?.slug?.trim()) {
-        enrichedProviderSlugs.push(updated.slug.trim());
-      }
       console.log(
-        `[${done + 1}/${queue.length}] Skipped enrichment because display name is missing; marked as enriched.`
+        `[${done + 1}/${queue.length}] FAIL display name is missing; provider left pending.`
       );
       done += 1;
       continue;
     }
 
     const enriched = await enrichProviderData(name);
+    const description = enriched.description?.trim() || '';
+    if (!description) {
+      console.log(
+        `[${done + 1}/${queue.length}] FAIL OpenAI returned an empty description; provider left pending.`
+      );
+      done += 1;
+      continue;
+    }
+
     const { error: upErr } = await supabase
       .from('providers')
       .update({
-        ai_description: enriched.description,
+        ai_description: description,
         ai_sources: enriched.sources,
         ai_faq: enriched.faq,
         state: enriched.state,
