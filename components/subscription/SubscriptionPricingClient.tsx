@@ -1,12 +1,10 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Sparkles, Star } from 'lucide-react';
 
 import Button from '@/components/ui/Button';
-import { getCheckoutURL } from '@/app/actions/billing';
 import { SCHOLARSHIP_ACTION_FOCUS_VISIBLE } from '@/lib/constants/scholarshipActionUi';
 import { cn } from '@/utils/cn';
 
@@ -17,14 +15,6 @@ function parseVariantId(value: string | undefined): number | null {
 
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
-}
-
-function getErrorMessage(error: unknown): string {
-  if (error instanceof Error && error.message) {
-    return error.message;
-  }
-
-  return 'Could not start checkout. Please try again.';
 }
 
 /** Compact trial note — same language as `ScholarshipsEmailConfirmationBanner`. */
@@ -243,32 +233,17 @@ const PLANS: PlanConfig[] = [
 ];
 
 export default function SubscriptionPricingClient() {
-  const router = useRouter();
-  const [activeVariantId, setActiveVariantId] = useState<number | null>(null);
+  const [activeVariantId, setActiveVariantId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
   const isBusy = activeVariantId !== null;
 
   const handleCheckout = (variantId: number | null) => {
-    if (variantId === null) {
-      setCheckoutError(
-        'This plan is not configured yet. Add the Lemon Squeezy variant ID in `.env.local`.'
-      );
-      return;
-    }
-
-    setCheckoutError(null);
-    setActiveVariantId(variantId);
-
-    startTransition(async () => {
-      try {
-        const checkoutUrl = await getCheckoutURL(variantId);
-        router.push(checkoutUrl);
-      } catch (error) {
-        setCheckoutError(getErrorMessage(error));
-        setActiveVariantId(null);
-      }
-    });
+    const selectedPlan = PLANS.find((plan) => plan.variantId === variantId);
+    setActiveVariantId(selectedPlan?.title ?? 'plan');
+    setCheckoutError(
+      `The ${selectedPlan?.title ?? 'selected'} plan is temporarily unavailable while checkout is being updated.`
+    );
+    window.setTimeout(() => setActiveVariantId(null), 250);
   };
 
   return (
@@ -286,7 +261,7 @@ export default function SubscriptionPricingClient() {
             badge={plan.badge}
             featured={plan.featured}
             ctaAbove={plan.ctaAbove}
-            isLoading={activeVariantId === plan.variantId && activeVariantId !== null}
+            isLoading={activeVariantId === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}
           />
