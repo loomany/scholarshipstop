@@ -15,6 +15,7 @@ import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 
 import { enrichProviderData } from '../lib/providers/enrichProviderDataCore';
+import { fetchProviderOfficialUrlsBySlug } from '../lib/providers/providerOfficialUrl';
 import { enqueueProviderUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
 
@@ -160,18 +161,24 @@ async function main() {
   console.log('Loading provider_scholarship_stats…');
   const stats = await fetchAllStats(supabase);
   console.log(`Found ${stats.length} provider slugs in stats view.`);
+  console.log('Loading official provider URLs from scholarships…');
+  const officialUrlsBySlug = await fetchProviderOfficialUrlsBySlug(
+    supabase,
+    stats.map((row) => row.slug)
+  );
+  console.log(
+    `Found ${officialUrlsBySlug.size} provider slug(s) with an official URL.`
+  );
 
   const upsertRows = stats.map((row) => {
     const slug = row.slug.trim();
     const display_name =
       row.display_name?.trim() || slug.replace(/-/g, ' ');
+    const officialUrl = officialUrlsBySlug.get(slug);
     return {
       slug,
       display_name,
-      official_url: null as string | null,
-      ai_sources: [] as Database['public']['Tables']['providers']['Insert']['ai_sources'],
-      ai_faq: [] as Database['public']['Tables']['providers']['Insert']['ai_faq'],
-      is_enriched: false
+      ...(officialUrl ? { official_url: officialUrl } : {})
     };
   });
 
@@ -256,6 +263,7 @@ async function main() {
   for (const row of queue) {
     const name = row.display_name?.trim();
     const slug = row.slug?.trim() || 'unknown-slug';
+    const officialUrl = officialUrlsBySlug.get(slug) ?? null;
     console.log(
       `[${done + 1}/${queue.length}] Processing provider: ${name || '(missing display name)'} (${slug})`
     );
@@ -267,7 +275,7 @@ async function main() {
       continue;
     }
 
-    const enriched = await enrichProviderData(name);
+    const enriched = await enrichProviderData(name, { officialUrl });
     const description = enriched.description?.trim() || '';
     if (!description) {
       console.log(

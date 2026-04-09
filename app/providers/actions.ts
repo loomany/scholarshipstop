@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { enrichProviderData } from '@/lib/providers/enrichProviderDataCore';
+import { fetchProviderOfficialUrlsBySlug } from '@/lib/providers/providerOfficialUrl';
 import { isProvidersBulkEnrichUiEnabled } from '@/lib/providers/providerHubServer';
 import { addToIndexingQueue, providerIndexingUrl } from '@/lib/seo/googleIndexingQueue';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
@@ -27,7 +28,7 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
 
   const { data: rows, error } = await admin
     .from('providers')
-    .select('id, display_name')
+    .select('id, slug, display_name, official_url')
     .eq('is_enriched', false)
     .order('created_at', { ascending: true });
 
@@ -39,15 +40,22 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
     return { ok: true, processed: 0 };
   }
 
+  const officialUrlsBySlug = await fetchProviderOfficialUrlsBySlug(
+    admin,
+    rows.map((row) => row.slug)
+  );
+
   let processed = 0;
   for (const row of rows) {
     const name = row.display_name?.trim();
+    const officialUrl =
+      row.official_url?.trim() || officialUrlsBySlug.get(row.slug?.trim() || '') || null;
     if (!name) {
       processed += 1;
       continue;
     }
 
-    const enriched = await enrichProviderData(name);
+    const enriched = await enrichProviderData(name, { officialUrl });
     const description = enriched.description?.trim() || '';
     if (!description) {
       processed += 1;
@@ -58,6 +66,7 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
       .from('providers')
       .update({
         ai_description: description,
+        ...(officialUrl ? { official_url: officialUrl } : {}),
         ai_sources: enriched.sources,
         ai_faq: enriched.faq,
         state: enriched.state,
