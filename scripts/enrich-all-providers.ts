@@ -1,6 +1,6 @@
 /**
  * Ensure every slug in `provider_scholarship_stats` has a `providers` row, then run
- * OpenAI enrichment for each row with `is_enriched = false`.
+ * OpenAI enrichment for each row with an empty `ai_description`.
  *
  *   npx tsx scripts/enrich-all-providers.ts
  *   npx tsx scripts/enrich-all-providers.ts --dry-run
@@ -167,8 +167,8 @@ async function main() {
 
   const { data: pending, error: pendErr } = await supabase
     .from('providers')
-    .select('id, display_name')
-    .eq('is_enriched', false)
+    .select('id, slug, display_name, ai_description')
+    .or('ai_description.is.null,ai_description.eq.')
     .order('created_at', { ascending: true });
 
   if (pendErr) {
@@ -177,6 +177,15 @@ async function main() {
   }
 
   let queue = pending ?? [];
+  console.log(
+    `Found ${queue.length} provider(s) with empty ai_description ready for enrichment.`
+  );
+
+  if (queue.length === 0) {
+    console.log('No new providers to enrich. Exiting...');
+    process.exit(0);
+  }
+
   if (enrichLimit != null && enrichLimit < queue.length) {
     console.log(
       `Applying --limit=${enrichLimit}: enriching first ${enrichLimit} of ${queue.length} queued.`
@@ -195,6 +204,10 @@ async function main() {
   const enrichedProviderSlugs: string[] = [];
   for (const row of queue) {
     const name = row.display_name?.trim();
+    const slug = row.slug?.trim() || 'unknown-slug';
+    console.log(
+      `[${done + 1}/${queue.length}] Processing provider: ${name || '(missing display name)'} (${slug})`
+    );
     if (!name) {
       const { data: updated } = await supabase
         .from('providers')
@@ -208,11 +221,13 @@ async function main() {
       if (updated?.slug?.trim()) {
         enrichedProviderSlugs.push(updated.slug.trim());
       }
+      console.log(
+        `[${done + 1}/${queue.length}] Skipped enrichment because display name is missing; marked as enriched.`
+      );
       done += 1;
       continue;
     }
 
-    process.stdout.write(`[${done + 1}/${queue.length}] ${name}… `);
     const enriched = await enrichProviderData(name);
     const { error: upErr } = await supabase
       .from('providers')
@@ -227,7 +242,7 @@ async function main() {
       .eq('id', row.id);
 
     if (upErr) {
-      console.log('FAIL', upErr.message);
+      console.log(`[${done + 1}/${queue.length}] FAIL ${upErr.message}`);
     } else {
       const { data: updated } = await supabase
         .from('providers')
@@ -237,13 +252,15 @@ async function main() {
       if (updated?.slug?.trim()) {
         enrichedProviderSlugs.push(updated.slug.trim());
       }
-      console.log('ok');
+      console.log(`[${done + 1}/${queue.length}] DONE`);
     }
     done += 1;
     await sleep(450);
   }
 
-  console.log(`Finished. Updated ${done} row(s).`);
+  console.log(
+    `Enrichment complete. Processed ${done}/${queue.length} provider(s).`
+  );
   if (enrichedProviderSlugs.length > 0) {
     const queue = enqueueProviderUrlsForScript(
       enrichedProviderSlugs,
