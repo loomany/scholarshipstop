@@ -3,7 +3,10 @@
 import { revalidatePath } from 'next/cache';
 
 import { enrichProviderData } from '@/lib/providers/enrichProviderDataCore';
-import { fetchProviderOfficialUrlsBySlug } from '@/lib/providers/providerOfficialUrl';
+import {
+  fetchProviderOfficialUrlsBySlug,
+  fetchProviderSourceUrlsBySlug
+} from '@/lib/providers/providerOfficialUrl';
 import { isProvidersBulkEnrichUiEnabled } from '@/lib/providers/providerHubServer';
 import { addToIndexingQueue, providerIndexingUrl } from '@/lib/seo/googleIndexingQueue';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
@@ -44,20 +47,31 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
     admin,
     rows.map((row) => row.slug)
   );
+  const sourceUrlsBySlug = await fetchProviderSourceUrlsBySlug(
+    admin,
+    rows.map((row) => row.slug)
+  );
 
   let processed = 0;
   for (const row of rows) {
     const name = row.display_name?.trim();
     const officialUrl =
       row.official_url?.trim() || officialUrlsBySlug.get(row.slug?.trim() || '') || null;
+    const sourceUrls = sourceUrlsBySlug.get(row.slug?.trim() || '') ?? [];
     if (!name) {
       processed += 1;
       continue;
     }
 
-    const enriched = await enrichProviderData(name, { officialUrl });
+    const enriched = await enrichProviderData(name, {
+      sourceUrls: [
+        ...(officialUrl ? [officialUrl] : []),
+        ...sourceUrls
+      ]
+    });
     const description = enriched.description?.trim() || '';
-    if (!description) {
+    const sources = enriched.sources.filter(Boolean);
+    if (!description || sources.length === 0) {
       processed += 1;
       continue;
     }
@@ -67,7 +81,7 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
       .update({
         ai_description: description,
         ...(officialUrl ? { official_url: officialUrl } : {}),
-        ai_sources: enriched.sources,
+        ai_sources: sources,
         ai_faq: enriched.faq,
         state: enriched.state,
         is_enriched: true,

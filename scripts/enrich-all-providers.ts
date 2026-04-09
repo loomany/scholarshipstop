@@ -15,7 +15,10 @@ import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 
 import { enrichProviderData } from '../lib/providers/enrichProviderDataCore';
-import { fetchProviderOfficialUrlsBySlug } from '../lib/providers/providerOfficialUrl';
+import {
+  fetchProviderOfficialUrlsBySlug,
+  fetchProviderSourceUrlsBySlug
+} from '../lib/providers/providerOfficialUrl';
 import { enqueueProviderUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
 
@@ -166,6 +169,10 @@ async function main() {
     supabase,
     stats.map((row) => row.slug)
   );
+  const sourceUrlsBySlug = await fetchProviderSourceUrlsBySlug(
+    supabase,
+    stats.map((row) => row.slug)
+  );
   console.log(
     `Found ${officialUrlsBySlug.size} provider slug(s) with an official URL.`
   );
@@ -264,6 +271,7 @@ async function main() {
     const name = row.display_name?.trim();
     const slug = row.slug?.trim() || 'unknown-slug';
     const officialUrl = officialUrlsBySlug.get(slug) ?? null;
+    const sourceUrls = sourceUrlsBySlug.get(slug) ?? [];
     console.log(
       `[${done + 1}/${queue.length}] Processing provider: ${name || '(missing display name)'} (${slug})`
     );
@@ -275,11 +283,17 @@ async function main() {
       continue;
     }
 
-    const enriched = await enrichProviderData(name, { officialUrl });
+    const enriched = await enrichProviderData(name, {
+      sourceUrls: [
+        ...(officialUrl ? [officialUrl] : []),
+        ...sourceUrls
+      ]
+    });
     const description = enriched.description?.trim() || '';
-    if (!description) {
+    const sources = enriched.sources.filter(Boolean);
+    if (!description || sources.length === 0) {
       console.log(
-        `[${done + 1}/${queue.length}] FAIL OpenAI returned an empty description; provider left pending.`
+        `[${done + 1}/${queue.length}] FAIL OpenAI returned incomplete enrichment (missing description or sources); provider left pending.`
       );
       done += 1;
       continue;
@@ -289,7 +303,8 @@ async function main() {
       .from('providers')
       .update({
         ai_description: description,
-        ai_sources: enriched.sources,
+        ...(officialUrl ? { official_url: officialUrl } : {}),
+        ai_sources: sources,
         ai_faq: enriched.faq,
         state: enriched.state,
         is_enriched: true,

@@ -166,7 +166,7 @@ async function fetchOfficialWebsiteSource(
 export async function enrichProviderData(
   providerName: string,
   options?: {
-    officialUrl?: string | null;
+    sourceUrls?: string[];
   }
 ): Promise<ProviderEnrichmentResult> {
   const empty: ProviderEnrichmentResult = {
@@ -183,7 +183,15 @@ export async function enrichProviderData(
     process.env.OPENAI_PROVIDER_ENRICH_MODEL?.trim() || 'gpt-4o-mini';
 
   const nameInPrompt = JSON.stringify(providerName);
-  const source = await fetchOfficialWebsiteSource(options?.officialUrl);
+  const sourceUrls = Array.from(
+    new Set((options?.sourceUrls ?? []).map((url) => normalizeProviderOfficialUrl(url)).filter(Boolean))
+  ) as string[];
+
+  let source: { url: string; text: string } | null = null;
+  for (const url of sourceUrls) {
+    source = await fetchOfficialWebsiteSource(url);
+    if (source) break;
+  }
 
   const userPrompt = source
     ? `You are a strict data researcher. Use ONLY the supplied source material from the organization's official website.
