@@ -13,6 +13,7 @@ import {
   RESOURCES_PAGE_TITLE,
   RESOURCES_SECTION_PATH
 } from '@/lib/content-hub/resourcesSection';
+import { getURL } from '@/utils/helpers';
 
 export type ResourceGuideFaqItem = { question: string; answer: string };
 
@@ -45,13 +46,13 @@ export default function ResourceGuideShell({
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: '/'
+        item: getURL('/')
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: RESOURCES_PAGE_TITLE,
-        item: RESOURCES_SECTION_PATH
+        item: getURL(RESOURCES_SECTION_PATH)
       },
       {
         '@type': 'ListItem',

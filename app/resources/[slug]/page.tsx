@@ -88,19 +88,19 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: '/'
+        item: getURL('/')
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: RESOURCES_PAGE_TITLE,
-        item: RESOURCES_SECTION_PATH
+        item: getURL(RESOURCES_SECTION_PATH)
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: post.title?.trim() || 'Article',
-        item: articlePath
+        item: articleUrl
       }
     ]
   };

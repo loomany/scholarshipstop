@@ -28,6 +28,7 @@ import {
   redactPremiumScholarshipFields
 } from '@/lib/scholarships/scholarshipDetailServer';
 import { resolveScholarshipCategorySlug } from '@/lib/scholarships/similarScholarships';
+import { getURL } from '@/utils/helpers';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -208,10 +209,11 @@ function faqItems(s: Scholarship): { question: string; answer: string }[] {
 
 function jsonLdDocument(s: Scholarship) {
   const path = scholarshipPublicPath(s);
+  const absolutePath = getURL(path);
   const faqs = faqItems(s);
   const graph: Record<string, unknown>[] = [];
-  const funderId = s.provider?.trim() ? `${path}#funder` : null;
-  const grantId = `${path}#grant`;
+  const funderId = s.provider?.trim() ? `${absolutePath}#funder` : null;
+  const grantId = `${absolutePath}#grant`;
   const scholarshipDescription = scholarshipSchemaDescription(s);
 
   const grant: Record<string, unknown> = {
@@ -219,7 +221,7 @@ function jsonLdDocument(s: Scholarship) {
     '@type': 'Grant',
     name: s.title,
     description: scholarshipDescription,
-    url: path
+    url: absolutePath
   };
   if (funderId) {
     graph.push({
@@ -246,18 +248,18 @@ function jsonLdDocument(s: Scholarship) {
   if (deadlineIso) {
     const applicationEvent: Record<string, unknown> = {
       '@type': 'Event',
-      '@id': `${path}#application-deadline`,
+      '@id': `${absolutePath}#application-deadline`,
       name: `Application deadline for ${s.title}`,
       description:
         scholarshipDescription ||
         `Application deadline information for ${s.title}.`,
       startDate: deadlineIso,
       endDate: deadlineIso,
-      url: path,
+      url: absolutePath,
       about: { '@id': grantId },
       location: {
         '@type': 'VirtualLocation',
-        url: path
+        url: absolutePath
       }
     };
     if (funderId) {
@@ -268,16 +270,16 @@ function jsonLdDocument(s: Scholarship) {
 
   const categorySlug = resolveScholarshipCategorySlug(s);
   const crumbItems: { name: string; item: string }[] = [
-    { name: 'Home', item: '/' },
-    { name: 'Find Scholarships', item: '/scholarships' }
+    { name: 'Home', item: getURL('/') },
+    { name: 'Find Scholarships', item: getURL('/scholarships') }
   ];
   if (categorySlug) {
     crumbItems.push({
       name: breadcrumbCategoryLabel(categorySlug),
-      item: `/scholarships/category/${categorySlug}`
+      item: getURL(`/scholarships/category/${categorySlug}`)
     });
   }
-  crumbItems.push({ name: s.title, item: path });
+  crumbItems.push({ name: s.title, item: absolutePath });
 
   graph.push({
     '@type': 'BreadcrumbList',

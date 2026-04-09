@@ -18,6 +18,7 @@ import {
 } from '@/app/scholarships/scholarshipListServerPayload';
 import ScholarshipCategoryPageAuthBridge from '../ScholarshipCategoryPageAuthBridge';
 import { createPublicClient } from '@/utils/supabase/public';
+import { getURL } from '@/utils/helpers';
 
 export const revalidate = 300;
 
@@ -109,19 +110,19 @@ export default async function ScholarshipCategoryPage({ params }: PageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: '/'
+        item: getURL('/')
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Find Scholarships',
-        item: '/scholarships'
+        item: getURL('/scholarships')
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: pageTitle,
-        item: `/scholarships/category/${canonicalSlug}`
+        item: getURL(`/scholarships/category/${canonicalSlug}`)
       }
     ]
   };

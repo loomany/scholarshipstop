@@ -18,6 +18,7 @@ import {
   parseProvidersHubPageParam,
   PROVIDERS_HUB_PAGE_SIZE
 } from '@/lib/providers/providersHubUrl';
+import { getURL } from '@/utils/helpers';
 
 export const dynamic = 'force-dynamic';
 
@@ -96,8 +97,8 @@ export default async function ProvidersHubPage({ searchParams }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: '/' },
-      { '@type': 'ListItem', position: 2, name: 'Providers', item: '/providers' }
+      { '@type': 'ListItem', position: 1, name: 'Home', item: getURL('/') },
+      { '@type': 'ListItem', position: 2, name: 'Providers', item: getURL('/providers') }
     ]
   };
 

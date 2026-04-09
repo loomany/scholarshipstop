@@ -24,6 +24,7 @@ import {
   RESOURCES_SECTION_PATH,
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
+import { getURL } from '@/utils/helpers';
 
 export const revalidate = 300;
 
@@ -176,13 +177,13 @@ export default async function ResourcesIndexPage({
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: '/'
+        item: getURL('/')
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: RESOURCES_PAGE_TITLE,
-        item: RESOURCES_SECTION_PATH
+        item: getURL(RESOURCES_SECTION_PATH)
       }
     ]
   };
