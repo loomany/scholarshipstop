@@ -7,7 +7,6 @@ export function redactPremiumScholarshipFields(
   return {
     ...scholarship,
     premiumFieldsRedacted: true,
-    applyLink: undefined,
     providerUrl: undefined,
     supportEmail: null,
     supportPhone: null

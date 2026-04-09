@@ -132,6 +132,7 @@ export default function SubscriptionDebug() {
     }
 
     setMessage('Updated.');
+    window.dispatchEvent(new Event('subscription-debug-updated'));
     router.refresh();
   };
 

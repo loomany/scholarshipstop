@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 
+import { hasActiveSubscriptionAccess } from '@/lib/payments/subscriptionEntitlements';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
 
@@ -34,10 +35,10 @@ export default function AuthStatusProvider({
       }
       const { data: profile } = await supabase
         .from('profiles')
-        .select('is_subscribed')
+        .select('*')
         .eq('id', nextUser.id)
-        .maybeSingle<Pick<Database['public']['Tables']['profiles']['Row'], 'is_subscribed'>>();
-      setHasSubscription(Boolean(profile?.is_subscribed));
+        .maybeSingle<Database['public']['Tables']['profiles']['Row']>();
+      setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, null));
       setAuthResolved(true);
     };
 
@@ -49,8 +50,23 @@ export default function AuthStatusProvider({
       void syncSubscription(session?.user ?? null);
     });
 
+    const handleSubscriptionDebugUpdated = () => {
+      void supabase.auth.getSession().then(({ data: { session } }) => {
+        void syncSubscription(session?.user ?? null);
+      });
+    };
+
+    window.addEventListener(
+      'subscription-debug-updated',
+      handleSubscriptionDebugUpdated
+    );
+
     return () => {
       sub.subscription.unsubscribe();
+      window.removeEventListener(
+        'subscription-debug-updated',
+        handleSubscriptionDebugUpdated
+      );
     };
   }, []);
 
