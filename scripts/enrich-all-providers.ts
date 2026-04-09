@@ -54,6 +54,57 @@ function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+async function revalidateProviderPages(slugs: string[]): Promise<void> {
+  const uniqueSlugs = Array.from(
+    new Set(slugs.map((slug) => slug.trim()).filter(Boolean))
+  );
+  if (uniqueSlugs.length === 0) return;
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'https://scholarshiptop.com';
+  const secret = process.env.PROVIDERS_REVALIDATE_SECRET?.trim();
+  if (!secret) {
+    console.log(
+      'Skipping provider page revalidation: PROVIDERS_REVALIDATE_SECRET is missing.'
+    );
+    return;
+  }
+
+  const endpoint = `${siteUrl.replace(/\/+$/, '')}/api/internal/providers/revalidate`;
+  console.log(
+    `Requesting provider page revalidation for ${uniqueSlugs.length} slug(s)...`
+  );
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${secret}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ slugs: uniqueSlugs })
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      console.log(
+        `Provider page revalidation failed with HTTP ${response.status}: ${details}`
+      );
+      return;
+    }
+
+    console.log(
+      `Provider page revalidation completed for ${uniqueSlugs.length} slug(s).`
+    );
+  } catch (error) {
+    console.log(
+      `Provider page revalidation request failed: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
+  }
+}
+
 async function fetchAllStats(
   supabase: ReturnType<typeof createClient<Database>>
 ): Promise<StatRow[]> {
@@ -270,6 +321,7 @@ async function main() {
       `google indexing queue: +${queue.enqueued} provider URL(s), total queued ${queue.total}`
     );
   }
+  await revalidateProviderPages(enrichedProviderSlugs);
 }
 
 main().catch((e) => {

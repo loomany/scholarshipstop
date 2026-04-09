@@ -12,13 +12,15 @@ jobs:
     timeout-minutes: 45
     env:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      NEXT_PUBLIC_SITE_URL: https://scholarshiptop.com
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      PROVIDERS_REVALIDATE_SECRET: ${{ secrets.PROVIDERS_REVALIDATE_SECRET }}
     steps:
       - name: Check required secrets
         run: |
           missing=0
-          for key in NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY OPENAI_API_KEY; do
+          for key in NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY OPENAI_API_KEY PROVIDERS_REVALIDATE_SECRET; do
             if [ -z "${!key}" ]; then
               echo "Missing required secret/env: ${key}" >&2
               missing=1
