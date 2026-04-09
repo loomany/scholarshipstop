@@ -26,7 +26,8 @@ const ABOUT_SUBLINKS = [
   { href: '/help', label: 'Help' },
   { href: '/privacy-policy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms' },
-  { href: '/faq', label: 'FAQ' }
+  { href: '/faq', label: 'FAQ' },
+  { href: '/subscription', label: 'Price' }
 ] as const;
 
 function sublinkActive(href: string, pathname: string) {

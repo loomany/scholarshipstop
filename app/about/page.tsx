@@ -1,7 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { HelpCircle, MessageCircleQuestion, Scale, Shield } from 'lucide-react';
+import {
+  BadgeDollarSign,
+  HelpCircle,
+  MessageCircleQuestion,
+  Scale,
+  Shield
+} from 'lucide-react';
 
 import AboutResourceCard from '@/components/about/AboutResourceCard';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
@@ -48,6 +54,15 @@ const CARDS = [
     expandedText:
       'Explore answers about finding scholarships, improving matches, saving opportunities, and understanding how the platform is used.',
     icon: MessageCircleQuestion
+  },
+  {
+    href: '/subscription',
+    title: 'Price',
+    shortText:
+      'See ScholarshipTop plans, free trial details, and which premium features are included.',
+    expandedText:
+      'Compare monthly, quarterly, and yearly pricing options and choose the plan that fits your scholarship search.',
+    icon: BadgeDollarSign
   }
 ] as const;
 
