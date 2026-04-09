@@ -41,19 +41,6 @@ function normalizeAiSourceHref(url: string): string {
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 }
 
-/** Link text: hostname only. */
-function aiSourceDisplayLabel(url: string): string {
-  const trimmed = url.trim();
-  if (!trimmed) return '';
-  try {
-    return new URL(normalizeAiSourceHref(trimmed)).hostname;
-  } catch {
-    const stripped = trimmed.replace(/^https?:\/\//i, '');
-    const host = stripped.split('/')[0] ?? '';
-    return host.replace(/:\d+$/, '') || stripped;
-  }
-}
-
 type PageProps = {
   params: { id: string };
   searchParams?: { page?: string | string[] };
@@ -157,7 +144,7 @@ export default async function ProviderProfilePage({
             </div>
             {data.officialUrl ? (
               <a
-                href={data.officialUrl}
+                href={normalizeAiSourceHref(data.officialUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"
@@ -187,7 +174,7 @@ export default async function ProviderProfilePage({
               or visit the official site when linked.
             </p>
           )}
-          {data.aiSources.length > 0 ? (
+          {data.officialUrl?.trim() ? (
             <div className="mt-5 rounded-xl bg-gray-50 px-4 py-3 text-xs text-gray-500">
               <p className="flex items-start gap-2 leading-relaxed">
                 <Info
@@ -195,21 +182,16 @@ export default async function ProviderProfilePage({
                   aria-hidden
                 />
                 <span>
-                  Information aggregated from public sources:{' '}
-                  {data.aiSources.map((url, i) => (
-                    <span key={url}>
-                      {i > 0 ? ', ' : null}
-                      <a
-                        href={normalizeAiSourceHref(url)}
-                        title={normalizeAiSourceHref(url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium text-emerald-700 underline decoration-emerald-600/30 underline-offset-2 hover:text-emerald-800"
-                      >
-                        {aiSourceDisplayLabel(url)}
-                      </a>
-                    </span>
-                  ))}
+                  Information aggregated from the provider&apos;s official website:{' '}
+                  <a
+                    href={normalizeAiSourceHref(data.officialUrl)}
+                    title={normalizeAiSourceHref(data.officialUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-emerald-700 underline decoration-emerald-600/30 underline-offset-2 hover:text-emerald-800"
+                  >
+                    Official website
+                  </a>
                 </span>
               </p>
             </div>
