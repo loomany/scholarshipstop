@@ -76,7 +76,7 @@ export default function SafeContentPostBody({
   return (
     <div
       className={clsx(
-        'rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8 lg:p-10',
+        'min-w-0 max-w-full rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8 lg:p-10',
         tightTop ? 'mt-4 sm:mt-5' : 'mt-10'
       )}
     >

@@ -40,10 +40,10 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.png',
+        url: '/logo-preview.png',
         width: 1200,
         height: 630,
-        alt: 'ScholarshipTop — Find Scholarships That Match You'
+        alt: 'ScholarshipTop Logo'
       }
     ]
   },
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'ScholarshipTop',
     description: 'Find Scholarships That Match You',
-    images: ['/og-image.png']
+    images: ['/logo-preview.png']
   }
 };
 
