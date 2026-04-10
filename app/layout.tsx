@@ -7,14 +7,17 @@ import { PropsWithChildren, Suspense } from 'react';
 import { getURL } from '@/utils/helpers';
 import 'styles/main.css';
 
-const title = 'ScholarshipTop — Find Scholarships That Match You';
-const description =
-  'Browse scholarships, filter by your goals, and find awards that fit your profile.';
+const defaultTitle = 'ScholarshipTop — Find Scholarships That Match You';
+const defaultDescription =
+  'Discover and manage the best scholarship grants tailored for your education. ScholarshipTop helps students find funding opportunities worldwide.';
+const openGraphDescription =
+  'Discover and manage thousands of scholarship grants.';
+const canonicalSiteUrl = getURL().replace(/\/+$/, '');
 
 export const metadata: Metadata = {
   metadataBase: new URL(getURL()),
-  title: title,
-  description: description,
+  title: defaultTitle,
+  description: defaultDescription,
   manifest: '/site.webmanifest',
   icons: {
     icon: [
@@ -29,8 +32,26 @@ export const metadata: Metadata = {
     ]
   },
   openGraph: {
-    title: title,
-    description: description
+    title: defaultTitle,
+    description: openGraphDescription,
+    url: `${canonicalSiteUrl}/`,
+    siteName: 'ScholarshipTop',
+    locale: 'en_US',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'ScholarshipTop — Find Scholarships That Match You'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ScholarshipTop',
+    description: 'Find Scholarships That Match You',
+    images: ['/og-image.png']
   }
 };
 
