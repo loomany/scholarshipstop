@@ -44,6 +44,9 @@ function shouldNotifyPublish(params: {
  * POST /api/internal/resources/notify-published
  * Authorization: Bearer ${TELEGRAM_RESOURCE_NOTIFY_SECRET} (or CONTENT_ARTICLE_MATCH_SECRET fallback)
  *
+ * Optional: set TELEGRAM_RESOURCES_BROADCAST_ALL=1 to DM every bot user who used /start
+ * (`telegram_users.last_bot_started_at` set). Throttle with TELEGRAM_RESOURCES_SEND_DELAY_MS (default 40).
+ *
  * Call from Supabase Database Webhook on `content_posts` (INSERT/UPDATE) or manually:
  * `{ "slug": "my-article" }` | `{ "postId": "uuid" }`
  *

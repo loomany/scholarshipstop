@@ -123,8 +123,17 @@ export async function sendResourceNotifyToChats(
 
   const photoUrl = isProbablyHttpUrl(input.image_url) ? input.image_url!.trim() : null;
 
+  const delayBetweenMs =
+    chatIds.length > 1
+      ? Math.max(0, Number(process.env.TELEGRAM_RESOURCES_SEND_DELAY_MS?.trim() || '40'))
+      : 0;
+
   let anyOk = false;
-  for (const chat_id of chatIds) {
+  for (let i = 0; i < chatIds.length; i++) {
+    const chat_id = chatIds[i]!;
+    if (i > 0 && delayBetweenMs > 0) {
+      await new Promise((r) => setTimeout(r, delayBetweenMs));
+    }
     if (photoUrl) {
       const r = await telegramBotApi<unknown>('sendPhoto', {
         chat_id,
