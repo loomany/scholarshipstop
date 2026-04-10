@@ -91,16 +91,19 @@ type GrantNotifyField =
   | 'notify_hot_deadlines';
 
 const BUTTON_LABELS = {
-  admin: 'Admin',
-  alertsOff: 'Alerts: OFF',
-  alertsOn: 'Alerts: ON',
-  backToMenu: 'Back to Menu',
-  connectAccount: 'Connect Account',
+  admin: '🛠 Admin Panel',
+  alertsOff: '🔔 Notifications: OFF',
+  alertsOn: '🔔 Notifications: ON',
+  backToMenu: '⬅️ Main Menu',
+  connectAccount: '🔗 Link Account',
   /** Grant notification toggles (same as account email prefs); search: /scholarships on site. */
-  findScholarships: 'Grant alerts',
-  myProfile: 'My Profile',
-  reconnectAccount: 'Reconnect Account'
+  findScholarships: '🔔 Alerts Setup',
+  myProfile: '👤 My Account',
+  reconnectAccount: '🔄 Sync Account'
 } as const;
+
+/** Short reply when returning to the reply-keyboard hub (not Markdown). */
+const MAIN_MENU_REPLY = 'Main menu — pick your next step.';
 
 function getTelegramBotToken() {
   return process.env.TELEGRAM_BOT_TOKEN?.trim() || '';
@@ -438,31 +441,38 @@ async function answerTelegramCallbackQuery(callbackQueryId: string, text?: strin
   });
 }
 
+function grantNotifyChannelStatus(on: boolean): 'ON' | 'OFF' {
+  return on ? 'ON' : 'OFF';
+}
+
 function formatGrantNotifyPanelText(user: TelegramUserRow): string {
   return [
-    'Grant alerts (Telegram)',
-    'Tap a switch to turn grant notifications on or off for each channel.',
+    '🔔 *Notification Center*',
+    'Stay ahead of the competition! Personalize your stream to get the most relevant grant opportunities.',
     '',
-    `Best recommendations: ${user.notify_best_matches ? 'on' : 'off'}`,
-    `Saved filters: ${user.notify_saved_filters ? 'on' : 'off'}`,
-    `Easy apply: ${user.notify_easy_apply ? 'on' : 'off'}`,
-    `Hot deadlines: ${user.notify_hot_deadlines ? 'on' : 'off'}`
+    '*Active Channels:*',
+    `🎯 Top Matches: ${grantNotifyChannelStatus(user.notify_best_matches)}`,
+    `💾 Saved Filters: ${grantNotifyChannelStatus(user.notify_saved_filters)}`,
+    `⚡ Quick Apply: ${grantNotifyChannelStatus(user.notify_easy_apply)}`,
+    `🔥 Hot Deadlines: ${grantNotifyChannelStatus(user.notify_hot_deadlines)}`,
+    '',
+    '_Tap the buttons below to toggle channels._'
   ].join('\n');
 }
 
 function buildGrantNotifyInlineKeyboard(user: TelegramUserRow): TelegramReplyMarkup {
   const cell = (label: string, on: boolean, data: string): TelegramInlineButton =>
-    button(`${label}: ${on ? 'On' : 'Off'}`, data);
+    button(`${label}: ${grantNotifyChannelStatus(on)}`, data);
 
   return {
     inline_keyboard: [
       [
-        cell('Best', user.notify_best_matches, CALLBACKS.notifyBest),
-        cell('Saved', user.notify_saved_filters, CALLBACKS.notifySf)
+        cell('🎯 Top Matches', user.notify_best_matches, CALLBACKS.notifyBest),
+        cell('💾 Saved Filters', user.notify_saved_filters, CALLBACKS.notifySf)
       ],
       [
-        cell('Easy', user.notify_easy_apply, CALLBACKS.notifyEa),
-        cell('Hot', user.notify_hot_deadlines, CALLBACKS.notifyHd)
+        cell('⚡ Quick Apply', user.notify_easy_apply, CALLBACKS.notifyEa),
+        cell('🔥 Hot Deadlines', user.notify_hot_deadlines, CALLBACKS.notifyHd)
       ]
     ]
   };
@@ -472,6 +482,7 @@ async function sendGrantSettingsPanel(user: TelegramUserRow) {
   await callTelegramApi('sendMessage', {
     chat_id: user.telegram_chat_id,
     text: formatGrantNotifyPanelText(user),
+    parse_mode: 'Markdown',
     reply_markup: buildGrantNotifyInlineKeyboard(user),
     disable_web_page_preview: true
   });
@@ -501,6 +512,7 @@ async function handleGrantNotifyToggle(
     chat_id: user.telegram_chat_id,
     message_id: callback.message.message_id,
     text: formatGrantNotifyPanelText(fresh),
+    parse_mode: 'Markdown',
     reply_markup: buildGrantNotifyInlineKeyboard(fresh),
     disable_web_page_preview: true
   });
@@ -816,7 +828,7 @@ async function sendProfileSummary(user: TelegramUserRow) {
   if (!user.app_user_id) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'Your Telegram account is not connected yet. Tap Connect Account first.',
+      `Your Telegram account is not connected yet. Tap ${BUTTON_LABELS.connectAccount} first.`,
       buildProfileKeyboard(user)
     );
     return;
@@ -1267,7 +1279,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
 
     const lower = text.toLowerCase();
     if (lower === '/menu' || lower === '/help') {
-      await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainKeyboard());
+      await sendTelegramMessage(user.telegram_chat_id, MAIN_MENU_REPLY, buildMainKeyboard());
       return;
     }
 
@@ -1298,7 +1310,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     }
 
     if (text === BUTTON_LABELS.backToMenu) {
-      await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainKeyboard());
+      await sendTelegramMessage(user.telegram_chat_id, MAIN_MENU_REPLY, buildMainKeyboard());
       return;
     }
 
@@ -1389,7 +1401,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         return;
       case CALLBACKS.mainMenu:
       default:
-        await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainKeyboard());
+        await sendTelegramMessage(user.telegram_chat_id, MAIN_MENU_REPLY, buildMainKeyboard());
     }
   }
 }
