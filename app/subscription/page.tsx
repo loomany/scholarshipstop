@@ -10,6 +10,10 @@ export const metadata: Metadata = {
   title: 'Unlock Premium Precision'
 };
 
+// Must be dynamic: pricing CTAs depend on the signed-in user's subscription row.
+// Without this, Next can serve a static shell where `getUser` never runs with cookies.
+export const dynamic = 'force-dynamic';
+
 type Subscription = Tables<'subscriptions'>;
 
 function inferCurrentPlanKey(subscription: Subscription | null): 'monthly' | 'quarterly' | 'yearly' | null {
