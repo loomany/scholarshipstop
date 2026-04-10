@@ -18,6 +18,7 @@ import {
   lemonWebhookShouldSendSubscriptionPaymentFailedEmail
 } from '@/lib/email/sendLemonSubscriptionEmail';
 import { notifyTelegramPayment } from '@/lib/telegram/bot';
+import { runInvoicePaymentFailedWebhookEffects } from '@/lib/payments/runInvoicePaymentFailedWebhookEffects';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -118,9 +119,15 @@ export async function POST(req: Request) {
   try {
     const decision = decideSubscriptionUpdate(payload);
     if (decision.kind === 'ignored') {
-      return new Response(JSON.stringify({ received: true, ignored: true }), {
-        status: 200
-      });
+      const invoiceFx = await runInvoicePaymentFailedWebhookEffects(supabaseAdmin, payload);
+      return new Response(
+        JSON.stringify({
+          received: true,
+          ignored: true,
+          invoicePaymentFailed: invoiceFx
+        }),
+        { status: 200 }
+      );
     }
 
     console.info('[lemon:webhook] processing entitlement event', {

@@ -176,10 +176,10 @@ export async function sendLemonSubscriptionPaymentFailedEmail(options: {
   payload: LemonWebhookPayload;
 }): Promise<{ ok: boolean; skipped?: string }> {
   const origin = getEmailSiteOrigin();
-  const updatePaymentUrl = extractLemonUpdatePaymentMethodUrl(options.payload);
-  if (!updatePaymentUrl) {
-    return { ok: false, skipped: 'update_payment_method URL missing from payload' };
-  }
+  const base = origin.replace(/\/+$/, '');
+  /** Invoice webhooks do not include `urls.update_payment_method` (see Lemon API). */
+  const updatePaymentUrl =
+    extractLemonUpdatePaymentMethodUrl(options.payload) ?? `${base}/subscription`;
 
   const html = buildSubscriptionPaymentFailedEmailHtml({
     siteOrigin: origin,

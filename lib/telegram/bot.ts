@@ -265,6 +265,29 @@ function formatAdminEventTypeLabel(eventType: string) {
   }
 }
 
+/** Lemon `meta.event_name` / stored `event_name` → short Russian label for admin Telegram. */
+function formatLemonWebhookEventRu(eventName: string | null | undefined): string {
+  if (!eventName?.trim()) return 'не указано';
+  const e = eventName.trim().toLowerCase().replace(/\./g, '_');
+  const map: Record<string, string> = {
+    subscription_created: 'подписка создана',
+    subscription_updated: 'подписка обновлена',
+    subscription_cancelled: 'подписка отменена',
+    subscription_resumed: 'подписка возобновлена',
+    subscription_expired: 'подписка истекла',
+    subscription_paused: 'подписка на паузе',
+    subscription_unpaused: 'пауза снята',
+    subscription_plan_changed: 'смена тарифа',
+    subscription_payment_success: 'успешный платёж',
+    subscription_payment_failed: 'ошибка платежа',
+    subscription_payment_recovered: 'платёж восстановлен',
+    subscription_payment_refunded: 'возврат по подписке',
+    order_created: 'заказ создан',
+    order_refunded: 'возврат заказа'
+  };
+  return map[e] ?? eventName;
+}
+
 function formatValue(value: string | number | null | undefined, fallback = 'Not set') {
   if (value == null) return fallback;
   const text = String(value).trim();
@@ -324,7 +347,17 @@ function formatEventLine(event: {
       }).format(when);
 
   if (event.event_type === 'payment') {
-    return `• платеж - ${formatAdminPlanLabel(plan, plan !== 'free')} - ${email ?? 'неизвестный пользователь'} - ${stamp}`;
+    const status =
+      typeof payload.status === 'string' ? formatAdminStatusLabel(payload.status) : null;
+    const ev =
+      typeof payload.event_name === 'string'
+        ? formatLemonWebhookEventRu(payload.event_name)
+        : null;
+    const statusPart = status ? ` — ${status}` : '';
+    const evPart = ev ? `${ev} — ` : '';
+    return `• платеж — ${evPart}${formatAdminPlanLabel(plan, plan !== 'free')}${statusPart} — ${
+      email ?? 'неизвестный пользователь'
+    } — ${stamp}`;
   }
   if (event.event_type === 'signup') {
     return `• регистрация - ${email ?? 'неизвестный email'}${source ? ` - ${formatAdminSourceLabel(source)}` : ''} - ${stamp}`;
@@ -523,11 +556,16 @@ async function logTelegramEvent(
   payload: Record<string, Json>,
   options?: {
     dedupeByUserId?: string | null;
+    /** Prefer for rows where dedupe must stay null but FK to auth user should be set (e.g. payments). */
+    relatedUserId?: string | null;
     telegramChatId?: number | null;
   }
 ) {
   const admin = getAdminClient();
   if (!admin) return false;
+
+  const relatedUserIdForInsert =
+    options?.relatedUserId ?? options?.dedupeByUserId ?? null;
 
   if (options?.dedupeByUserId) {
     const { data: existing } = await admin
@@ -545,7 +583,7 @@ async function logTelegramEvent(
 
   const { error } = await admin.from('telegram_event_logs').insert({
     event_type: eventType,
-    related_user_id: options?.dedupeByUserId ?? null,
+    related_user_id: relatedUserIdForInsert,
     telegram_chat_id: options?.telegramChatId ?? null,
     payload
   });
@@ -625,6 +663,9 @@ export async function notifyTelegramPayment(payload: {
   plan: string;
   status: string;
   eventName?: string | null;
+  /** Dedupe key for invoice-only billing hooks (e.g. subscription_payment_failed). */
+  invoiceId?: string | null;
+  source?: string | null;
 }) {
   await logTelegramEvent(
     'payment',
@@ -632,16 +673,19 @@ export async function notifyTelegramPayment(payload: {
       email: payload.email ?? null,
       plan: payload.plan,
       status: payload.status,
-      event_name: payload.eventName ?? null
+      event_name: payload.eventName ?? null,
+      ...(payload.invoiceId ? { invoice_id: payload.invoiceId } : {}),
+      ...(payload.source ? { source: payload.source } : {})
     },
-    { dedupeByUserId: null }
+    { dedupeByUserId: null, relatedUserId: payload.userId }
   );
 
   await sendTelegramAdminBroadcast(
     [
       'Получено платежное событие',
+      `Событие Lemon: ${formatLemonWebhookEventRu(payload.eventName)}`,
       `Тариф: ${formatAdminPlanLabel(payload.plan, payload.plan !== 'free')}`,
-      `Статус: ${formatAdminStatusLabel(payload.status)}`,
+      `Статус в БД: ${formatAdminStatusLabel(payload.status)}`,
       `Пользователь: ${payload.email ?? payload.userId}`
     ].join('\n')
   );

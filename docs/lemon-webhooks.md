@@ -77,6 +77,7 @@ Unknown events are acknowledged with `{ received: true, ignored: true }`.
 - `subscription_payment_failed` maps to `past_due` and blocks access immediately (no grace period)
 - `subscription_payment_refunded` revokes access immediately
 - `subscription_payment_success`, `subscription_payment_failed`, `subscription_payment_recovered`, and `subscription_payment_refunded` invoice payloads are ignored for entitlement sync; only subscription-object payloads can change access
+- Exception: `subscription_payment_failed` **invoice** webhooks still trigger the “payment failed” email (link falls back to `/subscription` when Lemon omits `update_payment_method`) and an admin Telegram line, deduped by invoice id; DB state still follows `subscription_updated` with a subscription object
 
 ## User id resolution
 

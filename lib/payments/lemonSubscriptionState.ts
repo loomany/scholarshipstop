@@ -49,6 +49,9 @@ export type LemonWebhookPayload = {
         customer_portal_update_subscription?: string | null;
         update_payment_method?: string | null;
       } | null;
+      /** Present on subscription-invoice objects. */
+      user_email?: string | null;
+      subscription_id?: number | null;
     };
   };
   attributes?: {
@@ -83,6 +86,8 @@ export type LemonWebhookPayload = {
       customer_portal_update_subscription?: string | null;
       update_payment_method?: string | null;
     } | null;
+    user_email?: string | null;
+    subscription_id?: number | null;
   };
 };
 
@@ -147,7 +152,7 @@ function isOrderPayload(payload: LemonWebhookPayload): boolean {
   return (payload.data as { type?: string } | undefined)?.type === 'orders';
 }
 
-function isSubscriptionInvoicePayload(payload: LemonWebhookPayload): boolean {
+export function isSubscriptionInvoicePayload(payload: LemonWebhookPayload): boolean {
   return (payload.data as { type?: string } | undefined)?.type === 'subscription-invoices';
 }
 
@@ -178,7 +183,7 @@ function toSubscribedFromLemonAttributes(
   });
 }
 
-function normalizeLemonEventName(eventName?: string) {
+export function normalizeLemonEventName(eventName?: string) {
   const normalized = (eventName ?? '').trim();
   switch (normalized) {
     case 'order.created':
