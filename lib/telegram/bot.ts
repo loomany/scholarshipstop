@@ -147,37 +147,38 @@ function keyboardButton(text: string): TelegramKeyboardButton {
 
 function buildMainKeyboard(): TelegramReplyKeyboardMarkup {
   return {
-    keyboard: [
-      [keyboardButton(BUTTON_LABELS.findScholarships)],
-      [keyboardButton(BUTTON_LABELS.myProfile)]
-    ],
+    keyboard: [[
+      keyboardButton(BUTTON_LABELS.findScholarships),
+      keyboardButton(BUTTON_LABELS.myProfile)
+    ]],
     resize_keyboard: true,
     is_persistent: true
   };
 }
 
 function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarkup {
-  const rows: TelegramKeyboardButton[][] = [
-    [
-      keyboardButton(
-        user.app_user_id ? BUTTON_LABELS.reconnectAccount : BUTTON_LABELS.connectAccount
-      )
-    ]
-  ];
+  const primaryConnectButton = keyboardButton(
+    user.app_user_id ? BUTTON_LABELS.reconnectAccount : BUTTON_LABELS.connectAccount
+  );
 
   if (user.is_admin) {
-    rows.push([keyboardButton(BUTTON_LABELS.admin)]);
-    rows.push([
-      keyboardButton(
-        user.notifications_enabled ? BUTTON_LABELS.alertsOn : BUTTON_LABELS.alertsOff
-      )
-    ]);
+    return {
+      keyboard: [
+        [primaryConnectButton, keyboardButton(BUTTON_LABELS.admin)],
+        [
+          keyboardButton(
+            user.notifications_enabled ? BUTTON_LABELS.alertsOn : BUTTON_LABELS.alertsOff
+          ),
+          keyboardButton(BUTTON_LABELS.backToMenu)
+        ]
+      ],
+      resize_keyboard: true,
+      is_persistent: true
+    };
   }
 
-  rows.push([keyboardButton(BUTTON_LABELS.backToMenu)]);
-
   return {
-    keyboard: rows,
+    keyboard: [[primaryConnectButton, keyboardButton(BUTTON_LABELS.backToMenu)]],
     resize_keyboard: true,
     is_persistent: true
   };
