@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 
+import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
 import { hasActiveSubscriptionAccess } from '@/lib/payments/subscriptionEntitlements';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
@@ -43,11 +44,10 @@ export default function AuthStatusProvider({
           .from('subscriptions')
           .select('*, prices(*, products(*))')
           .eq('user_id', nextUser.id)
-          .in('status', ['trialing', 'on_trial', 'active', 'cancelled', 'canceled', 'paused', 'past_due'])
           .order('created', { ascending: false })
-          .limit(1)
+          .limit(20)
       ]);
-      const subscription = subscriptions?.[0] ?? null;
+      const subscription = pickCanonicalSubscription(subscriptions ?? []);
       setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
       setAuthResolved(true);
     };

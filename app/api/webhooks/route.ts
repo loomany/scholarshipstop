@@ -8,6 +8,7 @@ import {
   decideSubscriptionUpdate,
   type LemonWebhookPayload
 } from '@/lib/payments/lemonSubscriptionState';
+import type { Json } from '@/types_db';
 import {
   sendLemonSubscriptionActiveEmail,
   sendLemonSubscriptionCancelledEmail,
@@ -110,16 +111,38 @@ export async function POST(req: Request) {
 
     const { data: existingSubscription } = await supabaseAdmin
       .from('subscriptions')
-      .select('id, raw_payload')
+      .select('id, metadata, raw_payload')
       .eq('id', decision.subscription.id)
       .maybeSingle();
+    const existingMetadata =
+      existingSubscription?.metadata &&
+      typeof existingSubscription.metadata === 'object' &&
+      !Array.isArray(existingSubscription.metadata)
+        ? (existingSubscription.metadata as Record<string, Json>)
+        : null;
+    const nextMetadata =
+      decision.subscription.metadata &&
+      typeof decision.subscription.metadata === 'object' &&
+      !Array.isArray(decision.subscription.metadata)
+        ? (decision.subscription.metadata as Record<string, Json>)
+        : null;
+    const existingEventFingerprint =
+      typeof existingMetadata?.lemon_event_fingerprint === 'string'
+        ? existingMetadata.lemon_event_fingerprint
+        : null;
+    const nextEventFingerprint =
+      typeof nextMetadata?.lemon_event_fingerprint === 'string'
+        ? nextMetadata.lemon_event_fingerprint
+        : null;
     if (
-      existingSubscription?.raw_payload &&
-      JSON.stringify(existingSubscription.raw_payload) === JSON.stringify(payload)
+      (existingEventFingerprint && nextEventFingerprint && existingEventFingerprint === nextEventFingerprint) ||
+      (existingSubscription?.raw_payload &&
+        JSON.stringify(existingSubscription.raw_payload) === JSON.stringify(payload))
     ) {
       console.info('[lemon:webhook] duplicate payload ignored', {
         subscriptionId: decision.subscription.id,
-        userId: decision.userId
+        userId: decision.userId,
+        eventFingerprint: nextEventFingerprint
       });
       return new Response(JSON.stringify({ received: true, duplicate: true }), {
         status: 200

@@ -50,6 +50,29 @@ test('maps subscription_updated cancelled status to isSubscribed=false', () => {
   assert.equal(decision.subscriptionPlan, 'quarterly_pro');
 });
 
+test('keeps access during paid grace period for cancelled Lemon subscriptions', () => {
+  const payload = {
+    meta: { event_name: 'subscription_updated' },
+    data: {
+      id: 'sub_grace',
+      attributes: {
+        user_id: 'user-grace',
+        status: 'cancelled',
+        variant_name: 'Yearly Pro',
+        ends_at: '2099-04-10T00:00:00.000Z',
+        updated_at: '2026-04-10T00:00:00.000Z'
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.isSubscribed, true);
+  assert.equal(decision.subscription.status, 'cancelled');
+  assert.equal(decision.subscriptionPlan, 'yearly_pro');
+});
+
 test('maps on_trial status to trial plan and active access', () => {
   const payload = {
     meta: { event_name: 'subscription_created' },
@@ -150,6 +173,8 @@ test('does not persist Lemon price ids into Stripe price_id foreign key', () => 
   assert.deepEqual(decision.subscription.metadata, {
     source: 'lemon_squeezy',
     event_name: 'subscription_updated',
+    lemon_event_fingerprint:
+      'subscription_updated:2047507:trialing:::::0:',
     lemon_price_id: '2516368',
     lemon_subscription_item_id: '7674432'
   });

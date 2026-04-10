@@ -37,7 +37,7 @@
     "debug:first-gen-tags": "npx tsx scripts/debug-eligibility-first-generation.ts",
     "enrich-providers": "npx tsx scripts/enrich-all-providers.ts",
     "content:reprocess-articles": "npx tsx scripts/reprocess-content-posts.ts",
-    "test:webhooks": "npx tsx --test lib/payments/__tests__/lemonWebhookSignature.test.ts lib/payments/__tests__/lemonSubscriptionState.test.ts"
+    "test:webhooks": "npx tsx --test lib/payments/__tests__/lemonWebhookSignature.test.ts lib/payments/__tests__/lemonSubscriptionState.test.ts lib/payments/__tests__/subscriptionAccess.test.ts"
   },
   "dependencies": {
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",

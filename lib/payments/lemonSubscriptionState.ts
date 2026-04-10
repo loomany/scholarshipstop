@@ -1,5 +1,10 @@
 import type { Json, TablesInsert } from '@/types_db';
 import type { AppSubscriptionPlan } from '@/lib/payments/subscriptionEntitlements';
+import {
+  createSubscriptionEventFingerprint,
+  hasSubscriptionAccess,
+  normalizeSubscriptionStatus
+} from '@/lib/payments/subscriptionAccess';
 
 export type LemonWebhookPayload = {
   meta?: {
@@ -131,8 +136,22 @@ function isSubscriptionInvoicePayload(payload: LemonWebhookPayload): boolean {
 }
 
 export function toSubscribedFromLemonStatus(status?: string): boolean {
-  const normalized = (status ?? '').toLowerCase();
-  return normalized === 'active' || normalized === 'trialing' || normalized === 'on_trial';
+  return hasSubscriptionAccess({ status });
+}
+
+function toSubscribedFromLemonAttributes(
+  attributes:
+    | LemonWebhookPayload['data']['attributes']
+    | LemonWebhookPayload['attributes']
+    | undefined
+) {
+  return hasSubscriptionAccess({
+    status: attributes?.status,
+    endedAt: attributes?.ends_at,
+    cancelAt: attributes?.ends_at,
+    currentPeriodEnd: attributes?.renews_at ?? attributes?.ends_at,
+    renewsAt: attributes?.renews_at
+  });
 }
 
 function normalizeLemonEventName(eventName?: string) {
@@ -168,27 +187,8 @@ function normalizeLemonEventName(eventName?: string) {
 }
 
 function normalizeLemonStatus(status?: string) {
-  const normalized = (status ?? '').toLowerCase();
-  switch (normalized) {
-    case 'on_trial':
-      return 'trialing';
-    case 'active':
-      return 'active';
-    case 'paused':
-      return 'paused';
-    case 'past_due':
-      return 'past_due';
-    case 'unpaid':
-      return 'unpaid';
-    case 'cancelled':
-      return 'cancelled';
-    case 'expired':
-      return 'expired';
-    case 'canceled':
-      return 'canceled';
-    default:
-      return 'expired';
-  }
+  const normalized = normalizeSubscriptionStatus(status);
+  return normalized === 'inactive' ? 'expired' : normalized;
 }
 
 function derivePlanCode(payload: LemonWebhookPayload): AppSubscriptionPlan {
@@ -223,6 +223,17 @@ function buildSubscriptionUpsert(
     attributes?.first_subscription_item?.id != null
       ? String(attributes.first_subscription_item.id)
       : null;
+  const eventFingerprint = createSubscriptionEventFingerprint({
+    eventName,
+    subscriptionId,
+    status: attributes?.status,
+    updatedAt: attributes?.updated_at,
+    renewsAt: attributes?.renews_at,
+    endsAt: attributes?.ends_at,
+    trialEndsAt: attributes?.trial_ends_at,
+    cancelled: attributes?.cancelled,
+    orderId: attributes?.order_id
+  });
 
   return {
     id: subscriptionId,
@@ -241,6 +252,7 @@ function buildSubscriptionUpsert(
     metadata: {
       source: 'lemon_squeezy',
       event_name: eventName,
+      lemon_event_fingerprint: eventFingerprint,
       lemon_price_id: lemonPriceId,
       lemon_subscription_item_id: lemonSubscriptionItemId
     } as Json,
@@ -289,7 +301,8 @@ export function decideSubscriptionUpdate(
     return { kind: 'ignored', eventName };
   }
   const userId = resolveUserId(payload);
-  const isSubscribed = toSubscribedFromLemonStatus(getLemonAttributes(payload)?.status);
+  const attributes = getLemonAttributes(payload);
+  const isSubscribed = toSubscribedFromLemonAttributes(attributes);
   const subscriptionPlan = derivePlanCode(payload);
 
   if (

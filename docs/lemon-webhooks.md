@@ -9,18 +9,17 @@ This project creates Lemon Squeezy overlay checkouts, verifies webhooks, syncs
 
 ## Required env vars
 
-- `LEMONSQUEEZY_API_KEY`
-- `LEMONSQUEEZY_STORE_ID`
-- `LEMONSQUEEZY_MONTHLY_VARIANT_ID`
-- `LEMONSQUEEZY_QUARTERLY_VARIANT_ID`
-- `LEMONSQUEEZY_YEARLY_VARIANT_ID`
-- `LEMONSQUEEZY_SUCCESS_URL` (optional, defaults to `/scholarships`)
 - `LEMON_SQUEEZY_WEBHOOK_SECRET` — **signing secret** from Lemon **Settings → Webhooks → [your endpoint]** (the string you chose when creating the webhook; 6–40 characters). Used for `X-Signature` HMAC. **Not** the Lemon REST API key.
 - `LEMON_SQUEEZY_SECRET` — optional second candidate: only if you store another signing secret here; the handler tries **both** distinct values so a mis-set API key in one var does not block verification.
+- `NEXT_PUBLIC_LS_MONTHLY_VARIANT_ID`
+- `NEXT_PUBLIC_LS_QUARTERLY_VARIANT_ID`
+- `NEXT_PUBLIC_LS_YEARLY_VARIANT_ID`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SITE_URL` (used for links in transactional emails from the webhook)
 - `RESEND_API_KEY` and `RESEND_FROM` (optional; if unset, subscription status emails are skipped — DB sync still succeeds)
+
+Legacy aliases `LEMONSQUEEZY_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_QUARTERLY_VARIANT_ID`, and `LEMONSQUEEZY_YEARLY_VARIANT_ID` are also accepted for server-side tier inference, but `NEXT_PUBLIC_LS_*` is the canonical naming used by the current app code.
 
 ## Transactional emails (Resend)
 
@@ -63,12 +62,11 @@ Unknown events are acknowledged with `{ received: true, ignored: true }`.
 ## Checkout flow
 
 - Frontend loads `https://app.lemonsqueezy.com/js/lemon.js`
-- Pricing buttons open Lemon overlay with a server-created checkout URL
-- Checkout creation embeds:
-  - `checkoutData.email`
-  - `checkoutData.custom.user_id`
-  - `checkoutOptions.embed = true`
-  - `productOptions.redirectUrl` pointing to the success URL
+- Pricing buttons open Lemon overlay with a server-generated hosted checkout URL
+- The current server action appends:
+  - `checkout[email]`
+  - `checkout[custom][user_id]`
+- The success path currently redirects the browser to `/scholarships` when Lemon reports `Checkout.Success`
 
 ## User id resolution
 
