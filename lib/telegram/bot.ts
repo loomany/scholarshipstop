@@ -121,9 +121,10 @@ function getTelegramAdminIds() {
   return set;
 }
 
+/** First token, without @botname; lowercased so /TestResources matches /testresources. */
 function normalizeBotCommand(text: string): string {
   const first = text.trim().split(/\s+/)[0] ?? '';
-  return first.split('@')[0] ?? '';
+  return (first.split('@')[0] ?? '').toLowerCase();
 }
 
 function getTelegramCodeSecret() {
@@ -1245,15 +1246,16 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
   }
 
   if (message?.from && message.chat) {
+    const rawText = message.text?.trim() || '';
     const user = await upsertTelegramUser({
       from: message.from,
       chatId: message.chat.id,
-      isStart: message.text?.startsWith('/start')
+      isStart: rawText.toLowerCase().startsWith('/start')
     });
     if (!user) return;
 
-    const text = message.text?.trim() || '';
-    if (text.startsWith('/start')) {
+    const text = rawText;
+    if (text.toLowerCase().startsWith('/start')) {
       await logTelegramEvent(
         'bot_start',
         {
@@ -1266,7 +1268,8 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
       return;
     }
 
-    if (text === '/menu' || text === '/help') {
+    const lower = text.toLowerCase();
+    if (lower === '/menu' || lower === '/help') {
       await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainKeyboard());
       return;
     }
