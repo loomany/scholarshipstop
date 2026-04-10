@@ -29,6 +29,11 @@ export function saveScholarship(id: string): string[] {
   return next;
 }
 
+/** Alias for UI copy that names the profile save action explicitly. */
+export function saveScholarshipToUserProfile(id: string): string[] {
+  return saveScholarship(id);
+}
+
 export function removeScholarship(id: string): string[] {
   const next = getSavedScholarshipIds().filter((item) => item !== id);
   if (isBrowser()) {

@@ -657,3 +657,23 @@ export async function fetchFirstActiveScholarshipPreview(): Promise<Scholarship 
   if (!data) return null;
   return mapScholarshipRow(data as unknown as ScholarshipRow);
 }
+
+/** Recent active scholarships for multi-card digest previews (service role). */
+export async function fetchActiveScholarshipPreviews(limit: number): Promise<Scholarship[]> {
+  const admin = createServiceRoleSupabaseClient();
+  if (!admin) return [];
+
+  const cap = Math.min(40, Math.max(1, Math.floor(limit)));
+  const { data, error } = await admin
+    .from('scholarships')
+    .select(DETAIL_SELECT)
+    .eq('is_active', true)
+    .order('updated_at', { ascending: false })
+    .limit(cap);
+
+  if (error) {
+    console.error('[scholarships] fetchActiveScholarshipPreviews', error.message);
+    return [];
+  }
+  return (data ?? []).map((row) => mapScholarshipRow(row as unknown as ScholarshipRow));
+}

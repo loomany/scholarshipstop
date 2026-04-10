@@ -12,9 +12,22 @@ function truncatePlain(text: string, max: number): string {
   return `${t.slice(0, Math.max(0, max - 1)).trimEnd()}…`;
 }
 
-function buildGrantCardExtraHtml(s: Scholarship, origin: string): string {
+/** Category labels aligned with grant notification channels (email digest). */
+export const GRANT_DIGEST_DEMO_CHANNEL_LABELS = [
+  'Best recommendations',
+  'Saved filters',
+  'Easy apply',
+  'Hot deadlines'
+] as const;
+
+function buildGrantCardExtraHtml(
+  s: Scholarship,
+  origin: string,
+  categoryLabel: string
+): string {
   const path = scholarshipPublicPath(s);
   const href = `${origin.replace(/\/+$/, '')}${path}`;
+  const category = escapeHtml(categoryLabel.trim() || 'Match');
   const title = escapeHtml(s.title?.trim() || 'Scholarship');
   const deadline = escapeHtml(s.deadline?.trim() || 'See listing');
   const amountRaw = s.awardAmount ?? s.amount;
@@ -34,7 +47,7 @@ function buildGrantCardExtraHtml(s: Scholarship, origin: string): string {
         <tr>
           <td style="width:4px;background:#10b981;"></td>
           <td style="padding:18px 20px;">
-            <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6b7280;">Featured pick</p>
+            <p style="margin:0 0 8px;font-size:13px;font-weight:700;line-height:1.3;color:#059669;">${category}</p>
             <p style="margin:0 0 10px;font-size:18px;font-weight:800;line-height:1.25;color:#111827;letter-spacing:-0.02em;">${title}</p>
             <p style="margin:0 0 6px;font-size:13px;color:#374151;"><span style="color:#6b7280;">Provider</span> · ${provider}</p>
             <p style="margin:0 0 6px;font-size:13px;color:#374151;"><span style="color:#6b7280;">Deadline</span> · ${deadline}</p>
@@ -61,10 +74,9 @@ function buildGrantCardExtraHtml(s: Scholarship, origin: string): string {
 </table>`;
 }
 
-export async function sendGrantDigestEmail(params: {
+export async function sendGrantDigestBatchEmail(params: {
   toEmail: string;
-  scholarship: Scholarship;
-  channelLabel: string;
+  items: { scholarship: Scholarship; channelLabel: string }[];
   firstName?: string | null;
 }): Promise<{ ok: boolean; skipped?: string }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
@@ -77,22 +89,46 @@ export async function sendGrantDigestEmail(params: {
     return { ok: false, skipped: 'RESEND_FROM not set' };
   }
 
-  const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
-  const grantPath = scholarshipPublicPath(params.scholarship);
-  const grantUrl = `${origin}${grantPath}`;
-  const name = params.firstName?.trim() || 'there';
-  const subject = `New scholarship — ${params.channelLabel}`;
+  const items = params.items;
+  if (items.length === 0) {
+    return { ok: false, skipped: 'No digest items' };
+  }
 
-  const extraHtml = buildGrantCardExtraHtml(params.scholarship, origin);
+  const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
+  const name = params.firstName?.trim() || 'there';
+  const first = items[0]!;
+  const grantPath = scholarshipPublicPath(first.scholarship);
+  const grantUrl = `${origin}${grantPath}`;
+  const n = items.length;
+
+  const extraHtml = items
+    .map((it) => buildGrantCardExtraHtml(it.scholarship, origin, it.channelLabel))
+    .join('\n');
+
+  const titlesPreview = items
+    .map((it) => it.scholarship.title?.trim() || 'Scholarship')
+    .join(' · ');
+  const preheader =
+    titlesPreview.length > 140 ? `${titlesPreview.slice(0, 137)}…` : titlesPreview;
+
+  const subject =
+    n === 1
+      ? `New scholarship — ${first.channelLabel}`
+      : `New scholarships for you (${n} matches)`;
+
+  const headline = n === 1 ? 'A new grant worth a look' : 'New grants worth a look';
+  const accentLine = n === 1 ? first.channelLabel : `${n} new matches`;
+
+  const bodySecond =
+    n === 1
+      ? `We added a scholarship that lines up with <strong>${escapeHtml(first.channelLabel)}</strong>. Use the button in the card below to open the listing.`
+      : `We found <strong>${n}</strong> opportunities that match your alert channels. Each card is labeled with its category at the top — open any listing below.`;
 
   const html = buildScholarshipTopPremiumEmailHtml({
-    preheader: `${params.scholarship.title} — ${params.channelLabel}`,
-    headline: 'A new grant worth a look',
-    accentLine: params.channelLabel,
-    bodyParagraphsHtml: [
-      `Hi ${escapeHtml(name)},`,
-      `We added a scholarship that lines up with <strong>${escapeHtml(params.channelLabel)}</strong>. Use the button in the card below to open the listing.`
-    ],
+    preheader,
+    headline,
+    accentLine,
+    bodyParagraphsHtml: [`Hi ${escapeHtml(name)},`, bodySecond],
     extraHtml,
     ctaHref: grantUrl,
     ctaLabel: 'Open full listing',
@@ -123,4 +159,17 @@ export async function sendGrantDigestEmail(params: {
   }
 
   return { ok: true };
+}
+
+export async function sendGrantDigestEmail(params: {
+  toEmail: string;
+  scholarship: Scholarship;
+  channelLabel: string;
+  firstName?: string | null;
+}): Promise<{ ok: boolean; skipped?: string }> {
+  return sendGrantDigestBatchEmail({
+    toEmail: params.toEmail,
+    items: [{ scholarship: params.scholarship, channelLabel: params.channelLabel }],
+    firstName: params.firstName
+  });
 }

@@ -7,7 +7,7 @@ import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 
 export const metadata: Metadata = {
   title: 'Refund Policy | ScholarshipTop',
-  description: 'Refund Policy for IE Daur Mussatay (FREEBEE) and ScholarshipTop.'
+  description: 'Refund Policy for Daur M. (Freebee KZ) and ScholarshipTop.'
 };
 
 const sectionClass = 'mt-12 first:mt-10';
@@ -29,7 +29,7 @@ export default function RefundPolicyPage() {
 
         <div className="pt-10">
           <p className="text-base leading-relaxed text-zinc-700">
-            At ScholarshipTop, operated by IE Daur Mussatay (FREEBEE), we want
+            At ScholarshipTop, operated by Daur M. (Freebee KZ), we want
             you to be satisfied with our service.
           </p>
 

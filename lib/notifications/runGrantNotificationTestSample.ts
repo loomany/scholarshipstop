@@ -1,11 +1,11 @@
 import 'server-only';
 
-import { sendGrantDigestEmail } from '@/lib/email/sendGrantDigestEmail';
-import { mapScholarshipRow, type ScholarshipRow } from '@/lib/scholarships/supabase';
-import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
+import {
+  GRANT_DIGEST_DEMO_CHANNEL_LABELS,
+  sendGrantDigestBatchEmail
+} from '@/lib/email/sendGrantDigestEmail';
+import { fetchActiveScholarshipPreviews } from '@/lib/scholarships/supabase';
 import { sendScholarshipTelegramCardToChat } from '@/lib/telegram/scholarshipTelegramCard';
-
-const CHANNEL_LABEL = 'Test sample';
 
 export type GrantNotificationTestSampleResult = {
   ok: boolean;
@@ -18,7 +18,7 @@ export type GrantNotificationTestSampleResult = {
 };
 
 /**
- * Sends one arbitrary active scholarship to a fixed test email and/or Telegram chat.
+ * Sends a 4-card digest email (demo category labels) and/or one Telegram card.
  * Guarded by GRANT_NOTIFICATION_TEST_SAMPLE_CRON so it cannot run by accident.
  */
 export async function runGrantNotificationTestSample(): Promise<GrantNotificationTestSampleResult> {
@@ -47,34 +47,8 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
     };
   }
 
-  const admin = createServiceRoleSupabaseClient();
-  if (!admin) {
-    return {
-      ok: false,
-      emailSent: false,
-      telegramSent: false,
-      message: 'Service role client unavailable'
-    };
-  }
-
-  const { data: row, error } = await admin
-    .from('scholarships')
-    .select('*')
-    .eq('is_active', true)
-    .order('updated_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (error) {
-    return {
-      ok: false,
-      emailSent: false,
-      telegramSent: false,
-      message: error.message
-    };
-  }
-
-  if (!row) {
+  const digestList = await fetchActiveScholarshipPreviews(4);
+  if (digestList.length === 0) {
     return {
       ok: false,
       emailSent: false,
@@ -83,18 +57,23 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
     };
   }
 
-  const scholarship = mapScholarshipRow(row as ScholarshipRow);
-  const sid = scholarship.id;
-  const title = scholarship.title?.trim() || 'Scholarship';
+  const labels = [...GRANT_DIGEST_DEMO_CHANNEL_LABELS];
+  const emailItems = digestList.map((scholarship, i) => ({
+    scholarship,
+    channelLabel: `${labels[i % labels.length]!} (test)`
+  }));
+
+  const previewTelegram = digestList[0]!;
+  const sid = previewTelegram.id;
+  const title = digestList.map((s) => s.title?.trim() || 'Scholarship').join(' · ');
 
   let emailSent = false;
   let telegramSent = false;
 
   if (email) {
-    const r = await sendGrantDigestEmail({
+    const r = await sendGrantDigestBatchEmail({
       toEmail: email,
-      scholarship,
-      channelLabel: CHANNEL_LABEL,
+      items: emailItems,
       firstName: 'there'
     });
     emailSent = r.ok;
@@ -112,7 +91,7 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
         message: 'GRANT_NOTIFICATION_TEST_SAMPLE_TELEGRAM_CHAT_ID must be a number'
       };
     }
-    telegramSent = await sendScholarshipTelegramCardToChat(chatId, scholarship);
+    telegramSent = await sendScholarshipTelegramCardToChat(chatId, previewTelegram);
   }
 
   return {

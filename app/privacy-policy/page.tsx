@@ -31,7 +31,7 @@ export default function PrivacyPolicyPage() {
 
         <div className="pt-10">
           <p className="text-base leading-relaxed text-zinc-700">
-            ScholarshipTop, operated by IE Daur Mussatay (FREEBEE), values your
+            ScholarshipTop, operated by Daur M. (Freebee KZ), values your
             privacy. This Privacy Policy explains what information we collect, how
             we use it, and how we protect it when you use our website and related
             services.
@@ -194,7 +194,7 @@ export default function PrivacyPolicyPage() {
               >
                 support@scholarshiptop.com
               </a>{' '}
-              | Address: IE Daur Mussatay, Karaganda, 10000, Kazakhstan
+              | Address: Freebee KZ, Karaganda, 10000, Kazakhstan
             </p>
           </section>
 

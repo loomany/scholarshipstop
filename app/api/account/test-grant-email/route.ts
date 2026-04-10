@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import { sendGrantDigestEmail } from '@/lib/email/sendGrantDigestEmail';
-import { fetchFirstActiveScholarshipPreview } from '@/lib/scholarships/supabase';
+import {
+  GRANT_DIGEST_DEMO_CHANNEL_LABELS,
+  sendGrantDigestBatchEmail
+} from '@/lib/email/sendGrantDigestEmail';
+import { fetchActiveScholarshipPreviews } from '@/lib/scholarships/supabase';
 import { createClient } from '@/utils/supabase/server';
 
 const TEST_RECIPIENT = 'loomany.self@gmail.com';
@@ -29,15 +32,20 @@ export async function POST() {
     .eq('id', user.id)
     .maybeSingle();
 
-  const scholarship = await fetchFirstActiveScholarshipPreview();
-  if (!scholarship) {
+  const scholarships = await fetchActiveScholarshipPreviews(4);
+  if (scholarships.length === 0) {
     return NextResponse.json({ error: 'No scholarship available for preview' }, { status: 503 });
   }
 
-  const result = await sendGrantDigestEmail({
-    toEmail: TEST_RECIPIENT,
+  const labels = [...GRANT_DIGEST_DEMO_CHANNEL_LABELS];
+  const items = scholarships.map((scholarship, i) => ({
     scholarship,
-    channelLabel: 'Best recommendations (test)',
+    channelLabel: `${labels[i % labels.length]!} (test)`
+  }));
+
+  const result = await sendGrantDigestBatchEmail({
+    toEmail: TEST_RECIPIENT,
+    items,
     firstName: profile?.first_name ?? null
   });
 
