@@ -14,10 +14,12 @@ export const getUser = cache(async (supabase: ServerSupabaseClient) => {
 /** Cache key is only `userId` so RSC cache is stable (avoids `supabase` ref churn breaking dedupe). */
 export const getSubscription = cache(async (userId: string) => {
   const supabase = createClient();
-  // Latest row for this user (any status) so UI can show "no plan" after expiry / failed payment.
+  // Latest row for this user (any status). Use `select('*')` only: a nested `prices(*)` embed
+  // can make PostgREST return no row when `price_id` is null (Lemon checkouts), which breaks
+  // /subscription CTAs even though the subscription exists.
   const { data: subscription } = await supabase
     .from('subscriptions')
-    .select('*, prices(*, products(*))')
+    .select('*')
     .eq('user_id', userId)
     .order('created', { ascending: false })
     .limit(1)
