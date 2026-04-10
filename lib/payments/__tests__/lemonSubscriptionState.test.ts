@@ -73,6 +73,107 @@ test('maps subscription_plan_changed to active and updates variant fields', () =
   assert.equal(decision.subscriptionPlan, 'yearly_pro');
 });
 
+test('forces cancelled semantics from event even when payload status is stale expired', () => {
+  const payload = {
+    meta: { event_name: 'subscription.cancelled' },
+    data: {
+      id: 'sub_cancelled_event',
+      attributes: {
+        user_id: 'user-cancelled-event',
+        status: 'expired',
+        variant_name: 'Monthly Pro',
+        cancelled: true,
+        ends_at: '2026-04-10T14:20:58.000Z',
+        renews_at: '2099-04-13T13:04:39.000Z',
+        updated_at: '2026-04-10T14:20:58.000Z'
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.eventName, 'subscription_cancelled');
+  assert.equal(decision.subscription.status, 'cancelled');
+  assert.equal(decision.isSubscribed, true);
+  assert.equal(decision.subscriptionPlan, 'monthly_pro');
+  assert.equal(decision.subscription.cancel_at_period_end, true);
+  assert.equal(decision.subscription.ended_at, '2099-04-13T13:04:39.000Z');
+});
+
+test('forces resumed semantics from event even when payload status is stale expired', () => {
+  const payload = {
+    meta: { event_name: 'subscription.resumed' },
+    data: {
+      id: 'sub_resumed_event',
+      attributes: {
+        user_id: 'user-resumed-event',
+        status: 'expired',
+        variant_name: 'Monthly Pro',
+        renews_at: '2099-04-13T13:04:39.000Z',
+        updated_at: '2026-04-10T14:20:58.000Z'
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.eventName, 'subscription_resumed');
+  assert.equal(decision.subscription.status, 'active');
+  assert.equal(decision.isSubscribed, true);
+  assert.equal(decision.subscriptionPlan, 'monthly_pro');
+});
+
+test('forces created semantics from event when payload status is stale expired', () => {
+  const payload = {
+    meta: { event_name: 'subscription_created' },
+    data: {
+      id: 'sub_created_event',
+      attributes: {
+        user_id: 'user-created-event',
+        status: 'expired',
+        variant_name: 'Monthly Pro',
+        renews_at: '2099-04-13T13:04:39.000Z',
+        updated_at: '2026-04-10T14:20:58.000Z'
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.eventName, 'subscription_created');
+  assert.equal(decision.subscription.status, 'active');
+  assert.equal(decision.isSubscribed, true);
+  assert.equal(decision.subscriptionPlan, 'monthly_pro');
+});
+
+test('forces expired semantics from event even when payload status is stale active', () => {
+  const payload = {
+    meta: { event_name: 'subscription.expired' },
+    data: {
+      id: 'sub_expired_event',
+      attributes: {
+        user_id: 'user-expired-event',
+        status: 'active',
+        variant_name: 'Monthly Pro',
+        ends_at: '2026-04-10T14:20:58.000Z',
+        renews_at: '2099-04-13T13:04:39.000Z',
+        updated_at: '2026-04-10T14:20:58.000Z'
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.eventName, 'subscription_expired');
+  assert.equal(decision.subscription.status, 'expired');
+  assert.equal(decision.isSubscribed, false);
+  assert.equal(decision.subscriptionPlan, 'free');
+});
+
 test('keeps access during paid grace period for cancelled Lemon subscriptions', () => {
   const payload = {
     meta: { event_name: 'subscription_updated' },
