@@ -28,6 +28,9 @@ const toastVariants = cva(
     variants: {
       variant: {
         default: 'text-zinc-900',
+        /** Expected user issues (e.g. expired link) — matches site cards, not alarm red. */
+        warning:
+          'warning group border-amber-200/90 bg-amber-50 text-zinc-900 shadow-[0_4px_20px_rgba(146,64,14,0.08)] dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-zinc-50 dark:shadow-[0_4px_24px_rgba(0,0,0,0.35)]',
         destructive:
           'destructive group border-red-500 bg-red-500 text-zinc-50 dark:border-red-900 dark:bg-red-900 dark:text-zinc-50'
       }
@@ -60,7 +63,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-      'inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-transparent px-3 text-sm font-medium ring-offset-white transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-zinc-100/40 group-[.destructive]:hover:border-red-500/30 group-[.destructive]:hover:bg-red-500 group-[.destructive]:hover:text-zinc-50 group-[.destructive]:focus:ring-red-500 dark:border-zinc-800 dark:ring-offset-zinc-950 dark:hover:bg-zinc-800 dark:focus:ring-zinc-300 dark:group-[.destructive]:border-zinc-800/40 dark:group-[.destructive]:hover:border-red-900/30 dark:group-[.destructive]:hover:bg-red-900 dark:group-[.destructive]:hover:text-zinc-50 dark:group-[.destructive]:focus:ring-red-900',
+      'inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-transparent px-3 text-sm font-medium ring-offset-white transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.warning]:border-amber-300/80 group-[.warning]:hover:bg-amber-100/80 dark:group-[.warning]:border-amber-800 group-[.destructive]:border-zinc-100/40 group-[.destructive]:hover:border-red-500/30 group-[.destructive]:hover:bg-red-500 group-[.destructive]:hover:text-zinc-50 group-[.destructive]:focus:ring-red-500 dark:border-zinc-800 dark:ring-offset-zinc-950 dark:hover:bg-zinc-800 dark:focus:ring-zinc-300 dark:group-[.destructive]:border-zinc-800/40 dark:group-[.destructive]:hover:border-red-900/30 dark:group-[.destructive]:hover:bg-red-900 dark:group-[.destructive]:hover:text-zinc-50 dark:group-[.destructive]:focus:ring-red-900',
       className
     )}
     {...props}
@@ -75,7 +78,7 @@ const ToastClose = React.forwardRef<
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
-      'absolute right-2 top-2 rounded-md p-1 text-zinc-950/50 opacity-0 transition-opacity hover:text-zinc-950 focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600 dark:text-zinc-50/50 dark:hover:text-zinc-50',
+      'absolute right-2 top-2 rounded-md p-1 text-zinc-950/50 opacity-0 transition-opacity hover:text-zinc-950 focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.warning]:text-amber-900/50 group-[.warning]:hover:text-amber-950 dark:group-[.warning]:text-zinc-400 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600 dark:text-zinc-50/50 dark:hover:text-zinc-50',
       className
     )}
     toast-close=""
@@ -93,7 +96,7 @@ const ToastTitle = React.forwardRef<
   <ToastPrimitives.Title
     ref={ref}
     className={cn(
-      'text-base font-bold leading-snug text-zinc-900 group-[.destructive]:text-zinc-50 dark:text-zinc-50',
+      'text-base font-bold leading-snug text-zinc-900 group-[.warning]:text-zinc-900 group-[.destructive]:text-zinc-50 dark:text-zinc-50 dark:group-[.warning]:text-zinc-50',
       className
     )}
     {...props}
@@ -108,7 +111,7 @@ const ToastDescription = React.forwardRef<
   <ToastPrimitives.Description
     ref={ref}
     className={cn(
-      'text-sm leading-snug text-zinc-600 group-[.destructive]:text-red-100 dark:text-zinc-300',
+      'text-sm leading-snug text-zinc-600 group-[.warning]:text-zinc-700 group-[.destructive]:text-red-100 dark:text-zinc-300 dark:group-[.warning]:text-zinc-300',
       className
     )}
     {...props}

@@ -8,6 +8,13 @@ export async function middleware(request: NextRequest) {
     url.pathname = pathname.replace(/^\/content-hub/, '/resources');
     return NextResponse.redirect(url, 308);
   }
+  /** Refresh Supabase session cookies on recovery hand-off (browser sets session just before this). */
+  if (
+    pathname === '/signin/update_password' ||
+    pathname === '/auth/reset_password'
+  ) {
+    return await updateSession(request);
+  }
   if (
     pathname === '/signin' ||
     pathname.startsWith('/signin/') ||

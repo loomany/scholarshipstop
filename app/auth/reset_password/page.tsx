@@ -8,7 +8,11 @@ import {
   parseOAuthStyleHash,
   userFacingRecoveryHashError
 } from '@/lib/auth/recoveryUrlErrors';
-import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
+import {
+  getErrorRedirect,
+  getStatusRedirect,
+  TOAST_VARIANT_WARNING_PARAM
+} from '@/utils/helpers';
 
 function ResetPasswordExchange() {
   const router = useRouter();
@@ -30,7 +34,13 @@ function ResetPasswordExchange() {
         const u = userFacingRecoveryHashError(hashParams);
         if (!cancelled) {
           router.replace(
-            getErrorRedirect('/signin/forgot_password', u.title, u.description)
+            getErrorRedirect(
+              '/signin/forgot_password',
+              u.title,
+              u.description,
+              false,
+              TOAST_VARIANT_WARNING_PARAM
+            )
           );
         }
         return;
@@ -103,7 +113,9 @@ function ResetPasswordExchange() {
               getErrorRedirect(
                 '/signin/forgot_password',
                 'Reset link incomplete',
-                'Open the link from your latest email, or request a new password reset.'
+                'Open the link from your latest email, or request a new password reset.',
+                false,
+                TOAST_VARIANT_WARNING_PARAM
               )
             );
           }
@@ -112,13 +124,13 @@ function ResetPasswordExchange() {
       }
 
       if (!cancelled) {
-        router.replace(
-          getStatusRedirect(
-            '/signin/update_password',
-            'You are now signed in.',
-            'Please enter a new password for your account.'
-          )
+        const nextPath = getStatusRedirect(
+          '/signin/update_password',
+          'You are now signed in.',
+          'Please enter a new password for your account.'
         );
+        /** Full navigation so SSR receives session cookies (soft `router` nav can skip them). */
+        window.location.assign(new URL(nextPath, window.location.origin).href);
       }
     }
 

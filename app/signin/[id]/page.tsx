@@ -14,7 +14,7 @@ import EmailSignIn from '@/components/ui/AuthForms/EmailSignIn';
 import Separator from '@/components/ui/AuthForms/Separator';
 import OauthSignIn from '@/components/ui/AuthForms/OauthSignIn';
 import ForgotPassword from '@/components/ui/AuthForms/ForgotPassword';
-import UpdatePassword from '@/components/ui/AuthForms/UpdatePassword';
+import UpdatePasswordSessionGate from '@/components/ui/AuthForms/UpdatePasswordSessionGate';
 import SignUp from '@/components/ui/AuthForms/Signup';
 
 export const metadata: Metadata = {
@@ -58,9 +58,9 @@ export default async function SignIn({
 
   if (user && viewProp !== 'update_password') {
     return redirect('/');
-  } else if (!user && viewProp === 'update_password') {
-    return redirect('/signin');
   }
+  /** `update_password`: recovery session is often visible only to the browser client — see
+   * `UpdatePasswordSessionGate` (do not redirect unauthenticated users here). */
 
   const cardDescription =
     viewProp === 'password_signin'
@@ -104,7 +104,7 @@ export default async function SignIn({
             />
           )}
           {viewProp === 'update_password' && (
-            <UpdatePassword redirectMethod={redirectMethod} />
+            <UpdatePasswordSessionGate redirectMethod={redirectMethod} />
           )}
           {viewProp === 'signup' && (
             <SignUp allowEmail={allowEmail} redirectMethod={redirectMethod} />

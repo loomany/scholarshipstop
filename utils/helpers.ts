@@ -146,3 +146,6 @@ export const getErrorRedirect = (
     disableButton,
     arbitraryParams
   );
+
+/** Pass as `getErrorRedirect(..., false, TOAST_VARIANT_WARNING_PARAM)` for soft amber toasts. */
+export const TOAST_VARIANT_WARNING_PARAM = 'toast_variant=warning';
