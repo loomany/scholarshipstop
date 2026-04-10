@@ -94,7 +94,8 @@ export function buildResetPasswordEmailHtml(params: ResetPasswordEmailParams): s
     ctaLabel: 'Reset password',
     siteOrigin: origin,
     unsubscribeUrl: unsub,
-    postCtaMutedText: 'Link expires in 24 hours.'
+    postCtaMutedText: 'Link expires in 24 hours.',
+    secondaryLinkNote: ''
   });
 }
 
