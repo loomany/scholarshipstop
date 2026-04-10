@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 
 export type BillingPlanKey = 'monthly' | 'quarterly' | 'yearly';
 
-function checkoutUrlFromPlan(plan: BillingPlanKey): string {
+function baseCheckoutUrlFromPlan(plan: BillingPlanKey): string {
   const url =
     plan === 'monthly'
       ? 'https://pay.scholarshiptop.com/checkout/buy/4e63048d-5d76-4818-925c-048b10047128?logo=0&discount=0'
@@ -17,6 +17,21 @@ function checkoutUrlFromPlan(plan: BillingPlanKey): string {
   }
 
   return url;
+}
+
+function checkoutUrlFromPlan({
+  plan,
+  email,
+  userId
+}: {
+  plan: BillingPlanKey;
+  email: string;
+  userId: string;
+}) {
+  const url = new URL(baseCheckoutUrlFromPlan(plan));
+  url.searchParams.set('checkout[email]', email);
+  url.searchParams.set('checkout[custom][user_id]', userId);
+  return url.toString();
 }
 
 export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
@@ -34,5 +49,9 @@ export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
     throw new Error('Your account is missing an email address.');
   }
 
-  return checkoutUrlFromPlan(plan);
+  return checkoutUrlFromPlan({
+    plan,
+    email: user.email,
+    userId: user.id
+  });
 }

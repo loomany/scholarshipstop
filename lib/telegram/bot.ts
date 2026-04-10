@@ -1,0 +1,968 @@
+import 'server-only';
+
+import { createHash, randomInt } from 'crypto';
+
+import { sendTelegramLinkCodeEmail } from '@/lib/email/sendTelegramLinkCodeEmail';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
+import type { Database, Json } from '@/types_db';
+
+type TelegramUserRow = Database['public']['Tables']['telegram_users']['Row'];
+type TelegramEventType = Database['public']['Tables']['telegram_event_logs']['Row']['event_type'];
+type ProfileRow = Database['public']['Tables']['profiles']['Row'];
+
+type TelegramInlineButton = {
+  text: string;
+  callback_data: string;
+};
+
+type TelegramReplyMarkup = {
+  inline_keyboard: TelegramInlineButton[][];
+};
+
+type TelegramFrom = {
+  id: number;
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+};
+
+type TelegramChat = {
+  id: number;
+  type: string;
+};
+
+type TelegramMessage = {
+  message_id: number;
+  text?: string;
+  chat: TelegramChat;
+  from?: TelegramFrom;
+};
+
+type TelegramCallbackQuery = {
+  id: string;
+  data?: string;
+  from: TelegramFrom;
+  message?: TelegramMessage;
+};
+
+export type TelegramUpdate = {
+  update_id: number;
+  message?: TelegramMessage;
+  callback_query?: TelegramCallbackQuery;
+};
+
+type AuthUserRow = {
+  id: string;
+  email: string | null;
+  raw_user_meta_data?: Record<string, unknown> | null;
+};
+
+const CALLBACKS = {
+  admin: 'tg:admin',
+  connect: 'tg:connect',
+  findScholarships: 'tg:find',
+  mainMenu: 'tg:menu',
+  myProfile: 'tg:profile',
+  toggleAlerts: 'tg:toggle-alerts'
+} as const;
+
+function getTelegramBotToken() {
+  return process.env.TELEGRAM_BOT_TOKEN?.trim() || '';
+}
+
+function getTelegramAdminIds() {
+  const raw = process.env.TELEGRAM_ADMIN_IDS?.trim() || '200082134';
+  return new Set(
+    raw
+      .split(',')
+      .map((item) => Number(item.trim()))
+      .filter((item) => Number.isFinite(item))
+  );
+}
+
+function getTelegramCodeSecret() {
+  return (
+    process.env.TELEGRAM_LINK_CODE_SECRET?.trim() ||
+    process.env.TELEGRAM_WEBHOOK_SECRET?.trim() ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
+    'telegram-link-code'
+  );
+}
+
+function getSiteUrl() {
+  return (
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+    process.env.SITE_URL?.trim() ||
+    'https://scholarshiptop.com'
+  ).replace(/\/+$/, '');
+}
+
+function createTelegramCodeHash(code: string) {
+  return createHash('sha256')
+    .update(`${getTelegramCodeSecret()}:${code}`)
+    .digest('hex');
+}
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function button(text: string, callback_data: string): TelegramInlineButton {
+  return { text, callback_data };
+}
+
+function buildMainMenu(user: TelegramUserRow): TelegramReplyMarkup {
+  const rows: TelegramInlineButton[][] = [
+    [button('Find Scholarships', CALLBACKS.findScholarships)],
+    [button('My Profile', CALLBACKS.myProfile)]
+  ];
+
+  if (user.app_user_id) {
+    rows.push([button('Reconnect Account', CALLBACKS.connect)]);
+  } else {
+    rows.push([button('Connect Account', CALLBACKS.connect)]);
+  }
+
+  if (user.is_admin) {
+    rows.push([button('Admin', CALLBACKS.admin)]);
+    rows.push([
+      button(
+        user.notifications_enabled ? 'Alerts: ON' : 'Alerts: OFF',
+        CALLBACKS.toggleAlerts
+      )
+    ]);
+  }
+
+  return { inline_keyboard: rows };
+}
+
+function formatPlanLabel(plan: string | null | undefined, isSubscribed: boolean) {
+  switch (plan) {
+    case 'trial':
+      return 'Trial';
+    case 'monthly_pro':
+      return 'Monthly Pro';
+    case 'quarterly_pro':
+      return 'Quarterly Pro';
+    case 'yearly_pro':
+      return 'Yearly Pro';
+    default:
+      return isSubscribed ? 'Paid' : 'Free';
+  }
+}
+
+function formatValue(value: string | number | null | undefined, fallback = 'Not set') {
+  if (value == null) return fallback;
+  const text = String(value).trim();
+  return text || fallback;
+}
+
+function formatProfileMessage(
+  authUser: AuthUserRow | null,
+  profile: ProfileRow | null,
+  linkedAt: string
+) {
+  const firstName = profile?.first_name?.trim() || '';
+  const lastName = profile?.last_name?.trim() || '';
+  const fullName = [firstName, lastName].filter(Boolean).join(' ') || 'Not set';
+
+  return [
+    'Your ScholarshipTop profile',
+    '',
+    `Name: ${fullName}`,
+    `Email: ${formatValue(authUser?.email)}`,
+    `Email verified: ${profile?.email_verified ? 'Yes' : 'No'}`,
+    `Plan: ${formatPlanLabel(profile?.subscription_plan, Boolean(profile?.is_subscribed))}`,
+    `School level: ${formatValue(profile?.school_level_label || profile?.school_level)}`,
+    `Field of study: ${formatValue(
+      profile?.field_of_study_label || profile?.field_of_study
+    )}`,
+    `Citizenship: ${formatValue(
+      profile?.citizenship_status_label || profile?.citizenship_status
+    )}`,
+    `State: ${formatValue(profile?.state_region)}`,
+    `GPA: ${formatValue(profile?.gpa)}`,
+    '',
+    `Telegram linked: ${linkedAt}`
+  ].join('\n');
+}
+
+function formatEventLine(event: {
+  event_type: string;
+  payload: Json;
+  created_at: string;
+}) {
+  const payload =
+    event.payload && typeof event.payload === 'object' && !Array.isArray(event.payload)
+      ? (event.payload as Record<string, Json>)
+      : {};
+  const email = typeof payload.email === 'string' ? payload.email : null;
+  const plan = typeof payload.plan === 'string' ? payload.plan : null;
+  const source = typeof payload.source === 'string' ? payload.source : null;
+  const when = new Date(event.created_at);
+  const stamp = Number.isNaN(when.getTime())
+    ? event.created_at
+    : new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+      }).format(when);
+
+  if (event.event_type === 'payment') {
+    return `• payment - ${plan ?? 'unknown plan'} - ${email ?? 'unknown user'} - ${stamp}`;
+  }
+  if (event.event_type === 'signup') {
+    return `• signup - ${email ?? 'unknown email'}${source ? ` - ${source}` : ''} - ${stamp}`;
+  }
+  if (event.event_type === 'email_verified') {
+    return `• verified - ${email ?? 'unknown email'} - ${stamp}`;
+  }
+  return `• ${event.event_type} - ${stamp}`;
+}
+
+async function callTelegramApi<T>(method: string, payload: Record<string, unknown>) {
+  const token = getTelegramBotToken();
+  if (!token) {
+    return null as T | null;
+  }
+
+  const response = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    console.error(`[telegram] ${method} failed`, response.status, text);
+    return null as T | null;
+  }
+
+  const json = (await response.json().catch(() => null)) as { result?: T } | null;
+  return json?.result ?? null;
+}
+
+async function sendTelegramMessage(
+  chatId: number,
+  text: string,
+  replyMarkup?: TelegramReplyMarkup
+) {
+  await callTelegramApi('sendMessage', {
+    chat_id: chatId,
+    text,
+    reply_markup: replyMarkup,
+    disable_web_page_preview: true
+  });
+}
+
+async function answerTelegramCallbackQuery(callbackQueryId: string, text?: string) {
+  await callTelegramApi('answerCallbackQuery', {
+    callback_query_id: callbackQueryId,
+    text
+  });
+}
+
+function getAdminClient() {
+  return createServiceRoleSupabaseClient();
+}
+
+async function getTelegramUserByTelegramId(telegramUserId: number) {
+  const admin = getAdminClient();
+  if (!admin) return null;
+
+  const { data } = await admin
+    .from('telegram_users')
+    .select('*')
+    .eq('telegram_user_id', telegramUserId)
+    .maybeSingle();
+
+  return data;
+}
+
+async function getAuthUserByEmail(email: string): Promise<AuthUserRow | null> {
+  const admin = getAdminClient();
+  if (!admin) return null;
+
+  const { data, error } = await (admin as any)
+    .schema('auth')
+    .from('users')
+    .select('id, email, raw_user_meta_data')
+    .ilike('email', email)
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error('[telegram] auth.users lookup by email failed', error.message);
+    return null;
+  }
+
+  return (data ?? null) as AuthUserRow | null;
+}
+
+async function getAuthUserById(userId: string): Promise<AuthUserRow | null> {
+  const admin = getAdminClient();
+  if (!admin) return null;
+
+  const { data, error } = await (admin as any)
+    .schema('auth')
+    .from('users')
+    .select('id, email, raw_user_meta_data')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('[telegram] auth.users lookup by id failed', error.message);
+    return null;
+  }
+
+  return (data ?? null) as AuthUserRow | null;
+}
+
+async function upsertTelegramUser(params: {
+  from: TelegramFrom;
+  chatId: number;
+  isStart?: boolean;
+}): Promise<TelegramUserRow | null> {
+  const admin = getAdminClient();
+  if (!admin) return null;
+
+  const existing = await getTelegramUserByTelegramId(params.from.id);
+  const isAdmin = getTelegramAdminIds().has(params.from.id);
+  const now = new Date().toISOString();
+
+  const payload: Database['public']['Tables']['telegram_users']['Insert'] = {
+    telegram_user_id: params.from.id,
+    telegram_chat_id: params.chatId,
+    telegram_username: params.from.username ?? null,
+    telegram_first_name: params.from.first_name ?? null,
+    telegram_last_name: params.from.last_name ?? null,
+    app_user_id: existing?.app_user_id ?? null,
+    is_admin: isAdmin,
+    notifications_enabled: isAdmin ? true : existing?.notifications_enabled ?? false,
+    last_state: existing?.last_state ?? 'idle',
+    pending_email: existing?.pending_email ?? null,
+    last_bot_started_at: params.isStart ? now : existing?.last_bot_started_at ?? null,
+    last_interaction_at: now,
+    updated_at: now
+  };
+
+  const { data, error } = await admin
+    .from('telegram_users')
+    .upsert(payload, { onConflict: 'telegram_user_id' })
+    .select('*')
+    .maybeSingle();
+
+  if (error) {
+    console.error('[telegram] telegram_users upsert failed', error.message);
+    return null;
+  }
+
+  return data;
+}
+
+async function updateTelegramUserState(
+  userId: string,
+  patch: Database['public']['Tables']['telegram_users']['Update']
+) {
+  const admin = getAdminClient();
+  if (!admin) return null;
+
+  const { data, error } = await admin
+    .from('telegram_users')
+    .update({
+      ...patch,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', userId)
+    .select('*')
+    .maybeSingle();
+
+  if (error) {
+    console.error('[telegram] telegram_users update failed', error.message);
+    return null;
+  }
+
+  return data;
+}
+
+async function logTelegramEvent(
+  eventType: TelegramEventType,
+  payload: Record<string, Json>,
+  options?: {
+    dedupeByUserId?: string | null;
+    telegramChatId?: number | null;
+  }
+) {
+  const admin = getAdminClient();
+  if (!admin) return false;
+
+  if (options?.dedupeByUserId) {
+    const { data: existing } = await admin
+      .from('telegram_event_logs')
+      .select('id')
+      .eq('event_type', eventType)
+      .eq('related_user_id', options.dedupeByUserId)
+      .limit(1)
+      .maybeSingle();
+
+    if (existing) {
+      return false;
+    }
+  }
+
+  const { error } = await admin.from('telegram_event_logs').insert({
+    event_type: eventType,
+    related_user_id: options?.dedupeByUserId ?? null,
+    telegram_chat_id: options?.telegramChatId ?? null,
+    payload
+  });
+
+  if (error) {
+    console.error('[telegram] telegram_event_logs insert failed', error.message);
+    return false;
+  }
+
+  return true;
+}
+
+async function sendTelegramAdminBroadcast(text: string) {
+  const admin = getAdminClient();
+  if (!admin) return;
+
+  const { data: chats } = await admin
+    .from('telegram_users')
+    .select('telegram_chat_id')
+    .eq('is_admin', true)
+    .eq('notifications_enabled', true);
+
+  for (const chat of chats ?? []) {
+    await sendTelegramMessage(chat.telegram_chat_id, text);
+  }
+}
+
+export async function notifyTelegramSignup(payload: {
+  userId: string;
+  email: string;
+  firstName?: string | null;
+  source?: string | null;
+}) {
+  const inserted = await logTelegramEvent(
+    'signup',
+    {
+      email: payload.email,
+      first_name: payload.firstName ?? null,
+      source: payload.source ?? 'app'
+    },
+    { dedupeByUserId: payload.userId }
+  );
+
+  if (!inserted) return;
+
+  await sendTelegramAdminBroadcast(
+    [
+      'New ScholarshipTop signup',
+      `Email: ${payload.email}`,
+      `Source: ${payload.source ?? 'app'}`
+    ].join('\n')
+  );
+}
+
+export async function notifyTelegramEmailVerified(payload: {
+  userId: string;
+  email: string;
+}) {
+  const inserted = await logTelegramEvent(
+    'email_verified',
+    {
+      email: payload.email
+    },
+    { dedupeByUserId: payload.userId }
+  );
+
+  if (!inserted) return;
+
+  await sendTelegramAdminBroadcast(
+    ['User verified email', `Email: ${payload.email}`].join('\n')
+  );
+}
+
+export async function notifyTelegramPayment(payload: {
+  userId: string;
+  email?: string | null;
+  plan: string;
+  status: string;
+  eventName?: string | null;
+}) {
+  await logTelegramEvent(
+    'payment',
+    {
+      email: payload.email ?? null,
+      plan: payload.plan,
+      status: payload.status,
+      event_name: payload.eventName ?? null
+    },
+    { dedupeByUserId: null }
+  );
+
+  await sendTelegramAdminBroadcast(
+    [
+      'Payment event received',
+      `Plan: ${payload.plan}`,
+      `Status: ${payload.status}`,
+      `User: ${payload.email ?? payload.userId}`
+    ].join('\n')
+  );
+}
+
+async function sendWelcomeMessage(user: TelegramUserRow) {
+  const text = user.app_user_id
+    ? [
+        'Welcome back to ScholarshipTop.',
+        'Your Telegram account is connected and ready to use.',
+        '',
+        'Use the menu below to open your profile or jump back into scholarship search.'
+      ].join('\n')
+    : [
+        'Welcome to ScholarshipTop.',
+        'I can help you explore scholarships, view your profile, and keep your account connected.',
+        '',
+        'Start by connecting your account with a secure email code.'
+      ].join('\n');
+
+  await sendTelegramMessage(user.telegram_chat_id, text, buildMainMenu(user));
+}
+
+async function sendScholarshipPlaceholder(user: TelegramUserRow) {
+  await sendTelegramMessage(
+    user.telegram_chat_id,
+    [
+      'Find Scholarships is coming next inside Telegram.',
+      `For now, open the full search experience here: ${getSiteUrl()}/scholarships`
+    ].join('\n'),
+    buildMainMenu(user)
+  );
+}
+
+async function sendProfileSummary(user: TelegramUserRow) {
+  if (!user.app_user_id) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Your Telegram account is not connected yet. Tap Connect Account first.',
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  const admin = getAdminClient();
+  if (!admin) return;
+
+  const [authUser, profileResult] = await Promise.all([
+    getAuthUserById(user.app_user_id),
+    admin.from('profiles').select('*').eq('id', user.app_user_id).maybeSingle()
+  ]);
+
+  const linkedAt = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(new Date(user.updated_at || user.created_at));
+
+  await sendTelegramMessage(
+    user.telegram_chat_id,
+    formatProfileMessage(authUser, profileResult.data, linkedAt),
+    buildMainMenu(user)
+  );
+}
+
+async function sendAdminPanel(user: TelegramUserRow) {
+  if (!user.is_admin) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Admin access is not enabled for this Telegram account.',
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  const admin = getAdminClient();
+  if (!admin) return;
+
+  const sinceIso = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const countQuery = (eventType: TelegramEventType) =>
+    admin
+      .from('telegram_event_logs')
+      .select('*', { count: 'exact', head: true })
+      .eq('event_type', eventType)
+      .gte('created_at', sinceIso);
+
+  const [signupCount, verifiedCount, paymentCount, latestResult] = await Promise.all([
+    countQuery('signup'),
+    countQuery('email_verified'),
+    countQuery('payment'),
+    admin
+      .from('telegram_event_logs')
+      .select('event_type, payload, created_at')
+      .order('created_at', { ascending: false })
+      .limit(5)
+  ]);
+
+  const latestLines =
+    latestResult.data && latestResult.data.length > 0
+      ? latestResult.data.map(formatEventLine).join('\n')
+      : '• No recent events yet';
+
+  await sendTelegramMessage(
+    user.telegram_chat_id,
+    [
+      'ScholarshipTop admin panel',
+      '',
+      `Alerts: ${user.notifications_enabled ? 'ON' : 'OFF'}`,
+      `Signups (24h): ${signupCount.count ?? 0}`,
+      `Verified emails (24h): ${verifiedCount.count ?? 0}`,
+      `Payments (24h): ${paymentCount.count ?? 0}`,
+      '',
+      'Latest events',
+      latestLines
+    ].join('\n'),
+    buildMainMenu(user)
+  );
+}
+
+async function startConnectFlow(user: TelegramUserRow) {
+  const nextUser = await updateTelegramUserState(user.id, {
+    last_state: 'awaiting_email',
+    pending_email: null
+  });
+
+  await sendTelegramMessage(
+    user.telegram_chat_id,
+    [
+      'Send the email address you use on ScholarshipTop.',
+      'I will email you a one-time code and then connect your Telegram account securely.'
+    ].join('\n'),
+    buildMainMenu(nextUser ?? user)
+  );
+}
+
+async function handleEmailInput(user: TelegramUserRow, rawText: string) {
+  const email = rawText.trim().toLowerCase();
+
+  if (!isValidEmail(email)) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'That does not look like a valid email address. Please send a valid email.',
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  const admin = getAdminClient();
+  if (!admin) return;
+
+  const authUser = await getAuthUserByEmail(email);
+  if (!authUser?.id || !authUser.email) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'I could not find a ScholarshipTop account for that email. Try another one or sign up on the site first.',
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  const code = String(randomInt(100000, 1000000));
+  const emailResult = await sendTelegramLinkCodeEmail(authUser.email, code, {
+    displayName:
+      typeof authUser.raw_user_meta_data?.first_name === 'string'
+        ? authUser.raw_user_meta_data.first_name
+        : null
+  });
+
+  if (!emailResult.ok) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'I could not send the email code right now. Please try again in a minute.',
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  await admin
+    .from('telegram_link_codes')
+    .update({
+      used_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    })
+    .eq('telegram_user_uuid', user.id)
+    .is('used_at', null);
+
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+  await admin.from('telegram_link_codes').insert({
+    telegram_user_uuid: user.id,
+    app_user_id: authUser.id,
+    email: authUser.email,
+    code_hash: createTelegramCodeHash(code),
+    expires_at: expiresAt
+  });
+
+  const nextUser = await updateTelegramUserState(user.id, {
+    last_state: 'awaiting_code',
+    pending_email: authUser.email
+  });
+
+  await sendTelegramMessage(
+    user.telegram_chat_id,
+    [
+      `I sent a 6-digit code to ${authUser.email}.`,
+      'Reply with that code here. It expires in 10 minutes.'
+    ].join('\n'),
+    buildMainMenu(nextUser ?? user)
+  );
+}
+
+async function handleCodeInput(user: TelegramUserRow, rawText: string) {
+  const code = rawText.replace(/\s+/g, '');
+  if (!/^\d{6}$/.test(code)) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Please send the 6-digit code from your email.',
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  const admin = getAdminClient();
+  if (!admin) return;
+
+  const { data: codeRow } = await admin
+    .from('telegram_link_codes')
+    .select('*')
+    .eq('telegram_user_uuid', user.id)
+    .is('used_at', null)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!codeRow) {
+    const nextUser = await updateTelegramUserState(user.id, {
+      last_state: 'awaiting_email',
+      pending_email: null
+    });
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Your code is missing or expired. Send your email again to request a new one.',
+      buildMainMenu(nextUser ?? user)
+    );
+    return;
+  }
+
+  if (new Date(codeRow.expires_at).getTime() < Date.now()) {
+    await admin
+      .from('telegram_link_codes')
+      .update({
+        used_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', codeRow.id);
+
+    const nextUser = await updateTelegramUserState(user.id, {
+      last_state: 'awaiting_email',
+      pending_email: null
+    });
+
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'That code has expired. Send your email again and I will issue a new code.',
+      buildMainMenu(nextUser ?? user)
+    );
+    return;
+  }
+
+  const expectedHash = createTelegramCodeHash(code);
+  if (expectedHash !== codeRow.code_hash) {
+    const attempts = (codeRow.attempts ?? 0) + 1;
+    await admin
+      .from('telegram_link_codes')
+      .update({
+        attempts,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', codeRow.id);
+
+    if (attempts >= 5) {
+      await admin
+        .from('telegram_link_codes')
+        .update({
+          used_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', codeRow.id);
+
+      const resetUser = await updateTelegramUserState(user.id, {
+        last_state: 'awaiting_email',
+        pending_email: null
+      });
+
+      await sendTelegramMessage(
+        user.telegram_chat_id,
+        'Too many incorrect attempts. Send your email again to request a fresh code.',
+        buildMainMenu(resetUser ?? user)
+      );
+      return;
+    }
+
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      `That code is incorrect. Attempts left: ${Math.max(0, 5 - attempts)}.`,
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  if (codeRow.app_user_id) {
+    await admin
+      .from('telegram_users')
+      .update({
+        app_user_id: null,
+        updated_at: new Date().toISOString()
+      })
+      .eq('app_user_id', codeRow.app_user_id)
+      .neq('id', user.id);
+  }
+
+  await admin
+    .from('telegram_link_codes')
+    .update({
+      used_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', codeRow.id);
+
+  const linkedUser = await updateTelegramUserState(user.id, {
+    app_user_id: codeRow.app_user_id ?? null,
+    last_state: 'idle',
+    pending_email: null
+  });
+
+  if (!linkedUser) return;
+
+  await sendTelegramMessage(
+    linkedUser.telegram_chat_id,
+    'Your ScholarshipTop account is now connected to Telegram.',
+    buildMainMenu(linkedUser)
+  );
+  await sendProfileSummary(linkedUser);
+}
+
+async function toggleAdminAlerts(user: TelegramUserRow) {
+  if (!user.is_admin) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Admin access is not enabled for this Telegram account.',
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  const nextUser = await updateTelegramUserState(user.id, {
+    notifications_enabled: !user.notifications_enabled
+  });
+
+  await sendTelegramMessage(
+    user.telegram_chat_id,
+    `Admin alerts are now ${(nextUser ?? user).notifications_enabled ? 'ON' : 'OFF'}.`,
+    buildMainMenu(nextUser ?? user)
+  );
+}
+
+export async function handleTelegramUpdate(update: TelegramUpdate) {
+  const message = update.message;
+  const callback = update.callback_query;
+
+  if (message?.chat?.type !== 'private' && callback?.message?.chat?.type !== 'private') {
+    if (callback?.id) {
+      await answerTelegramCallbackQuery(callback.id, 'Please use me in a private chat.');
+    }
+    return;
+  }
+
+  if (message?.from && message.chat) {
+    const user = await upsertTelegramUser({
+      from: message.from,
+      chatId: message.chat.id,
+      isStart: message.text?.startsWith('/start')
+    });
+    if (!user) return;
+
+    const text = message.text?.trim() || '';
+    if (text.startsWith('/start')) {
+      await logTelegramEvent(
+        'bot_start',
+        {
+          telegram_user_id: user.telegram_user_id,
+          is_admin: user.is_admin
+        },
+        { telegramChatId: user.telegram_chat_id }
+      );
+      await sendWelcomeMessage(user);
+      return;
+    }
+
+    if (text === '/menu' || text === '/help') {
+      await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainMenu(user));
+      return;
+    }
+
+    if (user.last_state === 'awaiting_email') {
+      await handleEmailInput(user, text);
+      return;
+    }
+
+    if (user.last_state === 'awaiting_code') {
+      await handleCodeInput(user, text);
+      return;
+    }
+
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Use the buttons below to continue.',
+      buildMainMenu(user)
+    );
+    return;
+  }
+
+  if (callback?.from && callback.message?.chat) {
+    const user = await upsertTelegramUser({
+      from: callback.from,
+      chatId: callback.message.chat.id
+    });
+    if (!user) return;
+
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id);
+    }
+
+    switch (callback.data) {
+      case CALLBACKS.findScholarships:
+        await sendScholarshipPlaceholder(user);
+        return;
+      case CALLBACKS.myProfile:
+        await sendProfileSummary(user);
+        return;
+      case CALLBACKS.connect:
+        await startConnectFlow(user);
+        return;
+      case CALLBACKS.admin:
+        await sendAdminPanel(user);
+        return;
+      case CALLBACKS.toggleAlerts:
+        await toggleAdminAlerts(user);
+        return;
+      case CALLBACKS.mainMenu:
+      default:
+        await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainMenu(user));
+    }
+  }
+}

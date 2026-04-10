@@ -201,6 +201,25 @@ function OnboardingWizard() {
         userId: existingSession?.user?.id ?? null
       });
 
+      const notifyTelegramRegistration = async (userId: string, userEmail: string) => {
+        try {
+          await fetch('/api/internal/telegram/registration', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              userId,
+              email: userEmail,
+              firstName: base.step2.firstName.trim() || null,
+              source: 'onboarding'
+            })
+          });
+        } catch (error) {
+          console.warn('[onboarding:telegram] registration notify failed', error);
+        }
+      };
+
       const finishWithSession = async () => {
         if (!session?.user) return false;
         const sync = await syncOnboardingToProfiles(
@@ -220,6 +239,7 @@ function OnboardingWizard() {
         const addr = session.user.email?.trim();
         if (addr) {
           void enqueueRegistrationVerificationEmail(addr, session.user.id);
+          void notifyTelegramRegistration(session.user.id, addr);
         }
         clearScholarshipOnboardingDraft();
         finalizeInFlight.current = false;

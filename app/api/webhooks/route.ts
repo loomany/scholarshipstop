@@ -5,6 +5,7 @@ import {
   decideSubscriptionUpdate,
   type LemonWebhookPayload
 } from '@/lib/payments/lemonSubscriptionState';
+import { notifyTelegramPayment } from '@/lib/telegram/bot';
 
 const supabaseAdmin = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -88,6 +89,21 @@ export async function POST(req: Request) {
     if (error) {
       return new Response('Error updating subscription status.', { status: 500 });
     }
+
+    const { data: authUser } = await (supabaseAdmin as any)
+      .schema('auth')
+      .from('users')
+      .select('email')
+      .eq('id', decision.userId)
+      .maybeSingle();
+
+    await notifyTelegramPayment({
+      userId: decision.userId,
+      email: authUser?.email ?? null,
+      plan: decision.subscriptionPlan,
+      status: decision.subscription.status ?? 'unknown',
+      eventName: payload.meta?.event_name ?? null
+    });
 
     return new Response(JSON.stringify({ received: true, updated: true }), {
       status: 200

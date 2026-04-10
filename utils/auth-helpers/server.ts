@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getPasswordPolicyError } from '@/lib/validation/passwordPolicy';
+import { notifyTelegramSignup } from '@/lib/telegram/bot';
 import {
   getServerAuthCallbackUrl,
   getServerAuthResetPasswordUrl,
@@ -204,6 +205,13 @@ export async function signUp(formData: FormData) {
       error.message
     );
   } else if (data.session) {
+    if (data.user?.id) {
+      await notifyTelegramSignup({
+        userId: data.user.id,
+        email,
+        source: 'signup-form'
+      });
+    }
     redirectPath = getStatusRedirect('/', 'Success!', 'You are now signed in.');
   } else if (
     data.user &&
@@ -216,6 +224,11 @@ export async function signUp(formData: FormData) {
       'There is already an account associated with this email address. Try resetting your password.'
     );
   } else if (data.user) {
+    await notifyTelegramSignup({
+      userId: data.user.id,
+      email,
+      source: 'signup-form'
+    });
     redirectPath = getStatusRedirect(
       '/',
       'Success!',

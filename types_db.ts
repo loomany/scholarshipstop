@@ -237,6 +237,157 @@ export interface Database {
           }
         ]
       }
+      telegram_event_logs: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          payload: Json
+          related_user_id: string | null
+          telegram_chat_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          payload?: Json
+          related_user_id?: string | null
+          telegram_chat_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          payload?: Json
+          related_user_id?: string | null
+          telegram_chat_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_event_logs_related_user_id_fkey"
+            columns: ["related_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      telegram_link_codes: {
+        Row: {
+          app_user_id: string | null
+          attempts: number
+          code_hash: string
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          telegram_user_uuid: string
+          updated_at: string
+          used_at: string | null
+        }
+        Insert: {
+          app_user_id?: string | null
+          attempts?: number
+          code_hash: string
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          telegram_user_uuid: string
+          updated_at?: string
+          used_at?: string | null
+        }
+        Update: {
+          app_user_id?: string | null
+          attempts?: number
+          code_hash?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          telegram_user_uuid?: string
+          updated_at?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_link_codes_app_user_id_fkey"
+            columns: ["app_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "telegram_link_codes_telegram_user_uuid_fkey"
+            columns: ["telegram_user_uuid"]
+            isOneToOne: false
+            referencedRelation: "telegram_users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      telegram_users: {
+        Row: {
+          app_user_id: string | null
+          created_at: string
+          id: string
+          is_admin: boolean
+          last_bot_started_at: string | null
+          last_interaction_at: string
+          last_state: string
+          notifications_enabled: boolean
+          pending_email: string | null
+          telegram_chat_id: number
+          telegram_first_name: string | null
+          telegram_last_name: string | null
+          telegram_user_id: number
+          telegram_username: string | null
+          updated_at: string
+        }
+        Insert: {
+          app_user_id?: string | null
+          created_at?: string
+          id?: string
+          is_admin?: boolean
+          last_bot_started_at?: string | null
+          last_interaction_at?: string
+          last_state?: string
+          notifications_enabled?: boolean
+          pending_email?: string | null
+          telegram_chat_id: number
+          telegram_first_name?: string | null
+          telegram_last_name?: string | null
+          telegram_user_id: number
+          telegram_username?: string | null
+          updated_at?: string
+        }
+        Update: {
+          app_user_id?: string | null
+          created_at?: string
+          id?: string
+          is_admin?: boolean
+          last_bot_started_at?: string | null
+          last_interaction_at?: string
+          last_state?: string
+          notifications_enabled?: boolean
+          pending_email?: string | null
+          telegram_chat_id?: number
+          telegram_first_name?: string | null
+          telegram_last_name?: string | null
+          telegram_user_id?: number
+          telegram_username?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_users_app_user_id_fkey"
+            columns: ["app_user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       providers: {
         Row: {
           id: string

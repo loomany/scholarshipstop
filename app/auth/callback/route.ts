@@ -3,6 +3,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { syncOnboardingFromMetadataIfPresent } from '@/lib/onboarding/profilesOnboardingSync';
+import { notifyTelegramEmailVerified, notifyTelegramSignup } from '@/lib/telegram/bot';
 import type { Database } from '@/types_db';
 import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
 import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
@@ -164,6 +165,17 @@ export async function GET(request: NextRequest) {
     await syncOnboardingFromMetadataIfPresent(syncClient, userForSync.id, metaObj);
   }
 
+  if (userForSync?.id && userForSync.email) {
+    const firstName =
+      metaObj && typeof metaObj.first_name === 'string' ? metaObj.first_name : null;
+    await notifyTelegramSignup({
+      userId: userForSync.id,
+      email: userForSync.email,
+      firstName,
+      source: 'auth-callback'
+    });
+  }
+
   if (userForSync?.email_confirmed_at) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -180,6 +192,13 @@ export async function GET(request: NextRequest) {
       if (evErr) {
         console.warn('[auth:callback] profiles email_verified sync', evErr.message);
       }
+    }
+
+    if (userForSync.email) {
+      await notifyTelegramEmailVerified({
+        userId: userForSync.id,
+        email: userForSync.email
+      });
     }
   }
 
