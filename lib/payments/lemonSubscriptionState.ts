@@ -105,6 +105,10 @@ function isOrderPayload(payload: LemonWebhookPayload): boolean {
   return (payload.data as { type?: string } | undefined)?.type === 'orders';
 }
 
+function isSubscriptionInvoicePayload(payload: LemonWebhookPayload): boolean {
+  return (payload.data as { type?: string } | undefined)?.type === 'subscription-invoices';
+}
+
 export function toSubscribedFromLemonStatus(status?: string): boolean {
   const normalized = (status ?? '').toLowerCase();
   return normalized === 'active' || normalized === 'trialing' || normalized === 'on_trial';
@@ -251,6 +255,16 @@ export function decideSubscriptionUpdate(
 ): LemonSubscriptionDecision {
   const eventName = normalizeLemonEventName(payload.meta?.event_name);
   if (eventName === 'order_created' && isOrderPayload(payload)) {
+    return { kind: 'ignored', eventName };
+  }
+  if (
+    (eventName === 'subscription_payment_success' ||
+      eventName === 'subscription_payment_failed' ||
+      eventName === 'subscription_payment_recovered') &&
+    isSubscriptionInvoicePayload(payload)
+  ) {
+    // Invoice webhooks confirm billing outcomes, but they are not subscription objects.
+    // Entitlements should be driven by `subscription_*` events that carry subscription state.
     return { kind: 'ignored', eventName };
   }
   const userId = resolveUserId(payload);

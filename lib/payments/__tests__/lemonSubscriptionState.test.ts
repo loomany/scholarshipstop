@@ -154,3 +154,26 @@ test('does not persist Lemon price ids into Stripe price_id foreign key', () => 
     lemon_subscription_item_id: '7674432'
   });
 });
+
+test('ignores subscription_payment_success invoice payloads for entitlement sync', () => {
+  const payload = {
+    meta: {
+      event_name: 'subscription_payment_success',
+      custom_data: { user_id: 'dceafcc1-dfe6-44c1-83af-46066fdc7f79' }
+    },
+    data: {
+      id: '6714128',
+      type: 'subscription-invoices',
+      attributes: {
+        status: 'paid',
+        subscription_id: 2047512
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.deepEqual(decision, {
+    kind: 'ignored',
+    eventName: 'subscription_payment_success'
+  });
+});
