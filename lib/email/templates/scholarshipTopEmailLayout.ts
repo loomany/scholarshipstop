@@ -40,6 +40,8 @@ export type PremiumEmailLayoutOptions = {
   secondaryLinkNote?: string;
   /** Small centered line directly under the primary button (e.g. link expiry). */
   postCtaMutedText?: string;
+  /** Hide the black primary CTA button (e.g. Telegram code email — user returns to chat). */
+  omitPrimaryCta?: boolean;
 };
 
 /**
@@ -117,7 +119,10 @@ export function buildScholarshipTopPremiumEmailHtml(
                     ${accentBlock}
                     ${paragraphs}
                     ${opts.extraHtml ?? ''}
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0 8px;">
+                    ${
+                      opts.omitPrimaryCta
+                        ? ''
+                        : `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0 8px;">
                       <tr>
                         <td align="center">
                           <a href="${escapeHtml(opts.ctaHref)}" style="display:inline-block;background-color:#000000;color:#ffffff!important;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:12px;">
@@ -125,7 +130,8 @@ export function buildScholarshipTopPremiumEmailHtml(
                           </a>
                         </td>
                       </tr>
-                    </table>
+                    </table>`
+                    }
                     ${
                       opts.postCtaMutedText
                         ? `<p style="margin:16px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.5;color:#9ca3af;text-align:center;">${escapeHtml(opts.postCtaMutedText)}</p>`

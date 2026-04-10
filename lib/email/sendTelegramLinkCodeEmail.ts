@@ -26,21 +26,31 @@ export async function sendTelegramLinkCodeEmail(
   const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
   const name = options?.displayName?.trim() || 'there';
 
+  const codeBlock = `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:12px 0 20px;">
+  <tr>
+    <td align="center" style="padding:0;">
+      <span style="display:inline-block;margin:8px 0 4px;padding:14px 18px;border-radius:14px;background:#111827;color:#ffffff;font-size:28px;font-weight:800;letter-spacing:0.18em;">${escapeHtml(code)}</span>
+    </td>
+  </tr>
+</table>
+<p style="margin:0 0 16px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.6;color:#374151;">If you did not request this, you can safely ignore this email.</p>`;
+
   const html = buildScholarshipTopPremiumEmailHtml({
     preheader: 'Use this code to connect your Telegram account to ScholarshipTop.',
     headline: 'Connect your Telegram account',
     accentLine: 'Your login code expires in 10 minutes.',
     bodyParagraphsHtml: [
       `Hi ${escapeHtml(name)},`,
-      `Use the code below in the ScholarshipTop Telegram bot to finish connecting your account:`,
-      `<span style="display:inline-block;margin:8px 0 4px;padding:14px 18px;border-radius:14px;background:#111827;color:#ffffff;font-size:28px;font-weight:800;letter-spacing:0.18em;">${escapeHtml(code)}</span>`,
-      `If you did not request this, you can safely ignore this email.`
+      `Use the code below in the ScholarshipTop Telegram bot to finish connecting your account:`
     ],
+    extraHtml: codeBlock,
     ctaHref: `${origin}/account`,
     ctaLabel: 'Open ScholarshipTop',
+    omitPrimaryCta: true,
     siteOrigin: origin,
     unsubscribeUrl: `${origin}/account`,
-    secondaryLinkNote:
+    secondaryLinkNote: '',
+    postCtaMutedText:
       'Return to the Telegram chat and enter the 6-digit code exactly as shown above.'
   });
 
