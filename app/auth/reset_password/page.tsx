@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import {
+  getImplicitGrantTokensFromHash,
   hasOAuthStyleHashError,
   parseOAuthStyleHash,
   userFacingRecoveryHashError
@@ -62,6 +63,10 @@ function ResetPasswordExchange() {
       }
 
       const code = searchParams.get('code');
+      const hashStr =
+        typeof window !== 'undefined' ? window.location.hash : '';
+      const implicit = getImplicitGrantTokensFromHash(hashStr);
+
       if (code) {
         const { error } = await supabase.auth.exchangeCodeForSession(code);
         if (error) {
@@ -75,6 +80,35 @@ function ResetPasswordExchange() {
             );
           }
           return;
+        }
+      } else if (implicit.access_token && implicit.refresh_token) {
+        /** PKCE client does not auto-apply implicit `#access_token` fragments — set explicitly. */
+        setLabel('Completing sign-in…');
+        const { error } = await supabase.auth.setSession({
+          access_token: implicit.access_token,
+          refresh_token: implicit.refresh_token
+        });
+        if (error) {
+          if (!cancelled) {
+            router.replace(
+              getErrorRedirect(
+                '/signin/forgot_password',
+                'Could not use reset link',
+                error.message ||
+                  'Request a new password reset email and try again.'
+              )
+            );
+          }
+          return;
+        }
+        try {
+          window.history.replaceState(
+            null,
+            '',
+            `${window.location.pathname}${window.location.search}`
+          );
+        } catch {
+          /* ignore */
         }
       } else {
         setLabel('Completing sign-in…');

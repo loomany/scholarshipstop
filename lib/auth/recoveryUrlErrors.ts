@@ -62,3 +62,24 @@ export function userFacingRecoveryHashError(params: Record<string, string>): {
 export function hasOAuthStyleHashError(params: Record<string, string>): boolean {
   return Boolean(params.error || params.error_code);
 }
+
+/**
+ * Implicit grant fragment (`#access_token=…&refresh_token=…`) after Supabase redirects.
+ * The browser client uses `flowType: 'pkce'` by default, so auto URL detection often skips
+ * these tokens — callers must call `auth.setSession` explicitly.
+ */
+export function getImplicitGrantTokensFromHash(hash: string): {
+  access_token: string | null;
+  refresh_token: string | null;
+} {
+  const p = parseOAuthStyleHash(hash);
+  const at = p.access_token?.trim();
+  const rt = p.refresh_token?.trim();
+  if (!at) {
+    return { access_token: null, refresh_token: null };
+  }
+  return {
+    access_token: at,
+    refresh_token: rt && rt.length > 0 ? rt : null
+  };
+}
