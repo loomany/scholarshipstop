@@ -96,7 +96,8 @@ const BUTTON_LABELS = {
   alertsOn: 'Alerts: ON',
   backToMenu: 'Back to Menu',
   connectAccount: 'Connect Account',
-  findScholarships: 'Find Scholarships',
+  /** Grant notification toggles (same as account email prefs); search: /scholarships on site. */
+  findScholarships: 'Grant alerts',
   myProfile: 'My Profile',
   reconnectAccount: 'Reconnect Account'
 } as const;
@@ -806,15 +807,24 @@ async function sendWelcomeMessage(user: TelegramUserRow) {
   await sendTelegramMessage(user.telegram_chat_id, text, buildMainKeyboard());
 }
 
-async function sendScholarshipPlaceholder(user: TelegramUserRow) {
-  await sendTelegramMessage(
-    user.telegram_chat_id,
-    [
-      'Find Scholarships is coming next inside Telegram.',
-      `For now, open the full search experience here: ${getSiteUrl()}/scholarships`
-    ].join('\n'),
-    buildMainKeyboard()
-  );
+/** Same grant-alert toggles as on the website account (Best / Saved / Easy / Hot). */
+async function openScholarshipAlertsPanel(user: TelegramUserRow) {
+  if (!user.app_user_id) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      [
+        'Grant alerts in Telegram match your account settings on the website.',
+        '',
+        'Connect your ScholarshipTop account first — then you can turn channels on or off below (same as in Account → notifications).',
+        '',
+        `Browse all scholarships anytime: ${getSiteUrl()}/scholarships`
+      ].join('\n'),
+      buildMainKeyboard()
+    );
+    return;
+  }
+
+  await sendGrantSettingsPanel(user);
 }
 
 async function sendProfileSummary(user: TelegramUserRow) {
@@ -1306,7 +1316,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     }
 
     if (text === BUTTON_LABELS.findScholarships) {
-      await sendScholarshipPlaceholder(user);
+      await openScholarshipAlertsPanel(user);
       return;
     }
 
@@ -1364,7 +1374,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
 
     switch (callback.data) {
       case CALLBACKS.findScholarships:
-        await sendScholarshipPlaceholder(user);
+        await openScholarshipAlertsPanel(user);
         return;
       case CALLBACKS.myProfile:
         await sendProfileSummary(user);
