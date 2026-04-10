@@ -28,18 +28,23 @@ function getEmbeddedPriceRow(
   return row ?? null;
 }
 
-/** Match checkout variant ids from env (Lemon); works when product_name is missing in SSR row. */
+function envVariantIdList(value: string | undefined): string[] {
+  if (!value?.trim()) return [];
+  return value.split(/[,\s]+/).map((s) => s.trim()).filter(Boolean);
+}
+
+/** Match checkout variant ids from env (Lemon). Comma-separated lists allowed (test vs live ids). */
 function inferTierFromLemonVariantId(
   providerVariantId: string | null | undefined
 ): SubscriptionBillingTier | null {
   if (providerVariantId == null || providerVariantId === '') return null;
   const vid = String(providerVariantId).trim();
-  const monthly = process.env.NEXT_PUBLIC_LS_MONTHLY_VARIANT_ID;
-  const quarterly = process.env.NEXT_PUBLIC_LS_QUARTERLY_VARIANT_ID;
-  const yearly = process.env.NEXT_PUBLIC_LS_YEARLY_VARIANT_ID;
-  if (monthly && vid === String(monthly).trim()) return 'monthly';
-  if (quarterly && vid === String(quarterly).trim()) return 'quarterly';
-  if (yearly && vid === String(yearly).trim()) return 'yearly';
+  const monthly = envVariantIdList(process.env.NEXT_PUBLIC_LS_MONTHLY_VARIANT_ID);
+  const quarterly = envVariantIdList(process.env.NEXT_PUBLIC_LS_QUARTERLY_VARIANT_ID);
+  const yearly = envVariantIdList(process.env.NEXT_PUBLIC_LS_YEARLY_VARIANT_ID);
+  if (monthly.includes(vid)) return 'monthly';
+  if (quarterly.includes(vid)) return 'quarterly';
+  if (yearly.includes(vid)) return 'yearly';
   return null;
 }
 
@@ -50,6 +55,11 @@ function inferBillingTierFromRawPayload(raw: Json | null): SubscriptionBillingTi
   const data = root.data as Record<string, unknown> | undefined;
   const attrs = (data?.attributes ?? root.attributes) as Record<string, unknown> | undefined;
   if (!attrs || typeof attrs !== 'object') return null;
+  const variantIdRaw = attrs.variant_id;
+  if (variantIdRaw != null && variantIdRaw !== '') {
+    const fromVid = inferTierFromLemonVariantId(String(variantIdRaw));
+    if (fromVid) return fromVid;
+  }
   const productName = String(attrs.product_name ?? '');
   const variantName = String(attrs.variant_name ?? '');
   const planText = `${productName} ${variantName}`.toLowerCase();
@@ -72,6 +82,9 @@ export function inferSubscriptionBillingTier(
     if (subscription.plan_code === 'quarterly_pro') return 'quarterly';
     if (subscription.plan_code === 'yearly_pro') return 'yearly';
 
+    const fromProviderVariant = inferTierFromLemonVariantId(subscription.provider_variant_id);
+    if (fromProviderVariant) return fromProviderVariant;
+
     const priceRow = getEmbeddedPriceRow(subscription);
     const interval = priceRow?.interval;
     const intervalCount = priceRow?.interval_count ?? 1;
@@ -87,9 +100,6 @@ export function inferSubscriptionBillingTier(
 
     const fromRaw = inferBillingTierFromRawPayload(subscription.raw_payload);
     if (fromRaw) return fromRaw;
-
-    const fromVariant = inferTierFromLemonVariantId(subscription.provider_variant_id);
-    if (fromVariant) return fromVariant;
   }
 
   switch (profile?.subscription_plan) {
