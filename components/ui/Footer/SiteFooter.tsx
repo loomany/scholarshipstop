@@ -26,7 +26,7 @@ export default function SiteFooter() {
               </Link>
             </div>
             <div className="flex w-full min-w-0 flex-col items-start gap-1.5 sm:w-auto sm:gap-2">
-              <div className="flex w-full justify-start">
+              <div className="flex w-full min-w-0 justify-start">
                 <SiteFooterNav />
               </div>
               <p className="max-w-3xl text-left text-xs leading-snug text-gray-600 sm:text-sm">

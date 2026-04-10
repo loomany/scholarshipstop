@@ -46,7 +46,7 @@ export default function SiteFooterNav() {
 
   return (
     <nav
-      className="flex shrink-0 flex-row flex-wrap items-center justify-start gap-x-2 gap-y-2 sm:gap-x-3"
+      className="flex w-full min-w-0 max-w-full shrink-0 flex-row flex-wrap items-center justify-start gap-x-1 gap-y-1.5 sm:gap-x-3 sm:gap-y-2"
       aria-label="Footer"
     >
       {ITEMS.map(({ href, label, isActive }) => (
@@ -55,7 +55,7 @@ export default function SiteFooterNav() {
           href={href}
           className={clsx(
             n.light,
-            n.lightXs,
+            'text-[11px] tracking-tight sm:text-sm sm:tracking-normal',
             isActive(pathname) && n.lightActive
           )}
         >
