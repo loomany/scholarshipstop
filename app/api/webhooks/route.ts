@@ -1,11 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types_db';
-import { validateLemonSignature } from '@/lib/payments/lemonWebhookSignature';
+import {
+  getLemonSignatureDebug,
+  validateLemonSignature
+} from '@/lib/payments/lemonWebhookSignature';
 import {
   decideSubscriptionUpdate,
   type LemonWebhookPayload
 } from '@/lib/payments/lemonSubscriptionState';
 import { notifyTelegramPayment } from '@/lib/telegram/bot';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 const supabaseAdmin = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -13,7 +19,9 @@ const supabaseAdmin = createClient<Database>(
 );
 
 export async function POST(req: Request) {
-  const bodyText = await req.text();
+  const rawBodyBuffer = await req.arrayBuffer();
+  const rawBodyBytes = new Uint8Array(rawBodyBuffer);
+  const bodyText = new TextDecoder().decode(rawBodyBytes);
   const signature = req.headers.get('x-signature');
   const webhookSecret =
     process.env.LEMON_SQUEEZY_SECRET ??
@@ -30,11 +38,19 @@ export async function POST(req: Request) {
     }
     if (
       !validateLemonSignature({
-        rawBody: bodyText,
+        rawBody: rawBodyBytes,
         signatureHeader: signature,
         secret: webhookSecret
       })
     ) {
+      console.warn(
+        '[lemon:webhook] invalid signature',
+        getLemonSignatureDebug({
+          rawBody: rawBodyBytes,
+          signatureHeader: signature,
+          secret: webhookSecret
+        })
+      );
       return new Response('Invalid signature', { status: 400 });
     }
     payload = JSON.parse(bodyText) as LemonWebhookPayload;
@@ -71,6 +87,14 @@ export async function POST(req: Request) {
       .from('subscriptions')
       .upsert([decision.subscription], { onConflict: 'id' });
     if (subscriptionError) {
+      console.error('[lemon:webhook] subscription upsert failed', {
+        message: subscriptionError.message,
+        code: subscriptionError.code,
+        details: subscriptionError.details,
+        hint: subscriptionError.hint,
+        subscriptionId: decision.subscription.id,
+        userId: decision.userId
+      });
       return new Response('Error syncing subscription record.', { status: 500 });
     }
 
@@ -87,6 +111,13 @@ export async function POST(req: Request) {
         { onConflict: 'id' }
       );
     if (error) {
+      console.error('[lemon:webhook] profile entitlement update failed', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        userId: decision.userId
+      });
       return new Response('Error updating subscription status.', { status: 500 });
     }
 
@@ -109,6 +140,9 @@ export async function POST(req: Request) {
     if (error instanceof Error && error.message.includes('Missing user id')) {
       return new Response(error.message, { status: 400 });
     }
+    console.error('[lemon:webhook] unexpected failure', {
+      message: error instanceof Error ? error.message : String(error)
+    });
     return new Response('Webhook processing failed.', { status: 500 });
   }
 }
