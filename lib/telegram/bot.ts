@@ -911,7 +911,9 @@ async function startConnectFlow(user: TelegramUserRow) {
     user.telegram_chat_id,
     [
       'Send the email address you use on ScholarshipTop.',
-      'I will email you a one-time code and then connect your Telegram account securely.'
+      'I will email you a one-time code and then connect your Telegram account securely.',
+      '',
+      'Important: type your email in this chat as the next message (plain text). The code is sent only after I receive your email — not when you tap Connect.'
     ].join('\n'),
     buildProfileKeyboard(nextUser ?? user)
   );
