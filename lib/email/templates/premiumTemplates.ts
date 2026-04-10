@@ -1,4 +1,5 @@
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
+import { buildScholarshipTopDarkEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayoutDark';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 
 /**
@@ -34,12 +35,12 @@ export function buildConfirmSignupEmailHtml(params: ConfirmSignupEmailParams): s
   const name = params.name.trim() || 'there';
   const unsub = params.unsubscribeUrl ?? defaultEmailUnsubscribeUrl(origin);
 
-  return buildScholarshipTopPremiumEmailHtml({
+  return buildScholarshipTopDarkEmailHtml({
     preheader: `Confirm your email to unlock ScholarshipTop — 3,000+ matches await.`,
     headline: 'One step away from your scholarship',
     accentLine: 'Confirm your email to get started',
     bodyParagraphsHtml: [
-      `Hi ${escapeHtml(name)}! Thanks for joining <strong style="color:#111827;">ScholarshipTop</strong>. Please confirm your email to activate your account and get full access to 3,000+ matches.`,
+      `Hi ${escapeHtml(name)}! Thanks for joining <strong style="color:#f9fafb;">ScholarshipTop</strong>. Please confirm your email to activate your account and get full access to 3,000+ matches.`,
       `You&rsquo;re already signed in on the site in most cases &mdash; this step secures your account and unlocks the full experience.`
     ],
     ctaHref: params.confirmationUrl,
