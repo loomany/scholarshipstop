@@ -14,12 +14,13 @@ export const getUser = cache(async (supabase: ServerSupabaseClient) => {
 /** Cache key is only `userId` so RSC cache is stable (avoids `supabase` ref churn breaking dedupe). */
 export const getSubscription = cache(async (userId: string) => {
   const supabase = createClient();
+  // Latest row for this user (any status) so UI can show "no plan" after expiry / failed payment.
   const { data: subscription } = await supabase
     .from('subscriptions')
     .select('*, prices(*, products(*))')
     .eq('user_id', userId)
-    .in('status', ['trialing', 'on_trial', 'active', 'cancelled', 'canceled', 'paused', 'past_due'])
     .order('created', { ascending: false })
+    .limit(1)
     .maybeSingle();
 
   return subscription;

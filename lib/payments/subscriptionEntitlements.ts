@@ -239,6 +239,23 @@ function derivePlanFromSubscription(
   if (!subscription) return fallbackPlan;
 
   const debugStatus = normalizeProviderStatus(subscription.status);
+
+  // Payment failed / lapsed — do not keep a paid plan from stale profile fallback.
+  if (
+    debugStatus === 'past_due' ||
+    debugStatus === 'unpaid' ||
+    debugStatus === 'expired'
+  ) {
+    return 'free';
+  }
+
+  if (
+    (debugStatus === 'cancelled' || debugStatus === 'canceled') &&
+    !isWithinGracePeriod(subscription, nowValue)
+  ) {
+    return 'free';
+  }
+
   const trialEndsAt = subscription.trial_end;
   const trialStillRunning = Boolean(
     parseDate(trialEndsAt) &&
