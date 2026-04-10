@@ -1,11 +1,12 @@
 'use client';
 
-import Button from '@/components/ui/Button';
-import { updatePassword } from '@/utils/auth-helpers/server';
-import { handleRequest } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+
 import { PASSWORD_POLICY_HINT } from '@/lib/validation/passwordPolicy';
+import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
+import { handleRequest } from '@/utils/auth-helpers/client';
+import { updatePassword } from '@/utils/auth-helpers/server';
 
 interface UpdatePasswordProps {
   redirectMethod: string;
@@ -17,50 +18,55 @@ export default function UpdatePassword({
   const router = redirectMethod === 'client' ? useRouter() : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const fieldClass =
+    'w-full rounded-xl border border-zinc-200/90 bg-white px-4 py-3.5 text-[15px] text-zinc-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-[border-color,box-shadow] placeholder:text-zinc-400/80 focus:border-teal-400 focus:ring-2 focus:ring-teal-500/25';
+  const labelClass = 'mb-1.5 block text-sm font-medium text-zinc-700';
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsSubmitting(true); // Disable the button while the request is being handled
+    setIsSubmitting(true);
     await handleRequest(e, updatePassword, router);
     setIsSubmitting(false);
   };
 
   return (
-    <div className="my-8">
-      <form
-        noValidate={true}
-        className="mb-4"
-        onSubmit={(e) => handleSubmit(e)}
-      >
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <label htmlFor="password">New Password</label>
+    <div>
+      <form noValidate className="space-y-5" onSubmit={(e) => handleSubmit(e)}>
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="password" className={labelClass}>
+              New password
+            </label>
             <input
               id="password"
-              placeholder="Password"
+              placeholder="Enter your new password"
               type="password"
               name="password"
               autoComplete="new-password"
-              className="w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
+              className={fieldClass}
             />
             <p className="text-xs text-zinc-500">{PASSWORD_POLICY_HINT}</p>
-            <label htmlFor="passwordConfirm">Confirm New Password</label>
+          </div>
+          <div>
+            <label htmlFor="passwordConfirm" className={labelClass}>
+              Confirm password
+            </label>
             <input
               id="passwordConfirm"
-              placeholder="Password"
+              placeholder="Confirm your new password"
               type="password"
               name="passwordConfirm"
-              autoComplete="current-password"
-              className="w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
+              autoComplete="new-password"
+              className={fieldClass}
             />
           </div>
-          <Button
-            variant="slim"
-            type="submit"
-            className="mt-1"
-            loading={isSubmitting}
-          >
-            Update Password
-          </Button>
         </div>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className={ONBOARDING_PRIMARY_BUTTON_CLASS}
+        >
+          {isSubmitting ? 'Saving…' : 'Save new password'}
+        </button>
       </form>
     </div>
   );

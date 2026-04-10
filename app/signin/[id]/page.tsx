@@ -67,6 +67,8 @@ export default async function SignIn({
       ? 'View your scholarship matches, saved opportunities, and application progress.'
       : viewProp === 'forgot_password'
         ? "Enter your email and we'll send you a password reset link."
+        : viewProp === 'update_password'
+          ? 'Create a new password for your ScholarshipTop account.'
         : undefined;
 
   return (
@@ -78,7 +80,7 @@ export default async function SignIn({
             viewProp === 'forgot_password'
               ? 'Reset Password'
               : viewProp === 'update_password'
-                ? 'Update Password'
+                ? 'Set New Password'
                 : viewProp === 'signup'
                   ? 'Sign Up'
                   : 'Sign in'
