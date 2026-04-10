@@ -91,6 +91,7 @@ type PlanRowProps = {
   hasActiveSubscription?: boolean;
   manageSubscriptionUrl?: string | null;
   isCurrentPlan?: boolean;
+  showResumeAction?: boolean;
   isLoading: boolean;
   isBusy: boolean;
   onSelect: (planKey: BillingPlanKey, title: string) => void;
@@ -111,6 +112,7 @@ function PlanGrantCard({
   hasActiveSubscription = false,
   manageSubscriptionUrl = null,
   isCurrentPlan = false,
+  showResumeAction = false,
   isLoading,
   isBusy,
   onSelect
@@ -172,6 +174,15 @@ function PlanGrantCard({
           >
             {isLoading ? 'Redirecting...' : buttonLabel}
           </Button>
+          {isCurrentPlan && showResumeAction && manageSubscriptionUrl ? (
+            <button
+              type="button"
+              onClick={() => window.location.assign(manageSubscriptionUrl)}
+              className="inline-flex w-full items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-center text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100"
+            >
+              Resume Subscription
+            </button>
+          ) : null}
         </div>
       </div>
     </article>
@@ -266,12 +277,14 @@ const PLANS: PlanConfig[] = [
 export default function SubscriptionPricingClient({
   currentPlanKey = null,
   hasActiveSubscription: hasActiveSubscriptionProp,
-  manageSubscriptionUrl = null
+  manageSubscriptionUrl = null,
+  showResumeAction = false
 }: {
   currentPlanKey?: BillingPlanKey | null;
   /** When set, overrides the legacy heuristic (`currentPlanKey !== null`). */
   hasActiveSubscription?: boolean;
   manageSubscriptionUrl?: string | null;
+  showResumeAction?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
@@ -336,6 +349,7 @@ export default function SubscriptionPricingClient({
             hasActiveSubscription={hasActiveSubscription}
             manageSubscriptionUrl={manageSubscriptionUrl}
             isCurrentPlan={currentPlanKey === plan.planKey}
+            showResumeAction={showResumeAction}
             isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}

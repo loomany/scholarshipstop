@@ -42,6 +42,8 @@ export default async function SubscriptionPage() {
     ? inferSubscriptionBillingTier(subscription, profile.data)
     : null;
   const manageSubscriptionUrl = getManageSubscriptionUrlFromRow(subscription);
+  const showResumeAction =
+    presentation.status === 'cancelled' && presentation.isSubscribed && Boolean(manageSubscriptionUrl);
 
   return (
     <>
@@ -60,6 +62,7 @@ export default async function SubscriptionPage() {
             currentPlanKey={currentPlanKey}
             hasActiveSubscription={presentation.isSubscribed}
             manageSubscriptionUrl={manageSubscriptionUrl}
+            showResumeAction={showResumeAction}
           />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">
