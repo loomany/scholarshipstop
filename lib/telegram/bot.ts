@@ -97,6 +97,14 @@ function getSiteUrl() {
   ).replace(/\/+$/, '');
 }
 
+function getSupabaseUrl() {
+  return process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || '';
+}
+
+function getServiceRoleKey() {
+  return process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || '';
+}
+
 function createTelegramCodeHash(code: string) {
   return createHash('sha256')
     .update(`${getTelegramCodeSecret()}:${code}`)
@@ -283,42 +291,58 @@ async function getTelegramUserByTelegramId(telegramUserId: number) {
 }
 
 async function getAuthUserByEmail(email: string): Promise<AuthUserRow | null> {
-  const admin = getAdminClient();
-  if (!admin) return null;
+  const url = getSupabaseUrl();
+  const serviceRoleKey = getServiceRoleKey();
+  if (!url || !serviceRoleKey) return null;
 
-  const { data, error } = await (admin as any)
-    .schema('auth')
-    .from('users')
-    .select('id, email, raw_user_meta_data')
-    .ilike('email', email)
-    .limit(1)
-    .maybeSingle();
+  const response = await fetch(
+    `${url}/auth/v1/admin/users?filter=${encodeURIComponent(email)}`,
+    {
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`
+      },
+      cache: 'no-store'
+    }
+  );
 
-  if (error) {
-    console.error('[telegram] auth.users lookup by email failed', error.message);
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    console.error('[telegram] auth admin email lookup failed', response.status, text);
     return null;
   }
 
-  return (data ?? null) as AuthUserRow | null;
+  const payload = (await response.json().catch(() => null)) as
+    | { users?: AuthUserRow[] }
+    | null;
+  const users = payload?.users ?? [];
+
+  return (
+    users.find((candidate) => candidate.email?.trim().toLowerCase() === email) ?? null
+  );
 }
 
 async function getAuthUserById(userId: string): Promise<AuthUserRow | null> {
   const admin = getAdminClient();
   if (!admin) return null;
 
-  const { data, error } = await (admin as any)
-    .schema('auth')
-    .from('users')
-    .select('id, email, raw_user_meta_data')
-    .eq('id', userId)
-    .maybeSingle();
-
+  const { data, error } = await admin.auth.admin.getUserById(userId);
   if (error) {
-    console.error('[telegram] auth.users lookup by id failed', error.message);
+    console.error('[telegram] auth admin lookup by id failed', error.message);
     return null;
   }
 
-  return (data ?? null) as AuthUserRow | null;
+  const user = data?.user;
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    email: user.email ?? null,
+    raw_user_meta_data:
+      user.user_metadata && typeof user.user_metadata === 'object' && !Array.isArray(user.user_metadata)
+        ? (user.user_metadata as Record<string, unknown>)
+        : null
+  };
 }
 
 async function upsertTelegramUser(params: {

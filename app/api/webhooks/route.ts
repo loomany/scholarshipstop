@@ -90,16 +90,13 @@ export async function POST(req: Request) {
       return new Response('Error updating subscription status.', { status: 500 });
     }
 
-    const { data: authUser } = await (supabaseAdmin as any)
-      .schema('auth')
-      .from('users')
-      .select('email')
-      .eq('id', decision.userId)
-      .maybeSingle();
+    const { data: authUserData } = await supabaseAdmin.auth.admin.getUserById(
+      decision.userId
+    );
 
     await notifyTelegramPayment({
       userId: decision.userId,
-      email: authUser?.email ?? null,
+      email: authUserData?.user?.email ?? null,
       plan: decision.subscriptionPlan,
       status: decision.subscription.status ?? 'unknown',
       eventName: payload.meta?.event_name ?? null
