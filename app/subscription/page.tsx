@@ -45,10 +45,6 @@ export default async function SubscriptionPage() {
           <SubscriptionPricingClient
             currentPlanKey={currentPlanKey}
             hasActiveSubscription={presentation.isSubscribed}
-            isTrialing={presentation.plan === 'trial'}
-            trialingPresentationLabel={
-              presentation.plan === 'trial' ? presentation.label : null
-            }
           />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">

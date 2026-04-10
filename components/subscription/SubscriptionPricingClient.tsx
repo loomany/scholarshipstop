@@ -77,10 +77,6 @@ type PlanRowProps = {
   ctaAbove?: ReactNode;
   hasActiveSubscription?: boolean;
   isCurrentPlan?: boolean;
-  /** True when this tier is the member’s plan and they are in the intro trial window. */
-  isTrialingOnCurrentPlan?: boolean;
-  /** Same wording as account (e.g. "3-Day Trial"); pairs with billing tier title. */
-  trialingPresentationLabel?: string | null;
   isLoading: boolean;
   isBusy: boolean;
   onSelect: (planKey: BillingPlanKey, title: string) => void;
@@ -100,8 +96,6 @@ function PlanGrantCard({
   ctaAbove,
   hasActiveSubscription = false,
   isCurrentPlan = false,
-  isTrialingOnCurrentPlan = false,
-  trialingPresentationLabel = null,
   isLoading,
   isBusy,
   onSelect
@@ -111,11 +105,7 @@ function PlanGrantCard({
     ? hasActiveSubscription
       ? `Upgrade to ${title}`
       : 'Start Free Trial'
-    : isTrialingOnCurrentPlan
-      ? trialingPresentationLabel
-        ? `${trialingPresentationLabel} · ${title}`
-        : `3-day trial, then ${title}`
-      : 'Current Plan';
+    : 'Active Plan';
 
   return (
     <article
@@ -161,8 +151,6 @@ function PlanGrantCard({
             className={cn(
               'lemonsqueezy-button',
               'inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-center text-sm font-semibold transition focus:outline-none disabled:cursor-not-allowed disabled:opacity-70',
-              isTrialingOnCurrentPlan &&
-                'whitespace-normal px-2 py-2.5 text-xs leading-snug sm:text-sm',
               SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
               buttonClassName
             )}
@@ -262,17 +250,11 @@ const PLANS: PlanConfig[] = [
 
 export default function SubscriptionPricingClient({
   currentPlanKey = null,
-  hasActiveSubscription: hasActiveSubscriptionProp,
-  isTrialing = false,
-  trialingPresentationLabel = null
+  hasActiveSubscription: hasActiveSubscriptionProp
 }: {
   currentPlanKey?: BillingPlanKey | null;
   /** When set, overrides the legacy heuristic (`currentPlanKey !== null`). */
   hasActiveSubscription?: boolean;
-  /** From `deriveSubscriptionPresentation`: plan === 'trial' while trial is active. */
-  isTrialing?: boolean;
-  /** `deriveSubscriptionPresentation().label` when on trial (e.g. "3-Day Trial"). */
-  trialingPresentationLabel?: string | null;
 }) {
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
@@ -336,10 +318,6 @@ export default function SubscriptionPricingClient({
             ctaAbove={plan.ctaAbove}
             hasActiveSubscription={hasActiveSubscription}
             isCurrentPlan={currentPlanKey === plan.planKey}
-            isTrialingOnCurrentPlan={
-              Boolean(isTrialing && currentPlanKey === plan.planKey)
-            }
-            trialingPresentationLabel={trialingPresentationLabel}
             isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}
