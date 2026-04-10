@@ -249,15 +249,21 @@ const PLANS: PlanConfig[] = [
 ];
 
 export default function SubscriptionPricingClient({
-  currentPlanKey = null
+  currentPlanKey = null,
+  hasActiveSubscription: hasActiveSubscriptionProp
 }: {
   currentPlanKey?: BillingPlanKey | null;
+  /** When set, overrides the legacy heuristic (`currentPlanKey !== null`). */
+  hasActiveSubscription?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const isBusy = activePlanTitle !== null;
-  const hasActiveSubscription = currentPlanKey !== null;
+  const hasActiveSubscription =
+    typeof hasActiveSubscriptionProp === 'boolean'
+      ? hasActiveSubscriptionProp
+      : currentPlanKey !== null;
 
   useEffect(() => {
     window.LemonSqueezy?.Setup?.({
