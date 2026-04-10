@@ -1,0 +1,42 @@
+name: Grant notification dispatch
+
+on:
+  schedule:
+    - cron: '25 */8 * * *'
+  workflow_dispatch:
+
+jobs:
+  dispatch-grant-notifications:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Run grant notification job
+        env:
+          SITE_URL: https://scholarshiptop.com
+          GRANT_NOTIFICATION_CRON_SECRET: ${{ secrets.GRANT_NOTIFICATION_CRON_SECRET }}
+        run: |
+          if [ -z "$GRANT_NOTIFICATION_CRON_SECRET" ]; then
+            echo "Missing GitHub secret: GRANT_NOTIFICATION_CRON_SECRET" >&2
+            exit 1
+          fi
+
+          response_file="$(mktemp)"
+          http_code="$(
+            curl \
+              --silent \
+              --show-error \
+              --output "$response_file" \
+              --write-out '%{http_code}' \
+              --request POST \
+              --url "${SITE_URL}/api/internal/grant-notifications/run" \
+              --header "Authorization: Bearer ${GRANT_NOTIFICATION_CRON_SECRET}" \
+              --header "Content-Type: application/json" \
+              --data '{}'
+          )"
+
+          cat "$response_file"
+
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+            echo "Grant notification dispatch failed with HTTP ${http_code}" >&2
+            exit 1
+          fi

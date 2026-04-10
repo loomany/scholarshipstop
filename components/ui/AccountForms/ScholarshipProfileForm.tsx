@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowRight, Check, ExternalLink } from 'lucide-react';
 
 import PremiumLockedDuringPastDueCard from '@/components/billing/PremiumLockedDuringPastDueCard';
+import GrantNotificationToggles from '@/components/account/GrantNotificationToggles';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { DarkSelect } from '@/components/home/DarkSelect';
@@ -1479,6 +1480,13 @@ export default function ScholarshipProfileForm({
                 </p>
               ) : null}
             </div>
+            {variant === 'saas' ? (
+              <GrantNotificationToggles
+                profile={profile}
+                userEmail={userEmail}
+                disabled={submitting}
+              />
+            ) : null}
             {sectionSaveRow('personal', onSavePersonal)}
           </div>
 

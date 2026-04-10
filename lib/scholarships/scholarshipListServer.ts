@@ -1306,7 +1306,7 @@ function normalizeTabScopedMoreFilters(
 /**
  * Sidebar “Saved Filters” (`recommended`) count: optional snapshot (hub) vs legacy `moreFilters`.
  */
-function moreFiltersForRecommendedSidebarCount(
+export function moreFiltersForRecommendedSidebarCount(
   req: ScholarshipListRequest,
   bounds: ScholarshipListMeta['filterBounds']
 ): MoreFiltersState | null {
@@ -1704,6 +1704,24 @@ export async function fetchScholarshipListMeta(
   };
   writeTtlValue(listMetaCache, cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
   return meta;
+}
+
+/**
+ * Cron/dispatch: same SQL filter stack as the hub tab, narrowed to one scholarship id.
+ */
+export async function scholarshipMatchesTabListSql(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest,
+  tab: ScholarshipListTabId,
+  scholarshipId: string
+): Promise<boolean> {
+  if (tabUsesEmptyIdSet(req, tab)) return false;
+  const r = { ...effectiveListingRequest({ ...req, tab }), tab };
+  let q: any = buildScholarshipListFilterQuery(supabase, true, r);
+  q = q.eq('id', scholarshipId);
+  const { error, count } = await q;
+  if (error) throw new Error(error.message);
+  return (count ?? 0) > 0;
 }
 
 export { DEFAULT_LIMIT as SCHOLARSHIPS_API_DEFAULT_LIMIT, MAX_LIMIT as SCHOLARSHIPS_API_MAX_LIMIT };

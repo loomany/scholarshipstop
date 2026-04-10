@@ -9,6 +9,48 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      grant_notification_deliveries: {
+        Row: {
+          id: string
+          user_id: string
+          scholarship_id: string
+          channel: string
+          medium: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          scholarship_id: string
+          channel: string
+          medium: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          scholarship_id?: string
+          channel?: string
+          medium?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grant_notification_deliveries_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grant_notification_deliveries_scholarship_id_fkey"
+            columns: ["scholarship_id"]
+            isOneToOne: false
+            referencedRelation: "scholarships"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       customers: {
         Row: {
           id: string
@@ -147,6 +189,11 @@ export interface Database {
           created_at: string
           date_of_birth: string | null
           email_verified: boolean
+          email_notify_best_matches: boolean
+          email_notify_easy_apply: boolean
+          email_notify_hot_deadlines: boolean
+          email_notify_saved_filters: boolean
+          saved_filters_snapshot: Json | null
           field_of_study: string | null
           field_of_study_label: string | null
           first_name: string | null
@@ -178,6 +225,11 @@ export interface Database {
           created_at?: string
           date_of_birth?: string | null
           email_verified?: boolean
+          email_notify_best_matches?: boolean
+          email_notify_easy_apply?: boolean
+          email_notify_hot_deadlines?: boolean
+          email_notify_saved_filters?: boolean
+          saved_filters_snapshot?: Json | null
           field_of_study?: string | null
           field_of_study_label?: string | null
           first_name?: string | null
@@ -209,6 +261,11 @@ export interface Database {
           created_at?: string
           date_of_birth?: string | null
           email_verified?: boolean
+          email_notify_best_matches?: boolean
+          email_notify_easy_apply?: boolean
+          email_notify_hot_deadlines?: boolean
+          email_notify_saved_filters?: boolean
+          saved_filters_snapshot?: Json | null
           field_of_study?: string | null
           field_of_study_label?: string | null
           first_name?: string | null
@@ -336,6 +393,10 @@ export interface Database {
           last_interaction_at: string
           last_state: string
           notifications_enabled: boolean
+          notify_best_matches: boolean
+          notify_easy_apply: boolean
+          notify_hot_deadlines: boolean
+          notify_saved_filters: boolean
           pending_email: string | null
           telegram_chat_id: number
           telegram_first_name: string | null
@@ -353,6 +414,10 @@ export interface Database {
           last_interaction_at?: string
           last_state?: string
           notifications_enabled?: boolean
+          notify_best_matches?: boolean
+          notify_easy_apply?: boolean
+          notify_hot_deadlines?: boolean
+          notify_saved_filters?: boolean
           pending_email?: string | null
           telegram_chat_id: number
           telegram_first_name?: string | null
@@ -370,6 +435,10 @@ export interface Database {
           last_interaction_at?: string
           last_state?: string
           notifications_enabled?: boolean
+          notify_best_matches?: boolean
+          notify_easy_apply?: boolean
+          notify_hot_deadlines?: boolean
+          notify_saved_filters?: boolean
           pending_email?: string | null
           telegram_chat_id?: number
           telegram_first_name?: string | null

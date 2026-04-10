@@ -10,6 +10,7 @@ import { sanitizeRequirementLines } from '@/lib/scholarships/scholarshipText';
 import { buildScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import type { ScholarshipDbCatalogFields } from '@/lib/scholarships/scholarshipCatalogTypes';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { createClient } from '@/utils/supabase/server';
 import { createPublicClient } from '@/utils/supabase/public';
 
@@ -634,4 +635,25 @@ export async function fetchScholarshipBySlugOrId(
     return fetchScholarshipById(decoded);
   }
   return fetchScholarshipBySlug(decoded);
+}
+
+/** One recent active scholarship for email/Telegram preview cards (service role). */
+export async function fetchFirstActiveScholarshipPreview(): Promise<Scholarship | null> {
+  const admin = createServiceRoleSupabaseClient();
+  if (!admin) return null;
+
+  const { data, error } = await admin
+    .from('scholarships')
+    .select(DETAIL_SELECT)
+    .eq('is_active', true)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error('[scholarships] fetchFirstActiveScholarshipPreview', error.message);
+    return null;
+  }
+  if (!data) return null;
+  return mapScholarshipRow(data as unknown as ScholarshipRow);
 }

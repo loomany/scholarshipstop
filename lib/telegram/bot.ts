@@ -4,6 +4,8 @@ import { createHash, randomInt } from 'crypto';
 
 import { sendTelegramLinkCodeEmail } from '@/lib/email/sendTelegramLinkCodeEmail';
 import { sendTelegramResourceNotification } from '@/lib/telegram/notifyResources';
+import { fetchFirstActiveScholarshipPreview } from '@/lib/scholarships/supabase';
+import { sendScholarshipTelegramCardToChat } from '@/lib/telegram/scholarshipTelegramCard';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
 
@@ -75,8 +77,18 @@ const CALLBACKS = {
   findScholarships: 'tg:find',
   mainMenu: 'tg:menu',
   myProfile: 'tg:profile',
-  toggleAlerts: 'tg:toggle-alerts'
+  toggleAlerts: 'tg:toggle-alerts',
+  notifyBest: 'tg:n:bm',
+  notifySf: 'tg:n:sf',
+  notifyEa: 'tg:n:ea',
+  notifyHd: 'tg:n:hd'
 } as const;
+
+type GrantNotifyField =
+  | 'notify_best_matches'
+  | 'notify_saved_filters'
+  | 'notify_easy_apply'
+  | 'notify_hot_deadlines';
 
 const BUTTON_LABELS = {
   admin: 'Admin',
@@ -424,6 +436,74 @@ async function answerTelegramCallbackQuery(callbackQueryId: string, text?: strin
   });
 }
 
+function formatGrantNotifyPanelText(user: TelegramUserRow): string {
+  return [
+    'Grant alerts (Telegram)',
+    'Tap a switch to turn grant notifications on or off for each channel.',
+    '',
+    `Best recommendations: ${user.notify_best_matches ? 'on' : 'off'}`,
+    `Saved filters: ${user.notify_saved_filters ? 'on' : 'off'}`,
+    `Easy apply: ${user.notify_easy_apply ? 'on' : 'off'}`,
+    `Hot deadlines: ${user.notify_hot_deadlines ? 'on' : 'off'}`
+  ].join('\n');
+}
+
+function buildGrantNotifyInlineKeyboard(user: TelegramUserRow): TelegramReplyMarkup {
+  const cell = (label: string, on: boolean, data: string): TelegramInlineButton =>
+    button(`${label}: ${on ? 'On' : 'Off'}`, data);
+
+  return {
+    inline_keyboard: [
+      [
+        cell('Best', user.notify_best_matches, CALLBACKS.notifyBest),
+        cell('Saved', user.notify_saved_filters, CALLBACKS.notifySf)
+      ],
+      [
+        cell('Easy', user.notify_easy_apply, CALLBACKS.notifyEa),
+        cell('Hot', user.notify_hot_deadlines, CALLBACKS.notifyHd)
+      ]
+    ]
+  };
+}
+
+async function sendGrantSettingsPanel(user: TelegramUserRow) {
+  await callTelegramApi('sendMessage', {
+    chat_id: user.telegram_chat_id,
+    text: formatGrantNotifyPanelText(user),
+    reply_markup: buildGrantNotifyInlineKeyboard(user),
+    disable_web_page_preview: true
+  });
+}
+
+async function handleGrantNotifyToggle(
+  user: TelegramUserRow,
+  callback: TelegramCallbackQuery,
+  field: GrantNotifyField
+) {
+  if (!user.app_user_id) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Connect your ScholarshipTop account first to manage grant alerts.',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  if (!callback.message?.message_id) return;
+
+  const next = !user[field];
+  const updated = await updateTelegramUserState(user.id, { [field]: next });
+  const fresh = updated ?? { ...user, [field]: next };
+
+  await callTelegramApi('editMessageText', {
+    chat_id: user.telegram_chat_id,
+    message_id: callback.message.message_id,
+    text: formatGrantNotifyPanelText(fresh),
+    reply_markup: buildGrantNotifyInlineKeyboard(fresh),
+    disable_web_page_preview: true
+  });
+}
+
 function getAdminClient() {
   return createServiceRoleSupabaseClient();
 }
@@ -517,6 +597,10 @@ async function upsertTelegramUser(params: {
     app_user_id: existing?.app_user_id ?? null,
     is_admin: isAdmin,
     notifications_enabled: isAdmin ? true : existing?.notifications_enabled ?? false,
+    notify_best_matches: existing?.notify_best_matches ?? false,
+    notify_saved_filters: existing?.notify_saved_filters ?? false,
+    notify_easy_apply: existing?.notify_easy_apply ?? false,
+    notify_hot_deadlines: existing?.notify_hot_deadlines ?? false,
     last_state: existing?.last_state ?? 'idle',
     pending_email: existing?.pending_email ?? null,
     last_bot_started_at: params.isStart ? now : existing?.last_bot_started_at ?? null,
@@ -761,6 +845,10 @@ async function sendProfileSummary(user: TelegramUserRow) {
     formatProfileMessage(authUser, profileResult.data, linkedAt),
     buildProfileKeyboard(user)
   );
+
+  if (user.app_user_id) {
+    await sendGrantSettingsPanel(user);
+  }
 }
 
 async function sendAdminPanel(user: TelegramUserRow) {
@@ -1123,6 +1211,28 @@ async function sendTestResourceCard(user: TelegramUserRow) {
   }
 }
 
+/** Admin-only: sample scholarship card in DM (matches production grant formatting). */
+async function sendTestGrantPreview(user: TelegramUserRow) {
+  const scholarship = await fetchFirstActiveScholarshipPreview();
+  if (!scholarship) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'No active scholarship was found for a preview.',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  const ok = await sendScholarshipTelegramCardToChat(user.telegram_chat_id, scholarship);
+  if (!ok) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Failed to send the grant preview. Check TELEGRAM_BOT_TOKEN.',
+      buildProfileKeyboard(user)
+    );
+  }
+}
+
 export async function handleTelegramUpdate(update: TelegramUpdate) {
   const message = update.message;
   const callback = update.callback_query;
@@ -1171,6 +1281,19 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         return;
       }
       await sendTestResourceCard(user);
+      return;
+    }
+
+    if (normalizeBotCommand(text) === '/testgrant') {
+      if (!getTelegramAdminIds().has(message.from.id)) {
+        await sendTelegramMessage(
+          user.telegram_chat_id,
+          'This command is only available to admins.',
+          buildMainKeyboard()
+        );
+        return;
+      }
+      await sendTestGrantPreview(user);
       return;
     }
 
@@ -1251,6 +1374,18 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         return;
       case CALLBACKS.toggleAlerts:
         await toggleAdminAlerts(user);
+        return;
+      case CALLBACKS.notifyBest:
+        await handleGrantNotifyToggle(user, callback, 'notify_best_matches');
+        return;
+      case CALLBACKS.notifySf:
+        await handleGrantNotifyToggle(user, callback, 'notify_saved_filters');
+        return;
+      case CALLBACKS.notifyEa:
+        await handleGrantNotifyToggle(user, callback, 'notify_easy_apply');
+        return;
+      case CALLBACKS.notifyHd:
+        await handleGrantNotifyToggle(user, callback, 'notify_hot_deadlines');
         return;
       case CALLBACKS.mainMenu:
       default:

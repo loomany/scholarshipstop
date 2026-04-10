@@ -591,6 +591,11 @@ function ScholarshipsPageInner({
         ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersDraft)
         : cloneMoreFilters(moreFiltersDraft);
     writeSavedFiltersToStorage(merged);
+    void fetch('/api/account/saved-filters-snapshot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ snapshot: moreFiltersToJson(merged) })
+    }).catch(() => {});
     setSavedFiltersRevision((n) => n + 1);
     setMoreFiltersApplied(cloneMoreFilters(merged));
     replaceListingParams({
