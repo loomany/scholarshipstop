@@ -69,6 +69,14 @@ export async function POST(req: Request) {
       });
     }
 
+    console.info('[lemon:webhook] processing entitlement event', {
+      eventName: decision.eventName,
+      subscriptionId: decision.subscription.id,
+      userId: decision.userId,
+      status: decision.subscription.status,
+      plan: decision.subscriptionPlan
+    });
+
     const { data: existingSubscription } = await supabaseAdmin
       .from('subscriptions')
       .select('id, raw_payload')
@@ -78,11 +86,19 @@ export async function POST(req: Request) {
       existingSubscription?.raw_payload &&
       JSON.stringify(existingSubscription.raw_payload) === JSON.stringify(payload)
     ) {
+      console.info('[lemon:webhook] duplicate payload ignored', {
+        subscriptionId: decision.subscription.id,
+        userId: decision.userId
+      });
       return new Response(JSON.stringify({ received: true, duplicate: true }), {
         status: 200
       });
     }
 
+    console.info('[lemon:webhook] upserting subscription', {
+      subscriptionId: decision.subscription.id,
+      userId: decision.userId
+    });
     const { error: subscriptionError } = await supabaseAdmin
       .from('subscriptions')
       .upsert([decision.subscription], { onConflict: 'id' });
@@ -97,7 +113,16 @@ export async function POST(req: Request) {
       });
       return new Response('Error syncing subscription record.', { status: 500 });
     }
+    console.info('[lemon:webhook] subscription upserted', {
+      subscriptionId: decision.subscription.id,
+      userId: decision.userId
+    });
 
+    console.info('[lemon:webhook] updating profile entitlements', {
+      userId: decision.userId,
+      isSubscribed: decision.isSubscribed,
+      plan: decision.subscriptionPlan
+    });
     const { error } = await supabaseAdmin
       .from('profiles')
       .upsert(
@@ -120,18 +145,27 @@ export async function POST(req: Request) {
       });
       return new Response('Error updating subscription status.', { status: 500 });
     }
-
-    const { data: authUserData } = await supabaseAdmin.auth.admin.getUserById(
-      decision.userId
-    );
-
-    await notifyTelegramPayment({
-      userId: decision.userId,
-      email: authUserData?.user?.email ?? null,
-      plan: decision.subscriptionPlan,
-      status: decision.subscription.status ?? 'unknown',
-      eventName: payload.meta?.event_name ?? null
+    console.info('[lemon:webhook] profile entitlements updated', {
+      userId: decision.userId
     });
+
+    void supabaseAdmin.auth.admin
+      .getUserById(decision.userId)
+      .then(({ data: authUserData }) =>
+        notifyTelegramPayment({
+          userId: decision.userId,
+          email: authUserData?.user?.email ?? null,
+          plan: decision.subscriptionPlan,
+          status: decision.subscription.status ?? 'unknown',
+          eventName: payload.meta?.event_name ?? null
+        })
+      )
+      .catch((telegramError) => {
+        console.error('[lemon:webhook] telegram notification failed', {
+          message: telegramError instanceof Error ? telegramError.message : String(telegramError),
+          userId: decision.userId
+        });
+      });
 
     return new Response(JSON.stringify({ received: true, updated: true }), {
       status: 200
