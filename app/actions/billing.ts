@@ -1,46 +1,25 @@
 'use server';
 
-import {
-  createCheckout,
-  lemonSqueezySetup
-} from '@lemonsqueezy/lemonsqueezy.js';
-
 import { createClient } from '@/utils/supabase/server';
-import { getURL } from '@/utils/helpers';
 
 export type BillingPlanKey = 'monthly' | 'quarterly' | 'yearly';
 
-function variantIdFromPlan(plan: BillingPlanKey): number {
-  const raw =
+function checkoutUrlFromPlan(plan: BillingPlanKey): string {
+  const url =
     plan === 'monthly'
-      ? process.env.LEMONSQUEEZY_MONTHLY_VARIANT_ID ??
-        process.env.NEXT_PUBLIC_LS_MONTHLY_VARIANT_ID
+      ? 'https://pay.scholarshiptop.com/checkout/buy/4e63048d-5d76-4818-925c-048b10047128?logo=0&discount=0'
       : plan === 'quarterly'
-        ? process.env.LEMONSQUEEZY_QUARTERLY_VARIANT_ID ??
-          process.env.NEXT_PUBLIC_LS_QUARTERLY_VARIANT_ID
-        : process.env.LEMONSQUEEZY_YEARLY_VARIANT_ID ??
-          process.env.NEXT_PUBLIC_LS_YEARLY_VARIANT_ID;
-  const parsed = Number(raw);
-  if (!Number.isFinite(parsed)) {
-    throw new Error(`Variant id for the ${plan} plan is not configured.`);
+        ? 'https://pay.scholarshiptop.com/checkout/buy/3faf88f4-d2d6-437f-808f-f641bcb955a1?logo=0&discount=0'
+        : 'https://pay.scholarshiptop.com/checkout/buy/152da89c-f707-4417-9cd8-3be69938a677?logo=0&discount=0';
+
+  if (!url.trim()) {
+    throw new Error(`Checkout URL for the ${plan} plan is not configured.`);
   }
-  return parsed;
+
+  return url;
 }
 
 export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
-  const apiKey = process.env.LEMONSQUEEZY_API_KEY;
-  const storeId = process.env.LEMONSQUEEZY_STORE_ID;
-  const variantId = variantIdFromPlan(plan);
-  const successUrl = process.env.LEMONSQUEEZY_SUCCESS_URL?.trim() || getURL('/scholarships');
-
-  if (!apiKey) {
-    throw new Error('LEMONSQUEEZY_API_KEY is not configured.');
-  }
-
-  if (!storeId) {
-    throw new Error('LEMONSQUEEZY_STORE_ID is not configured.');
-  }
-
   const supabase = createClient();
   const {
     data: { user },
@@ -55,35 +34,5 @@ export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
     throw new Error('Your account is missing an email address.');
   }
 
-  lemonSqueezySetup({ apiKey });
-
-  const checkout = await createCheckout(storeId, variantId, {
-    productOptions: {
-      redirectUrl: successUrl,
-      enabledVariants: [variantId]
-    },
-    checkoutOptions: {
-      embed: true,
-      logo: false,
-      discount: false
-    },
-    checkoutData: {
-      email: user.email,
-      custom: {
-        user_id: user.id
-      }
-    }
-  });
-
-  if (checkout.error) {
-    throw checkout.error;
-  }
-
-  const checkoutUrl = checkout.data?.data?.attributes?.url;
-
-  if (!checkoutUrl) {
-    throw new Error('Failed to create Lemon Squeezy checkout.');
-  }
-
-  return checkoutUrl;
+  return checkoutUrlFromPlan(plan);
 }
