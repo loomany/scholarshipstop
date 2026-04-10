@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
 import { getPasswordPolicyError } from '@/lib/validation/passwordPolicy';
 import { notifyTelegramSignup } from '@/lib/telegram/bot';
 import {
@@ -187,10 +188,11 @@ export async function signUp(formData: FormData) {
   });
 
   if (error) {
+    const u = userFacingAuthError(error);
     redirectPath = getErrorRedirect(
       '/signin/signup',
-      'Sign up failed.',
-      error.message
+      u.title,
+      u.description ?? u.title
     );
   } else if (data.session) {
     if (data.user?.id) {

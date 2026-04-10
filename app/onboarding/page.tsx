@@ -29,19 +29,17 @@ import { enqueueRegistrationVerificationEmail } from '@/app/actions/registration
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { syncOnboardingToProfiles } from '@/lib/onboarding/syncScholarshipProfile';
 import { validateScholarshipOnboardingStep2 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
+import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
+import { toast } from '@/components/ui/Toasts/use-toast';
 
 const POST_ONBOARDING_PATH = SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
 
-/** GoTrue returns human text (e.g. "Error sending confirmation email"); add code/status for support logs. */
-function formatSupabaseAuthErrorMessage(err: {
-  message: string;
-  status?: number;
-  code?: string;
-}): string {
-  const parts = [err.message];
-  if (err.code) parts.push(`Code: ${err.code}.`);
-  if (err.status != null) parts.push(`HTTP ${err.status}.`);
-  return parts.join(' ');
+function notifyDestructive(title: string, description?: string) {
+  toast({
+    variant: 'destructive',
+    title,
+    description
+  });
 }
 
 function emptyDraft(): StoredOnboardingDraft {
@@ -69,7 +67,6 @@ function OnboardingWizard() {
 
   const [draft, setDraft] = useState<StoredOnboardingDraft | null>(null);
   const [loading, setLoading] = useState(false);
-  const [finalError, setFinalError] = useState<string | null>(null);
   const finalizeInFlight = useRef(false);
   useEffect(() => {
     setDraft(loadStoredOnboardingDraft() ?? emptyDraft());
@@ -154,13 +151,15 @@ function OnboardingWizard() {
     async (password: string, confirmPassword: string) => {
       if (finalizeInFlight.current) return;
       finalizeInFlight.current = true;
-      setFinalError(null);
 
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       const built = buildCompleteScholarshipUserProfile(base);
       if (!built.ok) {
         finalizeInFlight.current = false;
-        setFinalError('Please complete all steps before continuing.');
+        notifyDestructive(
+          'Almost there',
+          'Please complete all steps before continuing.'
+        );
         return;
       }
 
@@ -181,7 +180,7 @@ function OnboardingWizard() {
           authCheck.errors.firstName ??
           authCheck.errors.lastName ??
           'Please review your account details.';
-        setFinalError(first);
+        notifyDestructive('Check your details', first);
         return;
       }
 
@@ -230,9 +229,10 @@ function OnboardingWizard() {
         if (!sync.ok) {
           setLoading(false);
           finalizeInFlight.current = false;
-          setFinalError(
+          notifyDestructive(
+            'Could not save your profile',
             sync.error ??
-              'We could not save your profile. Check your database columns or try again from Account.'
+              'Try again in a moment, or finish setup from your account page.'
           );
           return false;
         }
@@ -278,7 +278,10 @@ function OnboardingWizard() {
       } catch {
         setLoading(false);
         finalizeInFlight.current = false;
-        setFinalError('Something went wrong. Check your connection and try again.');
+        notifyDestructive(
+          'Something went wrong',
+          'Check your connection and try again.'
+        );
         return;
       }
 
@@ -297,11 +300,15 @@ function OnboardingWizard() {
         });
         setLoading(false);
         finalizeInFlight.current = false;
-        setFinalError(
-          signUpError.message
-            ? formatSupabaseAuthErrorMessage(signUpError)
-            : 'Something went wrong. Check your connection and try again.'
-        );
+        if (signUpError.message) {
+          const u = userFacingAuthError(signUpError);
+          notifyDestructive(u.title, u.description);
+        } else {
+          notifyDestructive(
+            'Something went wrong',
+            'Check your connection and try again.'
+          );
+        }
         return;
       }
 
@@ -393,7 +400,6 @@ function OnboardingWizard() {
               disabled={loading}
               isSubmitting={loading}
               initialStep2={draft.step2}
-              submitError={finalError}
               onBack={() => handleBack(3)}
               onContinue={handleAccountSubmit}
             />

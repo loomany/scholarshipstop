@@ -29,7 +29,6 @@ type Props = {
   /** True while parent runs sign-up / finalize (inline button loading, no fullscreen overlay). */
   isSubmitting?: boolean;
   initialStep2: OnboardingStep2DraftFields;
-  submitError: string | null;
   onBack: () => void;
   /** Saves account draft (no password). Password stays in memory via parent callback only. */
   onContinue: (payload: Step2ContinuePayload) => void;
@@ -39,7 +38,6 @@ export function ScholarshipOnboardingStep2({
   disabled = false,
   isSubmitting = false,
   initialStep2,
-  submitError,
   onBack,
   onContinue
 }: Props) {
@@ -227,12 +225,6 @@ export function ScholarshipOnboardingStep2({
         </div>
         {!errors.password ? (
           <p className="text-center text-xs text-zinc-500">{PASSWORD_POLICY_HINT}</p>
-        ) : null}
-
-        {submitError ? (
-          <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">
-            {submitError}
-          </p>
         ) : null}
 
         <button

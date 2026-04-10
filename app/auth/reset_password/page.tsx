@@ -3,6 +3,11 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import {
+  hasOAuthStyleHashError,
+  parseOAuthStyleHash,
+  userFacingRecoveryHashError
+} from '@/lib/auth/recoveryUrlErrors';
 import { getErrorRedirect, getStatusRedirect } from '@/utils/helpers';
 
 function ResetPasswordExchange() {
@@ -15,6 +20,21 @@ function ResetPasswordExchange() {
 
     async function run() {
       const supabase = createClient();
+
+      /** Hash (#error=…) is client-only; searchParams never includes it. */
+      const hashParams =
+        typeof window !== 'undefined'
+          ? parseOAuthStyleHash(window.location.hash)
+          : {};
+      if (hasOAuthStyleHashError(hashParams)) {
+        const u = userFacingRecoveryHashError(hashParams);
+        if (!cancelled) {
+          router.replace(
+            getErrorRedirect('/signin/forgot_password', u.title, u.description)
+          );
+        }
+        return;
+      }
 
       const qpError = searchParams.get('error');
       if (qpError) {
@@ -79,7 +99,13 @@ function ResetPasswordExchange() {
         }
         if (!session) {
           if (!cancelled) {
-            router.replace('/signin');
+            router.replace(
+              getErrorRedirect(
+                '/signin/forgot_password',
+                'Reset link incomplete',
+                'Open the link from your latest email, or request a new password reset.'
+              )
+            );
           }
           return;
         }
