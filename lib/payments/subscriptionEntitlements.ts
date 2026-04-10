@@ -28,6 +28,21 @@ function getEmbeddedPriceRow(
   return row ?? null;
 }
 
+/** Match checkout variant ids from env (Lemon); works when product_name is missing in SSR row. */
+function inferTierFromLemonVariantId(
+  providerVariantId: string | null | undefined
+): SubscriptionBillingTier | null {
+  if (providerVariantId == null || providerVariantId === '') return null;
+  const vid = String(providerVariantId).trim();
+  const monthly = process.env.NEXT_PUBLIC_LS_MONTHLY_VARIANT_ID;
+  const quarterly = process.env.NEXT_PUBLIC_LS_QUARTERLY_VARIANT_ID;
+  const yearly = process.env.NEXT_PUBLIC_LS_YEARLY_VARIANT_ID;
+  if (monthly && vid === String(monthly).trim()) return 'monthly';
+  if (quarterly && vid === String(quarterly).trim()) return 'quarterly';
+  if (yearly && vid === String(yearly).trim()) return 'yearly';
+  return null;
+}
+
 /** Last-resort tier from stored Lemon webhook JSON (same fields as live webhook). */
 function inferBillingTierFromRawPayload(raw: Json | null): SubscriptionBillingTier | null {
   if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) return null;
@@ -72,6 +87,9 @@ export function inferSubscriptionBillingTier(
 
     const fromRaw = inferBillingTierFromRawPayload(subscription.raw_payload);
     if (fromRaw) return fromRaw;
+
+    const fromVariant = inferTierFromLemonVariantId(subscription.provider_variant_id);
+    if (fromVariant) return fromVariant;
   }
 
   switch (profile?.subscription_plan) {

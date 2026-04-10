@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { unstable_noStore as noStore } from 'next/cache';
 import SubscriptionPricingClient from '@/components/subscription/SubscriptionPricingClient';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import {
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function SubscriptionPage() {
+  noStore();
   const supabase = createClient();
   const user = await getUser(supabase);
   const profile = user
