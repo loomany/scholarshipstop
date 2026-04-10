@@ -16,7 +16,7 @@ export default function SiteFooter() {
       <div className="mx-auto max-w-6xl py-2.5 pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pb-[max(0.625rem,env(safe-area-inset-bottom,0px))] sm:px-6 sm:py-3 sm:pb-3">
         <div className="flex justify-start sm:justify-center">
           <div className="flex max-w-full flex-col items-start gap-3 sm:flex-row sm:items-start sm:gap-x-3">
-            <div className="shrink-0 -translate-x-0.5 sm:-translate-x-1">
+            <div className="hidden shrink-0 -translate-x-0.5 sm:block sm:-translate-x-1">
               <Link
                 href="/"
                 className="inline-flex rounded-xl bg-black px-3 py-2 ring-1 ring-gray-800 transition hover:ring-gray-600"
