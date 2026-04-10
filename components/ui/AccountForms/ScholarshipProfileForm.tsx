@@ -1480,6 +1480,7 @@ export default function ScholarshipProfileForm({
                 </p>
               ) : null}
             </div>
+            {sectionSaveRow('personal', onSavePersonal)}
             {variant === 'saas' ? (
               <GrantNotificationToggles
                 profile={profile}
@@ -1487,7 +1488,6 @@ export default function ScholarshipProfileForm({
                 disabled={submitting}
               />
             ) : null}
-            {sectionSaveRow('personal', onSavePersonal)}
           </div>
 
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">

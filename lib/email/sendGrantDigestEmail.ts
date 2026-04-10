@@ -40,10 +40,16 @@ function buildGrantCardExtraHtml(s: Scholarship, origin: string): string {
             <p style="margin:0 0 6px;font-size:13px;color:#374151;"><span style="color:#6b7280;">Deadline</span> · ${deadline}</p>
             <p style="margin:0 0 12px;font-size:13px;color:#374151;"><span style="color:#6b7280;">Award</span> · ${amount}</p>
             <p style="margin:0 0 16px;font-size:14px;line-height:1.55;color:#4b5563;">${snippet}</p>
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
               <tr>
-                <td style="border-radius:12px;background:#10b981;">
-                  <a href="${escapeHtml(href)}" style="display:inline-block;padding:12px 22px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:700;color:#ffffff!important;text-decoration:none;">View scholarship</a>
+                <td align="center" style="padding:0;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+                    <tr>
+                      <td align="center" style="border-radius:12px;background:#10b981;">
+                        <a href="${escapeHtml(href)}" style="display:inline-block;padding:12px 22px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:700;color:#ffffff!important;text-decoration:none;">View scholarship</a>
+                      </td>
+                    </tr>
+                  </table>
                 </td>
               </tr>
             </table>
@@ -85,11 +91,12 @@ export async function sendGrantDigestEmail(params: {
     accentLine: params.channelLabel,
     bodyParagraphsHtml: [
       `Hi ${escapeHtml(name)},`,
-      `We added a scholarship that lines up with <strong>${escapeHtml(params.channelLabel)}</strong>. Open the card below or jump straight to the listing.`
+      `We added a scholarship that lines up with <strong>${escapeHtml(params.channelLabel)}</strong>. Use the button in the card below to open the listing.`
     ],
     extraHtml,
     ctaHref: grantUrl,
     ctaLabel: 'Open full listing',
+    omitPrimaryCta: true,
     siteOrigin: origin,
     unsubscribeUrl: `${origin}/account`,
     secondaryLinkNote: ''
