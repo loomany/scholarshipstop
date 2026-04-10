@@ -120,3 +120,37 @@ test('maps dotted subscription event names to normalized snake_case', () => {
   assert.equal(decision.eventName, 'subscription_updated');
   assert.equal(decision.isSubscribed, true);
 });
+
+test('does not persist Lemon price ids into Stripe price_id foreign key', () => {
+  const payload = {
+    meta: {
+      event_name: 'subscription_updated',
+      custom_data: { user_id: 'dceafcc1-dfe6-44c1-83af-46066fdc7f79' }
+    },
+    data: {
+      id: '2047507',
+      attributes: {
+        status: 'on_trial',
+        product_name: 'Monthly Plan1',
+        variant_name: 'Default',
+        first_subscription_item: {
+          id: 7674432,
+          price_id: 2516368,
+          quantity: 1
+        }
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.subscriptionPlan, 'trial');
+  assert.equal(decision.subscription.price_id, null);
+  assert.deepEqual(decision.subscription.metadata, {
+    source: 'lemon_squeezy',
+    event_name: 'subscription_updated',
+    lemon_price_id: '2516368',
+    lemon_subscription_item_id: '7674432'
+  });
+});

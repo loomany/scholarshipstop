@@ -173,10 +173,10 @@ function derivePlanCode(payload: LemonWebhookPayload): AppSubscriptionPlan {
     return 'trial';
   }
 
-  const variantName = (attributes?.variant_name ?? '').toLowerCase();
-  if (variantName.includes('year')) return 'yearly_pro';
-  if (variantName.includes('quarter')) return 'quarterly_pro';
-  if (variantName.includes('month')) return 'monthly_pro';
+  const planText = `${attributes?.product_name ?? ''} ${attributes?.variant_name ?? ''}`.toLowerCase();
+  if (planText.includes('year')) return 'yearly_pro';
+  if (planText.includes('quarter')) return 'quarterly_pro';
+  if (planText.includes('month')) return 'monthly_pro';
   return toSubscribedFromLemonStatus(attributes?.status) ? 'monthly_pro' : 'free';
 }
 
@@ -190,6 +190,14 @@ function buildSubscriptionUpsert(
   const nowIso = new Date().toISOString();
   const subscriptionId = String(payload.data?.id ?? (payload as { id?: string }).id ?? `${userId}:${eventName}`);
   const planCode = derivePlanCode(payload);
+  const lemonPriceId =
+    attributes?.first_subscription_item?.price_id != null
+      ? String(attributes.first_subscription_item.price_id)
+      : null;
+  const lemonSubscriptionItemId =
+    attributes?.first_subscription_item?.id != null
+      ? String(attributes.first_subscription_item.id)
+      : null;
 
   return {
     id: subscriptionId,
@@ -207,13 +215,14 @@ function buildSubscriptionUpsert(
     status: normalizedStatus,
     metadata: {
       source: 'lemon_squeezy',
-      event_name: eventName
+      event_name: eventName,
+      lemon_price_id: lemonPriceId,
+      lemon_subscription_item_id: lemonSubscriptionItemId
     } as Json,
     plan_code: planCode,
-    price_id:
-      attributes?.first_subscription_item?.price_id != null
-        ? String(attributes.first_subscription_item.price_id)
-        : null,
+    // `public.subscriptions.price_id` still references Stripe `prices.id`.
+    // Lemon price ids are provider-specific and would violate that FK.
+    price_id: null,
     quantity: attributes?.first_subscription_item?.quantity ?? null,
     cancel_at_period_end: Boolean(attributes?.cancelled),
     created: attributes?.created_at ?? nowIso,
