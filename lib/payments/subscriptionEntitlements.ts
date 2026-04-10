@@ -10,8 +10,62 @@ export type SubscriptionWithPriceAndProduct = Subscription & {
     | (Price & {
         products: Product | null;
       })
-    | null;
+    | null
+    | (Price & {
+        products: Product | null;
+      })[];
 };
+
+/** Billing cadence for pricing cards (Monthly / Quarterly / Yearly). */
+export type SubscriptionBillingTier = 'monthly' | 'quarterly' | 'yearly';
+
+function getEmbeddedPriceRow(
+  subscription: SubscriptionWithPriceAndProduct
+): (Price & { products: Product | null }) | null {
+  const raw = subscription.prices;
+  if (!raw) return null;
+  const row = Array.isArray(raw) ? raw[0] : raw;
+  return row ?? null;
+}
+
+/**
+ * Which pricing-card tier the user's subscription maps to (including Lemon trial on a variant).
+ * Used for /subscription “current plan” vs “Upgrade” CTAs.
+ */
+export function inferSubscriptionBillingTier(
+  subscription: SubscriptionWithPriceAndProduct | null,
+  profile: Profile | null
+): SubscriptionBillingTier | null {
+  if (subscription) {
+    if (subscription.plan_code === 'monthly_pro') return 'monthly';
+    if (subscription.plan_code === 'quarterly_pro') return 'quarterly';
+    if (subscription.plan_code === 'yearly_pro') return 'yearly';
+
+    const priceRow = getEmbeddedPriceRow(subscription);
+    const interval = priceRow?.interval;
+    const intervalCount = priceRow?.interval_count ?? 1;
+    if (interval === 'year') return 'yearly';
+    if (interval === 'month' && intervalCount === 3) return 'quarterly';
+    if (interval === 'month') return 'monthly';
+
+    const productName = priceRow?.products?.name ?? '';
+    const planText = `${subscription.provider_product_name ?? ''} ${subscription.provider_variant_name ?? ''} ${productName}`.toLowerCase();
+    if (planText.includes('year')) return 'yearly';
+    if (planText.includes('quarter')) return 'quarterly';
+    if (planText.includes('month')) return 'monthly';
+  }
+
+  switch (profile?.subscription_plan) {
+    case 'monthly_pro':
+      return 'monthly';
+    case 'quarterly_pro':
+      return 'quarterly';
+    case 'yearly_pro':
+      return 'yearly';
+    default:
+      return null;
+  }
+}
 
 export type AppSubscriptionPlan =
   | 'free'
@@ -162,8 +216,9 @@ function derivePlanFromSubscription(
   if (subscription.plan_code === 'quarterly_pro') return 'quarterly_pro';
   if (subscription.plan_code === 'yearly_pro') return 'yearly_pro';
 
-  const interval = subscription.prices?.interval;
-  const intervalCount = subscription.prices?.interval_count ?? 1;
+  const priceRow = getEmbeddedPriceRow(subscription);
+  const interval = priceRow?.interval;
+  const intervalCount = priceRow?.interval_count ?? 1;
   if (interval === 'year') return 'yearly_pro';
   if (interval === 'month' && intervalCount === 3) return 'quarterly_pro';
   if (interval === 'month') return 'monthly_pro';

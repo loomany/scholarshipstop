@@ -3,11 +3,10 @@ import SubscriptionPricingClient from '@/components/subscription/SubscriptionPri
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import {
   deriveSubscriptionPresentation,
-  type SubscriptionWithPriceAndProduct
+  inferSubscriptionBillingTier
 } from '@/lib/payments/subscriptionEntitlements';
 import { createClient } from '@/utils/supabase/server';
 import { getSubscription, getUser } from '@/utils/supabase/queries';
-import type { Tables } from '@/types_db';
 import type { BillingPlanKey } from '@/app/actions/billing';
 
 export const metadata: Metadata = {
@@ -18,39 +17,6 @@ export const metadata: Metadata = {
 // Without this, Next can serve a static shell where `getUser` never runs with cookies.
 export const dynamic = 'force-dynamic';
 
-function inferCurrentPlanKey(
-  subscription: SubscriptionWithPriceAndProduct | null,
-  profile: Tables<'profiles'> | null
-): BillingPlanKey | null {
-  if (subscription) {
-    if (subscription.plan_code === 'monthly_pro') return 'monthly';
-    if (subscription.plan_code === 'quarterly_pro') return 'quarterly';
-    if (subscription.plan_code === 'yearly_pro') return 'yearly';
-
-    const interval = subscription.prices?.interval;
-    const intervalCount = subscription.prices?.interval_count ?? 1;
-    if (interval === 'year') return 'yearly';
-    if (interval === 'month' && intervalCount === 3) return 'quarterly';
-    if (interval === 'month') return 'monthly';
-
-    const planText = `${subscription.provider_product_name ?? ''} ${subscription.provider_variant_name ?? ''}`.toLowerCase();
-    if (planText.includes('year')) return 'yearly';
-    if (planText.includes('quarter')) return 'quarterly';
-    if (planText.includes('month')) return 'monthly';
-  }
-
-  switch (profile?.subscription_plan) {
-    case 'monthly_pro':
-      return 'monthly';
-    case 'quarterly_pro':
-      return 'quarterly';
-    case 'yearly_pro':
-      return 'yearly';
-    default:
-      return null;
-  }
-}
-
 export default async function SubscriptionPage() {
   const supabase = createClient();
   const user = await getUser(supabase);
@@ -59,8 +25,8 @@ export default async function SubscriptionPage() {
     : { data: null };
   const subscription = user ? await getSubscription(supabase, user.id) : null;
   const presentation = deriveSubscriptionPresentation(profile.data, subscription);
-  const currentPlanKey = presentation.isSubscribed
-    ? inferCurrentPlanKey(subscription, profile.data)
+  const currentPlanKey: BillingPlanKey | null = presentation.isSubscribed
+    ? inferSubscriptionBillingTier(subscription, profile.data)
     : null;
 
   return (
@@ -79,6 +45,7 @@ export default async function SubscriptionPage() {
           <SubscriptionPricingClient
             currentPlanKey={currentPlanKey}
             hasActiveSubscription={presentation.isSubscribed}
+            isTrialing={presentation.plan === 'trial'}
           />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">
