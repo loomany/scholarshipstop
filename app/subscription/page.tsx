@@ -11,6 +11,7 @@ import {
   extractLemonCustomerPortalUrl,
   extractLemonUpdatePaymentMethodUrl
 } from '@/lib/payments/lemonSubscriptionState';
+import { resolveBillingFixHref } from '@/lib/payments/billingUrls';
 import { createClient } from '@/utils/supabase/server';
 import { getSubscription, getUser } from '@/utils/supabase/queries';
 import type { BillingPlanKey } from '@/app/actions/billing';
@@ -57,9 +58,17 @@ export default async function SubscriptionPage() {
       : null;
   const manageSubscriptionUrl = getManageSubscriptionUrlFromRow(subscription);
   const updatePaymentUrl = getUpdatePaymentUrlFromRow(subscription);
+  const siteBase = (
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'https://scholarshiptop.com'
+  ).replace(/\/+$/, '');
+  const pastDue = presentation.status === 'past_due';
+  /** Always set when past_due: Lemon URLs or site subscription page. */
+  const resolvedBillingFixUrl = pastDue
+    ? resolveBillingFixHref(subscription, `${siteBase}/subscription`)
+    : null;
   const showResumeAction =
     presentation.status === 'cancelled' && presentation.isSubscribed && Boolean(manageSubscriptionUrl);
-  const showUpdatePaymentAction = presentation.status === 'past_due' && Boolean(updatePaymentUrl);
+  const showUpdatePaymentAction = pastDue;
 
   return (
     <>
@@ -78,9 +87,10 @@ export default async function SubscriptionPage() {
             currentPlanKey={currentPlanKey}
             hasActiveSubscription={presentation.isSubscribed}
             manageSubscriptionUrl={manageSubscriptionUrl}
-            updatePaymentUrl={updatePaymentUrl}
+            updatePaymentUrl={pastDue ? resolvedBillingFixUrl : updatePaymentUrl}
             showResumeAction={showResumeAction}
             showUpdatePaymentAction={showUpdatePaymentAction}
+            pastDueBillingAccent={pastDue}
           />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">

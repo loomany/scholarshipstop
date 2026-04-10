@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, Check, ExternalLink } from 'lucide-react';
 
+import PremiumLockedDuringPastDueCard from '@/components/billing/PremiumLockedDuringPastDueCard';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { DarkSelect } from '@/components/home/DarkSelect';
@@ -28,6 +29,10 @@ import {
   sanitizeBirthYearInput,
   validateBirthDateFields
 } from '@/lib/validation/birthDateFields';
+import {
+  resolveBillingFixHref,
+  resolveResumeSubscriptionHref
+} from '@/lib/payments/billingUrls';
 import {
   deriveSubscriptionPresentation,
   type SubscriptionWithPriceAndProduct
@@ -697,6 +702,14 @@ export default function ScholarshipProfileForm({
     () => deriveSubscriptionPresentation(profile, subscription),
     [profile, subscription]
   );
+  const billingFixHref = useMemo(
+    () => resolveBillingFixHref(subscription, '/subscription'),
+    [subscription]
+  );
+  const resumeSubscriptionHref = useMemo(
+    () => resolveResumeSubscriptionHref(subscription, '/subscription'),
+    [subscription]
+  );
   const subscriptionType = useMemo<SubscriptionType>(() => {
     switch (subscriptionPresentation.plan) {
       case 'trial':
@@ -898,6 +911,7 @@ export default function ScholarshipProfileForm({
     const showSaasEmailStatus =
       userEmail != null && emailConfirmed !== undefined;
     const paymentFailed = subscriptionPresentation.status === 'past_due';
+    const subscriptionPaused = subscriptionPresentation.status === 'paused';
     const subscriptionStatusUi = (() => {
       if (paymentFailed) {
         return {
@@ -906,9 +920,23 @@ export default function ScholarshipProfileForm({
           title: 'Update Billing To Restore Access',
           subtitle:
             'We could not renew your subscription after the trial ended. Update your card to unlock access again.',
-          buttonLabel: 'Update Billing Info',
+          buttonLabel: 'Fix Billing Issue',
           buttonClass:
             'bg-amber-500 text-white shadow-sm hover:bg-amber-600 hover:shadow-md'
+        };
+      }
+
+      if (subscriptionPaused) {
+        return {
+          badgeLabel: 'Paused',
+          badgeClass:
+            'bg-amber-100 text-amber-900 font-medium ring-1 ring-amber-300/80 dark:bg-amber-500/20 dark:text-amber-100 dark:ring-amber-400/50',
+          title: 'Subscription on hold',
+          subtitle:
+            'Your subscription is currently paused. You can resume it anytime to regain full access.',
+          buttonLabel: 'Resume Access',
+          buttonClass:
+            'border border-amber-400/80 bg-amber-400/15 text-amber-950 shadow-sm hover:bg-amber-400/25 dark:text-amber-50'
         };
       }
 
@@ -1203,17 +1231,33 @@ export default function ScholarshipProfileForm({
                         type="button"
                         onClick={
                           paymentFailed
-                            ? () => onManageSubscription()
-                            : subscriptionType === 'none'
                             ? () => {
-                                void onStartTrial();
+                                const href = billingFixHref;
+                                if (href.startsWith('http')) {
+                                  window.location.assign(href);
+                                } else {
+                                  void router.push(href.startsWith('/') ? href : `/${href}`);
+                                }
                               }
-                            : () => onManageSubscription()
+                            : subscriptionPaused
+                              ? () => {
+                                  const href = resumeSubscriptionHref;
+                                  if (href.startsWith('http')) {
+                                    window.location.assign(href);
+                                  } else {
+                                    void router.push(href.startsWith('/') ? href : `/${href}`);
+                                  }
+                                }
+                              : subscriptionType === 'none'
+                                ? () => {
+                                    void onStartTrial();
+                                  }
+                                : () => onManageSubscription()
                         }
                         className={
                           subscriptionType === 'trial'
                             ? `group relative w-full px-8 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 inline-flex items-center justify-center text-center text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${subscriptionStatusUi.buttonClass}`
-                            : `${subscriptionButtonBaseClass} ${subscriptionStatusUi.buttonClass}${
+                            : `${subscriptionButtonBaseClass} inline-flex items-center justify-center gap-2 ${subscriptionStatusUi.buttonClass}${
                                 subscriptionType === 'none'
                                   ? ' md:whitespace-nowrap md:px-6 md:py-2.5 md:text-[0.8125rem] md:leading-tight'
                                   : ''
@@ -1221,7 +1265,9 @@ export default function ScholarshipProfileForm({
                         }
                       >
                         <span>{subscriptionStatusUi.buttonLabel}</span>
-                        {subscriptionType === 'trial' ? (
+                        {paymentFailed ? (
+                          <ExternalLink className="h-4 w-4 shrink-0 opacity-90" strokeWidth={2} aria-hidden />
+                        ) : subscriptionType === 'trial' ? (
                           <ArrowRight
                             className="pointer-events-none absolute right-5 top-1/2 h-4 w-4 -translate-y-1/2 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
                             strokeWidth={2}
@@ -1263,7 +1309,8 @@ export default function ScholarshipProfileForm({
                       : 'h-full justify-center px-8 py-6'
                 }`}
               >
-                {subscriptionType === 'none' || subscriptionType === 'trial' ? (
+                {!paymentFailed &&
+                (subscriptionType === 'none' || subscriptionType === 'trial') ? (
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-700 text-center md:text-left">
                     Stop Searching. Start Winning.
                   </p>
@@ -1316,6 +1363,18 @@ export default function ScholarshipProfileForm({
                         </button>
                       </div>
                     </div>
+                  </div>
+                ) : paymentFailed ? (
+                  <div className="mt-2 md:mt-0">
+                    <PremiumLockedDuringPastDueCard />
+                  </div>
+                ) : subscriptionPaused ? (
+                  <div
+                    className="mt-2 rounded-xl border border-amber-300/50 bg-amber-400/10 px-4 py-3 text-left text-sm leading-snug text-amber-950 shadow-sm ring-1 ring-amber-400/20 dark:bg-amber-500/10 dark:text-amber-50 dark:ring-amber-500/25"
+                    role="status"
+                  >
+                    Premium tools stay paused until you resume your subscription from the billing
+                    portal.
                   </div>
                 ) : (
                   <div className="mt-4 space-y-4 text-center md:mt-3 md:space-y-3 md:text-left">

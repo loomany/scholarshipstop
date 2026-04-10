@@ -3,7 +3,10 @@
 import Link from 'next/link';
 import type { User } from '@supabase/supabase-js';
 
+import SubscriptionPausedBanner from '@/components/billing/SubscriptionPausedBanner';
 import ScholarshipProfileForm from '@/components/ui/AccountForms/ScholarshipProfileForm';
+import { resolveResumeSubscriptionHref } from '@/lib/payments/billingUrls';
+import { deriveSubscriptionPresentation } from '@/lib/payments/subscriptionEntitlements';
 import type { Database, Tables } from '@/types_db';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
@@ -40,10 +43,17 @@ export default function AccountDashboardClient({
           ? true
           : false;
 
+  const subscriptionPresentation = deriveSubscriptionPresentation(profile, subscription);
+  const subscriptionPaused = subscriptionPresentation.status === 'paused';
+  const pausedResumeUrl = resolveResumeSubscriptionHref(subscription, '/subscription');
+
   return (
     <div className="min-h-screen bg-zinc-50/90">
       <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 lg:px-8">
         <section id="account-section-profile" className="scroll-mt-20 space-y-6 pb-16">
+          {subscriptionPaused ? (
+            <SubscriptionPausedBanner resumeUrl={pausedResumeUrl} className="shadow-sm" />
+          ) : null}
           <ScholarshipProfileForm
             profile={profile}
             subscription={subscription}

@@ -27,11 +27,14 @@ declare global {
 function PlanTrialBetweenFeaturesAndCta({
   manageSubscriptionUrl,
   updatePaymentUrl,
-  showUpdatePaymentAction = false
+  showUpdatePaymentAction = false,
+  pastDueBillingAccent = false
 }: {
   manageSubscriptionUrl?: string | null;
   updatePaymentUrl?: string | null;
   showUpdatePaymentAction?: boolean;
+  /** Strong visual cue when payment failed (past_due). */
+  pastDueBillingAccent?: boolean;
 }) {
   return (
     <div className="flex w-full max-w-md shrink-0 flex-col items-center justify-center border-t border-gray-100 pt-4 lg:w-[12rem] lg:max-w-[13rem] lg:min-w-[10.5rem] lg:items-stretch lg:border-l lg:border-t-0 lg:pl-3 lg:pr-0 lg:pt-0 xl:w-[13rem]">
@@ -61,7 +64,12 @@ function PlanTrialBetweenFeaturesAndCta({
         <button
           type="button"
           onClick={() => window.location.assign(updatePaymentUrl)}
-          className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-center text-xs font-semibold text-amber-900 transition hover:bg-amber-100 sm:text-sm"
+          className={cn(
+            'mt-3 inline-flex w-full items-center justify-center rounded-xl px-3 py-2 text-center text-xs font-semibold transition sm:text-sm',
+            pastDueBillingAccent
+              ? 'border-2 border-orange-500 bg-orange-50 text-orange-950 shadow-sm shadow-orange-500/20 ring-2 ring-orange-500/75 hover:bg-orange-100 dark:bg-orange-950/40 dark:text-orange-50 dark:ring-orange-400/80'
+              : 'border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100'
+          )}
         >
           Update Billing Info
         </button>
@@ -107,6 +115,7 @@ type PlanRowProps = {
   isCurrentPlan?: boolean;
   showResumeAction?: boolean;
   showUpdatePaymentAction?: boolean;
+  pastDueBillingAccent?: boolean;
   isLoading: boolean;
   isBusy: boolean;
   onSelect: (planKey: BillingPlanKey, title: string) => void;
@@ -130,6 +139,7 @@ function PlanGrantCard({
   isCurrentPlan = false,
   showResumeAction = false,
   showUpdatePaymentAction = false,
+  pastDueBillingAccent = false,
   isLoading,
   isBusy,
   onSelect
@@ -176,6 +186,7 @@ function PlanGrantCard({
           manageSubscriptionUrl={manageSubscriptionUrl}
           updatePaymentUrl={updatePaymentUrl}
           showUpdatePaymentAction={showUpdatePaymentAction}
+          pastDueBillingAccent={pastDueBillingAccent}
         />
 
         <div className="flex w-full max-w-md shrink-0 flex-col items-center gap-2 border-t border-gray-100 pt-4 lg:max-w-none lg:w-44 lg:items-stretch lg:justify-center lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0">
@@ -301,7 +312,8 @@ export default function SubscriptionPricingClient({
   manageSubscriptionUrl = null,
   updatePaymentUrl = null,
   showResumeAction = false,
-  showUpdatePaymentAction = false
+  showUpdatePaymentAction = false,
+  pastDueBillingAccent = false
 }: {
   currentPlanKey?: BillingPlanKey | null;
   /** When set, overrides the legacy heuristic (`currentPlanKey !== null`). */
@@ -310,6 +322,7 @@ export default function SubscriptionPricingClient({
   updatePaymentUrl?: string | null;
   showResumeAction?: boolean;
   showUpdatePaymentAction?: boolean;
+  pastDueBillingAccent?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
@@ -377,6 +390,7 @@ export default function SubscriptionPricingClient({
             isCurrentPlan={currentPlanKey === plan.planKey}
             showResumeAction={showResumeAction}
             showUpdatePaymentAction={showUpdatePaymentAction}
+            pastDueBillingAccent={pastDueBillingAccent}
             isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}

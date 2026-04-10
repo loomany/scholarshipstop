@@ -40,6 +40,7 @@ export async function runInvoicePaymentFailedWebhookEffects(
     payload.data?.id != null ? String(payload.data.id) : '';
   if (!invoiceId) return 'skipped';
 
+  /** One email + one admin log per Lemon invoice id (retries / debugger replays do not resend). */
   const { data: dup } = await admin
     .from('telegram_event_logs')
     .select('id')

@@ -3,8 +3,16 @@
 import { useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 
-import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
-import { hasActiveSubscriptionAccess } from '@/lib/payments/subscriptionEntitlements';
+import SubscriptionPausedBanner from '@/components/billing/SubscriptionPausedBanner';
+import { resolveResumeSubscriptionHref } from '@/lib/payments/billingUrls';
+import {
+  normalizeSubscriptionStatus,
+  pickCanonicalSubscription
+} from '@/lib/payments/subscriptionAccess';
+import {
+  hasActiveSubscriptionAccess,
+  type SubscriptionWithPriceAndProduct
+} from '@/lib/payments/subscriptionEntitlements';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
 
@@ -23,6 +31,8 @@ export default function AuthStatusProvider({
   const [user, setUser] = useState<User | null>(null);
   const [hasSubscription, setHasSubscription] = useState(false);
   const [authResolved, setAuthResolved] = useState(false);
+  const [subscriptionPaused, setSubscriptionPaused] = useState(false);
+  const [pausedResumeUrl, setPausedResumeUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -31,6 +41,8 @@ export default function AuthStatusProvider({
       setUser(nextUser);
       if (!nextUser) {
         setHasSubscription(false);
+        setSubscriptionPaused(false);
+        setPausedResumeUrl(null);
         setAuthResolved(true);
         return;
       }
@@ -47,8 +59,15 @@ export default function AuthStatusProvider({
           .order('created', { ascending: false })
           .limit(20)
       ]);
-      const subscription = pickCanonicalSubscription(subscriptions ?? []);
+      const subscription = pickCanonicalSubscription(
+        (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
+      ) as SubscriptionWithPriceAndProduct | null;
       setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
+      const paused = normalizeSubscriptionStatus(subscription?.status) === 'paused';
+      setSubscriptionPaused(paused);
+      setPausedResumeUrl(
+        paused ? resolveResumeSubscriptionHref(subscription, '/subscription') : null
+      );
       setAuthResolved(true);
     };
 
@@ -82,6 +101,13 @@ export default function AuthStatusProvider({
 
   return (
     <>
+      {authResolved && user && subscriptionPaused && pausedResumeUrl ? (
+        <div className="sticky top-0 z-40 border-b border-amber-200/50 bg-zinc-50/95 px-4 py-3 backdrop-blur-sm dark:border-amber-500/20 dark:bg-zinc-950/90">
+          <div className="mx-auto max-w-5xl">
+            <SubscriptionPausedBanner resumeUrl={pausedResumeUrl} />
+          </div>
+        </div>
+      ) : null}
       {children({
         user,
         isAuthenticated: Boolean(user),
