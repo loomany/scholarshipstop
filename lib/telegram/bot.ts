@@ -19,6 +19,17 @@ type TelegramReplyMarkup = {
   inline_keyboard: TelegramInlineButton[][];
 };
 
+type TelegramKeyboardButton = {
+  text: string;
+};
+
+type TelegramReplyKeyboardMarkup = {
+  keyboard: TelegramKeyboardButton[][];
+  resize_keyboard?: boolean;
+  is_persistent?: boolean;
+  one_time_keyboard?: boolean;
+};
+
 type TelegramFrom = {
   id: number;
   username?: string;
@@ -64,6 +75,17 @@ const CALLBACKS = {
   mainMenu: 'tg:menu',
   myProfile: 'tg:profile',
   toggleAlerts: 'tg:toggle-alerts'
+} as const;
+
+const BUTTON_LABELS = {
+  admin: 'Admin',
+  alertsOff: 'Alerts: OFF',
+  alertsOn: 'Alerts: ON',
+  backToMenu: 'Back to Menu',
+  connectAccount: 'Connect Account',
+  findScholarships: 'Find Scholarships',
+  myProfile: 'My Profile',
+  reconnectAccount: 'Reconnect Account'
 } as const;
 
 function getTelegramBotToken() {
@@ -119,29 +141,46 @@ function button(text: string, callback_data: string): TelegramInlineButton {
   return { text, callback_data };
 }
 
-function buildMainMenu(user: TelegramUserRow): TelegramReplyMarkup {
-  const rows: TelegramInlineButton[][] = [
-    [button('Find Scholarships', CALLBACKS.findScholarships)],
-    [button('My Profile', CALLBACKS.myProfile)]
+function keyboardButton(text: string): TelegramKeyboardButton {
+  return { text };
+}
+
+function buildMainKeyboard(): TelegramReplyKeyboardMarkup {
+  return {
+    keyboard: [
+      [keyboardButton(BUTTON_LABELS.findScholarships)],
+      [keyboardButton(BUTTON_LABELS.myProfile)]
+    ],
+    resize_keyboard: true,
+    is_persistent: true
+  };
+}
+
+function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarkup {
+  const rows: TelegramKeyboardButton[][] = [
+    [
+      keyboardButton(
+        user.app_user_id ? BUTTON_LABELS.reconnectAccount : BUTTON_LABELS.connectAccount
+      )
+    ]
   ];
 
-  if (user.app_user_id) {
-    rows.push([button('Reconnect Account', CALLBACKS.connect)]);
-  } else {
-    rows.push([button('Connect Account', CALLBACKS.connect)]);
-  }
-
   if (user.is_admin) {
-    rows.push([button('Admin', CALLBACKS.admin)]);
+    rows.push([keyboardButton(BUTTON_LABELS.admin)]);
     rows.push([
-      button(
-        user.notifications_enabled ? 'Alerts: ON' : 'Alerts: OFF',
-        CALLBACKS.toggleAlerts
+      keyboardButton(
+        user.notifications_enabled ? BUTTON_LABELS.alertsOn : BUTTON_LABELS.alertsOff
       )
     ]);
   }
 
-  return { inline_keyboard: rows };
+  rows.push([keyboardButton(BUTTON_LABELS.backToMenu)]);
+
+  return {
+    keyboard: rows,
+    resize_keyboard: true,
+    is_persistent: true
+  };
 }
 
 function formatPlanLabel(plan: string | null | undefined, isSubscribed: boolean) {
@@ -256,7 +295,7 @@ async function callTelegramApi<T>(method: string, payload: Record<string, unknow
 async function sendTelegramMessage(
   chatId: number,
   text: string,
-  replyMarkup?: TelegramReplyMarkup
+  replyMarkup?: TelegramReplyMarkup | TelegramReplyKeyboardMarkup
 ) {
   await callTelegramApi('sendMessage', {
     chat_id: chatId,
@@ -556,7 +595,7 @@ async function sendWelcomeMessage(user: TelegramUserRow) {
         'Start by connecting your account with a secure email code.'
       ].join('\n');
 
-  await sendTelegramMessage(user.telegram_chat_id, text, buildMainMenu(user));
+  await sendTelegramMessage(user.telegram_chat_id, text, buildMainKeyboard());
 }
 
 async function sendScholarshipPlaceholder(user: TelegramUserRow) {
@@ -566,7 +605,7 @@ async function sendScholarshipPlaceholder(user: TelegramUserRow) {
       'Find Scholarships is coming next inside Telegram.',
       `For now, open the full search experience here: ${getSiteUrl()}/scholarships`
     ].join('\n'),
-    buildMainMenu(user)
+    buildMainKeyboard()
   );
 }
 
@@ -575,7 +614,7 @@ async function sendProfileSummary(user: TelegramUserRow) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Your Telegram account is not connected yet. Tap Connect Account first.',
-      buildMainMenu(user)
+      buildProfileKeyboard(user)
     );
     return;
   }
@@ -597,7 +636,7 @@ async function sendProfileSummary(user: TelegramUserRow) {
   await sendTelegramMessage(
     user.telegram_chat_id,
     formatProfileMessage(authUser, profileResult.data, linkedAt),
-    buildMainMenu(user)
+    buildProfileKeyboard(user)
   );
 }
 
@@ -606,7 +645,7 @@ async function sendAdminPanel(user: TelegramUserRow) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Admin access is not enabled for this Telegram account.',
-      buildMainMenu(user)
+      buildProfileKeyboard(user)
     );
     return;
   }
@@ -651,7 +690,7 @@ async function sendAdminPanel(user: TelegramUserRow) {
       'Latest events',
       latestLines
     ].join('\n'),
-    buildMainMenu(user)
+    buildProfileKeyboard(user)
   );
 }
 
@@ -667,7 +706,7 @@ async function startConnectFlow(user: TelegramUserRow) {
       'Send the email address you use on ScholarshipTop.',
       'I will email you a one-time code and then connect your Telegram account securely.'
     ].join('\n'),
-    buildMainMenu(nextUser ?? user)
+    buildProfileKeyboard(nextUser ?? user)
   );
 }
 
@@ -678,7 +717,7 @@ async function handleEmailInput(user: TelegramUserRow, rawText: string) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'That does not look like a valid email address. Please send a valid email.',
-      buildMainMenu(user)
+      buildProfileKeyboard(user)
     );
     return;
   }
@@ -691,7 +730,7 @@ async function handleEmailInput(user: TelegramUserRow, rawText: string) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'I could not find a ScholarshipTop account for that email. Try another one or sign up on the site first.',
-      buildMainMenu(user)
+      buildProfileKeyboard(user)
     );
     return;
   }
@@ -708,7 +747,7 @@ async function handleEmailInput(user: TelegramUserRow, rawText: string) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'I could not send the email code right now. Please try again in a minute.',
-      buildMainMenu(user)
+      buildProfileKeyboard(user)
     );
     return;
   }
@@ -742,7 +781,7 @@ async function handleEmailInput(user: TelegramUserRow, rawText: string) {
       `I sent a 6-digit code to ${authUser.email}.`,
       'Reply with that code here. It expires in 10 minutes.'
     ].join('\n'),
-    buildMainMenu(nextUser ?? user)
+    buildProfileKeyboard(nextUser ?? user)
   );
 }
 
@@ -752,7 +791,7 @@ async function handleCodeInput(user: TelegramUserRow, rawText: string) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Please send the 6-digit code from your email.',
-      buildMainMenu(user)
+      buildProfileKeyboard(user)
     );
     return;
   }
@@ -777,7 +816,7 @@ async function handleCodeInput(user: TelegramUserRow, rawText: string) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Your code is missing or expired. Send your email again to request a new one.',
-      buildMainMenu(nextUser ?? user)
+      buildProfileKeyboard(nextUser ?? user)
     );
     return;
   }
@@ -799,7 +838,7 @@ async function handleCodeInput(user: TelegramUserRow, rawText: string) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'That code has expired. Send your email again and I will issue a new code.',
-      buildMainMenu(nextUser ?? user)
+      buildProfileKeyboard(nextUser ?? user)
     );
     return;
   }
@@ -832,7 +871,7 @@ async function handleCodeInput(user: TelegramUserRow, rawText: string) {
       await sendTelegramMessage(
         user.telegram_chat_id,
         'Too many incorrect attempts. Send your email again to request a fresh code.',
-        buildMainMenu(resetUser ?? user)
+        buildProfileKeyboard(resetUser ?? user)
       );
       return;
     }
@@ -840,7 +879,7 @@ async function handleCodeInput(user: TelegramUserRow, rawText: string) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       `That code is incorrect. Attempts left: ${Math.max(0, 5 - attempts)}.`,
-      buildMainMenu(user)
+      buildProfileKeyboard(user)
     );
     return;
   }
@@ -875,7 +914,7 @@ async function handleCodeInput(user: TelegramUserRow, rawText: string) {
   await sendTelegramMessage(
     linkedUser.telegram_chat_id,
     'Your ScholarshipTop account is now connected to Telegram.',
-    buildMainMenu(linkedUser)
+    buildProfileKeyboard(linkedUser)
   );
   await sendProfileSummary(linkedUser);
 }
@@ -885,7 +924,7 @@ async function toggleAdminAlerts(user: TelegramUserRow) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Admin access is not enabled for this Telegram account.',
-      buildMainMenu(user)
+      buildProfileKeyboard(user)
     );
     return;
   }
@@ -897,7 +936,7 @@ async function toggleAdminAlerts(user: TelegramUserRow) {
   await sendTelegramMessage(
     user.telegram_chat_id,
     `Admin alerts are now ${(nextUser ?? user).notifications_enabled ? 'ON' : 'OFF'}.`,
-    buildMainMenu(nextUser ?? user)
+    buildProfileKeyboard(nextUser ?? user)
   );
 }
 
@@ -935,7 +974,40 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     }
 
     if (text === '/menu' || text === '/help') {
-      await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainMenu(user));
+      await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainKeyboard());
+      return;
+    }
+
+    if (text === BUTTON_LABELS.backToMenu) {
+      await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainKeyboard());
+      return;
+    }
+
+    if (text === BUTTON_LABELS.findScholarships) {
+      await sendScholarshipPlaceholder(user);
+      return;
+    }
+
+    if (text === BUTTON_LABELS.myProfile) {
+      await sendProfileSummary(user);
+      return;
+    }
+
+    if (
+      text === BUTTON_LABELS.connectAccount ||
+      text === BUTTON_LABELS.reconnectAccount
+    ) {
+      await startConnectFlow(user);
+      return;
+    }
+
+    if (text === BUTTON_LABELS.admin) {
+      await sendAdminPanel(user);
+      return;
+    }
+
+    if (text === BUTTON_LABELS.alertsOn || text === BUTTON_LABELS.alertsOff) {
+      await toggleAdminAlerts(user);
       return;
     }
 
@@ -952,7 +1024,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Use the buttons below to continue.',
-      buildMainMenu(user)
+      buildMainKeyboard()
     );
     return;
   }
@@ -986,7 +1058,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         return;
       case CALLBACKS.mainMenu:
       default:
-        await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainMenu(user));
+        await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainKeyboard());
     }
   }
 }
