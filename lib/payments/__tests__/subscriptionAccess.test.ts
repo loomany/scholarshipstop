@@ -23,6 +23,66 @@ test('treats cancelled subscriptions as active until the paid period ends', () =
   );
 });
 
+test('blocks access immediately for payment failures', () => {
+  assert.equal(
+    hasSubscriptionAccess({
+      status: 'subscription_payment_failed',
+      renewsAt: '2099-04-10T00:00:00.000Z'
+    }),
+    false
+  );
+  assert.equal(
+    hasSubscriptionAccess({
+      status: 'past_due',
+      renewsAt: '2099-04-10T00:00:00.000Z'
+    }),
+    false
+  );
+});
+
+test('blocks access for expired and paused states regardless of dates', () => {
+  assert.equal(
+    hasSubscriptionAccess({
+      status: 'expired',
+      renewsAt: '2099-04-10T00:00:00.000Z'
+    }),
+    false
+  );
+  assert.equal(
+    hasSubscriptionAccess({
+      status: 'paused',
+      renewsAt: '2099-04-10T00:00:00.000Z'
+    }),
+    false
+  );
+});
+
+test('allows access for active subscriptions', () => {
+  assert.equal(
+    hasSubscriptionAccess({
+      status: 'active'
+    }),
+    true
+  );
+});
+
+test('revokes access immediately for refunded subscriptions and orders', () => {
+  assert.equal(
+    hasSubscriptionAccess({
+      status: 'subscription_payment_refunded',
+      renewsAt: '2099-04-10T00:00:00.000Z'
+    }),
+    false
+  );
+  assert.equal(
+    hasSubscriptionAccess({
+      status: 'order_refunded',
+      renewsAt: '2099-04-10T00:00:00.000Z'
+    }),
+    false
+  );
+});
+
 test('event fingerprint depends on subscription state, not payload key order', () => {
   const left = createSubscriptionEventFingerprint({
     eventName: 'subscription_updated',

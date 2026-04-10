@@ -53,9 +53,12 @@ If you see `400 Invalid signature` in Lemon’s delivery log, the value in `LEMO
 - `subscription_expired`
 - `subscription_paused`
 - `subscription_unpaused`
+- `subscription_plan_changed`
 - `subscription_payment_success`
 - `subscription_payment_failed`
 - `subscription_payment_recovered`
+- `subscription_payment_refunded`
+- `order_refunded`
 
 Unknown events are acknowledged with `{ received: true, ignored: true }`.
 
@@ -67,6 +70,13 @@ Unknown events are acknowledged with `{ received: true, ignored: true }`.
   - `checkout[email]`
   - `checkout[custom][user_id]`
 - The success path currently redirects the browser to `/scholarships` when Lemon reports `Checkout.Success`
+
+## Access policy
+
+- `subscription_cancelled` keeps access until `ends_at` / `current_period_end` / `renews_at`
+- `subscription_payment_failed` maps to `past_due` and blocks access immediately (no grace period)
+- `subscription_payment_refunded` revokes access immediately
+- `subscription_payment_success`, `subscription_payment_failed`, `subscription_payment_recovered`, and `subscription_payment_refunded` invoice payloads are ignored for entitlement sync; only subscription-object payloads can change access
 
 ## User id resolution
 

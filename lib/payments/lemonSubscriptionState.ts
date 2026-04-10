@@ -1,5 +1,6 @@
 import type { Json, TablesInsert } from '@/types_db';
 import type { AppSubscriptionPlan } from '@/lib/payments/subscriptionEntitlements';
+import type { Database } from '@/types_db';
 import {
   createSubscriptionEventFingerprint,
   hasSubscriptionAccess,
@@ -107,6 +108,11 @@ export type LemonSubscriptionDecision =
     }
   | { kind: 'ignored'; eventName: string };
 
+type LemonAttributes =
+  | NonNullable<LemonWebhookPayload['data']>['attributes']
+  | LemonWebhookPayload['attributes']
+  | undefined;
+
 export function resolveUserId(payload: LemonWebhookPayload): string | null {
   const userId =
     payload.data?.attributes?.user_id ??
@@ -140,10 +146,7 @@ export function toSubscribedFromLemonStatus(status?: string): boolean {
 }
 
 function toSubscribedFromLemonAttributes(
-  attributes:
-    | LemonWebhookPayload['data']['attributes']
-    | LemonWebhookPayload['attributes']
-    | undefined
+  attributes: LemonAttributes
 ) {
   return hasSubscriptionAccess({
     status: attributes?.status,
@@ -175,12 +178,18 @@ function normalizeLemonEventName(eventName?: string) {
       return 'subscription_paused';
     case 'subscription.unpaused':
       return 'subscription_unpaused';
+    case 'subscription.plan_changed':
+      return 'subscription_plan_changed';
     case 'subscription.payment_failed':
       return 'subscription_payment_failed';
     case 'subscription.payment_recovered':
       return 'subscription_payment_recovered';
     case 'subscription.payment_success':
       return 'subscription_payment_success';
+    case 'subscription.payment_refunded':
+      return 'subscription_payment_refunded';
+    case 'order.refunded':
+      return 'order_refunded';
     default:
       return normalized.replace(/\./g, '_');
   }
@@ -188,7 +197,9 @@ function normalizeLemonEventName(eventName?: string) {
 
 function normalizeLemonStatus(status?: string) {
   const normalized = normalizeSubscriptionStatus(status);
-  return normalized === 'inactive' ? 'expired' : normalized;
+  return (normalized === 'inactive'
+    ? 'expired'
+    : normalized) as Database['public']['Enums']['subscription_status'];
 }
 
 function derivePlanCode(payload: LemonWebhookPayload): AppSubscriptionPlan {
@@ -196,6 +207,14 @@ function derivePlanCode(payload: LemonWebhookPayload): AppSubscriptionPlan {
   const normalizedStatus = normalizeLemonStatus(attributes?.status);
   if (normalizedStatus === 'trialing') {
     return 'trial';
+  }
+  if (
+    normalizedStatus === 'expired' ||
+    normalizedStatus === 'past_due' ||
+    normalizedStatus === 'paused' ||
+    normalizedStatus === 'unpaid'
+  ) {
+    return 'free';
   }
 
   const planText = `${attributes?.product_name ?? ''} ${attributes?.variant_name ?? ''}`.toLowerCase();
@@ -287,13 +306,14 @@ export function decideSubscriptionUpdate(
   payload: LemonWebhookPayload
 ): LemonSubscriptionDecision {
   const eventName = normalizeLemonEventName(payload.meta?.event_name);
-  if (eventName === 'order_created' && isOrderPayload(payload)) {
+  if ((eventName === 'order_created' || eventName === 'order_refunded') && isOrderPayload(payload)) {
     return { kind: 'ignored', eventName };
   }
   if (
     (eventName === 'subscription_payment_success' ||
       eventName === 'subscription_payment_failed' ||
-      eventName === 'subscription_payment_recovered') &&
+      eventName === 'subscription_payment_recovered' ||
+      eventName === 'subscription_payment_refunded') &&
     isSubscriptionInvoicePayload(payload)
   ) {
     // Invoice webhooks confirm billing outcomes, but they are not subscription objects.
@@ -314,9 +334,11 @@ export function decideSubscriptionUpdate(
     eventName === 'subscription_expired' ||
     eventName === 'subscription_paused' ||
     eventName === 'subscription_unpaused' ||
+    eventName === 'subscription_plan_changed' ||
     eventName === 'subscription_payment_success' ||
     eventName === 'subscription_payment_failed' ||
-    eventName === 'subscription_payment_recovered'
+    eventName === 'subscription_payment_recovered' ||
+    eventName === 'subscription_payment_refunded'
   ) {
     if (!userId) throw new Error('Missing user id in webhook payload.');
     return {

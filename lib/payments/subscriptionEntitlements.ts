@@ -326,6 +326,9 @@ export function deriveSubscriptionPresentation(
   );
   const endsAt = formatDate(effectiveSubscription?.ended_at ?? effectiveSubscription?.cancel_at);
   const providerStatus = normalizeSubscriptionStatus(effectiveSubscription?.status);
+  const cancelledButStillActive =
+    (providerStatus === 'cancelled' || providerStatus === 'canceled') &&
+    isWithinGracePeriod(effectiveSubscription, nowValue);
   const isSubscribed =
     plan !== 'free' &&
     (hasSubscriptionAccess(
@@ -342,7 +345,7 @@ export function deriveSubscriptionPresentation(
 
   return {
     plan,
-    label: DISPLAY_LABELS[plan],
+    label: cancelledButStillActive ? `${DISPLAY_LABELS[plan]} (Canceled)` : DISPLAY_LABELS[plan],
     status: providerStatus,
     isSubscribed,
     nextBillingDate,

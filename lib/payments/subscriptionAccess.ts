@@ -28,6 +28,7 @@ export function normalizeSubscriptionStatus(status: string | null | undefined) {
       return 'cancelled';
     case 'subscription_canceled':
       return 'canceled';
+    case 'subscription_plan_changed':
     case 'subscription_resumed':
     case 'subscription_payment_recovered':
     case 'subscription_payment_success':
@@ -35,6 +36,8 @@ export function normalizeSubscriptionStatus(status: string | null | undefined) {
       return 'active';
     case 'subscription_payment_failed':
       return 'past_due';
+    case 'subscription_payment_refunded':
+    case 'order_refunded':
     case 'subscription_expired':
       return 'expired';
     case 'subscription_paused':
