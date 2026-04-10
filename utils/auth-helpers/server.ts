@@ -10,6 +10,7 @@ import {
   getServerAuthResetPasswordUrl,
   getServerAuthSiteOrigin
 } from '@/utils/auth-email-redirect.server';
+import { sendPasswordResetEmail } from '@/lib/email/sendPasswordResetEmail';
 import { getErrorRedirect, getStatusRedirect } from 'utils/helpers';
 import { getAuthTypes } from 'utils/auth-helpers/settings';
 
@@ -95,44 +96,31 @@ export async function signInWithEmail(formData: FormData) {
 export async function requestPasswordUpdate(formData: FormData) {
   // Get form data
   const email = String(formData.get('email')).trim();
-  let redirectPath: string;
 
   if (!isValidEmail(email)) {
-    redirectPath = getErrorRedirect(
+    return getErrorRedirect(
       '/signin/forgot_password',
       'Invalid email address.',
       'Please try again.'
     );
   }
 
-  const supabase = createClient();
+  const result = await sendPasswordResetEmail(email);
 
-  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: getServerAuthResetPasswordUrl()
-  });
-
-  if (error) {
-    redirectPath = getErrorRedirect(
+  if (!result.ok) {
+    return getErrorRedirect(
       '/signin/forgot_password',
-      error.message,
-      'Please try again.'
-    );
-  } else if (data) {
-    redirectPath = getStatusRedirect(
-      '/signin/forgot_password',
-      'Success!',
-      'Please check your email for a password reset link. You may now close this tab.',
-      true
-    );
-  } else {
-    redirectPath = getErrorRedirect(
-      '/signin/forgot_password',
-      'Hmm... Something went wrong.',
-      'Password reset email could not be sent.'
+      'Password reset email could not be sent.',
+      result.skipped ?? 'Please try again.'
     );
   }
 
-  return redirectPath;
+  return getStatusRedirect(
+    '/signin/forgot_password',
+    'Success!',
+    'Please check your email for a password reset link. You may now close this tab.',
+    true
+  );
 }
 
 export async function signInWithPassword(formData: FormData) {
@@ -164,7 +152,7 @@ export async function signInWithPassword(formData: FormData) {
     redirectPath = getErrorRedirect(
       '/signin/password_signin',
       'Hmm... Something went wrong.',
-      'You could not be signed in.'
+      'Please try again.'
     );
   }
 

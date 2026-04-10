@@ -53,7 +53,7 @@ export default function ForgotPassword({
         </div>
         <button
           type="submit"
-          disabled={disableButton || isSubmitting}
+          disabled={isSubmitting}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
           {isSubmitting ? 'Sending…' : 'Send reset link'}
