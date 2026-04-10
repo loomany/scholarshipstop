@@ -25,6 +25,26 @@ const supabaseAdmin = createClient<Database>(
   process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
+function parseIsoDate(value: string | null | undefined) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function getPayloadUpdatedAt(payload: LemonWebhookPayload): string | null {
+  const value = payload.data?.attributes?.updated_at ?? payload.attributes?.updated_at ?? null;
+  return typeof value === 'string' && value.trim() ? value : null;
+}
+
+function getStoredPayloadUpdatedAt(rawPayload: Json | null): string | null {
+  if (!rawPayload || typeof rawPayload !== 'object' || Array.isArray(rawPayload)) {
+    return null;
+  }
+
+  const payload = rawPayload as LemonWebhookPayload;
+  return getPayloadUpdatedAt(payload);
+}
+
 function shouldSkipSignatureValidation() {
   return process.env.NODE_ENV !== 'production' && process.env.LEMON_WEBHOOK_SKIP_SIGNATURE === '1';
 }
@@ -134,6 +154,9 @@ export async function POST(req: Request) {
       typeof nextMetadata?.lemon_event_fingerprint === 'string'
         ? nextMetadata.lemon_event_fingerprint
         : null;
+    const existingUpdatedAt = getStoredPayloadUpdatedAt(existingSubscription?.raw_payload ?? null);
+    const incomingUpdatedAt = getPayloadUpdatedAt(payload);
+
     if (
       (existingEventFingerprint && nextEventFingerprint && existingEventFingerprint === nextEventFingerprint) ||
       (existingSubscription?.raw_payload &&
@@ -149,6 +172,27 @@ export async function POST(req: Request) {
       });
     }
 
+    if (existingUpdatedAt && incomingUpdatedAt) {
+      const existingUpdatedAtDate = parseIsoDate(existingUpdatedAt);
+      const incomingUpdatedAtDate = parseIsoDate(incomingUpdatedAt);
+      if (
+        existingUpdatedAtDate &&
+        incomingUpdatedAtDate &&
+        incomingUpdatedAtDate.getTime() < existingUpdatedAtDate.getTime()
+      ) {
+        console.info('[lemon:webhook] stale payload ignored', {
+          subscriptionId: decision.subscription.id,
+          userId: decision.userId,
+          existingUpdatedAt,
+          incomingUpdatedAt,
+          eventName: decision.eventName
+        });
+        return new Response(JSON.stringify({ received: true, stale: true }), {
+          status: 200
+        });
+      }
+    }
+
     console.info('[lemon:webhook] upserting subscription', {
       subscriptionId: decision.subscription.id,
       userId: decision.userId
@@ -162,6 +206,8 @@ export async function POST(req: Request) {
         code: subscriptionError.code,
         details: subscriptionError.details,
         hint: subscriptionError.hint,
+        incomingStatus: decision.subscription.status,
+        incomingUpdatedAt,
         subscriptionId: decision.subscription.id,
         userId: decision.userId
       });

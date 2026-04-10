@@ -42,7 +42,7 @@ export default function AuthStatusProvider({
         .maybeSingle<Database['public']['Tables']['profiles']['Row']>(),
         supabase
           .from('subscriptions')
-          .select('*, prices(*, products(*))')
+          .select('*')
           .eq('user_id', nextUser.id)
           .order('created', { ascending: false })
           .limit(20)
