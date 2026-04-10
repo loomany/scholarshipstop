@@ -8,6 +8,9 @@ export const EMAIL_SUBJECT_SUBSCRIPTION_ACTIVE =
 export const EMAIL_SUBJECT_SUBSCRIPTION_CANCELLED =
   'Your ScholarshipTop subscription has been cancelled';
 
+export const EMAIL_SUBJECT_SUBSCRIPTION_PAYMENT_FAILED =
+  'Action Required: Payment Failed';
+
 export type SubscriptionActiveEmailParams = {
   siteOrigin: string;
   /** e.g. "Monthly Plan", "Quarterly Plan", "Annual Plan" — from Lemon `product_name` + tier logic */
@@ -99,6 +102,32 @@ export function buildSubscriptionCancelledEmailHtml(
     ],
     ctaHref: params.billingPortalUrl,
     ctaLabel: 'Reactivate Subscription',
+    siteOrigin: origin,
+    unsubscribeUrl: unsub,
+    secondaryLinkNote: ''
+  });
+}
+
+export type SubscriptionPaymentFailedEmailParams = {
+  siteOrigin: string;
+  updatePaymentUrl: string;
+  unsubscribeUrl?: string;
+};
+
+export function buildSubscriptionPaymentFailedEmailHtml(
+  params: SubscriptionPaymentFailedEmailParams
+): string {
+  const origin = params.siteOrigin.replace(/\/+$/, '');
+  const unsub = params.unsubscribeUrl ?? defaultEmailUnsubscribeUrl(origin);
+
+  return buildScholarshipTopPremiumEmailHtml({
+    preheader: 'Action required: we could not process your subscription renewal payment.',
+    headline: 'Action Required: Payment Failed',
+    bodyParagraphsHtml: [
+      `Hi there. Your 3-day free trial on ScholarshipTop has ended. Unfortunately, we couldn&rsquo;t process your payment for the subscription renewal, so your access is temporarily paused. This usually happens if a card has expired, has insufficient funds, or the bank declined the transaction. Please update your billing information to restore your access to our scholarship database.`
+    ],
+    ctaHref: params.updatePaymentUrl,
+    ctaLabel: 'Update Billing Info',
     siteOrigin: origin,
     unsubscribeUrl: unsub,
     secondaryLinkNote: ''

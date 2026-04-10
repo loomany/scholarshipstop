@@ -25,9 +25,13 @@ declare global {
 
 /** Compact trial note — same language as `ScholarshipsEmailConfirmationBanner`. */
 function PlanTrialBetweenFeaturesAndCta({
-  manageSubscriptionUrl
+  manageSubscriptionUrl,
+  updatePaymentUrl,
+  showUpdatePaymentAction = false
 }: {
   manageSubscriptionUrl?: string | null;
+  updatePaymentUrl?: string | null;
+  showUpdatePaymentAction?: boolean;
 }) {
   return (
     <div className="flex w-full max-w-md shrink-0 flex-col items-center justify-center border-t border-gray-100 pt-4 lg:w-[12rem] lg:max-w-[13rem] lg:min-w-[10.5rem] lg:items-stretch lg:border-l lg:border-t-0 lg:pl-3 lg:pr-0 lg:pt-0 xl:w-[13rem]">
@@ -51,6 +55,15 @@ function PlanTrialBetweenFeaturesAndCta({
           className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-zinc-300 bg-white px-3 py-2 text-center text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 sm:text-sm"
         >
           Manage Subscription
+        </button>
+      ) : null}
+      {showUpdatePaymentAction && updatePaymentUrl ? (
+        <button
+          type="button"
+          onClick={() => window.location.assign(updatePaymentUrl)}
+          className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-center text-xs font-semibold text-amber-900 transition hover:bg-amber-100 sm:text-sm"
+        >
+          Update Billing Info
         </button>
       ) : null}
     </div>
@@ -90,8 +103,10 @@ type PlanRowProps = {
   ctaAbove?: ReactNode;
   hasActiveSubscription?: boolean;
   manageSubscriptionUrl?: string | null;
+  updatePaymentUrl?: string | null;
   isCurrentPlan?: boolean;
   showResumeAction?: boolean;
+  showUpdatePaymentAction?: boolean;
   isLoading: boolean;
   isBusy: boolean;
   onSelect: (planKey: BillingPlanKey, title: string) => void;
@@ -111,8 +126,10 @@ function PlanGrantCard({
   ctaAbove,
   hasActiveSubscription = false,
   manageSubscriptionUrl = null,
+  updatePaymentUrl = null,
   isCurrentPlan = false,
   showResumeAction = false,
+  showUpdatePaymentAction = false,
   isLoading,
   isBusy,
   onSelect
@@ -155,7 +172,11 @@ function PlanGrantCard({
           <PlanFeatureList items={features} />
         </div>
 
-        <PlanTrialBetweenFeaturesAndCta manageSubscriptionUrl={manageSubscriptionUrl} />
+        <PlanTrialBetweenFeaturesAndCta
+          manageSubscriptionUrl={manageSubscriptionUrl}
+          updatePaymentUrl={updatePaymentUrl}
+          showUpdatePaymentAction={showUpdatePaymentAction}
+        />
 
         <div className="flex w-full max-w-md shrink-0 flex-col items-center gap-2 border-t border-gray-100 pt-4 lg:max-w-none lg:w-44 lg:items-stretch lg:justify-center lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0">
           {ctaAbove}
@@ -278,13 +299,17 @@ export default function SubscriptionPricingClient({
   currentPlanKey = null,
   hasActiveSubscription: hasActiveSubscriptionProp,
   manageSubscriptionUrl = null,
-  showResumeAction = false
+  updatePaymentUrl = null,
+  showResumeAction = false,
+  showUpdatePaymentAction = false
 }: {
   currentPlanKey?: BillingPlanKey | null;
   /** When set, overrides the legacy heuristic (`currentPlanKey !== null`). */
   hasActiveSubscription?: boolean;
   manageSubscriptionUrl?: string | null;
+  updatePaymentUrl?: string | null;
   showResumeAction?: boolean;
+  showUpdatePaymentAction?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
@@ -348,8 +373,10 @@ export default function SubscriptionPricingClient({
             ctaAbove={plan.ctaAbove}
             hasActiveSubscription={hasActiveSubscription}
             manageSubscriptionUrl={manageSubscriptionUrl}
+            updatePaymentUrl={updatePaymentUrl}
             isCurrentPlan={currentPlanKey === plan.planKey}
             showResumeAction={showResumeAction}
+            showUpdatePaymentAction={showUpdatePaymentAction}
             isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}

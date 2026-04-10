@@ -7,7 +7,10 @@ import {
   deriveSubscriptionPresentation,
   inferSubscriptionBillingTier
 } from '@/lib/payments/subscriptionEntitlements';
-import { extractLemonCustomerPortalUrl } from '@/lib/payments/lemonSubscriptionState';
+import {
+  extractLemonCustomerPortalUrl,
+  extractLemonUpdatePaymentMethodUrl
+} from '@/lib/payments/lemonSubscriptionState';
 import { createClient } from '@/utils/supabase/server';
 import { getSubscription, getUser } from '@/utils/supabase/queries';
 import type { BillingPlanKey } from '@/app/actions/billing';
@@ -29,6 +32,15 @@ function getManageSubscriptionUrlFromRow(row: unknown): string | null {
   );
 }
 
+function getUpdatePaymentUrlFromRow(row: unknown): string | null {
+  if (!row || typeof row !== 'object') return null;
+  const candidate = row as { provider?: unknown; raw_payload?: Json | null };
+  if (candidate.provider !== 'lemon_squeezy') return null;
+  return extractLemonUpdatePaymentMethodUrl(
+    candidate.raw_payload as Parameters<typeof extractLemonUpdatePaymentMethodUrl>[0]
+  );
+}
+
 export default async function SubscriptionPage() {
   noStore();
   const supabase = createClient();
@@ -40,10 +52,14 @@ export default async function SubscriptionPage() {
   const presentation = deriveSubscriptionPresentation(profile.data, subscription);
   const currentPlanKey: BillingPlanKey | null = presentation.isSubscribed
     ? inferSubscriptionBillingTier(subscription, profile.data)
-    : null;
+    : presentation.status === 'past_due'
+      ? inferSubscriptionBillingTier(subscription, profile.data)
+      : null;
   const manageSubscriptionUrl = getManageSubscriptionUrlFromRow(subscription);
+  const updatePaymentUrl = getUpdatePaymentUrlFromRow(subscription);
   const showResumeAction =
     presentation.status === 'cancelled' && presentation.isSubscribed && Boolean(manageSubscriptionUrl);
+  const showUpdatePaymentAction = presentation.status === 'past_due' && Boolean(updatePaymentUrl);
 
   return (
     <>
@@ -62,7 +78,9 @@ export default async function SubscriptionPage() {
             currentPlanKey={currentPlanKey}
             hasActiveSubscription={presentation.isSubscribed}
             manageSubscriptionUrl={manageSubscriptionUrl}
+            updatePaymentUrl={updatePaymentUrl}
             showResumeAction={showResumeAction}
+            showUpdatePaymentAction={showUpdatePaymentAction}
           />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">

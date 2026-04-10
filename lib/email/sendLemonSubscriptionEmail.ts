@@ -3,13 +3,16 @@ import 'server-only';
 import type { AppSubscriptionPlan } from '@/lib/payments/subscriptionEntitlements';
 import {
   extractLemonCustomerPortalUrl,
+  extractLemonUpdatePaymentMethodUrl,
   type LemonWebhookPayload
 } from '@/lib/payments/lemonSubscriptionState';
 import {
   buildSubscriptionActiveEmailHtml,
   buildSubscriptionCancelledEmailHtml,
+  buildSubscriptionPaymentFailedEmailHtml,
   EMAIL_SUBJECT_SUBSCRIPTION_ACTIVE,
-  EMAIL_SUBJECT_SUBSCRIPTION_CANCELLED
+  EMAIL_SUBJECT_SUBSCRIPTION_CANCELLED,
+  EMAIL_SUBJECT_SUBSCRIPTION_PAYMENT_FAILED
 } from '@/lib/email/templates/subscriptionEmailTemplates';
 import { defaultEmailUnsubscribeUrl } from '@/lib/email/templates/premiumTemplates';
 
@@ -85,6 +88,12 @@ export function lemonWebhookShouldSendSubscriptionCancelledEmail(
   return eventName === 'subscription_cancelled';
 }
 
+export function lemonWebhookShouldSendSubscriptionPaymentFailedEmail(
+  eventName: string
+): boolean {
+  return eventName === 'subscription_payment_failed';
+}
+
 async function postResend(params: {
   to: string;
   subject: string;
@@ -158,6 +167,29 @@ export async function sendLemonSubscriptionCancelledEmail(options: {
   return postResend({
     to: options.toEmail,
     subject: EMAIL_SUBJECT_SUBSCRIPTION_CANCELLED,
+    html
+  });
+}
+
+export async function sendLemonSubscriptionPaymentFailedEmail(options: {
+  toEmail: string;
+  payload: LemonWebhookPayload;
+}): Promise<{ ok: boolean; skipped?: string }> {
+  const origin = getEmailSiteOrigin();
+  const updatePaymentUrl = extractLemonUpdatePaymentMethodUrl(options.payload);
+  if (!updatePaymentUrl) {
+    return { ok: false, skipped: 'update_payment_method URL missing from payload' };
+  }
+
+  const html = buildSubscriptionPaymentFailedEmailHtml({
+    siteOrigin: origin,
+    updatePaymentUrl,
+    unsubscribeUrl: defaultEmailUnsubscribeUrl(origin)
+  });
+
+  return postResend({
+    to: options.toEmail,
+    subject: EMAIL_SUBJECT_SUBSCRIPTION_PAYMENT_FAILED,
     html
   });
 }

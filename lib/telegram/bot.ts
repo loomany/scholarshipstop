@@ -199,6 +199,72 @@ function formatPlanLabel(plan: string | null | undefined, isSubscribed: boolean)
   }
 }
 
+function formatAdminPlanLabel(plan: string | null | undefined, isSubscribed: boolean) {
+  switch (plan) {
+    case 'trial':
+      return 'Пробный период';
+    case 'monthly_pro':
+      return 'Премиум на месяц';
+    case 'quarterly_pro':
+      return 'Премиум на квартал';
+    case 'yearly_pro':
+      return 'Премиум на год';
+    case 'free':
+      return 'Бесплатный';
+    default:
+      return isSubscribed ? 'Платный' : 'Бесплатный';
+  }
+}
+
+function formatAdminStatusLabel(status: string | null | undefined) {
+  switch ((status ?? '').trim().toLowerCase()) {
+    case 'active':
+      return 'Активна';
+    case 'cancelled':
+    case 'canceled':
+      return 'Отменена';
+    case 'expired':
+      return 'Истекла';
+    case 'trialing':
+    case 'on_trial':
+      return 'Пробный период';
+    case 'paused':
+      return 'Приостановлена';
+    case 'past_due':
+      return 'Просрочена';
+    case 'unpaid':
+      return 'Не оплачена';
+    case 'refunded':
+      return 'Возврат';
+    default:
+      return formatValue(status, 'Не указан');
+  }
+}
+
+function formatAdminSourceLabel(source: string | null | undefined) {
+  switch ((source ?? '').trim().toLowerCase()) {
+    case 'app':
+      return 'сайт';
+    default:
+      return formatValue(source, 'не указан');
+  }
+}
+
+function formatAdminEventTypeLabel(eventType: string) {
+  switch (eventType) {
+    case 'payment':
+      return 'платеж';
+    case 'signup':
+      return 'регистрация';
+    case 'email_verified':
+      return 'почта подтверждена';
+    case 'bot_start':
+      return 'запуск бота';
+    default:
+      return eventType;
+  }
+}
+
 function formatValue(value: string | number | null | undefined, fallback = 'Not set') {
   if (value == null) return fallback;
   const text = String(value).trim();
@@ -258,15 +324,15 @@ function formatEventLine(event: {
       }).format(when);
 
   if (event.event_type === 'payment') {
-    return `• payment - ${plan ?? 'unknown plan'} - ${email ?? 'unknown user'} - ${stamp}`;
+    return `• платеж - ${formatAdminPlanLabel(plan, plan !== 'free')} - ${email ?? 'неизвестный пользователь'} - ${stamp}`;
   }
   if (event.event_type === 'signup') {
-    return `• signup - ${email ?? 'unknown email'}${source ? ` - ${source}` : ''} - ${stamp}`;
+    return `• регистрация - ${email ?? 'неизвестный email'}${source ? ` - ${formatAdminSourceLabel(source)}` : ''} - ${stamp}`;
   }
   if (event.event_type === 'email_verified') {
-    return `• verified - ${email ?? 'unknown email'} - ${stamp}`;
+    return `• почта подтверждена - ${email ?? 'неизвестный email'} - ${stamp}`;
   }
-  return `• ${event.event_type} - ${stamp}`;
+  return `• ${formatAdminEventTypeLabel(event.event_type)} - ${stamp}`;
 }
 
 async function callTelegramApi<T>(method: string, payload: Record<string, unknown>) {
@@ -527,9 +593,9 @@ export async function notifyTelegramSignup(payload: {
 
   await sendTelegramAdminBroadcast(
     [
-      'New ScholarshipTop signup',
+      'Новая регистрация в ScholarshipTop',
       `Email: ${payload.email}`,
-      `Source: ${payload.source ?? 'app'}`
+      `Источник: ${formatAdminSourceLabel(payload.source ?? 'app')}`
     ].join('\n')
   );
 }
@@ -549,7 +615,7 @@ export async function notifyTelegramEmailVerified(payload: {
   if (!inserted) return;
 
   await sendTelegramAdminBroadcast(
-    ['User verified email', `Email: ${payload.email}`].join('\n')
+    ['Пользователь подтвердил email', `Email: ${payload.email}`].join('\n')
   );
 }
 
@@ -573,10 +639,10 @@ export async function notifyTelegramPayment(payload: {
 
   await sendTelegramAdminBroadcast(
     [
-      'Payment event received',
-      `Plan: ${payload.plan}`,
-      `Status: ${payload.status}`,
-      `User: ${payload.email ?? payload.userId}`
+      'Получено платежное событие',
+      `Тариф: ${formatAdminPlanLabel(payload.plan, payload.plan !== 'free')}`,
+      `Статус: ${formatAdminStatusLabel(payload.status)}`,
+      `Пользователь: ${payload.email ?? payload.userId}`
     ].join('\n')
   );
 }
@@ -676,19 +742,19 @@ async function sendAdminPanel(user: TelegramUserRow) {
   const latestLines =
     latestResult.data && latestResult.data.length > 0
       ? latestResult.data.map(formatEventLine).join('\n')
-      : '• No recent events yet';
+      : '• Пока нет недавних событий';
 
   await sendTelegramMessage(
     user.telegram_chat_id,
     [
-      'ScholarshipTop admin panel',
+      'Админ-панель ScholarshipTop',
       '',
-      `Alerts: ${user.notifications_enabled ? 'ON' : 'OFF'}`,
-      `Signups (24h): ${signupCount.count ?? 0}`,
-      `Verified emails (24h): ${verifiedCount.count ?? 0}`,
-      `Payments (24h): ${paymentCount.count ?? 0}`,
+      `Уведомления: ${user.notifications_enabled ? 'включены' : 'выключены'}`,
+      `Регистрации за 24ч: ${signupCount.count ?? 0}`,
+      `Подтверждения email за 24ч: ${verifiedCount.count ?? 0}`,
+      `Платежи за 24ч: ${paymentCount.count ?? 0}`,
       '',
-      'Latest events',
+      'Последние события',
       latestLines
     ].join('\n'),
     buildProfileKeyboard(user)
@@ -936,7 +1002,7 @@ async function toggleAdminAlerts(user: TelegramUserRow) {
 
   await sendTelegramMessage(
     user.telegram_chat_id,
-    `Admin alerts are now ${(nextUser ?? user).notifications_enabled ? 'ON' : 'OFF'}.`,
+    `Уведомления администратора ${(nextUser ?? user).notifications_enabled ? 'включены' : 'выключены'}.`,
     buildProfileKeyboard(nextUser ?? user)
   );
 }

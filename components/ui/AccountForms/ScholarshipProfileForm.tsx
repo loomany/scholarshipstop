@@ -897,7 +897,21 @@ export default function ScholarshipProfileForm({
   if (isSaas) {
     const showSaasEmailStatus =
       userEmail != null && emailConfirmed !== undefined;
+    const paymentFailed = subscriptionPresentation.status === 'past_due';
     const subscriptionStatusUi = (() => {
+      if (paymentFailed) {
+        return {
+          badgeLabel: 'Payment Failed',
+          badgeClass: 'bg-amber-100 text-amber-800 font-medium ring-1 ring-amber-200',
+          title: 'Update Billing To Restore Access',
+          subtitle:
+            'We could not renew your subscription after the trial ended. Update your card to unlock access again.',
+          buttonLabel: 'Update Billing Info',
+          buttonClass:
+            'bg-amber-500 text-white shadow-sm hover:bg-amber-600 hover:shadow-md'
+        };
+      }
+
       switch (subscriptionType) {
         case 'trial':
           return {
@@ -1188,7 +1202,9 @@ export default function ScholarshipProfileForm({
                       <button
                         type="button"
                         onClick={
-                          subscriptionType === 'none'
+                          paymentFailed
+                            ? () => onManageSubscription()
+                            : subscriptionType === 'none'
                             ? () => {
                                 void onStartTrial();
                               }

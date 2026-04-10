@@ -47,6 +47,7 @@ export type LemonWebhookPayload = {
       urls?: {
         customer_portal?: string | null;
         customer_portal_update_subscription?: string | null;
+        update_payment_method?: string | null;
       } | null;
     };
   };
@@ -80,6 +81,7 @@ export type LemonWebhookPayload = {
     urls?: {
       customer_portal?: string | null;
       customer_portal_update_subscription?: string | null;
+      update_payment_method?: string | null;
     } | null;
   };
 };
@@ -95,6 +97,14 @@ export function extractLemonCustomerPortalUrl(
     urls?.customer_portal?.trim() ||
     '';
   return u || null;
+}
+
+export function extractLemonUpdatePaymentMethodUrl(
+  payload: LemonWebhookPayload
+): string | null {
+  const attrs = payload.data?.attributes ?? payload.attributes;
+  const url = attrs?.urls?.update_payment_method?.trim() || '';
+  return url || null;
 }
 
 export type LemonSubscriptionDecision =
@@ -261,12 +271,8 @@ function derivePlanCode(
   if (normalizedStatus === 'trialing') {
     return 'trial';
   }
-  if (
-    normalizedStatus === 'expired' ||
-    normalizedStatus === 'past_due' ||
-    normalizedStatus === 'paused' ||
-    normalizedStatus === 'unpaid'
-  ) {
+
+  if (normalizedStatus === 'expired') {
     return 'free';
   }
 
@@ -274,6 +280,17 @@ function derivePlanCode(
   if (planText.includes('year')) return 'yearly_pro';
   if (planText.includes('quarter')) return 'quarterly_pro';
   if (planText.includes('month')) return 'monthly_pro';
+  if (
+    normalizedStatus === 'active' ||
+    normalizedStatus === 'cancelled' ||
+    normalizedStatus === 'canceled' ||
+    normalizedStatus === 'past_due' ||
+    normalizedStatus === 'unpaid' ||
+    normalizedStatus === 'paused'
+  ) {
+    return 'monthly_pro';
+  }
+
   return toSubscribedFromLemonStatus(normalizedStatus) ? 'monthly_pro' : 'free';
 }
 

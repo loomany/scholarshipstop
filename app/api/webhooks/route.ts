@@ -12,8 +12,10 @@ import type { Json } from '@/types_db';
 import {
   sendLemonSubscriptionActiveEmail,
   sendLemonSubscriptionCancelledEmail,
+  sendLemonSubscriptionPaymentFailedEmail,
   lemonWebhookShouldSendSubscriptionActiveEmail,
-  lemonWebhookShouldSendSubscriptionCancelledEmail
+  lemonWebhookShouldSendSubscriptionCancelledEmail,
+  lemonWebhookShouldSendSubscriptionPaymentFailedEmail
 } from '@/lib/email/sendLemonSubscriptionEmail';
 import { notifyTelegramPayment } from '@/lib/telegram/bot';
 
@@ -288,6 +290,17 @@ export async function POST(req: Request) {
           });
           if (!r.ok) {
             console.warn('[lemon:webhook] subscription cancelled email not sent', {
+              userId: decision.userId,
+              skipped: r.skipped
+            });
+          }
+        } else if (lemonWebhookShouldSendSubscriptionPaymentFailedEmail(eventName)) {
+          const r = await sendLemonSubscriptionPaymentFailedEmail({
+            toEmail: email.trim(),
+            payload
+          });
+          if (!r.ok) {
+            console.warn('[lemon:webhook] subscription payment failed email not sent', {
               userId: decision.userId,
               skipped: r.skipped
             });

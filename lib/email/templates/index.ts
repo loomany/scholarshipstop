@@ -23,10 +23,13 @@ export type {
 export {
   EMAIL_SUBJECT_SUBSCRIPTION_ACTIVE,
   EMAIL_SUBJECT_SUBSCRIPTION_CANCELLED,
+  EMAIL_SUBJECT_SUBSCRIPTION_PAYMENT_FAILED,
   buildSubscriptionActiveEmailHtml,
-  buildSubscriptionCancelledEmailHtml
+  buildSubscriptionCancelledEmailHtml,
+  buildSubscriptionPaymentFailedEmailHtml
 } from '@/lib/email/templates/subscriptionEmailTemplates';
 export type {
   SubscriptionActiveEmailParams,
-  SubscriptionCancelledEmailParams
+  SubscriptionCancelledEmailParams,
+  SubscriptionPaymentFailedEmailParams
 } from '@/lib/email/templates/subscriptionEmailTemplates';
