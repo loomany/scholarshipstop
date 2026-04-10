@@ -3,6 +3,7 @@ import 'server-only';
 import { createHash, randomInt } from 'crypto';
 
 import { sendTelegramLinkCodeEmail } from '@/lib/email/sendTelegramLinkCodeEmail';
+import { sendTelegramResourceNotification } from '@/lib/telegram/notifyResources';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
 
@@ -94,12 +95,23 @@ function getTelegramBotToken() {
 
 function getTelegramAdminIds() {
   const raw = process.env.TELEGRAM_ADMIN_IDS?.trim() || '200082134';
-  return new Set(
+  const set = new Set(
     raw
       .split(',')
       .map((item) => Number(item.trim()))
       .filter((item) => Number.isFinite(item))
   );
+  const single = process.env.TELEGRAM_ADMIN_ID?.trim();
+  if (single) {
+    const n = Number(single);
+    if (Number.isFinite(n)) set.add(n);
+  }
+  return set;
+}
+
+function normalizeBotCommand(text: string): string {
+  const first = text.trim().split(/\s+/)[0] ?? '';
+  return first.split('@')[0] ?? '';
 }
 
 function getTelegramCodeSecret() {
@@ -1051,6 +1063,66 @@ async function toggleAdminAlerts(user: TelegramUserRow) {
   );
 }
 
+/** Admin-only: preview the latest published /resources article card in this chat. */
+async function sendTestResourceCard(user: TelegramUserRow) {
+  const admin = getAdminClient();
+  if (!admin) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Database is not configured.',
+      buildMainKeyboard()
+    );
+    return;
+  }
+
+  const { data: post, error } = await admin
+    .from('content_posts')
+    .select('title, slug, meta_description, cover_image_url, status')
+    .eq('status', 'published')
+    .not('slug', 'is', null)
+    .neq('slug', '')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error('[telegram] /testresources query failed', error.message);
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Could not load resources from the database.',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  if (!post?.slug) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'No published resource with a slug was found.',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  const ok = await sendTelegramResourceNotification(
+    {
+      title: post.title ?? 'Article',
+      description: post.meta_description,
+      image_url: post.cover_image_url,
+      slug: post.slug
+    },
+    { targetChatIds: [user.telegram_chat_id] }
+  );
+
+  if (!ok) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Failed to send the preview. Check TELEGRAM_BOT_TOKEN and that the bot can message this chat.',
+      buildProfileKeyboard(user)
+    );
+  }
+}
+
 export async function handleTelegramUpdate(update: TelegramUpdate) {
   const message = update.message;
   const callback = update.callback_query;
@@ -1086,6 +1158,19 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
 
     if (text === '/menu' || text === '/help') {
       await sendTelegramMessage(user.telegram_chat_id, 'Main menu', buildMainKeyboard());
+      return;
+    }
+
+    if (normalizeBotCommand(text) === '/testresources') {
+      if (!getTelegramAdminIds().has(message.from.id)) {
+        await sendTelegramMessage(
+          user.telegram_chat_id,
+          'This command is only available to admins.',
+          buildMainKeyboard()
+        );
+        return;
+      }
+      await sendTestResourceCard(user);
       return;
     }
 
