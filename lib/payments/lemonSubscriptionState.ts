@@ -38,6 +38,10 @@ export type LemonWebhookPayload = {
         user_id?: string;
         userId?: string;
       };
+      urls?: {
+        customer_portal?: string | null;
+        customer_portal_update_subscription?: string | null;
+      } | null;
     };
   };
   attributes?: {
@@ -67,8 +71,25 @@ export type LemonWebhookPayload = {
       user_id?: string;
       userId?: string;
     };
+    urls?: {
+      customer_portal?: string | null;
+      customer_portal_update_subscription?: string | null;
+    } | null;
   };
 };
+
+/** Lemon-signed URLs for managing billing (present on subscription webhooks when included). */
+export function extractLemonCustomerPortalUrl(
+  payload: LemonWebhookPayload
+): string | null {
+  const attrs = payload.data?.attributes ?? payload.attributes;
+  const urls = attrs?.urls;
+  const u =
+    urls?.customer_portal_update_subscription?.trim() ||
+    urls?.customer_portal?.trim() ||
+    '';
+  return u || null;
+}
 
 export type LemonSubscriptionDecision =
   | {

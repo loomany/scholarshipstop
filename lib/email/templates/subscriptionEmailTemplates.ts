@@ -1,6 +1,6 @@
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
-import { buildScholarshipTopDarkEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayoutDark';
 import { defaultEmailUnsubscribeUrl } from '@/lib/email/templates/premiumTemplates';
+import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 
 export const EMAIL_SUBJECT_SUBSCRIPTION_ACTIVE =
   'Welcome to ScholarshipTop! Your subscription is active 🎉';
@@ -36,20 +36,20 @@ export function buildSubscriptionActiveEmailHtml(
   const name = escapeHtml(params.planDisplayName.trim());
   const price = escapeHtml(params.planPriceDisplay.trim());
   const cadence = params.planCadenceLine?.trim()
-    ? `<p style="margin:10px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5;color:#9ca3af;">${escapeHtml(params.planCadenceLine.trim())}</p>`
+    ? `<p style="margin:10px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5;color:#6b7280;">${escapeHtml(params.planCadenceLine.trim())}</p>`
     : '';
 
   const extraHtml = `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:24px 0;">
   <tr>
     <td align="center">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:100%;border-radius:14px;background-color:#1f2937;border:1px solid #374151;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:100%;border-radius:14px;background-color:#f9fafb;border:1px solid #e5e7eb;">
         <tr>
           <td style="padding:22px 20px;text-align:center;">
-            <p style="margin:0 0 10px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af;">
+            <p style="margin:0 0 10px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#6b7280;">
               Your plan
             </p>
-            <p style="margin:0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:20px;font-weight:800;line-height:1.3;color:#f9fafb;">
+            <p style="margin:0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:20px;font-weight:800;line-height:1.3;color:#111827;">
               ${name}
             </p>
             <p style="margin:12px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:800;line-height:1.2;color:#f97316;">
@@ -63,11 +63,11 @@ export function buildSubscriptionActiveEmailHtml(
   </tr>
 </table>`;
 
-  return buildScholarshipTopDarkEmailHtml({
+  return buildScholarshipTopPremiumEmailHtml({
     preheader: 'Your ScholarshipTop subscription is active — start exploring scholarships.',
     headline: 'Subscription Confirmed',
     bodyParagraphsHtml: [
-      `Hi there! Congratulations and welcome to <strong style="color:#f9fafb;">ScholarshipTop</strong>. Your subscription is now active, and your <strong style="color:#f9fafb;">3-day free trial</strong> has started. You have unlocked full access to our database to find your perfect scholarship.`
+      `Hi there! Congratulations and welcome to <strong style="color:#111827;">ScholarshipTop</strong>. Your subscription is now active, and your <strong style="color:#111827;">3-day free trial</strong> has started. You have unlocked full access to our database to find your perfect scholarship.`
     ],
     extraHtml,
     ctaHref: params.scholarshipsUrl,
@@ -91,11 +91,11 @@ export function buildSubscriptionCancelledEmailHtml(
   const origin = params.siteOrigin.replace(/\/+$/, '');
   const unsub = params.unsubscribeUrl ?? defaultEmailUnsubscribeUrl(origin);
 
-  return buildScholarshipTopDarkEmailHtml({
+  return buildScholarshipTopPremiumEmailHtml({
     preheader: 'Your ScholarshipTop subscription has been cancelled.',
     headline: 'Subscription Cancelled',
     bodyParagraphsHtml: [
-      `Hi there. We&rsquo;re sorry to see you go! This email confirms that your ScholarshipTop subscription has been successfully cancelled. You will continue to have <strong style="color:#f9fafb;">full access</strong> to the platform until the end of your current billing period. If you change your mind, you can always come back and reactivate your plan.`
+      `Hi there. We&rsquo;re sorry to see you go! This email confirms that your ScholarshipTop subscription has been successfully cancelled. You will continue to have <strong style="color:#111827;">full access</strong> to the platform until the end of your current billing period. If you change your mind, you can always come back and reactivate your plan.`
     ],
     ctaHref: params.billingPortalUrl,
     ctaLabel: 'Reactivate Subscription',

@@ -8,6 +8,12 @@ import {
   decideSubscriptionUpdate,
   type LemonWebhookPayload
 } from '@/lib/payments/lemonSubscriptionState';
+import {
+  sendLemonSubscriptionActiveEmail,
+  sendLemonSubscriptionCancelledEmail,
+  lemonWebhookShouldSendSubscriptionActiveEmail,
+  lemonWebhookShouldSendSubscriptionCancelledEmail
+} from '@/lib/email/sendLemonSubscriptionEmail';
 import { notifyTelegramPayment } from '@/lib/telegram/bot';
 
 export const runtime = 'nodejs';
@@ -156,18 +162,53 @@ export async function POST(req: Request) {
 
     void supabaseAdmin.auth.admin
       .getUserById(decision.userId)
-      .then(({ data: authUserData }) =>
-        notifyTelegramPayment({
+      .then(async ({ data: authUserData }) => {
+        const email = authUserData?.user?.email ?? null;
+        await notifyTelegramPayment({
           userId: decision.userId,
-          email: authUserData?.user?.email ?? null,
+          email,
           plan: decision.subscriptionPlan,
           status: decision.subscription.status ?? 'unknown',
           eventName: payload.meta?.event_name ?? null
-        })
-      )
-      .catch((telegramError) => {
-        console.error('[lemon:webhook] telegram notification failed', {
-          message: telegramError instanceof Error ? telegramError.message : String(telegramError),
+        });
+
+        if (!email?.trim()) {
+          return;
+        }
+
+        const eventName = decision.eventName;
+        if (
+          lemonWebhookShouldSendSubscriptionActiveEmail(eventName) &&
+          decision.isSubscribed
+        ) {
+          const r = await sendLemonSubscriptionActiveEmail({
+            toEmail: email.trim(),
+            payload,
+            subscriptionPlan: decision.subscriptionPlan
+          });
+          if (!r.ok) {
+            console.warn('[lemon:webhook] subscription active email not sent', {
+              userId: decision.userId,
+              skipped: r.skipped
+            });
+          }
+        } else if (lemonWebhookShouldSendSubscriptionCancelledEmail(eventName)) {
+          const r = await sendLemonSubscriptionCancelledEmail({
+            toEmail: email.trim(),
+            payload
+          });
+          if (!r.ok) {
+            console.warn('[lemon:webhook] subscription cancelled email not sent', {
+              userId: decision.userId,
+              skipped: r.skipped
+            });
+          }
+        }
+      })
+      .catch((sideEffectError) => {
+        console.error('[lemon:webhook] post-update notification failed', {
+          message:
+            sideEffectError instanceof Error ? sideEffectError.message : String(sideEffectError),
           userId: decision.userId
         });
       });

@@ -25,6 +25,8 @@ export type PremiumEmailLayoutOptions = {
   accentLine?: string;
   /** Safe HTML fragments (already escaped or static) for main copy. */
   bodyParagraphsHtml: string[];
+  /** Optional block between body copy and primary CTA (e.g. plan summary). */
+  extraHtml?: string;
   ctaHref: string;
   ctaLabel: string;
   /** Primary site origin for absolute asset links / footer. */
@@ -36,6 +38,8 @@ export type PremiumEmailLayoutOptions = {
    * Pass `''` to omit that block (button only).
    */
   secondaryLinkNote?: string;
+  /** Small centered line directly under the primary button (e.g. link expiry). */
+  postCtaMutedText?: string;
 };
 
 /**
@@ -58,7 +62,7 @@ export function buildScholarshipTopPremiumEmailHtml(
   const accentBlock = opts.accentLine
     ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 20px;">
         <tr>
-          <td style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.5;color:#111827;font-weight:600;">
+          <td align="center" style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.5;color:#111827;font-weight:600;">
             ${EMERALD_CHECK_SVG}<span style="vertical-align:middle;">${opts.accentLine}</span>
           </td>
         </tr>
@@ -92,11 +96,13 @@ export function buildScholarshipTopPremiumEmailHtml(
             <td style="background-color:#ffffff;border-radius:24px;padding:40px 36px;box-shadow:0 4px 24px rgba(17,24,39,0.06);border:1px solid #e5e7eb;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                  <td style="padding-bottom:28px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <td align="center" style="padding-bottom:28px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
                       <tr>
-                        <td style="vertical-align:middle;padding-right:12px;">${LOGO_CAP_SVG}</td>
-                        <td style="vertical-align:middle;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">
+                        <td align="center" style="padding-bottom:10px;">${LOGO_CAP_SVG}</td>
+                      </tr>
+                      <tr>
+                        <td align="center" style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">
                           <span style="color:#111827;">Scholarship</span><span style="color:#f97316;">Top</span>
                         </td>
                       </tr>
@@ -105,20 +111,26 @@ export function buildScholarshipTopPremiumEmailHtml(
                 </tr>
                 <tr>
                   <td>
-                    <h1 style="margin:0 0 12px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;line-height:1.25;color:#111827;letter-spacing:-0.02em;">
+                    <h1 style="margin:0 0 12px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;line-height:1.25;color:#111827;letter-spacing:-0.02em;text-align:center;">
                       ${escapeHtml(opts.headline)}
                     </h1>
                     ${accentBlock}
                     ${paragraphs}
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 8px;">
+                    ${opts.extraHtml ?? ''}
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0 8px;">
                       <tr>
-                        <td align="left">
+                        <td align="center">
                           <a href="${escapeHtml(opts.ctaHref)}" style="display:inline-block;background-color:#000000;color:#ffffff!important;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:12px;">
                             ${escapeHtml(opts.ctaLabel)}
                           </a>
                         </td>
                       </tr>
                     </table>
+                    ${
+                      opts.postCtaMutedText
+                        ? `<p style="margin:16px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.5;color:#9ca3af;text-align:center;">${escapeHtml(opts.postCtaMutedText)}</p>`
+                        : ''
+                    }
                     ${
                       secondary
                         ? `<p style="margin:20px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.55;color:#6b7280;">

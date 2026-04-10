@@ -58,6 +58,40 @@ export function getServerAuthCallbackUrl(): string {
   return `${getServerAuthSiteOrigin()}/auth/callback`;
 }
 
+function normalizeSiteOrigin(url: string): string {
+  const s = url.replace(/\/+$/, '');
+  return s.startsWith('http') ? s : `https://${s}`;
+}
+
+/** True for localhost / loopback hosts — not used as canonical links in password-reset emails. */
+function isLocalDevelopmentOrigin(origin: string): boolean {
+  try {
+    const { hostname } = new URL(origin);
+    const h = hostname.toLowerCase();
+    return (
+      h === 'localhost' ||
+      h === '127.0.0.1' ||
+      h === '[::1]' ||
+      h.endsWith('.local')
+    );
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Return URL for Supabase `redirectTo` on password reset.
+ * When `NEXT_PUBLIC_SITE_URL` is set to your public domain (e.g. production), reset links in
+ * emails use that host even if the forgot-password form was submitted from local dev — avoiding
+ * localhost links in real inboxes. Local-only URLs still fall back to the request host.
+ */
 export function getServerAuthResetPasswordUrl(): string {
+  const envSite = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (envSite) {
+    const origin = normalizeSiteOrigin(envSite);
+    if (!isLocalDevelopmentOrigin(origin)) {
+      return `${origin}/auth/reset_password`;
+    }
+  }
   return `${getServerAuthSiteOrigin()}/auth/reset_password`;
 }

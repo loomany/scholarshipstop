@@ -19,6 +19,19 @@ This project creates Lemon Squeezy overlay checkouts, verifies webhooks, syncs
 - `LEMON_SQUEEZY_WEBHOOK_SECRET` (fallback)
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SITE_URL` (used for links in transactional emails from the webhook)
+- `RESEND_API_KEY` and `RESEND_FROM` (optional; if unset, subscription status emails are skipped — DB sync still succeeds)
+
+## Transactional emails (Resend)
+
+After a successful entitlement update, the handler may send:
+
+- **Subscription active** — on `subscription_created`, `subscription_resumed`, or `subscription_unpaused`, when the user is considered subscribed (active / trialing / on_trial).
+- **Subscription cancelled** — on `subscription_cancelled` only (not on every `subscription_updated` or renewal).
+
+Renewals and generic updates do not trigger the “active” email, so users are not emailed on each billing cycle.
+
+The cancelled email uses Lemon’s `customer_portal` / `customer_portal_update_subscription` URL from the webhook when present; otherwise it falls back to `{NEXT_PUBLIC_SITE_URL}/subscription`.
 
 ## Signature validation
 

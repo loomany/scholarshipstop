@@ -1,5 +1,4 @@
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
-import { buildScholarshipTopDarkEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayoutDark';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 
 /**
@@ -35,12 +34,12 @@ export function buildConfirmSignupEmailHtml(params: ConfirmSignupEmailParams): s
   const name = params.name.trim() || 'there';
   const unsub = params.unsubscribeUrl ?? defaultEmailUnsubscribeUrl(origin);
 
-  return buildScholarshipTopDarkEmailHtml({
+  return buildScholarshipTopPremiumEmailHtml({
     preheader: `Confirm your email to unlock ScholarshipTop — 3,000+ matches await.`,
     headline: 'One step away from your scholarship',
     accentLine: 'Confirm your email to get started',
     bodyParagraphsHtml: [
-      `Hi ${escapeHtml(name)}! Thanks for joining <strong style="color:#f9fafb;">ScholarshipTop</strong>. Please confirm your email to activate your account and get full access to 3,000+ matches.`,
+      `Hi ${escapeHtml(name)}! Thanks for joining <strong style="color:#111827;">ScholarshipTop</strong>. Please confirm your email to activate your account and get full access to 3,000+ matches.`,
       `You&rsquo;re already signed in on the site in most cases &mdash; this step secures your account and unlocks the full experience.`
     ],
     ctaHref: params.confirmationUrl,
@@ -86,16 +85,16 @@ export function buildResetPasswordEmailHtml(params: ResetPasswordEmailParams): s
   const unsub = params.unsubscribeUrl ?? defaultEmailUnsubscribeUrl(origin);
 
   return buildScholarshipTopPremiumEmailHtml({
-    preheader: 'Reset your ScholarshipTop password.',
+    preheader: 'Reset your ScholarshipTop password — link expires in 24 hours.',
     headline: 'Reset your password',
     bodyParagraphsHtml: [
-      `Forgot your password? No worries. Click below to set a new one.`,
-      `This link is single-use. If you didn&rsquo;t ask for a reset, you can ignore this message.`
+      `We received a request to reset the password for your ScholarshipTop account. Click the button below to choose a new password. If you didn&rsquo;t make this request, you can safely ignore this email.`
     ],
     ctaHref: params.confirmationUrl,
     ctaLabel: 'Reset password',
     siteOrigin: origin,
-    unsubscribeUrl: unsub
+    unsubscribeUrl: unsub,
+    postCtaMutedText: 'Link expires in 24 hours.'
   });
 }
 
