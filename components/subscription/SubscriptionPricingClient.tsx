@@ -75,6 +75,8 @@ type PlanRowProps = {
   planKey: BillingPlanKey;
   featured?: boolean;
   ctaAbove?: ReactNode;
+  hasActiveSubscription?: boolean;
+  isCurrentPlan?: boolean;
   isLoading: boolean;
   isBusy: boolean;
   onSelect: (planKey: BillingPlanKey, title: string) => void;
@@ -92,11 +94,18 @@ function PlanGrantCard({
   planKey,
   featured = false,
   ctaAbove,
+  hasActiveSubscription = false,
+  isCurrentPlan = false,
   isLoading,
   isBusy,
   onSelect
 }: PlanRowProps) {
-  const isDisabled = isBusy;
+  const isDisabled = isBusy || isCurrentPlan;
+  const buttonLabel = isCurrentPlan
+    ? 'Current Plan'
+    : hasActiveSubscription
+      ? `Upgrade to ${title}`
+      : 'Start Free Trial';
 
   return (
     <article
@@ -146,7 +155,7 @@ function PlanGrantCard({
               buttonClassName
             )}
           >
-            {isLoading ? 'Redirecting...' : 'Start Free Trial'}
+            {isLoading ? 'Redirecting...' : buttonLabel}
           </Button>
         </div>
       </div>
@@ -239,11 +248,16 @@ const PLANS: PlanConfig[] = [
   }
 ];
 
-export default function SubscriptionPricingClient() {
+export default function SubscriptionPricingClient({
+  currentPlanKey = null
+}: {
+  currentPlanKey?: BillingPlanKey | null;
+}) {
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const isBusy = activePlanTitle !== null;
+  const hasActiveSubscription = currentPlanKey !== null;
 
   useEffect(() => {
     window.LemonSqueezy?.Setup?.({
@@ -296,6 +310,8 @@ export default function SubscriptionPricingClient() {
             badge={plan.badge}
             featured={plan.featured}
             ctaAbove={plan.ctaAbove}
+            hasActiveSubscription={hasActiveSubscription}
+            isCurrentPlan={currentPlanKey === plan.planKey}
             isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}

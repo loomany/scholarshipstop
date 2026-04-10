@@ -40,6 +40,29 @@ type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 type Subscription = Tables<'subscriptions'>;
 type SubscriptionType = 'none' | 'trial' | 'monthly' | 'quarterly' | 'yearly';
 
+function getLemonManageSubscriptionUrl(subscription: Subscription | null): string | null {
+  if (!subscription || subscription.provider !== 'lemon_squeezy') return null;
+
+  const rawPayload = subscription.raw_payload as
+    | {
+        data?: {
+          attributes?: {
+            urls?: {
+              customer_portal_update_subscription?: string | null;
+              customer_portal?: string | null;
+            } | null;
+          } | null;
+        } | null;
+      }
+    | null;
+
+  const urls = rawPayload?.data?.attributes?.urls;
+  const manageUrl =
+    urls?.customer_portal_update_subscription?.trim() || urls?.customer_portal?.trim() || null;
+
+  return manageUrl || null;
+}
+
 function birthPartsFromProfile(p: ProfilesRow | null): {
   month: string;
   day: string;
@@ -664,6 +687,15 @@ export default function ScholarshipProfileForm({
     router.push('/subscription');
   }, [router]);
 
+  const onManageSubscription = useCallback(() => {
+    const manageUrl = getLemonManageSubscriptionUrl(subscription);
+    if (manageUrl) {
+      window.location.assign(manageUrl);
+      return;
+    }
+    router.push('/subscription');
+  }, [router, subscription]);
+
   const isAccount = variant === 'account';
   const isSaas = variant === 'saas';
   const subscriptionPresentation = useMemo(
@@ -877,11 +909,11 @@ export default function ScholarshipProfileForm({
             badgeLabel: subscriptionPresentation.label,
             badgeClass: 'bg-orange-100 text-orange-700 font-medium ring-1 ring-orange-200',
             title: 'Keep Premium Access Active',
-            subtitle: subscriptionPresentation.countdownLabel ?? 'Expires soon',
-            buttonLabel: 'Upgrade to Pro',
+            subtitle: null,
+            buttonLabel: 'Manage Subscription',
             buttonClass:
-              'bg-orange-500 text-white shadow-sm hover:bg-orange-600 hover:shadow-md',
-            showTrialProgress: subscriptionPresentation.progressPercent != null
+              'bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow-md',
+            showTrialProgress: true
           };
         case 'monthly':
           return {
@@ -1130,12 +1162,6 @@ export default function ScholarshipProfileForm({
                       }`}
                     >
                       <span>Trial countdown</span>
-                      <span>
-                        {subscriptionPresentation.remainingHours != null &&
-                        subscriptionPresentation.remainingHours < 48
-                          ? `${subscriptionPresentation.remainingHours}h left`
-                          : `${subscriptionPresentation.remainingDays ?? 0} days left`}
-                      </span>
                     </div>
                     <div className="h-2 overflow-hidden rounded-full bg-orange-100">
                       <div
@@ -1171,7 +1197,7 @@ export default function ScholarshipProfileForm({
                             ? () => {
                                 void onStartTrial();
                               }
-                            : () => router.push('/subscription')
+                            : () => onManageSubscription()
                         }
                         className={
                           subscriptionType === 'trial'
