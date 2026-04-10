@@ -79,6 +79,8 @@ type PlanRowProps = {
   isCurrentPlan?: boolean;
   /** True when this tier is the member’s plan and they are in the intro trial window. */
   isTrialingOnCurrentPlan?: boolean;
+  /** Same wording as account (e.g. "3-Day Trial"); pairs with billing tier title. */
+  trialingPresentationLabel?: string | null;
   isLoading: boolean;
   isBusy: boolean;
   onSelect: (planKey: BillingPlanKey, title: string) => void;
@@ -99,6 +101,7 @@ function PlanGrantCard({
   hasActiveSubscription = false,
   isCurrentPlan = false,
   isTrialingOnCurrentPlan = false,
+  trialingPresentationLabel = null,
   isLoading,
   isBusy,
   onSelect
@@ -109,7 +112,9 @@ function PlanGrantCard({
       ? `Upgrade to ${title}`
       : 'Start Free Trial'
     : isTrialingOnCurrentPlan
-      ? `3-day trial, then ${title}`
+      ? trialingPresentationLabel
+        ? `${trialingPresentationLabel} · ${title}`
+        : `3-day trial, then ${title}`
       : 'Current Plan';
 
   return (
@@ -258,13 +263,16 @@ const PLANS: PlanConfig[] = [
 export default function SubscriptionPricingClient({
   currentPlanKey = null,
   hasActiveSubscription: hasActiveSubscriptionProp,
-  isTrialing = false
+  isTrialing = false,
+  trialingPresentationLabel = null
 }: {
   currentPlanKey?: BillingPlanKey | null;
   /** When set, overrides the legacy heuristic (`currentPlanKey !== null`). */
   hasActiveSubscription?: boolean;
   /** From `deriveSubscriptionPresentation`: plan === 'trial' while trial is active. */
   isTrialing?: boolean;
+  /** `deriveSubscriptionPresentation().label` when on trial (e.g. "3-Day Trial"). */
+  trialingPresentationLabel?: string | null;
 }) {
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
@@ -331,6 +339,7 @@ export default function SubscriptionPricingClient({
             isTrialingOnCurrentPlan={
               Boolean(isTrialing && currentPlanKey === plan.planKey)
             }
+            trialingPresentationLabel={trialingPresentationLabel}
             isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}

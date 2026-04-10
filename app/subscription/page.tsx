@@ -23,7 +23,7 @@ export default async function SubscriptionPage() {
   const profile = user
     ? await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle()
     : { data: null };
-  const subscription = user ? await getSubscription(supabase, user.id) : null;
+  const subscription = user ? await getSubscription(user.id) : null;
   const presentation = deriveSubscriptionPresentation(profile.data, subscription);
   const currentPlanKey: BillingPlanKey | null = presentation.isSubscribed
     ? inferSubscriptionBillingTier(subscription, profile.data)
@@ -46,6 +46,9 @@ export default async function SubscriptionPage() {
             currentPlanKey={currentPlanKey}
             hasActiveSubscription={presentation.isSubscribed}
             isTrialing={presentation.plan === 'trial'}
+            trialingPresentationLabel={
+              presentation.plan === 'trial' ? presentation.label : null
+            }
           />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">

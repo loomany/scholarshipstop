@@ -1,4 +1,4 @@
-import type { Tables } from '@/types_db';
+import type { Json, Tables } from '@/types_db';
 
 type Profile = Tables<'profiles'>;
 type Subscription = Tables<'subscriptions'>;
@@ -28,6 +28,22 @@ function getEmbeddedPriceRow(
   return row ?? null;
 }
 
+/** Last-resort tier from stored Lemon webhook JSON (same fields as live webhook). */
+function inferBillingTierFromRawPayload(raw: Json | null): SubscriptionBillingTier | null {
+  if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const root = raw as Record<string, unknown>;
+  const data = root.data as Record<string, unknown> | undefined;
+  const attrs = (data?.attributes ?? root.attributes) as Record<string, unknown> | undefined;
+  if (!attrs || typeof attrs !== 'object') return null;
+  const productName = String(attrs.product_name ?? '');
+  const variantName = String(attrs.variant_name ?? '');
+  const planText = `${productName} ${variantName}`.toLowerCase();
+  if (planText.includes('year')) return 'yearly';
+  if (planText.includes('quarter')) return 'quarterly';
+  if (planText.includes('month')) return 'monthly';
+  return null;
+}
+
 /**
  * Which pricing-card tier the user's subscription maps to (including Lemon trial on a variant).
  * Used for /subscription “current plan” vs “Upgrade” CTAs.
@@ -53,6 +69,9 @@ export function inferSubscriptionBillingTier(
     if (planText.includes('year')) return 'yearly';
     if (planText.includes('quarter')) return 'quarterly';
     if (planText.includes('month')) return 'monthly';
+
+    const fromRaw = inferBillingTierFromRawPayload(subscription.raw_payload);
+    if (fromRaw) return fromRaw;
   }
 
   switch (profile?.subscription_plan) {

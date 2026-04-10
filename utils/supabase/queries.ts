@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { hasActiveSubscriptionAccess } from '@/lib/payments/subscriptionEntitlements';
-import type { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/utils/supabase/server';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
 
@@ -11,8 +11,10 @@ export const getUser = cache(async (supabase: ServerSupabaseClient) => {
   return user;
 });
 
-export const getSubscription = cache(async (supabase: ServerSupabaseClient, userId: string) => {
-  const { data: subscription, error } = await supabase
+/** Cache key is only `userId` so RSC cache is stable (avoids `supabase` ref churn breaking dedupe). */
+export const getSubscription = cache(async (userId: string) => {
+  const supabase = createClient();
+  const { data: subscription } = await supabase
     .from('subscriptions')
     .select('*, prices(*, products(*))')
     .eq('user_id', userId)
@@ -31,7 +33,7 @@ export const getUserSubscriptionStatus = cache(
       .select('*')
       .eq('id', userId)
         .maybeSingle(),
-      getSubscription(supabase, userId)
+      getSubscription(userId)
     ]);
 
     return hasActiveSubscriptionAccess(profile, subscription);
