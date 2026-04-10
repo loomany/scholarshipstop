@@ -287,8 +287,9 @@ test('ignores refunded orders for subscription entitlement sync', () => {
   };
 
   const decision = decideSubscriptionUpdate(payload);
-  assert.deepEqual(decision, {
-    kind: 'ignored',
-    eventName: 'order_refunded'
-  });
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.eventName, 'order_refunded');
+  assert.equal(decision.isSubscribed, false);
+  assert.equal(decision.subscription.status, 'expired');
 });

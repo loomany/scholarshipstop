@@ -145,6 +145,10 @@ export function toSubscribedFromLemonStatus(status?: string): boolean {
   return hasSubscriptionAccess({ status });
 }
 
+function isIgnoredOrderEvent(eventName: string, payload: LemonWebhookPayload) {
+  return eventName === 'order_created' && isOrderPayload(payload);
+}
+
 function toSubscribedFromLemonAttributes(
   attributes: LemonAttributes
 ) {
@@ -306,7 +310,7 @@ export function decideSubscriptionUpdate(
   payload: LemonWebhookPayload
 ): LemonSubscriptionDecision {
   const eventName = normalizeLemonEventName(payload.meta?.event_name);
-  if ((eventName === 'order_created' || eventName === 'order_refunded') && isOrderPayload(payload)) {
+  if (isIgnoredOrderEvent(eventName, payload)) {
     return { kind: 'ignored', eventName };
   }
   if (
@@ -338,7 +342,8 @@ export function decideSubscriptionUpdate(
     eventName === 'subscription_payment_success' ||
     eventName === 'subscription_payment_failed' ||
     eventName === 'subscription_payment_recovered' ||
-    eventName === 'subscription_payment_refunded'
+    eventName === 'subscription_payment_refunded' ||
+    eventName === 'order_refunded'
   ) {
     if (!userId) throw new Error('Missing user id in webhook payload.');
     return {

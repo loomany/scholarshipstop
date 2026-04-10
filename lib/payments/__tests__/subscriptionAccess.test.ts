@@ -40,6 +40,16 @@ test('blocks access immediately for payment failures', () => {
   );
 });
 
+test('blocks access immediately for past_due even when current period end is in the future', () => {
+  assert.equal(
+    hasSubscriptionAccess({
+      status: 'past_due',
+      currentPeriodEnd: '2099-04-10T00:00:00.000Z'
+    }),
+    false
+  );
+});
+
 test('blocks access for expired and paused states regardless of dates', () => {
   assert.equal(
     hasSubscriptionAccess({

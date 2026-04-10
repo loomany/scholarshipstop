@@ -38,6 +38,7 @@ export function normalizeSubscriptionStatus(status: string | null | undefined) {
       return 'past_due';
     case 'subscription_payment_refunded':
     case 'order_refunded':
+    case 'refunded':
     case 'subscription_expired':
       return 'expired';
     case 'subscription_paused':
