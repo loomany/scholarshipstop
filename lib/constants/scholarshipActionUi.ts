@@ -23,6 +23,14 @@ export const scholarshipNotRelevantButtonClass = scholarshipSaveButtonClass;
 /** More filters footer — size unchanged from product. */
 export const scholarshipSeeResultsButtonClass = `rounded-xl px-5 py-3 text-sm font-bold text-white shadow-sm transition ${SCHOLARSHIP_ACTION_FILL} ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
 
+/** More filters — Save filter (brand orange, paired with green See results). */
+const SAVE_FILTER_FILL =
+  'bg-[#FF7A1A] hover:bg-[#E6670C] active:bg-[#CC5508] disabled:hover:bg-[#FF7A1A]';
+const SAVE_FILTER_FOCUS =
+  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-0';
+
+export const scholarshipSaveFilterButtonClass = `inline-flex min-h-[2.75rem] shrink-0 items-center justify-center rounded-xl px-5 py-3 text-sm font-bold text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-50 ${SAVE_FILTER_FILL} ${SAVE_FILTER_FOCUS}`;
+
 /** Categories panel Apply — size unchanged. */
 export const scholarshipCategoriesApplyButtonClass = `rounded-xl px-5 py-2 text-sm font-semibold text-white shadow-sm transition ${SCHOLARSHIP_ACTION_FILL} ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
 

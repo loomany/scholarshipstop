@@ -1,4 +1,8 @@
-import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import {
+  fieldOfStudyDisplayList,
+  studyLevelsDisplayList,
+  type Scholarship
+} from '@/app/scholarships/scholarshipsData';
 import type { SeoScholarshipRouteManifestEntry } from '@/lib/scholarships/seoScholarshipManifest';
 import { getScholarshipsMatchingManifestEntry } from '@/lib/scholarships/seoScholarshipListing';
 
@@ -101,8 +105,8 @@ export function buildSeoListingPageData(
     else essayUnknown += 1;
 
     requirementTypes.push(...(row.requirementTypes ?? []));
-    studyLevels.push(...(row.studyLevels ?? []));
-    fields.push(...(row.fieldOfStudy ?? []));
+    studyLevels.push(...studyLevelsDisplayList(row));
+    fields.push(...fieldOfStudyDisplayList(row));
     residency.push(...(row.citizenshipStatuses ?? []));
     tags.push(...(row.categories ?? []));
     if (row.categorySlug?.trim()) tags.push(row.categorySlug.trim());

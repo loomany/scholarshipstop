@@ -1,5 +1,12 @@
 import type { ScholarshipCatalogView } from '@/lib/scholarships/scholarshipCatalogTypes';
 
+/** Parsed from `scholarships.raw_data.catalog_ui` for human-readable catalog UI. */
+export type ScholarshipCatalogUi = {
+  study_levels_display?: string[];
+  field_of_study_display?: string[];
+  scholarship_status_display?: string | null;
+};
+
 export type ScholarshipSeoFaqItem = { question: string; answer: string };
 export type ScholarshipDocumentLink = { title?: string | null; url: string };
 
@@ -110,6 +117,8 @@ export type Scholarship = {
   officialSourceName?: string | null;
   lastVerifiedAt?: string | null;
   isIndexable?: boolean;
+  /** Human labels from `raw_data.catalog_ui` when present; slugs stay in `studyLevels` / `fieldOfStudy` / `scholarshipStatus`. */
+  catalogUi?: ScholarshipCatalogUi;
   studyLevels?: string[];
   fieldOfStudy?: string[];
   citizenshipStatuses?: string[];
@@ -158,6 +167,38 @@ export type Scholarship = {
   matchScore?: number;
   matchReasons?: string[];
 };
+
+/** Quick facts / copy: prefer `catalog_ui`, else legacy columns (may be slug-like). */
+export function scholarshipStatusDisplay(
+  s: Pick<
+    Scholarship,
+    'catalogUi' | 'statusText' | 'scholarshipStatus'
+  >
+): string | null {
+  const d = s.catalogUi?.scholarship_status_display?.trim();
+  if (d) return d;
+  return s.statusText?.trim() || s.scholarshipStatus?.trim() || null;
+}
+
+export function studyLevelsDisplayList(
+  s: Pick<Scholarship, 'catalogUi' | 'studyLevels'>
+): string[] {
+  const fromUi = s.catalogUi?.study_levels_display
+    ?.map((x) => x.trim())
+    .filter((x) => x.length > 0);
+  if (fromUi && fromUi.length > 0) return fromUi;
+  return s.studyLevels?.filter(Boolean) ?? [];
+}
+
+export function fieldOfStudyDisplayList(
+  s: Pick<Scholarship, 'catalogUi' | 'fieldOfStudy'>
+): string[] {
+  const fromUi = s.catalogUi?.field_of_study_display
+    ?.map((x) => x.trim())
+    .filter((x) => x.length > 0);
+  if (fromUi && fromUi.length > 0) return fromUi;
+  return s.fieldOfStudy?.filter(Boolean) ?? [];
+}
 
 const UUID_LIKE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

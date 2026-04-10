@@ -6,8 +6,7 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
-  useState,
-  type ReactNode
+  useState
 } from 'react';
 import { createPortal } from 'react-dom';
 import {
@@ -72,8 +71,6 @@ type ScholarshipsListHeaderProps = {
   /** Активные фильтры над списком (поиск, категории, сводка по модалке). */
   activeListingChips?: { id: string; label: string; onDismiss: () => void }[];
   onClearAllListingChips?: () => void;
-  /** Hub: Best match / All / Easy apply segmented control (row 2 of the control bar). */
-  listingViewControls?: ReactNode;
   /**
    * When false, “smart” sort options still appear but trigger `onGuestSortBlocked`
    * instead of changing sort (hub guests).
@@ -187,7 +184,6 @@ export default function ScholarshipsListHeader({
   moreFiltersActiveCount = 0,
   activeListingChips = [],
   onClearAllListingChips,
-  listingViewControls = null,
   isAuthenticated = true,
   hasSubscription = true,
   onGuestSortBlocked,
@@ -619,12 +615,6 @@ export default function ScholarshipsListHeader({
                   </button>
                 </div>
               </div>
-
-              {listingViewControls ? (
-                <div className="mt-3 min-w-0 w-full sm:w-auto sm:min-w-[12rem]">
-                  {listingViewControls}
-                </div>
-              ) : null}
             </div>
           </div>
         </div>

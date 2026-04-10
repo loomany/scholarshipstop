@@ -162,7 +162,9 @@ async function handleList(
   searchParams: URLSearchParams,
   bodyMoreFilters: MoreFiltersJson | undefined,
   bodyLongTail: string[] | undefined,
-  seoBody?: SeoListBodyOpts
+  seoBody?: SeoListBodyOpts,
+  /** Hub: optional saved-filter snapshot for `recommended` sidebar count (`null` = none saved). */
+  savedFiltersSnapshotBody?: MoreFiltersJson | null
 ) {
   const supabase = createClient() as any;
   const page = searchParams.get('page');
@@ -243,6 +245,16 @@ async function handleList(
       requiredSeoTags: seoBody?.requiredSeoTags
     })
   );
+
+  if (savedFiltersSnapshotBody !== undefined) {
+    req = {
+      ...req,
+      savedFiltersSnapshot:
+        savedFiltersSnapshotBody == null
+          ? null
+          : moreFiltersFromJson(savedFiltersSnapshotBody, bounds)
+    };
+  }
 
   const v2ReadPathEligible =
     scholarshipsV2ReadPathEnabled() &&
@@ -627,7 +639,7 @@ export async function GET(request: Request) {
       }
     }
     const lt = searchParams.get('long_tail')?.split(',').map((s) => s.trim());
-    return await handleList(searchParams, bodyMore, lt, undefined);
+    return await handleList(searchParams, bodyMore, lt, undefined, undefined);
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     // eslint-disable-next-line no-console -- API diagnostics
@@ -655,6 +667,8 @@ export async function POST(request: Request) {
       seoListingFallback?: boolean;
       slugOnlyMoreFilters?: MoreFiltersJson;
       requiredSeoTags?: string[];
+      /** `null` = client has no saved filter preset (Saved Filters count = 0). */
+      savedFiltersSnapshot?: MoreFiltersJson | null;
     };
     // eslint-disable-next-line no-console -- API diagnostics (SEO listing debugging)
     console.log('[scholarships api] POST body snapshot', {
@@ -668,7 +682,7 @@ export async function POST(request: Request) {
       seoListingFallback: json.seoListingFallback,
       slugOnlyMoreFilters: json.slugOnlyMoreFilters,
       requiredSeoTags: json.requiredSeoTags
-    });
+    }, json.savedFiltersSnapshot);
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     // eslint-disable-next-line no-console -- API diagnostics

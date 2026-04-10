@@ -6,6 +6,7 @@ import { Lock, X } from 'lucide-react';
 import type { DeadlinePreset, MoreFiltersState } from '@/app/scholarships/moreFilters';
 import {
   scholarshipGuestLockIconClass,
+  scholarshipSaveFilterButtonClass,
   scholarshipSeeResultsButtonClass
 } from '@/lib/constants/scholarshipActionUi';
 import { REQUIREMENT_TYPE_OPTIONS } from '@/app/scholarships/moreFilters';
@@ -32,6 +33,10 @@ type ScholarshipsMoreFiltersPanelProps = {
   onChange: (next: MoreFiltersState) => void;
   onClear: () => void;
   onApply: () => void;
+  /** Persist current draft as the “Saved filters” tab preset (hub). */
+  onSaveFilter?: () => void;
+  /** False when nothing is selected vs defaults or guest. */
+  saveFilterEnabled?: boolean;
   previewCount: number | null;
   previewCountLoading: boolean;
   previewCountFallback?: number | null;
@@ -136,6 +141,8 @@ export default function ScholarshipsMoreFiltersPanel({
   onChange,
   onClear,
   onApply,
+  onSaveFilter,
+  saveFilterEnabled = false,
   previewCount,
   previewCountLoading,
   previewCountFallback = null,
@@ -891,7 +898,7 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
         </div>
 
-        <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-zinc-200 bg-white px-4 py-4">
+        <footer className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-zinc-200 bg-white px-4 py-4">
           <button
             type="button"
             onClick={onClear}
@@ -899,31 +906,69 @@ export default function ScholarshipsMoreFiltersPanel({
           >
             Clear
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              if (!isAuthenticated) {
-                onGuestLockedAction?.();
-                return;
-              }
-              onApply();
-            }}
-            title={
-              !isAuthenticated
-                ? 'Apply filters after you create a free account'
-                : undefined
-            }
-            className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
-          >
-            {!isAuthenticated ? (
-              <Lock
-                className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
-                strokeWidth={2}
-                aria-hidden
-              />
+          <div className="flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
+            {onSaveFilter ? (
+              <button
+                type="button"
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    onGuestLockedAction?.();
+                    return;
+                  }
+                  if (!hasSubscription) {
+                    onSubscriptionLockedAction?.();
+                    return;
+                  }
+                  onSaveFilter();
+                }}
+                disabled={
+                  isAuthenticated && hasSubscription ? !saveFilterEnabled : false
+                }
+                title={
+                  !isAuthenticated
+                    ? 'Save filter preset after you create a free account'
+                    : !hasSubscription
+                      ? 'Start your free access to save filter presets'
+                      : undefined
+                }
+                className={`${scholarshipSaveFilterButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
+              >
+                {!isAuthenticated || !hasSubscription ? (
+                  <Lock
+                    className="mr-1.5 inline-block h-3.5 w-3.5 shrink-0 text-white"
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                ) : null}
+                Save filter
+              </button>
             ) : null}
-            {previewLabel}
-          </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (!isAuthenticated) {
+                  onGuestLockedAction?.();
+                  return;
+                }
+                onApply();
+              }}
+              title={
+                !isAuthenticated
+                  ? 'Apply filters after you create a free account'
+                  : undefined
+              }
+              className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
+            >
+              {!isAuthenticated ? (
+                <Lock
+                  className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
+                  strokeWidth={2}
+                  aria-hidden
+                />
+              ) : null}
+              {previewLabel}
+            </button>
+          </div>
         </footer>
       </div>
     </div>

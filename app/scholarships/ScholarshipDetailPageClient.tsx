@@ -29,10 +29,13 @@ import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategorie
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import {
+  fieldOfStudyDisplayList,
   formatDeadlineTooltipText,
   formatScholarshipAwardDisplay,
   getScholarshipDeadlineDisplayParts,
-  scholarshipPublicPath
+  scholarshipPublicPath,
+  scholarshipStatusDisplay,
+  studyLevelsDisplayList
 } from '@/app/scholarships/scholarshipsData';
 import {
   addIgnoredScholarship,
@@ -832,13 +835,13 @@ export default function ScholarshipDetailPageClient({
   const detailApplyPrimaryClass =
     'inline-flex h-11 min-h-[2.75rem] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 sm:px-6 sm:text-base';
 
-  const statusText = scholarship.statusText?.trim();
+  const statusDisplay = scholarshipStatusDisplay(scholarship);
+  const studyLevelsList = studyLevelsDisplayList(scholarship);
+  const fieldOfStudyList = fieldOfStudyDisplayList(scholarship);
   const institutionsText = scholarship.institutionsText?.trim();
   const stateTerritoryText = scholarship.stateTerritoryText?.trim();
-  const studyLevels = scholarship.studyLevels?.filter(Boolean) ?? [];
   const stateCodes = scholarship.stateCodes?.filter(Boolean) ?? [];
   const locationScope = scholarship.locationScope?.trim();
-  const schStatus = scholarship.scholarshipStatus?.trim();
   const payoutLabel = payoutMethodDetailLabel(scholarship.payoutMethod);
 
   const supportEmail = scholarship.supportEmail?.trim();
@@ -910,8 +913,9 @@ export default function ScholarshipDetailPageClient({
   const awardsPlain = scholarship.awardsText?.trim();
 
   const hasQuickFacts =
-    Boolean(statusText || schStatus) ||
-    studyLevels.length > 0 ||
+    Boolean(statusDisplay) ||
+    studyLevelsList.length > 0 ||
+    fieldOfStudyList.length > 0 ||
     Boolean(institutionsLine) ||
     Boolean(locationQuickFact) ||
     scholarship.numberOfAwards != null ||
@@ -1250,21 +1254,31 @@ export default function ScholarshipDetailPageClient({
               Quick facts
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {statusText || schStatus ? (
+              {statusDisplay ? (
                 <div>
                   <p className="text-xs font-medium text-zinc-500">Status</p>
                   <p className="mt-1 text-sm font-semibold text-zinc-900">
-                    {statusText || schStatus}
+                    {statusDisplay}
                   </p>
                 </div>
               ) : null}
-              {studyLevels.length ? (
+              {studyLevelsList.length ? (
                 <div className="min-w-0 sm:col-span-2 lg:col-span-2">
                   <p className="text-xs font-medium text-zinc-500">
                     Study levels
                   </p>
                   <p className="mt-1 text-sm text-zinc-700">
-                    {studyLevels.join(', ')}
+                    {studyLevelsList.join(', ')}
+                  </p>
+                </div>
+              ) : null}
+              {fieldOfStudyList.length ? (
+                <div className="min-w-0 sm:col-span-2 lg:col-span-2">
+                  <p className="text-xs font-medium text-zinc-500">
+                    Field of study
+                  </p>
+                  <p className="mt-1 text-sm text-zinc-700">
+                    {fieldOfStudyList.join(', ')}
                   </p>
                 </div>
               ) : null}

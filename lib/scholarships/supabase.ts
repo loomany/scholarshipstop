@@ -1,6 +1,7 @@
 import type { Database, Json } from '@/types_db';
 import type {
   Scholarship,
+  ScholarshipCatalogUi,
   ScholarshipDocumentLink,
   ScholarshipSeoFaqItem
 } from '@/app/scholarships/scholarshipsData';
@@ -71,6 +72,36 @@ function seoFaqFromJson(value: Json | null | undefined): ScholarshipSeoFaqItem[]
   return out;
 }
 
+function catalogUiFromRawData(
+  raw: Json | null | undefined
+): ScholarshipCatalogUi | undefined {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined;
+  const root = raw as Record<string, unknown>;
+  const ui = root.catalog_ui;
+  if (!ui || typeof ui !== 'object' || Array.isArray(ui)) return undefined;
+  const o = ui as Record<string, unknown>;
+  const out: ScholarshipCatalogUi = {};
+  if (
+    typeof o.scholarship_status_display === 'string' &&
+    o.scholarship_status_display.trim()
+  ) {
+    out.scholarship_status_display = o.scholarship_status_display.trim();
+  }
+  if (Array.isArray(o.study_levels_display)) {
+    const arr = o.study_levels_display
+      .filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
+      .map((x) => x.trim());
+    if (arr.length) out.study_levels_display = arr;
+  }
+  if (Array.isArray(o.field_of_study_display)) {
+    const arr = o.field_of_study_display
+      .filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
+      .map((x) => x.trim());
+    if (arr.length) out.field_of_study_display = arr;
+  }
+  return Object.keys(out).length > 0 ? out : undefined;
+}
+
 const LISTING_CARD_SELECT_COLUMNS = [
   'id',
   'slug',
@@ -137,7 +168,8 @@ const LISTING_CARD_SELECT_COLUMNS = [
   'location_scope',
   'state_codes',
   'ai_match_score',
-  'ai_match_band'
+  'ai_match_band',
+  'raw_data'
 ];
 
 /**
@@ -463,7 +495,8 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     seoEligibility: row.seo_eligibility?.trim() || undefined,
     seoApplication: row.seo_application?.trim() || undefined,
     seoFaq: seoFaqFromJson(row.seo_faq),
-    applicantsCountIsEstimated: Boolean(row.applicants_count_is_estimated)
+    applicantsCountIsEstimated: Boolean(row.applicants_count_is_estimated),
+    catalogUi: catalogUiFromRawData(row.raw_data)
   };
 
   const scholarshipCatalog = buildScholarshipCatalog(base, dbCatalog);

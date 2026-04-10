@@ -71,7 +71,7 @@ const STATIC_TOP_ROWS: StaticNavDef[] = [
   },
   {
     id: 'recommended',
-    label: 'Recommendation',
+    label: 'Saved Filters',
     icon: Bookmark
   }
 ];

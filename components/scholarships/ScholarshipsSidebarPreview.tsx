@@ -21,7 +21,7 @@ type PreviewNavItem = {
 
 const PREVIEW_NAV: PreviewNavItem[] = [
   { id: 'best-matches', label: 'Best matches', count: 23, icon: Flame, active: true },
-  { id: 'recommended', label: 'Recommended', count: 62, icon: Bookmark },
+  { id: 'recommended', label: 'Saved Filters', count: 62, icon: Bookmark },
   { id: 'easy-apply', label: 'Easy apply', count: 17, icon: Trophy },
   { id: 'hot-deadlines', label: 'Hot Deadlines', count: 105, icon: Timer },
   { id: 'matches', label: 'Matches', count: 3781, icon: Layers },

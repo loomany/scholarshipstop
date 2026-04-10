@@ -16,8 +16,6 @@ import {
 } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Lock } from 'lucide-react';
-
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import SubjectL2BrowseChips from '@/components/scholarships/SubjectL2BrowseChips';
@@ -28,7 +26,6 @@ import ScholarshipsTwoColumnLayout from '@/components/scholarships/ScholarshipsT
 import { ScholarshipsEmailConfirmationBanner } from '@/components/scholarships/ScholarshipsEmailConfirmationBanner';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
-import { scholarshipGuestLockIconClass } from '@/lib/constants/scholarshipActionUi';
 import {
   SCHOLARSHIP_CATEGORY_ORDER,
   type ScholarshipCategoryId
@@ -46,6 +43,11 @@ import {
   defaultMoreFiltersFromBounds,
   type MoreFiltersState
 } from './moreFilters';
+import {
+  readSavedFiltersFromStorage,
+  writeSavedFiltersToStorage,
+  SAVED_FILTERS_STORAGE_KEY
+} from '@/lib/scholarships/savedFiltersStorage';
 import {
   getSavedScholarshipIds,
   removeScholarship,
@@ -83,6 +85,7 @@ import {
 } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
+import { toast } from '@/components/ui/Toasts/use-toast';
 
 /** Temporary: trace hub meta overwrite. Remove after diagnosis. */
 function hubClientSidebarDebugEnabled(): boolean {
@@ -505,6 +508,22 @@ function ScholarshipsPageInner({
     applicantsMin: 0,
     applicantsMax: 200000
   };
+
+  const [savedFiltersRevision, setSavedFiltersRevision] = useState(0);
+  const savedFiltersForHub = useMemo(() => {
+    return readSavedFiltersFromStorage(filterBounds);
+  }, [filterBounds, savedFiltersRevision]);
+
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === SAVED_FILTERS_STORAGE_KEY || e.key === null) {
+        setSavedFiltersRevision((n) => n + 1);
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
   const routeBaseMoreFilters = useMemo(
     () =>
       routeScope?.baseMoreFilters
@@ -512,6 +531,20 @@ function ScholarshipsPageInner({
         : null,
     [routeScope?.baseMoreFilters, filterBounds]
   );
+
+  const savedFiltersSnapshotJson = useMemo(() => {
+    if (!isAuthenticated || !savedFiltersForHub) return null;
+    const merged =
+      routeBaseMoreFilters != null
+        ? mergeMoreFilterStates(routeBaseMoreFilters, savedFiltersForHub)
+        : savedFiltersForHub;
+    return moreFiltersToJson(merged);
+  }, [
+    isAuthenticated,
+    savedFiltersForHub,
+    routeBaseMoreFilters,
+    savedFiltersRevision
+  ]);
   const moreFiltersBaseline = useMemo(
     () =>
       buildHubMoreFiltersBaseline({
@@ -528,6 +561,83 @@ function ScholarshipsPageInner({
       ),
     [moreFiltersBaseline, filterBounds]
   );
+
+  const saveFilterEnabled = useMemo(() => {
+    if (!moreFiltersDraft || !isAuthenticated) return false;
+    const merged =
+      routeBaseMoreFilters != null
+        ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersDraft)
+        : cloneMoreFilters(moreFiltersDraft);
+    return countMoreFilterSelections(merged, filterBounds) > 0;
+  }, [
+    moreFiltersDraft,
+    isAuthenticated,
+    routeBaseMoreFilters,
+    filterBounds
+  ]);
+
+  const saveMoreFiltersPreset = useCallback(() => {
+    if (!isAuthenticated) {
+      openRegistrationWall();
+      return;
+    }
+    if (isSubscriptionLocked) {
+      openSubscriptionOffer();
+      return;
+    }
+    if (!moreFiltersDraft || !saveFilterEnabled) return;
+    const merged =
+      routeBaseMoreFilters != null
+        ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersDraft)
+        : cloneMoreFilters(moreFiltersDraft);
+    writeSavedFiltersToStorage(merged);
+    setSavedFiltersRevision((n) => n + 1);
+    setMoreFiltersApplied(cloneMoreFilters(merged));
+    replaceListingParams({
+      tab: 'recommended',
+      deadline: merged.deadlinePreset,
+      resetPage: true
+    });
+    setMoreFiltersOpen(false);
+
+    const approxCount = previewCount ?? lastKnownPreviewCount;
+    const countPhrase =
+      approxCount != null && Number.isFinite(approxCount)
+        ? ` (${approxCount.toLocaleString('en-US')})`
+        : '';
+    toast({
+      title: 'Filter saved',
+      description: `Your criteria are stored in Saved Filters${countPhrase} under My scholarships. Open that tab anytime to browse scholarships that match this preset.`
+    });
+  }, [
+    isAuthenticated,
+    moreFiltersDraft,
+    saveFilterEnabled,
+    routeBaseMoreFilters,
+    openRegistrationWall,
+    openSubscriptionOffer,
+    isSubscriptionLocked,
+    replaceListingParams,
+    previewCount,
+    lastKnownPreviewCount
+  ]);
+
+  useEffect(() => {
+    if (activeTab !== 'recommended' || !isAuthenticated || !savedFiltersForHub) {
+      return;
+    }
+    const merged =
+      routeBaseMoreFilters != null
+        ? mergeMoreFilterStates(routeBaseMoreFilters, savedFiltersForHub)
+        : savedFiltersForHub;
+    setMoreFiltersApplied(cloneMoreFilters(merged));
+  }, [
+    activeTab,
+    isAuthenticated,
+    savedFiltersForHub,
+    routeBaseMoreFilters,
+    savedFiltersRevision
+  ]);
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
     return listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
@@ -567,7 +677,7 @@ function ScholarshipsPageInner({
 
   useEffect(() => {
     let cancelled = false;
-    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}`;
+    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}`;
     /**
      * Keep visible list stable on membership mutations (save/ignore/restore):
      * collection changes are handled optimistically in local state and should not
@@ -598,6 +708,13 @@ function ScholarshipsPageInner({
 
     const run = async () => {
       try {
+        if (isAuthenticated && activeTab === 'recommended' && !savedFiltersForHub) {
+          setScholarships([]);
+          setTotalCount(0);
+          setHasError(false);
+          setIsLoading(false);
+          return;
+        }
         setIsLoading(true);
         setHasError(false);
         const ids = userListIdsRef.current;
@@ -658,6 +775,7 @@ function ScholarshipsPageInner({
           moreFilters: tabAwareMoreFilters
             ? moreFiltersToJson(tabAwareMoreFilters)
             : undefined,
+          savedFiltersSnapshot: savedFiltersSnapshotJson,
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
@@ -711,12 +829,14 @@ function ScholarshipsPageInner({
     catalogListScope,
     routeScope,
     pathname,
-    routeBaseMoreFilters
+    routeBaseMoreFilters,
+    savedFiltersForHub,
+    savedFiltersSnapshotJson
   ]);
 
   useEffect(() => {
     let cancelled = false;
-    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}|${userCollectionsFingerprint}`;
+    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${moreFiltersFingerprint}|${userCollectionsFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}`;
     if (metaKeySynced.current === metaKey) return;
     if (metaRequestInFlightRef.current === metaKey) return;
     metaRequestInFlightRef.current = metaKey;
@@ -749,6 +869,7 @@ function ScholarshipsPageInner({
                   routeBaseMoreFilters ??
                   defaultMoreFiltersFromBounds(filterBounds))
           ),
+          savedFiltersSnapshot: savedFiltersSnapshotJson,
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
@@ -783,7 +904,8 @@ function ScholarshipsPageInner({
     moreFiltersApplied,
     routeScope,
     filterBounds,
-    routeBaseMoreFilters
+    routeBaseMoreFilters,
+    savedFiltersSnapshotJson
   ]);
 
   useEffect(() => {
@@ -933,69 +1055,6 @@ function ScholarshipsPageInner({
     router.replace(pathname, { scroll: false });
   }, [router, emptyMoreFiltersState, pathname]);
 
-  const viewSegment = useMemo<'best' | 'all' | 'easy'>(() => {
-    if (!isAuthenticated) {
-      if (activeTab === 'easy-apply') return 'easy';
-      if (activeTab === 'hot-deadlines') return 'easy';
-      if (activeTab === 'matches') return 'all';
-      if (activeTab === 'best-matches' || activeTab === 'recommended') {
-        return 'best';
-      }
-      return 'all';
-    }
-    return 'all';
-  }, [isAuthenticated, activeTab]);
-
-  const setViewBest = useCallback(() => {
-    if (!isAuthenticated) {
-      openRegistrationWall();
-      return;
-    }
-    if (isSubscriptionLocked) {
-      openSubscriptionOffer();
-      return;
-    }
-    replaceListingParams({
-      tab: 'best-matches',
-      resetPage: true
-    });
-  }, [
-    isAuthenticated,
-    isSubscriptionLocked,
-    openRegistrationWall,
-    openSubscriptionOffer,
-    replaceListingParams
-  ]);
-
-  const setViewAll = useCallback(() => {
-    replaceListingParams({
-      scope: 'catalog',
-      tab: 'matches',
-      resetPage: true
-    });
-  }, [replaceListingParams]);
-
-  const setViewEasy = useCallback(() => {
-    if (!isAuthenticated) {
-      openRegistrationWall();
-      return;
-    }
-    if (isSubscriptionLocked) {
-      openSubscriptionOffer();
-      return;
-    }
-    replaceListingParams({
-      tab: 'easy-apply',
-      resetPage: true
-    });
-  }, [
-    isAuthenticated,
-    isSubscriptionLocked,
-    openRegistrationWall,
-    openSubscriptionOffer,
-    replaceListingParams
-  ]);
-
   const showProfileWhy = false;
 
   const showPersonalizedMatchOnCards = false;
@@ -1108,7 +1167,10 @@ function ScholarshipsPageInner({
       case 'best-matches':
         return 'No best recommendations for the current filters. Try broadening your search or opening Matches.';
       case 'recommended':
-        return 'No recommendations in the current context. Adjust filters or open Matches for a broader list.';
+        if (isAuthenticated && !savedFiltersForHub) {
+          return 'Save a filter preset to use this tab: open More filters, choose options, then tap Save filter.';
+        }
+        return 'No scholarships match your saved filters. Adjust More filters or browse Matches.';
       case 'easy-apply':
         return 'No easy-apply scholarships in this set. Try broadening categories or More filters.';
       case 'hot-deadlines':
@@ -1116,7 +1178,7 @@ function ScholarshipsPageInner({
       default:
         return 'No scholarships match your filters. Try adjusting search or filters.';
     }
-  }, [activeTab, isAuthenticated]);
+  }, [activeTab, isAuthenticated, savedFiltersForHub]);
 
   const guestPersonalizedEmpty =
     !isAuthenticated &&
@@ -1183,72 +1245,9 @@ function ScholarshipsPageInner({
               isSubscriptionLocked ? openSubscriptionOffer : undefined
             }
             onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
-            listingViewControls={
-              !isAuthenticated ? (
-                <div
-                  className="flex h-10 w-full min-w-0 items-stretch rounded-xl bg-gray-100 p-1"
-                  role="group"
-                  aria-label="Listing view"
-                >
-                  <button
-                    type="button"
-                    onClick={setViewBest}
-                    title="Create a free account for personalized best matches"
-                    className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-2 text-center text-sm font-semibold transition sm:gap-1.5 sm:px-3 ${
-                      viewSegment === 'best'
-                        ? 'bg-gray-900 text-white shadow-sm'
-                        : 'text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    <Lock
-                      className={`h-3.5 w-3.5 shrink-0 ${
-                        viewSegment === 'best'
-                          ? 'text-white/85 stroke-white/85'
-                          : scholarshipGuestLockIconClass
-                      }`}
-                      strokeWidth={2}
-                      aria-hidden
-                    />
-                    <span className="min-w-0">Best match</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={setViewAll}
-                    className={`min-w-0 flex-1 rounded-lg px-2 text-center text-sm font-semibold transition sm:px-3 ${
-                      viewSegment === 'all'
-                        ? 'bg-gray-900 text-white shadow-sm'
-                        : 'text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    All
-                  </button>
-                  <button
-                    type="button"
-                    onClick={setViewEasy}
-                    title="Create a free account to use Easy apply"
-                    className={`flex min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-2 text-center text-sm font-semibold transition sm:gap-1.5 sm:px-3 ${
-                      viewSegment === 'easy'
-                        ? 'bg-gray-900 text-white shadow-sm'
-                        : 'text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    <Lock
-                      className={`h-3.5 w-3.5 shrink-0 ${
-                        viewSegment === 'easy'
-                          ? 'text-white/85 stroke-white/85'
-                          : scholarshipGuestLockIconClass
-                      }`}
-                      strokeWidth={2}
-                      aria-hidden
-                    />
-                    <span className="min-w-0">Easy apply</span>
-                  </button>
-                </div>
-              ) : null
-            }
           />
 
-          {!isAuthenticated && viewSegment !== 'all' ? (
+          {!isAuthenticated && activeTab !== 'matches' ? (
             <SubjectL2BrowseChips />
           ) : null}
 
@@ -1275,12 +1274,12 @@ function ScholarshipsPageInner({
                   <h3 className="text-base font-semibold text-[#7A3B00] sm:text-lg">
                     {activeTab === 'best-matches'
                       ? 'Complete your profile to unlock best matches'
-                      : 'Complete your profile to see recommendations'}
+                      : 'Complete your profile so we can align saved filters with your profile defaults.'}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-[#8C5A2B]">
                     {activeTab === 'best-matches'
                       ? 'Add your school level, field of study, citizenship, GPA, and location so we can show scholarships that fit you better.'
-                      : 'Fill in your academic and eligibility details so we can recommend scholarships that match your background.'}
+                      : 'Fill in your academic and eligibility details so saved filters can merge with your profile where helpful.'}
                   </p>
                   <div className="mt-4">
                     <Link
@@ -1349,6 +1348,8 @@ function ScholarshipsPageInner({
         onChange={setMoreFiltersDraft}
         onClear={clearMoreFiltersDraft}
         onApply={applyMoreFilters}
+        onSaveFilter={saveMoreFiltersPreset}
+        saveFilterEnabled={saveFilterEnabled}
         previewCount={previewCount}
         previewCountLoading={previewCountLoading}
         previewCountFallback={lastKnownPreviewCount}

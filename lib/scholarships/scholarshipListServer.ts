@@ -34,6 +34,7 @@ import {
 } from '@/lib/scholarships/supabase';
 import {
   buildScholarshipProfileFilterSeed,
+  mergeBestRecommendationFiltersFromProfile,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
 import {
@@ -122,6 +123,11 @@ export type ScholarshipListRequest = {
    * Set by the API when `categories.slug` is an active level-2 row.
    */
   catalogSubjectCategoryId: string | null;
+  /**
+   * Hub: optional “Saved filters” snapshot for sidebar `recommended` count when the active
+   * listing uses different `moreFilters`. `undefined` = omit (legacy). `null` = no saved preset (count 0).
+   */
+  savedFiltersSnapshot?: MoreFiltersState | null;
 };
 
 export type SeoListingFallbackMeta = {
@@ -762,8 +768,8 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
       }
       return q.in('id', submitted);
     case 'recommended': {
-      let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
-      return nq.or('is_verified.eq.true,credibility_score.gte.75');
+      /** Saved Filters tab: same catalog scope as Matches; narrowing is via `moreFilters` only. */
+      return applyTabScopeFixed({ ...req, tab: 'matches' }, q);
     }
     case 'easy-apply': {
       let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
@@ -960,11 +966,18 @@ function buildListMetaCacheKey(
     .sort()
     .join(',');
   const moreFiltersKey = JSON.stringify(moreFiltersToJson(req.moreFilters));
+  const savedSnapKey =
+    req.savedFiltersSnapshot === undefined
+      ? ''
+      : req.savedFiltersSnapshot === null
+        ? 'null'
+        : JSON.stringify(moreFiltersToJson(req.savedFiltersSnapshot));
   const profileKey = req.personalizedProfile
     ? `${req.personalizedProfile.id}:${scholarshipMatchProfileVersion(req.personalizedProfile)}`
     : 'none';
   return [
     req.tab,
+    savedSnapKey,
     req.deadline,
     req.listScope,
     `pf:${profileKey}`,
@@ -1291,12 +1304,44 @@ function normalizeTabScopedMoreFilters(
 }
 
 /**
+ * Sidebar “Saved Filters” (`recommended`) count: optional snapshot (hub) vs legacy `moreFilters`.
+ */
+function moreFiltersForRecommendedSidebarCount(
+  req: ScholarshipListRequest,
+  bounds: ScholarshipListMeta['filterBounds']
+): MoreFiltersState | null {
+  const profile = req.personalizedProfile ?? null;
+  const seed = profile ? buildScholarshipProfileFilterSeed(profile) : null;
+
+  if (req.savedFiltersSnapshot === undefined) {
+    const base = cloneMoreFilters(req.moreFilters);
+    return mergeBestRecommendationFiltersFromProfile(
+      'recommended',
+      base,
+      seed,
+      bounds
+    );
+  }
+  if (req.savedFiltersSnapshot === null) {
+    return null;
+  }
+  const base = cloneMoreFilters(req.savedFiltersSnapshot);
+  return mergeBestRecommendationFiltersFromProfile(
+    'recommended',
+    base,
+    seed,
+    bounds
+  );
+}
+
+/**
  * Stable sidebar counts source of truth.
  * Intentionally decoupled from active list tab/page/sort/list total.
  */
 export async function fetchScholarshipSidebarCounts(
   supabase: ServerSupabaseClient,
-  req: ScholarshipListRequest
+  req: ScholarshipListRequest,
+  bounds: ScholarshipListMeta['filterBounds']
 ): Promise<ScholarshipSidebarCounts> {
   const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
   const tabs: ScholarshipListTabId[] = [
@@ -1311,18 +1356,28 @@ export async function fetchScholarshipSidebarCounts(
     'ignored'
   ];
   const sidebarParts = await Promise.all(
-    tabs.map(async (t) => ({
-      t,
-      n: await countFor(
-        supabase,
-        t === 'easy-apply'
-          ? easyApplyListCanonicalRequest(effectiveReq)
-          : t === 'hot-deadlines'
-            ? hotDeadlinesListCanonicalRequest(effectiveReq)
-            : effectiveReq,
-        t
-      )
-    }))
+    tabs.map(async (t) => {
+      if (t === 'recommended') {
+        const mf = moreFiltersForRecommendedSidebarCount(effectiveReq, bounds);
+        if (mf === null) {
+          return { t, n: 0 };
+        }
+        const r = { ...effectiveReq, moreFilters: mf };
+        return { t, n: await countFor(supabase, r, 'recommended') };
+      }
+      return {
+        t,
+        n: await countFor(
+          supabase,
+          t === 'easy-apply'
+            ? easyApplyListCanonicalRequest(effectiveReq)
+            : t === 'hot-deadlines'
+              ? hotDeadlinesListCanonicalRequest(effectiveReq)
+              : effectiveReq,
+          t
+        )
+      };
+    })
   );
   const sidebarCounts: ScholarshipSidebarCounts = {
     bestMatches: 0,
@@ -1624,7 +1679,7 @@ export async function fetchScholarshipListMeta(
   }
 
   const categoryReq = categoryDropdownCountsRequest(req, b);
-  const sidebarCounts = await fetchScholarshipSidebarCounts(supabase, req);
+  const sidebarCounts = await fetchScholarshipSidebarCounts(supabase, req, b);
 
   const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
   if (includeCategoryCounts) {

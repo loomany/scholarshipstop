@@ -74,21 +74,6 @@ export function scholarshipTabShowsCardActions(tab: ScholarshipListTabId): boole
   return SCHOLARSHIP_LIST_TAB_IDS.includes(tab);
 }
 
-function credPercent(s: Scholarship): number | null {
-  const lab = s.credibilityLabel?.trim();
-  if (!lab) return null;
-  const m = lab.match(/(\d+)\s*%/);
-  if (m) return Number(m[1]);
-  return null;
-}
-
-function isRecommendedScholarship(s: Scholarship): boolean {
-  if (s.featured) return true;
-  if (s.verified) return true;
-  const p = credPercent(s);
-  return p !== null && p >= 70;
-}
-
 /** Mirrors SQL tab scope for best-matches (high credibility or verified). */
 function isBestMatchesTabScholarship(s: Scholarship): boolean {
   if (s.verified) return true;
@@ -125,7 +110,8 @@ export function scholarshipsInTab(
     case 'ignored':
       return usa.filter((s) => ign.has(s.id));
     case 'recommended':
-      return usa.filter((s) => !ign.has(s.id) && isRecommendedScholarship(s));
+      /** Hub uses API for this tab; static catalog fallback mirrors Matches scope. */
+      return usa.filter((s) => !ign.has(s.id));
     case 'easy-apply':
       return usa.filter(
         (s) => !ign.has(s.id) && (s.eligibility?.length ?? 0) === 0
@@ -182,7 +168,7 @@ export function scholarshipListPageTitle(
     case 'saved':
       return 'Saved scholarships';
     case 'recommended':
-      return guest ? 'Recommended' : 'Recommended scholarships';
+      return guest ? 'Saved filters' : 'Saved filters';
     case 'easy-apply':
       return 'Easy apply scholarships';
     case 'hot-deadlines':
@@ -202,6 +188,7 @@ export function scholarshipListPageTitle(
 export function scholarshipListLoadingText(tab: ScholarshipListTabId): string {
   if (tab === 'saved') return 'Loading saved…';
   if (tab === 'best-matches') return 'Loading best matches…';
+  if (tab === 'recommended') return 'Loading saved filters…';
   if (tab === 'hot-deadlines') return 'Loading hot deadlines…';
   return 'Loading matches…';
 }

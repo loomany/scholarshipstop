@@ -28,6 +28,8 @@ export function normalizeScholarshipsListRows(
 export type ScholarshipsListPostBody = {
   searchParams: string;
   moreFilters?: MoreFiltersJson;
+  /** `null` = no saved preset (Saved Filters sidebar count = 0). Omit on legacy clients. */
+  savedFiltersSnapshot?: MoreFiltersJson | null;
   longTailLegacySlugs?: string[];
   seoListingFallback?: boolean;
   slugOnlyMoreFilters?: MoreFiltersJson;
@@ -75,6 +77,7 @@ export async function postScholarshipsCount(
     body: JSON.stringify({
       searchParams: sp.toString(),
       moreFilters: body.moreFilters,
+      savedFiltersSnapshot: body.savedFiltersSnapshot,
       longTailLegacySlugs: body.longTailLegacySlugs,
       seoListingFallback: body.seoListingFallback,
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
@@ -96,6 +99,7 @@ export async function postScholarshipsMeta(
     body: JSON.stringify({
       searchParams: sp.toString(),
       moreFilters: body.moreFilters,
+      savedFiltersSnapshot: body.savedFiltersSnapshot,
       longTailLegacySlugs: body.longTailLegacySlugs,
       seoListingFallback: body.seoListingFallback,
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
