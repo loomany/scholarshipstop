@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import { unstable_noStore as noStore } from 'next/cache';
 import SubscriptionPricingClient from '@/components/subscription/SubscriptionPricingClient';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
+import type { Json } from '@/types_db';
 import {
   deriveSubscriptionPresentation,
   inferSubscriptionBillingTier
 } from '@/lib/payments/subscriptionEntitlements';
+import { extractLemonCustomerPortalUrl } from '@/lib/payments/lemonSubscriptionState';
 import { createClient } from '@/utils/supabase/server';
 import { getSubscription, getUser } from '@/utils/supabase/queries';
 import type { BillingPlanKey } from '@/app/actions/billing';
@@ -17,6 +19,15 @@ export const metadata: Metadata = {
 // Must be dynamic: pricing CTAs depend on the signed-in user's subscription row.
 // Without this, Next can serve a static shell where `getUser` never runs with cookies.
 export const dynamic = 'force-dynamic';
+
+function getManageSubscriptionUrlFromRow(row: unknown): string | null {
+  if (!row || typeof row !== 'object') return null;
+  const candidate = row as { provider?: unknown; raw_payload?: Json | null };
+  if (candidate.provider !== 'lemon_squeezy') return null;
+  return extractLemonCustomerPortalUrl(
+    candidate.raw_payload as Parameters<typeof extractLemonCustomerPortalUrl>[0]
+  );
+}
 
 export default async function SubscriptionPage() {
   noStore();
@@ -30,6 +41,7 @@ export default async function SubscriptionPage() {
   const currentPlanKey: BillingPlanKey | null = presentation.isSubscribed
     ? inferSubscriptionBillingTier(subscription, profile.data)
     : null;
+  const manageSubscriptionUrl = getManageSubscriptionUrlFromRow(subscription);
 
   return (
     <>
@@ -47,6 +59,7 @@ export default async function SubscriptionPage() {
           <SubscriptionPricingClient
             currentPlanKey={currentPlanKey}
             hasActiveSubscription={presentation.isSubscribed}
+            manageSubscriptionUrl={manageSubscriptionUrl}
           />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">

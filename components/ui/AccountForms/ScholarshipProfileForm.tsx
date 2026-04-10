@@ -688,13 +688,8 @@ export default function ScholarshipProfileForm({
   }, [router]);
 
   const onManageSubscription = useCallback(() => {
-    const manageUrl = getLemonManageSubscriptionUrl(subscription);
-    if (manageUrl) {
-      window.location.assign(manageUrl);
-      return;
-    }
     router.push('/subscription');
-  }, [router, subscription]);
+  }, [router]);
 
   const isAccount = variant === 'account';
   const isSaas = variant === 'saas';
@@ -910,7 +905,7 @@ export default function ScholarshipProfileForm({
             badgeClass: 'bg-orange-100 text-orange-700 font-medium ring-1 ring-orange-200',
             title: 'Keep Premium Access Active',
             subtitle: null,
-            buttonLabel: 'Manage Subscription',
+            buttonLabel: 'View Your Plan',
             buttonClass:
               'bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow-md',
             showTrialProgress: true

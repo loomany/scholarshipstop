@@ -24,7 +24,11 @@ declare global {
 }
 
 /** Compact trial note — same language as `ScholarshipsEmailConfirmationBanner`. */
-function PlanTrialBetweenFeaturesAndCta() {
+function PlanTrialBetweenFeaturesAndCta({
+  manageSubscriptionUrl
+}: {
+  manageSubscriptionUrl?: string | null;
+}) {
   return (
     <div className="flex w-full max-w-md shrink-0 flex-col items-center justify-center border-t border-gray-100 pt-4 lg:w-[12rem] lg:max-w-[13rem] lg:min-w-[10.5rem] lg:items-stretch lg:border-l lg:border-t-0 lg:pl-3 lg:pr-0 lg:pt-0 xl:w-[13rem]">
       <div
@@ -40,6 +44,15 @@ function PlanTrialBetweenFeaturesAndCta() {
           </span>
         </p>
       </div>
+      {manageSubscriptionUrl ? (
+        <button
+          type="button"
+          onClick={() => window.location.assign(manageSubscriptionUrl)}
+          className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-zinc-300 bg-white px-3 py-2 text-center text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 sm:text-sm"
+        >
+          Manage Subscription
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -76,6 +89,7 @@ type PlanRowProps = {
   featured?: boolean;
   ctaAbove?: ReactNode;
   hasActiveSubscription?: boolean;
+  manageSubscriptionUrl?: string | null;
   isCurrentPlan?: boolean;
   isLoading: boolean;
   isBusy: boolean;
@@ -95,6 +109,7 @@ function PlanGrantCard({
   featured = false,
   ctaAbove,
   hasActiveSubscription = false,
+  manageSubscriptionUrl = null,
   isCurrentPlan = false,
   isLoading,
   isBusy,
@@ -138,7 +153,7 @@ function PlanGrantCard({
           <PlanFeatureList items={features} />
         </div>
 
-        <PlanTrialBetweenFeaturesAndCta />
+        <PlanTrialBetweenFeaturesAndCta manageSubscriptionUrl={manageSubscriptionUrl} />
 
         <div className="flex w-full max-w-md shrink-0 flex-col items-center gap-2 border-t border-gray-100 pt-4 lg:max-w-none lg:w-44 lg:items-stretch lg:justify-center lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0">
           {ctaAbove}
@@ -250,11 +265,13 @@ const PLANS: PlanConfig[] = [
 
 export default function SubscriptionPricingClient({
   currentPlanKey = null,
-  hasActiveSubscription: hasActiveSubscriptionProp
+  hasActiveSubscription: hasActiveSubscriptionProp,
+  manageSubscriptionUrl = null
 }: {
   currentPlanKey?: BillingPlanKey | null;
   /** When set, overrides the legacy heuristic (`currentPlanKey !== null`). */
   hasActiveSubscription?: boolean;
+  manageSubscriptionUrl?: string | null;
 }) {
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
@@ -317,6 +334,7 @@ export default function SubscriptionPricingClient({
             featured={plan.featured}
             ctaAbove={plan.ctaAbove}
             hasActiveSubscription={hasActiveSubscription}
+            manageSubscriptionUrl={manageSubscriptionUrl}
             isCurrentPlan={currentPlanKey === plan.planKey}
             isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}

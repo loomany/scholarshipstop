@@ -40,25 +40,25 @@ function planCardFromSubscriptionPlan(
   switch (plan) {
     case 'trial':
       return {
-        planDisplayName: fromLemon || '3-Day Trial',
+        planDisplayName: 'Monthly',
         planPriceDisplay: '$0',
         planCadenceLine: 'Full access during your trial'
       };
     case 'monthly_pro':
       return {
-        planDisplayName: fromLemon || 'Monthly Pro',
+        planDisplayName: 'Monthly',
         planPriceDisplay: '$25',
         planCadenceLine: 'Billed every month'
       };
     case 'quarterly_pro':
       return {
-        planDisplayName: fromLemon || 'Quarterly Pro',
+        planDisplayName: 'Quarterly',
         planPriceDisplay: '$57',
         planCadenceLine: 'Billed every 3 months'
       };
     case 'yearly_pro':
       return {
-        planDisplayName: fromLemon || 'Yearly Pro',
+        planDisplayName: 'Yearly',
         planPriceDisplay: '$144',
         planCadenceLine: 'Billed annually'
       };
