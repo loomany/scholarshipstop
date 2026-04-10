@@ -28,39 +28,59 @@ function shouldSkipSignatureValidation() {
   return process.env.NODE_ENV !== 'production' && process.env.LEMON_WEBHOOK_SKIP_SIGNATURE === '1';
 }
 
+/** Signing secret from the webhook in Lemon (6–40 chars), not the REST API key. Try all distinct env values. */
+function lemonWebhookSecretCandidates(): string[] {
+  const raw = [
+    process.env.LEMON_SQUEEZY_WEBHOOK_SECRET,
+    process.env.LEMON_SQUEEZY_SECRET
+  ];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const s of raw) {
+    const t = s?.trim();
+    if (t && !seen.has(t)) {
+      seen.add(t);
+      out.push(t);
+    }
+  }
+  return out;
+}
+
 export async function POST(req: Request) {
   const rawBodyBuffer = await req.arrayBuffer();
   const rawBodyBytes = new Uint8Array(rawBodyBuffer);
   const bodyText = new TextDecoder().decode(rawBodyBytes);
   const signature = req.headers.get('x-signature');
-  const webhookSecret =
-    process.env.LEMON_SQUEEZY_SECRET ??
-    process.env.LEMON_SQUEEZY_WEBHOOK_SECRET ??
-    '';
+  const secretCandidates = lemonWebhookSecretCandidates();
   let payload: LemonWebhookPayload;
 
   try {
-    if (!webhookSecret) {
+    if (secretCandidates.length === 0) {
       return new Response('Webhook secret is not configured.', { status: 500 });
     }
     if (!signature) {
       return new Response('Invalid signature', { status: 400 });
     }
+    const signatureValid = secretCandidates.some((secret) =>
+      validateLemonSignature({
+        rawBody: rawBodyBytes,
+        signatureHeader: signature,
+        secret
+      })
+    );
     const signatureDebug = getLemonSignatureDebug({
       rawBody: rawBodyBytes,
       signatureHeader: signature,
-      secret: webhookSecret
-    });
-    const signatureValid = validateLemonSignature({
-      rawBody: rawBodyBytes,
-      signatureHeader: signature,
-      secret: webhookSecret
+      secret: secretCandidates[0]!
     });
     if (!signatureValid) {
       if (shouldSkipSignatureValidation()) {
         console.warn('[lemon:webhook] skipping invalid signature in local development', signatureDebug);
       } else {
-        console.warn('[lemon:webhook] invalid signature', signatureDebug);
+        console.warn('[lemon:webhook] invalid signature (check LEMON_SQUEEZY_WEBHOOK_SECRET matches Lemon webhook signing secret)', {
+          ...signatureDebug,
+          candidateCount: secretCandidates.length
+        });
         return new Response('Invalid signature', { status: 400 });
       }
     }
