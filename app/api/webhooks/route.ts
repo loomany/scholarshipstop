@@ -18,6 +18,10 @@ const supabaseAdmin = createClient<Database>(
   process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
+function shouldSkipSignatureValidation() {
+  return process.env.NODE_ENV !== 'production' && process.env.LEMON_WEBHOOK_SKIP_SIGNATURE === '1';
+}
+
 export async function POST(req: Request) {
   const rawBodyBuffer = await req.arrayBuffer();
   const rawBodyBytes = new Uint8Array(rawBodyBuffer);
@@ -36,22 +40,23 @@ export async function POST(req: Request) {
     if (!signature) {
       return new Response('Invalid signature', { status: 400 });
     }
-    if (
-      !validateLemonSignature({
-        rawBody: rawBodyBytes,
-        signatureHeader: signature,
-        secret: webhookSecret
-      })
-    ) {
-      console.warn(
-        '[lemon:webhook] invalid signature',
-        getLemonSignatureDebug({
-          rawBody: rawBodyBytes,
-          signatureHeader: signature,
-          secret: webhookSecret
-        })
-      );
-      return new Response('Invalid signature', { status: 400 });
+    const signatureDebug = getLemonSignatureDebug({
+      rawBody: rawBodyBytes,
+      signatureHeader: signature,
+      secret: webhookSecret
+    });
+    const signatureValid = validateLemonSignature({
+      rawBody: rawBodyBytes,
+      signatureHeader: signature,
+      secret: webhookSecret
+    });
+    if (!signatureValid) {
+      if (shouldSkipSignatureValidation()) {
+        console.warn('[lemon:webhook] skipping invalid signature in local development', signatureDebug);
+      } else {
+        console.warn('[lemon:webhook] invalid signature', signatureDebug);
+        return new Response('Invalid signature', { status: 400 });
+      }
     }
     payload = JSON.parse(bodyText) as LemonWebhookPayload;
   } catch (error) {

@@ -150,7 +150,7 @@ function normalizeLemonStatus(status?: string) {
   const normalized = (status ?? '').toLowerCase();
   switch (normalized) {
     case 'on_trial':
-      return 'on_trial';
+      return 'trialing';
     case 'active':
       return 'active';
     case 'paused':
@@ -173,7 +173,7 @@ function normalizeLemonStatus(status?: string) {
 function derivePlanCode(payload: LemonWebhookPayload): AppSubscriptionPlan {
   const attributes = getLemonAttributes(payload);
   const normalizedStatus = normalizeLemonStatus(attributes?.status);
-  if (normalizedStatus === 'on_trial') {
+  if (normalizedStatus === 'trialing') {
     return 'trial';
   }
 
@@ -240,7 +240,7 @@ function buildSubscriptionUpsert(
         ? attributes?.updated_at ?? nowIso
         : null,
     trial_start:
-      normalizedStatus === 'on_trial'
+      normalizedStatus === 'trialing'
         ? attributes?.created_at ?? nowIso
         : null,
     trial_end: attributes?.trial_ends_at ?? null,

@@ -70,7 +70,7 @@ test('maps on_trial status to trial plan and active access', () => {
   assert.equal(decision.userId, 'user-789');
   assert.equal(decision.isSubscribed, true);
   assert.equal(decision.eventName, 'subscription_created');
-  assert.equal(decision.subscription.status, 'on_trial');
+  assert.equal(decision.subscription.status, 'trialing');
   assert.equal(decision.subscriptionPlan, 'trial');
 });
 
