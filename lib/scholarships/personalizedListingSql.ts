@@ -10,7 +10,7 @@ function csLiteral(values: string[]): string {
 }
 
 /**
- * Soft “profile fit” predicate for SQL listings. Mirrors key OR-signals from `matchScholarship`
+ * Soft “profile fit” predicate for SQL listings (field / level / state / citizenship OR-signals).
  * without per-user id arrays. Combined with `applyTabScopeFixed` for best / recommended / matches / easy.
  */
 export function applyPersonalizedProfileFitSql(q: any, profile: ProfilesRow): any {

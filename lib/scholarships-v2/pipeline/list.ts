@@ -1,4 +1,3 @@
-import { scoreScholarshipMatch } from '@/lib/scholarships-v2/matching/scoring';
 import { buildScholarshipsRequestKey } from '@/lib/scholarships-v2/pipeline/requestKey';
 import { resolveScholarshipsMode } from '@/lib/scholarships-v2/tabs/userCollections';
 import type {
@@ -20,7 +19,7 @@ function sortRowsByMode(
   rows: ScholarshipListItem[]
 ): ScholarshipListItem[] {
   if (mode === 'bestMatches') {
-    return [...rows].sort((a, b) => (b.matchScore?.total ?? 0) - (a.matchScore?.total ?? 0));
+    return [...rows];
   }
   return rows;
 }
@@ -50,30 +49,15 @@ export async function getBestMatches(input: {
   filters: EffectiveScholarshipFilters;
   profileSignals: ScholarshipProfileSignals;
 }): Promise<{ rows: ScholarshipListItem[]; total: number; requestKey: string }> {
+  void input.profileSignals;
   const bestMatchFilters: EffectiveScholarshipFilters = {
     ...input.filters,
     mode: 'bestMatches',
     sort: 'relevance'
   };
 
-  const base = await getScholarshipList({
+  return getScholarshipList({
     repository: input.repository,
     filters: bestMatchFilters
   });
-
-  const scored = base.rows
-    .map((scholarship) => ({
-      ...scholarship,
-      matchScore: scoreScholarshipMatch({
-        profile: input.profileSignals,
-        scholarship: scholarship.eligibility
-      })
-    }))
-    .sort((a, b) => (b.matchScore?.total ?? 0) - (a.matchScore?.total ?? 0));
-
-  return {
-    rows: scored,
-    total: base.total,
-    requestKey: base.requestKey
-  };
 }

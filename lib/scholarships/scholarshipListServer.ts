@@ -32,17 +32,17 @@ import {
   scholarshipListSelectWithCatalogSubjectJoin,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
-import type { ScholarshipProfileFilterSeed } from '@/lib/scholarships/profileFilterDefaults';
-import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
+import {
+  buildScholarshipProfileFilterSeed,
+  type ScholarshipProfileFilterSeed
+} from '@/lib/scholarships/profileFilterDefaults';
+import {
+  scholarshipMatchProfileVersion,
+  type ProfilesRow
+} from '@/lib/scholarships/scholarshipMatch';
 import { isSeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
 import { requirementTypesToDbColumns } from '@/lib/scholarships/requirementTypeMapping';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
-import {
-  canBuildPersonalizedMatchIndex,
-  getCachedScholarshipMatchIndex,
-  scholarshipMatchProfileVersion
-} from '@/lib/scholarships/scholarshipMatchCache';
-import { filterIdsByIgnored } from '@/lib/scholarships/scholarshipMatchIndex';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import type { createClient } from '@/utils/supabase/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -1115,26 +1115,6 @@ export async function executeScholarshipListQuery(
   req: ScholarshipListRequest,
   opts: ScholarshipListQueryOpts
 ): Promise<ScholarshipListResult> {
-  if (req.tab === 'best-matches' || req.tab === 'recommended') {
-    const ids = await personalizedBucketIds(supabase, req, req.tab);
-    const listReq: ScholarshipListRequest = {
-      ...req,
-      tab: 'saved',
-      saved: ids
-    };
-    const result = await executeScholarshipListQuery(supabase, listReq, {
-      ...opts,
-      includeMeta: false
-    });
-    if (opts.includeMeta) {
-      const bounds = await fetchGlobalFilterBounds(supabase);
-      result.meta = await fetchScholarshipListMeta(supabase, req, bounds, {
-        includeCategoryCounts: opts.includeCategoryCounts
-      });
-    }
-    return result;
-  }
-
   /**
    * Catalog “similar scholarships” must bypass personalized match ordering.
    * Otherwise `similar_to` is ignored whenever a match bundle exists.
@@ -1278,22 +1258,6 @@ async function countFor(
   return countScholarshipsForTabRequest(supabase, req, tab);
 }
 
-async function personalizedBucketIds(
-  supabase: ServerSupabaseClient,
-  req: ScholarshipListRequest,
-  tab: 'best-matches' | 'recommended'
-): Promise<string[]> {
-  const profile = req.personalizedProfile ?? null;
-  if (!canBuildPersonalizedMatchIndex(profile)) return [];
-  const bundle = await getCachedScholarshipMatchIndex(
-    supabase as any,
-    profile.id,
-    profile
-  );
-  const raw = tab === 'best-matches' ? bundle.idsBest : bundle.idsRecommended;
-  return filterIdsByIgnored(raw, req.ignored);
-}
-
 function easyApplyListCanonicalRequest(
   req: ScholarshipListRequest
 ): ScholarshipListRequest {
@@ -1349,29 +1313,15 @@ export async function fetchScholarshipSidebarCounts(
   const sidebarParts = await Promise.all(
     tabs.map(async (t) => ({
       t,
-      n:
-        t === 'best-matches' || t === 'recommended'
-          ? await (async () => {
-              const ids = await personalizedBucketIds(supabase, effectiveReq, t);
-              return countFor(
-                supabase,
-                {
-                  ...effectiveReq,
-                  tab: 'saved',
-                  saved: ids
-                },
-                'saved'
-              );
-            })()
-          : await countFor(
-              supabase,
-              t === 'easy-apply'
-                ? easyApplyListCanonicalRequest(effectiveReq)
-                : t === 'hot-deadlines'
-                  ? hotDeadlinesListCanonicalRequest(effectiveReq)
-                  : effectiveReq,
-              t
-            )
+      n: await countFor(
+        supabase,
+        t === 'easy-apply'
+          ? easyApplyListCanonicalRequest(effectiveReq)
+          : t === 'hot-deadlines'
+            ? hotDeadlinesListCanonicalRequest(effectiveReq)
+            : effectiveReq,
+        t
+      )
     }))
   );
   const sidebarCounts: ScholarshipSidebarCounts = {
@@ -1693,8 +1643,8 @@ export async function fetchScholarshipListMeta(
     filterBounds: b,
     sidebarCounts,
     categoryCounts,
-    personalizedMatchReady: canBuildPersonalizedMatchIndex(
-      req.personalizedProfile ?? null
+    personalizedMatchReady: Boolean(
+      buildScholarshipProfileFilterSeed(req.personalizedProfile ?? null)
     )
   };
   writeTtlValue(listMetaCache, cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);

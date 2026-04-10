@@ -281,11 +281,7 @@ function SimilarScholarshipDetailListItem({
     !hasSubscription &&
     (similarEasyApplyIds.includes('easy_apply') ||
       similarEasyApplyIds.includes('quick_apply'));
-  const matchScore =
-    s.aiMatchScore != null && !Number.isNaN(s.aiMatchScore)
-      ? Math.max(0, Math.min(100, Math.round(s.aiMatchScore)))
-      : null;
-  const showBadgeColumn = showBestMatchChip || matchScore != null;
+  const showBadgeColumn = showBestMatchChip;
   const showRightHeader =
     showBadgeColumn || similarSubscriptionLocked;
 
@@ -322,32 +318,14 @@ function SimilarScholarshipDetailListItem({
                 Best match
               </span>
             ) : null}
-            {similarSubscriptionLocked || matchScore != null ? (
+            {similarSubscriptionLocked ? (
               <div className="flex items-center justify-end gap-1.5">
-                {similarSubscriptionLocked ? (
-                  <span
-                    className="pointer-events-none inline-flex h-[22px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
-                    aria-hidden
-                  >
-                    <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
-                  </span>
-                ) : null}
-                {matchScore != null ? (
-                  <span
-                    className={`whitespace-nowrap rounded-full px-2 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide ${
-                      deadlinePassed
-                        ? 'bg-zinc-200/90 text-zinc-600'
-                        : 'bg-violet-100 text-violet-900'
-                    }`}
-                    title={
-                      s.aiMatchBand?.trim()
-                        ? `Band: ${s.aiMatchBand}`
-                        : 'Match score (0–100)'
-                    }
-                  >
-                    Match {matchScore}%
-                  </span>
-                ) : null}
+                <span
+                  className="pointer-events-none inline-flex h-[22px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
+                  aria-hidden
+                >
+                  <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
+                </span>
               </div>
             ) : null}
           </div>

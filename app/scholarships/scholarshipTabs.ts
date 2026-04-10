@@ -89,6 +89,13 @@ function isRecommendedScholarship(s: Scholarship): boolean {
   return p !== null && p >= 70;
 }
 
+/** Mirrors SQL tab scope for best-matches (high credibility or verified). */
+function isBestMatchesTabScholarship(s: Scholarship): boolean {
+  if (s.verified) return true;
+  const c = s.credibilityScore;
+  return c != null && Number.isFinite(c) && c >= 90;
+}
+
 export type TabIdSets = {
   saved: string[];
   ignored: string[];
@@ -109,7 +116,7 @@ export function scholarshipsInTab(
   switch (tab) {
     case 'best-matches':
       return usa.filter(
-        (s) => !ign.has(s.id) && (s.aiMatchScore ?? 0) > 90
+        (s) => !ign.has(s.id) && isBestMatchesTabScholarship(s)
       );
     case 'matches':
       return usa.filter((s) => !ign.has(s.id));

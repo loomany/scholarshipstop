@@ -19,7 +19,10 @@ import {
 } from '@/lib/scholarships/scholarshipListServer';
 import type { Database } from '@/types_db';
 import { profileMatchSummaryFromRow } from '@/lib/scholarships/profileMatchMeta';
-import { buildScholarshipProfileFilterSeed } from '@/lib/scholarships/profileFilterDefaults';
+import {
+  buildScholarshipProfileFilterSeed,
+  mergeBestRecommendationFiltersFromProfile
+} from '@/lib/scholarships/profileFilterDefaults';
 import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
@@ -322,6 +325,21 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   }
   if (profileRow) {
     req = { ...req, personalizedProfile: profileRow };
+  }
+
+  if (
+    profileFilterSeed &&
+    (req.tab === 'best-matches' || req.tab === 'recommended')
+  ) {
+    req = {
+      ...req,
+      moreFilters: mergeBestRecommendationFiltersFromProfile(
+        req.tab,
+        req.moreFilters,
+        profileFilterSeed,
+        bounds
+      )
+    };
   }
 
   if (hubDbg) {

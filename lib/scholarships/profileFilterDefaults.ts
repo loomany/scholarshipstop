@@ -1,7 +1,9 @@
 import {
+  cloneMoreFilters,
   defaultMoreFiltersFromBounds,
   type MoreFiltersState
 } from '@/app/scholarships/moreFilters';
+import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import { parseUserGpa, type ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 
@@ -108,4 +110,43 @@ export function buildMoreFiltersWithProfileDefaults(
   next.includeGpaBuckets = new Set(seed.gpaBucketIds);
   next.includeEligibility = new Set(seed.eligibilityIds);
   return next;
+}
+
+/**
+ * Best matches / Recommended: apply cabinet (profile) facets to the listing SQL when the user
+ * has not chosen a stricter value in the hub UI. Missing profile fields produce no seed slice,
+ * so those dimensions stay open (wider results).
+ */
+export function mergeBestRecommendationFiltersFromProfile(
+  tab: ScholarshipListTabId,
+  moreFilters: MoreFiltersState,
+  seed: ScholarshipProfileFilterSeed | null,
+  bounds: {
+    amountMin: number;
+    amountMax: number;
+    applicantsMin: number;
+    applicantsMax: number;
+  }
+): MoreFiltersState {
+  const out = cloneMoreFilters(moreFilters);
+  if ((tab !== 'best-matches' && tab !== 'recommended') || !seed) {
+    return out;
+  }
+
+  const prof = buildMoreFiltersWithProfileDefaults(bounds, seed);
+
+  if (!out.filterStateInput.trim() && prof.filterStateInput.trim()) {
+    out.filterStateInput = prof.filterStateInput;
+  }
+  if (out.includeEducationLevels.size === 0 && prof.includeEducationLevels.size > 0) {
+    out.includeEducationLevels = new Set(prof.includeEducationLevels);
+  }
+  if (out.includeGpaBuckets.size === 0 && prof.includeGpaBuckets.size > 0) {
+    out.includeGpaBuckets = new Set(prof.includeGpaBuckets);
+  }
+  if (out.includeEligibility.size === 0 && prof.includeEligibility.size > 0) {
+    out.includeEligibility = new Set(prof.includeEligibility);
+  }
+
+  return out;
 }

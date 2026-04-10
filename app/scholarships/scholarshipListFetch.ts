@@ -106,33 +106,3 @@ export async function postScholarshipsMeta(
   return res.json();
 }
 
-export type ScholarshipsMatchCountsResponse = {
-  counts?: {
-    bestMatches: number;
-    recommended: number;
-    matches: number;
-    easyApply: number;
-  } | null;
-};
-
-export async function postScholarshipsMatchCounts(body: {
-  ignored?: string[];
-}): Promise<ScholarshipsMatchCountsResponse> {
-  const res = await fetch('/api/scholarships/match', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      page: 1,
-      limit: 1,
-      bucket: 'matches',
-      ignored: body.ignored ?? []
-    }),
-    cache: 'no-store'
-  });
-  if (res.status === 401) {
-    return { counts: null };
-  }
-  if (!res.ok) throw new Error('match counts failed');
-  const data = (await res.json()) as ScholarshipsMatchCountsResponse;
-  return data;
-}

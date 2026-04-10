@@ -229,29 +229,10 @@ export function getUrgencyBadge(
   return { label: u, variant };
 }
 
-export function getMatchBadge(s: Scholarship): {
+export function getMatchBadge(_s: Scholarship): {
   label: string;
   title?: string;
 } | null {
-  const score = s.aiMatchScore;
-  const bandRaw = s.aiMatchBand?.trim();
-  const explain = s.aiScoreExplanation?.trim();
-  if (score != null && !Number.isNaN(score)) {
-    const clamped = Math.max(0, Math.min(100, Math.round(score)));
-    const band =
-      bandRaw ||
-      (clamped >= 67 ? 'High' : clamped >= 34 ? 'Medium' : 'Low');
-    return {
-      label: `Match ${clamped}%`,
-      title: explain ? `${band} fit — ${explain}` : `${band} fit (0–100)`
-    };
-  }
-  if (bandRaw) {
-    return {
-      label: `${bandRaw} fit`,
-      title: explain || undefined
-    };
-  }
   return null;
 }
 

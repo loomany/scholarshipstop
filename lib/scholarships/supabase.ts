@@ -13,21 +13,6 @@ import { createClient } from '@/utils/supabase/server';
 import { createPublicClient } from '@/utils/supabase/public';
 
 export type ScholarshipRow = Database['public']['Tables']['scholarships']['Row'];
-export type ScholarshipMatchScoreRow = Pick<
-  ScholarshipRow,
-  | 'id'
-  | 'field_of_study'
-  | 'study_levels'
-  | 'catalog_education_levels'
-  | 'citizenship_statuses'
-  | 'gpa_requirement_min'
-  | 'essay_required'
-  | 'requirements_count'
-  | 'requirement_signals_count'
-  | 'easy_apply_flags'
-  | 'state_territory_text'
-  | 'state_codes'
->;
 
 export { sanitizeRequirementLines };
 
@@ -160,25 +145,6 @@ const LISTING_CARD_SELECT_COLUMNS = [
  * `mapScholarshipRow` tolerates missing columns (undefined → empty / derived from counts).
  */
 export const LIST_CARD_SELECT = LISTING_CARD_SELECT_COLUMNS.join(', ');
-
-/**
- * Match/scoring payload — only fields used by `matchScholarship`, `isEasyApplyScholarship`,
- * and lightweight card mapping for result merge/order.
- */
-export const MATCH_SCORE_SELECT = [
-  'id',
-  'essay_required',
-  'requirements_count',
-  'requirement_signals_count',
-  'catalog_education_levels',
-  'gpa_requirement_min',
-  'easy_apply_flags',
-  'study_levels',
-  'field_of_study',
-  'citizenship_statuses',
-  'state_territory_text',
-  'state_codes'
-].join(', ');
 
 /**
  * Active-catalog payload for server/script consumers that still need broad scholarship records,
