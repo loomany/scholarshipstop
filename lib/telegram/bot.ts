@@ -807,23 +807,8 @@ async function sendWelcomeMessage(user: TelegramUserRow) {
   await sendTelegramMessage(user.telegram_chat_id, text, buildMainKeyboard());
 }
 
-/** Same grant-alert toggles as on the website account (Best / Saved / Easy / Hot). */
+/** Inline toggles (Best / Saved / Easy / Hot). If account not linked, taps show “connect first” (see handleGrantNotifyToggle). */
 async function openScholarshipAlertsPanel(user: TelegramUserRow) {
-  if (!user.app_user_id) {
-    await sendTelegramMessage(
-      user.telegram_chat_id,
-      [
-        'Grant alerts in Telegram match your account settings on the website.',
-        '',
-        'Connect your ScholarshipTop account first — then you can turn channels on or off below (same as in Account → notifications).',
-        '',
-        `Browse all scholarships anytime: ${getSiteUrl()}/scholarships`
-      ].join('\n'),
-      buildMainKeyboard()
-    );
-    return;
-  }
-
   await sendGrantSettingsPanel(user);
 }
 
