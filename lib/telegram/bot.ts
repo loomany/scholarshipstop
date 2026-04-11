@@ -942,8 +942,8 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
   if (!user.app_user_id) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      `Connect your ScholarshipTop account first (${BUTTON_LABELS.connectAccount}), then saved grants will show here.`,
-      buildProfileKeyboard(user)
+      `Connect your ScholarshipTop account first (${BUTTON_LABELS.myProfile} → ${BUTTON_LABELS.connectAccount}), then saved grants will show here.`,
+      buildMainKeyboard()
     );
     return;
   }
@@ -953,7 +953,7 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Service unavailable. Try again later.',
-      buildProfileKeyboard(user)
+      buildMainKeyboard()
     );
     return;
   }
@@ -970,7 +970,7 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Could not load saved grants. If this persists, the saved list table may not be set up yet.',
-      buildProfileKeyboard(user)
+      buildMainKeyboard()
     );
     return;
   }
@@ -988,7 +988,7 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
         '',
         `<a href="${site}${SCHOLARSHIPS_HUB_SAVED_TAB_HREF}">Open saved list on the site</a>`
       ].join('\n'),
-      buildProfileKeyboard(user),
+      buildMainKeyboard(),
       { parse_mode: 'HTML' }
     );
     return;
@@ -1002,7 +1002,7 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Could not load grant details. Try again later.',
-      buildProfileKeyboard(user)
+      buildMainKeyboard()
     );
     return;
   }
@@ -1033,7 +1033,7 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
   );
 
   const text = lines.join('\n');
-  await sendTelegramMessage(user.telegram_chat_id, text, buildProfileKeyboard(user), {
+  await sendTelegramMessage(user.telegram_chat_id, text, buildMainKeyboard(), {
     parse_mode: 'HTML'
   });
 }
