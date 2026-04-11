@@ -10,6 +10,10 @@ import {
   SITE_TITLE_TAGLINE
 } from '@/lib/seo/siteTitle';
 import { getURL } from '@/utils/helpers';
+import {
+  GoogleTagManager,
+  GoogleTagManagerNoScript
+} from '@/components/analytics/GoogleTagManager';
 import 'styles/main.css';
 
 const defaultDescription =
@@ -99,6 +103,8 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ff7e00" />
       </head>
       <body className={`${fontSans.className} bg-zinc-50 text-zinc-900`}>
+        <GoogleTagManagerNoScript />
+        <GoogleTagManager />
         <Script
           id="lemonsqueezy-js"
           src="https://app.lemonsqueezy.com/js/lemon.js"
