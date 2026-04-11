@@ -1277,9 +1277,7 @@ function ScholarshipsPageInner({
             onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
           />
 
-          {!isAuthenticated && activeTab !== 'matches' ? (
-            <SubjectL2BrowseChips />
-          ) : null}
+          {isAuthenticated ? <SubjectL2BrowseChips /> : null}
 
           {isLoading ? (
             <div className="text-slate-600">Loading scholarships...</div>
