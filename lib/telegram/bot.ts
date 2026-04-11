@@ -828,6 +828,27 @@ export async function notifyTelegramEmailVerified(payload: {
   );
 }
 
+/** Lemon often fires e.g. `subscription_cancelled` + `subscription_updated` within seconds — one admin ping is enough. */
+const PAYMENT_ADMIN_TELEGRAM_DEDUP_MS = 120_000;
+
+async function hasRecentPaymentAdminTelegram(userId: string): Promise<boolean> {
+  const admin = getAdminClient();
+  if (!admin) return false;
+  const since = new Date(Date.now() - PAYMENT_ADMIN_TELEGRAM_DEDUP_MS).toISOString();
+  const { data, error } = await admin
+    .from('telegram_event_logs')
+    .select('id')
+    .eq('event_type', 'payment')
+    .eq('related_user_id', userId)
+    .gte('created_at', since)
+    .limit(1);
+  if (error) {
+    console.warn('[telegram] payment dedup lookup failed', error.message);
+    return false;
+  }
+  return (data?.length ?? 0) > 0;
+}
+
 export async function notifyTelegramPayment(payload: {
   userId: string;
   email?: string | null;
@@ -838,6 +859,8 @@ export async function notifyTelegramPayment(payload: {
   invoiceId?: string | null;
   source?: string | null;
 }) {
+  const skipAdminTelegram = await hasRecentPaymentAdminTelegram(payload.userId);
+
   await logTelegramEvent(
     'payment',
     {
@@ -850,6 +873,10 @@ export async function notifyTelegramPayment(payload: {
     },
     { dedupeByUserId: null, relatedUserId: payload.userId }
   );
+
+  if (skipAdminTelegram) {
+    return;
+  }
 
   const text = [
     'Получено платежное событие',
