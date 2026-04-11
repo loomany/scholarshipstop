@@ -339,7 +339,7 @@ export default function SubscriptionPricingClient({
         if (event?.event === 'Checkout.Success') {
           setActivePlanTitle(null);
           setCheckoutError(null);
-          window.location.assign('/scholarships');
+          window.location.assign('/scholarships?status=success');
         }
       }
     });
