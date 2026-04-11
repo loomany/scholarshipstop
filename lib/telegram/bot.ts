@@ -11,6 +11,8 @@ import {
 import {
   addUserSavedScholarship,
   isLikelyScholarshipUuid,
+  removeUserSavedScholarship,
+  userHasSavedScholarship,
   TELEGRAM_GRANT_SAVE_CALLBACK_PREFIX,
   TELEGRAM_GRANT_SAVED_ACK_PREFIX
 } from '@/lib/account/userSavedScholarships';
@@ -19,6 +21,7 @@ import {
   editScholarshipGrantCardReplyMarkup,
   sendScholarshipTelegramCardToChat
 } from '@/lib/telegram/scholarshipTelegramCard';
+import { SCHOLARSHIPS_HUB_SAVED_TAB_HREF } from '@/app/scholarships/scholarshipListUrl';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
@@ -116,7 +119,7 @@ const BUTTON_LABELS = {
   findScholarships: '🔔 Alerts Setup',
   myProfile: '👤 My Account',
   reconnectAccount: '🔄 Sync Account',
-  /** Same data as /account/saved-scholarships (Save on grant cards). */
+  /** Same data as hub My scholarships → Saved (`/scholarships?tab=saved`). */
   savedScholarships: '💾 Saved'
 } as const;
 
@@ -963,7 +966,7 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
         'No saved grants yet.',
         'Tap <b>Save</b> on a grant card in this chat, or save hearts on the website.',
         '',
-        `<a href="${site}/account/saved-scholarships">Open saved list on the site</a>`
+        `<a href="${site}${SCHOLARSHIPS_HUB_SAVED_TAB_HREF}">Open saved list on the site</a>`
       ].join('\n'),
       buildProfileKeyboard(user),
       { parse_mode: 'HTML' }
@@ -1003,7 +1006,7 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
   }
   lines.push(
     '',
-    `<a href="${site}/account/saved-scholarships">Full list on ScholarshipTop</a>`
+    `<a href="${site}${SCHOLARSHIPS_HUB_SAVED_TAB_HREF}">Full list on ScholarshipTop</a>`
   );
 
   const text = lines.join('\n');
@@ -1395,6 +1398,24 @@ async function sendTestResourceCard(user: TelegramUserRow) {
   }
 }
 
+/** Listing URL aligned with site routing (slug when present). */
+async function getGrantListingFullUrl(
+  admin: NonNullable<ReturnType<typeof createServiceRoleSupabaseClient>>,
+  scholarshipId: string
+): Promise<string> {
+  const site = getSiteUrl();
+  const { data } = await admin
+    .from('scholarships')
+    .select('id, slug')
+    .eq('id', scholarshipId)
+    .maybeSingle();
+  const row = data as { id: string; slug: string | null } | null;
+  if (row?.id) {
+    return `${site}${scholarshipPublicPath({ id: row.id, slug: row.slug ?? undefined })}`;
+  }
+  return `${site}/scholarships/${scholarshipId}`;
+}
+
 /** Admin-only: sample scholarship card in DM (matches production grant formatting). */
 async function sendTestGrantPreview(user: TelegramUserRow) {
   const scholarship = await fetchFirstActiveScholarshipPreview();
@@ -1407,9 +1428,15 @@ async function sendTestGrantPreview(user: TelegramUserRow) {
     return;
   }
 
+  let savedInitially = false;
+  const admin = getAdminClient();
+  if (admin && user.app_user_id) {
+    savedInitially = await userHasSavedScholarship(admin, user.app_user_id, scholarship.id);
+  }
+
   const ok = await sendScholarshipTelegramCardToChat(user.telegram_chat_id, scholarship, {
     categoryLabel: grantNotifyTelegramCardCategoryLabel('best'),
-    savedInitially: false
+    savedInitially
   });
   if (!ok) {
     await sendTelegramMessage(
@@ -1461,8 +1488,7 @@ async function handleTelegramGrantSaveCallback(
     return;
   }
 
-  const site = getSiteUrl();
-  const listingFullUrl = `${site}/scholarships/${scholarshipId}`;
+  const listingFullUrl = await getGrantListingFullUrl(admin, scholarshipId);
   await editScholarshipGrantCardReplyMarkup(
     user.telegram_chat_id,
     callback.message.message_id,
@@ -1473,6 +1499,61 @@ async function handleTelegramGrantSaveCallback(
 
   if (callback.id) {
     await answerTelegramCallbackQuery(callback.id, 'Saved to your account');
+  }
+}
+
+async function handleTelegramGrantUnsaveCallback(
+  user: TelegramUserRow,
+  callback: TelegramCallbackQuery,
+  rawData: string
+) {
+  if (!callback.message?.message_id) return;
+
+  const scholarshipId = rawData.slice(TELEGRAM_GRANT_SAVED_ACK_PREFIX.length).trim();
+  if (!isLikelyScholarshipUuid(scholarshipId)) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id, 'Invalid grant link.');
+    }
+    return;
+  }
+
+  if (!user.app_user_id) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(
+        callback.id,
+        'Link your ScholarshipTop account first (My Account → Connect).'
+      );
+    }
+    return;
+  }
+
+  const admin = getAdminClient();
+  if (!admin) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id, 'Service unavailable.');
+    }
+    return;
+  }
+
+  const ok = await removeUserSavedScholarship(admin, user.app_user_id, scholarshipId);
+  if (!ok) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id, 'Could not update. Try again later.');
+    }
+    return;
+  }
+
+  const listingFullUrl = await getGrantListingFullUrl(admin, scholarshipId);
+  await editScholarshipGrantCardReplyMarkup(
+    user.telegram_chat_id,
+    callback.message.message_id,
+    listingFullUrl,
+    scholarshipId,
+    false
+  );
+
+  if (callback.id) {
+    await answerTelegramCallbackQuery(callback.id, 'Removed from saved');
   }
 }
 
@@ -1619,9 +1700,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     }
 
     if (callbackData.startsWith(TELEGRAM_GRANT_SAVED_ACK_PREFIX)) {
-      if (callback.id) {
-        await answerTelegramCallbackQuery(callback.id, 'Already saved in your account.');
-      }
+      await handleTelegramGrantUnsaveCallback(user, callback, callbackData);
       return;
     }
 

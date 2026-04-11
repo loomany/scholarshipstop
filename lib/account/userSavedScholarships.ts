@@ -41,3 +41,20 @@ export async function addUserSavedScholarship(
   }
   return true;
 }
+
+export async function removeUserSavedScholarship(
+  admin: SupabaseClient<Database>,
+  userId: string,
+  scholarshipId: string
+): Promise<boolean> {
+  const { error } = await (admin as any)
+    .from('user_saved_scholarships')
+    .delete()
+    .eq('user_id', userId)
+    .eq('scholarship_id', scholarshipId);
+  if (error) {
+    console.error('[user-saved-scholarships] delete', error.message);
+    return false;
+  }
+  return true;
+}

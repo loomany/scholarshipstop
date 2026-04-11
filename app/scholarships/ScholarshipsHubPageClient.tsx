@@ -252,13 +252,36 @@ function ScholarshipsPageInner({
     []
   );
 
+  /** Merge server-backed saves (Telegram, heart on site) with localStorage for guests→login edge cases. */
+  const refreshSavedIdsFromApi = useCallback(async () => {
+    const fromStorage = getSavedScholarshipIds();
+    if (!isAuthenticated) {
+      setSavedIds(fromStorage);
+      return;
+    }
+    try {
+      const res = await fetch('/api/account/saved-scholarships', {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const body = (await res.json()) as { scholarshipIds?: string[] };
+        const serverIds = body.scholarshipIds ?? [];
+        setSavedIds([...new Set([...serverIds, ...fromStorage])]);
+        return;
+      }
+    } catch {
+      /* offline */
+    }
+    setSavedIds(fromStorage);
+  }, [isAuthenticated]);
+
   const syncUserCollectionIdsFromStorage = useCallback(() => {
     if (!isAuthenticated) return;
-    setSavedIds(getSavedScholarshipIds());
     setIgnoredIds(getIgnoredScholarshipIds());
     setStartedIds(getStartedScholarshipIds());
     setSubmittedIds(getSubmittedScholarshipIds());
-  }, [isAuthenticated]);
+    void refreshSavedIdsFromApi();
+  }, [isAuthenticated, refreshSavedIdsFromApi]);
 
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
@@ -496,11 +519,12 @@ function ScholarshipsPageInner({
     const onVis = () => {
       if (document.visibilityState === 'visible') {
         setViewedIds(getViewedScholarshipIds());
+        if (isAuthenticated) void refreshSavedIdsFromApi();
       }
     };
     document.addEventListener('visibilitychange', onVis);
     return () => document.removeEventListener('visibilitychange', onVis);
-  }, []);
+  }, [isAuthenticated, refreshSavedIdsFromApi]);
 
   const filterBounds = listMeta?.filterBounds ?? {
     amountMin: 0,

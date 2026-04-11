@@ -5,6 +5,7 @@ import type { User } from '@supabase/supabase-js';
 
 import SubscriptionPausedBanner from '@/components/billing/SubscriptionPausedBanner';
 import ScholarshipProfileForm from '@/components/ui/AccountForms/ScholarshipProfileForm';
+import { SCHOLARSHIPS_HUB_SAVED_TAB_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { resolveResumeSubscriptionHref } from '@/lib/payments/billingUrls';
 import { deriveSubscriptionPresentation } from '@/lib/payments/subscriptionEntitlements';
 import type { Database, Tables } from '@/types_db';
@@ -55,7 +56,7 @@ export default function AccountDashboardClient({
             <SubscriptionPausedBanner resumeUrl={pausedResumeUrl} className="shadow-sm" />
           ) : null}
           <Link
-            href="/account/saved-scholarships"
+            href={SCHOLARSHIPS_HUB_SAVED_TAB_HREF}
             className="flex w-full items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-3 text-left text-sm font-medium text-zinc-900 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50/80"
           >
             Saved scholarships

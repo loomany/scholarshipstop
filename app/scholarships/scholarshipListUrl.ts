@@ -14,6 +14,9 @@ export const SCHOLARSHIPS_PAGE_SIZE = 12;
 export const SCHOLARSHIPS_HUB_ALL_MATCHES_HREF =
   '/scholarships?tab=matches&scope=catalog';
 
+/** Saved grants (My scholarships → Saved); same data as `user_saved_scholarships`. */
+export const SCHOLARSHIPS_HUB_SAVED_TAB_HREF = '/scholarships?tab=saved';
+
 const SORT_VALUES = new Set<string>([
   'magic',
   'best_match',
