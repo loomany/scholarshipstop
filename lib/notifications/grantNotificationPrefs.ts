@@ -61,6 +61,25 @@ export const GRANT_NOTIFY_CHANNELS: {
   }
 ];
 
+/**
+ * Shown in Telegram grant cards as `{title} | {label}` so users see which alert fired.
+ * Wording matches the My scholarships sidebar (Best recommendation, Saved Filters, …).
+ */
+export function grantNotifyTelegramCardCategoryLabel(
+  id: GrantNotifyChannelId
+): string {
+  switch (id) {
+    case 'best':
+      return 'Best recommendation';
+    case 'saved_filters':
+      return 'Saved Filters';
+    case 'easy_apply':
+      return 'Easy apply';
+    case 'hot_deadlines':
+      return 'Hot Deadlines';
+  }
+}
+
 export function getTelegramBotLink(): string {
   const raw =
     process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL?.trim() ||

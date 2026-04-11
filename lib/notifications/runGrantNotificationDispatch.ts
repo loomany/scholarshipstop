@@ -20,6 +20,8 @@ import {
   type ScholarshipListRequest
 } from '@/lib/scholarships/scholarshipListServer';
 import { mapScholarshipRow, type ScholarshipRow } from '@/lib/scholarships/supabase';
+import { userHasSavedScholarship } from '@/lib/account/userSavedScholarships';
+import { grantNotifyTelegramCardCategoryLabel } from '@/lib/notifications/grantNotificationPrefs';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { sendScholarshipTelegramCardToChat } from '@/lib/telegram/scholarshipTelegramCard';
 
@@ -287,6 +289,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   let cappedOps = false;
 
   const channels: ChannelId[] = ['easy_apply', 'hot_deadlines', 'best', 'saved_filters'];
+  const savedGrantByUserScholarship = new Map<string, boolean>();
 
   type PendingEmailLine = {
     scholarshipId: string;
@@ -313,6 +316,12 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
 
     for (const profile of profiles) {
       const uid = profile.id;
+      const savedKey = `${uid}:${sid}`;
+      let savedInitially = savedGrantByUserScholarship.get(savedKey);
+      if (savedInitially === undefined) {
+        savedInitially = await userHasSavedScholarship(admin, uid, sid);
+        savedGrantByUserScholarship.set(savedKey, savedInitially);
+      }
 
       for (const ch of channels) {
         const profCol = channelProfileColumn(ch);
@@ -370,7 +379,10 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
           if (dupT) {
             skippedDup += 1;
           } else {
-            const ok = await sendScholarshipTelegramCardToChat(tg.telegram_chat_id, s);
+            const ok = await sendScholarshipTelegramCardToChat(tg.telegram_chat_id, s, {
+              categoryLabel: grantNotifyTelegramCardCategoryLabel(ch),
+              savedInitially
+            });
             if (ok) {
               await recordDelivery(admin, uid, sid, ch, 'telegram');
               telegramSent += 1;

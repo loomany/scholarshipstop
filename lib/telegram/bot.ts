@@ -5,7 +5,17 @@ import { createHash, randomInt } from 'crypto';
 import { sendTelegramLinkCodeEmail } from '@/lib/email/sendTelegramLinkCodeEmail';
 import { sendTelegramResourceNotification } from '@/lib/telegram/notifyResources';
 import { fetchFirstActiveScholarshipPreview } from '@/lib/scholarships/supabase';
-import { sendScholarshipTelegramCardToChat } from '@/lib/telegram/scholarshipTelegramCard';
+import {
+  addUserSavedScholarship,
+  isLikelyScholarshipUuid,
+  TELEGRAM_GRANT_SAVE_CALLBACK_PREFIX,
+  TELEGRAM_GRANT_SAVED_ACK_PREFIX
+} from '@/lib/account/userSavedScholarships';
+import { grantNotifyTelegramCardCategoryLabel } from '@/lib/notifications/grantNotificationPrefs';
+import {
+  editScholarshipGrantCardReplyMarkup,
+  sendScholarshipTelegramCardToChat
+} from '@/lib/telegram/scholarshipTelegramCard';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
 
@@ -323,11 +333,7 @@ function formatValue(value: string | number | null | undefined, fallback = 'Not 
   return text || fallback;
 }
 
-function formatProfileMessage(
-  authUser: AuthUserRow | null,
-  profile: ProfileRow | null,
-  linkedAt: string
-) {
+function formatProfileMessage(authUser: AuthUserRow | null, profile: ProfileRow | null) {
   const firstName = profile?.first_name?.trim() || '';
   const lastName = profile?.last_name?.trim() || '';
   const fullName = [firstName, lastName].filter(Boolean).join(' ') || 'Not set';
@@ -347,9 +353,7 @@ function formatProfileMessage(
       profile?.citizenship_status_label || profile?.citizenship_status
     )}`,
     `State: ${formatValue(profile?.state_region)}`,
-    `GPA: ${formatValue(profile?.gpa)}`,
-    '',
-    `Telegram linked: ${linkedAt}`
+    `GPA: ${formatValue(profile?.gpa)}`
   ].join('\n');
 }
 
@@ -424,13 +428,15 @@ async function callTelegramApi<T>(method: string, payload: Record<string, unknow
 async function sendTelegramMessage(
   chatId: number,
   text: string,
-  replyMarkup?: TelegramReplyMarkup | TelegramReplyKeyboardMarkup
+  replyMarkup?: TelegramReplyMarkup | TelegramReplyKeyboardMarkup,
+  options?: { parse_mode?: 'HTML' | 'Markdown' }
 ) {
   await callTelegramApi('sendMessage', {
     chat_id: chatId,
     text,
     reply_markup: replyMarkup,
-    disable_web_page_preview: true
+    disable_web_page_preview: true,
+    ...(options?.parse_mode ? { parse_mode: options.parse_mode } : {})
   });
 }
 
@@ -802,21 +808,29 @@ export async function notifyTelegramPayment(payload: {
 }
 
 async function sendWelcomeMessage(user: TelegramUserRow) {
+  const site = getSiteUrl().replace(/&/g, '&amp;');
+  const brand = `<a href="${site}">ScholarshipTop</a>`;
   const text = user.app_user_id
     ? [
-        'Welcome back to ScholarshipTop.',
+        `Welcome back to ${brand}.`,
         'Your Telegram account is connected and ready to use.',
         '',
-        'Use the menu below to open your profile or jump back into scholarship search.'
+        'Use the menu below to open your profile or jump back into scholarship search.',
+        '',
+        'Use Alerts Setup or My Account to choose which grant notifications you receive.'
       ].join('\n')
     : [
-        'Welcome to ScholarshipTop.',
+        `Welcome to ${brand}.`,
         'I can help you explore scholarships, view your profile, and keep your account connected.',
         '',
-        'Start by connecting your account with a secure email code.'
+        'Start by connecting your account with a secure email code.',
+        '',
+        'Open My Account below, link your ScholarshipTop account, then turn on notifications in Alerts Setup.'
       ].join('\n');
 
-  await sendTelegramMessage(user.telegram_chat_id, text, buildMainKeyboard());
+  await sendTelegramMessage(user.telegram_chat_id, text, buildMainKeyboard(), {
+    parse_mode: 'HTML'
+  });
 }
 
 /** Inline toggles (Best / Saved / Easy / Hot). If account not linked, taps show “connect first” (see handleGrantNotifyToggle). */
@@ -842,21 +856,11 @@ async function sendProfileSummary(user: TelegramUserRow) {
     admin.from('profiles').select('*').eq('id', user.app_user_id).maybeSingle()
   ]);
 
-  const linkedAt = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  }).format(new Date(user.updated_at || user.created_at));
-
   await sendTelegramMessage(
     user.telegram_chat_id,
-    formatProfileMessage(authUser, profileResult.data, linkedAt),
+    formatProfileMessage(authUser, profileResult.data),
     buildProfileKeyboard(user)
   );
-
-  if (user.app_user_id) {
-    await sendGrantSettingsPanel(user);
-  }
 }
 
 async function sendAdminPanel(user: TelegramUserRow) {
@@ -1233,13 +1237,72 @@ async function sendTestGrantPreview(user: TelegramUserRow) {
     return;
   }
 
-  const ok = await sendScholarshipTelegramCardToChat(user.telegram_chat_id, scholarship);
+  const ok = await sendScholarshipTelegramCardToChat(user.telegram_chat_id, scholarship, {
+    categoryLabel: grantNotifyTelegramCardCategoryLabel('best'),
+    savedInitially: false
+  });
   if (!ok) {
     await sendTelegramMessage(
       user.telegram_chat_id,
       'Failed to send the grant preview. Check TELEGRAM_BOT_TOKEN.',
       buildProfileKeyboard(user)
     );
+  }
+}
+
+async function handleTelegramGrantSaveCallback(
+  user: TelegramUserRow,
+  callback: TelegramCallbackQuery,
+  rawData: string
+) {
+  if (!callback.message?.message_id) return;
+
+  const scholarshipId = rawData.slice(TELEGRAM_GRANT_SAVE_CALLBACK_PREFIX.length).trim();
+  if (!isLikelyScholarshipUuid(scholarshipId)) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id, 'Invalid grant link.');
+    }
+    return;
+  }
+
+  if (!user.app_user_id) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(
+        callback.id,
+        'Link your ScholarshipTop account first (My Account → Connect).'
+      );
+    }
+    return;
+  }
+
+  const admin = getAdminClient();
+  if (!admin) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id, 'Service unavailable.');
+    }
+    return;
+  }
+
+  const ok = await addUserSavedScholarship(admin, user.app_user_id, scholarshipId);
+  if (!ok) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id, 'Could not save. Try again later.');
+    }
+    return;
+  }
+
+  const site = getSiteUrl();
+  const listingFullUrl = `${site}/scholarships/${scholarshipId}`;
+  await editScholarshipGrantCardReplyMarkup(
+    user.telegram_chat_id,
+    callback.message.message_id,
+    listingFullUrl,
+    scholarshipId,
+    true
+  );
+
+  if (callback.id) {
+    await answerTelegramCallbackQuery(callback.id, 'Saved to your account');
   }
 }
 
@@ -1366,6 +1429,20 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
       chatId: callback.message.chat.id
     });
     if (!user) return;
+
+    const callbackData = callback.data ?? '';
+
+    if (callbackData.startsWith(TELEGRAM_GRANT_SAVE_CALLBACK_PREFIX)) {
+      await handleTelegramGrantSaveCallback(user, callback, callbackData);
+      return;
+    }
+
+    if (callbackData.startsWith(TELEGRAM_GRANT_SAVED_ACK_PREFIX)) {
+      if (callback.id) {
+        await answerTelegramCallbackQuery(callback.id, 'Already saved in your account.');
+      }
+      return;
+    }
 
     if (callback.id) {
       await answerTelegramCallbackQuery(callback.id);

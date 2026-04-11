@@ -29,12 +29,22 @@ export default function SiteFooter() {
               <div className="flex w-full min-w-0 justify-start">
                 <SiteFooterNav />
               </div>
-              <p className="max-w-3xl text-left text-xs leading-snug text-gray-600 sm:text-sm">
-                Helping students find the right scholarships faster.{' '}
-                <span className="text-gray-500 tabular-nums">
-                  | © {year} ScholarshipTop
-                </span>
-              </p>
+              <div className="max-w-3xl text-left text-xs leading-snug sm:text-sm">
+                <div className="sm:hidden">
+                  <p className="text-gray-600">
+                    Helping students find the right scholarships faster.
+                  </p>
+                  <p className="mt-1 text-gray-500 tabular-nums">
+                    © {year} <span className="text-gray-600">ScholarshipTop</span>
+                  </p>
+                </div>
+                <p className="hidden text-gray-600 sm:block">
+                  Helping students find the right scholarships faster.{' '}
+                  <span className="text-gray-500 tabular-nums">
+                    | © {year} ScholarshipTop
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
         </div>

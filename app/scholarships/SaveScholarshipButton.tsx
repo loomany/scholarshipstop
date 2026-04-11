@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
+
+import { createClient } from '@/utils/supabase/client';
+
 import {
   isScholarshipSaved,
   removeScholarship,
@@ -22,12 +25,61 @@ export default function SaveScholarshipButton({
   onPersistChange
 }: SaveScholarshipButtonProps) {
   const [saved, setSaved] = useState(false);
+  const [accountMode, setAccountMode] = useState(false);
 
   useEffect(() => {
-    setSaved(isScholarshipSaved(scholarshipId));
+    let cancelled = false;
+    async function load() {
+      const supabase = createClient();
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+      if (cancelled || !session?.user?.id) {
+        if (!cancelled) {
+          setAccountMode(false);
+          setSaved(isScholarshipSaved(scholarshipId));
+        }
+        return;
+      }
+      setAccountMode(true);
+      const res = await fetch('/api/account/saved-scholarships', { credentials: 'include' });
+      if (!res.ok || cancelled) return;
+      const body = (await res.json()) as { scholarshipIds?: string[] };
+      const ids = body.scholarshipIds ?? [];
+      setSaved(ids.includes(scholarshipId));
+    }
+    void load();
+    return () => {
+      cancelled = true;
+    };
   }, [scholarshipId]);
 
-  const onSave = useCallback(() => {
+  const onSave = useCallback(async () => {
+    if (accountMode) {
+      if (saved) {
+        const res = await fetch(
+          `/api/account/saved-scholarships?id=${encodeURIComponent(scholarshipId)}`,
+          { method: 'DELETE', credentials: 'include' }
+        );
+        if (res.ok) {
+          setSaved(false);
+          onPersistChange?.();
+        }
+        return;
+      }
+      const res = await fetch('/api/account/saved-scholarships', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scholarshipId })
+      });
+      if (res.ok) {
+        setSaved(true);
+        onPersistChange?.();
+      }
+      return;
+    }
+
     if (saved) {
       removeScholarship(scholarshipId);
       setSaved(false);
@@ -37,7 +89,7 @@ export default function SaveScholarshipButton({
     saveScholarship(scholarshipId);
     setSaved(true);
     onPersistChange?.();
-  }, [saved, scholarshipId, onPersistChange]);
+  }, [accountMode, saved, scholarshipId, onPersistChange]);
 
   if (variant === 'icon') {
     return (

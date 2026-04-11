@@ -54,6 +54,15 @@ export default function AccountDashboardClient({
           {subscriptionPaused ? (
             <SubscriptionPausedBanner resumeUrl={pausedResumeUrl} className="shadow-sm" />
           ) : null}
+          <Link
+            href="/account/saved-scholarships"
+            className="flex w-full items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-3 text-left text-sm font-medium text-zinc-900 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50/80"
+          >
+            Saved scholarships
+            <span className="text-zinc-400" aria-hidden>
+              →
+            </span>
+          </Link>
           <ScholarshipProfileForm
             profile={profile}
             subscription={subscription}

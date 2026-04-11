@@ -7,9 +7,17 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 
 import {
+  TELEGRAM_GRANT_SAVE_CALLBACK_PREFIX,
+  TELEGRAM_GRANT_SAVED_ACK_PREFIX
+} from '@/lib/account/userSavedScholarships';
+import {
   buildResourceSnippet,
   escapeTelegramHtml
 } from '@/lib/telegram/resourceNotifyCore';
+
+export type GrantCardInlineReplyMarkup = {
+  inline_keyboard: { text: string; url?: string; callback_data?: string }[][];
+};
 
 function getBotToken() {
   return process.env.TELEGRAM_BOT_TOKEN?.trim() || '';
@@ -31,6 +39,23 @@ function isProbablyHttpUrl(s: string | null | undefined): boolean {
   } catch {
     return false;
   }
+}
+
+export function buildScholarshipGrantCardReplyMarkup(opts: {
+  listingFullUrl: string;
+  scholarshipId: string;
+  saved: boolean;
+}): GrantCardInlineReplyMarkup {
+  const sid = opts.scholarshipId.trim();
+  const saveRow = opts.saved
+    ? [{ text: 'Saved', callback_data: `${TELEGRAM_GRANT_SAVED_ACK_PREFIX}${sid}` }]
+    : [{ text: 'Save', callback_data: `${TELEGRAM_GRANT_SAVE_CALLBACK_PREFIX}${sid}` }];
+  return {
+    inline_keyboard: [
+      [{ text: 'View on ScholarshipTop →', url: opts.listingFullUrl }],
+      saveRow
+    ]
+  };
 }
 
 async function telegramBotApi<T>(
@@ -56,20 +81,45 @@ async function telegramBotApi<T>(
   return json?.result ?? null;
 }
 
+export async function editScholarshipGrantCardReplyMarkup(
+  chatId: number,
+  messageId: number,
+  listingFullUrl: string,
+  scholarshipId: string,
+  saved: boolean
+): Promise<boolean> {
+  const reply_markup = buildScholarshipGrantCardReplyMarkup({
+    listingFullUrl,
+    scholarshipId,
+    saved
+  });
+  const r = await telegramBotApi<unknown>('editMessageReplyMarkup', {
+    chat_id: chatId,
+    message_id: messageId,
+    reply_markup
+  });
+  return r != null;
+}
+
 export async function sendScholarshipTelegramCardToChat(
   chatId: number,
-  scholarship: Scholarship
+  scholarship: Scholarship,
+  opts?: { categoryLabel?: string | null; savedInitially?: boolean }
 ): Promise<boolean> {
   const site = getSiteBaseUrl();
   const path = scholarshipPublicPath(scholarship);
   const url = `${site}${path}`;
   const title = scholarship.title?.trim() || 'Scholarship';
+  const cat = opts?.categoryLabel?.trim();
+  const titleLine = cat
+    ? `<b>${escapeTelegramHtml(title)} | ${escapeTelegramHtml(cat)}</b>`
+    : `<b>${escapeTelegramHtml(title)}</b>`;
   const snippet = buildResourceSnippet(scholarship.description, title);
   const deadline = scholarship.deadline?.trim() || 'See listing';
   const amount = scholarship.awardAmount?.trim() || scholarship.amount?.trim() || 'Varies';
 
   const caption = [
-    `<b>${escapeTelegramHtml(title)}</b>`,
+    titleLine,
     '',
     `<b>Deadline</b>: ${escapeTelegramHtml(deadline)}`,
     `<b>Award</b>: ${escapeTelegramHtml(amount)}`,
@@ -79,9 +129,11 @@ export async function sendScholarshipTelegramCardToChat(
 
   const safeCaption = caption.length > 1024 ? `${caption.slice(0, 1020)}…` : caption;
 
-  const replyMarkup = {
-    inline_keyboard: [[{ text: 'View on ScholarshipTop →', url }]]
-  };
+  const replyMarkup = buildScholarshipGrantCardReplyMarkup({
+    listingFullUrl: url,
+    scholarshipId: scholarship.id,
+    saved: opts?.savedInitially === true
+  });
 
   const photoUrl = isProbablyHttpUrl(scholarship.providerLogo)
     ? scholarship.providerLogo!.trim()

@@ -50,7 +50,58 @@ export interface Database {
             referencedColumns: ["id"]
           }
         ]
-      }
+      },
+      user_saved_scholarships: {
+        Row: {
+          user_id: string
+          scholarship_id: string
+          created_at: string
+        }
+        Insert: {
+          user_id: string
+          scholarship_id: string
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          scholarship_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_saved_scholarships_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_saved_scholarships_scholarship_id_fkey"
+            columns: ["scholarship_id"]
+            isOneToOne: false
+            referencedRelation: "scholarships"
+            referencedColumns: ["id"]
+          }
+        ]
+      },
+      telegram_resource_notify_config: {
+        Row: {
+          id: number
+          endpoint_url: string
+          bearer_token: string
+        }
+        Insert: {
+          id?: number
+          endpoint_url?: string
+          bearer_token?: string
+        }
+        Update: {
+          id?: number
+          endpoint_url?: string
+          bearer_token?: string
+        }
+        Relationships: []
+      },
       customers: {
         Row: {
           id: string

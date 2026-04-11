@@ -4,6 +4,7 @@ import {
   GRANT_DIGEST_DEMO_CHANNEL_LABELS,
   sendGrantDigestBatchEmail
 } from '@/lib/email/sendGrantDigestEmail';
+import { grantNotifyTelegramCardCategoryLabel } from '@/lib/notifications/grantNotificationPrefs';
 import { fetchActiveScholarshipPreviews } from '@/lib/scholarships/supabase';
 import { sendScholarshipTelegramCardToChat } from '@/lib/telegram/scholarshipTelegramCard';
 
@@ -91,7 +92,9 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
         message: 'GRANT_NOTIFICATION_TEST_SAMPLE_TELEGRAM_CHAT_ID must be a number'
       };
     }
-    telegramSent = await sendScholarshipTelegramCardToChat(chatId, previewTelegram);
+    telegramSent = await sendScholarshipTelegramCardToChat(chatId, previewTelegram, {
+      categoryLabel: grantNotifyTelegramCardCategoryLabel('best')
+    });
   }
 
   return {

@@ -14,6 +14,8 @@ import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClien
 import { createClient } from '@/utils/supabase/server';
 import { createPublicClient } from '@/utils/supabase/public';
 
+type ServerSupabaseClient = ReturnType<typeof createClient>;
+
 export type ScholarshipRow = Database['public']['Tables']['scholarships']['Row'];
 
 export { sanitizeRequirementLines };
@@ -635,6 +637,26 @@ export async function fetchScholarshipBySlugOrId(
     return fetchScholarshipById(decoded);
   }
   return fetchScholarshipBySlug(decoded);
+}
+
+/** Listing cards for account saved list; order follows `ids` (deduped first). */
+export async function fetchScholarshipsByIdsForListing(
+  supabase: ServerSupabaseClient,
+  ids: string[]
+): Promise<Scholarship[]> {
+  if (ids.length === 0) return [];
+  const unique = [...new Set(ids)];
+  const { data, error } = await supabase
+    .from('scholarships')
+    .select(LIST_CARD_SELECT)
+    .in('id', unique);
+
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as unknown as ScholarshipRow[];
+  const mapped = new Map(rows.map((r) => [r.id, mapScholarshipRow(r)]));
+  return ids
+    .map((id) => mapped.get(id))
+    .filter((x): x is Scholarship => x != null);
 }
 
 /** One recent active scholarship for email/Telegram preview cards (service role). */
