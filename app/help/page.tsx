@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 
 export const metadata: Metadata = {
-  title: 'Help | ScholarshipTop',
+  title: 'Help',
   description: 'Help and support for ScholarshipTop users'
 };
 

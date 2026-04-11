@@ -6,7 +6,7 @@ import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 
 export const metadata: Metadata = {
-  title: 'Refund Policy | ScholarshipTop',
+  title: 'Refund Policy',
   description: 'Refund Policy for Daur M. (Freebee KZ) and ScholarshipTop.'
 };
 

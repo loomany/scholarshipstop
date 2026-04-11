@@ -6,7 +6,7 @@ import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | ScholarshipTop',
+  title: 'Privacy Policy',
   description: 'Privacy Policy for ScholarshipTop'
 };
 
@@ -193,8 +193,7 @@ export default function PrivacyPolicyPage() {
                 className="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition hover:decoration-zinc-500"
               >
                 support@scholarshiptop.com
-              </a>{' '}
-              | Address: Freebee KZ, Karaganda, 10000, Kazakhstan
+              </a>
             </p>
           </section>
 

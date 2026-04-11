@@ -1062,8 +1062,6 @@ function ScholarshipsPageInner({
 
   const showProfileWhy = false;
 
-  const showPersonalizedMatchOnCards = false;
-
   const listStart = (currentPage - 1) * SCHOLARSHIPS_PAGE_SIZE;
   const toggleSave = useCallback(
     (id: string) => {
@@ -1162,7 +1160,7 @@ function ScholarshipsPageInner({
       !isAuthenticated &&
       (activeTab === 'best-matches' || activeTab === 'recommended')
     ) {
-      return 'Create an account to see personalized matches.';
+      return 'Create an account to see personalized recommendations.';
     }
     switch (activeTab) {
       case 'saved':
@@ -1278,7 +1276,7 @@ function ScholarshipsPageInner({
                 <div className="mx-auto mt-5 max-w-xl rounded-2xl border border-[#FFD9B3] bg-gradient-to-b from-[#FFF8F1] to-white p-6 text-left shadow-sm">
                   <h3 className="text-base font-semibold text-[#7A3B00] sm:text-lg">
                     {activeTab === 'best-matches'
-                      ? 'Complete your profile to unlock best matches'
+                      ? 'Complete your profile to unlock best recommendations'
                       : 'Complete your profile so we can align saved filters with your profile defaults.'}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-[#8C5A2B]">
@@ -1324,7 +1322,6 @@ function ScholarshipsPageInner({
                         : ignoreScholarship
                     }
                     ignoreAction={activeTab === 'ignored' ? 'restore' : 'hide'}
-                    showPersonalizedMatch={showPersonalizedMatchOnCards}
                     showCardActions={scholarshipTabShowsCardActions(activeTab)}
                     subscriptionLocked={isSubscriptionLocked}
                     listingTab={activeTab}

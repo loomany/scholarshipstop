@@ -164,7 +164,7 @@ export function scholarshipListPageTitle(
   const guest = options?.guest === true;
   switch (tab) {
     case 'best-matches':
-      return guest ? 'Best matches' : 'Best matches for you';
+      return guest ? 'Best recommendations' : 'Best recommendations for you';
     case 'saved':
       return 'Saved scholarships';
     case 'recommended':
@@ -187,7 +187,7 @@ export function scholarshipListPageTitle(
 
 export function scholarshipListLoadingText(tab: ScholarshipListTabId): string {
   if (tab === 'saved') return 'Loading saved…';
-  if (tab === 'best-matches') return 'Loading best matches…';
+  if (tab === 'best-matches') return 'Loading best recommendations…';
   if (tab === 'recommended') return 'Loading saved filters…';
   if (tab === 'hot-deadlines') return 'Loading hot deadlines…';
   return 'Loading matches…';

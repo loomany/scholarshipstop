@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 
 export const metadata: Metadata = {
-  title: 'FAQ | ScholarshipTop',
+  title: 'FAQ',
   description:
     'Answers to common questions about scholarships, how ScholarshipTop works, profile matching, saving scholarships, eligibility, and support.'
 };
@@ -41,9 +41,9 @@ const faqItems: { question: string; answer: string }[] = [
       'No. ScholarshipTop helps you find and organize scholarship opportunities, but it does not guarantee eligibility or acceptance. All scholarship decisions are made by the scholarship providers.'
   },
   {
-    question: 'What does “Best scholarship matches” mean?',
+    question: 'What does “Best recommendations” mean?',
     answer:
-      'Best matches are scholarships that appear to align closely with your profile. These matches are based on the information you provide, such as your academic level, interests, and preferences.'
+      'Best recommendations are scholarships chosen to align with your profile and filters. They are based on the information you provide, such as your academic level, interests, and preferences.'
   },
   {
     question: 'What are “easy scholarships to apply for”?',

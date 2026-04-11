@@ -111,7 +111,7 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'most_recent', label: 'Newest' },
   { value: 'highest_amount', label: 'Amount high → low' },
   { value: 'lowest_amount', label: 'Amount low → high' },
-  { value: 'best_match', label: 'Best match' },
+  { value: 'best_match', label: 'Best recommendation' },
   { value: 'magic', label: 'Recommended' },
   { value: 'verified_first', label: 'Verified first' },
   { value: 'least_requirements', label: 'Fewest requirements' },
@@ -119,7 +119,7 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 ];
 
 const SORT_TRIGGER_LABEL: Record<SortOption, string> = {
-  best_match: 'Best match',
+  best_match: 'Best recommendation',
   most_recent: 'Newest',
   closest_deadline: 'Deadline soonest',
   highest_amount: 'Amount high → low',

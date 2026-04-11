@@ -28,7 +28,7 @@ import { getURL } from '@/utils/helpers';
 
 export const revalidate = 300;
 
-const baseTitle = `${RESOURCES_PAGE_TITLE} — Guides & Tips | ScholarshipTop`;
+const baseTitle = `${RESOURCES_PAGE_TITLE} — Guides & Tips`;
 const baseDescription =
   'Guides and expert tips to help you find scholarships, write stronger applications, and stay organized.';
 

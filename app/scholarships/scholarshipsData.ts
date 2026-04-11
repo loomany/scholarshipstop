@@ -163,9 +163,6 @@ export type Scholarship = {
   scholarshipCatalog?: ScholarshipCatalogView;
   /** When true, `applicantCount` may be an estimate from the source. */
   applicantsCountIsEstimated?: boolean;
-  /** Server-side personalized match (listing only). */
-  matchScore?: number;
-  matchReasons?: string[];
 };
 
 /** Quick facts / copy: prefer `catalog_ui`, else legacy columns (may be slug-like). */

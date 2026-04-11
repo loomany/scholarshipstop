@@ -108,7 +108,7 @@ export function sortScholarshipsInPlace(
     switch (sortBy) {
       case 'magic':
       case 'best_match': {
-        /* best_match: will incorporate user profile + grant eligibility when available */
+        /* Uses catalog ranking score (no per-user % on cards). */
         const d = ranking(b) - ranking(a);
         if (d !== 0) return d;
         return orig(a) - orig(b);

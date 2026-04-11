@@ -4,10 +4,14 @@ import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
 import { fontSans } from '@/lib/fonts';
 import { PropsWithChildren, Suspense } from 'react';
+import {
+  SITE_DEFAULT_TITLE,
+  SITE_METADATA_TITLE_TEMPLATE,
+  SITE_TITLE_TAGLINE
+} from '@/lib/seo/siteTitle';
 import { getURL } from '@/utils/helpers';
 import 'styles/main.css';
 
-const defaultTitle = 'ScholarshipTop — Find Scholarships That Match You';
 const defaultDescription =
   'Discover and manage the best scholarship grants tailored for your education. ScholarshipTop helps students find funding opportunities worldwide.';
 const openGraphDescription =
@@ -16,7 +20,10 @@ const canonicalSiteUrl = getURL().replace(/\/+$/, '');
 
 export const metadata: Metadata = {
   metadataBase: new URL(getURL()),
-  title: defaultTitle,
+  title: {
+    default: SITE_DEFAULT_TITLE,
+    template: SITE_METADATA_TITLE_TEMPLATE
+  },
   description: defaultDescription,
   manifest: '/site.webmanifest',
   icons: {
@@ -32,7 +39,7 @@ export const metadata: Metadata = {
     ]
   },
   openGraph: {
-    title: defaultTitle,
+    title: SITE_DEFAULT_TITLE,
     description: openGraphDescription,
     url: `${canonicalSiteUrl}/`,
     siteName: 'ScholarshipTop',
@@ -49,8 +56,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ScholarshipTop',
-    description: 'Find Scholarships That Match You',
+    title: SITE_DEFAULT_TITLE,
+    description: SITE_TITLE_TAGLINE,
     images: ['/logo-preview.png']
   }
 };

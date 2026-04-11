@@ -16,6 +16,7 @@ import {
   editScholarshipGrantCardReplyMarkup,
   sendScholarshipTelegramCardToChat
 } from '@/lib/telegram/scholarshipTelegramCard';
+import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
 
@@ -727,6 +728,41 @@ async function sendTelegramAdminBroadcast(text: string) {
   }
 }
 
+/**
+ * Plain-text DM to every numeric chat in `TELEGRAM_ADMIN_IDS` / `TELEGRAM_ADMIN_ID` (env only).
+ * Does not read `telegram_users` — use this when only env-configured admins should receive alerts.
+ */
+export async function notifyEnvTelegramAdminsPlainText(text: string) {
+  if (!getTelegramBotToken()) {
+    console.warn('[telegram] notifyEnvTelegramAdminsPlainText: missing TELEGRAM_BOT_TOKEN');
+    return;
+  }
+  const ids = [...getTelegramAdminIds()];
+  if (ids.length === 0) {
+    console.warn('[telegram] notifyEnvTelegramAdminsPlainText: no TELEGRAM_ADMIN_IDS');
+    return;
+  }
+  for (const chatId of ids) {
+    await sendTelegramMessage(chatId, text);
+  }
+}
+
+/** Admin-only alert when a new row appears in `scholarships` (link uses slug when present). */
+export async function notifyEnvTelegramAdminsNewScholarship(row: {
+  id: string;
+  slug?: string | null;
+  title?: string | null;
+}) {
+  const title = row.title?.trim() || 'New scholarship';
+  const path = scholarshipPublicPath({
+    id: row.id,
+    slug: row.slug ?? undefined
+  });
+  const url = `${getSiteUrl()}${path}`;
+  const text = ['🆕 New grant', '', title, '', url].join('\n');
+  await notifyEnvTelegramAdminsPlainText(text);
+}
+
 export async function notifyTelegramSignup(payload: {
   userId: string;
   email: string;
@@ -914,6 +950,27 @@ async function sendAdminPanel(user: TelegramUserRow) {
       latestLines
     ].join('\n'),
     buildProfileKeyboard(user)
+  );
+}
+
+/** Shown when the user taps “Sync Account” but Telegram is already linked (app_user_id set). */
+async function sendAlreadyLinkedSyncAck(user: TelegramUserRow) {
+  const nextUser = await updateTelegramUserState(user.id, {
+    last_state: 'idle',
+    pending_email: null
+  });
+  const kbUser = nextUser ?? user;
+
+  await sendTelegramMessage(
+    user.telegram_chat_id,
+    [
+      "You're all set — this Telegram chat is already linked to your ScholarshipTop account.",
+      '',
+      'Notifications and account features use this connection, so there is no need to enter your email again.',
+      '',
+      'Open My Account to review your profile, or Alerts Setup to choose which grant alerts you receive.'
+    ].join('\n'),
+    buildProfileKeyboard(kbUser)
   );
 }
 
@@ -1387,11 +1444,17 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
       return;
     }
 
-    if (
-      text === BUTTON_LABELS.connectAccount ||
-      text === BUTTON_LABELS.reconnectAccount
-    ) {
+    if (text === BUTTON_LABELS.connectAccount) {
       await startConnectFlow(user);
+      return;
+    }
+
+    if (text === BUTTON_LABELS.reconnectAccount) {
+      if (user.app_user_id) {
+        await sendAlreadyLinkedSyncAck(user);
+      } else {
+        await startConnectFlow(user);
+      }
       return;
     }
 
@@ -1456,7 +1519,11 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         await sendProfileSummary(user);
         return;
       case CALLBACKS.connect:
-        await startConnectFlow(user);
+        if (user.app_user_id) {
+          await sendAlreadyLinkedSyncAck(user);
+        } else {
+          await startConnectFlow(user);
+        }
         return;
       case CALLBACKS.admin:
         await sendAdminPanel(user);

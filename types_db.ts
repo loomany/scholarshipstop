@@ -84,6 +84,24 @@ export interface Database {
           }
         ]
       },
+      scholarship_admin_notify_config: {
+        Row: {
+          id: number
+          endpoint_url: string
+          bearer_token: string
+        }
+        Insert: {
+          id?: number
+          endpoint_url?: string
+          bearer_token?: string
+        }
+        Update: {
+          id?: number
+          endpoint_url?: string
+          bearer_token?: string
+        }
+        Relationships: []
+      },
       telegram_resource_notify_config: {
         Row: {
           id: number

@@ -1,3 +1,4 @@
+import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import type { Database } from '@/types_db';
 
 export type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
@@ -9,6 +10,43 @@ export function parseUserGpa(raw: ProfilesRow['gpa']): number | null {
   if (s === 'prefer_not_to_say' || s === 'n/a') return null;
   const n = Number.parseFloat(s);
   return Number.isFinite(n) ? n : null;
+}
+
+/** Facets that drive hub “best recommendation” SQL + profile defaults (5 × 20% = 100%). */
+export type ScholarshipProfileMatchFields = Pick<
+  ProfilesRow,
+  | 'field_of_study'
+  | 'field_of_study_label'
+  | 'school_level'
+  | 'citizenship_status'
+  | 'state_region'
+  | 'gpa'
+>;
+
+/**
+ * Profile completeness for similar-scholarship cards: 100% when all five facets are set.
+ * Each missing facet lowers the score by 20 points (used for Best recommendation vs Match % UI).
+ */
+export function computeScholarshipProfileMatchPercent(
+  profile: ScholarshipProfileMatchFields | null | undefined
+): number | null {
+  if (!profile) return null;
+
+  let filled = 0;
+  if (
+    (profile.field_of_study?.trim() ?? '') ||
+    (profile.field_of_study_label?.trim() ?? '')
+  ) {
+    filled += 1;
+  }
+  if (profile.school_level?.trim()) filled += 1;
+  if (profile.citizenship_status?.trim()) filled += 1;
+  if (normalizeUsStateToCanonical(profile.state_region?.trim() ?? '')) {
+    filled += 1;
+  }
+  if (parseUserGpa(profile.gpa) != null) filled += 1;
+
+  return filled * 20;
 }
 
 /**

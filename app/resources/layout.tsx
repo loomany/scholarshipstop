@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react';
 
 import { RESOURCES_PAGE_TITLE } from '@/lib/content-hub/resourcesSection';
 
-const title = `${RESOURCES_PAGE_TITLE} — Guides & Tips | ScholarshipTop`;
+const title = `${RESOURCES_PAGE_TITLE} — Guides & Tips`;
 const description =
   'Guides and expert tips to help you find scholarships, write stronger applications, and stay organized.';
 

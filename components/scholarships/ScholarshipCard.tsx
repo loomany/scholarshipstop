@@ -34,7 +34,6 @@ type ScholarshipCardProps = {
   /** Kept for API compatibility with category/long-tail pages; no separate report control in the compact layout. */
   reported?: boolean;
   onToggleReport?: (id: string) => void;
-  showPersonalizedMatch?: boolean;
   /** Save + Not relevant (and Restore on Ignored tab). */
   showCardActions?: boolean;
   /**
@@ -53,28 +52,6 @@ type ScholarshipCardProps = {
 const METRIC_LABEL =
   'mt-1 text-[10px] font-normal leading-snug text-gray-500 sm:text-[11px] sm:normal-case';
 
-function matchTierLabel(score: number): { emoji: string; label: string; className: string } {
-  if (score >= 90) {
-    return {
-      emoji: '🔥',
-      label: 'Best Match',
-      className: 'bg-orange-50 text-orange-900 ring-1 ring-orange-200/80'
-    };
-  }
-  if (score >= 70) {
-    return {
-      emoji: '✅',
-      label: 'Good Match',
-      className: 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/80'
-    };
-  }
-  return {
-    emoji: '⚠️',
-    label: 'Possible',
-    className: 'bg-amber-50 text-amber-900 ring-1 ring-amber-200/80'
-  };
-}
-
 export default function ScholarshipCard({
   scholarship,
   isUnread = false,
@@ -82,7 +59,6 @@ export default function ScholarshipCard({
   onToggleSave,
   onHide,
   ignoreAction = 'hide',
-  showPersonalizedMatch = false,
   showCardActions = true,
   stackedListing = false,
   subscriptionLocked = false,
@@ -205,12 +181,6 @@ export default function ScholarshipCard({
     : null;
 
   const deadlineTooltipText = formatDeadlineTooltipText(scholarship);
-
-  const matchScore = scholarship.matchScore;
-  const showMatchBlock =
-    showPersonalizedMatch && matchScore != null && matchScore > 0;
-  const matchTier =
-    showMatchBlock && matchScore != null ? matchTierLabel(matchScore) : null;
 
   const showBadgeRow =
     scholarship.recurring ||
@@ -384,28 +354,6 @@ export default function ScholarshipCard({
               applicants
               {scholarship.applicantsCountIsEstimated ? ' (est.)' : ''}
             </p>
-          ) : null}
-          {showMatchBlock && matchTier ? (
-            <div className="mt-2 space-y-1 rounded-lg border border-gray-100 bg-gray-50/90 px-2.5 py-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <span
-                  className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${matchTier.className}`}
-                >
-                  <span aria-hidden>{matchTier.emoji}</span>
-                  {matchTier.label}
-                </span>
-                <span className="text-sm font-semibold tabular-nums text-gray-900">
-                  Match: {matchScore}%
-                </span>
-              </div>
-              {scholarship.matchReasons && scholarship.matchReasons.length > 0 ? (
-                <ul className="list-disc space-y-0.5 pl-4 text-xs leading-snug text-gray-500">
-                  {scholarship.matchReasons.slice(0, 4).map((r) => (
-                    <li key={r}>{r}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
           ) : null}
           {showBadgeRow ? (
             <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">

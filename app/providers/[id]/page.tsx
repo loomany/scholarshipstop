@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const slug = await resolveProviderProfileSlug(params.id);
   const data = slug ? await getCachedProviderProfilePage(slug, 1) : null;
   if (!data) {
-    return { title: 'Provider | ScholarshipTop' };
+    return { title: 'Provider' };
   }
   return {
     title: `${data.displayName} | Scholarship Provider`,

@@ -80,6 +80,11 @@ import {
 } from '@/lib/scholarships/similarScholarships';
 import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import {
+  computeScholarshipProfileMatchPercent,
+  type ScholarshipProfileMatchFields
+} from '@/lib/scholarships/scholarshipMatch';
+import { createClient } from '@/utils/supabase/client';
+import {
   filterApplicationTipsForUi,
   filterFaqForOnPageDisplay,
   filterImportantNoteChunks,
@@ -264,14 +269,19 @@ const similarScholarshipsGridClass =
 function SimilarScholarshipDetailListItem({
   scholarship: s,
   highlightPrimary,
-  showBestMatchChip,
+  profileMatchPercent,
+  isPrimarySimilarOpen,
+  eligibleForMatchPill,
   isAuthenticated,
   hasSubscription,
   onSubscriptionOffer
 }: {
   scholarship: Scholarship;
   highlightPrimary: boolean;
-  showBestMatchChip: boolean;
+  profileMatchPercent: number | null;
+  isPrimarySimilarOpen: boolean;
+  /** Open-deadline similar rows only (not “past deadline” reference cards). */
+  eligibleForMatchPill: boolean;
   isAuthenticated: boolean;
   hasSubscription: boolean;
   onSubscriptionOffer: () => void;
@@ -284,13 +294,46 @@ function SimilarScholarshipDetailListItem({
     !hasSubscription &&
     (similarEasyApplyIds.includes('easy_apply') ||
       similarEasyApplyIds.includes('quick_apply'));
-  const showBadgeColumn = showBestMatchChip;
-  const showRightHeader =
-    showBadgeColumn || similarSubscriptionLocked;
+
+  const showBestRecommendation =
+    eligibleForMatchPill &&
+    isPrimarySimilarOpen &&
+    profileMatchPercent === 100;
+  const showMatchPercentPill =
+    eligibleForMatchPill &&
+    !showBestRecommendation &&
+    profileMatchPercent != null &&
+    profileMatchPercent >= 70 &&
+    profileMatchPercent <= 90;
+
+  const awardLine = formatScholarshipAwardLine(s);
+
+  const recommendationPill =
+    showBestRecommendation ? (
+      <span
+        className={`inline-flex max-w-full whitespace-normal rounded-full px-2.5 py-1 text-[10px] font-bold uppercase leading-tight tracking-wide shadow-sm ${
+          deadlinePassed
+            ? 'bg-zinc-300 text-zinc-700'
+            : 'bg-teal-600 text-white'
+        }`}
+      >
+        Best recommendation
+      </span>
+    ) : showMatchPercentPill ? (
+      <span
+        className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-bold tabular-nums tracking-wide shadow-sm ${
+          deadlinePassed
+            ? 'bg-zinc-200 text-zinc-700'
+            : 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/90'
+        }`}
+      >
+        {profileMatchPercent}% Match
+      </span>
+    ) : null;
 
   const cardInner = (
     <div className="relative text-left">
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3 sm:gap-4">
         <div className="min-w-0 flex-1 text-left">
           <span
             className={`block text-left text-base font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'}`}
@@ -304,64 +347,47 @@ function SimilarScholarshipDetailListItem({
               {s.provider}
             </span>
           ) : null}
+          {recommendationPill ? (
+            <div className="mt-2.5 flex min-h-[1.75rem] items-start">{recommendationPill}</div>
+          ) : null}
         </div>
-        {showRightHeader ? (
-          <div
-            className="flex shrink-0 flex-col items-end gap-1.5"
-            aria-label={showBadgeColumn ? 'Scholarship tags' : undefined}
-          >
-            {showBestMatchChip ? (
-              <span
-                className={`whitespace-nowrap rounded-full px-2.5 py-0.5 text-center text-[10px] font-bold uppercase tracking-wide shadow-sm ${
-                  deadlinePassed
-                    ? 'bg-zinc-300 text-zinc-700'
-                    : 'bg-teal-600 text-white'
-                }`}
-              >
-                Best match
-              </span>
-            ) : null}
-            {similarSubscriptionLocked ? (
-              <div className="flex items-center justify-end gap-1.5">
-                <span
-                  className="pointer-events-none inline-flex h-[22px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
-                  aria-hidden
-                >
-                  <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
-                </span>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
-      <div className="mt-2 flex w-full min-w-0 items-center justify-between gap-2 sm:gap-3">
-        <div className="min-w-0 flex-1 pr-2 text-left">
-          <span
-            className={`block text-sm font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-800'}`}
-          >
-            {formatScholarshipAwardLine(s)}
-          </span>
-        </div>
-        <div
-          className={
-            deadlinePassed
-              ? 'w-max min-w-0 shrink-0 text-right text-xs font-normal italic text-zinc-400'
-              : 'w-max min-w-0 shrink-0 text-right text-xs font-medium text-zinc-700'
-          }
-        >
-          <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
-            {deadlinePassed ? 'Deadline passed' : 'Deadline'}
-          </span>
-          <span
-            className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
-          >
-            {simDd.primary}
-          </span>
-          {simDd.secondary && !deadlinePassed ? (
-            <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
-              {simDd.secondary}
+        <div className="flex w-[min(11rem,42%)] shrink-0 flex-col items-end gap-1.5 text-right">
+          {similarSubscriptionLocked ? (
+            <span
+              className="pointer-events-none inline-flex h-[22px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
+              aria-hidden
+            >
+              <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
             </span>
           ) : null}
+          <span
+            className={`block w-full text-base font-semibold tabular-nums leading-tight sm:text-[1.0625rem] ${
+              deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'
+            }`}
+          >
+            {awardLine}
+          </span>
+          <div
+            className={
+              deadlinePassed
+                ? 'w-full text-xs font-normal italic text-zinc-400'
+                : 'w-full text-xs font-medium text-zinc-700'
+            }
+          >
+            <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
+              {deadlinePassed ? 'Deadline passed' : 'Deadline'}
+            </span>
+            <span
+              className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
+            >
+              {simDd.primary}
+            </span>
+            {simDd.secondary && !deadlinePassed ? (
+              <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
+                {simDd.secondary}
+              </span>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>
@@ -540,6 +566,9 @@ export default function ScholarshipDetailPageClient({
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [profileMatchPercent, setProfileMatchPercent] = useState<number | null>(
+    null
+  );
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
   }, []);
@@ -568,6 +597,44 @@ export default function ScholarshipDetailPageClient({
   useEffect(() => {
     syncIdsFromStorage();
   }, [syncIdsFromStorage]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !authResolved) {
+      setProfileMatchPercent(null);
+      return;
+    }
+    const supabase = createClient();
+    let cancelled = false;
+    void (async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      if (!user || cancelled) {
+        if (!cancelled) setProfileMatchPercent(null);
+        return;
+      }
+      const { data: row } = await supabase
+        .from('profiles')
+        .select(
+          'field_of_study, field_of_study_label, school_level, citizenship_status, state_region, gpa'
+        )
+        .eq('id', user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      if (!row) {
+        setProfileMatchPercent(null);
+        return;
+      }
+      setProfileMatchPercent(
+        computeScholarshipProfileMatchPercent(
+          row as ScholarshipProfileMatchFields
+        )
+      );
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated, authResolved]);
 
   useEffect(() => {
     if (!scholarship?.id) return;
@@ -2095,7 +2162,9 @@ export default function ScholarshipDetailPageClient({
                         key={s.id}
                         scholarship={s}
                         highlightPrimary={s.id === similarFirstOpenId}
-                        showBestMatchChip={s.id === similarFirstOpenId}
+                        profileMatchPercent={profileMatchPercent}
+                        isPrimarySimilarOpen={s.id === similarFirstOpenId}
+                        eligibleForMatchPill
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
                         onSubscriptionOffer={openSubscriptionOffer}
@@ -2120,7 +2189,9 @@ export default function ScholarshipDetailPageClient({
                         key={s.id}
                         scholarship={s}
                         highlightPrimary={false}
-                        showBestMatchChip={false}
+                        profileMatchPercent={profileMatchPercent}
+                        isPrimarySimilarOpen={false}
+                        eligibleForMatchPill={false}
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
                         onSubscriptionOffer={openSubscriptionOffer}
@@ -2139,7 +2210,9 @@ export default function ScholarshipDetailPageClient({
                       key={s.id}
                       scholarship={s}
                       highlightPrimary={Boolean(isPrimaryOpen)}
-                      showBestMatchChip={Boolean(isPrimaryOpen)}
+                      profileMatchPercent={profileMatchPercent}
+                      isPrimarySimilarOpen={Boolean(isPrimaryOpen)}
+                      eligibleForMatchPill={isOpen}
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
                       onSubscriptionOffer={openSubscriptionOffer}

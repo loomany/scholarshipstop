@@ -14,6 +14,7 @@ This project now includes a Telegram bot webhook at `app/api/telegram/webhook/ro
   - new registrations
   - verified emails
   - payment/subscription events
+- Optional: **new scholarship row** → message only to env admins (`TELEGRAM_ADMIN_IDS`), with a link to the grant (`POST /api/internal/scholarships/notify-admin-new`, secured by `SCHOLARSHIP_NEW_ADMIN_NOTIFY_SECRET`). See [New grant admin notify](#new-grant-admin-notify) below.
 
 ## Required Env
 
@@ -84,6 +85,23 @@ If the Telegram user ID is listed in `TELEGRAM_ADMIN_IDS`, the bot:
 - enables admin controls
 - enables alerts automatically on `/start`
 - shows the admin dashboard button
+
+## New grant admin notify
+
+When a **new row** is inserted into `public.scholarships`, you can ping only the Telegram chats listed in **`TELEGRAM_ADMIN_IDS`** / **`TELEGRAM_ADMIN_ID`** (not the `telegram_users` admin list).
+
+1. Set a secret, e.g. `SCHOLARSHIP_NEW_ADMIN_NOTIFY_SECRET` (or reuse `TELEGRAM_WEBHOOK_SECRET`).
+2. In Supabase: **Database → Webhooks → Create a new hook**
+   - **Table**: `scholarships`
+   - **Events**: Insert
+   - **HTTP Request**: `POST` to  
+     `https://<your-production-domain>/api/internal/scholarships/notify-admin-new`
+   - **Headers**: `Authorization: Bearer <same secret>`
+3. Message format: title + public URL (`NEXT_PUBLIC_SITE_URL` + `/scholarships/{slug-or-id}`).
+
+Local test (dev server running, env loaded):
+
+`npx dotenv -e .env.local -- npx tsx scripts/test-scholarship-admin-notify.ts`
 
 ## Notes
 

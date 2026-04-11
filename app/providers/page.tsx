@@ -22,14 +22,13 @@ import { getURL } from '@/utils/helpers';
 
 export const dynamic = 'force-dynamic';
 
-const baseTitle = 'Scholarship Providers | ScholarshipTop';
 const baseDescription =
   'Explore organizations and foundations offering financial aid across the United States.';
 
 export const metadata: Metadata = {
-  title: baseTitle,
+  title: 'Scholarship Providers',
   description: baseDescription,
-  openGraph: { title: baseTitle, description: baseDescription }
+  openGraph: { description: baseDescription }
 };
 
 function searchQueryFromParams(q: string | string[] | undefined): string | undefined {

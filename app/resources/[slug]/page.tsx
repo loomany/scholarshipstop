@@ -35,10 +35,10 @@ export async function generateMetadata({
   const slug = decodeURIComponent(params.slug).trim();
   const post = await fetchPublishedContentPostBySlug(slug);
   if (!post) {
-    return { title: 'Article | ScholarshipTop' };
+    return { title: 'Article' };
   }
   const title =
-    post.meta_title?.trim() || post.title?.trim() || 'Article | ScholarshipTop';
+    post.meta_title?.trim() || post.title?.trim() || 'Article';
   const description = post.meta_description?.trim() || undefined;
   const ogImage = post.cover_image_url?.trim();
   return {

@@ -66,10 +66,10 @@ export default function ScholarshipRegistrationWallModal({
           Unlock filters, save scholarships, and see results tailored to you.
         </p>
         <ul className="mt-5 list-inside list-disc space-y-2 text-sm text-zinc-700 sm:text-[15px]">
-          <li>Find best matches based on your profile</li>
+          <li>See best recommendations based on your profile</li>
           <li>Filter by GPA, deadline, and requirements</li>
           <li>Browse scholarships by categories</li>
-          <li>Sort by best matches and smart recommendations</li>
+          <li>Sort by best recommendation and smart recommendations</li>
           <li>Save and track opportunities</li>
         </ul>
 

@@ -14,7 +14,7 @@ import AboutResourceCard from '@/components/about/AboutResourceCard';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 
 export const metadata: Metadata = {
-  title: 'About ScholarshipTop | ScholarshipTop',
+  title: 'About',
   description:
     'Learn how ScholarshipTop works, get help, and find Privacy Policy, Terms, and FAQ in one place.'
 };
