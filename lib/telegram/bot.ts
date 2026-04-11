@@ -119,9 +119,12 @@ const BUTTON_LABELS = {
   findScholarships: '🔔 Alerts Setup',
   myProfile: '👤 My Account',
   reconnectAccount: '🔄 Sync Account',
-  /** Same data as hub My scholarships → Saved (`/scholarships?tab=saved`). */
-  savedScholarships: '💾 Saved'
+  /** Same data as hub My scholarships → Saved (`/scholarships?tab=saved`). Main menu only — not duplicated on My Account keyboard. */
+  savedScholarships: '💾 Saved scholarships'
 } as const;
+
+/** Previous reply-keyboard label; still accept taps until clients refresh the keyboard. */
+const LEGACY_SAVED_SCHOLARSHIPS_BUTTON = '💾 Saved';
 
 /** Short reply when returning to the reply-keyboard hub (not Markdown). */
 const MAIN_MENU_REPLY = 'Main menu — pick your next step.';
@@ -219,7 +222,6 @@ function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarku
       keyboard: [
         [primaryConnectButton, keyboardButton(BUTTON_LABELS.admin)],
         [
-          keyboardButton(BUTTON_LABELS.savedScholarships),
           keyboardButton(
             user.notifications_enabled ? BUTTON_LABELS.alertsOn : BUTTON_LABELS.alertsOff
           )
@@ -233,7 +235,7 @@ function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarku
 
   return {
     keyboard: [
-      [primaryConnectButton, keyboardButton(BUTTON_LABELS.savedScholarships)],
+      [primaryConnectButton],
       [keyboardButton(BUTTON_LABELS.backToMenu)]
     ],
     resize_keyboard: true,
@@ -918,6 +920,24 @@ async function sendProfileSummary(user: TelegramUserRow) {
 
 const SAVED_LIST_MAX = 15;
 
+/** YYYY-MM-DD from `deadline_date` / `deadline_text`, else em dash. */
+function savedListIsoDate(s: Scholarship): string {
+  if (s.deadlineAt) return s.deadlineAt.slice(0, 10);
+  const t = s.deadline?.trim();
+  if (t && /^\d{4}-\d{2}-\d{2}/.test(t)) return t.slice(0, 10);
+  return '—';
+}
+
+/** Human deadline line: avoid duplicating the ISO column when `deadline` is only a date. */
+function savedListDeadlinePart(s: Scholarship, isoDate: string): string {
+  const raw = s.deadline?.trim() || '';
+  if (!raw) return '—';
+  if (raw === isoDate || raw.replace(/\s/g, '') === isoDate) {
+    return s.deadlineBucket?.trim() || raw;
+  }
+  return raw;
+}
+
 async function sendSavedScholarshipsList(user: TelegramUserRow) {
   if (!user.app_user_id) {
     await sendTelegramMessage(
@@ -995,11 +1015,14 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
     const path = scholarshipPublicPath(s);
     const href = `${site}${path}`;
     const title = escapeTelegramHtml(s.title?.trim() || 'Scholarship');
-    lines.push(`${n}. <a href="${href}">${title}</a>`);
-    const dl = s.deadline?.trim();
-    if (dl) {
-      lines.push(`   <i>${escapeTelegramHtml(dl)}</i>`);
-    }
+    const iso = savedListIsoDate(s);
+    const dlPart = savedListDeadlinePart(s, iso);
+    const amt = (s.amount || s.awardAmount)?.trim() || '—';
+    lines.push(
+      `${n}. <a href="${href}">${title}</a> - ${escapeTelegramHtml(iso)} - ${escapeTelegramHtml(
+        dlPart
+      )} - ${escapeTelegramHtml(amt)}`
+    );
   }
   if (ids.length > list.length) {
     lines.push('', '<i>Some entries could not be loaded.</i>');
@@ -1638,7 +1661,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
       return;
     }
 
-    if (text === BUTTON_LABELS.savedScholarships) {
+    if (text === BUTTON_LABELS.savedScholarships || text === LEGACY_SAVED_SCHOLARSHIPS_BUTTON) {
       await sendSavedScholarshipsList(user);
       return;
     }
