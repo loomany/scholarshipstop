@@ -18,7 +18,6 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
-import SubjectL2BrowseChips from '@/components/scholarships/SubjectL2BrowseChips';
 import ScholarshipsMoreFiltersPanel from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
 import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagination';
 import ScholarshipsSidebar from '@/components/scholarships/ScholarshipsSidebar';
@@ -1276,8 +1275,6 @@ function ScholarshipsPageInner({
             }
             onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
           />
-
-          {isAuthenticated ? <SubjectL2BrowseChips /> : null}
 
           {isLoading ? (
             <div className="text-slate-600">Loading scholarships...</div>
