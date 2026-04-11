@@ -4,13 +4,26 @@ import { createClient } from '@/utils/supabase/server';
 
 export type BillingPlanKey = 'monthly' | 'quarterly' | 'yearly';
 
+/**
+ * Hosted checkout URLs (custom domain). Prefer env so Live/Test buy UUIDs stay in sync with Lemon
+ * without code changes — stale hardcoded `/checkout/buy/...` links keep showing Test mode.
+ */
 function baseCheckoutUrlFromPlan(plan: BillingPlanKey): string {
+  const fromEnv =
+    plan === 'monthly'
+      ? process.env.LEMONSQUEEZY_CHECKOUT_URL_MONTHLY?.trim()
+      : plan === 'quarterly'
+        ? process.env.LEMONSQUEEZY_CHECKOUT_URL_QUARTERLY?.trim()
+        : process.env.LEMONSQUEEZY_CHECKOUT_URL_YEARLY?.trim();
+
+  if (fromEnv) return fromEnv;
+
   const url =
     plan === 'monthly'
-      ? 'https://pay.scholarshiptop.com/checkout/buy/4e63048d-5d76-4818-925c-048b10047128?logo=0&discount=0'
+      ? 'https://pay.scholarshiptop.com/checkout/buy/fa9652cf-35f3-4dc2-af2d-29244a786861?logo=0&discount=0'
       : plan === 'quarterly'
-        ? 'https://pay.scholarshiptop.com/checkout/buy/3faf88f4-d2d6-437f-808f-f641bcb955a1?logo=0&discount=0'
-        : 'https://pay.scholarshiptop.com/checkout/buy/152da89c-f707-4417-9cd8-3be69938a677?logo=0&discount=0';
+        ? 'https://pay.scholarshiptop.com/checkout/buy/d8c88c38-44c6-4ab5-805a-71ffe1b8e89e?logo=0&discount=0'
+        : 'https://pay.scholarshiptop.com/checkout/buy/cddda988-fad6-46e8-a56f-a1f2a3eea3d3?logo=0&discount=0';
 
   if (!url.trim()) {
     throw new Error(`Checkout URL for the ${plan} plan is not configured.`);

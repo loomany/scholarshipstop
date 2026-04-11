@@ -71,6 +71,20 @@ Unknown events are acknowledged with `{ received: true, ignored: true }`.
   - `checkout[custom][user_id]`
 - The success path currently redirects the browser to `/scholarships` when Lemon reports `Checkout.Success`
 
+### Hosted checkout URLs (avoid “Test mode” at pay domain)
+
+The buy link is a **checkout UUID** in the path (`/checkout/buy/<uuid>`), not the numeric **variant id**. If that UUID still points at an old Test checkout, the overlay shows Test mode even when `NEXT_PUBLIC_LS_*` variant ids are updated.
+
+Optional env overrides (full URL, same query params you use in Lemon):
+
+- `LEMONSQUEEZY_CHECKOUT_URL_MONTHLY`
+- `LEMONSQUEEZY_CHECKOUT_URL_QUARTERLY`
+- `LEMONSQUEEZY_CHECKOUT_URL_YEARLY`
+
+Copy each from **Lemon → Live store → Product → Variant → Share / checkout link**. When unset, `app/actions/billing.ts` falls back to built-in defaults (keep those in sync when you rotate checkouts).
+
+`NEXT_PUBLIC_LS_*` variant ids must match the **same** Live variants webhooks send, or tier inference will be wrong.
+
 ## Access policy
 
 - `subscription_cancelled` keeps access until `ends_at` / `current_period_end` / `renews_at`
