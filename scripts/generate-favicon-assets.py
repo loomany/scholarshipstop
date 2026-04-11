@@ -233,6 +233,7 @@ def main() -> None:
 
     write_simple_png(OUT / "icon-16x16.png", pngs[16])
     write_simple_png(OUT / "icon-32x32.png", pngs[32])
+    write_simple_png(OUT / "icon-48x48.png", pngs[48])
     write_simple_png(OUT / "apple-touch-icon-120x120.png", pngs[120])
     write_simple_png(OUT / "apple-touch-icon-152x152.png", pngs[152])
     write_simple_png(OUT / "apple-touch-icon.png", pngs[180])
@@ -261,6 +262,12 @@ def main() -> None:
   "background_color": "#fafafa",
   "theme_color": "{ORANGE}",
   "icons": [
+    {{
+      "src": "/icon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    }},
     {{
       "src": "/icon-192x192.png",
       "sizes": "192x192",
