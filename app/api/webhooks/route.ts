@@ -13,7 +13,7 @@ import {
   sendLemonSubscriptionActiveEmail,
   sendLemonSubscriptionCancelledEmail,
   sendLemonSubscriptionPaymentFailedEmail,
-  lemonWebhookShouldSendSubscriptionActiveEmail,
+  lemonWebhookShouldSendSubscriptionWelcomeEmail,
   lemonWebhookShouldSendSubscriptionCancelledEmail,
   lemonWebhookShouldSendSubscriptionPaymentFailedEmail
 } from '@/lib/email/sendLemonSubscriptionEmail';
@@ -258,29 +258,44 @@ export async function POST(req: Request) {
       userId: decision.userId
     });
 
-    void supabaseAdmin.auth.admin
-      .getUserById(decision.userId)
-      .then(async ({ data: authUserData }) => {
-        const email = authUserData?.user?.email ?? null;
-        await notifyTelegramPayment({
-          userId: decision.userId,
-          email,
-          plan: decision.subscriptionPlan,
-          status: decision.subscription.status ?? 'unknown',
-          eventName: payload.meta?.event_name ?? null
-        });
-
-        if (!email?.trim()) {
-          return;
+    try {
+      let userEmail: string | null = null;
+      try {
+        const { data: authUserData, error: authErr } =
+          await supabaseAdmin.auth.admin.getUserById(decision.userId);
+        if (authErr) {
+          console.warn('[lemon:webhook] auth admin getUserById', authErr.message);
         }
+        userEmail = authUserData?.user?.email ?? null;
+      } catch (authLookupError) {
+        console.error('[lemon:webhook] auth admin getUserById threw', {
+          message:
+            authLookupError instanceof Error
+              ? authLookupError.message
+              : String(authLookupError),
+          userId: decision.userId
+        });
+      }
 
+      await notifyTelegramPayment({
+        userId: decision.userId,
+        email: userEmail,
+        plan: decision.subscriptionPlan,
+        status: decision.subscription.status ?? 'unknown',
+        eventName: decision.eventName
+      });
+
+      if (!userEmail?.trim()) {
+        console.warn('[lemon:webhook] skip subscription emails — no auth email for user', {
+          userId: decision.userId
+        });
+      } else {
         const eventName = decision.eventName;
         if (
-          lemonWebhookShouldSendSubscriptionActiveEmail(eventName) &&
-          decision.isSubscribed
+          lemonWebhookShouldSendSubscriptionWelcomeEmail(eventName, payload, decision.isSubscribed)
         ) {
           const r = await sendLemonSubscriptionActiveEmail({
-            toEmail: email.trim(),
+            toEmail: userEmail.trim(),
             payload,
             subscriptionPlan: decision.subscriptionPlan
           });
@@ -292,7 +307,7 @@ export async function POST(req: Request) {
           }
         } else if (lemonWebhookShouldSendSubscriptionCancelledEmail(eventName)) {
           const r = await sendLemonSubscriptionCancelledEmail({
-            toEmail: email.trim(),
+            toEmail: userEmail.trim(),
             payload
           });
           if (!r.ok) {
@@ -303,7 +318,7 @@ export async function POST(req: Request) {
           }
         } else if (lemonWebhookShouldSendSubscriptionPaymentFailedEmail(eventName)) {
           const r = await sendLemonSubscriptionPaymentFailedEmail({
-            toEmail: email.trim(),
+            toEmail: userEmail.trim(),
             payload
           });
           if (!r.ok) {
@@ -313,14 +328,14 @@ export async function POST(req: Request) {
             });
           }
         }
-      })
-      .catch((sideEffectError) => {
-        console.error('[lemon:webhook] post-update notification failed', {
-          message:
-            sideEffectError instanceof Error ? sideEffectError.message : String(sideEffectError),
-          userId: decision.userId
-        });
+      }
+    } catch (sideEffectError) {
+      console.error('[lemon:webhook] post-update notification failed', {
+        message:
+          sideEffectError instanceof Error ? sideEffectError.message : String(sideEffectError),
+        userId: decision.userId
       });
+    }
 
     return new Response(JSON.stringify({ received: true, updated: true }), {
       status: 200

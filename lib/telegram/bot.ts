@@ -851,15 +851,16 @@ export async function notifyTelegramPayment(payload: {
     { dedupeByUserId: null, relatedUserId: payload.userId }
   );
 
-  await sendTelegramAdminBroadcast(
-    [
-      'Получено платежное событие',
-      `Событие Lemon: ${formatLemonWebhookEventRu(payload.eventName)}`,
-      `Тариф: ${formatAdminPlanLabel(payload.plan, payload.plan !== 'free')}`,
-      `Статус в БД: ${formatAdminStatusLabel(payload.status)}`,
-      `Пользователь: ${payload.email ?? payload.userId}`
-    ].join('\n')
-  );
+  const text = [
+    'Получено платежное событие',
+    `Событие Lemon: ${formatLemonWebhookEventRu(payload.eventName)}`,
+    `Тариф: ${formatAdminPlanLabel(payload.plan, payload.plan !== 'free')}`,
+    `Статус в БД: ${formatAdminStatusLabel(payload.status)}`,
+    `Пользователь: ${payload.email ?? payload.userId}`
+  ].join('\n');
+
+  /** Prefer env chat IDs — `sendTelegramAdminBroadcast` only hits `telegram_users` with `is_admin` + notifications on. */
+  await notifyEnvTelegramAdminsPlainText(text);
 }
 
 async function sendWelcomeMessage(user: TelegramUserRow) {

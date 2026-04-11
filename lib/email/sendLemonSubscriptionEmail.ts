@@ -82,6 +82,34 @@ export function lemonWebhookShouldSendSubscriptionActiveEmail(eventName: string)
   );
 }
 
+/**
+ * “Welcome / subscription active” transactional email — broader than {@link lemonWebhookShouldSendSubscriptionActiveEmail}
+ * because Lemon often delivers `subscription_updated` (without `subscription_created`) right after checkout, and renewals
+ * must still be excluded (handled by timestamp heuristic).
+ */
+export function lemonWebhookShouldSendSubscriptionWelcomeEmail(
+  eventName: string,
+  payload: LemonWebhookPayload,
+  isSubscribed: boolean
+): boolean {
+  if (!isSubscribed) return false;
+  if (lemonWebhookShouldSendSubscriptionActiveEmail(eventName)) return true;
+  if (eventName === 'subscription_plan_changed') return true;
+  if (eventName === 'subscription_updated') {
+    const attrs = payload.data?.attributes ?? (payload as { attributes?: { created_at?: string; updated_at?: string } }).attributes;
+    const created = attrs?.created_at;
+    const updated = attrs?.updated_at;
+    if (typeof created === 'string' && typeof updated === 'string') {
+      const c = new Date(created).getTime();
+      const u = new Date(updated).getTime();
+      if (!Number.isNaN(c) && !Number.isNaN(u)) {
+        return Math.abs(u - c) <= 5 * 60 * 1000;
+      }
+    }
+  }
+  return false;
+}
+
 export function lemonWebhookShouldSendSubscriptionCancelledEmail(
   eventName: string
 ): boolean {
