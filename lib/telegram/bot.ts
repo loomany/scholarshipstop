@@ -4,7 +4,10 @@ import { createHash, randomInt } from 'crypto';
 
 import { sendTelegramLinkCodeEmail } from '@/lib/email/sendTelegramLinkCodeEmail';
 import { sendTelegramResourceNotification } from '@/lib/telegram/notifyResources';
-import { fetchFirstActiveScholarshipPreview } from '@/lib/scholarships/supabase';
+import {
+  fetchFirstActiveScholarshipPreview,
+  fetchScholarshipsByIdsForListing
+} from '@/lib/scholarships/supabase';
 import {
   addUserSavedScholarship,
   isLikelyScholarshipUuid,
@@ -16,7 +19,9 @@ import {
   editScholarshipGrantCardReplyMarkup,
   sendScholarshipTelegramCardToChat
 } from '@/lib/telegram/scholarshipTelegramCard';
+import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
 
@@ -110,7 +115,9 @@ const BUTTON_LABELS = {
   /** Grant notification toggles (same as account email prefs); search: /scholarships on site. */
   findScholarships: '🔔 Alerts Setup',
   myProfile: '👤 My Account',
-  reconnectAccount: '🔄 Sync Account'
+  reconnectAccount: '🔄 Sync Account',
+  /** Same data as /account/saved-scholarships (Save on grant cards). */
+  savedScholarships: '💾 Saved'
 } as const;
 
 /** Short reply when returning to the reply-keyboard hub (not Markdown). */
@@ -187,10 +194,13 @@ function keyboardButton(text: string): TelegramKeyboardButton {
 
 function buildMainKeyboard(): TelegramReplyKeyboardMarkup {
   return {
-    keyboard: [[
-      keyboardButton(BUTTON_LABELS.findScholarships),
-      keyboardButton(BUTTON_LABELS.myProfile)
-    ]],
+    keyboard: [
+      [
+        keyboardButton(BUTTON_LABELS.findScholarships),
+        keyboardButton(BUTTON_LABELS.myProfile)
+      ],
+      [keyboardButton(BUTTON_LABELS.savedScholarships)]
+    ],
     resize_keyboard: true,
     is_persistent: true
   };
@@ -206,11 +216,12 @@ function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarku
       keyboard: [
         [primaryConnectButton, keyboardButton(BUTTON_LABELS.admin)],
         [
+          keyboardButton(BUTTON_LABELS.savedScholarships),
           keyboardButton(
             user.notifications_enabled ? BUTTON_LABELS.alertsOn : BUTTON_LABELS.alertsOff
-          ),
-          keyboardButton(BUTTON_LABELS.backToMenu)
-        ]
+          )
+        ],
+        [keyboardButton(BUTTON_LABELS.backToMenu)]
       ],
       resize_keyboard: true,
       is_persistent: true
@@ -218,7 +229,10 @@ function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarku
   }
 
   return {
-    keyboard: [[primaryConnectButton, keyboardButton(BUTTON_LABELS.backToMenu)]],
+    keyboard: [
+      [primaryConnectButton, keyboardButton(BUTTON_LABELS.savedScholarships)],
+      [keyboardButton(BUTTON_LABELS.backToMenu)]
+    ],
     resize_keyboard: true,
     is_persistent: true
   };
@@ -899,6 +913,105 @@ async function sendProfileSummary(user: TelegramUserRow) {
   );
 }
 
+const SAVED_LIST_MAX = 15;
+
+async function sendSavedScholarshipsList(user: TelegramUserRow) {
+  if (!user.app_user_id) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      `Connect your ScholarshipTop account first (${BUTTON_LABELS.connectAccount}), then saved grants will show here.`,
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  const admin = getAdminClient();
+  if (!admin) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Service unavailable. Try again later.',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  const { data: saves, error: savesErr } = await admin
+    .from('user_saved_scholarships')
+    .select('scholarship_id')
+    .eq('user_id', user.app_user_id)
+    .order('created_at', { ascending: false })
+    .limit(SAVED_LIST_MAX);
+
+  if (savesErr) {
+    console.error('[telegram] user_saved_scholarships select', savesErr.message);
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Could not load saved grants. If this persists, the saved list table may not be set up yet.',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  const ids = (saves ?? []).map((r) => r.scholarship_id).filter(Boolean) as string[];
+  if (ids.length === 0) {
+    const site = getSiteUrl();
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      [
+        '<b>Saved scholarships</b>',
+        '',
+        'No saved grants yet.',
+        'Tap <b>Save</b> on a grant card in this chat, or save hearts on the website.',
+        '',
+        `<a href="${site}/account/saved-scholarships">Open saved list on the site</a>`
+      ].join('\n'),
+      buildProfileKeyboard(user),
+      { parse_mode: 'HTML' }
+    );
+    return;
+  }
+
+  let list: Scholarship[];
+  try {
+    list = await fetchScholarshipsByIdsForListing(admin as never, ids);
+  } catch (e) {
+    console.error('[telegram] fetchScholarshipsByIdsForListing', e);
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Could not load grant details. Try again later.',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  const site = getSiteUrl().replace(/\/+$/, '');
+  const lines: string[] = ['<b>Saved scholarships</b>', ''];
+  let n = 0;
+  for (const s of list) {
+    n += 1;
+    const path = scholarshipPublicPath(s);
+    const href = `${site}${path}`;
+    const title = escapeTelegramHtml(s.title?.trim() || 'Scholarship');
+    lines.push(`${n}. <a href="${href}">${title}</a>`);
+    const dl = s.deadline?.trim();
+    if (dl) {
+      lines.push(`   <i>${escapeTelegramHtml(dl)}</i>`);
+    }
+  }
+  if (ids.length > list.length) {
+    lines.push('', '<i>Some entries could not be loaded.</i>');
+  }
+  lines.push(
+    '',
+    `<a href="${site}/account/saved-scholarships">Full list on ScholarshipTop</a>`
+  );
+
+  const text = lines.join('\n');
+  await sendTelegramMessage(user.telegram_chat_id, text, buildProfileKeyboard(user), {
+    parse_mode: 'HTML'
+  });
+}
+
 async function sendAdminPanel(user: TelegramUserRow) {
   if (!user.is_admin) {
     await sendTelegramMessage(
@@ -1441,6 +1554,11 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
 
     if (text === BUTTON_LABELS.myProfile) {
       await sendProfileSummary(user);
+      return;
+    }
+
+    if (text === BUTTON_LABELS.savedScholarships) {
+      await sendSavedScholarshipsList(user);
       return;
     }
 
