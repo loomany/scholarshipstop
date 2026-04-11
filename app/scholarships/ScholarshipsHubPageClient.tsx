@@ -192,6 +192,7 @@ function withTabEnforcedMoreFilters(
 
 function ScholarshipsPageInner({
   isAuthenticated,
+  authResolved = true,
   hasSubscription = false,
   initialPayload = null,
   routeScope = null,
@@ -199,6 +200,8 @@ function ScholarshipsPageInner({
   postListingContent = null
 }: {
   isAuthenticated: boolean;
+  /** False until Supabase session is known — avoids guest URL normalization racing ahead of login. */
+  authResolved?: boolean;
   hasSubscription?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
@@ -430,14 +433,14 @@ function ScholarshipsPageInner({
    */
   useEffect(() => {
     if (isAuthenticated) return;
+    if (!authResolved) return;
     const sp = new URLSearchParams(searchParamsString);
     const tab = sp.get('tab');
+    /** Personal tabs (saved/ignored) stay in the URL for deep links (e.g. Telegram → hub). */
     const badTab =
       tab === 'best-matches' ||
       tab === 'recommended' ||
-      tab === 'hot-deadlines' ||
-      tab === 'saved' ||
-      tab === 'ignored';
+      tab === 'hot-deadlines';
     const needDefaultHubTab = !tab;
     const parsedDeadline = parseDeadlineFromParam(sp.get('deadline'));
     const hasAdvDeadline = parsedDeadline != null && parsedDeadline !== 'any';
@@ -452,7 +455,7 @@ function ScholarshipsPageInner({
       ...(hasAdvDeadline ? { deadline: 'any' } : {}),
       resetPage
     });
-  }, [isAuthenticated, searchParamsString, replaceListingParams]);
+  }, [isAuthenticated, authResolved, searchParamsString, replaceListingParams]);
 
   const queryDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -1399,6 +1402,7 @@ function ScholarshipsPageInner({
 
 export default function ScholarshipsHubPageClient({
   isAuthenticated = false,
+  authResolved = true,
   hasSubscription = false,
   initialPayload = null,
   routeScope = null,
@@ -1406,6 +1410,7 @@ export default function ScholarshipsHubPageClient({
   postListingContent = null
 }: {
   isAuthenticated?: boolean;
+  authResolved?: boolean;
   hasSubscription?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
@@ -1422,6 +1427,7 @@ export default function ScholarshipsHubPageClient({
     >
       <ScholarshipsPageInner
         isAuthenticated={isAuthenticated}
+        authResolved={authResolved}
         hasSubscription={hasSubscription}
         initialPayload={initialPayload}
         routeScope={routeScope}

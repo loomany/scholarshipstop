@@ -20,9 +20,10 @@ export default function ScholarshipsHubPageAuthBridge({
 }: ScholarshipsHubPageAuthBridgeProps) {
   return (
     <AuthStatusProvider>
-      {({ isAuthenticated, hasSubscription }) => (
+      {({ isAuthenticated, hasSubscription, authResolved }) => (
         <ScholarshipsHubPageClient
           isAuthenticated={isAuthenticated}
+          authResolved={authResolved}
           hasSubscription={hasSubscription}
           initialPayload={initialPayload}
           routeScope={routeScope}
