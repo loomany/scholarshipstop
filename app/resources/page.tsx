@@ -188,12 +188,41 @@ export default async function ResourcesIndexPage({
     ]
   };
 
+  const itemListSchema =
+    withSlug.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: RESOURCES_PAGE_TITLE,
+          description: baseDescription,
+          numberOfItems: withSlug.length,
+          itemListElement: withSlug.map((post, index) => {
+            const slug = post.slug!.trim();
+            const path = resourcesArticlePath(slug).replace(/^\/+/, '');
+            return {
+              '@type': 'ListItem',
+              position: index + 1,
+              name: post.title?.trim() || 'Untitled',
+              item: getURL(path)
+            };
+          })
+        }
+      : null;
+
   return (
     <div className="bg-white text-gray-900 antialiased">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
       />
+      {itemListSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(itemListSchema)
+          }}
+        />
+      ) : null}
       <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <nav className="text-sm text-gray-500" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">

@@ -8,8 +8,8 @@ import {
   scholarshipCategoryIds
 } from '@/app/scholarships/scholarshipCategories';
 
-/** Detail page: fewer, cleaner similar cards; pass a higher `targetCount` if needed. */
-const SIMILAR_MAX = 4;
+/** Detail page: max cards shown in the “Similar scholarships” block (API may fetch a small buffer). */
+export const SIMILAR_MAX = 4;
 
 /** Канонический slug категории для ссылок и «похожих» (DB `category_slug` или первая категория из данных). */
 export function resolveScholarshipCategorySlug(
@@ -60,6 +60,9 @@ export function formatScholarshipAwardLine(s: Scholarship): string {
 }
 
 /**
+ * @deprecated Similar scholarships are ranked in Postgres via `get_scored_similar_scholarships`.
+ * Kept for scripts/tests only.
+ *
  * До `targetCount` грантов (по умолчанию 4): та же категория (дедлайн → новее), затем добор новыми.
  */
 export function pickSimilarScholarships(

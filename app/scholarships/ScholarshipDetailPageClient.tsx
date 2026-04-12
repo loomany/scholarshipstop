@@ -79,7 +79,8 @@ import {
 import {
   formatScholarshipAwardLine,
   resolveScholarshipCategorySlug,
-  scholarshipDeadlineHasPassed
+  scholarshipDeadlineHasPassed,
+  SIMILAR_MAX
 } from '@/lib/scholarships/similarScholarships';
 import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import {
@@ -717,12 +718,16 @@ export default function ScholarshipDetailPageClient({
     const slug = resolveScholarshipCategorySlug(scholarship);
     const sp = new URLSearchParams();
     sp.set('similar_to', scholarship.id);
-    sp.set('limit', '8');
+    sp.set('limit', String(SIMILAR_MAX));
     if (slug) sp.set('similar_category_slug', slug);
+    const stateCode = scholarship.stateCodes?.find((c) => /^[A-Za-z]{2}$/.test(c.trim()));
+    if (stateCode) sp.set('similar_state_slug', stateCode.trim().toUpperCase());
 
     postScholarshipsList({ searchParams: sp.toString() })
       .then((r) => {
-        if (!cancelled) setSimilarScholarships(r.scholarships);
+        if (!cancelled) {
+          setSimilarScholarships(r.scholarships.slice(0, SIMILAR_MAX));
+        }
       })
       .catch(() => {
         if (!cancelled) setSimilarScholarships([]);
@@ -2140,11 +2145,12 @@ export default function ScholarshipDetailPageClient({
 
         {similarScholarships.length > 0 ? (
           <div
+            id="similar-scholarships"
             className={`${
               showUsefulFaqPage && faqItemsOnPage.length >= 2
                 ? 'mt-4'
                 : 'mt-3'
-            } border-t border-zinc-200 pt-4`}
+            } scroll-mt-24 border-t border-zinc-200 pt-4`}
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
               <div className="min-w-0 space-y-2">

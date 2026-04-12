@@ -186,6 +186,7 @@ async function handleList(
   const metaOnly = searchParams.get('meta_only') === '1';
   const similarTo = searchParams.get('similar_to');
   const similarCategorySlug = searchParams.get('similar_category_slug');
+  const similarStateSlug = searchParams.get('similar_state_slug');
   const listScope = searchParams.get('scope');
 
   const bounds = await fetchGlobalFilterBounds(supabase);
@@ -241,6 +242,7 @@ async function handleList(
       longTailLegacySlugs: lt.filter(Boolean),
       similarTo,
       similarCategorySlug,
+      similarStateSlug,
       listScope,
       requiredSeoTags: seoBody?.requiredSeoTags
     })

@@ -1213,7 +1213,14 @@ export interface Database {
       }
     }
     Functions: {
-      [_ in never]: never
+      get_scored_similar_scholarships: {
+        Args: {
+          target_id: string
+          target_category_slug: string
+          target_state_slug?: string | null
+        }
+        Returns: Database['public']['Tables']['scholarships']['Row'][]
+      }
     }
     Enums: {
       pricing_plan_interval: "day" | "week" | "month" | "year"

@@ -29,6 +29,7 @@ function baseRequest(): ScholarshipListRequest {
     longTailLegacySlugs: [],
     similarToId: null,
     similarCategorySlug: null,
+    similarStateSlug: null,
     listScope: 'catalog',
     requiredSeoTags: [],
     catalogSubjectCategoryId: null

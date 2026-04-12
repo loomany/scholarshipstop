@@ -31,7 +31,7 @@ export function seoRequestHasCatalogStateGeo(req: ScholarshipListRequest): boole
  * Strip client/URL noise before SEO relax attempts and nuclear query.
  *
  * **Clears:** `q`, `categoryIds`, `stateCodes`, `ignored`, `saved`, `started`, `submitted`,
- * `similarToId`, `similarCategorySlug`; `categoryPageSlug` → null unless `keepCategoryPageSlug`.
+ * `similarToId`, `similarCategorySlug`, `similarStateSlug`; `categoryPageSlug` → null unless `keepCategoryPageSlug`.
  *
  * **Does not clear:** `page`, `limit`, `sort`, `tab`, `listScope`, `deadline` (unused in SQL;
  * deadline comes from `moreFilters`), `moreFilters` (caller replaces per tier), `longTailLegacySlugs`
@@ -55,7 +55,8 @@ export function seoStripListingUrlNoise(
     started: [],
     submitted: [],
     similarToId: null,
-    similarCategorySlug: null
+    similarCategorySlug: null,
+    similarStateSlug: null
   };
 }
 
@@ -83,7 +84,8 @@ export function buildSeoNuclearListingRequest(
       started: [],
       submitted: [],
       similarToId: null,
-      similarCategorySlug: null
+      similarCategorySlug: null,
+      similarStateSlug: null
     };
   }
 
@@ -103,7 +105,8 @@ export function buildSeoNuclearListingRequest(
     started: [],
     submitted: [],
     similarToId: null,
-    similarCategorySlug: null
+    similarCategorySlug: null,
+    similarStateSlug: null
   };
 }
 

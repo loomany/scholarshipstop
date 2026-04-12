@@ -3,11 +3,41 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
+import { getURL } from '@/utils/helpers';
+
+const faqDescription =
+  'Answers to common questions about scholarships, how ScholarshipTop works, profile matching, saving scholarships, eligibility, and support.';
+
+const faqCanonical = getURL('faq');
 
 export const metadata: Metadata = {
   title: 'FAQ',
-  description:
-    'Answers to common questions about scholarships, how ScholarshipTop works, profile matching, saving scholarships, eligibility, and support.'
+  description: faqDescription,
+  alternates: {
+    canonical: faqCanonical
+  },
+  openGraph: {
+    title: 'FAQ',
+    description: faqDescription,
+    url: faqCanonical,
+    type: 'website',
+    siteName: 'ScholarshipTop',
+    locale: 'en_US',
+    images: [
+      {
+        url: '/logo-preview.png',
+        width: 1200,
+        height: 630,
+        alt: 'ScholarshipTop Logo'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'FAQ',
+    description: faqDescription,
+    images: ['/logo-preview.png']
+  }
 };
 
 const supportMailClass =

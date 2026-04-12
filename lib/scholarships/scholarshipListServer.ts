@@ -109,6 +109,10 @@ export type ScholarshipListRequest = {
   /** When set, skip tab/matches logic and return similar rows. */
   similarToId: string | null;
   similarCategorySlug: string | null;
+  /**
+   * Optional US state code (e.g. CA) for `get_scored_similar_scholarships` scoring.
+   */
+  similarStateSlug: string | null;
   /** `catalog` = full directory (All); `personalized` = SQL profile-fit + tab scopes. */
   listScope: ScholarshipListScope;
   /** Legacy field; catalog-only listing ignores this. */
@@ -252,6 +256,13 @@ function normalizeStateNameOrCodeToCode(raw: string | null | undefined): string 
   return code ? code.toUpperCase() : null;
 }
 
+/** `similar_state_slug` query param → 2-letter code for RPC (or null). */
+function normalizeSimilarStateSlugParam(
+  raw: string | null | undefined
+): string | null {
+  return normalizeStateNameOrCodeToCode(raw);
+}
+
 /** Allowlisted, deduped, sorted — safe for PostgREST `seo_tags` filter. */
 export function sanitizeRequiredSeoTagsInput(
   raw: string[] | null | undefined
@@ -320,6 +331,7 @@ export function scholarshipListRequestFromParts(parts: {
   longTailLegacySlugs?: string[] | null;
   similarTo?: string | null;
   similarCategorySlug?: string | null;
+  similarStateSlug?: string | null;
   listScope?: string | null;
   requiredSeoTags?: string[] | null;
   catalogSubjectCategoryId?: string | null;
@@ -360,6 +372,7 @@ export function scholarshipListRequestFromParts(parts: {
     longTailLegacySlugs: lt,
     similarToId: parts.similarTo?.trim() || null,
     similarCategorySlug: parts.similarCategorySlug?.trim().toLowerCase() || null,
+    similarStateSlug: normalizeSimilarStateSlugParam(parts.similarStateSlug),
     /** Hub/catalog listing is always catalog; `scope` URL param is ignored. */
     listScope: 'catalog',
     requiredSeoTags: sanitizeRequiredSeoTagsInput(parts.requiredSeoTags ?? null),
@@ -1043,6 +1056,60 @@ export async function countScholarshipsForTabRequest(
  */
 const SIMILAR_LIST_MAX_EXPIRED = 3;
 
+/**
+ * Legacy similar pool (bounded window, category filter + deadline sort).
+ * Used when `get_scored_similar_scholarships` is unavailable or returns no rows.
+ */
+async function loadSimilarScholarshipsLegacyRows(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest
+): Promise<ScholarshipRow[]> {
+  let q = supabase
+    .from('scholarships')
+    .select(LIST_CARD_SELECT)
+    .eq('is_active', true)
+    .neq('id', req.similarToId!);
+  if (req.similarCategorySlug) {
+    const raw = req.similarCategorySlug.trim().toLowerCase();
+    const canon = normalizeCategoryId(raw);
+    const keys = Array.from(
+      new Set([raw].concat(canon ? [canon] : []))
+    );
+    q = applyCategoryOrFilter(q, keys);
+  }
+  const similarPoolSize = Math.min(120, Math.max(req.limit * 6, 36));
+  q = q
+    .order('deadline_date', { ascending: true, nullsFirst: false })
+    .order('updated_at', { ascending: false, nullsFirst: true })
+    .range(0, Math.max(0, similarPoolSize - 1));
+  const { data, error } = await q;
+  if (error) throw new Error(error.message);
+  return (data ?? []) as unknown as ScholarshipRow[];
+}
+
+async function fetchScoredSimilarScholarshipRows(
+  supabase: ServerSupabaseClient,
+  req: ScholarshipListRequest
+): Promise<ScholarshipRow[] | null> {
+  if (!req.similarToId) return null;
+  const { data, error } = await supabase.rpc('get_scored_similar_scholarships', {
+    target_id: req.similarToId,
+    target_category_slug: req.similarCategorySlug ?? '',
+    target_state_slug: req.similarStateSlug
+  });
+  if (error) {
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[scholarships] get_scored_similar_scholarships RPC failed; using legacy similar query',
+        error.message
+      );
+    }
+    return null;
+  }
+  return (data ?? []) as ScholarshipRow[];
+}
+
 async function fetchSimilarListFillerScholarships(
   supabase: ServerSupabaseClient,
   excludeIds: string[],
@@ -1133,11 +1200,11 @@ export async function executeScholarshipListQuery(
    * Otherwise `similar_to` is ignored whenever a match bundle exists.
    */
   if (req.similarToId) {
-    let q = supabase
+    let qCount = supabase
       .from('scholarships')
-      .select(opts.countOnly ? 'id' : LIST_CARD_SELECT, {
+      .select('id', {
         count: 'exact',
-        head: opts.countOnly
+        head: true
       })
       .eq('is_active', true)
       .neq('id', req.similarToId);
@@ -1147,31 +1214,29 @@ export async function executeScholarshipListQuery(
       const keys = Array.from(
         new Set([raw].concat(canon ? [canon] : []))
       );
-      q = applyCategoryOrFilter(q, keys);
+      qCount = applyCategoryOrFilter(qCount, keys);
     }
-    if (!opts.countOnly) {
-      const similarPoolSize = Math.min(120, Math.max(req.limit * 6, 36));
-      q = q
-        .order('deadline_date', { ascending: true, nullsFirst: false })
-        .order('updated_at', { ascending: false, nullsFirst: true })
-        .range(0, Math.max(0, similarPoolSize - 1));
-    }
-    const { data, error, count } = await q;
-    if (error) throw new Error(error.message);
-    const total = count ?? 0;
     if (opts.countOnly) {
+      const { error, count } = await qCount;
+      if (error) throw new Error(error.message);
       return {
         scholarships: [],
-        total,
+        total: count ?? 0,
         page: 1,
         limit: req.limit
       };
     }
-    const rows = (data ?? []) as unknown as ScholarshipRow[];
-    const fromCategory = rows.map((r) => mapScholarshipRow(r));
+
+    let rows =
+      (await fetchScoredSimilarScholarshipRows(supabase, req)) ?? [];
+    if (rows.length === 0) {
+      rows = await loadSimilarScholarshipsLegacyRows(supabase, req);
+    }
+
+    const fromScored = rows.map((r) => mapScholarshipRow(r));
     const scholarships = await finalizeSimilarScholarshipsList(
       supabase,
-      fromCategory,
+      fromScored,
       req.similarToId,
       req.limit
     );
