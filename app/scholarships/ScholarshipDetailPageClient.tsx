@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'reac
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
+  BookOpen,
   CalendarClock,
   CheckCircle2,
   ExternalLink,
@@ -27,6 +28,8 @@ import ScholarshipRegistrationWallModal from '@/components/scholarships/Scholars
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
+import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import {
   fieldOfStudyDisplayList,
@@ -525,12 +528,15 @@ export default function ScholarshipDetailPageClient({
   isAuthenticated = true,
   hasSubscription = false,
   authResolved = true,
-  initialScholarship = null
+  initialScholarship = null,
+  initialRelatedArticles = []
 }: {
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
   authResolved?: boolean;
   initialScholarship?: Scholarship | null;
+  /** Published articles that reference this scholarship in `related_scholarships` (max 3). */
+  initialRelatedArticles?: ContentPostListFields[];
 } = {}) {
   const layoutInitialScholarship = useScholarshipDetailInitialData();
   const serverScholarship = initialScholarship ?? layoutInitialScholarship;
@@ -1406,6 +1412,56 @@ export default function ScholarshipDetailPageClient({
 
         {showNextStepsBlock ? (
           <ScholarshipNextStepsBlock items={nextStepActions} />
+        ) : null}
+
+        {initialRelatedArticles.length > 0 ? (
+          <div
+            className="mt-10"
+            aria-labelledby="scholarship-related-resources-heading"
+          >
+            <div className="flex flex-wrap items-start gap-3">
+              <BookOpen
+                className="mt-0.5 h-5 w-5 shrink-0 text-teal-700/90"
+                strokeWidth={1.75}
+                aria-hidden
+              />
+              <div className="min-w-0 flex-1 space-y-3">
+                <h2
+                  id="scholarship-related-resources-heading"
+                  className="text-lg font-semibold tracking-tight text-zinc-900"
+                >
+                  From our resources
+                </h2>
+                <p className="text-sm leading-relaxed text-zinc-600">
+                  Articles and guides on this site that mention this program in
+                  context.
+                </p>
+                <ul className="space-y-2.5" role="list">
+                  {initialRelatedArticles.map((post) => {
+                    const slug = post.slug?.trim();
+                    if (!slug) return null;
+                    const label =
+                      post.title?.trim() || slug.replace(/-/g, ' ');
+                    return (
+                      <li key={post.id}>
+                        <Link
+                          href={resourcesArticlePath(slug)}
+                          className="text-sm font-semibold text-teal-800 underline decoration-teal-600/35 underline-offset-2 transition hover:text-teal-950 hover:decoration-teal-700/60"
+                        >
+                          {label}
+                        </Link>
+                        {post.meta_description?.trim() ? (
+                          <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                            {post.meta_description.trim()}
+                          </p>
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </div>
         ) : null}
 
         {showApplicationTips ? (

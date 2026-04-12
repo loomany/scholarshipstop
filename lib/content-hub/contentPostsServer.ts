@@ -2,15 +2,10 @@ import 'server-only';
 
 import { cache } from 'react';
 
-import type { Database } from '@/types_db';
+import type { ContentPostRow, ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import { createPublicClient } from '@/utils/supabase/public';
 
-export type ContentPostRow = Database['public']['Tables']['content_posts']['Row'];
-
-export type ContentPostListFields = Pick<
-  ContentPostRow,
-  'id' | 'title' | 'slug' | 'cover_image_url' | 'meta_description' | 'published_at'
->;
+export type { ContentPostRow, ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 
 const publishedWithSlugSelect =
   'id, title, slug, cover_image_url, meta_description, published_at' as const;
@@ -128,3 +123,41 @@ export async function fetchRelatedPublishedContentPosts(
   const rows = (data ?? []) as ContentPostListFields[];
   return rows.slice(0, limit);
 }
+
+const RELATED_ARTICLES_FOR_SCHOLARSHIP_MAX = 3;
+
+/**
+ * Published articles whose `related_scholarships` JSON lists this catalog slug
+ * (same field as article matching / `RelatedScholarshipStored.slug`).
+ */
+export const fetchPublishedArticlesForScholarshipSlug = cache(
+  async (
+    scholarshipSlug: string,
+    limit = RELATED_ARTICLES_FOR_SCHOLARSHIP_MAX
+  ): Promise<ContentPostListFields[]> => {
+    const raw = scholarshipSlug.trim();
+    if (!raw) return [];
+
+    const cap = Math.max(1, Math.min(6, Math.floor(limit)));
+    try {
+      const supabase = createPublicClient();
+      /** `cs` = `@>`; JSON string avoids PostgREST parse errors from `.contains()` on this column. */
+      const relatedContains = JSON.stringify([{ slug: raw }]);
+      const { data, error } = await supabase
+        .from('content_posts')
+        .select(publishedWithSlugSelect)
+        .eq('status', 'published')
+        .not('slug', 'is', null)
+        .neq('slug', '')
+        .filter('related_scholarships', 'cs', relatedContains)
+        .order('published_at', { ascending: false, nullsFirst: false })
+        .order('updated_at', { ascending: false, nullsFirst: false })
+        .limit(cap);
+
+      if (error) return [];
+      return (data ?? []) as ContentPostListFields[];
+    } catch {
+      return [];
+    }
+  }
+);

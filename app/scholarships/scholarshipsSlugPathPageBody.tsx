@@ -21,6 +21,8 @@ import {
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
+import { scholarshipPublicSlugForMatching } from '@/app/scholarships/scholarshipsData';
+import { fetchPublishedArticlesForScholarshipSlug } from '@/lib/content-hub/contentPostsServer';
 import {
   getScholarshipDetailServer,
   redactPremiumScholarshipFields
@@ -98,6 +100,10 @@ export default async function ScholarshipsSlugPathPageBody({
     if (!scholarship) {
       notFound();
     }
+    const matchSlug = scholarshipPublicSlugForMatching(scholarship);
+    const initialRelatedArticles = matchSlug
+      ? await fetchPublishedArticlesForScholarshipSlug(matchSlug, 3)
+      : [];
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
@@ -110,6 +116,7 @@ export default async function ScholarshipsSlugPathPageBody({
         >
           <ScholarshipDetailPageAuthBridge
             initialScholarship={redactPremiumScholarshipFields(scholarship)}
+            initialRelatedArticles={initialRelatedArticles}
           />
         </Suspense>
       </>
@@ -137,6 +144,10 @@ export default async function ScholarshipsSlugPathPageBody({
     if (!scholarship) {
       notFound();
     }
+    const matchSlug = scholarshipPublicSlugForMatching(scholarship);
+    const initialRelatedArticles = matchSlug
+      ? await fetchPublishedArticlesForScholarshipSlug(matchSlug, 3)
+      : [];
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
@@ -149,6 +160,7 @@ export default async function ScholarshipsSlugPathPageBody({
         >
           <ScholarshipDetailPageAuthBridge
             initialScholarship={redactPremiumScholarshipFields(scholarship)}
+            initialRelatedArticles={initialRelatedArticles}
           />
         </Suspense>
       </>

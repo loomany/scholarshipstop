@@ -212,6 +212,18 @@ export function scholarshipPublicPath(
 }
 
 /**
+ * SEO slug when the public URL uses `/scholarships/{slug}` (not UUID). Matches
+ * `content_posts.related_scholarships[].slug` from the article matching pipeline.
+ */
+export function scholarshipPublicSlugForMatching(
+  s: Pick<Scholarship, 'id' | 'slug'>
+): string | null {
+  const sl = s.slug?.trim();
+  if (!sl || UUID_LIKE.test(sl)) return null;
+  return sl;
+}
+
+/**
  * Shows a leading $ for plain numeric catalog amounts (e.g. "2,500").
  * Leaves text that already has a currency symbol or non-cash phrases unchanged.
  */
