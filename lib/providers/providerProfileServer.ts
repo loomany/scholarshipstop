@@ -47,6 +47,13 @@ function faqFromJson(value: Json | null | undefined): ProviderFaqItem[] {
   return out;
 }
 
+/** Shared parser for `providers.ai_faq` (e.g. university hub + profile). */
+export function parseProviderAiFaqJson(
+  value: Json | null | undefined
+): ProviderFaqItem[] {
+  return faqFromJson(value);
+}
+
 function sourcesFromJson(value: Json | null | undefined): string[] {
   if (!value || !Array.isArray(value)) return [];
   return value.filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
@@ -131,7 +138,7 @@ export async function loadProviderProfilePage(
   const officialUrl = providerRow?.official_url ?? null;
   const aiDescription = normalizeProviderAiDescription(providerRow?.ai_description);
   const aiSources = providerRow ? sourcesFromJson(providerRow.ai_sources) : [];
-  const aiFaq = providerRow ? faqFromJson(providerRow.ai_faq) : [];
+  const aiFaq = providerRow ? parseProviderAiFaqJson(providerRow.ai_faq) : [];
   const isEnriched = providerRow?.is_enriched ?? false;
 
   const page = Math.max(1, Math.floor(scholarshipsPage) || 1);
