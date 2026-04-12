@@ -1136,32 +1136,9 @@ export default function ScholarshipDetailPageClient({
       beforeMissing.length > 0 ||
       beforeFlags.length > 0);
 
-  const hasQuickDecisionGridContent =
-    panelPick.showQuickDecision &&
-    (ui.quickDecision.bestFor.length > 0 ||
-      ui.quickDecision.highlights.length > 0 ||
-      ui.quickDecision.whyApply.length > 0 ||
-      quickChecksForGrid.length > 0);
-
-  const hasLockedDetailStack =
-    hasQuickDecisionGridContent ||
-    whoLines.length > 0 ||
-    showEligibilityHtmlFallback ||
-    hasQuickFacts ||
-    showSupport ||
-    hasBeforeYouApplyContent ||
-    showNextStepsBlock ||
-    showApplicationTips ||
-    hasRequirementsSection ||
-    docs.length > 0 ||
-    showSeoApplication ||
-    hasAwardPaymentBlock ||
-    hasImportantNotes ||
-    showProviderSection ||
-    showOverviewSection;
   const isApplySubscriptionLocked = isAuthenticated && !hasSubscription;
-  const showLockedDetailOverlay =
-    authResolved && !hasDetailAccess && hasLockedDetailStack;
+  /** Guest blur + “Sign in to unlock AI insights” overlay disabled — full detail body stays readable. */
+  const showLockedDetailOverlay = false;
   const openLockedAccessWall = isEasyApplySubscriptionLocked
     ? openSubscriptionOffer
     : openRegistrationWall;
