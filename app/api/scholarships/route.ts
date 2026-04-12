@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
+import { createPublicClient } from '@/utils/supabase/public';
 import { parseDeadlineFromParam } from '@/app/scholarships/scholarshipListUrl';
 import { parseSortFromParam } from '@/app/scholarships/scholarshipListUrl';
 import {
@@ -90,13 +91,14 @@ function applyListingMetaGuestPatches(
 async function emptyListResult(
   req: ScholarshipListRequest,
   includeMeta: boolean,
-  authUser: boolean
+  authUser: boolean,
+  /** Listing/meta queries: public client for guests (no cookies), cookie client when session exists. */
+  listDb: ReturnType<typeof createPublicClient>
 ) {
-  const supabase = createClient() as any;
   let meta: ScholarshipListMeta | undefined = undefined;
   if (includeMeta) {
-    const bounds = await fetchGlobalFilterBounds(supabase);
-    meta = await fetchScholarshipListMeta(supabase, req, bounds);
+    const bounds = await fetchGlobalFilterBounds(listDb);
+    meta = await fetchScholarshipListMeta(listDb, req, bounds);
     applyListingMetaGuestPatches(meta, { authUser });
   }
   return {
@@ -166,7 +168,14 @@ async function handleList(
   /** Hub: optional saved-filter snapshot for `recommended` sidebar count (`null` = none saved). */
   savedFiltersSnapshotBody?: MoreFiltersJson | null
 ) {
-  const supabase = createClient() as any;
+  const cookieSupabase = createClient() as any;
+  const publicSupabase = createPublicClient() as any;
+  const {
+    data: { user: sessionUser }
+  } = await cookieSupabase.auth.getUser();
+  /** Guest catalog reads skip cookie-bound client so PostgREST can align with cacheable anonymous paths. */
+  const listingSupabase = sessionUser ? cookieSupabase : publicSupabase;
+
   const page = searchParams.get('page');
   const limit = searchParams.get('limit');
   const sort = parseSortFromParam(searchParams.get('sort'));
@@ -189,7 +198,7 @@ async function handleList(
   const similarStateSlug = searchParams.get('similar_state_slug');
   const listScope = searchParams.get('scope');
 
-  const bounds = await fetchGlobalFilterBounds(supabase);
+  const bounds = await fetchGlobalFilterBounds(listingSupabase);
   const moreFilters = moreFiltersFromJson(
     bodyMoreFilters,
     bounds
@@ -220,7 +229,10 @@ async function handleList(
     : parseScholarshipTabParam(searchParams.get('tab'));
 
   const { legacyCategoryPageSlug, catalogSubjectCategoryId } =
-    await resolveCatalogSubjectCategoryForPageSlug(supabase, categoryPageParam);
+    await resolveCatalogSubjectCategoryForPageSlug(
+      listingSupabase,
+      categoryPageParam
+    );
 
   let req: ScholarshipListRequest = applyCatalogOnlyListingNormalization(
     scholarshipListRequestFromParts({
@@ -278,14 +290,13 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   const hubDebugReqId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   const hubDbg = hubSidebarMetaDebugEnabled() && isHubPrimaryListing;
 
-  let authUser: { id?: string } | null = null;
+  let authUser: { id?: string } | null = sessionUser;
   let profileRow: ProfilesRow | null = null;
   let isProSubscriber = false;
   let profileFilterSeed = null as ReturnType<typeof buildScholarshipProfileFilterSeed>;
   /**
    * Load auth/profile only when the response actually needs personalized context.
-   * This keeps base catalog filtering fast for signed-in users when they are
-   * changing filters/sort/page in catalog scope.
+   * Session is resolved once via `cookieSupabase` so listing can use `publicSupabase` for guests.
    */
   const requiresPersonalizationContext =
     includeMeta ||
@@ -321,21 +332,19 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     });
   }
 
-  if (shouldLoadAuthAndProfile) {
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-    authUser = user;
-    if (authUser?.id) {
-      const { data: prof } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', authUser.id)
-        .maybeSingle();
-      profileRow = prof;
-      profileFilterSeed = buildScholarshipProfileFilterSeed(prof);
-      isProSubscriber = await getUserSubscriptionStatus(supabase, authUser.id);
-    }
+  if (shouldLoadAuthAndProfile && sessionUser?.id) {
+    authUser = sessionUser;
+    const { data: prof } = await cookieSupabase
+      .from('profiles')
+      .select('*')
+      .eq('id', sessionUser.id)
+      .maybeSingle();
+    profileRow = prof;
+    profileFilterSeed = buildScholarshipProfileFilterSeed(prof);
+    isProSubscriber = await getUserSubscriptionStatus(
+      cookieSupabase,
+      sessionUser.id
+    );
   }
   if (profileRow) {
     req = { ...req, personalizedProfile: profileRow };
@@ -371,7 +380,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       Boolean(isHubPrimaryListing) ||
       !anonymousCatalogFastPath ||
       Boolean(categoryPageParam?.trim());
-    const meta = await fetchScholarshipListMeta(supabase, req, bounds, {
+    const meta = await fetchScholarshipListMeta(listingSupabase, req, bounds, {
       includeCategoryCounts
     });
     if (profileRow) {
@@ -396,7 +405,8 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     const r = await emptyListResult(
       req,
       includeMeta && !countOnly,
-      Boolean(authUser)
+      Boolean(sessionUser),
+      listingSupabase
     );
     if (hubDbg) {
       // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
@@ -455,7 +465,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   ) {
     // eslint-disable-next-line no-console -- SEO SQL debug
     console.log('[SEO_SQL_DEBUG_BYPASS] active: is_active=true, limit 10, no moreFilters');
-    const { data, error, count } = await supabase
+    const { data, error, count } = await listingSupabase
       .from('scholarships')
       .select(LIST_CARD_SELECT, { count: 'exact' })
       .eq('is_active', true)
@@ -500,7 +510,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
 
   const result = seoFallbackEnabled
     ? await executeScholarshipListQueryWithSeoFallback(
-        supabase,
+        listingSupabase,
         req,
         {
           countOnly,
@@ -520,7 +530,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
           )
         }
       )
-    : await executeScholarshipListQuery(supabase, req, {
+    : await executeScholarshipListQuery(listingSupabase, req, {
         countOnly,
         includeMeta: includeMeta && !countOnly,
         includeCategoryCounts:

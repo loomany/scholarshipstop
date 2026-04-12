@@ -57,6 +57,15 @@ export default function ContentHubArticleMatchedScholarships({ items }: Props) {
           </li>
         ))}
       </ul>
+      <p className="mt-8 text-center text-sm text-gray-600 sm:mt-10">
+        <Link
+          href="/scholarships"
+          className="font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
+        >
+          Browse the full scholarship catalog
+        </Link>{' '}
+        — filter by deadline, category, and more.
+      </p>
     </section>
   );
 }

@@ -2170,6 +2170,25 @@ export default function ScholarshipDetailPageClient({
                       : 'All scholarships'}
                   </span>
                 </p>
+                {categorySlugForLinks ? (
+                  <p className="text-sm">
+                    <Link
+                      href={`/scholarships/category/${encodeURIComponent(categorySlugForLinks)}`}
+                      className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
+                    >
+                      More scholarships in {breadcrumbCategoryLabel(categorySlugForLinks)}
+                    </Link>
+                  </p>
+                ) : (
+                  <p className="text-sm">
+                    <Link
+                      href="/scholarships"
+                      className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
+                    >
+                      Browse all scholarships
+                    </Link>
+                  </p>
+                )}
               </div>
               <Link
                 href={SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}

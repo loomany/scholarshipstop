@@ -14,6 +14,7 @@ import {
   GoogleTagManager,
   GoogleTagManagerNoScript
 } from '@/components/analytics/GoogleTagManager';
+import WebVitalsClient from '@/components/analytics/WebVitalsClient';
 import 'styles/main.css';
 
 const defaultDescription =
@@ -140,6 +141,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <Suspense fallback={null}>
           <Toaster />
         </Suspense>
+        <WebVitalsClient />
       </body>
     </html>
   );
