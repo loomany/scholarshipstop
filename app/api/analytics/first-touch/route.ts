@@ -123,7 +123,15 @@ export async function POST(request: Request) {
 
   const supabase = createServiceRoleSupabaseClient();
   if (!supabase) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+    /**
+     * Local / misconfigured deploy: no service role key. Not a client fault — avoid 500
+     * noise in DevTools; first-touch rows are optional attribution.
+     */
+    return NextResponse.json({
+      success: true,
+      status: 'skipped',
+      reason: 'service_role_unconfigured'
+    });
   }
 
   const { data, error } = await supabase
