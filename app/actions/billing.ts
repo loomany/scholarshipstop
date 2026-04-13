@@ -283,54 +283,77 @@ export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
   });
 }
 
+export type PreferredPlanCheckoutResult =
+  | { ok: true; url: string }
+  | { ok: false; error: string };
+
 /**
  * Lemon checkout for the billing tier inferred from the user’s current subscription (e.g. trial variant),
  * same heuristic as `/subscription` current plan. Falls back to monthly.
+ *
+ * Returns a plain object (never throws) so production clients show a real message instead of the
+ * generic Next.js Server Action error.
  */
-export async function getCheckoutURLForPreferredPlan(): Promise<string> {
-  const supabase = createClient();
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
+export async function getCheckoutURLForPreferredPlan(): Promise<PreferredPlanCheckoutResult> {
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+      error
+    } = await supabase.auth.getUser();
 
-  if (error || !user) {
-    throw new Error(error?.message ?? 'You must be signed in to subscribe.');
-  }
+    if (error || !user) {
+      return {
+        ok: false,
+        error: error?.message ?? 'You must be signed in to subscribe.'
+      };
+    }
 
-  if (!user.email) {
-    throw new Error('Your account is missing an email address.');
-  }
+    if (!user.email) {
+      return { ok: false, error: 'Your account is missing an email address.' };
+    }
 
-  const [{ data: profile }, { data: subRows }] = await Promise.all([
-    supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
-    supabase
-      .from('subscriptions')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created', { ascending: false })
-      .limit(20)
-  ]);
+    const [{ data: profile }, { data: subRows }] = await Promise.all([
+      supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
+      supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created', { ascending: false })
+        .limit(20)
+    ]);
 
-  const subscription = pickCanonicalSubscription(
-    subRows ?? []
-  ) as SubscriptionWithPriceAndProduct | null;
-  const tier = inferSubscriptionBillingTier(
-    subscription,
-    profile as Tables<'profiles'> | null
-  );
-  const plan: BillingPlanKey = tier ?? 'monthly';
-
-  const r = await createLemonSkipTrialCheckout(plan, user.email, user.id);
-  if (r.ok) return r.url;
-
-  if (r.reason === 'missing_env') {
-    throw new Error(
-      'Checkout is not configured: add LEMONSQUEEZY_API_KEY, LEMONSQUEEZY_STORE_ID, and variant IDs (LEMONSQUEEZY_MONTHLY_VARIANT_ID, etc.) to the server environment. API checkout is required to replace trial text and skip the trial.'
+    const subscription = pickCanonicalSubscription(
+      subRows ?? []
+    ) as SubscriptionWithPriceAndProduct | null;
+    const tier = inferSubscriptionBillingTier(
+      subscription,
+      profile as Tables<'profiles'> | null
     );
-  }
+    const plan: BillingPlanKey = tier ?? 'monthly';
 
-  throw new Error(
-    'Could not open checkout. Check server logs for [billing] Lemon create checkout. If Lemon returned an error, verify API key and variant IDs match your store (Test vs Live).'
-  );
+    const r = await createLemonSkipTrialCheckout(plan, user.email, user.id);
+    if (r.ok) return { ok: true, url: r.url };
+
+    if (r.reason === 'missing_env') {
+      return {
+        ok: false,
+        error:
+          'Checkout is not configured on the server. Add LEMONSQUEEZY_API_KEY, LEMONSQUEEZY_STORE_ID, and LEMONSQUEEZY_MONTHLY_VARIANT_ID (and quarterly/yearly IDs) in Vercel → Environment Variables, then redeploy.'
+      };
+    }
+
+    return {
+      ok: false,
+      error:
+        'Payment link could not be created. Check Vercel logs for [billing] Lemon create checkout — often a wrong API key, store ID, or variant ID (Test vs Live mismatch).'
+    };
+  } catch (e) {
+    console.error('[billing] getCheckoutURLForPreferredPlan', e);
+    return {
+      ok: false,
+      error:
+        'Something went wrong while creating the checkout link. Try again or open /subscription from the menu.'
+    };
+  }
 }

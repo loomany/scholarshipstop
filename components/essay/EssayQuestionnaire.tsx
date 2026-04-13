@@ -20,6 +20,7 @@ import {
 
 import { useToast } from '@/components/ui/Toasts/use-toast';
 import { SITE_SEARCH_INPUT_CHROME } from '@/lib/constants/catalogControlBar';
+import MentorPremiumAccessMessage from '@/components/essay/MentorPremiumAccessMessage';
 import MentorTrialSubscribeModal from '@/components/essay/MentorTrialSubscribeModal';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import {
@@ -44,6 +45,8 @@ export type ChatMessage = {
   role: 'user' | 'assistant';
   content: string;
   at?: string;
+  /** Client-only: premium upsell rendered as an assistant bubble (not persisted to API). */
+  variant?: 'premium_access';
 };
 
 export type { ThemeProgress };
@@ -61,20 +64,41 @@ const THEME_LABELS: {
 
 const INIT_FETCH_MS = 60_000;
 
+function newLocalMessageId() {
+  return typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+}
+
 function buildGuestSeedMessages(): ChatMessage[] {
   const now = new Date().toISOString();
-  const id =
-    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-      ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
   return [
     {
-      id,
+      id: newLocalMessageId(),
       role: 'assistant',
       content: FIRST_ASSISTANT_MESSAGE,
       at: now
     }
   ];
+}
+
+/** Shown when the server rejects new mentor chats (trial quota). */
+function buildPremiumQuotaExceededMessages(): ChatMessage[] {
+  const now = new Date().toISOString();
+  return [
+    {
+      id: newLocalMessageId(),
+      role: 'assistant',
+      content: '',
+      variant: 'premium_access',
+      at: now
+    }
+  ];
+}
+
+function prependPremiumUpsellIfNeeded(messages: ChatMessage[]): ChatMessage[] {
+  if (messages.some((m) => m.variant === 'premium_access')) return messages;
+  return [...buildPremiumQuotaExceededMessages(), ...messages];
 }
 
 /** Same shape as server `UUID_RE` — used to validate persisted ids. */
@@ -406,6 +430,28 @@ export function EssayQuestionnaire({
     [applyInitPayload, toast]
   );
 
+  /** After loading a chat from the server: optionally prepend the inline Premium banner when trial dialogue quota is exhausted (e.g. resumed chat). Skip prepend after a fresh init so the first dialogue stays clean. */
+  const syncMentorTrialBanner = useCallback(
+    async (options?: { prependBanner?: boolean }) => {
+      try {
+        const res = await fetch('/api/interviewer/mentor-trial-status', {
+          credentials: 'same-origin'
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          mentor_dialogue_exhausted?: boolean;
+        };
+        if (!data.mentor_dialogue_exhausted) return;
+        if (options?.prependBanner) {
+          setMessages((prev) => prependPremiumUpsellIfNeeded(prev));
+        }
+      } catch {
+        /* ignore */
+      }
+    },
+    []
+  );
+
   const initChat = useCallback(async () => {
     if (!userId) {
       const seed = buildGuestSeedMessages();
@@ -415,14 +461,34 @@ export function EssayQuestionnaire({
       persistGuestBlob(seed, EMPTY_PROGRESS, false);
       return;
     }
+    try {
+      const st = await fetch('/api/interviewer/mentor-trial-status', {
+        credentials: 'same-origin'
+      });
+      if (st.ok) {
+        const trialData = (await st.json()) as {
+          mentor_dialogue_exhausted?: boolean;
+        };
+        if (trialData.mentor_dialogue_exhausted) {
+          setMessages((prev) => prependPremiumUpsellIfNeeded(prev));
+          setMentorTrialModalOpen(true);
+          return;
+        }
+      }
+    } catch {
+      /* continue — server will still reject init if needed */
+    }
+
     setBootLoading(true);
     const ac = new AbortController();
     const timer = setTimeout(() => ac.abort(), INIT_FETCH_MS);
     try {
       const data = await requestInterviewInit(ac.signal);
       applyInitPayload(data, userId);
+      await syncMentorTrialBanner({ prependBanner: false });
     } catch (e) {
       if (e instanceof MentorTrialQuotaExceededError) {
+        setMessages((prev) => prependPremiumUpsellIfNeeded(prev));
         setMentorTrialModalOpen(true);
       } else if (e instanceof Error && e.name === 'AbortError') {
         toast({
@@ -441,7 +507,7 @@ export function EssayQuestionnaire({
       clearTimeout(timer);
       setBootLoading(false);
     }
-  }, [applyInitPayload, persistGuestBlob, toast, userId]);
+  }, [applyInitPayload, persistGuestBlob, syncMentorTrialBanner, toast, userId]);
 
   useEffect(() => {
     let alive = true;
@@ -507,6 +573,7 @@ export function EssayQuestionnaire({
             if (!alive) return;
             applyInitPayload(resumed, user.id);
             localStorage.removeItem(ESSAY_GUEST_INTERVIEW_STORAGE_KEY);
+            await syncMentorTrialBanner({ prependBanner: true });
             return;
           } catch {
             if (!alive) return;
@@ -517,6 +584,7 @@ export function EssayQuestionnaire({
         const claimed = await tryClaimGuestAndApply(user.id);
         if (!alive) return;
         if (claimed) {
+          await syncMentorTrialBanner({ prependBanner: true });
           return;
         }
 
@@ -526,6 +594,7 @@ export function EssayQuestionnaire({
             const resumed = await requestInterviewResume(savedChatId, ac.signal);
             if (!alive) return;
             applyInitPayload(resumed, user.id);
+            await syncMentorTrialBanner({ prependBanner: true });
             return;
           } catch {
             if (!alive) return;
@@ -537,10 +606,14 @@ export function EssayQuestionnaire({
         if (!alive) return;
 
         applyInitPayload(data, user.id);
+        await syncMentorTrialBanner({ prependBanner: false });
       } catch (e) {
         if (!alive) return;
         if (e instanceof MentorTrialQuotaExceededError) {
-          setMentorTrialModalOpen(true);
+          setChatId(null);
+          setMessages(buildPremiumQuotaExceededMessages());
+          setProgress(EMPTY_PROGRESS);
+          setInput('');
         } else if (e instanceof Error && e.name === 'AbortError') {
           toast({
             variant: 'destructive',
@@ -569,7 +642,7 @@ export function EssayQuestionnaire({
     // Mount-only load; `toast` omitted from deps to avoid resetting the chat on toast identity changes.
     // `initialChatIdFromQuery` is read once per mount via the dependency below so `/essay?chat=` deep-links work.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [applyInitPayload, initialChatIdFromQuery]);
+  }, [applyInitPayload, initialChatIdFromQuery, syncMentorTrialBanner]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -639,6 +712,7 @@ export function EssayQuestionnaire({
     async (text: string) => {
       const t = text.trim();
       if (!t || sending || generating || devBypassing) return false;
+      if (messages.some((m) => m.variant === 'premium_access')) return false;
       if (messages.length === 0) return false;
       setSending(true);
       try {
@@ -693,6 +767,7 @@ export function EssayQuestionnaire({
     async (text: string) => {
       const t = text.trim();
       if (!t || sending || generating || devBypassing) return false;
+      if (messages.some((m) => m.variant === 'premium_access')) return false;
       if (!userId) {
         return submitGuestMessage(t);
       }
@@ -735,13 +810,25 @@ export function EssayQuestionnaire({
       sending,
       submitGuestMessage,
       toast,
-      userId
+      userId,
+      messages
     ]
   );
 
   const conversationReady = useMemo(
     () => Boolean(userId ? chatId : messages.length > 0),
     [userId, chatId, messages.length]
+  );
+
+  /** Trial / paywall: inline Premium card is shown — block typing, voice, send, draft. */
+  const mentorPremiumLocksComposer = useMemo(
+    () => messages.some((m) => m.variant === 'premium_access'),
+    [messages]
+  );
+
+  const chatComposerEnabled = useMemo(
+    () => conversationReady && !mentorPremiumLocksComposer,
+    [conversationReady, mentorPremiumLocksComposer]
   );
 
   const stopMediaStream = useCallback(() => {
@@ -756,7 +843,7 @@ export function EssayQuestionnaire({
       generating ||
       devBypassing ||
       messageMutating ||
-      !conversationReady
+      !chatComposerEnabled
     )
       return;
 
@@ -873,7 +960,7 @@ export function EssayQuestionnaire({
       });
     }
   }, [
-    conversationReady,
+    chatComposerEnabled,
     devBypassing,
     generating,
     isRecording,
@@ -1041,6 +1128,7 @@ export function EssayQuestionnaire({
       return;
     }
     if (!chatId || generating || devBypassing || !canGenerate) return;
+    if (messages.some((m) => m.variant === 'premium_access')) return;
     setGenerating(true);
     try {
       const res = await fetch('/api/essay/generate', {
@@ -1229,8 +1317,18 @@ export function EssayQuestionnaire({
         {messages.map((m) =>
           m.role === 'assistant' ? (
             <div key={m.id} className="flex justify-start">
-              <div className="max-w-[98%] rounded-2xl rounded-bl-md border border-zinc-200 bg-white px-3.5 py-3.5 text-[15px] leading-relaxed text-zinc-800 shadow-sm sm:max-w-[85%] sm:px-4 sm:py-3 sm:text-sm">
-                <p className="whitespace-pre-wrap">{m.content}</p>
+              <div
+                className={`max-w-[98%] rounded-2xl rounded-bl-md border border-zinc-200 bg-white px-3.5 py-3.5 text-[15px] leading-relaxed text-zinc-800 shadow-sm sm:max-w-[85%] sm:px-4 sm:py-3 sm:text-sm ${
+                  m.variant === 'premium_access'
+                    ? 'border-emerald-200/80 bg-gradient-to-b from-white to-zinc-50/90 shadow-[0_16px_40px_-20px_rgba(16,185,129,0.25)]'
+                    : ''
+                }`}
+              >
+                {m.variant === 'premium_access' ? (
+                  <MentorPremiumAccessMessage />
+                ) : (
+                  <p className="whitespace-pre-wrap">{m.content}</p>
+                )}
               </div>
             </div>
           ) : (
@@ -1366,7 +1464,7 @@ export function EssayQuestionnaire({
               devBypassing ||
               isTranscribing ||
               messageMutating ||
-              !conversationReady
+              !chatComposerEnabled
             }
             placeholder="Type your answer…"
             rows={1}
@@ -1381,7 +1479,7 @@ export function EssayQuestionnaire({
               devBypassing ||
               isTranscribing ||
               messageMutating ||
-              !conversationReady
+              !chatComposerEnabled
             }
             className={`col-start-2 row-start-1 inline-flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl border shadow-md transition disabled:opacity-45 ${
               isRecording
@@ -1415,7 +1513,7 @@ export function EssayQuestionnaire({
                 isTranscribing ||
                 isRecording ||
                 messageMutating ||
-                !conversationReady
+                !chatComposerEnabled
               }
               title={returnToTemplateTitle}
               aria-label="Return to template — open your saved draft"
@@ -1437,7 +1535,7 @@ export function EssayQuestionnaire({
                 isTranscribing ||
                 isRecording ||
                 messageMutating ||
-                !conversationReady
+                !chatComposerEnabled
               }
               title={generateDraftButtonTitle}
               aria-label={
@@ -1467,7 +1565,7 @@ export function EssayQuestionnaire({
               isTranscribing ||
               messageMutating ||
               !input.trim() ||
-              !conversationReady
+              !chatComposerEnabled
             }
             className="col-start-3 row-start-1 inline-flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-sm transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500 disabled:shadow-none disabled:hover:bg-zinc-200 sm:col-start-4"
             aria-label="Send"

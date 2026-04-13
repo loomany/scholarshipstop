@@ -67,6 +67,9 @@ export default function Navlinks() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
   const [essaysExpanded, setEssaysExpanded] = useState(false);
+  /** After choosing a desktop Essay Guides item, hide the flyout until pointer leaves the trigger. */
+  const [suppressEssayGuidesFlyout, setSuppressEssayGuidesFlyout] =
+    useState(false);
   const menuId = useId();
 
   const aboutSectionActive = useMemo(() => {
@@ -115,6 +118,10 @@ export default function Navlinks() {
   useEffect(() => {
     closeMenu();
   }, [pathname, closeMenu]);
+
+  useEffect(() => {
+    setSuppressEssayGuidesFlyout(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -233,7 +240,10 @@ export default function Navlinks() {
             >
               {RESOURCES_SECTION_LABEL}
             </Link>
-            <div className="group/essays relative">
+            <div
+              className="group/essays relative"
+              onMouseLeave={() => setSuppressEssayGuidesFlyout(false)}
+            >
               <Link
                 href={ESSAYS_SECTION_PATH}
                 className={clsx(
@@ -245,11 +255,17 @@ export default function Navlinks() {
                 Essay Guides
               </Link>
               <div
-                className="pointer-events-none invisible absolute left-0 top-full z-[110] pt-2 opacity-0 transition-[opacity,visibility] duration-150 ease-out group-hover/essays:pointer-events-auto group-hover/essays:visible group-hover/essays:opacity-100 group-focus-within/essays:pointer-events-auto group-focus-within/essays:visible group-focus-within/essays:opacity-100"
+                className={clsx(
+                  'pointer-events-none invisible absolute left-0 top-full z-[110] pt-2 opacity-0 transition-[opacity,visibility] duration-150 ease-out',
+                  !suppressEssayGuidesFlyout &&
+                    'group-hover/essays:pointer-events-auto group-hover/essays:visible group-hover/essays:opacity-100 group-focus-within/essays:pointer-events-auto group-focus-within/essays:visible group-focus-within/essays:opacity-100',
+                  suppressEssayGuidesFlyout &&
+                    '!pointer-events-none !invisible !opacity-0'
+                )}
                 role="presentation"
               >
                 <div
-                  className="min-w-[min(100vw-2rem,20rem)] max-w-[22rem] rounded-2xl border border-gray-200/95 bg-white p-1.5 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.18)] ring-1 ring-black/[0.04]"
+                  className="min-w-[min(100vw-2rem,18rem)] max-w-[22rem] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg"
                   aria-label="Essay Guides menu"
                 >
                   {ESSAYS_GUIDE_SUBLINKS.map((item) => {
@@ -261,20 +277,21 @@ export default function Navlinks() {
                       <Link
                         key={item.href}
                         href={item.href}
+                        onClick={() => setSuppressEssayGuidesFlyout(true)}
                         className={clsx(
                           'relative flex flex-col gap-1 rounded-xl px-3 py-2.5 text-left transition-colors',
                           item.featured
-                            ? 'mb-0.5 bg-gradient-to-br from-orange-50/95 via-white to-white ring-1 ring-orange-200/40'
-                            : 'hover:bg-zinc-50/95',
+                            ? 'border-b-2 border-orange-400 bg-white hover:bg-zinc-50'
+                            : 'hover:bg-zinc-50',
                           active &&
                             (item.featured
-                              ? 'ring-orange-400/50'
-                              : 'bg-zinc-50/90')
+                              ? 'border-orange-500 bg-zinc-50'
+                              : 'bg-zinc-50')
                         )}
                       >
                         <span className="flex items-start gap-2.5">
                           {item.featured ? (
-                            <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-orange-500/12 text-orange-600 ring-1 ring-orange-500/20">
+                            <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-700">
                               <Sparkles className="h-4 w-4" strokeWidth={2} aria-hidden />
                             </span>
                           ) : (

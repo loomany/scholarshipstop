@@ -34,3 +34,43 @@ export function visiblePaginationItems(
   }
   return out;
 }
+
+const DESKTOP_FIRST_BLOCK = 10;
+
+/**
+ * Desktop: always include pages `1 … DESKTOP_FIRST_BLOCK`, the last page, and a ±1 window
+ * around `current` so middle pages stay reachable. Gaps collapse to `ellipsis`.
+ * Example (total 380, current 1): `1–10 … 380`.
+ */
+export function visiblePaginationItemsDesktop(
+  current: number,
+  total: number
+): (number | 'ellipsis')[] {
+  if (total <= DESKTOP_FIRST_BLOCK) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const set = new Set<number>();
+  for (let p = 1; p <= DESKTOP_FIRST_BLOCK; p++) {
+    set.add(p);
+  }
+  set.add(total);
+  set.add(current);
+  for (let p = current - 1; p <= current + 1; p++) {
+    if (p >= 1 && p <= total) {
+      set.add(p);
+    }
+  }
+
+  const sorted = Array.from(set).sort((a, b) => a - b);
+  const out: (number | 'ellipsis')[] = [];
+  let prev = 0;
+  for (const n of sorted) {
+    if (prev && n - prev > 1) {
+      out.push('ellipsis');
+    }
+    out.push(n);
+    prev = n;
+  }
+  return out;
+}

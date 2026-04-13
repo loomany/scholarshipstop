@@ -5,6 +5,10 @@ import { X } from 'lucide-react';
 
 import { getCheckoutURLForPreferredPlan } from '@/app/actions/billing';
 import { useToast } from '@/components/ui/Toasts/use-toast';
+import {
+  MENTOR_PREMIUM_ACCESS_BODY,
+  MENTOR_PREMIUM_ACCESS_TITLE
+} from '@/lib/essay/mentorPremiumCopy';
 
 declare global {
   interface Window {
@@ -68,23 +72,24 @@ export default function MentorTrialSubscribeModal({
 
   const handleStart = () => {
     startTransition(async () => {
-      try {
-        const checkoutUrl = await getCheckoutURLForPreferredPlan();
-        const opened =
-          typeof window !== 'undefined' &&
-          typeof window.LemonSqueezy?.Url?.Open === 'function';
-        if (opened) {
-          window.LemonSqueezy!.Url!.Open!(checkoutUrl);
-          return;
-        }
-        window.location.assign(checkoutUrl);
-      } catch (e) {
+      const result = await getCheckoutURLForPreferredPlan();
+      if (!result.ok) {
         toast({
           variant: 'destructive',
           title: 'Could not open checkout',
-          description: e instanceof Error ? e.message : 'Try again in a moment.'
+          description: result.error
         });
+        return;
       }
+      const checkoutUrl = result.url;
+      const opened =
+        typeof window !== 'undefined' &&
+        typeof window.LemonSqueezy?.Url?.Open === 'function';
+      if (opened) {
+        window.LemonSqueezy!.Url!.Open!(checkoutUrl);
+        return;
+      }
+      window.location.assign(checkoutUrl);
     });
   };
 
@@ -119,11 +124,10 @@ export default function MentorTrialSubscribeModal({
           id="mentor-trial-subscribe-title"
           className="pr-10 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl"
         >
-          Premium Access
+          {MENTOR_PREMIUM_ACCESS_TITLE}
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-base">
-          Get full access to our global scholarship database with advanced filters, plus unlimited AI
-          mentor chats and complete essay generation. Your monthly subscription starts today.
+          {MENTOR_PREMIUM_ACCESS_BODY}
         </p>
 
         <div className="mt-8 flex w-full justify-center">
