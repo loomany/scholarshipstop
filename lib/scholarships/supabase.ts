@@ -12,6 +12,7 @@ import type { ScholarshipDbCatalogFields } from '@/lib/scholarships/scholarshipC
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { createClient } from '@/utils/supabase/server';
+import { legacyScholarshipSlugCandidates } from '@/lib/seo/legacyScholarshipSlugAliases';
 import { createPublicClient } from '@/utils/supabase/public';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
@@ -637,7 +638,25 @@ export async function fetchScholarshipBySlugOrId(
   if (UUID_PARAM_RE.test(decoded)) {
     return fetchScholarshipById(decoded);
   }
-  return fetchScholarshipBySlug(decoded);
+  const candidates = legacyScholarshipSlugCandidates(decoded);
+  if (candidates.length === 1) {
+    return fetchScholarshipBySlug(candidates[0]!);
+  }
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from('scholarships')
+    .select(DETAIL_SELECT)
+    .in('slug', candidates);
+
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as unknown as ScholarshipRow[];
+  if (rows.length === 0) return null;
+  const bySlug = new Map(rows.map((r) => [r.slug, r]));
+  for (const slug of candidates) {
+    const row = bySlug.get(slug);
+    if (row) return mapScholarshipRow(row);
+  }
+  return null;
 }
 
 /** Listing cards for account saved list; order follows `ids` (deduped first). */

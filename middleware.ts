@@ -1,8 +1,35 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { preferredScholarshipSlugForLegacySlug } from '@/lib/seo/legacyScholarshipSlugAliases';
 import { updateSession } from '@/utils/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  /**
+   * Legacy URLs from the previous stack used scholarship slugs at the domain root
+   * (e.g. /study-in-…-2019/). Current canonical paths live under /scholarships/[slug].
+   * Map long WP slugs → real catalog slugs (see legacyScholarshipSlugAliases).
+   */
+  const legacyRootYear = pathname.match(/^\/(.+-2019)\/?$/i);
+  if (legacyRootYear?.[1]) {
+    const slug = preferredScholarshipSlugForLegacySlug(legacyRootYear[1]);
+    const url = request.nextUrl.clone();
+    url.pathname = `/scholarships/${encodeURIComponent(slug)}`;
+    return NextResponse.redirect(url, 308);
+  }
+
+  /** Long legacy slugs under `/scholarships/…` → shorter canonical slug when known. */
+  const schSeg = pathname.match(/^\/scholarships\/([^/]+)\/?$/);
+  if (schSeg?.[1]) {
+    const decoded = decodeURIComponent(schSeg[1]);
+    const preferred = preferredScholarshipSlugForLegacySlug(decoded);
+    if (preferred !== decoded) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/scholarships/${encodeURIComponent(preferred)}`;
+      return NextResponse.redirect(url, 308);
+    }
+  }
+
   if (pathname === '/content-hub' || pathname.startsWith('/content-hub/')) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.replace(/^\/content-hub/, '/resources');
