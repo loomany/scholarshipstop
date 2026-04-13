@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
 import { resolveOpenAiModel } from '@/lib/ai/resolveOpenAiModel';
-import { createClient } from '@/utils/supabase/server';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -81,18 +80,10 @@ async function cleanupTranscript(apiKey: string, raw: string): Promise<string> {
 
 /**
  * POST multipart: поле `audio`.
- * Auth: как в `/api/interviewer` — сессия Supabase, `getUser()`.
+ * Auth: не требуется — голос нужен и гостю в ментор-чате (`/api/interviewer/guest`), и залогиненному пользователю.
  * Ответ при успехе: JSON `{ text: string }`.
  */
 export async function POST(request: Request) {
-  const supabase = createClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-  if (!user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   const apiKey = process.env.OPENAI_API_KEY?.trim();
   if (!apiKey) {
     return NextResponse.json(

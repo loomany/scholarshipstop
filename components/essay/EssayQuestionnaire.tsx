@@ -144,8 +144,28 @@ function clearPersistedChatId(userId: string) {
   }
 }
 
-/** Recording must use WebM + Opus (Chrome, Edge, Firefox). */
-const VOICE_RECORD_MIME = 'audio/webm;codecs=opus';
+/** Prefer WebM+Opus; Safari often needs MP4/AAC — see `pickVoiceRecorderMime`. */
+const VOICE_RECORD_MIME_FALLBACK_ORDER = [
+  'audio/webm;codecs=opus',
+  'audio/webm',
+  'audio/mp4',
+  'audio/mp4;codecs=mp4a.40.2',
+  'audio/ogg;codecs=opus'
+] as const;
+
+function pickVoiceRecorderMime(): string | null {
+  if (typeof MediaRecorder === 'undefined') return null;
+  for (const mime of VOICE_RECORD_MIME_FALLBACK_ORDER) {
+    if (MediaRecorder.isTypeSupported(mime)) return mime;
+  }
+  return null;
+}
+
+function voiceBlobFileName(mime: string): string {
+  if (mime.includes('mp4')) return 'recording.m4a';
+  if (mime.includes('ogg')) return 'recording.ogg';
+  return 'recording.webm';
+}
 
 type InitPayload = {
   chat_id: string;
@@ -865,15 +885,13 @@ export function EssayQuestionnaire({
       return;
     }
 
-    if (
-      typeof MediaRecorder === 'undefined' ||
-      !MediaRecorder.isTypeSupported(VOICE_RECORD_MIME)
-    ) {
+    const voiceMime = pickVoiceRecorderMime();
+    if (!voiceMime) {
       toast({
         variant: 'destructive',
         title: 'Recording format not supported',
         description:
-          'Use a browser that supports audio/webm;codecs=opus (e.g. Chrome or Edge).'
+          'Your browser cannot record audio in a supported format. Try Safari (updated), Chrome, or Edge.'
       });
       return;
     }
@@ -883,7 +901,7 @@ export function EssayQuestionnaire({
       mediaStreamRef.current = stream;
       audioChunksRef.current = [];
 
-      const rec = new MediaRecorder(stream, { mimeType: VOICE_RECORD_MIME });
+      const rec = new MediaRecorder(stream, { mimeType: voiceMime });
       mediaRecorderRef.current = rec;
 
       rec.ondataavailable = (ev) => {
@@ -895,7 +913,7 @@ export function EssayQuestionnaire({
         mediaRecorderRef.current = null;
 
         const blob = new Blob(audioChunksRef.current, {
-          type: VOICE_RECORD_MIME
+          type: voiceMime
         });
         audioChunksRef.current = [];
 
@@ -912,7 +930,7 @@ export function EssayQuestionnaire({
           if (mountedRef.current) setIsTranscribing(true);
           try {
             const fd = new FormData();
-            fd.append('audio', blob, 'recording.webm');
+            fd.append('audio', blob, voiceBlobFileName(voiceMime));
             const res = await fetch('/api/voice-to-text', {
               method: 'POST',
               body: fd,

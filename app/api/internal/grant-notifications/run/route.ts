@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { runGrantNotificationDispatch } from '@/lib/notifications/runGrantNotificationDispatch';
 
 export const dynamic = 'force-dynamic';
+/** Matches other long-running cron-style routes; default serverless timeout is too low for this job. */
+export const maxDuration = 300;
 
 function isAuthorized(request: Request): boolean {
   const secret =
@@ -25,6 +27,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const result = await runGrantNotificationDispatch();
-  return NextResponse.json(result);
+  try {
+    const result = await runGrantNotificationDispatch();
+    return NextResponse.json(result);
+  } catch (e) {
+    console.error('[grant-notifications/run]', e);
+    return NextResponse.json(
+      {
+        ok: false,
+        error: e instanceof Error ? e.message : 'Unexpected error'
+      },
+      { status: 500 }
+    );
+  }
 }
