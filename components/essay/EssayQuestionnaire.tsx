@@ -1188,7 +1188,7 @@ export function EssayQuestionnaire({
 
   return (
     <>
-      <div className="relative flex w-full max-w-2xl flex-col rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)]">
+      <div className="relative flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] max-sm:min-h-0 max-sm:max-h-[min(calc(100dvh-6.5rem),900px)] sm:overflow-visible sm:max-h-none">
         {process.env.NODE_ENV === 'development' ? (
           <div
             ref={devMenuRef}
@@ -1238,7 +1238,7 @@ export function EssayQuestionnaire({
             ) : null}
           </div>
         ) : null}
-        <div className="border-b border-zinc-100 bg-zinc-50/80 px-4 py-4 sm:px-6">
+        <div className="shrink-0 border-b border-zinc-100 bg-zinc-50/80 px-4 py-4 sm:px-6">
           <div className="mb-3 space-y-2">
             <div className="grid grid-cols-1 items-center gap-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-x-3 sm:gap-y-0">
               <div className="hidden min-w-0 sm:block" aria-hidden />
@@ -1313,12 +1313,12 @@ export function EssayQuestionnaire({
         </div>
       </div>
 
-      <div className="max-h-[min(68vh,600px)] min-h-0 space-y-3 overflow-y-auto px-3 py-4 max-sm:min-h-[min(280px,38vh)] sm:max-h-[min(60vh,520px)] sm:min-h-0 sm:px-6">
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-y-contain px-2 py-4 [-webkit-overflow-scrolling:touch] max-sm:min-h-[12rem] max-sm:px-3 sm:max-h-[min(60vh,520px)] sm:flex-none sm:px-6">
         {messages.map((m) =>
           m.role === 'assistant' ? (
             <div key={m.id} className="flex justify-start">
               <div
-                className={`max-w-[98%] rounded-2xl rounded-bl-md border border-zinc-200 bg-white px-3.5 py-3.5 text-[15px] leading-relaxed text-zinc-800 shadow-sm sm:max-w-[85%] sm:px-4 sm:py-3 sm:text-sm ${
+                className={`max-w-[min(100%,22rem)] rounded-2xl rounded-bl-md border border-zinc-200 bg-white px-3 py-3 text-[15px] leading-relaxed text-zinc-800 shadow-sm max-sm:max-w-[88%] sm:max-w-[85%] sm:px-4 sm:py-3 sm:text-sm ${
                   m.variant === 'premium_access'
                     ? 'border-emerald-200/80 bg-gradient-to-b from-white to-zinc-50/90 shadow-[0_16px_40px_-20px_rgba(16,185,129,0.25)]'
                     : ''
@@ -1334,7 +1334,7 @@ export function EssayQuestionnaire({
           ) : (
             <div key={m.id} className="flex justify-end">
               <div
-                className={`relative max-w-[98%] rounded-2xl rounded-br-md px-3.5 py-3.5 text-[15px] leading-relaxed shadow-sm sm:max-w-[85%] sm:px-4 sm:py-3 sm:text-sm ${
+                className={`relative max-w-[min(100%,22rem)] rounded-2xl rounded-br-md px-3 py-3 text-[15px] leading-relaxed shadow-sm max-sm:max-w-[88%] sm:max-w-[85%] sm:px-4 sm:py-3 sm:text-sm ${
                   editingMessageId === m.id
                     ? 'border border-zinc-200 bg-white text-zinc-800'
                     : 'bg-emerald-500 text-white'
@@ -1447,7 +1447,7 @@ export function EssayQuestionnaire({
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-zinc-100 p-4 sm:p-6">
+      <div className="shrink-0 border-t border-zinc-100 bg-white p-4 sm:p-6">
         <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto] sm:items-center">
           <textarea
             value={input}

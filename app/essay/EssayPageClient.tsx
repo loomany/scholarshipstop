@@ -14,7 +14,7 @@ export default function EssayPageClient() {
   );
 
   return (
-    <section className="min-h-screen bg-zinc-50 px-3 py-10 text-zinc-900 sm:px-6">
+    <section className="min-h-screen bg-zinc-50 px-3 py-6 text-zinc-900 sm:px-6 sm:py-10">
       <div className="mx-auto max-w-3xl">
         <header className="mb-8 sm:mb-10">
           <div className="mx-auto max-w-2xl rounded-2xl border border-zinc-200/90 bg-white px-5 py-6 shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] sm:px-6">

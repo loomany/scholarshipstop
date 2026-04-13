@@ -38,13 +38,20 @@ async function searchLike(
   client: SupabaseClient,
   term: string
 ): Promise<Row[]> {
-  const { data, error } = await client
-    .from('scholarships')
-    .select('id, slug, title, is_active, is_indexable')
-    .or(`slug.ilike.%${term}%,title.ilike.%${term}%`)
-    .limit(15);
-  if (error) throw new Error(error.message);
-  return (data ?? []) as Row[];
+  const pattern = `%${term}%`;
+  const sel = 'id, slug, title, is_active, is_indexable';
+  const [{ data: byTitle, error: e1 }, { data: bySlug, error: e2 }] =
+    await Promise.all([
+      client.from('scholarships').select(sel).ilike('title', pattern).limit(15),
+      client.from('scholarships').select(sel).ilike('slug', pattern).limit(15)
+    ]);
+  if (e1) throw new Error(e1.message);
+  if (e2) throw new Error(e2.message);
+  const map = new Map<string, Row>();
+  for (const r of [...(byTitle ?? []), ...(bySlug ?? [])] as Row[]) {
+    map.set(r.id, r);
+  }
+  return [...map.values()].slice(0, 15);
 }
 
 async function main() {
@@ -66,8 +73,17 @@ async function main() {
       })
     : null;
 
-  console.log('=== Exact slug lookup (service role, if present) ===\n');
   const primary = admin ?? anonClient;
+  const { count: totalRows, error: countErr } = await primary
+    .from('scholarships')
+    .select('*', { count: 'exact', head: true });
+  console.log(
+    `=== Table scholarships: total rows = ${totalRows ?? '?'}${
+      countErr ? ` (${countErr.message})` : ''
+    } ===\n`
+  );
+
+  console.log('=== Exact slug lookup (service role, if present) ===\n');
   for (const slug of TARGET_SLUGS) {
     const row = await fetchBySlug(primary, slug);
     if (!row) {
@@ -90,7 +106,46 @@ async function main() {
   }
 
   if (admin) {
-    console.log('\n=== Fuzzy search (service role) for related slugs ===\n');
+    const { data: anyActive } = await admin
+      .from('scholarships')
+      .select('slug, title, is_active')
+      .eq('is_active', true)
+      .not('slug', 'is', null)
+      .limit(1)
+      .maybeSingle();
+    if (anyActive?.slug) {
+      const viaAnon = await fetchBySlug(anonClient, anyActive.slug);
+      console.log(
+        `\n=== RLS check: random active row slug="${anyActive.slug}" ===`
+      );
+      console.log(
+        viaAnon
+          ? `✓ anon CAN read public scholarships (sample ok)`
+          : `✗ anon CANNOT read — fix RLS for SELECT on scholarships`
+      );
+    }
+  }
+
+  if (admin) {
+    const sanity = await searchLike(admin, 'scholarship');
+    console.log(
+      `\n=== Sanity: rows with "scholarship" in title or slug: ${sanity.length} (expect > 0) ===\n`
+    );
+
+    const canadaHint = await searchLike(admin, 'Canada');
+    if (canadaHint.length > 0) {
+      console.log(
+        `=== Hint: ${canadaHint.length} rows mention "Canada" (sample — use real slug for aliases) ===`
+      );
+      for (const r of canadaHint.slice(0, 8)) {
+        console.log(
+          `  slug=${r.slug ?? '(null)'} active=${r.is_active} | ${r.title?.slice(0, 72)}`
+        );
+      }
+      console.log('');
+    }
+
+    console.log('=== Fuzzy search (service role) for related slugs ===\n');
     for (const term of SEARCH_TERMS) {
       const rows = await searchLike(admin, term);
       if (rows.length === 0) {
