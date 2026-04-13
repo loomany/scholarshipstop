@@ -6,6 +6,10 @@ import {
   type EssayChatMessageRow
 } from '@/lib/essay/essayChatMessages';
 import {
+  MAX_GUEST_USER_MESSAGE_CHARS,
+  normalizeGuestInterviewMessages
+} from '@/lib/essay/guestInterviewPayload';
+import {
   clampProgress,
   openAiInterviewerTurn,
   parseInterviewerJson,
@@ -15,34 +19,6 @@ import {
 
 export const maxDuration = 90;
 export const dynamic = 'force-dynamic';
-
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-const MAX_MESSAGES = 120;
-const MAX_USER_MESSAGE_CHARS = 12_000;
-
-function normalizePriorMessages(raw: unknown): EssayChatMessageRow[] | null {
-  if (!Array.isArray(raw) || raw.length === 0 || raw.length > MAX_MESSAGES) {
-    return null;
-  }
-  const out: EssayChatMessageRow[] = [];
-  for (const item of raw) {
-    if (!item || typeof item !== 'object' || Array.isArray(item)) return null;
-    const m = item as Record<string, unknown>;
-    if (m.role !== 'user' && m.role !== 'assistant') return null;
-    const content = typeof m.content === 'string' ? m.content : '';
-    const id = typeof m.id === 'string' ? m.id : '';
-    if (!content.trim() || !UUID_RE.test(id)) return null;
-    out.push({
-      id,
-      role: m.role,
-      content,
-      at: typeof m.at === 'string' ? m.at : undefined
-    });
-  }
-  return out;
-}
 
 type PostBody = {
   messages?: unknown;
@@ -69,11 +45,11 @@ export async function POST(request: Request) {
 
   const userMessage =
     typeof body.user_message === 'string' ? body.user_message.trim() : '';
-  if (!userMessage || userMessage.length > MAX_USER_MESSAGE_CHARS) {
+  if (!userMessage || userMessage.length > MAX_GUEST_USER_MESSAGE_CHARS) {
     return NextResponse.json({ error: 'Invalid message' }, { status: 400 });
   }
 
-  const prior = normalizePriorMessages(body.messages);
+  const prior = normalizeGuestInterviewMessages(body.messages);
   if (!prior || prior.length === 0) {
     return NextResponse.json({ error: 'Invalid messages' }, { status: 400 });
   }

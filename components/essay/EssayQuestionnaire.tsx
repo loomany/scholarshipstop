@@ -998,9 +998,60 @@ export function EssayQuestionnaire({
   };
 
   const saveEditedUserMessage = async () => {
-    if (!chatId || !editingMessageId || messageMutating || devBypassing) return;
+    if (!editingMessageId || messageMutating || devBypassing) return;
     const t = editDraft.trim();
     if (!t) return;
+
+    if (!userId) {
+      setMessageMutating(true);
+      try {
+        const payloadMessages = messages.filter(
+          (m) => m.variant !== 'premium_access'
+        );
+        const res = await fetch('/api/interviewer/guest-message', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            messages: payloadMessages,
+            message_id: editingMessageId,
+            new_text: t
+          })
+        });
+        const data = (await res.json()) as {
+          error?: string;
+          messages?: ChatMessage[];
+          progress?: ThemeProgress;
+          ready_to_generate?: boolean;
+        };
+        if (!res.ok) {
+          throw new Error(data.error || `Error ${res.status}`);
+        }
+        if (data.messages) {
+          setMessages(data.messages);
+          const nextProgress = data.progress ?? EMPTY_PROGRESS;
+          setProgress(nextProgress);
+          persistGuestBlob(
+            data.messages,
+            nextProgress,
+            data.ready_to_generate ?? false
+          );
+        }
+        setEditingMessageId(null);
+        setEditDraft('');
+      } catch (e) {
+        toast({
+          variant: 'destructive',
+          title: 'Couldn’t save',
+          description: e instanceof Error ? e.message : 'Error'
+        });
+      } finally {
+        setMessageMutating(false);
+      }
+      return;
+    }
+
+    if (!chatId) return;
     setMessageMutating(true);
     try {
       const res = await fetch('/api/essay/message', {
@@ -1037,7 +1088,59 @@ export function EssayQuestionnaire({
   };
 
   const deleteUserMessageById = async (messageId: string) => {
-    if (!chatId || messageMutating || devBypassing) return;
+    if (messageMutating || devBypassing) return;
+
+    if (!userId) {
+      setMessageMutating(true);
+      try {
+        const payloadMessages = messages.filter(
+          (m) => m.variant !== 'premium_access'
+        );
+        const res = await fetch('/api/interviewer/guest-message', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            messages: payloadMessages,
+            message_id: messageId
+          })
+        });
+        const data = (await res.json()) as {
+          error?: string;
+          messages?: ChatMessage[];
+          progress?: ThemeProgress;
+          ready_to_generate?: boolean;
+        };
+        if (!res.ok) {
+          throw new Error(data.error || `Error ${res.status}`);
+        }
+        if (data.messages) {
+          setMessages(data.messages);
+          const nextProgress = data.progress ?? EMPTY_PROGRESS;
+          setProgress(nextProgress);
+          persistGuestBlob(
+            data.messages,
+            nextProgress,
+            data.ready_to_generate ?? false
+          );
+        }
+        if (editingMessageId === messageId) {
+          setEditingMessageId(null);
+          setEditDraft('');
+        }
+      } catch (e) {
+        toast({
+          variant: 'destructive',
+          title: 'Couldn’t delete',
+          description: e instanceof Error ? e.message : 'Error'
+        });
+      } finally {
+        setMessageMutating(false);
+      }
+      return;
+    }
+
+    if (!chatId) return;
     setMessageMutating(true);
     try {
       const res = await fetch('/api/essay/message', {
@@ -1372,7 +1475,6 @@ export function EssayQuestionnaire({
                           setEditDraft(m.content);
                         }}
                         disabled={
-                          !userId ||
                           messageMutating ||
                           sending ||
                           generating ||
@@ -1388,7 +1490,6 @@ export function EssayQuestionnaire({
                         type="button"
                         onClick={() => void deleteUserMessageById(m.id)}
                         disabled={
-                          !userId ||
                           messageMutating ||
                           sending ||
                           generating ||

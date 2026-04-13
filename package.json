@@ -17,6 +17,7 @@
     "supabase:stop": "npx supabase stop",
     "supabase:status": "npx supabase status",
     "supabase:ping-env": "node scripts/supabase-env-ping.mjs",
+    "export:scholarship-urls": "node scripts/export-scholarship-urls.mjs",
     "supabase:restart": "npm run supabase:stop && npm run supabase:start",
     "supabase:reset": "npx supabase db reset",
     "supabase:link": "npx supabase link",
