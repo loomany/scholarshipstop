@@ -143,7 +143,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           <Toaster />
         </Suspense>
         <WebVitalsClient />
-        <AnalyticsTracker />
+        <Suspense fallback={null}>
+          <AnalyticsTracker />
+        </Suspense>
       </body>
     </html>
   );

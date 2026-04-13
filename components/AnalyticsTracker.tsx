@@ -1,10 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useSearchParams, usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 const VISITOR_COOKIE = 'st_visitor_id';
 const SESSION_KEY = 'st_first_touch_session';
+const ATTRIBUTION_UTM_KEY = 'st_attribution_utm_source';
+const ATTRIBUTION_UTM_CONTENT_KEY = 'st_attribution_utm_content';
 const COOKIE_MAX_AGE_SEC = 60 * 60 * 24 * 365; // 1 year
+/** Wait for SPA navigations to settle so Landing + persisted UTM match the final page. */
+const FIRST_TOUCH_DEBOUNCE_MS = 320;
 
 function readCookie(name: string): string {
   if (typeof document === 'undefined') return '';
@@ -29,27 +34,55 @@ function randomUuidV4(): string {
   });
 }
 
-function scheduleIdle(cb: () => void) {
-  if (typeof window === 'undefined') return;
-  const ric = (
-    window as unknown as {
-      requestIdleCallback?: (fn: () => void, opts?: { timeout: number }) => number;
-    }
-  ).requestIdleCallback;
-  if (typeof ric === 'function') {
-    ric(cb, { timeout: 2500 });
-    return;
+function readPersistedUtm(): string {
+  try {
+    return (sessionStorage.getItem(ATTRIBUTION_UTM_KEY) || '').trim();
+  } catch {
+    return '';
   }
-  window.setTimeout(cb, 1);
 }
 
+function readPersistedUtmContent(): string {
+  try {
+    return (sessionStorage.getItem(ATTRIBUTION_UTM_CONTENT_KEY) || '').trim();
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * First-touch + UTM attribution (sessionStorage «первое касание»):
+ * - On each navigation, if `utm_source` is in the URL → save under `st_attribution_utm_source` for this tab.
+ * - If the URL has no `utm_source` → use the value from sessionStorage (survives client-side route changes).
+ * - `utm_content` is stored the same way under `st_attribution_utm_content` for Meta creatives.
+ * - First-touch POST uses priority: current URL → sessionStorage → empty (server shows Organic/Direct).
+ * - Debounce ~320ms so Landing URL reflects the page after SPA navigation stabilizes.
+ */
 export default function AnalyticsTracker() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    const utmFromUrl = (searchParams.get('utm_source') || '').trim().slice(0, 500);
+    const utmContentFromUrl = (searchParams.get('utm_content') || '').trim().slice(0, 500);
+    try {
+      if (utmFromUrl) {
+        sessionStorage.setItem(ATTRIBUTION_UTM_KEY, utmFromUrl);
+      }
+      if (utmContentFromUrl) {
+        sessionStorage.setItem(ATTRIBUTION_UTM_CONTENT_KEY, utmContentFromUrl);
+      }
+    } catch {
+      /* sessionStorage may be blocked */
+    }
+
     try {
       if (sessionStorage.getItem(SESSION_KEY) === '1') return;
     } catch {
-      // sessionStorage may be blocked
+      /* ignore */
     }
 
     let visitorId = readCookie(VISITOR_COOKIE);
@@ -58,27 +91,36 @@ export default function AnalyticsTracker() {
       writeVisitorCookie(visitorId);
     }
 
-    scheduleIdle(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      debounceRef.current = null;
       try {
         if (sessionStorage.getItem(SESSION_KEY) === '1') return;
       } catch {
         /* ignore */
       }
 
-      const href = window.location.href || '';
-      const referrer = document.referrer || '';
+      const href = (window.location.href || '').slice(0, 4000);
       const params = new URLSearchParams(window.location.search);
-      const utm_source = params.get('utm_source') || '';
-      const utm_medium = params.get('utm_medium') || '';
-      const utm_campaign = params.get('utm_campaign') || '';
+      const utmFromCurrent = (params.get('utm_source') || '').trim().slice(0, 500);
+      const utm_source = utmFromCurrent || readPersistedUtm();
+      const utmFromCurrentContent = (params.get('utm_content') || '').trim().slice(0, 500);
+      const utm_content = utmFromCurrentContent || readPersistedUtmContent();
+      const utm_medium = (params.get('utm_medium') || '').trim().slice(0, 500);
+      const utm_campaign = (params.get('utm_campaign') || '').trim().slice(0, 500);
+      const referrer = (document.referrer || '').slice(0, 4000);
 
       const payload = {
         visitor_id: visitorId,
-        landing_url: href.slice(0, 4000),
-        referrer: referrer.slice(0, 4000),
-        utm_source: utm_source.slice(0, 500),
-        utm_medium: utm_medium.slice(0, 500),
-        utm_campaign: utm_campaign.slice(0, 500)
+        landing_url: href,
+        referrer,
+        utm_source,
+        utm_medium,
+        utm_campaign,
+        utm_content
       };
 
       void fetch('/api/analytics/first-touch', {
@@ -99,8 +141,15 @@ export default function AnalyticsTracker() {
         .catch(() => {
           /* non-fatal */
         });
-    });
-  }, []);
+    }, FIRST_TOUCH_DEBOUNCE_MS);
+
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
+    };
+  }, [pathname, searchParams.toString()]);
 
   return null;
 }

@@ -1206,7 +1206,7 @@ export function EssayQuestionnaire({
 
   return (
     <>
-      <div className="relative flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] max-sm:min-h-0 max-sm:max-h-[min(calc(100dvh-6.5rem),900px)] sm:overflow-visible sm:max-h-none">
+      <div className="relative flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] max-sm:min-h-0 max-sm:max-h-[min(calc(100dvh-4.5rem),900px)] sm:overflow-visible sm:max-h-none">
         {process.env.NODE_ENV === 'development' ? (
           <div
             ref={devMenuRef}
@@ -1256,8 +1256,8 @@ export function EssayQuestionnaire({
             ) : null}
           </div>
         ) : null}
-        <div className="shrink-0 border-b border-zinc-100 bg-zinc-50/80 px-4 py-4 sm:px-6">
-          <div className="mb-3 space-y-2">
+        <div className="shrink-0 border-b border-zinc-100 bg-zinc-50/80 px-3 py-3 sm:px-6 sm:py-4">
+          <div className="mb-2 space-y-1.5 sm:mb-3 sm:space-y-2">
             <div className="grid grid-cols-1 items-center gap-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-x-3 sm:gap-y-0">
               <div className="hidden min-w-0 sm:block" aria-hidden />
               <h2 className="px-1 text-center text-lg font-bold leading-snug text-zinc-900 sm:col-start-2 sm:justify-self-center sm:px-0 sm:text-xl">
@@ -1288,7 +1288,11 @@ export function EssayQuestionnaire({
                 </strong>{' '}
                 Detailed answers fill the progress bars faster.
               </p>
-              <ul className="mt-2 list-disc space-y-1 pl-4 marker:text-zinc-400">
+              <p className="mt-1.5 text-[11px] leading-snug text-zinc-500 sm:hidden">
+                Basic draft from {INTERVIEW_DRAFT_MIN_THEME_PERCENT}% on all topics; strong essay from{' '}
+                {INTERVIEW_DRAFT_STRONG_MIN_PERCENT}%+.
+              </p>
+              <ul className="mt-2 hidden list-disc space-y-1 pl-4 marker:text-zinc-400 sm:block">
                 <li>
                   <strong className="font-medium text-zinc-600">
                     From {INTERVIEW_DRAFT_MIN_THEME_PERCENT}% across all topics:
@@ -1304,7 +1308,7 @@ export function EssayQuestionnaire({
               </ul>
             </div>
           </div>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-1.5 sm:grid-cols-2 sm:gap-2">
           {THEME_LABELS.map(({ key, label, Icon }) => (
             <div key={key}>
               <div className="mb-1 flex items-center justify-between gap-2 text-[10px] font-medium uppercase tracking-wide text-zinc-500">
@@ -1331,7 +1335,7 @@ export function EssayQuestionnaire({
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-y-contain px-2 py-4 [-webkit-overflow-scrolling:touch] max-sm:min-h-[12rem] max-sm:px-3 sm:max-h-[min(60vh,520px)] sm:flex-none sm:px-6">
+      <div className="flex min-h-0 flex-1 flex-col space-y-3 overflow-y-auto overscroll-y-contain px-2 py-3 [-webkit-overflow-scrolling:touch] max-sm:min-h-[min(46svh,21rem)] max-sm:px-3 sm:max-h-[min(60vh,520px)] sm:flex-none sm:px-6 sm:py-4">
         {messages.map((m) =>
           m.role === 'assistant' ? (
             <div key={m.id} className="flex justify-start">
@@ -1465,7 +1469,7 @@ export function EssayQuestionnaire({
         <div ref={bottomRef} />
       </div>
 
-      <div className="shrink-0 border-t border-zinc-100 bg-white p-4 sm:p-6">
+      <div className="shrink-0 border-t border-zinc-100 bg-white p-3 sm:p-6">
         <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto] sm:items-center">
           <textarea
             value={input}

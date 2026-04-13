@@ -18,6 +18,7 @@ export interface Database {
           utm_source: string | null
           utm_medium: string | null
           utm_campaign: string | null
+          utm_content: string | null
           created_at: string
         }
         Insert: {
@@ -28,6 +29,7 @@ export interface Database {
           utm_source?: string | null
           utm_medium?: string | null
           utm_campaign?: string | null
+          utm_content?: string | null
           created_at?: string
         }
         Update: {
@@ -38,6 +40,7 @@ export interface Database {
           utm_source?: string | null
           utm_medium?: string | null
           utm_campaign?: string | null
+          utm_content?: string | null
           created_at?: string
         }
         Relationships: []

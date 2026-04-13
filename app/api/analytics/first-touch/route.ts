@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { formatVisitorSourceDisplay } from '@/lib/analytics/utmSourceDisplay';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 
 export const runtime = 'nodejs';
@@ -38,12 +39,14 @@ type Body = {
   utm_source?: unknown;
   utm_medium?: unknown;
   utm_campaign?: unknown;
+  utm_content?: unknown;
 };
 
 function sendNewVisitorTelegramHtml(payload: {
   utmSource: string;
-  referrer: string;
+  utmContent: string;
   landingUrl: string;
+  referrer: string;
 }): Promise<void> {
   const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
   const chatId = resolveTelegramChatId();
@@ -54,16 +57,15 @@ function sendNewVisitorTelegramHtml(payload: {
     return Promise.resolve();
   }
 
-  const sourceLine = payload.utmSource.trim()
-    ? payload.utmSource
-    : 'Organic/Direct';
-  const refLine = payload.referrer.trim() ? payload.referrer : 'None';
+  const sourceDisplay = formatVisitorSourceDisplay(payload.utmSource, payload.utmContent, {
+    referrer: payload.referrer,
+    landingUrl: payload.landingUrl
+  });
 
   const text = [
-    '🚀 <b>New Visitor on ScholarshipTop!</b>',
+    '<b>New Visitor on ScholarshipTop!</b>',
     '',
-    `<b>Source:</b> ${escapeHtml(sourceLine)}`,
-    `<b>Referrer:</b> ${escapeHtml(refLine)}`,
+    `<b>Source:</b> ${escapeHtml(sourceDisplay)}`,
     `<b>Landing:</b> ${escapeHtml(payload.landingUrl)}`
   ].join('\n');
 
@@ -116,6 +118,8 @@ export async function POST(request: Request) {
     typeof body.utm_campaign === 'string'
       ? body.utm_campaign.trim().slice(0, 500)
       : '';
+  const utm_content =
+    typeof body.utm_content === 'string' ? body.utm_content.trim().slice(0, 500) : '';
 
   const supabase = createServiceRoleSupabaseClient();
   if (!supabase) {
@@ -130,7 +134,8 @@ export async function POST(request: Request) {
       referrer: referrer || null,
       utm_source: utm_source || null,
       utm_medium: utm_medium || null,
-      utm_campaign: utm_campaign || null
+      utm_campaign: utm_campaign || null,
+      utm_content: utm_content || null
     })
     .select('id')
     .maybeSingle();
@@ -149,8 +154,9 @@ export async function POST(request: Request) {
 
   void sendNewVisitorTelegramHtml({
     utmSource: utm_source,
-    referrer,
-    landingUrl: landing_url
+    utmContent: utm_content,
+    landingUrl: landing_url,
+    referrer
   }).catch((e) => {
     console.error('[analytics/first-touch] telegram async error', e);
   });

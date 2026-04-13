@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { resendRegistrationVerificationEmail } from '@/app/actions/registrationVerification';
 import type { Database } from '@/types_db';
@@ -8,7 +8,10 @@ import {
   SCHOLARSHIP_ACTION_FILL,
   SCHOLARSHIP_ACTION_FOCUS_VISIBLE
 } from '@/lib/constants/scholarshipActionUi';
+import { ToastAction } from '@/components/ui/Toasts/toast';
+import { toast } from '@/components/ui/Toasts/use-toast';
 import { createClient } from '@/utils/supabase/client';
+import { cn } from '@/utils/cn';
 import { getURL } from '@/utils/helpers';
 
 type ProfileEmailVerified = Pick<
@@ -29,21 +32,73 @@ function pickResendMode(
   return null;
 }
 
+/**
+ * No inline banner — reminds unverified users via the global bottom toast (same UX as other app toasts).
+ */
 export function ScholarshipsEmailConfirmationBanner() {
-  const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
   const [resendMode, setResendMode] = useState<ResendMode | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [needsReminder, setNeedsReminder] = useState(false);
+  const reminderToastScheduledRef = useRef(false);
+  const resendInFlightRef = useRef(false);
+
+  const resend = useCallback(async () => {
+    if (!email || resendInFlightRef.current) return;
+    resendInFlightRef.current = true;
+    try {
+      if (resendMode === 'app') {
+        const r = await resendRegistrationVerificationEmail();
+        if (!r.ok) {
+          toast({
+            title: 'Could not send email',
+            description: r.error ?? 'Try again in a moment.',
+            variant: 'destructive'
+          });
+        } else {
+          toast({
+            title: 'Check your inbox for the link.',
+            description: 'We sent a confirmation message to your email.',
+            duration: 6000
+          });
+        }
+      } else if (resendMode === 'supabase') {
+        const supabase = createClient();
+        const emailRedirectTo = getURL(
+          `auth/callback?next=${encodeURIComponent('/scholarships')}`
+        );
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email,
+          options: { emailRedirectTo }
+        });
+        if (error) {
+          toast({
+            title: 'Could not resend',
+            description: error.message,
+            variant: 'destructive'
+          });
+        } else {
+          toast({
+            title: 'Check your inbox for the link.',
+            description: 'We sent a confirmation message to your email.',
+            duration: 6000
+          });
+        }
+      }
+    } finally {
+      resendInFlightRef.current = false;
+    }
+  }, [email, resendMode]);
 
   useEffect(() => {
     const supabase = createClient();
 
     const apply = async (user: User | null) => {
       if (!user?.email) {
-        setVisible(false);
+        setNeedsReminder(false);
         setEmail(null);
         setResendMode(null);
+        reminderToastScheduledRef.current = false;
         return;
       }
       setEmail(user.email);
@@ -55,9 +110,11 @@ export function ScholarshipsEmailConfirmationBanner() {
       const row = prof as ProfileEmailVerified | null;
       const mode = pickResendMode(user, row?.email_verified);
       const show = mode != null;
-      setVisible(show);
+      setNeedsReminder(show);
       setResendMode(mode);
-      if (!show) setMsg(null);
+      if (!show) {
+        reminderToastScheduledRef.current = false;
+      }
     };
 
     void supabase.auth.getSession().then(({ data: { session } }) => {
@@ -73,61 +130,36 @@ export function ScholarshipsEmailConfirmationBanner() {
     };
   }, []);
 
-  const resend = async () => {
-    if (!email) return;
-    setBusy(true);
-    setMsg(null);
-    try {
-      if (resendMode === 'app') {
-        const r = await resendRegistrationVerificationEmail();
-        if (!r.ok) setMsg(r.error ?? 'Could not send email.');
-        else setMsg('Check your inbox for the link.');
-      } else if (resendMode === 'supabase') {
-        const supabase = createClient();
-        const emailRedirectTo = getURL(
-          `auth/callback?next=${encodeURIComponent('/scholarships')}`
-        );
-        const { error } = await supabase.auth.resend({
-          type: 'signup',
-          email,
-          options: { emailRedirectTo }
-        });
-        if (error) setMsg(error.message);
-        else setMsg('Check your inbox for the link.');
-      }
-    } finally {
-      setBusy(false);
+  useEffect(() => {
+    if (!needsReminder || !resendMode || !email || reminderToastScheduledRef.current) {
+      return;
     }
-  };
+    reminderToastScheduledRef.current = true;
 
-  if (!visible) return null;
-
-  const resendButtonClass = `inline-flex shrink-0 items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition disabled:pointer-events-none disabled:opacity-50 ${SCHOLARSHIP_ACTION_FILL} ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
-
-  return (
-    <div
-      className="mb-6 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm shadow-sm sm:flex sm:items-center sm:justify-between sm:gap-4"
-      role="status"
-    >
-      <p className="leading-snug text-zinc-600">
-        <span className="font-semibold text-zinc-900">
-          Confirm your email to unlock full access.
-        </span>{' '}
-        You can keep browsing; we&apos;ll finish verifying your account in the background.
-      </p>
-      <div className="mt-3 flex shrink-0 flex-col gap-2 sm:mt-0 sm:items-end">
-        <button
-          type="button"
-          disabled={busy}
-          onClick={resend}
-          className={resendButtonClass}
+    toast({
+      title: 'Confirm your email to unlock full access.',
+      description:
+        "You can keep browsing; we'll finish verifying your account in the background.",
+      variant: 'warning',
+      duration: 12_000,
+      action: (
+        <ToastAction
+          altText="Resend confirmation"
+          className={cn(
+            'border-0 font-semibold text-white',
+            SCHOLARSHIP_ACTION_FILL,
+            SCHOLARSHIP_ACTION_FOCUS_VISIBLE
+          )}
+          onClick={(e) => {
+            e.preventDefault();
+            void resend();
+          }}
         >
-          {busy ? 'Sending…' : 'Resend confirmation'}
-        </button>
-        {msg ? (
-          <p className="max-w-xs text-right text-xs text-zinc-600">{msg}</p>
-        ) : null}
-      </div>
-    </div>
-  );
+          Resend confirmation
+        </ToastAction>
+      )
+    });
+  }, [needsReminder, resendMode, email, resend]);
+
+  return null;
 }

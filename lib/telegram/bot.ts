@@ -24,6 +24,7 @@ import {
 import { SCHOLARSHIPS_HUB_SAVED_TAB_HREF } from '@/app/scholarships/scholarshipListUrl';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import { formatVisitorSourceDisplay } from '@/lib/analytics/utmSourceDisplay';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
@@ -309,21 +310,6 @@ function formatAdminSourceLabel(source: string | null | undefined) {
   }
 }
 
-function formatAdminEventTypeLabel(eventType: string) {
-  switch (eventType) {
-    case 'payment':
-      return 'платеж';
-    case 'signup':
-      return 'регистрация';
-    case 'email_verified':
-      return 'почта подтверждена';
-    case 'bot_start':
-      return 'запуск бота';
-    default:
-      return eventType;
-  }
-}
-
 /** Lemon `meta.event_name` / stored `event_name` → short Russian label for admin Telegram. */
 function formatLemonWebhookEventRu(eventName: string | null | undefined): string {
   if (!eventName?.trim()) return 'не указано';
@@ -375,50 +361,6 @@ function formatProfileMessage(authUser: AuthUserRow | null, profile: ProfileRow 
     `State: ${formatValue(profile?.state_region)}`,
     `GPA: ${formatValue(profile?.gpa)}`
   ].join('\n');
-}
-
-function formatEventLine(event: {
-  event_type: string;
-  payload: Json;
-  created_at: string;
-}) {
-  const payload =
-    event.payload && typeof event.payload === 'object' && !Array.isArray(event.payload)
-      ? (event.payload as Record<string, Json>)
-      : {};
-  const email = typeof payload.email === 'string' ? payload.email : null;
-  const plan = typeof payload.plan === 'string' ? payload.plan : null;
-  const source = typeof payload.source === 'string' ? payload.source : null;
-  const when = new Date(event.created_at);
-  const stamp = Number.isNaN(when.getTime())
-    ? event.created_at
-    : new Intl.DateTimeFormat('en-US', {
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit'
-      }).format(when);
-
-  if (event.event_type === 'payment') {
-    const status =
-      typeof payload.status === 'string' ? formatAdminStatusLabel(payload.status) : null;
-    const ev =
-      typeof payload.event_name === 'string'
-        ? formatLemonWebhookEventRu(payload.event_name)
-        : null;
-    const statusPart = status ? ` — ${status}` : '';
-    const evPart = ev ? `${ev} — ` : '';
-    return `• платеж — ${evPart}${formatAdminPlanLabel(plan, plan !== 'free')}${statusPart} — ${
-      email ?? 'неизвестный пользователь'
-    } — ${stamp}`;
-  }
-  if (event.event_type === 'signup') {
-    return `• регистрация - ${email ?? 'неизвестный email'}${source ? ` - ${formatAdminSourceLabel(source)}` : ''} - ${stamp}`;
-  }
-  if (event.event_type === 'email_verified') {
-    return `• почта подтверждена - ${email ?? 'неизвестный email'} - ${stamp}`;
-  }
-  return `• ${formatAdminEventTypeLabel(event.event_type)} - ${stamp}`;
 }
 
 async function callTelegramApi<T>(method: string, payload: Record<string, unknown>) {
@@ -1087,21 +1029,46 @@ async function sendAdminPanel(user: TelegramUserRow) {
       .eq('event_type', eventType)
       .gte('created_at', sinceIso);
 
-  const [signupCount, verifiedCount, paymentCount, latestResult] = await Promise.all([
+  const [signupCount, verifiedCount, paymentCount, visitorsResult] = await Promise.all([
     countQuery('signup'),
     countQuery('email_verified'),
     countQuery('payment'),
     admin
-      .from('telegram_event_logs')
-      .select('event_type, payload, created_at')
-      .order('created_at', { ascending: false })
-      .limit(5)
+      .from('anonymous_visitor_first_touch')
+      .select('utm_source, utm_content, referrer, landing_url')
+      .gte('created_at', sinceIso)
   ]);
 
-  const latestLines =
-    latestResult.data && latestResult.data.length > 0
-      ? latestResult.data.map(formatEventLine).join('\n')
-      : '• Пока нет недавних событий';
+  const trafficLines: string[] = [];
+  if (visitorsResult.error) {
+    console.error('[telegram] admin panel anonymous_visitor_first_touch', visitorsResult.error);
+    trafficLines.push('• Не удалось загрузить источники (см. логи сервера)');
+  } else {
+    const rows = visitorsResult.data ?? [];
+    if (rows.length === 0) {
+      trafficLines.push('• Нет первых визитов за период');
+    } else {
+      const counts = new Map<string, number>();
+      for (const row of rows) {
+        const label = formatVisitorSourceDisplay(
+          row.utm_source ?? '',
+          row.utm_content ?? '',
+          {
+            referrer: row.referrer ?? '',
+            landingUrl: row.landing_url ?? ''
+          }
+        );
+        counts.set(label, (counts.get(label) ?? 0) + 1);
+      }
+      const sorted = [...counts.entries()].sort((a, b) => {
+        if (b[1] !== a[1]) return b[1] - a[1];
+        return a[0].localeCompare(b[0], 'en');
+      });
+      for (const [label, n] of sorted) {
+        trafficLines.push(`• ${label} — ${n}`);
+      }
+    }
+  }
 
   await sendTelegramMessage(
     user.telegram_chat_id,
@@ -1113,8 +1080,8 @@ async function sendAdminPanel(user: TelegramUserRow) {
       `Подтверждения email за 24ч: ${verifiedCount.count ?? 0}`,
       `Платежи за 24ч: ${paymentCount.count ?? 0}`,
       '',
-      'Последние события',
-      latestLines
+      'Трафик за 24ч (первые визиты по источнику)',
+      ...trafficLines
     ].join('\n'),
     buildProfileKeyboard(user)
   );
