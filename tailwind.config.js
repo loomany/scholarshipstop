@@ -37,6 +37,19 @@ module.exports = {
         'pain-fade-up': {
           from: { opacity: '0', transform: 'translateY(16px)' },
           to: { opacity: '1', transform: 'translateY(0)' }
+        },
+        /** Essay mic: soft transparent orange fill + glow while recording */
+        'mic-recording-pulse': {
+          '0%, 100%': {
+            backgroundColor: 'rgba(255, 122, 26, 0.12)',
+            boxShadow:
+              '0 2px 8px -2px rgba(255, 122, 26, 0.28), 0 0 0 1px rgba(255, 178, 125, 0.55)'
+          },
+          '50%': {
+            backgroundColor: 'rgba(255, 122, 26, 0.3)',
+            boxShadow:
+              '0 4px 18px -2px rgba(255, 122, 26, 0.48), 0 0 0 1px rgba(255, 122, 26, 0.55)'
+          }
         }
       },
       animation: {
@@ -57,7 +70,8 @@ module.exports = {
         'works-benefit-1': 'pain-fade-up 0.45s ease-out 0.18s forwards',
         'works-benefit-2': 'pain-fade-up 0.45s ease-out 0.3s forwards',
         'works-benefit-3': 'pain-fade-up 0.45s ease-out 0.42s forwards',
-        'works-cta-in': 'pain-fade-up 0.5s ease-out 0.52s forwards'
+        'works-cta-in': 'pain-fade-up 0.5s ease-out 0.52s forwards',
+        'mic-recording-pulse': 'mic-recording-pulse 1.35s ease-in-out infinite'
       }
     }
   },

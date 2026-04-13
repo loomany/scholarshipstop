@@ -18,8 +18,14 @@ export function getMaxAllowedOnboardingStep(
   return cap;
 }
 
-export function onboardingStepHref(step: OnboardingStep): string {
-  return `/onboarding?step=${step}`;
+export function onboardingStepHref(
+  step: OnboardingStep,
+  nextPath?: string | null
+): string {
+  const base = `/onboarding?step=${step}`;
+  const n = nextPath?.trim();
+  if (!n) return base;
+  return `${base}&next=${encodeURIComponent(n)}`;
 }
 
 /** Sign-in surfaces “Create one” / “Sign up” → new account flow, step 1 (“Tell us about you”). */

@@ -68,6 +68,17 @@
     @apply ring-2 ring-emerald-500/45 ring-offset-0 rounded-md;
   }
 
+  /** Native stepper arrows on number inputs (Chrome / Edge / Firefox). */
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
   /**
    * Mobile: center page-style headings site-wide. Opt out with
    * data-heading-mobile-align="start" or Tailwind text-left on the heading.

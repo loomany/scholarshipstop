@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 
+import { SITE_SEARCH_INPUT_CHROME } from '@/lib/constants/catalogControlBar';
+
 type Props = {
   defaultQuery: string;
   /** Preserves `?state=` in the form when present (e.g. bookmarked URLs). */
@@ -37,7 +39,7 @@ export function ProvidersHubToolbar({ defaultQuery, activeStateCode }: Props) {
           onChange={(e) => setQDraft(e.target.value)}
           placeholder="Search by provider name, state, or your request..."
           autoComplete="off"
-          className="w-full rounded-lg border border-zinc-200 bg-white py-3.5 pl-12 pr-4 text-base text-zinc-900 shadow-sm outline-none ring-zinc-900/0 transition placeholder:text-zinc-400 focus:border-zinc-300 focus:ring-4 focus:ring-zinc-900/[0.06]"
+          className={`w-full py-3.5 pl-12 pr-4 text-left text-base text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
         />
       </div>
     </form>

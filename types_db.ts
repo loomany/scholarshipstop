@@ -9,6 +9,39 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      anonymous_visitor_first_touch: {
+        Row: {
+          id: string
+          visitor_id: string
+          landing_url: string
+          referrer: string | null
+          utm_source: string | null
+          utm_medium: string | null
+          utm_campaign: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          visitor_id: string
+          landing_url: string
+          referrer?: string | null
+          utm_source?: string | null
+          utm_medium?: string | null
+          utm_campaign?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          visitor_id?: string
+          landing_url?: string
+          referrer?: string | null
+          utm_source?: string | null
+          utm_medium?: string | null
+          utm_campaign?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      },
       grant_notification_deliveries: {
         Row: {
           id: string
@@ -102,6 +135,36 @@ export interface Database {
         }
         Relationships: []
       },
+      scholarship_essays: {
+        Row: {
+          scholarship_id: string
+          essay_id: string
+        }
+        Insert: {
+          scholarship_id: string
+          essay_id: string
+        }
+        Update: {
+          scholarship_id?: string
+          essay_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scholarship_essays_scholarship_id_fkey"
+            columns: ["scholarship_id"]
+            isOneToOne: false
+            referencedRelation: "scholarships"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scholarship_essays_essay_id_fkey"
+            columns: ["essay_id"]
+            isOneToOne: false
+            referencedRelation: "essays"
+            referencedColumns: ["id"]
+          }
+        ]
+      },
       telegram_resource_notify_config: {
         Row: {
           id: number
@@ -138,6 +201,230 @@ export interface Database {
             foreignKeyName: "customers_id_fkey"
             columns: ["id"]
             isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      essay_chats: {
+        Row: {
+          id: string
+          user_id: string
+          messages: Json
+          progress: Json
+          ready_to_generate: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          messages?: Json
+          progress?: Json
+          ready_to_generate?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          messages?: Json
+          progress?: Json
+          ready_to_generate?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "essay_chats_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      essay_generation_queue: {
+        Row: {
+          id: string
+          scholarship_id: string
+          status: string
+          error_message: string | null
+          created_essay_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          scholarship_id: string
+          status?: string
+          error_message?: string | null
+          created_essay_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          scholarship_id?: string
+          status?: string
+          error_message?: string | null
+          created_essay_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "essay_generation_queue_scholarship_id_fkey"
+            columns: ["scholarship_id"]
+            isOneToOne: false
+            referencedRelation: "scholarships"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "essay_generation_queue_created_essay_id_fkey"
+            columns: ["created_essay_id"]
+            isOneToOne: false
+            referencedRelation: "essays"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      essays: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          content_html: string
+          hero_image_url: string | null
+          sources: Json
+          faq: Json
+          meta_description: string | null
+          is_published: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          content_html?: string
+          hero_image_url?: string | null
+          sources?: Json
+          faq?: Json
+          meta_description?: string | null
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title?: string
+          content_html?: string
+          hero_image_url?: string | null
+          sources?: Json
+          faq?: Json
+          meta_description?: string | null
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      essay_results: {
+        Row: {
+          id: string
+          user_id: string
+          response_id: string | null
+          essay_chat_id: string | null
+          content: string
+          version: number
+          grinder_notes: string | null
+          draft_quality_tier: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          response_id?: string | null
+          essay_chat_id?: string | null
+          content: string
+          version?: number
+          grinder_notes?: string | null
+          draft_quality_tier?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          response_id?: string | null
+          essay_chat_id?: string | null
+          content?: string
+          version?: number
+          grinder_notes?: string | null
+          draft_quality_tier?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "essay_results_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "essay_results_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "questionnaire_responses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "essay_results_essay_chat_id_fkey"
+            columns: ["essay_chat_id"]
+            isOneToOne: false
+            referencedRelation: "essay_chats"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      questionnaire_responses: {
+        Row: {
+          id: string
+          user_id: string
+          stage1_data: Json | null
+          stage2_data: Json | null
+          stage3_data: Json | null
+          stage4_data: Json | null
+          rubric_weights: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          stage1_data?: Json | null
+          stage2_data?: Json | null
+          stage3_data?: Json | null
+          stage4_data?: Json | null
+          rubric_weights?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          stage1_data?: Json | null
+          stage2_data?: Json | null
+          stage3_data?: Json | null
+          stage4_data?: Json | null
+          rubric_weights?: Json | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questionnaire_responses_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -279,6 +566,9 @@ export interface Database {
           subscription_debug_status: string | null
           subscription_debug_trial_ends_at: string | null
           subscription_plan: string
+          trial_quota_ai_check_used: number
+          trial_quota_chat_turns_used: number
+          trial_quota_humanize_draft_used: number
           updated_at: string | null
         }
         Insert: {
@@ -315,6 +605,9 @@ export interface Database {
           subscription_debug_status?: string | null
           subscription_debug_trial_ends_at?: string | null
           subscription_plan?: string
+          trial_quota_ai_check_used?: number
+          trial_quota_chat_turns_used?: number
+          trial_quota_humanize_draft_used?: number
           updated_at?: string | null
         }
         Update: {
@@ -351,6 +644,9 @@ export interface Database {
           subscription_debug_status?: string | null
           subscription_debug_trial_ends_at?: string | null
           subscription_plan?: string
+          trial_quota_ai_check_used?: number
+          trial_quota_chat_turns_used?: number
+          trial_quota_humanize_draft_used?: number
           updated_at?: string | null
         }
         Relationships: [
@@ -630,6 +926,7 @@ export interface Database {
           requirement_types: Json
           requirement_signals_count: number | null
           essay_required: boolean
+          requires_essay: boolean
           document_required: boolean
           photo_required: boolean
           video_required: boolean
@@ -760,6 +1057,7 @@ export interface Database {
           requirement_types?: Json
           requirement_signals_count?: number | null
           essay_required?: boolean | null
+          requires_essay?: boolean | null
           document_required?: boolean | null
           photo_required?: boolean | null
           video_required?: boolean | null
@@ -890,6 +1188,7 @@ export interface Database {
           requirement_types?: Json
           requirement_signals_count?: number | null
           essay_required?: boolean | null
+          requires_essay?: boolean | null
           document_required?: boolean | null
           photo_required?: boolean | null
           video_required?: boolean | null

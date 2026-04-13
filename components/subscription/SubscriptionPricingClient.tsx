@@ -224,19 +224,22 @@ function PlanGrantCard({
 const MONTHLY_FEATURES: string[] = [
   'Full access to AI scholarship matches',
   'Precision filters (intent, nationality)',
-  'Save 20+ hours of manual research'
+  'Save 20+ hours of manual research',
+  'Unlimited AI Mentor & Essay Generation'
 ];
 
 const QUARTERLY_FEATURES: string[] = [
   'Everything in Monthly, plus:',
   'Priority support & early grant alerts',
-  'Track applications for the full season'
+  'Track applications for the full season',
+  'Advanced AI essay checks & humanization'
 ];
 
 const YEARLY_FEATURES: string[] = [
   'Everything in Quarterly, plus:',
   'Lock in our maximum 52% discount',
-  'Uninterrupted access for a full year'
+  'Uninterrupted access for a full year',
+  'Unlimited premium AI usage all year round'
 ];
 
 const PLANS: PlanConfig[] = [

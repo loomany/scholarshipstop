@@ -7,11 +7,14 @@ import { X } from 'lucide-react';
 type ScholarshipRegistrationWallModalProps = {
   open: boolean;
   onClose: () => void;
+  /** Essay mentor: copy about saving the interview before sign-up. */
+  variant?: 'scholarships' | 'essay';
 };
 
 export default function ScholarshipRegistrationWallModal({
   open,
-  onClose
+  onClose,
+  variant = 'scholarships'
 }: ScholarshipRegistrationWallModalProps) {
   useEffect(() => {
     if (!open) return;
@@ -62,20 +65,49 @@ export default function ScholarshipRegistrationWallModal({
         >
           Create a free account
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-base">
-          Unlock filters, save scholarships, and see results tailored to you.
-        </p>
-        <ul className="mt-5 list-inside list-disc space-y-2 text-sm text-zinc-700 sm:text-[15px]">
-          <li>See best recommendations based on your profile</li>
-          <li>Filter by GPA, deadline, and requirements</li>
-          <li>Browse scholarships by categories</li>
-          <li>Sort by best recommendation and smart recommendations</li>
-          <li>Save and track opportunities</li>
-        </ul>
+        {variant === 'essay' ? (
+          <>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-base">
+              Sign up to generate your full essay draft and save it to your account.
+            </p>
+            <p className="mt-3 rounded-xl border border-emerald-100 bg-emerald-50/90 px-3 py-2.5 text-sm leading-relaxed text-emerald-950">
+              Don&apos;t worry — your conversation stays in this chat. When you come back after
+              signing in, you can continue right where you left off and tap Generate Draft.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-600">
+              You&apos;ll use the full sign-up flow: short profile (about you, location, GPA), then
+              create your password — same as other members, so your essay and scholarship tools live
+              in one account. Registration starts at step 1; when you finish, we take you back here
+              to the essay mentor.
+            </p>
+            <ul className="mt-5 list-inside list-disc space-y-2 text-sm text-zinc-700 sm:text-[15px]">
+              <li>Save your AI mentor interview in one place</li>
+              <li>Unlock the full essay draft from your answers</li>
+              <li>Edit and refine your essay on the next step</li>
+            </ul>
+          </>
+        ) : (
+          <>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-base">
+              Unlock filters, save scholarships, and see results tailored to you.
+            </p>
+            <ul className="mt-5 list-inside list-disc space-y-2 text-sm text-zinc-700 sm:text-[15px]">
+              <li>See best recommendations based on your profile</li>
+              <li>Filter by GPA, deadline, and requirements</li>
+              <li>Browse scholarships by categories</li>
+              <li>Sort by best recommendation and smart recommendations</li>
+              <li>Save and track opportunities</li>
+            </ul>
+          </>
+        )}
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <Link
-            href="/onboarding?step=3"
+            href={
+              variant === 'essay'
+                ? `/onboarding?step=1&next=${encodeURIComponent('/essay')}`
+                : '/onboarding?step=3'
+            }
             onClick={onClose}
             className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-0 sm:w-auto sm:min-w-[200px]"
           >

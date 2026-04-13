@@ -12,6 +12,7 @@ import { fetchScholarshipsForArticleMatching } from './fetchScholarshipsForArtic
 import { findScholarshipsForArticle } from './scoreScholarshipsForArticle';
 import { insertInlineScholarshipLinks } from './insertInlineScholarshipLinks';
 import { selectRelatedScholarshipsForArticle } from './selectRelatedForArticle';
+import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
 import { stripDisallowedAnchorsFromHtml } from './stripArticleAnchors';
 import type {
   ArticleMatchDiagnostics,
@@ -54,7 +55,9 @@ export async function runArticleScholarshipMatchingPipeline(
 ): Promise<RunArticleScholarshipMatchingResult> {
   log('scholarship article matching started');
 
-  const strippedBody = stripDisallowedAnchorsFromHtml(input.bodyHtml);
+  const strippedBody = deduplicateQuickSummaryBlocksInHtml(
+    stripDisallowedAnchorsFromHtml(input.bodyHtml)
+  );
   const signals = extractArticleSignals({
     title: input.title,
     metaTitle: input.metaTitle,

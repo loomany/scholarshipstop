@@ -25,7 +25,8 @@ import {
 } from '@/app/scholarships/scholarshipCategories';
 import {
   CATALOG_CONTROL_BAR_BTN,
-  CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS
+  CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS,
+  SITE_SEARCH_INPUT_CHROME
 } from '@/lib/constants/catalogControlBar';
 import {
   scholarshipCategoriesApplyButtonClass,
@@ -314,7 +315,7 @@ export default function ScholarshipsListHeader({
             onChange={(e) => setCategorySearch(e.target.value)}
             placeholder="Search categories"
             aria-label="Search categories"
-            className="w-full rounded-xl border border-zinc-200 bg-zinc-50/80 px-3 py-2.5 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-300 focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-0"
+            className={`w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
           />
         </div>
         <ul

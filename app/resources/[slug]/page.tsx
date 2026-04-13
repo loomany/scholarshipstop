@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { ContentPostCardPublishedAt } from '@/components/content-hub/ContentPostCardPublishedAt';
-
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
+import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import ContentHubScholarshipCta from '@/components/content-hub/ContentHubScholarshipCta';
 import ResourceGuidesContinueSection from '@/components/content-hub/resourceGuides/ResourceGuidesContinueSection';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
@@ -16,6 +15,7 @@ import {
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
+import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
 import {
   splitForMidCtaInRemainder,
   splitForPrimaryCtaInsertion
@@ -24,6 +24,7 @@ import {
   fetchPublishedContentPostBySlug,
   fetchRelatedPublishedContentPosts
 } from '@/lib/content-hub/contentPostsServer';
+import { fetchScholarshipBySlug } from '@/lib/scholarships/supabase';
 
 export const revalidate = 300;
 
@@ -63,7 +64,15 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   const matchedRelatedScholarships = parseRelatedScholarshipsJson(
     post.related_scholarships
   );
-  const bodyHtml = post.body_html?.trim() ?? '';
+  const singleRelatedDetail =
+    matchedRelatedScholarships.length === 1
+      ? await fetchScholarshipBySlug(
+          matchedRelatedScholarships[0]!.slug.trim()
+        )
+      : null;
+  const bodyHtml = deduplicateQuickSummaryBlocksInHtml(
+    post.body_html?.trim() ?? ''
+  );
   const primarySplit = bodyHtml
     ? splitForPrimaryCtaInsertion(bodyHtml)
     : null;
@@ -184,14 +193,6 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.25rem] lg:leading-tight">
             {post.title?.trim() || 'Untitled'}
           </h1>
-          {post.published_at ? (
-            <div className="mt-4">
-              <ContentPostCardPublishedAt
-                publishedAt={post.published_at}
-                variant="article"
-              />
-            </div>
-          ) : null}
         </header>
 
         {post.cover_image_url?.trim() ? (
@@ -258,29 +259,12 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
         ) : null}
 
         {faq.length > 0 ? (
-          <section
-            className="mt-10 rounded-2xl border border-gray-200/90 bg-gray-50/80 p-6 sm:p-8"
-            aria-labelledby="content-faq-heading"
-          >
-            <h2
-              id="content-faq-heading"
-              className="text-xl font-bold tracking-tight text-gray-900"
-            >
-              FAQ
-            </h2>
-            <dl className="mt-6 space-y-6">
-              {faq.map((item, i) => (
-                <div key={i}>
-                  <dt className="text-sm font-semibold text-gray-900">
-                    {item.question}
-                  </dt>
-                  <dd className="mt-2 text-sm leading-relaxed text-gray-600">
-                    {item.answer}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </section>
+          <SiteFaqAccordion
+            items={faq}
+            className="mt-10"
+            headingId="content-faq-heading"
+            idPrefix="content-post-faq"
+          />
         ) : null}
 
         <ResourceGuidesContinueSection currentSlug={post.slug.trim()} />
@@ -288,6 +272,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
         {matchedRelatedScholarships.length > 0 ? (
           <ContentHubArticleMatchedScholarships
             items={matchedRelatedScholarships}
+            detailScholarship={singleRelatedDetail}
           />
         ) : (
           <ContentHubScholarshipCta

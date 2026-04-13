@@ -23,6 +23,7 @@ import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
 import { scholarshipPublicSlugForMatching } from '@/app/scholarships/scholarshipsData';
 import { fetchPublishedArticlesForScholarshipSlug } from '@/lib/content-hub/contentPostsServer';
+import { fetchPublishedEssaysForScholarship } from '@/lib/essays/essaysServer';
 import {
   getScholarshipDetailServer,
   redactPremiumScholarshipFields
@@ -104,6 +105,10 @@ export default async function ScholarshipsSlugPathPageBody({
     const initialRelatedArticles = matchSlug
       ? await fetchPublishedArticlesForScholarshipSlug(matchSlug, 3)
       : [];
+    const initialRelatedEssays = await fetchPublishedEssaysForScholarship(
+      scholarship.id,
+      4
+    );
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
@@ -117,6 +122,7 @@ export default async function ScholarshipsSlugPathPageBody({
           <ScholarshipDetailPageAuthBridge
             initialScholarship={redactPremiumScholarshipFields(scholarship)}
             initialRelatedArticles={initialRelatedArticles}
+            initialRelatedEssays={initialRelatedEssays}
           />
         </Suspense>
       </>
@@ -148,6 +154,10 @@ export default async function ScholarshipsSlugPathPageBody({
     const initialRelatedArticles = matchSlug
       ? await fetchPublishedArticlesForScholarshipSlug(matchSlug, 3)
       : [];
+    const initialRelatedEssays = await fetchPublishedEssaysForScholarship(
+      scholarship.id,
+      4
+    );
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
@@ -161,6 +171,7 @@ export default async function ScholarshipsSlugPathPageBody({
           <ScholarshipDetailPageAuthBridge
             initialScholarship={redactPremiumScholarshipFields(scholarship)}
             initialRelatedArticles={initialRelatedArticles}
+            initialRelatedEssays={initialRelatedEssays}
           />
         </Suspense>
       </>

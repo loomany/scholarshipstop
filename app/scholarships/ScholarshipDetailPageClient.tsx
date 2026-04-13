@@ -30,6 +30,8 @@ import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategorie
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
+import type { EssayListFields } from '@/lib/essays/essaysServer';
+import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import {
   fieldOfStudyDisplayList,
@@ -530,7 +532,8 @@ export default function ScholarshipDetailPageClient({
   hasSubscription = false,
   authResolved = true,
   initialScholarship = null,
-  initialRelatedArticles = []
+  initialRelatedArticles = [],
+  initialRelatedEssays = []
 }: {
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
@@ -538,6 +541,8 @@ export default function ScholarshipDetailPageClient({
   initialScholarship?: Scholarship | null;
   /** Published articles that reference this scholarship in `related_scholarships` (max 3). */
   initialRelatedArticles?: ContentPostListFields[];
+  /** Essay hub guides linked to this scholarship (max 4). */
+  initialRelatedEssays?: EssayListFields[];
 } = {}) {
   const layoutInitialScholarship = useScholarshipDetailInitialData();
   const serverScholarship = initialScholarship ?? layoutInitialScholarship;
@@ -1464,6 +1469,76 @@ export default function ScholarshipDetailPageClient({
                     );
                   })}
                 </ul>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {initialRelatedEssays.length > 0 ||
+        Boolean(scholarship?.essayRequired) ? (
+          <div
+            className="mt-10"
+            aria-labelledby="scholarship-related-essays-heading"
+          >
+            <div className="flex flex-wrap items-start gap-3">
+              <BookOpen
+                className="mt-0.5 h-5 w-5 shrink-0 text-indigo-700/90"
+                strokeWidth={1.75}
+                aria-hidden
+              />
+              <div className="min-w-0 flex-1 space-y-3">
+                <h2
+                  id="scholarship-related-essays-heading"
+                  className="text-lg font-semibold tracking-tight text-zinc-900"
+                >
+                  Example essays & guides
+                </h2>
+                <p className="text-sm leading-relaxed text-zinc-600">
+                  Long-tail writing guides on ScholarshipTop (separate from
+                  scholarship listings—no duplicate SEO intent).
+                </p>
+                {initialRelatedEssays.length > 0 ? (
+                  <ul className="space-y-2.5" role="list">
+                    {initialRelatedEssays.map((ex) => {
+                      const slug = ex.slug?.trim();
+                      if (!slug) return null;
+                      const label =
+                        ex.title?.trim() || slug.replace(/-/g, ' ');
+                      return (
+                        <li key={ex.id}>
+                          <Link
+                            href={essayHubArticlePath(slug)}
+                            className="text-sm font-semibold text-indigo-800 underline decoration-indigo-600/35 underline-offset-2 transition hover:text-indigo-950 hover:decoration-indigo-700/60"
+                          >
+                            {label}
+                          </Link>
+                          {ex.meta_description?.trim() ? (
+                            <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                              {ex.meta_description.trim()}
+                            </p>
+                          ) : null}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-zinc-600">
+                    A dedicated how-to guide for this program may be added over
+                    time. Browse all essay guides from the hub.
+                  </p>
+                )}
+                <div className="rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-4">
+                  <p className="text-sm font-semibold text-indigo-950">
+                    Need to write an essay for this grant? Use our AI Essay
+                    Writer to draft a unique personal statement fast.
+                  </p>
+                  <Link
+                    href="/essay"
+                    className="mt-2 inline-flex text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
+                  >
+                    Open AI Essay Writer →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

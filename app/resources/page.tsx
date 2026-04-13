@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { ContentPostCardPublishedAt } from '@/components/content-hub/ContentPostCardPublishedAt';
 import ResourcesIndexToolbar from '@/components/content-hub/ResourcesIndexToolbar';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import {
@@ -105,8 +104,7 @@ function ResourcesGrid({ posts }: { posts: ContentPostListFields[] }) {
                 )}
               </div>
               <div className="flex flex-1 flex-col p-5 sm:p-6">
-                <ContentPostCardPublishedAt publishedAt={post.published_at} />
-                <h2 className="mt-2 text-lg font-bold leading-snug tracking-tight text-gray-900 group-hover:text-gray-800 sm:text-xl">
+                <h2 className="text-lg font-bold leading-snug tracking-tight text-gray-900 group-hover:text-gray-800 sm:text-xl">
                   {title}
                 </h2>
                 {desc ? (

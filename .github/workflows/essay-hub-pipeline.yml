@@ -1,0 +1,52 @@
+# Essay Hub: enqueue + generate until the queue is empty and no new scholarships remain.
+# - Scheduled: every 3 hours (UTC). If nothing new → exits in seconds with "done".
+# - workflow_dispatch: run a full pass manually (same as local `npm run essay:pipeline-full`).
+#
+# Does NOT use CRON_SECRET: runs `processOneEssayQueueItem` in-process (no call to Vercel).
+# Repo secrets (Settings → Secrets): SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY, FAL_KEY
+name: Essay Hub pipeline
+
+on:
+  schedule:
+    # UTC; adjust if you need local-time alignment (GitHub cron is UTC-only).
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
+
+jobs:
+  essay-pipeline:
+    runs-on: ubuntu-latest
+    # Full backfill can take a long time; raise if jobs time out mid-run.
+    timeout-minutes: 360
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      FAL_KEY: ${{ secrets.FAL_KEY }}
+    steps:
+      - name: Check required secrets
+        run: |
+          missing=0
+          for key in NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY OPENAI_API_KEY FAL_KEY; do
+            if [ -z "${!key}" ]; then
+              echo "Missing required secret/env: ${key}" >&2
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run essay pipeline (full pass until idle)
+        run: npx tsx scripts/run-essay-pipeline-full.ts

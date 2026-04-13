@@ -127,6 +127,7 @@ const LISTING_CARD_SELECT_COLUMNS = [
   'ranking_score',
   'requirement_types',
   'essay_required',
+  'requires_essay',
   'document_required',
   'photo_required',
   'video_required',
@@ -459,7 +460,7 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
       row.number_of_awards != null && !Number.isNaN(row.number_of_awards)
         ? row.number_of_awards
         : undefined,
-    essayRequired: Boolean(row.essay_required),
+    essayRequired: Boolean(row.essay_required || row.requires_essay),
     documentRequired: Boolean(row.document_required),
     photoRequired: Boolean(row.photo_required),
     videoRequired: Boolean(row.video_required),

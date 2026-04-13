@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import {
   enqueueGoogleIndexingUrls,
+  essayIndexingUrl,
   providerIndexingUrl,
   resourceIndexingUrl,
   scholarshipIndexingUrl,
@@ -30,6 +31,7 @@ export async function POST(request: Request) {
         scholarship?: { id: string; slug?: string | null };
         resource?: { slug: string };
         provider?: { routeId: string };
+        essay?: { slug: string };
       }
     | null;
 
@@ -45,7 +47,9 @@ export async function POST(request: Request) {
         ? [resourceIndexingUrl(body.resource.slug.trim())]
         : kind === 'provider' && body?.provider?.routeId?.trim()
           ? [providerIndexingUrl(body.provider.routeId.trim())]
-          : [];
+          : kind === 'essay' && body?.essay?.slug?.trim()
+            ? [essayIndexingUrl(body.essay.slug.trim())]
+            : [];
 
   if (urls.length === 0) {
     return NextResponse.json(

@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
@@ -17,6 +17,7 @@ import {
   normalizeOnboardingStepParam,
   onboardingStepHref
 } from '@/lib/onboarding/onboardingResume';
+import { parseSafeNextPath } from '@/lib/onboarding/safeNextPath';
 import {
   clearScholarshipOnboardingDraft,
   loadStoredOnboardingDraft,
@@ -64,6 +65,12 @@ function OnboardingWizard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requested = parseStepParam(searchParams.get('step'));
+  const nextQueryRaw = searchParams.get('next');
+  const safeNext = useMemo(
+    () => parseSafeNextPath(nextQueryRaw),
+    [nextQueryRaw]
+  );
+  const afterAuthPath = safeNext ?? POST_ONBOARDING_PATH;
 
   const [draft, setDraft] = useState<StoredOnboardingDraft | null>(null);
   const [loading, setLoading] = useState(false);
@@ -76,10 +83,10 @@ function OnboardingWizard() {
     const supabase = createClient();
     void supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        router.replace(POST_ONBOARDING_PATH);
+        router.replace(afterAuthPath);
       }
     });
-  }, [router]);
+  }, [router, afterAuthPath]);
 
   useEffect(() => {
     if (!draft) return;
@@ -89,9 +96,9 @@ function OnboardingWizard() {
         : clampOnboardingStepToProgress(draft, requested);
     const cur = searchParams.get('step');
     if (cur !== String(target)) {
-      router.replace(onboardingStepHref(target));
+      router.replace(onboardingStepHref(target, safeNext));
     }
-  }, [draft, requested, router, searchParams]);
+  }, [draft, requested, router, searchParams, safeNext]);
 
   const step: OnboardingStep = draft
     ? requested == null
@@ -113,9 +120,9 @@ function OnboardingWizard() {
         step1: values,
         activeStep: 2
       });
-      router.push(onboardingStepHref(2));
+      router.push(onboardingStepHref(2, safeNext));
     },
-    [persistFull, router]
+    [persistFull, router, safeNext]
   );
 
   const handleAfterState = useCallback(() => {
@@ -125,8 +132,8 @@ function OnboardingWizard() {
       v: 7,
       activeStep: 3
     });
-    router.push(onboardingStepHref(3));
-  }, [persistFull, router]);
+    router.push(onboardingStepHref(3, safeNext));
+  }, [persistFull, router, safeNext]);
 
   const handleAfterGpa = useCallback(() => {
     const base = loadStoredOnboardingDraft() ?? emptyDraft();
@@ -135,16 +142,16 @@ function OnboardingWizard() {
       v: 7,
       activeStep: 4
     });
-    router.push(onboardingStepHref(4));
-  }, [persistFull, router]);
+    router.push(onboardingStepHref(4, safeNext));
+  }, [persistFull, router, safeNext]);
 
   const handleBack = useCallback(
     (s: OnboardingStep) => {
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       persistFull({ ...base, v: 7, activeStep: s });
-      router.push(onboardingStepHref(s));
+      router.push(onboardingStepHref(s, safeNext));
     },
-    [persistFull, router]
+    [persistFull, router, safeNext]
   );
 
   const finalizeOnboarding = useCallback(
@@ -188,7 +195,7 @@ function OnboardingWizard() {
       const supabase = createClient();
       const email = base.step2.email.trim();
       const emailRedirectTo = getURL(
-        `auth/callback?next=${encodeURIComponent(POST_ONBOARDING_PATH)}`
+        `auth/callback?next=${encodeURIComponent(afterAuthPath)}`
       );
 
       const {
@@ -245,7 +252,7 @@ function OnboardingWizard() {
         finalizeInFlight.current = false;
         setLoading(false);
         router.refresh();
-        router.push(POST_ONBOARDING_PATH);
+        router.push(afterAuthPath);
         return true;
       };
 
@@ -324,9 +331,9 @@ function OnboardingWizard() {
       setLoading(false);
       finalizeInFlight.current = false;
       router.refresh();
-      router.push(POST_ONBOARDING_PATH);
+      router.push(afterAuthPath);
     },
-    [persistFull, router]
+    [afterAuthPath, persistFull, router]
   );
 
   const handleAccountSubmit = useCallback(

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import clsx from 'clsx';
 import DOMPurify from 'isomorphic-dompurify';
 
@@ -56,11 +56,14 @@ type SafeContentPostBodyProps = {
   html: string;
   /** Use after a CTA so article cards sit closer together */
   tightTop?: boolean;
+  /** Rendered inside the same bordered card, below the article body (e.g. Sources). */
+  footer?: ReactNode;
 };
 
 export default function SafeContentPostBody({
   html,
-  tightTop = false
+  tightTop = false,
+  footer
 }: SafeContentPostBodyProps) {
   const clean = useMemo(
     () =>
@@ -71,7 +74,7 @@ export default function SafeContentPostBody({
     [html]
   );
 
-  if (!clean.trim()) return null;
+  if (!clean.trim() && !footer) return null;
 
   return (
     <div
@@ -80,10 +83,13 @@ export default function SafeContentPostBody({
         tightTop ? 'mt-4 sm:mt-5' : 'mt-10'
       )}
     >
-      <div
-        className={contentHubProseClassName}
-        dangerouslySetInnerHTML={{ __html: clean }}
-      />
+      {clean.trim() ? (
+        <div
+          className={contentHubProseClassName}
+          dangerouslySetInnerHTML={{ __html: clean }}
+        />
+      ) : null}
+      {footer}
     </div>
   );
 }

@@ -2,6 +2,8 @@
 
 import { Search } from 'lucide-react';
 
+import { SITE_SEARCH_INPUT_CHROME } from '@/lib/constants/catalogControlBar';
+
 type ContentHubSearchProps = {
   value: string;
   onChange: (value: string) => void;
@@ -23,7 +25,7 @@ export default function ContentHubSearch({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search articles..."
-        className="h-11 w-full rounded-xl border border-gray-200 bg-white py-0 pl-10 pr-3.5 text-sm text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-0 sm:h-12"
+        className={`h-11 w-full py-0 pl-10 pr-3.5 text-left text-sm text-zinc-900 sm:h-12 ${SITE_SEARCH_INPUT_CHROME}`}
         aria-label="Search articles"
       />
     </div>

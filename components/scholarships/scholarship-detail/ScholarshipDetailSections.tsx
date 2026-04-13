@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { ChevronDown, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import type { ScholarshipSeoFaqItem } from '@/app/scholarships/scholarshipsData';
+import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import ai from './aiInsightsLocked.module.css';
 import {
   scholarshipDetailCardPrimaryClass,
@@ -300,41 +300,17 @@ export function ScholarshipSeoApplicationBlock({ text }: { text: string }) {
 }
 
 export function ScholarshipFaqAccordion({ items }: { items: ScholarshipSeoFaqItem[] }) {
-  const [open, setOpen] = useState<number | null>(0);
-
   if (items.length === 0) return null;
 
   return (
-    <div>
-      <h2 className="mb-3 text-lg font-semibold tracking-tight text-zinc-900">
-        FAQ
-      </h2>
-      <div className="divide-y divide-zinc-200 rounded-2xl border border-zinc-200/90 bg-white shadow-sm ring-1 ring-zinc-100/50">
-        {items.map((item, i) => {
-          const isOpen = open === i;
-          return (
-            <div key={`faq-${i}-${item.question.slice(0, 20)}`}>
-              <button
-                type="button"
-                onClick={() => setOpen(isOpen ? null : i)}
-                className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left text-sm font-semibold text-zinc-900 transition hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-400"
-                aria-expanded={isOpen}
-              >
-                <span className="min-w-0 flex-1">{item.question}</span>
-                <ChevronDown
-                  className={`h-4 w-4 shrink-0 text-zinc-500 transition ${isOpen ? 'rotate-180' : ''}`}
-                  aria-hidden
-                />
-              </button>
-              {isOpen ? (
-                <div className="border-t border-zinc-100 px-4 pb-4 pt-2 text-sm leading-relaxed text-zinc-600">
-                  {item.answer}
-                </div>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    <SiteFaqAccordion
+      items={items}
+      as="div"
+      headingId="scholarship-useful-faq-heading"
+      headingClassName="mb-3 text-lg font-semibold tracking-tight text-zinc-900"
+      headingToAccordionClassName="mt-0"
+      idPrefix="scholarship-faq"
+      accordionClassName="shadow-sm ring-1 ring-zinc-100/50"
+    />
   );
 }

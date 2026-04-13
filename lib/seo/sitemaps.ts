@@ -2,6 +2,8 @@ import { cache } from 'react';
 import type { MetadataRoute } from 'next';
 
 import { fetchAllPublishedContentPostsListFields } from '@/lib/content-hub/contentPostsServer';
+import { fetchAllPublishedEssaySitemapRows } from '@/lib/essays/essaysServer';
+import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { createPublicClient } from '@/utils/supabase/public';
 import type { Database } from '@/types_db';
@@ -24,6 +26,7 @@ export { isSeoDripFeedActive } from '@/lib/seo/seoDripFeed';
 type SitemapBucket =
   | 'core'
   | 'resources'
+  | 'essays'
   | 'providers'
   | 'categories'
   | 'seo'
@@ -218,6 +221,7 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     { url: `${base}/`, lastModified: new Date() },
     { url: `${base}/scholarships`, lastModified: new Date() },
     { url: `${base}/resources`, lastModified: new Date() },
+    { url: `${base}/essays`, lastModified: new Date() },
     { url: `${base}/providers`, lastModified: new Date() }
   ];
 
@@ -227,6 +231,14 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     .map((post) => ({
       url: `${base}${resourcesArticlePath(post.slug!.trim())}`,
       lastModified: post.published_at || new Date()
+    }));
+
+  const essayRows = await fetchAllPublishedEssaySitemapRows().catch(() => []);
+  const essays: MetadataRoute.Sitemap = essayRows
+    .filter((row) => Boolean(row.slug?.trim()))
+    .map((row) => ({
+      url: `${base}${essayHubArticlePath(row.slug.trim())}`,
+      lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
     }));
 
   const promotedCategorySlugs = new Set(getPromotedSeoCategorySlugs());
@@ -269,6 +281,7 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
   return {
     core: dedupeSitemapEntries(core),
     resources: dedupeSitemapEntries(resources),
+    essays: dedupeSitemapEntries(essays),
     providers: dedupeSitemapEntries(providers),
     categories: dedupeSitemapEntries(categories),
     seo,
@@ -287,6 +300,7 @@ export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> 
   return [
     makeSitemapDocument('core', 'core', buckets.core),
     makeSitemapDocument('resources', 'resources', buckets.resources),
+    makeSitemapDocument('essays', 'essays', buckets.essays),
     makeSitemapDocument('providers', 'providers', buckets.providers),
     makeSitemapDocument('categories', 'categories', buckets.categories),
     makeSitemapDocument('seo', 'seo', buckets.seo),

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 import ContentHubScholarshipCta from '@/components/content-hub/ContentHubScholarshipCta';
+import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import { contentHubProseClassName } from '@/lib/content-hub/contentHubProseClassName';
 import {
@@ -96,29 +97,13 @@ export default function ResourceGuideShell({
         <div className={clsx(contentHubProseClassName, 'max-w-none')}>{children}</div>
 
         {faq.length > 0 ? (
-          <section
-            className="mt-12 rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-sm sm:p-8"
-            aria-labelledby="guide-faq-heading"
-          >
-            <h2
-              id="guide-faq-heading"
-              className="text-lg font-bold tracking-tight text-zinc-900"
-            >
-              FAQ
-            </h2>
-            <dl className="mt-6 space-y-6">
-              {faq.map((item) => (
-                <div key={item.question}>
-                  <dt className="text-sm font-semibold text-zinc-900">
-                    {item.question}
-                  </dt>
-                  <dd className="mt-2 text-sm leading-relaxed text-zinc-600">
-                    {item.answer}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </section>
+          <SiteFaqAccordion
+            items={faq}
+            className="mt-12"
+            headingId="guide-faq-heading"
+            headingClassName="text-lg font-bold tracking-tight text-zinc-900"
+            idPrefix="resource-guide-faq"
+          />
         ) : null}
 
         <section

@@ -11,7 +11,7 @@ import {
   type CSSProperties
 } from 'react';
 import clsx from 'clsx';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, Sparkles, X } from 'lucide-react';
 
 import Logo from '@/components/icons/Logo';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
@@ -19,6 +19,7 @@ import {
   RESOURCES_SECTION_LABEL,
   RESOURCES_SECTION_PATH
 } from '@/lib/content-hub/resourcesSection';
+import { ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
 import NavbarUserSlot from './NavbarUserSlot';
 import s from './Navbar.module.css';
 
@@ -31,6 +32,32 @@ const ABOUT_SUBLINKS = [
   { href: '/subscription', label: 'Pricing' }
 ] as const;
 
+const ESSAY_MENTOR_PATH = '/essay';
+
+/** Подменю Essay Guides: хаб статей и инструмент ментора (не путать с `/essays`). */
+const ESSAYS_GUIDE_SUBLINKS: {
+  href: string;
+  title: string;
+  description: string;
+  kicker: string;
+  featured?: boolean;
+}[] = [
+  {
+    href: ESSAYS_SECTION_PATH,
+    title: 'Article library',
+    description: 'Prompts, outlines, and revision playbooks—built for scholarships.',
+    kicker: 'Guides'
+  },
+  {
+    href: ESSAY_MENTOR_PATH,
+    title: 'AI Essay Mentor',
+    description:
+      'A premium guided interview—your answers become a structured draft, auto-saved.',
+    kicker: 'Studio',
+    featured: true
+  }
+];
+
 function sublinkActive(href: string, pathname: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
@@ -39,6 +66,7 @@ export default function Navlinks() {
   const pathname = usePathname() ?? '';
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
+  const [essaysExpanded, setEssaysExpanded] = useState(false);
   const menuId = useId();
 
   const aboutSectionActive = useMemo(() => {
@@ -51,6 +79,24 @@ export default function Navlinks() {
       pathname === RESOURCES_SECTION_PATH ||
       pathname.startsWith(`${RESOURCES_SECTION_PATH}/`),
     [pathname]
+  );
+
+  const essaysSectionActive = useMemo(
+    () =>
+      pathname === ESSAYS_SECTION_PATH ||
+      pathname.startsWith(`${ESSAYS_SECTION_PATH}/`),
+    [pathname]
+  );
+
+  const essayMentorActive = useMemo(() => {
+    if (pathname === ESSAY_MENTOR_PATH) return true;
+    if (!pathname.startsWith(`${ESSAY_MENTOR_PATH}/`)) return false;
+    return !pathname.startsWith(`${ESSAYS_SECTION_PATH}`);
+  }, [pathname]);
+
+  const essayGuidesNavActive = useMemo(
+    () => essaysSectionActive || essayMentorActive,
+    [essaysSectionActive, essayMentorActive]
   );
 
   const scholarshipsActive = useMemo(
@@ -96,8 +142,9 @@ export default function Navlinks() {
   useEffect(() => {
     if (menuOpen) {
       setAboutExpanded(aboutSectionActive);
+      setEssaysExpanded(essayGuidesNavActive);
     }
-  }, [menuOpen, aboutSectionActive]);
+  }, [menuOpen, aboutSectionActive, essayGuidesNavActive]);
 
   return (
     <>
@@ -186,6 +233,76 @@ export default function Navlinks() {
             >
               {RESOURCES_SECTION_LABEL}
             </Link>
+            <div className="group/essays relative">
+              <Link
+                href={ESSAYS_SECTION_PATH}
+                className={clsx(
+                  nav.dark,
+                  essayGuidesNavActive && nav.darkActive
+                )}
+                aria-haspopup="menu"
+              >
+                Essay Guides
+              </Link>
+              <div
+                className="pointer-events-none invisible absolute left-0 top-full z-[110] pt-2 opacity-0 transition-[opacity,visibility] duration-150 ease-out group-hover/essays:pointer-events-auto group-hover/essays:visible group-hover/essays:opacity-100 group-focus-within/essays:pointer-events-auto group-focus-within/essays:visible group-focus-within/essays:opacity-100"
+                role="presentation"
+              >
+                <div
+                  className="min-w-[min(100vw-2rem,20rem)] max-w-[22rem] rounded-2xl border border-gray-200/95 bg-white p-1.5 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.18)] ring-1 ring-black/[0.04]"
+                  aria-label="Essay Guides menu"
+                >
+                  {ESSAYS_GUIDE_SUBLINKS.map((item) => {
+                    const active =
+                      item.href === ESSAYS_SECTION_PATH
+                        ? essaysSectionActive
+                        : essayMentorActive;
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={clsx(
+                          'relative flex flex-col gap-1 rounded-xl px-3 py-2.5 text-left transition-colors',
+                          item.featured
+                            ? 'mb-0.5 bg-gradient-to-br from-orange-50/95 via-white to-white ring-1 ring-orange-200/40'
+                            : 'hover:bg-zinc-50/95',
+                          active &&
+                            (item.featured
+                              ? 'ring-orange-400/50'
+                              : 'bg-zinc-50/90')
+                        )}
+                      >
+                        <span className="flex items-start gap-2.5">
+                          {item.featured ? (
+                            <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-orange-500/12 text-orange-600 ring-1 ring-orange-500/20">
+                              <Sparkles className="h-4 w-4" strokeWidth={2} aria-hidden />
+                            </span>
+                          ) : (
+                            <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-zinc-300" aria-hidden />
+                          )}
+                          <span className="min-w-0 flex-1">
+                            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-zinc-400">
+                              {item.kicker}
+                            </span>
+                            <span
+                              className={clsx(
+                                'mt-0.5 block text-[15px] font-semibold leading-snug text-zinc-900',
+                                active && 'text-orange-700'
+                              )}
+                            >
+                              {item.title}
+                            </span>
+                          </span>
+                        </span>
+                        <p className="text-[12px] leading-snug text-zinc-500 sm:text-[13px]">
+                          {item.description}
+                        </p>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </nav>
         </div>
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3">
@@ -322,6 +439,105 @@ export default function Navlinks() {
               >
                 {RESOURCES_SECTION_LABEL}
               </Link>
+              <div className="w-full max-w-full">
+                <div
+                  className="flex w-full min-w-0 items-stretch overflow-hidden rounded-lg"
+                  onMouseEnter={() => {
+                    if (
+                      typeof window !== 'undefined' &&
+                      window.matchMedia('(hover: hover)').matches
+                    ) {
+                      setEssaysExpanded(true);
+                    }
+                  }}
+                >
+                  <Link
+                    href={ESSAYS_SECTION_PATH}
+                    className={clsx(
+                      nav.darkDrawer,
+                      'min-w-0 flex-1 rounded-none rounded-l-lg py-3 pl-3 pr-2',
+                      essayGuidesNavActive && nav.darkDrawerActive
+                    )}
+                    onClick={closeMenu}
+                  >
+                    Essay Guides
+                  </Link>
+                  <button
+                    type="button"
+                    className="flex w-11 shrink-0 items-center justify-center rounded-none rounded-r-lg border-0 bg-transparent text-zinc-300 transition hover:bg-white/10 hover:text-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                    aria-expanded={essaysExpanded}
+                    aria-controls={`${menuId}-essays-sub`}
+                    id={`${menuId}-essays-chevron`}
+                    aria-label={
+                      essaysExpanded
+                        ? 'Collapse Essay Guides submenu'
+                        : 'Expand Essay Guides submenu'
+                    }
+                    onClick={() => setEssaysExpanded((o) => !o)}
+                  >
+                    <ChevronDown
+                      className={clsx(
+                        'h-5 w-5 shrink-0 transition-transform duration-200 ease-out',
+                        essaysExpanded && 'rotate-180'
+                      )}
+                      aria-hidden
+                    />
+                  </button>
+                </div>
+                <div
+                  id={`${menuId}-essays-sub`}
+                  role="region"
+                  aria-label="Essay Guides links"
+                  className={clsx(
+                    'grid transition-[grid-template-rows] duration-200 ease-out',
+                    essaysExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <div
+                      className="mb-1 ml-3 mt-0.5 flex flex-col gap-1 border-l border-white/15 pl-3"
+                      role="group"
+                      aria-label="Guides and AI mentor"
+                    >
+                      {ESSAYS_GUIDE_SUBLINKS.map((item) => {
+                        const active =
+                          item.href === ESSAYS_SECTION_PATH
+                            ? essaysSectionActive
+                            : essayMentorActive;
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className={clsx(
+                              nav.darkDrawerSub,
+                              'flex flex-col gap-0.5 py-2.5',
+                              active && nav.darkDrawerSubActive
+                            )}
+                            onClick={closeMenu}
+                          >
+                            <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+                              {item.featured ? (
+                                <Sparkles
+                                  className="h-3 w-3 text-orange-400"
+                                  strokeWidth={2}
+                                  aria-hidden
+                                />
+                              ) : null}
+                              {item.kicker}
+                            </span>
+                            <span className="text-sm font-semibold text-zinc-200">
+                              {item.title}
+                            </span>
+                            <span className="text-xs font-normal leading-snug text-zinc-500">
+                              {item.description}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <NavbarUserSlot
                 pathname={pathname}
                 variant="drawer"

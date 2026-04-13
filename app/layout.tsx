@@ -15,6 +15,7 @@ import {
   GoogleTagManagerNoScript
 } from '@/components/analytics/GoogleTagManager';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
+import AnalyticsTracker from '@/components/AnalyticsTracker';
 import 'styles/main.css';
 
 const defaultDescription =
@@ -142,6 +143,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           <Toaster />
         </Suspense>
         <WebVitalsClient />
+        <AnalyticsTracker />
       </body>
     </html>
   );

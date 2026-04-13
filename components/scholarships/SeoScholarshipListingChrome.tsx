@@ -8,6 +8,7 @@ import {
   scholarshipRichProseClassName
 } from '@/components/scholarships/SafeScholarshipHtml';
 import { ScholarshipSeoBlock } from '@/components/scholarships/ScholarshipSeoBlock';
+import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { stripSeoAdditionalResourcesSection } from '@/lib/scholarships/stripSeoAdditionalResourcesSection';
 import { stripNumericSuffixFromSeoHeading } from '@/lib/scholarships/seoAiNumericSanitizer';
 import type { SeoListingPageData } from '@/lib/scholarships/seoScholarshipPageData';
@@ -593,24 +594,14 @@ export function SeoScholarshipPostListingSeo({
       </div>
 
       {generatedFaq && generatedFaq.length > 0 ? (
-        <div className="space-y-2.5">
-          <h2 className="text-base font-semibold text-zinc-900">FAQ</h2>
-          <dl className="space-y-2">
-            {generatedFaq.map((item, i) => (
-              <div
-                key={`${i}-${item.question.slice(0, 20)}`}
-                className="rounded-lg border border-slate-200/60 bg-slate-50/40 px-3 py-2.5"
-              >
-                <dt className="text-sm font-medium text-zinc-900">
-                  {item.question}
-                </dt>
-                <dd className="mt-1 text-sm leading-relaxed text-slate-600">
-                  {item.answer}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        <SiteFaqAccordion
+          items={generatedFaq}
+          as="div"
+          headingClassName="text-base font-semibold text-zinc-900"
+          headingId="seo-listing-faq-heading"
+          headingToAccordionClassName="mt-2.5"
+          idPrefix="seo-listing-faq"
+        />
       ) : null}
     </div>
   );

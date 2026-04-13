@@ -1,18 +1,32 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
 
 type ScholarshipSubscriptionOfferModalProps = {
   open: boolean;
   onClose: () => void;
+  /**
+   * Maybe Later, backdrop, X, Escape — e.g. continue another flow after closing.
+   * If omitted, only `onClose` runs.
+   */
+  onSecondaryAction?: () => void;
+  /** Get Free Access — e.g. clear a pending action before navigating to /subscription. */
+  onPrimaryClick?: () => void;
 };
 
 export default function ScholarshipSubscriptionOfferModal({
   open,
-  onClose
+  onClose,
+  onSecondaryAction,
+  onPrimaryClick
 }: ScholarshipSubscriptionOfferModalProps) {
+  const dismiss = useCallback(() => {
+    onSecondaryAction?.();
+    onClose();
+  }, [onClose, onSecondaryAction]);
+
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -25,11 +39,11 @@ export default function ScholarshipSubscriptionOfferModal({
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') dismiss();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+  }, [open, dismiss]);
 
   if (!open) return null;
 
@@ -39,7 +53,7 @@ export default function ScholarshipSubscriptionOfferModal({
         type="button"
         aria-label="Close dialog"
         className="absolute inset-0 bg-zinc-900/45 backdrop-blur-[2px]"
-        onClick={onClose}
+        onClick={dismiss}
       />
 
       <div
@@ -51,7 +65,7 @@ export default function ScholarshipSubscriptionOfferModal({
         <button
           type="button"
           aria-label="Close"
-          onClick={onClose}
+          onClick={dismiss}
           className="absolute right-4 top-4 rounded-lg p-1 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/55 focus-visible:ring-offset-0"
         >
           <X className="h-5 w-5" strokeWidth={2} aria-hidden />
@@ -72,14 +86,17 @@ export default function ScholarshipSubscriptionOfferModal({
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <Link
             href="/subscription"
-            onClick={onClose}
+            onClick={() => {
+              onPrimaryClick?.();
+              onClose();
+            }}
             className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-0 sm:w-auto sm:min-w-[220px]"
           >
             Get Free Access
           </Link>
           <button
             type="button"
-            onClick={onClose}
+            onClick={dismiss}
             className="inline-flex h-11 w-full items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-700 shadow-sm transition hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-0 sm:w-auto"
           >
             Maybe Later

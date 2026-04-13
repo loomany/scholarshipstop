@@ -11,6 +11,7 @@ import {
 } from '@/lib/constants/scholarshipActionUi';
 import { REQUIREMENT_TYPE_OPTIONS } from '@/app/scholarships/moreFilters';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
+import { SITE_SEARCH_INPUT_CHROME } from '@/lib/constants/catalogControlBar';
 import {
   EASY_APPLY_OPTIONS,
   EDUCATION_LEVEL_OPTIONS,
@@ -119,8 +120,7 @@ const sectionTitle = 'text-sm font-bold text-zinc-900';
 const sectionHint = 'mt-1 text-xs text-zinc-500';
 const divider = 'border-t border-zinc-200';
 
-const filterPanelStateInputClass =
-  'w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 shadow-sm transition placeholder:text-zinc-400 hover:border-zinc-300 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20';
+const filterPanelStateInputClass = `w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`;
 
 function toggleInSet(
   prev: Set<string>,

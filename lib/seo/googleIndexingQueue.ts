@@ -1,5 +1,3 @@
-import 'server-only';
-
 import fs from 'fs';
 import path from 'path';
 import { JWT } from 'google-auth-library';
@@ -12,7 +10,8 @@ import { getURL } from '@/utils/helpers';
 export type GoogleIndexingContentKind =
   | 'scholarship'
   | 'resource'
-  | 'provider';
+  | 'provider'
+  | 'essay';
 
 export type GoogleIndexingNotificationType = 'URL_UPDATED' | 'URL_DELETED';
 
@@ -85,6 +84,7 @@ function inferGoogleIndexingKindFromUrl(url: string): GoogleIndexingContentKind 
     if (pathname.startsWith('/scholarships/')) return 'scholarship';
     if (pathname.startsWith('/resources/')) return 'resource';
     if (pathname.startsWith('/providers/')) return 'provider';
+    if (pathname.startsWith('/essays/')) return 'essay';
     return null;
   } catch {
     return null;
@@ -130,6 +130,11 @@ export function scholarshipIndexingUrl(input: {
 
 export function resourceIndexingUrl(slug: string): string {
   return getURL(resourcesArticlePath(slug));
+}
+
+export function essayIndexingUrl(slug: string): string {
+  const s = slug.trim();
+  return getURL(s ? `/essays/${encodeURIComponent(s)}` : '/essays');
 }
 
 export function providerIndexingUrl(providerRouteId: string): string {
