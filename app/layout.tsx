@@ -14,6 +14,7 @@ import {
   GoogleTagManager,
   GoogleTagManagerNoScript
 } from '@/components/analytics/GoogleTagManager';
+import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import 'styles/main.css';
@@ -115,6 +116,18 @@ export default async function RootLayout({ children }: PropsWithChildren) {
       <body className={`${fontSans.className} bg-zinc-50 text-zinc-900`}>
         <GoogleTagManagerNoScript />
         <GoogleTagManager />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_AW_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-gtag" strategy="afterInteractive">
+          {`
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GOOGLE_ADS_AW_ID}');
+`}
+        </Script>
         <Script
           id="lemonsqueezy-js"
           src="https://app.lemonsqueezy.com/js/lemon.js"

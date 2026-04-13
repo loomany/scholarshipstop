@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { isSignupConversionEligibleUser } from '@/lib/analytics/googleAdsSignupConversion';
 import { syncOnboardingFromMetadataIfPresent } from '@/lib/onboarding/profilesOnboardingSync';
 import { notifyTelegramEmailVerified, notifyTelegramSignup } from '@/lib/telegram/bot';
 import type { Database } from '@/types_db';
@@ -199,6 +200,23 @@ export async function GET(request: NextRequest) {
         userId: userForSync.id,
         email: userForSync.email
       });
+    }
+  }
+
+  /**
+   * New-account sign-in / email confirm: one client-side hop so gtag can fire
+   * `conversion` + `dataLayer.push({ event: 'signup_success' })` (not URL-based).
+   */
+  if (userForSync && isSignupConversionEligibleUser(userForSync)) {
+    try {
+      const u = new URL(successUrl);
+      const nextAfterAuth = `${u.pathname}${u.search}`;
+      const conversionUrl = new URL('/auth/register-conversion', publicOrigin);
+      conversionUrl.searchParams.set('next', nextAfterAuth);
+      conversionUrl.searchParams.set('eligible', '1');
+      response.headers.set('Location', conversionUrl.toString());
+    } catch {
+      /* keep original Location */
     }
   }
 
