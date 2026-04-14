@@ -16,9 +16,9 @@ export default function EssayPageClient() {
     searchParams.get('scholarship')?.trim() || null;
 
   return (
-    <section className="min-h-screen bg-zinc-50 py-6 text-zinc-900 sm:py-10">
-      <div className="mx-auto w-full max-w-7xl px-3 sm:px-6">
-        <header className="mx-auto mb-0 max-w-3xl">
+    <section className="bg-zinc-50 py-6 text-zinc-900 sm:min-h-[100dvh] sm:py-10 max-sm:flex max-sm:h-[calc(100dvh-4rem)] max-sm:min-h-0 max-sm:flex-col max-sm:overflow-hidden">
+      <div className="mx-auto w-full max-w-7xl px-3 sm:px-6 max-sm:flex max-sm:min-h-0 max-sm:flex-1 max-sm:flex-col">
+        <header className="mx-auto mb-0 max-w-3xl shrink-0">
           <div className="mx-auto max-w-2xl rounded-2xl border border-zinc-200/90 bg-white px-5 py-6 shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] sm:px-6">
             <div className="text-center">
               <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
@@ -37,7 +37,7 @@ export default function EssayPageClient() {
           </div>
         </header>
 
-        <div className="mx-auto mt-10 flex max-w-3xl justify-center sm:mt-12">
+        <div className="mx-auto mt-6 flex w-full max-w-3xl flex-col max-sm:min-h-0 max-sm:flex-1 sm:mt-12">
           <EssayQuestionnaire
             initialChatIdFromQuery={initialChatIdFromQuery}
             initialScholarshipTitle={initialScholarshipTitle}
