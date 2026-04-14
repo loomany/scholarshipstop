@@ -6,14 +6,14 @@ import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/schol
  * (e.g. same value you would put in {{ .ConfirmationURL }}).
  */
 export const EMAIL_SUBJECT_CONFIRM_SIGNUP =
-  '🎓 Welcome to ScholarshipTop! Confirm your email';
+  'Welcome to ScholarshipTop! Confirm your email';
 
 export const EMAIL_SUBJECT_MAGIC_LINK = 'Your magic link for ScholarshipTop';
 
 export const EMAIL_SUBJECT_RESET_PASSWORD = 'Reset your password';
 
 export function emailSubjectNewMatches(matchCount: number): string {
-  return `⚡️ ${matchCount} new scholarships found for you!`;
+  return `${matchCount} new scholarships found for you!`;
 }
 
 export function defaultEmailUnsubscribeUrl(siteOrigin: string): string {

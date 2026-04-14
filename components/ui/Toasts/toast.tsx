@@ -14,7 +14,7 @@ const ToastViewport = React.forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={cn(
-      'pointer-events-none fixed inset-x-0 bottom-0 z-[100] flex max-h-screen w-full flex-col-reverse gap-3 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:inset-x-auto sm:right-4 sm:bottom-4 sm:left-auto sm:max-w-[min(420px,calc(100vw-2rem))]',
+      'pointer-events-none fixed inset-x-0 bottom-0 z-[100] flex max-h-screen w-full flex-col-reverse gap-3 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:inset-x-auto sm:right-4 sm:bottom-4 sm:left-auto sm:max-w-[min(560px,calc(100vw-2rem))]',
       className
     )}
     {...props}
@@ -23,7 +23,7 @@ const ToastViewport = React.forwardRef<
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
 const toastVariants = cva(
-  'group pointer-events-auto relative flex w-full items-start justify-between gap-3 overflow-hidden rounded-lg border border-zinc-200/90 bg-white p-4 pr-10 text-left shadow-[0_4px_24px_rgba(15,23,42,0.08)] transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-bottom-full data-[state=open]:slide-in-from-bottom-full dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:shadow-[0_4px_24px_rgba(0,0,0,0.35)]',
+  'group pointer-events-auto relative flex w-full flex-col gap-3 overflow-hidden rounded-lg border border-zinc-200/90 bg-white p-4 pr-10 text-left shadow-[0_4px_24px_rgba(15,23,42,0.08)] transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-bottom-full data-[state=open]:slide-in-from-bottom-full sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:rounded-xl sm:p-5 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:shadow-[0_4px_24px_rgba(0,0,0,0.35)]',
   {
     variants: {
       variant: {
@@ -63,7 +63,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-      'inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-transparent px-3 text-sm font-medium ring-offset-white transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.warning]:border-amber-300/80 group-[.warning]:hover:bg-amber-100/80 dark:group-[.warning]:border-amber-800 group-[.destructive]:border-zinc-100/40 group-[.destructive]:hover:border-red-500/30 group-[.destructive]:hover:bg-red-500 group-[.destructive]:hover:text-zinc-50 group-[.destructive]:focus:ring-red-500 dark:border-zinc-800 dark:ring-offset-zinc-950 dark:hover:bg-zinc-800 dark:focus:ring-zinc-300 dark:group-[.destructive]:border-zinc-800/40 dark:group-[.destructive]:hover:border-red-900/30 dark:group-[.destructive]:hover:bg-red-900 dark:group-[.destructive]:hover:text-zinc-50 dark:group-[.destructive]:focus:ring-red-900',
+      'inline-flex h-auto min-h-10 w-full shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-transparent px-3 py-2 text-sm font-medium ring-offset-white transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.warning]:border-amber-300/80 group-[.warning]:hover:bg-amber-100/80 dark:group-[.warning]:border-amber-800 group-[.destructive]:border-zinc-100/40 group-[.destructive]:hover:border-red-500/30 group-[.destructive]:hover:bg-red-500 group-[.destructive]:hover:text-zinc-50 group-[.destructive]:focus:ring-red-500 dark:border-zinc-800 dark:ring-offset-zinc-950 dark:hover:bg-zinc-800 dark:focus:ring-zinc-300 dark:group-[.destructive]:border-zinc-800/40 dark:group-[.destructive]:hover:border-red-900/30 dark:group-[.destructive]:hover:bg-red-900 dark:group-[.destructive]:hover:text-zinc-50 dark:group-[.destructive]:focus:ring-red-900 sm:h-8 sm:min-h-8 sm:w-auto sm:py-0',
       className
     )}
     {...props}
@@ -96,7 +96,7 @@ const ToastTitle = React.forwardRef<
   <ToastPrimitives.Title
     ref={ref}
     className={cn(
-      'text-base font-bold leading-snug text-zinc-900 group-[.warning]:text-zinc-900 group-[.destructive]:text-zinc-50 dark:text-zinc-50 dark:group-[.warning]:text-zinc-50',
+      'text-balance text-base font-bold leading-snug text-zinc-900 group-[.warning]:text-zinc-900 group-[.destructive]:text-zinc-50 dark:text-zinc-50 dark:group-[.warning]:text-zinc-50',
       className
     )}
     {...props}
@@ -111,7 +111,7 @@ const ToastDescription = React.forwardRef<
   <ToastPrimitives.Description
     ref={ref}
     className={cn(
-      'text-sm leading-snug text-zinc-600 group-[.warning]:text-zinc-700 group-[.destructive]:text-red-100 dark:text-zinc-300 dark:group-[.warning]:text-zinc-300',
+      'text-pretty text-sm leading-relaxed text-zinc-600 group-[.warning]:text-zinc-700 group-[.destructive]:text-red-100 dark:text-zinc-300 dark:group-[.warning]:text-zinc-300',
       className
     )}
     {...props}

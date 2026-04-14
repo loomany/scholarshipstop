@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type AuthError, type Session, type User } from '@supabase/supabase-js';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
@@ -27,14 +27,35 @@ function safeAppPath(next: string | null): string | null {
   return path;
 }
 
+/** GoTrue email links: admin `generateLink` / magic links often use `token_hash` + `type`, not PKCE `code`. */
+const SUPABASE_EMAIL_OTP_TYPES = [
+  'signup',
+  'invite',
+  'magiclink',
+  'recovery',
+  'email_change',
+  'email'
+] as const;
+
+type SupabaseEmailOtpType = (typeof SUPABASE_EMAIL_OTP_TYPES)[number];
+
+function parseEmailOtpType(raw: string | null): SupabaseEmailOtpType | null {
+  if (!raw) return null;
+  return (SUPABASE_EMAIL_OTP_TYPES as readonly string[]).includes(raw)
+    ? (raw as SupabaseEmailOtpType)
+    : null;
+}
+
 /**
- * PKCE email-confirm / OAuth callback.
+ * PKCE (`code`) + OTP (`token_hash` + `type`) / OAuth callback.
  * Must attach session cookies to the **redirect** Response (Route Handler cannot rely on
  * `cookies()` from `next/headers` for this — sets are often dropped).
  */
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const token_hash = requestUrl.searchParams.get('token_hash');
+  const otpTypeRaw = requestUrl.searchParams.get('type');
   /**
    * Must follow the browser’s public host (x-forwarded-host), not `getURL()` / NEXT_PUBLIC_SITE_URL
    * alone — a mis-set env like https://localhost:8080 on Railway would otherwise redirect users
@@ -43,7 +64,7 @@ export async function GET(request: NextRequest) {
   const publicOrigin = getServerAuthSiteOrigin().replace(/\/+$/, '');
   const nextPath = safeAppPath(requestUrl.searchParams.get('next'));
 
-  if (!code) {
+  if (!code && !(token_hash && otpTypeRaw)) {
     return withNoStore(NextResponse.redirect(new URL('/signin', publicOrigin)));
   }
 
@@ -75,7 +96,30 @@ export async function GET(request: NextRequest) {
     }
   );
 
-  const { data: authData, error } = await supabase.auth.exchangeCodeForSession(code);
+  let authData: { user: User | null; session: Session | null } | null = null;
+  let error: AuthError | null = null;
+
+  if (code) {
+    const exchanged = await supabase.auth.exchangeCodeForSession(code);
+    authData = exchanged.data;
+    error = exchanged.error;
+  } else {
+    const otpType = parseEmailOtpType(otpTypeRaw);
+    if (!otpType || !token_hash) {
+      return withNoStore(
+        NextResponse.redirect(
+          getErrorRedirect(
+            `${publicOrigin}/signin`,
+            'Link invalid',
+            'This sign-in link is invalid or expired. Request a new link and try again.'
+          )
+        )
+      );
+    }
+    const verified = await supabase.auth.verifyOtp({ token_hash, type: otpType });
+    authData = verified.data;
+    error = verified.error;
+  }
 
   if (error) {
     return withNoStore(
@@ -90,7 +134,7 @@ export async function GET(request: NextRequest) {
   }
 
   /**
-   * Same-request pitfall: `exchangeCodeForSession` persists the session via `set` on the
+   * Same-request pitfall: `exchangeCodeForSession` / `verifyOtp` persists the session via `set` on the
    * redirect Response, but `getUser()` / `getSession()` read **request** cookies only.
    * Until the browser stores those cookies, storage looks empty — PostgREST then uses the
    * anon key, RLS blocks `profiles` upsert, and onboarding never syncs from metadata.

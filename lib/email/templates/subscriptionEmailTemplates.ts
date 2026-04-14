@@ -3,7 +3,7 @@ import { defaultEmailUnsubscribeUrl } from '@/lib/email/templates/premiumTemplat
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 
 export const EMAIL_SUBJECT_SUBSCRIPTION_ACTIVE =
-  'Welcome to ScholarshipTop! Your subscription is active 🎉';
+  'Welcome to ScholarshipTop! Your subscription is active';
 
 export const EMAIL_SUBJECT_SUBSCRIPTION_CANCELLED =
   'Your ScholarshipTop subscription has been cancelled';
