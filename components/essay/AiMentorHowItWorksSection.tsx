@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import { AiMentorCtaLink } from '@/components/essay/AiMentorCtaLink';
 
 const VIDEO_SRC = '/videos/IMG_1482.MP4';
+/** Shown until the first frame decodes (fixes blank/gray box on Safari/mobile). */
+const VIDEO_POSTER = '/logo-preview.png';
 
 /** One orange for every icon (`currentColor` on the wrapper → uniform Lucide strokes). */
 const STEP_ICON_WRAP = 'mt-0.5 inline-flex shrink-0 text-orange-500';
@@ -56,15 +58,16 @@ export function AiMentorHowItWorksSection({
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-center lg:gap-12 xl:gap-16">
         {/* Video + CTA first in DOM → stacked on mobile */}
         <div className="flex min-w-0 flex-col gap-3 sm:gap-3.5">
-          <div className="aspect-video w-full overflow-hidden rounded-3xl bg-gray-100 shadow-2xl ring-1 ring-zinc-200/60">
+          <div className="aspect-video w-full overflow-hidden rounded-3xl bg-zinc-950 shadow-2xl ring-1 ring-zinc-200/60">
             <video
               controls
               playsInline
-              preload="metadata"
+              preload="auto"
+              poster={VIDEO_POSTER}
               controlsList="nodownload noremoteplayback"
               disablePictureInPicture
               disableRemotePlayback
-              className="h-full w-full object-cover"
+              className="h-full w-full bg-black object-cover"
             >
               <source src={VIDEO_SRC} type="video/mp4" />
             </video>

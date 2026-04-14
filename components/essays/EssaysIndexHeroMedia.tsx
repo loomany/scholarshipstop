@@ -5,9 +5,10 @@ import { AiMentorCtaLink } from '@/components/essay/AiMentorCtaLink';
  * Place the file at `public/videos/IMG_1482.MP4` (or set VIDEO_SRC below).
  */
 const VIDEO_SRC = '/videos/IMG_1482.MP4';
+const VIDEO_POSTER = '/logo-preview.png';
 
 const mediaShellClass =
-  'w-full overflow-hidden rounded-2xl border border-gray-100 bg-gray-100 shadow-xl ring-1 ring-gray-100';
+  'w-full overflow-hidden rounded-2xl border border-gray-100 bg-zinc-950 shadow-xl ring-1 ring-gray-100';
 
 /** Same as essay guide card hero in `EssaysGrid`: `aspect-[16/10]`. */
 const CARD_COVER_ASPECT = 'aspect-[16/10]';
@@ -46,8 +47,9 @@ function LocalVideoFile() {
         disablePictureInPicture
         disableRemotePlayback
         playsInline
-        preload="metadata"
-        className="h-full w-full object-cover"
+        preload="auto"
+        poster={VIDEO_POSTER}
+        className="h-full w-full bg-black object-cover"
       >
         <source src={VIDEO_SRC} type="video/mp4" />
         Your browser does not support the video tag.
