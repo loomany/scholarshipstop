@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
+import { EssaysIndexHeroMedia } from '@/components/essays/EssaysIndexHeroMedia';
+import { EssaysIndexResultSummary } from '@/components/essays/EssaysIndexResultSummary';
 import EssaysIndexToolbar from '@/components/essays/EssaysIndexToolbar';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import {
@@ -157,7 +159,7 @@ export default async function EssaysIndexPage({
           }}
         />
       ) : null}
-      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
+      <div className="mx-auto w-full max-w-7xl px-4 pb-10 pt-5 sm:px-6 sm:pb-12 sm:pt-6 lg:pb-14 lg:pt-6">
         <nav className="text-sm text-gray-500" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
@@ -177,41 +179,92 @@ export default async function EssaysIndexPage({
           </ol>
         </nav>
 
-        <header className="mt-8 max-w-3xl">
-          <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
-            {ESSAYS_PAGE_TITLE}
-          </h1>
-          <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-            How-to guides for scholarship essays—structured prompts, outlines,
-            and revision checklists. For browsing awards, use the scholarship
-            directory.
-          </p>
-        </header>
-
         {hasAnyPublished ? (
           <Suspense
             fallback={
               <div
-                className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
+                className="mt-4 flex flex-col gap-6 sm:mt-5 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-x-8 lg:gap-y-0 xl:gap-x-10"
                 aria-hidden
-              />
+              >
+                <div className="min-w-0 space-y-4">
+                  <div className="h-28 w-full max-w-xl animate-pulse rounded-2xl bg-gray-100 sm:h-32" />
+                  <div className="h-24 w-full animate-pulse rounded-2xl bg-gray-100" />
+                </div>
+                <div className="h-44 w-full max-w-sm shrink-0 animate-pulse rounded-2xl bg-gray-100 lg:mx-0 lg:max-w-none" />
+              </div>
             }
           >
-            <EssaysIndexToolbar
-              categoryOptions={categoryOptions}
-              resultCount={total}
-              showingFrom={showingFrom}
-              showingTo={showingTo}
-            />
+            {/*
+              Title + toolbar share the left column with the video on the right (`lg`+).
+              Stacking toolbar then a full-width `justify-end` video row left the left
+              half of the row empty beside a tall video.
+            */}
+            <section className="mt-4 flex flex-col gap-6 sm:mt-5 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-x-8 lg:gap-y-0 xl:gap-x-10">
+              <div className="min-w-0 space-y-4 sm:space-y-5">
+                <header>
+                  <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
+                    {ESSAYS_PAGE_TITLE}
+                  </h1>
+                  <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
+                    How-to guides for scholarship essays—structured prompts,
+                    outlines, and revision checklists. For browsing awards, use
+                    the scholarship directory.
+                  </p>
+                </header>
+                <EssaysIndexToolbar
+                  categoryOptions={categoryOptions}
+                  resultCount={total}
+                  showingFrom={showingFrom}
+                  showingTo={showingTo}
+                  className="mt-0 w-full max-w-none"
+                />
+              </div>
+              <aside className="w-full max-w-sm shrink-0 lg:max-w-none lg:w-full">
+                <EssaysIndexHeroMedia
+                  youtubeVideoId={
+                    process.env.NEXT_PUBLIC_ESSAYS_HERO_YOUTUBE_ID?.trim() ||
+                    null
+                  }
+                />
+                <EssaysIndexResultSummary
+                  resultCount={total}
+                  showingFrom={showingFrom}
+                  showingTo={showingTo}
+                  className="mt-2 lg:hidden"
+                />
+              </aside>
+            </section>
           </Suspense>
-        ) : null}
+        ) : (
+          <>
+            <header className="mt-4 max-w-3xl sm:mt-5">
+              <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
+                {ESSAYS_PAGE_TITLE}
+              </h1>
+              <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
+                How-to guides for scholarship essays—structured prompts, outlines,
+                and revision checklists. For browsing awards, use the scholarship
+                directory.
+              </p>
+            </header>
+            <div className="mt-6 flex justify-center sm:mt-8 lg:justify-end">
+              <div className="w-full max-w-[min(20rem,100%)] sm:max-w-sm">
+                <EssaysIndexHeroMedia
+                  youtubeVideoId={
+                    process.env.NEXT_PUBLIC_ESSAYS_HERO_YOUTUBE_ID?.trim() || null
+                  }
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         {!hasAnyPublished ? (
-          <p className="mt-12 text-center text-gray-600">
+          <p className="mt-8 text-center text-gray-600 sm:mt-10">
             No published essay guides yet. Check back soon.
           </p>
         ) : total === 0 ? (
-          <p className="mt-12 text-center text-gray-600">
+          <p className="mt-8 text-center text-gray-600 sm:mt-10">
             No guides match your filters. Try clearing search or categories.
           </p>
         ) : (

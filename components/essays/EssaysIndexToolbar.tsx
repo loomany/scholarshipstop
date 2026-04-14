@@ -12,6 +12,8 @@ import { createPortal } from 'react-dom';
 import { ChevronDown, LayoutGrid, Search, SlidersHorizontal } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import clsx from 'clsx';
+
 import {
   CATALOG_CONTROL_BAR_BTN,
   CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS
@@ -24,6 +26,8 @@ import {
   type EssaysIndexQueryState
 } from '@/lib/essays/essaysIndexFilters';
 import { ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
+
+import { EssaysIndexResultSummary } from '@/components/essays/EssaysIndexResultSummary';
 
 const CATEGORY_PANEL_GAP = 8;
 const CATEGORY_PANEL_VPAD = 12;
@@ -73,13 +77,16 @@ type EssaysIndexToolbarProps = {
   resultCount: number;
   showingFrom: number;
   showingTo: number;
+  /** Merged onto the root wrapper (e.g. `mt-0` beside hero video). */
+  className?: string;
 };
 
 export default function EssaysIndexToolbar({
   categoryOptions,
   resultCount,
   showingFrom,
-  showingTo
+  showingTo,
+  className
 }: EssaysIndexToolbarProps) {
   const router = useRouter();
   const sp = useSearchParams();
@@ -365,7 +372,12 @@ export default function EssaysIndexToolbar({
     );
 
   return (
-    <div className="relative z-[70] mt-6 max-w-3xl space-y-2">
+    <div
+      className={clsx(
+        'relative z-[70] mt-6 max-w-3xl space-y-2',
+        className
+      )}
+    >
       <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
         <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
           <div className="relative min-w-0 flex-1">
@@ -437,13 +449,12 @@ export default function EssaysIndexToolbar({
         </div>
       </div>
 
-      {resultCount > 0 ? (
-        <p className="text-sm text-gray-500">
-          {showingFrom >= 1 && showingTo >= showingFrom
-            ? `Showing ${showingFrom}–${showingTo} of ${resultCount} guides`
-            : `Found ${resultCount} guides`}
-        </p>
-      ) : null}
+      <EssaysIndexResultSummary
+        resultCount={resultCount}
+        showingFrom={showingFrom}
+        showingTo={showingTo}
+        className="hidden lg:block"
+      />
 
       {categoryDropdown}
       {filtersDropdown}

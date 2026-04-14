@@ -16,6 +16,7 @@ import {
   Zap
 } from 'lucide-react';
 
+import { AiMentorHowItWorksSection } from '@/components/essay/AiMentorHowItWorksSection';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import ScholarshipPreviewList from '@/components/scholarships/ScholarshipPreviewList';
 
@@ -83,6 +84,9 @@ export default function HomePageClient() {
 
   const listIconClass = 'mt-1 h-6 w-6 shrink-0 text-gray-500';
 
+  /** “Everything in one place” — uniform orange outline icons (same as book accent). */
+  const worksListIconClass = 'mt-1 h-6 w-6 shrink-0 text-orange-500';
+
   return (
     <div className="bg-white text-gray-900 antialiased">
       {/* 1. Hero */}
@@ -126,6 +130,15 @@ export default function HomePageClient() {
               </HomePrimaryCtaClient>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* 1b. AI Essay Mentor — how it works (same block as /essay) */}
+      <section
+        className={`border-b border-gray-100 bg-white pt-8 pb-10 sm:pt-10 sm:pb-12 lg:pb-14 ${homeSectionPadX}`}
+      >
+        <div className={container}>
+          <AiMentorHowItWorksSection className="mt-0" />
         </div>
       </section>
 
@@ -236,7 +249,7 @@ export default function HomePageClient() {
               <ul className="mt-8 w-full max-w-lg space-y-5 text-left text-lg text-gray-600 sm:mt-9 sm:space-y-6 sm:text-xl lg:max-w-none">
                 <li className="flex gap-4">
                   <Check
-                    className={`${listIconClass} text-emerald-600`}
+                    className={worksListIconClass}
                     strokeWidth={2}
                     aria-hidden
                   />
@@ -246,21 +259,25 @@ export default function HomePageClient() {
                 </li>
                 <li className="flex gap-4">
                   <Heart
-                    className={`${listIconClass} text-emerald-600`}
+                    className={worksListIconClass}
                     strokeWidth={2}
                     aria-hidden
                   />
                   <span className="leading-snug">Save the ones you like</span>
                 </li>
                 <li className="flex gap-4">
-                  <Layers className={listIconClass} strokeWidth={2} aria-hidden />
+                  <Layers
+                    className={worksListIconClass}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
                   <span className="leading-snug">
                     Ignore what doesn&apos;t fit
                   </span>
                 </li>
                 <li className="flex gap-4">
                   <BookOpen
-                    className={`${listIconClass} text-orange-500`}
+                    className={worksListIconClass}
                     strokeWidth={2}
                     aria-hidden
                   />
