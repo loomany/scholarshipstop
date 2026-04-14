@@ -5,7 +5,7 @@ import { AiMentorCtaLink } from '@/components/essay/AiMentorCtaLink';
  * Place the file at `public/videos/IMG_1482.MP4` (or set VIDEO_SRC below).
  */
 const VIDEO_SRC = '/videos/IMG_1482.MP4';
-const VIDEO_POSTER = '/logo-preview.png';
+const VIDEO_POSTER = '/images/essay-mentor-video-poster.png';
 
 const mediaShellClass =
   'w-full overflow-hidden rounded-2xl border border-gray-100 bg-zinc-950 shadow-xl ring-1 ring-gray-100';

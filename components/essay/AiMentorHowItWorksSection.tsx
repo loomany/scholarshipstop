@@ -4,8 +4,8 @@ import clsx from 'clsx';
 import { AiMentorCtaLink } from '@/components/essay/AiMentorCtaLink';
 
 const VIDEO_SRC = '/videos/IMG_1482.MP4';
-/** Until first frame decodes; replace with `/video-thumbnail.jpg` when that asset exists in `public/`. */
-const VIDEO_POSTER = '/logo-preview.png';
+/** Hero frame before playback (`public/images/essay-mentor-video-poster.png`). */
+const VIDEO_POSTER = '/images/essay-mentor-video-poster.png';
 
 /** One orange for every icon (`currentColor` on the wrapper → uniform Lucide strokes). */
 const STEP_ICON_WRAP = 'mt-0.5 inline-flex shrink-0 text-orange-500';
