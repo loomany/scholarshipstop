@@ -20,8 +20,13 @@ import {
   RESOURCES_SECTION_PATH
 } from '@/lib/content-hub/resourcesSection';
 import { ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
+import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import NavbarUserSlot from './NavbarUserSlot';
 import s from './Navbar.module.css';
+
+type NavlinksProps = {
+  initialNavbarAuth?: NavbarInitialAuth;
+};
 
 const ABOUT_SUBLINKS = [
   { href: '/help', label: 'Help' },
@@ -62,7 +67,7 @@ function sublinkActive(href: string, pathname: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export default function Navlinks() {
+export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
   const pathname = usePathname() ?? '';
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
@@ -339,7 +344,11 @@ export default function Navlinks() {
           </nav>
         </div>
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3">
-          <NavbarUserSlot pathname={pathname} variant="header" />
+          <NavbarUserSlot
+            pathname={pathname}
+            variant="header"
+            initialNavbarAuth={initialNavbarAuth}
+          />
         </div>
       </div>
 
@@ -585,6 +594,7 @@ export default function Navlinks() {
                 pathname={pathname}
                 variant="drawer"
                 onNavigate={closeMenu}
+                initialNavbarAuth={initialNavbarAuth}
               />
             </nav>
           </div>

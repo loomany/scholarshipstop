@@ -8,10 +8,10 @@ import clsx from 'clsx';
 
 import {
   accountNavbarLabel,
-  accountNavbarLabelMobile,
   profileDisplayNameFromRow,
   profileFirstNameFromRow
 } from '@/lib/nav/accountDisplayName';
+import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import { createClient } from '@/utils/supabase/client';
 
@@ -19,22 +19,41 @@ type NavbarUserSlotProps = {
   pathname: string;
   variant: 'header' | 'drawer';
   onNavigate?: () => void;
+  initialNavbarAuth?: NavbarInitialAuth;
 };
+
+function stubUserFromInitial(initial: NonNullable<NavbarInitialAuth>): User {
+  return {
+    id: initial.userId,
+    email: initial.email ?? undefined
+  } as User;
+}
 
 export default function NavbarUserSlot({
   pathname,
   variant,
-  onNavigate
+  onNavigate,
+  initialNavbarAuth = null
 }: NavbarUserSlotProps) {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [profileDisplayName, setProfileDisplayName] = useState<string | null>(null);
-  const [profileFirstName, setProfileFirstName] = useState<string | null>(null);
+  const [clientUser, setClientUser] = useState<User | null>(null);
+  const [authSyncDone, setAuthSyncDone] = useState(false);
+  const [profileDisplayName, setProfileDisplayName] = useState<string | null>(
+    () => initialNavbarAuth?.profileDisplayName ?? null
+  );
+  const [profileFirstName, setProfileFirstName] = useState<string | null>(
+    () => initialNavbarAuth?.profileFirstName ?? null
+  );
+  /** Avoid showing email as a label until `profiles` has been read at least once (client-only sign-in). */
+  const [profileQueryIdle, setProfileQueryIdle] = useState(
+    () => Boolean(initialNavbarAuth)
+  );
 
   useEffect(() => {
     const supabase = createClient();
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      setClientUser(session?.user ?? null);
+      setAuthSyncDone(true);
     });
     return () => {
       sub.subscription.unsubscribe();
@@ -44,17 +63,35 @@ export default function NavbarUserSlot({
   useEffect(() => {
     const supabase = createClient();
     void supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      setClientUser(session?.user ?? null);
+      setAuthSyncDone(true);
     });
   }, [pathname]);
+
+  const user = useMemo(() => {
+    if (!authSyncDone && initialNavbarAuth) {
+      return stubUserFromInitial(initialNavbarAuth);
+    }
+    return clientUser;
+  }, [authSyncDone, clientUser, initialNavbarAuth]);
 
   useEffect(() => {
     const uid = user?.id;
     if (!uid) {
       setProfileDisplayName(null);
       setProfileFirstName(null);
+      setProfileQueryIdle(false);
       return;
     }
+
+    const serverPrefetched =
+      initialNavbarAuth != null && initialNavbarAuth.userId === uid;
+    if (serverPrefetched) {
+      setProfileQueryIdle(true);
+    } else {
+      setProfileQueryIdle(false);
+    }
+
     let cancelled = false;
     const supabase = createClient();
     void supabase
@@ -63,24 +100,29 @@ export default function NavbarUserSlot({
       .eq('id', uid)
       .maybeSingle()
       .then(({ data, error }) => {
-        if (cancelled || error) return;
-        setProfileDisplayName(profileDisplayNameFromRow(data));
-        setProfileFirstName(profileFirstNameFromRow(data));
+        if (cancelled) return;
+        if (!error) {
+          setProfileDisplayName(profileDisplayNameFromRow(data));
+          setProfileFirstName(profileFirstNameFromRow(data));
+        }
+        setProfileQueryIdle(true);
       });
     return () => {
       cancelled = true;
     };
-  }, [user?.id]);
+  }, [user?.id, initialNavbarAuth]);
 
   const accountLabel = useMemo(() => {
     if (!user) return '';
-    return accountNavbarLabel(profileDisplayName, user);
-  }, [profileDisplayName, user]);
-
-  const accountLabelMobile = useMemo(() => {
-    if (!user) return '';
-    return accountNavbarLabelMobile(profileFirstName, profileDisplayName, user);
-  }, [profileDisplayName, profileFirstName, user]);
+    if (
+      !profileQueryIdle &&
+      !String(profileFirstName ?? '').trim() &&
+      !String(profileDisplayName ?? '').trim()
+    ) {
+      return 'Account';
+    }
+    return accountNavbarLabel(profileFirstName, profileDisplayName, user);
+  }, [profileDisplayName, profileFirstName, profileQueryIdle, user]);
 
   const accountActive = useMemo(
     () => pathname === '/account' || pathname.startsWith('/account/'),
@@ -95,9 +137,11 @@ export default function NavbarUserSlot({
   const signOut = useCallback(async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    setUser(null);
+    setClientUser(null);
+    setAuthSyncDone(true);
     setProfileDisplayName(null);
     setProfileFirstName(null);
+    setProfileQueryIdle(false);
     router.refresh();
   }, [router]);
 
@@ -136,8 +180,7 @@ export default function NavbarUserSlot({
             className={clsx(nav.dark, nav.darkAccount, accountActive && nav.darkActive)}
             title={accountLabel}
           >
-            <span className="lg:hidden">{accountLabelMobile}</span>
-            <span className="hidden lg:inline">{accountLabel}</span>
+            {accountLabel}
           </Link>
           <button
             type="button"

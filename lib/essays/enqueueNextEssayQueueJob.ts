@@ -17,6 +17,50 @@ function maxScanRows(): number {
 
 type CandidateRow = { id: string; title: string | null; slug: string | null };
 
+/** PostgREST default max rows per request is 1000; load everything for correct eligibility. */
+const ID_PAGE = 1000;
+
+async function loadAllScholarshipIdsWithEssay(
+  supabase: SupabaseClient<Database>
+): Promise<Set<string>> {
+  const out = new Set<string>();
+  for (let from = 0; ; from += ID_PAGE) {
+    const { data, error } = await supabase
+      .from('scholarship_essays')
+      .select('scholarship_id')
+      .order('scholarship_id', { ascending: true })
+      .range(from, from + ID_PAGE - 1);
+    if (error) throw new Error(error.message);
+    const rows = data ?? [];
+    for (const r of rows) {
+      if (r.scholarship_id) out.add(r.scholarship_id);
+    }
+    if (rows.length < ID_PAGE) break;
+  }
+  return out;
+}
+
+async function loadQueuedScholarshipIdsPendingOrProcessing(
+  supabase: SupabaseClient<Database>
+): Promise<Set<string>> {
+  const out = new Set<string>();
+  for (let from = 0; ; from += ID_PAGE) {
+    const { data, error } = await supabase
+      .from('essay_generation_queue')
+      .select('scholarship_id')
+      .in('status', ['pending', 'processing'])
+      .order('id', { ascending: true })
+      .range(from, from + ID_PAGE - 1);
+    if (error) throw new Error(error.message);
+    const rows = data ?? [];
+    for (const r of rows) {
+      if (r.scholarship_id) out.add(r.scholarship_id);
+    }
+    if (rows.length < ID_PAGE) break;
+  }
+  return out;
+}
+
 export type EnqueueNextEssayQueueJobResult =
   | {
       ok: true;
@@ -50,22 +94,8 @@ export async function enqueueNextEssayQueueJob(
     .in('status', ['pending', 'processing']);
   if (cErr) throw new Error(cErr.message);
 
-  const { data: essayRows, error: eErr } = await supabase
-    .from('scholarship_essays')
-    .select('scholarship_id');
-  if (eErr) throw new Error(eErr.message);
-  const withEssay = new Set(
-    (essayRows ?? []).map((r) => r.scholarship_id).filter(Boolean)
-  );
-
-  const { data: queuedRows, error: qErr } = await supabase
-    .from('essay_generation_queue')
-    .select('scholarship_id')
-    .in('status', ['pending', 'processing']);
-  if (qErr) throw new Error(qErr.message);
-  const inQueue = new Set(
-    (queuedRows ?? []).map((r) => r.scholarship_id).filter(Boolean)
-  );
+  const withEssay = await loadAllScholarshipIdsWithEssay(supabase);
+  const inQueue = await loadQueuedScholarshipIdsPendingOrProcessing(supabase);
 
   const eligible = (rows: CandidateRow[]) =>
     rows.filter((s) => s.id && !withEssay.has(s.id) && !inQueue.has(s.id));

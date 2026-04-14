@@ -4,6 +4,7 @@
 #
 # Does NOT use CRON_SECRET: runs `processOneEssayQueueItem` in-process (no call to Vercel).
 # Repo secrets (Settings → Secrets): SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY, FAL_KEY
+# Use the service_role JWT from Supabase (Settings → API), not the anon key — otherwise the queue table is invisible (RLS).
 name: Essay Hub pipeline
 
 on:

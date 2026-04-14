@@ -16,6 +16,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 import { enqueueNextEssayQueueJob } from '@/lib/essays/enqueueNextEssayQueueJob';
+import { resetStaleProcessingEssayQueueRows } from '@/lib/essays/runEssayGenerationJob';
 import type { Database } from '@/types_db';
 
 function serviceSupabase() {
@@ -47,6 +48,17 @@ const MAX_ROUNDS = 5000;
 
 async function main() {
   const supabase = serviceSupabase();
+  const staleReset = await resetStaleProcessingEssayQueueRows(supabase);
+  if (staleReset > 0) {
+    console.log(
+      JSON.stringify(
+        { stale_processing_reset_to_pending: staleReset },
+        null,
+        2
+      )
+    );
+  }
+
   const secret = cronSecretOrNull();
   const base = cronBaseUrl();
 

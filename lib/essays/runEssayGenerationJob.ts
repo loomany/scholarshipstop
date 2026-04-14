@@ -298,6 +298,38 @@ export async function claimNextPendingEssayQueueRow(
 }
 
 /**
+ * Workers that crash mid-job leave rows in `processing` forever — nothing is `pending`, so the
+ * queue looks empty. Move stale `processing` rows back to `pending` for retry.
+ *
+ * `ESSAY_QUEUE_STALE_PROCESSING_RESET_MINUTES` — min age of `updated_at` to reset (default 90).
+ * Set to `0` to disable.
+ */
+export async function resetStaleProcessingEssayQueueRows(
+  supabase: SupabaseClient<Database>
+): Promise<number> {
+  const raw = process.env.ESSAY_QUEUE_STALE_PROCESSING_RESET_MINUTES?.trim();
+  if (raw === '0') return 0;
+
+  const minutes = Math.max(5, Number(raw || '90') || 90);
+  const cutoff = new Date(Date.now() - minutes * 60_000).toISOString();
+
+  const { data, error } = await supabase
+    .from('essay_generation_queue')
+    .update({
+      status: 'pending',
+      error_message:
+        'requeued: stale processing (worker reset — safe to retry)',
+      updated_at: new Date().toISOString()
+    })
+    .eq('status', 'processing')
+    .lt('updated_at', cutoff)
+    .select('id');
+
+  if (error) throw new Error(error.message);
+  return data?.length ?? 0;
+}
+
+/**
  * When there are no `pending` jobs, promotes the oldest `failed` row to `pending` so the worker
  * can run the full pipeline again (including a fresh FAL hero attempt). Respects a cooldown from
  * `updated_at` so a tight fail loop does not spin.
@@ -360,6 +392,8 @@ export async function processOneEssayQueueItem(
 
   let queueId: string | null = null;
   try {
+    await resetStaleProcessingEssayQueueRows(supabase);
+
     let claimed = await claimNextPendingEssayQueueRow(supabase);
     if (!claimed) {
       await promoteOldestCooldownFailedQueueRowToPending(supabase);

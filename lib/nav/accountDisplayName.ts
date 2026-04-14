@@ -24,9 +24,9 @@ export function profileFirstNameFromRow(p: {
 }
 
 /**
- * Mobile navbar: first name → first token of full display name → email → fallback.
+ * Navbar account link (desktop + mobile): first name → first word of full name → email → fallback.
  */
-export function accountNavbarLabelMobile(
+export function accountNavbarLabel(
   firstNameFromProfile: string | null | undefined,
   profileDisplayName: string | null | undefined,
   user: Pick<User, 'email'> | null
@@ -44,17 +44,11 @@ export function accountNavbarLabelMobile(
   return 'Account';
 }
 
-/**
- * Navbar / account entry label: profiles display name → email → fallback.
- */
-export function accountNavbarLabel(
+/** @deprecated Use `accountNavbarLabel` — same behavior. */
+export function accountNavbarLabelMobile(
+  firstNameFromProfile: string | null | undefined,
   profileDisplayName: string | null | undefined,
   user: Pick<User, 'email'> | null
 ): string {
-  if (!user) return 'Account';
-  const fromProfile = profileDisplayName?.trim();
-  if (fromProfile) return fromProfile;
-  const em = user.email?.trim();
-  if (em) return em;
-  return 'Account';
+  return accountNavbarLabel(firstNameFromProfile, profileDisplayName, user);
 }
