@@ -2,7 +2,6 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import { AiMentorHowItWorksSection } from '@/components/essay/AiMentorHowItWorksSection';
 import {
   EssayQuestionnaire,
   parseEssayChatQueryParam
@@ -35,8 +34,6 @@ export default function EssayPageClient() {
             </div>
           </div>
         </header>
-
-        <AiMentorHowItWorksSection />
 
         <div className="mx-auto mt-10 flex max-w-3xl justify-center sm:mt-12">
           <EssayQuestionnaire initialChatIdFromQuery={initialChatIdFromQuery} />
