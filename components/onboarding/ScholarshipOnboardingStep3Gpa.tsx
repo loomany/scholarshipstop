@@ -16,10 +16,7 @@ import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrim
 import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
 
 const gpaSelectOptions = [
-  {
-    value: SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY,
-    label: 'Prefer not to say (optional)'
-  },
+  { value: '', label: 'Select your GPA' },
   ...SCHOLARSHIP_GPA_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 ];
 
@@ -41,7 +38,10 @@ export function ScholarshipOnboardingStep3Gpa({
   onBack,
   onContinue
 }: Props) {
-  const [gpa, setGpa] = useState(() => normalizeGpaForSelect(initialStep3.gpa));
+  const [gpa, setGpa] = useState(() => {
+    const n = normalizeGpaForSelect(initialStep3.gpa);
+    return n === SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY ? '' : n;
+  });
   const [error, setError] = useState<string | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -71,11 +71,6 @@ export function ScholarshipOnboardingStep3Gpa({
     runFinish(gpa);
   };
 
-  const handleSkip = () => {
-    setGpa(SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY);
-    runFinish(SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY);
-  };
-
   return (
     <div className="w-full space-y-6">
       <button
@@ -94,8 +89,7 @@ export function ScholarshipOnboardingStep3Gpa({
           What&apos;s your GPA?
         </h2>
         <p className="mx-auto mt-3 flex max-w-md flex-col gap-1 text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
-          <span>Optional — some scholarships use academic standing.</span>
-          <span>You can skip this step.</span>
+          <span>Some scholarships use academic standing.</span>
         </p>
         <p className="mx-auto mt-2.5 max-w-md text-sm leading-relaxed text-zinc-500 sm:max-w-lg">
           Adding your GPA can help surface scholarships that better match your
@@ -106,7 +100,7 @@ export function ScholarshipOnboardingStep3Gpa({
       <form className="space-y-5 text-left" onSubmit={handleSubmit} noValidate>
         <div>
           <label htmlFor="onb-gpa" className={sectionLabelClass}>
-            GPA (optional)
+            GPA
           </label>
           <DarkSelect
             id="onb-gpa"
@@ -124,21 +118,9 @@ export function ScholarshipOnboardingStep3Gpa({
           {error ? <p className={hintClass}>{error}</p> : null}
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
-          <button
-            type="submit"
-            disabled={disabled}
-            className={`${ONBOARDING_PRIMARY_BUTTON_CLASS} sm:order-2 sm:w-1/2`}
-          >
+        <div className="flex flex-col gap-3">
+          <button type="submit" disabled={disabled} className={ONBOARDING_PRIMARY_BUTTON_CLASS}>
             Continue →
-          </button>
-          <button
-            type="button"
-            disabled={disabled}
-            onClick={handleSkip}
-            className="w-full rounded-xl border border-zinc-300 bg-white px-6 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 disabled:opacity-50 sm:order-1 sm:w-1/2"
-          >
-            Skip
           </button>
         </div>
       </form>

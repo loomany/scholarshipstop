@@ -70,6 +70,13 @@ export const metadata: Metadata = {
     title: SITE_DEFAULT_TITLE,
     description: SITE_TITLE_TAGLINE,
     images: ['/logo-preview.png']
+  },
+  appleWebApp: {
+    title: SITE_DEFAULT_TITLE,
+    statusBarStyle: 'black'
+  },
+  other: {
+    'msapplication-TileColor': '#000000'
   }
 };
 
@@ -77,7 +84,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#ff7e00'
+  themeColor: '#000000'
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
@@ -111,7 +118,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className={fontSans.variable}>
       <head>
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ff7e00" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
       </head>
       <body className={`${fontSans.className} bg-zinc-50 text-zinc-900`}>
         <GoogleTagManagerNoScript />

@@ -1,6 +1,9 @@
-import { isValidGpaValue } from '@/lib/constants/scholarshipGpaOptions';
+import {
+  isValidGpaValue,
+  SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY
+} from '@/lib/constants/scholarshipGpaOptions';
 
-/** Step 3 (GPA) — optional; non-empty must be a known value or `prefer_not_to_say`. */
+/** Step 3 (GPA) — required; must be a known numeric GPA. */
 export type Step3GpaFormValues = {
   gpa: string;
 };
@@ -18,7 +21,9 @@ export function validateScholarshipOnboardingStep3Gpa(
 ): Step3GpaValidationResult {
   const errors: Step3GpaFieldErrors = {};
   const g = values.gpa.trim();
-  if (g && !isValidGpaValue(g)) {
+  if (!g || g === SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY) {
+    errors.gpa = 'Please select your GPA';
+  } else if (!isValidGpaValue(g)) {
     errors.gpa = 'Please select a valid GPA';
   }
   return Object.keys(errors).length > 0 ? { ok: false, errors } : { ok: true };

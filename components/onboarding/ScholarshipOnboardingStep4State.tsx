@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
+import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import {
   loadStoredOnboardingDraft,
   saveStep4DraftFields,
@@ -29,6 +30,7 @@ export function ScholarshipOnboardingStep4State({
   onContinue
 }: Props) {
   const [stateInput, setStateInput] = useState(() => initialStep4.state);
+  const [error, setError] = useState<string | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -42,19 +44,24 @@ export function ScholarshipOnboardingStep4State({
   }, [stateInput]);
 
   const persistAndContinue = () => {
-    saveStep4DraftFields({ state: stateInput.trim() }, loadStoredOnboardingDraft());
+    const trimmed = stateInput.trim();
+    const canonical = normalizeUsStateToCanonical(trimmed);
+    if (!canonical) {
+      setError(
+        trimmed
+          ? 'Choose a state from the suggestions — we only save a valid U.S. state name.'
+          : 'Please select your U.S. state.'
+      );
+      return;
+    }
+    setError(null);
+    saveStep4DraftFields({ state: canonical }, loadStoredOnboardingDraft());
     onContinue();
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     persistAndContinue();
-  };
-
-  const handleSkip = () => {
-    setStateInput('');
-    saveStep4DraftFields({ state: '' }, loadStoredOnboardingDraft());
-    onContinue();
   };
 
   return (
@@ -75,8 +82,7 @@ export function ScholarshipOnboardingStep4State({
           What state are you in?
         </h2>
         <p className="mx-auto mt-3 flex max-w-md flex-col gap-1 text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
-          <span>Optional — this helps us filter scholarships by state.</span>
-          <span>You can skip this step.</span>
+          <span>This helps us filter scholarships by state.</span>
         </p>
         <p className="mx-auto mt-2.5 max-w-md text-sm leading-relaxed text-zinc-500 sm:max-w-lg">
           Adding your state helps us narrow scholarships that may be more relevant
@@ -87,35 +93,27 @@ export function ScholarshipOnboardingStep4State({
       <form className="space-y-5 text-left" onSubmit={handleSubmit} noValidate>
         <div>
           <label htmlFor="onb-state" id="onb-state-label" className={sectionLabelClass}>
-            U.S. state (optional)
+            U.S. state
           </label>
           <UsStateAutocomplete
             id="onb-state"
             labelId="onb-state-label"
             value={stateInput}
-            onChange={setStateInput}
+            onChange={(v) => {
+              setStateInput(v);
+              setError(null);
+            }}
             disabled={disabled}
           />
           <p className={hintClass}>
-            Choose a suggestion or leave blank — we only save a valid U.S. state name.
+            Choose a suggestion from the list — we only save a valid U.S. state name.
           </p>
+          {error ? <p className={hintClass}>{error}</p> : null}
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
-          <button
-            type="submit"
-            disabled={disabled}
-            className={`${ONBOARDING_PRIMARY_BUTTON_CLASS} sm:order-2 sm:w-1/2`}
-          >
+        <div className="flex flex-col gap-3">
+          <button type="submit" disabled={disabled} className={ONBOARDING_PRIMARY_BUTTON_CLASS}>
             Continue →
-          </button>
-          <button
-            type="button"
-            disabled={disabled}
-            onClick={handleSkip}
-            className="w-full rounded-xl border border-zinc-300 bg-white px-6 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 disabled:opacity-50 sm:order-1 sm:w-1/2"
-          >
-            Skip
           </button>
         </div>
       </form>
