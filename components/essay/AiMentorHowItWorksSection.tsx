@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { AiMentorCtaLink } from '@/components/essay/AiMentorCtaLink';
 
 const VIDEO_SRC = '/videos/IMG_1482.MP4';
-/** Shown until the first frame decodes (fixes blank/gray box on Safari/mobile). */
+/** Until first frame decodes; replace with `/video-thumbnail.jpg` when that asset exists in `public/`. */
 const VIDEO_POSTER = '/logo-preview.png';
 
 /** One orange for every icon (`currentColor` on the wrapper → uniform Lucide strokes). */
