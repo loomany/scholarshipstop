@@ -1385,7 +1385,9 @@ export function EssayQuestionnaire({
 
   return (
     <>
-      <div className="relative flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] max-sm:h-full max-sm:min-h-0 sm:max-h-none sm:overflow-visible sm:min-h-0">
+      <div
+        className="relative isolate flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] [&_a]:touch-manipulation [&_button]:touch-manipulation [&_textarea]:touch-manipulation max-sm:h-full max-sm:min-h-0 max-sm:max-h-[min(92dvh,calc(100dvh-9rem))] sm:max-h-none sm:min-h-0 sm:overflow-visible"
+      >
         {process.env.NODE_ENV === 'development' ? (
           <div
             ref={devMenuRef}
@@ -1514,7 +1516,7 @@ export function EssayQuestionnaire({
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col space-y-3 overflow-y-auto overscroll-y-contain px-2 py-3 [-webkit-overflow-scrolling:touch] max-sm:min-h-0 max-sm:flex-1 max-sm:px-3 sm:max-h-[min(60vh,520px)] sm:flex-none sm:px-6 sm:py-4">
+      <div className="relative z-0 flex min-h-0 flex-1 flex-col space-y-3 overflow-y-auto px-2 py-3 [-webkit-overflow-scrolling:touch] touch-pan-y max-sm:min-h-[6rem] max-sm:flex-1 max-sm:px-3 sm:max-h-[min(60vh,520px)] sm:flex-none sm:px-6 sm:py-4">
         {messages.map((m) =>
           m.role === 'assistant' ? (
             <div key={m.id} className="flex justify-start">
@@ -1646,7 +1648,7 @@ export function EssayQuestionnaire({
         <div ref={bottomRef} />
       </div>
 
-      <div className="shrink-0 border-t border-zinc-100 bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] sm:p-6">
+      <div className="relative z-10 shrink-0 border-t border-zinc-100 bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] sm:p-6">
         <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto] sm:items-center">
           <textarea
             value={input}

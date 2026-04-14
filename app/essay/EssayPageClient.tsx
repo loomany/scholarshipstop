@@ -16,7 +16,7 @@ export default function EssayPageClient() {
     searchParams.get('scholarship')?.trim() || null;
 
   return (
-    <section className="bg-zinc-50 py-6 text-zinc-900 sm:min-h-[100dvh] sm:py-10 max-sm:flex max-sm:h-[calc(100dvh-4rem)] max-sm:min-h-0 max-sm:flex-col max-sm:overflow-hidden">
+    <section className="bg-zinc-50 py-6 text-zinc-900 sm:min-h-[100dvh] sm:py-10 max-sm:flex max-sm:min-h-[calc(100dvh-4rem)] max-sm:flex-col max-sm:pb-4">
       <div className="mx-auto w-full max-w-7xl px-3 sm:px-6 max-sm:flex max-sm:min-h-0 max-sm:flex-1 max-sm:flex-col">
         <header className="mx-auto mb-0 max-w-3xl shrink-0">
           <div className="mx-auto max-w-2xl rounded-2xl border border-zinc-200/90 bg-white px-5 py-6 shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] sm:px-6">
