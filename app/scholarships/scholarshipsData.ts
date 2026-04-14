@@ -248,6 +248,60 @@ export function formatScholarshipAwardDisplay(
   return t;
 }
 
+/** Listing cards: max visible characters for text awards (Full Ride, Amount Varies, …). */
+export const SCHOLARSHIP_CARD_AWARD_TEXT_MAX_LEN = 25;
+
+/**
+ * Card award line: prefer structured numeric sort, then `amount`/`awardAmount` (DB award text),
+ * else a neutral placeholder. Truncates long text; use `lineTitle` for full string when truncated.
+ */
+export function resolveScholarshipCardAwardDisplay(s: Scholarship): {
+  line: string;
+  isPlaceholder: boolean;
+  lineTitle?: string;
+  isNumeric: boolean;
+} {
+  const n = s.awardAmountNumericSort;
+  if (n != null && Number.isFinite(n) && n > 0) {
+    const rounded = Math.round(n);
+    const withCommas = rounded.toLocaleString('en-US');
+    return {
+      line: formatScholarshipAwardDisplay(withCommas),
+      isPlaceholder: false,
+      isNumeric: true
+    };
+  }
+  const raw = (s.amount ?? s.awardAmount)?.trim() ?? '';
+  if (raw && raw !== '—') {
+    const formatted = formatScholarshipAwardDisplay(raw).trim();
+    if (!formatted) {
+      return {
+        line: 'Amount Varies',
+        isPlaceholder: true,
+        isNumeric: false
+      };
+    }
+    if (formatted.length <= SCHOLARSHIP_CARD_AWARD_TEXT_MAX_LEN) {
+      return {
+        line: formatted,
+        isPlaceholder: false,
+        isNumeric: false
+      };
+    }
+    return {
+      line: `${formatted.slice(0, SCHOLARSHIP_CARD_AWARD_TEXT_MAX_LEN)}…`,
+      isPlaceholder: false,
+      lineTitle: formatted,
+      isNumeric: false
+    };
+  }
+  return {
+    line: 'Amount Varies',
+    isPlaceholder: true,
+    isNumeric: false
+  };
+}
+
 function pad2(n: number): string {
   return n.toString().padStart(2, '0');
 }

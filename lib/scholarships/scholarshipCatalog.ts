@@ -562,7 +562,7 @@ export function payoutMethodChipLabel(method: string | null | undefined): string
   if (m === 'college') return 'Paid to school';
   if (m === 'student') return 'Direct to student';
   if (m === 'non_monetary') return 'Non-monetary';
-  if (m === 'not_stated') return 'Payout not stated';
+  if (m === 'not_stated') return null;
   return null;
 }
 

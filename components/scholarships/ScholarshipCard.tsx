@@ -5,8 +5,8 @@ import { useMemo } from 'react';
 import { Info, Lock, Star } from 'lucide-react';
 import {
   formatDeadlineTooltipText,
-  formatScholarshipAwardDisplay,
   getScholarshipDeadlineDisplayParts,
+  resolveScholarshipCardAwardDisplay,
   scholarshipPublicPath,
   type Scholarship
 } from '@/app/scholarships/scholarshipsData';
@@ -100,12 +100,9 @@ export default function ScholarshipCard({
   const cardActionSaveClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL}`;
   const cardActionSavedClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL_PRESSED}`;
 
-  const amountRaw = scholarship.amount ?? scholarship.awardAmount;
-  const hasAmount =
-    amountRaw != null && String(amountRaw).trim() !== '';
-  const amount = hasAmount
-    ? formatScholarshipAwardDisplay(String(amountRaw).trim())
-    : '';
+  const awardLine = resolveScholarshipCardAwardDisplay(scholarship);
+  const awardCell = awardLine.line;
+  const hasAwardContent = !awardLine.isPlaceholder;
 
   const deadlineRaw = scholarship.deadline?.trim() ?? '';
   const hasDeadline =
@@ -185,8 +182,6 @@ export default function ScholarshipCard({
   const showBadgeRow =
     scholarship.recurring ||
     Boolean(scholarship.credibilityLabel?.trim());
-
-  const awardCell = hasAmount ? amount : '—';
 
   const applicantsTitle = scholarship.applicantsCountIsEstimated
     ? 'Approximate applicant volume when available.'
@@ -420,8 +415,11 @@ export default function ScholarshipCard({
             <div className={awardMetricsWrap}>
               <div className={awardMetricAlign}>
                 <p
-                  className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
-                    !hasAmount
+                  title={awardLine.lineTitle}
+                  className={`min-w-0 max-w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
+                    awardLine.isNumeric ? 'tabular-nums' : ''
+                  } ${
+                    !hasAwardContent
                       ? 'text-gray-400'
                       : deadlinePassed
                         ? 'text-gray-600'
@@ -450,8 +448,11 @@ export default function ScholarshipCard({
               <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:gap-3">
                 <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
                   <p
-                    className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
-                      !hasAmount
+                    title={awardLine.lineTitle}
+                    className={`min-w-0 max-w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
+                      awardLine.isNumeric ? 'tabular-nums' : ''
+                    } ${
+                      !hasAwardContent
                         ? 'text-gray-400'
                         : deadlinePassed
                           ? 'text-gray-600'
@@ -548,8 +549,11 @@ export default function ScholarshipCard({
               <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-stretch xl:gap-2">
                 <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
                   <p
-                    className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
-                      !hasAmount
+                    title={awardLine.lineTitle}
+                    className={`min-w-0 max-w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
+                      awardLine.isNumeric ? 'tabular-nums' : ''
+                    } ${
+                      !hasAwardContent
                         ? 'text-gray-400'
                         : deadlinePassed
                           ? 'text-gray-600'
