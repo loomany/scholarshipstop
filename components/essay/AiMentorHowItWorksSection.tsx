@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { AiMentorCtaLink } from '@/components/essay/AiMentorCtaLink';
 
 const VIDEO_SRC = '/videos/IMG_1482.MP4';
+const VIDEO_POSTER = '/video-thumbnail.jpg';
 
 /** One orange for every icon (`currentColor` on the wrapper → uniform Lucide strokes). */
 const STEP_ICON_WRAP = 'mt-0.5 inline-flex shrink-0 text-orange-500';
@@ -61,6 +62,7 @@ export function AiMentorHowItWorksSection({
               controls
               playsInline
               preload="metadata"
+              poster={VIDEO_POSTER}
               controlsList="nodownload noremoteplayback"
               disablePictureInPicture
               disableRemotePlayback

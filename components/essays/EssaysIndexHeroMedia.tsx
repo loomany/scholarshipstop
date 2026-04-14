@@ -5,6 +5,7 @@ import { AiMentorCtaLink } from '@/components/essay/AiMentorCtaLink';
  * Place the file at `public/videos/IMG_1482.MP4` (or set VIDEO_SRC below).
  */
 const VIDEO_SRC = '/videos/IMG_1482.MP4';
+const VIDEO_POSTER = '/video-thumbnail.jpg';
 
 const mediaShellClass =
   'w-full overflow-hidden rounded-2xl border border-gray-100 bg-gray-100 shadow-xl ring-1 ring-gray-100';
@@ -47,6 +48,7 @@ function LocalVideoFile() {
         disableRemotePlayback
         playsInline
         preload="metadata"
+        poster={VIDEO_POSTER}
         className="h-full w-full object-cover"
       >
         <source src={VIDEO_SRC} type="video/mp4" />
