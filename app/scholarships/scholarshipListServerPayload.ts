@@ -44,7 +44,7 @@ export async function fetchInitialHubScholarshipsPayload(
   const req = scholarshipListRequestFromParts({
     page: 1,
     limit: 12,
-    sort: 'most_recent',
+    sort: 'magic',
     tab: 'matches',
     q: '',
     category: null,
@@ -106,7 +106,7 @@ export async function fetchInitialLongTailScholarshipsPayload(
   const req = scholarshipListRequestFromParts({
     page: 1,
     limit: 12,
-    sort: 'most_recent',
+    sort: 'magic',
     tab: 'matches',
     q: '',
     category: null,
@@ -173,7 +173,7 @@ export async function fetchInitialCategoryScholarshipsPayload(
   const req = scholarshipListRequestFromParts({
     page: 1,
     limit: 12,
-    sort: 'most_recent',
+    sort: 'magic',
     tab: 'matches',
     q: '',
     category: null,

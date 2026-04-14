@@ -760,7 +760,9 @@ function applySort(q: any, sort: SortOption): any {
     default:
       return q
         .order('ranking_score', { ascending: false, nullsFirst: false })
-        .order('updated_at', { ascending: false, nullsFirst: true });
+        .order('deadline_date', { ascending: true, nullsFirst: false })
+        .order('days_until_deadline', { ascending: true, nullsFirst: false })
+        .order('created_at', { ascending: false, nullsFirst: true });
   }
 }
 

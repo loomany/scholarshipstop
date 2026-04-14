@@ -96,6 +96,24 @@ function recentMs(s: Scholarship): number {
   return 0;
 }
 
+/** Align with `applySort` magic branch: sooner deadline, then newer `created_at`. */
+function magicTieBreak(a: Scholarship, b: Scholarship): number {
+  const da = a.daysUntilDeadline;
+  const db = b.daysUntilDeadline;
+  const na =
+    da == null || Number.isNaN(da) ? Number.POSITIVE_INFINITY : da;
+  const nb =
+    db == null || Number.isNaN(db) ? Number.POSITIVE_INFINITY : db;
+  if (na !== nb) return na - nb;
+  const ta = deadlineMs(a);
+  const tb = deadlineMs(b);
+  if (ta !== tb) return ta - tb;
+  const ca = a.createdAt ? Date.parse(a.createdAt) : 0;
+  const cb = b.createdAt ? Date.parse(b.createdAt) : 0;
+  if (ca !== cb) return cb - ca;
+  return 0;
+}
+
 /** Mutates `list` in place. `orderIndex` = original API order (lower = earlier in response). */
 export function sortScholarshipsInPlace(
   list: Scholarship[],
@@ -111,6 +129,8 @@ export function sortScholarshipsInPlace(
         /* Uses catalog ranking score (no per-user % on cards). */
         const d = ranking(b) - ranking(a);
         if (d !== 0) return d;
+        const tie = magicTieBreak(a, b);
+        if (tie !== 0) return tie;
         return orig(a) - orig(b);
       }
       case 'highest_amount': {

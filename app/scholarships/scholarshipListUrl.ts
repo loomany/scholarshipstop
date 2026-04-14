@@ -50,12 +50,13 @@ const DEADLINE_ALIASES: Record<string, DeadlinePreset> = {
 };
 
 export function parseSortFromParam(raw: string | null): SortOption {
-  if (!raw?.trim()) return 'most_recent';
+  /** Default: catalog ranking (`magic` / `applySort`), not bulk `updated_at` bumps. */
+  if (!raw?.trim()) return 'magic';
   const k = raw.trim().toLowerCase();
   if (k === 'newest') return 'most_recent';
   if (k === 'best-match') return 'best_match';
   if (SORT_VALUES.has(k)) return k as SortOption;
-  return 'most_recent';
+  return 'magic';
 }
 
 export function parseCategoriesFromParam(
@@ -171,7 +172,7 @@ export function buildScholarshipListSearchParams(
   }
 
   if (patch.sort !== undefined && patch.sort !== null) {
-    if (patch.sort === 'most_recent') {
+    if (patch.sort === 'magic') {
       p.delete('sort');
     } else {
       p.set('sort', patch.sort);

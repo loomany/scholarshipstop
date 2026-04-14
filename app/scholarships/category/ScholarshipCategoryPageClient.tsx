@@ -650,7 +650,7 @@ export default function ScholarshipCategoryPageClient({
   const hasListingParams =
     parsedList.q.length > 0 ||
     parsedList.categories.size > 0 ||
-    parsedList.sort !== 'most_recent' ||
+    parsedList.sort !== 'magic' ||
     (parsedList.deadline != null && parsedList.deadline !== 'any');
 
   const clearListingFilters = useCallback(() => {

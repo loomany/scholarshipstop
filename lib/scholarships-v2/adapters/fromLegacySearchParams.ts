@@ -32,8 +32,15 @@ const LEGACY_SORT_TO_V2: Record<string, ScholarshipSort> = {
 };
 
 function toSort(raw: string | null, mode: ScholarshipsV2Mode): ScholarshipSort {
-  if (!raw) return mode === 'bestMatches' ? 'relevance' : 'recentlyUpdated';
-  return LEGACY_SORT_TO_V2[raw] ?? (mode === 'bestMatches' ? 'relevance' : 'recentlyUpdated');
+  if (!raw?.trim()) {
+    if (mode === 'userCollections') return 'recentlyUpdated';
+    return 'relevance';
+  }
+  const k = raw.trim().toLowerCase();
+  return (
+    LEGACY_SORT_TO_V2[k] ??
+    (mode === 'bestMatches' ? 'relevance' : 'recentlyUpdated')
+  );
 }
 
 function toPage(raw: string | null): number {

@@ -89,7 +89,7 @@ function listingReq(
   return scholarshipListRequestFromParts({
     page: 1,
     limit: 1,
-    sort: 'most_recent',
+    sort: 'magic',
     tab: 'matches',
     q: '',
     category: null,
