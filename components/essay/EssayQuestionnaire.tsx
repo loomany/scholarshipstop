@@ -296,6 +296,15 @@ export function EssayQuestionnaire({
   const [devMenuOpen, setDevMenuOpen] = useState(false);
   const devMenuRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * iOS Safari: `dvh`/`svh` can disagree with the visible area when the virtual
+   * keyboard opens. `visualViewport` tracks the real visible height so the chat
+   * card does not reserve impossible space (black gap + clipped composer).
+   */
+  const [mobileChatMaxHeightPx, setMobileChatMaxHeightPx] = useState<
+    number | undefined
+  >(undefined);
+
   /** Latest essay_results row for this mentor chat (any version chain). */
   const [latestEssayResultId, setLatestEssayResultId] = useState<string | null>(
     null
@@ -337,6 +346,35 @@ export function EssayQuestionnaire({
       document.removeEventListener('keydown', onKey);
     };
   }, [devMenuOpen]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.visualViewport) return;
+
+    const mq = window.matchMedia('(max-width: 639px)');
+    const vv = window.visualViewport;
+    /** Same reserve as `max-h-[min(calc(100dvh-4.5rem),…)]` on the card. */
+    const reservePx = Math.round(4.5 * 16);
+
+    const sync = () => {
+      if (!mq.matches) {
+        setMobileChatMaxHeightPx(undefined);
+        return;
+      }
+      setMobileChatMaxHeightPx(
+        Math.min(Math.max(220, vv.height - reservePx), 900)
+      );
+    };
+
+    sync();
+    vv.addEventListener('resize', sync);
+    vv.addEventListener('scroll', sync);
+    mq.addEventListener('change', sync);
+    return () => {
+      vv.removeEventListener('resize', sync);
+      vv.removeEventListener('scroll', sync);
+      mq.removeEventListener('change', sync);
+    };
+  }, []);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -1385,7 +1423,14 @@ export function EssayQuestionnaire({
 
   return (
     <>
-      <div className="relative flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] max-sm:min-h-0 max-sm:max-h-[min(calc(100dvh-4.5rem),900px)] sm:overflow-visible sm:max-h-none">
+      <div
+        className="relative flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] max-sm:min-h-0 max-sm:max-h-[min(calc(100dvh-4.5rem),900px)] sm:overflow-visible sm:max-h-none"
+        style={
+          mobileChatMaxHeightPx != null
+            ? { maxHeight: mobileChatMaxHeightPx }
+            : undefined
+        }
+      >
         {process.env.NODE_ENV === 'development' ? (
           <div
             ref={devMenuRef}
@@ -1514,7 +1559,7 @@ export function EssayQuestionnaire({
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col space-y-3 overflow-y-auto overscroll-y-contain px-2 py-3 [-webkit-overflow-scrolling:touch] max-sm:min-h-[min(46svh,21rem)] max-sm:px-3 sm:max-h-[min(60vh,520px)] sm:flex-none sm:px-6 sm:py-4">
+      <div className="flex min-h-0 flex-1 flex-col space-y-3 overflow-y-auto overscroll-y-contain px-2 py-3 [-webkit-overflow-scrolling:touch] max-sm:px-3 sm:max-h-[min(60vh,520px)] sm:flex-none sm:px-6 sm:py-4">
         {messages.map((m) =>
           m.role === 'assistant' ? (
             <div key={m.id} className="flex justify-start">
@@ -1646,7 +1691,7 @@ export function EssayQuestionnaire({
         <div ref={bottomRef} />
       </div>
 
-      <div className="shrink-0 border-t border-zinc-100 bg-white p-3 sm:p-6">
+      <div className="shrink-0 border-t border-zinc-100 bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-6">
         <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto] sm:items-center">
           <textarea
             value={input}

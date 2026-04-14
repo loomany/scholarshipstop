@@ -75,6 +75,11 @@ type GptSnapshot = {
   detector?: EssayAiDetectorChoice | null;
 };
 
+/** Queued when the early-draft modal opens so “Run check anyway” resumes the right flow and detector. */
+type PreviewAiCheckPending =
+  | { kind: 'toolbar'; branch: 'original' | 'corrections'; detector: EssayAiDetectorChoice }
+  | { kind: 'textEditor'; detector: EssaySendForAiDetectorChoice };
+
 /** Completed GPTZero check in this session (score and/or sentence map). */
 function hasCompletedAiCheck(snap: GptSnapshot | undefined): boolean {
   if (!snap) return false;
@@ -628,6 +633,8 @@ export default function EssayResultClient({
   const [fullHumanizeLoading, setFullHumanizeLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [previewCheckOpen, setPreviewCheckOpen] = useState(false);
+  const [previewCheckPending, setPreviewCheckPending] =
+    useState<PreviewAiCheckPending | null>(null);
   const [humanizeSourceByRow, setHumanizeSourceByRow] = useState<
     Record<string, Set<number>>
   >({});
@@ -974,7 +981,7 @@ export default function EssayResultClient({
 
   const downloadPdfDisabled = !mergedEssayText.trim();
 
-  const downloadEssayPdf = useCallback(() => {
+  const downloadEssayPdf = useCallback(async () => {
     if (busy || pdfLoading) return;
     const text = mergedEssayText.trim();
     if (!text) {
@@ -990,7 +997,7 @@ export default function EssayResultClient({
     }
     setPdfLoading(true);
     try {
-      downloadEssayAsPdf({
+      await downloadEssayAsPdf({
         body: text,
         title: 'Scholarship essay',
         fileBaseName: 'scholarship-essay'
@@ -1312,6 +1319,11 @@ export default function EssayResultClient({
     if (busy) return;
     if (showVersionTabs && editorView === 'original') {
       if (previewInterviewNagActive) {
+        setPreviewCheckPending({
+          kind: 'toolbar',
+          branch: 'original',
+          detector
+        });
         setPreviewCheckOpen(true);
         return;
       }
@@ -1329,6 +1341,11 @@ export default function EssayResultClient({
       return;
     }
     if (previewInterviewNagActive) {
+      setPreviewCheckPending({
+        kind: 'toolbar',
+        branch: 'corrections',
+        detector
+      });
       setPreviewCheckOpen(true);
       return;
     }
@@ -1430,13 +1447,8 @@ export default function EssayResultClient({
     ]
   );
 
-  const sendFromTextEditorForAiCheck = useCallback(
+  const runTextEditorAiCheckFromRatioStep = useCallback(
     async (detector: EssaySendForAiDetectorChoice) => {
-      if (busy || mergeLoading || checkLoading) return;
-      if (previewInterviewNagActive) {
-        setPreviewCheckOpen(true);
-        return;
-      }
       const scores =
         showVersionTabs && editorView === 'original' && gptOriginal?.sentences
           ? gptOriginal.sentences
@@ -1473,19 +1485,34 @@ export default function EssayResultClient({
     [
       activeMergeRow.content,
       activeMergeRow.id,
-      busy,
-      checkLoading,
-      mergeLoading,
       displayed.sentences,
       editorView,
       essayChainKey,
       gptOriginal?.sentences,
       hasSubscription,
       humanizeSourceByRow,
-      previewInterviewNagActive,
       runSendFromTextEditorForAiCheck,
       sentenceUserEdits,
       showVersionTabs
+    ]
+  );
+
+  const sendFromTextEditorForAiCheck = useCallback(
+    async (detector: EssaySendForAiDetectorChoice) => {
+      if (busy || mergeLoading || checkLoading) return;
+      if (previewInterviewNagActive) {
+        setPreviewCheckPending({ kind: 'textEditor', detector });
+        setPreviewCheckOpen(true);
+        return;
+      }
+      await runTextEditorAiCheckFromRatioStep(detector);
+    },
+    [
+      busy,
+      checkLoading,
+      mergeLoading,
+      previewInterviewNagActive,
+      runTextEditorAiCheckFromRatioStep
     ]
   );
 
@@ -1677,13 +1704,40 @@ export default function EssayResultClient({
               at least {INTERVIEW_DRAFT_STRONG_MIN_PERCENT}%, then generating again. You can still run
               GPTZero on this draft.
             </p>
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
               <button
                 type="button"
-                className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2"
-                onClick={() => setPreviewCheckOpen(false)}
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 sm:w-auto"
+                onClick={() => {
+                  setPreviewCheckOpen(false);
+                  setPreviewCheckPending(null);
+                }}
               >
                 Back to editing
+              </button>
+              <button
+                type="button"
+                disabled={busy || mergeLoading || checkLoading}
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-emerald-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                onClick={() => {
+                  const pending = previewCheckPending;
+                  setPreviewCheckOpen(false);
+                  setPreviewCheckPending(null);
+                  if (!pending || busy || mergeLoading || checkLoading) return;
+                  void (async () => {
+                    if (pending.kind === 'toolbar') {
+                      if (pending.branch === 'original') {
+                        await runOriginalAiCheckFlow(pending.detector);
+                      } else {
+                        await runAiCheckFlow(pending.detector);
+                      }
+                    } else {
+                      await runTextEditorAiCheckFromRatioStep(pending.detector);
+                    }
+                  })();
+                }}
+              >
+                Run AI check anyway
               </button>
             </div>
           </div>

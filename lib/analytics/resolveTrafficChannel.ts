@@ -5,6 +5,7 @@
 
 export type TrafficChannel =
   | 'google_ads'
+  | 'facebook_paid'
   | 'organic_search'
   | 'other_paid'
   | 'referral'
@@ -50,6 +51,13 @@ function isGoogleAdsSource(source: string): boolean {
     s === 'googleadservices' ||
     s.includes('google_reklama')
   );
+}
+
+/** Meta outbound / Ads: `fbclid`, or UTM source like `fb`, `facebook`. */
+function isFacebookPaidSignal(url: URL, utmSource: string): boolean {
+  if (url.searchParams.has('fbclid')) return true;
+  const s = utmSource.toLowerCase();
+  return s === 'fb' || s === 'facebook' || s.startsWith('facebook_');
 }
 
 function mergeUtmFromLandingUrl(
@@ -118,10 +126,15 @@ export function resolveTrafficChannel(raw: ResolveTrafficChannelInput): TrafficC
     return 'google_ads';
   }
 
-  // 4: Other paid (Meta, TikTok ads, etc.) — not organic
+  // 4: Paid non-Google — Facebook / Meta vs other ad networks
   const utmSrc = (merged.utm_source || get('utm_source')).trim();
-  if (paidMedium && utmSrc && !isGoogleAdsSource(utmSrc)) {
-    return 'other_paid';
+  if (paidMedium && !isGoogleAdsSource(utmSrc)) {
+    if (isFacebookPaidSignal(url, utmSrc)) {
+      return 'facebook_paid';
+    }
+    if (utmSrc) {
+      return 'other_paid';
+    }
   }
 
   // 5: Organic search (referrer from a search / discover surface)
@@ -139,6 +152,7 @@ export function resolveTrafficChannel(raw: ResolveTrafficChannelInput): TrafficC
 
 export const TRAFFIC_CHANNEL_LABELS: Record<TrafficChannel, string> = {
   google_ads: 'Google Ads (paid)',
+  facebook_paid: 'Facebook',
   organic_search: 'Organic search',
   other_paid: 'Paid (non-Google)',
   referral: 'Referral',
@@ -161,9 +175,20 @@ export function labelForVisitorRow(row: {
   utm_medium?: string | null;
   utm_campaign?: string | null;
 }): string {
+  const resolved = resolveTrafficChannel({
+    landingUrl: row.landing_url,
+    referrer: row.referrer ?? '',
+    utm_source: row.utm_source ?? '',
+    utm_medium: row.utm_medium ?? '',
+    utm_campaign: row.utm_campaign ?? ''
+  });
   const raw = row.traffic_channel?.trim();
+  if (raw === 'other_paid' && resolved === 'facebook_paid') {
+    return formatTrafficChannelLabel('facebook_paid');
+  }
   if (
     raw === 'google_ads' ||
+    raw === 'facebook_paid' ||
     raw === 'organic_search' ||
     raw === 'other_paid' ||
     raw === 'referral' ||
@@ -171,13 +196,5 @@ export function labelForVisitorRow(row: {
   ) {
     return formatTrafficChannelLabel(raw);
   }
-  return formatTrafficChannelLabel(
-    resolveTrafficChannel({
-      landingUrl: row.landing_url,
-      referrer: row.referrer ?? '',
-      utm_source: row.utm_source ?? '',
-      utm_medium: row.utm_medium ?? '',
-      utm_campaign: row.utm_campaign ?? ''
-    })
-  );
+  return formatTrafficChannelLabel(resolved);
 }
