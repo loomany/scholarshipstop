@@ -8,11 +8,11 @@ type ScholarshipSubscriptionOfferModalProps = {
   open: boolean;
   onClose: () => void;
   /**
-   * Maybe Later, backdrop, X, Escape — e.g. continue another flow after closing.
+   * Backdrop, X, Escape — e.g. continue another flow after closing.
    * If omitted, only `onClose` runs.
    */
   onSecondaryAction?: () => void;
-  /** Get Free Access — e.g. clear a pending action before navigating to /subscription. */
+  /** Start trial CTA — e.g. clear a pending action before navigating to /subscription. */
   onPrimaryClick?: () => void;
 };
 
@@ -71,36 +71,42 @@ export default function ScholarshipSubscriptionOfferModal({
           <X className="h-5 w-5" strokeWidth={2} aria-hidden />
         </button>
 
-        <h2
-          id="subscription-offer-title"
-          className="pr-10 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl"
-        >
-          Get 3 Days of Free Access!
-        </h2>
-        <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-base">
-          We are offering you 3 days of free access to all premium results and
-          recommendations. After this, you can continue using our services by
-          subscribing.
-        </p>
+        <div className="pr-8 text-center sm:pr-10">
+          <div className="mb-6 flex items-center justify-between gap-3 text-left">
+            <span className="text-sm font-semibold text-zinc-900 sm:text-base">
+              Subscription status
+            </span>
+            <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-slate-600 sm:text-xs">
+              FREE PLAN
+            </span>
+          </div>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <Link
-            href="/subscription"
-            onClick={() => {
-              onPrimaryClick?.();
-              onClose();
-            }}
-            className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-0 sm:w-auto sm:min-w-[220px]"
+          <h2
+            id="subscription-offer-title"
+            className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-[1.65rem]"
           >
-            Get Free Access
-          </Link>
-          <button
-            type="button"
-            onClick={dismiss}
-            className="inline-flex h-11 w-full items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-700 shadow-sm transition hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-0 sm:w-auto"
-          >
-            Maybe Later
-          </button>
+            Unlock Premium Access
+          </h2>
+          <p className="mt-3 text-sm text-zinc-500 sm:text-base">
+            Start 3-Day Free Trial, then as low as $12/mo.
+          </p>
+
+          <div className="mt-8">
+            <Link
+              href="/subscription"
+              onClick={() => {
+                onPrimaryClick?.();
+                onClose();
+              }}
+              className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 text-sm font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 sm:text-base"
+            >
+              Start 3-Day Free Trial
+            </Link>
+          </div>
+
+          <p className="mt-4 text-xs text-zinc-400 sm:text-sm">
+            Full access. No commitment. Cancel anytime.
+          </p>
         </div>
       </div>
     </div>
