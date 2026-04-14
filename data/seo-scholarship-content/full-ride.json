@@ -1,0 +1,21 @@
+{
+  "seo_title": "Full ride scholarships 2026 | USA catalog",
+  "seo_description": "Browse full-ride and full-tuition scholarships: tuition coverage, cost of attendance, and other high-value awards. Compare deadlines and requirements—always confirm on the official program page.",
+  "intro": "This view lists opportunities tagged for <strong>high-value non-monetary</strong> awards—often described as full ride, full tuition, or similar coverage. Dollar amounts may not appear on every card; read each program’s wording and verify eligibility, stack rules, and renewal terms on the sponsor’s site.",
+  "h1": "Full ride & full tuition scholarships",
+  "supporting": "Sort by deadline or use filters to narrow the pool. When an award is non-monetary or described in words (not a single number), treat the card as a starting point and open the official listing before you invest time in an application.",
+  "faq": [
+    {
+      "question": "What does “full ride” mean on this page?",
+      "answer": "We include programs our catalog tags as high-value, full-coverage style awards (for example full tuition or cost of attendance language). Wording varies by sponsor—use each official page for the exact benefit."
+    },
+    {
+      "question": "Why don’t all listings show a dollar amount?",
+      "answer": "Some sponsors describe benefits in text (tuition waiver, full COA, stipend rules) without a simple check amount. We still surface these so competitive opportunities aren’t hidden behind missing numeric fields."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "full-ride",
+    "curated": true
+  }
+}

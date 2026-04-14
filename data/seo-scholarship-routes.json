@@ -4,6 +4,23 @@
   "promptVersion": "v1",
   "routes": [
     {
+      "canonicalPath": "full-ride",
+      "pageType": "single",
+      "pageKind": "manifest",
+      "source": "manual",
+      "indexable": true,
+      "qualityBucket": "GOOD",
+      "noindexNow": false,
+      "minCountSnapshot": 1,
+      "scholarshipsCount": 0,
+      "h1Fallback": "Full ride scholarships",
+      "metaTitleFallback": "Full ride scholarships 2026 | USA catalog",
+      "metaDescriptionFallback": "Find full-ride and full-tuition scholarships for 2026—programs that cover tuition, cost of attendance, or other high-value non-monetary awards. Compare deadlines and requirements, then confirm every detail on the official program page.",
+      "priority": 82,
+      "reasonCodes": ["good_route"],
+      "notes": "Listing filter: seo_tags contains award_signal_high_value (parser high-value awards)."
+    },
+    {
       "canonicalPath": "for-women",
       "pageType": "single",
       "filters": {

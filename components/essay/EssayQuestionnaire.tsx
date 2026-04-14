@@ -32,10 +32,10 @@ import {
   INTERVIEW_DRAFT_STRONG_MIN_PERCENT,
   interviewThemesMeetDraftThreshold
 } from '@/lib/essay/interviewDraftProgressGate';
+import { buildWelcomeAssistantMessage } from '@/lib/essay/mentorOnboarding';
 import {
   clampProgress,
   EMPTY_PROGRESS,
-  FIRST_ASSISTANT_MESSAGE,
   type ThemeProgress
 } from '@/lib/essay/interviewerAi';
 import { createClient } from '@/utils/supabase/client';
@@ -70,13 +70,15 @@ function newLocalMessageId() {
     : `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 }
 
-function buildGuestSeedMessages(): ChatMessage[] {
+function buildGuestSeedMessages(
+  scholarshipTitle?: string | null
+): ChatMessage[] {
   const now = new Date().toISOString();
   return [
     {
       id: newLocalMessageId(),
       role: 'assistant',
-      content: FIRST_ASSISTANT_MESSAGE,
+      content: buildWelcomeAssistantMessage(scholarshipTitle),
       at: now
     }
   ];
@@ -181,12 +183,20 @@ class MentorTrialQuotaExceededError extends Error {
   }
 }
 
-async function requestInterviewInit(signal?: AbortSignal): Promise<InitPayload> {
+async function requestInterviewInit(
+  signal?: AbortSignal,
+  scholarshipTitle?: string | null
+): Promise<InitPayload> {
   const res = await fetch('/api/interviewer', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'same-origin',
-    body: JSON.stringify({ action: 'init' }),
+    body: JSON.stringify({
+      action: 'init',
+      ...(scholarshipTitle?.trim()
+        ? { scholarship_title: scholarshipTitle.trim() }
+        : {})
+    }),
     signal
   });
   const data = (await res.json()) as {
@@ -253,11 +263,14 @@ type Props = {
    * on first load instead of only the last persisted chat id.
    */
   initialChatIdFromQuery?: string | null;
+  /** From `/essay?scholarship=` — custom welcome + LLM context (e.g. scholarship detail CTA). */
+  initialScholarshipTitle?: string | null;
 };
 
 export function EssayQuestionnaire({
   onComplete,
-  initialChatIdFromQuery = null
+  initialChatIdFromQuery = null,
+  initialScholarshipTitle = null
 }: Props) {
   const router = useRouter();
   const { toast } = useToast();
@@ -290,6 +303,9 @@ export function EssayQuestionnaire({
   const [draftLinkResolved, setDraftLinkResolved] = useState(false);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [mentorTrialModalOpen, setMentorTrialModalOpen] = useState(false);
+  /** Guest-only: after first LLM reply, subsequent turns omit onboarding system appendix. */
+  const [guestMentorInterviewStarted, setGuestMentorInterviewStarted] =
+    useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -357,7 +373,11 @@ export function EssayQuestionnaire({
     (
       nextMessages: ChatMessage[],
       nextProgress: ThemeProgress,
-      ready?: boolean
+      ready?: boolean,
+      meta?: {
+        scholarshipTitle?: string | null;
+        mentorInterviewStarted?: boolean;
+      }
     ) => {
       if (typeof window === 'undefined') return;
       try {
@@ -367,7 +387,9 @@ export function EssayQuestionnaire({
             v: ESSAY_GUEST_STORAGE_VERSION,
             messages: nextMessages,
             progress: nextProgress,
-            ready_to_generate: ready ?? false
+            ready_to_generate: ready ?? false,
+            scholarship_title: meta?.scholarshipTitle ?? null,
+            mentor_interview_started: meta?.mentorInterviewStarted ?? false
           })
         );
       } catch {
@@ -387,6 +409,8 @@ export function EssayQuestionnaire({
         messages?: ChatMessage[];
         progress?: ThemeProgress;
         ready_to_generate?: boolean;
+        scholarship_title?: string | null;
+        mentor_interview_started?: boolean;
       };
       try {
         parsed = JSON.parse(raw) as typeof parsed;
@@ -408,7 +432,10 @@ export function EssayQuestionnaire({
           body: JSON.stringify({
             messages: parsed.messages,
             progress: parsed.progress ?? EMPTY_PROGRESS,
-            ready_to_generate: parsed.ready_to_generate ?? false
+            ready_to_generate: parsed.ready_to_generate ?? false,
+            scholarship_title: parsed.scholarship_title ?? null,
+            mentor_interview_started: parsed.mentor_interview_started === true,
+            mentor_profile_prompt_sent: false
           })
         });
         const data = (await res.json()) as {
@@ -474,11 +501,15 @@ export function EssayQuestionnaire({
 
   const initChat = useCallback(async () => {
     if (!userId) {
-      const seed = buildGuestSeedMessages();
+      const seed = buildGuestSeedMessages(initialScholarshipTitle);
       setMessages(seed);
       setProgress(EMPTY_PROGRESS);
       setChatId(null);
-      persistGuestBlob(seed, EMPTY_PROGRESS, false);
+      setGuestMentorInterviewStarted(false);
+      persistGuestBlob(seed, EMPTY_PROGRESS, false, {
+        scholarshipTitle: initialScholarshipTitle,
+        mentorInterviewStarted: false
+      });
       return;
     }
     try {
@@ -503,7 +534,7 @@ export function EssayQuestionnaire({
     const ac = new AbortController();
     const timer = setTimeout(() => ac.abort(), INIT_FETCH_MS);
     try {
-      const data = await requestInterviewInit(ac.signal);
+      const data = await requestInterviewInit(ac.signal, initialScholarshipTitle);
       applyInitPayload(data, userId);
       await syncMentorTrialBanner({ prependBanner: false });
     } catch (e) {
@@ -527,7 +558,14 @@ export function EssayQuestionnaire({
       clearTimeout(timer);
       setBootLoading(false);
     }
-  }, [applyInitPayload, persistGuestBlob, syncMentorTrialBanner, toast, userId]);
+  }, [
+    applyInitPayload,
+    initialScholarshipTitle,
+    persistGuestBlob,
+    syncMentorTrialBanner,
+    toast,
+    userId
+  ]);
 
   useEffect(() => {
     let alive = true;
@@ -554,6 +592,7 @@ export function EssayQuestionnaire({
                 messages?: ChatMessage[];
                 progress?: ThemeProgress;
                 ready_to_generate?: boolean;
+                mentor_interview_started?: boolean;
               };
               if (
                 parsed.v === ESSAY_GUEST_STORAGE_VERSION &&
@@ -565,6 +604,9 @@ export function EssayQuestionnaire({
                   clampProgress(parsed.progress ?? EMPTY_PROGRESS)
                 );
                 setChatId(null);
+                setGuestMentorInterviewStarted(
+                  parsed.mentor_interview_started === true
+                );
                 if (alive) setBootLoading(false);
                 return;
               }
@@ -572,11 +614,15 @@ export function EssayQuestionnaire({
           } catch {
             /* ignore corrupt guest blob */
           }
-          const seed = buildGuestSeedMessages();
+          const seed = buildGuestSeedMessages(initialScholarshipTitle);
           setMessages(seed);
           setProgress(EMPTY_PROGRESS);
           setChatId(null);
-          persistGuestBlob(seed, EMPTY_PROGRESS, false);
+          setGuestMentorInterviewStarted(false);
+          persistGuestBlob(seed, EMPTY_PROGRESS, false, {
+            scholarshipTitle: initialScholarshipTitle,
+            mentorInterviewStarted: false
+          });
           if (alive) setBootLoading(false);
           return;
         }
@@ -622,7 +668,7 @@ export function EssayQuestionnaire({
           }
         }
 
-        const data = await requestInterviewInit(ac.signal);
+        const data = await requestInterviewInit(ac.signal, initialScholarshipTitle);
         if (!alive) return;
 
         applyInitPayload(data, user.id);
@@ -662,7 +708,12 @@ export function EssayQuestionnaire({
     // Mount-only load; `toast` omitted from deps to avoid resetting the chat on toast identity changes.
     // `initialChatIdFromQuery` is read once per mount via the dependency below so `/essay?chat=` deep-links work.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [applyInitPayload, initialChatIdFromQuery, syncMentorTrialBanner]);
+  }, [
+    applyInitPayload,
+    initialChatIdFromQuery,
+    initialScholarshipTitle,
+    syncMentorTrialBanner
+  ]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -740,13 +791,19 @@ export function EssayQuestionnaire({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify({ messages, user_message: t })
+          body: JSON.stringify({
+            messages,
+            user_message: t,
+            scholarship_title: initialScholarshipTitle?.trim() || null,
+            mentor_interview_started: guestMentorInterviewStarted
+          })
         });
         const data = (await res.json()) as {
           error?: string;
           messages?: ChatMessage[];
           progress?: ThemeProgress;
           ready_to_generate?: boolean;
+          mentor_interview_started?: boolean;
         };
         if (!res.ok) {
           throw new Error(data.error || `Error ${res.status}`);
@@ -755,10 +812,19 @@ export function EssayQuestionnaire({
           setMessages(data.messages);
           const nextProgress = data.progress ?? EMPTY_PROGRESS;
           setProgress(nextProgress);
+          if (data.mentor_interview_started === true) {
+            setGuestMentorInterviewStarted(true);
+          }
           persistGuestBlob(
             data.messages,
             nextProgress,
-            data.ready_to_generate
+            data.ready_to_generate,
+            {
+              scholarshipTitle: initialScholarshipTitle,
+              mentorInterviewStarted:
+                data.mentor_interview_started === true ||
+                guestMentorInterviewStarted
+            }
           );
         }
         return true;
@@ -776,6 +842,8 @@ export function EssayQuestionnaire({
     [
       devBypassing,
       generating,
+      guestMentorInterviewStarted,
+      initialScholarshipTitle,
       messages,
       persistGuestBlob,
       sending,
@@ -1034,7 +1102,11 @@ export function EssayQuestionnaire({
           persistGuestBlob(
             data.messages,
             nextProgress,
-            data.ready_to_generate ?? false
+            data.ready_to_generate ?? false,
+            {
+              scholarshipTitle: initialScholarshipTitle,
+              mentorInterviewStarted: guestMentorInterviewStarted
+            }
           );
         }
         setEditingMessageId(null);
@@ -1121,7 +1193,11 @@ export function EssayQuestionnaire({
           persistGuestBlob(
             data.messages,
             nextProgress,
-            data.ready_to_generate ?? false
+            data.ready_to_generate ?? false,
+            {
+              scholarshipTitle: initialScholarshipTitle,
+              mentorInterviewStarted: guestMentorInterviewStarted
+            }
           );
         }
         if (editingMessageId === messageId) {

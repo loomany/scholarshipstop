@@ -12,6 +12,8 @@ export default function EssayPageClient() {
   const initialChatIdFromQuery = parseEssayChatQueryParam(
     searchParams.get('chat')
   );
+  const initialScholarshipTitle =
+    searchParams.get('scholarship')?.trim() || null;
 
   return (
     <section className="min-h-screen bg-zinc-50 py-6 text-zinc-900 sm:py-10">
@@ -36,7 +38,10 @@ export default function EssayPageClient() {
         </header>
 
         <div className="mx-auto mt-10 flex max-w-3xl justify-center sm:mt-12">
-          <EssayQuestionnaire initialChatIdFromQuery={initialChatIdFromQuery} />
+          <EssayQuestionnaire
+            initialChatIdFromQuery={initialChatIdFromQuery}
+            initialScholarshipTitle={initialScholarshipTitle}
+          />
         </div>
       </div>
     </section>

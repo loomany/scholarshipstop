@@ -100,6 +100,7 @@ export function listPreferredSeoPathSegments(): string[] {
   segments.add('payout-student');
   segments.add('payout-non-monetary');
   segments.add('payout-not-stated');
+  segments.add('full-ride');
   return Array.from(segments).sort((a, b) => a.localeCompare(b));
 }
 

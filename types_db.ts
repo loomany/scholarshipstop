@@ -225,6 +225,9 @@ export interface Database {
           messages: Json
           progress: Json
           ready_to_generate: boolean
+          scholarship_title: string | null
+          mentor_interview_started: boolean
+          mentor_profile_prompt_sent: boolean
           created_at: string
           updated_at: string
         }
@@ -234,6 +237,9 @@ export interface Database {
           messages?: Json
           progress?: Json
           ready_to_generate?: boolean
+          scholarship_title?: string | null
+          mentor_interview_started?: boolean
+          mentor_profile_prompt_sent?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -243,6 +249,9 @@ export interface Database {
           messages?: Json
           progress?: Json
           ready_to_generate?: boolean
+          scholarship_title?: string | null
+          mentor_interview_started?: boolean
+          mentor_profile_prompt_sent?: boolean
           created_at?: string
           updated_at?: string
         }

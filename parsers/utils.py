@@ -283,6 +283,34 @@ def _find_id_by_source_fingerprint(
 _SKIP_ON_WRITE = frozenset({"id"})
 
 
+def _merge_seo_tags_for_upsert(
+    existing: object | None,
+    incoming: object | None,
+) -> list[str]:
+    """
+    Union DB + payload seo_tags; dedupe case-insensitively.
+    Incoming (parser) values are listed first so their casing wins on collisions.
+    """
+    incoming_list: list[str] = []
+    if isinstance(incoming, list):
+        incoming_list = [str(x) for x in incoming if isinstance(x, str) and x.strip()]
+    existing_list: list[str] = []
+    if isinstance(existing, list):
+        existing_list = [str(x) for x in existing if isinstance(x, str) and x.strip()]
+    seen: set[str] = set()
+    out: list[str] = []
+    for t in incoming_list + existing_list:
+        tl = t.strip()
+        if not tl:
+            continue
+        kl = tl.lower()
+        if kl in seen:
+            continue
+        seen.add(kl)
+        out.append(tl)
+    return out
+
+
 def upsert_scholarship(record: Mapping[str, Any]) -> dict[str, Any]:
     """
     Записать стипендию с логикой дедупликации:
@@ -329,6 +357,24 @@ def upsert_scholarship(record: Mapping[str, Any]) -> dict[str, Any]:
     payload["url"] = url
     payload["text_fingerprint"] = fingerprint
     payload["last_seen_at"] = now
+
+    if row_id is not None:
+        res_prev = (
+            client.table("scholarships")
+            .select("seo_tags")
+            .eq("id", row_id)
+            .limit(1)
+            .execute()
+        )
+        rows_prev = res_prev.data or []
+        existing_tags = rows_prev[0].get("seo_tags") if rows_prev else None
+        if "seo_tags" in payload:
+            payload["seo_tags"] = _merge_seo_tags_for_upsert(
+                existing_tags,
+                payload.get("seo_tags"),
+            )
+        elif existing_tags is not None:
+            payload["seo_tags"] = _merge_seo_tags_for_upsert(existing_tags, [])
 
     if row_id is None:
         # Новая запись (created_at / updated_at по умолчанию из БД)

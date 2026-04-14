@@ -10,6 +10,11 @@ import {
   normalizeGuestInterviewMessages
 } from '@/lib/essay/guestInterviewPayload';
 import {
+  buildMentorInterviewContextBlock,
+  transcriptForContextBlock
+} from '@/lib/essay/mentorOnboarding';
+import {
+  buildInterviewerSystemPrompt,
   clampProgress,
   openAiInterviewerTurn,
   parseInterviewerJson,
@@ -23,6 +28,9 @@ export const dynamic = 'force-dynamic';
 type PostBody = {
   messages?: unknown;
   user_message?: string;
+  scholarship_title?: string | null;
+  /** After the first LLM turn, client sets true — subsequent turns use the standard interviewer prompt only. */
+  mentor_interview_started?: boolean;
 };
 
 /**
@@ -54,6 +62,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid messages' }, { status: 400 });
   }
 
+  const stRaw =
+    typeof body.scholarship_title === 'string' ? body.scholarship_title.trim() : '';
+  const scholarshipTitle = stRaw.length > 0 && stRaw.length <= 500 ? stRaw : null;
+  const mentorInterviewStarted = body.mentor_interview_started === true;
+
   const now = new Date().toISOString();
   let history: EssayChatMessageRow[] = [
     ...prior,
@@ -66,8 +79,21 @@ export async function POST(request: Request) {
     ready_to_generate: boolean;
   };
   try {
-    const raw = await openAiInterviewerTurn(toOpenAiHistory(history));
-    assistantPayload = parseInterviewerJson(raw);
+    if (!mentorInterviewStarted) {
+      const appendix = buildMentorInterviewContextBlock({
+        scholarshipTitle,
+        setupTranscript: transcriptForContextBlock(
+          history.map((m) => ({ role: m.role, content: m.content }))
+        )
+      });
+      const raw = await openAiInterviewerTurn(toOpenAiHistory(history), {
+        systemPrompt: buildInterviewerSystemPrompt(appendix)
+      });
+      assistantPayload = parseInterviewerJson(raw);
+    } else {
+      const raw = await openAiInterviewerTurn(toOpenAiHistory(history));
+      assistantPayload = parseInterviewerJson(raw);
+    }
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Interviewer failed';
     return NextResponse.json({ error: msg }, { status: 502 });
@@ -82,6 +108,7 @@ export async function POST(request: Request) {
   return NextResponse.json({
     messages: history,
     progress: clampProgress(assistantPayload.progress),
-    ready_to_generate: assistantPayload.ready_to_generate
+    ready_to_generate: assistantPayload.ready_to_generate,
+    mentor_interview_started: true
   });
 }

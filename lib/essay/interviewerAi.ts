@@ -14,10 +14,11 @@ export const EMPTY_PROGRESS: ThemeProgress = {
   personality: 0
 };
 
+/** @deprecated Use `buildWelcomeAssistantMessage` from `@/lib/essay/mentorOnboarding` for new chats. */
 export const FIRST_ASSISTANT_MESSAGE =
   "Hi! I'm your AI mentor. I'll ask questions so we cover four themes; your answers fill the progress bars, and the full draft is generated in the app once there's enough material — I won't write the essay here in chat. Let's start with the basics: what shaped you as a person and why did you decide to continue your studies (or change your path)? Write naturally — the main thing is specifics: circumstances, numbers, and emotions.";
 
-const INTERVIEWER_SYSTEM = `You are an experienced mentor (Ivy League caliber). Your job is ONLY to interview: draw out the student's facts and stories. The actual essay draft is produced elsewhere in the product after this interview — not by you in the chat.
+export const INTERVIEWER_SYSTEM_BASE = `You are an experienced mentor (Ivy League caliber). Your job is ONLY to interview: draw out the student's facts and stories. The actual essay draft is produced elsewhere in the product after this interview — not by you in the chat.
 
 Gradually cover four themes (not as a dry checklist — keep the conversation natural):
 1) Background — where the person comes from, what shaped them.
@@ -59,6 +60,15 @@ Response format: ONLY one JSON object, no markdown, with this shape:
 }
 
 ready_to_generate: true ONLY when all four progress values reflect genuinely strong coverage (typically each theme has enough real student material that a draft would be grounded — align with high scores on all four, not before). If the student is pushing for an essay without providing substance, ready_to_generate must stay false.`;
+
+/** Alias for backwards compatibility. */
+export const INTERVIEWER_SYSTEM = INTERVIEWER_SYSTEM_BASE;
+
+export function buildInterviewerSystemPrompt(contextAppendix?: string | null): string {
+  const extra = contextAppendix?.trim();
+  if (!extra) return INTERVIEWER_SYSTEM_BASE;
+  return `${INTERVIEWER_SYSTEM_BASE}\n${extra}`;
+}
 
 export function clampProgress(p: Partial<ThemeProgress>): ThemeProgress {
   const c = (n: unknown) =>
@@ -204,7 +214,8 @@ export async function reassessProgressFromConversation(
 }
 
 export async function openAiInterviewerTurn(
-  conversation: ChatTurn[]
+  conversation: ChatTurn[],
+  options?: { systemPrompt?: string }
 ): Promise<string> {
   const key = process.env.OPENAI_API_KEY?.trim();
   if (!key) throw new Error('OPENAI_API_KEY missing');
@@ -213,6 +224,7 @@ export async function openAiInterviewerTurn(
     process.env.OPENAI_INTERVIEWER_MODEL,
     process.env.OPENAI_ESSAY_MODEL
   );
+  const systemContent = options?.systemPrompt ?? INTERVIEWER_SYSTEM_BASE;
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -224,7 +236,7 @@ export async function openAiInterviewerTurn(
       temperature: 0.7,
       response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: INTERVIEWER_SYSTEM },
+        { role: 'system', content: systemContent },
         ...conversation
       ]
     })

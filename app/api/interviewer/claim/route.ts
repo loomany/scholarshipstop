@@ -21,6 +21,9 @@ type PostBody = {
   messages?: unknown;
   progress?: unknown;
   ready_to_generate?: boolean;
+  scholarship_title?: string | null;
+  mentor_interview_started?: boolean;
+  mentor_profile_prompt_sent?: boolean;
 };
 
 function validateMessagesJson(raw: unknown): Json | null {
@@ -56,6 +59,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid messages' }, { status: 400 });
   }
 
+  const { messages: parsedForFlags } = readEssayChatMessages(messagesJson);
+  const userMsgCount = parsedForFlags.filter((m) => m.role === 'user').length;
+  const assistantMsgCount = parsedForFlags.filter(
+    (m) => m.role === 'assistant'
+  ).length;
+  /** Guest / legacy: welcome + at least one more assistant ⇒ LLM has started. */
+  const derivedInterviewStarted =
+    userMsgCount >= 1 && assistantMsgCount >= 2;
+
   const progress = clampProgress(
     body.progress && typeof body.progress === 'object'
       ? (body.progress as Partial<ThemeProgress>)
@@ -63,12 +75,27 @@ export async function POST(request: Request) {
   );
   const ready = body.ready_to_generate === true;
 
+  const st =
+    typeof body.scholarship_title === 'string' && body.scholarship_title.trim()
+      ? body.scholarship_title.trim().slice(0, 500)
+      : null;
+  const mentorStarted =
+    body.mentor_interview_started === true
+      ? true
+      : body.mentor_interview_started === false
+        ? false
+        : derivedInterviewStarted;
+  const profileSent = body.mentor_profile_prompt_sent === true;
+
   const now = new Date().toISOString();
   const insertRow: TablesInsert<'essay_chats'> = {
     user_id: user.id,
     messages: messagesJson,
     progress: progress as unknown as Json,
     ready_to_generate: ready,
+    scholarship_title: st,
+    mentor_interview_started: mentorStarted,
+    mentor_profile_prompt_sent: profileSent,
     updated_at: now
   };
 

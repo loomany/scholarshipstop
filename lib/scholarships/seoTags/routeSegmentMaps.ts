@@ -143,5 +143,7 @@ export const SEO_ROUTE_SEGMENT_TO_CANONICAL_TAG: Record<string, SeoCanonicalTag>
   'payout-college': 'payout_college',
   'payout-student': 'payout_student',
   'payout-non-monetary': 'payout_non_monetary',
-  'payout-not-stated': 'payout_not_stated'
+  'payout-not-stated': 'payout_not_stated',
+  /** High-value non-monetary / full coverage (maps to `seo_tags` from parser). */
+  'full-ride': 'award_signal_high_value'
 };

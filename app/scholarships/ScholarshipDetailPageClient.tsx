@@ -1493,10 +1493,6 @@ export default function ScholarshipDetailPageClient({
                 >
                   Example essays & guides
                 </h2>
-                <p className="text-sm leading-relaxed text-zinc-600">
-                  Long-tail writing guides on ScholarshipTop (separate from
-                  scholarship listings—no duplicate SEO intent).
-                </p>
                 {initialRelatedEssays.length > 0 ? (
                   <ul className="space-y-2.5" role="list">
                     {initialRelatedEssays.map((ex) => {
@@ -1533,7 +1529,7 @@ export default function ScholarshipDetailPageClient({
                     Writer to draft a unique personal statement fast.
                   </p>
                   <Link
-                    href="/essay"
+                    href={`/essay?scholarship=${encodeURIComponent(scholarship.title)}`}
                     className="mt-2 inline-flex text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
                   >
                     Open AI Essay Writer →
