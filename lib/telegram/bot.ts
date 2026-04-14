@@ -494,6 +494,43 @@ function getAdminClient() {
   return createServiceRoleSupabaseClient();
 }
 
+/**
+ * Admin alerts (signup, visitor first-touch, email verified): env chat IDs plus any
+ * DB-linked admins with notifications on. Env is required when `telegram_users` has no admin row.
+ */
+async function collectTelegramAdminAlertChatIds(): Promise<number[]> {
+  const set = new Set<number>();
+
+  for (const id of getTelegramAdminIds()) {
+    set.add(id);
+  }
+
+  const extraChat = process.env.TELEGRAM_CHAT_ID?.trim();
+  if (extraChat) {
+    for (const part of extraChat.split(',')) {
+      const n = Number(part.trim());
+      if (Number.isFinite(n)) {
+        set.add(n);
+      }
+    }
+  }
+
+  const admin = getAdminClient();
+  if (admin) {
+    const { data: chats } = await admin
+      .from('telegram_users')
+      .select('telegram_chat_id')
+      .eq('is_admin', true)
+      .eq('notifications_enabled', true);
+
+    for (const chat of chats ?? []) {
+      set.add(chat.telegram_chat_id);
+    }
+  }
+
+  return [...set];
+}
+
 async function getTelegramUserByTelegramId(telegramUserId: number) {
   const admin = getAdminClient();
   if (!admin) return null;
@@ -679,38 +716,34 @@ async function logTelegramEvent(
 }
 
 async function sendTelegramAdminBroadcast(text: string) {
-  const admin = getAdminClient();
-  if (!admin) return;
-
-  const { data: chats } = await admin
-    .from('telegram_users')
-    .select('telegram_chat_id')
-    .eq('is_admin', true)
-    .eq('notifications_enabled', true);
-
-  for (const chat of chats ?? []) {
-    await sendTelegramMessage(chat.telegram_chat_id, text);
+  const chatIds = await collectTelegramAdminAlertChatIds();
+  if (chatIds.length === 0) {
+    console.warn(
+      '[telegram] sendTelegramAdminBroadcast: no recipient chat IDs (TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID / telegram_users admins)'
+    );
+    return;
+  }
+  for (const chatId of chatIds) {
+    await sendTelegramMessage(chatId, text);
   }
 }
 
-/** Same recipients as {@link sendTelegramAdminBroadcast} (admin + notifications on), HTML body. */
+/** Same recipients as {@link sendTelegramAdminBroadcast}, HTML body. */
 async function sendTelegramAdminBroadcastHtml(text: string) {
-  const admin = getAdminClient();
-  if (!admin) return;
-
-  const { data: chats } = await admin
-    .from('telegram_users')
-    .select('telegram_chat_id')
-    .eq('is_admin', true)
-    .eq('notifications_enabled', true);
-
-  for (const chat of chats ?? []) {
-    await sendTelegramMessage(chat.telegram_chat_id, text, undefined, { parse_mode: 'HTML' });
+  const chatIds = await collectTelegramAdminAlertChatIds();
+  if (chatIds.length === 0) {
+    console.warn(
+      '[telegram] sendTelegramAdminBroadcastHtml: no recipient chat IDs (TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID / telegram_users admins)'
+    );
+    return;
+  }
+  for (const chatId of chatIds) {
+    await sendTelegramMessage(chatId, text, undefined, { parse_mode: 'HTML' });
   }
 }
 
 /**
- * First-touch anonymous visit (after DB insert). Same audience as signup admin pings — not a single env chat.
+ * First-touch anonymous visit (after DB insert). Same audience as signup admin pings (env + DB admins).
  */
 export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
   trafficChannel: TrafficChannel;

@@ -1,5 +1,5 @@
+import { MagicLinkImplicitSession } from '@/components/auth/MagicLinkImplicitSession';
 import { createClient } from '@/utils/supabase/server';
-import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import {
@@ -16,14 +16,6 @@ import OauthSignIn from '@/components/ui/AuthForms/OauthSignIn';
 import ForgotPassword from '@/components/ui/AuthForms/ForgotPassword';
 import UpdatePasswordSessionGate from '@/components/ui/AuthForms/UpdatePasswordSessionGate';
 import SignUp from '@/components/ui/AuthForms/Signup';
-
-export const metadata: Metadata = {
-  title: 'Sign in',
-  robots: {
-    index: false,
-    follow: true
-  }
-};
 
 export default async function SignIn({
   params,
@@ -73,6 +65,7 @@ export default async function SignIn({
 
   return (
     <div className="height-screen-helper flex min-h-[calc(100vh-5rem)] justify-center bg-zinc-50 px-4 py-8 sm:py-10">
+      <MagicLinkImplicitSession />
       <div className="m-auto flex w-full max-w-[440px] flex-col items-stretch">
         <Card
           variant="auth"
