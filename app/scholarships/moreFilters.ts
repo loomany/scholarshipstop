@@ -1,3 +1,4 @@
+import { scholarshipSeoTagsBypassAmountFilter } from '@/lib/scholarships/seoTags/awardSignalTags';
 import type { Scholarship } from './scholarshipsData';
 import {
   normalizeUsStateToCanonical,
@@ -287,9 +288,14 @@ export function scholarshipPassesMoreFilters(
 ): boolean {
   if (!matchesDeadlinePreset(s, f.deadlinePreset)) return false;
 
-  const nonMonetary = s.payoutMethod === 'non_monetary';
+  /** Matches server `applyMoreFilters`: non_monetary, award_signal_* in seo_tags, or in amount range. */
+  const amountFilterBypass =
+    s.payoutMethod === 'non_monetary' ||
+    scholarshipSeoTagsBypassAmountFilter(s);
   const amt = parseScholarshipAmount(s);
-  if (!nonMonetary && (amt < f.amountMin || amt > f.amountMax)) return false;
+  if (!amountFilterBypass && (amt < f.amountMin || amt > f.amountMax)) {
+    return false;
+  }
 
   const ap =
     typeof s.applicantCount === 'number' && !Number.isNaN(s.applicantCount)

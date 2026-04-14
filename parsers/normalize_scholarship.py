@@ -302,6 +302,92 @@ def _payout_method(record: dict[str, Any], blob: str) -> str:
     return "not_stated"
 
 
+AWARD_SIGNAL_HIGH_VALUE_TAG = "award_signal_high_value"
+
+_HIGH_VALUE_AWARD_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bfull[-\s]*ride\b", re.I),
+    re.compile(r"\bfull[-\s]+tuition\b", re.I),
+    re.compile(r"\bfull\s+cost\s+of\s+attendance\b", re.I),
+    re.compile(r"\bfull\s+scholarship\b", re.I),
+    re.compile(r"\btuition[-\s]*free\b", re.I),
+    re.compile(r"\b100%\s+of\s+tuition\b", re.I),
+    re.compile(r"\bcovers\s+full\s+(?:tuition|cost)", re.I),
+)
+
+
+def _award_primary_text_has_explicit_monetary_digits(text: str | None) -> bool:
+    if not text or not str(text).strip():
+        return False
+    t = str(text).strip()
+    if re.search(r"\$\s*[\d,]+", t):
+        return True
+    if re.search(r"\b\d{1,3}(?:,\d{3})+(?:\.\d{2})?\b", t):
+        return True
+    return False
+
+
+def _detect_high_value_award_signal(record: dict[str, Any]) -> bool:
+    """
+    HIGH_VALUE_AWARD: high-impact wording (full ride, full tuition, …) without a
+    parseable dollar amount in the primary award line — aligns with site listing filters.
+    """
+    award = (record.get("award_amount_text") or "").strip()
+    if _award_primary_text_has_explicit_monetary_digits(award):
+        return False
+    title = (record.get("title") or "").strip()
+    awards_body = (record.get("awards_text") or "").strip()[:8000]
+    hay = f"{award} \n {title} \n {awards_body}"
+    if _award_primary_text_has_explicit_monetary_digits(hay):
+        return False
+    return any(p.search(hay) for p in _HIGH_VALUE_AWARD_PATTERNS)
+
+
+def _merge_seo_tags(record: dict[str, Any], add: list[str]) -> None:
+    existing: list[str] = []
+    if isinstance(record.get("seo_tags"), list):
+        existing = [
+            str(x) for x in record["seo_tags"] if isinstance(x, str) and x.strip()
+        ]
+    seen = {x.lower() for x in existing}
+    out = list(existing)
+    for raw in add:
+        k = raw.strip()
+        if not k:
+            continue
+        kl = k.lower()
+        if kl in seen:
+            continue
+        seen.add(kl)
+        out.append(k)
+    record["seo_tags"] = out
+
+
+def _record_has_award_signal_seo_tag(record: dict[str, Any]) -> bool:
+    raw = record.get("seo_tags")
+    if not isinstance(raw, list):
+        return False
+    for x in raw:
+        if isinstance(x, str) and x.strip().lower().startswith("award_signal_"):
+            return True
+    return False
+
+
+def infer_high_value_award_tags(record: dict[str, Any]) -> list[str]:
+    """
+    Canonical award_signal_* tags inferred from text (full ride, full tuition, …).
+    Parser / upstream may also pre-fill seo_tags — use _enforce_non_monetary_for_award_signals.
+    """
+    if not _detect_high_value_award_signal(record):
+        return []
+    return [AWARD_SIGNAL_HIGH_VALUE_TAG]
+
+
+def _enforce_non_monetary_for_award_signals(record: dict[str, Any]) -> None:
+    """Any award_signal_* in seo_tags must pair with non_monetary for listing SQL."""
+    if _record_has_award_signal_seo_tag(record):
+        record["payout_method"] = "non_monetary"
+
+
 def _deadline_fields(
     deadline_date: str | None,
     status_text: str | None,
@@ -386,6 +472,13 @@ def _credibility(record: dict[str, Any], blob: str) -> tuple[int | None, str]:
     return score, "high"
 
 
+def _ranking_high_value_financial_equivalent_applies(record: dict[str, Any]) -> bool:
+    """Treat as ~$50k+ award for ranking when numeric sort is missing."""
+    if _detect_high_value_award_signal(record):
+        return True
+    return _record_has_award_signal_seo_tag(record)
+
+
 def _ranking_score(
     record: dict[str, Any],
     days_left: int | None,
@@ -402,8 +495,11 @@ def _ranking_score(
         s += min(20.0, days_left / 14.0 * 10)
     if record.get("apply_url"):
         s += 15
-    if amount_sort and amount_sort > 0:
-        s += min(25.0, amount_sort / 5000.0 * 15)
+    effective_amount = float(amount_sort) if amount_sort and amount_sort > 0 else 0.0
+    if effective_amount <= 0 and _ranking_high_value_financial_equivalent_applies(record):
+        effective_amount = 50000.0
+    if effective_amount > 0:
+        s += min(25.0, effective_amount / 5000.0 * 15)
     s += max(0.0, 15.0 - min(15, req_count))
     if record.get("provider_url"):
         s += 5
@@ -957,6 +1053,10 @@ def apply_normalization(record: dict[str, Any]) -> None:
     record["award_amount_numeric_sort"] = num_sort
 
     record["payout_method"] = _payout_method(record, blob)
+    hv_tags = infer_high_value_award_tags(record)
+    if hv_tags:
+        _merge_seo_tags(record, hv_tags)
+        record["payout_method"] = "non_monetary"
 
     req_types, req_flags = _extract_requirements(blob)
     record["requirement_types"] = req_types
@@ -1049,6 +1149,9 @@ def apply_normalization(record: dict[str, Any]) -> None:
         _documents_from_flags(record),
         _extract_documents_from_text(doc_blob),
     )
+
+    # Upstream may inject award_signal_* into seo_tags without re-running text rules.
+    _enforce_non_monetary_for_award_signals(record)
 
     record["ranking_score"] = _ranking_score(
         record,

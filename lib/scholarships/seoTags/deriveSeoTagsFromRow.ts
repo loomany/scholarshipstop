@@ -5,6 +5,7 @@
 
 import type { Json } from '@/types_db';
 import type { SeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
+import { shouldTagAwardSignalHighValue } from '@/lib/scholarships/seoTags/awardSignalTags';
 import {
   ALL_SEO_TAGS,
   isSeoCanonicalTag
@@ -35,6 +36,9 @@ export type SeoTagSourceRow = {
   study_levels: Json | null;
   payout_method: string | null;
   award_amount_numeric_sort: number | null;
+  /** Optional: used with `title` / `awards_text` for `award_signal_high_value`. */
+  award_amount_text?: string | null;
+  awards_text?: string | null;
   deadline_bucket: string | null;
   is_verified: boolean | null;
   financial_need_considered: boolean | null;
@@ -179,6 +183,16 @@ function tagsFromStructured(row: SeoTagSourceRow, out: Set<SeoCanonicalTag>): vo
     ) {
       out.add('international_students');
     }
+  }
+
+  if (
+    shouldTagAwardSignalHighValue({
+      award_amount_text: row.award_amount_text ?? null,
+      title: row.title,
+      awards_text: row.awards_text ?? null
+    })
+  ) {
+    out.add('award_signal_high_value');
   }
 }
 

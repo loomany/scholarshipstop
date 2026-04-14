@@ -60,6 +60,8 @@ const SELECT_COLUMNS = [
   'study_levels',
   'payout_method',
   'award_amount_numeric_sort',
+  'award_amount_text',
+  'awards_text',
   'deadline_bucket',
   'is_verified',
   'financial_need_considered',

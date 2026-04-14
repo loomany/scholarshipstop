@@ -41,6 +41,7 @@ import {
   scholarshipMatchProfileVersion,
   type ProfilesRow
 } from '@/lib/scholarships/scholarshipMatch';
+import { AWARD_SIGNAL_SEO_TAGS } from '@/lib/scholarships/seoTags/awardSignalTags';
 import { isSeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
 import { requirementTypesToDbColumns } from '@/lib/scholarships/requirementTypeMapping';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
@@ -435,6 +436,11 @@ export async function fetchGlobalFilterBounds(
       ?.award_amount_numeric_sort;
     const pmin = (minP as { applicants_count: number | null } | null)?.applicants_count;
     const pmax = (maxP as { applicants_count: number | null } | null)?.applicants_count;
+    /**
+     * Bounds drive the amount slider only. Rows with NULL `award_amount_numeric_sort`
+     * still pass the listing query when `payout_method = non_monetary` or `seo_tags`
+     * overlaps `award_signal_*` (see `applyMoreFilters`).
+     */
     const value = {
       amountMin: amin != null && Number.isFinite(Number(amin)) ? Math.floor(Number(amin)) : fallback.amountMin,
       amountMax: amax != null && Number.isFinite(Number(amax)) ? Math.ceil(Number(amax)) : fallback.amountMax,
@@ -625,8 +631,17 @@ function moreFiltersReducedForSeoListing(base: MoreFiltersState): MoreFiltersSta
 function applyMoreFilters(q: any, f: MoreFiltersState): any {
   q = applyDeadlinePreset(q, f.deadlinePreset);
 
-  const nonMonetaryOrAmount = `payout_method.eq.non_monetary,and(award_amount_numeric_sort.gte.${f.amountMin},award_amount_numeric_sort.lte.${f.amountMax})`;
-  q = q.or(nonMonetaryOrAmount);
+  /**
+   * Amount slider: non-monetary payout OR numeric amount within bounds OR canonical
+   * `award_signal_*` tags (full ride / no dollar line — see awardSignalTags.ts).
+   */
+  const amountRange = `and(award_amount_numeric_sort.gte.${f.amountMin},award_amount_numeric_sort.lte.${f.amountMax})`;
+  const awardSignalPart =
+    AWARD_SIGNAL_SEO_TAGS.length > 0
+      ? `,seo_tags.ov.{${AWARD_SIGNAL_SEO_TAGS.join(',')}}`
+      : '';
+  const payoutAmountOrAwardSignal = `payout_method.eq.non_monetary,${amountRange}${awardSignalPart}`;
+  q = q.or(payoutAmountOrAwardSignal);
 
   q = q
     .or(`applicants_count.is.null,and(applicants_count.gte.${f.applicantsMin},applicants_count.lte.${f.applicantsMax})`);

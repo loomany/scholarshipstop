@@ -46,7 +46,12 @@ export const SEO_TAG_GROUPS = {
     'payout_non_monetary',
     'payout_not_stated'
   ],
-  gpa: ['gpa_2_0', 'gpa_2_5', 'gpa_3_0', 'gpa_3_5']
+  gpa: ['gpa_2_0', 'gpa_2_5', 'gpa_3_0', 'gpa_3_5'],
+  /**
+   * Parser-driven `award_signal_*` tokens; listing SQL `.or()` includes overlap with these
+   * so NULL `award_amount_numeric_sort` rows still match (e.g. BigFuture pipeline).
+   */
+  award_signals: ['award_signal_high_value', 'award_signal_listing_eligible']
 } as const;
 
 /** Flat ordered list (deterministic) for migrations, audits, UI. */
@@ -57,7 +62,8 @@ export const ALL_SEO_TAGS = [
   ...SEO_TAG_GROUPS.requirement_format,
   ...SEO_TAG_GROUPS.payout_amount,
   ...SEO_TAG_GROUPS.payout_method,
-  ...SEO_TAG_GROUPS.gpa
+  ...SEO_TAG_GROUPS.gpa,
+  ...SEO_TAG_GROUPS.award_signals
 ] as const;
 
 export type SeoCanonicalTag = (typeof ALL_SEO_TAGS)[number];
