@@ -2,6 +2,21 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { Database } from '@/types_db';
 
+/** Page size for candidate scans (PostgREST `range` batches). */
+const CANDIDATE_PAGE = 200;
+
+/**
+ * Max scholarships to scan per phase (essay-flagged, then fallback “any active”).
+ * Prevents unbounded pagination if the catalog is huge. Override via `ESSAY_ENQUEUE_MAX_SCAN`.
+ */
+function maxScanRows(): number {
+  const raw = process.env.ESSAY_ENQUEUE_MAX_SCAN?.trim();
+  const n = raw ? Number(raw) : 20_000;
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 20_000;
+}
+
+type CandidateRow = { id: string; title: string | null; slug: string | null };
+
 export type EnqueueNextEssayQueueJobResult =
   | {
       ok: true;
@@ -52,36 +67,38 @@ export async function enqueueNextEssayQueueJob(
     (queuedRows ?? []).map((r) => r.scholarship_id).filter(Boolean)
   );
 
-  const { data: candidates, error: sErr } = await supabase
-    .from('scholarships')
-    .select('id, title, slug')
-    .eq('is_active', true)
-    .or('requires_essay.eq.true,essay_required.eq.true')
-    .not('title', 'is', null)
-    .order('updated_at', { ascending: false })
-    .limit(200);
+  const eligible = (rows: CandidateRow[]) =>
+    rows.filter((s) => s.id && !withEssay.has(s.id) && !inQueue.has(s.id));
 
-  if (sErr) throw new Error(sErr.message);
+  const scanForNext = async (
+    essayFlagsOnly: boolean
+  ): Promise<CandidateRow | null> => {
+    const cap = maxScanRows();
+    for (let from = 0; from < cap; from += CANDIDATE_PAGE) {
+      const to = Math.min(from + CANDIDATE_PAGE - 1, cap - 1);
+      let q = supabase
+        .from('scholarships')
+        .select('id, title, slug')
+        .eq('is_active', true)
+        .not('title', 'is', null);
+      if (essayFlagsOnly) {
+        q = q.or('requires_essay.eq.true,essay_required.eq.true');
+      }
+      const { data, error } = await q
+        .order('updated_at', { ascending: false })
+        .range(from, to);
+      if (error) throw new Error(error.message);
+      const batch = (data ?? []) as CandidateRow[];
+      const pick = eligible(batch)[0];
+      if (pick) return pick;
+      if (batch.length < CANDIDATE_PAGE) break;
+    }
+    return null;
+  };
 
-  let picks = (candidates ?? []).filter(
-    (s) => s.id && !withEssay.has(s.id) && !inQueue.has(s.id)
-  );
-
-  if (picks.length === 0) {
-    const { data: fallback, error: fbErr } = await supabase
-      .from('scholarships')
-      .select('id, title, slug')
-      .eq('is_active', true)
-      .not('title', 'is', null)
-      .order('updated_at', { ascending: false })
-      .limit(200);
-    if (fbErr) throw new Error(fbErr.message);
-    picks = (fallback ?? []).filter(
-      (s) => s.id && !withEssay.has(s.id) && !inQueue.has(s.id)
-    );
-  }
-
-  const next = picks[0];
+  /** Prefer essay-tagged grants, then any active grant still missing a hub guide. */
+  const next =
+    (await scanForNext(true)) ?? (await scanForNext(false)) ?? undefined;
   if (!next?.id) {
     return { ok: false, reason: 'no_eligible_scholarship' };
   }

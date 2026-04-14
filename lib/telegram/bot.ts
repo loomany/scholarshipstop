@@ -24,7 +24,11 @@ import {
 import { SCHOLARSHIPS_HUB_SAVED_TAB_HREF } from '@/app/scholarships/scholarshipListUrl';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
-import { formatVisitorSourceDisplay } from '@/lib/analytics/utmSourceDisplay';
+import {
+  labelForVisitorRow,
+  type TrafficChannel,
+  formatTrafficChannelLabel
+} from '@/lib/analytics/resolveTrafficChannel';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
@@ -689,6 +693,48 @@ async function sendTelegramAdminBroadcast(text: string) {
   }
 }
 
+/** Same recipients as {@link sendTelegramAdminBroadcast} (admin + notifications on), HTML body. */
+async function sendTelegramAdminBroadcastHtml(text: string) {
+  const admin = getAdminClient();
+  if (!admin) return;
+
+  const { data: chats } = await admin
+    .from('telegram_users')
+    .select('telegram_chat_id')
+    .eq('is_admin', true)
+    .eq('notifications_enabled', true);
+
+  for (const chat of chats ?? []) {
+    await sendTelegramMessage(chat.telegram_chat_id, text, undefined, { parse_mode: 'HTML' });
+  }
+}
+
+/**
+ * First-touch anonymous visit (after DB insert). Same audience as signup admin pings — not a single env chat.
+ */
+export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
+  trafficChannel: TrafficChannel;
+  landingUrl: string;
+}) {
+  if (!getTelegramBotToken()) {
+    console.warn(
+      '[telegram] notifyTelegramAdminsVisitorFirstTouch: missing TELEGRAM_BOT_TOKEN'
+    );
+    return;
+  }
+
+  const channelDisplay = formatTrafficChannelLabel(payload.trafficChannel);
+
+  const text = [
+    '<b>New Visitor on ScholarshipTop!</b>',
+    '',
+    `<b>Channel:</b> ${escapeTelegramHtml(channelDisplay)}`,
+    `<b>Landing:</b> ${escapeTelegramHtml(payload.landingUrl)}`
+  ].join('\n');
+
+  await sendTelegramAdminBroadcastHtml(text);
+}
+
 /**
  * Plain-text DM to every numeric chat in `TELEGRAM_ADMIN_IDS` / `TELEGRAM_ADMIN_ID` (env only).
  * Does not read `telegram_users` — use this when only env-configured admins should receive alerts.
@@ -1029,35 +1075,40 @@ async function sendAdminPanel(user: TelegramUserRow) {
       .eq('event_type', eventType)
       .gte('created_at', sinceIso);
 
-  const [signupCount, verifiedCount, paymentCount, visitorsResult] = await Promise.all([
-    countQuery('signup'),
-    countQuery('email_verified'),
-    countQuery('payment'),
-    admin
-      .from('anonymous_visitor_first_touch')
-      .select('utm_source, utm_content, referrer, landing_url')
-      .gte('created_at', sinceIso)
-  ]);
+  const [signupCount, verifiedCount, paymentCount, humanVisitorsResult, botVisitorsCount] =
+    await Promise.all([
+      countQuery('signup'),
+      countQuery('email_verified'),
+      countQuery('payment'),
+      admin
+        .from('anonymous_visitor_first_touch')
+        .select('*')
+        .eq('is_likely_bot', false)
+        .gte('created_at', sinceIso),
+      admin
+        .from('anonymous_visitor_first_touch')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_likely_bot', true)
+        .gte('created_at', sinceIso)
+    ]);
 
   const trafficLines: string[] = [];
-  if (visitorsResult.error) {
-    console.error('[telegram] admin panel anonymous_visitor_first_touch', visitorsResult.error);
+  if (humanVisitorsResult.error) {
+    console.error(
+      '[telegram] admin panel anonymous_visitor_first_touch (humans)',
+      humanVisitorsResult.error.message,
+      humanVisitorsResult.error.code,
+      humanVisitorsResult.error.details
+    );
     trafficLines.push('• Не удалось загрузить источники (см. логи сервера)');
   } else {
-    const rows = visitorsResult.data ?? [];
+    const rows = humanVisitorsResult.data ?? [];
     if (rows.length === 0) {
-      trafficLines.push('• Нет первых визитов за период');
+      trafficLines.push('• Нет первых визитов людей за период');
     } else {
       const counts = new Map<string, number>();
       for (const row of rows) {
-        const label = formatVisitorSourceDisplay(
-          row.utm_source ?? '',
-          row.utm_content ?? '',
-          {
-            referrer: row.referrer ?? '',
-            landingUrl: row.landing_url ?? ''
-          }
-        );
+        const label = labelForVisitorRow(row);
         counts.set(label, (counts.get(label) ?? 0) + 1);
       }
       const sorted = [...counts.entries()].sort((a, b) => {
@@ -1070,6 +1121,11 @@ async function sendAdminPanel(user: TelegramUserRow) {
     }
   }
 
+  const botLine =
+    botVisitorsCount.error != null
+      ? 'Оценка ботов (24ч): не удалось загрузить'
+      : `Оценка ботов по UA (24ч): ${botVisitorsCount.count ?? 0}`;
+
   await sendTelegramMessage(
     user.telegram_chat_id,
     [
@@ -1080,8 +1136,10 @@ async function sendAdminPanel(user: TelegramUserRow) {
       `Подтверждения email за 24ч: ${verifiedCount.count ?? 0}`,
       `Платежи за 24ч: ${paymentCount.count ?? 0}`,
       '',
-      'Трафик за 24ч (первые визиты по источнику)',
-      ...trafficLines
+      'Трафик за 24ч — люди (первые визиты по каналу)',
+      ...trafficLines,
+      '',
+      botLine
     ].join('\n'),
     buildProfileKeyboard(user)
   );

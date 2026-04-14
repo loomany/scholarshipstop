@@ -19,6 +19,9 @@ export interface Database {
           utm_medium: string | null
           utm_campaign: string | null
           utm_content: string | null
+          traffic_channel: string | null
+          is_likely_bot: boolean
+          user_agent_snapshot: string | null
           created_at: string
         }
         Insert: {
@@ -30,6 +33,9 @@ export interface Database {
           utm_medium?: string | null
           utm_campaign?: string | null
           utm_content?: string | null
+          traffic_channel?: string | null
+          is_likely_bot?: boolean
+          user_agent_snapshot?: string | null
           created_at?: string
         }
         Update: {
@@ -41,6 +47,9 @@ export interface Database {
           utm_medium?: string | null
           utm_campaign?: string | null
           utm_content?: string | null
+          traffic_channel?: string | null
+          is_likely_bot?: boolean
+          user_agent_snapshot?: string | null
           created_at?: string
         }
         Relationships: []

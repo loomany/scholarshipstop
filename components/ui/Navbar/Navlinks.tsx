@@ -113,6 +113,13 @@ export default function Navlinks() {
     [pathname]
   );
 
+  const forOrganizationsActive = useMemo(
+    () =>
+      pathname === '/for-organizations' ||
+      pathname.startsWith('/for-organizations/'),
+    [pathname]
+  );
+
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   useEffect(() => {
@@ -320,6 +327,15 @@ export default function Navlinks() {
                 </div>
               </div>
             </div>
+            <Link
+              href="/for-organizations"
+              className={clsx(
+                nav.dark,
+                forOrganizationsActive && nav.darkActive
+              )}
+            >
+              For Organizations
+            </Link>
           </nav>
         </div>
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3">
@@ -555,6 +571,16 @@ export default function Navlinks() {
                   </div>
                 </div>
               </div>
+              <Link
+                href="/for-organizations"
+                className={clsx(
+                  nav.darkDrawer,
+                  forOrganizationsActive && nav.darkDrawerActive
+                )}
+                onClick={closeMenu}
+              >
+                For Organizations
+              </Link>
               <NavbarUserSlot
                 pathname={pathname}
                 variant="drawer"

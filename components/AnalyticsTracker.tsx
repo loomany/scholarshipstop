@@ -112,6 +112,10 @@ export default function AnalyticsTracker() {
       const utm_medium = (params.get('utm_medium') || '').trim().slice(0, 500);
       const utm_campaign = (params.get('utm_campaign') || '').trim().slice(0, 500);
       const referrer = (document.referrer || '').slice(0, 4000);
+      const user_agent =
+        typeof navigator !== 'undefined' && navigator.userAgent
+          ? navigator.userAgent.slice(0, 800)
+          : '';
 
       const payload = {
         visitor_id: visitorId,
@@ -120,7 +124,8 @@ export default function AnalyticsTracker() {
         utm_source,
         utm_medium,
         utm_campaign,
-        utm_content
+        utm_content,
+        user_agent
       };
 
       void fetch('/api/analytics/first-touch', {

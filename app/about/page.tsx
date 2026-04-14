@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 
 import AboutResourceCard from '@/components/about/AboutResourceCard';
+import FoundersNote from '@/components/about/FoundersNote';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 
 export const metadata: Metadata = {
@@ -104,6 +105,8 @@ export default function AboutPage() {
           ScholarshipTop is built to make scholarship discovery easier, more
           organized, and more transparent for students.
         </p>
+
+        <FoundersNote />
 
         <Link href="/" className={clsx(nav.legal, 'mt-8 inline-block sm:mt-10')}>
           ← Back to home

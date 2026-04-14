@@ -1,36 +1,18 @@
 import { NextResponse } from 'next/server';
 
-import { formatVisitorSourceDisplay } from '@/lib/analytics/utmSourceDisplay';
+import {
+  isLikelyAutomatedUserAgent,
+  normalizeClientUserAgent
+} from '@/lib/analytics/clientBot';
+import { resolveTrafficChannel } from '@/lib/analytics/resolveTrafficChannel';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
+import { notifyTelegramAdminsVisitorFirstTouch } from '@/lib/telegram/bot';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const UUID_V4_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
-function resolveTelegramChatId(): string | null {
-  const direct = process.env.TELEGRAM_CHAT_ID?.trim();
-  if (direct) return direct;
-
-  const single = process.env.TELEGRAM_ADMIN_ID?.trim();
-  if (single) return single;
-
-  const list = process.env.TELEGRAM_ADMIN_IDS?.trim();
-  if (list) {
-    const first = list.split(',')[0]?.trim();
-    if (first) return first;
-  }
-
-  return null;
-}
 
 type Body = {
   visitor_id?: unknown;
@@ -40,53 +22,8 @@ type Body = {
   utm_medium?: unknown;
   utm_campaign?: unknown;
   utm_content?: unknown;
+  user_agent?: unknown;
 };
-
-function sendNewVisitorTelegramHtml(payload: {
-  utmSource: string;
-  utmContent: string;
-  landingUrl: string;
-  referrer: string;
-}): Promise<void> {
-  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
-  const chatId = resolveTelegramChatId();
-  if (!token || !chatId) {
-    console.warn(
-      '[analytics/first-touch] skip Telegram: set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID (or TELEGRAM_ADMIN_IDS)'
-    );
-    return Promise.resolve();
-  }
-
-  const sourceDisplay = formatVisitorSourceDisplay(payload.utmSource, payload.utmContent, {
-    referrer: payload.referrer,
-    landingUrl: payload.landingUrl
-  });
-
-  const text = [
-    '<b>New Visitor on ScholarshipTop!</b>',
-    '',
-    `<b>Source:</b> ${escapeHtml(sourceDisplay)}`,
-    `<b>Landing:</b> ${escapeHtml(payload.landingUrl)}`
-  ].join('\n');
-
-  const url = `https://api.telegram.org/bot${encodeURIComponent(token)}/sendMessage`;
-
-  return fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text,
-      parse_mode: 'HTML',
-      disable_web_page_preview: true
-    })
-  }).then(async (res) => {
-    if (!res.ok) {
-      const errText = await res.text().catch(() => '');
-      console.error('[analytics/first-touch] Telegram send failed', res.status, errText);
-    }
-  });
-}
 
 export async function POST(request: Request) {
   let body: Body;
@@ -121,6 +58,20 @@ export async function POST(request: Request) {
   const utm_content =
     typeof body.utm_content === 'string' ? body.utm_content.trim().slice(0, 500) : '';
 
+  const uaFromBody =
+    typeof body.user_agent === 'string' ? body.user_agent.trim() : '';
+  const uaHeader = request.headers.get('user-agent')?.trim() ?? '';
+  const user_agent_snapshot = normalizeClientUserAgent(uaFromBody || uaHeader);
+  const is_likely_bot = isLikelyAutomatedUserAgent(user_agent_snapshot);
+
+  const traffic_channel = resolveTrafficChannel({
+    landingUrl: landing_url,
+    referrer,
+    utm_source,
+    utm_medium,
+    utm_campaign
+  });
+
   const supabase = createServiceRoleSupabaseClient();
   if (!supabase) {
     /**
@@ -143,7 +94,10 @@ export async function POST(request: Request) {
       utm_source: utm_source || null,
       utm_medium: utm_medium || null,
       utm_campaign: utm_campaign || null,
-      utm_content: utm_content || null
+      utm_content: utm_content || null,
+      traffic_channel,
+      is_likely_bot,
+      user_agent_snapshot: user_agent_snapshot || null
     })
     .select('id')
     .maybeSingle();
@@ -160,14 +114,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, status: 'duplicate' });
   }
 
-  void sendNewVisitorTelegramHtml({
-    utmSource: utm_source,
-    utmContent: utm_content,
-    landingUrl: landing_url,
-    referrer
-  }).catch((e) => {
-    console.error('[analytics/first-touch] telegram async error', e);
-  });
+  if (!is_likely_bot) {
+    void notifyTelegramAdminsVisitorFirstTouch({
+      trafficChannel: traffic_channel,
+      landingUrl: landing_url
+    }).catch((e) => {
+      console.error('[analytics/first-touch] telegram async error', e);
+    });
+  }
 
-  return NextResponse.json({ success: true, status: 'new' });
+  return NextResponse.json({
+    success: true,
+    status: 'new',
+    ...(is_likely_bot ? { visitor_kind: 'likely_bot' as const } : { visitor_kind: 'human' as const })
+  });
 }
