@@ -26,10 +26,11 @@ Legacy aliases `LEMONSQUEEZY_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_QUARTERLY_VARIAN
 
 After a successful entitlement update, the handler may send:
 
-- **Subscription active** — on `subscription_created`, `subscription_resumed`, or `subscription_unpaused`, when the user is considered subscribed (active / trialing / on_trial).
+- **Subscription active / welcome** — **off by default.** Lemon Squeezy already sends purchase/receipt email; duplicating it from Resend spams users. Set `SUBSCRIPTION_RESEND_WELCOME_ON_PURCHASE=1` to enable the legacy template on subscribe/resume/unpause/plan change (and the `subscription_updated` “within 5 minutes of `created_at`” fallback when Lemon omits `subscription_created`).
 - **Subscription cancelled** — on `subscription_cancelled` only (not on every `subscription_updated` or renewal).
+- **Payment failed** — on `subscription_payment_failed` (update card / billing).
 
-Renewals and generic updates do not trigger the “active” email, so users are not emailed on each billing cycle.
+Renewals do not trigger marketing-style emails.
 
 The cancelled email uses Lemon’s `customer_portal` / `customer_portal_update_subscription` URL from the webhook when present; otherwise it falls back to `{NEXT_PUBLIC_SITE_URL}/subscription`.
 

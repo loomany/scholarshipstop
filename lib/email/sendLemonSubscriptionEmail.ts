@@ -83,15 +83,22 @@ export function lemonWebhookShouldSendSubscriptionActiveEmail(eventName: string)
 }
 
 /**
- * “Welcome / subscription active” transactional email — broader than {@link lemonWebhookShouldSendSubscriptionActiveEmail}
- * because Lemon often delivers `subscription_updated` (without `subscription_created`) right after checkout, and renewals
- * must still be excluded (handled by timestamp heuristic).
+ * **SaaS default: do not send.** Lemon Squeezy already emails the customer (receipt / order confirmation).
+ * Sending our own “subscription active” on top duplicated that flow and could double with
+ * `subscription_created` + `subscription_updated` within minutes.
+ *
+ * Set `SUBSCRIPTION_RESEND_WELCOME_ON_PURCHASE=1` to opt into legacy Resend “welcome” on:
+ * `subscription_created` | `subscription_resumed` | `subscription_unpaused` | `subscription_plan_changed`,
+ * plus `subscription_updated` when `created_at` and `updated_at` are within 5 minutes (Lemon sometimes skips `created`).
  */
 export function lemonWebhookShouldSendSubscriptionWelcomeEmail(
   eventName: string,
   payload: LemonWebhookPayload,
   isSubscribed: boolean
 ): boolean {
+  if (process.env.SUBSCRIPTION_RESEND_WELCOME_ON_PURCHASE?.trim() !== '1') {
+    return false;
+  }
   if (!isSubscribed) return false;
   if (lemonWebhookShouldSendSubscriptionActiveEmail(eventName)) return true;
   if (eventName === 'subscription_plan_changed') return true;
