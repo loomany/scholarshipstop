@@ -1,0 +1,59 @@
+# One-off / manual: regenerate Essay Hub heroes where URL is missing or still the gradient placeholder.
+# Uses the same FAL + Storage pipeline as production (`scripts/backfill-flux-essays-needing-hero.ts`).
+#
+# Repo secrets (Settings → Secrets): SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, FAL_KEY
+# Runs on `workflow_dispatch` only — not on every push.
+name: Essay Hub backfill heroes (FLUX)
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Max essays to process (leave empty for all matching)'
+        required: false
+        default: ''
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 720
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      FAL_KEY: ${{ secrets.FAL_KEY }}
+      ESSAY_HUB_HERO_FAL_BACKEND: flux
+    steps:
+      - name: Check required secrets
+        run: |
+          missing=0
+          for key in NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY FAL_KEY; do
+            if [ -z "${!key}" ]; then
+              echo "Missing required secret/env: ${key}" >&2
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run hero backfill
+        run: |
+          set -e
+          LIM="${{ inputs.limit }}"
+          if [ -n "$LIM" ]; then
+            echo "Running with --limit $LIM"
+            npx tsx scripts/backfill-flux-essays-needing-hero.ts --limit "$LIM"
+          else
+            echo "Running full scan (all essays that need a real hero)"
+            npx tsx scripts/backfill-flux-essays-needing-hero.ts
+          fi
