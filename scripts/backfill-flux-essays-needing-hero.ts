@@ -1,7 +1,7 @@
 /**
  * Находит опубликованные эссе **без hero** или с **градиентным placeholder** (тот же размер файла,
  * что buildFallbackEssayHeroWebpBuffer), и прогоняет FLUX + ingest (настройки из runEssayGenerationJob:
- * по умолчанию 768×432, см. FLUX_HERO_*).
+ * по умолчанию 704×396 (или FLUX_HERO_*), см. runEssayGenerationJob).
  *
  *   npx dotenv-cli -e .env.local -- npx tsx scripts/backfill-flux-essays-needing-hero.ts
  *   npx dotenv-cli -e .env.local -- npx tsx scripts/backfill-flux-essays-needing-hero.ts --limit 3
@@ -171,7 +171,7 @@ async function main() {
         published_total: ordered.length,
         fallback_placeholder_bytes: fallbackLen,
         flux_defaults_note:
-          '768×432 unless FLUX_HERO_WIDTH/HEIGHT set — see runEssayGenerationJob buildFluxDevHeroBody'
+          '704×396 unless FLUX_HERO_WIDTH/HEIGHT set — see runEssayGenerationJob buildFluxDevHeroBody'
       },
       null,
       2

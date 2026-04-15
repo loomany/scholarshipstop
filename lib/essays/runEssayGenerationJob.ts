@@ -174,19 +174,26 @@ function buildNanoBanana2HeroBody(prompt: string): Record<string, unknown> {
 }
 
 function buildFluxDevHeroBody(prompt: string): Record<string, unknown> {
-  /** Default 768×432 (16:9) ≈0.33 MP — FAL bills per MP; enough for web hero + sharp caps at 1200w without upscale. */
+  /**
+   * Default 704×396 (16:9) ≈0.28 MP — cheaper than 768×432 (~0.33 MP) on per-MP billing, still sharp enough
+   * for Essay Hub after sharp→WebP. Cheaper preset: 640×360; sharper: 768×432 — set FLUX_HERO_WIDTH/HEIGHT.
+   */
   const w = Math.max(
     256,
-    Math.min(4096, Number.parseInt(process.env.FLUX_HERO_WIDTH?.trim() || '768', 10) || 768)
+    Math.min(4096, Number.parseInt(process.env.FLUX_HERO_WIDTH?.trim() || '704', 10) || 704)
   );
   const h = Math.max(
     256,
-    Math.min(4096, Number.parseInt(process.env.FLUX_HERO_HEIGHT?.trim() || '432', 10) || 432)
+    Math.min(4096, Number.parseInt(process.env.FLUX_HERO_HEIGHT?.trim() || '396', 10) || 396)
+  );
+  const steps = Math.max(
+    12,
+    Math.min(50, Number.parseInt(process.env.FLUX_HERO_INFERENCE_STEPS?.trim() || '28', 10) || 28)
   );
   return {
     prompt,
     image_size: { width: w, height: h },
-    num_inference_steps: 28,
+    num_inference_steps: steps,
     guidance_scale: 3.5,
     num_images: 1,
     enable_safety_checker: true,
