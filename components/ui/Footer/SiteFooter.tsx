@@ -1,9 +1,21 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 import Logo from '@/components/icons/Logo';
-import SiteFooterNav from '@/components/ui/Footer/SiteFooterNav';
+
+/** Avoid `usePathname` during SSR (Turbopack can surface `useContext` null in dev). */
+const SiteFooterNav = dynamic(() => import('@/components/ui/Footer/SiteFooterNav'), {
+  ssr: false,
+  loading: () => (
+    <nav
+      className="flex w-full min-w-0 max-w-full shrink-0 flex-row flex-wrap items-center justify-start gap-x-1 gap-y-1.5 opacity-60 sm:gap-x-3 sm:gap-y-2"
+      aria-label="Footer"
+      aria-busy="true"
+    />
+  )
+});
 
 /**
  * Primary site footer — ScholarshipTop branding and nav (same on all pages).

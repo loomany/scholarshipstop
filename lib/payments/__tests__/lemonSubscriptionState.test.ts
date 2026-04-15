@@ -327,6 +327,33 @@ test('does not persist Lemon price ids into Stripe price_id foreign key', () => 
   });
 });
 
+test('subscription_payment_failed invoice payload upserts past_due using subscription_id as row id', () => {
+  const payload = {
+    meta: {
+      event_name: 'subscription_payment_failed',
+      custom_data: { user_id: 'dceafcc1-dfe6-44c1-83af-46066fdc7f79' }
+    },
+    data: {
+      id: '6769716',
+      type: 'subscription-invoices',
+      attributes: {
+        status: 'unpaid',
+        subscription_id: 2063387,
+        customer_id: 8284987,
+        updated_at: '2026-04-15T10:23:16.000000Z',
+        test_mode: true
+      }
+    }
+  };
+
+  const decision = decideSubscriptionUpdate(payload);
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.subscription.id, '2063387');
+  assert.equal(decision.subscription.status, 'past_due');
+  assert.equal(decision.isSubscribed, false);
+});
+
 test('ignores subscription_payment_success invoice payloads for entitlement sync', () => {
   const payload = {
     meta: {

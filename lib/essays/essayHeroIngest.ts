@@ -142,16 +142,18 @@ export async function ingestFallbackHeroWebpToSupabase(
 export async function ingestEssayHeroFromFalOrFallback(
   supabase: SupabaseClient<Database>,
   opts: { falImageUrl: string | null; slug: string }
-): Promise<string> {
+): Promise<{ url: string; heroIsReal: boolean }> {
   if (opts.falImageUrl?.startsWith('http')) {
     try {
-      return await ingestFalHeroImageToSupabase(supabase, {
+      const url = await ingestFalHeroImageToSupabase(supabase, {
         falImageUrl: opts.falImageUrl,
         slug: opts.slug
       });
+      return { url, heroIsReal: true };
     } catch {
       /* use gradient below */
     }
   }
-  return ingestFallbackHeroWebpToSupabase(supabase, { slug: opts.slug });
+  const url = await ingestFallbackHeroWebpToSupabase(supabase, { slug: opts.slug });
+  return { url, heroIsReal: false };
 }

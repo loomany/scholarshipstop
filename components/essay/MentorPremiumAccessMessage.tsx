@@ -19,6 +19,7 @@ declare global {
       Refresh?: () => void;
       Url?: {
         Open?: (url: string) => void;
+        Close?: () => void;
       };
     };
   }

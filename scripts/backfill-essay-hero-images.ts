@@ -126,14 +126,18 @@ async function main() {
         grantCategory
       });
       const falHeroUrl = await tryResolveHeroImageUrl(heroPrompt);
-      const heroUrl = await ingestEssayHeroFromFalOrFallback(supabase, {
-        falImageUrl: falHeroUrl,
-        slug
-      });
+      const { url: heroUrl, heroIsReal } = await ingestEssayHeroFromFalOrFallback(
+        supabase,
+        {
+          falImageUrl: falHeroUrl,
+          slug
+        }
+      );
       const { error: upErr } = await supabase
         .from('essays')
         .update({
           hero_image_url: heroUrl,
+          hero_is_real: heroIsReal,
           updated_at: new Date().toISOString()
         })
         .eq('id', row.id);

@@ -1,4 +1,4 @@
-import type { Json, TablesInsert } from '@/types_db';
+import type { Json, Tables, TablesInsert } from '@/types_db';
 import type { AppSubscriptionPlan } from '@/lib/payments/subscriptionEntitlements';
 import type { Database } from '@/types_db';
 import {
@@ -299,6 +299,61 @@ function derivePlanCode(
   return toSubscribedFromLemonStatus(normalizedStatus) ? 'monthly_pro' : 'free';
 }
 
+/** Invoice payloads use `data.id` for the invoice; subscription row id is `attributes.subscription_id`. */
+export function resolveLemonSubscriptionRecordId(
+  payload: LemonWebhookPayload,
+  userId: string,
+  eventName: string
+): string {
+  if (isSubscriptionInvoicePayload(payload)) {
+    const sid = payload.data?.attributes?.subscription_id;
+    if (sid != null && String(sid).trim() !== '') {
+      return String(sid);
+    }
+  }
+  return String(payload.data?.id ?? (payload as { id?: string }).id ?? `${userId}:${eventName}`);
+}
+
+/**
+ * Invoice webhooks omit most product fields; merge into the existing Lemon row so we do not null out
+ * `provider_variant_id` etc. when marking `past_due` from `subscription_payment_failed`.
+ */
+export function mergeSubscriptionPaymentFailedInvoiceUpsert(
+  incoming: TablesInsert<'subscriptions'>,
+  existing: Tables<'subscriptions'>
+): TablesInsert<'subscriptions'> {
+  return {
+    ...existing,
+    ...incoming,
+    provider_customer_id: incoming.provider_customer_id ?? existing.provider_customer_id,
+    provider_order_id: incoming.provider_order_id ?? existing.provider_order_id,
+    provider_product_id: incoming.provider_product_id ?? existing.provider_product_id,
+    provider_variant_id: incoming.provider_variant_id ?? existing.provider_variant_id,
+    provider_product_name: incoming.provider_product_name ?? existing.provider_product_name,
+    provider_variant_name: incoming.provider_variant_name ?? existing.provider_variant_name,
+    price_id: incoming.price_id ?? existing.price_id,
+    quantity: incoming.quantity ?? existing.quantity,
+    plan_code: incoming.plan_code ?? existing.plan_code,
+    created: existing.created,
+    current_period_start: existing.current_period_start,
+    current_period_end: existing.current_period_end ?? incoming.current_period_end,
+    trial_start: existing.trial_start,
+    trial_end: existing.trial_end ?? incoming.trial_end,
+    renews_at: existing.renews_at ?? incoming.renews_at,
+    ended_at: existing.ended_at,
+    cancel_at: existing.cancel_at,
+    canceled_at: existing.canceled_at,
+    cancel_at_period_end: existing.cancel_at_period_end,
+    status: incoming.status,
+    raw_payload: incoming.raw_payload,
+    metadata: incoming.metadata,
+    user_id: incoming.user_id,
+    id: incoming.id,
+    provider: incoming.provider,
+    test_mode: incoming.test_mode
+  };
+}
+
 function buildSubscriptionUpsert(
   payload: LemonWebhookPayload,
   userId: string,
@@ -307,7 +362,7 @@ function buildSubscriptionUpsert(
   const attributes = getLemonAttributes(payload);
   const normalizedStatus = resolveEffectiveStatus(eventName, attributes);
   const nowIso = new Date().toISOString();
-  const subscriptionId = String(payload.data?.id ?? (payload as { id?: string }).id ?? `${userId}:${eventName}`);
+  const subscriptionId = resolveLemonSubscriptionRecordId(payload, userId, eventName);
   const planCode = derivePlanCode(attributes, normalizedStatus);
   const lemonPriceId =
     attributes?.first_subscription_item?.price_id != null
@@ -403,13 +458,15 @@ export function decideSubscriptionUpdate(
   }
   if (
     (eventName === 'subscription_payment_success' ||
-      eventName === 'subscription_payment_failed' ||
       eventName === 'subscription_payment_recovered' ||
       eventName === 'subscription_payment_refunded') &&
     isSubscriptionInvoicePayload(payload)
   ) {
     // Invoice webhooks confirm billing outcomes, but they are not subscription objects.
-    // Entitlements should be driven by `subscription_*` events that carry subscription state.
+    // `POST /api/webhooks` may rewrite payment_success/recovered invoices to a synthetic
+    // `subscription_updated` after `GET /v1/subscriptions/:id` (requires `LEMONSQUEEZY_API_KEY`).
+    // Exception: `subscription_payment_failed` on subscription-invoices updates row status to `past_due`
+    // (see `resolveLemonSubscriptionRecordId` + merge in webhook route).
     return { kind: 'ignored', eventName };
   }
   const userId = resolveUserId(payload);
@@ -446,4 +503,24 @@ export function decideSubscriptionUpdate(
   }
 
   return { kind: 'ignored', eventName };
+}
+
+/**
+ * Wraps GET /v1/subscriptions/:id (JSON:API) so {@link decideSubscriptionUpdate} can build the same
+ * row as a `subscription_updated` webhook. REST bodies omit `meta.custom_data.user_id`; pass Supabase `userId`.
+ */
+export function lemonRestDocumentToWebhookPayload(
+  restJson: unknown,
+  userId: string
+): LemonWebhookPayload | null {
+  if (!restJson || typeof restJson !== 'object') return null;
+  const root = restJson as { data?: LemonWebhookPayload['data'] };
+  if (!root.data || typeof root.data !== 'object') return null;
+  return {
+    meta: {
+      event_name: 'subscription_updated',
+      custom_data: { user_id: userId }
+    },
+    data: root.data
+  };
 }

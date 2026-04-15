@@ -5,10 +5,14 @@ import {
   inferSubscriptionBillingTier,
   type SubscriptionWithPriceAndProduct
 } from '@/lib/payments/subscriptionEntitlements';
+import {
+  resolveLemonVariantIdForBillingPlan,
+  type BillingPlanKey
+} from '@/lib/payments/lemonVariantIds';
 import type { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/server';
 
-export type BillingPlanKey = 'monthly' | 'quarterly' | 'yearly';
+export type { BillingPlanKey };
 
 /**
  * Hosted checkout URLs (custom domain). Prefer env so Live/Test buy UUIDs stay in sync with Lemon
@@ -26,10 +30,10 @@ function baseCheckoutUrlFromPlan(plan: BillingPlanKey): string {
 
   const url =
     plan === 'monthly'
-      ? 'https://pay.scholarshiptop.com/checkout/buy/fa9652cf-35f3-4dc2-af2d-29244a786861?logo=0&discount=0'
+      ? 'https://pay.scholarshiptop.com/checkout/buy/4e63048d-5d76-4818-925c-048b10047128?logo=0&discount=0'
       : plan === 'quarterly'
-        ? 'https://pay.scholarshiptop.com/checkout/buy/d8c88c38-44c6-4ab5-805a-71ffe1b8e89e?logo=0&discount=0'
-        : 'https://pay.scholarshiptop.com/checkout/buy/cddda988-fad6-46e8-a56f-a1f2a3eea3d3?logo=0&discount=0';
+        ? 'https://pay.scholarshiptop.com/checkout/buy/3faf88f4-d2d6-437f-808f-f641bcb955a1?logo=0&discount=0'
+        : 'https://pay.scholarshiptop.com/checkout/buy/152da89c-f707-4417-9cd8-3be69938a677?logo=0&discount=0';
 
   if (!url.trim()) {
     throw new Error(`Checkout URL for the ${plan} plan is not configured.`);
@@ -51,17 +55,6 @@ function checkoutUrlFromPlan({
   url.searchParams.set('checkout[email]', email);
   url.searchParams.set('checkout[custom][user_id]', userId);
   return url.toString();
-}
-
-function variantIdFromPlan(plan: BillingPlanKey): string | null {
-  const raw =
-    plan === 'monthly'
-      ? process.env.LEMONSQUEEZY_MONTHLY_VARIANT_ID
-      : plan === 'quarterly'
-        ? process.env.LEMONSQUEEZY_QUARTERLY_VARIANT_ID
-        : process.env.LEMONSQUEEZY_YEARLY_VARIANT_ID;
-  const v = raw?.trim();
-  return v && v.length > 0 ? v : null;
 }
 
 function planProductTitle(plan: BillingPlanKey): string {
@@ -95,22 +88,29 @@ function lemonSkipTrialCheckoutDescriptionHtml(plan: BillingPlanKey): string {
   return `<p>${plain.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`;
 }
 
-type LemonSkipTrialResult =
+type LemonCheckoutApiResult =
   | { ok: true; url: string }
   | { ok: false; reason: 'missing_env' | 'http' | 'bad_response'; detail?: string };
 
+type LemonCheckoutMode = 'with_trial' | 'skip_trial';
+
 /**
- * Creates checkout via API: `skip_trial` + full product override so dashboard “3 day trial”
- * marketing is replaced (hosted `/checkout/buy/...` links cannot set `product_options`).
+ * Creates checkout via Lemon API so the **variant id** is explicit.
+ * Hosted `/checkout/buy/{uuid}` URLs often point at a **multi-variant** product; Lemon may pre-select
+ * the wrong plan (e.g. yearly). API checkout locks `relationships.variant` + `enabled_variants`.
+ *
+ * - `with_trial`: normal trial from variant settings (no `skip_trial`).
+ * - `skip_trial`: same as before — custom copy + immediate charge semantics.
  */
-async function createLemonSkipTrialCheckout(
+async function createLemonCheckoutForPlan(
   plan: BillingPlanKey,
   email: string,
-  userId: string
-): Promise<LemonSkipTrialResult> {
+  userId: string,
+  mode: LemonCheckoutMode
+): Promise<LemonCheckoutApiResult> {
   const apiKey = process.env.LEMONSQUEEZY_API_KEY?.trim();
   const storeId = process.env.LEMONSQUEEZY_STORE_ID?.trim();
-  const variantId = variantIdFromPlan(plan);
+  const variantId = resolveLemonVariantIdForBillingPlan(plan);
   if (!apiKey || !storeId || !variantId) {
     return { ok: false, reason: 'missing_env' };
   }
@@ -120,8 +120,36 @@ async function createLemonSkipTrialCheckout(
     return { ok: false, reason: 'missing_env', detail: 'invalid variant id' };
   }
 
-  const name = planProductTitle(plan);
-  const descriptionHtml = lemonSkipTrialCheckoutDescriptionHtml(plan);
+  const productOptions: {
+    enabled_variants: number[];
+    name?: string;
+    description?: string;
+  } = {
+    enabled_variants: [variantNum]
+  };
+
+  const attributes: {
+    checkout_data: { email: string; custom: { user_id: string } };
+    product_options: typeof productOptions;
+    checkout_options?: { skip_trial: boolean; desc?: boolean };
+  } = {
+    checkout_data: {
+      email,
+      custom: {
+        user_id: userId
+      }
+    },
+    product_options: productOptions
+  };
+
+  if (mode === 'skip_trial') {
+    attributes.checkout_options = {
+      skip_trial: true,
+      desc: true
+    };
+    productOptions.name = planProductTitle(plan);
+    productOptions.description = lemonSkipTrialCheckoutDescriptionHtml(plan);
+  }
 
   const res = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
     method: 'POST',
@@ -133,23 +161,7 @@ async function createLemonSkipTrialCheckout(
     body: JSON.stringify({
       data: {
         type: 'checkouts',
-        attributes: {
-          checkout_options: {
-            skip_trial: true,
-            desc: true
-          },
-          product_options: {
-            name,
-            description: descriptionHtml,
-            enabled_variants: [variantNum]
-          },
-          checkout_data: {
-            email,
-            custom: {
-              user_id: userId
-            }
-          }
-        },
+        attributes,
         relationships: {
           store: {
             data: {
@@ -172,10 +184,10 @@ async function createLemonSkipTrialCheckout(
 
   if (!res.ok) {
     console.error(
-      '[billing] Lemon create checkout (skip_trial) failed',
-      plan,
+      '[billing] Lemon create checkout failed',
+      { plan, mode },
       res.status,
-      raw
+      raw.slice(0, 800)
     );
     return { ok: false, reason: 'http', detail: raw.slice(0, 500) };
   }
@@ -194,6 +206,14 @@ async function createLemonSkipTrialCheckout(
 
   console.error('[billing] Lemon checkout response missing url', raw.slice(0, 800));
   return { ok: false, reason: 'bad_response', detail: 'no url in response' };
+}
+
+async function createLemonSkipTrialCheckout(
+  plan: BillingPlanKey,
+  email: string,
+  userId: string
+): Promise<LemonCheckoutApiResult> {
+  return createLemonCheckoutForPlan(plan, email, userId, 'skip_trial');
 }
 
 /**
@@ -275,6 +295,21 @@ export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
   if (!user.email) {
     throw new Error('Your account is missing an email address.');
   }
+
+  const apiCheckout = await createLemonCheckoutForPlan(
+    plan,
+    user.email,
+    user.id,
+    'with_trial'
+  );
+  if (apiCheckout.ok) {
+    return apiCheckout.url;
+  }
+
+  console.warn(
+    '[billing] getCheckoutURL: Lemon API checkout failed; using hosted checkout URL — multi-variant products may show the wrong default plan',
+    { plan, reason: apiCheckout }
+  );
 
   return checkoutUrlFromPlan({
     plan,

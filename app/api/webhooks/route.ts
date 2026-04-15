@@ -6,6 +6,8 @@ import {
 } from '@/lib/payments/lemonWebhookSignature';
 import {
   decideSubscriptionUpdate,
+  isSubscriptionInvoicePayload,
+  mergeSubscriptionPaymentFailedInvoiceUpsert,
   type LemonWebhookPayload
 } from '@/lib/payments/lemonSubscriptionState';
 import type { Json } from '@/types_db';
@@ -19,6 +21,7 @@ import {
 } from '@/lib/email/sendLemonSubscriptionEmail';
 import { notifyTelegramPayment } from '@/lib/telegram/bot';
 import { runInvoicePaymentFailedWebhookEffects } from '@/lib/payments/runInvoicePaymentFailedWebhookEffects';
+import { enrichInvoicePaymentSuccessWithSubscriptionFetch } from '@/lib/payments/lemonInvoiceWebhookEnrichment';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -117,6 +120,14 @@ export async function POST(req: Request) {
   }
 
   try {
+    const enriched = await enrichInvoicePaymentSuccessWithSubscriptionFetch(payload);
+    if (enriched) {
+      console.info('[lemon:webhook] enriched invoice webhook via Lemon API GET /subscriptions', {
+        subscriptionId: enriched.data?.id
+      });
+      payload = enriched;
+    }
+
     const decision = decideSubscriptionUpdate(payload);
     if (decision.kind === 'ignored') {
       const invoiceFx = await runInvoicePaymentFailedWebhookEffects(supabaseAdmin, payload);
@@ -181,7 +192,11 @@ export async function POST(req: Request) {
       });
     }
 
-    if (existingUpdatedAt && incomingUpdatedAt) {
+    const skipStaleForInvoicePaymentFailed =
+      decision.eventName === 'subscription_payment_failed' &&
+      isSubscriptionInvoicePayload(payload);
+
+    if (!skipStaleForInvoicePaymentFailed && existingUpdatedAt && incomingUpdatedAt) {
       const existingUpdatedAtDate = parseIsoDate(existingUpdatedAt);
       const incomingUpdatedAtDate = parseIsoDate(incomingUpdatedAt);
       if (
@@ -202,13 +217,31 @@ export async function POST(req: Request) {
       }
     }
 
+    let subscriptionRow = decision.subscription;
+    if (
+      decision.eventName === 'subscription_payment_failed' &&
+      isSubscriptionInvoicePayload(payload)
+    ) {
+      const { data: existingFull } = await supabaseAdmin
+        .from('subscriptions')
+        .select('*')
+        .eq('id', decision.subscription.id)
+        .maybeSingle();
+      if (existingFull) {
+        subscriptionRow = mergeSubscriptionPaymentFailedInvoiceUpsert(
+          decision.subscription,
+          existingFull
+        );
+      }
+    }
+
     console.info('[lemon:webhook] upserting subscription', {
-      subscriptionId: decision.subscription.id,
+      subscriptionId: subscriptionRow.id,
       userId: decision.userId
     });
     const { error: subscriptionError } = await supabaseAdmin
       .from('subscriptions')
-      .upsert([decision.subscription], { onConflict: 'id' });
+      .upsert([subscriptionRow], { onConflict: 'id' });
     if (subscriptionError) {
       console.error('[lemon:webhook] subscription upsert failed', {
         message: subscriptionError.message,

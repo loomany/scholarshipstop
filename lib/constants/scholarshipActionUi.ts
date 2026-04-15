@@ -31,6 +31,10 @@ const SAVE_FILTER_FOCUS =
 
 export const scholarshipSaveFilterButtonClass = `inline-flex min-h-[2.75rem] shrink-0 items-center justify-center rounded-xl px-5 py-3 text-sm font-bold text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-50 ${SAVE_FILTER_FILL} ${SAVE_FILTER_FOCUS}`;
 
+/** Disabled “current plan” CTA on `/subscription` — same brand orange as Save filter. */
+export const SUBSCRIPTION_CURRENT_PLAN_BUTTON_FILL = `${SAVE_FILTER_FILL} disabled:hover:bg-[#FF7A1A]`;
+export const SUBSCRIPTION_CURRENT_PLAN_BUTTON_FOCUS = SAVE_FILTER_FOCUS;
+
 /** Categories panel Apply — size unchanged. */
 export const scholarshipCategoriesApplyButtonClass = `rounded-xl px-5 py-2 text-sm font-semibold text-white shadow-sm transition ${SCHOLARSHIP_ACTION_FILL} ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
 

@@ -96,6 +96,9 @@ export function filterAndSortEssayIndexRows(
 
   const mult = sort === 'oldest' ? 1 : -1;
   const sorted = [...filtered].sort((a, b) => {
+    const pa = a.heroListPriority ?? 0;
+    const pb = b.heroListPriority ?? 0;
+    if (pa !== pb) return pb - pa;
     const ta = a.created_at ? new Date(a.created_at).getTime() : 0;
     const tb = b.created_at ? new Date(b.created_at).getTime() : 0;
     if (ta !== tb) return (ta - tb) * mult;

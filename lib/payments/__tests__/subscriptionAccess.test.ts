@@ -144,3 +144,28 @@ test('prefers an active or grace-period subscription over a newer expired row', 
 
   assert.equal(canonical?.id, 'cancelled_grace');
 });
+
+test('prefers a cancelled subscription over a stale past_due row', () => {
+  const canonical = pickCanonicalSubscription([
+    {
+      id: 'past_due_stale',
+      status: 'past_due',
+      created: '2026-04-01T00:00:00.000Z',
+      renews_at: '2099-04-10T00:00:00.000Z',
+      current_period_end: '2099-04-10T00:00:00.000Z',
+      cancel_at: null,
+      ended_at: null
+    },
+    {
+      id: 'cancelled_newer',
+      status: 'cancelled',
+      created: '2026-04-10T00:00:00.000Z',
+      renews_at: '2026-05-15T10:21:39.000Z',
+      current_period_end: '2026-05-15T10:21:39.000Z',
+      cancel_at: '2026-05-15T10:21:39.000Z',
+      ended_at: null
+    }
+  ]);
+
+  assert.equal(canonical?.id, 'cancelled_newer');
+});

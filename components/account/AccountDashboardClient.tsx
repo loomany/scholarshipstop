@@ -4,6 +4,7 @@ import Link from 'next/link';
 import type { User } from '@supabase/supabase-js';
 
 import SubscriptionPausedBanner from '@/components/billing/SubscriptionPausedBanner';
+import SubscriptionDebug from '@/components/debug/SubscriptionDebug';
 import ScholarshipProfileForm from '@/components/ui/AccountForms/ScholarshipProfileForm';
 import { resolveResumeSubscriptionHref } from '@/lib/payments/billingUrls';
 import { deriveSubscriptionPresentation } from '@/lib/payments/subscriptionEntitlements';
@@ -72,6 +73,7 @@ export default function AccountDashboardClient({
           </div>
         </section>
       </div>
+      <SubscriptionDebug />
     </div>
   );
 }

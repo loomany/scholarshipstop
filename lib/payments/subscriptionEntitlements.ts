@@ -42,7 +42,9 @@ function envVariantIds(primaryName: string, legacyName: string): string[] {
   return Array.from(
     new Set([
       ...envVariantIdList(process.env[primaryName]),
-      ...envVariantIdList(process.env[legacyName])
+      ...envVariantIdList(process.env[legacyName]),
+      ...envVariantIdList(process.env[`${primaryName}_TEST`]),
+      ...envVariantIdList(process.env[`${legacyName}_TEST`])
     ])
   );
 }
@@ -94,13 +96,21 @@ export function inferSubscriptionBillingTier(
   subscription: SubscriptionWithPriceAndProduct | null,
   profile: Profile | null
 ): SubscriptionBillingTier | null {
+  const debugPlan = profile?.subscription_debug_plan?.trim();
+  if (debugPlan === 'monthly_pro') return 'monthly';
+  if (debugPlan === 'quarterly_pro') return 'quarterly';
+  if (debugPlan === 'yearly_pro') return 'yearly';
+  /** Trial tier is ambiguous in debug — default to monthly for “current plan” highlight. */
+  if (debugPlan === 'trial') return 'monthly';
+
   if (subscription) {
+    /** Lemon `plan_code` can lag behind a variant change until webhooks settle — trust variant id first. */
+    const fromProviderVariant = inferTierFromLemonVariantId(subscription.provider_variant_id);
+    if (fromProviderVariant) return fromProviderVariant;
+
     if (subscription.plan_code === 'monthly_pro') return 'monthly';
     if (subscription.plan_code === 'quarterly_pro') return 'quarterly';
     if (subscription.plan_code === 'yearly_pro') return 'yearly';
-
-    const fromProviderVariant = inferTierFromLemonVariantId(subscription.provider_variant_id);
-    if (fromProviderVariant) return fromProviderVariant;
 
     const priceRow = getEmbeddedPriceRow(subscription);
     const interval = priceRow?.interval;
@@ -131,6 +141,37 @@ export function inferSubscriptionBillingTier(
   }
 }
 
+/**
+ * Which pricing card is the user's "current" tier on `/subscription`.
+ * Uses the same `presentation.plan` as the profile badge (`deriveSubscriptionPresentation`);
+ * falls back to {@link inferSubscriptionBillingTier} for trial / edge cases.
+ */
+export function subscriptionPricingHighlightTier(
+  presentation: AppSubscriptionPresentation,
+  subscription: SubscriptionWithPriceAndProduct | null,
+  profile: Profile | null
+): SubscriptionBillingTier | null {
+  const inferred = inferSubscriptionBillingTier(subscription, profile);
+
+  switch (presentation.plan) {
+    case 'monthly_pro':
+      return 'monthly';
+    case 'quarterly_pro':
+      return 'quarterly';
+    case 'yearly_pro':
+      return 'yearly';
+    default:
+      break;
+  }
+
+  const status = normalizeSubscriptionStatus(presentation.status);
+  if (!presentation.isSubscribed && status !== 'past_due') {
+    return null;
+  }
+
+  return inferred;
+}
+
 export type AppSubscriptionPlan =
   | 'free'
   | 'trial'
@@ -159,6 +200,112 @@ const DISPLAY_LABELS: Record<AppSubscriptionPlan, string> = {
   quarterly_pro: 'Quarterly Pro',
   yearly_pro: 'Yearly Pro'
 };
+
+/** During Lemon trial, `plan` is always `trial`; billing cadence comes from variant / plan_code. */
+function labelForTrialingSubscription(
+  subscription: SubscriptionWithPriceAndProduct | null,
+  profile: Profile | null
+): string {
+  const tier = inferSubscriptionBillingTier(subscription, profile);
+  if (!tier) return DISPLAY_LABELS.trial;
+  const tierWord =
+    tier === 'yearly' ? 'Yearly' : tier === 'quarterly' ? 'Quarterly' : 'Monthly';
+  return `3-Day Trial · ${tierWord}`;
+}
+
+/**
+ * Short English label for the disabled CTA on /subscription for the user’s current plan
+ * (replaces static “Active Plan”).
+ */
+export function subscriptionPricingCurrentPlanButtonLabel(status: string): string {
+  const s = status.trim().toLowerCase();
+  switch (s) {
+    case 'active':
+      return 'Active';
+    case 'trialing':
+    case 'on_trial':
+      return 'Trial';
+    case 'past_due':
+      return 'Payment failed';
+    case 'paused':
+      return 'Paused';
+    case 'cancelled':
+    case 'canceled':
+      return 'Cancelled';
+    case 'expired':
+      return 'Expired';
+    case 'unpaid':
+      return 'Unpaid';
+    case 'inactive':
+      return 'Inactive';
+    default:
+      if (!s) return 'Active Plan';
+      return s
+        .split('_')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+  }
+}
+
+/**
+ * Disabled “current plan” label on `/subscription`: short **Lemon subscription status** + billing cadence
+ * when `subscription` + `profile` are passed (e.g. `Trialing · Yearly`, `Active · Monthly`, `Payment failed`).
+ */
+export function subscriptionPricingPlanStatusLabel(
+  presentation: AppSubscriptionPresentation,
+  subscription?: SubscriptionWithPriceAndProduct | null,
+  profile?: Profile | null
+): string {
+  const status = normalizeSubscriptionStatus(presentation.status);
+
+  if (status === 'past_due') {
+    return 'Payment failed';
+  }
+  if (status === 'paused') return 'Paused';
+  if (status === 'unpaid') return 'Unpaid';
+  if (status === 'expired') return 'Expired';
+  if (status === 'inactive') return 'Inactive';
+
+  const tier =
+    subscription !== undefined && profile !== undefined
+      ? inferSubscriptionBillingTier(subscription ?? null, profile ?? null)
+      : null;
+  const tierWord =
+    tier === 'yearly'
+      ? 'Yearly'
+      : tier === 'quarterly'
+        ? 'Quarterly'
+        : tier === 'monthly'
+          ? 'Monthly'
+          : null;
+
+  const withTier = (prefix: string) =>
+    tierWord ? `${prefix} · ${tierWord}` : prefix;
+
+  if (status === 'trialing' || status === 'on_trial' || presentation.plan === 'trial') {
+    return withTier('Trialing');
+  }
+
+  if (status === 'active' && presentation.isSubscribed && presentation.plan !== 'free') {
+    return withTier('Active');
+  }
+
+  if (status === 'cancelled' || status === 'canceled') {
+    return tierWord ? `Cancelled · ${tierWord}` : 'Cancelled';
+  }
+
+  if (subscription === undefined || profile === undefined) {
+    if (status === 'active') {
+      return presentation.plan === 'free' ? 'Free Plan' : presentation.label;
+    }
+    if (status === 'cancelled' || status === 'canceled') {
+      return presentation.label;
+    }
+    return subscriptionPricingCurrentPlanButtonLabel(presentation.status);
+  }
+
+  return subscriptionPricingCurrentPlanButtonLabel(presentation.status);
+}
 
 function parseDate(value: string | null | undefined) {
   if (!value) return null;
@@ -277,6 +424,14 @@ function derivePlanFromSubscription(
   }
 
   if (subscription.plan_code === 'trial') return 'trial';
+
+  if (subscription.provider === 'lemon_squeezy') {
+    const fromVid = inferTierFromLemonVariantId(subscription.provider_variant_id);
+    if (fromVid === 'yearly') return 'yearly_pro';
+    if (fromVid === 'quarterly') return 'quarterly_pro';
+    if (fromVid === 'monthly') return 'monthly_pro';
+  }
+
   if (subscription.plan_code === 'monthly_pro') return 'monthly_pro';
   if (subscription.plan_code === 'quarterly_pro') return 'quarterly_pro';
   if (subscription.plan_code === 'yearly_pro') return 'yearly_pro';
@@ -302,10 +457,106 @@ function getFallbackPlan(profile: Profile | null): AppSubscriptionPlan {
   }
 }
 
+/**
+ * When `profiles.subscription_debug_plan` is set (local Subscription Debug panel),
+ * treat it as the source of truth for UI so dev overrides are visible without real webhooks.
+ */
+function derivePresentationFromProfileDebug(
+  profile: Profile | null
+): AppSubscriptionPresentation | null {
+  const raw = profile?.subscription_debug_plan?.trim();
+  if (!raw) return null;
+
+  let plan: AppSubscriptionPlan;
+  switch (raw) {
+    case 'free':
+      plan = 'free';
+      break;
+    case 'trial':
+      plan = 'trial';
+      break;
+    case 'monthly_pro':
+      plan = 'monthly_pro';
+      break;
+    case 'quarterly_pro':
+      plan = 'quarterly_pro';
+      break;
+    case 'yearly_pro':
+      plan = 'yearly_pro';
+      break;
+    default:
+      return null;
+  }
+
+  const nowValue = null;
+  const trialEndsAt =
+    plan === 'trial' ? profile?.subscription_debug_trial_ends_at ?? null : null;
+  const { remainingDays, remainingHours } = getRemainingTime(trialEndsAt, nowValue);
+  const countdownLabel =
+    plan === 'trial' ? getCountdownLabel(trialEndsAt, nowValue) : null;
+  const progressPercent =
+    plan === 'trial'
+      ? getProgressPercent(
+          profile?.created_at ?? null,
+          trialEndsAt,
+          nowValue
+        )
+      : null;
+
+  const dbgStatus = profile?.subscription_debug_status;
+  const status =
+    dbgStatus && dbgStatus.trim()
+      ? normalizeSubscriptionStatus(dbgStatus)
+      : plan === 'trial'
+        ? 'trialing'
+        : plan === 'free'
+          ? 'inactive'
+          : 'active';
+
+  const isSubscribed = plan !== 'free';
+
+  const nextBillingDate =
+    plan === 'monthly_pro' ||
+    plan === 'quarterly_pro' ||
+    plan === 'yearly_pro'
+      ? formatDate(profile?.subscription_debug_renews_at)
+      : null;
+
+  const label =
+    plan === 'trial'
+      ? (() => {
+          const tier = profile?.subscription_debug_plan?.trim();
+          if (tier === 'yearly_pro') return '3-Day Trial · Yearly';
+          if (tier === 'quarterly_pro') return '3-Day Trial · Quarterly';
+          if (tier === 'monthly_pro') return '3-Day Trial · Monthly';
+          return DISPLAY_LABELS.trial;
+        })()
+      : DISPLAY_LABELS[plan];
+
+  return {
+    plan,
+    label,
+    status,
+    isSubscribed,
+    nextBillingDate,
+    endsAt: null,
+    trialEndsAt,
+    remainingDays,
+    remainingHours,
+    countdownLabel,
+    progressPercent
+  };
+}
+
 export function deriveSubscriptionPresentation(
   profile: Profile | null,
   subscription: SubscriptionWithPriceAndProduct | null
 ): AppSubscriptionPresentation {
+  const fromDebug = derivePresentationFromProfileDebug(profile);
+  if (fromDebug) {
+    return fromDebug;
+  }
+
   const nowValue = null;
   const effectiveSubscription = subscription;
   const fallbackPlan = getFallbackPlan(profile);
@@ -343,9 +594,19 @@ export function deriveSubscriptionPresentation(
     ) ||
       (!effectiveSubscription && Boolean(profile?.is_subscribed)));
 
+  const labelForPlan = (() => {
+    if (cancelledButStillActive) {
+      return `${DISPLAY_LABELS[plan]} (Canceled)`;
+    }
+    if (plan === 'trial') {
+      return labelForTrialingSubscription(effectiveSubscription, profile);
+    }
+    return DISPLAY_LABELS[plan];
+  })();
+
   return {
     plan,
-    label: cancelledButStillActive ? `${DISPLAY_LABELS[plan]} (Canceled)` : DISPLAY_LABELS[plan],
+    label: labelForPlan,
     status: providerStatus,
     isSubscribed,
     nextBillingDate,

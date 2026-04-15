@@ -139,11 +139,20 @@ type FalHeroAttemptResult = {
 };
 
 /**
- * Essay Hub heroes: **only** standard Nano Banana 2 (not `nano-banana-pro`).
- * One request → one image → one `hero_image_url` per essay.
- * @see https://fal.ai/models/fal-ai/nano-banana-2/api
+ * Essay Hub hero image backend on fal.run.
+ * Default: **FLUX.1 [dev]** (16:9 JPEG, matches article `aspect-[16/9]`).
+ * Set `ESSAY_HUB_HERO_FAL_BACKEND=nano` for Nano Banana 2 (9:16, 1K).
  */
-const ESSAY_HUB_FAL_IMAGE_MODEL = 'fal-ai/nano-banana-2' as const;
+function essayHubHeroFalBackend(): 'flux' | 'nano' {
+  const v = process.env.ESSAY_HUB_HERO_FAL_BACKEND?.trim().toLowerCase();
+  if (v === 'nano' || v === 'nano-banana' || v === 'nano-banana-2') {
+    return 'nano';
+  }
+  return 'flux';
+}
+
+const ESSAY_HUB_FAL_NANO_MODEL = 'fal-ai/nano-banana-2' as const;
+const ESSAY_HUB_FAL_FLUX_DEV_MODEL = 'fal-ai/flux/dev' as const;
 
 /** Portrait hero (`aspect_ratio` enum for nano-banana-2). */
 const DEFAULT_FAL_IMAGE_ASPECT_RATIO = '9:16';
@@ -164,17 +173,43 @@ function buildNanoBanana2HeroBody(prompt: string): Record<string, unknown> {
   };
 }
 
+function buildFluxDevHeroBody(prompt: string): Record<string, unknown> {
+  /** Default 768×432 (16:9) ≈0.33 MP — FAL bills per MP; enough for web hero + sharp caps at 1200w without upscale. */
+  const w = Math.max(
+    256,
+    Math.min(4096, Number.parseInt(process.env.FLUX_HERO_WIDTH?.trim() || '768', 10) || 768)
+  );
+  const h = Math.max(
+    256,
+    Math.min(4096, Number.parseInt(process.env.FLUX_HERO_HEIGHT?.trim() || '432', 10) || 432)
+  );
+  return {
+    prompt,
+    image_size: { width: w, height: h },
+    num_inference_steps: 28,
+    guidance_scale: 3.5,
+    num_images: 1,
+    enable_safety_checker: true,
+    output_format: 'jpeg'
+  };
+}
+
 async function falGenerateHeroImageOnce(fullImagePrompt: string): Promise<FalHeroAttemptResult> {
   const key = process.env.FAL_KEY?.trim();
   if (!key) {
     return { url: null, httpStatus: 0, detail: 'FAL_KEY missing' };
   }
 
-  const model = ESSAY_HUB_FAL_IMAGE_MODEL;
+  const backend = essayHubHeroFalBackend();
+  const model =
+    backend === 'nano' ? ESSAY_HUB_FAL_NANO_MODEL : ESSAY_HUB_FAL_FLUX_DEV_MODEL;
   const endpoint = `https://fal.run/${model}`;
 
-  const prompt = fullImagePrompt.trim().slice(0, 3800);
-  const falBody = buildNanoBanana2HeroBody(prompt);
+  const rawPrompt = fullImagePrompt.trim();
+  const prompt =
+    backend === 'nano' ? rawPrompt.slice(0, 3800) : rawPrompt.slice(0, 8000);
+  const falBody =
+    backend === 'nano' ? buildNanoBanana2HeroBody(prompt) : buildFluxDevHeroBody(prompt);
 
   try {
     const res = await fetch(endpoint, {
@@ -500,10 +535,13 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
       grantCategory
     });
     const falHeroUrl = await tryResolveHeroImageUrl(heroPrompt);
-    const heroUrl = await ingestEssayHeroFromFalOrFallback(supabase, {
-      falImageUrl: falHeroUrl,
-      slug
-    });
+    const { url: heroUrl, heroIsReal } = await ingestEssayHeroFromFalOrFallback(
+      supabase,
+      {
+        falImageUrl: falHeroUrl,
+        slug
+      }
+    );
 
     const { data: inserted, error: insErr } = await supabase
       .from('essays')
@@ -513,6 +551,7 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
         meta_description: parsed.meta_description?.trim() || null,
         content_html: parsed.content_html.trim(),
         hero_image_url: heroUrl,
+        hero_is_real: heroIsReal,
         sources: verifiedSources as unknown as Json,
         faq: faqJson as unknown as Json,
         is_published: true

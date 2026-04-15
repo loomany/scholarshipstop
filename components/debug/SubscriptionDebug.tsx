@@ -8,7 +8,6 @@ import type { Database } from '@/types_db';
 import { createClient } from '@/utils/supabase/client';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
-type ProfilesUpdate = Database['public']['Tables']['profiles']['Update'];
 
 type DebugPlan = 'free' | 'trial' | 'monthly_pro' | 'quarterly_pro' | 'yearly_pro';
 
@@ -110,30 +109,26 @@ export default function SubscriptionDebug() {
     setIsSaving(true);
     setMessage(null);
 
-    // `createBrowserClient<Database>()` can infer `from('profiles').update` as `never` here; runtime is valid.
-    const { error } = await (
-      supabase.from('profiles') as unknown as {
-        update: (values: ProfilesUpdate) => {
-          eq: (
-            col: string,
-            val: string
-          ) => PromiseLike<{ error: { message: string } | null }>;
-        };
+    try {
+      const res = await fetch('/api/internal/subscription-debug', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+        credentials: 'same-origin'
+      });
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      if (!res.ok) {
+        setMessage(data.error ?? `Request failed (${res.status})`);
+        return;
       }
-    )
-      .update(patch as ProfilesUpdate)
-      .eq('id', userId);
-
-    setIsSaving(false);
-
-    if (error) {
-      setMessage(error.message);
-      return;
+      setMessage('Updated.');
+      window.dispatchEvent(new Event('subscription-debug-updated'));
+      router.refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : 'Request failed.');
+    } finally {
+      setIsSaving(false);
     }
-
-    setMessage('Updated.');
-    window.dispatchEvent(new Event('subscription-debug-updated'));
-    router.refresh();
   };
 
   const handleApplyPlan = async () => {
@@ -313,7 +308,16 @@ export default function SubscriptionDebug() {
               Reset Debug
             </button>
 
-            {message ? <p className="text-xs font-medium text-slate-500">{message}</p> : null}
+            {message ? (
+              <p
+                className={`text-xs font-medium ${
+                  message.startsWith('Updated') ? 'text-emerald-700' : 'text-red-600'
+                }`}
+                role="status"
+              >
+                {message}
+              </p>
+            ) : null}
           </div>
         </div>
       </aside>

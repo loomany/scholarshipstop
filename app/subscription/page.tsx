@@ -2,16 +2,18 @@ import type { Metadata } from 'next';
 import { unstable_noStore as noStore } from 'next/cache';
 import SubscriptionPricingClient from '@/components/subscription/SubscriptionPricingClient';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
-import type { Json } from '@/types_db';
+import type { Json, Tables } from '@/types_db';
 import {
   deriveSubscriptionPresentation,
-  inferSubscriptionBillingTier
+  subscriptionPricingHighlightTier,
+  subscriptionPricingPlanStatusLabel
 } from '@/lib/payments/subscriptionEntitlements';
 import {
   extractLemonCustomerPortalUrl,
   extractLemonUpdatePaymentMethodUrl
 } from '@/lib/payments/lemonSubscriptionState';
 import { resolveBillingFixHref } from '@/lib/payments/billingUrls';
+import { enrichBillingFixUrlFromLemonApi } from '@/lib/payments/enrichLemonBillingFixUrl';
 import { createClient } from '@/utils/supabase/server';
 import { getSubscription, getUser } from '@/utils/supabase/queries';
 import type { BillingPlanKey } from '@/app/actions/billing';
@@ -42,6 +44,18 @@ function getUpdatePaymentUrlFromRow(row: unknown): string | null {
   );
 }
 
+/** Matches eligibility in `app/api/billing/skip-trial/route.ts`. */
+function isEligibleForSkipTrial(subscription: Tables<'subscriptions'> | null): boolean {
+  if (!subscription || subscription.provider !== 'lemon_squeezy') return false;
+  const status = subscription.status;
+  if (status !== 'trialing' && status !== 'on_trial') return false;
+  if (subscription.trial_end) {
+    const end = new Date(subscription.trial_end);
+    if (!Number.isNaN(end.getTime()) && end.getTime() <= Date.now()) return false;
+  }
+  return true;
+}
+
 export default async function SubscriptionPage() {
   noStore();
   const supabase = createClient();
@@ -51,24 +65,38 @@ export default async function SubscriptionPage() {
     : { data: null };
   const subscription = user ? await getSubscription(user.id) : null;
   const presentation = deriveSubscriptionPresentation(profile.data, subscription);
-  const currentPlanKey: BillingPlanKey | null = presentation.isSubscribed
-    ? inferSubscriptionBillingTier(subscription, profile.data)
-    : presentation.status === 'past_due'
-      ? inferSubscriptionBillingTier(subscription, profile.data)
-      : null;
+  const currentPlanKey: BillingPlanKey | null = subscriptionPricingHighlightTier(
+    presentation,
+    subscription,
+    profile.data
+  );
   const manageSubscriptionUrl = getManageSubscriptionUrlFromRow(subscription);
   const updatePaymentUrl = getUpdatePaymentUrlFromRow(subscription);
   const siteBase = (
     process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'https://scholarshiptop.com'
   ).replace(/\/+$/, '');
   const pastDue = presentation.status === 'past_due';
+  const fallbackBillingPath = `${siteBase}/subscription`;
   /** Always set when past_due: Lemon URLs or site subscription page. */
-  const resolvedBillingFixUrl = pastDue
-    ? resolveBillingFixHref(subscription, `${siteBase}/subscription`)
+  let resolvedBillingFixUrl = pastDue
+    ? resolveBillingFixHref(subscription, fallbackBillingPath)
     : null;
+  if (
+    pastDue &&
+    user &&
+    subscription &&
+    resolvedBillingFixUrl === fallbackBillingPath
+  ) {
+    resolvedBillingFixUrl = await enrichBillingFixUrlFromLemonApi(
+      subscription,
+      user.id,
+      fallbackBillingPath
+    );
+  }
   const showResumeAction =
     presentation.status === 'cancelled' && presentation.isSubscribed && Boolean(manageSubscriptionUrl);
   const showUpdatePaymentAction = pastDue;
+  const isEligibleForSkipTrialFlag = isEligibleForSkipTrial(subscription);
 
   return (
     <>
@@ -79,18 +107,26 @@ export default async function SubscriptionPage() {
               Unlock Premium Precision
             </h1>
             <p className="mx-auto mt-3 max-w-xl text-base text-gray-500 sm:text-lg">
-              Start your 3-day free trial today. Cancel anytime.
+              {presentation.isSubscribed
+                ? 'Change billing cadence or upgrade anytime. Cancel through your billing portal.'
+                : 'Start your 3-day free trial today. Cancel anytime.'}
             </p>
           </header>
 
           <SubscriptionPricingClient
             currentPlanKey={currentPlanKey}
+            currentPlanStatusLabel={subscriptionPricingPlanStatusLabel(
+              presentation,
+              subscription,
+              profile.data
+            )}
             hasActiveSubscription={presentation.isSubscribed}
             manageSubscriptionUrl={manageSubscriptionUrl}
             updatePaymentUrl={pastDue ? resolvedBillingFixUrl : updatePaymentUrl}
             showResumeAction={showResumeAction}
             showUpdatePaymentAction={showUpdatePaymentAction}
             pastDueBillingAccent={pastDue}
+            isEligibleForSkipTrial={isEligibleForSkipTrialFlag}
           />
 
           <p className="mx-auto mt-10 max-w-2xl text-center text-xs text-gray-500">

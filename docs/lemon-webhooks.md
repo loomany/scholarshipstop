@@ -18,6 +18,7 @@ This project creates Lemon Squeezy overlay checkouts, verifies webhooks, syncs
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SITE_URL` (used for links in transactional emails from the webhook)
 - `RESEND_API_KEY` and `RESEND_FROM` (optional; if unset, subscription status emails are skipped — DB sync still succeeds)
+- `LEMONSQUEEZY_API_KEY` — **recommended in production.** Used when Lemon delivers `subscription_payment_success` / `subscription_payment_recovered` as a **subscription-invoices** body (no variant/status fields). The webhook handler then **GET**s `https://api.lemonsqueezy.com/v1/subscriptions/:id` and runs the same upsert as `subscription_updated`, so plan upgrades and trial conversions update `profiles` even if a full `subscription_updated` event is delayed or missing.
 
 Legacy aliases `LEMONSQUEEZY_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_QUARTERLY_VARIANT_ID`, and `LEMONSQUEEZY_YEARLY_VARIANT_ID` are also accepted for server-side tier inference, but `NEXT_PUBLIC_LS_*` is the canonical naming used by the current app code.
 
@@ -90,8 +91,9 @@ Copy each from **Lemon → Live store → Product → Variant → Share / checko
 - `subscription_cancelled` keeps access until `ends_at` / `current_period_end` / `renews_at`
 - `subscription_payment_failed` maps to `past_due` and blocks access immediately (no grace period)
 - `subscription_payment_refunded` revokes access immediately
-- `subscription_payment_success`, `subscription_payment_failed`, `subscription_payment_recovered`, and `subscription_payment_refunded` invoice payloads are ignored for entitlement sync; only subscription-object payloads can change access
-- Exception: `subscription_payment_failed` **invoice** webhooks still trigger the “payment failed” email (link falls back to `/subscription` when Lemon omits `update_payment_method`) and an admin Telegram line, deduped by invoice id; DB state still follows `subscription_updated` with a subscription object
+- `subscription_payment_success` / `subscription_payment_recovered` **invoice** payloads: **`decideSubscriptionUpdate` alone** ignores them (no subscription object in the body). The **HTTP handler** may first enrich them via Lemon API (`LEMONSQUEEZY_API_KEY`) and treat the result like `subscription_updated` — required for reliable entitlement sync after upgrades when Lemon only sends the invoice event.
+- `subscription_payment_refunded` invoice payloads remain ignored for entitlement sync (use subscription-object events or a future enrichment path if needed).
+- `subscription_payment_failed` **invoice** webhooks still update DB to `past_due` (merge) and trigger the “payment failed” email / admin Telegram, deduped by invoice id.
 
 ## User id resolution
 

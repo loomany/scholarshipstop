@@ -921,7 +921,7 @@ export default function ScholarshipProfileForm({
           title: 'Update Billing To Restore Access',
           subtitle:
             'We could not renew your subscription after the trial ended. Update your card to unlock access again.',
-          buttonLabel: 'Fix Billing Issue',
+          buttonLabel: 'Subscription Manager',
           buttonClass:
             'bg-amber-500 text-white shadow-sm hover:bg-amber-600 hover:shadow-md'
         };
@@ -948,7 +948,7 @@ export default function ScholarshipProfileForm({
             badgeClass: 'bg-orange-100 text-orange-700 font-medium ring-1 ring-orange-200',
             title: 'Keep Premium Access Active',
             subtitle: null,
-            buttonLabel: 'View Your Plan',
+            buttonLabel: 'Subscription Manager',
             buttonClass:
               'bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow-md',
             showTrialProgress: true
@@ -985,7 +985,7 @@ export default function ScholarshipProfileForm({
             badgeClass: 'bg-slate-100 text-slate-600 font-medium',
             title: 'Unlock Premium Access',
             subtitle: 'Start 3-Day Free Trial, then as low as $12/mo.',
-            buttonLabel: 'Start 3-Day Free Trial',
+            buttonLabel: 'Subscription Manager',
             buttonClass:
               'bg-orange-500 text-white shadow-lg shadow-orange-200 hover:bg-orange-600 hover:shadow-orange-200',
             buttonSubtext: 'Full access. No commitment. Cancel anytime.'

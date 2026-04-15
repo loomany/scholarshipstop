@@ -9,6 +9,7 @@ export type EssayListFields = {
   slug: string;
   title: string;
   hero_image_url: string | null;
+  hero_is_real: boolean;
   meta_description: string | null;
   created_at: string | null;
 };
@@ -17,6 +18,8 @@ export type EssayListFields = {
 export type EssayIndexRow = EssayListFields & {
   linkedCategorySlug: string | null;
   linkedCategoryLabel: string | null;
+  /** 1 = real stored hero; 0 = missing URL or canonical gradient placeholder */
+  heroListPriority: number;
 };
 
 export type EssayDetailRow = {
@@ -25,6 +28,7 @@ export type EssayDetailRow = {
   title: string;
   content_html: string;
   hero_image_url: string | null;
+  hero_is_real: boolean;
   sources: unknown;
   faq: unknown;
   meta_description: string | null;
@@ -34,7 +38,7 @@ export type EssayDetailRow = {
 };
 
 const listSelect =
-  'id, slug, title, hero_image_url, meta_description, created_at' as const;
+  'id, slug, title, hero_image_url, hero_is_real, meta_description, created_at' as const;
 
 export const ESSAYS_INDEX_PAGE_SIZE = 12;
 
@@ -129,7 +133,8 @@ export async function fetchAllPublishedEssaysForIndex(): Promise<EssayIndexRow[]
     return {
       ...e,
       linkedCategorySlug: cat?.slug ?? null,
-      linkedCategoryLabel: cat?.label ?? null
+      linkedCategoryLabel: cat?.label ?? null,
+      heroListPriority: e.hero_is_real ? 1 : 0
     };
   });
 }
@@ -164,7 +169,7 @@ export const fetchPublishedEssayBySlug = cache(
     const { data, error } = await supabase
       .from('essays')
       .select(
-        'id, slug, title, content_html, hero_image_url, sources, faq, meta_description, is_published, created_at, updated_at'
+        'id, slug, title, content_html, hero_image_url, hero_is_real, sources, faq, meta_description, is_published, created_at, updated_at'
       )
       .eq('slug', raw)
       .eq('is_published', true)

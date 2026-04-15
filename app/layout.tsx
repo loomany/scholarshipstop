@@ -16,8 +16,14 @@ import {
 } from '@/components/analytics/GoogleTagManager';
 import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
-import AnalyticsTracker from '@/components/AnalyticsTracker';
+import dynamic from 'next/dynamic';
 import 'styles/main.css';
+
+/** Client-only: `usePathname` / `useSearchParams` can throw with Turbopack SSR (`useContext` null). */
+const AnalyticsTracker = dynamic(
+  () => import('@/components/AnalyticsTracker'),
+  { ssr: false }
+);
 
 const defaultDescription =
   'Discover and manage the best scholarship grants tailored for your education. ScholarshipTop helps students find funding opportunities worldwide.';
@@ -163,9 +169,7 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
           <Toaster />
         </Suspense>
         <WebVitalsClient />
-        <Suspense fallback={null}>
-          <AnalyticsTracker />
-        </Suspense>
+        <AnalyticsTracker />
       </body>
     </html>
   );

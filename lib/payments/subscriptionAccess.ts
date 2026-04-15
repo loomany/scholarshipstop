@@ -137,6 +137,10 @@ function subscriptionPriorityScore(subscription: AccessStatusLike) {
   ) {
     return 3;
   }
+  // Prefer explicit cancelled rows over stale past_due / billing-issue duplicates.
+  if (normalizedStatus === 'cancelled' || normalizedStatus === 'canceled') {
+    return 3;
+  }
   if (
     normalizedStatus === 'paused' ||
     normalizedStatus === 'past_due' ||
