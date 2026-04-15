@@ -202,16 +202,16 @@ export function sitemapBaseUrl(): string {
 }
 
 /**
- * Drip-feed SEO: canonical listing paths (under `/scholarships/`) allowed this hour.
- * Empty when `SEO_DRIP_*` env is unset — callers treat that as “no drip gating”.
+ * Drip-feed SEO: canonical listing paths (under `/scholarships/`) allowed this hour when drip is on.
+ * Empty when drip is off (`SEO_DRIP_ENABLED=false`, or start/rate unset) — callers treat that as “no drip gating”.
  */
 export function getVisibleSeoRoutes(): string[] {
   return getVisibleSeoRoutesFromDrip();
 }
 
 /**
- * SEO listing URLs use {@link canonicalPathAllowedInSeoSitemap}, which matches the drip window
- * from {@link getVisibleSeoRoutes} / `SEO_DRIP_START_DATE` + `SEO_PAGES_PER_HOUR`.
+ * SEO listing URLs use {@link canonicalPathAllowedInSeoSitemap}, which matches the drip window when active
+ * ({@link getVisibleSeoRoutes} / `SEO_DRIP_START_DATE` + `SEO_PAGES_PER_HOUR`; disabled via `SEO_DRIP_ENABLED=false`).
  * Sitemap builders call `getVisibleSeoRoutes()` so the drip module runs on each sitemap build.
  */
 export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {

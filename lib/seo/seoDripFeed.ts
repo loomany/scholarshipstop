@@ -2,6 +2,10 @@
  * SEO drip: paths in `data/seo-pending-queue.json` go live in list order after `SEO_DRIP_START_DATE`.
  * Each hour-slot unlocks `SEO_PAGES_PER_HOUR` more URLs. Slots use **ceiling** elapsed time so the
  * first batch unlocks right after start (the old floor-hour model left the site at 0 URLs for a full hour).
+ *
+ * **Kill switch:** `SEO_DRIP_ENABLED=false` (or `0`) disables drip entirely; the queue is ignored and
+ * no listing is blocked by drip. Quality rules (thin/broad/noindex elsewhere) are unchanged.
+ * When unset, legacy behavior: drip is active iff `SEO_DRIP_START_DATE` and `SEO_PAGES_PER_HOUR` are set.
  */
 import fs from 'fs';
 import path from 'path';
@@ -51,7 +55,14 @@ export function queueEntryToCanonicalPath(entry: string): string | null {
   return rest ? normalizeListingPath(rest) : null;
 }
 
+function isSeoDripExplicitlyDisabled(): boolean {
+  const v = process.env.SEO_DRIP_ENABLED?.trim().toLowerCase();
+  return v === 'false' || v === '0';
+}
+
 function parseDripConfig(): SeoDripFeedConfig | null {
+  if (isSeoDripExplicitlyDisabled()) return null;
+
   const startRaw = process.env.SEO_DRIP_START_DATE?.trim();
   const perHourRaw = process.env.SEO_PAGES_PER_HOUR?.trim();
   if (!startRaw || perHourRaw === undefined || perHourRaw === '') return null;
@@ -111,8 +122,18 @@ function loadOrderedQueuePaths(): string[] {
 
 /** Logs once when the Node server process starts (see root `instrumentation.ts`). */
 export function logSeoQueueLoadedOnStartup(): void {
+  if (isSeoDripExplicitlyDisabled()) {
+    console.log('SEO drip: disabled (SEO_DRIP_ENABLED=false)');
+    return;
+  }
+  if (!parseDripConfig()) {
+    console.log(
+      'SEO drip: inactive (set SEO_DRIP_START_DATE and SEO_PAGES_PER_HOUR, and SEO_DRIP_ENABLED not false)'
+    );
+    return;
+  }
   const count = loadOrderedQueuePaths().length;
-  console.log(`SEO Queue loaded: ${count} URLs found`);
+  console.log(`SEO drip: active — queue has ${count} URLs`);
 }
 
 export function isSeoDripFeedActive(): boolean {
