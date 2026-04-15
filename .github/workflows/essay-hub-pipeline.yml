@@ -23,6 +23,8 @@ jobs:
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       FAL_KEY: ${{ secrets.FAL_KEY }}
+      # Essay Hub hero: fal-ai/flux/dev (16:9). Do not set `nano` here unless you intentionally want Nano Banana 2.
+      ESSAY_HUB_HERO_FAL_BACKEND: flux
     steps:
       - name: Check required secrets
         run: |
