@@ -30,7 +30,7 @@ function baseCheckoutUrlFromPlan(plan: BillingPlanKey): string {
 
   const url =
     plan === 'monthly'
-      ? 'https://pay.scholarshiptop.com/checkout/buy/4e63048d-5d76-4818-925c-048b10047128?logo=0&discount=0'
+      ? 'https://pay.scholarshiptop.com/checkout/buy/88e78199-f190-43a0-bb33-5e52fa96a67f?logo=0&discount=0'
       : plan === 'quarterly'
         ? 'https://pay.scholarshiptop.com/checkout/buy/3faf88f4-d2d6-437f-808f-f641bcb955a1?logo=0&discount=0'
         : 'https://pay.scholarshiptop.com/checkout/buy/152da89c-f707-4417-9cd8-3be69938a677?logo=0&discount=0';
