@@ -1,7 +1,13 @@
+/**
+ * SEO drip: paths in `data/seo-pending-queue.json` go live in list order after `SEO_DRIP_START_DATE`.
+ * Each hour-slot unlocks `SEO_PAGES_PER_HOUR` more URLs. Slots use **ceiling** elapsed time so the
+ * first batch unlocks right after start (the old floor-hour model left the site at 0 URLs for a full hour).
+ */
 import fs from 'fs';
 import path from 'path';
 
 const QUEUE_REL = ['data', 'seo-pending-queue.json'] as const;
+const MS_PER_HOUR = 3_600_000;
 
 export type SeoDripFeedConfig = {
   startDate: Date;
@@ -63,7 +69,17 @@ function parseDripConfig(): SeoDripFeedConfig | null {
 export function fullUtcHoursSinceStart(start: Date, now: Date): number {
   const ms = now.getTime() - start.getTime();
   if (ms <= 0) return 0;
-  return Math.floor(ms / 3_600_000);
+  return Math.floor(ms / MS_PER_HOUR);
+}
+
+/**
+ * Hour-sized buckets since `start` for drip limits: first bucket begins as soon as `now > start`
+ * (ceil), so drip is not idle for a full clock hour after launch.
+ */
+export function dripHourSlotsElapsedForLimit(start: Date, now: Date): number {
+  const ms = now.getTime() - start.getTime();
+  if (ms <= 0) return 0;
+  return Math.ceil(ms / MS_PER_HOUR);
 }
 
 function loadOrderedQueuePaths(): string[] {
@@ -117,8 +133,10 @@ export function getSeoDripFeedSnapshot(now = new Date()): SeoDripFeedSnapshot | 
   if (!config) return { active: false };
 
   const orderedQueue = loadOrderedQueuePaths();
-  const hours = fullUtcHoursSinceStart(config.startDate, now);
-  const limit = hours * config.pagesPerHour;
+  const { pagesPerHour } = config;
+  const slots = dripHourSlotsElapsedForLimit(config.startDate, now);
+  const limit =
+    pagesPerHour <= 0 ? 0 : slots * pagesPerHour;
   const visibleList = orderedQueue.slice(0, Math.min(limit, orderedQueue.length));
 
   return {

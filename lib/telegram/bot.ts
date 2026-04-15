@@ -31,6 +31,7 @@ import {
   formatTrafficChannelLabel
 } from '@/lib/analytics/resolveTrafficChannel';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
+import { getSeoDripFeedSnapshot } from '@/lib/seo/seoDripFeed';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
 
@@ -126,7 +127,9 @@ const BUTTON_LABELS = {
   myProfile: '👤 My Account',
   reconnectAccount: '🔄 Sync Account',
   /** Same data as hub My scholarships → Saved (`/scholarships?tab=saved`). Main menu only — not duplicated on My Account keyboard. */
-  savedScholarships: '💾 Saved scholarships'
+  savedScholarships: '💾 Saved scholarships',
+  /** Admin: copy-paste snapshot of SEO drip queue (env + progress). */
+  seoQueueReport: '📊 SEO очередь'
 } as const;
 
 /** Previous reply-keyboard label; still accept taps until clients refresh the keyboard. */
@@ -232,6 +235,7 @@ function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarku
             user.notifications_enabled ? BUTTON_LABELS.alertsOn : BUTTON_LABELS.alertsOff
           )
         ],
+        [keyboardButton(BUTTON_LABELS.seoQueueReport)],
         [keyboardButton(BUTTON_LABELS.backToMenu)]
       ],
       resize_keyboard: true,
@@ -1190,6 +1194,82 @@ async function sendAdminPanel(user: TelegramUserRow) {
   );
 }
 
+async function sendSeoQueueReport(user: TelegramUserRow) {
+  const envAdmin = getTelegramAdminIds().has(Number(user.telegram_user_id));
+  if (!user.is_admin && !envAdmin) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Только для админов.',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  const site = getSiteUrl();
+  const startRaw = process.env.SEO_DRIP_START_DATE?.trim() || '(не задано)';
+  const pphRaw = process.env.SEO_PAGES_PER_HOUR?.trim() ?? '(не задано)';
+  const snap = getSeoDripFeedSnapshot();
+
+  const lines: string[] = [
+    '📊 SEO drip — снимок с сервера',
+    `(копируй блок целиком для анализа; Google Search Console сюда не входит)`,
+    '',
+    `Сайт: ${site}`,
+    `SEO_DRIP_START_DATE: ${startRaw}`,
+    `SEO_PAGES_PER_HOUR: ${pphRaw}`,
+    `Drip включён: ${snap.active ? 'да' : 'нет (нет одной из env или 0)'}`
+  ];
+
+  if (!snap.active) {
+    lines.push(
+      '',
+      'Пока drip выключен — все пути из очереди не режутся этим механизмом (см. код seoDripFeed).'
+    );
+    await sendTelegramMessage(user.telegram_chat_id, lines.join('\n'), buildProfileKeyboard(user));
+    return;
+  }
+
+  const { orderedQueue, limit } = snap;
+  const n = orderedQueue.length;
+  const unlocked = Math.min(limit, n);
+  const remaining = Math.max(0, n - unlocked);
+
+  lines.push(
+    `Всего URL в data/seo-pending-queue.json: ${n}`,
+    `Текущий лимит (слоты×страниц/час): ${limit}`,
+    `Уже «открыто» первых в списке: ${unlocked}`,
+    `Ещё ждут очереди: ${remaining}`,
+    '',
+    'Уже открытые (до 10 путей):'
+  );
+  for (const p of orderedQueue.slice(0, Math.min(10, unlocked))) {
+    lines.push(`• ${site}/scholarships/${p}`);
+  }
+  if (unlocked === 0) {
+    lines.push('— пока 0 (проверь дату старта и лимит)');
+  }
+
+  lines.push('', 'Следующие в очереди (до 15):');
+  for (const p of orderedQueue.slice(unlocked, unlocked + 15)) {
+    lines.push(`• ${site}/scholarships/${p}`);
+  }
+  if (remaining === 0) {
+    lines.push('— очередь полностью открыта');
+  }
+
+  const text = lines.join('\n');
+  if (text.length > 4000) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      text.slice(0, 3990) + '\n…(обрезано)',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
+
+  await sendTelegramMessage(user.telegram_chat_id, text, buildProfileKeyboard(user));
+}
+
 /** Shown when the user taps “Sync Account” but Telegram is already linked (app_user_id set). */
 async function sendAlreadyLinkedSyncAck(user: TelegramUserRow) {
   const nextUser = await updateTelegramUserState(user.id, {
@@ -1744,6 +1824,19 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
       return;
     }
 
+    if (normalizeBotCommand(text) === '/seoreport') {
+      if (!getTelegramAdminIds().has(message.from.id)) {
+        await sendTelegramMessage(
+          user.telegram_chat_id,
+          'This command is only available to admins.',
+          buildMainKeyboard()
+        );
+        return;
+      }
+      await sendSeoQueueReport(user);
+      return;
+    }
+
     if (text === BUTTON_LABELS.backToMenu) {
       await sendTelegramMessage(user.telegram_chat_id, MAIN_MENU_REPLY, buildMainKeyboard());
       return;
@@ -1780,6 +1873,11 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
 
     if (text === BUTTON_LABELS.admin) {
       await sendAdminPanel(user);
+      return;
+    }
+
+    if (text === BUTTON_LABELS.seoQueueReport) {
+      await sendSeoQueueReport(user);
       return;
     }
 
