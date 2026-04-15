@@ -710,13 +710,20 @@ export default function SubscriptionPricingClient({
           {billingActionError ? (
             <div className="flex flex-col items-center gap-3">
               <p className="text-red-600">{billingActionError}</p>
-              {manageSubscriptionUrl ? (
+              {/** Portal URL is often missing in `raw_payload`; update-payment URL still opens Lemon hosted billing. */}
+              {manageSubscriptionUrl || updatePaymentUrl ? (
                 <button
                   type="button"
-                  onClick={() => openLemonHostedUrl(manageSubscriptionUrl)}
+                  onClick={() =>
+                    openLemonHostedUrl(
+                      manageSubscriptionUrl ?? updatePaymentUrl ?? ''
+                    )
+                  }
                   className="inline-flex items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
                 >
-                  Open billing portal
+                  {manageSubscriptionUrl
+                    ? 'Open billing portal'
+                    : 'Open billing in Lemon'}
                 </button>
               ) : null}
             </div>
