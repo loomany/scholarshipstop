@@ -103,6 +103,20 @@ function prependPremiumUpsellIfNeeded(messages: ChatMessage[]): ChatMessage[] {
   return [...buildPremiumQuotaExceededMessages(), ...messages];
 }
 
+/**
+ * Trial mentor quota exhausted: show the subscribe card. If the user has not sent any
+ * messages yet, do not keep assistant-only seed/welcome bubbles — avoids a paywall plus
+ * a misleading "let's write your essay" greeting at once.
+ */
+function applyMentorQuotaExhaustedMessages(thread: ChatMessage[]): ChatMessage[] {
+  const nonPremium = thread.filter((m) => m.variant !== 'premium_access');
+  const hasUser = nonPremium.some((m) => m.role === 'user');
+  if (!hasUser) {
+    return buildPremiumQuotaExceededMessages();
+  }
+  return prependPremiumUpsellIfNeeded(thread);
+}
+
 /** Same shape as server `UUID_RE` — used to validate persisted ids. */
 const CHAT_ID_UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -490,7 +504,7 @@ export function EssayQuestionnaire({
         };
         if (!data.mentor_dialogue_exhausted) return;
         if (options?.prependBanner) {
-          setMessages((prev) => prependPremiumUpsellIfNeeded(prev));
+          setMessages((prev) => applyMentorQuotaExhaustedMessages(prev));
         }
       } catch {
         /* ignore */
@@ -521,7 +535,7 @@ export function EssayQuestionnaire({
           mentor_dialogue_exhausted?: boolean;
         };
         if (trialData.mentor_dialogue_exhausted) {
-          setMessages((prev) => prependPremiumUpsellIfNeeded(prev));
+          setMessages((prev) => applyMentorQuotaExhaustedMessages(prev));
           setMentorTrialModalOpen(true);
           return;
         }
@@ -539,7 +553,7 @@ export function EssayQuestionnaire({
       await syncMentorTrialBanner({ prependBanner: false });
     } catch (e) {
       if (e instanceof MentorTrialQuotaExceededError) {
-        setMessages((prev) => prependPremiumUpsellIfNeeded(prev));
+        setMessages((prev) => applyMentorQuotaExhaustedMessages(prev));
         setMentorTrialModalOpen(true);
       } else if (e instanceof Error && e.name === 'AbortError') {
         toast({
@@ -677,7 +691,7 @@ export function EssayQuestionnaire({
         if (!alive) return;
         if (e instanceof MentorTrialQuotaExceededError) {
           setChatId(null);
-          setMessages(buildPremiumQuotaExceededMessages());
+          setMessages((prev) => applyMentorQuotaExhaustedMessages(prev));
           setProgress(EMPTY_PROGRESS);
           setInput('');
         } else if (e instanceof Error && e.name === 'AbortError') {
