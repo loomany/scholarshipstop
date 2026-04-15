@@ -117,7 +117,11 @@ export async function POST(request: Request) {
   if (!is_likely_bot) {
     void notifyTelegramAdminsVisitorFirstTouch({
       trafficChannel: traffic_channel,
-      landingUrl: landing_url
+      landingUrl: landing_url,
+      referrer: referrer || null,
+      utm_source: utm_source || null,
+      utm_medium: utm_medium || null,
+      utm_campaign: utm_campaign || null
     }).catch((e) => {
       console.error('[analytics/first-touch] telegram async error', e);
     });

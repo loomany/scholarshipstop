@@ -1,6 +1,9 @@
 /**
  * Classifies first-touch visits: Google Ads vs organic search vs other.
  * Prefers URL signals (gclid, etc.) over empty client UTM when the landing URL carries params.
+ *
+ * Paid acquisition: normal `utm_medium` (cpc, paid, …) **or** known ad `utm_source` alone
+ * (e.g. `utm_source=tiktok` with no medium) — matches how marketing links are built.
  */
 
 export type TrafficChannel =
@@ -53,11 +56,36 @@ function isGoogleAdsSource(source: string): boolean {
   );
 }
 
-/** Meta outbound / Ads: `fbclid`, or UTM source like `fb`, `facebook`. */
+/** Meta / Instagram placements: `fb`, `facebook`, `ig`, `instagram`, … */
+function isMetaUtmSource(utmSource: string): boolean {
+  const s = utmSource.toLowerCase();
+  return (
+    s === 'fb' ||
+    s === 'facebook' ||
+    s.startsWith('facebook_') ||
+    s === 'ig' ||
+    s === 'instagram'
+  );
+}
+
+/** Meta outbound / Ads: `fbclid`, or UTM source like `fb`, `facebook`, `ig`. */
 function isFacebookPaidSignal(url: URL, utmSource: string): boolean {
   if (url.searchParams.has('fbclid')) return true;
-  const s = utmSource.toLowerCase();
-  return s === 'fb' || s === 'facebook' || s.startsWith('facebook_');
+  return isMetaUtmSource(utmSource);
+}
+
+/**
+ * When `utm_medium` is omitted but the source is a known paid platform (same list as tagged ad links).
+ */
+function isKnownPaidAcquisitionUtmSource(utmSource: string): boolean {
+  const s = utmSource.trim();
+  if (!s) return false;
+  if (isGoogleAdsSource(s)) return true;
+  if (isMetaUtmSource(s)) return true;
+  const lower = s.toLowerCase();
+  if (lower === 'tiktok' || lower.startsWith('tiktok_')) return true;
+  if (lower === 'reddit' || lower.startsWith('reddit_')) return true;
+  return false;
 }
 
 function mergeUtmFromLandingUrl(
@@ -116,19 +144,21 @@ export function resolveTrafficChannel(raw: ResolveTrafficChannelInput): TrafficC
   }
 
   const mediumLower = merged.utm_medium.toLowerCase();
-  const sourceLower = merged.utm_source.toLowerCase();
   const paidMedium =
     PAID_MEDIUMS.has(mediumLower) ||
     PAID_MEDIUMS.has(get('utm_medium').toLowerCase());
 
+  const utmSrc = (merged.utm_source || get('utm_source')).trim();
+  const effectivePaid =
+    paidMedium || (!!utmSrc && isKnownPaidAcquisitionUtmSource(utmSrc));
+
   // 3: UTM: paid + Google source
-  if (paidMedium && isGoogleAdsSource(merged.utm_source || get('utm_source'))) {
+  if (effectivePaid && isGoogleAdsSource(utmSrc)) {
     return 'google_ads';
   }
 
   // 4: Paid non-Google — Facebook / Meta vs other ad networks
-  const utmSrc = (merged.utm_source || get('utm_source')).trim();
-  if (paidMedium && !isGoogleAdsSource(utmSrc)) {
+  if (effectivePaid && !isGoogleAdsSource(utmSrc)) {
     if (isFacebookPaidSignal(url, utmSrc)) {
       return 'facebook_paid';
     }
@@ -191,6 +221,26 @@ export function getSocialNetworkFirstTouchLabel(row: {
     return 'REDDIT';
   }
   return null;
+}
+
+/** Instant visitor alert: TIKTOK/REDDIT when applicable, else standard channel label. */
+export function formatFirstTouchVisitorAlertLabel(args: {
+  traffic_channel: TrafficChannel;
+  landing_url: string;
+  referrer?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+}): string {
+  const social = getSocialNetworkFirstTouchLabel({
+    landing_url: args.landing_url,
+    referrer: args.referrer,
+    utm_source: args.utm_source,
+    utm_medium: args.utm_medium,
+    utm_campaign: args.utm_campaign
+  });
+  if (social) return social;
+  return formatTrafficChannelLabel(args.traffic_channel);
 }
 
 /** Stored row → human label; recomputes from URL/UTM when `traffic_channel` is null (legacy rows). */

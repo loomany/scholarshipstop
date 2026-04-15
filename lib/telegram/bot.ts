@@ -27,6 +27,7 @@ import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import {
   labelForVisitorRow,
   type TrafficChannel,
+  formatFirstTouchVisitorAlertLabel,
   formatTrafficChannelLabel
 } from '@/lib/analytics/resolveTrafficChannel';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
@@ -748,6 +749,10 @@ async function sendTelegramAdminBroadcastHtml(text: string) {
 export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
   trafficChannel: TrafficChannel;
   landingUrl: string;
+  referrer?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
 }) {
   if (!getTelegramBotToken()) {
     console.warn(
@@ -756,7 +761,14 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
     return;
   }
 
-  const channelDisplay = formatTrafficChannelLabel(payload.trafficChannel);
+  const channelDisplay = formatFirstTouchVisitorAlertLabel({
+    traffic_channel: payload.trafficChannel,
+    landing_url: payload.landingUrl,
+    referrer: payload.referrer,
+    utm_source: payload.utm_source,
+    utm_medium: payload.utm_medium,
+    utm_campaign: payload.utm_campaign
+  });
 
   const text = [
     '<b>New Visitor on ScholarshipTop!</b>',
