@@ -323,11 +323,11 @@ export type PreferredPlanCheckoutResult =
   | { ok: false; error: string };
 
 /**
- * Lemon checkout for the billing tier inferred from the user’s current subscription (e.g. trial variant),
- * same heuristic as `/subscription` current plan. Falls back to monthly.
+ * **Pay now — no free trial** on this checkout path: uses Lemon `skip_trial` (API checkout) or hosted
+ * fallback with `checkout[skip_trial]=1`. Same plan heuristic as `/subscription` (infer tier, else monthly).
  *
- * Returns a plain object (never throws) so production clients show a real message instead of the
- * generic Next.js Server Action error.
+ * Used by AI Mentor “Start” (inline card + modal), *not* by the main `/subscription` “Start free trial” buttons
+ * (`getCheckoutURL` uses `with_trial`).
  */
 export async function getCheckoutURLForPreferredPlan(): Promise<PreferredPlanCheckoutResult> {
   try {
@@ -378,10 +378,13 @@ export async function getCheckoutURLForPreferredPlan(): Promise<PreferredPlanChe
       };
     }
 
+    console.warn(
+      '[billing] getCheckoutURLForPreferredPlan: Lemon API skip-trial checkout failed; using hosted skip_trial URL',
+      { plan, reason: r.reason, detail: r.detail?.slice?.(0, 200) }
+    );
     return {
-      ok: false,
-      error:
-        'Payment link could not be created. Check Vercel logs for [billing] Lemon create checkout — often a wrong API key, store ID, or variant ID (Test vs Live mismatch).'
+      ok: true,
+      url: checkoutUrlSkipTrialFallbackForPlan(plan, user.email, user.id)
     };
   } catch (e) {
     console.error('[billing] getCheckoutURLForPreferredPlan', e);

@@ -55,6 +55,7 @@ import EssaySendForAiCheckButton from '@/components/essay/EssaySendForAiCheckBut
 import type { EssaySendForAiDetectorChoice } from '@/components/essay/EssaySendForAiCheckButton';
 import ManualGreenCoverageModal from '@/components/essay/ManualGreenCoverageModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
+import MentorTrialSubscribeModal from '@/components/essay/MentorTrialSubscribeModal';
 import {
   getManualGreenCoverageRatio,
   MANUAL_GREEN_COVERAGE_THRESHOLD
@@ -390,6 +391,8 @@ export default function EssayResultClient({
   const router = useRouter();
   const { toast } = useToast();
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [trialAiCheckPremiumModalOpen, setTrialAiCheckPremiumModalOpen] =
+    useState(false);
   const [preAiCheckPromoOpen, setPreAiCheckPromoOpen] = useState(false);
   const [manualCoverageModalOpen, setManualCoverageModalOpen] = useState(false);
   const pendingTextEditorDetectorRef = useRef<EssaySendForAiDetectorChoice | null>(
@@ -1024,7 +1027,7 @@ export default function EssayResultClient({
       detector: EssayAiDetectorChoice = 'gptzero',
       /** Text the user sees (same as Copy / active tab), so we do not send a stale DB string. */
       textForDetector?: string
-    ) => {
+    ): Promise<'ok' | 'trial_ai_check_exhausted'> => {
       const ac = new AbortController();
       const clientTimeoutMs = 180_000;
       const tid = window.setTimeout(() => ac.abort(), clientTimeoutMs);
@@ -1046,9 +1049,17 @@ export default function EssayResultClient({
           humanScore?: number;
           sentences?: GptZeroSentenceScore[];
           detector?: string;
+          code?: string;
+          kind?: string;
         };
         if (!res.ok) {
           if (res.status === 402) {
+            if (
+              data.code === 'trial_quota_exceeded' &&
+              data.kind === 'ai_check'
+            ) {
+              return 'trial_ai_check_exhausted' as const;
+            }
             throw new Error(
               data.error?.trim() ||
                 'Trial limit reached for this feature. Upgrade to a paid plan on the subscription page.'
@@ -1064,6 +1075,7 @@ export default function EssayResultClient({
         const det: EssayAiDetectorChoice =
           data.detector === 'undetectable' ? 'undetectable' : 'gptzero';
         mergeGpt(essayId, { humanScore: hs, sentences: sent, detector: det });
+        return 'ok' as const;
       } finally {
         window.clearTimeout(tid);
       }
@@ -1145,34 +1157,48 @@ export default function EssayResultClient({
         data.sentences.length > 0;
 
       if (opts.clientCheckDetector) {
-        setCheckLoading(true);
-        try {
-          await checkAiForEssayId(
-            data.id,
-            opts.clientCheckDetector,
-            data.content
-          );
-        } catch {
-          toast({
-            variant: 'destructive',
-            title: opts.checkFailTitle,
-            description: opts.checkFailDescription
-          });
-        } finally {
-          setCheckLoading(false);
+        if (trialFeatureQuota?.applies && trialFeatureQuota.aiRemaining <= 0) {
+          setTrialAiCheckPremiumModalOpen(true);
+        } else {
+          setCheckLoading(true);
+          try {
+            const outcome = await checkAiForEssayId(
+              data.id,
+              opts.clientCheckDetector,
+              data.content
+            );
+            if (outcome === 'trial_ai_check_exhausted') {
+              setTrialAiCheckPremiumModalOpen(true);
+            }
+          } catch {
+            toast({
+              variant: 'destructive',
+              title: opts.checkFailTitle,
+              description: opts.checkFailDescription
+            });
+          } finally {
+            setCheckLoading(false);
+          }
         }
       } else if (!opts.skipAutoAiCheck && !hasServerHighlights) {
-        setCheckLoading(true);
-        try {
-          await checkAiForEssayId(data.id, 'gptzero', data.content);
-        } catch {
-          toast({
-            variant: 'destructive',
-            title: opts.checkFailTitle,
-            description: opts.checkFailDescription
-          });
-        } finally {
-          setCheckLoading(false);
+        if (trialFeatureQuota?.applies && trialFeatureQuota.aiRemaining <= 0) {
+          setTrialAiCheckPremiumModalOpen(true);
+        } else {
+          setCheckLoading(true);
+          try {
+            const outcome = await checkAiForEssayId(data.id, 'gptzero', data.content);
+            if (outcome === 'trial_ai_check_exhausted') {
+              setTrialAiCheckPremiumModalOpen(true);
+            }
+          } catch {
+            toast({
+              variant: 'destructive',
+              title: opts.checkFailTitle,
+              description: opts.checkFailDescription
+            });
+          } finally {
+            setCheckLoading(false);
+          }
         }
       }
 
@@ -1204,17 +1230,32 @@ export default function EssayResultClient({
         });
       }
     },
-    [essayChainKey, mergeGpt, checkAiForEssayId, router, toast]
+    [
+      essayChainKey,
+      mergeGpt,
+      checkAiForEssayId,
+      router,
+      toast,
+      trialFeatureQuota
+    ]
   );
 
   const AI_CHECK_CLIENT_TIMEOUT_MS = 180_000;
 
   const runAiCheckFlow = async (detector: EssayAiDetectorChoice = 'gptzero') => {
+    if (trialFeatureQuota?.applies && trialFeatureQuota.aiRemaining <= 0) {
+      setTrialAiCheckPremiumModalOpen(true);
+      return;
+    }
     if (showVersionTabs) setEditorView('corrections');
     setCheckLoading(true);
     try {
       /** Latest version only (Corrections text); do not send Source from the toolbar to GPTZero. */
-      await checkAiForEssayId(latest.id, detector, mergedEssayText);
+      const outcome = await checkAiForEssayId(latest.id, detector, mergedEssayText);
+      if (outcome === 'trial_ai_check_exhausted') {
+        setTrialAiCheckPremiumModalOpen(true);
+        return;
+      }
       setHasManualSnippetTouch(false);
       setSentenceUserEdits((prev) => {
         const next = { ...prev };
@@ -1251,6 +1292,10 @@ export default function EssayResultClient({
     detector: EssayAiDetectorChoice = 'gptzero'
   ) => {
     if (!originalEssayRow) return;
+    if (trialFeatureQuota?.applies && trialFeatureQuota.aiRemaining <= 0) {
+      setTrialAiCheckPremiumModalOpen(true);
+      return;
+    }
     setEditorView('original');
     setCheckLoading(true);
     try {
@@ -1287,7 +1332,15 @@ export default function EssayResultClient({
           return next;
         });
       }
-      await checkAiForEssayId(originalEssayRow.id, detector, mergedEssayText);
+      const outcome = await checkAiForEssayId(
+        originalEssayRow.id,
+        detector,
+        mergedEssayText
+      );
+      if (outcome === 'trial_ai_check_exhausted') {
+        setTrialAiCheckPremiumModalOpen(true);
+        return;
+      }
       setHasManualSnippetTouch(false);
     } catch (err) {
       const aborted =
@@ -1653,6 +1706,10 @@ export default function EssayResultClient({
         open={subscriptionOfferOpen}
         onClose={() => setSubscriptionOfferOpen(false)}
       />
+      <MentorTrialSubscribeModal
+        open={trialAiCheckPremiumModalOpen}
+        onClose={() => setTrialAiCheckPremiumModalOpen(false)}
+      />
       <ScholarshipSubscriptionOfferModal
         open={preAiCheckPromoOpen}
         onClose={() => setPreAiCheckPromoOpen(false)}
@@ -1911,7 +1968,8 @@ export default function EssayResultClient({
                       trialFeatureQuota.humanizeRemaining === TRIAL_FEATURE_LIMIT ? (
                       <p className="max-w-lg text-xs font-semibold leading-relaxed text-zinc-800 sm:text-sm">
                         Trial includes 1 AI mentor conversation · {TRIAL_FEATURE_LIMIT} AI authenticity
-                        checks · {TRIAL_FEATURE_LIMIT} full-draft humanize runs (whole essay at once).
+                        check (GPTZero or Undetectable — one total) · {TRIAL_FEATURE_LIMIT}{' '}
+                        full-draft humanize run (whole essay at once).
                       </p>
                     ) : (
                       <p className="max-w-lg text-xs font-medium leading-relaxed text-zinc-600 sm:text-sm">

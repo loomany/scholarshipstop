@@ -71,6 +71,7 @@ export default function MentorTrialSubscribeModal({
     window.LemonSqueezy?.Refresh?.();
   }, [open]);
 
+  /** Skip-trial checkout: immediate payment (see `getCheckoutURLForPreferredPlan`). */
   const handleStart = () => {
     startTransition(async () => {
       const result = await getCheckoutURLForPreferredPlan();
@@ -127,7 +128,7 @@ export default function MentorTrialSubscribeModal({
         >
           {MENTOR_PREMIUM_ACCESS_TITLE}
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-base">
+        <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-zinc-600 sm:text-base">
           {MENTOR_PREMIUM_ACCESS_BODY}
         </p>
 
@@ -138,7 +139,7 @@ export default function MentorTrialSubscribeModal({
             disabled={isPending}
             className="inline-flex h-12 w-full max-w-sm items-center justify-center rounded-xl bg-[#FF6600] px-8 text-sm font-bold text-white shadow-sm transition hover:bg-[#E65C00] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6600]/70 focus-visible:ring-offset-2 disabled:opacity-60 sm:max-w-md"
           >
-            {isPending ? 'Opening…' : 'Start'}
+            {isPending ? 'Opening…' : 'Subscribe & pay'}
           </button>
         </div>
       </div>

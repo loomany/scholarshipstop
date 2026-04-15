@@ -6,8 +6,8 @@ import {
 
 type Profile = Tables<'profiles'>;
 
-/** AI authenticity check + full-draft humanize during 3-day trial. */
-export const TRIAL_FEATURE_LIMIT = 2;
+/** AI authenticity check + full-draft humanize during 3-day trial (1 each; one detector choice for the check). */
+export const TRIAL_FEATURE_LIMIT = 1;
 /** Mentor chat: one `essay_chats` dialogue (POST /api/interviewer init) per trial. */
 export const TRIAL_CHAT_DIALOGUE_LIMIT = 1;
 

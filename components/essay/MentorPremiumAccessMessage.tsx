@@ -40,6 +40,7 @@ export default function MentorPremiumAccessMessage() {
     window.LemonSqueezy?.Refresh?.();
   }, []);
 
+  /** Skip-trial checkout: immediate payment (see `getCheckoutURLForPreferredPlan` in billing actions). */
   const handleStart = () => {
     startTransition(async () => {
       const result = await getCheckoutURLForPreferredPlan();
@@ -81,7 +82,7 @@ export default function MentorPremiumAccessMessage() {
           <h3 className="text-base font-bold tracking-tight text-zinc-900 sm:text-lg">
             {MENTOR_PREMIUM_ACCESS_TITLE}
           </h3>
-          <p className="mt-2.5 text-sm leading-relaxed text-zinc-600 sm:text-[15px]">
+          <p className="mt-2.5 whitespace-pre-line text-sm leading-relaxed text-zinc-600 sm:text-[15px]">
             {MENTOR_PREMIUM_ACCESS_BODY}
           </p>
           <button
@@ -90,7 +91,7 @@ export default function MentorPremiumAccessMessage() {
             disabled={isPending}
             className="mt-5 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#FF6600] px-6 text-sm font-bold text-white shadow-[0_2px_12px_-2px_rgba(255,102,0,0.45)] transition hover:bg-[#E65C00] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6600]/70 focus-visible:ring-offset-2 disabled:opacity-60"
           >
-            {isPending ? 'Opening…' : 'Start'}
+            {isPending ? 'Opening…' : 'Subscribe & pay'}
           </button>
         </div>
       </div>
