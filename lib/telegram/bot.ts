@@ -835,7 +835,7 @@ export async function notifyTelegramSignup(payload: {
 
   await sendTelegramAdminBroadcast(
     [
-      'Новая регистрация в ScholarshipTop',
+      '✨ Новая регистрация в ScholarshipTop',
       `Email: ${payload.email}`,
       `Источник: ${formatAdminSourceLabel(payload.source ?? 'app')}`
     ].join('\n')
