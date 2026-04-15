@@ -50,6 +50,11 @@ module.exports = {
             boxShadow:
               '0 4px 18px -2px rgba(255, 122, 26, 0.48), 0 0 0 1px rgba(255, 122, 26, 0.55)'
           }
+        },
+        /** Skeleton loading stripes (see `components/ui/Shimmer.tsx`). */
+        'shimmer-wave': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' }
         }
       },
       animation: {
@@ -71,7 +76,8 @@ module.exports = {
         'works-benefit-2': 'pain-fade-up 0.45s ease-out 0.3s forwards',
         'works-benefit-3': 'pain-fade-up 0.45s ease-out 0.42s forwards',
         'works-cta-in': 'pain-fade-up 0.5s ease-out 0.52s forwards',
-        'mic-recording-pulse': 'mic-recording-pulse 1.35s ease-in-out infinite'
+        'mic-recording-pulse': 'mic-recording-pulse 1.35s ease-in-out infinite',
+        'shimmer-wave': 'shimmer-wave 1.35s ease-in-out infinite'
       }
     }
   },

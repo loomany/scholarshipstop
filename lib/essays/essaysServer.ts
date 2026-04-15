@@ -42,6 +42,94 @@ const listSelect =
 
 export const ESSAYS_INDEX_PAGE_SIZE = 12;
 
+export type EssaysHubCategoryOption = {
+  key: string;
+  label: string;
+  count: number;
+};
+
+/** Same fields as `EssaysIndexQueryState` (declared separately to avoid circular imports). */
+export type EssaysHubIndexRequest = {
+  q: string;
+  categoryKey: string | null;
+  sort: 'latest' | 'oldest';
+  page: number;
+};
+
+type RpcEssaysHubRow = {
+  id: string;
+  slug: string;
+  title: string;
+  hero_image_url: string | null;
+  hero_is_real: boolean;
+  meta_description: string | null;
+  created_at: string | null;
+  linked_category_slug: string | null;
+  linked_category_label: string | null;
+  hero_list_priority: number;
+};
+
+function mapRpcEssayIndexRow(r: RpcEssaysHubRow): EssayIndexRow {
+  return {
+    id: r.id,
+    slug: r.slug,
+    title: r.title,
+    hero_image_url: r.hero_image_url,
+    hero_is_real: r.hero_is_real,
+    meta_description: r.meta_description,
+    created_at: r.created_at,
+    linkedCategorySlug: r.linked_category_slug,
+    linkedCategoryLabel: r.linked_category_label,
+    heroListPriority: r.hero_list_priority
+  };
+}
+
+/** Single RPC: paginated rows, totals, category facets — replaces full-table fetch + in-memory filter. */
+export const fetchEssaysHubIndexPage = cache(
+  async (
+    state: EssaysHubIndexRequest
+  ): Promise<{
+    rows: EssayIndexRow[];
+    total: number;
+    categoryOptions: EssaysHubCategoryOption[];
+    anyPublished: boolean;
+  }> => {
+    const supabase = createPublicClient();
+    const { data, error } = await supabase.rpc('essays_hub_index_page', {
+      p_q: state.q,
+      p_category: state.categoryKey,
+      p_sort: state.sort,
+      p_page: state.page,
+      p_page_size: ESSAYS_INDEX_PAGE_SIZE
+    });
+
+    if (error) throw new Error(error.message);
+
+    const payload = data as {
+      any_published?: boolean;
+      total?: number;
+      rows?: RpcEssaysHubRow[] | null;
+      category_options?: { key: string; label: string; count: number }[] | null;
+    };
+
+    const rowsRaw = Array.isArray(payload.rows) ? payload.rows : [];
+    const categoryRaw = Array.isArray(payload.category_options)
+      ? payload.category_options
+      : [];
+
+    return {
+      rows: rowsRaw.map(mapRpcEssayIndexRow),
+      total: Number(payload.total ?? 0),
+      categoryOptions: categoryRaw.map((o) => ({
+        key: o.key,
+        label: o.label,
+        count: o.count
+      })),
+      anyPublished: Boolean(payload.any_published)
+    };
+  }
+);
+
 export async function countPublishedEssays(): Promise<number> {
   const supabase = createPublicClient();
   const { count, error } = await supabase
@@ -51,113 +139,6 @@ export async function countPublishedEssays(): Promise<number> {
 
   if (error) throw new Error(error.message);
   return count ?? 0;
-}
-
-const ESSAYS_INDEX_FETCH_BATCH = 500;
-
-function pickFirstCategoryPerEssay(
-  links: {
-    essay_id: string;
-    scholarship_id: string;
-    scholarships: {
-      category: string | null;
-      category_slug: string | null;
-    } | null;
-  }[]
-): Map<string, { slug: string | null; label: string | null }> {
-  const sorted = [...links].sort((a, b) => {
-    const c = a.essay_id.localeCompare(b.essay_id);
-    if (c !== 0) return c;
-    return a.scholarship_id.localeCompare(b.scholarship_id);
-  });
-  const map = new Map<string, { slug: string | null; label: string | null }>();
-  for (const row of sorted) {
-    if (map.has(row.essay_id)) continue;
-    const s = row.scholarships;
-    map.set(row.essay_id, {
-      slug: s?.category_slug?.trim() || null,
-      label: s?.category?.trim() || null
-    });
-  }
-  return map;
-}
-
-/** All published essays with slug + first linked scholarship category (batched). */
-export async function fetchAllPublishedEssaysForIndex(): Promise<EssayIndexRow[]> {
-  const supabase = createPublicClient();
-  const essays: EssayListFields[] = [];
-  let page = 1;
-  for (;;) {
-    const batch = await fetchPublishedEssaysPage(page, ESSAYS_INDEX_FETCH_BATCH);
-    essays.push(...batch);
-    if (batch.length < ESSAYS_INDEX_FETCH_BATCH) break;
-    page += 1;
-  }
-
-  const withSlug = essays.filter((e) => e.slug?.trim());
-  if (withSlug.length === 0) return [];
-
-  const essayIds = withSlug.map((e) => e.id);
-  const categoryByEssay = new Map<
-    string,
-    { slug: string | null; label: string | null }
-  >();
-
-  const chunkSize = 200;
-  for (let i = 0; i < essayIds.length; i += chunkSize) {
-    const chunk = essayIds.slice(i, i + chunkSize);
-    const { data: links, error } = await supabase
-      .from('scholarship_essays')
-      .select(
-        'essay_id, scholarship_id, scholarships(category, category_slug)'
-      )
-      .in('essay_id', chunk);
-
-    if (error) throw new Error(error.message);
-    const rows = (links ?? []) as {
-      essay_id: string;
-      scholarship_id: string;
-      scholarships: {
-        category: string | null;
-        category_slug: string | null;
-      } | null;
-    }[];
-    const picked = pickFirstCategoryPerEssay(rows);
-    for (const [id, cat] of picked) {
-      if (!categoryByEssay.has(id)) categoryByEssay.set(id, cat);
-    }
-  }
-
-  return withSlug.map((e) => {
-    const cat = categoryByEssay.get(e.id);
-    return {
-      ...e,
-      linkedCategorySlug: cat?.slug ?? null,
-      linkedCategoryLabel: cat?.label ?? null,
-      heroListPriority: e.hero_is_real ? 1 : 0
-    };
-  });
-}
-
-export async function fetchPublishedEssaysPage(
-  page: number,
-  pageSize: number
-): Promise<EssayListFields[]> {
-  const safePage = Math.max(1, Math.floor(page));
-  const size = Math.max(1, Math.floor(pageSize));
-  const from = (safePage - 1) * size;
-  const to = from + size - 1;
-
-  const supabase = createPublicClient();
-  const { data, error } = await supabase
-    .from('essays')
-    .select(listSelect)
-    .eq('is_published', true)
-    .order('created_at', { ascending: false, nullsFirst: false })
-    .range(from, to);
-
-  if (error) throw new Error(error.message);
-  return (data ?? []) as EssayListFields[];
 }
 
 export const fetchPublishedEssayBySlug = cache(

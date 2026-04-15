@@ -1544,6 +1544,16 @@ export interface Database {
         }
         Returns: Database['public']['Tables']['scholarships']['Row'][]
       }
+      essays_hub_index_page: {
+        Args: {
+          p_q?: string
+          p_category?: string | null
+          p_sort?: string
+          p_page?: number
+          p_page_size?: number
+        }
+        Returns: Record<string, unknown>
+      }
     }
     Enums: {
       pricing_plan_interval: "day" | "week" | "month" | "year"

@@ -9,15 +9,11 @@ import EssaysIndexToolbar from '@/components/essays/EssaysIndexToolbar';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import {
   ESSAYS_INDEX_PAGE_SIZE,
-  fetchAllPublishedEssaysForIndex,
+  fetchEssaysHubIndexPage,
   type EssayListFields
 } from '@/lib/essays/essaysServer';
 import {
-  buildEssayCategoryToolbarOptions,
   buildEssaysIndexHref,
-  essaysCategoryCountsAfterQuery,
-  filterAndSortEssayIndexRows,
-  paginateEssayIndex,
   parseEssaysIndexSearchParams
 } from '@/lib/essays/essaysIndexFilters';
 import {
@@ -67,20 +63,17 @@ export default async function EssaysIndexPage({
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const queryState = parseEssaysIndexSearchParams(searchParams);
-  const allRows = await fetchAllPublishedEssaysForIndex();
+  const {
+    rows: indexRows,
+    total,
+    categoryOptions,
+    anyPublished: hasAnyPublished
+  } = await fetchEssaysHubIndexPage(queryState);
 
-  const categoryCounts = essaysCategoryCountsAfterQuery(allRows, queryState.q);
-  const categoryOptions = buildEssayCategoryToolbarOptions(
-    allRows,
-    categoryCounts
-  );
-
-  const filtered = filterAndSortEssayIndexRows(allRows, queryState);
-  const { slice, total, totalPages, currentPage } = paginateEssayIndex(
-    filtered,
-    queryState.page,
-    ESSAYS_INDEX_PAGE_SIZE
-  );
+  const totalPages =
+    total <= 0 ? 0 : Math.max(1, Math.ceil(total / ESSAYS_INDEX_PAGE_SIZE));
+  const currentPage = queryState.page;
+  const withSlug = indexRows.filter((p) => p.slug?.trim());
 
   if (total > 0 && queryState.page > totalPages) {
     redirect(
@@ -96,14 +89,11 @@ export default async function EssaysIndexPage({
     );
   }
 
-  const withSlug = slice.filter((p) => p.slug?.trim());
   const pageSize = ESSAYS_INDEX_PAGE_SIZE;
   const showingFrom =
     total === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const showingTo =
     total === 0 ? 0 : Math.min(currentPage * pageSize, total);
-
-  const hasAnyPublished = allRows.some((p) => p.slug?.trim());
 
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
