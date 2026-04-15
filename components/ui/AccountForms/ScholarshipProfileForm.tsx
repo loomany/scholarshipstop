@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Check, ExternalLink } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 
 import PremiumLockedDuringPastDueCard from '@/components/billing/PremiumLockedDuringPastDueCard';
 import GrantNotificationToggles from '@/components/account/GrantNotificationToggles';
@@ -30,10 +30,7 @@ import {
   sanitizeBirthYearInput,
   validateBirthDateFields
 } from '@/lib/validation/birthDateFields';
-import {
-  resolveBillingFixHref,
-  resolveResumeSubscriptionHref
-} from '@/lib/payments/billingUrls';
+import { resolveResumeSubscriptionHref } from '@/lib/payments/billingUrls';
 import {
   deriveSubscriptionPresentation,
   type SubscriptionWithPriceAndProduct
@@ -703,10 +700,6 @@ export default function ScholarshipProfileForm({
     () => deriveSubscriptionPresentation(profile, subscription),
     [profile, subscription]
   );
-  const billingFixHref = useMemo(
-    () => resolveBillingFixHref(subscription, '/subscription'),
-    [subscription]
-  );
   const resumeSubscriptionHref = useMemo(
     () => resolveResumeSubscriptionHref(subscription, '/subscription'),
     [subscription]
@@ -1232,14 +1225,7 @@ export default function ScholarshipProfileForm({
                         type="button"
                         onClick={
                           paymentFailed
-                            ? () => {
-                                const href = billingFixHref;
-                                if (href.startsWith('http')) {
-                                  window.location.assign(href);
-                                } else {
-                                  void router.push(href.startsWith('/') ? href : `/${href}`);
-                                }
-                              }
+                            ? () => void router.push('/subscription')
                             : subscriptionPaused
                               ? () => {
                                   const href = resumeSubscriptionHref;
@@ -1267,7 +1253,13 @@ export default function ScholarshipProfileForm({
                       >
                         <span>{subscriptionStatusUi.buttonLabel}</span>
                         {paymentFailed ? (
-                          <ExternalLink className="h-4 w-4 shrink-0 opacity-90" strokeWidth={2} aria-hidden />
+                          <ArrowRight
+                            className={`h-4 w-4 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100${
+                              subscriptionType === 'none' ? ' md:h-3.5 md:w-3.5' : ''
+                            }`}
+                            strokeWidth={2}
+                            aria-hidden
+                          />
                         ) : subscriptionType === 'trial' ? (
                           <ArrowRight
                             className="pointer-events-none absolute right-5 top-1/2 h-4 w-4 -translate-y-1/2 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"

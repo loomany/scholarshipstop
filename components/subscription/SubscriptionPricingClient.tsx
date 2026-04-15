@@ -704,10 +704,23 @@ export default function SubscriptionPricingClient({
         ))}
       </div>
       {checkoutError || skipTrialError || billingActionError ? (
-        <div className="mx-auto mt-6 flex max-w-2xl flex-col gap-2 text-center text-sm text-red-600">
-          {checkoutError ? <p>{checkoutError}</p> : null}
-          {skipTrialError ? <p>{skipTrialError}</p> : null}
-          {billingActionError ? <p>{billingActionError}</p> : null}
+        <div className="mx-auto mt-6 flex max-w-2xl flex-col gap-2 text-center text-sm">
+          {checkoutError ? <p className="text-red-600">{checkoutError}</p> : null}
+          {skipTrialError ? <p className="text-red-600">{skipTrialError}</p> : null}
+          {billingActionError ? (
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-red-600">{billingActionError}</p>
+              {manageSubscriptionUrl ? (
+                <button
+                  type="button"
+                  onClick={() => openLemonHostedUrl(manageSubscriptionUrl)}
+                  className="inline-flex items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
+                >
+                  Open billing portal
+                </button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       ) : null}
     </>

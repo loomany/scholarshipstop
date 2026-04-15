@@ -97,6 +97,9 @@ export default async function SubscriptionPage() {
     presentation.status === 'cancelled' && presentation.isSubscribed && Boolean(manageSubscriptionUrl);
   const showUpdatePaymentAction = pastDue;
   const isEligibleForSkipTrialFlag = isEligibleForSkipTrial(subscription);
+  /** `isSubscribed` is false for `past_due` (no paid access), but Lemon still has a tier — use Upgrade CTAs, not new-trial. */
+  const hasSubscriptionForPricingUi =
+    presentation.isSubscribed || (pastDue && currentPlanKey !== null);
 
   return (
     <>
@@ -107,7 +110,7 @@ export default async function SubscriptionPage() {
               Unlock Premium Precision
             </h1>
             <p className="mx-auto mt-3 max-w-xl text-base text-gray-500 sm:text-lg">
-              {presentation.isSubscribed
+              {hasSubscriptionForPricingUi
                 ? 'Change billing cadence or upgrade anytime. Cancel through your billing portal.'
                 : 'Start your 3-day free trial today. Cancel anytime.'}
             </p>
@@ -120,7 +123,7 @@ export default async function SubscriptionPage() {
               subscription,
               profile.data
             )}
-            hasActiveSubscription={presentation.isSubscribed}
+            hasActiveSubscription={hasSubscriptionForPricingUi}
             manageSubscriptionUrl={manageSubscriptionUrl}
             updatePaymentUrl={pastDue ? resolvedBillingFixUrl : updatePaymentUrl}
             showResumeAction={showResumeAction}

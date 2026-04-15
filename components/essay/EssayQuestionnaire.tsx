@@ -1386,7 +1386,7 @@ export function EssayQuestionnaire({
   return (
     <>
       <div
-        className="relative isolate flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] [&_a]:touch-manipulation [&_button]:touch-manipulation [&_textarea]:touch-manipulation max-sm:h-full max-sm:min-h-0 max-sm:max-h-[min(92dvh,calc(100dvh-9rem))] sm:max-h-none sm:min-h-0 sm:overflow-visible"
+        className="relative isolate flex w-full min-w-0 flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_8px_32px_-12px_rgba(15,23,42,0.12)] [&_a]:touch-manipulation [&_button]:touch-manipulation [&_textarea]:touch-manipulation max-sm:h-full max-sm:min-h-0 max-sm:max-h-[min(92dvh,calc(100dvh-9rem))] sm:max-h-none sm:min-h-0 sm:overflow-visible"
       >
         {process.env.NODE_ENV === 'development' ? (
           <div
@@ -1649,7 +1649,7 @@ export function EssayQuestionnaire({
       </div>
 
       <div className="relative z-10 shrink-0 border-t border-zinc-100 bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] sm:p-6">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto] sm:items-center">
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-stretch sm:gap-3">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -1669,110 +1669,108 @@ export function EssayQuestionnaire({
             }
             placeholder="Type your answer…"
             rows={1}
-            className={`col-span-1 col-start-1 row-start-1 min-h-[52px] min-w-0 resize-none px-4 py-[15px] text-center text-sm leading-5 text-zinc-900 disabled:opacity-60 ${SITE_SEARCH_INPUT_CHROME}`}
+            className={`min-h-[52px] min-w-0 flex-1 resize-none px-4 py-[15px] text-left text-sm leading-5 text-zinc-900 disabled:opacity-60 ${SITE_SEARCH_INPUT_CHROME}`}
           />
-          <button
-            type="button"
-            onClick={() => void toggleVoiceInput()}
-            disabled={
-              sending ||
-              generating ||
-              devBypassing ||
-              isTranscribing ||
-              messageMutating ||
-              !chatComposerEnabled
-            }
-            className={`col-start-2 row-start-1 inline-flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl border shadow-md transition disabled:opacity-45 ${
-              isRecording
-                ? 'animate-mic-recording-pulse border-[#FFB27D] text-[#FF7A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A1A]/35 focus-visible:ring-offset-2'
-                : 'border-[#E6670C]/35 bg-[#FF7A1A] text-white shadow-orange-500/25 hover:bg-[#E6670C]'
-            }`}
-            aria-pressed={isRecording}
-            aria-label={
-              isRecording ? 'Stop recording' : 'Voice input'
-            }
-            title={
-              isRecording
-                ? 'Click again to stop and transcribe'
-                : 'Record with microphone'
-            }
-          >
-            {isTranscribing ? (
-              <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
-            ) : (
-              <Mic className="h-5 w-5" aria-hidden />
-            )}
-          </button>
-          {showReturnToTemplate ? (
+          <div className="flex w-full shrink-0 items-stretch justify-end gap-2 sm:w-auto sm:min-w-0">
             <button
               type="button"
-              onClick={() => void returnToEssayTemplate()}
+              onClick={() => void toggleVoiceInput()}
               disabled={
+                sending ||
                 generating ||
                 devBypassing ||
-                sending ||
                 isTranscribing ||
-                isRecording ||
                 messageMutating ||
                 !chatComposerEnabled
               }
-              title={returnToTemplateTitle}
-              aria-label="Return to template — open your saved draft"
-              className="col-span-3 col-start-1 row-start-2 inline-flex h-[52px] w-full min-w-0 max-w-none shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl bg-emerald-500 px-2 text-center text-[10px] font-semibold leading-tight text-white shadow-sm transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500 disabled:shadow-none disabled:hover:bg-zinc-200 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:w-auto sm:min-w-[7.25rem] sm:max-w-[9rem]"
-            >
-              <span className="block">Return to</span>
-              <span className="block font-medium">template</span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => void generateEssay()}
-              disabled={
-                !draftLinkResolved ||
-                !canGenerate ||
-                generating ||
-                devBypassing ||
-                sending ||
-                isTranscribing ||
-                isRecording ||
-                messageMutating ||
-                !chatComposerEnabled
-              }
-              title={generateDraftButtonTitle}
+              className={`inline-flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl border shadow-md transition disabled:opacity-45 ${
+                isRecording
+                  ? 'animate-mic-recording-pulse border-[#FFB27D] text-[#FF7A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A1A]/35 focus-visible:ring-offset-2'
+                  : 'border-[#E6670C]/35 bg-[#FF7A1A] text-white shadow-orange-500/25 hover:bg-[#E6670C]'
+              }`}
+              aria-pressed={isRecording}
               aria-label={
-                generating
-                  ? 'Preparing draft…'
-                  : 'Generate essay draft'
+                isRecording ? 'Stop recording' : 'Voice input'
               }
-              className="col-span-3 col-start-1 row-start-2 inline-flex h-[52px] w-full min-w-0 max-w-none shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl bg-emerald-500 px-2 text-center text-[10px] font-semibold leading-tight text-white shadow-sm transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500 disabled:shadow-none disabled:hover:bg-zinc-200 sm:col-span-1 sm:col-start-3 sm:row-start-1 sm:w-auto sm:min-w-[7.25rem] sm:max-w-[9rem]"
+              title={
+                isRecording
+                  ? 'Click again to stop and transcribe'
+                  : 'Record with microphone'
+              }
             >
-              {generating ? (
+              {isTranscribing ? (
                 <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
               ) : (
-                <>
-                  <span className="block">Generate</span>
-                  <span className="block font-medium">Draft</span>
-                </>
+                <Mic className="h-5 w-5" aria-hidden />
               )}
             </button>
-          )}
-          <button
-            type="button"
-            onClick={() => void sendMessage()}
-            disabled={
-              sending ||
-              generating ||
-              devBypassing ||
-              isTranscribing ||
-              messageMutating ||
-              !input.trim() ||
-              !chatComposerEnabled
-            }
-            className="col-start-3 row-start-1 inline-flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-sm transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500 disabled:shadow-none disabled:hover:bg-zinc-200 sm:col-start-4"
-            aria-label="Send"
-          >
-            <Send className="h-5 w-5" />
-          </button>
+            {showReturnToTemplate ? (
+              <button
+                type="button"
+                onClick={() => void returnToEssayTemplate()}
+                disabled={
+                  generating ||
+                  devBypassing ||
+                  sending ||
+                  isTranscribing ||
+                  isRecording ||
+                  messageMutating ||
+                  !chatComposerEnabled
+                }
+                title={returnToTemplateTitle}
+                aria-label="Return to template — open your saved draft"
+                className="inline-flex h-[52px] min-w-0 flex-1 items-center justify-center rounded-xl bg-emerald-500 px-3 text-center text-xs font-semibold leading-snug text-white shadow-sm transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500 disabled:shadow-none disabled:hover:bg-zinc-200 sm:min-w-[8.5rem] sm:flex-initial"
+              >
+                Return to template
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => void generateEssay()}
+                disabled={
+                  !draftLinkResolved ||
+                  !canGenerate ||
+                  generating ||
+                  devBypassing ||
+                  sending ||
+                  isTranscribing ||
+                  isRecording ||
+                  messageMutating ||
+                  !chatComposerEnabled
+                }
+                title={generateDraftButtonTitle}
+                aria-label={
+                  generating
+                    ? 'Preparing draft…'
+                    : 'Generate essay draft'
+                }
+                className="inline-flex h-[52px] min-w-0 flex-1 items-center justify-center rounded-xl bg-emerald-500 px-3 text-center text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500 disabled:shadow-none disabled:hover:bg-zinc-200 sm:min-w-[8.75rem] sm:flex-initial sm:whitespace-nowrap sm:text-sm"
+              >
+                {generating ? (
+                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+                ) : (
+                  'Generate draft'
+                )}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => void sendMessage()}
+              disabled={
+                sending ||
+                generating ||
+                devBypassing ||
+                isTranscribing ||
+                messageMutating ||
+                !input.trim() ||
+                !chatComposerEnabled
+              }
+              className="inline-flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-sm transition hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500 disabled:shadow-none disabled:hover:bg-zinc-200"
+              aria-label="Send"
+            >
+              <Send className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
