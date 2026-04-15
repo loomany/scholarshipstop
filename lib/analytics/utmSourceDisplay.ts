@@ -31,6 +31,14 @@ function isSearchEngineReferrer(referrer: string): boolean {
   );
 }
 
+/** When `utm_source` is empty, infer TIKTOK / REDDIT from HTTP referrer. */
+function sourceLabelFromSocialReferrer(referrer: string): string | null {
+  const r = referrer.toLowerCase();
+  if (r.includes('tiktok.com')) return 'TIKTOK';
+  if (r.includes('reddit.com')) return 'REDDIT';
+  return null;
+}
+
 function sourceFromReferrerOnly(referrer: string, landingUrl: string): string {
   const ref = referrer.trim();
   if (!ref) {
@@ -42,6 +50,8 @@ function sourceFromReferrerOnly(referrer: string, landingUrl: string): string {
   if (isSearchEngineReferrer(ref)) {
     return 'SEO / Search';
   }
+  const social = sourceLabelFromSocialReferrer(ref);
+  if (social) return social;
   return 'Referral';
 }
 
@@ -60,8 +70,8 @@ export function formatVisitorSourceDisplay(
       const suffix = content ? ` (${content})` : '';
       return `Meta Ads${suffix}`;
     }
-    if (lower === 'tiktok') return 'TikTok Ads';
-    if (lower === 'reddit') return 'Reddit Ads';
+    if (lower === 'tiktok') return 'TIKTOK';
+    if (lower === 'reddit') return 'REDDIT';
     if (lower === 'google') return 'Google Ads';
     return source.toUpperCase();
   }

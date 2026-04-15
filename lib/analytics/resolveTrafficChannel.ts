@@ -166,6 +166,33 @@ export function formatTrafficChannelLabel(channel: TrafficChannel | null | undef
   return TRAFFIC_CHANNEL_LABELS[channel as TrafficChannel];
 }
 
+/**
+ * TikTok / Reddit: show as own lines in admin Telegram traffic (not merged into
+ * "Paid (non-Google)" / "Referral"). Uses merged UTM from landing URL + referrer.
+ */
+export function getSocialNetworkFirstTouchLabel(row: {
+  landing_url: string;
+  referrer?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+}): 'TIKTOK' | 'REDDIT' | null {
+  const merged = mergeUtmFromLandingUrl(row.landing_url, {
+    utm_source: row.utm_source ?? '',
+    utm_medium: row.utm_medium ?? '',
+    utm_campaign: row.utm_campaign ?? ''
+  });
+  const utm = merged.utm_source.toLowerCase();
+  const ref = (row.referrer ?? '').toLowerCase();
+  if (utm === 'tiktok' || utm.startsWith('tiktok_') || ref.includes('tiktok.com')) {
+    return 'TIKTOK';
+  }
+  if (utm === 'reddit' || utm.startsWith('reddit_') || ref.includes('reddit.com')) {
+    return 'REDDIT';
+  }
+  return null;
+}
+
 /** Stored row → human label; recomputes from URL/UTM when `traffic_channel` is null (legacy rows). */
 export function labelForVisitorRow(row: {
   traffic_channel?: string | null;
@@ -175,6 +202,9 @@ export function labelForVisitorRow(row: {
   utm_medium?: string | null;
   utm_campaign?: string | null;
 }): string {
+  const social = getSocialNetworkFirstTouchLabel(row);
+  if (social) return social;
+
   const resolved = resolveTrafficChannel({
     landingUrl: row.landing_url,
     referrer: row.referrer ?? '',
