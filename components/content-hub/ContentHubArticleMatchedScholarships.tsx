@@ -7,6 +7,27 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 const cardClass =
   'group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-5 text-left shadow-sm transition hover:border-gray-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2';
 
+/** Normalize catalog deadline lines (e.g. ISO timestamps) for card meta. */
+function formatDeadlineDisplay(raw: string | null | undefined): string {
+  const s = raw?.trim();
+  if (!s) return '';
+  if (/^\d{4}-\d{2}-\d{2}T/.test(s)) {
+    try {
+      const d = new Date(s);
+      if (!Number.isNaN(d.getTime())) {
+        return d.toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric'
+        });
+      }
+    } catch {
+      /* keep raw */
+    }
+  }
+  return s;
+}
+
 type Props = {
   items: RelatedScholarshipStored[];
   /** When there is exactly one related item, full catalog row for hub-style card. */
@@ -23,9 +44,9 @@ type Props = {
 
 function MatchedScholarshipGrid({ items }: { items: RelatedScholarshipStored[] }) {
   return (
-    <ul className="mt-6 grid list-none grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="mt-6 flex list-none flex-col gap-4">
       {items.map((item) => (
-        <li key={item.slug} className="min-w-0">
+        <li key={item.slug} className="min-w-0 w-full">
           <Link
             href={`/scholarships/${encodeURIComponent(item.slug)}`}
             scroll
@@ -44,7 +65,9 @@ function MatchedScholarshipGrid({ items }: { items: RelatedScholarshipStored[] }
                 </span>
               ) : null}
               {item.deadline_text ? (
-                <span className="text-gray-500">{item.deadline_text}</span>
+                <span className="text-gray-500">
+                  {formatDeadlineDisplay(item.deadline_text)}
+                </span>
               ) : null}
             </div>
             <span className="mt-4 inline-flex items-center text-sm font-semibold text-orange-600 group-hover:text-orange-700">
