@@ -24,7 +24,9 @@ import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagina
 import ScholarshipsSidebar from '@/components/scholarships/ScholarshipsSidebar';
 import ScholarshipsTwoColumnLayout from '@/components/scholarships/ScholarshipsTwoColumnLayout';
 import { ScholarshipsEmailConfirmationBanner } from '@/components/scholarships/ScholarshipsEmailConfirmationBanner';
-import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipRegistrationWallModal, {
+  type ScholarshipRegistrationWallContentMode
+} from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import {
   SCHOLARSHIP_CATEGORY_ORDER,
@@ -247,6 +249,8 @@ function ScholarshipsPageInner({
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallContent, setRegistrationWallContent] =
+    useState<ScholarshipRegistrationWallContentMode>('hub');
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
   const isSubscriptionLocked = isAuthenticated && !hasSubscription;
   const LOCKED_TABS_FOR_UNSUBSCRIBED = useMemo(
@@ -287,9 +291,13 @@ function ScholarshipsPageInner({
     void refreshSavedIdsFromApi();
   }, [isAuthenticated, refreshSavedIdsFromApi]);
 
-  const openRegistrationWall = useCallback(() => {
-    setRegistrationWallOpen(true);
-  }, []);
+  const openRegistrationWall = useCallback(
+    (mode?: ScholarshipRegistrationWallContentMode) => {
+      setRegistrationWallContent(mode ?? 'hub');
+      setRegistrationWallOpen(true);
+    },
+    []
+  );
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
@@ -1363,6 +1371,11 @@ function ScholarshipsPageInner({
                     onSubscriptionLockedCategoryClick={
                       isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
                     }
+                    onGuestDetailNavigate={
+                      !isAuthenticated
+                        ? () => openRegistrationWall('card-unlock')
+                        : undefined
+                    }
                   />
                 ))}
               </div>
@@ -1399,6 +1412,7 @@ function ScholarshipsPageInner({
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+        contentMode={registrationWallContent}
       />
       <ScholarshipSubscriptionOfferModal
         open={subscriptionOfferOpen}

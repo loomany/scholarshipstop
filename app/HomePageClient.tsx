@@ -18,6 +18,7 @@ import {
 
 import { AiMentorHowItWorksSection } from '@/components/essay/AiMentorHowItWorksSection';
 import { FeaturedBrandScholarshipsSection } from '@/components/home/FeaturedBrandScholarshipsSection';
+import SuccessStoriesCarousel from '@/components/home/SuccessStoriesCarousel';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import ScholarshipPreviewList from '@/components/scholarships/ScholarshipPreviewList';
 
@@ -49,6 +50,7 @@ const ledeMuted =
 const homeY = {
   hero: 'pt-10 pb-5 sm:pt-12 sm:pb-6 lg:pt-14 lg:pb-7',
   featured: 'pt-6 pb-6 sm:pt-7 sm:pb-7',
+  successStories: 'pt-7 pb-7 sm:pt-8 sm:pb-8 lg:pt-9 lg:pb-9',
   essay: 'pt-3 pb-7 sm:pt-4 sm:pb-8 lg:pb-9',
   valueStrip: 'py-3.5 sm:py-4',
   block: 'py-7 sm:py-8 lg:py-9'
@@ -149,6 +151,15 @@ export default function HomePageClient() {
       >
         <div className={container}>
           <FeaturedBrandScholarshipsSection />
+        </div>
+      </section>
+
+      {/* Success stories — trust carousel */}
+      <section
+        className={`border-b border-gray-100 bg-white ${homeY.successStories} ${homeSectionPadX}`}
+      >
+        <div className={container}>
+          <SuccessStoriesCarousel />
         </div>
       </section>
 

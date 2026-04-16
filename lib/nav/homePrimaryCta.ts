@@ -1,5 +1,5 @@
-/** Guest home CTAs land on onboarding GPA step (step 3). */
-export const HOME_PRIMARY_CTA_GUEST_HREF = '/onboarding?step=3';
+/** Guest home CTAs go to the scholarships hub (skip registration/onboarding). */
+export const HOME_PRIMARY_CTA_GUEST_HREF = '/scholarships';
 
 export const HOME_PRIMARY_CTA_AUTH_HREF = '/scholarships';
 

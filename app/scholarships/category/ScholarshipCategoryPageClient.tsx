@@ -6,7 +6,9 @@ import { Lock } from 'lucide-react';
 
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
-import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipRegistrationWallModal, {
+  type ScholarshipRegistrationWallContentMode
+} from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
@@ -178,6 +180,8 @@ export default function ScholarshipCategoryPageClient({
   const [seoFallbackMeta, setSeoFallbackMeta] =
     useState<SeoListingFallbackMeta | null>(null);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallContent, setRegistrationWallContent] =
+    useState<ScholarshipRegistrationWallContentMode>('hub');
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
   const isSubscriptionLocked = isAuthenticated && !hasSubscription;
   const isLockedPremiumCategory = useMemo(() => {
@@ -188,9 +192,13 @@ export default function ScholarshipCategoryPageClient({
     );
   }, [categorySlug, isSubscriptionLocked]);
 
-  const openRegistrationWall = useCallback(() => {
-    setRegistrationWallOpen(true);
-  }, []);
+  const openRegistrationWall = useCallback(
+    (mode?: ScholarshipRegistrationWallContentMode) => {
+      setRegistrationWallContent(mode ?? 'hub');
+      setRegistrationWallOpen(true);
+    },
+    []
+  );
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
@@ -861,6 +869,11 @@ export default function ScholarshipCategoryPageClient({
                     onSubscriptionLockedCategoryClick={
                       isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
                     }
+                    onGuestDetailNavigate={
+                      !isAuthenticated
+                        ? () => openRegistrationWall('card-unlock')
+                        : undefined
+                    }
                   />
                 ))}
               </div>
@@ -896,6 +909,7 @@ export default function ScholarshipCategoryPageClient({
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+        contentMode={registrationWallContent}
       />
       <ScholarshipSubscriptionOfferModal
         open={subscriptionOfferOpen}

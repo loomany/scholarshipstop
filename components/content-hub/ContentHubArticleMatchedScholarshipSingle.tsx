@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
-import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipRegistrationWallModal, {
+  type ScholarshipRegistrationWallContentMode
+} from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
@@ -39,6 +41,8 @@ export default function ContentHubArticleMatchedScholarshipSingle({
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallContent, setRegistrationWallContent] =
+    useState<ScholarshipRegistrationWallContentMode>('hub');
 
   const refreshSavedIds = useCallback(async () => {
     if (!isAuthenticated) {
@@ -102,9 +106,13 @@ export default function ContentHubArticleMatchedScholarshipSingle({
     return () => window.removeEventListener('storage', onStorage);
   }, [syncFromStorage, refreshSavedIds]);
 
-  const openRegistrationWall = useCallback(() => {
-    setRegistrationWallOpen(true);
-  }, []);
+  const openRegistrationWall = useCallback(
+    (mode?: ScholarshipRegistrationWallContentMode) => {
+      setRegistrationWallContent(mode ?? 'hub');
+      setRegistrationWallOpen(true);
+    },
+    []
+  );
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
@@ -167,11 +175,17 @@ export default function ContentHubArticleMatchedScholarshipSingle({
           onHide={ignoreScholarship}
           showCardActions
           subscriptionLocked={false}
+          onGuestDetailNavigate={
+            !isAuthenticated
+              ? () => openRegistrationWall('card-unlock')
+              : undefined
+          }
         />
       </div>
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+        contentMode={registrationWallContent}
       />
     </>
   );

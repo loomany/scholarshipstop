@@ -48,6 +48,7 @@
     "debug:first-gen-tags": "npx tsx scripts/debug-eligibility-first-generation.ts",
     "enrich-providers": "npx tsx scripts/enrich-all-providers.ts",
     "content:reprocess-articles": "npx tsx scripts/reprocess-content-posts.ts",
+    "content:inspect-recent": "node scripts/inspect-content-posts-recent.mjs",
     "test:webhooks": "npx tsx --test lib/payments/__tests__/lemonWebhookSignature.test.ts lib/payments/__tests__/lemonSubscriptionState.test.ts lib/payments/__tests__/subscriptionAccess.test.ts",
     "seo:measure-urls": "npx tsx scripts/seo-measure-urls.ts",
     "gptzero:ping": "dotenv -e .env.local -- node scripts/gptzero-ping.mjs",

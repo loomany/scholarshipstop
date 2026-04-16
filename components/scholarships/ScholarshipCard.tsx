@@ -21,6 +21,10 @@ import {
   scholarshipCardChips
 } from '@/lib/scholarships/scholarshipCatalog';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
+import {
+  recordGuestScholarshipDetailFreeNavigation,
+  shouldBlockGuestScholarshipDetailNavigation
+} from '@/lib/scholarships/guestScholarshipDetailClickBudget';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCatalogChipRow';
 
@@ -47,6 +51,11 @@ type ScholarshipCardProps = {
   listingTab?: ScholarshipListTabId;
   /** Open subscription modal when premium category chip is clicked. */
   onSubscriptionLockedCategoryClick?: (categoryId: string) => void;
+  /**
+   * Guest-only: after two free navigations to scholarship details (per browser tab session),
+   * the next click opens the parent’s registration modal instead of navigating.
+   */
+  onGuestDetailNavigate?: () => void;
 };
 
 const METRIC_LABEL =
@@ -63,7 +72,8 @@ export default function ScholarshipCard({
   stackedListing = false,
   subscriptionLocked = false,
   listingTab,
-  onSubscriptionLockedCategoryClick
+  onSubscriptionLockedCategoryClick,
+  onGuestDetailNavigate
 }: ScholarshipCardProps) {
   const detailHref = scholarshipPublicPath(scholarship);
   const deadlinePassed = scholarshipDeadlineHasPassed(scholarship);
@@ -237,6 +247,16 @@ export default function ScholarshipCard({
     <article className={cardArticleClass} data-scholarship-card>
       <Link
         href={detailHref}
+        onClick={(e) => {
+          if (!onGuestDetailNavigate) return;
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          if (shouldBlockGuestScholarshipDetailNavigation()) {
+            e.preventDefault();
+            onGuestDetailNavigate();
+            return;
+          }
+          recordGuestScholarshipDetailFreeNavigation();
+        }}
         className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A1A]/50"
         aria-label={`View scholarship: ${scholarship.title}`}
       >

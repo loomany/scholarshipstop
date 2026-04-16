@@ -141,6 +141,53 @@ export async function countPublishedEssays(): Promise<number> {
   return count ?? 0;
 }
 
+/** Latest published essay hub guides (same table/fields as `/essays` index cards). */
+export async function fetchLatestPublishedEssayHubList(
+  limit: number
+): Promise<EssayListFields[]> {
+  const size = Math.max(1, Math.min(200, Math.floor(limit)));
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from('essays')
+    .select(listSelect)
+    .eq('is_published', true)
+    .not('slug', 'is', null)
+    .neq('slug', '')
+    .order('created_at', { ascending: false, nullsFirst: false })
+    .limit(size);
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as EssayListFields[];
+}
+
+/**
+ * Published essay hub rows for specific slugs, **in the same order as `slugs`**
+ * (skips missing rows). Case-insensitive ordering key.
+ */
+export async function fetchPublishedEssaysBySlugsOrdered(
+  slugs: string[]
+): Promise<EssayListFields[]> {
+  const ordered = [...new Set(slugs.map((s) => s.trim()).filter(Boolean))];
+  if (ordered.length === 0) return [];
+
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from('essays')
+    .select(listSelect)
+    .eq('is_published', true)
+    .not('slug', 'is', null)
+    .neq('slug', '')
+    .in('slug', ordered);
+
+  if (error) throw new Error(error.message);
+
+  const rows = (data ?? []) as EssayListFields[];
+  const map = new Map(rows.map((r) => [r.slug.toLowerCase(), r]));
+  return ordered
+    .map((s) => map.get(s.toLowerCase()))
+    .filter((x): x is EssayListFields => Boolean(x));
+}
+
 export const fetchPublishedEssayBySlug = cache(
   async (slug: string): Promise<EssayDetailRow | null> => {
     const raw = slug.trim();

@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
-import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipRegistrationWallModal, {
+  type ScholarshipRegistrationWallContentMode
+} from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
@@ -39,6 +41,8 @@ export function ProviderProfileScholarshipsList({
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallContent, setRegistrationWallContent] =
+    useState<ScholarshipRegistrationWallContentMode>('hub');
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
 
   const isSubscriptionLocked = isAuthenticated && !hasSubscription;
@@ -90,9 +94,13 @@ export function ProviderProfileScholarshipsList({
     return () => window.removeEventListener('storage', onStorage);
   }, [syncFromStorage, refreshSavedIds]);
 
-  const openRegistrationWall = useCallback(() => {
-    setRegistrationWallOpen(true);
-  }, []);
+  const openRegistrationWall = useCallback(
+    (mode?: ScholarshipRegistrationWallContentMode) => {
+      setRegistrationWallContent(mode ?? 'hub');
+      setRegistrationWallOpen(true);
+    },
+    []
+  );
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
@@ -181,12 +189,18 @@ export function ProviderProfileScholarshipsList({
             onSubscriptionLockedCategoryClick={
               isSubscriptionLocked ? openSubscriptionOffer : undefined
             }
+            onGuestDetailNavigate={
+              !isAuthenticated
+                ? () => openRegistrationWall('card-unlock')
+                : undefined
+            }
           />
         ))}
       </div>
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+        contentMode={registrationWallContent}
       />
       <ScholarshipSubscriptionOfferModal
         open={subscriptionOfferOpen}

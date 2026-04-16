@@ -75,6 +75,34 @@ export async function fetchAllPublishedContentPostsListFields(): Promise<
   return out;
 }
 
+/**
+ * Published list fields for specific slugs, **in the same order as `slugs`**
+ * (skips missing rows). Case-insensitive ordering key; DB must return matching slug rows.
+ */
+export async function fetchPublishedContentPostsBySlugsOrdered(
+  slugs: string[]
+): Promise<ContentPostListFields[]> {
+  const ordered = [...new Set(slugs.map((s) => s.trim()).filter(Boolean))];
+  if (ordered.length === 0) return [];
+
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from('content_posts')
+    .select(publishedWithSlugSelect)
+    .eq('status', 'published')
+    .not('slug', 'is', null)
+    .neq('slug', '')
+    .in('slug', ordered);
+
+  if (error) throw new Error(error.message);
+
+  const rows = (data ?? []) as ContentPostListFields[];
+  const map = new Map(rows.map((r) => [r.slug!.toLowerCase(), r]));
+  return ordered
+    .map((s) => map.get(s.toLowerCase()))
+    .filter((x): x is ContentPostListFields => Boolean(x));
+}
+
 /** @deprecated Prefer `fetchPublishedContentPostsPage` for the resources index. */
 export async function fetchPublishedContentPosts(
   limit = 12
