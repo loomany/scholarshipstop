@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo } from 'react';
+import clsx from 'clsx';
 import { Info, Lock, Star } from 'lucide-react';
 import {
   formatDeadlineTooltipText,
@@ -41,8 +42,8 @@ type ScholarshipCardProps = {
   /** Save + Not relevant (and Restore on Ignored tab). */
   showCardActions?: boolean;
   /**
-   * Single-column stack (award / deadline / actions below title) regardless of viewport.
-   * Use inside narrow containers (e.g. landing preview) where `xl:` grid would break layout.
+   * Single-column layout for narrow containers (e.g. article previews): same card chrome,
+   * meta + body stack vertically without the wide-screen three-column grid.
    */
   stackedListing?: boolean;
   /** Signed-in user without active subscription. */
@@ -59,7 +60,7 @@ type ScholarshipCardProps = {
 };
 
 const METRIC_LABEL =
-  'mt-1 text-[10px] font-normal leading-snug text-gray-500 sm:text-[11px] sm:normal-case';
+  'mt-1 text-xs font-normal leading-snug text-gray-500';
 
 export default function ScholarshipCard({
   scholarship,
@@ -78,35 +79,11 @@ export default function ScholarshipCard({
   const detailHref = scholarshipPublicPath(scholarship);
   const deadlinePassed = scholarshipDeadlineHasPassed(scholarship);
 
-  const gridShell = stackedListing
-    ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5'
-    : 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:grid-rows-[auto_auto_auto] xl:gap-x-2.5 xl:gap-y-2 xl:items-start';
+  /** Save / Not relevant — right column; full width of column on large screens. */
+  const cardActionsWrap =
+    'relative z-10 flex w-full max-w-[11rem] shrink-0 flex-col gap-2 self-start pointer-events-auto sm:max-w-[13rem] lg:max-w-none lg:w-full lg:self-stretch';
 
-  /** Title spans rows 1–2 on xl so it aligns with deadline+reqs / award+actions. */
-  const titleCell = stackedListing
-    ? 'min-w-0 text-left'
-    : 'min-w-0 text-left xl:col-start-1 xl:row-start-1 xl:row-span-2';
-
-  /** Stacked/narrow listing only — catalog hub uses a mobile combined row + xl grid columns on inner wrappers. */
-  const deadlineBlockWrap = 'min-w-0 border-t border-gray-200 pt-3';
-  const awardMetricsWrap = 'min-w-0 border-t border-gray-200 pt-3';
-
-  /** Save / Not relevant — under award when stacked; inside award row on catalog mobile. */
-  const cardActionsWrap = stackedListing
-    ? 'relative z-10 mt-2.5 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto'
-    : 'relative z-10 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto xl:mt-0 xl:w-full xl:max-w-[148px] xl:self-start';
-
-  /** Award metrics: left-aligned (reads toward deadline). */
-  const awardMetricAlign = 'text-left';
-  const awardMetricAlignTight = 'text-left';
-
-  const deadlineInner = 'min-w-0';
-
-  /** Left-aligned on all breakpoints (matches requirements / award on mobile). */
-  const deadlineMetricAlign = 'text-left';
-
-  /** Compact vertical stack under award (right column on xl). */
-  const cardActionBtnBase = `w-full rounded-lg px-2.5 py-1.5 text-center text-xs font-semibold text-white transition ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
+  const cardActionBtnBase = `w-full rounded-lg px-2.5 py-2 text-center text-xs font-semibold text-white transition ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
   const cardActionSaveClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL}`;
   const cardActionSavedClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL_PRESSED}`;
 
@@ -142,17 +119,13 @@ export default function ScholarshipCard({
     <>
       <p
         className={`break-words text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
-          deadlinePassed ? 'text-gray-600' : 'text-gray-900'
+          deadlinePassed ? 'text-gray-600' : 'text-slate-900'
         }`}
       >
         {requirementsMetric}
       </p>
       <p className={METRIC_LABEL}>Requirements</p>
     </>
-  );
-
-  const requirementsStackedUnderDeadline = (
-    <div className="mt-2 min-w-0 text-left">{requirementsMetricInner}</div>
   );
 
   const summaryLine =
@@ -243,6 +216,26 @@ export default function ScholarshipCard({
     ? 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50/95 shadow-sm transition-all duration-200 hover:border-zinc-300 hover:shadow-md focus-within:border-zinc-300 focus-within:shadow-md'
     : 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg focus-within:border-gray-300 focus-within:shadow-lg';
 
+  const shellPad = stackedListing
+    ? 'gap-4 px-4 py-4 sm:px-5 sm:py-5'
+    : 'gap-5 px-5 py-5 sm:px-6 sm:py-6';
+
+  const metaGrid = stackedListing
+    ? 'flex flex-col gap-3'
+    : 'flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1.1fr)_auto_minmax(0,1.1fr)] lg:items-start lg:gap-x-8';
+
+  const titleColSpan = !stackedListing
+    ? showCardActions
+      ? 'lg:col-span-6'
+      : 'lg:col-span-8'
+    : '';
+
+  const reqColSpan = !stackedListing
+    ? showCardActions
+      ? 'lg:col-span-3'
+      : 'lg:col-span-4'
+    : '';
+
   return (
     <article className={cardArticleClass} data-scholarship-card>
       <Link
@@ -263,14 +256,20 @@ export default function ScholarshipCard({
         <span className="sr-only">Open scholarship details</span>
       </Link>
       <div
-        className={`relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] pointer-events-none ${deadlinePassed ? 'bg-zinc-400' : 'bg-gray-900'}`}
+        className={`relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] pointer-events-none ${deadlinePassed ? 'bg-zinc-400' : 'bg-slate-900'}`}
         aria-hidden
       />
 
-      <div className={`${gridShell} relative z-[1] pointer-events-none`}>
-        <div className={titleCell}>
-          <div className="flex min-w-0 items-center justify-between gap-2 text-xs font-medium text-gray-500 sm:text-[13px]">
-            <div className="flex min-w-0 flex-1 items-center gap-1.5">
+      <div
+        className={clsx(
+          'relative z-[1] flex min-w-0 flex-1 flex-col pointer-events-none',
+          shellPad
+        )}
+      >
+        {/* Row 1: provider + NEW | deadline | award (matches wide “SaaS” card) */}
+        <div className={metaGrid}>
+          <div className="min-w-0 lg:justify-self-start">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 text-xs font-medium text-gray-500 sm:text-[13px]">
               {scholarship.featured ? (
                 <span
                   className="pointer-events-none flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-amber-50/95 text-amber-800 ring-1 ring-amber-200/60"
@@ -286,7 +285,7 @@ export default function ScholarshipCard({
                 providerProfileHref ? (
                   <Link
                     href={providerProfileHref}
-                    className="group relative z-10 inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-md text-gray-500 outline-none transition pointer-events-auto hover:text-emerald-700 hover:underline decoration-emerald-600/40 underline-offset-2 focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1"
+                    className="group relative z-10 inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-md text-gray-500 outline-none transition pointer-events-auto hover:text-emerald-700 hover:underline hover:decoration-emerald-600/40 hover:underline-offset-2 focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1"
                     onClick={(e) => e.stopPropagation()}
                     aria-label={`View provider: ${providerLine}`}
                   >
@@ -297,30 +296,26 @@ export default function ScholarshipCard({
                     <span className="min-w-0 truncate">{providerLine}</span>
                   </Link>
                 ) : (
-                  <>
+                  <span className="inline-flex min-w-0 items-center gap-1.5">
                     <Info
                       className="h-3.5 w-3.5 shrink-0 text-gray-400"
                       aria-hidden
                     />
                     <span className="min-w-0 truncate">{providerLine}</span>
-                  </>
+                  </span>
                 )
               ) : null}
-              {scholarship.verified ? (
-                <span
-                  className="pointer-events-none shrink-0 rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/70"
-                >
-                  Verified
-                </span>
-              ) : null}
-            </div>
-            <div className="flex shrink-0 items-center gap-1.5 self-start">
               {isUnread ? (
                 <span
                   className="pointer-events-none inline-flex h-5 shrink-0 items-center rounded-md bg-[#FF7A1A] px-2 text-[10px] font-bold uppercase leading-none tracking-wide text-white shadow-sm"
                   aria-label="New — not opened yet"
                 >
                   NEW
+                </span>
+              ) : null}
+              {scholarship.verified ? (
+                <span className="pointer-events-none shrink-0 rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/70">
+                  Verified
                 </span>
               ) : null}
               {showTopRightLockBadge ? (
@@ -342,266 +337,174 @@ export default function ScholarshipCard({
               ) : null}
             </div>
           </div>
-          <h2
-            className={`mt-1 min-w-0 overflow-hidden text-base font-semibold leading-snug tracking-tight sm:text-[1.0625rem] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] ${
-              deadlinePassed
-                ? 'text-gray-600 group-hover:text-gray-600'
-                : 'text-gray-900 group-hover:text-gray-800'
-            }`}
-            title={scholarship.title}
+
+          <div
+            className={clsx(
+              'min-w-0',
+              !stackedListing && 'lg:text-center'
+            )}
+            title={hasDeadline ? deadlineTooltipText : undefined}
           >
-            {scholarship.title}
-          </h2>
-          <p
-            className="mt-1 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-400 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
-            title={summaryLine}
-          >
-            {summaryLine}
-          </p>
-          {hasApplicants ? (
-            <p
-              className="mt-1.5 min-w-0 truncate text-xs tabular-nums text-gray-500"
-              title={applicantsTitle}
-            >
-              <span className="font-medium text-gray-700">
-                {scholarship.applicantCount!.toLocaleString()}
-              </span>{' '}
-              applicants
-              {scholarship.applicantsCountIsEstimated ? ' (est.)' : ''}
-            </p>
-          ) : null}
-          {showBadgeRow ? (
-            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
-              {scholarship.recurring ? (
-                <span
-                  className="inline-flex max-w-full items-center gap-1 text-gray-500"
-                  title="This scholarship recurs periodically."
+            {hasDeadline ? (
+              <>
+                <p
+                  className={clsx(
+                    'min-w-0 break-words font-bold tabular-nums leading-tight',
+                    deadlinePassed
+                      ? 'text-base text-gray-500 sm:text-lg'
+                      : 'text-base text-slate-900 sm:text-lg'
+                  )}
                 >
-                  <span className="text-gray-400" aria-hidden>
-                    ↻
-                  </span>
-                  <span className="truncate">Recurring</span>
-                </span>
-              ) : null}
-              {scholarship.credibilityLabel?.trim() ? (
-                <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
+                  {deadlineParts.primary}
+                </p>
+                {deadlineParts.secondary ? (
+                  <p
+                    className={clsx(
+                      'mt-0.5 text-xs font-medium leading-snug',
+                      deadlinePassed ? 'text-gray-400' : 'text-gray-500'
+                    )}
+                  >
+                    {deadlineParts.secondary}
+                  </p>
+                ) : null}
+              </>
+            ) : (
+              <p className="text-base font-bold text-gray-400">—</p>
+            )}
+          </div>
+
+          <div
+            className={clsx(
+              'min-w-0',
+              !stackedListing && 'lg:text-right'
+            )}
+          >
+            <p
+              title={awardLine.lineTitle}
+              className={clsx(
+                'min-w-0 max-w-full truncate font-bold leading-tight',
+                awardLine.isNumeric && 'tabular-nums',
+                !hasAwardContent && 'text-sm text-gray-400',
+                hasAwardContent &&
+                  deadlinePassed &&
+                  'text-base text-gray-600 sm:text-lg',
+                hasAwardContent &&
+                  !deadlinePassed &&
+                  'text-lg text-slate-900 sm:text-xl'
+              )}
+            >
+              {awardCell}
+            </p>
+            <p
+              className={clsx(
+                METRIC_LABEL,
+                !stackedListing && 'lg:text-right'
+              )}
+            >
+              Award Amount
+            </p>
+            {payoutLine ? (
+              <p
+                className={clsx(
+                  'mt-1 text-xs font-medium text-gray-500',
+                  !stackedListing && 'lg:text-right'
+                )}
+              >
+                {payoutLine}
+              </p>
+            ) : null}
+          </div>
+        </div>
+
+        {/* Row 2: title + summary | requirements | actions */}
+        <div
+          className={clsx(
+            'grid grid-cols-1 gap-5',
+            !stackedListing && 'lg:grid-cols-12 lg:items-start lg:gap-6'
+          )}
+        >
+          <div
+            className={clsx(
+              'min-w-0 space-y-1.5',
+              titleColSpan
+            )}
+          >
+            <h2
+              className={clsx(
+                'min-w-0 overflow-hidden text-lg font-bold leading-snug tracking-tight [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] sm:text-xl',
+                deadlinePassed
+                  ? 'text-gray-600 group-hover:text-gray-600'
+                  : 'text-slate-900 group-hover:text-slate-800'
+              )}
+              title={scholarship.title}
+            >
+              {scholarship.title}
+            </h2>
+            <p
+              className="min-w-0 overflow-hidden text-sm leading-relaxed text-gray-500 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
+              title={summaryLine}
+            >
+              {summaryLine}
+            </p>
+            {hasApplicants ? (
+              <p
+                className="min-w-0 truncate text-xs tabular-nums text-gray-500"
+                title={applicantsTitle}
+              >
+                <span className="font-medium text-gray-700">
+                  {scholarship.applicantCount!.toLocaleString()}
+                </span>{' '}
+                applicants
+                {scholarship.applicantsCountIsEstimated ? ' (est.)' : ''}
+              </p>
+            ) : null}
+            {showBadgeRow ? (
+              <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                {scholarship.recurring ? (
                   <span
-                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400"
-                    aria-hidden
-                  />
-                  <span className="truncate">
-                    {scholarship.credibilityLabel.trim()}
+                    className="inline-flex max-w-full items-center gap-1 text-gray-500"
+                    title="This scholarship recurs periodically."
+                  >
+                    <span className="text-gray-400" aria-hidden>
+                      ↻
+                    </span>
+                    <span className="truncate">Recurring</span>
                   </span>
-                </span>
-              ) : null}
+                ) : null}
+                {scholarship.credibilityLabel?.trim() ? (
+                  <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
+                    <span
+                      className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400"
+                      aria-hidden
+                    />
+                    <span className="truncate">
+                      {scholarship.credibilityLabel.trim()}
+                    </span>
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+
+          <div className={clsx('min-w-0', reqColSpan)}>
+            {requirementsMetricInner}
+          </div>
+
+          {showCardActions ? (
+            <div
+              className={clsx(
+                cardActionsWrap,
+                !stackedListing && 'lg:col-span-3'
+              )}
+            >
+              {cardActionControls}
             </div>
           ) : null}
         </div>
 
-        {stackedListing ? (
-          <>
-            <div className={deadlineBlockWrap}>
-              <div
-                className={deadlineInner}
-                title={hasDeadline ? deadlineTooltipText : undefined}
-              >
-                {hasDeadline ? (
-                  <div className={deadlineMetricAlign}>
-                    <p
-                      className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
-                        deadlinePassed ? 'text-gray-500' : 'text-gray-900'
-                      }`}
-                    >
-                      {deadlineParts.primary}
-                    </p>
-                    {deadlineParts.secondary ? (
-                      <p
-                        className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
-                          deadlinePassed ? 'text-gray-400' : 'text-gray-500'
-                        }`}
-                      >
-                        {deadlineParts.secondary}
-                      </p>
-                    ) : null}
-                  </div>
-                ) : (
-                  <div className={deadlineMetricAlign}>
-                    <p className="text-sm font-semibold text-gray-400">—</p>
-                  </div>
-                )}
-              </div>
-              {requirementsStackedUnderDeadline}
-            </div>
-            <div className={awardMetricsWrap}>
-              <div className={awardMetricAlign}>
-                <p
-                  title={awardLine.lineTitle}
-                  className={`min-w-0 max-w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
-                    awardLine.isNumeric ? 'tabular-nums' : ''
-                  } ${
-                    !hasAwardContent
-                      ? 'text-gray-400'
-                      : deadlinePassed
-                        ? 'text-gray-600'
-                        : 'text-gray-900'
-                  }`}
-                >
-                  {awardCell}
-                </p>
-                <p className={METRIC_LABEL}>Award Amount</p>
-                {payoutLine ? (
-                  <p
-                    className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
-                  >
-                    {payoutLine}
-                  </p>
-                ) : null}
-              </div>
-              {showCardActions ? (
-                <div className={cardActionsWrap}>{cardActionControls}</div>
-              ) : null}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="col-span-full space-y-3 border-t border-gray-200 pt-3 xl:hidden">
-              <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:gap-3">
-                <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
-                  <p
-                    title={awardLine.lineTitle}
-                    className={`min-w-0 max-w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
-                      awardLine.isNumeric ? 'tabular-nums' : ''
-                    } ${
-                      !hasAwardContent
-                        ? 'text-gray-400'
-                        : deadlinePassed
-                          ? 'text-gray-600'
-                          : 'text-gray-900'
-                    }`}
-                  >
-                    {awardCell}
-                  </p>
-                  <p className={METRIC_LABEL}>Award Amount</p>
-                  {payoutLine ? (
-                    <p
-                      className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
-                    >
-                      {payoutLine}
-                    </p>
-                  ) : null}
-                </div>
-                <div
-                  className={`${deadlineInner} min-w-0 max-w-[min(11rem,52%)] shrink-0 text-right`}
-                  title={hasDeadline ? deadlineTooltipText : undefined}
-                >
-                  {hasDeadline ? (
-                    <div className="text-right">
-                      <p
-                        className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
-                          deadlinePassed ? 'text-gray-500' : 'text-gray-900'
-                        }`}
-                      >
-                        {deadlineParts.primary}
-                      </p>
-                      {deadlineParts.secondary ? (
-                        <p
-                          className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
-                            deadlinePassed ? 'text-gray-400' : 'text-gray-500'
-                          }`}
-                        >
-                          {deadlineParts.secondary}
-                        </p>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-gray-400">—</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3">
-                <div className="min-w-0 flex-1 text-left">
-                  {requirementsMetricInner}
-                </div>
-                {showCardActions ? (
-                  <div className={cardActionsWrap}>{cardActionControls}</div>
-                ) : null}
-              </div>
-            </div>
-            <div className="hidden min-w-0 xl:col-start-2 xl:row-start-1 xl:row-span-2 xl:block xl:self-start xl:border-0 xl:pt-0">
-              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-stretch xl:gap-2">
-                <div
-                  className={`${deadlineInner} min-w-0 flex-1`}
-                  title={hasDeadline ? deadlineTooltipText : undefined}
-                >
-                  {hasDeadline ? (
-                    <div className={deadlineMetricAlign}>
-                      <p
-                        className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
-                          deadlinePassed ? 'text-gray-500' : 'text-gray-900'
-                        }`}
-                      >
-                        {deadlineParts.primary}
-                      </p>
-                      {deadlineParts.secondary ? (
-                        <p
-                          className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
-                            deadlinePassed ? 'text-gray-400' : 'text-gray-500'
-                          }`}
-                        >
-                          {deadlineParts.secondary}
-                        </p>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <div className={deadlineMetricAlign}>
-                      <p className="text-sm font-semibold text-gray-400">—</p>
-                    </div>
-                  )}
-                </div>
-                <div className="min-w-0 max-w-[min(11rem,46%)] shrink-0 text-right xl:max-w-none xl:w-full xl:shrink xl:text-left">
-                  {requirementsMetricInner}
-                </div>
-              </div>
-            </div>
-            <div className="hidden min-w-0 xl:col-start-3 xl:row-start-1 xl:row-span-2 xl:block xl:w-full xl:max-w-[200px] xl:justify-self-start xl:self-start xl:border-0 xl:pt-0">
-              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-stretch xl:gap-2">
-                <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
-                  <p
-                    title={awardLine.lineTitle}
-                    className={`min-w-0 max-w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
-                      awardLine.isNumeric ? 'tabular-nums' : ''
-                    } ${
-                      !hasAwardContent
-                        ? 'text-gray-400'
-                        : deadlinePassed
-                          ? 'text-gray-600'
-                          : 'text-gray-900'
-                    }`}
-                  >
-                    {awardCell}
-                  </p>
-                  <p className={METRIC_LABEL}>Award Amount</p>
-                  {payoutLine ? (
-                    <p
-                      className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
-                    >
-                      {payoutLine}
-                    </p>
-                  ) : null}
-                </div>
-                {showCardActions ? (
-                  <div className={cardActionsWrap}>{cardActionControls}</div>
-                ) : null}
-              </div>
-            </div>
-          </>
-        )}
-
         {catalogChips.length > 0 ? (
           <div
-            className="col-span-full min-w-0 border-t border-gray-200 pt-2.5 xl:row-start-3"
+            className="min-w-0 border-t border-gray-200 pt-4"
             aria-label="Scholarship tags"
           >
             <ScholarshipCatalogChipRow chips={catalogChips} />
