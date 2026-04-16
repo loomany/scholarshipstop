@@ -25,14 +25,25 @@ export function sanitizeEssayHeroStorageSlug(slug: string): string {
 }
 
 async function downloadImageBuffer(url: string): Promise<Buffer> {
-  const res = await fetch(url, {
-    signal: AbortSignal.timeout(90_000),
-    headers: { Accept: 'image/*' }
-  });
-  if (!res.ok) {
-    throw new Error(`Failed to download hero image: HTTP ${res.status}`);
+  let lastErr: unknown;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const res = await fetch(url, {
+        signal: AbortSignal.timeout(90_000),
+        headers: { Accept: 'image/*' }
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to download hero image: HTTP ${res.status}`);
+      }
+      return Buffer.from(await res.arrayBuffer());
+    } catch (e) {
+      lastErr = e;
+      if (attempt < 2) {
+        await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+      }
+    }
   }
-  return Buffer.from(await res.arrayBuffer());
+  throw lastErr instanceof Error ? lastErr : new Error(String(lastErr));
 }
 
 /**
@@ -150,8 +161,12 @@ export async function ingestEssayHeroFromFalOrFallback(
         slug: opts.slug
       });
       return { url, heroIsReal: true };
-    } catch {
-      /* use gradient below */
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error('[essay-hero] FAL URL present but ingest failed; using gradient fallback', {
+        slug: opts.slug,
+        error: msg.slice(0, 500)
+      });
     }
   }
   const url = await ingestFallbackHeroWebpToSupabase(supabase, { slug: opts.slug });

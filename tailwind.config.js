@@ -55,6 +55,19 @@ module.exports = {
         'shimmer-wave': {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' }
+        },
+        /** Scholarship hub/detail: pulsing brand mark while lists load (pairs with top orange nprogress). */
+        'scholarship-brand-mark-breathe': {
+          '0%, 100%': {
+            transform: 'scale(1)',
+            boxShadow:
+              '0 4px 22px -10px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(228, 228, 231, 0.95)'
+          },
+          '50%': {
+            transform: 'scale(1.07)',
+            boxShadow:
+              '0 14px 36px -12px rgba(249, 115, 22, 0.35), 0 0 0 1px rgba(251, 146, 60, 0.4)'
+          }
         }
       },
       animation: {
@@ -77,7 +90,9 @@ module.exports = {
         'works-benefit-3': 'pain-fade-up 0.45s ease-out 0.42s forwards',
         'works-cta-in': 'pain-fade-up 0.5s ease-out 0.52s forwards',
         'mic-recording-pulse': 'mic-recording-pulse 1.35s ease-in-out infinite',
-        'shimmer-wave': 'shimmer-wave 1.35s ease-in-out infinite'
+        'shimmer-wave': 'shimmer-wave 1.35s ease-in-out infinite',
+        'scholarship-brand-mark-breathe':
+          'scholarship-brand-mark-breathe 1.85s cubic-bezier(0.45, 0, 0.55, 1) infinite'
       }
     }
   },

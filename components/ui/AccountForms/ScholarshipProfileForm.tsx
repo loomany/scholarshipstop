@@ -660,6 +660,12 @@ export default function ScholarshipProfileForm({
     });
   }, [formValues, performProfilePatch, profile]);
 
+  const handleLogOut = useCallback(async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.refresh();
+  }, [router]);
+
   const onStartTrial = useCallback(async () => {
     const supabase = createClient();
     const {
@@ -993,32 +999,49 @@ export default function ScholarshipProfileForm({
 
     const sectionSaveRow = (
       section: ProfileSectionKey,
-      onSave: () => void
+      onSave: () => void,
+      endSlot?: React.ReactNode
     ) => {
       const fb = sectionFeedback[section];
+      const feedback = fb ? (
+        <p
+          role="status"
+          aria-live="polite"
+          className={`max-w-xl text-sm font-medium leading-snug ${
+            fb.type === 'ok' ? 'text-emerald-700' : 'text-red-600'
+          }`}
+        >
+          {fb.text}
+        </p>
+      ) : null;
+
+      const saveButton = (
+        <button
+          type="button"
+          onClick={onSave}
+          disabled={submitting}
+          className={accountPagePrimaryButtonClass}
+        >
+          {submitting ? 'Saving…' : 'Save'}
+        </button>
+      );
+
       return (
         <div className={SAAS_SECTION_ACTION_ROW}>
-          <div className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-            <button
-              type="button"
-              onClick={onSave}
-              disabled={submitting}
-              className={accountPagePrimaryButtonClass}
-            >
-              {submitting ? 'Saving…' : 'Save'}
-            </button>
-            {fb ? (
-              <p
-                role="status"
-                aria-live="polite"
-                className={`max-w-xl text-sm font-medium leading-snug ${
-                  fb.type === 'ok' ? 'text-emerald-700' : 'text-red-600'
-                }`}
-              >
-                {fb.text}
-              </p>
-            ) : null}
-          </div>
+          {endSlot ? (
+            <div className="flex w-full flex-col gap-2">
+              <div className="flex w-full min-w-0 flex-row items-center justify-between gap-2 sm:gap-4">
+                <div className="min-w-0 shrink">{saveButton}</div>
+                <div className="flex shrink-0 items-center justify-end">{endSlot}</div>
+              </div>
+              {feedback}
+            </div>
+          ) : (
+            <div className="flex min-w-0 flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+              {saveButton}
+              {feedback}
+            </div>
+          )}
         </div>
       );
     };
@@ -1472,7 +1495,17 @@ export default function ScholarshipProfileForm({
                 </p>
               ) : null}
             </div>
-            {sectionSaveRow('personal', onSavePersonal)}
+            {sectionSaveRow(
+              'personal',
+              onSavePersonal,
+              <button
+                type="button"
+                onClick={() => void handleLogOut()}
+                className={accountPagePrimaryButtonClass}
+              >
+                Log out
+              </button>
+            )}
             {variant === 'saas' ? (
               <GrantNotificationToggles
                 profile={profile}

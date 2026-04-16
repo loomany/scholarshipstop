@@ -16,6 +16,7 @@ import {
 } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
@@ -47,6 +48,11 @@ import {
   writeSavedFiltersToStorage,
   SAVED_FILTERS_STORAGE_KEY
 } from '@/lib/scholarships/savedFiltersStorage';
+import {
+  deleteUserSavedScholarship,
+  fetchUserSavedScholarshipIds,
+  postUserSavedScholarship
+} from './savedScholarshipsAccountApi';
 import {
   getSavedScholarshipIds,
   removeScholarship,
@@ -262,12 +268,8 @@ function ScholarshipsPageInner({
       return;
     }
     try {
-      const res = await fetch('/api/account/saved-scholarships', {
-        credentials: 'include'
-      });
-      if (res.ok) {
-        const body = (await res.json()) as { scholarshipIds?: string[] };
-        const serverIds = body.scholarshipIds ?? [];
+      const serverIds = await fetchUserSavedScholarshipIds();
+      if (serverIds !== null) {
         setSavedIds([...new Set([...serverIds, ...fromStorage])]);
         return;
       }
@@ -1090,12 +1092,23 @@ function ScholarshipsPageInner({
 
   const listStart = (currentPage - 1) * SCHOLARSHIPS_PAGE_SIZE;
   const toggleSave = useCallback(
-    (id: string) => {
+    async (id: string) => {
       if (!isAuthenticated) {
         openRegistrationWall();
         return;
       }
       const wasSaved = savedIds.includes(id);
+      const ok = wasSaved
+        ? await deleteUserSavedScholarship(id)
+        : await postUserSavedScholarship(id);
+      if (!ok) {
+        toast({
+          title: 'Could not update saved scholarships',
+          description: 'Check your connection and try again.',
+          variant: 'destructive'
+        });
+        return;
+      }
       if (activeTab === 'saved' && wasSaved) {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
@@ -1277,7 +1290,7 @@ function ScholarshipsPageInner({
           />
 
           {isLoading ? (
-            <div className="text-slate-600">Loading scholarships...</div>
+            <ScholarshipsBrandLoading density="compact" />
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
           ) : totalCount === 0 ? (
@@ -1416,7 +1429,9 @@ export default function ScholarshipsHubPageClient({
     <Suspense
       fallback={
         <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
-          <div className="mx-auto max-w-5xl">Loading scholarships…</div>
+          <div className="mx-auto max-w-5xl">
+            <ScholarshipsBrandLoading />
+          </div>
         </section>
       }
     >

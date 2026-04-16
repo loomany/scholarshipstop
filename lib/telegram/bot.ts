@@ -993,13 +993,11 @@ function savedListIsoDate(s: Scholarship): string {
   return '—';
 }
 
-/** Human deadline line: avoid duplicating the ISO column when `deadline` is only a date. */
-function savedListDeadlinePart(s: Scholarship, isoDate: string): string {
-  const raw = s.deadline?.trim() || '';
+/** Extra deadline text when it is more than a bare ISO date (ISO is shown in the previous column). */
+function savedListDeadlinePart(isoDate: string, deadlineText: string | undefined): string {
+  const raw = deadlineText?.trim() || '';
   if (!raw) return '—';
-  if (raw === isoDate || raw.replace(/\s/g, '') === isoDate) {
-    return s.deadlineBucket?.trim() || raw;
-  }
+  if (raw === isoDate || raw.replace(/\s/g, '') === isoDate) return '—';
   return raw;
 }
 
@@ -1081,7 +1079,7 @@ async function sendSavedScholarshipsList(user: TelegramUserRow) {
     const href = `${site}${path}`;
     const title = escapeTelegramHtml(s.title?.trim() || 'Scholarship');
     const iso = savedListIsoDate(s);
-    const dlPart = savedListDeadlinePart(s, iso);
+    const dlPart = savedListDeadlinePart(iso, s.deadline);
     const amt = (s.amount || s.awardAmount)?.trim() || '—';
     lines.push(
       `${n}. <a href="${href}">${title}</a> - ${escapeTelegramHtml(iso)} - ${escapeTelegramHtml(

@@ -107,26 +107,48 @@ type GeneratedPayload = {
 };
 
 /** Always returns at most one URL (first asset only) — one hero per essay. */
-function extractImageUrlFromFalJson(data: unknown): string | null {
-  if (!data || typeof data !== 'object') return null;
+function extractImageUrlFromFalJson(data: unknown, depth = 0): string | null {
+  if (depth > 10 || !data || typeof data !== 'object') return null;
   const d = data as Record<string, unknown>;
 
-  if (typeof d.url === 'string' && d.url.startsWith('http')) return d.url;
+  const asHttpUrl = (u: unknown): string | null =>
+    typeof u === 'string' && u.startsWith('http') ? u : null;
 
-  const images = d.images ?? d.image ?? d.output;
+  if (asHttpUrl(d.url)) return asHttpUrl(d.url);
+
+  /** Some fal models return a single image object (not array) under `output` / `image`. */
+  const maybeSingle =
+    d.output && typeof d.output === 'object' && !Array.isArray(d.output)
+      ? d.output
+      : d.image && typeof d.image === 'object' && !Array.isArray(d.image)
+        ? d.image
+        : null;
+  if (maybeSingle) {
+    const u = asHttpUrl((maybeSingle as Record<string, unknown>).url);
+    if (u) return u;
+  }
+  if (typeof d.output === 'string' && d.output.startsWith('http')) return d.output;
+
+  const images =
+    d.images ??
+    (Array.isArray(d.image) ? d.image : null) ??
+    (Array.isArray(d.output) ? d.output : null);
   if (Array.isArray(images) && images.length > 0) {
     const first = images[0];
     if (typeof first === 'string' && first.startsWith('http')) return first;
     if (first && typeof first === 'object') {
       const img = first as Record<string, unknown>;
-      const u = img.url ?? img.image_url ?? img.file_url;
-      if (typeof u === 'string' && u.startsWith('http')) return u;
+      const u = img.url ?? img.image_url ?? img.file_url ?? img.content;
+      if (asHttpUrl(u)) return u as string;
     }
   }
 
-  const inner = d.data;
-  if (inner && typeof inner === 'object') {
-    return extractImageUrlFromFalJson(inner);
+  for (const nestKey of ['data', 'result', 'response', 'output'] as const) {
+    const inner = d[nestKey];
+    if (inner && typeof inner === 'object') {
+      const nested = extractImageUrlFromFalJson(inner, depth + 1);
+      if (nested) return nested;
+    }
   }
   return null;
 }
@@ -196,9 +218,45 @@ function buildFluxDevHeroBody(prompt: string): Record<string, unknown> {
     num_inference_steps: steps,
     guidance_scale: 3.5,
     num_images: 1,
-    enable_safety_checker: true,
+    /** When the checker misfires, FLUX can return an empty `images` array → silent fallback to gradient. */
+    enable_safety_checker:
+      process.env.FLUX_HERO_DISABLE_SAFETY_CHECKER?.trim() === '1' ? false : true,
     output_format: 'jpeg'
   };
+}
+
+/** Long enough for FLUX on a cold queue; override via env if your host has a shorter limit. */
+function falHeroRequestTimeoutMs(): number {
+  const n = Number.parseInt(process.env.FAL_HERO_REQUEST_TIMEOUT_MS?.trim() || '', 10);
+  return Number.isFinite(n) && n >= 30_000 ? Math.min(n, 300_000) : 120_000;
+}
+
+function falHeroMaxAttempts(): number {
+  const n = Number.parseInt(process.env.FAL_HERO_MAX_ATTEMPTS?.trim() || '3', 10);
+  return Math.max(1, Math.min(5, Number.isFinite(n) ? n : 3));
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+function shouldRetryFalAttempt(
+  attemptIndex: number,
+  maxAttempts: number,
+  r: FalHeroAttemptResult
+): boolean {
+  if (attemptIndex >= maxAttempts - 1) return false;
+  if (r.detail === 'FAL_KEY missing') return false;
+  if (r.url?.startsWith('http')) return false;
+
+  const s = r.httpStatus;
+  if (s === 401 || s === 402 || s === 403 || s === 400) return false;
+
+  if (s === 429 || s === 408 || s === 502 || s === 503 || s === 504) return true;
+  if (s === 0) return true;
+  if (s === 200 && r.detail.includes('no image URL')) return true;
+
+  return false;
 }
 
 async function falGenerateHeroImageOnce(fullImagePrompt: string): Promise<FalHeroAttemptResult> {
@@ -225,7 +283,8 @@ async function falGenerateHeroImageOnce(fullImagePrompt: string): Promise<FalHer
         Authorization: `Key ${key}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(falBody)
+      body: JSON.stringify(falBody),
+      signal: AbortSignal.timeout(falHeroRequestTimeoutMs())
     });
     const json = (await res.json().catch(() => null)) as unknown;
     const raw =
@@ -254,16 +313,47 @@ async function falGenerateHeroImageOnce(fullImagePrompt: string): Promise<FalHer
   }
 }
 
+async function falGenerateHeroImageWithRetries(
+  fullImagePrompt: string
+): Promise<FalHeroAttemptResult> {
+  const maxAttempts = falHeroMaxAttempts();
+  let last: FalHeroAttemptResult = {
+    url: null,
+    httpStatus: 0,
+    detail: 'no attempts'
+  };
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    last = await falGenerateHeroImageOnce(fullImagePrompt);
+    if (last.url?.startsWith('http')) return last;
+
+    if (!shouldRetryFalAttempt(attempt, maxAttempts, last)) break;
+
+    const backoff = 1200 * 2 ** attempt + Math.floor(Math.random() * 400);
+    console.error(
+      `[essay-hero] FAL attempt ${attempt + 1}/${maxAttempts} failed; retry in ${backoff}ms`,
+      { httpStatus: last.httpStatus, detail: last.detail.slice(0, 500) }
+    );
+    await sleep(backoff);
+  }
+
+  console.error('[essay-hero] FAL gave up after retries', {
+    attempts: maxAttempts,
+    httpStatus: last.httpStatus,
+    detail: last.detail.slice(0, 800)
+  });
+  return last;
+}
+
 /**
- * Exactly **one** `POST` to fal.run per hero — no retries (avoids duplicate billing when the first
- * response is slow or flaky). Returns `null` if `FAL_KEY` is missing or FAL returns no usable URL.
- * Queue generation uses this + `ingestEssayHeroFromFalOrFallback` so essays still publish with a hero.
+ * POST to fal.run with bounded retries (429/5xx/timeouts/empty JSON shape). Set `FAL_HERO_MAX_ATTEMPTS=1`
+ * to restore old single-shot behavior. Returns `null` if `FAL_KEY` is missing or FAL returns no URL.
  */
 export async function tryResolveHeroImageUrl(fullImagePrompt: string): Promise<string | null> {
   const key = process.env.FAL_KEY?.trim();
   if (!key) return null;
 
-  const r = await falGenerateHeroImageOnce(fullImagePrompt);
+  const r = await falGenerateHeroImageWithRetries(fullImagePrompt);
   return r.url?.startsWith('http') ? r.url : null;
 }
 
@@ -279,14 +369,12 @@ export async function resolveHeroImageUrl(fullImagePrompt: string): Promise<stri
     );
   }
 
-  const r = await falGenerateHeroImageOnce(fullImagePrompt);
+  const r = await falGenerateHeroImageWithRetries(fullImagePrompt);
   if (r.url?.startsWith('http')) {
     return r.url;
   }
 
-  throw new Error(
-    `Hero image generation failed (single FAL attempt; no auto-retry to save quota). ${r.detail}`
-  );
+  throw new Error(`Hero image generation failed after ${falHeroMaxAttempts()} attempt(s). ${r.detail}`);
 }
 
 async function ensureUniqueEssaySlug(

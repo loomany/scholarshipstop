@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 
+import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipDetailPageAuthBridge from '@/app/scholarships/ScholarshipDetailPageAuthBridge';
 import ScholarshipsHubPageAuthBridge from '@/app/scholarships/ScholarshipsHubPageAuthBridge';
 import {
@@ -218,7 +219,9 @@ export default async function ScholarshipsSlugPathPageBody({
       <Suspense
         fallback={
           <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
-            <div className="mx-auto max-w-5xl">Loading scholarships…</div>
+            <div className="mx-auto max-w-5xl">
+              <ScholarshipsBrandLoading />
+            </div>
           </section>
         }
       >
@@ -291,7 +294,9 @@ export default async function ScholarshipsSlugPathPageBody({
         <Suspense
           fallback={
             <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
-              <div className="mx-auto max-w-5xl">Loading scholarships…</div>
+              <div className="mx-auto max-w-5xl">
+                <ScholarshipsBrandLoading />
+              </div>
             </section>
           }
         >

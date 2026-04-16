@@ -6,6 +6,11 @@ import { Heart } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 
 import {
+  deleteUserSavedScholarship,
+  fetchUserSavedScholarshipIds,
+  postUserSavedScholarship
+} from './savedScholarshipsAccountApi';
+import {
   isScholarshipSaved,
   removeScholarship,
   saveScholarship
@@ -42,10 +47,8 @@ export default function SaveScholarshipButton({
         return;
       }
       setAccountMode(true);
-      const res = await fetch('/api/account/saved-scholarships', { credentials: 'include' });
-      if (!res.ok || cancelled) return;
-      const body = (await res.json()) as { scholarshipIds?: string[] };
-      const ids = body.scholarshipIds ?? [];
+      const ids = await fetchUserSavedScholarshipIds();
+      if (cancelled || ids === null) return;
       setSaved(ids.includes(scholarshipId));
     }
     void load();
@@ -56,25 +59,11 @@ export default function SaveScholarshipButton({
 
   const onSave = useCallback(async () => {
     if (accountMode) {
-      if (saved) {
-        const res = await fetch(
-          `/api/account/saved-scholarships?id=${encodeURIComponent(scholarshipId)}`,
-          { method: 'DELETE', credentials: 'include' }
-        );
-        if (res.ok) {
-          setSaved(false);
-          onPersistChange?.();
-        }
-        return;
-      }
-      const res = await fetch('/api/account/saved-scholarships', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scholarshipId })
-      });
-      if (res.ok) {
-        setSaved(true);
+      const ok = saved
+        ? await deleteUserSavedScholarship(scholarshipId)
+        : await postUserSavedScholarship(scholarshipId);
+      if (ok) {
+        setSaved(!saved);
         onPersistChange?.();
       }
       return;

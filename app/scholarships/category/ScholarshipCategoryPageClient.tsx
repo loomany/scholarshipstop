@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Lock } from 'lucide-react';
 
+import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
@@ -12,6 +13,7 @@ import ScholarshipsMoreFiltersPanel from '@/components/scholarships/Scholarships
 import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagination';
 import ScholarshipsSidebar from '@/components/scholarships/ScholarshipsSidebar';
 import ScholarshipsTwoColumnLayout from '@/components/scholarships/ScholarshipsTwoColumnLayout';
+import { toast } from '@/components/ui/Toasts/use-toast';
 import {
   SCHOLARSHIP_CATEGORY_LABELS,
   SCHOLARSHIP_CATEGORY_ORDER,
@@ -33,6 +35,11 @@ import {
   getReportedScholarshipIds,
   toggleReportedScholarship
 } from '@/app/scholarships/reportedScholarships';
+import {
+  deleteUserSavedScholarship,
+  fetchUserSavedScholarshipIds,
+  postUserSavedScholarship
+} from '@/app/scholarships/savedScholarshipsAccountApi';
 import {
   getSavedScholarshipIds,
   removeScholarship,
@@ -270,10 +277,27 @@ export default function ScholarshipCategoryPageClient({
       setSubmittedIds([]);
       return;
     }
-    setSavedIds(getSavedScholarshipIds());
     setIgnoredIds(getIgnoredScholarshipIds());
     setStartedIds(getStartedScholarshipIds());
     setSubmittedIds(getSubmittedScholarshipIds());
+    const fromStorage = getSavedScholarshipIds();
+    let cancelled = false;
+    void (async () => {
+      try {
+        const serverIds = await fetchUserSavedScholarshipIds();
+        if (cancelled) return;
+        if (serverIds !== null) {
+          setSavedIds([...new Set([...serverIds, ...fromStorage])]);
+        } else {
+          setSavedIds(fromStorage);
+        }
+      } catch {
+        if (!cancelled) setSavedIds(fromStorage);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [isAuthenticated]);
 
   useEffect(() => {
@@ -663,14 +687,28 @@ export default function ScholarshipCategoryPageClient({
     router.replace(pathname, { scroll: false });
   }, [router, pathname, filterBounds]);
 
-  const toggleSave = (id: string) => {
-    setSavedIds((prev) => {
-      if (prev.includes(id)) {
-        return removeScholarship(id);
+  const toggleSave = useCallback(
+    async (id: string) => {
+      const wasSaved = savedIds.includes(id);
+      if (isAuthenticated) {
+        const ok = wasSaved
+          ? await deleteUserSavedScholarship(id)
+          : await postUserSavedScholarship(id);
+        if (!ok) {
+          toast({
+            title: 'Could not update saved scholarships',
+            description: 'Check your connection and try again.',
+            variant: 'destructive'
+          });
+          return;
+        }
       }
-      return saveScholarship(id);
-    });
-  };
+      setSavedIds(
+        wasSaved ? removeScholarship(id) : saveScholarship(id)
+      );
+    },
+    [isAuthenticated, savedIds]
+  );
 
   const ignoreScholarship = useCallback((id: string) => {
     setIgnoredIds(addIgnoredScholarship(id));
@@ -776,7 +814,7 @@ export default function ScholarshipCategoryPageClient({
               </div>
             </div>
           ) : isLoading ? (
-            <div className="text-slate-600">Loading scholarships...</div>
+            <ScholarshipsBrandLoading density="compact" />
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
           ) : showEmptyState ? (

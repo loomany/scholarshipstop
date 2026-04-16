@@ -8,7 +8,20 @@ const VIDEO_SRC = '/videos/IMG_1482.MP4';
 /** Hero frame before playback (`public/images/essay-mentor-video-poster.png`). */
 const VIDEO_POSTER = '/images/essay-mentor-video-poster.png';
 
-export function AiMentorHowItWorksVideo() {
+const DEFAULT_SHELL =
+  'relative aspect-video w-full overflow-hidden rounded-3xl bg-zinc-950 shadow-2xl ring-1 ring-zinc-200/60';
+
+export type AiMentorHowItWorksVideoProps = {
+  /** Outer wrapper (aspect ratio, radius, border). Defaults to homepage hero shell. */
+  className?: string;
+  /** Accessible name for the overlay play control before native controls appear. */
+  playButtonAriaLabel?: string;
+};
+
+export function AiMentorHowItWorksVideo({
+  className,
+  playButtonAriaLabel = 'Play video: How the AI Essay Mentor works'
+}: AiMentorHowItWorksVideoProps = {}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showControls, setShowControls] = useState(false);
 
@@ -23,7 +36,7 @@ export function AiMentorHowItWorksVideo() {
   }, []);
 
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-3xl bg-zinc-950 shadow-2xl ring-1 ring-zinc-200/60">
+    <div className={clsx(className ?? DEFAULT_SHELL)}>
       <video
         ref={videoRef}
         controls={showControls}
@@ -47,7 +60,7 @@ export function AiMentorHowItWorksVideo() {
           type="button"
           onClick={handlePointerActivate}
           className="absolute bottom-3 left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-sm transition hover:bg-black/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 active:scale-[0.97] sm:bottom-4 sm:left-4 sm:h-12 sm:w-12"
-          aria-label="Play video: How the AI Essay Mentor works"
+          aria-label={playButtonAriaLabel}
         >
           <Play
             className="ml-0.5 h-5 w-5 text-white sm:h-[1.35rem] sm:w-[1.35rem]"

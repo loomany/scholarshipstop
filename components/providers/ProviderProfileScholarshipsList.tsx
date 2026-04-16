@@ -6,11 +6,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
+import { toast } from '@/components/ui/Toasts/use-toast';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
   addIgnoredScholarship,
   getIgnoredScholarshipIds
 } from '@/app/scholarships/ignoredScholarships';
+import {
+  deleteUserSavedScholarship,
+  fetchUserSavedScholarshipIds,
+  postUserSavedScholarship
+} from '@/app/scholarships/savedScholarshipsAccountApi';
 import {
   getSavedScholarshipIds,
   removeScholarship,
@@ -37,20 +43,37 @@ export function ProviderProfileScholarshipsList({
 
   const isSubscriptionLocked = isAuthenticated && !hasSubscription;
 
+  const refreshSavedIds = useCallback(async () => {
+    if (!isAuthenticated) {
+      setSavedIds([]);
+      return;
+    }
+    const fromStorage = getSavedScholarshipIds();
+    try {
+      const serverIds = await fetchUserSavedScholarshipIds();
+      if (serverIds !== null) {
+        setSavedIds([...new Set([...serverIds, ...fromStorage])]);
+      } else {
+        setSavedIds(fromStorage);
+      }
+    } catch {
+      setSavedIds(fromStorage);
+    }
+  }, [isAuthenticated]);
+
   const syncFromStorage = useCallback(() => {
     setViewedIds(getViewedScholarshipIds());
-    if (isAuthenticated) {
-      setSavedIds(getSavedScholarshipIds());
-      setIgnoredIds(getIgnoredScholarshipIds());
-    } else {
-      setSavedIds([]);
+    if (!isAuthenticated) {
       setIgnoredIds([]);
+      return;
     }
+    setIgnoredIds(getIgnoredScholarshipIds());
   }, [isAuthenticated]);
 
   useEffect(() => {
     syncFromStorage();
-  }, [syncFromStorage]);
+    void refreshSavedIds();
+  }, [syncFromStorage, refreshSavedIds]);
 
   useEffect(() => {
     function onStorage(e: StorageEvent) {
@@ -60,11 +83,12 @@ export function ProviderProfileScholarshipsList({
         e.key === 'scholarshipViewedIds'
       ) {
         syncFromStorage();
+        void refreshSavedIds();
       }
     }
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
-  }, [syncFromStorage]);
+  }, [syncFromStorage, refreshSavedIds]);
 
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
@@ -80,12 +104,23 @@ export function ProviderProfileScholarshipsList({
   }, []);
 
   const toggleSave = useCallback(
-    (id: string) => {
+    async (id: string) => {
       if (!isAuthenticated) {
         openRegistrationWall();
         return;
       }
       const wasSaved = savedIds.includes(id);
+      const ok = wasSaved
+        ? await deleteUserSavedScholarship(id)
+        : await postUserSavedScholarship(id);
+      if (!ok) {
+        toast({
+          title: 'Could not update saved scholarships',
+          description: 'Check your connection and try again.',
+          variant: 'destructive'
+        });
+        return;
+      }
       setSavedIds(wasSaved ? removeScholarship(id) : saveScholarship(id));
     },
     [isAuthenticated, openRegistrationWall, savedIds]

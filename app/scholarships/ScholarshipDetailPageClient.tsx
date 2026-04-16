@@ -24,6 +24,8 @@ import {
   DarkTooltip,
   DarkTooltipProvider
 } from '@/components/ui/DarkTooltip';
+import { toast } from '@/components/ui/Toasts/use-toast';
+import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
@@ -47,6 +49,11 @@ import {
   getIgnoredScholarshipIds,
   removeIgnoredScholarship
 } from '@/app/scholarships/ignoredScholarships';
+import {
+  deleteUserSavedScholarship,
+  fetchUserSavedScholarshipIds,
+  postUserSavedScholarship
+} from '@/app/scholarships/savedScholarshipsAccountApi';
 import {
   getSavedScholarshipIds,
   removeScholarship,
@@ -593,12 +600,27 @@ export default function ScholarshipDetailPageClient({
   const closeSubscriptionOffer = useCallback(() => {
     setSubscriptionOfferOpen(false);
   }, []);
-  const syncIdsFromStorage = useCallback(() => {
-    setSavedIds(getSavedScholarshipIds());
+  const syncIdsFromStorage = useCallback(async () => {
     setIgnoredIds(getIgnoredScholarshipIds());
     setStartedIds(getStartedScholarshipIds());
     setSubmittedIds(getSubmittedScholarshipIds());
-  }, []);
+
+    const fromStorage = getSavedScholarshipIds();
+    if (!isAuthenticated || !authResolved) {
+      setSavedIds(fromStorage);
+      return;
+    }
+    try {
+      const serverIds = await fetchUserSavedScholarshipIds();
+      if (serverIds !== null) {
+        setSavedIds([...new Set([...serverIds, ...fromStorage])]);
+      } else {
+        setSavedIds(fromStorage);
+      }
+    } catch {
+      setSavedIds(fromStorage);
+    }
+  }, [isAuthenticated, authResolved]);
   const easyApplyIds = scholarship ? getScholarshipCatalog(scholarship).easyApplyIds : [];
   const isEasyApplySubscriptionLocked =
     isAuthenticated &&
@@ -607,7 +629,7 @@ export default function ScholarshipDetailPageClient({
   const hasDetailAccess = isAuthenticated && !isEasyApplySubscriptionLocked;
 
   useEffect(() => {
-    syncIdsFromStorage();
+    void syncIdsFromStorage();
   }, [syncIdsFromStorage]);
 
   useEffect(() => {
@@ -768,9 +790,10 @@ export default function ScholarshipDetailPageClient({
           className={`${scholarshipDetailPageBgClass} px-4 py-8 sm:px-5 md:py-12 lg:px-8`}
         >
           <div className={scholarshipDetailShellClass}>
-            <div className="flex min-h-[50vh] w-full items-center justify-center">
-              <p className="text-zinc-600">Loading scholarships...</p>
-            </div>
+            <ScholarshipsBrandLoading
+              density="comfortable"
+              label="Loading scholarship…"
+            />
           </div>
         </section>
         {registrationWallModal}
@@ -2083,12 +2106,22 @@ export default function ScholarshipDetailPageClient({
                           ? `${detailOfficialSavedPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
                           : `${detailOfficialSavePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
                       }
-                      onClick={() => {
+                      onClick={async () => {
                         const id = scholarship.id;
+                        const wasSaved = savedIds.includes(id);
+                        const ok = wasSaved
+                          ? await deleteUserSavedScholarship(id)
+                          : await postUserSavedScholarship(id);
+                        if (!ok) {
+                          toast({
+                            title: 'Could not update saved scholarships',
+                            description: 'Check your connection and try again.',
+                            variant: 'destructive'
+                          });
+                          return;
+                        }
                         setSavedIds(
-                          savedIds.includes(id)
-                            ? removeScholarship(id)
-                            : saveScholarship(id)
+                          wasSaved ? removeScholarship(id) : saveScholarship(id)
                         );
                       }}
                     >
