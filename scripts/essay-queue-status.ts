@@ -44,6 +44,8 @@ async function main() {
         hint: {
           stuck_processing:
             'Rows left in processing usually mean the worker crashed or timed out before completing. claimNextPending only picks pending — stuck processing does not block pending, but ties up those scholarships until reset.',
+          awaiting_hero:
+            'Text saved as unpublished draft; worker retries FAL before new pending jobs. Refill FAL balance if errors mention payment/quota.',
           cron: 'Vercel cron hits /api/cron/process-essay-queue hourly; needs CRON_SECRET or ESSAY_CRON_SECRET and ESSAY_GENERATION_DISABLED unset on Vercel.'
         },
         latestPublishedEssays: recentEssays ?? [],

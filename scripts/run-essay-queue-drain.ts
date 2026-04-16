@@ -117,12 +117,34 @@ async function main() {
       return;
     }
 
+    if (result.ok === true && 'skipped' in result && result.skipped === 'hero_retry_deferred') {
+      console.log(
+        JSON.stringify(
+          {
+            stopped: true,
+            reason: 'hero_retry_deferred',
+            queueId: 'queueId' in result ? result.queueId : undefined,
+            completedJobs: completed,
+            message:
+              'FAL still failed (e.g. empty balance). Row stays awaiting_hero; refill FAL and run drain again.'
+          },
+          null,
+          2
+        )
+      );
+      return;
+    }
+
     if (result.ok === false) {
       console.error(JSON.stringify({ fatal: true, result }, null, 2));
       process.exit(1);
     }
 
-    if (result.ok === true && 'essaySlug' in result) {
+    if (
+      result.ok === true &&
+      'phase' in result &&
+      (result.phase === 'published' || result.phase === 'resume_published')
+    ) {
       completed += 1;
       if (maxCompleted != null && completed >= maxCompleted) {
         console.log(

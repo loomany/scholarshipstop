@@ -15,7 +15,7 @@ import {
   ESSAY_HERO_SCENE_VARIANTS,
   heroSceneVariantIndex
 } from '@/lib/essays/essayHeroSceneVariants';
-import { ingestEssayHeroFromFalOrFallback } from '@/lib/essays/essayHeroIngest';
+import { ingestFalHeroImageToSupabase } from '@/lib/essays/essayHeroIngest';
 
 export function buildGrantCategoryHaystack(input: {
   category: string | null;
@@ -345,16 +345,37 @@ async function falGenerateHeroImageWithRetries(
   return last;
 }
 
+export type FalHeroResolveMeta = {
+  url: string | null;
+  detail: string;
+  httpStatus: number;
+};
+
 /**
- * POST to fal.run with bounded retries (429/5xx/timeouts/empty JSON shape). Set `FAL_HERO_MAX_ATTEMPTS=1`
- * to restore old single-shot behavior. Returns `null` if `FAL_KEY` is missing or FAL returns no URL.
+ * POST to fal.run with bounded retries. Returns `url: null` if `FAL_KEY` is missing or FAL returns no URL.
  */
-export async function tryResolveHeroImageUrl(fullImagePrompt: string): Promise<string | null> {
+export async function tryResolveHeroImageUrlWithMeta(
+  fullImagePrompt: string
+): Promise<FalHeroResolveMeta> {
   const key = process.env.FAL_KEY?.trim();
-  if (!key) return null;
+  if (!key) {
+    return { url: null, detail: 'FAL_KEY missing', httpStatus: 0 };
+  }
 
   const r = await falGenerateHeroImageWithRetries(fullImagePrompt);
-  return r.url?.startsWith('http') ? r.url : null;
+  return {
+    url: r.url?.startsWith('http') ? r.url : null,
+    detail: r.detail,
+    httpStatus: r.httpStatus
+  };
+}
+
+/**
+ * Same as {@link tryResolveHeroImageUrlWithMeta} but URL only (for scripts/backfill that only need the link).
+ */
+export async function tryResolveHeroImageUrl(fullImagePrompt: string): Promise<string | null> {
+  const { url } = await tryResolveHeroImageUrlWithMeta(fullImagePrompt);
+  return url;
 }
 
 /**
@@ -428,6 +449,50 @@ export async function claimNextPendingEssayQueueRow(
 }
 
 /**
+ * Oldest `awaiting_hero` row → `processing` (hero retry before new `pending` jobs).
+ */
+export async function claimAwaitingHeroQueueRow(
+  supabase: SupabaseClient<Database>
+): Promise<{
+  queueId: string;
+  scholarshipId: string;
+  createdEssayId: string;
+} | null> {
+  const { data: next, error: e1 } = await supabase
+    .from('essay_generation_queue')
+    .select('id, scholarship_id, created_essay_id')
+    .eq('status', 'awaiting_hero')
+    .not('created_essay_id', 'is', null)
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (e1) throw new Error(e1.message);
+  if (!next?.id || !next.scholarship_id || !next.created_essay_id) return null;
+
+  const { data: claimed, error: e2 } = await supabase
+    .from('essay_generation_queue')
+    .update({
+      status: 'processing',
+      updated_at: new Date().toISOString(),
+      error_message: null
+    })
+    .eq('id', next.id)
+    .eq('status', 'awaiting_hero')
+    .select('id, scholarship_id, created_essay_id')
+    .maybeSingle();
+
+  if (e2) throw new Error(e2.message);
+  if (!claimed?.scholarship_id || !claimed.created_essay_id) return null;
+
+  return {
+    queueId: claimed.id,
+    scholarshipId: claimed.scholarship_id,
+    createdEssayId: claimed.created_essay_id
+  };
+}
+
+/**
  * Workers that crash mid-job leave rows in `processing` forever — nothing is `pending`, so the
  * queue looks empty. Move stale `processing` rows back to `pending` for retry.
  *
@@ -443,7 +508,22 @@ export async function resetStaleProcessingEssayQueueRows(
   const minutes = Math.max(5, Number(raw || '90') || 90);
   const cutoff = new Date(Date.now() - minutes * 60_000).toISOString();
 
-  const { data, error } = await supabase
+  const { data: heroPending, error: e1 } = await supabase
+    .from('essay_generation_queue')
+    .update({
+      status: 'awaiting_hero',
+      error_message:
+        'requeued: stale processing while awaiting FAL hero (worker reset — will retry image)',
+      updated_at: new Date().toISOString()
+    })
+    .eq('status', 'processing')
+    .not('created_essay_id', 'is', null)
+    .lt('updated_at', cutoff)
+    .select('id');
+
+  if (e1) throw new Error(e1.message);
+
+  const { data: freshPending, error: e2 } = await supabase
     .from('essay_generation_queue')
     .update({
       status: 'pending',
@@ -452,11 +532,12 @@ export async function resetStaleProcessingEssayQueueRows(
       updated_at: new Date().toISOString()
     })
     .eq('status', 'processing')
+    .is('created_essay_id', null)
     .lt('updated_at', cutoff)
     .select('id');
 
-  if (error) throw new Error(error.message);
-  return data?.length ?? 0;
+  if (e2) throw new Error(e2.message);
+  return (heroPending?.length ?? 0) + (freshPending?.length ?? 0);
 }
 
 /**
@@ -504,6 +585,155 @@ export async function promoteOldestCooldownFailedQueueRowToPending(
   return Boolean(updated?.id);
 }
 
+async function processResumeAwaitingHeroJob(
+  supabase: SupabaseClient<Database>,
+  job: { queueId: string; scholarshipId: string; createdEssayId: string }
+): Promise<
+  | { outcome: 'published'; essaySlug: string; queueId: string }
+  | { outcome: 'deferred'; queueId: string }
+  | { outcome: 'failed'; error: string }
+> {
+  const { queueId, scholarshipId, createdEssayId } = job;
+
+  const { data: essay, error: ge } = await supabase
+    .from('essays')
+    .select('id, slug, hero_variant_index, is_published')
+    .eq('id', createdEssayId)
+    .maybeSingle();
+
+  if (ge) return { outcome: 'failed', error: ge.message };
+  if (!essay?.slug) {
+    await supabase
+      .from('essay_generation_queue')
+      .update({
+        status: 'failed',
+        error_message: 'Draft essay row missing for awaiting_hero resume',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', queueId);
+    return { outcome: 'failed', error: 'Draft essay missing' };
+  }
+
+  if (essay.is_published) {
+    await supabase
+      .from('essay_generation_queue')
+      .update({
+        status: 'completed',
+        created_essay_id: essay.id,
+        error_message: null,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', queueId);
+    return { outcome: 'published', essaySlug: essay.slug, queueId };
+  }
+
+  const { data: scholarship, error: se } = await supabase
+    .from('scholarships')
+    .select('id, title, category, category_slug, tags, summary_short')
+    .eq('id', scholarshipId)
+    .maybeSingle();
+
+  if (se || !scholarship?.id) {
+    await supabase
+      .from('essay_generation_queue')
+      .update({
+        status: 'failed',
+        error_message: 'Scholarship missing for hero resume',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', queueId);
+    return { outcome: 'failed', error: 'Scholarship not found for hero resume' };
+  }
+
+  const scholarshipTitle = scholarship.title?.trim() || 'Scholarship program';
+  const { count: publishedCount, error: cntErr } = await supabase
+    .from('essays')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_published', true);
+  if (cntErr) return { outcome: 'failed', error: cntErr.message };
+
+  const existingIndex =
+    typeof essay.hero_variant_index === 'number' && essay.hero_variant_index >= 0
+      ? essay.hero_variant_index
+      : publishedCount ?? 0;
+
+  const grantCategory = buildGrantCategoryHaystack({
+    category: scholarship.category ?? null,
+    category_slug: scholarship.category_slug ?? null,
+    tags: scholarship.tags ?? null,
+    summary_short: scholarship.summary_short ?? null,
+    title: scholarshipTitle
+  });
+
+  const heroPrompt = buildEssayHubHeroImagePrompt({
+    existingIndex,
+    grantTitle: scholarshipTitle,
+    grantCategory
+  });
+
+  const falMeta = await tryResolveHeroImageUrlWithMeta(heroPrompt);
+  if (!falMeta.url) {
+    await supabase
+      .from('essay_generation_queue')
+      .update({
+        status: 'awaiting_hero',
+        error_message: `FAL deferred (retry next run): ${falMeta.detail}`.slice(0, 2000),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', queueId);
+    return { outcome: 'deferred', queueId };
+  }
+
+  try {
+    const heroUrl = await ingestFalHeroImageToSupabase(supabase, {
+      falImageUrl: falMeta.url,
+      slug: essay.slug
+    });
+
+    const { error: upEssayErr } = await supabase
+      .from('essays')
+      .update({
+        hero_image_url: heroUrl,
+        hero_is_real: true,
+        is_published: true,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', essay.id);
+
+    if (upEssayErr) throw new Error(upEssayErr.message);
+
+    await supabase
+      .from('essay_generation_queue')
+      .update({
+        status: 'completed',
+        created_essay_id: essay.id,
+        error_message: null,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', queueId);
+
+    const path = essayHubArticlePath(essay.slug).replace(/^\/+/, '');
+    enqueueGoogleIndexingUrls({
+      kind: 'essay',
+      urls: [getURL(path)],
+      source: 'cron:process-essay-queue'
+    });
+
+    return { outcome: 'published', essaySlug: essay.slug, queueId };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    await supabase
+      .from('essay_generation_queue')
+      .update({
+        status: 'awaiting_hero',
+        error_message: `Ingest deferred (retry next run): ${msg}`.slice(0, 2000),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', queueId);
+    return { outcome: 'deferred', queueId };
+  }
+}
+
 function isEssayGenerationPaused(): boolean {
   const v = process.env.ESSAY_GENERATION_DISABLED?.trim().toLowerCase();
   return v === '1' || v === 'true' || v === 'yes';
@@ -512,8 +742,17 @@ function isEssayGenerationPaused(): boolean {
 export async function processOneEssayQueueItem(
   supabase: SupabaseClient<Database>
 ): Promise<
-  | { ok: true; skipped: 'queue_empty' | 'generation_paused' }
-  | { ok: true; essaySlug: string; queueId: string }
+  | {
+      ok: true;
+      skipped: 'queue_empty' | 'generation_paused' | 'hero_retry_deferred';
+      queueId?: string;
+    }
+  | {
+      ok: true;
+      essaySlug: string;
+      queueId: string;
+      phase?: 'published' | 'resume_published' | 'draft_saved_awaiting_hero';
+    }
   | { ok: false; error: string }
 > {
   if (isEssayGenerationPaused()) {
@@ -523,6 +762,23 @@ export async function processOneEssayQueueItem(
   let queueId: string | null = null;
   try {
     await resetStaleProcessingEssayQueueRows(supabase);
+
+    const heroJob = await claimAwaitingHeroQueueRow(supabase);
+    if (heroJob) {
+      const resumed = await processResumeAwaitingHeroJob(supabase, heroJob);
+      if (resumed.outcome === 'failed') {
+        return { ok: false, error: resumed.error };
+      }
+      if (resumed.outcome === 'deferred') {
+        return { ok: true, skipped: 'hero_retry_deferred', queueId: resumed.queueId };
+      }
+      return {
+        ok: true,
+        essaySlug: resumed.essaySlug,
+        queueId: resumed.queueId,
+        phase: 'resume_published'
+      };
+    }
 
     let claimed = await claimNextPendingEssayQueueRow(supabase);
     if (!claimed) {
@@ -629,14 +885,74 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
       grantTitle: scholarshipTitle,
       grantCategory
     });
-    const falHeroUrl = await tryResolveHeroImageUrl(heroPrompt);
-    const { url: heroUrl, heroIsReal } = await ingestEssayHeroFromFalOrFallback(
-      supabase,
-      {
-        falImageUrl: falHeroUrl,
+    const falMeta = await tryResolveHeroImageUrlWithMeta(heroPrompt);
+
+    const insertDraftLinkAndAwaitHero = async (reason: string) => {
+      const { data: inserted, error: insErr } = await supabase
+        .from('essays')
+        .insert({
+          slug,
+          title: parsed.title.trim(),
+          meta_description: parsed.meta_description?.trim() || null,
+          content_html: parsed.content_html.trim(),
+          hero_image_url: null,
+          hero_is_real: false,
+          hero_variant_index: existingIndex,
+          sources: verifiedSources as unknown as Json,
+          faq: faqJson as unknown as Json,
+          is_published: false
+        })
+        .select('id')
+        .single();
+
+      if (insErr) throw new Error(insErr.message);
+      const essayId = inserted?.id;
+      if (!essayId) throw new Error('Essay insert returned no id');
+
+      const { error: jErr } = await supabase.from('scholarship_essays').insert({
+        scholarship_id: scholarship.id,
+        essay_id: essayId
+      });
+      if (jErr) throw new Error(jErr.message);
+
+      const { error: quErr } = await supabase
+        .from('essay_generation_queue')
+        .update({
+          status: 'awaiting_hero',
+          created_essay_id: essayId,
+          error_message: reason.slice(0, 2000),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', queueId!);
+      if (quErr) throw new Error(quErr.message);
+    };
+
+    if (!falMeta.url) {
+      await insertDraftLinkAndAwaitHero(`Awaiting FAL hero: ${falMeta.detail}`);
+      return {
+        ok: true,
+        essaySlug: slug,
+        queueId,
+        phase: 'draft_saved_awaiting_hero'
+      };
+    }
+
+    let publicHeroUrl: string;
+    try {
+      publicHeroUrl = await ingestFalHeroImageToSupabase(supabase, {
+        falImageUrl: falMeta.url,
         slug
-      }
-    );
+      });
+    } catch (ingestErr) {
+      const msg = ingestErr instanceof Error ? ingestErr.message : String(ingestErr);
+      await insertDraftLinkAndAwaitHero(`Awaiting FAL ingest: ${msg}`);
+      return {
+        ok: true,
+        essaySlug: slug,
+        queueId,
+        phase: 'draft_saved_awaiting_hero'
+      };
+    }
 
     const { data: inserted, error: insErr } = await supabase
       .from('essays')
@@ -645,8 +961,9 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
         title: parsed.title.trim(),
         meta_description: parsed.meta_description?.trim() || null,
         content_html: parsed.content_html.trim(),
-        hero_image_url: heroUrl,
-        hero_is_real: heroIsReal,
+        hero_image_url: publicHeroUrl,
+        hero_is_real: true,
+        hero_variant_index: existingIndex,
         sources: verifiedSources as unknown as Json,
         faq: faqJson as unknown as Json,
         is_published: true
@@ -682,7 +999,7 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
       source: 'cron:process-essay-queue'
     });
 
-    return { ok: true, essaySlug: slug, queueId };
+    return { ok: true, essaySlug: slug, queueId, phase: 'published' };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     if (queueId) {

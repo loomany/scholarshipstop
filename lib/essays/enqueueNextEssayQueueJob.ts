@@ -48,7 +48,7 @@ async function loadQueuedScholarshipIdsPendingOrProcessing(
     const { data, error } = await supabase
       .from('essay_generation_queue')
       .select('scholarship_id')
-      .in('status', ['pending', 'processing'])
+      .in('status', ['pending', 'processing', 'awaiting_hero'])
       .order('id', { ascending: true })
       .range(from, from + ID_PAGE - 1);
     if (error) throw new Error(error.message);
@@ -91,7 +91,7 @@ export async function enqueueNextEssayQueueJob(
   const { count: pendingBefore, error: cErr } = await supabase
     .from('essay_generation_queue')
     .select('id', { count: 'exact', head: true })
-    .in('status', ['pending', 'processing']);
+    .in('status', ['pending', 'processing', 'awaiting_hero']);
   if (cErr) throw new Error(cErr.message);
 
   const withEssay = await loadAllScholarshipIdsWithEssay(supabase);

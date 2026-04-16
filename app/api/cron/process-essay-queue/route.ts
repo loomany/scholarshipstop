@@ -30,7 +30,8 @@ function serviceSupabase() {
 
 /**
  * Processes at most ONE `essay_generation_queue` row (sequential worker).
- * If no `pending` rows exist, may promote one cooled-down `failed` row to `pending` and process it.
+ * Priority: `awaiting_hero` (retry FAL only) → `pending` → may promote cooled-down `failed`.
+ * If FAL has no balance, draft stays unpublished (`is_published=false`) until a later run succeeds.
  * Vercel Cron: GET or POST with `Authorization: Bearer ${CRON_SECRET}` or `?cron_secret=`.
  */
 async function handle() {

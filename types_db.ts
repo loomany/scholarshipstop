@@ -318,6 +318,7 @@ export interface Database {
           content_html: string
           hero_image_url: string | null
           hero_is_real: boolean
+          hero_variant_index: number | null
           sources: Json
           faq: Json
           meta_description: string | null
@@ -332,6 +333,7 @@ export interface Database {
           content_html?: string
           hero_image_url?: string | null
           hero_is_real?: boolean
+          hero_variant_index?: number | null
           sources?: Json
           faq?: Json
           meta_description?: string | null
@@ -346,6 +348,7 @@ export interface Database {
           content_html?: string
           hero_image_url?: string | null
           hero_is_real?: boolean
+          hero_variant_index?: number | null
           sources?: Json
           faq?: Json
           meta_description?: string | null

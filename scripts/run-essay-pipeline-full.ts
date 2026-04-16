@@ -113,7 +113,13 @@ async function main() {
       console.log(JSON.stringify({ round, http: res.status, body }, null, 2));
       if (!res.ok) process.exit(1);
 
-      const b = body as { ok?: boolean; skipped?: string; essaySlug?: string };
+      const b = body as {
+        ok?: boolean;
+        skipped?: string;
+        essaySlug?: string;
+        phase?: string;
+        queueId?: string;
+      };
       if (b?.skipped === 'generation_paused') {
         console.log(
           JSON.stringify(
@@ -147,7 +153,15 @@ async function main() {
         );
         return;
       }
-      if (b?.ok === true && b?.essaySlug) totalCompleted += 1;
+      if (b?.skipped === 'hero_retry_deferred') {
+        continue;
+      }
+      if (
+        b?.ok === true &&
+        (b.phase === 'published' || b.phase === 'resume_published')
+      ) {
+        totalCompleted += 1;
+      }
       continue;
     }
 
@@ -199,7 +213,15 @@ async function main() {
       continue;
     }
 
-    if (result.ok && 'essaySlug' in result) {
+    if (result.ok && 'skipped' in result && result.skipped === 'hero_retry_deferred') {
+      continue;
+    }
+
+    if (
+      result.ok &&
+      'phase' in result &&
+      (result.phase === 'published' || result.phase === 'resume_published')
+    ) {
       totalCompleted += 1;
     }
   }
