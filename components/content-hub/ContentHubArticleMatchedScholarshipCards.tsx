@@ -30,8 +30,8 @@ type Props = {
 };
 
 /**
- * Hub-style `ScholarshipCard` list for resource/essay “Related scholarships”
- * (catalog layout + save/ignore + registration modal).
+ * Same `ScholarshipCard` layout as the scholarship hub listing (not the narrow stacked variant)
+ * for resource/essay “Related scholarships” — save/ignore + registration modal.
  */
 export default function ContentHubArticleMatchedScholarshipCards({
   scholarships
@@ -177,7 +177,6 @@ export default function ContentHubArticleMatchedScholarshipCards({
             <div className="relative z-0 w-full min-w-0">
               <ScholarshipCard
                 scholarship={scholarship}
-                stackedListing
                 isUnread={!viewedIds.includes(scholarship.id)}
                 saved={savedIds.includes(scholarship.id)}
                 onToggleSave={toggleSave}
