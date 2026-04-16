@@ -45,13 +45,13 @@ const h2EasyApplySection =
 const ledeMuted =
   'text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed';
 
-/** Minimal vertical padding between homepage sections (top + bottom) */
+/** Shared vertical padding between homepage sections (top + bottom) */
 const homeY = {
-  hero: 'pt-8 pb-3 sm:pt-10 sm:pb-4 lg:pt-11 lg:pb-5',
-  featured: 'pt-4 pb-4 sm:pt-5 sm:pb-5',
-  essay: 'pt-1 pb-5 sm:pt-2 sm:pb-6 lg:pb-7',
-  valueStrip: 'py-2 sm:py-2.5',
-  block: 'py-5 sm:py-6 lg:py-7'
+  hero: 'pt-10 pb-5 sm:pt-12 sm:pb-6 lg:pt-14 lg:pb-7',
+  featured: 'pt-6 pb-6 sm:pt-7 sm:pb-7',
+  essay: 'pt-3 pb-7 sm:pt-4 sm:pb-8 lg:pb-9',
+  valueStrip: 'py-3.5 sm:py-4',
+  block: 'py-7 sm:py-8 lg:py-9'
 } as const;
 
 export default function HomePageClient() {
@@ -202,7 +202,7 @@ export default function HomePageClient() {
         className={`border-b border-gray-100 bg-white ${homeY.block} ${homeSectionPadX}`}
       >
         <div
-          className={`${container} flex flex-col items-stretch gap-8 lg:flex-row lg:items-center lg:gap-10 xl:gap-14 ${
+          className={`${container} flex flex-col items-stretch gap-9 lg:flex-row lg:items-center lg:gap-12 xl:gap-16 ${
             painSectionVisible ? 'animate-pain-fade-up' : 'opacity-0'
           }`}
         >
@@ -251,7 +251,7 @@ export default function HomePageClient() {
         className={`border-b border-gray-100 bg-gray-50 ${homeY.block} ${homeSectionPadX}`}
       >
         <div className={container}>
-          <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16">
+          <div className="grid grid-cols-1 items-stretch gap-9 lg:grid-cols-2 lg:gap-14 xl:gap-20">
             <div
               className={`order-2 flex min-h-0 min-w-0 lg:order-1 ${
                 worksSectionVisible ? 'animate-works-mockup-in' : 'opacity-0'
@@ -265,7 +265,7 @@ export default function HomePageClient() {
               }`}
             >
               <h2 className={`text-pretty ${h2Section}`}>Everything in one place</h2>
-              <ul className="mt-5 w-full max-w-lg space-y-4 text-left text-lg text-gray-600 sm:mt-6 sm:space-y-5 sm:text-xl lg:max-w-none">
+              <ul className="mt-6 w-full max-w-lg space-y-4 text-left text-lg text-gray-600 sm:mt-7 sm:space-y-5 sm:text-xl lg:max-w-none">
                 <li className="flex gap-4">
                   <Check
                     className={worksListIconClass}
@@ -305,7 +305,7 @@ export default function HomePageClient() {
                   </span>
                 </li>
               </ul>
-              <div className="mt-8 sm:mt-9">
+              <div className="mt-9 sm:mt-10">
                 <HomePrimaryCtaClient
                   className={`${primaryCtaClass} w-full max-w-none sm:w-auto sm:max-w-lg`}
                 >
@@ -327,7 +327,7 @@ export default function HomePageClient() {
           >
             Focus on scholarships you can actually apply to
           </h2>
-          <div className="mx-auto mt-5 grid max-w-lg gap-5 sm:mt-6 sm:max-w-none sm:grid-cols-3 sm:gap-5 lg:mt-6 lg:gap-6">
+          <div className="mx-auto mt-6 grid max-w-lg gap-6 sm:mt-7 sm:max-w-none sm:grid-cols-3 sm:gap-6 lg:mt-7 lg:gap-7">
             {[
               {
                 icon: Zap,
@@ -370,7 +370,7 @@ export default function HomePageClient() {
       >
         <div className={`${container} max-w-5xl`}>
           <h2 className={`text-center text-pretty ${h2Section}`}>How it works</h2>
-          <div className="mx-auto mt-5 grid max-w-lg gap-5 sm:mt-6 sm:max-w-none sm:grid-cols-3 sm:gap-5 lg:mt-6 lg:gap-6">
+          <div className="mx-auto mt-6 grid max-w-lg gap-6 sm:mt-7 sm:max-w-none sm:grid-cols-3 sm:gap-6 lg:mt-7 lg:gap-7">
             {[
               {
                 step: '1',

@@ -29,7 +29,7 @@
       [role='radio'],
       [tabindex]:not([tabindex='-1'])
     ):focus-visible {
-    @apply outline-none ring-2 ring-orange-500/70 ring-offset-0;
+    @apply outline-none ring-2 ring-[#FF7A1A]/55 ring-offset-0 shadow-[0_0_18px_-4px_rgba(255,122,26,0.35)];
   }
 
   :where(
@@ -39,13 +39,13 @@
       textarea,
       select
     ):focus-visible {
-    @apply outline-none ring-2 ring-orange-500/50 ring-offset-0;
+    @apply outline-none ring-2 ring-[#FF7A1A]/30 ring-offset-0 shadow-[0_0_22px_-4px_rgba(255,122,26,0.45)];
   }
 
   input[type='checkbox'],
   input[type='radio'] {
-    color: #047857;
-    accent-color: #10b981;
+    color: #c2410c;
+    accent-color: #f97316;
   }
 
   input[type='checkbox']:focus,
@@ -56,7 +56,7 @@
   input[type='checkbox']:focus-visible,
   input[type='radio']:focus-visible {
     outline: none;
-    @apply ring-2 ring-emerald-500/50 ring-offset-0;
+    @apply ring-2 ring-[#FF7A1A]/40 ring-offset-0;
   }
 
   input[type='range']:focus {
@@ -65,7 +65,7 @@
 
   input[type='range']:focus-visible {
     outline: none;
-    @apply ring-2 ring-emerald-500/45 ring-offset-0 rounded-md;
+    @apply ring-2 ring-[#FF7A1A]/40 ring-offset-0 rounded-md;
   }
 
   /** Native stepper arrows on number inputs (Chrome / Edge / Firefox). */
@@ -118,7 +118,8 @@ html {
   width: 100%;
   max-width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  /* clip avoids horizontal bleed without breaking position:sticky (hidden often does). */
+  overflow-x: clip;
   box-sizing: border-box;
   touch-action: manipulation;
   font-feature-settings:
@@ -140,8 +141,8 @@ body {
   max-width: 100%;
   min-height: 100%;
   margin: 0;
-  /* Pairs with html overflow-x; catches edge cases where only <main> was clipped */
-  overflow-x: hidden;
+  /* Pairs with html overflow-x; clip keeps vertical stickies working site-wide */
+  overflow-x: clip;
   overscroll-behavior-x: none;
 }
 

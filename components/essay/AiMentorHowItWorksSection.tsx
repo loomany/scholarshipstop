@@ -52,7 +52,7 @@ export function AiMentorHowItWorksSection({
       aria-labelledby="ai-mentor-how-it-works-heading"
       className={cn('mt-10 sm:mt-12', className)}
     >
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start lg:gap-10 xl:gap-12">
+      <div className="grid grid-cols-1 gap-7 lg:grid-cols-2 lg:items-start lg:gap-11 xl:gap-14">
         {/* Video + CTA first in DOM → stacked on mobile */}
         <div className="flex min-w-0 flex-col gap-3 sm:gap-3.5">
           <AiMentorHowItWorksVideo />
@@ -66,7 +66,7 @@ export function AiMentorHowItWorksSection({
           >
             How the AI Essay Mentor Works
           </h2>
-          <ol className="mt-5 list-none space-y-4 sm:mt-6 sm:space-y-5">
+          <ol className="mt-6 list-none space-y-5 sm:mt-7 sm:space-y-5">
             {STEPS.map((step) => {
               const Icon = step.icon;
               return (

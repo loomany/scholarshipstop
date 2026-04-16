@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
+
 export default function WordCounterClient() {
   const [text, setText] = useState('');
 
@@ -28,7 +30,7 @@ export default function WordCounterClient() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Type or paste your text here..."
-            className="w-full min-h-[220px] resize-y rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
+            className={`w-full min-h-[220px] resize-y rounded-lg border border-zinc-200 bg-white px-4 py-3 text-zinc-900 outline-none placeholder:text-zinc-400 ${SITE_INPUT_FOCUS_CLASS}`}
           />
 
           <div className="mt-6 w-full">

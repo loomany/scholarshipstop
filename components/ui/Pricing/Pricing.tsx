@@ -124,7 +124,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                     billingInterval === 'month'
                       ? 'relative w-1/2 rounded-md border border-zinc-200 bg-white py-2 text-sm font-medium text-zinc-900 shadow-sm'
                       : 'relative ml-0.5 w-1/2 rounded-md border border-transparent py-2 text-sm font-medium whitespace-nowrap text-zinc-500'
-                  } m-1 focus:z-10 focus:outline-none focus:ring-2 focus:ring-teal-500/30 sm:w-auto sm:px-8`}
+                  } m-1 focus:z-10 focus:outline-none focus:ring-2 focus:ring-[#FF7A1A]/40 sm:w-auto sm:px-8`}
                 >
                   Monthly billing
                 </button>
@@ -137,7 +137,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                     billingInterval === 'year'
                       ? 'relative w-1/2 rounded-md border border-zinc-200 bg-white py-2 text-sm font-medium text-zinc-900 shadow-sm'
                       : 'relative ml-0.5 w-1/2 rounded-md border border-transparent py-2 text-sm font-medium whitespace-nowrap text-zinc-500'
-                  } m-1 focus:z-10 focus:outline-none focus:ring-2 focus:ring-teal-500/30 sm:w-auto sm:px-8`}
+                  } m-1 focus:z-10 focus:outline-none focus:ring-2 focus:ring-[#FF7A1A]/40 sm:w-auto sm:px-8`}
                 >
                   Yearly billing
                 </button>

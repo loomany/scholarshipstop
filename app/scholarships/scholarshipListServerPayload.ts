@@ -17,6 +17,7 @@ import {
   scholarshipListRequestFromParts,
   type ScholarshipListResult
 } from '@/lib/scholarships/scholarshipListServer';
+import { SCHOLARSHIPS_PAGE_SIZE } from '@/app/scholarships/scholarshipListUrl';
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import type { createClient } from '@/utils/supabase/server';
 import {
@@ -43,7 +44,7 @@ export async function fetchInitialHubScholarshipsPayload(
   };
   const req = scholarshipListRequestFromParts({
     page: 1,
-    limit: 12,
+    limit: SCHOLARSHIPS_PAGE_SIZE,
     sort: 'magic',
     tab: 'matches',
     q: '',
@@ -105,7 +106,7 @@ export async function fetchInitialLongTailScholarshipsPayload(
       : requiredSeoTagsForListingPath(mode.slug);
   const req = scholarshipListRequestFromParts({
     page: 1,
-    limit: 12,
+    limit: SCHOLARSHIPS_PAGE_SIZE,
     sort: 'magic',
     tab: 'matches',
     q: '',
@@ -172,7 +173,7 @@ export async function fetchInitialCategoryScholarshipsPayload(
   );
   const req = scholarshipListRequestFromParts({
     page: 1,
-    limit: 12,
+    limit: SCHOLARSHIPS_PAGE_SIZE,
     sort: 'magic',
     tab: 'matches',
     q: '',

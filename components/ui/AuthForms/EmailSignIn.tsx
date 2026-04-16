@@ -3,6 +3,8 @@
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
 
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
+
 import { SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF } from '@/lib/onboarding/onboardingResume';
 import {
   handleRequest,
@@ -50,7 +52,7 @@ export default function EmailSignIn({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
+              className={`w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none ${SITE_INPUT_FOCUS_CLASS}`}
             />
           </div>
           <Button

@@ -1,3 +1,5 @@
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
+
 /**
  * Shared listing toolbar styles — keep aligned with `ScholarshipsListHeader`
  * (catalog / matches) and resource index toolbar.
@@ -6,11 +8,10 @@ export const CATALOG_CONTROL_BAR_BTN =
   'inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 text-sm font-medium text-gray-800 shadow-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/55 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50';
 
 /**
- * Shared border + focus glow for site-wide search/filter text fields (matches essay reply field).
+ * Shared border + focus glow for site-wide search/filter text fields.
  * Compose with layout classes (`h-*`, `pl-*`, `text-sm`, etc.).
  */
-export const SITE_SEARCH_INPUT_CHROME =
-  'rounded-2xl border border-zinc-200 bg-white shadow-sm outline-none transition placeholder:text-zinc-400 focus:border-[#FFB27D] focus:outline-none focus:ring-2 focus:ring-[#FF7A1A]/30 focus:shadow-[0_0_22px_-4px_rgba(255,122,26,0.45)] focus-visible:ring-offset-0';
+export const SITE_SEARCH_INPUT_CHROME = `rounded-2xl border border-zinc-200 bg-white shadow-sm outline-none transition placeholder:text-zinc-400 ${SITE_INPUT_FOCUS_CLASS}`;
 
 /** Full-width keyword search with leading icon (`left-3` → `pl-10` in markup). */
 export const CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS = `h-11 w-full py-0 pl-10 pr-4 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`;

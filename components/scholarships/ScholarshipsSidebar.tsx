@@ -29,6 +29,7 @@ import {
   scholarshipGuestLockIconClass,
   scholarshipSidebarActiveRowClass
 } from '@/lib/constants/scholarshipActionUi';
+import { ScholarshipsSidebarAiMentorCard } from '@/components/scholarships/ScholarshipsSidebarAiMentorCard';
 
 export type { ScholarshipSidebarCounts };
 
@@ -190,8 +191,9 @@ export default function ScholarshipsSidebar({
   };
 
   return (
+    <div className="flex w-full flex-col lg:max-w-[320px] lg:shrink-0">
     <nav
-      className="w-full max-w-none rounded-2xl bg-white p-3 shadow-sm lg:max-w-[320px] lg:shrink-0"
+      className="w-full max-w-none rounded-2xl bg-white p-3 shadow-sm"
       aria-label="Scholarship categories"
     >
       <div className="rounded-lg bg-black px-4 py-3.5 text-center">
@@ -455,5 +457,7 @@ export default function ScholarshipsSidebar({
         })}
       </ul>
     </nav>
+    <ScholarshipsSidebarAiMentorCard />
+    </div>
   );
 }

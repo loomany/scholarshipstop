@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
+
 export type DarkSelectOption = { value: string; label: string };
 
 type DarkSelectProps = {
@@ -19,13 +21,13 @@ type DarkSelectProps = {
 };
 
 const triggerBaseClass =
-  'flex w-full items-center justify-between gap-2 rounded-xl border bg-white px-4 py-3.5 text-left text-sm shadow-sm transition-all duration-200 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/25 disabled:cursor-not-allowed disabled:opacity-50';
+  `flex w-full items-center justify-between gap-2 rounded-xl border bg-white px-4 py-3.5 text-left text-sm shadow-sm transition-all duration-200 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 ${SITE_INPUT_FOCUS_CLASS}`;
 
 const triggerNormalBorder =
-  'border-zinc-200 hover:border-zinc-300 focus-visible:border-teal-400';
+  'border-zinc-200 hover:border-zinc-300';
 
 const triggerErrorBorder =
-  'border-amber-400/80 hover:border-amber-500/70 focus-visible:border-teal-400';
+  'border-amber-400/80 hover:border-amber-500/70';
 
 export function DarkSelect({
   id,
@@ -105,7 +107,7 @@ export function DarkSelect({
                 }}
                 className={`cursor-pointer px-4 py-2.5 text-sm text-zinc-900 transition-colors duration-150 ${
                   isSelected
-                    ? 'bg-teal-50 text-teal-900'
+                    ? 'bg-orange-50 text-orange-950'
                     : 'hover:bg-zinc-50'
                 }`}
               >

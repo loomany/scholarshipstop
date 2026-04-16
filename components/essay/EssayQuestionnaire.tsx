@@ -20,6 +20,7 @@ import {
 
 import { useToast } from '@/components/ui/Toasts/use-toast';
 import { SITE_SEARCH_INPUT_CHROME } from '@/lib/constants/catalogControlBar';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import MentorPremiumAccessMessage from '@/components/essay/MentorPremiumAccessMessage';
 import MentorTrialSubscribeModal from '@/components/essay/MentorTrialSubscribeModal';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
@@ -1603,7 +1604,7 @@ export function EssayQuestionnaire({
                       onChange={(e) => setEditDraft(e.target.value)}
                       rows={4}
                       disabled={messageMutating}
-                      className="w-full resize-y rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200/60 disabled:opacity-60"
+                      className={`w-full resize-y rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 disabled:opacity-60 ${SITE_INPUT_FOCUS_CLASS}`}
                     />
                     <div className="mt-2 flex flex-wrap justify-end gap-2">
                       <button

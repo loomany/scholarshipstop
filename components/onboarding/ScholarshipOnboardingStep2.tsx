@@ -6,6 +6,7 @@ import {
   saveStep2DraftFields,
   type OnboardingStep2DraftFields
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
 import { PASSWORD_POLICY_HINT } from '@/lib/validation/passwordPolicy';
 import {
@@ -14,11 +15,9 @@ import {
   type Step2FieldErrors
 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
 
-const inputClass =
-  'w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 hover:border-zinc-300 focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/25';
+const inputClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 hover:border-zinc-300 ${SITE_INPUT_FOCUS_CLASS}`;
 
-const inputErrorClass =
-  'w-full rounded-xl border border-amber-400/90 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/25';
+const inputErrorClass = `w-full rounded-xl border border-amber-400/90 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 ${SITE_INPUT_FOCUS_CLASS}`;
 
 const hintClass = 'mt-1 text-sm text-zinc-600';
 

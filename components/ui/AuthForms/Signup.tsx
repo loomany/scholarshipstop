@@ -7,6 +7,7 @@ import { signUp } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { PASSWORD_POLICY_HINT } from '@/lib/validation/passwordPolicy';
 
 // Define prop type with allowEmail boolean
@@ -43,7 +44,7 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
+              className={`w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none ${SITE_INPUT_FOCUS_CLASS}`}
             />
             <label htmlFor="password">Password</label>
             <input
@@ -52,7 +53,7 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
               type="password"
               name="password"
               autoComplete="new-password"
-              className="w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
+              className={`w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none ${SITE_INPUT_FOCUS_CLASS}`}
             />
             <p className="text-xs text-zinc-500">{PASSWORD_POLICY_HINT}</p>
           </div>

@@ -10,6 +10,7 @@ import {
   type FormEvent
 } from 'react';
 import { DarkSelect } from '@/components/home/DarkSelect';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { CITIZENSHIP_OPTIONS } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
   buildBirthMonthSelectOptions,
@@ -48,8 +49,7 @@ const citizenshipSelectOptions = [
 const birthMonthOptions = buildBirthMonthSelectOptions();
 
 const fieldHintClass = 'mt-1 text-sm text-zinc-600';
-const datePartInputBaseClass =
-  'w-full rounded-xl border bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm outline-none transition-all duration-200 placeholder:text-zinc-400 focus:border-teal-400 focus:ring-2 focus:ring-teal-500/25 disabled:cursor-not-allowed disabled:opacity-50';
+const datePartInputBaseClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm outline-none transition-all duration-200 placeholder:text-zinc-400 disabled:cursor-not-allowed disabled:opacity-50 ${SITE_INPUT_FOCUS_CLASS}`;
 
 const sectionLabelClass =
   'mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-gray-700';

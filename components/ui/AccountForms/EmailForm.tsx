@@ -2,6 +2,7 @@
 
 import Button from '@/components/ui/Button';
 import { accountPagePrimaryButtonClass } from '@/lib/constants/scholarshipActionUi';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import Card from '@/components/ui/Card';
 import { updateEmail } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
@@ -56,7 +57,7 @@ export default function EmailForm({
           <input
             type="text"
             name="newEmail"
-            className="mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-500/20"
+            className={`mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:bg-white ${SITE_INPUT_FOCUS_CLASS}`}
             defaultValue={userEmail ?? ''}
             placeholder="you@example.com"
             maxLength={64}
@@ -106,7 +107,7 @@ export default function EmailForm({
           <input
             type="text"
             name="newEmail"
-            className="w-1/2 rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
+            className={`w-1/2 rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 outline-none ${SITE_INPUT_FOCUS_CLASS}`}
             defaultValue={userEmail ?? ''}
             placeholder="Your email"
             maxLength={64}

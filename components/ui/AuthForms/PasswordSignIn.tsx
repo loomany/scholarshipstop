@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
 import { SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF } from '@/lib/onboarding/onboardingResume';
 import {
@@ -10,8 +11,7 @@ import {
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-const fieldClass =
-  'w-full rounded-xl border border-zinc-200/90 bg-white px-4 py-3.5 text-[15px] text-zinc-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-[border-color,box-shadow] placeholder:text-zinc-400/80 focus:border-teal-400 focus:ring-2 focus:ring-teal-500/25';
+const fieldClass = `w-full rounded-xl border border-zinc-200/90 bg-white px-4 py-3.5 text-[15px] text-zinc-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-[border-color,box-shadow] placeholder:text-zinc-400/80 ${SITE_INPUT_FOCUS_CLASS}`;
 
 const labelClass = 'mb-1.5 block text-sm font-medium text-zinc-700';
 

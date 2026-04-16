@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { createPublicClient } from '@/utils/supabase/public';
-import { parseDeadlineFromParam } from '@/app/scholarships/scholarshipListUrl';
-import { parseSortFromParam } from '@/app/scholarships/scholarshipListUrl';
+import {
+  parseDeadlineFromParam,
+  parseSortFromParam,
+  SCHOLARSHIPS_PAGE_SIZE
+} from '@/app/scholarships/scholarshipListUrl';
 import {
   parseHubScholarshipTabParam,
   parseScholarshipTabParam
@@ -143,7 +146,7 @@ function buildGuestPublicCacheControl(args: {
   if (args.authUser) return null;
   if (!args.isHubPrimaryListing) return null;
   if (args.countOnly || args.includeMeta || args.metaOnly) return null;
-  if (args.req.page !== 1 || args.req.limit !== 12) return null;
+  if (args.req.page !== 1 || args.req.limit !== SCHOLARSHIPS_PAGE_SIZE) return null;
   if (args.req.tab !== 'matches') return null;
   if (args.req.q.trim().length > 0) return null;
   if (args.req.categoryIds.size > 0) return null;

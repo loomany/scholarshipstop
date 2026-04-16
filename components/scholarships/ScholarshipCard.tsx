@@ -237,7 +237,7 @@ export default function ScholarshipCard({
     <article className={cardArticleClass} data-scholarship-card>
       <Link
         href={detailHref}
-        className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-500/55"
+        className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A1A]/50"
         aria-label={`View scholarship: ${scholarship.title}`}
       >
         <span className="sr-only">Open scholarship details</span>

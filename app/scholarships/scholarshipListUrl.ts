@@ -8,7 +8,7 @@ import type { DeadlinePreset } from './moreFilters';
 import type { SortOption } from './scholarshipSort';
 import type { ScholarshipListTabId } from './scholarshipTabs';
 
-export const SCHOLARSHIPS_PAGE_SIZE = 12;
+export const SCHOLARSHIPS_PAGE_SIZE = 9;
 
 /** Hub URL for the catalog “All” view (`tab=matches` + `scope=catalog`). */
 export const SCHOLARSHIPS_HUB_ALL_MATCHES_HREF =

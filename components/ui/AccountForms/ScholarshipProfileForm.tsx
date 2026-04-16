@@ -21,6 +21,7 @@ import {
   buildBirthMonthSelectOptions
 } from '@/lib/constants/scholarshipProfileOptions';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { US_STATE_AUTOCOMPLETE_PLACEHOLDER } from '@/lib/constants/usStates';
 import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
 import { accountPagePrimaryButtonClass } from '@/lib/constants/scholarshipActionUi';
@@ -94,15 +95,11 @@ function birthPartsFromProfile(p: ProfilesRow | null): {
   return { month: '', day: '', year: '' };
 }
 
-const inputClass =
-  'mt-2 w-full max-w-xl rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20';
-const inputClassSaaS =
-  'mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-500/20';
+const inputClass = `mt-2 w-full max-w-xl rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-zinc-900 outline-none ${SITE_INPUT_FOCUS_CLASS}`;
+const inputClassSaaS = `mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:bg-white ${SITE_INPUT_FOCUS_CLASS}`;
 /** SaaS email field: full width inside a relative wrapper; extra right padding when status chip is shown. */
-const emailInputSaaSClass =
-  'w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-500/20 disabled:cursor-not-allowed disabled:opacity-50 read-only:cursor-default read-only:bg-zinc-50 read-only:focus:border-zinc-200 read-only:focus:bg-zinc-50 read-only:focus:ring-0';
-const birthDateInputBaseClass =
-  'w-full rounded-xl border bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm outline-none transition-all duration-200 placeholder:text-zinc-400 focus:border-teal-400 focus:ring-2 focus:ring-teal-500/25 disabled:cursor-not-allowed disabled:opacity-50';
+const emailInputSaaSClass = `w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:bg-white ${SITE_INPUT_FOCUS_CLASS} disabled:cursor-not-allowed disabled:opacity-50 read-only:cursor-default read-only:bg-zinc-50 read-only:focus:border-zinc-200 read-only:focus:bg-zinc-50 read-only:focus:ring-0 read-only:focus:shadow-none`;
+const birthDateInputBaseClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm outline-none transition-all duration-200 placeholder:text-zinc-400 disabled:cursor-not-allowed disabled:opacity-50 ${SITE_INPUT_FOCUS_CLASS}`;
 const labelClass = 'mt-4 block text-sm font-medium text-zinc-700 first:mt-0';
 const labelClassSaaS =
   'mt-4 block text-xs font-semibold uppercase tracking-wide text-zinc-500 first:mt-0';

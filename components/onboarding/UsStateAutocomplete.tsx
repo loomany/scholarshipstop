@@ -6,9 +6,9 @@ import {
   filterUsStateNames,
   US_STATE_AUTOCOMPLETE_PLACEHOLDER
 } from '@/lib/constants/usStates';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 
-const onboardingInputClass =
-  'w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 hover:border-zinc-300 focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/25';
+const onboardingInputClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 hover:border-zinc-300 ${SITE_INPUT_FOCUS_CLASS}`;
 
 const listClassBase =
   'absolute mt-1 max-h-52 w-full overflow-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg';

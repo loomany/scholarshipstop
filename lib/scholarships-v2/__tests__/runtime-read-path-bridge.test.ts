@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
+import { SCHOLARSHIPS_PAGE_SIZE } from '@/app/scholarships/scholarshipListUrl';
 import { defaultMoreFiltersFromBounds } from '@/app/scholarships/moreFilters';
 import type { ScholarshipListRequest } from '@/lib/scholarships/scholarshipListServer';
 import { applyV2ReadPathToLegacyRequest } from '@/lib/scholarships-v2/runtime/applyV2ReadPathToLegacyRequest';
@@ -8,7 +9,7 @@ import { applyV2ReadPathToLegacyRequest } from '@/lib/scholarships-v2/runtime/ap
 function baseRequest(): ScholarshipListRequest {
   return {
     page: 1,
-    limit: 12,
+    limit: SCHOLARSHIPS_PAGE_SIZE,
     sort: 'magic',
     tab: 'matches',
     q: '',

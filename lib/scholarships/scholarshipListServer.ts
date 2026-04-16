@@ -1,4 +1,5 @@
 import type { Database } from '@/types_db';
+import { SCHOLARSHIPS_PAGE_SIZE } from '@/app/scholarships/scholarshipListUrl';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
   isScholarshipUSA,
@@ -156,7 +157,7 @@ export type ScholarshipListResult = {
   seoFallback?: SeoListingFallbackMeta;
 };
 
-const DEFAULT_LIMIT = 12;
+const DEFAULT_LIMIT = SCHOLARSHIPS_PAGE_SIZE;
 const MAX_LIMIT = 50;
 const GLOBAL_FILTER_BOUNDS_TTL_MS = 5 * 60 * 1000;
 const LIST_META_CACHE_TTL_MS = 60 * 1000;

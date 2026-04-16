@@ -2,6 +2,7 @@
 
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
+import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { updateName } from '@/utils/auth-helpers/server';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
@@ -46,7 +47,7 @@ export default function NameForm({ userName }: { userName: string }) {
           <input
             type="text"
             name="fullName"
-            className="w-1/2 rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-500/20"
+            className={`w-1/2 rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 outline-none ${SITE_INPUT_FOCUS_CLASS}`}
             defaultValue={userName}
             placeholder="Your name"
             maxLength={64}
