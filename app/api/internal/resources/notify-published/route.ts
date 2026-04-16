@@ -16,6 +16,14 @@ function getNotifySecret() {
   );
 }
 
+/** When false (0/false/no/off), publish webhooks skip Telegram entirely (users/admins get no article cards). */
+function isResourcePublishTelegramNotifyEnabled(): boolean {
+  const v = process.env.TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED?.trim().toLowerCase();
+  if (!v) return true;
+  if (v === '0' || v === 'false' || v === 'no' || v === 'off') return false;
+  return true;
+}
+
 function isAuthorized(request: Request) {
   const secret = getNotifySecret();
   if (!secret) return false;
@@ -44,6 +52,7 @@ function shouldNotifyPublish(params: {
  * POST /api/internal/resources/notify-published
  * Authorization: Bearer ${TELEGRAM_RESOURCE_NOTIFY_SECRET} (or CONTENT_ARTICLE_MATCH_SECRET fallback)
  *
+ * Optional: TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED=0 disables Telegram for this endpoint (DB trigger still 200).
  * Optional: set TELEGRAM_RESOURCES_BROADCAST_ALL=1 to DM every bot user who used /start
  * (`telegram_users.last_bot_started_at` set). Throttle with TELEGRAM_RESOURCES_SEND_DELAY_MS (default 40).
  *
@@ -56,6 +65,13 @@ function shouldNotifyPublish(params: {
 export async function POST(request: Request) {
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  if (!isResourcePublishTelegramNotifyEnabled()) {
+    return NextResponse.json({
+      ok: true,
+      skipped: 'telegram_publish_notifications_disabled'
+    });
   }
 
   const raw = (await request.json().catch(() => null)) as Record<string, unknown> | null;

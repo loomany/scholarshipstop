@@ -1,8 +1,9 @@
 /**
  * Why a published article may not appear in Telegram:
- * 1) Nothing calls POST /api/internal/resources/notify-published (needs DB webhook or manual).
- * 2) TELEGRAM_BOT_TOKEN missing / invalid.
- * 3) Zero target chats (TELEGRAM_RESOURCES_* / admin fallback).
+ * 1) TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED=0 (publish notify disabled).
+ * 2) Nothing calls POST /api/internal/resources/notify-published (needs DB webhook or manual).
+ * 3) TELEGRAM_BOT_TOKEN missing / invalid.
+ * 4) Zero target chats (TELEGRAM_RESOURCES_* / admin fallback).
  *
  * Run: npx dotenv-cli -e .env.local -- npx tsx scripts/diagnose-telegram-resource-flow.ts
  */
@@ -42,6 +43,16 @@ async function main() {
     process.env.NEXT_PUBLIC_SITE_URL?.trim() || process.env.SITE_URL?.trim() || '';
 
   console.log('[1] Env (secrets masked)');
+  const publishNotifyOff =
+    process.env.TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED?.trim().toLowerCase() === '0' ||
+    process.env.TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED?.trim().toLowerCase() === 'false' ||
+    process.env.TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED?.trim().toLowerCase() === 'no' ||
+    process.env.TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED?.trim().toLowerCase() === 'off';
+  console.log(
+    '    TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED:',
+    process.env.TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED ?? '(unset = on)',
+    publishNotifyOff ? '— publish → Telegram is OFF' : ''
+  );
   console.log('    TELEGRAM_BOT_TOKEN:', botToken ? mask(botToken) : '(not set) — sends will fail');
   console.log(
     '    Bearer for /api/internal/resources/notify-published:',

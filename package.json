@@ -53,7 +53,8 @@
     "essay:queue-drain": "npx dotenv-cli -e .env.local -- npx tsx scripts/run-essay-queue-drain.ts",
     "essay:pipeline-full": "npx dotenv-cli -e .env.local -- npx tsx scripts/run-essay-pipeline-full.ts",
     "essay:audit-fal": "npx dotenv-cli -e .env.local -- npx tsx scripts/audit-essay-fal-footprint.ts",
-    "weekly-free-digest:preview": "dotenv -e .env.local -- node scripts/preview-weekly-free-digest.mjs"
+    "weekly-free-digest:preview": "dotenv -e .env.local -- node scripts/preview-weekly-free-digest.mjs",
+    "weekly-free-digest:quick": "dotenv -e .env.local -- npx tsx scripts/quick-weekly-digest-email.ts"
   },
   "dependencies": {
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
