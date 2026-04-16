@@ -11,9 +11,22 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
-import { ChevronDown, Menu, Sparkles, X } from 'lucide-react';
+import {
+  BadgeDollarSign,
+  BookOpen,
+  Building2,
+  ChevronDown,
+  Handshake,
+  Info,
+  LayoutGrid,
+  Menu,
+  Search,
+  Sparkles,
+  X
+} from 'lucide-react';
 
 import Logo from '@/components/icons/Logo';
+import MobileDrawerNavIcon from '@/components/ui/Navbar/MobileDrawerNavIcon';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import {
   RESOURCES_SECTION_LABEL,
@@ -122,6 +135,12 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
     () =>
       pathname === '/for-organizations' ||
       pathname.startsWith('/for-organizations/'),
+    [pathname]
+  );
+
+  const pricingActive = useMemo(
+    () =>
+      pathname === '/subscription' || pathname.startsWith('/subscription/'),
     [pathname]
   );
 
@@ -431,12 +450,16 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     href="/about"
                     className={clsx(
                       nav.darkDrawer,
-                      'min-w-0 flex-1 rounded-none rounded-l-lg py-3 pl-3 pr-2',
+                      'flex min-w-0 flex-1 items-center gap-3 rounded-none rounded-l-lg py-3 pl-3 pr-2',
                       aboutSectionActive && nav.darkDrawerActive
                     )}
                     onClick={closeMenu}
                   >
-                    About
+                    <MobileDrawerNavIcon
+                      icon={Info}
+                      active={aboutSectionActive}
+                    />
+                    <span className="min-w-0">About</span>
                   </Link>
                   <button
                     type="button"
@@ -497,31 +520,46 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 href="/scholarships"
                 className={clsx(
                   nav.darkDrawer,
+                  'flex w-full max-w-full items-center gap-3',
                   scholarshipsActive && nav.darkDrawerActive
                 )}
                 onClick={closeMenu}
               >
-                Find Scholarships
+                <MobileDrawerNavIcon
+                  icon={Search}
+                  active={scholarshipsActive}
+                />
+                <span className="min-w-0">Find Scholarships</span>
               </Link>
               <Link
                 href="/providers"
                 className={clsx(
                   nav.darkDrawer,
+                  'flex w-full max-w-full items-center gap-3',
                   providersActive && nav.darkDrawerActive
                 )}
                 onClick={closeMenu}
               >
-                Providers
+                <MobileDrawerNavIcon
+                  icon={Building2}
+                  active={providersActive}
+                />
+                <span className="min-w-0">Providers</span>
               </Link>
               <Link
                 href={RESOURCES_SECTION_PATH}
                 className={clsx(
                   nav.darkDrawer,
+                  'flex w-full max-w-full items-center gap-3',
                   resourcesSectionActive && nav.darkDrawerActive
                 )}
                 onClick={closeMenu}
               >
-                {RESOURCES_SECTION_LABEL}
+                <MobileDrawerNavIcon
+                  icon={LayoutGrid}
+                  active={resourcesSectionActive}
+                />
+                <span className="min-w-0">{RESOURCES_SECTION_LABEL}</span>
               </Link>
               <div className="w-full max-w-full">
                 <div
@@ -539,12 +577,16 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     href={ESSAYS_SECTION_PATH}
                     className={clsx(
                       nav.darkDrawer,
-                      'min-w-0 flex-1 rounded-none rounded-l-lg py-3 pl-3 pr-2',
+                      'flex min-w-0 flex-1 items-center gap-3 rounded-none rounded-l-lg py-3 pl-3 pr-2',
                       essayGuidesNavActive && nav.darkDrawerActive
                     )}
                     onClick={closeMenu}
                   >
-                    Essay Guides
+                    <MobileDrawerNavIcon
+                      icon={BookOpen}
+                      active={essayGuidesNavActive}
+                    />
+                    <span className="min-w-0">Essay Guides</span>
                   </Link>
                   <button
                     type="button"
@@ -626,11 +668,28 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 href="/for-organizations"
                 className={clsx(
                   nav.darkDrawer,
+                  'flex w-full max-w-full items-center gap-3',
                   forOrganizationsActive && nav.darkDrawerActive
                 )}
                 onClick={closeMenu}
               >
-                For Organizations
+                <MobileDrawerNavIcon
+                  icon={Handshake}
+                  active={forOrganizationsActive}
+                />
+                <span className="min-w-0">For Organizations</span>
+              </Link>
+              <Link
+                href="/subscription"
+                className={clsx(
+                  nav.darkDrawer,
+                  'flex w-full max-w-full items-center gap-3',
+                  pricingActive && nav.darkDrawerActive
+                )}
+                onClick={closeMenu}
+              >
+                <MobileDrawerNavIcon icon={BadgeDollarSign} active={pricingActive} />
+                <span className="min-w-0">Pricing</span>
               </Link>
               <NavbarUserSlot
                 pathname={pathname}

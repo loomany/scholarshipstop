@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
+import { LogOut, UserCircle } from 'lucide-react';
 
+import MobileDrawerNavIcon from '@/components/ui/Navbar/MobileDrawerNavIcon';
 import {
   accountNavbarLabel,
   profileDisplayNameFromRow,
@@ -152,20 +154,30 @@ export default function NavbarUserSlot({
         <div className="my-2 border-t border-white/15" role="separator" />
         <Link
           href="/account"
-          className={clsx(nav.darkDrawer, accountActive && nav.darkDrawerActive)}
+          className={clsx(
+            nav.darkDrawer,
+            'flex w-full max-w-full items-center gap-3',
+            accountActive && nav.darkDrawerActive
+          )}
           onClick={onNavigate}
         >
-          Account
+          <MobileDrawerNavIcon icon={UserCircle} active={accountActive} />
+          <span className="min-w-0">Account</span>
         </Link>
         <button
           type="button"
-          className={clsx(nav.darkDrawer, nav.darkAsButton, 'w-full text-left')}
+          className={clsx(
+            nav.darkDrawer,
+            nav.darkAsButton,
+            'flex w-full max-w-full items-center gap-3 text-left'
+          )}
           onClick={() => {
             onNavigate?.();
             void signOut();
           }}
         >
-          Sign out
+          <MobileDrawerNavIcon icon={LogOut} />
+          <span className="min-w-0">Sign out</span>
         </button>
       </>
     );
