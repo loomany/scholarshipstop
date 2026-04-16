@@ -4,7 +4,10 @@ export type {
   RunArticleScholarshipMatchingInput,
   RunArticleScholarshipMatchingResult
 } from './runArticleScholarshipMatchingPipeline';
-export { parseRelatedScholarshipsJson } from './parseRelatedScholarshipsJson';
+export {
+  parseRelatedScholarshipsJson,
+  resolveRelatedScholarshipsForContentPost
+} from './parseRelatedScholarshipsJson';
 export type {
   ArticleSignals,
   RelatedScholarshipStored,
