@@ -1,12 +1,84 @@
 /**
- * Some resource articles accidentally include the same "Quick Summary" callout twice
- * (styled box at the top + duplicate near the end). Keep the first block and drop
- * later copies with the same normalized text.
+ * Some resource articles accidentally include the same "Quick Summary" callout twice:
+ * a styled callout (blue left border / card) plus a plain duplicate (heading + list
+ * near the end). Those have different HTML, so fingerprint dedup alone does not run.
+ * We drop plain sections when at least one styled callout exists, and if every block
+ * is plain but there are two, we keep the first and remove the second (bottom).
  *
- * Some long guides also include three different Quick Summary callouts (intro,
- * mid-article repeat, final). When there are three or more distinct blocks, we drop
- * the second in document order so the first (in-body) and last (final) remain.
+ * Identical normalized chunks still dedupe after the first.
+ *
+ * Some long guides include three different styled Quick Summary callouts. When there
+ * are three or more distinct blocks, we drop the second in document order so the
+ * first (in-body) and last (final) remain.
  */
+
+/** True when the chunk looks like the main “card” callout (not a bare heading section). */
+function isStyledQuickSummaryChunk(chunk: string): boolean {
+  const c = chunk.slice(0, 8000);
+  if (/style\s*=\s*["'][^"']*border-left\s*:/i.test(c)) {
+    if (
+      /2563eb|3b82f6|1d4ed8|1e40af/i.test(c) ||
+      /rgb\s*\(\s*37\s*,\s*99\s*,\s*235/i.test(c)
+    ) {
+      return true;
+    }
+  }
+  if (
+    /\bclass\s*=\s*["'][^"']*\b(border-l-(?:4|8|\[4px\])|border-l-4|border-l-8)\b[^"']*["'][^>]*>/i.test(
+      c
+    ) &&
+    /\b(border-blue-[56]00|text-blue-|bg-(?:white|gray-50|slate-50)|shadow-sm|rounded-lg)\b/i.test(
+      c
+    )
+  ) {
+    return true;
+  }
+  if (
+    /\bclass\s*=\s*["'][^"']*\bborder-l-[^"']*blue[^"']*["']/i.test(c) ||
+    /\bclass\s*=\s*["'][^"']*border-blue-[56]00[^"']*["'][^>]*\bborder-l-/i.test(c)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+/** Remove plain heading/list Quick Summary sections when a styled callout exists elsewhere. */
+function removePlainQuickSummaryWhenStyledExists(html: string): string {
+  const t = html.trim();
+  const merged = collectMergedQuickSummaryRanges(t);
+  if (merged.length < 2) return html;
+
+  const flags = merged.map((r) =>
+    isStyledQuickSummaryChunk(t.slice(r.start, r.end))
+  );
+  const hasStyled = flags.some(Boolean);
+  const hasPlain = flags.some((x) => !x);
+  if (!hasStyled || !hasPlain) return html;
+
+  const remove = merged.filter((_, i) => !flags[i]!);
+  remove.sort((a, b) => b.start - a.start);
+  let out = t;
+  for (const { start, end } of remove) {
+    out = out.slice(0, start) + out.slice(end);
+  }
+  return out.replace(/\n{3,}/g, '\n\n').trim();
+}
+
+/**
+ * Two different “plain” Quick Summary sections (e.g. heading + list at top and bottom):
+ * keep the first, drop the lower duplicate.
+ */
+function removeSecondPlainQuickSummaryWhenBothUnstyled(html: string): string {
+  const t = html.trim();
+  const merged = collectMergedQuickSummaryRanges(t);
+  if (merged.length !== 2) return html;
+
+  const chunks = merged.map((r) => t.slice(r.start, r.end));
+  if (chunks.every((ch) => isStyledQuickSummaryChunk(ch))) return html;
+
+  const { start, end } = merged[1]!;
+  return (t.slice(0, start) + t.slice(end)).replace(/\n{3,}/g, '\n\n').trim();
+}
 
 const MAX_BLOCK_CHARS = 48_000;
 
@@ -160,8 +232,11 @@ function removeSecondQuickSummaryAmongThreePlus(html: string): string {
  * Removes duplicate Quick Summary callouts (same normalized HTML chunk) after the first.
  */
 export function deduplicateQuickSummaryBlocksInHtml(html: string): string {
-  const t = html.trim();
+  let t = html.trim();
   if (!t || !/quick\s+summary/i.test(t)) return html;
+
+  t = removePlainQuickSummaryWhenStyledExists(t);
+  t = removeSecondPlainQuickSummaryWhenBothUnstyled(t);
 
   const merged = collectMergedQuickSummaryRanges(t);
   if (merged.length < 2) return removeSecondQuickSummaryAmongThreePlus(t);

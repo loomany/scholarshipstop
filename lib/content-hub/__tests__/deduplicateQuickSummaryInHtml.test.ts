@@ -31,3 +31,27 @@ test('with three different Quick Summary blocks, removes the second', () => {
   assert.ok(!out.includes('Second'));
   assert.ok(out.includes('Third'));
 });
+
+test('styled callout + plain heading section: removes plain, keeps styled', () => {
+  const styled =
+    '<div style="border-left:4px solid #2563eb;padding:12px"><p><strong>📌 Quick Summary</strong></p><ul><li><strong>Key Point 1:</strong> In card</li></ul></div>';
+  const plain =
+    '<h2>📌 Quick Summary</h2><ul><li><strong>Key Point 1:</strong> Duplicate body</li></ul>';
+  const html = `<p>Intro</p>${styled}<p>Body</p>${plain}<p>Outro</p>`;
+  const out = deduplicateQuickSummaryBlocksInHtml(html);
+  assert.equal((out.match(/Quick Summary/g) || []).length, 1);
+  assert.ok(out.includes('In card'));
+  assert.ok(!out.includes('Duplicate body'));
+});
+
+test('two plain Quick Summary sections: keeps first, drops second', () => {
+  const top =
+    '<h2>📌 Quick Summary</h2><ul><li><strong>Key Point 1:</strong> Top</li></ul>';
+  const bottom =
+    '<h3>📌 Quick Summary</h3><ul><li><strong>Key Point 1:</strong> Bottom dup</li></ul>';
+  const html = `<p>x</p>${top}<p>mid</p>${bottom}`;
+  const out = deduplicateQuickSummaryBlocksInHtml(html);
+  assert.equal((out.match(/Quick Summary/g) || []).length, 1);
+  assert.ok(out.includes('Top'));
+  assert.ok(!out.includes('Bottom dup'));
+});
