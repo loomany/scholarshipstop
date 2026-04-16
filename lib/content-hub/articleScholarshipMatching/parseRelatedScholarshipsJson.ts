@@ -45,9 +45,13 @@ export function parseRelatedScholarshipsJson(
 
 /**
  * Cards at the bottom of `/resources/[slug]` use this list.
- * Connect Hub often writes catalog matches to legacy `scholarship_links` only; the in-repo
- * matching pipeline fills `related_scholarships` and clears `scholarship_links`. Prefer
- * `related_scholarships` when present; otherwise map internal rows from `scholarship_links`.
+ *
+ * **Connect Hub contract:** either write `related_scholarships` as a JSON array of
+ * `{ slug, title, score?, reason?, award_amount_text?, deadline_text? }`, or write
+ * `scholarship_links` with `{ title, slug, reason?, url? }` where catalog rows include
+ * `slug` (absolute `https://…/scholarships/{slug}` in `url` is OK — parsed as internal).
+ * Optional: run `npm run content:backfill-related-from-links` after bulk imports to copy
+ * legacy links into `related_scholarships` for analytics and scholarship-page cross-links.
  */
 export function resolveRelatedScholarshipsForContentPost(
   relatedScholarships: Json | null | undefined,

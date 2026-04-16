@@ -154,9 +154,31 @@ export async function fetchRelatedPublishedContentPosts(
 
 const RELATED_ARTICLES_FOR_SCHOLARSHIP_MAX = 3;
 
+function mergeContentPostListFieldsById(
+  rows: ContentPostListFields[],
+  more: ContentPostListFields[]
+): ContentPostListFields[] {
+  const byId = new Map<string, ContentPostListFields>();
+  for (const row of rows) {
+    if (row?.id) byId.set(row.id, row);
+  }
+  for (const row of more) {
+    if (row?.id && !byId.has(row.id)) byId.set(row.id, row);
+  }
+  return Array.from(byId.values());
+}
+
+function sortContentPostsByRecency(rows: ContentPostListFields[]): ContentPostListFields[] {
+  return [...rows].sort((a, b) => {
+    const ta = a.published_at ? new Date(a.published_at).getTime() : 0;
+    const tb = b.published_at ? new Date(b.published_at).getTime() : 0;
+    return tb - ta;
+  });
+}
+
 /**
- * Published articles whose `related_scholarships` JSON lists this catalog slug
- * (same field as article matching / `RelatedScholarshipStored.slug`).
+ * Published articles that reference this catalog scholarship slug in either
+ * `related_scholarships` (matching pipeline) or legacy `scholarship_links` (Connect Hub).
  */
 export const fetchPublishedArticlesForScholarshipSlug = cache(
   async (
@@ -169,21 +191,38 @@ export const fetchPublishedArticlesForScholarshipSlug = cache(
     const cap = Math.max(1, Math.min(6, Math.floor(limit)));
     try {
       const supabase = createPublicClient();
-      /** `cs` = `@>`; JSON string avoids PostgREST parse errors from `.contains()` on this column. */
-      const relatedContains = JSON.stringify([{ slug: raw }]);
-      const { data, error } = await supabase
-        .from('content_posts')
-        .select(publishedWithSlugSelect)
-        .eq('status', 'published')
-        .not('slug', 'is', null)
-        .neq('slug', '')
-        .filter('related_scholarships', 'cs', relatedContains)
-        .order('published_at', { ascending: false, nullsFirst: false })
-        .order('updated_at', { ascending: false, nullsFirst: false })
-        .limit(cap);
+      /** `cs` = `@>` (JSON contains). */
+      const slugProbe = JSON.stringify([{ slug: raw }]);
 
-      if (error) return [];
-      return (data ?? []) as ContentPostListFields[];
+      const base = () =>
+        supabase
+          .from('content_posts')
+          .select(publishedWithSlugSelect)
+          .eq('status', 'published')
+          .not('slug', 'is', null)
+          .neq('slug', '');
+
+      const [{ data: fromRelated, error: err1 }, { data: fromLinks, error: err2 }] =
+        await Promise.all([
+          base()
+            .filter('related_scholarships', 'cs', slugProbe)
+            .order('published_at', { ascending: false, nullsFirst: false })
+            .order('updated_at', { ascending: false, nullsFirst: false })
+            .limit(cap),
+          base()
+            .filter('scholarship_links', 'cs', slugProbe)
+            .order('published_at', { ascending: false, nullsFirst: false })
+            .order('updated_at', { ascending: false, nullsFirst: false })
+            .limit(cap)
+        ]);
+
+      if (err1 || err2) return [];
+
+      const merged = mergeContentPostListFieldsById(
+        (fromRelated ?? []) as ContentPostListFields[],
+        (fromLinks ?? []) as ContentPostListFields[]
+      );
+      return sortContentPostsByRecency(merged).slice(0, cap);
     } catch {
       return [];
     }
