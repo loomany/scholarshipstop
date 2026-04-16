@@ -59,12 +59,12 @@ export function FeaturedBrandScholarshipsSection({
         <h2 id="featured-brand-scholarships-heading" className={`text-pretty ${h2Class}`}>
           Featured Opportunities from Global Brands
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-pretty text-lg leading-relaxed text-gray-600 sm:mt-5 sm:text-xl sm:leading-relaxed">
+        <p className="mx-auto mt-3 max-w-2xl text-pretty text-lg leading-relaxed text-gray-600 sm:mt-4 sm:text-xl sm:leading-relaxed">
           Apply to top-tier programs sponsored by industry leaders.
         </p>
       </div>
 
-      <div className="relative mt-6 sm:mt-8">
+      <div className="relative mt-5 sm:mt-6">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-gray-50/80 to-transparent sm:w-14" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-gray-50/80 to-transparent sm:w-14" />
 

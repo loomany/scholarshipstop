@@ -45,6 +45,15 @@ const h2EasyApplySection =
 const ledeMuted =
   'text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed';
 
+/** Minimal vertical padding between homepage sections (top + bottom) */
+const homeY = {
+  hero: 'pt-8 pb-3 sm:pt-10 sm:pb-4 lg:pt-11 lg:pb-5',
+  featured: 'pt-4 pb-4 sm:pt-5 sm:pb-5',
+  essay: 'pt-1 pb-5 sm:pt-2 sm:pb-6 lg:pb-7',
+  valueStrip: 'py-2 sm:py-2.5',
+  block: 'py-5 sm:py-6 lg:py-7'
+} as const;
+
 export default function HomePageClient() {
   const painSectionRef = useRef<HTMLDivElement>(null);
   const [painSectionVisible, setPainSectionVisible] = useState(false);
@@ -92,7 +101,7 @@ export default function HomePageClient() {
     <div className="bg-white text-gray-900 antialiased">
       {/* 1. Hero */}
       <section
-        className={`border-b border-gray-100 bg-white pt-10 pb-4 sm:pt-12 sm:pb-5 lg:pt-14 lg:pb-6 xl:pb-6 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-white ${homeY.hero} ${homeSectionPadX}`}
       >
         <div className={`${container} max-w-4xl text-center`}>
           <h1 className="text-pretty text-[clamp(1.8125rem,5.25vw+0.8rem,2.25rem)] font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 animate-home-fade-up sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
@@ -136,7 +145,7 @@ export default function HomePageClient() {
 
       {/* Featured brand scholarships — trust strip */}
       <section
-        className={`border-b border-gray-100 bg-gray-50/80 pt-6 pb-5 sm:pt-8 sm:pb-6 lg:pb-8 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-gray-50/80 ${homeY.featured} ${homeSectionPadX}`}
       >
         <div className={container}>
           <FeaturedBrandScholarshipsSection />
@@ -145,7 +154,7 @@ export default function HomePageClient() {
 
       {/* 1b. AI Essay Mentor — how it works (same block as /essay) */}
       <section
-        className={`border-b border-gray-100 bg-white pt-2 pb-8 sm:pt-3 sm:pb-10 lg:pb-12 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-white ${homeY.essay} ${homeSectionPadX}`}
       >
         <div className={container}>
           <AiMentorHowItWorksSection className="mt-0" />
@@ -154,10 +163,10 @@ export default function HomePageClient() {
 
       {/* 2. Value strip */}
       <section
-        className={`border-y border-gray-200/90 bg-gray-50 pb-3 pt-2 sm:pb-4 sm:pt-3 lg:pb-4 lg:pt-3 ${homeSectionPadX}`}
+        className={`border-y border-gray-200/90 bg-gray-50 ${homeY.valueStrip} ${homeSectionPadX}`}
       >
         <div className={container}>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 sm:gap-x-8 sm:gap-y-7 lg:gap-x-12">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-5 sm:grid-cols-4 sm:gap-x-6 sm:gap-y-5 lg:gap-x-10">
             {[
               { icon: LayoutGrid, label: 'Thousands of scholarships' },
               { icon: Clock, label: 'Updated frequently' },
@@ -190,10 +199,10 @@ export default function HomePageClient() {
       {/* 3. Problem */}
       <section
         ref={painSectionRef}
-        className={`border-b border-gray-100 bg-white pt-10 pb-12 sm:pt-11 sm:pb-14 lg:pt-12 lg:pb-16 xl:pt-14 xl:pb-20 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-white ${homeY.block} ${homeSectionPadX}`}
       >
         <div
-          className={`${container} flex flex-col items-stretch gap-12 lg:flex-row lg:items-center lg:gap-16 xl:gap-24 ${
+          className={`${container} flex flex-col items-stretch gap-8 lg:flex-row lg:items-center lg:gap-10 xl:gap-14 ${
             painSectionVisible ? 'animate-pain-fade-up' : 'opacity-0'
           }`}
         >
@@ -239,10 +248,10 @@ export default function HomePageClient() {
       {/* 4. Product demo */}
       <section
         ref={worksSectionRef}
-        className={`border-b border-gray-100 bg-gray-50 pt-10 pb-12 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-gray-50 ${homeY.block} ${homeSectionPadX}`}
       >
         <div className={container}>
-          <div className="grid grid-cols-1 items-stretch gap-12 lg:grid-cols-2 lg:gap-20 xl:gap-24">
+          <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16">
             <div
               className={`order-2 flex min-h-0 min-w-0 lg:order-1 ${
                 worksSectionVisible ? 'animate-works-mockup-in' : 'opacity-0'
@@ -256,7 +265,7 @@ export default function HomePageClient() {
               }`}
             >
               <h2 className={`text-pretty ${h2Section}`}>Everything in one place</h2>
-              <ul className="mt-8 w-full max-w-lg space-y-5 text-left text-lg text-gray-600 sm:mt-9 sm:space-y-6 sm:text-xl lg:max-w-none">
+              <ul className="mt-5 w-full max-w-lg space-y-4 text-left text-lg text-gray-600 sm:mt-6 sm:space-y-5 sm:text-xl lg:max-w-none">
                 <li className="flex gap-4">
                   <Check
                     className={worksListIconClass}
@@ -296,7 +305,7 @@ export default function HomePageClient() {
                   </span>
                 </li>
               </ul>
-              <div className="mt-12 sm:mt-14">
+              <div className="mt-8 sm:mt-9">
                 <HomePrimaryCtaClient
                   className={`${primaryCtaClass} w-full max-w-none sm:w-auto sm:max-w-lg`}
                 >
@@ -310,7 +319,7 @@ export default function HomePageClient() {
 
       {/* 5. Easy apply */}
       <section
-        className={`border-b border-gray-100 bg-white pt-10 pb-12 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-white ${homeY.block} ${homeSectionPadX}`}
       >
         <div className={`${container} max-w-5xl text-center`}>
           <h2
@@ -318,7 +327,7 @@ export default function HomePageClient() {
           >
             Focus on scholarships you can actually apply to
           </h2>
-          <div className="mx-auto mt-7 grid max-w-lg gap-6 sm:mt-8 sm:max-w-none sm:grid-cols-3 sm:gap-6 lg:mt-10 lg:gap-7">
+          <div className="mx-auto mt-5 grid max-w-lg gap-5 sm:mt-6 sm:max-w-none sm:grid-cols-3 sm:gap-5 lg:mt-6 lg:gap-6">
             {[
               {
                 icon: Zap,
@@ -357,11 +366,11 @@ export default function HomePageClient() {
 
       {/* 6. How it works */}
       <section
-        className={`border-b border-gray-100 bg-gray-50 pt-10 pb-12 sm:pt-10 sm:pb-14 lg:pt-11 lg:pb-16 xl:pt-12 xl:pb-20 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-gray-50 ${homeY.block} ${homeSectionPadX}`}
       >
         <div className={`${container} max-w-5xl`}>
           <h2 className={`text-center text-pretty ${h2Section}`}>How it works</h2>
-          <div className="mx-auto mt-7 grid max-w-lg gap-6 sm:mt-8 sm:max-w-none sm:grid-cols-3 sm:gap-6 lg:mt-10 lg:gap-7">
+          <div className="mx-auto mt-5 grid max-w-lg gap-5 sm:mt-6 sm:max-w-none sm:grid-cols-3 sm:gap-5 lg:mt-6 lg:gap-6">
             {[
               {
                 step: '1',
