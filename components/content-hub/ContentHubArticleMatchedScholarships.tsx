@@ -7,22 +7,30 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 const cardClass =
   'group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-5 text-left shadow-sm transition hover:border-gray-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2';
 
-/** Normalize catalog deadline lines (e.g. ISO timestamps) for card meta. */
+/** Normalize catalog deadline lines (ISO timestamps, plain dates) for card meta. */
 function formatDeadlineDisplay(raw: string | null | undefined): string {
   const s = raw?.trim();
   if (!s) return '';
-  if (/^\d{4}-\d{2}-\d{2}T/.test(s)) {
-    try {
-      const d = new Date(s);
-      if (!Number.isNaN(d.getTime())) {
-        return d.toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric'
-        });
-      }
-    } catch {
-      /* keep raw */
+  // ISO 8601 with time (any position in string)
+  if (/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(s)) {
+    const d = new Date(s);
+    if (!Number.isNaN(d.getTime())) {
+      return d.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+      });
+    }
+  }
+  // Plain YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+    const d = new Date(`${s}T12:00:00`);
+    if (!Number.isNaN(d.getTime())) {
+      return d.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+      });
     }
   }
   return s;
@@ -43,10 +51,11 @@ type Props = {
 };
 
 function MatchedScholarshipGrid({ items }: { items: RelatedScholarshipStored[] }) {
+  /* Block + space-y avoids any flex-row overrides from parent/CDN; one card per row. */
   return (
-    <ul className="mt-6 flex list-none flex-col gap-4">
+    <ul className="mt-6 list-none space-y-4">
       {items.map((item) => (
-        <li key={item.slug} className="min-w-0 w-full">
+        <li key={item.slug} className="block min-w-0 w-full">
           <Link
             href={`/scholarships/${encodeURIComponent(item.slug)}`}
             scroll
