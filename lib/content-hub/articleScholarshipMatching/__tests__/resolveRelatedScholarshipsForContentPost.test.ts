@@ -37,7 +37,7 @@ test('falls back to internal scholarship_links when related_scholarships empty',
   assert.equal(out[0]!.reason, 'Matched intent');
 });
 
-test('skips external-only scholarship_links', () => {
+test('skips external-only scholarship_links (no slug, non-catalog URL)', () => {
   const legacy = [
     {
       title: 'External',
@@ -47,4 +47,18 @@ test('skips external-only scholarship_links', () => {
   ];
   const out = resolveRelatedScholarshipsForContentPost(null, legacy);
   assert.equal(out.length, 0);
+});
+
+test('Connect Hub legacy: full site URL + slug yields bottom-card rows', () => {
+  const legacy = [
+    {
+      url: 'https://scholarshiptop.com/scholarships/foo-bar',
+      slug: 'foo-bar',
+      title: 'Foo',
+      reason: 'intent'
+    }
+  ];
+  const out = resolveRelatedScholarshipsForContentPost(null, legacy);
+  assert.equal(out.length, 1);
+  assert.equal(out[0]!.slug, 'foo-bar');
 });

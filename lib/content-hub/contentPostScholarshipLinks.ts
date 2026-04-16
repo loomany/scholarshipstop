@@ -20,6 +20,23 @@ function isExternalHttpUrl(url: string): boolean {
   return /^https?:\/\//i.test(url);
 }
 
+/**
+ * Connect Hub stores absolute `https://scholarshiptop.com/scholarships/{slug}` URLs together
+ * with a catalog `slug`. Old logic treated any https URL as "external", so bottom cards
+ * (which only render internal slugs) stayed empty.
+ */
+function slugFromScholarshipPageUrl(urlStr: string): string | null {
+  try {
+    const u = new URL(urlStr);
+    const raw = u.pathname.replace(/\/$/, '') || '/';
+    const m = raw.match(/^\/scholarships\/(.+)$/);
+    if (!m?.[1]) return null;
+    return decodeURIComponent(m[1]).trim() || null;
+  } catch {
+    return null;
+  }
+}
+
 export function parseContentPostScholarshipLinks(
   value: Json | null | undefined
 ): ContentPostScholarshipLink[] {
@@ -32,14 +49,17 @@ export function parseContentPostScholarshipLinks(
     if (!title) continue;
 
     const url = typeof o.url === 'string' ? o.url.trim() : '';
-    const slug = typeof o.slug === 'string' ? o.slug.trim() : '';
+    let slug = typeof o.slug === 'string' ? o.slug.trim() : '';
     const reason = typeof o.reason === 'string' ? o.reason.trim() : '';
 
-    if (isExternalHttpUrl(url)) {
-      out.push({ kind: 'external', title, url, reason });
-    } else {
-      if (!slug) continue;
+    if (!slug && isExternalHttpUrl(url)) {
+      slug = slugFromScholarshipPageUrl(url) ?? '';
+    }
+
+    if (slug) {
       out.push({ kind: 'internal', title, slug, reason });
+    } else if (isExternalHttpUrl(url)) {
+      out.push({ kind: 'external', title, url, reason });
     }
 
     if (out.length >= MAX_LINKS) break;
