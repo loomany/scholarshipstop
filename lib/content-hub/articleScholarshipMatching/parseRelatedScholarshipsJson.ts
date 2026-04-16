@@ -52,6 +52,10 @@ export function parseRelatedScholarshipsJson(
  * `slug` (absolute `https://…/scholarships/{slug}` in `url` is OK — parsed as internal).
  * Optional: run `npm run content:backfill-related-from-links` after bulk imports to copy
  * legacy links into `related_scholarships` for analytics and scholarship-page cross-links.
+ *
+ * Article pages call `getRelatedScholarshipsForResourceArticle` to show up to **3** cards,
+ * enrich deadlines from the catalog, and fill remaining slots via the same matcher as
+ * `runArticleScholarshipMatchingPipeline` when Hub sends fewer than 3.
  */
 export function resolveRelatedScholarshipsForContentPost(
   relatedScholarships: Json | null | undefined,

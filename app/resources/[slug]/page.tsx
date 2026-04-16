@@ -7,7 +7,7 @@ import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import ContentHubScholarshipCta from '@/components/content-hub/ContentHubScholarshipCta';
 import ResourceGuidesContinueSection from '@/components/content-hub/resourceGuides/ResourceGuidesContinueSection';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
-import { resolveRelatedScholarshipsForContentPost } from '@/lib/content-hub/articleScholarshipMatching/parseRelatedScholarshipsJson';
+import { getRelatedScholarshipsForResourceArticle } from '@/lib/content-hub/relatedScholarshipsForResourceArticle';
 import { contentPostFaqFromJson } from '@/lib/content-hub/contentPostFaq';
 import {
   RESOURCES_PAGE_TITLE,
@@ -61,10 +61,8 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   if (!post || !post.slug?.trim()) notFound();
 
   const faq = contentPostFaqFromJson(post.faq);
-  const matchedRelatedScholarships = resolveRelatedScholarshipsForContentPost(
-    post.related_scholarships,
-    post.scholarship_links
-  );
+  const matchedRelatedScholarships =
+    await getRelatedScholarshipsForResourceArticle(post);
   const singleRelatedDetail =
     matchedRelatedScholarships.length === 1
       ? await fetchScholarshipBySlug(
