@@ -391,10 +391,28 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Site menu"
-                className="fixed left-0 top-0 z-[99] flex h-[100dvh] min-h-[100dvh] w-[min(100%,18rem)] max-w-full flex-col overflow-hidden border-r border-zinc-800 bg-zinc-950 pt-16 shadow-2xl md:pt-20 lg:hidden sm:w-[19rem]"
+                className="fixed left-0 top-0 z-[101] flex h-[100dvh] min-h-[100dvh] w-[min(100%,18rem)] max-w-full flex-col overflow-hidden border-r border-zinc-800 bg-zinc-950 shadow-2xl lg:hidden sm:w-[19rem]"
               >
+                <div className="flex shrink-0 items-center justify-between gap-2 border-b border-zinc-800 px-3 pb-3 pt-[max(0.75rem,env(safe-area-inset-top,0px))] md:px-4">
+                  <Link
+                    href="/"
+                    onClick={closeMenu}
+                    className={`${s.logo} min-w-0`}
+                    aria-label="ScholarshipTop — Home"
+                  >
+                    <Logo variant="header" />
+                  </Link>
+                  <button
+                    type="button"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-zinc-100 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 md:h-11 md:w-11"
+                    aria-label="Close menu"
+                    onClick={closeMenu}
+                  >
+                    <X className="h-6 w-6" strokeWidth={2} aria-hidden />
+                  </button>
+                </div>
             <nav
-              className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain p-3 pt-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
+              className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain p-3 pt-3 pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
               aria-label="Main"
             >
               <div className="w-full max-w-full">
