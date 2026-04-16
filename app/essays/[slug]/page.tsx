@@ -26,7 +26,7 @@ import {
   fetchPublishedEssayBySlug,
   fetchScholarshipRowsForEssay
 } from '@/lib/essays/essaysServer';
-import { fetchScholarshipBySlugOrId } from '@/lib/scholarships/supabase';
+import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 import { getURL } from '@/utils/helpers';
 
 export const revalidate = 300;
@@ -196,7 +196,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
     /^https:\/\//i.test(s.url)
   );
 
-  const relatedScholarshipRows = await fetchScholarshipRowsForEssay(essay.id, 8);
+  const relatedScholarshipRows = await fetchScholarshipRowsForEssay(essay.id, 3);
   const primaryScholarshipRow = relatedScholarshipRows[0];
   const parentScholarshipAbout =
     primaryScholarshipRow &&
@@ -220,10 +220,11 @@ export default async function EssayGuidePage({ params }: PageProps) {
       score: 0,
       reason: 'Related to this essay'
     }));
-  const essaySingleRelatedDetail =
-    relatedScholarshipItems.length === 1
-      ? await fetchScholarshipBySlugOrId(relatedScholarshipItems[0]!.slug)
-      : null;
+  const essayHubKeys = relatedScholarshipItems.map((i) => i.slug.trim());
+  const essayHubScholarships =
+    essayHubKeys.length > 0
+      ? await fetchScholarshipsBySlugsOrIdsOrdered(essayHubKeys)
+      : [];
   const relatedArticles = await fetchRelatedPublishedContentPosts('', 3);
 
   const articlePath = essayHubArticlePath(slug.trim());
@@ -413,7 +414,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
         {relatedScholarshipItems.length > 0 ? (
           <ContentHubArticleMatchedScholarships
             items={relatedScholarshipItems}
-            detailScholarship={essaySingleRelatedDetail}
+            hubScholarships={essayHubScholarships}
             sectionClassName="mt-10"
             heading="Related scholarships"
             headingId="related-scholarships-heading"

@@ -24,7 +24,7 @@ import {
   fetchPublishedContentPostBySlug,
   fetchRelatedPublishedContentPosts
 } from '@/lib/content-hub/contentPostsServer';
-import { fetchScholarshipBySlug } from '@/lib/scholarships/supabase';
+import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 
 export const revalidate = 300;
 
@@ -63,12 +63,13 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   const faq = contentPostFaqFromJson(post.faq);
   const matchedRelatedScholarships =
     await getRelatedScholarshipsForResourceArticle(post);
-  const singleRelatedDetail =
-    matchedRelatedScholarships.length === 1
-      ? await fetchScholarshipBySlug(
-          matchedRelatedScholarships[0]!.slug.trim()
-        )
-      : null;
+  const hubScholarshipKeys = matchedRelatedScholarships.map((r) =>
+    r.slug.trim()
+  );
+  const hubScholarships =
+    hubScholarshipKeys.length > 0
+      ? await fetchScholarshipsBySlugsOrIdsOrdered(hubScholarshipKeys)
+      : [];
   const bodyHtml = deduplicateQuickSummaryBlocksInHtml(
     post.body_html?.trim() ?? ''
   );
@@ -271,7 +272,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
         {matchedRelatedScholarships.length > 0 ? (
           <ContentHubArticleMatchedScholarships
             items={matchedRelatedScholarships}
-            detailScholarship={singleRelatedDetail}
+            hubScholarships={hubScholarships}
           />
         ) : (
           <ContentHubScholarshipCta

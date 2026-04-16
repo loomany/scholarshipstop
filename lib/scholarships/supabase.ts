@@ -659,6 +659,63 @@ export async function fetchScholarshipBySlugOrId(
   return null;
 }
 
+/**
+ * Listing-card payloads in the same order as `keys` (slug or scholarship id).
+ * Skips keys with no active row. Use for related-scholarship blocks on articles.
+ */
+export async function fetchScholarshipsBySlugsOrIdsOrdered(
+  keys: string[]
+): Promise<Scholarship[]> {
+  const raw = keys
+    .map((k) => k?.trim())
+    .filter((k): k is string => Boolean(k));
+  if (raw.length === 0) return [];
+
+  const slugKeys: string[] = [];
+  const idKeys: string[] = [];
+  for (const k of raw) {
+    if (UUID_PARAM_RE.test(k)) idKeys.push(k);
+    else slugKeys.push(k);
+  }
+
+  const supabase = createPublicClient();
+  const bySlug = new Map<string, Scholarship>();
+  const byId = new Map<string, Scholarship>();
+
+  if (slugKeys.length > 0) {
+    const { data, error } = await supabase
+      .from('scholarships')
+      .select(LIST_CARD_SELECT)
+      .in('slug', slugKeys)
+      .eq('is_active', true);
+
+    if (error) throw new Error(error.message);
+    for (const row of (data ?? []) as unknown as ScholarshipRow[]) {
+      const slug = row.slug?.trim();
+      if (slug) bySlug.set(slug, mapScholarshipRow(row));
+    }
+  }
+
+  if (idKeys.length > 0) {
+    const { data, error } = await supabase
+      .from('scholarships')
+      .select(LIST_CARD_SELECT)
+      .in('id', idKeys)
+      .eq('is_active', true);
+
+    if (error) throw new Error(error.message);
+    for (const row of (data ?? []) as unknown as ScholarshipRow[]) {
+      byId.set(row.id, mapScholarshipRow(row));
+    }
+  }
+
+  return raw
+    .map((k) =>
+      UUID_PARAM_RE.test(k) ? byId.get(k) : bySlug.get(k)
+    )
+    .filter((x): x is Scholarship => x != null);
+}
+
 /** Listing cards for account saved list; order follows `ids` (deduped first). */
 export async function fetchScholarshipsByIdsForListing(
   supabase: ServerSupabaseClient,

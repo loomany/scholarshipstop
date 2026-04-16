@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
@@ -26,15 +26,15 @@ import { getViewedScholarshipIds } from '@/app/scholarships/viewedScholarships';
 import { createClient } from '@/utils/supabase/client';
 
 type Props = {
-  scholarship: Scholarship;
+  scholarships: Scholarship[];
 };
 
 /**
- * Hub-style `ScholarshipCard` for the resource article “Related scholarships” block
- * when exactly one match is shown (same layout as the main catalog).
+ * Hub-style `ScholarshipCard` list for resource/essay “Related scholarships”
+ * (catalog layout + save/ignore + registration modal).
  */
-export default function ContentHubArticleMatchedScholarshipSingle({
-  scholarship
+export default function ContentHubArticleMatchedScholarshipCards({
+  scholarships
 }: Props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [savedIds, setSavedIds] = useState<string[]>([]);
@@ -151,14 +151,19 @@ export default function ContentHubArticleMatchedScholarshipSingle({
     [isAuthenticated, openRegistrationWall]
   );
 
-  if (ignoredIds.includes(scholarship.id)) {
+  const visible = useMemo(
+    () => scholarships.filter((s) => !ignoredIds.includes(s.id)),
+    [scholarships, ignoredIds]
+  );
+
+  if (visible.length === 0) {
     return (
       <div className="rounded-xl border border-zinc-200 bg-white px-5 py-8 text-left text-slate-600 shadow-sm">
         <p className="text-sm font-medium text-zinc-800">
-          This scholarship is hidden from your matches here (Not relevant).
+          These scholarships are hidden from your matches here (Not relevant).
         </p>
         <p className="mt-2 text-sm text-zinc-600">
-          Restore it from the Ignored tab in the scholarship hub.
+          Restore them from the Ignored tab in the scholarship hub.
         </p>
       </div>
     );
@@ -166,22 +171,29 @@ export default function ContentHubArticleMatchedScholarshipSingle({
 
   return (
     <>
-      <div className="relative z-0 w-full min-w-0">
-        <ScholarshipCard
-          scholarship={scholarship}
-          isUnread={!viewedIds.includes(scholarship.id)}
-          saved={savedIds.includes(scholarship.id)}
-          onToggleSave={toggleSave}
-          onHide={ignoreScholarship}
-          showCardActions
-          subscriptionLocked={false}
-          onGuestDetailNavigate={
-            !isAuthenticated
-              ? () => openRegistrationWall('card-unlock')
-              : undefined
-          }
-        />
-      </div>
+      <ul className="mt-6 list-none space-y-4">
+        {visible.map((scholarship) => (
+          <li key={scholarship.id} className="block min-w-0 w-full">
+            <div className="relative z-0 w-full min-w-0">
+              <ScholarshipCard
+                scholarship={scholarship}
+                stackedListing
+                isUnread={!viewedIds.includes(scholarship.id)}
+                saved={savedIds.includes(scholarship.id)}
+                onToggleSave={toggleSave}
+                onHide={ignoreScholarship}
+                showCardActions
+                subscriptionLocked={false}
+                onGuestDetailNavigate={
+                  !isAuthenticated
+                    ? () => openRegistrationWall('card-unlock')
+                    : undefined
+                }
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}

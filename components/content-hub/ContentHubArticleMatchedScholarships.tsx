@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import ContentHubArticleMatchedScholarshipSingle from '@/components/content-hub/ContentHubArticleMatchedScholarshipSingle';
+import ContentHubArticleMatchedScholarshipCards from '@/components/content-hub/ContentHubArticleMatchedScholarshipCards';
 import type { RelatedScholarshipStored } from '@/lib/content-hub/articleScholarshipMatching/types';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 
@@ -38,8 +38,8 @@ function formatDeadlineDisplay(raw: string | null | undefined): string {
 
 type Props = {
   items: RelatedScholarshipStored[];
-  /** When there is exactly one related item, full catalog row for hub-style card. */
-  detailScholarship?: Scholarship | null;
+  /** Full catalog rows (listing card) for hub-style cards; order follows items. */
+  hubScholarships?: Scholarship[] | null;
   /** Section root classes. */
   sectionClassName?: string;
   /** Visible `<h2>` text. */
@@ -91,7 +91,7 @@ function MatchedScholarshipGrid({ items }: { items: RelatedScholarshipStored[] }
 
 export default function ContentHubArticleMatchedScholarships({
   items,
-  detailScholarship = null,
+  hubScholarships = null,
   sectionClassName = 'mt-4 sm:mt-5',
   heading = 'Related Scholarships',
   headingId = 'content-hub-matched-scholarships-heading',
@@ -99,8 +99,7 @@ export default function ContentHubArticleMatchedScholarships({
 }: Props) {
   if (!items.length) return null;
 
-  const useHubCard =
-    items.length === 1 && detailScholarship != null;
+  const useHubCards = hubScholarships != null && hubScholarships.length > 0;
 
   return (
     <section
@@ -131,12 +130,10 @@ export default function ContentHubArticleMatchedScholarships({
         — filter by deadline, category, and more.
       </p>
 
-      {useHubCard ? (
-        <div className="mt-6">
-          <ContentHubArticleMatchedScholarshipSingle
-            scholarship={detailScholarship}
-          />
-        </div>
+      {useHubCards ? (
+        <ContentHubArticleMatchedScholarshipCards
+          scholarships={hubScholarships}
+        />
       ) : (
         <MatchedScholarshipGrid items={items} />
       )}
