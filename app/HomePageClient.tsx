@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 
 import { AiMentorHowItWorksSection } from '@/components/essay/AiMentorHowItWorksSection';
+import { FeaturedBrandScholarshipsSection } from '@/components/home/FeaturedBrandScholarshipsSection';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import ScholarshipPreviewList from '@/components/scholarships/ScholarshipPreviewList';
 
@@ -130,6 +131,15 @@ export default function HomePageClient() {
               </HomePrimaryCtaClient>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Featured brand scholarships — trust strip */}
+      <section
+        className={`border-b border-gray-100 bg-gray-50/80 pt-10 pb-12 sm:pt-12 sm:pb-14 lg:pb-16 ${homeSectionPadX}`}
+      >
+        <div className={container}>
+          <FeaturedBrandScholarshipsSection />
         </div>
       </section>
 

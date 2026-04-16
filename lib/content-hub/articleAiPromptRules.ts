@@ -1,4 +1,10 @@
 /**
+ * Cover images for `content_posts` (Resources / Content Hub listing): use **FLUX.1 [dev]** only —
+ * `fal-ai/flux/dev` via `tryResolveResourceCoverImageUrl` in `resourceCoverFromFlux.ts`.
+ * Do not use Nano Banana for resource covers. Essay Hub heroes are also FLUX-only (no env switch).
+ */
+
+/**
  * Append this block to your article-generation system prompt (Codex / OpenAI).
  * AI must not emit links; backend `runArticleScholarshipMatchingPipeline` owns URLs.
  */

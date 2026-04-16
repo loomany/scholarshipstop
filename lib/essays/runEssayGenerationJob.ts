@@ -16,6 +16,12 @@ import {
   heroSceneVariantIndex
 } from '@/lib/essays/essayHeroSceneVariants';
 import { ingestFalHeroImageToSupabase } from '@/lib/essays/essayHeroIngest';
+import {
+  falMaxAttempts,
+  runFalImageAttemptLoop
+} from '@/lib/fal/falAttemptRetry';
+import type { FalImageAttemptResult } from '@/lib/fal/falAttemptTypes';
+import { postFluxDevImageOnce } from '@/lib/fal/postFluxDevImageOnce';
 
 export function buildGrantCategoryHaystack(input: {
   category: string | null;
@@ -106,243 +112,29 @@ type GeneratedPayload = {
   candidate_sources: EssaySourceItem[];
 };
 
-/** Always returns at most one URL (first asset only) — one hero per essay. */
-function extractImageUrlFromFalJson(data: unknown, depth = 0): string | null {
-  if (depth > 10 || !data || typeof data !== 'object') return null;
-  const d = data as Record<string, unknown>;
-
-  const asHttpUrl = (u: unknown): string | null =>
-    typeof u === 'string' && u.startsWith('http') ? u : null;
-
-  if (asHttpUrl(d.url)) return asHttpUrl(d.url);
-
-  /** Some fal models return a single image object (not array) under `output` / `image`. */
-  const maybeSingle =
-    d.output && typeof d.output === 'object' && !Array.isArray(d.output)
-      ? d.output
-      : d.image && typeof d.image === 'object' && !Array.isArray(d.image)
-        ? d.image
-        : null;
-  if (maybeSingle) {
-    const u = asHttpUrl((maybeSingle as Record<string, unknown>).url);
-    if (u) return u;
-  }
-  if (typeof d.output === 'string' && d.output.startsWith('http')) return d.output;
-
-  const images =
-    d.images ??
-    (Array.isArray(d.image) ? d.image : null) ??
-    (Array.isArray(d.output) ? d.output : null);
-  if (Array.isArray(images) && images.length > 0) {
-    const first = images[0];
-    if (typeof first === 'string' && first.startsWith('http')) return first;
-    if (first && typeof first === 'object') {
-      const img = first as Record<string, unknown>;
-      const u = img.url ?? img.image_url ?? img.file_url ?? img.content;
-      if (asHttpUrl(u)) return u as string;
-    }
-  }
-
-  for (const nestKey of ['data', 'result', 'response', 'output'] as const) {
-    const inner = d[nestKey];
-    if (inner && typeof inner === 'object') {
-      const nested = extractImageUrlFromFalJson(inner, depth + 1);
-      if (nested) return nested;
-    }
-  }
-  return null;
-}
-
-type FalHeroAttemptResult = {
-  url: string | null;
-  httpStatus: number;
-  /** Short snippet for logs (no secrets). */
-  detail: string;
-};
+type FalHeroAttemptResult = FalImageAttemptResult;
 
 /**
- * Essay Hub hero image backend on fal.run.
- * Default: **FLUX.1 [dev]** (16:9 JPEG, matches article `aspect-[16/9]`).
- * Set `ESSAY_HUB_HERO_FAL_BACKEND=nano` for Nano Banana 2 (9:16, 1K).
+ * Essay Hub hero: **always** FLUX.1 [dev] (`postFluxDevImageOnce` → `fal-ai/flux/dev`, 16:9 JPEG).
+ * No alternate backend — env `ESSAY_HUB_HERO_FAL_BACKEND` is ignored.
  */
-function essayHubHeroFalBackend(): 'flux' | 'nano' {
-  const v = process.env.ESSAY_HUB_HERO_FAL_BACKEND?.trim().toLowerCase();
-  if (v === 'nano' || v === 'nano-banana' || v === 'nano-banana-2') {
-    return 'nano';
-  }
-  return 'flux';
-}
-
-const ESSAY_HUB_FAL_NANO_MODEL = 'fal-ai/nano-banana-2' as const;
-const ESSAY_HUB_FAL_FLUX_DEV_MODEL = 'fal-ai/flux/dev' as const;
-
-/** Portrait hero (`aspect_ratio` enum for nano-banana-2). */
-const DEFAULT_FAL_IMAGE_ASPECT_RATIO = '9:16';
-
-function buildNanoBanana2HeroBody(prompt: string): Record<string, unknown> {
-  const aspect =
-    process.env.FAL_IMAGE_ASPECT_RATIO?.trim() || DEFAULT_FAL_IMAGE_ASPECT_RATIO;
-  return {
-    prompt,
-    /** Strictly one asset per essay (billing + UI). */
-    num_images: 1,
-    aspect_ratio: aspect,
-    /** Standard tier; avoid 2K/4K multiplier unless env overrides resolution. */
-    resolution: process.env.FAL_IMAGE_RESOLUTION?.trim() || '1K',
-    /** Ignore any “generate multiple” wording inside the prompt. */
-    limit_generations: true,
-    enable_web_search: false
-  };
-}
-
-function buildFluxDevHeroBody(prompt: string): Record<string, unknown> {
-  /**
-   * Default 704×396 (16:9) ≈0.28 MP — cheaper than 768×432 (~0.33 MP) on per-MP billing, still sharp enough
-   * for Essay Hub after sharp→WebP. Cheaper preset: 640×360; sharper: 768×432 — set FLUX_HERO_WIDTH/HEIGHT.
-   */
-  const w = Math.max(
-    256,
-    Math.min(4096, Number.parseInt(process.env.FLUX_HERO_WIDTH?.trim() || '704', 10) || 704)
-  );
-  const h = Math.max(
-    256,
-    Math.min(4096, Number.parseInt(process.env.FLUX_HERO_HEIGHT?.trim() || '396', 10) || 396)
-  );
-  const steps = Math.max(
-    12,
-    Math.min(50, Number.parseInt(process.env.FLUX_HERO_INFERENCE_STEPS?.trim() || '28', 10) || 28)
-  );
-  return {
-    prompt,
-    image_size: { width: w, height: h },
-    num_inference_steps: steps,
-    guidance_scale: 3.5,
-    num_images: 1,
-    /** When the checker misfires, FLUX can return an empty `images` array → silent fallback to gradient. */
-    enable_safety_checker:
-      process.env.FLUX_HERO_DISABLE_SAFETY_CHECKER?.trim() === '1' ? false : true,
-    output_format: 'jpeg'
-  };
-}
-
-/** Long enough for FLUX on a cold queue; override via env if your host has a shorter limit. */
-function falHeroRequestTimeoutMs(): number {
-  const n = Number.parseInt(process.env.FAL_HERO_REQUEST_TIMEOUT_MS?.trim() || '', 10);
-  return Number.isFinite(n) && n >= 30_000 ? Math.min(n, 300_000) : 120_000;
-}
-
-function falHeroMaxAttempts(): number {
-  const n = Number.parseInt(process.env.FAL_HERO_MAX_ATTEMPTS?.trim() || '3', 10);
-  return Math.max(1, Math.min(5, Number.isFinite(n) ? n : 3));
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((r) => setTimeout(r, ms));
-}
-
-function shouldRetryFalAttempt(
-  attemptIndex: number,
-  maxAttempts: number,
-  r: FalHeroAttemptResult
-): boolean {
-  if (attemptIndex >= maxAttempts - 1) return false;
-  if (r.detail === 'FAL_KEY missing') return false;
-  if (r.url?.startsWith('http')) return false;
-
-  const s = r.httpStatus;
-  if (s === 401 || s === 402 || s === 403 || s === 400) return false;
-
-  if (s === 429 || s === 408 || s === 502 || s === 503 || s === 504) return true;
-  if (s === 0) return true;
-  if (s === 200 && r.detail.includes('no image URL')) return true;
-
-  return false;
-}
-
-async function falGenerateHeroImageOnce(fullImagePrompt: string): Promise<FalHeroAttemptResult> {
+async function falGenerateHeroImageOnce(
+  fullImagePrompt: string
+): Promise<FalHeroAttemptResult> {
   const key = process.env.FAL_KEY?.trim();
   if (!key) {
     return { url: null, httpStatus: 0, detail: 'FAL_KEY missing' };
   }
-
-  const backend = essayHubHeroFalBackend();
-  const model =
-    backend === 'nano' ? ESSAY_HUB_FAL_NANO_MODEL : ESSAY_HUB_FAL_FLUX_DEV_MODEL;
-  const endpoint = `https://fal.run/${model}`;
-
-  const rawPrompt = fullImagePrompt.trim();
-  const prompt =
-    backend === 'nano' ? rawPrompt.slice(0, 3800) : rawPrompt.slice(0, 8000);
-  const falBody =
-    backend === 'nano' ? buildNanoBanana2HeroBody(prompt) : buildFluxDevHeroBody(prompt);
-
-  try {
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        Authorization: `Key ${key}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(falBody),
-      signal: AbortSignal.timeout(falHeroRequestTimeoutMs())
-    });
-    const json = (await res.json().catch(() => null)) as unknown;
-    const raw =
-      json && typeof json === 'object'
-        ? JSON.stringify(json).slice(0, 900)
-        : String(json);
-    if (!res.ok) {
-      return {
-        url: null,
-        httpStatus: res.status,
-        detail: `HTTP ${res.status} ${raw}`
-      };
-    }
-    const url = extractImageUrlFromFalJson(json);
-    if (!url) {
-      return {
-        url: null,
-        httpStatus: res.status,
-        detail: `200 but no image URL in JSON: ${raw}`
-      };
-    }
-    return { url, httpStatus: res.status, detail: 'ok' };
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    return { url: null, httpStatus: 0, detail: `fetch error: ${msg}` };
-  }
+  return postFluxDevImageOnce(fullImagePrompt);
 }
 
 async function falGenerateHeroImageWithRetries(
   fullImagePrompt: string
 ): Promise<FalHeroAttemptResult> {
-  const maxAttempts = falHeroMaxAttempts();
-  let last: FalHeroAttemptResult = {
-    url: null,
-    httpStatus: 0,
-    detail: 'no attempts'
-  };
-
-  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-    last = await falGenerateHeroImageOnce(fullImagePrompt);
-    if (last.url?.startsWith('http')) return last;
-
-    if (!shouldRetryFalAttempt(attempt, maxAttempts, last)) break;
-
-    const backoff = 1200 * 2 ** attempt + Math.floor(Math.random() * 400);
-    console.error(
-      `[essay-hero] FAL attempt ${attempt + 1}/${maxAttempts} failed; retry in ${backoff}ms`,
-      { httpStatus: last.httpStatus, detail: last.detail.slice(0, 500) }
-    );
-    await sleep(backoff);
-  }
-
-  console.error('[essay-hero] FAL gave up after retries', {
-    attempts: maxAttempts,
-    httpStatus: last.httpStatus,
-    detail: last.detail.slice(0, 800)
-  });
-  return last;
+  return runFalImageAttemptLoop(
+    () => falGenerateHeroImageOnce(fullImagePrompt),
+    '[essay-hero]'
+  );
 }
 
 export type FalHeroResolveMeta = {
@@ -395,7 +187,7 @@ export async function resolveHeroImageUrl(fullImagePrompt: string): Promise<stri
     return r.url;
   }
 
-  throw new Error(`Hero image generation failed after ${falHeroMaxAttempts()} attempt(s). ${r.detail}`);
+  throw new Error(`Hero image generation failed after ${falMaxAttempts()} attempt(s). ${r.detail}`);
 }
 
 async function ensureUniqueEssaySlug(

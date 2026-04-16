@@ -1,7 +1,7 @@
 /**
  * Regenerates hero images for the first N essays listed in
  * scripts/gradient-fallback-grants.output.json (gradient placeholder heroes).
- * Uses production pipeline: tryResolveHeroImageUrl (FLUX when ESSAY_HUB_HERO_FAL_BACKEND unset)
+ * Uses production pipeline: tryResolveHeroImageUrl (always FLUX for Essay Hub)
  * + ingestEssayHeroFromFalOrFallback.
  *
  *   npx dotenv-cli -e .env.local -- npx tsx scripts/backfill-flux-10-gradient-essays.ts

@@ -1,0 +1,45 @@
+name: Weekly free digest email
+
+on:
+  schedule:
+    # Thursday 15:00 UTC (~10–11 AM US Eastern, DST-dependent)
+    - cron: '0 15 * * 4'
+  workflow_dispatch:
+
+jobs:
+  weekly-free-digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Run weekly free digest
+        env:
+          SITE_URL: https://scholarshiptop.com
+          WEEKLY_FREE_DIGEST_CRON_SECRET: ${{ secrets.WEEKLY_FREE_DIGEST_CRON_SECRET }}
+          GRANT_NOTIFICATION_CRON_SECRET: ${{ secrets.GRANT_NOTIFICATION_CRON_SECRET }}
+        run: |
+          SECRET="${WEEKLY_FREE_DIGEST_CRON_SECRET:-$GRANT_NOTIFICATION_CRON_SECRET}"
+          if [ -z "$SECRET" ]; then
+            echo "Missing secret: set WEEKLY_FREE_DIGEST_CRON_SECRET or GRANT_NOTIFICATION_CRON_SECRET" >&2
+            exit 1
+          fi
+
+          response_file="$(mktemp)"
+          http_code="$(
+            curl \
+              --silent \
+              --show-error \
+              --output "$response_file" \
+              --write-out '%{http_code}' \
+              --request POST \
+              --url "${SITE_URL}/api/internal/weekly-free-digest/run" \
+              --header "Authorization: Bearer ${SECRET}" \
+              --header "Content-Type: application/json" \
+              --data '{}'
+          )"
+
+          cat "$response_file"
+
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+            echo "Weekly free digest failed with HTTP ${http_code}" >&2
+            exit 1
+          fi

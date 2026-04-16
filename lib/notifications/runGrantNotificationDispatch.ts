@@ -27,7 +27,7 @@ import { sendScholarshipTelegramCardToChat } from '@/lib/telegram/scholarshipTel
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-type ProfileRow = Database['public']['Tables']['profiles']['Row'];
+export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 type ChannelId = 'best' | 'saved_filters' | 'easy_apply' | 'hot_deadlines';
 
 const LOOKBACK_HOURS = Number(
@@ -111,7 +111,7 @@ async function recordDelivery(
   }
 }
 
-async function profileMatchesBest(
+export async function profileMatchesBest(
   admin: SupabaseClient<Database>,
   profile: ProfileRow,
   bounds: Awaited<ReturnType<typeof fetchGlobalFilterBounds>>,

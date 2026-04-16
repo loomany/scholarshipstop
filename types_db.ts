@@ -54,6 +54,41 @@ export interface Database {
         }
         Relationships: []
       },
+      weekly_free_digest_sent: {
+        Row: {
+          id: string
+          user_id: string
+          week_start_monday_et: string
+          match_count: number
+          grant_ids: string[]
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          week_start_monday_et: string
+          match_count?: number
+          grant_ids?: string[]
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          week_start_monday_et?: string
+          match_count?: number
+          grant_ids?: string[]
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weekly_free_digest_sent_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      },
       grant_notification_deliveries: {
         Row: {
           id: string
@@ -572,6 +607,7 @@ export interface Database {
           created_at: string
           date_of_birth: string | null
           email_verified: boolean
+          email_weekly_free_digest: boolean
           email_notify_best_matches: boolean
           email_notify_easy_apply: boolean
           email_notify_hot_deadlines: boolean
@@ -611,6 +647,7 @@ export interface Database {
           created_at?: string
           date_of_birth?: string | null
           email_verified?: boolean
+          email_weekly_free_digest?: boolean
           email_notify_best_matches?: boolean
           email_notify_easy_apply?: boolean
           email_notify_hot_deadlines?: boolean
@@ -650,6 +687,7 @@ export interface Database {
           created_at?: string
           date_of_birth?: string | null
           email_verified?: boolean
+          email_weekly_free_digest?: boolean
           email_notify_best_matches?: boolean
           email_notify_easy_apply?: boolean
           email_notify_hot_deadlines?: boolean
