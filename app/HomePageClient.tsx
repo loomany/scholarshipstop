@@ -92,7 +92,7 @@ export default function HomePageClient() {
     <div className="bg-white text-gray-900 antialiased">
       {/* 1. Hero */}
       <section
-        className={`border-b border-gray-100 bg-white pt-10 pb-6 sm:pt-12 sm:pb-7 lg:pt-14 lg:pb-8 xl:pb-8 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-white pt-10 pb-4 sm:pt-12 sm:pb-5 lg:pt-14 lg:pb-6 xl:pb-6 ${homeSectionPadX}`}
       >
         <div className={`${container} max-w-4xl text-center`}>
           <h1 className="text-pretty text-[clamp(1.8125rem,5.25vw+0.8rem,2.25rem)] font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 animate-home-fade-up sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
@@ -136,7 +136,7 @@ export default function HomePageClient() {
 
       {/* Featured brand scholarships — trust strip */}
       <section
-        className={`border-b border-gray-100 bg-gray-50/80 pt-10 pb-12 sm:pt-12 sm:pb-14 lg:pb-16 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-gray-50/80 pt-6 pb-5 sm:pt-8 sm:pb-6 lg:pb-8 ${homeSectionPadX}`}
       >
         <div className={container}>
           <FeaturedBrandScholarshipsSection />
@@ -145,7 +145,7 @@ export default function HomePageClient() {
 
       {/* 1b. AI Essay Mentor — how it works (same block as /essay) */}
       <section
-        className={`border-b border-gray-100 bg-white pt-8 pb-10 sm:pt-10 sm:pb-12 lg:pb-14 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-white pt-2 pb-8 sm:pt-3 sm:pb-10 lg:pb-12 ${homeSectionPadX}`}
       >
         <div className={container}>
           <AiMentorHowItWorksSection className="mt-0" />

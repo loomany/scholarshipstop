@@ -1,19 +1,25 @@
 'use client';
 
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import clsx from 'clsx';
 
 import {
-  FEATURED_BRAND_SCHOLARSHIPS_ALL,
+  FEATURED_BRAND_SCHOLARSHIPS_HOME,
+  featuredScholarshipHasSpecificUsdAmount,
   type FeaturedBrandScholarship
 } from '@/lib/home/featuredBrandScholarshipsData';
+import {
+  brandDomainToLogoFileKey,
+  featuredHomeLogoUiScale,
+  homeFeaturedDomainLogoPublicPath
+} from '@/lib/home/featuredBrandHomeLogos';
 
 export type { FeaturedBrandScholarship };
 
-/** @deprecated Use FEATURED_BRAND_SCHOLARSHIPS_ALL — kept for imports */
-export const FEATURED_BRAND_SCHOLARSHIPS_MOCK = FEATURED_BRAND_SCHOLARSHIPS_ALL.slice(0, 3);
+/** @deprecated Use FEATURED_BRAND_SCHOLARSHIPS_HOME — kept for imports */
+export const FEATURED_BRAND_SCHOLARSHIPS_MOCK = FEATURED_BRAND_SCHOLARSHIPS_HOME.slice(0, 3);
 
 const h2Class =
   'text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.35rem] lg:leading-[1.15] xl:text-[2.5rem]';
@@ -27,14 +33,20 @@ type FeaturedBrandScholarshipsSectionProps = {
 
 export function FeaturedBrandScholarshipsSection({
   className,
-  items = FEATURED_BRAND_SCHOLARSHIPS_ALL
+  items = FEATURED_BRAND_SCHOLARSHIPS_HOME
 }: FeaturedBrandScholarshipsSectionProps) {
   const scrollerRef = useRef<HTMLUListElement>(null);
+  /** Fal WebP missing or failed → Unavatar */
+  const [logoFallback, setLogoFallback] = useState<Record<string, boolean>>({});
 
   const scrollByDir = useCallback((dir: -1 | 1) => {
     const el = scrollerRef.current;
     if (!el) return;
     el.scrollBy({ left: dir * SCROLL_STEP_PX, behavior: 'smooth' });
+  }, []);
+
+  const markLogoFallback = useCallback((fileKey: string) => {
+    setLogoFallback((prev) => ({ ...prev, [fileKey]: true }));
   }, []);
 
   return (
@@ -52,7 +64,7 @@ export function FeaturedBrandScholarshipsSection({
         </p>
       </div>
 
-      <div className="relative mt-10 sm:mt-12">
+      <div className="relative mt-6 sm:mt-8">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-gray-50/80 to-transparent sm:w-14" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-gray-50/80 to-transparent sm:w-14" />
 
@@ -76,58 +88,81 @@ export function FeaturedBrandScholarshipsSection({
         <ul
           ref={scrollerRef}
           className={clsx(
-            'flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-3 pt-1',
+            'flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto scroll-smooth pb-3 pt-1',
             '[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
             'md:px-12'
           )}
         >
           {items.map((item, index) => {
-            const logoSrc = `https://unavatar.io/${item.brandDomain}`;
+            const fileKey = brandDomainToLogoFileKey(item.brandDomain);
+            const generatedSrc = homeFeaturedDomainLogoPublicPath(item.brandDomain);
+            const unavatarSrc = `https://unavatar.io/${item.brandDomain}`;
+            const useUnavatar = Boolean(logoFallback[fileKey]);
+            const logoSrc = useUnavatar ? unavatarSrc : generatedSrc;
             const key = `${item.href}-${index}`;
+            const logoUiScale = featuredHomeLogoUiScale(item.brandDomain);
+
             return (
               <li
                 key={key}
-                className="h-full w-[min(100vw-2.5rem,20rem)] shrink-0 snap-start sm:w-80"
+                className="flex w-[min(100vw-2.5rem,20rem)] shrink-0 snap-start sm:w-80"
               >
-                <article className="group relative flex h-full min-h-[320px] flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition duration-300 ease-out hover:-translate-y-1 hover:shadow-lg sm:min-h-[340px] sm:p-7">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-gray-100">
-                      {/* eslint-disable-next-line @next/next/no-img-element -- Unavatar */}
+                <Link
+                  href={item.href}
+                  className="group flex h-full min-h-[300px] w-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white pb-6 shadow-sm outline-none transition duration-300 ease-out hover:-translate-y-1 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-orange-500/35 sm:min-h-[320px] sm:pb-7"
+                >
+                  <div className="flex shrink-0 items-start justify-between gap-3">
+                    <div className="box-border grid h-[5.25rem] w-[5.25rem] shrink-0 place-items-center overflow-hidden rounded-br-2xl rounded-tl-2xl border-[3px] border-[#FF7A1A] bg-white p-1.5 sm:h-[5.75rem] sm:w-[5.75rem] sm:p-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- local WebP + Unavatar fallback */}
                       <img
                         src={logoSrc}
                         alt={`${item.brandName} logo`}
-                        width={48}
-                        height={48}
-                        className="h-12 w-12 bg-white object-contain p-1.5"
+                        width={96}
+                        height={96}
+                        className="h-full w-full min-h-0 min-w-0 origin-center object-contain"
+                        style={{ transform: `scale(${logoUiScale})` }}
                         loading={index < 4 ? 'eager' : 'lazy'}
                         decoding="async"
+                        onError={() => {
+                          if (!useUnavatar) markLogoFallback(fileKey);
+                        }}
                       />
                     </div>
-                    <span className="shrink-0 rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-sky-800">
+                    <span className="mr-6 mt-6 shrink-0 rounded-full bg-[#FFF4ED] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-500 sm:mr-7 sm:mt-7">
                       Premium
                     </span>
                   </div>
 
-                  <h3 className="mt-5 text-left text-lg font-bold leading-snug tracking-tight text-gray-900">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 line-clamp-3 text-left text-sm leading-relaxed text-gray-600 sm:text-[0.9375rem]">
-                    {item.description}
-                  </p>
-
-                  <div className="mt-auto pt-6">
-                    <p className="text-left text-lg font-bold tabular-nums text-gray-900">
-                      {item.amount}
+                  <div className="flex min-h-0 flex-1 flex-col px-6 sm:px-7">
+                    <h3 className="mt-5 text-left text-lg font-bold leading-snug tracking-tight text-gray-900 group-hover:text-gray-950">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 line-clamp-3 text-left text-sm leading-relaxed text-gray-600 sm:text-[0.9375rem]">
+                      {item.description}
                     </p>
-                    <Link
-                      href={item.href}
-                      className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-900 transition-all duration-200 hover:gap-2 hover:text-blue-600"
-                    >
-                      View Details -&gt;
-                      <ArrowRight className="h-4 w-4 shrink-0" strokeWidth={2.25} aria-hidden />
-                    </Link>
                   </div>
-                </article>
+
+                  <div
+                    className={clsx(
+                      'mt-auto flex items-baseline gap-3 px-6 pt-6 sm:px-7',
+                      featuredScholarshipHasSpecificUsdAmount(item.amount) && 'justify-between'
+                    )}
+                  >
+                    <span className="inline-flex min-w-0 items-center gap-1.5 text-sm font-semibold text-gray-900 transition-colors duration-200 group-hover:gap-2 group-hover:text-[#FF7A1A]">
+                      View Details
+                      <ArrowRight
+                        className="h-4 w-4 shrink-0 text-current"
+                        strokeWidth={2.25}
+                        aria-hidden
+                      />
+                    </span>
+                    {featuredScholarshipHasSpecificUsdAmount(item.amount) ? (
+                      <span className="shrink-0 text-right text-lg font-bold tabular-nums tracking-tight text-gray-900">
+                        {item.amount}
+                      </span>
+                    ) : null}
+                  </div>
+                </Link>
               </li>
             );
           })}

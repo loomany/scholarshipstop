@@ -1,5 +1,5 @@
 import { BookOpen, Check, Heart, Layers, type LucideIcon } from 'lucide-react';
-import clsx from 'clsx';
+import { cn } from '@/utils/cn';
 
 import { AiMentorCtaLink } from '@/components/essay/AiMentorCtaLink';
 import { AiMentorHowItWorksVideo } from '@/components/essay/AiMentorHowItWorksVideo';
@@ -50,9 +50,9 @@ export function AiMentorHowItWorksSection({
     <div
       role="region"
       aria-labelledby="ai-mentor-how-it-works-heading"
-      className={clsx('mt-10 sm:mt-12', className)}
+      className={cn('mt-10 sm:mt-12', className)}
     >
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-center lg:gap-12 xl:gap-16">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start lg:gap-12 xl:gap-16">
         {/* Video + CTA first in DOM → stacked on mobile */}
         <div className="flex min-w-0 flex-col gap-3 sm:gap-3.5">
           <AiMentorHowItWorksVideo />

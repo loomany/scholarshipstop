@@ -1,12 +1,69 @@
 export type FeaturedBrandScholarship = {
   brandName: string;
-  /** Domain for Unavatar: https://unavatar.io/[domain] */
+  /** Domain for Unavatar fallback: https://unavatar.io/[domain] */
   brandDomain: string;
   title: string;
   description: string;
   amount: string;
   href: string;
 };
+
+/** True when `amount` looks like a concrete USD figure (e.g. `$5,000`), not "Varies". */
+export function featuredScholarshipHasSpecificUsdAmount(amount: string): boolean {
+  return /\$\s*[\d]/.test(amount.trim());
+}
+
+function parseUsdAmountRank(amount: string): number {
+  const m = amount.match(/\$\s*([\d,]+)/);
+  if (!m) return 0;
+  return parseInt(m[1].replace(/,/g, ''), 10) || 0;
+}
+
+/**
+ * Reorder so adjacent cards rarely share the same brand (greedy round-robin by domain).
+ * Deterministic: stable within each brand by `href`.
+ */
+export function interleaveFeaturedBrandsNoAdjacent(
+  items: FeaturedBrandScholarship[]
+): FeaturedBrandScholarship[] {
+  if (items.length <= 1) return [...items];
+
+  const byDomain = new Map<string, FeaturedBrandScholarship[]>();
+  for (const row of items) {
+    const d = row.brandDomain;
+    if (!byDomain.has(d)) byDomain.set(d, []);
+    byDomain.get(d)!.push(row);
+  }
+  for (const [, list] of byDomain) {
+    list.sort((a, b) => a.href.localeCompare(b.href));
+  }
+
+  const domainKeys = [...byDomain.keys()].sort((a, b) => a.localeCompare(b));
+  const total = items.length;
+  const out: FeaturedBrandScholarship[] = [];
+  let lastDomain: string | null = null;
+
+  while (out.length < total) {
+    const candidates = domainKeys.filter((k) => byDomain.get(k)!.length > 0);
+    const pickable = candidates.filter((k) => k !== lastDomain);
+    const pool = pickable.length > 0 ? pickable : candidates;
+    let best = pool[0]!;
+    let bestSize = byDomain.get(best)!.length;
+    for (let i = 1; i < pool.length; i++) {
+      const k = pool[i]!;
+      const sz = byDomain.get(k)!.length;
+      if (sz > bestSize) {
+        best = k;
+        bestSize = sz;
+      }
+    }
+    const q = byDomain.get(best)!;
+    out.push(q.shift()!);
+    lastDomain = best;
+  }
+
+  return out;
+}
 
 /**
  * Curated brand-sponsored scholarships (catalog slugs).
@@ -347,3 +404,17 @@ export const FEATURED_BRAND_SCHOLARSHIPS_ALL: FeaturedBrandScholarship[] = [
     href: '/scholarships'
   }
 ];
+
+/**
+ * Homepage carousel: rows with a **concrete USD amount** first (largest first), then the rest
+ * ordered so the **same brand is not placed back-to-back** when avoidable.
+ */
+export const FEATURED_BRAND_SCHOLARSHIPS_HOME: FeaturedBrandScholarship[] = (() => {
+  const all = FEATURED_BRAND_SCHOLARSHIPS_ALL;
+  const withUsd = all.filter((r) => featuredScholarshipHasSpecificUsdAmount(r.amount));
+  const rest = all.filter((r) => !featuredScholarshipHasSpecificUsdAmount(r.amount));
+  // Highest $ first → Generation Google ($10k), then AMD ($5k); same order on mobile and desktop.
+  withUsd.sort((a, b) => parseUsdAmountRank(b.amount) - parseUsdAmountRank(a.amount));
+  return [...withUsd, ...interleaveFeaturedBrandsNoAdjacent(rest)];
+})();
+
