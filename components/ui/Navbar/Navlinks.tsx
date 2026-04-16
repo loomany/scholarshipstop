@@ -7,8 +7,7 @@ import {
   useEffect,
   useId,
   useMemo,
-  useState,
-  type CSSProperties
+  useState
 } from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
@@ -383,7 +382,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
             <>
               <button
                 type="button"
-                className="fixed inset-0 top-16 z-[98] bg-black/65 backdrop-blur-[2px] lg:hidden md:top-20"
+                className="fixed inset-0 z-[98] bg-black/65 backdrop-blur-[2px] lg:hidden"
                 aria-label="Close menu"
                 onClick={closeMenu}
               />
@@ -392,14 +391,12 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Site menu"
-                className="fixed left-0 top-16 z-[99] flex h-[calc(100dvh-4rem)] w-[min(100%,18rem)] max-w-full flex-col overflow-y-auto border-r border-zinc-800 bg-zinc-950 shadow-2xl lg:hidden md:top-20 md:h-[calc(100dvh-5rem)] sm:w-[19rem]"
-                style={
-                  {
-                    paddingTop: 'env(safe-area-inset-top, 0px)'
-                  } satisfies CSSProperties
-                }
+                className="fixed left-0 top-0 z-[99] flex h-[100dvh] min-h-[100dvh] w-[min(100%,18rem)] max-w-full flex-col overflow-hidden border-r border-zinc-800 bg-zinc-950 pt-16 shadow-2xl md:pt-20 lg:hidden sm:w-[19rem]"
               >
-            <nav className="flex flex-col gap-0.5 p-3 pt-4" aria-label="Main">
+            <nav
+              className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain p-3 pt-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
+              aria-label="Main"
+            >
               <div className="w-full max-w-full">
                 <div
                   className="flex w-full min-w-0 items-stretch overflow-hidden rounded-lg"
