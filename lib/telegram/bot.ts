@@ -828,6 +828,15 @@ export async function notifyEnvTelegramAdminsPlainText(
   }
 }
 
+/** Successful URL Inspection (indexed) — category `seo` (admin toggles). */
+export async function notifyAdminsScholarshipIndexed(payload: {
+  title: string;
+  url: string;
+}) {
+  const text = `🚀 Google проиндексировал страницу!\n\n${payload.title}\n${payload.url}`;
+  await notifyEnvTelegramAdminsPlainText(text, 'seo');
+}
+
 /** Admin-only alert when a new row appears in `scholarships` (link uses slug when present). */
 export async function notifyEnvTelegramAdminsNewScholarship(row: {
   id: string;

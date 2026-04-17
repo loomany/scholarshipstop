@@ -1065,6 +1065,8 @@ export interface Database {
           applicants_count_is_estimated: boolean | null
           /** Indexing pipeline: pending → submitted (after Indexing API ping) → indexed (after URL Inspection). */
           indexing_status: string
+          /** Last Google URL Inspection attempt (see scholarshipIndexInspectionWorker). */
+          last_index_check: string | null
         }
         Insert: {
           id?: string
@@ -1197,6 +1199,7 @@ export interface Database {
           listing_completeness_bucket?: string | null
           applicants_count_is_estimated?: boolean | null
           indexing_status?: string
+          last_index_check?: string | null
         }
         Update: {
           id?: string
@@ -1329,6 +1332,7 @@ export interface Database {
           listing_completeness_bucket?: string | null
           applicants_count_is_estimated?: boolean | null
           indexing_status?: string
+          last_index_check?: string | null
         }
         Relationships: []
       }

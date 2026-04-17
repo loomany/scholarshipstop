@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Run indexing status scan
+      - name: Run URL Inspection workers (pending + submitted)
         env:
           SITE_URL: https://scholarshiptop.com
           GOOGLE_INDEXING_SECRET: ${{ secrets.GOOGLE_INDEXING_SECRET }}
@@ -21,22 +21,33 @@ jobs:
             exit 1
           fi
 
-          response_file="$(mktemp)"
-          http_code="$(
-            curl \
-              --silent \
-              --show-error \
-              --output "$response_file" \
-              --write-out '%{http_code}' \
-              --request POST \
-              --url "${SITE_URL}/api/internal/seo/scan-indexing" \
-              --header "Authorization: Bearer ${GOOGLE_INDEXING_SECRET}" \
-              --header "Content-Type: application/json"
-          )"
+          run_one() {
+            local path="$1"
+            local label="$2"
+            local response_file
+            response_file="$(mktemp)"
+            local http_code
+            http_code="$(
+              curl \
+                --silent \
+                --show-error \
+                --output "$response_file" \
+                --write-out '%{http_code}' \
+                --request POST \
+                --url "${SITE_URL}${path}" \
+                --header "Authorization: Bearer ${GOOGLE_INDEXING_SECRET}" \
+                --header "Content-Type: application/json"
+            )"
+            echo "--- ${label} ---"
+            cat "$response_file"
+            echo ""
+            if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+              echo "${label} failed with HTTP ${http_code}" >&2
+              rm -f "$response_file"
+              exit 1
+            fi
+            rm -f "$response_file"
+          }
 
-          cat "$response_file"
-
-          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
-            echo "scan-indexing failed with HTTP ${http_code}" >&2
-            exit 1
-          fi
+          run_one "/api/internal/seo/check-index-worker" "check-index-worker (pending)"
+          run_one "/api/internal/seo/scan-indexing" "scan-indexing (submitted)"
