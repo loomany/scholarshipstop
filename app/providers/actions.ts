@@ -8,7 +8,10 @@ import {
   fetchProviderSourceUrlsBySlug
 } from '@/lib/providers/providerOfficialUrl';
 import { isProvidersBulkEnrichUiEnabled } from '@/lib/providers/providerHubServer';
-import { addToIndexingQueue, providerIndexingUrl } from '@/lib/seo/googleIndexingQueue';
+import {
+  pingGoogleIndexingDirect,
+  providerIndexingUrl
+} from '@/lib/seo/googleIndexingQueue';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 
 export type BulkEnrichResult =
@@ -98,8 +101,10 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
       .eq('id', row.id)
       .maybeSingle();
     if (providerRow?.slug?.trim()) {
-      addToIndexingQueue(providerIndexingUrl(providerRow.slug.trim()), {
-        source: 'server-action:providers:bulk-enrich'
+      void pingGoogleIndexingDirect(
+        providerIndexingUrl(providerRow.slug.trim())
+      ).catch(() => {
+        /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
       });
     }
     processed += 1;

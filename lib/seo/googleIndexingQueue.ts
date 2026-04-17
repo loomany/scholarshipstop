@@ -110,6 +110,78 @@ function googleIndexingJwt(): JWT | null {
   });
 }
 
+export type PingGoogleIndexingDirectResult =
+  | { ok: true; status: number }
+  | {
+      ok: false;
+      skipped?: 'invalid_url' | 'missing_credentials' | 'no_token';
+      status?: number;
+      error?: string;
+    };
+
+/**
+ * Sends one URL to Google Indexing API immediately (no `data/google-indexing-queue.json`).
+ * Safe for ephemeral filesystems (e.g. Railway). Errors are logged; does not throw.
+ */
+export async function pingGoogleIndexingDirect(
+  url: string,
+  notificationType: GoogleIndexingNotificationType = 'URL_UPDATED'
+): Promise<PingGoogleIndexingDirectResult> {
+  const normalized = normalizeIndexingUrl(url);
+  if (!normalized) {
+    console.error('[google-indexing-direct] invalid URL:', url);
+    return { ok: false, skipped: 'invalid_url' };
+  }
+
+  try {
+    const client = googleIndexingJwt();
+    if (!client) {
+      console.error(
+        '[google-indexing-direct] missing GOOGLE_INDEXING_CLIENT_EMAIL or GOOGLE_INDEXING_PRIVATE_KEY'
+      );
+      return { ok: false, skipped: 'missing_credentials' };
+    }
+
+    const accessToken = await client.getAccessToken();
+    const token =
+      typeof accessToken === 'string' ? accessToken : accessToken?.token ?? null;
+    if (!token) {
+      console.error('[google-indexing-direct] could not obtain access token');
+      return { ok: false, skipped: 'no_token' };
+    }
+
+    const response = await fetch(GOOGLE_INDEXING_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        url: normalized,
+        type: notificationType
+      })
+    });
+
+    if (!response.ok) {
+      const text = await response.text().catch(() => '');
+      console.error(
+        '[google-indexing-direct] API error',
+        response.status,
+        text
+      );
+      return { ok: false, status: response.status, error: text };
+    }
+
+    return { ok: true, status: response.status };
+  } catch (error) {
+    console.error('[google-indexing-direct]', error);
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : String(error)
+    };
+  }
+}
+
 export function getGoogleIndexingQueueSummary() {
   const items = readGoogleIndexingQueue();
   return {

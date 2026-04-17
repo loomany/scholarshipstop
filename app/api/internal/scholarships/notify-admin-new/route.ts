@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
 
+import {
+  pingGoogleIndexingDirect,
+  scholarshipIndexingUrl
+} from '@/lib/seo/googleIndexingQueue';
 import { notifyEnvTelegramAdminsNewScholarship } from '@/lib/telegram/bot';
 
 export const runtime = 'nodejs';
@@ -11,6 +15,7 @@ export const dynamic = 'force-dynamic';
  *
  * Call from Supabase **Database Webhook** on `public.scholarships` INSERT (or manually for tests).
  * Sends a Telegram message only to chats in TELEGRAM_ADMIN_IDS / TELEGRAM_ADMIN_ID (not `telegram_users`).
+ * Then pings Google Indexing API for the public scholarship URL (direct, no local JSON queue).
  *
  * Supabase payload shape: `{ type, table, schema, record }` — we read `record`.
  * Manual / curl body: `{ "id": "uuid", "title": "...", "slug": "..." }`
@@ -75,5 +80,8 @@ export async function POST(request: Request) {
 
   await notifyEnvTelegramAdminsNewScholarship({ id, slug, title });
 
-  return NextResponse.json({ ok: true });
+  const scholarshipUrl = scholarshipIndexingUrl({ id, slug });
+  const googleIndexing = await pingGoogleIndexingDirect(scholarshipUrl);
+
+  return NextResponse.json({ ok: true, googleIndexing });
 }

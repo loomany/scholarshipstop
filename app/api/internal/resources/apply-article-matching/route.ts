@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 import { runArticleScholarshipMatchingPipeline } from '@/lib/content-hub/articleScholarshipMatching';
-import { addToIndexingQueue, resourceIndexingUrl } from '@/lib/seo/googleIndexingQueue';
+import {
+  pingGoogleIndexingDirect,
+  resourceIndexingUrl,
+  type PingGoogleIndexingDirectResult
+} from '@/lib/seo/googleIndexingQueue';
 import type { Database } from '@/types_db';
 
 export const dynamic = 'force-dynamic';
@@ -95,10 +99,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: upErr.message }, { status: 500 });
     }
 
+    let googleIndexing: PingGoogleIndexingDirectResult | null = null;
     if (post.slug?.trim()) {
-      addToIndexingQueue(resourceIndexingUrl(post.slug.trim()), {
-        source: 'internal:resources:apply-article-matching'
-      });
+      try {
+        googleIndexing = await pingGoogleIndexingDirect(
+          resourceIndexingUrl(post.slug.trim())
+        );
+      } catch {
+        /* pingGoogleIndexingDirect should not throw; defensive */
+      }
     }
 
     return NextResponse.json({
@@ -106,7 +115,8 @@ export async function POST(request: Request) {
       postId: post.id,
       inlineLinksInserted: result.diagnostics.inlineLinksInserted,
       inlineFallbackUsed: result.diagnostics.inlineFallbackUsed,
-      relatedCount: result.relatedScholarships.length
+      relatedCount: result.relatedScholarships.length,
+      ...(googleIndexing ? { googleIndexing } : {})
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

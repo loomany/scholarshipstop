@@ -2,9 +2,11 @@ import OpenAI from 'openai';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { Database, Json } from '@/types_db';
-import { enqueueGoogleIndexingUrls } from '@/lib/seo/googleIndexingQueue';
+import {
+  essayIndexingUrl,
+  pingGoogleIndexingDirect
+} from '@/lib/seo/googleIndexingQueue';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
-import { getURL } from '@/utils/helpers';
 import {
   filterReachableHighAuthoritySources,
   type EssaySourceItem
@@ -504,11 +506,8 @@ async function processResumeAwaitingHeroJob(
       })
       .eq('id', queueId);
 
-    const path = essayHubArticlePath(essay.slug).replace(/^\/+/, '');
-    enqueueGoogleIndexingUrls({
-      kind: 'essay',
-      urls: [getURL(path)],
-      source: 'cron:process-essay-queue'
+    void pingGoogleIndexingDirect(essayIndexingUrl(essay.slug)).catch(() => {
+      /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
     });
 
     return { outcome: 'published', essaySlug: essay.slug, queueId };
@@ -784,11 +783,8 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
       .eq('id', queueId);
     if (quErr) throw new Error(quErr.message);
 
-    const path = essayHubArticlePath(slug).replace(/^\/+/, '');
-    enqueueGoogleIndexingUrls({
-      kind: 'essay',
-      urls: [getURL(path)],
-      source: 'cron:process-essay-queue'
+    void pingGoogleIndexingDirect(essayIndexingUrl(slug)).catch(() => {
+      /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
     });
 
     return { ok: true, essaySlug: slug, queueId, phase: 'published' };
