@@ -145,63 +145,79 @@ function faqItems(s: Scholarship): { question: string; answer: string }[] {
 function jsonLdDocument(s: Scholarship) {
   const path = scholarshipPublicPath(s);
   const absolutePath = getURL(path);
+  const siteBase = getURL().replace(/\/+$/, '');
+  const displayTitle = s.title?.trim() || 'Scholarship';
+  const publisherId = `${siteBase}#scholarshiptop-publisher`;
+  const programId = `${absolutePath}#program`;
   const faqs = faqItems(s);
   const graph: Record<string, unknown>[] = [];
-  const funderId = s.provider?.trim() ? `${absolutePath}#funder` : null;
-  const grantId = `${absolutePath}#grant`;
   const scholarshipDescription = scholarshipSchemaDescription(s);
+  const deadlineIso = scholarshipDeadlineIso(s);
 
-  const grant: Record<string, unknown> = {
-    '@id': grantId,
-    '@type': 'Grant',
-    name: s.title,
-    description: scholarshipDescription,
-    url: absolutePath
+  graph.push({
+    '@id': publisherId,
+    '@type': 'Organization',
+    name: 'ScholarshipTop',
+    url: siteBase,
+    email: 'support@scholarshiptop.com',
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteBase}/icon-192x192.png`
+    }
+  });
+
+  const program: Record<string, unknown> = {
+    '@id': programId,
+    '@type': 'EducationalOccupationalProgram',
+    name: displayTitle,
+    url: absolutePath,
+    publisher: { '@id': publisherId }
   };
-  if (funderId) {
-    graph.push({
-      '@id': funderId,
-      '@type': 'Organization',
-      name: s.provider!.trim()
-    });
-    grant.funder = { '@id': funderId };
+
+  if (scholarshipDescription) {
+    program.description = scholarshipDescription;
   }
-  if (
-    s.awardAmountNumericSort != null &&
-    !Number.isNaN(s.awardAmountNumericSort) &&
-    s.payoutMethod !== 'non_monetary'
-  ) {
-    grant.amount = {
+  if (deadlineIso) {
+    program.applicationDeadline = deadlineIso;
+  }
+
+  const providerName = s.provider?.trim();
+  if (providerName) {
+    const provider: Record<string, unknown> = {
+      '@type': 'EducationalOrganization',
+      name: providerName
+    };
+    const pUrl = s.providerUrl?.trim();
+    if (pUrl) {
+      provider.url = pUrl;
+    }
+    program.provider = provider;
+  }
+
+  const awardNumeric = s.awardAmountNumericSort;
+  const hasNumericAward =
+    awardNumeric != null &&
+    !Number.isNaN(awardNumeric) &&
+    s.payoutMethod !== 'non_monetary';
+
+  if (hasNumericAward) {
+    const monetary: Record<string, unknown> = {
       '@type': 'MonetaryAmount',
       currency: 'USD',
-      value: s.awardAmountNumericSort
+      value: awardNumeric
     };
-  }
-  graph.push(grant);
-
-  const deadlineIso = scholarshipDeadlineIso(s);
-  if (deadlineIso) {
-    const applicationEvent: Record<string, unknown> = {
-      '@type': 'Event',
-      '@id': `${absolutePath}#application-deadline`,
-      name: `Application deadline for ${s.title}`,
-      description:
-        scholarshipDescription ||
-        `Application deadline information for ${s.title}.`,
-      startDate: deadlineIso,
-      endDate: deadlineIso,
+    program.offers = {
+      '@type': 'Offer',
       url: absolutePath,
-      about: { '@id': grantId },
-      location: {
-        '@type': 'VirtualLocation',
-        url: absolutePath
+      itemOffered: {
+        '@type': 'FinancialAid',
+        name: `${displayTitle} — award`,
+        amount: monetary
       }
     };
-    if (funderId) {
-      applicationEvent.organizer = { '@id': funderId };
-    }
-    graph.push(applicationEvent);
   }
+
+  graph.push(program);
 
   const categorySlug = resolveScholarshipCategorySlug(s);
   const crumbItems: { name: string; item: string }[] = [
@@ -214,7 +230,7 @@ function jsonLdDocument(s: Scholarship) {
       item: getURL(`/scholarships/category/${categorySlug}`)
     });
   }
-  crumbItems.push({ name: s.title, item: absolutePath });
+  crumbItems.push({ name: displayTitle, item: absolutePath });
 
   graph.push({
     '@type': 'BreadcrumbList',
