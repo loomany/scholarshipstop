@@ -306,7 +306,7 @@ async function main() {
   }
   console.log(`update calls: ${ok} ok, ${fail} failed`);
   if (updatedRows.length > 0) {
-    const queue = enqueueScholarshipUrlsForScript(
+    const queue = await enqueueScholarshipUrlsForScript(
       updatedRows,
       'script:backfill-state-codes'
     );

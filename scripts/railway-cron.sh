@@ -19,6 +19,10 @@
 # HTTP cron calls use Node.js built-in fetch (scripts/railway-cron-post.mjs) — Node 18+;
 # no curl required in the container.
 #
+# SEO URL Inspection + Google Indexing queue flush run as local `npx tsx scripts/cron-*.ts`
+# (avoids Cloudflare 524 on long HTTP /api/internal/seo/*). Requires same env as the app
+# (Supabase service role, Google credentials). Indexing queue lives in public.google_indexing_queue.
+#
 # Secrets (set in Railway Variables):
 #   GOOGLE_INDEXING_SECRET — Bearer for SEO + Google Indexing API routes
 #   GRANT_NOTIFICATION_CRON_SECRET — grant notifications + fallback for weekly digest + SEO Telegram digest
@@ -50,6 +54,22 @@ resolve_base_url() {
 }
 
 BASE_URL="$(resolve_base_url)"
+
+# Run a TypeScript cron script from repo root; logs full stdout/stderr to Railway.
+run_tsx_cron() {
+  local name="$1"
+  local rel="$2"
+  echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') tsx START ${name} (${rel})"
+  set +e
+  (cd "$PROJECT_ROOT" && npx tsx "$rel")
+  local ec=$?
+  set -e
+  if [ "$ec" -eq 0 ]; then
+    echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') tsx OK ${name}"
+  else
+    echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') tsx WARN ${name} exit=${ec} (continuing)"
+  fi
+}
 
 # POST JSON via Node fetch (Node 18+). Args: task name, path, bearer, optional JSON body.
 http_post_json() {
@@ -84,18 +104,21 @@ require_env() {
 }
 
 task_seo_url_inspection() {
-  require_env GOOGLE_INDEXING_SECRET
-  http_post_json "SEO check-index-worker (pending)" \
-    "/api/internal/seo/check-index-worker" "$GOOGLE_INDEXING_SECRET" "{}"
-  http_post_json "SEO scan-indexing (submitted)" \
-    "/api/internal/seo/scan-indexing" "$GOOGLE_INDEXING_SECRET" "{}"
+  export NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-$BASE_URL}"
+  require_env NEXT_PUBLIC_SUPABASE_URL
+  require_env SUPABASE_SERVICE_ROLE_KEY
+  require_npm_or_exit || return 0
+  run_tsx_cron "cron-check-index-worker" "scripts/cron-check-index-worker.ts"
+  run_tsx_cron "cron-scan-indexing" "scripts/cron-scan-indexing.ts"
 }
 
 task_google_indexing_flush() {
-  require_env GOOGLE_INDEXING_SECRET
-  http_post_json "Daily Google Indexing flush" \
-    "/api/internal/google-indexing" "$GOOGLE_INDEXING_SECRET" \
-    '{"action":"flush","limit":200}'
+  export NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-$BASE_URL}"
+  require_env GOOGLE_INDEXING_CLIENT_EMAIL
+  require_env GOOGLE_INDEXING_PRIVATE_KEY
+  require_npm_or_exit || return 0
+  export GOOGLE_INDEXING_FLUSH_LIMIT="${GOOGLE_INDEXING_FLUSH_LIMIT:-200}"
+  run_tsx_cron "cron-google-indexing-flush" "scripts/cron-google-indexing-flush.ts"
 }
 
 task_grant_notifications() {

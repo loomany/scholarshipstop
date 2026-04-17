@@ -10,6 +10,16 @@ import {
 
 export const dynamic = 'force-dynamic';
 
+type GoogleIndexingPostBody = {
+  action?: string;
+  kind?: GoogleIndexingContentKind;
+  notificationType?: GoogleIndexingNotificationType;
+  urls?: string[];
+  url?: string;
+  source?: string;
+  limit?: number;
+};
+
 function isAuthorized(request: Request): boolean {
   const secret = process.env.GOOGLE_INDEXING_SECRET?.trim();
   const auth = request.headers.get('authorization')?.trim();
@@ -21,7 +31,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  return NextResponse.json(getGoogleIndexingQueueSummary());
+  return NextResponse.json(await getGoogleIndexingQueueSummary());
 }
 
 export async function POST(request: Request) {
@@ -29,22 +39,43 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = (await request.json().catch(() => null)) as
-    | {
-        action?: 'enqueue' | 'flush';
-        kind?: GoogleIndexingContentKind;
-        notificationType?: GoogleIndexingNotificationType;
-        urls?: string[];
-        url?: string;
-        source?: string;
-        limit?: number;
-      }
-    | null;
+  let body: GoogleIndexingPostBody | null = null;
 
-  const action = body?.action ?? 'enqueue';
+  try {
+    const text = await request.text();
+    if (text?.trim()) {
+      body = JSON.parse(text) as GoogleIndexingPostBody;
+    }
+  } catch (e) {
+    console.error('[google-indexing] invalid JSON body', e);
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+  }
+
+  const actionRaw =
+    typeof body?.action === 'string' ? body.action.trim().toLowerCase() : '';
+  const looksLikeCronFlushOnly = Boolean(
+    body &&
+      typeof body.limit === 'number' &&
+      body.kind == null &&
+      body.url == null &&
+      body.urls == null &&
+      (body.action == null || body.action === '')
+  );
+  const action: 'enqueue' | 'flush' =
+    actionRaw === 'flush'
+      ? 'flush'
+      : actionRaw === 'enqueue'
+        ? 'enqueue'
+        : looksLikeCronFlushOnly
+          ? 'flush'
+          : 'enqueue';
 
   if (action === 'flush') {
-    const result = await flushGoogleIndexingQueue(body?.limit ?? 50);
+    const limit =
+      typeof body?.limit === 'number' && Number.isFinite(body.limit)
+        ? body.limit
+        : 50;
+    const result = await flushGoogleIndexingQueue(limit);
     return NextResponse.json(result);
   }
 
@@ -68,7 +99,7 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json(
-    enqueueGoogleIndexingUrls({
+    await enqueueGoogleIndexingUrls({
       urls,
       kind,
       notificationType: body?.notificationType,

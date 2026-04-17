@@ -21,11 +21,6 @@ from scholarship_db_columns import SCHOLARSHIP_UPSERT_PAYLOAD_KEYS
 # Имена переменных окружения (как в Supabase Dashboard → Settings → API)
 ENV_URL = "SUPABASE_URL"
 ENV_KEY = "SUPABASE_SERVICE_ROLE_KEY"
-QUEUE_FILE = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "data",
-    "google-indexing-queue.json",
-)
 UUID_LIKE_RE = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
     re.IGNORECASE,
@@ -97,69 +92,36 @@ def scholarship_public_url(row: Mapping[str, Any]) -> str:
 
 
 def add_to_indexing_queue(url: str) -> None:
+    """Enqueue URL for Google Indexing flush (Supabase table ``google_indexing_queue``)."""
     raw = str(url).strip()
     if not raw:
         return
 
-    try:
-        with open(QUEUE_FILE, "r", encoding="utf-8") as fh:
-            existing = json.load(fh)
-            items = existing if isinstance(existing, list) else []
-    except FileNotFoundError:
-        items = []
-    except json.JSONDecodeError:
-        items = []
-
+    client = get_client()
     now = _now_iso()
-    key = f"URL_UPDATED:{raw}"
-    by_key: dict[str, dict[str, Any]] = {}
-    for item in items:
-        if not isinstance(item, dict):
-            continue
-        item_url = item.get("url")
-        if not isinstance(item_url, str) or not item_url.strip():
-            continue
-        notification_type = item.get("notificationType")
-        if not isinstance(notification_type, str) or not notification_type.strip():
-            notification_type = "URL_UPDATED"
-        by_key[f"{notification_type}:{item_url}"] = item
+    prev = (
+        client.table("google_indexing_queue")
+        .select("attempt_count")
+        .eq("url", raw)
+        .limit(1)
+        .execute()
+    )
+    rows = prev.data or []
+    attempt_count = int(rows[0]["attempt_count"]) if rows else 0
 
-    prev = by_key.get(key, {})
-    by_key[key] = {
-        "url": raw,
-        "kind": "scholarship",
-        "notificationType": "URL_UPDATED",
-        "source": "parser:scholarships:new",
-        "status": "pending",
-        "enqueuedAt": now,
-        "attemptCount": prev.get("attemptCount", 0),
-        **(
-            {"lastAttemptAt": prev["lastAttemptAt"]}
-            if isinstance(prev.get("lastAttemptAt"), str)
-            else {}
-        ),
-        **({"sentAt": prev["sentAt"]} if isinstance(prev.get("sentAt"), str) else {}),
-    }
-
-    ordered = [by_key[key]]
-    for item in items:
-        if not isinstance(item, dict):
-            continue
-        item_url = item.get("url")
-        if not isinstance(item_url, str) or not item_url.strip():
-            continue
-        notification_type = item.get("notificationType")
-        if not isinstance(notification_type, str) or not notification_type.strip():
-            notification_type = "URL_UPDATED"
-        item_key = f"{notification_type}:{item_url}"
-        if item_key == key:
-            continue
-        ordered.append(by_key[item_key])
-
-    os.makedirs(os.path.dirname(QUEUE_FILE), exist_ok=True)
-    with open(QUEUE_FILE, "w", encoding="utf-8") as fh:
-        json.dump(ordered, fh, ensure_ascii=False, indent=2)
-        fh.write("\n")
+    client.table("google_indexing_queue").upsert(
+        {
+            "url": raw,
+            "status": "pending",
+            "added_at": now,
+            "notification_type": "URL_UPDATED",
+            "content_kind": "scholarship",
+            "source": "parser:scholarships:new",
+            "attempt_count": attempt_count,
+            "last_error": None,
+        },
+        on_conflict="url",
+    ).execute()
 
 
 def _find_id_by_source_url(client: Client, source: str, url: str) -> str | None:

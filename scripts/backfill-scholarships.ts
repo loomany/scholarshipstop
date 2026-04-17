@@ -17,11 +17,11 @@ import path from 'path';
 
 import { createClient } from '@supabase/supabase-js';
 
+import { enqueueGoogleIndexingUrls } from '../lib/seo/googleIndexingQueue';
 import type { Database } from '../types_db';
 
 const ROOT = path.resolve(__dirname, '..');
 const PAGE_SIZE = 500;
-const QUEUE_PATH = path.join(ROOT, 'data', 'google-indexing-queue.json');
 const UUID_LIKE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -41,19 +41,6 @@ type ProviderQueueRow = Pick<
   Database['public']['Tables']['providers']['Row'],
   'id' | 'slug'
 >;
-
-type QueueItem = {
-  url: string;
-  kind: QueueKind;
-  notificationType: 'URL_UPDATED' | 'URL_DELETED';
-  source: string;
-  status: 'pending' | 'sent' | 'error';
-  enqueuedAt: string;
-  lastAttemptAt?: string;
-  sentAt?: string;
-  attemptCount: number;
-  lastError?: string;
-};
 
 type QueueEntry = {
   url: string;
@@ -143,26 +130,6 @@ function providerPath(slug: string): string {
 
 function canonicalUrl(siteOrigin: string, relativePath: string): string {
   return `${siteOrigin}${relativePath}`;
-}
-
-function readQueue(): QueueItem[] {
-  try {
-    const raw = fs.readFileSync(QUEUE_PATH, 'utf8');
-    if (!raw.trim()) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed) ? (parsed as QueueItem[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeQueue(items: QueueItem[]) {
-  fs.mkdirSync(path.dirname(QUEUE_PATH), { recursive: true });
-  fs.writeFileSync(QUEUE_PATH, `${JSON.stringify(items, null, 2)}\n`, 'utf8');
-}
-
-function queueKey(url: string, notificationType = 'URL_UPDATED'): string {
-  return `${notificationType}:${url}`;
 }
 
 function shuffleInPlace<T>(items: T[]): T[] {
@@ -293,64 +260,58 @@ function buildMixedEntries(input: {
 
   const deduped = new Map<string, QueueEntry>();
   for (const entry of entries) {
-    deduped.set(queueKey(entry.url), entry);
+    deduped.set(entry.url, entry);
   }
   return Array.from(deduped.values());
 }
 
-function queueImpact(entries: QueueEntry[], existing: QueueItem[]) {
-  const keys = new Set(existing.map((item) => queueKey(item.url, item.notificationType)));
+async function queueImpact(
+  supabase: ReturnType<typeof createSupabaseClient>,
+  entries: QueueEntry[]
+): Promise<{ newUrls: number; requeuedUrls: number }> {
+  const urls = entries.map((e) => e.url);
+  if (urls.length === 0) {
+    return { newUrls: 0, requeuedUrls: 0 };
+  }
+  const { data } = await supabase
+    .from('google_indexing_queue')
+    .select('url')
+    .in('url', urls);
+  const have = new Set((data ?? []).map((r) => r.url as string));
   let newUrls = 0;
   let requeuedUrls = 0;
-
   for (const entry of entries) {
-    if (keys.has(queueKey(entry.url))) {
+    if (have.has(entry.url)) {
       requeuedUrls += 1;
     } else {
       newUrls += 1;
     }
   }
-
   return { newUrls, requeuedUrls };
 }
 
-function applyMixedQueue(entries: QueueEntry[], source: string) {
-  const existing = readQueue();
-  const byKey = new Map(existing.map((item) => [queueKey(item.url, item.notificationType), item]));
-  const now = new Date().toISOString();
-  const shuffled = shuffleInPlace([...entries]);
-  const touchedKeys = new Set<string>();
-  const nextItems: QueueItem[] = [];
-
-  for (const entry of shuffled) {
-    const key = queueKey(entry.url);
-    const prev = byKey.get(key);
-    touchedKeys.add(key);
-    nextItems.push({
-      url: entry.url,
-      kind: entry.kind,
-      notificationType: 'URL_UPDATED',
-      source,
-      status: 'pending',
-      enqueuedAt: now,
-      attemptCount: prev?.attemptCount ?? 0,
-      ...(prev?.lastAttemptAt ? { lastAttemptAt: prev.lastAttemptAt } : {}),
-      ...(prev?.sentAt ? { sentAt: prev.sentAt } : {})
+async function applyMixedQueueToSupabase(
+  source: string,
+  shuffled: QueueEntry[]
+): Promise<{ enqueued: number; total: number }> {
+  const groups = new Map<QueueKind, string[]>();
+  for (const e of shuffled) {
+    if (!groups.has(e.kind)) groups.set(e.kind, []);
+    groups.get(e.kind)!.push(e.url);
+  }
+  let enqueued = 0;
+  let lastTotal = 0;
+  for (const kind of groups.keys()) {
+    const urls = groups.get(kind)!;
+    const r = await enqueueGoogleIndexingUrls({
+      urls,
+      kind,
+      source
     });
+    enqueued += r.enqueued;
+    lastTotal = r.total;
   }
-
-  for (const item of existing) {
-    if (touchedKeys.has(queueKey(item.url, item.notificationType))) continue;
-    nextItems.push(item);
-  }
-
-  writeQueue(nextItems);
-
-  return {
-    enqueued: shuffled.length,
-    total: nextItems.length,
-    shuffled
-  };
+  return { enqueued, total: lastTotal };
 }
 
 async function main() {
@@ -372,8 +333,7 @@ async function main() {
     providers
   });
   const shuffledPreview = shuffleInPlace([...entries]);
-  const existingQueue = readQueue();
-  const impact = queueImpact(entries, existingQueue);
+  const impact = await queueImpact(supabase, entries);
 
   const scholarshipCount = entries.filter((entry) => entry.kind === 'scholarship').length;
   const articleCount = entries.filter((entry) => entry.kind === 'resource').length;
@@ -419,14 +379,18 @@ async function main() {
 
   if (!apply) {
     console.log(
-      'Dry run only. Re-run with `npx tsx scripts/backfill-scholarships.ts --apply` to write the mixed queue to data/google-indexing-queue.json.'
+      'Dry run only. Re-run with `npx tsx scripts/backfill-scholarships.ts --apply` to upsert URLs into public.google_indexing_queue.'
     );
     return;
   }
 
-  const result = applyMixedQueue(entries, 'script:backfill-scholarships');
+  const shuffled = shuffleInPlace([...entries]);
+  const result = await applyMixedQueueToSupabase(
+    'script:backfill-scholarships',
+    shuffled
+  );
   console.log(
-    `Applied. Google indexing queue: +${result.enqueued} URL(s), total queued ${result.total}.`
+    `Applied. Google indexing queue: +${result.enqueued} URL(s), total rows ${result.total}.`
   );
 }
 

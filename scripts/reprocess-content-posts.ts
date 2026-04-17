@@ -158,7 +158,7 @@ async function processPost(
 
       if (upErr) throw new Error(upErr.message);
       if (post.slug?.trim()) {
-        const queue = enqueueResourceUrlsForScript(
+        const queue = await enqueueResourceUrlsForScript(
           [post.slug.trim()],
           'script:reprocess-content-posts'
         );

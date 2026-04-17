@@ -218,7 +218,7 @@ async function main() {
       'Sync done: new slugs inserted; existing slugs left unchanged (ignoreDuplicates).'
     );
     if (syncedProviderSlugs.length > 0) {
-      const queue = enqueueProviderUrlsForScript(
+      const queue = await enqueueProviderUrlsForScript(
         syncedProviderSlugs,
         'script:enrich-all-providers:sync'
       );
@@ -333,7 +333,7 @@ async function main() {
     `Enrichment complete. Processed ${done}/${queue.length} provider(s).`
   );
   if (enrichedProviderSlugs.length > 0) {
-    const queue = enqueueProviderUrlsForScript(
+    const queue = await enqueueProviderUrlsForScript(
       enrichedProviderSlugs,
       'script:enrich-all-providers:enrich'
     );

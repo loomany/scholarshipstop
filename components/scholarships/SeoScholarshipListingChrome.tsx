@@ -381,13 +381,13 @@ export function SeoScholarshipHero({
 
   return (
     <header className={`${PROSE} space-y-2 pb-5 sm:space-y-2.5 sm:pb-6`}>
-      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-3 sm:gap-y-2">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 sm:gap-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl lg:text-[1.85rem] lg:leading-snug">
           {topicCore}
         </h1>
         {showCountBadge ? (
           <span
-            className="inline-flex w-fit shrink-0 items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium tabular-nums text-gray-600"
+            className="inline-flex w-fit shrink-0 items-center rounded-full border border-zinc-200/90 bg-white px-3.5 py-1.5 text-sm font-semibold tabular-nums tracking-tight text-zinc-900 shadow-sm sm:text-[0.9375rem] sm:leading-none"
             aria-label={`${scholarshipCount!.toLocaleString('en-US')} ${oppLabel} in this list`}
           >
             {scholarshipCount!.toLocaleString('en-US')} {oppLabel}

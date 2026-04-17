@@ -328,7 +328,7 @@ async function main() {
     }
     console.log(`update calls succeeded: ${ok}, failed batches/calls: ${fail}`);
     if (updatedRows.length > 0) {
-      const queue = enqueueScholarshipUrlsForScript(
+      const queue = await enqueueScholarshipUrlsForScript(
         updatedRows,
         'script:backfill-scholarship-seo-tags'
       );

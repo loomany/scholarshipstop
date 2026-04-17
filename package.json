@@ -67,7 +67,10 @@
     "seo:grand-audit": "dotenv -e .env.local -- npx tsx scripts/seo-grand-audit.ts",
     "seo:worker-generate": "dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts",
     "seo:enqueue-missing": "dotenv -e .env.local -- npx tsx scripts/seo-enqueue-missing-hubs.ts",
-    "seo:daily-digest-telegram": "dotenv -e .env.local -- node scripts/post-seo-daily-digest-telegram.mjs"
+    "seo:daily-digest-telegram": "dotenv -e .env.local -- node scripts/post-seo-daily-digest-telegram.mjs",
+    "cron:check-index-worker": "npx tsx scripts/cron-check-index-worker.ts",
+    "cron:scan-indexing": "npx tsx scripts/cron-scan-indexing.ts",
+    "cron:google-indexing-flush": "npx tsx scripts/cron-google-indexing-flush.ts"
   },
   "dependencies": {
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",

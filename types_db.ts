@@ -92,6 +92,42 @@ export interface Database {
           }
         ]
       },
+      google_indexing_queue: {
+        Row: {
+          id: string
+          url: string
+          added_at: string
+          status: string
+          notification_type: string
+          content_kind: string | null
+          source: string | null
+          attempt_count: number
+          last_error: string | null
+        }
+        Insert: {
+          id?: string
+          url: string
+          added_at?: string
+          status?: string
+          notification_type?: string
+          content_kind?: string | null
+          source?: string | null
+          attempt_count?: number
+          last_error?: string | null
+        }
+        Update: {
+          id?: string
+          url?: string
+          added_at?: string
+          status?: string
+          notification_type?: string
+          content_kind?: string | null
+          source?: string | null
+          attempt_count?: number
+          last_error?: string | null
+        }
+        Relationships: []
+      },
       grant_notification_deliveries: {
         Row: {
           id: string

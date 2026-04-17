@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json(
-    enqueueGoogleIndexingUrls({
+    await enqueueGoogleIndexingUrls({
       kind,
       urls,
       notificationType: body?.notificationType,

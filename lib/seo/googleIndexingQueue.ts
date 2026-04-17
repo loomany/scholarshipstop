@@ -1,10 +1,10 @@
-import fs from 'fs';
-import path from 'path';
 import { JWT } from 'google-auth-library';
 
+import type { Database } from '@/types_db';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { buildProviderProfileScholarshipsHref } from '@/lib/providers/providerProfilePagination';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { getURL } from '@/utils/helpers';
 
 export type GoogleIndexingContentKind =
@@ -15,54 +15,22 @@ export type GoogleIndexingContentKind =
 
 export type GoogleIndexingNotificationType = 'URL_UPDATED' | 'URL_DELETED';
 
+/** DB + legacy API shape for queue rows */
 export type GoogleIndexingQueueItem = {
+  id?: string;
   url: string;
-  kind: GoogleIndexingContentKind;
+  kind: GoogleIndexingContentKind | null;
   notificationType: GoogleIndexingNotificationType;
-  source: string;
-  status: 'pending' | 'sent' | 'error';
+  source: string | null;
+  /** DB: pending | processed | failed — legacy summaries map processed→sent, failed→error */
+  status: 'pending' | 'processed' | 'failed' | 'sent' | 'error';
   enqueuedAt: string;
-  lastAttemptAt?: string;
-  sentAt?: string;
   attemptCount: number;
-  lastError?: string;
+  lastError?: string | null;
 };
 
 const GOOGLE_INDEXING_ENDPOINT =
   'https://indexing.googleapis.com/v3/urlNotifications:publish';
-
-const QUEUE_REL = ['data', 'google-indexing-queue.json'] as const;
-
-function queueFilePath(): string {
-  return path.join(process.cwd(), ...QUEUE_REL);
-}
-
-function readGoogleIndexingQueue(): GoogleIndexingQueueItem[] {
-  const abs = queueFilePath();
-  try {
-    const raw = fs.readFileSync(abs, 'utf8');
-    if (!raw.trim()) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed)
-      ? parsed.filter(
-          (item): item is GoogleIndexingQueueItem =>
-            Boolean(
-              item &&
-                typeof item === 'object' &&
-                typeof (item as GoogleIndexingQueueItem).url === 'string'
-            )
-        )
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeGoogleIndexingQueue(items: GoogleIndexingQueueItem[]): void {
-  const abs = queueFilePath();
-  fs.mkdirSync(path.dirname(abs), { recursive: true });
-  fs.writeFileSync(abs, `${JSON.stringify(items, null, 2)}\n`, 'utf8');
-}
 
 function normalizeIndexingUrl(value: string): string | null {
   const raw = value.trim();
@@ -91,13 +59,6 @@ function inferGoogleIndexingKindFromUrl(url: string): GoogleIndexingContentKind 
   }
 }
 
-function queueKey(item: {
-  url: string;
-  notificationType: GoogleIndexingNotificationType;
-}): string {
-  return `${item.notificationType}:${item.url}`;
-}
-
 function googleIndexingJwt(): JWT | null {
   const email = process.env.GOOGLE_INDEXING_CLIENT_EMAIL?.trim();
   const rawKey = process.env.GOOGLE_INDEXING_PRIVATE_KEY?.trim();
@@ -120,7 +81,7 @@ export type PingGoogleIndexingDirectResult =
     };
 
 /**
- * Sends one URL to Google Indexing API immediately (no `data/google-indexing-queue.json`).
+ * Sends one URL to Google Indexing API immediately (no DB queue).
  * Safe for ephemeral filesystems (e.g. Railway). Errors are logged; does not throw.
  */
 export async function pingGoogleIndexingDirect(
@@ -182,14 +143,97 @@ export async function pingGoogleIndexingDirect(
   }
 }
 
-export function getGoogleIndexingQueueSummary() {
-  const items = readGoogleIndexingQueue();
+type QueueRow = Database['public']['Tables']['google_indexing_queue']['Row'];
+
+function rowToItem(row: QueueRow): GoogleIndexingQueueItem {
+  const st = row.status;
+  const legacyStatus =
+    st === 'processed' ? 'sent' : st === 'failed' ? 'error' : 'pending';
   return {
-    total: items.length,
-    pending: items.filter((item) => item.status === 'pending').length,
-    sent: items.filter((item) => item.status === 'sent').length,
-    error: items.filter((item) => item.status === 'error').length,
-    items
+    id: row.id,
+    url: row.url,
+    kind: row.content_kind as GoogleIndexingContentKind | null,
+    notificationType: row.notification_type as GoogleIndexingNotificationType,
+    source: row.source,
+    status: legacyStatus,
+    enqueuedAt: row.added_at,
+    attemptCount: row.attempt_count,
+    lastError: row.last_error
+  };
+}
+
+export async function getGoogleIndexingQueueSummary() {
+  const admin = createServiceRoleSupabaseClient();
+  if (!admin) {
+    return {
+      total: 0,
+      pending: 0,
+      sent: 0,
+      error: 0,
+      processed: 0,
+      failed: 0,
+      items: [] as GoogleIndexingQueueItem[]
+    };
+  }
+
+  const [
+    totalRes,
+    pendingRes,
+    processedRes,
+    failedRes,
+    rowsRes
+  ] = await Promise.all([
+    admin.from('google_indexing_queue').select('*', { count: 'exact', head: true }),
+    admin
+      .from('google_indexing_queue')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pending'),
+    admin
+      .from('google_indexing_queue')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'processed'),
+    admin
+      .from('google_indexing_queue')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'failed'),
+    admin
+      .from('google_indexing_queue')
+      .select('*')
+      .order('added_at', { ascending: false })
+      .limit(2000)
+  ]);
+
+  if (totalRes.error) {
+    console.error('[google-indexing-queue] summary', totalRes.error.message);
+    return {
+      total: 0,
+      pending: 0,
+      sent: 0,
+      error: 0,
+      processed: 0,
+      failed: 0,
+      items: [] as GoogleIndexingQueueItem[]
+    };
+  }
+
+  const list = rowsRes.data ?? [];
+  if (rowsRes.error) {
+    console.error('[google-indexing-queue] summary items', rowsRes.error.message);
+  }
+
+  const total = totalRes.count ?? 0;
+  const pending = pendingRes.count ?? 0;
+  const processed = processedRes.count ?? 0;
+  const failed = failedRes.count ?? 0;
+
+  return {
+    total,
+    pending,
+    sent: processed,
+    error: failed,
+    processed,
+    failed,
+    items: list.map((r) => rowToItem(r as QueueRow))
   };
 }
 
@@ -213,7 +257,7 @@ export function providerIndexingUrl(providerRouteId: string): string {
   return getURL(buildProviderProfileScholarshipsHref(providerRouteId, 1).replace(/#.*$/, ''));
 }
 
-export function addToIndexingQueue(
+export async function addToIndexingQueue(
   url: string,
   input?: {
     kind?: GoogleIndexingContentKind;
@@ -241,60 +285,108 @@ export function addToIndexingQueue(
   });
 }
 
-export function enqueueGoogleIndexingUrls(input: {
+export async function enqueueGoogleIndexingUrls(input: {
   urls: string[];
   kind: GoogleIndexingContentKind;
   notificationType?: GoogleIndexingNotificationType;
   source?: string;
 }) {
+  const admin = createServiceRoleSupabaseClient();
+  if (!admin) {
+    throw new Error('Server missing Supabase service role for indexing queue');
+  }
+
   const notificationType = input.notificationType ?? 'URL_UPDATED';
   const source = input.source?.trim() || 'manual';
   const now = new Date().toISOString();
-  const queue = readGoogleIndexingQueue();
-  const byKey = new Map(queue.map((item) => [queueKey(item), item]));
 
-  let enqueued = 0;
-
+  const normalizedUrls: string[] = [];
   for (const value of input.urls) {
     const normalized = normalizeIndexingUrl(value);
-    if (!normalized) continue;
-    const key = queueKey({ url: normalized, notificationType });
-    const prev = byKey.get(key);
-    const next: GoogleIndexingQueueItem = {
-      url: normalized,
-      kind: input.kind,
-      notificationType,
-      source,
-      status: 'pending',
-      enqueuedAt: now,
-      attemptCount: prev?.attemptCount ?? 0,
-      ...(prev?.lastAttemptAt ? { lastAttemptAt: prev.lastAttemptAt } : {}),
-      ...(prev?.sentAt ? { sentAt: prev.sentAt } : {})
-    };
-    byKey.set(key, next);
-    enqueued += 1;
+    if (normalized) normalizedUrls.push(normalized);
+  }
+  if (normalizedUrls.length === 0) {
+    return { ok: true, enqueued: 0, total: 0, pending: 0 };
   }
 
-  const items = Array.from(byKey.values()).sort((a, b) =>
-    b.enqueuedAt.localeCompare(a.enqueuedAt)
+  const { data: existing } = await admin
+    .from('google_indexing_queue')
+    .select('url, attempt_count')
+    .in('url', normalizedUrls);
+
+  const prevAttempts = new Map(
+    (existing ?? []).map((r) => [r.url, r.attempt_count as number])
   );
-  writeGoogleIndexingQueue(items);
+
+  const payload = normalizedUrls.map((url) => ({
+    url,
+    status: 'pending' as const,
+    added_at: now,
+    notification_type: notificationType,
+    content_kind: input.kind,
+    source,
+    last_error: null as string | null,
+    attempt_count: prevAttempts.get(url) ?? 0
+  }));
+
+  const { error } = await admin
+    .from('google_indexing_queue')
+    .upsert(payload, { onConflict: 'url' });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const { count: pendingCount } = await admin
+    .from('google_indexing_queue')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'pending');
+
+  const { count: totalCount } = await admin
+    .from('google_indexing_queue')
+    .select('*', { count: 'exact', head: true });
 
   return {
     ok: true,
-    enqueued,
-    total: items.length,
-    pending: items.filter((item) => item.status === 'pending').length
+    enqueued: normalizedUrls.length,
+    total: totalCount ?? 0,
+    pending: pendingCount ?? 0
   };
 }
 
 export async function flushGoogleIndexingQueue(limit = 50) {
-  const queue = readGoogleIndexingQueue();
-  const pending = queue
-    .filter((item) => item.status === 'pending')
-    .slice(0, Math.max(1, Math.min(200, Math.floor(limit) || 50)));
+  const admin = createServiceRoleSupabaseClient();
+  if (!admin) {
+    return {
+      ok: false,
+      processed: 0,
+      sent: 0,
+      failed: 0,
+      skipped: 'Missing Supabase service role'
+    };
+  }
 
-  if (pending.length === 0) {
+  const cap = Math.max(1, Math.min(200, Math.floor(limit) || 50));
+
+  const { data: pending, error: selErr } = await admin
+    .from('google_indexing_queue')
+    .select('id, url, notification_type, attempt_count')
+    .eq('status', 'pending')
+    .order('added_at', { ascending: true })
+    .limit(cap);
+
+  if (selErr) {
+    return {
+      ok: false,
+      processed: 0,
+      sent: 0,
+      failed: 0,
+      skipped: selErr.message
+    };
+  }
+
+  const batch = pending ?? [];
+  if (batch.length === 0) {
     return { ok: true, processed: 0, sent: 0, failed: 0, skipped: 'Queue empty' };
   }
 
@@ -325,10 +417,9 @@ export async function flushGoogleIndexingQueue(limit = 50) {
 
   let sent = 0;
   let failed = 0;
-  const byKey = new Map(queue.map((item) => [queueKey(item), item]));
 
-  for (const item of pending) {
-    const now = new Date().toISOString();
+  for (const row of batch) {
+    const notificationType = row.notification_type as GoogleIndexingNotificationType;
     try {
       const response = await fetch(GOOGLE_INDEXING_ENDPOINT, {
         method: 'POST',
@@ -337,47 +428,56 @@ export async function flushGoogleIndexingQueue(limit = 50) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          url: item.url,
-          type: item.notificationType
+          url: row.url,
+          type: notificationType
         })
       });
 
-      const next = byKey.get(queueKey(item));
-      if (!next) continue;
-
-      next.lastAttemptAt = now;
-      next.attemptCount += 1;
+      const nextAttempts = (row.attempt_count ?? 0) + 1;
 
       if (!response.ok) {
         failed += 1;
-        next.status = 'error';
-        next.lastError = await response.text();
+        const errText = await response.text().catch(() => '');
+        await admin
+          .from('google_indexing_queue')
+          .update({
+            status: 'failed',
+            last_error: errText.slice(0, 2000),
+            attempt_count: nextAttempts
+          })
+          .eq('id', row.id);
         continue;
       }
 
       sent += 1;
-      next.status = 'sent';
-      next.sentAt = now;
-      delete next.lastError;
+      await admin
+        .from('google_indexing_queue')
+        .update({
+          status: 'processed',
+          last_error: null,
+          attempt_count: nextAttempts
+        })
+        .eq('id', row.id);
     } catch (error) {
-      const next = byKey.get(queueKey(item));
-      if (!next) continue;
       failed += 1;
-      next.status = 'error';
-      next.lastAttemptAt = now;
-      next.attemptCount += 1;
-      next.lastError = error instanceof Error ? error.message : String(error);
+      await admin
+        .from('google_indexing_queue')
+        .update({
+          status: 'failed',
+          last_error:
+            (error instanceof Error ? error.message : String(error)).slice(
+              0,
+              2000
+            ),
+          attempt_count: (row.attempt_count ?? 0) + 1
+        })
+        .eq('id', row.id);
     }
   }
 
-  const items = Array.from(byKey.values()).sort((a, b) =>
-    b.enqueuedAt.localeCompare(a.enqueuedAt)
-  );
-  writeGoogleIndexingQueue(items);
-
   return {
     ok: failed === 0,
-    processed: pending.length,
+    processed: batch.length,
     sent,
     failed
   };
