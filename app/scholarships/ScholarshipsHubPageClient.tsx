@@ -1080,6 +1080,37 @@ function ScholarshipsPageInner({
     return countMoreFilterSelections(moreFiltersApplied, filterBounds);
   }, [moreFiltersApplied, moreFiltersBaseline, filterBounds]);
 
+  const mergedHubCitizenshipSource = useMemo(() => {
+    if (!routeBaseMoreFilters && !moreFiltersApplied) return null;
+    if (routeBaseMoreFilters && moreFiltersApplied) {
+      return mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied);
+    }
+    return moreFiltersApplied ?? routeBaseMoreFilters ?? null;
+  }, [routeBaseMoreFilters, moreFiltersApplied]);
+
+  const internationalSidebarChecked =
+    mergedHubCitizenshipSource?.citizenshipAudience ===
+    'international_friendly';
+
+  const toggleInternationalAudienceSidebar = useCallback(() => {
+    const current =
+      moreFiltersApplied ?? cloneMoreFilters(emptyMoreFiltersState);
+    const merged =
+      routeBaseMoreFilters != null
+        ? mergeMoreFilterStates(routeBaseMoreFilters, current)
+        : cloneMoreFilters(current);
+    const next = cloneMoreFilters(current);
+    const nowOn = merged.citizenshipAudience === 'international_friendly';
+    next.citizenshipAudience = nowOn ? 'any' : 'international_friendly';
+    setMoreFiltersApplied(next);
+    replaceListingParams({ deadline: next.deadlinePreset, resetPage: true });
+  }, [
+    moreFiltersApplied,
+    emptyMoreFiltersState,
+    routeBaseMoreFilters,
+    replaceListingParams
+  ]);
+
   const hasListingParams =
     parsedList.q.length > 0 ||
     parsedList.categories.size > 0 ||
@@ -1264,6 +1295,15 @@ function ScholarshipsPageInner({
             onGuestRestrictedNav={!isAuthenticated ? openRegistrationWall : undefined}
             subscriptionLocked={isSubscriptionLocked}
             onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
+            internationalStudentsFilter={{
+              active: internationalSidebarChecked,
+              resultCount: internationalSidebarChecked ? totalCount : null,
+              onActivate: toggleInternationalAudienceSidebar,
+              showGuestLock: !isAuthenticated,
+              showSubscriptionLock: isSubscriptionLocked,
+              onGuestRestrictedClick: openRegistrationWall,
+              onSubscriptionRestrictedClick: openSubscriptionOffer
+            }}
           />
         }
       >

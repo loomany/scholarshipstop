@@ -563,8 +563,16 @@ function applyLegacyLongTailBase(q: any, slug: LongTailSlug): any {
         [
           'title.ilike.%international student%',
           'summary_short.ilike.%international student%',
+          'title.ilike.%foreign student%',
+          'summary_short.ilike.%foreign student%',
           'title.ilike.%f-1%',
-          'summary_short.ilike.%foreign national%'
+          'summary_short.ilike.%f-1%',
+          'title.ilike.%foreign national%',
+          'summary_short.ilike.%foreign national%',
+          'eligibility_tags.cs.["international_students"]',
+          'citizenship_statuses.cs.["international_student"]',
+          'citizenship_statuses.cs.["international_students"]',
+          'citizenship_statuses.cs.["international"]'
         ].join(',')
       );
     case 'engineering':
@@ -721,6 +729,31 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
      */
     const stateJson = JSON.stringify([stateCode]);
     q = q.or(`state_codes.cs.${stateJson},location_tags.cs.${stateJson}`);
+  }
+
+  if (f.citizenshipAudience === 'international_friendly') {
+    const intlParts = [
+      'title.ilike.%international student%',
+      'summary_short.ilike.%international student%',
+      'title.ilike.%foreign student%',
+      'summary_short.ilike.%foreign student%',
+      'title.ilike.%foreign national%',
+      'summary_short.ilike.%foreign national%',
+      'title.ilike.%f-1%',
+      'summary_short.ilike.%f-1%',
+      'description.ilike.%international student%',
+      'description.ilike.%foreign student%',
+      'requirements_text.ilike.%international student%',
+      'requirements_text.ilike.%foreign student%',
+      'eligibility_text.ilike.%international student%',
+      'eligibility_text.ilike.%foreign student%',
+      'citizenship_statuses.cs.["international"]',
+      'citizenship_statuses.cs.["international_students"]',
+      /** Canonical slug from catalog parsers (`scholarship_taxonomy` citizenship rules). */
+      'citizenship_statuses.cs.["international_student"]',
+      'eligibility_tags.cs.["international_students"]'
+    ];
+    q = q.or(intlParts.join(','));
   }
 
   return q;

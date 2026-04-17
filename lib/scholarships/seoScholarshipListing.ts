@@ -105,6 +105,10 @@ export function mergeMoreFilterStates(
     includeEasyApply: new Set(
       Array.from(a.includeEasyApply).concat(Array.from(b.includeEasyApply))
     ),
+    citizenshipAudience:
+      a.citizenshipAudience !== 'any'
+        ? a.citizenshipAudience
+        : b.citizenshipAudience,
     filterStateInput:
       a.filterStateInput.trim() !== ''
         ? a.filterStateInput

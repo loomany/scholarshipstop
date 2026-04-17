@@ -80,6 +80,7 @@ export function applyPersonalizedProfileFitSql(q: any, profile: ProfilesRow): an
   } else if (cit === 'international_student') {
     orParts.push(`citizenship_statuses.cs.${csLiteral(['international'])}`);
     orParts.push(`citizenship_statuses.cs.${csLiteral(['international_students'])}`);
+    orParts.push(`citizenship_statuses.cs.${csLiteral(['international_student'])}`);
   }
 
   /** Quality floor so OR-profile clauses do not return the entire table when JSON facets are sparse. */

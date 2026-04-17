@@ -3,7 +3,11 @@
 import { useEffect } from 'react';
 import { Lock, X } from 'lucide-react';
 
-import type { DeadlinePreset, MoreFiltersState } from '@/app/scholarships/moreFilters';
+import type {
+  CitizenshipAudienceFilter,
+  DeadlinePreset,
+  MoreFiltersState
+} from '@/app/scholarships/moreFilters';
 import {
   scholarshipGuestLockIconClass,
   scholarshipSaveFilterButtonClass,
@@ -176,6 +180,9 @@ export default function ScholarshipsMoreFiltersPanel({
   const eligibilityLocked = isAuthenticated && !hasSubscription;
   const applicantsLocked = isAuthenticated && !hasSubscription;
   const deadlineShortRangeLocked = isAuthenticated && !hasSubscription;
+  /** Guests + signed-in without subscription — same gating as sidebar Hot Deadlines row. */
+  const internationalAudienceGated =
+    !isAuthenticated || (isAuthenticated && !hasSubscription);
   const SUBSCRIPTION_LOCKED_EASY_APPLY_IDS = new Set([
     'easy_apply',
     'quick_apply'
@@ -289,6 +296,65 @@ export default function ScholarshipsMoreFiltersPanel({
                             return;
                           }
                           setDeadline(presetId);
+                        }}
+                        className="scholarship-deadline-radio h-4 w-4 shrink-0"
+                      />
+                      <span className="inline-flex items-center gap-1.5 text-sm text-zinc-800">
+                        {label}
+                        {optionLocked ? (
+                          <Lock
+                            className={`h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
+                            strokeWidth={2}
+                            aria-hidden
+                          />
+                        ) : null}
+                      </span>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+
+          <section className={`py-5 ${divider}`}>
+            <h3 className={sectionTitle}>Citizenship & eligibility</h3>
+            <p className={sectionHint}>
+              Narrow listings that explicitly mention international students, foreign
+              nationals, or similar in our catalog fields. Always confirm rules on the
+              official program page—this is not legal or visa advice.
+            </p>
+            <ul className="mt-4 space-y-3">
+              {(
+                [
+                  ['any', 'All applicants (default)'],
+                  [
+                    'international_friendly',
+                    'Open to international students (best effort)'
+                  ]
+                ] as const
+              ).map(([id, label]) => {
+                const optionLocked =
+                  id === 'international_friendly' && internationalAudienceGated;
+                return (
+                  <li key={id}>
+                    <label className="flex cursor-pointer items-center gap-3">
+                      <input
+                        type="radio"
+                        name="citizenship-audience"
+                        checked={value.citizenshipAudience === id}
+                        onChange={() => {
+                          if (optionLocked) {
+                            if (!isAuthenticated) {
+                              onGuestLockedAction?.();
+                            } else {
+                              onSubscriptionLockedAction?.();
+                            }
+                            return;
+                          }
+                          onChange({
+                            ...value,
+                            citizenshipAudience: id as CitizenshipAudienceFilter
+                          });
                         }}
                         className="scholarship-deadline-radio h-4 w-4 shrink-0"
                       />

@@ -10,7 +10,10 @@ export type MoreFiltersJson = Omit<
   | 'includeGpaBuckets'
   | 'includeLocationLabels'
   | 'includeEasyApply'
+  | 'citizenshipAudience'
 > & {
+  /** Omitted in older saved snapshots — decoded as `any`. */
+  citizenshipAudience?: MoreFiltersState['citizenshipAudience'];
   includeRequirementTypes: string[];
   includeEligibility: string[];
   includeEducationLevels: string[];
@@ -63,6 +66,10 @@ export function moreFiltersFromJson(
   const d = defaultMoreFiltersFromBounds(boundsFallback);
   return {
     deadlinePreset: raw.deadlinePreset ?? d.deadlinePreset,
+    citizenshipAudience:
+      raw.citizenshipAudience === 'international_friendly'
+        ? 'international_friendly'
+        : 'any',
     amountMin: raw.amountMin ?? d.amountMin,
     amountMax: raw.amountMax ?? d.amountMax,
     applicantsMin: raw.applicantsMin ?? d.applicantsMin,

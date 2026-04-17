@@ -26,8 +26,16 @@ export type PayoutFlags = {
   notStated: boolean;
 };
 
+/**
+ * Narrow catalog rows toward international-student-friendly signals (structured + text).
+ * Does not guarantee visa eligibility — users must confirm on the official program page.
+ */
+export type CitizenshipAudienceFilter = 'any' | 'international_friendly';
+
 export type MoreFiltersState = {
   deadlinePreset: DeadlinePreset;
+  /** When `international_friendly`, require catalog signals for international / foreign eligibility. */
+  citizenshipAudience: CitizenshipAudienceFilter;
   amountMin: number;
   amountMax: number;
   applicantsMin: number;
@@ -167,6 +175,35 @@ function matchesLocation(s: Scholarship, selected: Set<string>): boolean {
   return false;
 }
 
+function matchesInternationalFriendlyAudience(s: Scholarship): boolean {
+  const cat = getScholarshipCatalog(s);
+  if (cat.eligibilityIds.includes('international_students')) return true;
+  const cit = (s.citizenshipStatuses ?? [])
+    .map((x) => String(x).toLowerCase())
+    .join(' ');
+  if (
+    /international|f-1|f1|foreign|non.u\.s|non-us|global student|visa holder|outside the u\.s/i.test(
+      cit
+    )
+  ) {
+    return true;
+  }
+  const blob = [
+    s.title,
+    s.description,
+    s.summaryShort,
+    s.whoCanApplyText,
+    s.eligibilityText,
+    s.requirementsTextClean
+  ]
+    .filter(Boolean)
+    .join('\n')
+    .toLowerCase();
+  return /international student|foreign student|f-1|f1 visa|foreign national|students outside|non-u\.s\. citizen|non us citizen|eligible.*international/i.test(
+    blob
+  );
+}
+
 function matchesFilterStateInput(s: Scholarship, filterStateInput: string): boolean {
   const canon = normalizeUsStateToCanonical(filterStateInput);
   if (!canon) return true;
@@ -222,6 +259,7 @@ export function defaultMoreFiltersFromBounds(bounds: {
 }): MoreFiltersState {
   return {
     deadlinePreset: 'any',
+    citizenshipAudience: 'any',
     amountMin: bounds.amountMin,
     amountMax: bounds.amountMax,
     applicantsMin: bounds.applicantsMin,
@@ -314,6 +352,9 @@ export function scholarshipPassesMoreFilters(
   if (!matchesLocation(s, f.includeLocationLabels)) return false;
   if (!matchesEasyApply(s, f.includeEasyApply)) return false;
   if (!matchesFilterStateInput(s, f.filterStateInput)) return false;
+  if (f.citizenshipAudience === 'international_friendly') {
+    if (!matchesInternationalFriendlyAudience(s)) return false;
+  }
 
   return true;
 }
@@ -341,6 +382,7 @@ export function countMoreFilterSelections(
   const d = defaultMoreFiltersFromBounds(bounds);
   let n = 0;
   if (f.deadlinePreset !== 'any') n++;
+  if (f.citizenshipAudience !== 'any') n++;
   if (f.amountMin !== d.amountMin || f.amountMax !== d.amountMax) n++;
   if (f.applicantsMin !== d.applicantsMin || f.applicantsMax !== d.applicantsMax) {
     n++;
@@ -377,6 +419,7 @@ export function countMoreFilterDeltaFromBaseline(
 ): number {
   let n = 0;
   if (f.deadlinePreset !== baseline.deadlinePreset) n++;
+  if (f.citizenshipAudience !== baseline.citizenshipAudience) n++;
   if (
     f.amountMin !== baseline.amountMin ||
     f.amountMax !== baseline.amountMax

@@ -6,6 +6,7 @@ import {
   Ban,
   Bookmark,
   Flame,
+  Globe,
   Heart,
   Layers,
   Lock,
@@ -32,6 +33,23 @@ import {
 import { ScholarshipsSidebarAiMentorCard } from '@/components/scholarships/ScholarshipsSidebarAiMentorCard';
 
 export type { ScholarshipSidebarCounts };
+
+/**
+ * Hub / category: “Open to international students” under Hot Deadlines —
+ * same row chrome as other sidebar links (icon, label, optional count, lock).
+ */
+export type ScholarshipsSidebarInternationalFilterProps = {
+  /** Row highlight when the international filter is applied. */
+  active: boolean;
+  /** Same pattern as `(495)` on Hot Deadlines — typically current listing total while active. */
+  resultCount: number | null;
+  /** Ungated: apply filter and refresh grants immediately. */
+  onActivate: () => void;
+  showGuestLock: boolean;
+  showSubscriptionLock: boolean;
+  onGuestRestrictedClick: () => void;
+  onSubscriptionRestrictedClick: () => void;
+};
 
 type NavDef = {
   id: ScholarshipListTabId;
@@ -145,6 +163,8 @@ type ScholarshipsSidebarProps = {
   subscriptionLocked?: boolean;
   /** When set, subscription-gated rows call this instead of navigating. */
   onSubscriptionRestrictedNav?: () => void;
+  /** Optional row under Hot Deadlines — international audience filter + lock for free signed-in users. */
+  internationalStudentsFilter?: ScholarshipsSidebarInternationalFilterProps | null;
 };
 
 export default function ScholarshipsSidebar({
@@ -154,7 +174,8 @@ export default function ScholarshipsSidebar({
   guestMode = false,
   onGuestRestrictedNav,
   subscriptionLocked = false,
-  onSubscriptionRestrictedNav
+  onSubscriptionRestrictedNav,
+  internationalStudentsFilter = null
 }: ScholarshipsSidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -321,7 +342,7 @@ export default function ScholarshipsSidebar({
           );
         })}
 
-        {ACTION_NAV_DEFS.map((item) => {
+        {ACTION_NAV_DEFS.flatMap((item) => {
           const isActive = activeTab === item.id;
           const Icon = item.icon;
           const href = buildScholarshipTabHref(item.id);
@@ -438,7 +459,7 @@ export default function ScholarshipsSidebar({
             </Link>
           );
 
-          return (
+          const navLi = (
             <li key={item.id}>
               {useDarkTooltips && tip ? (
                 <DarkTooltip
@@ -454,6 +475,131 @@ export default function ScholarshipsSidebar({
               )}
             </li>
           );
+
+          if (
+            item.id === 'hot-deadlines' &&
+            internationalStudentsFilter != null
+          ) {
+            const intl = internationalStudentsFilter;
+            const intlActive = intl.active;
+            const intlCountSuffix =
+              intl.resultCount != null && Number.isFinite(intl.resultCount)
+                ? `(${intl.resultCount})`
+                : null;
+            const showGuestLockIntl = intl.showGuestLock;
+            const showSubscriptionLockIntl = intl.showSubscriptionLock;
+            const intlRowClass = `flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
+              intlActive
+                ? scholarshipSidebarActiveRowClass
+                : 'border-transparent hover:bg-gray-50/80'
+            }`;
+            const intlGated = showGuestLockIntl || showSubscriptionLockIntl;
+            const intlTip =
+              'Scholarships that mention international students or similar eligibility in our catalog data.';
+            const intlInner = (
+              <>
+                <Globe
+                  className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
+                    intlActive
+                      ? 'text-white stroke-white'
+                      : 'text-[#FF7A1A] stroke-[#FF7A1A]'
+                  }`}
+                  aria-hidden
+                />
+                <span
+                  className={`min-w-0 flex-1 text-left text-sm ${
+                    intlActive
+                      ? 'font-semibold text-white'
+                      : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
+                  }`}
+                >
+                  Open to international students
+                  {intlCountSuffix ? (
+                    <span
+                      className={
+                        intlActive
+                          ? 'font-normal text-white'
+                          : 'font-normal text-gray-400'
+                      }
+                    >
+                      {' '}
+                      {intlCountSuffix}
+                    </span>
+                  ) : null}
+                </span>
+                {showGuestLockIntl || showSubscriptionLockIntl ? (
+                  <Lock
+                    className={`h-3.5 w-3.5 shrink-0 ${
+                      intlActive
+                        ? 'text-white stroke-white'
+                        : 'text-[#FF7A1A] stroke-[#FF7A1A]'
+                    }`}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                ) : null}
+              </>
+            );
+            const intlControl = intlGated ? (
+              <button
+                type="button"
+                title={
+                  useDarkTooltips
+                    ? undefined
+                    : showSubscriptionLockIntl
+                      ? 'Start your free access to unlock'
+                      : 'Create a free account to unlock'
+                }
+                onClick={() =>
+                  showSubscriptionLockIntl
+                    ? intl.onSubscriptionRestrictedClick()
+                    : intl.onGuestRestrictedClick()
+                }
+                className={`${intlRowClass} w-full cursor-pointer text-left group`}
+                aria-label={
+                  showSubscriptionLockIntl
+                    ? 'Start free access to filter by international students'
+                    : 'Create a free account to filter by international students'
+                }
+              >
+                {intlInner}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => intl.onActivate()}
+                className={`${intlRowClass} w-full cursor-pointer text-left group`}
+                title={useDarkTooltips ? undefined : intlTip}
+                aria-pressed={intlActive}
+                aria-label={
+                  intlActive
+                    ? 'International filter on — click to clear'
+                    : 'Show scholarships open to international students'
+                }
+              >
+                {intlInner}
+              </button>
+            );
+            const internationalRow = (
+              <li key="sidebar-international-students">
+                {useDarkTooltips ? (
+                  <DarkTooltip
+                    content={intlTip}
+                    side="right"
+                    align="center"
+                    className="block w-full"
+                  >
+                    {intlControl}
+                  </DarkTooltip>
+                ) : (
+                  intlControl
+                )}
+              </li>
+            );
+            return [navLi, internationalRow];
+          }
+
+          return [navLi];
         })}
       </ul>
     </nav>

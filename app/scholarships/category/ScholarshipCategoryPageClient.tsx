@@ -538,6 +538,24 @@ export default function ScholarshipCategoryPageClient({
     replaceListingParams
   ]);
 
+  const internationalSidebarChecked =
+    moreFiltersApplied?.citizenshipAudience === 'international_friendly';
+
+  const toggleInternationalAudienceSidebar = useCallback(() => {
+    const current =
+      moreFiltersApplied ?? defaultMoreFiltersFromBounds(filterBounds);
+    const next = cloneMoreFilters(current);
+    next.citizenshipAudience =
+      current.citizenshipAudience === 'international_friendly'
+        ? 'any'
+        : 'international_friendly';
+    setMoreFiltersApplied(next);
+    replaceListingParams({
+      deadline: next.deadlinePreset,
+      resetPage: true
+    });
+  }, [moreFiltersApplied, filterBounds, replaceListingParams]);
+
   const clearMoreFiltersDraft = useCallback(() => {
     setMoreFiltersDraft(defaultMoreFiltersFromBounds(filterBounds));
   }, [filterBounds]);
@@ -612,6 +630,9 @@ export default function ScholarshipCategoryPageClient({
     if (moreFiltersApplied.includeLocationLabels.size > 0) return true;
     if (moreFiltersApplied.includeEasyApply.size > 0) return true;
     if (moreFiltersApplied.filterStateInput.trim() !== '') return true;
+    if (moreFiltersApplied.citizenshipAudience !== d.citizenshipAudience) {
+      return true;
+    }
     const po = moreFiltersApplied.payout;
     if (po.college || po.student || po.nonMonetary || po.notStated) return true;
     return false;
@@ -763,6 +784,15 @@ export default function ScholarshipCategoryPageClient({
             matchesNewIndicator={null}
             subscriptionLocked={isSubscriptionLocked}
             onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
+            internationalStudentsFilter={{
+              active: internationalSidebarChecked,
+              resultCount: internationalSidebarChecked ? listTotalForUi : null,
+              onActivate: toggleInternationalAudienceSidebar,
+              showGuestLock: !isAuthenticated,
+              showSubscriptionLock: isSubscriptionLocked,
+              onGuestRestrictedClick: openRegistrationWall,
+              onSubscriptionRestrictedClick: openSubscriptionOffer
+            }}
           />
         }
       >

@@ -182,7 +182,7 @@ const ELIGIBILITY_RULES: { id: string; re: RegExp }[] = [
   { id: 'women', re: /\b(women|female|woman)\b|\bladies\b/i },
   {
     id: 'international_students',
-    re: /\binternational\s+students?\b|\bforeign\s+students?\b|\bnon[-\s]?u\.?s\.?\s+citizens?\b/i
+    re: /\binternational\s+students?\b|\bforeign\s+students?\b|\bforeign\s+nationals?\b|\bnon[-\s]?u\.?s\.?\s+citizens?\b/i
   },
   { id: 'minority', re: /\bminorit(y|ies)\b|\bunderrepresented\b/i },
   { id: 'hispanic', re: /\bhispanic\b|\blatin[oa]\b|\bchican[oa]\b/i },

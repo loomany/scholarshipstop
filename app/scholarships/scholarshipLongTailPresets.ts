@@ -227,11 +227,15 @@ export function buildLongTailMoreFiltersState(
       };
     case 'closing-soon':
     case 'undergraduate':
-    case 'international-students':
     case 'high-school':
     case 'engineering':
     case 'computer-science':
       return d;
+    case 'international-students':
+      return {
+        ...d,
+        citizenshipAudience: 'international_friendly'
+      };
     case 'under-5000':
       return {
         ...d,
