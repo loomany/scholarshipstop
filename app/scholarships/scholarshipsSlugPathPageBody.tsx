@@ -295,8 +295,8 @@ export default async function ScholarshipsSlugPathPageBody({
           : `Scholarships in ${stateHubCtx.stateLabel} · ${year}`;
       stateHubIntroFallback =
         topicSlug && topicLinkLabel
-          ? `Use filters and search below to narrow ${topicLinkLabel.toLowerCase()} in ${stateHubCtx.stateLabel} by deadline, award size, and eligibility.`
-          : `Use filters below to narrow scholarships in ${stateHubCtx.stateLabel} by field, deadline, and amount.`;
+          ? `Discover top-rated ${topicLinkLabel.toLowerCase()} programs and financial aid tailored for students in ${stateHubCtx.stateLabel}. Use our smart filters to match deadlines, award size, and eligibility.`
+          : `Discover scholarships for students in ${stateHubCtx.stateLabel}. Use filters below to refine by field, deadline, and amount.`;
 
       const neighbors = neighborStateSlugsForSeoHub(stateHubCtx.stateSlug);
       stateHubSupportingAppend = buildStateHubSupportingAppendHtml({
@@ -312,7 +312,7 @@ export default async function ScholarshipsSlugPathPageBody({
         year
       });
       manifestDisplayHeading = `${tripleHubCtx.topicLabel} (${tripleHubCtx.degreeLabel}) in ${tripleHubCtx.stateLabel} · ${year}`;
-      stateHubIntroFallback = `Use filters and search below to narrow ${tripleHubCtx.topicLabel.toLowerCase()} (${tripleHubCtx.degreeLabel.toLowerCase()}) in ${tripleHubCtx.stateLabel} by deadline, award size, and eligibility.`;
+      stateHubIntroFallback = `Discover top-rated ${tripleHubCtx.topicLabel.toLowerCase()} programs for ${tripleHubCtx.degreeLabel.toLowerCase()} students in ${tripleHubCtx.stateLabel}. Use filters to find programs that fit your plan.`;
       const neighbors = neighborStateSlugsForSeoHub(tripleHubCtx.stateSlug);
       stateHubSupportingAppend = buildStateHubSupportingAppendHtml({
         contentHtml: hubRow?.content_html ?? null,
@@ -393,6 +393,7 @@ export default async function ScholarshipsSlugPathPageBody({
                   scholarshipCount={initialListPayload.total}
                   listLoading={false}
                   introHtml={introParagraph}
+                  introFromSeoBundle={Boolean(seo?.intro?.trim())}
                   fallbackUsed={Boolean(initialListPayload.seoFallback?.used)}
                   thinListing={Boolean(
                     initialListPayload.seoFallback?.thinListing

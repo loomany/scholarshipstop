@@ -34,10 +34,13 @@ export function stripNumericSuffixFromSeoHeading(raw: string): string {
   );
   t = t.replace(/\s*\(\s*[\d,]+\s*\)\s*$/, '');
   t = t.replace(/\s*:\s*[\d,]+\s*$/, '');
-  return stripNumericTokensFromSeoProse(t)
+  t = stripNumericTokensFromSeoProse(t)
     .replace(/\s+$/g, '')
     .replace(/^\s*[—–:\s]+/, '')
     .trim();
+  // Removing integers can leave a stray middle dot before where the count was (e.g. "Oregon ·").
+  t = t.replace(/\s*[·•]\s*$/g, '').trim();
+  return t;
 }
 
 function mapBullets(

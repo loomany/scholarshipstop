@@ -32,6 +32,54 @@ function stripTrailingYearFromHubHeading(raw: string): string {
   return raw.replace(/\s*·\s*\d{4}\s*$/, '').trim();
 }
 
+/** Remove trailing decorative middle dots left after title cleanup. */
+function stripTrailingMiddleDots(raw: string): string {
+  let t = raw.trim();
+  for (let i = 0; i < 3; i++) {
+    const next = t.replace(/\s*[·•]\s*$/g, '').trim();
+    if (next === t) break;
+    t = next;
+  }
+  return t;
+}
+
+function htmlToPlainSentenceSource(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<\/p>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** First sentence for hero lead (AI bundle intros are often multi-sentence). */
+function takeFirstSentence(plain: string): string {
+  const t = plain.trim();
+  if (!t) return t;
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i];
+    if (ch !== '.' && ch !== '!' && ch !== '?') continue;
+    const next = t[i + 1];
+    if (next == null || /\s/.test(next)) {
+      return t.slice(0, i + 1).trim();
+    }
+  }
+  return t;
+}
+
+function heroLeadFromIntroHtml(introHtml: string, useFirstSentenceOnly: boolean): string {
+  const plain = htmlToPlainSentenceSource(introHtml);
+  return useFirstSentenceOnly ? takeFirstSentence(plain) : plain;
+}
+
 function introParagraphs(text: string, maxParas: number): string[] {
   const parts = text
     .trim()
@@ -147,10 +195,10 @@ function whoThisPageIsFor(pageData: SeoListingPageData | null | undefined): stri
 }
 
 /**
- * When there is no AI intro HTML, show a single line pointing users at filters (no duplicate counts).
+ * When there is no bundle intro, keep a short friendly line (filters are implied).
  */
 function buildMinimalFilterIntro(_heading: string): string {
-  return 'Use filters and search below to narrow results by deadline, award size, and eligibility.';
+  return 'Explore programs that match this page, then refine with filters for deadlines and award amounts.';
 }
 
 function SeoFactsGrid({
@@ -253,6 +301,11 @@ type HeroProps = {
    * promoted routes like `/scholarships/engineering` (does not change robots/indexing).
    */
   publicSeoPage?: boolean;
+  /**
+   * True when `introHtml` comes from the SEO JSON bundle (`seo.intro`), so the hero
+   * shows the first sentence of that copy instead of the generic filter line.
+   */
+  introFromSeoBundle?: boolean;
 };
 
 /**
@@ -271,10 +324,13 @@ export function SeoScholarshipHero({
   pageData = null,
   updatedAt = null,
   canonicalTarget = null,
-  publicSeoPage = false
+  publicSeoPage = false,
+  introFromSeoBundle = false
 }: HeroProps) {
   const topicCore = shortenSeoListingHeading(
-    stripTrailingYearFromHubHeading(stripNumericSuffixFromSeoHeading(heading))
+    stripTrailingMiddleDots(
+      stripTrailingYearFromHubHeading(stripNumericSuffixFromSeoHeading(heading))
+    )
   );
   const showCountBadge = scholarshipCount != null && scholarshipCount > 0;
   const sub =
@@ -302,24 +358,39 @@ export function SeoScholarshipHero({
   const deterministicIntro = showDeterministicIntro
     ? buildMinimalFilterIntro(heading)
     : null;
-  const introSource =
-    introHtml?.trim() ?? deterministicIntro ?? null;
-  const paras = introSource ? introParagraphs(introSource, 1) : [];
+
+  const introSourceForHero = (() => {
+    if (!introHtml?.trim()) return deterministicIntro ?? null;
+    if (introFromSeoBundle) {
+      return heroLeadFromIntroHtml(introHtml, true);
+    }
+    return heroLeadFromIntroHtml(introHtml, false);
+  })();
+
+  const paras = introSourceForHero
+    ? introParagraphs(
+        introSourceForHero.includes('<') ? introSourceForHero : `<p>${introSourceForHero}</p>`,
+        1
+      )
+    : [];
 
   const hideInternalListingBanner = publicSeoPage || qualityBucket === 'GOOD';
 
+  const oppLabel =
+    scholarshipCount === 1 ? 'opportunity' : 'opportunities';
+
   return (
     <header className={`${PROSE} space-y-2 pb-5 sm:space-y-2.5 sm:pb-6`}>
-      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-3">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-3 sm:gap-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl lg:text-[1.85rem] lg:leading-snug">
           {topicCore}
         </h1>
         {showCountBadge ? (
           <span
-            className="inline-flex w-fit shrink-0 items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-sm font-semibold tabular-nums text-slate-500"
-            aria-label={`${scholarshipCount!.toLocaleString('en-US')} scholarships in this list`}
+            className="inline-flex w-fit shrink-0 items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium tabular-nums text-gray-600"
+            aria-label={`${scholarshipCount!.toLocaleString('en-US')} ${oppLabel} in this list`}
           >
-            {scholarshipCount!.toLocaleString('en-US')}
+            {scholarshipCount!.toLocaleString('en-US')} {oppLabel}
           </span>
         ) : null}
       </div>
@@ -339,12 +410,12 @@ export function SeoScholarshipHero({
         </p>
       ) : null}
       {paras.length > 0 ? (
-        <div className="space-y-2.5 text-sm leading-relaxed text-slate-600 sm:text-[15px]">
+        <div className="mt-1 space-y-2.5 text-sm leading-relaxed text-slate-600 sm:text-[15px]">
           {paras.map((p, i) => (
             <SafeScholarshipHtml
               key={i}
               html={p}
-              className={scholarshipRichProseClassName}
+              className={`${scholarshipRichProseClassName} text-slate-600 [&_p]:text-slate-600`}
             />
           ))}
         </div>
