@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types_db';
 import {
   getLemonSignatureDebug,
@@ -26,10 +26,24 @@ import { enrichInvoicePaymentSuccessWithSubscriptionFetch } from '@/lib/payments
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const supabaseAdmin = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+let supabaseAdminSingleton: SupabaseClient<Database> | null | undefined;
+
+function getSupabaseAdmin(): SupabaseClient<Database> {
+  if (supabaseAdminSingleton !== undefined) {
+    if (!supabaseAdminSingleton) {
+      throw new Error('Supabase admin client is not configured.');
+    }
+    return supabaseAdminSingleton;
+  }
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!url || !key) {
+    supabaseAdminSingleton = null;
+    throw new Error('Supabase admin client is not configured.');
+  }
+  supabaseAdminSingleton = createClient<Database>(url, key);
+  return supabaseAdminSingleton;
+}
 
 function parseIsoDate(value: string | null | undefined) {
   if (!value) return null;
@@ -130,7 +144,7 @@ export async function POST(req: Request) {
 
     const decision = decideSubscriptionUpdate(payload);
     if (decision.kind === 'ignored') {
-      const invoiceFx = await runInvoicePaymentFailedWebhookEffects(supabaseAdmin, payload);
+      const invoiceFx = await runInvoicePaymentFailedWebhookEffects(getSupabaseAdmin(), payload);
       return new Response(
         JSON.stringify({
           received: true,
@@ -149,7 +163,7 @@ export async function POST(req: Request) {
       plan: decision.subscriptionPlan
     });
 
-    const { data: existingSubscription } = await supabaseAdmin
+    const { data: existingSubscription } = await getSupabaseAdmin()
       .from('subscriptions')
       .select('id, metadata, raw_payload')
       .eq('id', decision.subscription.id)
@@ -222,7 +236,7 @@ export async function POST(req: Request) {
       decision.eventName === 'subscription_payment_failed' &&
       isSubscriptionInvoicePayload(payload)
     ) {
-      const { data: existingFull } = await supabaseAdmin
+      const { data: existingFull } = await getSupabaseAdmin()
         .from('subscriptions')
         .select('*')
         .eq('id', decision.subscription.id)
@@ -239,7 +253,7 @@ export async function POST(req: Request) {
       subscriptionId: subscriptionRow.id,
       userId: decision.userId
     });
-    const { error: subscriptionError } = await supabaseAdmin
+    const { error: subscriptionError } = await getSupabaseAdmin()
       .from('subscriptions')
       .upsert([subscriptionRow], { onConflict: 'id' });
     if (subscriptionError) {
@@ -265,7 +279,7 @@ export async function POST(req: Request) {
       isSubscribed: decision.isSubscribed,
       plan: decision.subscriptionPlan
     });
-    const { error } = await supabaseAdmin
+    const { error } = await getSupabaseAdmin()
       .from('profiles')
       .upsert(
         [
@@ -295,7 +309,7 @@ export async function POST(req: Request) {
       let userEmail: string | null = null;
       try {
         const { data: authUserData, error: authErr } =
-          await supabaseAdmin.auth.admin.getUserById(decision.userId);
+          await getSupabaseAdmin().auth.admin.getUserById(decision.userId);
         if (authErr) {
           console.warn('[lemon:webhook] auth admin getUserById', authErr.message);
         }

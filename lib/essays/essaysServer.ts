@@ -95,6 +95,14 @@ export const fetchEssaysHubIndexPage = cache(
     anyPublished: boolean;
   }> => {
     const supabase = createPublicClient();
+    if (!supabase) {
+      return {
+        rows: [],
+        total: 0,
+        categoryOptions: [],
+        anyPublished: false
+      };
+    }
     const { data, error } = await supabase.rpc('essays_hub_index_page', {
       p_q: state.q,
       p_category: state.categoryKey,
@@ -132,6 +140,7 @@ export const fetchEssaysHubIndexPage = cache(
 
 export async function countPublishedEssays(): Promise<number> {
   const supabase = createPublicClient();
+  if (!supabase) return 0;
   const { count, error } = await supabase
     .from('essays')
     .select('id', { count: 'exact', head: true })
@@ -147,6 +156,7 @@ export async function fetchLatestPublishedEssayHubList(
 ): Promise<EssayListFields[]> {
   const size = Math.max(1, Math.min(200, Math.floor(limit)));
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('essays')
     .select(listSelect)
@@ -171,6 +181,7 @@ export async function fetchPublishedEssaysBySlugsOrdered(
   if (ordered.length === 0) return [];
 
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('essays')
     .select(listSelect)
@@ -194,6 +205,7 @@ export const fetchPublishedEssayBySlug = cache(
     if (!raw) return null;
 
     const supabase = createPublicClient();
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('essays')
       .select(
@@ -215,6 +227,7 @@ export async function fetchScholarshipRowsForEssay(
   { id: string; slug: string | null; title: string | null }[]
 > {
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const { data: links, error: e1 } = await supabase
     .from('scholarship_essays')
     .select('scholarship_id')
@@ -248,6 +261,7 @@ export async function fetchAllPublishedEssaySitemapRows(): Promise<
   let from = 0;
   for (;;) {
     const supabase = createPublicClient();
+    if (!supabase) return [];
     const { data, error } = await supabase
       .from('essays')
       .select('slug, updated_at')
@@ -270,6 +284,7 @@ export async function fetchPublishedEssaysForScholarship(
   limit = 4
 ): Promise<EssayListFields[]> {
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const { data: links, error: e1 } = await supabase
     .from('scholarship_essays')
     .select('essay_id')

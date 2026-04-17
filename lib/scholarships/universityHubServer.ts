@@ -55,6 +55,7 @@ export async function fetchUniversityHubRow(
   if (!stateCode) return null;
 
   const supabase = createPublicClient();
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('provider_hub_listing')
     .select('slug, display_name, scholarship_count, state, ai_description')
@@ -95,6 +96,12 @@ export async function fetchScholarshipsForUniversitySlug(
   universitySlug: string
 ): Promise<UniversityHubScholarshipsResult> {
   const supabase = createPublicClient();
+  if (!supabase) {
+    return {
+      scholarships: [],
+      error: 'Unable to load scholarships.'
+    };
+  }
   const { data, error } = await supabase
     .from('scholarships')
     .select(LIST_CARD_SELECT)
@@ -122,6 +129,7 @@ export async function fetchProviderAiFaqBySlug(
   providerSlug: string
 ): Promise<ProviderFaqItem[]> {
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const { data } = await supabase
     .from('providers')
     .select('ai_faq')
@@ -147,6 +155,7 @@ export async function fetchRelatedUniversitiesInState(
   limit = 12
 ): Promise<RelatedUniversityLink[]> {
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('provider_hub_listing')
     .select('slug, display_name, scholarship_count')

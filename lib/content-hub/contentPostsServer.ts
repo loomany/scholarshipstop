@@ -12,6 +12,7 @@ const publishedWithSlugSelect =
 
 function publishedPostsWithSlugQuery() {
   const supabase = createPublicClient();
+  if (!supabase) return null;
   return supabase
     .from('content_posts')
     .select(publishedWithSlugSelect)
@@ -23,6 +24,7 @@ function publishedPostsWithSlugQuery() {
 /** Total published posts that have a non-empty slug (listable on `/resources`). */
 export async function countPublishedContentPostsWithSlug(): Promise<number> {
   const supabase = createPublicClient();
+  if (!supabase) return 0;
   const { count, error } = await supabase
     .from('content_posts')
     .select('id', { count: 'exact', head: true })
@@ -46,7 +48,10 @@ export async function fetchPublishedContentPostsPage(
   const from = (safePage - 1) * size;
   const to = from + size - 1;
 
-  const { data, error } = await publishedPostsWithSlugQuery()
+  const q = publishedPostsWithSlugQuery();
+  if (!q) return [];
+
+  const { data, error } = await q
     .order('published_at', { ascending: false, nullsFirst: false })
     .order('updated_at', { ascending: false, nullsFirst: false })
     .range(from, to);
@@ -75,6 +80,7 @@ export async function fetchAllPublishedContentPostsForSitemap(): Promise<
   let from = 0;
   for (;;) {
     const supabase = createPublicClient();
+    if (!supabase) return [];
     const { data, error } = await supabase
       .from('content_posts')
       .select('slug, published_at')
@@ -123,6 +129,7 @@ export async function fetchPublishedContentPostsBySlugsOrdered(
   if (ordered.length === 0) return [];
 
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('content_posts')
     .select(publishedWithSlugSelect)
@@ -153,6 +160,7 @@ export const fetchPublishedContentPostBySlug = cache(
     if (!raw) return null;
 
     const supabase = createPublicClient();
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('content_posts')
       .select('*')
@@ -171,6 +179,7 @@ export async function fetchRelatedPublishedContentPosts(
 ): Promise<ContentPostListFields[]> {
   const raw = excludeSlug.trim();
   const supabase = createPublicClient();
+  if (!supabase) return [];
   let q = supabase
     .from('content_posts')
     .select(
@@ -228,6 +237,7 @@ export const fetchPublishedArticlesForScholarshipSlug = cache(
     const cap = Math.max(1, Math.min(6, Math.floor(limit)));
     try {
       const supabase = createPublicClient();
+      if (!supabase) return [];
       /** `cs` = `@>` (JSON contains). */
       const slugProbe = JSON.stringify([{ slug: raw }]);
 

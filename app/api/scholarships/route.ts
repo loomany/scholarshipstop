@@ -96,7 +96,7 @@ async function emptyListResult(
   includeMeta: boolean,
   authUser: boolean,
   /** Listing/meta queries: public client for guests (no cookies), cookie client when session exists. */
-  listDb: ReturnType<typeof createPublicClient>
+  listDb: NonNullable<ReturnType<typeof createPublicClient>>
 ) {
   let meta: ScholarshipListMeta | undefined = undefined;
   if (includeMeta) {
@@ -178,6 +178,16 @@ async function handleList(
   } = await cookieSupabase.auth.getUser();
   /** Guest catalog reads skip cookie-bound client so PostgREST can align with cacheable anonymous paths. */
   const listingSupabase = sessionUser ? cookieSupabase : publicSupabase;
+
+  if (!listingSupabase) {
+    return NextResponse.json(
+      {
+        error:
+          'Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+      },
+      { status: 503 }
+    );
+  }
 
   const page = searchParams.get('page');
   const limit = searchParams.get('limit');

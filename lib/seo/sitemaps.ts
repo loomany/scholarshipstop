@@ -172,6 +172,7 @@ async function fetchScholarshipSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const out: MetadataRoute.Sitemap = [];
   let offset = 0;
 
@@ -203,6 +204,7 @@ async function fetchProviderSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const rows: ProviderSitemapRow[] = [];
   let offset = 0;
 

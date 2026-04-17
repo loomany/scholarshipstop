@@ -605,6 +605,7 @@ export async function fetchScholarshipById(
   id: string
 ): Promise<Scholarship | null> {
   const supabase = createPublicClient();
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('scholarships')
     .select(DETAIL_SELECT)
@@ -620,6 +621,7 @@ export async function fetchScholarshipBySlug(
   slug: string
 ): Promise<Scholarship | null> {
   const supabase = createPublicClient();
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('scholarships')
     .select(DETAIL_SELECT)
@@ -643,6 +645,7 @@ export async function fetchScholarshipBySlugOrId(
     return fetchScholarshipBySlug(candidates[0]!);
   }
   const supabase = createPublicClient();
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('scholarships')
     .select(DETAIL_SELECT)
@@ -679,6 +682,7 @@ export async function fetchScholarshipsBySlugsOrIdsOrdered(
   }
 
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const bySlug = new Map<string, Scholarship>();
   const byId = new Map<string, Scholarship>();
 

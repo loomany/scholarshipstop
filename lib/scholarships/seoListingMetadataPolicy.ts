@@ -135,6 +135,19 @@ export async function evaluateManifestSeoListingThin(
   const cached = readTtlCache(manifestThinCache, cacheKey);
   if (cached) return cached;
   const supabase = createPublicClient() as any;
+  if (!supabase) {
+    const value: ManifestThinResult = {
+      thinListing: true,
+      broadFallbackNoindex: false,
+      widenTo:
+        entry.canonicalTarget ?? widenScholarshipSeoPath(entry.canonicalPath),
+      fallbackUsed: false,
+      exactCount: 0,
+      renderedCount: 0
+    };
+    writeTtlCache(manifestThinCache, cacheKey, value);
+    return value;
+  }
   const bounds = await fetchGlobalFilterBounds(supabase);
   const mode: LongTailListingMode = {
     type: 'manifest',
@@ -197,6 +210,14 @@ export async function evaluateLegacyPresetSeoListingThin(
   const cached = readTtlCache(legacyThinCache, slug);
   if (cached) return cached;
   const supabase = createPublicClient() as any;
+  if (!supabase) {
+    const value: BasicThinResult = {
+      thinListing: true,
+      broadFallbackNoindex: false
+    };
+    writeTtlCache(legacyThinCache, slug, value);
+    return value;
+  }
   const bounds = await fetchGlobalFilterBounds(supabase);
   const mf = buildLongTailMoreFiltersState(bounds, slug);
   const mode: LongTailListingMode = { type: 'legacy', slug };
@@ -236,6 +257,14 @@ export async function evaluateCategorySeoListingThin(
   const cached = readTtlCache(categoryThinCache, categorySlug);
   if (cached) return cached;
   const supabase = createPublicClient() as any;
+  if (!supabase) {
+    const value: BasicThinResult = {
+      thinListing: true,
+      broadFallbackNoindex: false
+    };
+    writeTtlCache(categoryThinCache, categorySlug, value);
+    return value;
+  }
   const bounds = await fetchGlobalFilterBounds(supabase);
   const resolved = await resolveCatalogSubjectCategoryForPageSlug(
     supabase,

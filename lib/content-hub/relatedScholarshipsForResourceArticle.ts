@@ -22,6 +22,7 @@ async function enrichFromCatalog(
 ): Promise<RelatedScholarshipStored[]> {
   if (items.length === 0) return items;
   const supabase = createPublicClient();
+  if (!supabase) return items;
   const slugs = [...new Set(items.map((i) => i.slug.trim()).filter(Boolean))];
   const { data, error } = await supabase
     .from('scholarships')
@@ -64,6 +65,7 @@ async function relatedFromMatchingExcluding(
   if (!bodyHtml) return [];
 
   const supabase = createPublicClient();
+  if (!supabase) return [];
   const strippedBody = deduplicateQuickSummaryBlocksInHtml(
     stripDisallowedAnchorsFromHtml(bodyHtml)
   );

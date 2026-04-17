@@ -76,6 +76,7 @@ export const resolveProviderProfileSlug = cache(
     if (!UUID_PARAM_RE.test(param)) return param;
 
     const supabase = createPublicClient();
+    if (!supabase) return null;
     const { data } = await supabase
       .from('providers')
       .select('slug')
@@ -94,6 +95,7 @@ export async function loadProviderProfilePage(
   if (!param) return null;
 
   const supabase = createPublicClient();
+  if (!supabase) return null;
 
   const byUuid = UUID_PARAM_RE.test(param);
   let providerRow: ProviderRow | null = null;

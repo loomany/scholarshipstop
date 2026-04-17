@@ -33,9 +33,17 @@ type ServerSupabaseClient = SupabaseClient<Database>;
  * Hub `/scholarships` first paint: same catalog pipeline for signed-in and anonymous users.
  */
 export async function fetchInitialHubScholarshipsPayload(
-  supabase: ServerSupabaseClient,
+  supabase: ServerSupabaseClient | null,
   profile?: ProfilesRow | null
 ): Promise<ScholarshipListResult> {
+  if (!supabase) {
+    return {
+      scholarships: [],
+      total: 0,
+      page: 1,
+      limit: SCHOLARSHIPS_PAGE_SIZE
+    };
+  }
   const defaultBounds = {
     amountMin: 0,
     amountMax: 50000,
@@ -84,12 +92,50 @@ export async function fetchInitialHubScholarshipsPayload(
 }
 
 export async function fetchInitialLongTailScholarshipsPayload(
-  supabase: ServerSupabaseClient,
+  supabase: ServerSupabaseClient | null,
   mode: LongTailListingMode
 ): Promise<{
   result: ScholarshipListResult;
   routeScope: LongTailRouteScopePayload;
 }> {
+  const offlineBounds = {
+    amountMin: 0,
+    amountMax: 50000,
+    applicantsMin: 0,
+    applicantsMax: 200000
+  } as Awaited<ReturnType<typeof fetchGlobalFilterBounds>>;
+
+  if (!supabase) {
+    const moreFilters =
+      mode.type === 'legacy'
+        ? buildLongTailMoreFiltersState(offlineBounds, mode.slug)
+        : buildMoreFiltersForManifestEntry(offlineBounds, mode.entry);
+    const slugOnly = buildSeoSlugOnlyMoreFilters(offlineBounds, mode);
+    const longTailLegacySlugs =
+      mode.type === 'legacy'
+        ? [mode.slug]
+        : ((mode.entry.legacyBaseSlugs ?? []) as LongTailSlug[]);
+    const requiredSeoTags =
+      mode.type === 'manifest'
+        ? requiredSeoTagsForListingPath(mode.canonicalPath)
+        : requiredSeoTagsForListingPath(mode.slug);
+    return {
+      result: {
+        scholarships: [],
+        total: 0,
+        page: 1,
+        limit: SCHOLARSHIPS_PAGE_SIZE
+      },
+      routeScope: {
+        longTailLegacySlugs,
+        requiredSeoTags,
+        baseMoreFilters: moreFiltersToJson(moreFilters),
+        slugOnlyMoreFilters: moreFiltersToJson(slugOnly),
+        seoListingFallback: true
+      }
+    };
+  }
+
   const bounds = await fetchGlobalFilterBounds(supabase);
   const moreFilters =
     mode.type === 'legacy'
@@ -163,9 +209,17 @@ export type LongTailRouteScopePayload = {
 };
 
 export async function fetchInitialCategoryScholarshipsPayload(
-  supabase: ServerSupabaseClient,
+  supabase: ServerSupabaseClient | null,
   categorySlug: string
 ): Promise<ScholarshipListResult> {
+  if (!supabase) {
+    return {
+      scholarships: [],
+      total: 0,
+      page: 1,
+      limit: SCHOLARSHIPS_PAGE_SIZE
+    };
+  }
   const bounds = await fetchGlobalFilterBounds(supabase);
   const resolved = await resolveCatalogSubjectCategoryForPageSlug(
     supabase,
