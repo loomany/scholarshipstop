@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
 import { getPasswordPolicyError } from '@/lib/validation/passwordPolicy';
+import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { notifyTelegramSignup } from '@/lib/telegram/bot';
 import {
   getServerAuthCallbackUrl,
@@ -196,11 +197,20 @@ export async function signUp(formData: FormData) {
     );
   } else if (data.session) {
     if (data.user?.id) {
-      await notifyTelegramSignup({
+      logRegistrationPipeline('UserRegistered', {
+        source: 'signup-form',
         userId: data.user.id,
-        email,
-        source: 'signup-form'
+        session: true
       });
+      try {
+        await notifyTelegramSignup({
+          userId: data.user.id,
+          email,
+          source: 'signup-form'
+        });
+      } catch (e) {
+        console.error('[signUp] notifyTelegramSignup failed', e);
+      }
     }
     redirectPath = getStatusRedirect('/', 'Success!', 'You are now signed in.');
   } else if (
@@ -214,11 +224,20 @@ export async function signUp(formData: FormData) {
       'There is already an account associated with this email address. Try resetting your password.'
     );
   } else if (data.user) {
-    await notifyTelegramSignup({
+    logRegistrationPipeline('UserRegistered', {
+      source: 'signup-form',
       userId: data.user.id,
-      email,
-      source: 'signup-form'
+      session: false
     });
+    try {
+      await notifyTelegramSignup({
+        userId: data.user.id,
+        email,
+        source: 'signup-form'
+      });
+    } catch (e) {
+      console.error('[signUp] notifyTelegramSignup failed', e);
+    }
     redirectPath = getStatusRedirect(
       '/',
       'Success!',

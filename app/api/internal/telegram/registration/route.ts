@@ -36,12 +36,16 @@ export async function POST(request: Request) {
     return new Response('Missing email.', { status: 400 });
   }
 
-  await notifyTelegramSignup({
-    userId: user.id,
-    email,
-    firstName: payload.firstName ?? null,
-    source: payload.source ?? 'onboarding'
-  });
+  try {
+    await notifyTelegramSignup({
+      userId: user.id,
+      email,
+      firstName: payload.firstName ?? null,
+      source: payload.source ?? 'onboarding'
+    });
+  } catch (e) {
+    console.error('[api/internal/telegram/registration] notifyTelegramSignup failed', e);
+  }
 
   return Response.json({ ok: true });
 }

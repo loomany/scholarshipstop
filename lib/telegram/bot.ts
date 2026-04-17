@@ -30,6 +30,7 @@ import {
   formatFirstTouchVisitorAlertLabel,
   formatTrafficChannelLabel
 } from '@/lib/analytics/resolveTrafficChannel';
+import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 import { getSeoDripFeedSnapshot } from '@/lib/seo/seoDripFeed';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
@@ -378,22 +379,27 @@ async function callTelegramApi<T>(method: string, payload: Record<string, unknow
     return null as T | null;
   }
 
-  const response = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
 
-  if (!response.ok) {
-    const text = await response.text().catch(() => '');
-    console.error(`[telegram] ${method} failed`, response.status, text);
+    if (!response.ok) {
+      const text = await response.text().catch(() => '');
+      console.error(`[telegram] ${method} failed`, response.status, text);
+      return null as T | null;
+    }
+
+    const json = (await response.json().catch(() => null)) as { result?: T } | null;
+    return json?.result ?? null;
+  } catch (e) {
+    console.error(`[telegram] ${method} request error`, e);
     return null as T | null;
   }
-
-  const json = (await response.json().catch(() => null)) as { result?: T } | null;
-  return json?.result ?? null;
 }
 
 async function sendTelegramMessage(
@@ -685,65 +691,90 @@ async function logTelegramEvent(
     telegramChatId?: number | null;
   }
 ) {
-  const admin = getAdminClient();
-  if (!admin) return false;
+  try {
+    const admin = getAdminClient();
+    if (!admin) return false;
 
-  const relatedUserIdForInsert =
-    options?.relatedUserId ?? options?.dedupeByUserId ?? null;
+    const relatedUserIdForInsert =
+      options?.relatedUserId ?? options?.dedupeByUserId ?? null;
 
-  if (options?.dedupeByUserId) {
-    const { data: existing } = await admin
-      .from('telegram_event_logs')
-      .select('id')
-      .eq('event_type', eventType)
-      .eq('related_user_id', options.dedupeByUserId)
-      .limit(1)
-      .maybeSingle();
+    if (options?.dedupeByUserId) {
+      const { data: existing, error: dedupeErr } = await admin
+        .from('telegram_event_logs')
+        .select('id')
+        .eq('event_type', eventType)
+        .eq('related_user_id', options.dedupeByUserId)
+        .limit(1)
+        .maybeSingle();
 
-    if (existing) {
+      if (dedupeErr) {
+        console.warn('[telegram] telegram_event_logs dedupe lookup failed', dedupeErr.message);
+      }
+
+      if (existing) {
+        return false;
+      }
+    }
+
+    const { error } = await admin.from('telegram_event_logs').insert({
+      event_type: eventType,
+      related_user_id: relatedUserIdForInsert,
+      telegram_chat_id: options?.telegramChatId ?? null,
+      payload
+    });
+
+    if (error) {
+      console.error('[telegram] telegram_event_logs insert failed', error.message);
       return false;
     }
-  }
 
-  const { error } = await admin.from('telegram_event_logs').insert({
-    event_type: eventType,
-    related_user_id: relatedUserIdForInsert,
-    telegram_chat_id: options?.telegramChatId ?? null,
-    payload
-  });
-
-  if (error) {
-    console.error('[telegram] telegram_event_logs insert failed', error.message);
+    return true;
+  } catch (e) {
+    console.error('[telegram] logTelegramEvent unexpected error', e);
     return false;
   }
-
-  return true;
 }
 
 async function sendTelegramAdminBroadcast(text: string) {
-  const chatIds = await collectTelegramAdminAlertChatIds();
-  if (chatIds.length === 0) {
-    console.warn(
-      '[telegram] sendTelegramAdminBroadcast: no recipient chat IDs (TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID / telegram_users admins)'
-    );
-    return;
-  }
-  for (const chatId of chatIds) {
-    await sendTelegramMessage(chatId, text);
+  try {
+    const chatIds = await collectTelegramAdminAlertChatIds();
+    if (chatIds.length === 0) {
+      console.warn(
+        '[telegram] sendTelegramAdminBroadcast: no recipient chat IDs (TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID / telegram_users admins)'
+      );
+      return;
+    }
+    for (const chatId of chatIds) {
+      try {
+        await sendTelegramMessage(chatId, text);
+      } catch (e) {
+        console.error('[telegram] sendTelegramAdminBroadcast chat failed', chatId, e);
+      }
+    }
+  } catch (e) {
+    console.error('[telegram] sendTelegramAdminBroadcast failed', e);
   }
 }
 
 /** Same recipients as {@link sendTelegramAdminBroadcast}, HTML body. */
 async function sendTelegramAdminBroadcastHtml(text: string) {
-  const chatIds = await collectTelegramAdminAlertChatIds();
-  if (chatIds.length === 0) {
-    console.warn(
-      '[telegram] sendTelegramAdminBroadcastHtml: no recipient chat IDs (TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID / telegram_users admins)'
-    );
-    return;
-  }
-  for (const chatId of chatIds) {
-    await sendTelegramMessage(chatId, text, undefined, { parse_mode: 'HTML' });
+  try {
+    const chatIds = await collectTelegramAdminAlertChatIds();
+    if (chatIds.length === 0) {
+      console.warn(
+        '[telegram] sendTelegramAdminBroadcastHtml: no recipient chat IDs (TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID / telegram_users admins)'
+      );
+      return;
+    }
+    for (const chatId of chatIds) {
+      try {
+        await sendTelegramMessage(chatId, text, undefined, { parse_mode: 'HTML' });
+      } catch (e) {
+        console.error('[telegram] sendTelegramAdminBroadcastHtml chat failed', chatId, e);
+      }
+    }
+  } catch (e) {
+    console.error('[telegram] sendTelegramAdminBroadcastHtml failed', e);
   }
 }
 
@@ -758,30 +789,34 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
   utm_medium?: string | null;
   utm_campaign?: string | null;
 }) {
-  if (!getTelegramBotToken()) {
-    console.warn(
-      '[telegram] notifyTelegramAdminsVisitorFirstTouch: missing TELEGRAM_BOT_TOKEN'
-    );
-    return;
+  try {
+    if (!getTelegramBotToken()) {
+      console.warn(
+        '[telegram] notifyTelegramAdminsVisitorFirstTouch: missing TELEGRAM_BOT_TOKEN'
+      );
+      return;
+    }
+
+    const channelDisplay = formatFirstTouchVisitorAlertLabel({
+      traffic_channel: payload.trafficChannel,
+      landing_url: payload.landingUrl,
+      referrer: payload.referrer,
+      utm_source: payload.utm_source,
+      utm_medium: payload.utm_medium,
+      utm_campaign: payload.utm_campaign
+    });
+
+    const text = [
+      '<b>New Visitor on ScholarshipTop!</b>',
+      '',
+      `<b>Channel:</b> ${escapeTelegramHtml(channelDisplay)}`,
+      `<b>Landing:</b> ${escapeTelegramHtml(payload.landingUrl)}`
+    ].join('\n');
+
+    await sendTelegramAdminBroadcastHtml(text);
+  } catch (e) {
+    console.error('[telegram] notifyTelegramAdminsVisitorFirstTouch failed', e);
   }
-
-  const channelDisplay = formatFirstTouchVisitorAlertLabel({
-    traffic_channel: payload.trafficChannel,
-    landing_url: payload.landingUrl,
-    referrer: payload.referrer,
-    utm_source: payload.utm_source,
-    utm_medium: payload.utm_medium,
-    utm_campaign: payload.utm_campaign
-  });
-
-  const text = [
-    '<b>New Visitor on ScholarshipTop!</b>',
-    '',
-    `<b>Channel:</b> ${escapeTelegramHtml(channelDisplay)}`,
-    `<b>Landing:</b> ${escapeTelegramHtml(payload.landingUrl)}`
-  ].join('\n');
-
-  await sendTelegramAdminBroadcastHtml(text);
 }
 
 /**
@@ -799,7 +834,11 @@ export async function notifyEnvTelegramAdminsPlainText(text: string) {
     return;
   }
   for (const chatId of ids) {
-    await sendTelegramMessage(chatId, text);
+    try {
+      await sendTelegramMessage(chatId, text);
+    } catch (e) {
+      console.error('[telegram] notifyEnvTelegramAdminsPlainText chat failed', chatId, e);
+    }
   }
 }
 
@@ -825,44 +864,85 @@ export async function notifyTelegramSignup(payload: {
   firstName?: string | null;
   source?: string | null;
 }) {
-  const inserted = await logTelegramEvent(
-    'signup',
-    {
-      email: payload.email,
-      first_name: payload.firstName ?? null,
+  try {
+    const inserted = await logTelegramEvent(
+      'signup',
+      {
+        email: payload.email,
+        first_name: payload.firstName ?? null,
+        source: payload.source ?? 'app'
+      },
+      { dedupeByUserId: payload.userId }
+    );
+
+    if (!inserted) {
+      logRegistrationPipeline('TelegramNotificationSent', {
+        event: 'signup',
+        skipped: 'dedupe_or_log_failed',
+        userId: payload.userId
+      });
+      return;
+    }
+
+    const emailSafe = escapeTelegramHtml(payload.email);
+    const sourceSafe = escapeTelegramHtml(
+      formatAdminSourceLabel(payload.source ?? 'app')
+    );
+    await sendTelegramAdminBroadcastHtml(
+      [
+        '<b>✨ Новая регистрация в ScholarshipTop</b>',
+        '',
+        `<b>Email:</b> ${emailSafe}`,
+        `<b>Источник:</b> ${sourceSafe}`
+      ].join('\n')
+    );
+    logRegistrationPipeline('TelegramNotificationSent', {
+      event: 'signup',
+      userId: payload.userId,
       source: payload.source ?? 'app'
-    },
-    { dedupeByUserId: payload.userId }
-  );
-
-  if (!inserted) return;
-
-  await sendTelegramAdminBroadcast(
-    [
-      '✨ Новая регистрация в ScholarshipTop',
-      `Email: ${payload.email}`,
-      `Источник: ${formatAdminSourceLabel(payload.source ?? 'app')}`
-    ].join('\n')
-  );
+    });
+  } catch (e) {
+    console.error('[telegram] notifyTelegramSignup failed', e);
+  }
 }
 
 export async function notifyTelegramEmailVerified(payload: {
   userId: string;
   email: string;
 }) {
-  const inserted = await logTelegramEvent(
-    'email_verified',
-    {
-      email: payload.email
-    },
-    { dedupeByUserId: payload.userId }
-  );
+  try {
+    const inserted = await logTelegramEvent(
+      'email_verified',
+      {
+        email: payload.email
+      },
+      { dedupeByUserId: payload.userId }
+    );
 
-  if (!inserted) return;
+    if (!inserted) {
+      logRegistrationPipeline('TelegramNotificationSent', {
+        event: 'email_verified',
+        skipped: 'dedupe_or_log_failed',
+        userId: payload.userId
+      });
+      return;
+    }
 
-  await sendTelegramAdminBroadcast(
-    ['Пользователь подтвердил email', `Email: ${payload.email}`].join('\n')
-  );
+    const emailSafe = escapeTelegramHtml(payload.email);
+    await sendTelegramAdminBroadcastHtml(
+      [
+        '<b>Пользователь подтвердил email</b> (флаг в <code>profiles</code> или GoTrue)',
+        '',
+        `<b>Email:</b> ${emailSafe}`
+      ].join('\n')
+    );
+    logRegistrationPipeline('TelegramNotificationSent', {
+      event: 'email_verified',
+      userId: payload.userId
+    });
+  } catch (e) {
+    console.error('[telegram] notifyTelegramEmailVerified failed', e);
+  }
 }
 
 /** Lemon often fires e.g. `subscription_cancelled` + `subscription_updated` within seconds — one admin ping is enough. */
@@ -1122,22 +1202,38 @@ async function sendAdminPanel(user: TelegramUserRow) {
       .eq('event_type', eventType)
       .gte('created_at', sinceIso);
 
-  const [signupCount, verifiedCount, paymentCount, humanVisitorsResult, botVisitorsCount] =
-    await Promise.all([
-      countQuery('signup'),
-      countQuery('email_verified'),
-      countQuery('payment'),
-      admin
-        .from('anonymous_visitor_first_touch')
-        .select('*')
-        .eq('is_likely_bot', false)
-        .gte('created_at', sinceIso),
-      admin
-        .from('anonymous_visitor_first_touch')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_likely_bot', true)
-        .gte('created_at', sinceIso)
-    ]);
+  const [
+    signupCount,
+    verifiedCount,
+    paymentCount,
+    profilesCreated24h,
+    profilesCreated24hVerified,
+    humanVisitorsResult,
+    botVisitorsCount
+  ] = await Promise.all([
+    countQuery('signup'),
+    countQuery('email_verified'),
+    countQuery('payment'),
+    admin
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', sinceIso),
+    admin
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', sinceIso)
+      .eq('email_verified', true),
+    admin
+      .from('anonymous_visitor_first_touch')
+      .select('*')
+      .eq('is_likely_bot', false)
+      .gte('created_at', sinceIso),
+    admin
+      .from('anonymous_visitor_first_touch')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_likely_bot', true)
+      .gte('created_at', sinceIso)
+  ]);
 
   const trafficLines: string[] = [];
   if (humanVisitorsResult.error) {
@@ -1173,14 +1269,20 @@ async function sendAdminPanel(user: TelegramUserRow) {
       ? 'Оценка ботов (24ч): не удалось загрузить'
       : `Оценка ботов по UA (24ч): ${botVisitorsCount.count ?? 0}`;
 
+  const profilesLine =
+    profilesCreated24h.error != null || profilesCreated24hVerified.error != null
+      ? 'Профили за 24ч (БД): не удалось загрузить (см. логи сервера)'
+      : `Профили за 24ч (БД, created_at): ${profilesCreated24h.count ?? 0} — из них email_verified=true: ${profilesCreated24hVerified.count ?? 0}`;
+
   await sendTelegramMessage(
     user.telegram_chat_id,
     [
       'Админ-панель ScholarshipTop',
       '',
       `Уведомления: ${user.notifications_enabled ? 'включены' : 'выключены'}`,
-      `Регистрации за 24ч: ${signupCount.count ?? 0}`,
-      `Подтверждения email за 24ч: ${verifiedCount.count ?? 0}`,
+      `Регистрации за 24ч (лог Telegram, signup): ${signupCount.count ?? 0}`,
+      `Подтверждения email за 24ч (лог Telegram): ${verifiedCount.count ?? 0}`,
+      profilesLine,
       `Платежи за 24ч: ${paymentCount.count ?? 0}`,
       '',
       'Трафик за 24ч — люди (первые визиты по каналу)',

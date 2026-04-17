@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { parseEmailVerificationToken } from '@/lib/auth/emailVerificationToken';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
+import { notifyTelegramEmailVerified } from '@/lib/telegram/bot';
 import {
   getServerAuthCallbackUrl,
   getServerAuthSiteOrigin
@@ -35,15 +37,56 @@ export async function GET(request: NextRequest) {
   if (!admin) return fail();
 
   const now = new Date().toISOString();
-  const { error } = await admin
+
+  const { data: updatedRows, error } = await admin
     .schema('public')
     .from('profiles')
     .update({ email_verified: true, updated_at: now })
-    .eq('id', parsed.userId);
+    .eq('id', parsed.userId)
+    .select('id');
 
   if (error) {
     console.error('[auth:verify-email] profiles update', error.message);
     return fail();
+  }
+
+  if (!updatedRows?.length) {
+    const { error: upsertErr } = await admin
+      .schema('public')
+      .from('profiles')
+      .upsert(
+        {
+          id: parsed.userId,
+          email_verified: true,
+          updated_at: now,
+          subscription_plan: 'free'
+        },
+        { onConflict: 'id' }
+      );
+    if (upsertErr) {
+      console.error('[auth:verify-email] profiles upsert (no row to update)', upsertErr.message);
+      return fail();
+    }
+  }
+
+  const { data: authUser, error: authErr } = await admin.auth.admin.getUserById(parsed.userId);
+  const email = authUser?.user?.email?.trim() ?? null;
+
+  if (!authErr && email) {
+    logRegistrationPipeline('EmailConfirmed', {
+      source: 'auth-verify-email',
+      userId: parsed.userId
+    });
+    try {
+      await notifyTelegramEmailVerified({ userId: parsed.userId, email });
+    } catch (e) {
+      console.error('[auth:verify-email] notifyTelegramEmailVerified failed', e);
+    }
+  } else {
+    console.warn(
+      '[auth:verify-email] skip Telegram notify — no email from auth',
+      authErr?.message ?? 'missing email'
+    );
   }
 
   /**
@@ -51,8 +94,6 @@ export async function GET(request: NextRequest) {
    * Without a follow-up hop through GoTrue, no session cookies are set (unlike `/auth/callback`).
    * Redirect to a server-generated magic link so the user lands on `/auth/callback?code=...` signed in.
    */
-  const { data: authUser, error: authErr } = await admin.auth.admin.getUserById(parsed.userId);
-  const email = authUser?.user?.email?.trim();
   if (authErr || !email) {
     console.error('[auth:verify-email] getUserById', authErr?.message ?? 'missing email');
     return withNoStore(

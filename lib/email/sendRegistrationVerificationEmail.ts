@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { createEmailVerificationToken } from '@/lib/auth/emailVerificationToken';
 import {
   buildConfirmSignupEmailHtml,
@@ -59,5 +60,10 @@ export async function sendRegistrationVerificationEmail(
     console.error('[email:verify] Resend error', res.status, text);
     return { ok: false, skipped: `Resend HTTP ${res.status}` };
   }
+  logRegistrationPipeline('EmailSent', {
+    channel: 'resend',
+    userId,
+    toEmail
+  });
   return { ok: true };
 }

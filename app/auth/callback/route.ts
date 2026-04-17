@@ -2,6 +2,7 @@ import { createClient, type AuthError, type Session, type User } from '@supabase
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { isSignupConversionEligibleUser } from '@/lib/analytics/googleAdsSignupConversion';
 import { syncOnboardingFromMetadataIfPresent } from '@/lib/onboarding/profilesOnboardingSync';
 import { notifyTelegramEmailVerified, notifyTelegramSignup } from '@/lib/telegram/bot';
@@ -211,39 +212,52 @@ export async function GET(request: NextRequest) {
   }
 
   if (userForSync?.id && userForSync.email) {
-    const firstName =
-      metaObj && typeof metaObj.first_name === 'string' ? metaObj.first_name : null;
-    await notifyTelegramSignup({
-      userId: userForSync.id,
-      email: userForSync.email,
-      firstName,
-      source: 'auth-callback'
-    });
+    try {
+      const firstName =
+        metaObj && typeof metaObj.first_name === 'string' ? metaObj.first_name : null;
+      await notifyTelegramSignup({
+        userId: userForSync.id,
+        email: userForSync.email,
+        firstName,
+        source: 'auth-callback'
+      });
+    } catch (e) {
+      console.error('[auth:callback] notifyTelegramSignup failed', e);
+    }
   }
 
   if (userForSync?.email_confirmed_at) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (url && key) {
-      const admin = createClient<Database>(url, key);
-      const { error: evErr } = await admin
-        .schema('public')
-        .from('profiles')
-        .update({
-          email_verified: true,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', userForSync.id);
-      if (evErr) {
-        console.warn('[auth:callback] profiles email_verified sync', evErr.message);
+    try {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      if (url && key) {
+        const admin = createClient<Database>(url, key);
+        const { error: evErr } = await admin
+          .schema('public')
+          .from('profiles')
+          .update({
+            email_verified: true,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', userForSync.id);
+        if (evErr) {
+          console.warn('[auth:callback] profiles email_verified sync', evErr.message);
+        }
       }
-    }
 
-    if (userForSync.email) {
-      await notifyTelegramEmailVerified({
-        userId: userForSync.id,
-        email: userForSync.email
-      });
+      if (userForSync.email) {
+        logRegistrationPipeline('EmailConfirmed', {
+          source: 'auth-callback',
+          userId: userForSync.id,
+          via: 'gotrue_email_confirmed_at'
+        });
+        await notifyTelegramEmailVerified({
+          userId: userForSync.id,
+          email: userForSync.email
+        });
+      }
+    } catch (e) {
+      console.error('[auth:callback] email verified sync / telegram failed', e);
     }
   }
 
