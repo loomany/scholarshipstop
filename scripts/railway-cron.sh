@@ -59,15 +59,18 @@ http_post_json() {
   local data="${4:-{}}"
   local url="${BASE_URL}${path}"
 
-  echo "[railway-cron] Starting task: ${name}"
+  echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') Starting task: ${name}"
   echo "[railway-cron] POST ${url}"
 
-  # Temporarily do not exit the whole cron on POST failure (Railway log visibility).
-  if node "${SCRIPT_DIR}/railway-cron-post.mjs" "$url" "$bearer" "$data"; then
-    echo "[railway-cron] OK: ${name}"
+  # Do not exit the whole cron on POST failure (Railway log visibility).
+  set +e
+  node "${SCRIPT_DIR}/railway-cron-post.mjs" "$url" "$bearer" "$data"
+  http_ec=$?
+  set -e
+  if [ "$http_ec" -eq 0 ]; then
+    echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') Finished OK: ${name}"
   else
-    echo "[railway-cron] Node script failed with exit code $?"
-    echo "[railway-cron] WARN: ${name} — continuing (no abort)"
+    echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') WARN: ${name} — exit ${http_ec} (continuing)"
   fi
 }
 
@@ -172,6 +175,7 @@ usage() {
 }
 
 main() {
+  echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') run start task=${1:-all} base=${BASE_URL}"
   local cmd="${1:-all}"
   case "$cmd" in
     all) task_all ;;
@@ -189,6 +193,7 @@ main() {
       exit 1
       ;;
   esac
+  echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') run end task=${1:-all}"
 }
 
 main "$@"

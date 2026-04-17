@@ -31,6 +31,14 @@ export async function POST(request: Request) {
   try {
     const baseUrl = getURL().replace(/\/$/, '');
     const result = await runSeoHubDailyTelegramDigest({ baseUrl });
+    console.info('[seo/daily-digest-telegram]', {
+      ok: result.ok,
+      notified: result.notified,
+      chatCount: result.chatCount,
+      pageCount: result.pageCount,
+      messageParts: result.messageParts,
+      error: result.error
+    });
     return NextResponse.json(result);
   } catch (e) {
     console.error('[seo/daily-digest-telegram]', e);

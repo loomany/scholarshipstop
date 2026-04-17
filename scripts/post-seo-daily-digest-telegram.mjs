@@ -23,6 +23,11 @@ if (!secret) {
 
 const url = `${base}/api/internal/seo/daily-digest-telegram`;
 
+const t0 = Date.now();
+console.log(
+  `[post-seo-daily-digest-telegram] ${new Date().toISOString()} POST ${url}`
+);
+
 const res = await fetch(url, {
   method: 'POST',
   headers: { Authorization: `Bearer ${secret}` }
@@ -36,5 +41,9 @@ try {
   json = text;
 }
 
-console.log(res.status, json);
+const ms = Date.now() - t0;
+console.log(
+  `[post-seo-daily-digest-telegram] ${new Date().toISOString()} HTTP ${res.status} ${ms}ms`,
+  typeof json === 'object' && json !== null ? JSON.stringify(json, null, 2) : json
+);
 if (!res.ok) process.exit(1);
