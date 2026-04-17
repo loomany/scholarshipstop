@@ -14,7 +14,7 @@ export async function GET() {
 
   return new NextResponse(body, {
     headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
+      'Content-Type': 'text/xml; charset=utf-8',
       'Cache-Control': `public, max-age=300, s-maxage=${SITEMAP_REVALIDATE_SECONDS}`
     }
   });

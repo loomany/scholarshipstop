@@ -3,6 +3,16 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true
   },
+  /**
+   * Child sitemap URLs use `/sitemaps/{name}.xml` (see `lib/seo/sitemaps.ts`).
+   * A dynamic folder named `[slug].xml` is unreliable in some deployments; we serve
+   * `/sitemaps/[slug]` and rewrite `*.xml` here so public URLs stay stable.
+   */
+  async rewrites() {
+    return [
+      { source: '/sitemaps/:slug.xml', destination: '/sitemaps/:slug' }
+    ];
+  },
   /** Old site / CMS paths that still appear in Search Console → canonical home. */
   async redirects() {
     return [

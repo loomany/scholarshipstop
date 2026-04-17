@@ -9,6 +9,8 @@ import {
 export const revalidate = SITEMAP_REVALIDATE_SECONDS;
 export const dynamic = 'force-dynamic';
 
+const XML_UTF8 = 'text/xml; charset=utf-8';
+
 type RouteContext = {
   params: {
     slug: string;
@@ -30,7 +32,7 @@ export async function GET(_request: Request, { params }: RouteContext) {
 
   return new NextResponse(body, {
     headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
+      'Content-Type': XML_UTF8,
       'Cache-Control': `public, max-age=300, s-maxage=${SITEMAP_REVALIDATE_SECONDS}`
     }
   });
