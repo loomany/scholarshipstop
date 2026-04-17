@@ -15,6 +15,9 @@
 # Base URL (first non-empty):
 #   PUBLIC_URL, APP_URL, NEXT_PUBLIC_SITE_URL, SITE_URL
 #
+# HTTP cron calls use Node.js built-in fetch (scripts/railway-cron-post.mjs) — Node 18+;
+# no curl required in the container.
+#
 # Secrets (set in Railway Variables):
 #   GOOGLE_INDEXING_SECRET — Bearer for SEO + Google Indexing API routes
 #   GRANT_NOTIFICATION_CRON_SECRET — grant notifications + fallback for weekly digest
@@ -46,35 +49,19 @@ resolve_base_url() {
 
 BASE_URL="$(resolve_base_url)"
 
-curl_post_json() {
+# POST JSON via Node fetch (Node 18+). Args: task name, path, bearer, optional JSON body.
+http_post_json() {
   local name="$1"
   local path="$2"
   local bearer="$3"
   local data="${4:-{}}"
   local url="${BASE_URL}${path}"
-  local tmp http_code
 
   echo "[railway-cron] Starting task: ${name}"
   echo "[railway-cron] POST ${url}"
 
-  tmp="$(mktemp)"
-  http_code="$(
-    curl --silent --show-error \
-      --output "$tmp" \
-      --write-out '%{http_code}' \
-      --request POST "$url" \
-      --header "Authorization: Bearer ${bearer}" \
-      --header "Content-Type: application/json" \
-      --data "$data"
-  )" || true
-
-  echo "[railway-cron] Response HTTP ${http_code}"
-  cat "$tmp"
-  echo ""
-  rm -f "$tmp"
-
-  if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
-    echo "[railway-cron] ERROR: ${name} failed (HTTP ${http_code})" >&2
+  if ! node "${SCRIPT_DIR}/railway-cron-post.mjs" "$url" "$bearer" "$data"; then
+    echo "[railway-cron] ERROR: ${name} failed (non-2xx or network error)" >&2
     exit 1
   fi
   echo "[railway-cron] OK: ${name}"
@@ -91,22 +78,22 @@ require_env() {
 
 task_seo_url_inspection() {
   require_env GOOGLE_INDEXING_SECRET
-  curl_post_json "SEO check-index-worker (pending)" \
+  http_post_json "SEO check-index-worker (pending)" \
     "/api/internal/seo/check-index-worker" "$GOOGLE_INDEXING_SECRET" "{}"
-  curl_post_json "SEO scan-indexing (submitted)" \
+  http_post_json "SEO scan-indexing (submitted)" \
     "/api/internal/seo/scan-indexing" "$GOOGLE_INDEXING_SECRET" "{}"
 }
 
 task_google_indexing_flush() {
   require_env GOOGLE_INDEXING_SECRET
-  curl_post_json "Daily Google Indexing flush" \
+  http_post_json "Daily Google Indexing flush" \
     "/api/internal/google-indexing" "$GOOGLE_INDEXING_SECRET" \
     '{"action":"flush","limit":200}'
 }
 
 task_grant_notifications() {
   require_env GRANT_NOTIFICATION_CRON_SECRET
-  curl_post_json "Grant notification dispatch" \
+  http_post_json "Grant notification dispatch" \
     "/api/internal/grant-notifications/run" "$GRANT_NOTIFICATION_CRON_SECRET" "{}"
 }
 
@@ -116,7 +103,7 @@ task_weekly_free_digest() {
     echo "[railway-cron] ERROR: Set WEEKLY_FREE_DIGEST_CRON_SECRET or GRANT_NOTIFICATION_CRON_SECRET" >&2
     exit 1
   fi
-  curl_post_json "Weekly free digest" \
+  http_post_json "Weekly free digest" \
     "/api/internal/weekly-free-digest/run" "$secret" "{}"
 }
 
