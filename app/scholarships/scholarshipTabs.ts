@@ -9,6 +9,11 @@ export type ScholarshipSidebarCounts = {
   easyApply: number;
   /** Deadlines within ~7 days (`lt_1d` + `d1_7` buckets). */
   hotDeadlines: number;
+  /**
+   * Catalog “International Friendly” scope: same SQL as Matches for the current
+   * filters, plus `citizenshipAudience === international_friendly` (sidebar row).
+   */
+  internationalFriendly: number;
   /** Personalized: profile-fit SQL base + ignored filter; catalog: same without profile OR. */
   matches: number;
   saved: number;
@@ -140,6 +145,7 @@ export function computeScholarshipSidebarCounts(
     recommended: scholarshipsInTab(usa, 'recommended', ids).length,
     easyApply: scholarshipsInTab(usa, 'easy-apply', ids).length,
     hotDeadlines: scholarshipsInTab(usa, 'hot-deadlines', ids).length,
+    internationalFriendly: 0,
     matches: scholarshipsInTab(usa, 'matches', ids).length,
     saved: scholarshipsInTab(usa, 'saved', ids).length,
     started: scholarshipsInTab(usa, 'started', ids).length,

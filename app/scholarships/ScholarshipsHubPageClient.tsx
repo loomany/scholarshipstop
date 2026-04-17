@@ -107,6 +107,7 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   recommended: 0,
   easyApply: 0,
   hotDeadlines: 0,
+  internationalFriendly: 0,
   matches: 0,
   saved: 0,
   started: 0,
@@ -1297,7 +1298,6 @@ function ScholarshipsPageInner({
             onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
             internationalStudentsFilter={{
               active: internationalSidebarChecked,
-              resultCount: internationalSidebarChecked ? totalCount : null,
               onActivate: toggleInternationalAudienceSidebar,
               showGuestLock: !isAuthenticated,
               showSubscriptionLock: isSubscriptionLocked,

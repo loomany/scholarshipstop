@@ -35,14 +35,12 @@ import { ScholarshipsSidebarAiMentorCard } from '@/components/scholarships/Schol
 export type { ScholarshipSidebarCounts };
 
 /**
- * Hub / category: “Open to international students” under Hot Deadlines —
+ * Hub / category: “International Friendly” under Hot Deadlines —
  * same row chrome as other sidebar links (icon, label, optional count, lock).
  */
 export type ScholarshipsSidebarInternationalFilterProps = {
   /** Row highlight when the international filter is applied. */
   active: boolean;
-  /** Same pattern as `(495)` on Hot Deadlines — typically current listing total while active. */
-  resultCount: number | null;
   /** Ungated: apply filter and refresh grants immediately. */
   onActivate: () => void;
   showGuestLock: boolean;
@@ -344,6 +342,10 @@ export default function ScholarshipsSidebar({
 
         {ACTION_NAV_DEFS.flatMap((item) => {
           const isActive = activeTab === item.id;
+          /** On Matches tab + International Friendly filter: don’t paint both rows “selected”. */
+          const intlFilterOn = internationalStudentsFilter?.active === true;
+          const navLooksActive =
+            isActive && !(item.id === 'matches' && intlFilterOn);
           const Icon = item.icon;
           const href = buildScholarshipTabHref(item.id);
           const countSuffix = suffix(item.id);
@@ -356,7 +358,7 @@ export default function ScholarshipsSidebar({
             <>
               <Icon
                 className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
-                  isActive
+                  navLooksActive
                     ? 'text-white stroke-white'
                     : 'text-[#FF7A1A] stroke-[#FF7A1A]'
                 }`}
@@ -364,7 +366,7 @@ export default function ScholarshipsSidebar({
               />
               <span
                 className={`min-w-0 flex-1 text-left text-sm ${
-                  isActive
+                  navLooksActive
                     ? 'font-semibold text-white'
                     : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
                 }`}
@@ -373,7 +375,7 @@ export default function ScholarshipsSidebar({
                 {countSuffix ? (
                   <span
                     className={
-                      isActive
+                      navLooksActive
                         ? 'font-normal text-white'
                         : 'font-normal text-gray-400'
                     }
@@ -386,7 +388,7 @@ export default function ScholarshipsSidebar({
               {(showGuestLock || showSubscriptionLock) ? (
                 <Lock
                   className={`h-3.5 w-3.5 shrink-0 ${
-                    isActive
+                    navLooksActive
                       ? 'text-white stroke-white'
                       : 'text-[#FF7A1A] stroke-[#FF7A1A]'
                   }`}
@@ -410,7 +412,7 @@ export default function ScholarshipsSidebar({
           );
 
           const rowClass = `flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
-            isActive
+            navLooksActive
               ? scholarshipSidebarActiveRowClass
               : 'border-transparent hover:bg-gray-50/80'
           }`;
@@ -444,7 +446,7 @@ export default function ScholarshipsSidebar({
                   ? onSubscriptionRestrictedNav?.()
                   : onGuestRestrictedNav?.()
               }
-              className={`${rowClass} w-full cursor-pointer text-left ${!isActive ? 'group' : ''}`}
+              className={`${rowClass} w-full cursor-pointer text-left ${!navLooksActive ? 'group' : ''}`}
             >
               {content}
             </button>
@@ -452,7 +454,7 @@ export default function ScholarshipsSidebar({
             <Link
               href={href}
               title={useDarkTooltips ? undefined : tip}
-              className={`${rowClass} ${!isActive ? 'group' : ''}`}
+              className={`${rowClass} ${!navLooksActive ? 'group' : ''}`}
               aria-current={isActive ? 'page' : undefined}
             >
               {content}
@@ -482,10 +484,7 @@ export default function ScholarshipsSidebar({
           ) {
             const intl = internationalStudentsFilter;
             const intlActive = intl.active;
-            const intlCountSuffix =
-              intl.resultCount != null && Number.isFinite(intl.resultCount)
-                ? `(${intl.resultCount})`
-                : null;
+            const intlCountSuffix = `(${counts.internationalFriendly})`;
             const showGuestLockIntl = intl.showGuestLock;
             const showSubscriptionLockIntl = intl.showSubscriptionLock;
             const intlRowClass = `flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
@@ -495,7 +494,7 @@ export default function ScholarshipsSidebar({
             }`;
             const intlGated = showGuestLockIntl || showSubscriptionLockIntl;
             const intlTip =
-              'Scholarships that mention international students or similar eligibility in our catalog data.';
+              'Scholarships tagged International Friendly in our catalog (mentions international or foreign-national eligibility in our data).';
             const intlInner = (
               <>
                 <Globe
@@ -513,7 +512,7 @@ export default function ScholarshipsSidebar({
                       : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
                   }`}
                 >
-                  Open to international students
+                  International Friendly
                   {intlCountSuffix ? (
                     <span
                       className={
@@ -558,8 +557,8 @@ export default function ScholarshipsSidebar({
                 className={`${intlRowClass} w-full cursor-pointer text-left group`}
                 aria-label={
                   showSubscriptionLockIntl
-                    ? 'Start free access to filter by international students'
-                    : 'Create a free account to filter by international students'
+                    ? 'Start free access to use International Friendly'
+                    : 'Create a free account to use International Friendly'
                 }
               >
                 {intlInner}
@@ -573,8 +572,8 @@ export default function ScholarshipsSidebar({
                 aria-pressed={intlActive}
                 aria-label={
                   intlActive
-                    ? 'International filter on — click to clear'
-                    : 'Show scholarships open to international students'
+                    ? 'International Friendly on — click to clear'
+                    : 'Show International Friendly scholarships'
                 }
               >
                 {intlInner}

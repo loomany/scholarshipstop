@@ -329,7 +329,7 @@ export default function ScholarshipsMoreFiltersPanel({
                   ['any', 'All applicants (default)'],
                   [
                     'international_friendly',
-                    'Open to international students (best effort)'
+                    'International Friendly (best effort)'
                   ]
                 ] as const
               ).map(([id, label]) => {

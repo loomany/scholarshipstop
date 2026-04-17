@@ -1410,6 +1410,32 @@ function hotDeadlinesListCanonicalRequest(
   };
 }
 
+/** Sidebar “International Friendly” count: Matches scope + international citizenship filter. */
+function internationalFriendlySidebarCountRequest(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  const moreFilters = cloneMoreFilters(req.moreFilters);
+  moreFilters.citizenshipAudience = 'international_friendly';
+  return {
+    ...req,
+    tab: 'matches',
+    moreFilters
+  };
+}
+
+/**
+ * Sidebar row totals (Matches, Hot Deadlines, Easy apply, …) must ignore the live
+ * International Friendly citizenship toggle — same independence as switching tabs.
+ * Otherwise `matches` and `internationalFriendly` both count the narrowed set.
+ */
+function sidebarCountsIgnoreCitizenshipAudience(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  const moreFilters = cloneMoreFilters(req.moreFilters);
+  moreFilters.citizenshipAudience = 'any';
+  return { ...req, moreFilters };
+}
+
 /** Align `moreFilters` / URL deadline with tab-only SQL (easy-apply, hot-deadlines). */
 function normalizeTabScopedMoreFilters(
   req: ScholarshipListRequest
@@ -1460,6 +1486,8 @@ export async function fetchScholarshipSidebarCounts(
   bounds: ScholarshipListMeta['filterBounds']
 ): Promise<ScholarshipSidebarCounts> {
   const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+  /** Basis for every tab count except the dedicated International Friendly pill. */
+  const countsBasisReq = sidebarCountsIgnoreCitizenshipAudience(effectiveReq);
   const tabs: ScholarshipListTabId[] = [
     'best-matches',
     'recommended',
@@ -1471,35 +1499,43 @@ export async function fetchScholarshipSidebarCounts(
     'submitted',
     'ignored'
   ];
-  const sidebarParts = await Promise.all(
-    tabs.map(async (t) => {
-      if (t === 'recommended') {
-        const mf = moreFiltersForRecommendedSidebarCount(effectiveReq, bounds);
-        if (mf === null) {
-          return { t, n: 0 };
+  const [sidebarParts, internationalFriendly] = await Promise.all([
+    Promise.all(
+      tabs.map(async (t) => {
+        if (t === 'recommended') {
+          const mf = moreFiltersForRecommendedSidebarCount(countsBasisReq, bounds);
+          if (mf === null) {
+            return { t, n: 0 };
+          }
+          const r = { ...countsBasisReq, moreFilters: mf };
+          return { t, n: await countFor(supabase, r, 'recommended') };
         }
-        const r = { ...effectiveReq, moreFilters: mf };
-        return { t, n: await countFor(supabase, r, 'recommended') };
-      }
-      return {
-        t,
-        n: await countFor(
-          supabase,
-          t === 'easy-apply'
-            ? easyApplyListCanonicalRequest(effectiveReq)
-            : t === 'hot-deadlines'
-              ? hotDeadlinesListCanonicalRequest(effectiveReq)
-              : effectiveReq,
-          t
-        )
-      };
-    })
-  );
+        return {
+          t,
+          n: await countFor(
+            supabase,
+            t === 'easy-apply'
+              ? easyApplyListCanonicalRequest(countsBasisReq)
+              : t === 'hot-deadlines'
+                ? hotDeadlinesListCanonicalRequest(countsBasisReq)
+                : countsBasisReq,
+            t
+          )
+        };
+      })
+    ),
+    countScholarshipsForTabRequest(
+      supabase,
+      internationalFriendlySidebarCountRequest(countsBasisReq),
+      'matches'
+    )
+  ]);
   const sidebarCounts: ScholarshipSidebarCounts = {
     bestMatches: 0,
     recommended: 0,
     easyApply: 0,
     hotDeadlines: 0,
+    internationalFriendly,
     matches: 0,
     saved: 0,
     started: 0,
@@ -1788,7 +1824,7 @@ export async function fetchScholarshipListMeta(
   const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
   const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
-  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v5`;
+  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v7`;
   const cached = readTtlValue(listMetaCache.get(cacheKey));
   if (cached) {
     return cloneScholarshipListMeta(cached);
