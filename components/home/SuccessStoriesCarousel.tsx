@@ -125,7 +125,14 @@ const AUTO_SCROLL_SPEED_WIDE = 0.42;
 /** Narrow viewports: slower drift so touch users can read cards. */
 const AUTO_SCROLL_SPEED_NARROW = 0.22;
 
-export default function SuccessStoriesCarousel() {
+type SuccessStoriesCarouselProps = {
+  /** Fewer cards + tighter heading for homepage placement lower on the fold. */
+  shortTestimonials?: boolean;
+};
+
+export default function SuccessStoriesCarousel({
+  shortTestimonials = false
+}: SuccessStoriesCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [manualPause, setManualPause] = useState(false);
   const rafRef = useRef<number | null>(null);
@@ -225,11 +232,17 @@ export default function SuccessStoriesCarousel() {
     };
   }, [manualPause, loopScroll]);
 
+  const stories = shortTestimonials ? SUCCESS_STORIES.slice(0, 3) : SUCCESS_STORIES;
+  /** Duplicate rows so horizontal loop + auto-scroll remain stable. */
+  const loops = [0, 1] as const;
+
   return (
     <div className="w-full">
-      <h2 className={`text-center text-pretty ${h2Class}`}>Stories of Real Students</h2>
+      <h2 className={`text-center text-pretty ${h2Class}`}>
+        {shortTestimonials ? 'What students say' : 'Stories of Real Students'}
+      </h2>
 
-      <div className="group relative mt-8 w-full sm:mt-10">
+      <div className={`group relative w-full ${shortTestimonials ? 'mt-6 sm:mt-7' : 'mt-8 sm:mt-10'}`}>
         <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
           <div className={carouselEdgeFadeStoriesClass('left')} aria-hidden />
           <div className={carouselEdgeFadeStoriesClass('right')} aria-hidden />
@@ -256,8 +269,8 @@ export default function SuccessStoriesCarousel() {
             onScroll={loopScroll}
             className={`flex w-full gap-6 overflow-x-auto scroll-auto pb-1 pt-1 ${scrollbarHide} px-4 sm:px-12 md:px-14`}
           >
-            {[0, 1].map((loop) =>
-              SUCCESS_STORIES.map((story) => (
+            {loops.map((loop) =>
+              stories.map((story) => (
                 <StoryCard key={`${loop}-${story.name}`} story={story} />
               ))
             )}

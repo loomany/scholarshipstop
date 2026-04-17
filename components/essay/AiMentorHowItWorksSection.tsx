@@ -29,7 +29,7 @@ const STEPS: {
     icon: BookOpen,
     title: 'Human-Grade Drafting',
     body:
-      'We generate a powerful, empathetic draft that sounds like you, while ensuring it remains 100% undetectable by AI scanners.'
+      'We help you shape a clear, empathetic draft that reflects your voice — with iterative refinement until it feels ready to submit.'
   },
   {
     icon: Check,

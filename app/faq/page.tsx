@@ -101,9 +101,9 @@ const faqItems: { question: string; answer: string }[] = [
       'In most cases, ScholarshipTop helps you discover scholarships, but the application process is handled by the scholarship provider. You will typically apply through their official website or application system.'
   },
   {
-    question: 'Is ScholarshipTop free to use?',
+    question: 'Is ScholarshipTop free?',
     answer:
-      'ScholarshipTop offers access to scholarship listings and basic features for free. Additional features or advanced tools may be introduced as paid options in the future.'
+      'ScholarshipTop offers free access to part of the scholarship catalog and some core discovery features. We also offer paid plans with additional tools such as advanced matching, precision filters, expanded organization features, and essay support. You can review current plan details on our Pricing page.'
   },
   {
     question: 'How do I increase my chances of getting a scholarship?',

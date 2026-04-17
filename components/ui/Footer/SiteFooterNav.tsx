@@ -38,7 +38,27 @@ const ITEMS: {
     label: 'Refund Policy',
     isActive: (p) => p === '/refund-policy' || p.startsWith('/refund-policy/')
   },
-  { href: '/faq', label: 'FAQ', isActive: (p) => p === '/faq' || p.startsWith('/faq/') }
+  { href: '/faq', label: 'FAQ', isActive: (p) => p === '/faq' || p.startsWith('/faq/') },
+  {
+    href: '/how-we-verify-scholarships',
+    label: 'How we verify',
+    isActive: (p) => p === '/how-we-verify-scholarships'
+  },
+  {
+    href: '/editorial-policy',
+    label: 'Editorial policy',
+    isActive: (p) => p === '/editorial-policy'
+  },
+  {
+    href: '/how-ai-is-used',
+    label: 'How AI is used',
+    isActive: (p) => p === '/how-ai-is-used'
+  },
+  {
+    href: '/listing-review-policy',
+    label: 'Listing review',
+    isActive: (p) => p === '/listing-review-policy'
+  }
 ];
 
 export default function SiteFooterNav() {
