@@ -2,6 +2,7 @@ import 'server-only';
 
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 
+import { getTelegramAdminDbChatIdsForCategory } from '@/lib/telegram/adminNotificationRouting';
 import {
   buildResourceSnippet,
   escapeTelegramHtml,
@@ -58,19 +59,7 @@ async function getAllStartedBotUserChatIds(): Promise<number[]> {
 }
 
 async function getFallbackAdminChatIds(): Promise<number[]> {
-  const admin = createServiceRoleSupabaseClient();
-  if (!admin) return [];
-
-  const { data: rows } = await admin
-    .from('telegram_users')
-    .select('telegram_chat_id')
-    .eq('is_admin', true)
-    .eq('notifications_enabled', true);
-
-  const ids = (rows ?? [])
-    .map((r) => r.telegram_chat_id)
-    .filter((id): id is number => typeof id === 'number' && Number.isFinite(id));
-  return [...new Set(ids)];
+  return getTelegramAdminDbChatIdsForCategory('resources');
 }
 
 /**

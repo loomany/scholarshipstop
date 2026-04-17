@@ -99,7 +99,9 @@ async function main() {
     console.log('    Mode: TELEGRAM_RESOURCES_CHAT_ID');
     console.log('    Count:', envChats.length);
   } else {
-    console.log('    Mode: fallback — telegram_users where is_admin + notifications_enabled');
+    console.log(
+      '    Mode: fallback — telegram_users is_admin + notifications + category «resources» (admin_notification_prefs)'
+    );
     console.log('    Admin chat ids:', adminIds.length ? adminIds.join(', ') : '(none)');
     if (adminIds.length === 0) {
       console.log(

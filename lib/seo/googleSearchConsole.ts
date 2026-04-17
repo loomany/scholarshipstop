@@ -23,12 +23,16 @@ const URL_INSPECTION_INSPECT =
 const SEARCH_ANALYTICS_ROW_LIMIT = 25_000;
 
 /**
- * Property URL as registered in Google Search Console (usually with trailing slash).
- * Override if the site uses a domain property (`sc-domain:example.com`).
+ * Property URL as registered in Google Search Console.
+ * URL-prefix properties use a trailing slash (`https://example.com/`).
+ * Domain properties must be exactly `sc-domain:example.com` — no trailing slash (API 400 otherwise).
  */
 export function getSearchConsoleSitePropertyUrl(): string {
   const fromEnv = process.env.GOOGLE_SEARCH_CONSOLE_SITE_URL?.trim();
   if (fromEnv) {
+    if (fromEnv.startsWith('sc-domain:')) {
+      return fromEnv.replace(/\/+$/, '');
+    }
     const u = fromEnv.replace(/\/+$/, '');
     return `${u}/`;
   }

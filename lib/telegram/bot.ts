@@ -32,6 +32,17 @@ import {
 } from '@/lib/analytics/resolveTrafficChannel';
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
+import {
+  ADMIN_NOTIFY_CALLBACK_PREFIX,
+  ADMIN_NOTIFY_ENABLE_ALL_CALLBACK,
+  ADMIN_NOTIFY_LABEL_RU,
+  collectTelegramAdminAlertChatIdsForCategory,
+  isAdminNotifyCategoryEnabled,
+  parseAdminNotifyCallback,
+  toggleAdminNotifyCategory,
+  ADMIN_NOTIFY_KEYS,
+  type AdminNotifyCategory
+} from '@/lib/telegram/adminNotificationRouting';
 import { fetchSearchAppearancePageCount } from '@/lib/seo/googleSearchConsole';
 import { getSeoDripFeedSnapshot } from '@/lib/seo/seoDripFeed';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
@@ -120,8 +131,8 @@ type GrantNotifyField =
 
 const BUTTON_LABELS = {
   admin: '🛠 Admin Panel',
-  alertsOff: '🔔 Notifications: OFF',
-  alertsOn: '🔔 Notifications: ON',
+  /** Admin: per-category server alerts (inline panel). Replaces legacy ON/OFF row. */
+  adminAlertsMenu: '🔔 Admin alerts',
   backToMenu: '⬅️ Main Menu',
   connectAccount: '🔗 Link Account',
   /** Grant notification toggles (same as account email prefs); search: /scholarships on site. */
@@ -137,6 +148,10 @@ const LEGACY_SAVED_SCHOLARSHIPS_BUTTON = '💾 Saved';
 
 /** Removed from admin keyboard; still accept taps until clients refresh. Use `/seoreport` for the same report. */
 const LEGACY_SEO_QUEUE_REPORT_BUTTON = '📊 SEO очередь';
+
+/** Legacy reply-keyboard row; opens the new admin alerts panel instead of toggling one bit. */
+const LEGACY_ADMIN_ALERTS_ON = '🔔 Notifications: ON';
+const LEGACY_ADMIN_ALERTS_OFF = '🔔 Notifications: OFF';
 
 /** Short reply when returning to the reply-keyboard hub (not Markdown). */
 const MAIN_MENU_REPLY = 'Main menu — pick your next step.';
@@ -233,11 +248,7 @@ function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarku
     return {
       keyboard: [
         [primaryConnectButton, keyboardButton(BUTTON_LABELS.admin)],
-        [
-          keyboardButton(
-            user.notifications_enabled ? BUTTON_LABELS.alertsOn : BUTTON_LABELS.alertsOff
-          )
-        ],
+        [keyboardButton(BUTTON_LABELS.adminAlertsMenu)],
         [keyboardButton(BUTTON_LABELS.backToMenu)]
       ],
       resize_keyboard: true,
@@ -506,41 +517,8 @@ function getAdminClient() {
   return createServiceRoleSupabaseClient();
 }
 
-/**
- * Admin alerts (signup, visitor first-touch, email verified): env chat IDs plus any
- * DB-linked admins with notifications on. Env is required when `telegram_users` has no admin row.
- */
-async function collectTelegramAdminAlertChatIds(): Promise<number[]> {
-  const set = new Set<number>();
-
-  for (const id of getTelegramAdminIds()) {
-    set.add(id);
-  }
-
-  const extraChat = process.env.TELEGRAM_CHAT_ID?.trim();
-  if (extraChat) {
-    for (const part of extraChat.split(',')) {
-      const n = Number(part.trim());
-      if (Number.isFinite(n)) {
-        set.add(n);
-      }
-    }
-  }
-
-  const admin = getAdminClient();
-  if (admin) {
-    const { data: chats } = await admin
-      .from('telegram_users')
-      .select('telegram_chat_id')
-      .eq('is_admin', true)
-      .eq('notifications_enabled', true);
-
-    for (const chat of chats ?? []) {
-      set.add(chat.telegram_chat_id);
-    }
-  }
-
-  return [...set];
+function adminNotifyAnyCategoryEnabled(prefs: Json | null | undefined): boolean {
+  return ADMIN_NOTIFY_KEYS.some((k) => isAdminNotifyCategoryEnabled(prefs, k));
 }
 
 async function getTelegramUserByTelegramId(telegramUserId: number) {
@@ -632,6 +610,7 @@ async function upsertTelegramUser(params: {
     app_user_id: existing?.app_user_id ?? null,
     is_admin: isAdmin,
     notifications_enabled: isAdmin ? true : existing?.notifications_enabled ?? false,
+    admin_notification_prefs: existing?.admin_notification_prefs ?? {},
     notify_best_matches: existing?.notify_best_matches ?? false,
     notify_saved_filters: existing?.notify_saved_filters ?? false,
     notify_easy_apply: existing?.notify_easy_apply ?? false,
@@ -736,9 +715,9 @@ async function logTelegramEvent(
   }
 }
 
-async function sendTelegramAdminBroadcast(text: string) {
+async function sendTelegramAdminBroadcast(text: string, category: AdminNotifyCategory) {
   try {
-    const chatIds = await collectTelegramAdminAlertChatIds();
+    const chatIds = await collectTelegramAdminAlertChatIdsForCategory(category);
     if (chatIds.length === 0) {
       console.warn(
         '[telegram] sendTelegramAdminBroadcast: no recipient chat IDs (TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID / telegram_users admins)'
@@ -758,9 +737,9 @@ async function sendTelegramAdminBroadcast(text: string) {
 }
 
 /** Same recipients as {@link sendTelegramAdminBroadcast}, HTML body. */
-async function sendTelegramAdminBroadcastHtml(text: string) {
+async function sendTelegramAdminBroadcastHtml(text: string, category: AdminNotifyCategory) {
   try {
-    const chatIds = await collectTelegramAdminAlertChatIds();
+    const chatIds = await collectTelegramAdminAlertChatIdsForCategory(category);
     if (chatIds.length === 0) {
       console.warn(
         '[telegram] sendTelegramAdminBroadcastHtml: no recipient chat IDs (TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID / telegram_users admins)'
@@ -814,27 +793,33 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
       `<b>Landing:</b> ${escapeTelegramHtml(payload.landingUrl)}`
     ].join('\n');
 
-    await sendTelegramAdminBroadcastHtml(text);
+    await sendTelegramAdminBroadcastHtml(text, 'traffic');
   } catch (e) {
     console.error('[telegram] notifyTelegramAdminsVisitorFirstTouch failed', e);
   }
 }
 
 /**
- * Plain-text DM to every numeric chat in `TELEGRAM_ADMIN_IDS` / `TELEGRAM_ADMIN_ID` (env only).
- * Does not read `telegram_users` — use this when only env-configured admins should receive alerts.
+ * Plain-text admin alerts. Respects per-category prefs in `telegram_users.admin_notification_prefs`
+ * (env-only admins without a row still receive all categories).
  */
-export async function notifyEnvTelegramAdminsPlainText(text: string) {
+export async function notifyEnvTelegramAdminsPlainText(
+  text: string,
+  category: AdminNotifyCategory = 'grants'
+) {
   if (!getTelegramBotToken()) {
     console.warn('[telegram] notifyEnvTelegramAdminsPlainText: missing TELEGRAM_BOT_TOKEN');
     return;
   }
-  const ids = [...getTelegramAdminIds()];
-  if (ids.length === 0) {
-    console.warn('[telegram] notifyEnvTelegramAdminsPlainText: no TELEGRAM_ADMIN_IDS');
+  const chatIds = await collectTelegramAdminAlertChatIdsForCategory(category);
+  if (chatIds.length === 0) {
+    console.warn(
+      '[telegram] notifyEnvTelegramAdminsPlainText: no recipient chat IDs for category',
+      category
+    );
     return;
   }
-  for (const chatId of ids) {
+  for (const chatId of chatIds) {
     try {
       await sendTelegramMessage(chatId, text);
     } catch (e) {
@@ -895,7 +880,8 @@ export async function notifyTelegramSignup(payload: {
         '',
         `<b>Email:</b> ${emailSafe}`,
         `<b>Источник:</b> ${sourceSafe}`
-      ].join('\n')
+      ].join('\n'),
+      'auth'
     );
     logRegistrationPipeline('TelegramNotificationSent', {
       event: 'signup',
@@ -935,7 +921,8 @@ export async function notifyTelegramEmailVerified(payload: {
         '<b>Пользователь подтвердил email</b> (флаг в <code>profiles</code> или GoTrue)',
         '',
         `<b>Email:</b> ${emailSafe}`
-      ].join('\n')
+      ].join('\n'),
+      'auth'
     );
     logRegistrationPipeline('TelegramNotificationSent', {
       event: 'email_verified',
@@ -1004,8 +991,7 @@ export async function notifyTelegramPayment(payload: {
     `Пользователь: ${payload.email ?? payload.userId}`
   ].join('\n');
 
-  /** Prefer env chat IDs — `sendTelegramAdminBroadcast` only hits `telegram_users` with `is_admin` + notifications on. */
-  await notifyEnvTelegramAdminsPlainText(text);
+  await notifyEnvTelegramAdminsPlainText(text, 'billing');
 }
 
 async function sendWelcomeMessage(user: TelegramUserRow) {
@@ -1280,7 +1266,7 @@ async function sendAdminPanel(user: TelegramUserRow) {
     [
       'Админ-панель ScholarshipTop',
       '',
-      `Уведомления: ${user.notifications_enabled ? 'включены' : 'выключены'}`,
+      `Админ-алерты: ${user.notifications_enabled ? 'настройка — кнопка «🔔 Admin alerts»' : 'выкл. (открой «🔔 Admin alerts»)'}`,
       `Регистрации за 24ч (лог Telegram, signup): ${signupCount.count ?? 0}`,
       `Подтверждения email за 24ч (лог Telegram): ${verifiedCount.count ?? 0}`,
       profilesLine,
@@ -1619,7 +1605,45 @@ async function handleCodeInput(user: TelegramUserRow, rawText: string) {
   await sendProfileSummary(linkedUser);
 }
 
-async function toggleAdminAlerts(user: TelegramUserRow) {
+function formatAdminNotifyPanelHtml(user: TelegramUserRow): string {
+  const master = user.notifications_enabled;
+  const lines = [
+    '<b>Админ-уведомления</b>',
+    master
+      ? 'Серверные пинги (не путать с грантами в Alerts Setup).'
+      : '<i>Все типы выключены.</i> Нажми «Включить все» или включи отдельные пункты.',
+    ''
+  ];
+  for (const k of ADMIN_NOTIFY_KEYS) {
+    const on =
+      master && isAdminNotifyCategoryEnabled(user.admin_notification_prefs, k);
+    lines.push(`${on ? '✅' : '❌'} ${ADMIN_NOTIFY_LABEL_RU[k]}`);
+  }
+  return lines.join('\n');
+}
+
+function buildAdminNotifyInlineKeyboard(user: TelegramUserRow): TelegramReplyMarkup {
+  const rows: TelegramInlineButton[][] = [];
+  if (!user.notifications_enabled) {
+    rows.push([
+      button('✅ Включить все категории', ADMIN_NOTIFY_ENABLE_ALL_CALLBACK)
+    ]);
+  }
+  for (const k of ADMIN_NOTIFY_KEYS) {
+    const on =
+      user.notifications_enabled &&
+      isAdminNotifyCategoryEnabled(user.admin_notification_prefs, k);
+    rows.push([
+      button(
+        `${on ? '✅' : '❌'} ${ADMIN_NOTIFY_LABEL_RU[k]}`,
+        `${ADMIN_NOTIFY_CALLBACK_PREFIX}${k}`
+      )
+    ]);
+  }
+  return { inline_keyboard: rows };
+}
+
+async function sendAdminNotificationSettingsPanel(user: TelegramUserRow) {
   if (!user.is_admin) {
     await sendTelegramMessage(
       user.telegram_chat_id,
@@ -1629,15 +1653,69 @@ async function toggleAdminAlerts(user: TelegramUserRow) {
     return;
   }
 
-  const nextUser = await updateTelegramUserState(user.id, {
-    notifications_enabled: !user.notifications_enabled
-  });
-
   await sendTelegramMessage(
     user.telegram_chat_id,
-    `Уведомления администратора ${(nextUser ?? user).notifications_enabled ? 'включены' : 'выключены'}.`,
-    buildProfileKeyboard(nextUser ?? user)
+    formatAdminNotifyPanelHtml(user),
+    buildAdminNotifyInlineKeyboard(user),
+    { parse_mode: 'HTML' }
   );
+}
+
+async function handleAdminNotifyCallback(
+  user: TelegramUserRow,
+  callback: TelegramCallbackQuery,
+  data: string
+) {
+  if (!user.is_admin) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id, 'Not an admin.');
+    }
+    return;
+  }
+
+  if (!callback.message?.message_id) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id);
+    }
+    return;
+  }
+
+  let nextUser: TelegramUserRow | null = null;
+
+  if (data === ADMIN_NOTIFY_ENABLE_ALL_CALLBACK) {
+    nextUser = await updateTelegramUserState(user.id, {
+      notifications_enabled: true,
+      admin_notification_prefs: {}
+    });
+  } else {
+    const cat = parseAdminNotifyCallback(data);
+    if (!cat) {
+      if (callback.id) {
+        await answerTelegramCallbackQuery(callback.id);
+      }
+      return;
+    }
+    const newPrefs = toggleAdminNotifyCategory(user.admin_notification_prefs, cat);
+    const anyOn = adminNotifyAnyCategoryEnabled(newPrefs);
+    nextUser = await updateTelegramUserState(user.id, {
+      admin_notification_prefs: newPrefs,
+      notifications_enabled: anyOn
+    });
+  }
+
+  const fresh = nextUser ?? user;
+  await callTelegramApi('editMessageText', {
+    chat_id: user.telegram_chat_id,
+    message_id: callback.message.message_id,
+    text: formatAdminNotifyPanelHtml(fresh),
+    parse_mode: 'HTML',
+    reply_markup: buildAdminNotifyInlineKeyboard(fresh),
+    disable_web_page_preview: true
+  });
+
+  if (callback.id) {
+    await answerTelegramCallbackQuery(callback.id);
+  }
 }
 
 /** Admin-only: preview the latest published /resources article card in this chat. */
@@ -2008,8 +2086,12 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
       return;
     }
 
-    if (text === BUTTON_LABELS.alertsOn || text === BUTTON_LABELS.alertsOff) {
-      await toggleAdminAlerts(user);
+    if (
+      text === BUTTON_LABELS.adminAlertsMenu ||
+      text === LEGACY_ADMIN_ALERTS_ON ||
+      text === LEGACY_ADMIN_ALERTS_OFF
+    ) {
+      await sendAdminNotificationSettingsPanel(user);
       return;
     }
 
@@ -2039,6 +2121,11 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     if (!user) return;
 
     const callbackData = callback.data ?? '';
+
+    if (callbackData.startsWith(ADMIN_NOTIFY_CALLBACK_PREFIX)) {
+      await handleAdminNotifyCallback(user, callback, callbackData);
+      return;
+    }
 
     if (callbackData.startsWith(TELEGRAM_GRANT_SAVE_CALLBACK_PREFIX)) {
       await handleTelegramGrantSaveCallback(user, callback, callbackData);
@@ -2072,7 +2159,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         await sendAdminPanel(user);
         return;
       case CALLBACKS.toggleAlerts:
-        await toggleAdminAlerts(user);
+        await sendAdminNotificationSettingsPanel(user);
         return;
       case CALLBACKS.notifyBest:
         await handleGrantNotifyToggle(user, callback, 'notify_best_matches');

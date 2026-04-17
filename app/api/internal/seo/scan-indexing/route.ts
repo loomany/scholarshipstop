@@ -93,7 +93,8 @@ export async function POST(request: Request) {
     }
 
     await notifyEnvTelegramAdminsPlainText(
-      `✅ Страница проиндексирована и появилась в выдаче: ${title} ${url}`
+      `✅ Страница проиндексирована и появилась в выдаче: ${title} ${url}`,
+      'seo'
     );
   }
 

@@ -815,6 +815,7 @@ export interface Database {
       }
       telegram_users: {
         Row: {
+          admin_notification_prefs: Json
           app_user_id: string | null
           created_at: string
           id: string
@@ -836,6 +837,7 @@ export interface Database {
           updated_at: string
         }
         Insert: {
+          admin_notification_prefs?: Json
           app_user_id?: string | null
           created_at?: string
           id?: string
@@ -857,6 +859,7 @@ export interface Database {
           updated_at?: string
         }
         Update: {
+          admin_notification_prefs?: Json
           app_user_id?: string | null
           created_at?: string
           id?: string
