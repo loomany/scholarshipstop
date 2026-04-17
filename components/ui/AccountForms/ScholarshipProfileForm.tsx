@@ -1,7 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode
+} from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 
 import PremiumLockedDuringPastDueCard from '@/components/billing/PremiumLockedDuringPastDueCard';
@@ -24,7 +31,13 @@ import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { US_STATE_AUTOCOMPLETE_PLACEHOLDER } from '@/lib/constants/usStates';
 import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
-import { accountPagePrimaryButtonClass } from '@/lib/constants/scholarshipActionUi';
+import {
+  accountPagePrimaryButtonClass,
+  SCHOLARSHIP_ACTION_FOCUS_VISIBLE
+} from '@/lib/constants/scholarshipActionUi';
+import { resendRegistrationVerificationEmail } from '@/app/actions/registrationVerification';
+import { toast } from '@/components/ui/Toasts/use-toast';
+import { getURL } from '@/utils/helpers';
 import { pickAllowedProfilesUpsertFields } from '@/lib/onboarding/profilesOnboardingSync';
 import {
   sanitizeBirthDayInput,
@@ -103,6 +116,8 @@ const birthDateInputBaseClass = `w-full rounded-xl border border-zinc-200 bg-whi
 const labelClass = 'mt-4 block text-sm font-medium text-zinc-700 first:mt-0';
 const labelClassSaaS =
   'mt-4 block text-xs font-semibold uppercase tracking-wide text-zinc-500 first:mt-0';
+
+const accountResendConfirmationButtonClass = `inline-flex max-w-full items-center justify-center rounded-full border border-emerald-500 bg-white px-4 py-2.5 text-center text-sm font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50 disabled:pointer-events-none disabled:opacity-60 ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
 
 /** Same option sets as onboarding Step 1 / Step 3 (`DarkSelect`). */
 const schoolLevelSelectOptions = [
@@ -269,6 +284,7 @@ export default function ScholarshipProfileForm({
   subscription = null,
   userEmail,
   emailConfirmed,
+  resendConfirmationMode = null,
   variant = 'default'
 }: {
   profile: ProfilesRow | null;
@@ -279,6 +295,8 @@ export default function ScholarshipProfileForm({
    * SaaS email badge: `true` / `false` from `profiles.email_verified` (via parent); `undefined` if no profile row yet.
    */
   emailConfirmed?: boolean;
+  /** How to resend confirmation when email is unverified (`AccountDashboardClient`). */
+  resendConfirmationMode?: 'app' | 'supabase' | null;
   /** `account`: compact card on /account (page supplies section heading). `saas`: split profile cards, no outer Card. */
   variant?: 'default' | 'account' | 'saas';
 }) {
@@ -355,13 +373,8 @@ export default function ScholarshipProfileForm({
   const [sectionFeedback, setSectionFeedback] = useState<
     Partial<Record<ProfileSectionKey, SectionFeedback>>
   >({});
-  const [trialEmailGateMessage, setTrialEmailGateMessage] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (emailConfirmed === true) {
-      setTrialEmailGateMessage(null);
-    }
-  }, [emailConfirmed]);
+  const [resendingConfirmation, setResendingConfirmation] = useState(false);
+  const resendConfirmationInFlightRef = useRef(false);
 
   useEffect(() => {
     const keys = (['personal', 'education', 'eligibility'] as const).filter(
@@ -663,6 +676,65 @@ export default function ScholarshipProfileForm({
     router.refresh();
   }, [router]);
 
+  const handleResendConfirmation = useCallback(async () => {
+    if (!resendConfirmationMode || resendConfirmationInFlightRef.current) return;
+    const email = userEmail?.trim();
+    if (!email) {
+      toast({
+        title: 'Could not send email',
+        description: 'No email on file.',
+        variant: 'destructive'
+      });
+      return;
+    }
+    resendConfirmationInFlightRef.current = true;
+    setResendingConfirmation(true);
+    try {
+      if (resendConfirmationMode === 'app') {
+        const r = await resendRegistrationVerificationEmail();
+        if (!r.ok) {
+          toast({
+            title: 'Could not send email',
+            description: r.error ?? 'Try again in a moment.',
+            variant: 'destructive'
+          });
+        } else {
+          toast({
+            title: 'Check your inbox for the link.',
+            description: 'We sent a confirmation message to your email.',
+            duration: 6000
+          });
+        }
+      } else {
+        const supabase = createClient();
+        const emailRedirectTo = getURL(
+          `auth/callback?next=${encodeURIComponent('/account')}`
+        );
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email,
+          options: { emailRedirectTo }
+        });
+        if (error) {
+          toast({
+            title: 'Could not resend',
+            description: error.message,
+            variant: 'destructive'
+          });
+        } else {
+          toast({
+            title: 'Check your inbox for the link.',
+            description: 'We sent a confirmation message to your email.',
+            duration: 6000
+          });
+        }
+      }
+    } finally {
+      resendConfirmationInFlightRef.current = false;
+      setResendingConfirmation(false);
+    }
+  }, [resendConfirmationMode, userEmail]);
+
   const onStartTrial = useCallback(async () => {
     const supabase = createClient();
     const {
@@ -670,24 +742,12 @@ export default function ScholarshipProfileForm({
     } = await supabase.auth.getUser();
 
     if (!user) {
-      setTrialEmailGateMessage(null);
       router.push('/signin');
       return;
     }
 
-    // Must match UI / parent: only `emailConfirmed === true` (see AccountDashboardClient).
-    // Do not OR with `user.email_confirmed_at` here — that bypassed profile.email_verified === false.
-    if (emailConfirmed !== true) {
-      setTrialEmailGateMessage(
-        'Please confirm your email before starting your free trial. Check your inbox for the confirmation link, then return here.'
-      );
-      return;
-    }
-
-    setTrialEmailGateMessage(null);
-
     router.push('/subscription');
-  }, [emailConfirmed, router]);
+  }, [router]);
 
   const onSwitchPlan = useCallback(() => {
     router.push('/subscription');
@@ -907,6 +967,10 @@ export default function ScholarshipProfileForm({
   if (isSaas) {
     const showSaasEmailStatus =
       userEmail != null && emailConfirmed !== undefined;
+    const showResendConfirmationButton =
+      emailConfirmed === false &&
+      Boolean(userEmail?.trim()) &&
+      resendConfirmationMode != null;
     const paymentFailed = subscriptionPresentation.status === 'past_due';
     const subscriptionPaused = subscriptionPresentation.status === 'paused';
     const subscriptionStatusUi = (() => {
@@ -997,7 +1061,7 @@ export default function ScholarshipProfileForm({
     const sectionSaveRow = (
       section: ProfileSectionKey,
       onSave: () => void,
-      endSlot?: React.ReactNode
+      slots?: { middleSlot?: ReactNode; endSlot?: ReactNode }
     ) => {
       const fb = sectionFeedback[section];
       const feedback = fb ? (
@@ -1023,12 +1087,16 @@ export default function ScholarshipProfileForm({
         </button>
       );
 
+      const endSlot = slots?.endSlot;
+      const middleSlot = slots?.middleSlot;
+
       return (
         <div className={SAAS_SECTION_ACTION_ROW}>
-          {endSlot ? (
+          {endSlot || middleSlot ? (
             <div className="flex w-full flex-col gap-2">
-              <div className="flex w-full min-w-0 flex-row items-center justify-between gap-2 sm:gap-4">
+              <div className="flex w-full min-w-0 flex-row items-center gap-2 sm:gap-4">
                 <div className="min-w-0 shrink">{saveButton}</div>
+                <div className="flex min-w-0 flex-1 justify-center px-1">{middleSlot}</div>
                 <div className="flex shrink-0 items-center justify-end">{endSlot}</div>
               </div>
               {feedback}
@@ -1192,14 +1260,6 @@ export default function ScholarshipProfileForm({
                   >
                     {subscriptionStatusUi.subtitle}
                   </p>
-                ) : null}
-                {subscriptionType === 'none' && trialEmailGateMessage ? (
-                  <div
-                    role="alert"
-                    className="mt-4 max-w-md rounded-xl border border-amber-200 bg-amber-50/90 px-3 py-2.5 text-sm font-medium leading-snug text-amber-950 shadow-sm md:mt-3"
-                  >
-                    {trialEmailGateMessage}
-                  </div>
                 ) : null}
                 {subscriptionStatusUi.showTrialProgress ? (
                   <div
@@ -1492,17 +1552,27 @@ export default function ScholarshipProfileForm({
                 </p>
               ) : null}
             </div>
-            {sectionSaveRow(
-              'personal',
-              onSavePersonal,
-              <button
-                type="button"
-                onClick={() => void handleLogOut()}
-                className={accountPagePrimaryButtonClass}
-              >
-                Log out
-              </button>
-            )}
+            {sectionSaveRow('personal', onSavePersonal, {
+              middleSlot: showResendConfirmationButton ? (
+                <button
+                  type="button"
+                  onClick={() => void handleResendConfirmation()}
+                  disabled={submitting || resendingConfirmation}
+                  className={accountResendConfirmationButtonClass}
+                >
+                  {resendingConfirmation ? 'Sending…' : 'Resend confirmation'}
+                </button>
+              ) : undefined,
+              endSlot: (
+                <button
+                  type="button"
+                  onClick={() => void handleLogOut()}
+                  className={accountPagePrimaryButtonClass}
+                >
+                  Log out
+                </button>
+              )
+            })}
             {variant === 'saas' ? (
               <GrantNotificationToggles
                 profile={profile}

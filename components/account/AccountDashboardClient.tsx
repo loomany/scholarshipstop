@@ -11,6 +11,16 @@ import { deriveSubscriptionPresentation } from '@/lib/payments/subscriptionEntit
 import type { Database, Tables } from '@/types_db';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
+
+function pickResendConfirmationMode(
+  authUser: User,
+  profile: ProfilesRow | null
+): 'app' | 'supabase' | null {
+  if (profile?.email_verified === false) return 'app';
+  const at = authUser.email_confirmed_at;
+  if (at == null || at === '') return 'supabase';
+  return null;
+}
 type Subscription = Tables<'subscriptions'>;
 type Price = Tables<'prices'>;
 type Product = Tables<'products'>;
@@ -47,6 +57,7 @@ export default function AccountDashboardClient({
   const subscriptionPresentation = deriveSubscriptionPresentation(profile, subscription);
   const subscriptionPaused = subscriptionPresentation.status === 'paused';
   const pausedResumeUrl = resolveResumeSubscriptionHref(subscription, '/subscription');
+  const resendConfirmationMode = pickResendConfirmationMode(user, profile);
 
   return (
     <div className="min-h-screen bg-zinc-50/90">
@@ -60,6 +71,7 @@ export default function AccountDashboardClient({
             subscription={subscription}
             userEmail={user.email}
             emailConfirmed={emailConfirmedForUi}
+            resendConfirmationMode={resendConfirmationMode}
             variant="saas"
           />
 
