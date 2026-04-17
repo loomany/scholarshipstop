@@ -57,6 +57,43 @@ export async function fetchPublishedContentPostsPage(
 
 const RESOURCES_INDEX_FETCH_BATCH = 500;
 
+/** Sitemap only: slug + date — avoids loading title, cover, meta for every row. */
+const SITEMAP_POSTS_BATCH = 500;
+
+export type ContentPostSitemapRow = {
+  slug: string;
+  published_at: string | null;
+};
+
+/**
+ * All published resource article URLs for sitemap generation (minimal columns).
+ */
+export async function fetchAllPublishedContentPostsForSitemap(): Promise<
+  ContentPostSitemapRow[]
+> {
+  const out: ContentPostSitemapRow[] = [];
+  let from = 0;
+  for (;;) {
+    const supabase = createPublicClient();
+    const { data, error } = await supabase
+      .from('content_posts')
+      .select('slug, published_at')
+      .eq('status', 'published')
+      .not('slug', 'is', null)
+      .neq('slug', '')
+      .order('published_at', { ascending: false, nullsFirst: false })
+      .order('updated_at', { ascending: false, nullsFirst: false })
+      .range(from, from + SITEMAP_POSTS_BATCH - 1);
+
+    if (error) throw new Error(error.message);
+    const batch = (data ?? []) as ContentPostSitemapRow[];
+    out.push(...batch);
+    if (batch.length < SITEMAP_POSTS_BATCH) break;
+    from += SITEMAP_POSTS_BATCH;
+  }
+  return out;
+}
+
 /** All published posts with slug (for `/resources` filtering). Batched for large catalogs. */
 export async function fetchAllPublishedContentPostsListFields(): Promise<
   ContentPostListFields[]

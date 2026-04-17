@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import type { MetadataRoute } from 'next';
 
-import { fetchAllPublishedContentPostsListFields } from '@/lib/content-hub/contentPostsServer';
+import { fetchAllPublishedContentPostsForSitemap } from '@/lib/content-hub/contentPostsServer';
 import { fetchAllPublishedEssaySitemapRows } from '@/lib/essays/essaysServer';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
@@ -52,7 +52,17 @@ export type SitemapDocument = {
 };
 
 export const SITEMAP_REVALIDATE_SECONDS = 3600;
-export const SCHOLARSHIP_SITEMAP_CHUNK_SIZE = 1000;
+
+/** Google allows at most 50,000 URLs per sitemap file. */
+export const SITEMAP_MAX_URLS_PER_FILE = 50_000;
+
+/** Page size for Supabase `.range()` pagination (not a cap on total rows). */
+export const SITEMAP_DB_PAGE_SIZE = 1000;
+
+/**
+ * @deprecated Use {@link SITEMAP_DB_PAGE_SIZE} (DB batching) or {@link SITEMAP_MAX_URLS_PER_FILE} (XML chunking).
+ */
+export const SCHOLARSHIP_SITEMAP_CHUNK_SIZE = SITEMAP_DB_PAGE_SIZE;
 
 function dedupeSitemapEntries(
   entries: MetadataRoute.Sitemap
@@ -137,11 +147,32 @@ function makeSitemapDocument(
   };
 }
 
+type SitemapSlugMode = 'single-or-indexed' | 'always-indexed';
+
+/** Split URL lists into multiple documents if needed (≤ {@link SITEMAP_MAX_URLS_PER_FILE} each). */
+function buildDocumentsForBucket(
+  bucket: SitemapBucket,
+  slugBase: string,
+  entries: MetadataRoute.Sitemap,
+  slugMode: SitemapSlugMode
+): SitemapDocument[] {
+  const chunks = chunkSitemapEntries(entries, SITEMAP_MAX_URLS_PER_FILE);
+  return chunks.map((chunk, index) => {
+    const slug =
+      slugMode === 'always-indexed'
+        ? `${slugBase}-${index}`
+        : chunks.length === 1
+          ? slugBase
+          : `${slugBase}-${index}`;
+    return makeSitemapDocument(bucket, slug, chunk);
+  });
+}
+
 async function fetchScholarshipSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
   const supabase = createPublicClient();
-  const rows: ScholarshipSitemapRow[] = [];
+  const out: MetadataRoute.Sitemap = [];
   let offset = 0;
 
   for (;;) {
@@ -150,21 +181,22 @@ async function fetchScholarshipSitemapEntries(
       .select('id, slug, updated_at, is_indexable')
       .eq('is_active', true)
       .order('updated_at', { ascending: false, nullsFirst: false })
-      .range(offset, offset + SCHOLARSHIP_SITEMAP_CHUNK_SIZE - 1);
+      .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
 
     if (error) throw new Error(error.message);
     const batch = (data ?? []) as ScholarshipSitemapRow[];
-    rows.push(...batch);
-    if (batch.length < SCHOLARSHIP_SITEMAP_CHUNK_SIZE) break;
-    offset += SCHOLARSHIP_SITEMAP_CHUNK_SIZE;
+    for (const row of batch) {
+      if (row.is_indexable === false) continue;
+      out.push({
+        url: `${base}${scholarshipPublicPath(row)}`,
+        lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
+      });
+    }
+    if (batch.length < SITEMAP_DB_PAGE_SIZE) break;
+    offset += SITEMAP_DB_PAGE_SIZE;
   }
 
-  return rows
-    .filter((row) => row.is_indexable !== false)
-    .map((row) => ({
-      url: `${base}${scholarshipPublicPath(row)}`,
-      lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
-    }));
+  return out;
 }
 
 async function fetchProviderSitemapEntries(
@@ -180,13 +212,13 @@ async function fetchProviderSitemapEntries(
       .select('slug, updated_at, created_at')
       .order('updated_at', { ascending: false, nullsFirst: false })
       .order('created_at', { ascending: false })
-      .range(offset, offset + SCHOLARSHIP_SITEMAP_CHUNK_SIZE - 1);
+      .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
 
     if (error) throw new Error(error.message);
     const batch = (data ?? []) as ProviderSitemapRow[];
     rows.push(...batch);
-    if (batch.length < SCHOLARSHIP_SITEMAP_CHUNK_SIZE) break;
-    offset += SCHOLARSHIP_SITEMAP_CHUNK_SIZE;
+    if (batch.length < SITEMAP_DB_PAGE_SIZE) break;
+    offset += SITEMAP_DB_PAGE_SIZE;
   }
 
   return rows
@@ -225,7 +257,7 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     { url: `${base}/providers`, lastModified: new Date() }
   ];
 
-  const resourcePosts = await fetchAllPublishedContentPostsListFields();
+  const resourcePosts = await fetchAllPublishedContentPostsForSitemap();
   const resources: MetadataRoute.Sitemap = resourcePosts
     .filter((post) => Boolean(post.slug?.trim()))
     .map((post) => ({
@@ -274,8 +306,14 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
   const seo = dedupeSitemapEntries([...manifestSeoPages, ...longTailPages]);
 
   const [scholarships, providers] = await Promise.all([
-    fetchScholarshipSitemapEntries(base).catch(() => []),
-    fetchProviderSitemapEntries(base).catch(() => [])
+    fetchScholarshipSitemapEntries(base).catch((err) => {
+      console.error('[sitemap] fetchScholarshipSitemapEntries failed:', err);
+      return [];
+    }),
+    fetchProviderSitemapEntries(base).catch((err) => {
+      console.error('[sitemap] fetchProviderSitemapEntries failed:', err);
+      return [];
+    })
   ]);
 
   return {
@@ -292,20 +330,34 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
 export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> => {
   void getVisibleSeoRoutes();
   const buckets = await buildSitemapBuckets();
-  const scholarshipChunks = chunkSitemapEntries(
-    buckets.scholarships,
-    SCHOLARSHIP_SITEMAP_CHUNK_SIZE
-  );
 
   return [
-    makeSitemapDocument('core', 'core', buckets.core),
-    makeSitemapDocument('resources', 'resources', buckets.resources),
-    makeSitemapDocument('essays', 'essays', buckets.essays),
-    makeSitemapDocument('providers', 'providers', buckets.providers),
-    makeSitemapDocument('categories', 'categories', buckets.categories),
-    makeSitemapDocument('seo', 'seo', buckets.seo),
-    ...scholarshipChunks.map((entries, index) =>
-      makeSitemapDocument('scholarships', `scholarships-${index}`, entries)
+    ...buildDocumentsForBucket('core', 'core', buckets.core, 'single-or-indexed'),
+    ...buildDocumentsForBucket(
+      'resources',
+      'resources',
+      buckets.resources,
+      'single-or-indexed'
+    ),
+    ...buildDocumentsForBucket('essays', 'essays', buckets.essays, 'single-or-indexed'),
+    ...buildDocumentsForBucket(
+      'providers',
+      'providers',
+      buckets.providers,
+      'single-or-indexed'
+    ),
+    ...buildDocumentsForBucket(
+      'categories',
+      'categories',
+      buckets.categories,
+      'single-or-indexed'
+    ),
+    ...buildDocumentsForBucket('seo', 'seo', buckets.seo, 'single-or-indexed'),
+    ...buildDocumentsForBucket(
+      'scholarships',
+      'scholarships',
+      buckets.scholarships,
+      'always-indexed'
     )
   ];
 });
