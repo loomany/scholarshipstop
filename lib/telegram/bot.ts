@@ -129,13 +129,14 @@ const BUTTON_LABELS = {
   myProfile: '👤 My Account',
   reconnectAccount: '🔄 Sync Account',
   /** Same data as hub My scholarships → Saved (`/scholarships?tab=saved`). Main menu only — not duplicated on My Account keyboard. */
-  savedScholarships: '💾 Saved scholarships',
-  /** Admin: copy-paste snapshot of SEO drip queue (env + progress). */
-  seoQueueReport: '📊 SEO очередь'
+  savedScholarships: '💾 Saved scholarships'
 } as const;
 
 /** Previous reply-keyboard label; still accept taps until clients refresh the keyboard. */
 const LEGACY_SAVED_SCHOLARSHIPS_BUTTON = '💾 Saved';
+
+/** Removed from admin keyboard; still accept taps until clients refresh. Use `/seoreport` for the same report. */
+const LEGACY_SEO_QUEUE_REPORT_BUTTON = '📊 SEO очередь';
 
 /** Short reply when returning to the reply-keyboard hub (not Markdown). */
 const MAIN_MENU_REPLY = 'Main menu — pick your next step.';
@@ -237,7 +238,6 @@ function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarku
             user.notifications_enabled ? BUTTON_LABELS.alertsOn : BUTTON_LABELS.alertsOff
           )
         ],
-        [keyboardButton(BUTTON_LABELS.seoQueueReport)],
         [keyboardButton(BUTTON_LABELS.backToMenu)]
       ],
       resize_keyboard: true,
@@ -2003,7 +2003,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
       return;
     }
 
-    if (text === BUTTON_LABELS.seoQueueReport) {
+    if (text === LEGACY_SEO_QUEUE_REPORT_BUTTON) {
       await sendSeoQueueReport(user);
       return;
     }
