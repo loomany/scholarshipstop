@@ -1060,6 +1060,8 @@ export interface Database {
           listing_completeness_score: number | null
           listing_completeness_bucket: string | null
           applicants_count_is_estimated: boolean | null
+          /** Indexing pipeline: pending → submitted (after Indexing API ping) → indexed (after URL Inspection). */
+          indexing_status: string
         }
         Insert: {
           id?: string
@@ -1191,6 +1193,7 @@ export interface Database {
           listing_completeness_score?: number | null
           listing_completeness_bucket?: string | null
           applicants_count_is_estimated?: boolean | null
+          indexing_status?: string
         }
         Update: {
           id?: string
@@ -1322,6 +1325,7 @@ export interface Database {
           listing_completeness_score?: number | null
           listing_completeness_bucket?: string | null
           applicants_count_is_estimated?: boolean | null
+          indexing_status?: string
         }
         Relationships: []
       }

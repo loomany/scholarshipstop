@@ -4,6 +4,7 @@ import {
   pingGoogleIndexingDirect,
   scholarshipIndexingUrl
 } from '@/lib/seo/googleIndexingQueue';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { notifyEnvTelegramAdminsNewScholarship } from '@/lib/telegram/bot';
 
 export const runtime = 'nodejs';
@@ -82,6 +83,24 @@ export async function POST(request: Request) {
 
   const scholarshipUrl = scholarshipIndexingUrl({ id, slug });
   const googleIndexing = await pingGoogleIndexingDirect(scholarshipUrl);
+
+  const admin = createServiceRoleSupabaseClient();
+  if (admin) {
+    const indexing_status = googleIndexing.ok ? 'submitted' : 'pending';
+    const { error: idxErr } = await admin
+      .from('scholarships')
+      .update({
+        indexing_status,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id);
+    if (idxErr) {
+      console.error(
+        '[notify-admin-new] scholarships indexing_status update failed',
+        idxErr.message
+      );
+    }
+  }
 
   return NextResponse.json({ ok: true, googleIndexing });
 }

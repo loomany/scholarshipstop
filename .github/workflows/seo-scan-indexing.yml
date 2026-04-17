@@ -1,0 +1,42 @@
+name: SEO URL Inspection scan
+
+on:
+  schedule:
+    # Daily ~ 11:00 UTC — adjust as needed (GitHub Actions cron is UTC).
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+jobs:
+  scan-indexing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Run indexing status scan
+        env:
+          SITE_URL: https://scholarshiptop.com
+          GOOGLE_INDEXING_SECRET: ${{ secrets.GOOGLE_INDEXING_SECRET }}
+        run: |
+          if [ -z "$GOOGLE_INDEXING_SECRET" ]; then
+            echo "Missing required GitHub secret: GOOGLE_INDEXING_SECRET" >&2
+            exit 1
+          fi
+
+          response_file="$(mktemp)"
+          http_code="$(
+            curl \
+              --silent \
+              --show-error \
+              --output "$response_file" \
+              --write-out '%{http_code}' \
+              --request POST \
+              --url "${SITE_URL}/api/internal/seo/scan-indexing" \
+              --header "Authorization: Bearer ${GOOGLE_INDEXING_SECRET}" \
+              --header "Content-Type: application/json"
+          )"
+
+          cat "$response_file"
+
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+            echo "scan-indexing failed with HTTP ${http_code}" >&2
+            exit 1
+          fi

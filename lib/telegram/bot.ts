@@ -32,6 +32,7 @@ import {
 } from '@/lib/analytics/resolveTrafficChannel';
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
+import { fetchSearchAppearancePageCount } from '@/lib/seo/googleSearchConsole';
 import { getSeoDripFeedSnapshot } from '@/lib/seo/seoDripFeed';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
@@ -1934,6 +1935,32 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         return;
       }
       await sendSeoQueueReport(user);
+      return;
+    }
+
+    if (normalizeBotCommand(text) === '/seo') {
+      if (!getTelegramAdminIds().has(message.from.id)) {
+        await sendTelegramMessage(
+          user.telegram_chat_id,
+          'This command is only available to admins.',
+          buildMainKeyboard()
+        );
+        return;
+      }
+      const result = await fetchSearchAppearancePageCount({ days: 30 });
+      if (!result.ok) {
+        await sendTelegramMessage(
+          user.telegram_chat_id,
+          `📊 Статистика SEO: не удалось загрузить данные. ${result.error}`,
+          buildMainKeyboard()
+        );
+        return;
+      }
+      await sendTelegramMessage(
+        user.telegram_chat_id,
+        `📊 Статистика SEO: Всего страниц в поиске за последние 30 дней: ${result.count}`,
+        buildMainKeyboard()
+      );
       return;
     }
 
