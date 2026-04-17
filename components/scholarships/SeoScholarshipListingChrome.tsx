@@ -27,6 +27,11 @@ export function shortenSeoListingHeading(raw: string, maxChars = HERO_MAX_CHARS)
   return `${base}…`;
 }
 
+/** Hub titles often end with " · 2026" — strip for a cleaner visible H1 (metadata can keep full string). */
+function stripTrailingYearFromHubHeading(raw: string): string {
+  return raw.replace(/\s*·\s*\d{4}\s*$/, '').trim();
+}
+
 function introParagraphs(text: string, maxParas: number): string[] {
   const parts = text
     .trim()
@@ -141,46 +146,26 @@ function whoThisPageIsFor(pageData: SeoListingPageData | null | undefined): stri
   return parts.join(' · ');
 }
 
-function buildDeterministicIntro(
-  heading: string,
-  pageData: SeoListingPageData | null | undefined,
-  updatedAt: string | null | undefined
-): string | null {
-  if (!pageData) return null;
-  const segments: string[] = [];
-  segments.push(
-    `${pageData.exactCount.toLocaleString('en-US')} exact scholarships currently match ${stripNumericSuffixFromSeoHeading(
-      heading
-    ).toLowerCase()}.`
-  );
-  const award = formatAwardRange(pageData);
-  if (award) segments.push(`${award}.`);
-  if (pageData.deadline.within30Days > 0) {
-    segments.push(
-      `${pageData.deadline.within30Days} close within 30 days and ${pageData.deadline.within60Days} within 60 days.`
-    );
-  } else if (pageData.deadline.rollingOrUnknown > 0) {
-    segments.push(
-      `${pageData.deadline.rollingOrUnknown} listings have rolling or unstated deadlines.`
-    );
-  }
-  const audience = whoThisPageIsFor(pageData);
-  if (audience) segments.push(`This page is most useful for ${audience}.`);
-  const updated = formatUpdatedDate(updatedAt);
-  if (updated) segments.push(`Catalog snapshot updated ${updated}.`);
-  return segments.join(' ');
+/**
+ * When there is no AI intro HTML, show a single line pointing users at filters (no duplicate counts).
+ */
+function buildMinimalFilterIntro(_heading: string): string {
+  return 'Use filters and search below to narrow results by deadline, award size, and eligibility.';
 }
 
 function SeoFactsGrid({
   scholarshipCount,
   exactFilterMatchTotal,
   pageData,
-  updatedAt
+  updatedAt,
+  /** When the hero already shows this total in the count badge, omit the duplicate "Exact scholarships" card. */
+  heroListedCount = null
 }: {
   scholarshipCount: number | null;
   exactFilterMatchTotal: number | null;
   pageData?: SeoListingPageData | null;
   updatedAt?: string | null;
+  heroListedCount?: number | null;
 }) {
   const exactCount =
     exactFilterMatchTotal != null
@@ -188,8 +173,13 @@ function SeoFactsGrid({
       : scholarshipCount != null
         ? scholarshipCount
         : pageData?.exactCount ?? null;
+  const omitExactCard =
+    heroListedCount != null &&
+    heroListedCount > 0 &&
+    exactCount != null &&
+    exactCount === heroListedCount;
   const cards = [
-    exactCount != null
+    !omitExactCard && exactCount != null
       ? {
           label: 'Exact scholarships',
           value: exactCount.toLocaleString('en-US')
@@ -275,7 +265,7 @@ export function SeoScholarshipHero({
   listLoading = false,
   introHtml = null,
   fallbackUsed = false,
-  thinListing = false,
+  thinListing: _thinListing = false,
   exactFilterMatchTotal = null,
   qualityBucket = null,
   pageData = null,
@@ -284,12 +274,9 @@ export function SeoScholarshipHero({
   publicSeoPage = false
 }: HeroProps) {
   const topicCore = shortenSeoListingHeading(
-    stripNumericSuffixFromSeoHeading(heading)
+    stripTrailingYearFromHubHeading(stripNumericSuffixFromSeoHeading(heading))
   );
-  const h1 =
-    scholarshipCount != null && scholarshipCount > 0
-      ? `${topicCore}: ${scholarshipCount.toLocaleString('en-US')} opportunities available`
-      : topicCore;
+  const showCountBadge = scholarshipCount != null && scholarshipCount > 0;
   const sub =
     scholarshipCount === null
       ? 'Loading the scholarship list…'
@@ -299,7 +286,7 @@ export function SeoScholarshipHero({
           : 'No scholarships in this view right now. Try clearing search or filters below.'
         : fallbackUsed
           ? `Showing ${scholarshipCount.toLocaleString('en-US')} closest scholarships in this view (relaxed filters).`
-          : `Explore ${scholarshipCount.toLocaleString('en-US')} scholarships in this view.`;
+          : null;
 
   const exactLine =
     fallbackUsed &&
@@ -309,20 +296,33 @@ export function SeoScholarshipHero({
       ? `Exact matches for the original filters: ${exactFilterMatchTotal.toLocaleString('en-US')}.`
       : null;
 
-  const showDeterministicIntro = qualityBucket === 'GOOD' && pageData;
+  const hasBundleIntro = Boolean(introHtml?.trim());
+  const showDeterministicIntro =
+    !hasBundleIntro && qualityBucket === 'GOOD' && pageData;
   const deterministicIntro = showDeterministicIntro
-    ? buildDeterministicIntro(heading, pageData, updatedAt)
+    ? buildMinimalFilterIntro(heading)
     : null;
-  const introSource = deterministicIntro ?? introHtml?.trim() ?? null;
-  const paras = introSource ? introParagraphs(introSource, 2) : [];
+  const introSource =
+    introHtml?.trim() ?? deterministicIntro ?? null;
+  const paras = introSource ? introParagraphs(introSource, 1) : [];
 
   const hideInternalListingBanner = publicSeoPage || qualityBucket === 'GOOD';
 
   return (
     <header className={`${PROSE} space-y-2 pb-5 sm:space-y-2.5 sm:pb-6`}>
-      <h1 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl lg:text-[1.85rem] lg:leading-snug">
-        {h1}
-      </h1>
+      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-3">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl lg:text-[1.85rem] lg:leading-snug">
+          {topicCore}
+        </h1>
+        {showCountBadge ? (
+          <span
+            className="inline-flex w-fit shrink-0 items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-sm font-semibold tabular-nums text-slate-500"
+            aria-label={`${scholarshipCount!.toLocaleString('en-US')} scholarships in this list`}
+          >
+            {scholarshipCount!.toLocaleString('en-US')}
+          </span>
+        ) : null}
+      </div>
       {!hideInternalListingBanner ? (
         <p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 sm:text-[13px]">
           Internal listing page. Closest results may be shown for browsing, but
@@ -330,12 +330,9 @@ export function SeoScholarshipHero({
           {canonicalTarget ? ` Canonical intent rolls up to /scholarships/${canonicalTarget}.` : ''}
         </p>
       ) : null}
-      {thinListing ? (
-        <p className="text-xs font-medium text-amber-800 sm:text-[13px]">
-          Narrow result set — confirm details on each official program page.
-        </p>
+      {sub ? (
+        <p className="text-sm font-medium text-slate-600 sm:text-[15px]">{sub}</p>
       ) : null}
-      <p className="text-sm font-medium text-slate-600 sm:text-[15px]">{sub}</p>
       {exactLine ? (
         <p className="text-sm font-medium text-slate-600 sm:text-[15px]">
           {exactLine}
@@ -357,6 +354,7 @@ export function SeoScholarshipHero({
         exactFilterMatchTotal={exactFilterMatchTotal}
         pageData={pageData}
         updatedAt={updatedAt}
+        heroListedCount={showCountBadge ? scholarshipCount : null}
       />
     </header>
   );

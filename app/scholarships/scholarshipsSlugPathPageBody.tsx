@@ -295,8 +295,8 @@ export default async function ScholarshipsSlugPathPageBody({
           : `Scholarships in ${stateHubCtx.stateLabel} · ${year}`;
       stateHubIntroFallback =
         topicSlug && topicLinkLabel
-          ? `Browse ${topicLinkLabel.toLowerCase()} open to students connected to ${stateHubCtx.stateLabel}. Use filters below to narrow by deadline and award size.`
-          : `Browse scholarships tied to ${stateHubCtx.stateLabel}. Filter by field, deadline, and amount to find programs that fit your plan.`;
+          ? `Use filters and search below to narrow ${topicLinkLabel.toLowerCase()} in ${stateHubCtx.stateLabel} by deadline, award size, and eligibility.`
+          : `Use filters below to narrow scholarships in ${stateHubCtx.stateLabel} by field, deadline, and amount.`;
 
       const neighbors = neighborStateSlugsForSeoHub(stateHubCtx.stateSlug);
       stateHubSupportingAppend = buildStateHubSupportingAppendHtml({
@@ -312,7 +312,7 @@ export default async function ScholarshipsSlugPathPageBody({
         year
       });
       manifestDisplayHeading = `${tripleHubCtx.topicLabel} (${tripleHubCtx.degreeLabel}) in ${tripleHubCtx.stateLabel} · ${year}`;
-      stateHubIntroFallback = `Browse ${tripleHubCtx.topicLabel.toLowerCase()} for ${tripleHubCtx.degreeLabel.toLowerCase()} students connected to ${tripleHubCtx.stateLabel}. Use filters below to narrow results.`;
+      stateHubIntroFallback = `Use filters and search below to narrow ${tripleHubCtx.topicLabel.toLowerCase()} (${tripleHubCtx.degreeLabel.toLowerCase()}) in ${tripleHubCtx.stateLabel} by deadline, award size, and eligibility.`;
       const neighbors = neighborStateSlugsForSeoHub(tripleHubCtx.stateSlug);
       stateHubSupportingAppend = buildStateHubSupportingAppendHtml({
         contentHtml: hubRow?.content_html ?? null,
