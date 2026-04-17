@@ -763,11 +763,14 @@ async function sendTelegramAdminBroadcastHtml(text: string, category: AdminNotif
  */
 export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
   trafficChannel: TrafficChannel;
+  /** Normalized landing URL (no gclid/fbclid tail). */
   landingUrl: string;
   referrer?: string | null;
   utm_source?: string | null;
   utm_medium?: string | null;
   utm_campaign?: string | null;
+  clickId?: string | null;
+  clickIdParam?: 'gclid' | 'fbclid' | null;
 }) {
   try {
     if (!getTelegramBotToken()) {
@@ -786,12 +789,21 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
       utm_campaign: payload.utm_campaign
     });
 
-    const text = [
-      '<b>New Visitor on ScholarshipTop!</b>',
+    const lines: string[] = ['<b>New Visitor on ScholarshipTop!</b>'];
+    const showGoogleAdsTag = payload.clickIdParam === 'gclid';
+    const showPaidTag = payload.clickIdParam === 'fbclid';
+    if (showGoogleAdsTag) {
+      lines.push('', '💰 <b>Источник:</b> Google Ads');
+    } else if (showPaidTag) {
+      lines.push('', '🚀 <b>Источник:</b> Реклама');
+    }
+    lines.push(
       '',
       `<b>Channel:</b> ${escapeTelegramHtml(channelDisplay)}`,
       `<b>Landing:</b> ${escapeTelegramHtml(payload.landingUrl)}`
-    ].join('\n');
+    );
+
+    const text = lines.join('\n');
 
     await sendTelegramAdminBroadcastHtml(text, 'traffic');
   } catch (e) {

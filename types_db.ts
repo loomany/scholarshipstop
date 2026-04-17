@@ -14,6 +14,7 @@ export interface Database {
           id: string
           visitor_id: string
           landing_url: string
+          click_id: string | null
           referrer: string | null
           utm_source: string | null
           utm_medium: string | null
@@ -28,6 +29,7 @@ export interface Database {
           id?: string
           visitor_id: string
           landing_url: string
+          click_id?: string | null
           referrer?: string | null
           utm_source?: string | null
           utm_medium?: string | null
@@ -42,6 +44,7 @@ export interface Database {
           id?: string
           visitor_id?: string
           landing_url?: string
+          click_id?: string | null
           referrer?: string | null
           utm_source?: string | null
           utm_medium?: string | null

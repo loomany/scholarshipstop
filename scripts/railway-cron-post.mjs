@@ -4,14 +4,14 @@
  *
  * Usage: node scripts/railway-cron-post.mjs <full-url> <bearer-token> [json-body]
  *
- * Exits 0 on HTTP 2xx, 1 otherwise. Prints response body to stdout; status line to stderr.
+ * Exits 0 on HTTP 2xx, 1 otherwise. Prints response body and status line to stdout (Railway logs).
  */
 const url = process.argv[2];
 const bearer = process.argv[3];
 const body = process.argv[4] ?? '{}';
 
 if (!url || !bearer) {
-  console.error(
+  console.log(
     'usage: node railway-cron-post.mjs <url> <bearer-token> [json-body]'
   );
   process.exit(2);
@@ -28,7 +28,7 @@ try {
   });
 
   const text = await res.text();
-  console.error(`[railway-cron] Response HTTP ${res.status}`);
+  console.log(`[railway-cron] Response HTTP ${res.status}`);
   process.stdout.write(text);
   if (text && !text.endsWith('\n')) {
     process.stdout.write('\n');
@@ -39,6 +39,6 @@ try {
   }
 } catch (err) {
   const msg = err instanceof Error ? err.message : String(err);
-  console.error('[railway-cron] fetch error:', msg);
+  console.log('[railway-cron] fetch error:', msg);
   process.exit(1);
 }

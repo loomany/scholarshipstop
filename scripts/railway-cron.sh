@@ -60,11 +60,13 @@ http_post_json() {
   echo "[railway-cron] Starting task: ${name}"
   echo "[railway-cron] POST ${url}"
 
-  if ! node "${SCRIPT_DIR}/railway-cron-post.mjs" "$url" "$bearer" "$data"; then
-    echo "[railway-cron] ERROR: ${name} failed (non-2xx or network error)" >&2
-    exit 1
+  # Temporarily do not exit the whole cron on POST failure (Railway log visibility).
+  if node "${SCRIPT_DIR}/railway-cron-post.mjs" "$url" "$bearer" "$data"; then
+    echo "[railway-cron] OK: ${name}"
+  else
+    echo "[railway-cron] Node script failed with exit code $?"
+    echo "[railway-cron] WARN: ${name} — continuing (no abort)"
   fi
-  echo "[railway-cron] OK: ${name}"
 }
 
 require_env() {

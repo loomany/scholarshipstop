@@ -4,6 +4,7 @@ import {
   isLikelyAutomatedUserAgent,
   normalizeClientUserAgent
 } from '@/lib/analytics/clientBot';
+import { normalizeFirstTouchLandingUrl } from '@/lib/analytics/firstTouchLandingNormalization';
 import { resolveTrafficChannel } from '@/lib/analytics/resolveTrafficChannel';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { notifyTelegramAdminsVisitorFirstTouch } from '@/lib/telegram/bot';
@@ -39,11 +40,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid visitor_id' }, { status: 400 });
   }
 
-  const landing_url =
+  const landing_url_raw =
     typeof body.landing_url === 'string' ? body.landing_url.trim() : '';
-  if (!landing_url || landing_url.length > 4000) {
+  if (!landing_url_raw || landing_url_raw.length > 4000) {
     return NextResponse.json({ error: 'Invalid landing_url' }, { status: 400 });
   }
+
+  const {
+    normalizedUrl: landing_url,
+    clickId: click_id,
+    clickIdParam
+  } = normalizeFirstTouchLandingUrl(landing_url_raw);
 
   const referrer =
     typeof body.referrer === 'string' ? body.referrer.trim().slice(0, 4000) : '';
@@ -65,7 +72,7 @@ export async function POST(request: Request) {
   const is_likely_bot = isLikelyAutomatedUserAgent(user_agent_snapshot);
 
   const traffic_channel = resolveTrafficChannel({
-    landingUrl: landing_url,
+    landingUrl: landing_url_raw,
     referrer,
     utm_source,
     utm_medium,
@@ -90,6 +97,7 @@ export async function POST(request: Request) {
     .insert({
       visitor_id: visitorId,
       landing_url,
+      click_id: click_id,
       referrer: referrer || null,
       utm_source: utm_source || null,
       utm_medium: utm_medium || null,
@@ -121,7 +129,9 @@ export async function POST(request: Request) {
       referrer: referrer || null,
       utm_source: utm_source || null,
       utm_medium: utm_medium || null,
-      utm_campaign: utm_campaign || null
+      utm_campaign: utm_campaign || null,
+      clickId: click_id,
+      clickIdParam
     }).catch((e) => {
       console.error('[analytics/first-touch] telegram async error', e);
     });
