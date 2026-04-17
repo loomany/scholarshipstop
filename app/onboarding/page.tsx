@@ -27,13 +27,13 @@ import {
   type StoredOnboardingDraft
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { enqueueRegistrationVerificationEmail } from '@/app/actions/registrationVerification';
-import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { syncOnboardingToProfiles } from '@/lib/onboarding/syncScholarshipProfile';
 import { validateScholarshipOnboardingStep2 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
 import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
 import { toast } from '@/components/ui/Toasts/use-toast';
 
-const POST_ONBOARDING_PATH = SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
+/** Default landing page after “Create account & find scholarships” (pricing / trial). */
+const POST_ONBOARDING_PATH = '/subscription';
 
 function notifyDestructive(title: string, description?: string) {
   toast({
