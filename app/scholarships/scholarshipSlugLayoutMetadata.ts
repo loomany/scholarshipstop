@@ -5,6 +5,7 @@ import {
 } from '@/app/scholarships/scholarshipLongTailPresets';
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
+import { fetchSeoHubContentMeta } from '@/lib/seo/seoHubPublicRead';
 import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import {
   getSeoListingEntry,
@@ -237,9 +238,15 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     }
     const path = `/scholarships/${resolved.canonicalPath}`;
     const seo = readScholarshipSeoContent(resolved.canonicalPath);
-    const title = seo?.seo_title ?? resolved.entry.h1Fallback;
+    const hubMeta = await fetchSeoHubContentMeta(resolved.canonicalPath);
+    const title =
+      seo?.seo_title?.trim() ||
+      hubMeta?.title?.trim() ||
+      resolved.entry.h1Fallback;
     const description =
-      seo?.seo_description ?? resolved.entry.metaDescriptionFallback;
+      seo?.seo_description?.trim() ||
+      hubMeta?.meta_description?.trim() ||
+      resolved.entry.metaDescriptionFallback;
     const meta: Metadata = {
       title,
       description,

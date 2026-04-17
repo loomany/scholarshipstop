@@ -37,7 +37,9 @@ function legacyPresetSortOrder(slug: LongTailSlug): number {
   if (
     slug === 'engineering' ||
     slug === 'computer-science' ||
-    slug === 'international-students'
+    slug === 'international-students' ||
+    slug === 'nursing' ||
+    slug === 'arts'
   ) {
     return 30;
   }
@@ -48,6 +50,9 @@ function legacyPresetSortOrder(slug: LongTailSlug): number {
 
 function tokenSortOrder(t: SeoRouteToken): number {
   switch (t.kind) {
+    /** State/DC/nationwide first in canonical paths (e.g. california/nursing). */
+    case 'location':
+      return 5;
     case 'eligibility':
       return 10;
     case 'education':
@@ -62,8 +67,6 @@ function tokenSortOrder(t: SeoRouteToken): number {
       return 52;
     case 'payout':
       return 53;
-    case 'location':
-      return 60;
     case 'deadline':
       return 70;
     default:
@@ -108,6 +111,10 @@ function segmentToToken(seg: string): SeoRouteToken | null {
   const s = normalizeScholarshipDynamicParam(seg);
   if (!s) return null;
 
+  /** US state / DC / nationwide before other segment maps (stable filter priority). */
+  const loc = STATE_SLUG_TO_LABEL[s];
+  if (loc) return { kind: 'location', label: loc };
+
   const ez = EASY_SLUGS[s];
   if (ez) return { kind: 'easy_apply', id: ez };
 
@@ -119,9 +126,6 @@ function segmentToToken(seg: string): SeoRouteToken | null {
 
   const g = GPA_SLUGS[s];
   if (g) return { kind: 'gpa', id: g };
-
-  const loc = STATE_SLUG_TO_LABEL[s];
-  if (loc) return { kind: 'location', label: loc };
 
   if (s === 'verified' || s === 'verified-source') return { kind: 'verified' };
 

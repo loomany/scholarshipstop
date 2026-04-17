@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto';
+
 import OpenAI from 'openai';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -192,22 +194,84 @@ export async function resolveHeroImageUrl(fullImagePrompt: string): Promise<stri
   throw new Error(`Hero image generation failed after ${falMaxAttempts()} attempt(s). ${r.detail}`);
 }
 
+/**
+ * DB unique index is `lower(btrim(slug))` — `.eq('slug', x)` misses case variants and
+ * concurrent inserts can both pass a naive check. Use case-insensitive probe + normalized slug.
+ */
+async function isEssaySlugTakenCi(
+  supabase: SupabaseClient<Database>,
+  trySlug: string
+): Promise<boolean> {
+  const trimmed = trySlug.trim();
+  if (!trimmed) return true;
+  /** Slugs we generate are [a-z0-9-]; ILIKE treats `_`/`%` as wildcards — safe for our charset. */
+  const { data, error } = await supabase
+    .from('essays')
+    .select('id')
+    .ilike('slug', trimmed)
+    .limit(1);
+  if (error) throw new Error(error.message);
+  return (data?.length ?? 0) > 0;
+}
+
 async function ensureUniqueEssaySlug(
   supabase: SupabaseClient<Database>,
   baseSlug: string
 ): Promise<string> {
-  let candidate = baseSlug.slice(0, 200);
-  for (let n = 0; n < 20; n += 1) {
-    const trySlug = n === 0 ? candidate : `${baseSlug}-${n + 1}`.slice(0, 200);
-    const { data, error } = await supabase
-      .from('essays')
-      .select('id')
-      .eq('slug', trySlug)
-      .maybeSingle();
-    if (error) throw new Error(error.message);
-    if (!data) return trySlug;
+  const normalizedRoot = baseSlug.trim().toLowerCase().slice(0, 200);
+  for (let n = 0; n < 60; n += 1) {
+    const trySlug =
+      n === 0
+        ? normalizedRoot
+        : n < 45
+          ? `${normalizedRoot}-${n + 1}`.slice(0, 200)
+          : `${normalizedRoot}-${n + 1}-${randomBytes(3).toString('hex')}`.slice(0, 200);
+    const taken = await isEssaySlugTakenCi(supabase, trySlug);
+    if (!taken) return trySlug;
   }
   throw new Error('Could not allocate unique essay slug');
+}
+
+function isUniqueSlugConstraintError(err: {
+  code?: string;
+  message?: string;
+} | null): boolean {
+  if (!err) return false;
+  if (err.code === '23505') return true;
+  const m = err.message ?? '';
+  return (
+    m.includes('essays_slug_unique_lower') ||
+    m.includes('duplicate key value') ||
+    m.includes('unique constraint')
+  );
+}
+
+type EssayInsertRow = Database['public']['Tables']['essays']['Insert'];
+
+async function insertEssayRowWithSlugRetry(
+  supabase: SupabaseClient<Database>,
+  baseSlug: string,
+  buildRow: (slug: string) => EssayInsertRow
+): Promise<{ id: string; slug: string }> {
+  let slug = await ensureUniqueEssaySlug(supabase, baseSlug);
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    const { data, error } = await supabase
+      .from('essays')
+      .insert(buildRow(slug))
+      .select('id')
+      .maybeSingle();
+    if (error && !isUniqueSlugConstraintError(error)) {
+      throw new Error(error.message);
+    }
+    if (data?.id) {
+      return { id: data.id, slug };
+    }
+    slug = await ensureUniqueEssaySlug(
+      supabase,
+      `${baseSlug}-${randomBytes(4).toString('hex')}`
+    );
+  }
+  throw new Error('Could not insert essay after unique slug retries');
 }
 
 export async function claimNextPendingEssayQueueRow(
@@ -597,7 +661,6 @@ export async function processOneEssayQueueItem(
     const scholarshipTitle =
       scholarship.title?.trim() || 'Scholarship program';
     const baseSlug = buildDefaultEssaySlugFromScholarshipTitle(scholarshipTitle);
-    const slug = await ensureUniqueEssaySlug(supabase, baseSlug);
 
     const apiKey = process.env.OPENAI_API_KEY?.trim();
     if (!apiKey) {
@@ -678,11 +741,14 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
     });
     const falMeta = await tryResolveHeroImageUrlWithMeta(heroPrompt);
 
-    const insertDraftLinkAndAwaitHero = async (reason: string) => {
-      const { data: inserted, error: insErr } = await supabase
-        .from('essays')
-        .insert({
-          slug,
+    const insertDraftLinkAndAwaitHero = async (
+      reason: string
+    ): Promise<{ slug: string }> => {
+      const { id: essayId, slug: insertedSlug } = await insertEssayRowWithSlugRetry(
+        supabase,
+        baseSlug,
+        (s) => ({
+          slug: s,
           title: parsed.title.trim(),
           meta_description: parsed.meta_description?.trim() || null,
           content_html: parsed.content_html.trim(),
@@ -693,12 +759,7 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
           faq: faqJson as unknown as Json,
           is_published: false
         })
-        .select('id')
-        .single();
-
-      if (insErr) throw new Error(insErr.message);
-      const essayId = inserted?.id;
-      if (!essayId) throw new Error('Essay insert returned no id');
+      );
 
       const { error: jErr } = await supabase.from('scholarship_essays').insert({
         scholarship_id: scholarship.id,
@@ -716,55 +777,75 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
         })
         .eq('id', queueId!);
       if (quErr) throw new Error(quErr.message);
+      return { slug: insertedSlug };
     };
 
     if (!falMeta.url) {
-      await insertDraftLinkAndAwaitHero(`Awaiting FAL hero: ${falMeta.detail}`);
+      const { slug: draftSlug } = await insertDraftLinkAndAwaitHero(
+        `Awaiting FAL hero: ${falMeta.detail}`
+      );
       return {
         ok: true,
-        essaySlug: slug,
+        essaySlug: draftSlug,
         queueId,
         phase: 'draft_saved_awaiting_hero'
       };
     }
 
-    let publicHeroUrl: string;
-    try {
-      publicHeroUrl = await ingestFalHeroImageToSupabase(supabase, {
-        falImageUrl: falMeta.url,
-        slug
-      });
-    } catch (ingestErr) {
-      const msg = ingestErr instanceof Error ? ingestErr.message : String(ingestErr);
-      await insertDraftLinkAndAwaitHero(`Awaiting FAL ingest: ${msg}`);
-      return {
-        ok: true,
-        essaySlug: slug,
-        queueId,
-        phase: 'draft_saved_awaiting_hero'
-      };
+    /** Same slug for Storage path + DB row; retry on unique race after ingest. */
+    let essayId: string | undefined;
+    let slug: string | undefined;
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      const candidateSlug = await ensureUniqueEssaySlug(
+        supabase,
+        attempt === 0 ? baseSlug : `${baseSlug}-${randomBytes(4).toString('hex')}`
+      );
+      let publicHeroUrl: string;
+      try {
+        publicHeroUrl = await ingestFalHeroImageToSupabase(supabase, {
+          falImageUrl: falMeta.url,
+          slug: candidateSlug
+        });
+      } catch (ingestErr) {
+        const msg = ingestErr instanceof Error ? ingestErr.message : String(ingestErr);
+        const { slug: draftSlug } = await insertDraftLinkAndAwaitHero(
+          `Awaiting FAL ingest: ${msg}`
+        );
+        return {
+          ok: true,
+          essaySlug: draftSlug,
+          queueId,
+          phase: 'draft_saved_awaiting_hero'
+        };
+      }
+      const { data: row, error: insErr } = await supabase
+        .from('essays')
+        .insert({
+          slug: candidateSlug,
+          title: parsed.title.trim(),
+          meta_description: parsed.meta_description?.trim() || null,
+          content_html: parsed.content_html.trim(),
+          hero_image_url: publicHeroUrl,
+          hero_is_real: true,
+          hero_variant_index: existingIndex,
+          sources: verifiedSources as unknown as Json,
+          faq: faqJson as unknown as Json,
+          is_published: true
+        })
+        .select('id')
+        .maybeSingle();
+      if (!insErr && row?.id) {
+        essayId = row.id;
+        slug = candidateSlug;
+        break;
+      }
+      if (insErr && !isUniqueSlugConstraintError(insErr)) {
+        throw new Error(insErr.message);
+      }
     }
-
-    const { data: inserted, error: insErr } = await supabase
-      .from('essays')
-      .insert({
-        slug,
-        title: parsed.title.trim(),
-        meta_description: parsed.meta_description?.trim() || null,
-        content_html: parsed.content_html.trim(),
-        hero_image_url: publicHeroUrl,
-        hero_is_real: true,
-        hero_variant_index: existingIndex,
-        sources: verifiedSources as unknown as Json,
-        faq: faqJson as unknown as Json,
-        is_published: true
-      })
-      .select('id')
-      .single();
-
-    if (insErr) throw new Error(insErr.message);
-    const essayId = inserted?.id;
-    if (!essayId) throw new Error('Essay insert returned no id');
+    if (!essayId || !slug) {
+      throw new Error('Could not insert published essay after slug retries');
+    }
 
     const { error: jErr } = await supabase.from('scholarship_essays').insert({
       scholarship_id: scholarship.id,

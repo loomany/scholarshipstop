@@ -17,8 +17,18 @@ import {
 import {
   getLongTailPreset,
   isScholarshipDetailUuidParam,
-  normalizeScholarshipDynamicParam
+  LONG_TAIL_LINK_LABELS,
+  normalizeScholarshipDynamicParam,
+  type LongTailSlug
 } from '@/app/scholarships/scholarshipLongTailPresets';
+import { loadOrGenerateSeoHubContent } from '@/lib/seo/seoHubContentService';
+import {
+  buildStateHubSupportingAppendHtml,
+  mergeSeoSupportingWithStateHubAppend
+} from '@/lib/seo/stateHubSupportingHtml';
+import { parseProgrammaticTripleSeoHub } from '@/lib/seo/programmaticSeoHubParse';
+import { neighborStateSlugsForSeoHub } from '@/lib/seo/stateHubNeighbors';
+import { parseUsStateHubFromCanonicalPath } from '@/lib/seo/stateHubParse';
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
@@ -31,6 +41,7 @@ import {
 } from '@/lib/scholarships/scholarshipDetailServer';
 import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
+import { relatedScholarshipHubLinks } from '@/lib/seo/relatedScholarshipHubLinks';
 import { createPublicClient } from '@/utils/supabase/public';
 
 /** Set DEBUG_SEO_SCHOLARSHIP=1 to log which SEO bundle and copy the server picked. */
@@ -124,6 +135,7 @@ export default async function ScholarshipsSlugPathPageBody({
             initialScholarship={redactPremiumScholarshipFields(scholarship)}
             initialRelatedArticles={initialRelatedArticles}
             initialRelatedEssays={initialRelatedEssays}
+            initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
           />
         </Suspense>
       </>
@@ -173,6 +185,7 @@ export default async function ScholarshipsSlugPathPageBody({
             initialScholarship={redactPremiumScholarshipFields(scholarship)}
             initialRelatedArticles={initialRelatedArticles}
             initialRelatedEssays={initialRelatedEssays}
+            initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
           />
         </Suspense>
       </>
@@ -256,15 +269,78 @@ export default async function ScholarshipsSlugPathPageBody({
       });
 
     const seo = readScholarshipSeoContent(canonicalPath);
+
+    const stateHubCtx = parseUsStateHubFromCanonicalPath(canonicalPath);
+    const tripleHubCtx = parseProgrammaticTripleSeoHub(canonicalPath);
+    const year = new Date().getFullYear();
+
+    let manifestDisplayHeading: string | null = null;
+    let stateHubIntroFallback: string | null = null;
+    let stateHubSupportingAppend: string | null = null;
+
+    if (stateHubCtx) {
+      const topicSlug = stateHubCtx.topicSlug as LongTailSlug | null;
+      const topicLinkLabel =
+        topicSlug && LONG_TAIL_LINK_LABELS[topicSlug]
+          ? LONG_TAIL_LINK_LABELS[topicSlug]
+          : null;
+      const hubRow = await loadOrGenerateSeoHubContent(canonicalPath, {
+        stateName: stateHubCtx.stateLabel,
+        topicLabel: topicLinkLabel,
+        year
+      });
+      manifestDisplayHeading =
+        topicSlug && topicLinkLabel
+          ? `${topicLinkLabel} in ${stateHubCtx.stateLabel} · ${year}`
+          : `Scholarships in ${stateHubCtx.stateLabel} · ${year}`;
+      stateHubIntroFallback =
+        topicSlug && topicLinkLabel
+          ? `Browse ${topicLinkLabel.toLowerCase()} open to students connected to ${stateHubCtx.stateLabel}. Use filters below to narrow by deadline and award size.`
+          : `Browse scholarships tied to ${stateHubCtx.stateLabel}. Filter by field, deadline, and amount to find programs that fit your plan.`;
+
+      const neighbors = neighborStateSlugsForSeoHub(stateHubCtx.stateSlug);
+      stateHubSupportingAppend = buildStateHubSupportingAppendHtml({
+        contentHtml: hubRow?.content_html ?? null,
+        costOfLiving: hubRow?.cost_of_living_json ?? {},
+        neighborSlugs: neighbors
+      });
+    } else if (tripleHubCtx) {
+      const hubRow = await loadOrGenerateSeoHubContent(canonicalPath, {
+        stateName: tripleHubCtx.stateLabel,
+        topicLabel: tripleHubCtx.topicLabel,
+        degreeLabel: tripleHubCtx.degreeLabel,
+        year
+      });
+      manifestDisplayHeading = `${tripleHubCtx.topicLabel} (${tripleHubCtx.degreeLabel}) in ${tripleHubCtx.stateLabel} · ${year}`;
+      stateHubIntroFallback = `Browse ${tripleHubCtx.topicLabel.toLowerCase()} for ${tripleHubCtx.degreeLabel.toLowerCase()} students connected to ${tripleHubCtx.stateLabel}. Use filters below to narrow results.`;
+      const neighbors = neighborStateSlugsForSeoHub(tripleHubCtx.stateSlug);
+      stateHubSupportingAppend = buildStateHubSupportingAppendHtml({
+        contentHtml: hubRow?.content_html ?? null,
+        costOfLiving: hubRow?.cost_of_living_json ?? {},
+        neighborSlugs: neighbors
+      });
+    }
+
     const pageTitle =
-      seo?.h1?.trim() || seo?.seo_title?.trim() || entry.h1Fallback;
+      manifestDisplayHeading?.trim() ||
+      seo?.h1?.trim() ||
+      seo?.seo_title?.trim() ||
+      entry.h1Fallback;
     const introParagraph =
       seo?.intro?.trim() ||
+      stateHubIntroFallback?.trim() ||
       `Browse scholarships in our USA catalog that match this topic (${entry.h1Fallback}). Compare deadlines, amounts, and requirements, then open each official listing to apply.`;
+    const mergedSupporting = mergeSeoSupportingWithStateHubAppend(
+      seo?.supporting,
+      stateHubSupportingAppend
+    );
     const faqItems = seo?.faq;
 
     const safePath = canonicalPath.replace(/\//g, '__');
-    const promotedChrome = shouldShowManifestSeoPromotedChrome(entry, seo);
+    const promotedChrome =
+      stateHubCtx !== null ||
+      tripleHubCtx !== null ||
+      shouldShowManifestSeoPromotedChrome(entry, seo);
     const listingMode = { type: 'manifest', canonicalPath, entry } as const;
 
     debugLogListingSeo({
@@ -328,24 +404,27 @@ export default async function ScholarshipsSlugPathPageBody({
                   pageData={seo?.page_data ?? null}
                   updatedAt={seo?._meta?.generatedAt ?? null}
                   canonicalTarget={entry.canonicalTarget ?? null}
+                  publicSeoPage={stateHubCtx !== null || tripleHubCtx !== null}
                 />
               ) : null
             }
             postListingContent={
-              promotedChrome ? (
-                <SeoScholarshipPostListingSeo
-                  heading={pageTitle}
-                  supportingParagraph={seo?.supporting ?? null}
-                  relatedIntroParagraph={seo?.related_intro ?? null}
-                  howToUseLines={normalizeSeoTextLines(seo?.how_to_use)}
-                  whoForLines={normalizeSeoTextLines(seo?.who_for)}
-                  faqItems={seo?.faq}
-                  pageData={seo?.page_data ?? null}
-                  qualityBucket={entry.qualityBucket ?? null}
-                  updatedAt={seo?._meta?.generatedAt ?? null}
-                  relatedMode={listingMode}
-                />
-              ) : null
+              <>
+                {promotedChrome ? (
+                  <SeoScholarshipPostListingSeo
+                    heading={pageTitle}
+                    supportingParagraph={mergedSupporting}
+                    relatedIntroParagraph={seo?.related_intro ?? null}
+                    howToUseLines={normalizeSeoTextLines(seo?.how_to_use)}
+                    whoForLines={normalizeSeoTextLines(seo?.who_for)}
+                    faqItems={seo?.faq}
+                    pageData={seo?.page_data ?? null}
+                    qualityBucket={entry.qualityBucket ?? null}
+                    updatedAt={seo?._meta?.generatedAt ?? null}
+                    relatedMode={listingMode}
+                  />
+                ) : null}
+              </>
             }
           />
         </Suspense>

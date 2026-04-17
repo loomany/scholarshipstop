@@ -540,7 +540,8 @@ export default function ScholarshipDetailPageClient({
   authResolved = true,
   initialScholarship = null,
   initialRelatedArticles = [],
-  initialRelatedEssays = []
+  initialRelatedEssays = [],
+  initialRelatedHubLinks = []
 }: {
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
@@ -550,6 +551,8 @@ export default function ScholarshipDetailPageClient({
   initialRelatedArticles?: ContentPostListFields[];
   /** Essay hub guides linked to this scholarship (max 4). */
   initialRelatedEssays?: EssayListFields[];
+  /** Programmatic hub listings (state / topic). */
+  initialRelatedHubLinks?: { href: string; label: string }[];
 } = {}) {
   const layoutInitialScholarship = useScholarshipDetailInitialData();
   const serverScholarship = initialScholarship ?? layoutInitialScholarship;
@@ -1445,6 +1448,35 @@ export default function ScholarshipDetailPageClient({
 
         {showNextStepsBlock ? (
           <ScholarshipNextStepsBlock items={nextStepActions} />
+        ) : null}
+
+        {initialRelatedHubLinks.length > 0 ? (
+          <div
+            className="mt-10"
+            aria-labelledby="scholarship-related-hubs-heading"
+          >
+            <h2
+              id="scholarship-related-hubs-heading"
+              className="mb-3 text-base font-semibold tracking-tight text-zinc-900"
+            >
+              Related scholarship hubs
+            </h2>
+            <p className="mb-3 text-sm leading-relaxed text-zinc-600">
+              Browse curated listings that match this program’s state and field.
+            </p>
+            <ul className="flex flex-wrap gap-2" role="list">
+              {initialRelatedHubLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:border-slate-300 hover:bg-slate-50"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : null}
 
         {initialRelatedArticles.length > 0 ? (

@@ -1,3 +1,4 @@
+import { US_STATE_NAME_TO_CODE } from '@/lib/constants/usStates';
 import { NATIONWIDE_LOCATION } from '@/lib/scholarships/scholarshipCatalog';
 import type { SeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
 
@@ -55,6 +56,33 @@ export const SEO_ROUTE_STATE_SLUG_TO_LABEL: Record<string, string> = {
   wyoming: 'Wyoming',
   nationwide: NATIONWIDE_LOCATION
 };
+
+/**
+ * US state URL slug → USPS two-letter code (50 states + DC). Keys match
+ * {@link SEO_ROUTE_STATE_SLUG_TO_LABEL} (excludes `nationwide`).
+ */
+export const SEO_ROUTE_STATE_SLUG_TO_CODE: Record<string, string> = (() => {
+  const out: Record<string, string> = {};
+  for (const [slug, label] of Object.entries(SEO_ROUTE_STATE_SLUG_TO_LABEL)) {
+    if (slug === 'nationwide') continue;
+    if (label === 'District of Columbia') {
+      out[slug] = 'DC';
+      continue;
+    }
+    const code = US_STATE_NAME_TO_CODE[label];
+    if (code) out[slug] = code;
+  }
+  return out;
+})();
+
+/** USPS code (uppercase) → canonical SEO slug (inverse of slug→code). */
+export const SEO_ROUTE_STATE_CODE_TO_SLUG: Record<string, string> =
+  Object.fromEntries(
+    Object.entries(SEO_ROUTE_STATE_SLUG_TO_CODE).map(([slug, code]) => [
+      code.toUpperCase(),
+      slug
+    ])
+  );
 
 export const SEO_ROUTE_ELIGIBILITY_SEGMENTS: Record<string, string> = {
   'for-women': 'women',

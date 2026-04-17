@@ -12,12 +12,15 @@ type ScholarshipDetailPageAuthBridgeProps = {
   initialRelatedArticles?: ContentPostListFields[];
   /** Published essay hub guides linked via `scholarship_essays` (max 4). */
   initialRelatedEssays?: EssayListFields[];
+  /** Programmatic SEO hub links (state / state + topic). */
+  initialRelatedHubLinks?: { href: string; label: string }[];
 };
 
 export default function ScholarshipDetailPageAuthBridge({
   initialScholarship,
   initialRelatedArticles = [],
-  initialRelatedEssays = []
+  initialRelatedEssays = [],
+  initialRelatedHubLinks = []
 }: ScholarshipDetailPageAuthBridgeProps) {
   return (
     <AuthStatusProvider>
@@ -29,6 +32,7 @@ export default function ScholarshipDetailPageAuthBridge({
           initialScholarship={initialScholarship}
           initialRelatedArticles={initialRelatedArticles}
           initialRelatedEssays={initialRelatedEssays}
+          initialRelatedHubLinks={initialRelatedHubLinks}
         />
       )}
     </AuthStatusProvider>

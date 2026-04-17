@@ -61,7 +61,13 @@
     "essay:pipeline-full": "npx dotenv-cli -e .env.local -- npx tsx scripts/run-essay-pipeline-full.ts",
     "essay:audit-fal": "npx dotenv-cli -e .env.local -- npx tsx scripts/audit-essay-fal-footprint.ts",
     "weekly-free-digest:preview": "dotenv -e .env.local -- node scripts/preview-weekly-free-digest.mjs",
-    "weekly-free-digest:quick": "dotenv -e .env.local -- npx tsx scripts/quick-weekly-digest-email.ts"
+    "weekly-free-digest:quick": "dotenv -e .env.local -- npx tsx scripts/quick-weekly-digest-email.ts",
+    "audit:scholarship-facets": "dotenv -e .env.local -- npx tsx scripts/audit-scholarship-facets.ts",
+    "seo:pilot-launch": "dotenv -e .env.local -- npx tsx scripts/seo-pilot-launch.ts",
+    "seo:grand-audit": "dotenv -e .env.local -- npx tsx scripts/seo-grand-audit.ts",
+    "seo:worker-generate": "dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts",
+    "seo:enqueue-missing": "dotenv -e .env.local -- npx tsx scripts/seo-enqueue-missing-hubs.ts",
+    "seo:daily-digest-telegram": "dotenv -e .env.local -- node scripts/post-seo-daily-digest-telegram.mjs"
   },
   "dependencies": {
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",

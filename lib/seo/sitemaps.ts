@@ -10,14 +10,16 @@ import type { Database } from '@/types_db';
 import { SCHOLARSHIP_CATEGORY_ORDER } from '@/app/scholarships/scholarshipCategories';
 import { getLongTailSitemapSlugs } from '@/app/scholarships/scholarshipLongTailPresets';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import { SEO_ROUTE_STATE_CODE_TO_SLUG } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { getPromotedSeoCategorySlugs } from '@/lib/scholarships/categorySeoAllowlist';
 import {
   canonicalPathAllowedInSeoSitemap,
   getVisibleSeoRoutes as getVisibleSeoRoutesFromDrip
 } from '@/lib/seo/seoDripFeed';
 import {
-  getAllIndexableSeoManifestPaths,
-  getSeoManifestRoute
+  getAllIndexableSeoManifestPathsForSitemap,
+  getSeoManifestRoute,
+  manifestEntryMeetsSitemapGrantThreshold
 } from '@/lib/scholarships/seoScholarshipResolve';
 import { getURL } from '@/utils/helpers';
 
@@ -168,6 +170,46 @@ function buildDocumentsForBucket(
   });
 }
 
+type StateGrantCountRow = { state_code: string; grant_count: number };
+
+type SeoGenerationSitemapRow = {
+  canonical_path: string;
+  updated_at: string;
+};
+
+/** Programmatic hub URLs completed via `seo_generation_queue` (grant_count &gt; min). */
+async function fetchSeoGenerationSitemapRows(
+  minGrants = 3
+): Promise<SeoGenerationSitemapRow[]> {
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.rpc('seo_generation_sitemap_paths', {
+    p_min_grants: minGrants
+  });
+  if (error) {
+    console.error('[sitemap] seo_generation_sitemap_paths failed:', error);
+    return [];
+  }
+  return (data ?? []) as SeoGenerationSitemapRow[];
+}
+
+/** States with &gt;3 active grants (RPC); used alongside manifest SEO URLs. */
+async function fetchStateGrantSitemapRows(): Promise<StateGrantCountRow[]> {
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.rpc(
+    'scholarship_active_counts_by_state_code'
+  );
+  if (error) {
+    console.error(
+      '[sitemap] scholarship_active_counts_by_state_code failed:',
+      error
+    );
+    return [];
+  }
+  return (data ?? []) as StateGrantCountRow[];
+}
+
 async function fetchScholarshipSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
@@ -283,8 +325,8 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     lastModified: new Date()
   }));
 
-  const manifestSeoPaths = getAllIndexableSeoManifestPaths().filter((p) =>
-    canonicalPathAllowedInSeoSitemap(p)
+  const manifestSeoPaths = getAllIndexableSeoManifestPathsForSitemap(3).filter(
+    (p) => canonicalPathAllowedInSeoSitemap(p)
   );
   const manifestPathSet = new Set(manifestSeoPaths);
   const manifestSeoPages: MetadataRoute.Sitemap = manifestSeoPaths.map((path) => ({
@@ -296,16 +338,46 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     .filter((slug) => {
       if (!canonicalPathAllowedInSeoSitemap(slug)) return false;
       const manifestEntry = getSeoManifestRoute(slug);
-      if (!manifestEntry) return true;
-      if (manifestPathSet.has(slug)) return false;
-      return manifestEntry.indexable === true;
+      if (manifestEntry) {
+        if (!manifestEntryMeetsSitemapGrantThreshold(manifestEntry, 3))
+          return false;
+        if (manifestPathSet.has(slug)) return false;
+        return manifestEntry.indexable === true;
+      }
+      return true;
     })
     .map((slug) => ({
       url: `${base}/scholarships/${slug}`,
       lastModified: new Date()
     }));
 
-  const seo = dedupeSitemapEntries([...manifestSeoPages, ...longTailPages]);
+  const stateGrantRows = await fetchStateGrantSitemapRows().catch(() => []);
+  const stateListingPages: MetadataRoute.Sitemap = [];
+  for (const row of stateGrantRows) {
+    const slug = SEO_ROUTE_STATE_CODE_TO_SLUG[row.state_code.toUpperCase()];
+    if (!slug) continue;
+    stateListingPages.push({
+      url: `${base}/scholarships/${slug}`,
+      lastModified: new Date()
+    });
+  }
+
+  const generatedHubRows = await fetchSeoGenerationSitemapRows(3).catch(
+    () => []
+  );
+  const programmaticHubPages: MetadataRoute.Sitemap = generatedHubRows
+    .filter((row) => canonicalPathAllowedInSeoSitemap(row.canonical_path))
+    .map((row) => ({
+      url: `${base}/scholarships/${row.canonical_path}`,
+      lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
+    }));
+
+  const seo = dedupeSitemapEntries([
+    ...manifestSeoPages,
+    ...longTailPages,
+    ...stateListingPages,
+    ...programmaticHubPages
+  ]);
 
   const [scholarships, providers] = await Promise.all([
     fetchScholarshipSitemapEntries(base).catch((err) => {

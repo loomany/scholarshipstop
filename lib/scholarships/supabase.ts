@@ -10,7 +10,6 @@ import { sanitizeRequirementLines } from '@/lib/scholarships/scholarshipText';
 import { buildScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import type { ScholarshipDbCatalogFields } from '@/lib/scholarships/scholarshipCatalogTypes';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { createClient } from '@/utils/supabase/server';
 import { legacyScholarshipSlugCandidates } from '@/lib/seo/legacyScholarshipSlugAliases';
 import { createPublicClient } from '@/utils/supabase/public';
@@ -742,6 +741,9 @@ export async function fetchScholarshipsByIdsForListing(
 
 /** One recent active scholarship for email/Telegram preview cards (service role). */
 export async function fetchFirstActiveScholarshipPreview(): Promise<Scholarship | null> {
+  const { createServiceRoleSupabaseClient } = await import(
+    '@/lib/supabase/serviceRoleClient'
+  );
   const admin = createServiceRoleSupabaseClient();
   if (!admin) return null;
 
@@ -763,6 +765,9 @@ export async function fetchFirstActiveScholarshipPreview(): Promise<Scholarship 
 
 /** Recent active scholarships for multi-card digest previews (service role). */
 export async function fetchActiveScholarshipPreviews(limit: number): Promise<Scholarship[]> {
+  const { createServiceRoleSupabaseClient } = await import(
+    '@/lib/supabase/serviceRoleClient'
+  );
   const admin = createServiceRoleSupabaseClient();
   if (!admin) return [];
 

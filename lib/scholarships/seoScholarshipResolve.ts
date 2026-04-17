@@ -5,8 +5,23 @@ import {
   normalizeScholarshipDynamicParam
 } from '@/app/scholarships/scholarshipLongTailPresets';
 import { buildDynamicEntryFromCanonicalPath } from '@/lib/scholarships/seoScholarshipDynamicEntry';
-import { canonicalizeSegments } from '@/lib/scholarships/seoScholarshipRouteTokens';
+import {
+  canonicalizeSegments,
+  listUsStateSeoSlugs
+} from '@/lib/scholarships/seoScholarshipRouteTokens';
 import type { SeoScholarshipRouteManifestEntry } from '@/lib/scholarships/seoScholarshipManifest';
+
+/** US state segments first so filters and canonical URLs prioritize location (e.g. nursing/california → california/nursing). */
+function prioritizeUsStateSegmentsNorm(norm: string[]): string[] {
+  const stateSet = new Set(listUsStateSeoSlugs());
+  const states: string[] = [];
+  const rest: string[] = [];
+  for (const s of norm) {
+    if (stateSet.has(s)) states.push(s);
+    else rest.push(s);
+  }
+  return [...states, ...rest];
+}
 
 export type ResolvedScholarshipSlugPath =
   | { kind: 'scholarship_detail' }
@@ -64,6 +79,29 @@ export function getAllIndexableSeoManifestPaths(): string[] {
     .map((r) => r.canonicalPath);
 }
 
+export function getManifestRouteGrantCount(
+  entry: SeoScholarshipRouteManifestEntry
+): number {
+  return entry.scholarshipsCount ?? entry.minCountSnapshot ?? 0;
+}
+
+/** Sitemap: manifest rows must be indexable and have more than `minGrants` catalog matches. */
+export function manifestEntryMeetsSitemapGrantThreshold(
+  entry: SeoScholarshipRouteManifestEntry,
+  minGrants = 3
+): boolean {
+  if (!routeIsSitemapIndexable(entry)) return false;
+  return getManifestRouteGrantCount(entry) > minGrants;
+}
+
+export function getAllIndexableSeoManifestPathsForSitemap(
+  minGrants = 3
+): string[] {
+  return manifest.routes
+    .filter((r) => manifestEntryMeetsSitemapGrantThreshold(r, minGrants))
+    .map((r) => r.canonicalPath);
+}
+
 /**
  * Resolve /scholarships/[...segments] to listing type. Single UUID → detail.
  */
@@ -97,7 +135,7 @@ export function resolveScholarshipSlugPath(
     return { kind: 'legacy_long_tail', slug: norm[0]! };
   }
 
-  const canon = canonicalizeSegments(norm);
+  const canon = canonicalizeSegments(prioritizeUsStateSegmentsNorm(norm));
   if (!canon) {
     if (norm.length === 1) return { kind: 'scholarship_detail' };
     return { kind: 'not_found' };

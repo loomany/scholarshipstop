@@ -8,6 +8,7 @@
 #   bash scripts/railway-cron.sh weekly-free-digest   # (optional; not part of default "all")
 #   bash scripts/railway-cron.sh enrich-providers
 #   bash scripts/railway-cron.sh essay-pipeline
+#   bash scripts/railway-cron.sh seo-daily-telegram   # daily digest of new SEO hub pages (Telegram)
 #
 # Default task "all" = SEO + indexing flush + grants + enrich + essay (same as your checklist).
 # Schedule "weekly-free-digest" separately: bash scripts/railway-cron.sh weekly-free-digest
@@ -20,7 +21,8 @@
 #
 # Secrets (set in Railway Variables):
 #   GOOGLE_INDEXING_SECRET — Bearer for SEO + Google Indexing API routes
-#   GRANT_NOTIFICATION_CRON_SECRET — grant notifications + fallback for weekly digest
+#   GRANT_NOTIFICATION_CRON_SECRET — grant notifications + fallback for weekly digest + SEO Telegram digest
+#   SEO_DAILY_DIGEST_CRON_SECRET — optional; overrides Bearer for seo-daily-telegram (else GRANT_NOTIFICATION_CRON_SECRET)
 #   WEEKLY_FREE_DIGEST_CRON_SECRET — optional; else GRANT_NOTIFICATION_CRON_SECRET is used
 #
 # Node tasks (enrich-providers, essay-pipeline) need a full Node toolchain in the image
@@ -99,6 +101,16 @@ task_grant_notifications() {
     "/api/internal/grant-notifications/run" "$GRANT_NOTIFICATION_CRON_SECRET" "{}"
 }
 
+task_seo_daily_telegram() {
+  local secret="${SEO_DAILY_DIGEST_CRON_SECRET:-${GRANT_NOTIFICATION_CRON_SECRET:-}}"
+  if [ -z "$secret" ]; then
+    echo "[railway-cron] ERROR: Set SEO_DAILY_DIGEST_CRON_SECRET or GRANT_NOTIFICATION_CRON_SECRET" >&2
+    exit 1
+  fi
+  http_post_json "SEO hub daily Telegram digest" \
+    "/api/internal/seo/daily-digest-telegram" "$secret" "{}"
+}
+
 task_weekly_free_digest() {
   local secret="${WEEKLY_FREE_DIGEST_CRON_SECRET:-${GRANT_NOTIFICATION_CRON_SECRET:-}}"
   if [ -z "$secret" ]; then
@@ -156,7 +168,7 @@ task_all() {
 
 usage() {
   echo "Usage: $0 <task>"
-  echo "Tasks: all | seo-url-inspection | google-indexing-flush | grant-notifications | weekly-free-digest | enrich-providers | essay-pipeline"
+  echo "Tasks: all | seo-url-inspection | google-indexing-flush | grant-notifications | seo-daily-telegram | weekly-free-digest | enrich-providers | essay-pipeline"
 }
 
 main() {
@@ -166,6 +178,7 @@ main() {
     seo-url-inspection) task_seo_url_inspection ;;
     google-indexing-flush) task_google_indexing_flush ;;
     grant-notifications) task_grant_notifications ;;
+    seo-daily-telegram) task_seo_daily_telegram ;;
     weekly-free-digest) task_weekly_free_digest ;;
     enrich-providers) task_enrich_providers ;;
     essay-pipeline) task_essay_pipeline ;;

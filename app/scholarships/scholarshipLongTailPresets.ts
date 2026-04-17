@@ -23,7 +23,9 @@ export const LONG_TAIL_SLUGS = [
   'high-school',
   'engineering',
   'computer-science',
-  'under-10000'
+  'under-10000',
+  'nursing',
+  'arts'
 ] as const;
 
 export type LongTailSlug = (typeof LONG_TAIL_SLUGS)[number];
@@ -74,7 +76,9 @@ export const LONG_TAIL_LINK_LABELS: Record<LongTailSlug, string> = {
   'high-school': 'High school scholarships',
   engineering: 'Engineering scholarships',
   'computer-science': 'Computer science scholarships',
-  'under-10000': 'Scholarships under $10,000'
+  'under-10000': 'Scholarships under $10,000',
+  nursing: 'Nursing scholarships',
+  arts: 'Arts scholarships'
 };
 
 export type LongTailPreset = {
@@ -190,6 +194,34 @@ function computerScienceRelevant(s: Scholarship): boolean {
   );
 }
 
+function nursingFieldRelevant(s: Scholarship): boolean {
+  const fields = (s.fieldOfStudy ?? [])
+    .map((x) => String(x).toLowerCase())
+    .join(' ');
+  if (
+    /\bnursing\b|\brn\b|\bbsn\b|\bmsn\b|nurse practitioner|pre-nursing/i.test(fields)
+  ) {
+    return true;
+  }
+  const b = scholarshipTextBlob(s);
+  return /\bnursing school\b|\bnursing student\b|\bregistered nurse\b/i.test(b);
+}
+
+function artsFieldRelevant(s: Scholarship): boolean {
+  const fields = (s.fieldOfStudy ?? [])
+    .map((x) => String(x).toLowerCase())
+    .join(' ');
+  if (
+    /\barts\b|fine arts|visual arts|performing arts|music education|theatre|theater|dance|creative writing|humanities art/i.test(
+      fields
+    )
+  ) {
+    return true;
+  }
+  const b = scholarshipTextBlob(s);
+  return /\bart school\b|\barts major\b|\bfine arts\b/i.test(b);
+}
+
 /** Узкий base (Matches USA) до pipeline: deadline «скоро» задаётся здесь, не в MoreFilters. */
 export function longTailBaseFilter(
   slug: LongTailSlug
@@ -200,6 +232,8 @@ export function longTailBaseFilter(
   if (slug === 'high-school') return highSchoolRelevant;
   if (slug === 'engineering') return engineeringFieldRelevant;
   if (slug === 'computer-science') return computerScienceRelevant;
+  if (slug === 'nursing') return nursingFieldRelevant;
+  if (slug === 'arts') return artsFieldRelevant;
   return undefined;
 }
 
@@ -230,6 +264,8 @@ export function buildLongTailMoreFiltersState(
     case 'high-school':
     case 'engineering':
     case 'computer-science':
+    case 'nursing':
+    case 'arts':
       return d;
     case 'international-students':
       return {
@@ -308,6 +344,18 @@ const PRESET_COPY: Record<LongTailSlug, Omit<LongTailPreset, 'slug'>> = {
     metaTitle: 'Scholarships Under $10,000 2026 | Awards Up to Ten Thousand',
     metaDescription:
       'USA scholarships with awards up to $10,000 in our amount filter. Compare options and confirm details on official listings.'
+  },
+  nursing: {
+    h1: 'Nursing Scholarships 2026',
+    metaTitle: 'Nursing Scholarships 2026 | RN, BSN & Pre-Nursing USA',
+    metaDescription:
+      'Browse nursing and health-care focused scholarships in the USA. Compare deadlines, award amounts, and requirements.'
+  },
+  arts: {
+    h1: 'Arts Scholarships 2026',
+    metaTitle: 'Arts Scholarships 2026 | Fine Arts, Music & Creative Fields',
+    metaDescription:
+      'Find arts, fine arts, and creative-field scholarships in the USA. Filter by deadline and amount, then verify on official sites.'
   }
 };
 

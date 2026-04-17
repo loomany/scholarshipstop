@@ -258,6 +258,11 @@ type HeroProps = {
   pageData?: SeoListingPageData | null;
   updatedAt?: string | null;
   canonicalTarget?: string | null;
+  /**
+   * State+topic hubs: hide the “Internal listing page” banner so the layout matches
+   * promoted routes like `/scholarships/engineering` (does not change robots/indexing).
+   */
+  publicSeoPage?: boolean;
 };
 
 /**
@@ -275,7 +280,8 @@ export function SeoScholarshipHero({
   qualityBucket = null,
   pageData = null,
   updatedAt = null,
-  canonicalTarget = null
+  canonicalTarget = null,
+  publicSeoPage = false
 }: HeroProps) {
   const topicCore = shortenSeoListingHeading(
     stripNumericSuffixFromSeoHeading(heading)
@@ -303,19 +309,21 @@ export function SeoScholarshipHero({
       ? `Exact matches for the original filters: ${exactFilterMatchTotal.toLocaleString('en-US')}.`
       : null;
 
-  const isIndexable = qualityBucket === 'GOOD';
-  const deterministicIntro = isIndexable
+  const showDeterministicIntro = qualityBucket === 'GOOD' && pageData;
+  const deterministicIntro = showDeterministicIntro
     ? buildDeterministicIntro(heading, pageData, updatedAt)
     : null;
   const introSource = deterministicIntro ?? introHtml?.trim() ?? null;
   const paras = introSource ? introParagraphs(introSource, 2) : [];
+
+  const hideInternalListingBanner = publicSeoPage || qualityBucket === 'GOOD';
 
   return (
     <header className={`${PROSE} space-y-2 pb-5 sm:space-y-2.5 sm:pb-6`}>
       <h1 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl lg:text-[1.85rem] lg:leading-snug">
         {h1}
       </h1>
-      {!isIndexable ? (
+      {!hideInternalListingBanner ? (
         <p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 sm:text-[13px]">
           Internal listing page. Closest results may be shown for browsing, but
           this route is not treated as an indexable SEO page.

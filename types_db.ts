@@ -1396,6 +1396,78 @@ export interface Database {
         }
         Relationships: []
       }
+      seo_hub_content: {
+        Row: {
+          id: string
+          canonical_path: string
+          title: string | null
+          h1: string | null
+          content_html: string | null
+          cost_of_living_json: Json
+          meta_description: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          canonical_path: string
+          title?: string | null
+          h1?: string | null
+          content_html?: string | null
+          cost_of_living_json?: Json
+          meta_description?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          canonical_path?: string
+          title?: string | null
+          h1?: string | null
+          content_html?: string | null
+          cost_of_living_json?: Json
+          meta_description?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      seo_generation_queue: {
+        Row: {
+          id: string
+          canonical_path: string
+          filters: Json
+          priority: number
+          status: string
+          error_message: string | null
+          grant_count: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          canonical_path: string
+          filters?: Json
+          priority?: number
+          status?: string
+          error_message?: string | null
+          grant_count?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          canonical_path?: string
+          filters?: Json
+          priority?: number
+          status?: string
+          error_message?: string | null
+          grant_count?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           active: boolean | null
@@ -1608,6 +1680,20 @@ export interface Database {
           p_page_size?: number
         }
         Returns: Record<string, unknown>
+      }
+      scholarship_active_counts_by_state_code: {
+        Args: Record<string, never>
+        Returns: {
+          state_code: string
+          grant_count: number
+        }[]
+      }
+      seo_generation_sitemap_paths: {
+        Args: { p_min_grants?: number }
+        Returns: {
+          canonical_path: string
+          updated_at: string
+        }[]
       }
     }
     Enums: {
