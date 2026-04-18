@@ -16,6 +16,7 @@ import {
 } from '@/components/analytics/GoogleTagManager';
 import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
+import { ScholarshipOnboardingDraftPostAuthSync } from '@/components/onboarding/ScholarshipOnboardingDraftPostAuthSync';
 import { NavigationProgress } from '@/components/ui/NavigationProgress';
 import dynamic from 'next/dynamic';
 import 'styles/main.css';
@@ -159,6 +160,7 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
         */}
         <div className="w-full min-w-0 max-w-full">
           <NavigationProgress />
+          <ScholarshipOnboardingDraftPostAuthSync />
           <Navbar />
           <main
             id="skip"
