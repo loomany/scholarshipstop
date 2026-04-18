@@ -135,8 +135,8 @@ const CATEGORY_OPTIONS: {
   countKey?: 'universities' | 'states';
 }[] = [
   { id: 'all', label: 'All comparisons' },
-  { id: 'universities', label: 'University battles', countKey: 'universities' },
-  { id: 'states', label: 'State wars', countKey: 'states' }
+  { id: 'universities', label: 'University vs University', countKey: 'universities' },
+  { id: 'states', label: 'State vs State', countKey: 'states' }
 ];
 
 export default function CompareIndexToolbar({

@@ -63,7 +63,7 @@ export async function generateMetadata({
   const path = `/compare/universities/${encodeURIComponent(slug.trim().toLowerCase())}`;
   if (!row) {
     return {
-      title: 'University comparison',
+      title: 'University vs University',
       robots: { index: false, follow: false }
     };
   }
@@ -208,7 +208,7 @@ export default async function UniversityComparePage({
             href="/compare/universities"
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            ← Back to University Battles
+            ← Back to University vs University
           </Link>
         </p>
 
@@ -241,7 +241,7 @@ export default async function UniversityComparePage({
                 href="/compare/universities"
                 className="font-medium text-gray-600 transition hover:text-gray-900"
               >
-                University Battles
+                University vs University
               </Link>
             </li>
             <li className="text-gray-300" aria-hidden>
@@ -270,7 +270,7 @@ export default async function UniversityComparePage({
 
         <section className="mt-8 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8">
           <span className="inline-flex rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-800">
-            University battle
+            University vs University
           </span>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">

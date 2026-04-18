@@ -68,6 +68,36 @@ export function buildCompareIndexHref(
   return query ? `${basePath}?${query}` : basePath;
 }
 
+export function sortCompareIndexSlice(
+  items: CompareIndexItem[],
+  sort: CompareIndexSort
+): CompareIndexItem[] {
+  return [...items].sort((left, right) => {
+    if (sort === 'title') {
+      return left.title.localeCompare(right.title, 'en', { sensitivity: 'base' });
+    }
+
+    const leftTs = left.updatedAt ? Date.parse(left.updatedAt) : 0;
+    const rightTs = right.updatedAt ? Date.parse(right.updatedAt) : 0;
+    if (leftTs !== rightTs) return rightTs - leftTs;
+    return left.title.localeCompare(right.title, 'en', { sensitivity: 'base' });
+  });
+}
+
+/** State, university, state, university… then the longer tail. */
+export function interleaveStateThenUniversity(
+  states: CompareIndexItem[],
+  universities: CompareIndexItem[]
+): CompareIndexItem[] {
+  const out: CompareIndexItem[] = [];
+  const max = Math.max(states.length, universities.length);
+  for (let i = 0; i < max; i++) {
+    if (i < states.length) out.push(states[i]);
+    if (i < universities.length) out.push(universities[i]);
+  }
+  return out;
+}
+
 export function filterAndSortCompareIndexItems(
   items: CompareIndexItem[],
   state: Pick<CompareIndexQueryState, 'q' | 'category' | 'sort'>
@@ -83,16 +113,19 @@ export function filterAndSortCompareIndexItems(
     return haystack.includes(q);
   });
 
-  return filtered.sort((left, right) => {
-    if (state.sort === 'title') {
-      return left.title.localeCompare(right.title, 'en', { sensitivity: 'base' });
-    }
+  if (state.category !== 'all') {
+    return sortCompareIndexSlice(filtered, state.sort);
+  }
 
-    const leftTs = left.updatedAt ? Date.parse(left.updatedAt) : 0;
-    const rightTs = right.updatedAt ? Date.parse(right.updatedAt) : 0;
-    if (leftTs !== rightTs) return rightTs - leftTs;
-    return left.title.localeCompare(right.title, 'en', { sensitivity: 'base' });
-  });
+  const states = sortCompareIndexSlice(
+    filtered.filter((item) => item.type === 'states'),
+    state.sort
+  );
+  const universities = sortCompareIndexSlice(
+    filtered.filter((item) => item.type === 'universities'),
+    state.sort
+  );
+  return interleaveStateThenUniversity(states, universities);
 }
 
 export function paginateCompareIndexItems(

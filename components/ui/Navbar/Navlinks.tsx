@@ -667,7 +667,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     <div
                       className="mb-1 ml-3 mt-0.5 flex flex-col gap-1 border-l border-white/15 pl-3"
                       role="group"
-                      aria-label="University and state comparisons"
+                      aria-label="University vs University and State vs State"
                     >
                       {VERSUS_SUBLINKS.map((item) => {
                         const active = sublinkActive(item.href, pathname);

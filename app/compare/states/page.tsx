@@ -20,7 +20,7 @@ import { getURL } from '@/utils/helpers';
 export const revalidate = 3600;
 
 const basePath = '/compare/states';
-const baseTitle = 'State Wars';
+const baseTitle = 'State vs State';
 const baseDescription =
   'Browse published state-vs-state scholarship comparisons with searchable cards and quick sorting.';
 
@@ -199,8 +199,8 @@ export default async function StateBattlesPage({
               basePath={basePath}
               showCategories={false}
               fixedCategory="states"
-              searchPlaceholder="Search state wars"
-              resultLabel="state wars"
+              searchPlaceholder="Search State vs State"
+              resultLabel="State vs State"
               suggestionItems={items}
             />
           </Suspense>
@@ -208,12 +208,12 @@ export default async function StateBattlesPage({
 
         {!hasAnyPublished ? (
           <p className="mt-12 text-center text-gray-600">
-            No published state wars yet. Check back soon.
+            No published State vs State pages yet. Check back soon.
           </p>
         ) : (
           <CompareCardGrid
             items={slice}
-            emptyMessage="No state wars match your filters. Try clearing search."
+            emptyMessage="No State vs State matchups match your filters. Try clearing search."
           />
         )}
 

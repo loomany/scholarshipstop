@@ -1,4 +1,8 @@
-import type { CompareIndexItem } from '@/lib/seo/compareIndexFilters';
+import {
+  interleaveStateThenUniversity,
+  sortCompareIndexSlice,
+  type CompareIndexItem
+} from '@/lib/seo/compareIndexFilters';
 import type { fetchRecentPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
 import type { fetchRecentPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
 
@@ -50,8 +54,10 @@ export function buildCombinedCompareItems(args: {
   universities: Awaited<ReturnType<typeof fetchRecentPublishedUniversityComparePages>>;
   states: Awaited<ReturnType<typeof fetchRecentPublishedStateComparePages>>;
 }): CompareIndexItem[] {
-  return [
-    ...buildUniversityCompareItems(args.universities),
-    ...buildStateCompareItems(args.states)
-  ];
+  const universities = buildUniversityCompareItems(args.universities);
+  const states = buildStateCompareItems(args.states);
+  return interleaveStateThenUniversity(
+    sortCompareIndexSlice(states, 'latest'),
+    sortCompareIndexSlice(universities, 'latest')
+  );
 }

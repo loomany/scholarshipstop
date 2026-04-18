@@ -20,7 +20,7 @@ import { getURL } from '@/utils/helpers';
 export const revalidate = 3600;
 
 const basePath = '/compare/universities';
-const baseTitle = 'University Battles';
+const baseTitle = 'University vs University';
 const baseDescription =
   'Browse published university-vs-university scholarship comparisons with searchable cards and quick sorting.';
 
@@ -199,8 +199,8 @@ export default async function UniversityBattlesPage({
               basePath={basePath}
               showCategories={false}
               fixedCategory="universities"
-              searchPlaceholder="Search university battles"
-              resultLabel="university battles"
+              searchPlaceholder="Search University vs University"
+              resultLabel="University vs University"
               suggestionItems={items}
             />
           </Suspense>
@@ -208,12 +208,12 @@ export default async function UniversityBattlesPage({
 
         {!hasAnyPublished ? (
           <p className="mt-12 text-center text-gray-600">
-            No published university battles yet. Check back soon.
+            No published University vs University pages yet. Check back soon.
           </p>
         ) : (
           <CompareCardGrid
             items={slice}
-            emptyMessage="No university battles match your filters. Try clearing search."
+            emptyMessage="No University vs University matchups match your filters. Try clearing search."
           />
         )}
 

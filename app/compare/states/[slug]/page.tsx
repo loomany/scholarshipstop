@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import clsx from 'clsx';
 
 import { SafeCompareHtml } from '@/components/compare/SafeCompareHtml';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
@@ -43,6 +44,97 @@ function fmtNum(n: unknown, digits = 0): string {
   return n.toFixed(digits);
 }
 
+function grantBadgeLabel(raw: unknown): string {
+  if (typeof raw !== 'number' || Number.isNaN(raw)) return '—';
+  const n = Math.round(raw);
+  return `${n} grant${n === 1 ? '' : 's'}`;
+}
+
+function TopScholarshipProvidersColumn({
+  stateName,
+  stateSlug,
+  items,
+  browseHref
+}: {
+  stateName: string;
+  stateSlug: string | null | undefined;
+  items: Array<Record<string, unknown>>;
+  browseHref: string | null;
+}) {
+  return (
+    <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+      <h2 className="text-lg font-semibold text-zinc-900">
+        Top Scholarship Providers in {stateName}
+      </h2>
+      <p className="mt-1 text-sm leading-relaxed text-zinc-600">
+        Ranked by number of active scholarships
+      </p>
+      {browseHref ? (
+        <p className="mt-3">
+          <Link
+            href={browseHref}
+            className="inline-flex items-center gap-1 text-sm font-semibold text-orange-600 transition hover:text-orange-700"
+          >
+            View all scholarships
+            <span aria-hidden>→</span>
+          </Link>
+        </p>
+      ) : null}
+      <ul className="mt-4 space-y-2">
+        {items.length > 0 ? (
+          items.map((item, index) => {
+            const hubHref = buildUniversityHubHref(
+              stateSlug,
+              typeof item['slug'] === 'string' ? item['slug'] : null
+            );
+            const name = String(item['name'] ?? 'Unknown');
+            return (
+              <li
+                key={`${String(item['slug'] ?? item['name'])}-${index}`}
+                className={clsx(
+                  'flex items-center justify-between gap-3 rounded-lg border p-3 transition',
+                  'hover:border-gray-300 hover:shadow-sm',
+                  index === 0
+                    ? 'border-orange-200 bg-orange-50/90 hover:bg-orange-50 hover:border-orange-300'
+                    : 'border-gray-200 bg-white hover:bg-gray-50'
+                )}
+              >
+                <div className="flex min-w-0 flex-1 items-center gap-3">
+                  <span
+                    className="inline-flex min-w-[1.75rem] shrink-0 justify-center text-sm font-semibold tabular-nums text-gray-400"
+                    aria-hidden
+                  >
+                    {index + 1}
+                  </span>
+                  {hubHref ? (
+                    <Link
+                      href={hubHref}
+                      className="min-w-0 flex-1 text-sm font-medium text-gray-900 underline decoration-orange-400/45 underline-offset-2 transition hover:text-orange-800 hover:decoration-orange-600"
+                    >
+                      {name}
+                    </Link>
+                  ) : (
+                    <span className="min-w-0 flex-1 text-sm font-medium text-gray-900">{name}</span>
+                  )}
+                </div>
+                <span className="inline-flex min-w-[4.5rem] shrink-0 justify-end text-right sm:min-w-[5rem]">
+                  <span className="min-w-[2.5rem] rounded px-2 py-1 text-xs font-semibold tabular-nums bg-orange-100 text-orange-600">
+                    {grantBadgeLabel(item['grant_count'])}
+                  </span>
+                </span>
+              </li>
+            );
+          })
+        ) : (
+          <li className="rounded-lg border border-dashed border-gray-200 px-3 py-4 text-center text-sm text-gray-500">
+            No data available.
+          </li>
+        )}
+      </ul>
+    </div>
+  );
+}
+
 export async function generateMetadata({
   params
 }: {
@@ -54,7 +146,7 @@ export async function generateMetadata({
   const path = `/compare/states/${encodeURIComponent(slug.trim().toLowerCase())}`;
   if (!row) {
     return {
-      title: 'State comparison',
+      title: 'State vs State',
       robots: { index: false, follow: false }
     };
   }
@@ -137,8 +229,6 @@ export default async function StateComparePage({
     essayTextB: climate?.state_b,
     limit: 3
   });
-  const topUniversityRowCount = Math.max(topA.length, topB.length, 1);
-
   const faqJsonLd =
     faqItems.length > 0
       ? {
@@ -181,7 +271,7 @@ export default async function StateComparePage({
             href="/compare/states"
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            ← Back to State Battles
+            ← Back to State vs State
           </Link>
         </p>
 
@@ -211,7 +301,7 @@ export default async function StateComparePage({
                 href="/compare/states"
                 className="font-medium text-gray-600 transition hover:text-gray-900"
               >
-                State Battles
+                State vs State
               </Link>
             </li>
             <li className="text-gray-300" aria-hidden>
@@ -236,19 +326,17 @@ export default async function StateComparePage({
         </header>
 
         <section className="mt-8 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8">
-          <span className="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800">
-            State battle
+          <span className="inline-flex rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-800">
+            State vs State
           </span>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
-              <p className="text-sm font-medium text-gray-500">State A</p>
+              <p className="text-sm font-medium text-gray-500">Institution A</p>
               <p className="mt-2 text-xl font-bold leading-tight text-gray-900">{stateA.name}</p>
-              <p className="mt-2 text-sm text-gray-600">{stateA.region || 'Region unavailable'}</p>
             </div>
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
-              <p className="text-sm font-medium text-gray-500">State B</p>
+              <p className="text-sm font-medium text-gray-500">Institution B</p>
               <p className="mt-2 text-xl font-bold leading-tight text-gray-900">{stateB.name}</p>
-              <p className="mt-2 text-sm text-gray-600">{stateB.region || 'Region unavailable'}</p>
             </div>
           </div>
         </section>
@@ -277,11 +365,6 @@ export default async function StateComparePage({
               </thead>
               <tbody className="divide-y divide-gray-100">
                 <tr>
-                  <td className="px-3 py-3 font-medium text-gray-700 sm:px-4">State region</td>
-                  <td className="px-3 py-3 text-gray-900 sm:px-4">{stateA.region || 'No data available'}</td>
-                  <td className="px-3 py-3 text-gray-900 sm:px-4">{stateB.region || 'No data available'}</td>
-                </tr>
-                <tr>
                   <td className="px-3 py-3 font-medium text-gray-700 sm:px-4">
                     Active scholarships in catalog
                   </td>
@@ -309,192 +392,30 @@ export default async function StateComparePage({
               </tbody>
             </table>
           </div>
+          {bodyHtml.trim() ? (
+            <div className="mt-8 border-t border-gray-100 pt-8 sm:pt-10">
+              <SafeCompareHtml html={bodyHtml} />
+            </div>
+          ) : null}
         </section>
 
         <section
-          className="mt-10 rounded-2xl border border-sky-100 bg-gradient-to-b from-sky-50/80 to-white p-6 shadow-sm sm:p-8"
-          aria-labelledby="top-universities-by-state-heading"
+          className="mt-10 grid gap-6 md:grid-cols-2"
+          aria-label="Top scholarship providers in each state"
         >
-          <div className="max-w-3xl">
-            <h2
-              id="top-universities-by-state-heading"
-              className="text-center text-xl font-bold tracking-tight text-gray-900"
-            >
-              Top universities by state
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
-              Each side highlights the strongest university scholarship hubs currently indexed in
-              that state.
-            </p>
-          </div>
-
-          <div className="mt-6 grid gap-6 lg:grid-cols-2 lg:gap-8">
-            <div className="min-w-0">
-              <div className="mb-4 flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <h3 className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
-                    Top universities in {stateA.name}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-600">
-                    Institutions currently surfacing the most scholarships in this state.
-                  </p>
-                  {topStateAHref ? (
-                    <p className="mt-2 text-sm font-medium text-orange-600">
-                      <Link
-                        href={topStateAHref}
-                        className="underline decoration-orange-400/40 underline-offset-4 transition hover:text-orange-700 hover:decoration-orange-600"
-                      >
-                        See all scholarships in {stateA.name}
-                      </Link>
-                    </p>
-                  ) : null}
-                </div>
-                <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600">
-                  Top {Math.max(1, topA.length)}
-                </span>
-              </div>
-            </div>
-
-            <div className="min-w-0">
-              <div className="mb-4 flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <h3 className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
-                    Top universities in {stateB.name}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-600">
-                    Institutions currently surfacing the most scholarships in this state.
-                  </p>
-                  {topStateBHref ? (
-                    <p className="mt-2 text-sm font-medium text-orange-600">
-                      <Link
-                        href={topStateBHref}
-                        className="underline decoration-orange-400/40 underline-offset-4 transition hover:text-orange-700 hover:decoration-orange-600"
-                      >
-                        See all scholarships in {stateB.name}
-                      </Link>
-                    </p>
-                  ) : null}
-                </div>
-                <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600">
-                  Top {Math.max(1, topB.length)}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {Array.from({ length: topUniversityRowCount }, (_, index) => {
-              const leftItem = topA[index] ?? null;
-              const rightItem = topB[index] ?? null;
-              const leftHref = leftItem
-                ? buildUniversityHubHref(
-                    stateA.slug,
-                    typeof leftItem['slug'] === 'string' ? leftItem['slug'] : null
-                  )
-                : null;
-              const rightHref = rightItem
-                ? buildUniversityHubHref(
-                    stateB.slug,
-                    typeof rightItem['slug'] === 'string' ? rightItem['slug'] : null
-                  )
-                : null;
-
-              return (
-                <div key={`state-university-row-${index}`} className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                  <div className="min-w-0">
-                    {leftItem ? (
-                      <article className="flex h-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md">
-                        <div className="w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] bg-gray-900" aria-hidden />
-                        <div className="flex min-w-0 flex-1 items-start justify-between gap-4 px-4 py-4 sm:px-5 sm:py-5">
-                          <div className="min-w-0">
-                            <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                              University hub
-                            </p>
-                            {leftHref ? (
-                              <Link
-                                href={leftHref}
-                                className="mt-1 block text-base font-semibold leading-snug tracking-tight text-gray-900 underline decoration-sky-500/30 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
-                              >
-                                {String(leftItem['name'] ?? 'Unknown university')}
-                              </Link>
-                            ) : (
-                              <p className="mt-1 text-base font-semibold leading-snug tracking-tight text-gray-900">
-                                {String(leftItem['name'] ?? 'Unknown university')}
-                              </p>
-                            )}
-                            <p className="mt-2 text-sm leading-relaxed text-gray-500">
-                              Ranked here by active scholarship count in the current state catalog.
-                            </p>
-                          </div>
-                          <div className="shrink-0 text-right">
-                            <p className="text-sm font-semibold tabular-nums text-gray-900">
-                              {fmtNum(leftItem['grant_count'], 0)}
-                            </p>
-                            <p className="mt-1 text-[11px] font-medium text-gray-500">
-                              scholarships
-                            </p>
-                          </div>
-                        </div>
-                      </article>
-                    ) : (
-                      <div className="flex h-full min-w-0 items-center rounded-xl border border-dashed border-gray-200 bg-white/80 px-4 py-5 text-sm text-gray-500 sm:px-5">
-                        No university data available for this row yet.
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="min-w-0">
-                    {rightItem ? (
-                      <article className="flex h-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md">
-                        <div className="w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] bg-gray-900" aria-hidden />
-                        <div className="flex min-w-0 flex-1 items-start justify-between gap-4 px-4 py-4 sm:px-5 sm:py-5">
-                          <div className="min-w-0">
-                            <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                              University hub
-                            </p>
-                            {rightHref ? (
-                              <Link
-                                href={rightHref}
-                                className="mt-1 block text-base font-semibold leading-snug tracking-tight text-gray-900 underline decoration-sky-500/30 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
-                              >
-                                {String(rightItem['name'] ?? 'Unknown university')}
-                              </Link>
-                            ) : (
-                              <p className="mt-1 text-base font-semibold leading-snug tracking-tight text-gray-900">
-                                {String(rightItem['name'] ?? 'Unknown university')}
-                              </p>
-                            )}
-                            <p className="mt-2 text-sm leading-relaxed text-gray-500">
-                              Ranked here by active scholarship count in the current state catalog.
-                            </p>
-                          </div>
-                          <div className="shrink-0 text-right">
-                            <p className="text-sm font-semibold tabular-nums text-gray-900">
-                              {fmtNum(rightItem['grant_count'], 0)}
-                            </p>
-                            <p className="mt-1 text-[11px] font-medium text-gray-500">
-                              scholarships
-                            </p>
-                          </div>
-                        </div>
-                      </article>
-                    ) : (
-                      <div className="flex h-full min-w-0 items-center rounded-xl border border-dashed border-gray-200 bg-white/80 px-4 py-5 text-sm text-gray-500 sm:px-5">
-                        No university data available for this row yet.
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <TopScholarshipProvidersColumn
+            stateName={stateA.name}
+            stateSlug={stateA.slug}
+            items={topA}
+            browseHref={topStateAHref}
+          />
+          <TopScholarshipProvidersColumn
+            stateName={stateB.name}
+            stateSlug={stateB.slug}
+            items={topB}
+            browseHref={topStateBHref}
+          />
         </section>
-
-        {bodyHtml.trim() ? (
-          <div className="mt-10 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
-            <SafeCompareHtml html={bodyHtml} />
-          </div>
-        ) : null}
 
         {climate?.state_a || climate?.state_b ? (
           <section
@@ -509,14 +430,14 @@ export default async function StateComparePage({
             </h2>
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               <div className="rounded-xl border border-gray-200 bg-gray-50/70 p-5">
-                <h3 className="text-sm font-semibold text-emerald-900">{stateA.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                <h3 className="text-sm font-semibold text-gray-900">{stateA.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-900">
                   {climate?.state_a?.trim() || 'No data available'}
                 </p>
               </div>
               <div className="rounded-xl border border-gray-200 bg-gray-50/70 p-5">
-                <h3 className="text-sm font-semibold text-emerald-900">{stateB.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                <h3 className="text-sm font-semibold text-gray-900">{stateB.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-900">
                   {climate?.state_b?.trim() || 'No data available'}
                 </p>
               </div>
@@ -551,7 +472,7 @@ export default async function StateComparePage({
                 Sources and official pages
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
-                Official and high-authority pages used to support this state comparison.
+                Official and high-authority pages used to support this State vs State comparison.
               </p>
             </div>
             <ul className="mt-5 space-y-4">
@@ -590,7 +511,7 @@ export default async function StateComparePage({
                 id="state-related-guides-heading"
                 className="text-xl font-bold tracking-tight text-gray-900"
               >
-                More guides around this comparison
+                More guides around this State vs State comparison
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
                 Internal reading paths around scholarship search, application strategy, and essay preparation for students comparing {stateA.name} and {stateB.name}.

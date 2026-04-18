@@ -22,7 +22,7 @@ export default function CompareCardGrid({
         const badgeClass = isUniversity
           ? 'bg-sky-100 text-sky-800'
           : 'bg-emerald-100 text-emerald-800';
-        const eyebrow = isUniversity ? 'University battle' : 'State war';
+        const eyebrow = isUniversity ? 'University vs University' : 'State vs State';
 
         return (
           <li key={item.id}>
