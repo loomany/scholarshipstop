@@ -16,7 +16,7 @@ import {
   type Step2FormValues,
   type Step2FieldErrors
 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
-import { getOAuthRedirectURL } from '@/utils/helpers';
+import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/client';
 
 const inputClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 hover:border-zinc-300 ${SITE_INPUT_FOCUS_CLASS}`;
@@ -35,6 +35,11 @@ type Props = {
   onBack: () => void;
   /** Saves account draft (no password). Password stays in memory via parent callback only. */
   onContinue: (payload: Step2ContinuePayload) => void;
+  /**
+   * Post-auth path after Google OAuth (matches email signup `afterAuthPath`).
+   * Passed as `/auth/callback?next=…` — add the same origin + path in Supabase Auth redirect URLs if needed.
+   */
+  oauthRedirectAfterAuthPath: string;
 };
 
 export function ScholarshipOnboardingStep2({
@@ -42,7 +47,8 @@ export function ScholarshipOnboardingStep2({
   isSubmitting = false,
   initialStep2,
   onBack,
-  onContinue
+  onContinue,
+  oauthRedirectAfterAuthPath
 }: Props) {
   const [values, setValues] = useState<Step2FormValues>(() => ({
     firstName: initialStep2.firstName,
@@ -114,7 +120,7 @@ export function ScholarshipOnboardingStep2({
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: getOAuthRedirectURL('/auth/callback')
+          redirectTo: getOAuthCallbackUrlWithNext(oauthRedirectAfterAuthPath)
         }
       });
       if (error) {

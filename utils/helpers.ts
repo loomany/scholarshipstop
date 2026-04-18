@@ -38,6 +38,17 @@ export function getOAuthRedirectURL(path: string = '/auth/callback'): string {
   return getURL(path);
 }
 
+/**
+ * OAuth `redirectTo` for Supabase — same host as the tab + optional post-auth path (`/auth/callback?next=...`).
+ * `next` must be a same-site path (see `parseSafeNextPath` at call sites).
+ */
+export function getOAuthCallbackUrlWithNext(nextPath: string): string {
+  const safe = nextPath.startsWith('/') ? nextPath : `/${nextPath}`;
+  return getOAuthRedirectURL(
+    `/auth/callback?next=${encodeURIComponent(safe)}`
+  );
+}
+
 export const postData = async ({
   url,
   data

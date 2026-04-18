@@ -2,6 +2,7 @@ import { createClient, type AuthError, type Session, type User } from '@supabase
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { sendRegistrationVerificationEmail } from '@/lib/email/sendRegistrationVerificationEmail';
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { isSignupConversionEligibleUser } from '@/lib/analytics/googleAdsSignupConversion';
 import { consumePendingOnboardingDraftAfterOAuth } from '@/lib/onboarding/pendingOAuthOnboarding.server';
@@ -243,6 +244,30 @@ export async function GET(request: NextRequest) {
       });
     } catch (e) {
       console.error('[auth:callback] notifyTelegramSignup failed', e);
+    }
+  }
+
+  /**
+   * Same optional “confirm when convenient” Resend email as email onboarding (`enqueueRegistrationVerificationEmail`).
+   * OAuth signups never hit that server action — only PKCE callback here.
+   */
+  const REGISTER_VERIFY_EMAIL_MAX_ACCOUNT_AGE_MS = 15 * 60 * 1000;
+  if (userForSync?.email && userForSync.id && userForSync.created_at) {
+    const age = Date.now() - new Date(userForSync.created_at).getTime();
+    if (age >= 0 && age < REGISTER_VERIFY_EMAIL_MAX_ACCOUNT_AGE_MS) {
+      const displayName =
+        metaObj && typeof metaObj.first_name === 'string'
+          ? metaObj.first_name
+          : metaObj
+            ? firstLastFromOAuthUserMetadata(metaObj).first_name
+            : null;
+      void sendRegistrationVerificationEmail(userForSync.email, userForSync.id, {
+        displayName: displayName ?? undefined
+      }).then((result) => {
+        if (!result.ok && result.skipped) {
+          console.warn('[auth:callback] registration verification email', result.skipped);
+        }
+      });
     }
   }
 

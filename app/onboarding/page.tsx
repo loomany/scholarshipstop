@@ -409,6 +409,7 @@ function OnboardingWizard() {
               initialStep2={draft.step2}
               onBack={() => handleBack(3)}
               onContinue={handleAccountSubmit}
+              oauthRedirectAfterAuthPath={afterAuthPath}
             />
           ) : null}
         </div>
