@@ -21,13 +21,12 @@ type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 export function ScholarshipOnboardingDraftPostAuthSync() {
   const router = useRouter();
   const inFlight = useRef(false);
-  const done = useRef(false);
 
   useEffect(() => {
     const supabase = createClient();
 
     const trySync = async () => {
-      if (done.current || inFlight.current) return;
+      if (inFlight.current) return;
       const {
         data: { user }
       } = await supabase.auth.getUser();
@@ -50,7 +49,6 @@ export function ScholarshipOnboardingDraftPostAuthSync() {
         const p = profile as Pick<ProfilesRow, 'onboarding_completed'> | null;
         if (p?.onboarding_completed === true) {
           clearScholarshipOnboardingDraft();
-          done.current = true;
           return;
         }
 
@@ -61,7 +59,6 @@ export function ScholarshipOnboardingDraftPostAuthSync() {
         );
         if (result.ok) {
           clearScholarshipOnboardingDraft();
-          done.current = true;
           router.refresh();
         }
       } finally {
@@ -70,12 +67,22 @@ export function ScholarshipOnboardingDraftPostAuthSync() {
     };
 
     void trySync();
+    /** Session cookies can lag the first paint right after OAuth redirect. */
+    const t1 = setTimeout(() => void trySync(), 200);
+    const t2 = setTimeout(() => void trySync(), 800);
+    const t3 = setTimeout(() => void trySync(), 2500);
+
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
         void trySync();
       }
     });
-    return () => sub.subscription.unsubscribe();
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      sub.subscription.unsubscribe();
+    };
   }, [router]);
 
   return null;

@@ -14,6 +14,7 @@ import {
   type Step2FormValues,
   type Step2FieldErrors
 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
+import { getOAuthRedirectURL } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/client';
 
 const inputClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 hover:border-zinc-300 ${SITE_INPUT_FOCUS_CLASS}`;
@@ -53,12 +54,21 @@ export function ScholarshipOnboardingStep2({
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleGoogleAuth = async () => {
+    /** Flush before OAuth redirect — debounced save may not have run yet. */
+    saveStep2DraftFields(
+      {
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
+        email: values.email.trim()
+      },
+      loadStoredOnboardingDraft()
+    );
     setOauthPending(true);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`
+        redirectTo: getOAuthRedirectURL('/auth/callback')
       }
     });
     if (error) {
