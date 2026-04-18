@@ -2,7 +2,10 @@ import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import { gpaForProfile } from '@/lib/constants/scholarshipGpaOptions';
 import type { UserProfile } from '@/lib/onboarding/userProfile';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
-import { validateScholarshipOnboarding } from '@/lib/validation/scholarshipOnboardingSchema';
+import {
+  validateScholarshipOnboarding,
+  validateScholarshipOnboardingBasicsWithoutBirth
+} from '@/lib/validation/scholarshipOnboardingSchema';
 import {
   validateScholarshipOnboardingStep2Draft,
   validateScholarshipOnboardingStep2DraftForGoogleOAuth
@@ -23,7 +26,10 @@ export function buildCompleteScholarshipUserProfile(
   options?: BuildCompleteScholarshipUserProfileOptions
 ): { ok: true; profile: UserProfile } | { ok: false } {
   const forOAuth = options?.forGoogleOAuth === true;
-  const s1 = validateScholarshipOnboarding(draft.step1);
+  const s1 =
+    draft.quizVariant === 'landing_no_birth'
+      ? validateScholarshipOnboardingBasicsWithoutBirth(draft.step1)
+      : validateScholarshipOnboarding(draft.step1);
   if (!s1.ok) return { ok: false };
   const step2Ok = forOAuth
     ? validateScholarshipOnboardingStep2DraftForGoogleOAuth(draft.step2).ok

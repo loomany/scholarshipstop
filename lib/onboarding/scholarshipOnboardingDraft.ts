@@ -25,6 +25,11 @@ export type OnboardingFormValues = {
 
 export type StoredOnboardingDraft = {
   v: 7;
+  /**
+   * `/get-scholarships` quiz: step 1 omits birthday; profile stores null DOB.
+   * Does not use the main `scholarship_onboarding_draft_v2` key.
+   */
+  quizVariant?: 'landing_no_birth';
   activeStep: OnboardingStep;
   step1: OnboardingFormValues;
   step2: OnboardingStep2DraftFields;
@@ -139,8 +144,12 @@ function parseStored(raw: string): StoredOnboardingDraft | null {
         activeStep = 3;
       }
 
+      const quizVariant =
+        o.quizVariant === 'landing_no_birth' ? ('landing_no_birth' as const) : undefined;
+
       return {
         v: 7,
+        quizVariant,
         activeStep,
         step1: {
           birthMonth: typeof s1.birthMonth === 'string' ? s1.birthMonth : '',

@@ -64,7 +64,6 @@ type StaticNavDef = {
 
 /** Hub guests: these tabs open the registration wall instead of navigating. */
 const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
-  'best-matches',
   'recommended',
   'easy-apply',
   'hot-deadlines',
@@ -74,7 +73,6 @@ const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
 
 /** Paid-only tabs for signed-in users without active subscription. */
 const SUBSCRIPTION_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
-  'best-matches',
   'recommended',
   'easy-apply',
   'hot-deadlines'

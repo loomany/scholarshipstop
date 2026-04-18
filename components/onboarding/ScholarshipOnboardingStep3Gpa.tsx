@@ -8,6 +8,10 @@ import {
   SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY
 } from '@/lib/constants/scholarshipGpaOptions';
 import {
+  loadLandingQuizDraft,
+  saveStep3LandingDraftFields
+} from '@/lib/onboarding/getScholarshipsLandingDraft';
+import {
   loadStoredOnboardingDraft,
   saveStep3DraftFields,
   type OnboardingStep3DraftFields
@@ -30,14 +34,24 @@ type Props = {
   initialStep3: OnboardingStep3DraftFields;
   onBack: () => void;
   onContinue: () => void;
+  draftStore?: 'onboarding' | 'landing';
+  progressEyebrow?: string;
+  submitButtonLabel?: string;
 };
 
 export function ScholarshipOnboardingStep3Gpa({
   disabled = false,
   initialStep3,
   onBack,
-  onContinue
+  onContinue,
+  draftStore = 'onboarding',
+  progressEyebrow,
+  submitButtonLabel
 }: Props) {
+  const loadDraft =
+    draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
+  const saveStep3Fields =
+    draftStore === 'landing' ? saveStep3LandingDraftFields : saveStep3DraftFields;
   const [gpa, setGpa] = useState(() => {
     const n = normalizeGpaForSelect(initialStep3.gpa);
     return n === SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY ? '' : n;
@@ -48,7 +62,7 @@ export function ScholarshipOnboardingStep3Gpa({
   useEffect(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
-      saveStep3DraftFields({ gpa }, loadStoredOnboardingDraft());
+      saveStep3Fields({ gpa }, loadDraft());
     }, 400);
     return () => {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -62,7 +76,7 @@ export function ScholarshipOnboardingStep3Gpa({
       return;
     }
     setError(null);
-    saveStep3DraftFields({ gpa: gpaValue.trim() }, loadStoredOnboardingDraft());
+    saveStep3Fields({ gpa: gpaValue.trim() }, loadDraft());
     onContinue();
   };
 
@@ -83,7 +97,7 @@ export function ScholarshipOnboardingStep3Gpa({
       </button>
       <div className="mx-auto max-w-lg text-center">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
-          Step 3 of 4 · GPA
+          {progressEyebrow ?? 'Step 3 of 4 · GPA'}
         </p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
           What&apos;s your GPA?
@@ -120,7 +134,7 @@ export function ScholarshipOnboardingStep3Gpa({
 
         <div className="flex flex-col gap-3">
           <button type="submit" disabled={disabled} className={ONBOARDING_PRIMARY_BUTTON_CLASS}>
-            Continue →
+            {submitButtonLabel ?? 'Continue →'}
           </button>
         </div>
       </form>

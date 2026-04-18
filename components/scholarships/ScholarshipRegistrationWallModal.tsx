@@ -172,11 +172,11 @@ export default function ScholarshipRegistrationWallModal({
         )}
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <Link
+            <Link
             href={
               variant === 'essay'
                 ? `/onboarding?step=1&next=${encodeURIComponent('/essay')}`
-                : '/onboarding?step=3'
+                : '/onboarding'
             }
             onClick={onClose}
             className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-zinc-900 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-0 sm:w-auto sm:min-w-[200px]"

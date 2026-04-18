@@ -27,6 +27,7 @@ import {
 } from '@/lib/scholarships/guestScholarshipDetailClickBudget';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCatalogChipRow';
+import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
 
 type ScholarshipCardProps = {
   scholarship: Scholarship;
@@ -187,7 +188,8 @@ export default function ScholarshipCard({
     easyApplyIds.some((id) => LOCKED_CARD_CATEGORY_IDS.has(id));
   const showTopRightLockBadge =
     showHotDeadlinesLockBadge || showEasyApplyLockBadge;
-  const topRightBadgeLabel = badgeLabelOverride?.trim() || (isUnread ? 'NEW' : null);
+  const topRightBadgeLabel =
+    badgeLabelOverride?.trim() || (isUnread ? 'NEW' : null);
   const topRightBadgeAriaLabel = badgeLabelOverride?.trim()
     ? badgeLabelOverride.trim()
     : 'New - not opened yet';
@@ -331,7 +333,9 @@ export default function ScholarshipCard({
               ) : null}
             </div>
             <div className="flex shrink-0 items-center gap-1.5 self-start">
-              {topRightBadgeLabel ? (
+              {deadlinePassed ? (
+                <ScholarshipExpiredBadge />
+              ) : topRightBadgeLabel ? (
                 <span
                   className="pointer-events-none inline-flex h-5 shrink-0 items-center rounded-md bg-[#FF7A1A] px-2 text-[10px] font-bold uppercase leading-none tracking-wide text-white shadow-sm"
                   aria-label={topRightBadgeAriaLabel}

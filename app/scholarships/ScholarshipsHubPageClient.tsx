@@ -92,6 +92,11 @@ import {
 } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
+import { LANDING_QUIZ_HUB_SEED_KEY } from '@/lib/scholarships/landingQuizHubSession';
+import {
+  buildMoreFiltersWithProfileDefaults,
+  type ScholarshipProfileFilterSeed
+} from '@/lib/scholarships/profileFilterDefaults';
 import { toast } from '@/components/ui/Toasts/use-toast';
 
 /** Temporary: trace hub meta overwrite. Remove after diagnosis. */
@@ -257,7 +262,6 @@ function ScholarshipsPageInner({
   const LOCKED_TABS_FOR_UNSUBSCRIBED = useMemo(
     () =>
       new Set<ScholarshipListTabId>([
-        'best-matches',
         'recommended',
         'easy-apply',
         'hot-deadlines'
@@ -449,10 +453,7 @@ function ScholarshipsPageInner({
     const sp = new URLSearchParams(searchParamsString);
     const tab = sp.get('tab');
     /** Personal tabs (saved/ignored) stay in the URL for deep links (e.g. Telegram → hub). */
-    const badTab =
-      tab === 'best-matches' ||
-      tab === 'recommended' ||
-      tab === 'hot-deadlines';
+    const badTab = tab === 'recommended' || tab === 'hot-deadlines';
     const needDefaultHubTab = !tab;
     const parsedDeadline = parseDeadlineFromParam(sp.get('deadline'));
     const hasAdvDeadline = parsedDeadline != null && parsedDeadline !== 'any';
@@ -547,6 +548,30 @@ function ScholarshipsPageInner({
     applicantsMin: 0,
     applicantsMax: 200000
   };
+
+  const landingQuizHubSeedAppliedRef = useRef(false);
+
+  /** One-shot: `/get-scholarships` quiz stores a filter seed in sessionStorage before redirect. */
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (landingQuizHubSeedAppliedRef.current) return;
+    const raw = sessionStorage.getItem(LANDING_QUIZ_HUB_SEED_KEY);
+    if (!raw) return;
+
+    let seed: ScholarshipProfileFilterSeed;
+    try {
+      seed = JSON.parse(raw) as ScholarshipProfileFilterSeed;
+    } catch {
+      sessionStorage.removeItem(LANDING_QUIZ_HUB_SEED_KEY);
+      return;
+    }
+
+    const next = buildMoreFiltersWithProfileDefaults(filterBounds, seed);
+    setMoreFiltersApplied(next);
+    sessionStorage.removeItem(LANDING_QUIZ_HUB_SEED_KEY);
+    landingQuizHubSeedAppliedRef.current = true;
+    replaceListingParams({ resetPage: true });
+  }, [filterBounds, replaceListingParams]);
 
   const [savedFiltersRevision, setSavedFiltersRevision] = useState(0);
   const savedFiltersForHub = useMemo(() => {
@@ -718,6 +743,11 @@ function ScholarshipsPageInner({
   const rawPageParam = new URLSearchParams(searchParamsString).get('page');
   const pageFromUrl = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
+  /** Guests on Best recommendation only load page 1; URL may still carry `page` until normalized. */
+  const hubListingPage =
+    !isAuthenticated && activeTab === 'best-matches' ? 1 : pageFromUrl;
+  const listPageForUi =
+    !isAuthenticated && activeTab === 'best-matches' ? 1 : currentPage;
 
   useEffect(() => {
     let cancelled = false;
@@ -764,7 +794,7 @@ function ScholarshipsPageInner({
         const ids = userListIdsRef.current;
         const sp = buildHubListingSearchParams({
           base: new URLSearchParams(searchParamsString),
-          page: pageFromUrl,
+          page: hubListingPage,
           tab: activeTab,
           meta: false,
           saved: ids.saved,
@@ -868,7 +898,7 @@ function ScholarshipsPageInner({
   }, [
     isAuthenticated,
     searchParamsString,
-    pageFromUrl,
+    hubListingPage,
     activeTab,
     moreFiltersFingerprint,
     catalogListScope,
@@ -964,6 +994,16 @@ function ScholarshipsPageInner({
       replaceListingParams({ page: valid, resetPage: false });
     }
   }, [isLoading, totalCount, totalPages, rawPageParam, replaceListingParams]);
+
+  /** Guests on Best recommendation only see page 1; strip `page` from URL if they land with page>1. */
+  useEffect(() => {
+    if (isAuthenticated) return;
+    if (activeTab !== 'best-matches') return;
+    const n = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
+    if (n > 1) {
+      replaceListingParams({ page: 1, resetPage: false });
+    }
+  }, [isAuthenticated, activeTab, rawPageParam, replaceListingParams]);
 
   const openMoreFilters = useCallback(() => {
     const basis = withTabEnforcedMoreFilters(
@@ -1155,7 +1195,7 @@ function ScholarshipsPageInner({
 
   const showProfileWhy = false;
 
-  const listStart = (currentPage - 1) * SCHOLARSHIPS_PAGE_SIZE;
+  const listStart = (listPageForUi - 1) * SCHOLARSHIPS_PAGE_SIZE;
   const toggleSave = useCallback(
     async (id: string) => {
       if (!isAuthenticated) {
@@ -1260,10 +1300,7 @@ function ScholarshipsPageInner({
     (hasListingParams || moreFiltersOffDefault || query.trim().length > 0);
 
   const emptyMessage = useMemo(() => {
-    if (
-      !isAuthenticated &&
-      (activeTab === 'best-matches' || activeTab === 'recommended')
-    ) {
+    if (!isAuthenticated && activeTab === 'recommended') {
       return 'Create an account to see personalized recommendations.';
     }
     switch (activeTab) {
@@ -1288,8 +1325,7 @@ function ScholarshipsPageInner({
   }, [activeTab, isAuthenticated, savedFiltersForHub]);
 
   const guestPersonalizedEmpty =
-    !isAuthenticated &&
-    (activeTab === 'best-matches' || activeTab === 'recommended');
+    !isAuthenticated && activeTab === 'recommended';
   const profileIncompletePersonalizedEmpty =
     isAuthenticated &&
     totalCount === 0 &&
@@ -1375,7 +1411,7 @@ function ScholarshipsPageInner({
               {guestPersonalizedEmpty ? (
                 <p className="mt-5">
                   <Link
-                    href="/onboarding?step=3"
+                    href="/onboarding"
                     className="text-sm font-semibold text-zinc-900 underline decoration-zinc-400 underline-offset-2 transition hover:text-zinc-700"
                   >
                     Create a free account
@@ -1447,9 +1483,17 @@ function ScholarshipsPageInner({
                 ))}
               </div>
               <ScholarshipsPagination
-                currentPage={currentPage}
+                currentPage={listPageForUi}
                 totalPages={totalPages}
                 buildHref={buildPageHref}
+                guestPaginationLocked={
+                  !isAuthenticated && activeTab === 'best-matches'
+                }
+                onGuestLockedClick={
+                  !isAuthenticated && activeTab === 'best-matches'
+                    ? () => openRegistrationWall()
+                    : undefined
+                }
               />
             </>
           )}

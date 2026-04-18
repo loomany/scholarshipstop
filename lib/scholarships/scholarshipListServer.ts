@@ -764,6 +764,12 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
 
 function applySort(q: any, sort: SortOption): any {
   switch (sort) {
+    /** Best tab: largest awards first, then freshest rows (tie-break). */
+    case 'best_recommendation':
+      return q
+        .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
+        .order('updated_at', { ascending: false, nullsFirst: true })
+        .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'highest_amount':
       return q
         .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
@@ -1073,7 +1079,15 @@ function buildListMetaCacheKey(
 /** Single catalog pipeline: no personalized SQL branch. */
 function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRequest {
   const n = normalizeTabScopedMoreFilters(req);
-  return { ...n, listScope: 'catalog', personalizedProfile: undefined };
+  const base: ScholarshipListRequest = {
+    ...n,
+    listScope: 'catalog',
+    personalizedProfile: undefined
+  };
+  if (base.tab === 'best-matches') {
+    return { ...base, sort: 'best_recommendation' };
+  }
+  return base;
 }
 
 /** Canonical pipeline is catalog SQL; keep tab selection intact. */

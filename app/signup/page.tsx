@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-/** Canonical marketing URL → same onboarding entry as “Create free account” elsewhere. */
+/** Canonical marketing URL → onboarding (landing-quiz data merges on load). */
 export default function SignupPage() {
-  redirect('/onboarding?step=3');
+  redirect('/onboarding');
 }

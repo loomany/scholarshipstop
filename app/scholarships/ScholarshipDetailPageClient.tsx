@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/DarkTooltip';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
+import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
@@ -347,6 +348,11 @@ function SimilarScholarshipDetailListItem({
 
   const cardInner = (
     <div className="relative text-left">
+      {deadlinePassed ? (
+        <div className="mb-2 flex justify-start">
+          <ScholarshipExpiredBadge />
+        </div>
+      ) : null}
       <div className="flex items-start gap-3 sm:gap-4">
         <div className="min-w-0 flex-1 text-left">
           <span
@@ -938,6 +944,7 @@ export default function ScholarshipDetailPageClient({
     hasSocial ||
     hasMission;
 
+  const detailDeadlinePassed = scholarshipDeadlineHasPassed(scholarship);
   const deadlineDisplay = getScholarshipDeadlineDisplayParts(scholarship);
   const deadlinePrimary = deadlineDisplay.primary;
   const deadlineSecondaryLine =
@@ -1259,6 +1266,11 @@ export default function ScholarshipDetailPageClient({
           <h1 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl md:text-[2.25rem] md:leading-tight">
             {scholarship.title}
           </h1>
+          {detailDeadlinePassed ? (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <ScholarshipExpiredBadge />
+            </div>
+          ) : null}
           <HeroDecisionBadges
             matchBadge={ui.matchBadge}
             urgencyBadge={ui.urgencyBadge}

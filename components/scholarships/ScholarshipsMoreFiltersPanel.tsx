@@ -149,13 +149,16 @@ function UniversityAutocomplete({
   stateInput,
   onInputChange,
   onSelect,
-  inputClassName
+  inputClassName,
+  subscriptionLocked = false
 }: {
   value: string;
   stateInput: string;
   onInputChange: (next: string) => void;
   onSelect: (item: UniversitySuggestion) => void;
   inputClassName: string;
+  /** Signed-in user without active subscription — no typing or suggestions. */
+  subscriptionLocked?: boolean;
 }) {
   const genId = useId();
   const listboxId = `${genId}-listbox`;
@@ -178,6 +181,12 @@ function UniversityAutocomplete({
   }, [open]);
 
   useEffect(() => {
+    if (subscriptionLocked) {
+      setSuggestions([]);
+      setLoading(false);
+      setOpen(false);
+      return;
+    }
     if (!open) {
       setLoading(false);
       return;
@@ -225,7 +234,7 @@ function UniversityAutocomplete({
       ctrl.abort();
       window.clearTimeout(t);
     };
-  }, [open, stateInput, value]);
+  }, [open, stateInput, value, subscriptionLocked]);
 
   const pick = useCallback(
     (item: UniversitySuggestion) => {
@@ -238,6 +247,7 @@ function UniversityAutocomplete({
   );
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (subscriptionLocked) return;
     if (!open && (e.key === 'ArrowDown' || e.key === 'ArrowUp') && value.trim()) {
       setOpen(true);
       setHighlight(0);
@@ -285,18 +295,31 @@ function UniversityAutocomplete({
         aria-autocomplete="list"
         aria-label="University filter"
         placeholder="Type a university, e.g. Texas…"
-        className={inputClassName}
+        className={`${inputClassName}${
+          subscriptionLocked ? ' cursor-default bg-zinc-50 pr-10' : ''
+        }`}
         value={value}
+        readOnly={subscriptionLocked}
+        tabIndex={subscriptionLocked ? -1 : 0}
         onChange={(e) => {
+          if (subscriptionLocked) return;
           onInputChange(e.target.value);
           setOpen(true);
           setHighlight(0);
         }}
         onFocus={() => {
+          if (subscriptionLocked) return;
           if (value.trim().length >= 2) setOpen(true);
         }}
         onKeyDown={onKeyDown}
       />
+      {subscriptionLocked ? (
+        <Lock
+          className={`pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 ${scholarshipGuestLockIconClass}`}
+          strokeWidth={2}
+          aria-hidden
+        />
+      ) : null}
       {open && (loading || suggestions.length > 0 || showEmpty) ? (
         <div
           id={listboxId}
@@ -381,6 +404,7 @@ export default function ScholarshipsMoreFiltersPanel({
   const amountLocked = isAuthenticated && !hasSubscription;
   const eligibilityLocked = isAuthenticated && !hasSubscription;
   const applicantsLocked = isAuthenticated && !hasSubscription;
+  const universityLocked = isAuthenticated && !hasSubscription;
   const deadlineShortRangeLocked = isAuthenticated && !hasSubscription;
   /** Guests + signed-in without subscription — same gating as sidebar Hot Deadlines row. */
   const internationalAudienceGated =
@@ -947,12 +971,32 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>University</h3>
+            <h3 className={sectionTitle}>
+              University
+              {universityLocked ? (
+                <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+                  <Lock
+                    className={`h-3 w-3 ${scholarshipGuestLockIconClass}`}
+                    strokeWidth={2}
+                  />
+                  Locked
+                </span>
+              ) : null}
+            </h3>
             <p className={sectionHint}>
               Start typing a university name and choose a suggestion from our indexed
               catalog to narrow results to that school.
             </p>
-            <div className="mt-4">
+            <div className="relative mt-4">
+              {universityLocked ? (
+                <button
+                  type="button"
+                  aria-label="Unlock Premium to filter by university"
+                  title="Unlock Premium to filter by university"
+                  onClick={() => onSubscriptionLockedAction?.()}
+                  className="absolute inset-0 z-10 cursor-pointer rounded-xl"
+                />
+              ) : null}
               <UniversityAutocomplete
                 value={value.filterUniversityInput}
                 stateInput={value.filterStateInput}
@@ -971,6 +1015,7 @@ export default function ScholarshipsMoreFiltersPanel({
                   })
                 }
                 inputClassName={filterPanelStateInputClass}
+                subscriptionLocked={universityLocked}
               />
             </div>
             <p className="mt-2 text-xs text-zinc-500">

@@ -4,6 +4,10 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { buildCompleteScholarshipUserProfile } from '@/lib/onboarding/buildScholarshipUserProfile';
 import {
+  loadLandingQuizDraft,
+  saveStep2LandingDraftFields
+} from '@/lib/onboarding/getScholarshipsLandingDraft';
+import {
   loadStoredOnboardingDraft,
   saveStep2DraftFields,
   type OnboardingStep2DraftFields
@@ -40,6 +44,8 @@ type Props = {
    * Passed as `/auth/callback?next=…` — add the same origin + path in Supabase Auth redirect URLs if needed.
    */
   oauthRedirectAfterAuthPath: string;
+  /** `/get-scholarships` quiz uses a separate localStorage draft from `/onboarding`. */
+  draftStore?: 'onboarding' | 'landing';
 };
 
 export function ScholarshipOnboardingStep2({
@@ -48,8 +54,13 @@ export function ScholarshipOnboardingStep2({
   initialStep2,
   onBack,
   onContinue,
-  oauthRedirectAfterAuthPath
+  oauthRedirectAfterAuthPath,
+  draftStore = 'onboarding'
 }: Props) {
+  const loadDraft =
+    draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
+  const saveStep2Fields =
+    draftStore === 'landing' ? saveStep2LandingDraftFields : saveStep2DraftFields;
   const [values, setValues] = useState<Step2FormValues>(() => ({
     firstName: initialStep2.firstName,
     lastName: initialStep2.lastName,
@@ -62,7 +73,7 @@ export function ScholarshipOnboardingStep2({
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleGoogleAuth = async () => {
-    const base = loadStoredOnboardingDraft();
+    const base = loadDraft();
     if (!base) {
       toast({
         variant: 'destructive',
@@ -82,7 +93,7 @@ export function ScholarshipOnboardingStep2({
         email: values.email.trim()
       }
     };
-    saveStep2DraftFields(draft.step2, base);
+    saveStep2Fields(draft.step2, base);
 
     const built = buildCompleteScholarshipUserProfile(draft, { forGoogleOAuth: true });
     if (!built.ok) {
@@ -144,13 +155,13 @@ export function ScholarshipOnboardingStep2({
   useEffect(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
-      saveStep2DraftFields(
+      saveStep2Fields(
         {
           firstName: values.firstName,
           lastName: values.lastName,
           email: values.email
         },
-        loadStoredOnboardingDraft()
+        loadDraft()
       );
     }, 400);
     return () => {
@@ -179,13 +190,13 @@ export function ScholarshipOnboardingStep2({
       return;
     }
     setErrors({});
-    saveStep2DraftFields(
+    saveStep2Fields(
       {
         firstName: values.firstName.trim(),
         lastName: values.lastName.trim(),
         email: values.email.trim()
       },
-      loadStoredOnboardingDraft()
+      loadDraft()
     );
     onContinue(values);
   };

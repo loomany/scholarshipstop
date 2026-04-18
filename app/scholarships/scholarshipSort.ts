@@ -3,6 +3,7 @@ import type { Scholarship } from './scholarshipsData';
 export type SortOption =
   | 'magic'
   | 'best_match'
+  | 'best_recommendation'
   | 'highest_amount'
   | 'lowest_amount'
   | 'least_requirements'
@@ -131,6 +132,13 @@ export function sortScholarshipsInPlace(
         if (d !== 0) return d;
         const tie = magicTieBreak(a, b);
         if (tie !== 0) return tie;
+        return orig(a) - orig(b);
+      }
+      case 'best_recommendation': {
+        const d = parseAmount(b) - parseAmount(a);
+        if (d !== 0) return d;
+        const rec = recentMs(b) - recentMs(a);
+        if (rec !== 0) return rec;
         return orig(a) - orig(b);
       }
       case 'highest_amount': {

@@ -62,7 +62,7 @@ export function parseHubScholarshipTabParam(
 
 /**
  * Hub for guests: default **All** (`matches`); explicit `tab` in URL is respected
- * (e.g. best-matches → empty state + CTA).
+ * (e.g. `best-matches` for landing quiz / Best recommendation).
  */
 export function parseHubScholarshipTabParamForGuest(
   raw: string | null | undefined

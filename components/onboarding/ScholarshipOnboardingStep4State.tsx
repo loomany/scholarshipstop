@@ -5,6 +5,10 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import {
+  loadLandingQuizDraft,
+  saveStep4LandingDraftFields
+} from '@/lib/onboarding/getScholarshipsLandingDraft';
+import {
   loadStoredOnboardingDraft,
   saveStep4DraftFields,
   type OnboardingStep4DraftFields
@@ -21,14 +25,23 @@ type Props = {
   initialStep4: OnboardingStep4DraftFields;
   onBack: () => void;
   onContinue: () => void;
+  draftStore?: 'onboarding' | 'landing';
+  /** Overrides “Step 2 of 4 · State” (e.g. landing quiz uses 3 steps). */
+  progressEyebrow?: string;
 };
 
 export function ScholarshipOnboardingStep4State({
   disabled = false,
   initialStep4,
   onBack,
-  onContinue
+  onContinue,
+  draftStore = 'onboarding',
+  progressEyebrow
 }: Props) {
+  const loadDraft =
+    draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
+  const saveStep4Fields =
+    draftStore === 'landing' ? saveStep4LandingDraftFields : saveStep4DraftFields;
   const [stateInput, setStateInput] = useState(() => initialStep4.state);
   const [error, setError] = useState<string | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -36,7 +49,7 @@ export function ScholarshipOnboardingStep4State({
   useEffect(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
-      saveStep4DraftFields({ state: stateInput }, loadStoredOnboardingDraft());
+      saveStep4Fields({ state: stateInput }, loadDraft());
     }, 400);
     return () => {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -55,7 +68,7 @@ export function ScholarshipOnboardingStep4State({
       return;
     }
     setError(null);
-    saveStep4DraftFields({ state: canonical }, loadStoredOnboardingDraft());
+    saveStep4Fields({ state: canonical }, loadDraft());
     onContinue();
   };
 
@@ -76,7 +89,7 @@ export function ScholarshipOnboardingStep4State({
       </button>
       <div className="mx-auto max-w-lg text-center">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
-          Step 2 of 4 · State
+          {progressEyebrow ?? 'Step 2 of 4 · State'}
         </p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
           What state are you in?

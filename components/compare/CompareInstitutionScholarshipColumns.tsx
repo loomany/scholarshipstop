@@ -19,7 +19,6 @@ import {
   saveScholarship
 } from '@/app/scholarships/savedScholarships';
 import { getViewedScholarshipIds } from '@/app/scholarships/viewedScholarships';
-import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
@@ -176,9 +175,6 @@ export default function CompareInstitutionScholarshipColumns({
         <ScholarshipCard
           scholarship={scholarship}
           isUnread={!viewedIds.includes(scholarship.id)}
-          badgeLabelOverride={
-            scholarshipDeadlineHasPassed(scholarship) ? 'Expired' : null
-          }
           saved={savedIds.includes(scholarship.id)}
           onToggleSave={toggleSave}
           onHide={ignoreScholarship}
