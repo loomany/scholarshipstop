@@ -1245,13 +1245,19 @@ async function sendAdminPanel(user: TelegramUserRow) {
 
   const trafficLines: string[] = [];
   if (humanVisitorsResult.error) {
+    const e = humanVisitorsResult.error;
     console.error(
       '[telegram] admin panel anonymous_visitor_first_touch (humans)',
-      humanVisitorsResult.error.message,
-      humanVisitorsResult.error.code,
-      humanVisitorsResult.error.details
+      e.message,
+      e.code,
+      e.details
     );
-    trafficLines.push('• Не удалось загрузить источники (см. логи сервера)');
+    const hint = [e.code, e.message].filter(Boolean).join(': ').slice(0, 180);
+    trafficLines.push(
+      hint
+        ? `• Не удалось загрузить источники — ${hint}`
+        : '• Не удалось загрузить источники (см. логи сервера)'
+    );
   } else {
     const rows = humanVisitorsResult.data ?? [];
     if (rows.length === 0) {
@@ -1283,7 +1289,13 @@ async function sendAdminPanel(user: TelegramUserRow) {
 
   const botLine =
     botVisitorsCount.error != null
-      ? 'Оценка ботов (24ч): не удалось загрузить'
+      ? (() => {
+          const e = botVisitorsCount.error;
+          const hint = [e.code, e.message].filter(Boolean).join(': ').slice(0, 160);
+          return hint
+            ? `Оценка ботов (24ч): ошибка — ${hint}`
+            : 'Оценка ботов (24ч): не удалось загрузить';
+        })()
       : `Оценка ботов по UA (24ч): ${botVisitorsCount.count ?? 0}`;
 
   const profilesLine =

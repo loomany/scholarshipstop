@@ -35,16 +35,19 @@ export function MagicLinkImplicitSession() {
 
     const hashParams = parseOAuthStyleHash(window.location.hash);
     if (hasOAuthStyleHashError(hashParams)) {
-      const desc =
+      const rawDesc =
         safeDecodeParam(hashParams.error_description) ||
         'This link may have expired. Request a new confirmation email.';
-      router.replace(
-        getErrorRedirect(
-          '/signin/password_signin',
-          'Link could not be used',
-          desc
-        )
-      );
+      /** Supabase → Google token exchange failed (wrong Client Secret or redirect URI in Google Cloud). */
+      const isGoogleOAuthExchangeFailure =
+        /unable to exchange external code/i.test(rawDesc);
+      const title = isGoogleOAuthExchangeFailure
+        ? 'Google sign-in could not finish'
+        : 'Link could not be used';
+      const desc = isGoogleOAuthExchangeFailure
+        ? 'Check Google Cloud: Authorized redirect URIs must include the exact Supabase callback URL from Dashboard → Authentication → Providers → Google. The Client ID and Client Secret in Supabase must be from that same Web OAuth client.'
+        : rawDesc;
+      router.replace(getErrorRedirect('/signin/password_signin', title, desc));
       return;
     }
 
