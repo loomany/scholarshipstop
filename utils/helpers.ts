@@ -21,23 +21,21 @@ export const getURL = (path: string = '') => {
 };
 
 /**
- * OAuth `redirectTo`: prefer `NEXT_PUBLIC_SITE_URL` from the client bundle so production logins
- * always return to the public domain (not a preview host, wrong port, or stale tab origin).
- * If unset (typical local dev), use the current page origin.
+ * OAuth / magic-link `redirectTo` for URLs returned to this app after Supabase Auth.
+ *
+ * **Browser (PKCE):** must use the **same origin** as the tab that called `signInWithOAuth`
+ * (the code verifier lives in that origin’s storage). Using `NEXT_PUBLIC_SITE_URL` here caused
+ * `www` vs apex mismatches and `exchangeCodeForSession` → AuthApiError after Google login.
+ *
+ * **Server:** `window` is undefined → `getURL(path)` (SITE_URL or fallback).
  */
 export function getOAuthRedirectURL(path: string = '/auth/callback'): string {
   path = path.replace(/^\/+/, '');
-  if (typeof window === 'undefined') {
-    return getURL(path);
+  if (typeof window !== 'undefined') {
+    const base = window.location.origin.replace(/\/+$/, '');
+    return path ? `${base}/${path}` : base;
   }
-  const site = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  const base = site
-    ? (() => {
-        const s = site.replace(/\/+$/, '');
-        return s.startsWith('http') ? s : `https://${s}`;
-      })()
-    : window.location.origin.replace(/\/+$/, '');
-  return path ? `${base}/${path}` : base;
+  return getURL(path);
 }
 
 export const postData = async ({
