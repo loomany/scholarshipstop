@@ -9,6 +9,7 @@ import {
   requiredSeoTagsForListingPath,
   type LongTailListingMode
 } from '@/lib/scholarships/seoScholarshipListing';
+import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMetaGuestPatches';
 import {
   executeScholarshipListQuery,
   executeScholarshipListQueryWithSeoFallback,
@@ -87,6 +88,11 @@ export async function fetchInitialHubScholarshipsPayload(
       isProSubscriber: false
     }
   );
+
+  /** Hub SSR uses public Supabase only; align sidebar with POST `/api/scholarships` for guests. */
+  if (!profile && result.meta) {
+    applyListingMetaGuestPatches(result.meta, { authUser: false });
+  }
 
   return result;
 }

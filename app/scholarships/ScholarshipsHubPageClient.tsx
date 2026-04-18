@@ -91,6 +91,7 @@ import {
   moreFiltersToJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
+import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMetaGuestPatches';
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
 import { LANDING_QUIZ_HUB_SEED_KEY } from '@/lib/scholarships/landingQuizHubSession';
 import {
@@ -709,8 +710,22 @@ function ScholarshipsPageInner({
   ]);
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
-    return listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
-  }, [listMeta?.sidebarCounts]);
+    const raw = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
+    /**
+     * Guests: never show signed-in sidebar totals from stale SSR/ISR or a failed
+     * `meta_only` refetch (must match POST `/api/scholarships` + `applyListingMetaGuestPatches`).
+     */
+    if (!isAuthenticated && authResolved) {
+      if (!listMeta) return EMPTY_SIDEBAR_COUNTS;
+      const patched: ScholarshipListMeta = {
+        ...listMeta,
+        sidebarCounts: { ...raw }
+      };
+      applyListingMetaGuestPatches(patched, { authUser: false });
+      return patched.sidebarCounts;
+    }
+    return raw;
+  }, [listMeta, isAuthenticated, authResolved]);
 
   const categoryCounts = useMemo(() => {
     if (listMeta?.categoryCounts) return listMeta.categoryCounts;

@@ -22,6 +22,7 @@ import {
   type ScholarshipListRequest
 } from '@/lib/scholarships/scholarshipListServer';
 import type { Database } from '@/types_db';
+import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMetaGuestPatches';
 import { profileMatchSummaryFromRow } from '@/lib/scholarships/profileMatchMeta';
 import {
   buildScholarshipProfileFilterSeed,
@@ -70,25 +71,6 @@ function hubSidebarMetaDebugEnabled(): boolean {
     process.env.NODE_ENV === 'development' ||
     process.env.SCHOLARSHIPS_HUB_SIDEBAR_DEBUG === '1'
   );
-}
-
-function applyListingMetaGuestPatches(
-  meta: ScholarshipListMeta,
-  ctx: { authUser: boolean }
-) {
-  delete meta.matchedTotal;
-  if (!ctx.authUser) {
-    meta.sidebarCounts.bestMatches = 0;
-    meta.sidebarCounts.recommended = 0;
-    meta.personalizedMatchReady = false;
-    meta.sidebarCounts.saved = 0;
-    meta.sidebarCounts.ignored = 0;
-    meta.sidebarCounts.started = 0;
-    meta.sidebarCounts.submitted = 0;
-    delete meta.profileMatchSummary;
-    delete meta.profileFilterSeed;
-    delete meta.matchedTotal;
-  }
 }
 
 async function emptyListResult(
