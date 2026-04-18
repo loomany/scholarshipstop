@@ -305,20 +305,22 @@ export async function enqueueGoogleIndexingUrls(input: {
     const normalized = normalizeIndexingUrl(value);
     if (normalized) normalizedUrls.push(normalized);
   }
-  if (normalizedUrls.length === 0) {
+  // One INSERT … ON CONFLICT batch must not list the same conflict key twice.
+  const uniqueUrls = [...new Set(normalizedUrls)];
+  if (uniqueUrls.length === 0) {
     return { ok: true, enqueued: 0, total: 0, pending: 0 };
   }
 
   const { data: existing } = await admin
     .from('google_indexing_queue')
     .select('url, attempt_count')
-    .in('url', normalizedUrls);
+    .in('url', uniqueUrls);
 
   const prevAttempts = new Map(
     (existing ?? []).map((r) => [r.url, r.attempt_count as number])
   );
 
-  const payload = normalizedUrls.map((url) => ({
+  const payload = uniqueUrls.map((url) => ({
     url,
     status: 'pending' as const,
     added_at: now,
@@ -348,7 +350,7 @@ export async function enqueueGoogleIndexingUrls(input: {
 
   return {
     ok: true,
-    enqueued: normalizedUrls.length,
+    enqueued: uniqueUrls.length,
     total: totalCount ?? 0,
     pending: pendingCount ?? 0
   };
