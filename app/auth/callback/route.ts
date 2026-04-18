@@ -4,7 +4,11 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { isSignupConversionEligibleUser } from '@/lib/analytics/googleAdsSignupConversion';
-import { syncOnboardingFromMetadataIfPresent } from '@/lib/onboarding/profilesOnboardingSync';
+import {
+  firstLastFromOAuthUserMetadata,
+  syncOAuthNamesToProfilesIfEmpty,
+  syncOnboardingFromMetadataIfPresent
+} from '@/lib/onboarding/profilesOnboardingSync';
 import { notifyTelegramEmailVerified, notifyTelegramSignup } from '@/lib/telegram/bot';
 import type { Database } from '@/types_db';
 import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
@@ -209,12 +213,17 @@ export async function GET(request: NextRequest) {
       }
     );
     await syncOnboardingFromMetadataIfPresent(syncClient, userForSync.id, metaObj);
+    await syncOAuthNamesToProfilesIfEmpty(syncClient, userForSync.id, metaObj);
   }
 
   if (userForSync?.id && userForSync.email) {
     try {
       const firstName =
-        metaObj && typeof metaObj.first_name === 'string' ? metaObj.first_name : null;
+        metaObj && typeof metaObj.first_name === 'string'
+          ? metaObj.first_name
+          : metaObj
+            ? firstLastFromOAuthUserMetadata(metaObj).first_name
+            : null;
       await notifyTelegramSignup({
         userId: userForSync.id,
         email: userForSync.email,

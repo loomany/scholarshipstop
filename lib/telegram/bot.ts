@@ -25,6 +25,7 @@ import { SCHOLARSHIPS_HUB_SAVED_TAB_HREF } from '@/app/scholarships/scholarshipL
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import {
+  getFirstTouchNotifySourceKey,
   labelForVisitorRow,
   type TrafficChannel,
   formatFirstTouchVisitorAlertLabel,
@@ -36,10 +37,19 @@ import {
   ADMIN_NOTIFY_CALLBACK_PREFIX,
   ADMIN_NOTIFY_ENABLE_ALL_CALLBACK,
   ADMIN_NOTIFY_LABEL_RU,
+  ADMIN_NOTIFY_TRAFFIC_BACK_CALLBACK,
+  ADMIN_NOTIFY_TRAFFIC_MENU_CALLBACK,
+  ADMIN_NOTIFY_TRAFFIC_SRC_PREFIX,
+  FIRST_TOUCH_NOTIFY_LABEL_RU,
+  FIRST_TOUCH_NOTIFY_SOURCE_KEYS,
   collectTelegramAdminAlertChatIdsForCategory,
+  collectTelegramAdminAlertChatIdsForTrafficSource,
   isAdminNotifyCategoryEnabled,
+  isTrafficNotifySourceEnabled,
   parseAdminNotifyCallback,
+  parseFirstTouchNotifyCallback,
   toggleAdminNotifyCategory,
+  toggleTrafficNotifySource,
   ADMIN_NOTIFY_KEYS,
   type AdminNotifyCategory
 } from '@/lib/telegram/adminNotificationRouting';
@@ -805,7 +815,29 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
 
     const text = lines.join('\n');
 
-    await sendTelegramAdminBroadcastHtml(text, 'traffic');
+    const sourceKey = getFirstTouchNotifySourceKey({
+      traffic_channel: payload.trafficChannel,
+      landing_url: payload.landingUrl,
+      referrer: payload.referrer,
+      utm_source: payload.utm_source,
+      utm_medium: payload.utm_medium,
+      utm_campaign: payload.utm_campaign
+    });
+    const chatIds = await collectTelegramAdminAlertChatIdsForTrafficSource(sourceKey);
+    if (chatIds.length === 0) {
+      console.warn(
+        '[telegram] notifyTelegramAdminsVisitorFirstTouch: no recipient chat IDs for source',
+        sourceKey
+      );
+      return;
+    }
+    for (const chatId of chatIds) {
+      try {
+        await sendTelegramMessage(chatId, text, undefined, { parse_mode: 'HTML' });
+      } catch (e) {
+        console.error('[telegram] notifyTelegramAdminsVisitorFirstTouch chat failed', chatId, e);
+      }
+    }
   } catch (e) {
     console.error('[telegram] notifyTelegramAdminsVisitorFirstTouch failed', e);
   }
@@ -1675,13 +1707,54 @@ function buildAdminNotifyInlineKeyboard(user: TelegramUserRow): TelegramReplyMar
     const on =
       user.notifications_enabled &&
       isAdminNotifyCategoryEnabled(user.admin_notification_prefs, k);
+    if (k === 'traffic') {
+      const row: TelegramInlineButton[] = [
+        button(
+          `${on ? '✅' : '❌'} ${ADMIN_NOTIFY_LABEL_RU[k]}`,
+          `${ADMIN_NOTIFY_CALLBACK_PREFIX}${k}`
+        )
+      ];
+      if (on) {
+        row.push(button('⚙️ Источники', ADMIN_NOTIFY_TRAFFIC_MENU_CALLBACK));
+      }
+      rows.push(row);
+    } else {
+      rows.push([
+        button(
+          `${on ? '✅' : '❌'} ${ADMIN_NOTIFY_LABEL_RU[k]}`,
+          `${ADMIN_NOTIFY_CALLBACK_PREFIX}${k}`
+        )
+      ]);
+    }
+  }
+  return { inline_keyboard: rows };
+}
+
+function formatTrafficSourcesPanelHtml(user: TelegramUserRow): string {
+  const lines = [
+    '<b>Первый визит — источники</b>',
+    'Включи только нужные каналы. Пока список не трогали — пуши приходят со всех источников.',
+    ''
+  ];
+  for (const k of FIRST_TOUCH_NOTIFY_SOURCE_KEYS) {
+    const on = isTrafficNotifySourceEnabled(user.admin_notification_prefs, k);
+    lines.push(`${on ? '✅' : '❌'} ${FIRST_TOUCH_NOTIFY_LABEL_RU[k]}`);
+  }
+  return lines.join('\n');
+}
+
+function buildTrafficSourcesInlineKeyboard(user: TelegramUserRow): TelegramReplyMarkup {
+  const rows: TelegramInlineButton[][] = [];
+  for (const k of FIRST_TOUCH_NOTIFY_SOURCE_KEYS) {
+    const on = isTrafficNotifySourceEnabled(user.admin_notification_prefs, k);
     rows.push([
       button(
-        `${on ? '✅' : '❌'} ${ADMIN_NOTIFY_LABEL_RU[k]}`,
-        `${ADMIN_NOTIFY_CALLBACK_PREFIX}${k}`
+        `${on ? '✅' : '❌'} ${FIRST_TOUCH_NOTIFY_LABEL_RU[k]}`,
+        `${ADMIN_NOTIFY_TRAFFIC_SRC_PREFIX}${k}`
       )
     ]);
   }
+  rows.push([button('← Назад', ADMIN_NOTIFY_TRAFFIC_BACK_CALLBACK)]);
   return { inline_keyboard: rows };
 }
 
@@ -1716,6 +1789,57 @@ async function handleAdminNotifyCallback(
   }
 
   if (!callback.message?.message_id) {
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id);
+    }
+    return;
+  }
+
+  if (data === ADMIN_NOTIFY_TRAFFIC_MENU_CALLBACK) {
+    await callTelegramApi('editMessageText', {
+      chat_id: user.telegram_chat_id,
+      message_id: callback.message.message_id,
+      text: formatTrafficSourcesPanelHtml(user),
+      parse_mode: 'HTML',
+      reply_markup: buildTrafficSourcesInlineKeyboard(user),
+      disable_web_page_preview: true
+    });
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id);
+    }
+    return;
+  }
+
+  if (data === ADMIN_NOTIFY_TRAFFIC_BACK_CALLBACK) {
+    await callTelegramApi('editMessageText', {
+      chat_id: user.telegram_chat_id,
+      message_id: callback.message.message_id,
+      text: formatAdminNotifyPanelHtml(user),
+      parse_mode: 'HTML',
+      reply_markup: buildAdminNotifyInlineKeyboard(user),
+      disable_web_page_preview: true
+    });
+    if (callback.id) {
+      await answerTelegramCallbackQuery(callback.id);
+    }
+    return;
+  }
+
+  const trafficSrc = parseFirstTouchNotifyCallback(data);
+  if (trafficSrc) {
+    const newPrefs = toggleTrafficNotifySource(user.admin_notification_prefs, trafficSrc);
+    const nextUser = await updateTelegramUserState(user.id, {
+      admin_notification_prefs: newPrefs
+    });
+    const fresh = nextUser ?? user;
+    await callTelegramApi('editMessageText', {
+      chat_id: user.telegram_chat_id,
+      message_id: callback.message.message_id,
+      text: formatTrafficSourcesPanelHtml(fresh),
+      parse_mode: 'HTML',
+      reply_markup: buildTrafficSourcesInlineKeyboard(fresh),
+      disable_web_page_preview: true
+    });
     if (callback.id) {
       await answerTelegramCallbackQuery(callback.id);
     }

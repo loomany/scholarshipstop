@@ -244,6 +244,35 @@ export function formatFirstTouchVisitorAlertLabel(args: {
 }
 
 /** Stored row → human label; recomputes from URL/UTM when `traffic_channel` is null (legacy rows). */
+/**
+ * Bucket for first-touch Telegram admin prefs (must match `TRAFFIC_NOTIFY_SOURCE_KEYS`).
+ */
+export type FirstTouchNotifySourceKey =
+  | TrafficChannel
+  | 'tiktok'
+  | 'reddit';
+
+/** Maps a visit to one key for per-source admin notification toggles. */
+export function getFirstTouchNotifySourceKey(args: {
+  traffic_channel: TrafficChannel;
+  landing_url: string;
+  referrer?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+}): FirstTouchNotifySourceKey {
+  const social = getSocialNetworkFirstTouchLabel({
+    landing_url: args.landing_url,
+    referrer: args.referrer,
+    utm_source: args.utm_source,
+    utm_medium: args.utm_medium,
+    utm_campaign: args.utm_campaign
+  });
+  if (social === 'TIKTOK') return 'tiktok';
+  if (social === 'REDDIT') return 'reddit';
+  return args.traffic_channel;
+}
+
 export function labelForVisitorRow(row: {
   traffic_channel?: string | null;
   landing_url: string;

@@ -264,6 +264,86 @@ export async function syncOnboardingFromMetadataIfPresent(
   }
 }
 
+function strMeta(v: unknown): string {
+  return typeof v === 'string' ? v.trim() : '';
+}
+
+/**
+ * Google / OIDC put display name in `full_name` or `name`, sometimes `given_name` / `family_name`.
+ * Email-password signup uses `scholarship_profile` instead — this fills `profiles` when OAuth did not.
+ */
+export function firstLastFromOAuthUserMetadata(
+  meta: Record<string, unknown>
+): { first_name: string | null; last_name: string | null } {
+  const given = strMeta(meta.given_name);
+  const family = strMeta(meta.family_name);
+  if (given || family) {
+    return {
+      first_name: given || null,
+      last_name: family || null
+    };
+  }
+  const full = strMeta(meta.full_name) || strMeta(meta.name);
+  if (!full) {
+    return { first_name: null, last_name: null };
+  }
+  const parts = full.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return { first_name: null, last_name: null };
+  if (parts.length === 1) return { first_name: parts[0], last_name: null };
+  return {
+    first_name: parts[0],
+    last_name: parts.slice(1).join(' ')
+  };
+}
+
+/**
+ * When `profiles.first_name` and `last_name` are still empty, copy from OAuth `user_metadata`
+ * (e.g. Google `full_name`). Skips if either name is already set.
+ */
+export async function syncOAuthNamesToProfilesIfEmpty(
+  supabase: AppSupabaseClient,
+  userId: string,
+  metadata: Record<string, unknown>
+): Promise<void> {
+  const { first_name, last_name } = firstLastFromOAuthUserMetadata(metadata);
+  if (!first_name && !last_name) return;
+
+  const empty = (s: string | null | undefined) =>
+    s == null || (typeof s === 'string' && s.trim() === '');
+
+  const { data: row, error: selErr } = await supabase
+    .schema('public')
+    .from('profiles')
+    .select('first_name,last_name')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (selErr) {
+    console.warn('[onboarding:oauth-names] select failed', selErr.message);
+    return;
+  }
+
+  if (row && (!empty(row.first_name) || !empty(row.last_name))) {
+    return;
+  }
+
+  const payload = pickAllowedProfilesUpsertFields({
+    id: userId,
+    first_name,
+    last_name,
+    updated_at: new Date().toISOString()
+  }) as Database['public']['Tables']['profiles']['Insert'];
+
+  const { error: upErr } = await supabase
+    .schema('public')
+    .from('profiles')
+    .upsert(payload, { onConflict: 'id' });
+
+  if (upErr) {
+    console.warn('[onboarding:oauth-names] upsert failed', upErr.message);
+  }
+}
+
 export type ProfileCitizenshipLocationRow = {
   citizenship_status: string | null;
   citizenship_status_label: string | null;
