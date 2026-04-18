@@ -12,6 +12,9 @@ const PARAMS_TO_STRIP = new Set([
   'utm_term'
 ]);
 
+/** OAuth PKCE / Supabase email OTP — never store in analytics (privacy + smaller GROUP BY keys). */
+const SENSITIVE_AUTH_PARAMS = new Set(['code', 'token_hash']);
+
 export type FirstTouchUrlNormalization = {
   /** URL without strip-list params; keeps utm_source / utm_medium / utm_campaign when present. */
   normalizedUrl: string;
@@ -47,6 +50,15 @@ export function normalizeFirstTouchLandingUrl(raw: string): FirstTouchUrlNormali
     for (const p of PARAMS_TO_STRIP) {
       u.searchParams.delete(p);
     }
+    for (const p of SENSITIVE_AUTH_PARAMS) {
+      u.searchParams.delete(p);
+    }
+
+    /**
+     * Fragment is not sent to the server over HTTP; for SPA auth (e.g. Supabase implicit /
+     * magic-link hash with access_token) it must not be persisted or sent to Telegram.
+     */
+    u.hash = '';
 
     let out = u.toString();
     if (out.length > MAX_URL_LEN) {

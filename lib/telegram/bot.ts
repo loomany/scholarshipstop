@@ -769,6 +769,43 @@ async function sendTelegramAdminBroadcastHtml(text: string, category: AdminNotif
 }
 
 /**
+ * Human-readable landing line for admin Telegram: short path, clickable link without hash/tokens.
+ * Defense-in-depth if a legacy or malformed URL still contains secrets.
+ */
+function formatVisitorFirstTouchLandingTelegramHtml(landingUrl: string): string {
+  try {
+    const u = new URL(landingUrl);
+    u.hash = '';
+    u.searchParams.delete('code');
+    u.searchParams.delete('token_hash');
+    const safeUrl = u.toString();
+    const pathQuery = `${u.pathname}${u.search}` || '/';
+    const displayPath =
+      pathQuery.length > 160 ? `${pathQuery.slice(0, 157)}…` : pathQuery;
+
+    const isSignin = u.pathname === '/signin' || u.pathname.startsWith('/signin/');
+    const isAuthCallback =
+      u.pathname === '/auth/callback' || u.pathname.startsWith('/auth/callback');
+
+    let hint = '';
+    if (isSignin) {
+      hint =
+        '\n<i>Страница входа: часто это открытие magic link из письма. Токены в чат не передаём.</i>';
+    } else if (isAuthCallback) {
+      hint =
+        '\n<i>OAuth / подтверждение email — служебный redirect; параметры входа из ссылки убраны.</i>';
+    }
+
+    return (
+      `<b>Landing:</b> <a href="${escapeTelegramHtml(safeUrl)}">${escapeTelegramHtml(displayPath)}</a>` +
+      hint
+    );
+  } catch {
+    return `<b>Landing:</b> ${escapeTelegramHtml(landingUrl)}`;
+  }
+}
+
+/**
  * First-touch anonymous visit (after DB insert). Same audience as signup admin pings (env + DB admins).
  */
 export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
@@ -810,7 +847,8 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
     lines.push(
       '',
       `<b>Channel:</b> ${escapeTelegramHtml(channelDisplay)}`,
-      `<b>Landing:</b> ${escapeTelegramHtml(payload.landingUrl)}`
+      '',
+      formatVisitorFirstTouchLandingTelegramHtml(payload.landingUrl)
     );
 
     const text = lines.join('\n');
