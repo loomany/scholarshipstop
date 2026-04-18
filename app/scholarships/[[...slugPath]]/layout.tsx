@@ -191,23 +191,21 @@ function jsonLdDocument(s: Scholarship) {
   });
 
   /**
-   * Single primary entity for this URL. Use only `EducationalOccupationalProgram`:
-   * schema.org has no stable `Scholarship` type (404 on schema.org/Scholarship); pairing
-   * it with EOP caused multi-type validation noise. `Offer` + `FinancialAid` below
-   * cover the monetary award when we have a numeric amount.
+   * Primary listing entity: `EducationalOccupationalProgram` (only props valid for this type
+   * on validator.schema.org — no `inLanguage` / `publisher` here; sponsor stays on `provider`).
+   * Monetary amount uses `Offer.priceSpecification` (UnitPriceSpecification), not `itemOffered` +
+   * FinancialAid (invalid / unrecognized in strict validators).
    */
   const program: Record<string, unknown> = {
     '@id': programId,
     '@type': 'EducationalOccupationalProgram',
     name: displayTitle,
     url: absolutePath,
-    inLanguage: 'en-US',
     description: programDescriptionForSchema(
       s,
       displayTitle,
       scholarshipDescription
-    ),
-    publisher: { '@id': publisherId }
+    )
   };
 
   if (deadlineIso) {
@@ -234,22 +232,15 @@ function jsonLdDocument(s: Scholarship) {
     s.payoutMethod !== 'non_monetary';
 
   if (hasNumericAward) {
-    const monetary: Record<string, unknown> = {
-      '@type': 'MonetaryAmount',
-      currency: 'USD',
-      value: awardNumeric
-    };
     program.offers = {
       '@type': 'Offer',
       name: `${displayTitle} — award`,
       url: absolutePath,
       description: `Award amount for ${displayTitle} as listed on ScholarshipTop.`,
-      itemOffered: {
-        '@type': 'FinancialAid',
-        name: `${displayTitle} — financial aid`,
-        description: `Financial aid associated with ${displayTitle}.`,
-        url: absolutePath,
-        amount: monetary
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: awardNumeric,
+        priceCurrency: 'USD'
       }
     };
   }
