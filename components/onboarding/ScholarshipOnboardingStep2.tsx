@@ -56,24 +56,35 @@ export function ScholarshipOnboardingStep2({
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleGoogleAuth = async () => {
-    /** Flush step2 before OAuth — debounced save may not have run yet. */
-    saveStep2DraftFields(
-      {
+    const base = loadStoredOnboardingDraft();
+    if (!base) {
+      toast({
+        variant: 'destructive',
+        title: 'Could not load your answers',
+        description:
+          'Refresh the page and try again, or create an account with email instead.'
+      });
+      return;
+    }
+
+    /** Merge step 2 in memory + persist — avoids losing steps 1–3 when base was ever null. */
+    const draft: typeof base = {
+      ...base,
+      step2: {
         firstName: values.firstName.trim(),
         lastName: values.lastName.trim(),
         email: values.email.trim()
-      },
-      loadStoredOnboardingDraft()
-    );
+      }
+    };
+    saveStep2DraftFields(draft.step2, base);
 
-    const draft = loadStoredOnboardingDraft();
-    const built = draft ? buildCompleteScholarshipUserProfile(draft) : { ok: false as const };
+    const built = buildCompleteScholarshipUserProfile(draft, { forGoogleOAuth: true });
     if (!built.ok) {
       toast({
         variant: 'destructive',
         title: 'Complete your profile first',
         description:
-          'Finish every onboarding step (state, GPA, and this page) before signing in with Google.'
+          'Finish every onboarding step (about you, state, and GPA) before signing in with Google. Account name and email can be filled by Google.'
       });
       return;
     }

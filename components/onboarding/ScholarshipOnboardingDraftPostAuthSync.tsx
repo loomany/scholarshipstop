@@ -35,7 +35,9 @@ export function ScholarshipOnboardingDraftPostAuthSync() {
       const draft = loadStoredOnboardingDraft();
       if (!draft) return;
 
-      const built = buildCompleteScholarshipUserProfile(draft);
+      const built = buildCompleteScholarshipUserProfile(draft, {
+        forGoogleOAuth: true
+      });
       if (!built.ok) return;
 
       inFlight.current = true;

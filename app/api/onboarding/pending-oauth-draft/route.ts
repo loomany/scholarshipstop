@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing draft' }, { status: 400 });
   }
 
-  const built = buildCompleteScholarshipUserProfile(draft);
+  const built = buildCompleteScholarshipUserProfile(draft, { forGoogleOAuth: true });
   if (!built.ok) {
     return NextResponse.json(
       { error: 'Onboarding is incomplete — finish all steps before Google sign-in.' },

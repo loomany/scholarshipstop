@@ -48,6 +48,18 @@ export function validateScholarshipOnboardingStep2Draft(
   return Object.keys(errors).length > 0 ? { ok: false, errors } : { ok: true };
 }
 
+/**
+ * Google OAuth: identity email (and often names) come from the provider.
+ * Only reject a clearly invalid email if the user typed something.
+ */
+export function validateScholarshipOnboardingStep2DraftForGoogleOAuth(
+  s2: OnboardingStep2DraftFields
+): { ok: true } | { ok: false } {
+  const email = s2.email.trim();
+  if (email && !EMAIL_RE.test(email)) return { ok: false };
+  return { ok: true };
+}
+
 /** Full step 2 including password (in-memory only until final signup). */
 export function validateScholarshipOnboardingStep2(
   values: Step2FormValues

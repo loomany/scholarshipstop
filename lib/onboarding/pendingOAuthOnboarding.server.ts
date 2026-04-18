@@ -65,7 +65,7 @@ export async function consumePendingOnboardingDraftAfterOAuth(
   }
 
   const draft = row.draft as unknown as StoredOnboardingDraft;
-  const built = buildCompleteScholarshipUserProfile(draft);
+  const built = buildCompleteScholarshipUserProfile(draft, { forGoogleOAuth: true });
   if (!built.ok) {
     console.warn('[oauth-pending] stored draft failed validation');
     await admin.from('onboarding_oauth_pending').delete().eq('token', token);
