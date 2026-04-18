@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { toast } from '@/components/ui/Toasts/use-toast';
+import { buildCompleteScholarshipUserProfile } from '@/lib/onboarding/buildScholarshipUserProfile';
 import {
   loadStoredOnboardingDraft,
   saveStep2DraftFields,
@@ -54,7 +56,7 @@ export function ScholarshipOnboardingStep2({
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleGoogleAuth = async () => {
-    /** Flush before OAuth redirect — debounced save may not have run yet. */
+    /** Flush step2 before OAuth — debounced save may not have run yet. */
     saveStep2DraftFields(
       {
         firstName: values.firstName.trim(),
@@ -63,16 +65,62 @@ export function ScholarshipOnboardingStep2({
       },
       loadStoredOnboardingDraft()
     );
+
+    const draft = loadStoredOnboardingDraft();
+    const built = draft ? buildCompleteScholarshipUserProfile(draft) : { ok: false as const };
+    if (!built.ok) {
+      toast({
+        variant: 'destructive',
+        title: 'Complete your profile first',
+        description:
+          'Finish every onboarding step (state, GPA, and this page) before signing in with Google.'
+      });
+      return;
+    }
+
     setOauthPending(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: getOAuthRedirectURL('/auth/callback')
+    try {
+      const res = await fetch('/api/onboarding/pending-oauth-draft', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ draft })
+      });
+      if (!res.ok) {
+        const errJson = (await res.json().catch(() => null)) as { error?: string } | null;
+        toast({
+          variant: 'destructive',
+          title: 'Could not save your answers',
+          description:
+            errJson?.error ??
+            'Check your connection and try again, or use email signup instead.'
+        });
+        setOauthPending(false);
+        return;
       }
-    });
-    if (error) {
+
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: getOAuthRedirectURL('/auth/callback')
+        }
+      });
+      if (error) {
+        setOauthPending(false);
+        toast({
+          variant: 'destructive',
+          title: 'Google sign-in failed',
+          description: error.message
+        });
+      }
+    } catch {
       setOauthPending(false);
+      toast({
+        variant: 'destructive',
+        title: 'Something went wrong',
+        description: 'Try again in a moment.'
+      });
     }
   };
 

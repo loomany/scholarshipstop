@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { isSignupConversionEligibleUser } from '@/lib/analytics/googleAdsSignupConversion';
+import { consumePendingOnboardingDraftAfterOAuth } from '@/lib/onboarding/pendingOAuthOnboarding.server';
 import {
   firstLastFromOAuthUserMetadata,
   syncOAuthNamesToProfilesIfEmpty,
@@ -197,6 +198,16 @@ export async function GET(request: NextRequest) {
       userId: userForSync?.id ?? null,
       metadataType: metadata === undefined ? 'undefined' : typeof metadata
     });
+  }
+
+  /** Full onboarding from DB + HttpOnly cookie (before Google OAuth) — does not rely on localStorage. */
+  if (userForSync && session?.access_token) {
+    await consumePendingOnboardingDraftAfterOAuth(
+      request,
+      response,
+      userForSync.id,
+      session.access_token
+    );
   }
 
   if (userForSync && session?.access_token && metaObj) {

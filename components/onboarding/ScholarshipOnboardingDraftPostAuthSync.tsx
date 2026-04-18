@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * After OAuth (Google) signup, onboarding answers live only in localStorage — unlike email signUp,
- * which stores `scholarship_profile` in JWT metadata. When the user is signed in and the draft is
- * complete, upsert into `public.profiles` once (same as email flow) and clear the draft.
+ * Fallback: sync onboarding from localStorage after OAuth if the server-side pending draft
+ * (`/api/onboarding/pending-oauth-draft` + `/auth/callback`) did not run (e.g. old tab).
+ * Email/password signup still uses JWT `scholarship_profile` + callback.
  */
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';

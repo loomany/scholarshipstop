@@ -128,6 +128,27 @@ export interface Database {
         }
         Relationships: []
       },
+      onboarding_oauth_pending: {
+        Row: {
+          token: string
+          draft: Json
+          created_at: string
+          expires_at: string
+        }
+        Insert: {
+          token: string
+          draft: Json
+          created_at?: string
+          expires_at: string
+        }
+        Update: {
+          token?: string
+          draft?: Json
+          created_at?: string
+          expires_at?: string
+        }
+        Relationships: []
+      },
       grant_notification_deliveries: {
         Row: {
           id: string
