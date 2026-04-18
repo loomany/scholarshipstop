@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
 
@@ -29,8 +28,9 @@ export type SiteFaqAccordionProps = {
 };
 
 /**
- * Unified FAQ accordion: one rounded bordered container, row dividers, chevron toggles.
- * Used across the site except the standalone `/faq` marketing page.
+ * FAQ block using native `<details>` / `<summary>` so crawlers and assistive tech get
+ * standard disclosure semantics (works without JS). Kept as a client module because
+ * some call sites live under client components.
  */
 export function SiteFaqAccordion({
   items,
@@ -45,8 +45,6 @@ export function SiteFaqAccordion({
   idPrefix = 'site-faq',
   initialOpenIndex = 0
 }: SiteFaqAccordionProps) {
-  const [open, setOpen] = useState<number | null>(initialOpenIndex);
-
   if (items.length === 0) return null;
 
   const accordion = (
@@ -57,38 +55,33 @@ export function SiteFaqAccordion({
       )}
     >
       {items.map((item, i) => {
-        const isOpen = open === i;
+        const openDefault =
+          initialOpenIndex !== null && i === initialOpenIndex;
         return (
-          <div key={`${i}-${item.question.slice(0, 24)}`}>
-            <button
-              type="button"
-              onClick={() => setOpen(isOpen ? null : i)}
-              className="flex w-full items-center justify-between gap-3 px-4 py-4 text-left text-sm font-semibold text-gray-900 transition hover:bg-gray-50/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 sm:px-5"
-              aria-expanded={isOpen}
+          <details
+            key={`${i}-${item.question.slice(0, 24)}`}
+            className="group"
+            open={openDefault}
+          >
+            <summary
+              className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 text-left text-sm font-semibold text-gray-900 transition marker:content-none hover:bg-gray-50/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 sm:px-5 [&::-webkit-details-marker]:hidden"
               id={`${idPrefix}-q-${i}`}
-              aria-controls={`${idPrefix}-a-${i}`}
             >
               <span className="min-w-0 flex-1 pr-2">{item.question}</span>
               <ChevronDown
-                className={clsx(
-                  'h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200',
-                  isOpen ? 'rotate-180' : ''
-                )}
+                className="h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200 group-open:rotate-180"
                 aria-hidden
               />
-            </button>
+            </summary>
             <div
               id={`${idPrefix}-a-${i}`}
               role="region"
               aria-labelledby={`${idPrefix}-q-${i}`}
-              className={clsx(
-                'border-t border-gray-100 px-4 text-sm leading-relaxed text-gray-600 sm:px-5',
-                isOpen ? 'pb-4 pt-3' : 'hidden'
-              )}
+              className="border-t border-gray-100 px-4 pb-4 pt-3 text-sm leading-relaxed text-gray-600 sm:px-5"
             >
               {item.answer}
             </div>
-          </div>
+          </details>
         );
       })}
     </div>

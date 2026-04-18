@@ -97,23 +97,30 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   const siteUrl = getURL().replace(/\/$/, '');
+  const publisherId = `${siteUrl}#scholarshiptop-publisher`;
+  const websiteId = `${siteUrl}#website`;
   const siteSchema = {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'Organization',
+        '@id': publisherId,
+        '@type': ['Organization', 'EducationalOrganization'],
         name: 'ScholarshipTop',
         url: siteUrl,
         email: 'support@scholarshiptop.com',
+        description:
+          'Scholarship search and application platform helping students find verified scholarships and financial aid opportunities.',
         logo: {
           '@type': 'ImageObject',
           url: `${siteUrl}/icon-192x192.png`
         }
       },
       {
+        '@id': websiteId,
         '@type': 'WebSite',
         name: 'ScholarshipTop',
         url: siteUrl,
+        publisher: { '@id': publisherId },
         potentialAction: {
           '@type': 'SearchAction',
           target: `${siteUrl}/scholarships?q={search_term_string}`,

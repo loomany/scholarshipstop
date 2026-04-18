@@ -128,6 +128,21 @@ export interface Database {
         }
         Relationships: []
       },
+      google_indexing_daily_usage: {
+        Row: {
+          usage_date: string
+          publish_count: number
+        }
+        Insert: {
+          usage_date: string
+          publish_count?: number
+        }
+        Update: {
+          usage_date?: string
+          publish_count?: number
+        }
+        Relationships: []
+      },
       onboarding_oauth_pending: {
         Row: {
           token: string
@@ -1751,6 +1766,10 @@ export interface Database {
           canonical_path: string
           updated_at: string
         }[]
+      }
+      google_indexing_try_consume_quota: {
+        Args: { p_max?: number }
+        Returns: boolean
       }
     }
     Enums: {

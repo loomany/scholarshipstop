@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import HomePageClient from './HomePageClient';
 import FeaturedResources from '@/components/home/FeaturedResources';
 import HomeFinalCta from '@/components/home/HomeFinalCta';
+import { HomePageJsonLd } from '@/components/seo/HomePageJsonLd';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import { fetchHomeResourcesCarouselItems } from '@/lib/home/homeResourcesCarousel';
 import { SITE_BRAND } from '@/lib/seo/siteTitle';
@@ -66,6 +67,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <HomePageJsonLd />
       <HomePageClient />
       <FeaturedResources items={featuredResourceItems} />
       <HomeFinalCta />

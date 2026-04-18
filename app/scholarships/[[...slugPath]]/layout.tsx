@@ -44,6 +44,25 @@ function scholarshipSchemaDescription(s: Scholarship): string | undefined {
   return raw.length > 2000 ? `${raw.slice(0, 1997)}…` : raw;
 }
 
+/**
+ * Schema.org expects a `description` on the main entity when possible.
+ * Avoid empty strings (invalid for Text fields in many validators).
+ */
+function programDescriptionForSchema(
+  s: Scholarship,
+  displayTitle: string,
+  scholarshipDescription: string | undefined
+): string {
+  if (scholarshipDescription?.trim()) return scholarshipDescription;
+  const provider = s.provider?.trim();
+  const bits = [
+    `Scholarship listing: ${displayTitle}.`,
+    provider ? `Listed sponsor or program source: ${provider}.` : null,
+    'Eligibility, deadlines, and award details on this page are summarized from public listing data; confirm all requirements on the official application before you apply.'
+  ].filter(Boolean);
+  return bits.join(' ');
+}
+
 function scholarshipDeadlineIso(s: Scholarship): string | null {
   const iso = s.deadlineAt?.trim();
   if (iso) {
@@ -149,7 +168,12 @@ function jsonLdDocument(s: Scholarship) {
   const displayTitle = s.title?.trim() || 'Scholarship';
   const publisherId = `${siteBase}#scholarshiptop-publisher`;
   const programId = `${absolutePath}#program`;
-  const faqs = faqItems(s);
+  const faqPageId = `${absolutePath}#faqpage`;
+  const faqs = faqItems(s).filter(
+    (f) =>
+      f.question.trim().length > 0 &&
+      f.answer.trim().length > 0
+  );
   const graph: Record<string, unknown>[] = [];
   const scholarshipDescription = scholarshipSchemaDescription(s);
   const deadlineIso = scholarshipDeadlineIso(s);
@@ -166,17 +190,26 @@ function jsonLdDocument(s: Scholarship) {
     }
   });
 
+  /**
+   * Single primary entity for this URL. Use only `EducationalOccupationalProgram`:
+   * schema.org has no stable `Scholarship` type (404 on schema.org/Scholarship); pairing
+   * it with EOP caused multi-type validation noise. `Offer` + `FinancialAid` below
+   * cover the monetary award when we have a numeric amount.
+   */
   const program: Record<string, unknown> = {
     '@id': programId,
     '@type': 'EducationalOccupationalProgram',
     name: displayTitle,
     url: absolutePath,
+    inLanguage: 'en-US',
+    description: programDescriptionForSchema(
+      s,
+      displayTitle,
+      scholarshipDescription
+    ),
     publisher: { '@id': publisherId }
   };
 
-  if (scholarshipDescription) {
-    program.description = scholarshipDescription;
-  }
   if (deadlineIso) {
     program.applicationDeadline = deadlineIso;
   }
@@ -208,10 +241,14 @@ function jsonLdDocument(s: Scholarship) {
     };
     program.offers = {
       '@type': 'Offer',
+      name: `${displayTitle} — award`,
       url: absolutePath,
+      description: `Award amount for ${displayTitle} as listed on ScholarshipTop.`,
       itemOffered: {
         '@type': 'FinancialAid',
-        name: `${displayTitle} — award`,
+        name: `${displayTitle} — financial aid`,
+        description: `Financial aid associated with ${displayTitle}.`,
+        url: absolutePath,
         amount: monetary
       }
     };
@@ -233,6 +270,7 @@ function jsonLdDocument(s: Scholarship) {
   crumbItems.push({ name: displayTitle, item: absolutePath });
 
   graph.push({
+    '@id': `${absolutePath}#breadcrumb`,
     '@type': 'BreadcrumbList',
     itemListElement: crumbItems.map((c, i) => ({
       '@type': 'ListItem',
@@ -242,9 +280,20 @@ function jsonLdDocument(s: Scholarship) {
     }))
   });
 
+  /**
+   * FAQPage: Google rich result for FAQ is limited to certain site categories, but
+   * valid markup still helps Discoverability / assistants / GEO. Required: mainEntity
+   * with Question (name + acceptedAnswer.Answer.text). We also set url/name/@id per WebPage.
+   * Keep in sync with visible FAQ block (≥2 Q&As) on the detail page.
+   */
   if (faqs.length >= 2) {
     graph.push({
+      '@id': faqPageId,
       '@type': 'FAQPage',
+      url: absolutePath,
+      name: `${displayTitle} — Frequently asked questions`,
+      isPartOf: { '@id': `${siteBase}#website` },
+      about: { '@id': programId },
       mainEntity: faqs.map((item) => ({
         '@type': 'Question',
         name: item.question,

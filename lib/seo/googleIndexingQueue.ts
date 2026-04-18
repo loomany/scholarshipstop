@@ -32,6 +32,41 @@ export type GoogleIndexingQueueItem = {
 const GOOGLE_INDEXING_ENDPOINT =
   'https://indexing.googleapis.com/v3/urlNotifications:publish';
 
+/** Default matches GCP Indexing API quota (200 publish requests/day per project). */
+function maxPublishPerDay(): number {
+  const raw = process.env.GOOGLE_INDEXING_MAX_PUBLISH_PER_DAY?.trim();
+  if (!raw) return 200;
+  const n = parseInt(raw, 10);
+  if (!Number.isFinite(n) || n < 0) return 200;
+  return Math.min(Math.floor(n), 50_000);
+}
+
+type ReserveIndexingSlotResult =
+  | 'ok'
+  | 'no_service_role'
+  | 'rpc_error'
+  | 'quota_exhausted';
+
+/**
+ * Reserves one publish slot in DB before calling Google (Pacific calendar day).
+ * When SUPABASE_SERVICE_ROLE_KEY is unset, returns no_service_role so callers can still ping (local dev).
+ */
+async function tryReserveIndexingPublish(
+  admin?: ReturnType<typeof createServiceRoleSupabaseClient>
+): Promise<ReserveIndexingSlotResult> {
+  const client = admin ?? createServiceRoleSupabaseClient();
+  if (!client) return 'no_service_role';
+  const { data, error } = await client.rpc('google_indexing_try_consume_quota', {
+    p_max: maxPublishPerDay()
+  });
+  if (error) {
+    console.error('[google-indexing] quota RPC', error.message);
+    return 'rpc_error';
+  }
+  if (data === true) return 'ok';
+  return 'quota_exhausted';
+}
+
 function normalizeIndexingUrl(value: string): string | null {
   const raw = value.trim();
   if (!raw) return null;
@@ -75,7 +110,12 @@ export type PingGoogleIndexingDirectResult =
   | { ok: true; status: number }
   | {
       ok: false;
-      skipped?: 'invalid_url' | 'missing_credentials' | 'no_token';
+      skipped?:
+        | 'invalid_url'
+        | 'missing_credentials'
+        | 'no_token'
+        | 'daily_quota_exceeded'
+        | 'quota_rpc_unavailable';
       status?: number;
       error?: string;
     };
@@ -83,6 +123,7 @@ export type PingGoogleIndexingDirectResult =
 /**
  * Sends one URL to Google Indexing API immediately (no DB queue).
  * Safe for ephemeral filesystems (e.g. Railway). Errors are logged; does not throw.
+ * Publish volume is capped per Pacific day via `google_indexing_try_consume_quota` when service role is set.
  */
 export async function pingGoogleIndexingDirect(
   url: string,
@@ -101,6 +142,18 @@ export async function pingGoogleIndexingDirect(
         '[google-indexing-direct] missing GOOGLE_INDEXING_CLIENT_EMAIL or GOOGLE_INDEXING_PRIVATE_KEY'
       );
       return { ok: false, skipped: 'missing_credentials' };
+    }
+
+    const slot = await tryReserveIndexingPublish();
+    if (slot === 'quota_exhausted') {
+      await deferIndexingUrlWhenQuotaDeferred(normalized, notificationType);
+      console.warn(
+        `[google-indexing-direct] daily publish cap (${maxPublishPerDay()}/day) — URL queued, API not called`
+      );
+      return { ok: false, skipped: 'daily_quota_exceeded' };
+    }
+    if (slot === 'rpc_error') {
+      return { ok: false, skipped: 'quota_rpc_unavailable' };
     }
 
     const accessToken = await client.getAccessToken();
@@ -356,6 +409,24 @@ export async function enqueueGoogleIndexingUrls(input: {
   };
 }
 
+async function deferIndexingUrlWhenQuotaDeferred(
+  normalizedUrl: string,
+  notificationType: GoogleIndexingNotificationType
+): Promise<void> {
+  const kind = inferGoogleIndexingKindFromUrl(normalizedUrl);
+  if (!kind) return;
+  try {
+    await enqueueGoogleIndexingUrls({
+      urls: [normalizedUrl],
+      kind,
+      notificationType,
+      source: 'auto:quota-deferred'
+    });
+  } catch (e) {
+    console.error('[google-indexing-direct] quota-deferred enqueue', e);
+  }
+}
+
 export async function flushGoogleIndexingQueue(limit = 50) {
   const admin = createServiceRoleSupabaseClient();
   if (!admin) {
@@ -419,9 +490,23 @@ export async function flushGoogleIndexingQueue(limit = 50) {
 
   let sent = 0;
   let failed = 0;
+  let stoppedEarly: 'daily_quota' | 'quota_rpc' | null = null;
 
   for (const row of batch) {
     const notificationType = row.notification_type as GoogleIndexingNotificationType;
+    const slot = await tryReserveIndexingPublish(admin);
+    if (slot === 'quota_exhausted') {
+      console.warn(
+        `[google-indexing-queue] daily publish cap (${maxPublishPerDay()}/day) — leaving remaining rows pending`
+      );
+      stoppedEarly = 'daily_quota';
+      break;
+    }
+    if (slot === 'rpc_error') {
+      stoppedEarly = 'quota_rpc';
+      break;
+    }
+
     try {
       const response = await fetch(GOOGLE_INDEXING_ENDPOINT, {
         method: 'POST',
@@ -478,9 +563,14 @@ export async function flushGoogleIndexingQueue(limit = 50) {
   }
 
   return {
-    ok: failed === 0,
-    processed: batch.length,
+    ok: failed === 0 && stoppedEarly === null,
+    processed: sent + failed,
     sent,
-    failed
+    failed,
+    ...(stoppedEarly === 'daily_quota'
+      ? { skipped: 'Daily publish quota reached (Pacific day); remaining URLs stay pending' }
+      : stoppedEarly === 'quota_rpc'
+        ? { skipped: 'Quota RPC unavailable (apply migration or check DB)' }
+        : {})
   };
 }

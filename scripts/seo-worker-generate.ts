@@ -165,8 +165,12 @@ async function main() {
       .eq('id', row.id);
 
     const ping = await pingGoogleIndexingDirect(hubUrl(pathKey));
+    const skipLabel =
+      ping.ok || !('skipped' in ping) || ping.skipped == null
+        ? 'n/a'
+        : ping.skipped;
     console.log(
-      `[ok] ${pathKey} indexed=${ping.ok} skipped=${ping.skipped ?? 'n/a'}`
+      `[ok] ${pathKey} indexed=${ping.ok} skipped=${skipLabel}`
     );
   }
 
