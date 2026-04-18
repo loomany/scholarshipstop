@@ -1272,6 +1272,15 @@ async function sendAdminPanel(user: TelegramUserRow) {
     }
   }
 
+  if (botVisitorsCount.error) {
+    console.error(
+      '[telegram] admin panel anonymous_visitor_first_touch (bots count)',
+      botVisitorsCount.error.message,
+      botVisitorsCount.error.code,
+      botVisitorsCount.error.details
+    );
+  }
+
   const botLine =
     botVisitorsCount.error != null
       ? 'Оценка ботов (24ч): не удалось загрузить'

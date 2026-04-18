@@ -1,0 +1,8 @@
+{
+  "name": "server-only",
+  "version": "0.0.1",
+  "description": "No-op shim. The npm server-only package throws on load; Next.js replaces it when bundling. Plain Node (tsx, Railway cron) needs this empty package so scripts can import app modules.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT"
+}
