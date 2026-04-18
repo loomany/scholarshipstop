@@ -81,6 +81,23 @@ function normalizeIndexingUrl(value: string): string | null {
   return getURL(raw.startsWith('/') ? raw : `/${raw}`);
 }
 
+/**
+ * One PostgreSQL `INSERT … ON CONFLICT (url)` batch must not list the same `url` twice.
+ * `Set` is not enough: different strings can parse to the same URL (encoding, default port, etc.).
+ */
+function dedupeCanonicalIndexingUrls(urls: string[]): string[] {
+  const byHref = new Map<string, string>();
+  for (const u of urls) {
+    try {
+      const href = new URL(u).href;
+      byHref.set(href, href);
+    } catch {
+      byHref.set(u, u);
+    }
+  }
+  return [...byHref.values()];
+}
+
 function inferGoogleIndexingKindFromUrl(url: string): GoogleIndexingContentKind | null {
   try {
     const pathname = new URL(url).pathname.replace(/\/+$/, '');
@@ -359,7 +376,7 @@ export async function enqueueGoogleIndexingUrls(input: {
     if (normalized) normalizedUrls.push(normalized);
   }
   // One INSERT … ON CONFLICT batch must not list the same conflict key twice.
-  const uniqueUrls = [...new Set(normalizedUrls)];
+  const uniqueUrls = dedupeCanonicalIndexingUrls([...new Set(normalizedUrls)]);
   if (uniqueUrls.length === 0) {
     return { ok: true, enqueued: 0, total: 0, pending: 0 };
   }

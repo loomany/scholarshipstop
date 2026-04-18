@@ -72,7 +72,8 @@
     "cron:scan-indexing": "npx tsx scripts/cron-scan-indexing.ts",
     "cron:google-indexing-flush": "npx tsx scripts/cron-google-indexing-flush.ts",
     "audit:jsonld-sitemap": "dotenv -e .env.local -- npx tsx scripts/audit-jsonld-sitemap.ts",
-    "audit:jsonld-sitemap:dry": "dotenv -e .env.local -- npx tsx scripts/audit-jsonld-sitemap.ts --dry-run"
+    "audit:jsonld-sitemap:dry": "dotenv -e .env.local -- npx tsx scripts/audit-jsonld-sitemap.ts --dry-run",
+    "audit:jsonld-sitemap:prod": "npx tsx scripts/audit-jsonld-sitemap.ts"
   },
   "dependencies": {
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",

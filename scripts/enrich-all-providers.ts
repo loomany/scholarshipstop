@@ -219,7 +219,7 @@ async function main() {
     );
     if (syncedProviderSlugs.length > 0) {
       const queue = await enqueueProviderUrlsForScript(
-        syncedProviderSlugs,
+        [...new Set(syncedProviderSlugs.map((s) => s.trim()))],
         'script:enrich-all-providers:sync'
       );
       console.log(
