@@ -16,6 +16,7 @@ import {
   BookOpen,
   Building2,
   ChevronDown,
+  GitCompareArrows,
   Handshake,
   Info,
   LayoutGrid,
@@ -627,6 +628,10 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     )}
                     onClick={closeMenu}
                   >
+                    <MobileDrawerNavIcon
+                      icon={GitCompareArrows}
+                      active={versusActive}
+                    />
                     <span className="min-w-0">Versus</span>
                   </Link>
                   <button

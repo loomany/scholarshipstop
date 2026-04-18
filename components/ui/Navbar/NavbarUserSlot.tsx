@@ -186,22 +186,13 @@ export default function NavbarUserSlot({
   return (
     <div className="flex min-w-[4.75rem] shrink-0 items-center justify-end gap-2 sm:min-w-[5.5rem] lg:min-w-[13rem]">
       {user ? (
-        <>
-          <Link
-            href="/account"
-            className={clsx(nav.dark, nav.darkAccount, accountActive && nav.darkActive)}
-            title={accountLabel}
-          >
-            {accountLabel}
-          </Link>
-          <button
-            type="button"
-            className={clsx(nav.dark, nav.darkAsButton, 'hidden lg:inline-flex')}
-            onClick={() => void signOut()}
-          >
-            Sign out
-          </button>
-        </>
+        <Link
+          href="/account"
+          className={clsx(nav.dark, nav.darkAccount, accountActive && nav.darkActive)}
+          title={accountLabel}
+        >
+          {accountLabel}
+        </Link>
       ) : (
         <Link
           href="/signin"
