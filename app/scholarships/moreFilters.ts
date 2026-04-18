@@ -55,6 +55,12 @@ export type MoreFiltersState = {
    * Invalid/partial text does not filter (same as onboarding).
    */
   filterStateInput: string;
+  /**
+   * Optional university/provider picked from autocomplete suggestions.
+   * Input text alone does not filter until a matching suggestion is selected.
+   */
+  filterUniversityInput: string;
+  filterUniversitySlug: string | null;
 };
 
 export const REQUIREMENT_TYPE_OPTIONS: {
@@ -282,7 +288,9 @@ export function defaultMoreFiltersFromBounds(bounds: {
     includeGpaBuckets: new Set(),
     includeLocationLabels: new Set(),
     includeEasyApply: new Set(),
-    filterStateInput: ''
+    filterStateInput: '',
+    filterUniversityInput: '',
+    filterUniversitySlug: null
   };
 }
 
@@ -370,7 +378,9 @@ export function cloneMoreFilters(f: MoreFiltersState): MoreFiltersState {
     includeGpaBuckets: new Set(f.includeGpaBuckets),
     includeLocationLabels: new Set(f.includeLocationLabels),
     includeEasyApply: new Set(f.includeEasyApply),
-    filterStateInput: f.filterStateInput
+    filterStateInput: f.filterStateInput,
+    filterUniversityInput: f.filterUniversityInput,
+    filterUniversitySlug: f.filterUniversitySlug
   };
 }
 
@@ -402,6 +412,7 @@ export function countMoreFilterSelections(
   n += f.includeLocationLabels.size;
   n += f.includeEasyApply.size;
   if (f.filterStateInput.trim() !== '') n++;
+  if (f.filterUniversitySlug?.trim()) n++;
   return n;
 }
 
@@ -461,5 +472,6 @@ export function countMoreFilterDeltaFromBaseline(
   );
   n += setSymmetricDiffCount(f.includeEasyApply, baseline.includeEasyApply);
   if (f.filterStateInput.trim() !== baseline.filterStateInput.trim()) n++;
+  if ((f.filterUniversitySlug ?? '') !== (baseline.filterUniversitySlug ?? '')) n++;
   return n;
 }

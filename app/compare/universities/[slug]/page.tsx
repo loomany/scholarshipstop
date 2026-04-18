@@ -24,7 +24,7 @@ import {
 import { getURL } from '@/utils/helpers';
 
 const COMPARE_YEAR = 2026;
-export const revalidate = 3600;
+export const revalidate = 300;
 
 function buildUniversityHubHref(stateCode: string | null | undefined, slug: string | null | undefined) {
   const stateSlug = stateCode ? stateSlugFromCode(stateCode) : null;

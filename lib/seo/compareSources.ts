@@ -94,6 +94,37 @@ export function buildUniversityCompareSourceCandidates(args: {
   return dedupeSources(sources);
 }
 
+export function buildStateCompareSourceCandidates(args: {
+  stateAName: string;
+  stateBName: string;
+}): CompareSourceLink[] {
+  const stateALabel = args.stateAName.trim();
+  const stateBLabel = args.stateBName.trim();
+
+  return dedupeSources([
+    {
+      label: 'Federal Student Aid (U.S. Department of Education)',
+      url: 'https://studentaid.gov',
+      type: 'government'
+    },
+    {
+      label: 'College Scorecard (U.S. Department of Education)',
+      url: 'https://collegescorecard.ed.gov/',
+      type: 'government'
+    },
+    {
+      label: 'NCES College Navigator',
+      url: 'https://nces.ed.gov/collegenavigator/',
+      type: 'government'
+    },
+    {
+      label: `${stateALabel} and ${stateBLabel} scholarship search reference`,
+      url: 'https://www.petersons.com/scholarship-search.aspx',
+      type: 'reference'
+    }
+  ]);
+}
+
 export function parseCompareSources(raw: unknown): CompareSourceLink[] {
   if (!Array.isArray(raw)) return [];
   const parsed: Array<CompareSourceLink | null> = raw.map((item) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Lock, X } from 'lucide-react';
 
 import type {
@@ -135,6 +135,208 @@ function toggleInSet(
   if (on) next.add(id);
   else next.delete(id);
   return next;
+}
+
+type UniversitySuggestion = {
+  slug: string;
+  label: string;
+  stateCode: string | null;
+  scholarshipCount: number;
+};
+
+function UniversityAutocomplete({
+  value,
+  stateInput,
+  onInputChange,
+  onSelect,
+  inputClassName
+}: {
+  value: string;
+  stateInput: string;
+  onInputChange: (next: string) => void;
+  onSelect: (item: UniversitySuggestion) => void;
+  inputClassName: string;
+}) {
+  const genId = useId();
+  const listboxId = `${genId}-listbox`;
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [open, setOpen] = useState(false);
+  const [highlight, setHighlight] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<UniversitySuggestion[]>([]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDoc);
+    return () => document.removeEventListener('mousedown', onDoc);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) {
+      setLoading(false);
+      return;
+    }
+    const query = value.trim();
+    if (query.length < 2) {
+      setSuggestions([]);
+      setLoading(false);
+      return;
+    }
+
+    const ctrl = new AbortController();
+    const t = window.setTimeout(async () => {
+      try {
+        setLoading(true);
+        const sp = new URLSearchParams({
+          q: query,
+          limit: '8'
+        });
+        const trimmedState = stateInput.trim();
+        if (trimmedState) {
+          sp.set('state', trimmedState);
+        }
+        const res = await fetch(
+          `/api/scholarships/university-suggestions?${sp.toString()}`,
+          { signal: ctrl.signal }
+        );
+        if (!res.ok) throw new Error('suggestions failed');
+        const data = (await res.json()) as {
+          suggestions?: UniversitySuggestion[];
+        };
+        setSuggestions(Array.isArray(data.suggestions) ? data.suggestions : []);
+        setHighlight(0);
+      } catch (error) {
+        if (ctrl.signal.aborted) return;
+        setSuggestions([]);
+      } finally {
+        if (!ctrl.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    }, 180);
+
+    return () => {
+      ctrl.abort();
+      window.clearTimeout(t);
+    };
+  }, [open, stateInput, value]);
+
+  const pick = useCallback(
+    (item: UniversitySuggestion) => {
+      onSelect(item);
+      setOpen(false);
+      setHighlight(0);
+      inputRef.current?.focus();
+    },
+    [onSelect]
+  );
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!open && (e.key === 'ArrowDown' || e.key === 'ArrowUp') && value.trim()) {
+      setOpen(true);
+      setHighlight(0);
+      e.preventDefault();
+      return;
+    }
+    if (!open) {
+      if (e.key === 'Escape') setOpen(false);
+      return;
+    }
+    if (e.key === 'Escape') {
+      setOpen(false);
+      e.preventDefault();
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      setHighlight((i) => Math.min(i + 1, Math.max(0, suggestions.length - 1)));
+      e.preventDefault();
+      return;
+    }
+    if (e.key === 'ArrowUp') {
+      setHighlight((i) => Math.max(0, i - 1));
+      e.preventDefault();
+      return;
+    }
+    if (e.key === 'Enter' && suggestions.length > 0) {
+      const row = suggestions[highlight] ?? suggestions[0];
+      if (row) pick(row);
+      e.preventDefault();
+    }
+  };
+
+  const showEmpty = open && !loading && value.trim().length >= 2 && suggestions.length === 0;
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <input
+        ref={inputRef}
+        type="text"
+        autoComplete="off"
+        spellCheck={false}
+        role="combobox"
+        aria-expanded={open}
+        aria-controls={listboxId}
+        aria-autocomplete="list"
+        aria-label="University filter"
+        placeholder="Type a university, e.g. Texas…"
+        className={inputClassName}
+        value={value}
+        onChange={(e) => {
+          onInputChange(e.target.value);
+          setOpen(true);
+          setHighlight(0);
+        }}
+        onFocus={() => {
+          if (value.trim().length >= 2) setOpen(true);
+        }}
+        onKeyDown={onKeyDown}
+      />
+      {open && (loading || suggestions.length > 0 || showEmpty) ? (
+        <div
+          id={listboxId}
+          role="listbox"
+          aria-label="University suggestions"
+          className="absolute z-20 mt-1 max-h-64 w-full overflow-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg"
+        >
+          {loading ? (
+            <div className="px-4 py-2.5 text-sm text-zinc-500">Searching universities...</div>
+          ) : null}
+          {!loading
+            ? suggestions.map((item, idx) => (
+                <button
+                  key={item.slug}
+                  type="button"
+                  role="option"
+                  aria-selected={idx === highlight}
+                  className={`block w-full px-4 py-2.5 text-left hover:bg-zinc-50 ${idx === highlight ? 'bg-zinc-100' : ''}`}
+                  onMouseEnter={() => setHighlight(idx)}
+                  onMouseDown={(ev) => ev.preventDefault()}
+                  onClick={() => pick(item)}
+                >
+                  <span className="block text-sm font-medium text-zinc-900">
+                    {item.label}
+                  </span>
+                  <span className="block text-xs text-zinc-500">
+                    {[item.stateCode, `${item.scholarshipCount} scholarships`]
+                      .filter(Boolean)
+                      .join(' • ')}
+                  </span>
+                </button>
+              ))
+            : null}
+          {showEmpty ? (
+            <div className="px-4 py-2.5 text-sm text-zinc-500">No universities found.</div>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
 export default function ScholarshipsMoreFiltersPanel({
@@ -742,6 +944,39 @@ export default function ScholarshipsMoreFiltersPanel({
                 ))}
               </div>
             ) : null}
+          </section>
+
+          <section className={`py-5 ${divider}`}>
+            <h3 className={sectionTitle}>University</h3>
+            <p className={sectionHint}>
+              Start typing a university name and choose a suggestion from our indexed
+              catalog to narrow results to that school.
+            </p>
+            <div className="mt-4">
+              <UniversityAutocomplete
+                value={value.filterUniversityInput}
+                stateInput={value.filterStateInput}
+                onInputChange={(next) =>
+                  onChange({
+                    ...value,
+                    filterUniversityInput: next,
+                    filterUniversitySlug: null
+                  })
+                }
+                onSelect={(item) =>
+                  onChange({
+                    ...value,
+                    filterUniversityInput: item.label,
+                    filterUniversitySlug: item.slug
+                  })
+                }
+                inputClassName={filterPanelStateInputClass}
+              />
+            </div>
+            <p className="mt-2 text-xs text-zinc-500">
+              Enter at least 2 characters. Filtering applies after you choose a
+              suggestion.
+            </p>
           </section>
 
           <section className={`py-5 ${divider}`}>

@@ -193,6 +193,7 @@ export default async function CompareHubPage({
               resultCount={total}
               showingFrom={showingFrom}
               showingTo={showingTo}
+              suggestionItems={allItems}
             />
           </Suspense>
         ) : null}

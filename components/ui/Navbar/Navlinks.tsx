@@ -315,7 +315,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 className={clsx(nav.dark, versusActive && nav.darkActive)}
                 aria-haspopup="menu"
               >
-                Versus
+                Compare
               </Link>
               <div
                 className="pointer-events-none invisible absolute left-0 top-full z-[110] pt-2 opacity-0 transition-[opacity,visibility] duration-150 ease-out group-hover/versus:pointer-events-auto group-hover/versus:visible group-hover/versus:opacity-100 group-focus-within/versus:pointer-events-auto group-focus-within/versus:visible group-focus-within/versus:opacity-100"
@@ -323,7 +323,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               >
                 <div
                   className="min-w-[280px] max-w-[320px] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg"
-                  aria-label="Versus menu"
+                  aria-label="Compare menu"
                 >
                   {VERSUS_SUBLINKS.map((item) => {
                     const active = sublinkActive(item.href, pathname);
@@ -623,7 +623,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     href={VERSUS_HUB_PATH}
                     className={clsx(
                       nav.darkDrawer,
-                      'flex min-w-0 flex-1 items-center rounded-none rounded-l-lg py-3 pl-3 pr-2',
+                      'flex min-w-0 flex-1 items-center gap-3 rounded-none rounded-l-lg py-3 pl-3 pr-2',
                       versusActive && nav.darkDrawerActive
                     )}
                     onClick={closeMenu}
@@ -632,7 +632,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                       icon={GitCompareArrows}
                       active={versusActive}
                     />
-                    <span className="min-w-0">Versus</span>
+                    <span className="min-w-0">Compare</span>
                   </Link>
                   <button
                     type="button"
@@ -641,7 +641,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     aria-controls={`${menuId}-versus-sub`}
                     id={`${menuId}-versus-chevron`}
                     aria-label={
-                      versusExpanded ? 'Collapse Versus submenu' : 'Expand Versus submenu'
+                      versusExpanded ? 'Collapse Compare submenu' : 'Expand Compare submenu'
                     }
                     onClick={() => setVersusExpanded((o) => !o)}
                   >
@@ -657,7 +657,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 <div
                   id={`${menuId}-versus-sub`}
                   role="region"
-                  aria-label="Versus links"
+                  aria-label="Compare links"
                   className={clsx(
                     'grid transition-[grid-template-rows] duration-200 ease-out',
                     versusExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'

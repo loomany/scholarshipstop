@@ -201,6 +201,7 @@ export default async function UniversityBattlesPage({
               fixedCategory="universities"
               searchPlaceholder="Search university battles"
               resultLabel="university battles"
+              suggestionItems={items}
             />
           </Suspense>
         ) : null}

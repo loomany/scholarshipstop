@@ -112,7 +112,12 @@ export function mergeMoreFilterStates(
     filterStateInput:
       a.filterStateInput.trim() !== ''
         ? a.filterStateInput
-        : b.filterStateInput
+        : b.filterStateInput,
+    filterUniversityInput:
+      a.filterUniversityInput.trim() !== ''
+        ? a.filterUniversityInput
+        : b.filterUniversityInput,
+    filterUniversitySlug: a.filterUniversitySlug ?? b.filterUniversitySlug
   };
 }
 

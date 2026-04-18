@@ -201,6 +201,7 @@ export default async function StateBattlesPage({
               fixedCategory="states"
               searchPlaceholder="Search state wars"
               resultLabel="state wars"
+              suggestionItems={items}
             />
           </Suspense>
         ) : null}

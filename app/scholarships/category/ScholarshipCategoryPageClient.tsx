@@ -177,6 +177,7 @@ export default function ScholarshipCategoryPageClient({
     useState<MoreFiltersState | null>(null);
   const [moreFiltersDraft, setMoreFiltersDraft] =
     useState<MoreFiltersState | null>(null);
+  const appliedProviderSlug = moreFiltersApplied?.filterUniversitySlug ?? null;
   const [previewCount, setPreviewCount] = useState(0);
   const [seoFallbackMeta, setSeoFallbackMeta] =
     useState<SeoListingFallbackMeta | null>(null);
@@ -455,7 +456,8 @@ export default function ScholarshipCategoryPageClient({
               ? moreFiltersToJson(moreFiltersApplied)
               : undefined,
           longTailLegacySlugs: [],
-          seoListingFallback: true
+          seoListingFallback: true,
+          providerSlug: appliedProviderSlug
         });
         if (cancelled || seq !== listFetchSeqRef.current) return;
         const rows = normalizeScholarshipsListRows(data);
@@ -497,7 +499,8 @@ export default function ScholarshipCategoryPageClient({
     categorySlug,
     moreFiltersApplied,
     replaceListingParams,
-    isLockedPremiumCategory
+    isLockedPremiumCategory,
+    appliedProviderSlug
   ]);
 
   useEffect(() => {
@@ -581,7 +584,8 @@ export default function ScholarshipCategoryPageClient({
         searchParams: sp.toString(),
         moreFilters: moreFiltersToJson(moreFiltersDraft),
         longTailLegacySlugs: [],
-        seoListingFallback: true
+        seoListingFallback: true,
+        providerSlug: moreFiltersDraft.filterUniversitySlug
       })
         .then((r) => setPreviewCount(r.total))
         .catch(() => setPreviewCount(0));
@@ -631,6 +635,7 @@ export default function ScholarshipCategoryPageClient({
     if (moreFiltersApplied.includeLocationLabels.size > 0) return true;
     if (moreFiltersApplied.includeEasyApply.size > 0) return true;
     if (moreFiltersApplied.filterStateInput.trim() !== '') return true;
+    if (moreFiltersApplied.filterUniversitySlug) return true;
     if (moreFiltersApplied.citizenshipAudience !== d.citizenshipAudience) {
       return true;
     }

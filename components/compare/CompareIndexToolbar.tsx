@@ -1,15 +1,8 @@
 'use client';
 
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronDown, LayoutGrid, Search, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, LayoutGrid, MapPin, School2, Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
@@ -20,10 +13,12 @@ import { scholarshipCategoriesApplyButtonClass } from '@/lib/constants/scholarsh
 import {
   buildCompareIndexHref,
   parseCompareIndexSearchParams,
+  type CompareIndexItem,
   type CompareIndexCategory,
-  type CompareIndexQueryState,
-  type CompareIndexSort
+  type CompareIndexQueryState
 } from '@/lib/seo/compareIndexFilters';
+import { parseStateVsSlug, stateLabelFromSlug } from '@/lib/seo/stateCompareSlug';
+import { parseUniversityVsSlug } from '@/lib/seo/universityCompareSlug';
 
 const PANEL_GAP = 8;
 const PANEL_VPAD = 12;
@@ -48,6 +43,14 @@ type CompareIndexToolbarProps = {
   fixedCategory?: CompareIndexCategory;
   searchPlaceholder?: string;
   resultLabel?: string;
+  suggestionItems: CompareIndexItem[];
+};
+
+type SearchSuggestion = {
+  id: string;
+  label: string;
+  kind: 'state' | 'university';
+  searchValue: string;
 };
 
 function measurePanel(el: HTMLElement): PanelLayout {
@@ -73,6 +76,59 @@ function stateFromSearchParams(sp: URLSearchParams): CompareIndexQueryState {
   });
 }
 
+function humanizeSlug(raw: string): string {
+  return raw
+    .split('-')
+    .filter(Boolean)
+    .map((part) =>
+      part.length <= 3
+        ? part.toUpperCase()
+        : `${part[0]?.toUpperCase() ?? ''}${part.slice(1)}`
+    )
+    .join(' ');
+}
+
+function buildSearchSuggestions(
+  items: CompareIndexItem[],
+  fixedCategory?: CompareIndexCategory
+): SearchSuggestion[] {
+  const seen = new Set<string>();
+  const out: SearchSuggestion[] = [];
+
+  for (const item of items) {
+    if (fixedCategory && fixedCategory !== 'all' && item.type !== fixedCategory) {
+      continue;
+    }
+
+    if (item.type === 'states') {
+      const pair = parseStateVsSlug(item.slug);
+      if (!pair) continue;
+      for (const slug of pair) {
+        const label = stateLabelFromSlug(slug) ?? humanizeSlug(slug);
+        const key = `state:${label.toLowerCase()}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push({ id: key, label, kind: 'state', searchValue: label });
+      }
+      continue;
+    }
+
+    const pair = parseUniversityVsSlug(item.slug);
+    if (!pair) continue;
+    for (const slug of pair) {
+      const label = humanizeSlug(slug);
+      const key = `university:${label.toLowerCase()}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ id: key, label, kind: 'university', searchValue: label });
+    }
+  }
+
+  return out.sort((left, right) =>
+    left.label.localeCompare(right.label, 'en', { sensitivity: 'base' })
+  );
+}
+
 const CATEGORY_OPTIONS: {
   id: CompareIndexCategory;
   label: string;
@@ -81,11 +137,6 @@ const CATEGORY_OPTIONS: {
   { id: 'all', label: 'All comparisons' },
   { id: 'universities', label: 'University battles', countKey: 'universities' },
   { id: 'states', label: 'State wars', countKey: 'states' }
-];
-
-const SORT_OPTIONS: { value: CompareIndexSort; label: string }[] = [
-  { value: 'latest', label: 'Latest first' },
-  { value: 'title', label: 'Title A-Z' }
 ];
 
 export default function CompareIndexToolbar({
@@ -97,7 +148,8 @@ export default function CompareIndexToolbar({
   showCategories = true,
   fixedCategory,
   searchPlaceholder = 'Search comparisons',
-  resultLabel = 'comparisons'
+  resultLabel = 'comparisons',
+  suggestionItems
 }: CompareIndexToolbarProps) {
   const router = useRouter();
   const sp = useSearchParams();
@@ -105,19 +157,17 @@ export default function CompareIndexToolbar({
 
   const [searchDraft, setSearchDraft] = useState(applied.q);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [draftCategory, setDraftCategory] =
     useState<CompareIndexCategory>(applied.category);
   const [categoryPanelLayout, setCategoryPanelLayout] =
     useState<PanelLayout | null>(null);
-  const [filtersPanelLayout, setFiltersPanelLayout] =
-    useState<PanelLayout | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const [suggestionHighlight, setSuggestionHighlight] = useState(0);
 
+  const searchRef = useRef<HTMLDivElement>(null);
   const categoriesRef = useRef<HTMLDivElement>(null);
   const categoryDropdownRef = useRef<HTMLDivElement>(null);
-  const filtersRef = useRef<HTMLDivElement>(null);
-  const filtersDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -141,11 +191,15 @@ export default function CompareIndexToolbar({
             ? patch.page
             : applied.page
       };
-      const href = buildCompareIndexHref(next.page, {
-        q: next.q,
-        category: next.category,
-        sort: next.sort
-      }, basePath);
+      const href = buildCompareIndexHref(
+        next.page,
+        {
+          q: next.q,
+          category: next.category,
+          sort: next.sort
+        },
+        basePath
+      );
       router.replace(href, { scroll: false });
     },
     [applied, basePath, fixedCategory, router]
@@ -160,17 +214,35 @@ export default function CompareIndexToolbar({
     return () => window.clearTimeout(t);
   }, [searchDraft, applied.q, replaceState]);
 
+  const allSuggestions = useMemo(
+    () => buildSearchSuggestions(suggestionItems, fixedCategory),
+    [suggestionItems, fixedCategory]
+  );
+
+  const filteredSuggestions = useMemo(() => {
+    const q = searchDraft.trim().toLowerCase();
+    if (!q) return [];
+
+    const starts = allSuggestions.filter((item) =>
+      item.label.toLowerCase().startsWith(q)
+    );
+    const contains = allSuggestions.filter((item) => {
+      const low = item.label.toLowerCase();
+      return !low.startsWith(q) && low.includes(q);
+    });
+    return [...starts, ...contains].slice(0, 8);
+  }, [allSuggestions, searchDraft]);
+
+  useEffect(() => {
+    if (!suggestionsOpen) return;
+    setSuggestionHighlight(0);
+  }, [suggestionsOpen, filteredSuggestions.length]);
+
   const updateCategoryPanelLayout = useCallback(() => {
     const wrap = categoriesRef.current;
     if (!wrap || !categoriesOpen) return;
     setCategoryPanelLayout(measurePanel(wrap));
   }, [categoriesOpen]);
-
-  const updateFiltersPanelLayout = useCallback(() => {
-    const wrap = filtersRef.current;
-    if (!wrap || !filtersOpen) return;
-    setFiltersPanelLayout(measurePanel(wrap));
-  }, [filtersOpen]);
 
   useLayoutEffect(() => {
     if (!categoriesOpen) {
@@ -179,14 +251,6 @@ export default function CompareIndexToolbar({
     }
     updateCategoryPanelLayout();
   }, [categoriesOpen, updateCategoryPanelLayout]);
-
-  useLayoutEffect(() => {
-    if (!filtersOpen) {
-      setFiltersPanelLayout(null);
-      return;
-    }
-    updateFiltersPanelLayout();
-  }, [filtersOpen, updateFiltersPanelLayout]);
 
   useEffect(() => {
     if (!categoriesOpen) return;
@@ -200,41 +264,29 @@ export default function CompareIndexToolbar({
   }, [categoriesOpen, updateCategoryPanelLayout]);
 
   useEffect(() => {
-    if (!filtersOpen) return;
-    const onRe = () => updateFiltersPanelLayout();
-    window.addEventListener('resize', onRe);
-    window.addEventListener('scroll', onRe, true);
-    return () => {
-      window.removeEventListener('resize', onRe);
-      window.removeEventListener('scroll', onRe, true);
-    };
-  }, [filtersOpen, updateFiltersPanelLayout]);
-
-  useEffect(() => {
-    if (!categoriesOpen && !filtersOpen) return;
+    if (!categoriesOpen && !suggestionsOpen) return;
     const onDown = (e: MouseEvent) => {
       const t = e.target as Node;
+      if (searchRef.current?.contains(t)) return;
       if (categoriesRef.current?.contains(t)) return;
       if (categoryDropdownRef.current?.contains(t)) return;
-      if (filtersRef.current?.contains(t)) return;
-      if (filtersDropdownRef.current?.contains(t)) return;
       setCategoriesOpen(false);
-      setFiltersOpen(false);
+      setSuggestionsOpen(false);
     };
     document.addEventListener('mousedown', onDown);
     return () => document.removeEventListener('mousedown', onDown);
-  }, [categoriesOpen, filtersOpen]);
+  }, [categoriesOpen, suggestionsOpen]);
 
   useEffect(() => {
-    if (!categoriesOpen && !filtersOpen) return;
+    if (!categoriesOpen && !suggestionsOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       setCategoriesOpen(false);
-      setFiltersOpen(false);
+      setSuggestionsOpen(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [categoriesOpen, filtersOpen]);
+  }, [categoriesOpen, suggestionsOpen]);
 
   useEffect(() => {
     if (!categoriesOpen) return;
@@ -242,10 +294,7 @@ export default function CompareIndexToolbar({
   }, [categoriesOpen, applied.category]);
 
   const effectiveCategory = fixedCategory ?? applied.category;
-  const filtersActiveCount = applied.sort !== 'latest' ? 1 : 0;
   const categoryTriggerCount = effectiveCategory !== 'all' ? 1 : 0;
-  const optionSelectedClass = 'bg-gray-100 font-medium text-gray-900';
-  const optionDefaultClass = 'text-gray-600';
 
   const categoryDropdown =
     mounted &&
@@ -326,55 +375,11 @@ export default function CompareIndexToolbar({
       document.body
     );
 
-  const filtersDropdown =
-    mounted &&
-    filtersOpen &&
-    filtersPanelLayout &&
-    createPortal(
-      <div
-        ref={filtersDropdownRef}
-        role="dialog"
-        aria-label="Filters"
-        className="fixed z-[200] flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white py-2 shadow-sm ring-1 ring-zinc-900/5"
-        style={{
-          top: filtersPanelLayout.top,
-          left: filtersPanelLayout.left,
-          width: filtersPanelLayout.width,
-          maxHeight: filtersPanelLayout.maxHeight
-        }}
-      >
-        <div className="border-b border-zinc-100 px-4 py-2">
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-            Sort
-          </p>
-        </div>
-        <ul role="listbox" aria-label="Sort comparisons" className="py-1">
-          {SORT_OPTIONS.map((opt) => (
-            <li key={opt.value} role="option">
-              <button
-                type="button"
-                className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 ${
-                  applied.sort === opt.value ? optionSelectedClass : optionDefaultClass
-                }`}
-                onClick={() => {
-                  replaceState({ sort: opt.value, resetPage: true });
-                  setFiltersOpen(false);
-                }}
-              >
-                {opt.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>,
-      document.body
-    );
-
   return (
     <div className="relative z-[70] mt-6 max-w-3xl space-y-2">
       <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
         <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
-          <div className="relative min-w-0 flex-1">
+          <div ref={searchRef} className="relative min-w-0 flex-1">
             <Search
               className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-400"
               strokeWidth={2}
@@ -382,48 +387,90 @@ export default function CompareIndexToolbar({
             />
             <input
               value={searchDraft}
-              onChange={(e) => setSearchDraft(e.target.value)}
+              onChange={(e) => {
+                setSearchDraft(e.target.value);
+                setSuggestionsOpen(e.target.value.trim().length > 0);
+              }}
+              onFocus={() => {
+                if (searchDraft.trim()) setSuggestionsOpen(true);
+              }}
+              onKeyDown={(e) => {
+                if (!suggestionsOpen || filteredSuggestions.length === 0) return;
+                if (e.key === 'ArrowDown') {
+                  setSuggestionHighlight((i) =>
+                    Math.min(i + 1, filteredSuggestions.length - 1)
+                  );
+                  e.preventDefault();
+                  return;
+                }
+                if (e.key === 'ArrowUp') {
+                  setSuggestionHighlight((i) => Math.max(i - 1, 0));
+                  e.preventDefault();
+                  return;
+                }
+                if (e.key === 'Enter') {
+                  const item =
+                    filteredSuggestions[suggestionHighlight] ?? filteredSuggestions[0];
+                  if (!item) return;
+                  setSearchDraft(item.searchValue);
+                  setSuggestionsOpen(false);
+                  replaceState({ q: item.searchValue, resetPage: true });
+                  e.preventDefault();
+                }
+              }}
               placeholder={searchPlaceholder}
               aria-label={searchPlaceholder}
               className={CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS}
             />
+            {suggestionsOpen && filteredSuggestions.length > 0 ? (
+              <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-[120] overflow-hidden rounded-2xl border border-zinc-200 bg-white py-1 shadow-sm ring-1 ring-zinc-900/5">
+                <ul role="listbox" aria-label="Search suggestions">
+                  {filteredSuggestions.map((item, idx) => {
+                    const active = idx === suggestionHighlight;
+                    return (
+                      <li key={item.id} role="option" aria-selected={active}>
+                        <button
+                          type="button"
+                          className={`flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-zinc-50 ${active ? 'bg-zinc-100' : ''}`}
+                          onMouseEnter={() => setSuggestionHighlight(idx)}
+                          onMouseDown={(ev) => ev.preventDefault()}
+                          onClick={() => {
+                            setSearchDraft(item.searchValue);
+                            setSuggestionsOpen(false);
+                            replaceState({ q: item.searchValue, resetPage: true });
+                          }}
+                        >
+                          <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-600">
+                            {item.kind === 'state' ? (
+                              <MapPin className="h-4 w-4" strokeWidth={2} aria-hidden />
+                            ) : (
+                              <School2 className="h-4 w-4" strokeWidth={2} aria-hidden />
+                            )}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-sm font-medium text-zinc-900">
+                              {item.label}
+                            </span>
+                            <span className="block text-xs text-zinc-500">
+                              {item.kind === 'state' ? 'State' : 'University'}
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : null}
           </div>
-          <div className="flex w-full min-w-0 flex-wrap items-center gap-3 sm:w-auto sm:shrink-0">
-            <div className="relative min-w-0 sm:min-w-0" ref={filtersRef}>
-              <button
-                type="button"
-                aria-label="Open filters"
-                aria-expanded={filtersOpen}
-                aria-haspopup="dialog"
-                onClick={() => {
-                  setCategoriesOpen(false);
-                  setFiltersOpen((open) => !open);
-                }}
-                className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
-              >
-                <SlidersHorizontal
-                  className="h-[18px] w-[18px] shrink-0 text-gray-600"
-                  strokeWidth={2}
-                  aria-hidden
-                />
-                Filters
-                {filtersActiveCount > 0 ? (
-                  <span className="tabular-nums text-gray-600">
-                    ({filtersActiveCount})
-                  </span>
-                ) : null}
-              </button>
-            </div>
-            {showCategories ? (
+          {showCategories ? (
+            <div className="flex w-full min-w-0 flex-wrap items-center gap-3 sm:w-auto sm:shrink-0">
               <div className="relative min-w-0 sm:min-w-0" ref={categoriesRef}>
                 <button
                   type="button"
                   aria-expanded={categoriesOpen}
                   aria-haspopup="dialog"
-                  onClick={() => {
-                    setFiltersOpen(false);
-                    setCategoriesOpen((open) => !open);
-                  }}
+                  onClick={() => setCategoriesOpen((open) => !open)}
                   className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
                 >
                   <LayoutGrid className="h-[18px] w-[18px] text-gray-600" />
@@ -439,8 +486,8 @@ export default function CompareIndexToolbar({
                   />
                 </button>
               </div>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -453,7 +500,6 @@ export default function CompareIndexToolbar({
       ) : null}
 
       {showCategories ? categoryDropdown : null}
-      {filtersDropdown}
     </div>
   );
 }

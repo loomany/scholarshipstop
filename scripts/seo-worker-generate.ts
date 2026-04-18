@@ -21,6 +21,7 @@ import {
   stateCompareAiPayloadToJson
 } from '../lib/seo/comparePageAi';
 import {
+  buildStateCompareSourceCandidates,
   buildUniversityCompareSourceCandidates,
   parseCompareSources
 } from '../lib/seo/compareSources';
@@ -534,11 +535,16 @@ async function runStateCompareFlow(args: {
 
   const { data: existingPage } = await admin
     .from('state_compare_pages')
-    .select('id, ai_verdict')
+    .select('id, ai_verdict, content_json')
     .eq('slug', canon)
     .maybeSingle();
 
-  if (existingPage?.ai_verdict?.trim()) {
+  const refreshExistingStateCompare = argFlag('refresh-existing-state-compare');
+  const shouldRefreshExistingStateCompare =
+    Boolean(existingPage?.ai_verdict?.trim()) &&
+    (refreshExistingStateCompare || !contentJsonHasSources(existingPage?.content_json));
+
+  if (existingPage?.ai_verdict?.trim() && !shouldRefreshExistingStateCompare) {
     if (!dryRun) {
       await admin
         .from('seo_generation_queue')
@@ -548,9 +554,16 @@ async function runStateCompareFlow(args: {
     return;
   }
 
+  const sourceCandidates = buildStateCompareSourceCandidates({
+    stateAName: left.name,
+    stateBName: right.name
+  });
+
   if (dryRun) {
     console.log(
-      `[DRY RUN] would generate state compare ${canon} (priority=${row.priority}, grants≈${ca}+${cb})`
+      `[DRY RUN] would ${
+        shouldRefreshExistingStateCompare ? 'refresh' : 'generate'
+      } state compare ${canon} (priority=${row.priority}, grants≈${ca}+${cb})`
     );
     return;
   }
@@ -565,7 +578,8 @@ async function runStateCompareFlow(args: {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     generated = await generateStateCompareWithOpenAi({
       factsJson: JSON.stringify(rpcData),
-      year
+      year,
+      sourceCandidates
     });
     if (generated) break;
     lastErr = 'OpenAI returned empty state compare payload';

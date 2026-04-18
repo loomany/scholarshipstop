@@ -72,6 +72,7 @@
     "seo:enqueue-university-compare": "dotenv -e .env.local -- npx tsx scripts/enqueue-university-compare.ts",
     "seo:enqueue-state-compare": "dotenv -e .env.local -- npx tsx scripts/enqueue-state-compare.ts",
     "seo:refresh-university-compare-sources": "dotenv -e .env.local -- npx tsx scripts/refresh-university-compare-sources.ts",
+    "seo:refresh-state-compare-pages": "dotenv -e .env.local -- npx tsx scripts/refresh-state-compare-pages.ts",
     "seo:daily-digest-telegram": "dotenv -e .env.local -- node scripts/post-seo-daily-digest-telegram.mjs",
     "cron:check-index-worker": "npx tsx scripts/cron-check-index-worker.ts",
     "cron:scan-indexing": "npx tsx scripts/cron-scan-indexing.ts",

@@ -11,9 +11,13 @@ export type MoreFiltersJson = Omit<
   | 'includeLocationLabels'
   | 'includeEasyApply'
   | 'citizenshipAudience'
+  | 'filterUniversityInput'
+  | 'filterUniversitySlug'
 > & {
   /** Omitted in older saved snapshots — decoded as `any`. */
   citizenshipAudience?: MoreFiltersState['citizenshipAudience'];
+  filterUniversityInput?: string;
+  filterUniversitySlug?: string | null;
   includeRequirementTypes: string[];
   includeEligibility: string[];
   includeEducationLevels: string[];
@@ -95,6 +99,14 @@ export function moreFiltersFromJson(
     includeLocationLabels: new Set(raw.includeLocationLabels ?? []),
     includeEasyApply: new Set(raw.includeEasyApply ?? []),
     filterStateInput:
-      typeof raw.filterStateInput === 'string' ? raw.filterStateInput : ''
+      typeof raw.filterStateInput === 'string' ? raw.filterStateInput : '',
+    filterUniversityInput:
+      typeof raw.filterUniversityInput === 'string'
+        ? raw.filterUniversityInput
+        : '',
+    filterUniversitySlug:
+      typeof raw.filterUniversitySlug === 'string' && raw.filterUniversitySlug.trim()
+        ? raw.filterUniversitySlug.trim()
+        : null
   };
 }

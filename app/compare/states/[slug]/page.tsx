@@ -17,7 +17,7 @@ import {
 import { getURL } from '@/utils/helpers';
 
 const COMPARE_YEAR = 2026;
-export const revalidate = 3600;
+export const revalidate = 300;
 
 function buildUniversityHubHref(
   stateSlug: string | null | undefined,
@@ -137,6 +137,7 @@ export default async function StateComparePage({
     essayTextB: climate?.state_b,
     limit: 3
   });
+  const topUniversityRowCount = Math.max(topA.length, topB.length, 1);
 
   const faqJsonLd =
     faqItems.length > 0
@@ -310,125 +311,182 @@ export default async function StateComparePage({
           </div>
         </section>
 
-        <section className="mt-10 grid gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold tracking-tight text-gray-900">
-                  Top universities in {stateA.name}
-                </h2>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                  Institutions currently surfacing the most scholarships in this state.
-                </p>
-              </div>
-            </div>
-            <ul className="mt-5 space-y-4">
-              {topA.length > 0 ? (
-                topA.map((item, index) => {
-                  const universityName = String(item['name'] ?? 'Unknown university');
-                  const href = buildUniversityHubHref(
-                    stateA.slug,
-                    typeof item['slug'] === 'string' ? item['slug'] : null
-                  );
-                  return (
-                    <li
-                      key={`${String(item['slug'] ?? item['name'])}-${index}`}
-                      className="rounded-xl border border-gray-200 bg-gray-50/70 p-4"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        {href ? (
-                          <Link
-                            href={href}
-                            className="font-semibold text-gray-900 underline decoration-sky-500/30 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
-                          >
-                            {universityName}
-                          </Link>
-                        ) : (
-                          <span className="font-semibold text-gray-900">{universityName}</span>
-                        )}
-                        <span className="shrink-0 tabular-nums text-sm text-gray-500">
-                          {fmtNum(item['grant_count'], 0)}
-                        </span>
-                      </div>
-                    </li>
-                  );
-                })
-              ) : (
-                <li className="rounded-xl border border-gray-200 bg-gray-50/70 p-4 text-sm text-gray-600">
-                  No data available.
-                </li>
-              )}
-            </ul>
-            {topStateAHref ? (
-              <p className="mt-5">
-                <Link
-                  href={topStateAHref}
-                  className="text-sm font-semibold text-sky-700 underline decoration-sky-500/35 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
-                >
-                  See all scholarships in {stateA.name} →
-                </Link>
-              </p>
-            ) : null}
+        <section
+          className="mt-10 rounded-2xl border border-sky-100 bg-gradient-to-b from-sky-50/80 to-white p-6 shadow-sm sm:p-8"
+          aria-labelledby="top-universities-by-state-heading"
+        >
+          <div className="max-w-3xl">
+            <h2
+              id="top-universities-by-state-heading"
+              className="text-center text-xl font-bold tracking-tight text-gray-900"
+            >
+              Top universities by state
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
+              Each side highlights the strongest university scholarship hubs currently indexed in
+              that state.
+            </p>
           </div>
 
-          <div className="rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold tracking-tight text-gray-900">
-                  Top universities in {stateB.name}
-                </h2>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                  Institutions currently surfacing the most scholarships in this state.
-                </p>
+          <div className="mt-6 grid gap-6 lg:grid-cols-2 lg:gap-8">
+            <div className="min-w-0">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
+                    Top universities in {stateA.name}
+                  </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-600">
+                    Institutions currently surfacing the most scholarships in this state.
+                  </p>
+                  {topStateAHref ? (
+                    <p className="mt-2 text-sm font-medium text-orange-600">
+                      <Link
+                        href={topStateAHref}
+                        className="underline decoration-orange-400/40 underline-offset-4 transition hover:text-orange-700 hover:decoration-orange-600"
+                      >
+                        See all scholarships in {stateA.name}
+                      </Link>
+                    </p>
+                  ) : null}
+                </div>
+                <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600">
+                  Top {Math.max(1, topA.length)}
+                </span>
               </div>
             </div>
-            <ul className="mt-5 space-y-4">
-              {topB.length > 0 ? (
-                topB.map((item, index) => {
-                  const universityName = String(item['name'] ?? 'Unknown university');
-                  const href = buildUniversityHubHref(
+
+            <div className="min-w-0">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
+                    Top universities in {stateB.name}
+                  </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-600">
+                    Institutions currently surfacing the most scholarships in this state.
+                  </p>
+                  {topStateBHref ? (
+                    <p className="mt-2 text-sm font-medium text-orange-600">
+                      <Link
+                        href={topStateBHref}
+                        className="underline decoration-orange-400/40 underline-offset-4 transition hover:text-orange-700 hover:decoration-orange-600"
+                      >
+                        See all scholarships in {stateB.name}
+                      </Link>
+                    </p>
+                  ) : null}
+                </div>
+                <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600">
+                  Top {Math.max(1, topB.length)}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {Array.from({ length: topUniversityRowCount }, (_, index) => {
+              const leftItem = topA[index] ?? null;
+              const rightItem = topB[index] ?? null;
+              const leftHref = leftItem
+                ? buildUniversityHubHref(
+                    stateA.slug,
+                    typeof leftItem['slug'] === 'string' ? leftItem['slug'] : null
+                  )
+                : null;
+              const rightHref = rightItem
+                ? buildUniversityHubHref(
                     stateB.slug,
-                    typeof item['slug'] === 'string' ? item['slug'] : null
-                  );
-                  return (
-                    <li
-                      key={`${String(item['slug'] ?? item['name'])}-${index}`}
-                      className="rounded-xl border border-gray-200 bg-gray-50/70 p-4"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        {href ? (
-                          <Link
-                            href={href}
-                            className="font-semibold text-gray-900 underline decoration-sky-500/30 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
-                          >
-                            {universityName}
-                          </Link>
-                        ) : (
-                          <span className="font-semibold text-gray-900">{universityName}</span>
-                        )}
-                        <span className="shrink-0 tabular-nums text-sm text-gray-500">
-                          {fmtNum(item['grant_count'], 0)}
-                        </span>
+                    typeof rightItem['slug'] === 'string' ? rightItem['slug'] : null
+                  )
+                : null;
+
+              return (
+                <div key={`state-university-row-${index}`} className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                  <div className="min-w-0">
+                    {leftItem ? (
+                      <article className="flex h-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md">
+                        <div className="w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] bg-gray-900" aria-hidden />
+                        <div className="flex min-w-0 flex-1 items-start justify-between gap-4 px-4 py-4 sm:px-5 sm:py-5">
+                          <div className="min-w-0">
+                            <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                              University hub
+                            </p>
+                            {leftHref ? (
+                              <Link
+                                href={leftHref}
+                                className="mt-1 block text-base font-semibold leading-snug tracking-tight text-gray-900 underline decoration-sky-500/30 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
+                              >
+                                {String(leftItem['name'] ?? 'Unknown university')}
+                              </Link>
+                            ) : (
+                              <p className="mt-1 text-base font-semibold leading-snug tracking-tight text-gray-900">
+                                {String(leftItem['name'] ?? 'Unknown university')}
+                              </p>
+                            )}
+                            <p className="mt-2 text-sm leading-relaxed text-gray-500">
+                              Ranked here by active scholarship count in the current state catalog.
+                            </p>
+                          </div>
+                          <div className="shrink-0 text-right">
+                            <p className="text-sm font-semibold tabular-nums text-gray-900">
+                              {fmtNum(leftItem['grant_count'], 0)}
+                            </p>
+                            <p className="mt-1 text-[11px] font-medium text-gray-500">
+                              scholarships
+                            </p>
+                          </div>
+                        </div>
+                      </article>
+                    ) : (
+                      <div className="flex h-full min-w-0 items-center rounded-xl border border-dashed border-gray-200 bg-white/80 px-4 py-5 text-sm text-gray-500 sm:px-5">
+                        No university data available for this row yet.
                       </div>
-                    </li>
-                  );
-                })
-              ) : (
-                <li className="rounded-xl border border-gray-200 bg-gray-50/70 p-4 text-sm text-gray-600">
-                  No data available.
-                </li>
-              )}
-            </ul>
-            {topStateBHref ? (
-              <p className="mt-5">
-                <Link
-                  href={topStateBHref}
-                  className="text-sm font-semibold text-sky-700 underline decoration-sky-500/35 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
-                >
-                  See all scholarships in {stateB.name} →
-                </Link>
-              </p>
-            ) : null}
+                    )}
+                  </div>
+
+                  <div className="min-w-0">
+                    {rightItem ? (
+                      <article className="flex h-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md">
+                        <div className="w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] bg-gray-900" aria-hidden />
+                        <div className="flex min-w-0 flex-1 items-start justify-between gap-4 px-4 py-4 sm:px-5 sm:py-5">
+                          <div className="min-w-0">
+                            <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                              University hub
+                            </p>
+                            {rightHref ? (
+                              <Link
+                                href={rightHref}
+                                className="mt-1 block text-base font-semibold leading-snug tracking-tight text-gray-900 underline decoration-sky-500/30 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
+                              >
+                                {String(rightItem['name'] ?? 'Unknown university')}
+                              </Link>
+                            ) : (
+                              <p className="mt-1 text-base font-semibold leading-snug tracking-tight text-gray-900">
+                                {String(rightItem['name'] ?? 'Unknown university')}
+                              </p>
+                            )}
+                            <p className="mt-2 text-sm leading-relaxed text-gray-500">
+                              Ranked here by active scholarship count in the current state catalog.
+                            </p>
+                          </div>
+                          <div className="shrink-0 text-right">
+                            <p className="text-sm font-semibold tabular-nums text-gray-900">
+                              {fmtNum(rightItem['grant_count'], 0)}
+                            </p>
+                            <p className="mt-1 text-[11px] font-medium text-gray-500">
+                              scholarships
+                            </p>
+                          </div>
+                        </div>
+                      </article>
+                    ) : (
+                      <div className="flex h-full min-w-0 items-center rounded-xl border border-dashed border-gray-200 bg-white/80 px-4 py-5 text-sm text-gray-500 sm:px-5">
+                        No university data available for this row yet.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
 

@@ -400,6 +400,8 @@ function ScholarshipsPageInner({
     );
   const [moreFiltersDraft, setMoreFiltersDraft] =
     useState<MoreFiltersState | null>(null);
+  const appliedProviderSlug =
+    routeScope?.providerSlug ?? moreFiltersApplied?.filterUniversitySlug ?? null;
   const [previewCount, setPreviewCount] = useState<number | null>(null);
   const [previewCountLoading, setPreviewCountLoading] = useState(false);
   const [lastKnownPreviewCount, setLastKnownPreviewCount] = useState<
@@ -822,7 +824,7 @@ function ScholarshipsPageInner({
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-          providerSlug: routeScope?.providerSlug ?? null
+          providerSlug: appliedProviderSlug
         });
         if (cancelled) return;
         setScholarships(data.scholarships);
@@ -874,7 +876,8 @@ function ScholarshipsPageInner({
     pathname,
     routeBaseMoreFilters,
     savedFiltersForHub,
-    savedFiltersSnapshotJson
+    savedFiltersSnapshotJson,
+    appliedProviderSlug
   ]);
 
   useEffect(() => {
@@ -917,7 +920,7 @@ function ScholarshipsPageInner({
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-          providerSlug: routeScope?.providerSlug ?? null
+          providerSlug: appliedProviderSlug
         });
         if (cancelled) return;
         if (metaResponse.meta) {
@@ -949,7 +952,8 @@ function ScholarshipsPageInner({
     routeScope,
     filterBounds,
     routeBaseMoreFilters,
-    savedFiltersSnapshotJson
+    savedFiltersSnapshotJson,
+    appliedProviderSlug
   ]);
 
   useEffect(() => {
@@ -1025,7 +1029,8 @@ function ScholarshipsPageInner({
         requiredSeoTags: routeScope?.requiredSeoTags ?? [],
         seoListingFallback: routeScope?.seoListingFallback,
         slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-        providerSlug: routeScope?.providerSlug ?? null
+        providerSlug:
+          routeScope?.providerSlug ?? moreFiltersDraft?.filterUniversitySlug ?? null
       })
         .then((r) => {
           if (cancelled) return;

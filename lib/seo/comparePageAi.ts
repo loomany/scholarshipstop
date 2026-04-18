@@ -25,6 +25,7 @@ export type StateCompareAiPayload = {
     body_html?: string;
     climate_summary?: { state_a: string; state_b: string };
     faq?: { q: string; a: string }[];
+    sources?: CompareSourceLink[];
   };
 };
 
@@ -161,14 +162,19 @@ export async function generateUniversityCompareWithOpenAi(args: {
   }
 }
 
-function buildStateComparePrompt(factsJson: string, year: number): string {
+function buildStateComparePrompt(
+  factsJson: string,
+  year: number,
+  sourceCandidates: CompareSourceLink[]
+): string {
   return [
     'You are an expert scholarship market analyst for U.S. higher education.',
     'Respond with a single JSON object only (no markdown fences). Keys:',
     '{"ai_verdict": string, "meta_title": string, "meta_description": string, "content_json": {',
     '  "body_html": string (semantic HTML: <article><h2>...</h2><p>...</p></article>, short analytical overview),',
     '  "climate_summary": { "state_a": string, "state_b": string } (what each scholarship climate feels like for applicants),',
-    '  "faq": [ { "q": string, "a": string } ] (3–5 practical Q&As)',
+    '  "faq": [ { "q": string, "a": string } ] (3–5 practical Q&As),',
+    '  "sources": [ { "label": string, "url": string, "type": string } ] (4–6 links selected ONLY from SOURCE_CANDIDATES_JSON)',
     '}}',
     '',
     `Year context for titles: ${year}.`,
@@ -179,17 +185,38 @@ function buildStateComparePrompt(factsJson: string, year: number): string {
     '- If a metric is missing or null in FACTS_JSON, write "No data available" for that point — never invent figures.',
     '- Tone: expert, neutral, helpful for applicants comparing states.',
     '- ai_verdict: 1–2 sentences "Which state climate suits which applicant?" with no invented stats.',
+    `- body_html: use the exact section heading "Financial Aid Overview for ${year}" in the first <h2>.`,
     `- meta_title: ≤70 chars; include both state names and "${year}".`,
     '- meta_description: 140–160 chars; compelling; mention scholarship comparison.',
+    '- For sources: do not invent URLs, do not output any URL that is not present in SOURCE_CANDIDATES_JSON.',
+    '- Prefer government and official education references first, then high-authority search references.',
+    '',
+    'SOURCE_CANDIDATES_JSON:',
+    JSON.stringify(sourceCandidates),
     '',
     'FACTS_JSON:',
     factsJson
   ].join('\n');
 }
 
+function normalizeStateBodyHtml(raw: unknown, year: number): string | undefined {
+  if (typeof raw !== 'string') return undefined;
+  const value = raw.trim();
+  if (!value) return undefined;
+  const heading = `Financial Aid Overview for ${year}`;
+  if (/<h2\b[^>]*>[\s\S]*?<\/h2>/i.test(value)) {
+    return value.replace(/<h2\b[^>]*>[\s\S]*?<\/h2>/i, `<h2>${heading}</h2>`);
+  }
+  if (/<article\b[^>]*>/i.test(value)) {
+    return value.replace(/<article\b([^>]*)>/i, `<article$1><h2>${heading}</h2>`);
+  }
+  return `<article><h2>${heading}</h2><p>${value}</p></article>`;
+}
+
 export async function generateStateCompareWithOpenAi(args: {
   factsJson: string;
   year: number;
+  sourceCandidates: CompareSourceLink[];
 }): Promise<StateCompareAiPayload | null> {
   const key = process.env.OPENAI_API_KEY?.trim();
   if (!key) return null;
@@ -204,13 +231,23 @@ export async function generateStateCompareWithOpenAi(args: {
         content:
           'Return only valid JSON matching the user schema. No prose outside JSON.'
       },
-      { role: 'user', content: buildStateComparePrompt(args.factsJson, args.year) }
+      {
+        role: 'user',
+        content: buildStateComparePrompt(
+          args.factsJson,
+          args.year,
+          args.sourceCandidates
+        )
+      }
     ]
   });
   const raw = res.choices[0]?.message?.content?.trim();
   if (!raw) return null;
   try {
     const parsed = JSON.parse(raw) as StateCompareAiPayload;
+    const sourceCandidateMap = new Map(
+      args.sourceCandidates.map((item) => [item.url, item] as const)
+    );
     if (typeof parsed.ai_verdict !== 'string' || !parsed.ai_verdict.trim()) {
       return null;
     }
@@ -231,10 +268,7 @@ export async function generateStateCompareWithOpenAi(args: {
       meta_title: parsed.meta_title.trim(),
       meta_description: parsed.meta_description.trim(),
       content_json: {
-        body_html:
-          typeof parsed.content_json.body_html === 'string'
-            ? parsed.content_json.body_html
-            : undefined,
+        body_html: normalizeStateBodyHtml(parsed.content_json.body_html, args.year),
         climate_summary:
           parsed.content_json.climate_summary &&
           typeof parsed.content_json.climate_summary === 'object'
@@ -259,7 +293,18 @@ export async function generateStateCompareWithOpenAi(args: {
                 return q && a ? { q, a } : null;
               })
               .filter(Boolean) as { q: string; a: string }[]
-          : undefined
+          : undefined,
+        sources: Array.isArray(parsed.content_json.sources)
+          ? parsed.content_json.sources
+              .map((item) => {
+                if (!item || typeof item !== 'object') return null;
+                const row = item as Record<string, unknown>;
+                const url = typeof row.url === 'string' ? row.url.trim() : '';
+                if (!url) return null;
+                return sourceCandidateMap.get(url) ?? null;
+              })
+              .filter((item): item is CompareSourceLink => item !== null)
+          : args.sourceCandidates.slice(0, 4)
       }
     };
   } catch {
@@ -282,6 +327,7 @@ export function stateCompareAiPayloadToJson(payload: StateCompareAiPayload): Jso
   return {
     body_html: payload.content_json.body_html ?? null,
     climate_summary: payload.content_json.climate_summary ?? null,
-    faq: payload.content_json.faq ?? null
+    faq: payload.content_json.faq ?? null,
+    sources: payload.content_json.sources ?? null
   } as unknown as Json;
 }
