@@ -113,7 +113,7 @@ export default function PasswordSignIn({ redirectMethod }: PasswordSignInProps) 
               />
               <path fill="none" d="M0 0h48v48H0z" />
             </svg>
-            Вход с гуглом
+            Sign in with Google
           </button>
         ) : null}
         <button
