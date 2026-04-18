@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import {
   BookOpen,
   CalendarClock,
@@ -33,6 +33,7 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import type { EssayListFields } from '@/lib/essays/essaysServer';
+import type { ComparePeerRow } from '@/lib/seo/comparePeersServer';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import {
@@ -541,7 +542,8 @@ export default function ScholarshipDetailPageClient({
   initialScholarship = null,
   initialRelatedArticles = [],
   initialRelatedEssays = [],
-  initialRelatedHubLinks = []
+  initialRelatedHubLinks = [],
+  initialComparePeers = []
 }: {
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
@@ -553,10 +555,13 @@ export default function ScholarshipDetailPageClient({
   initialRelatedEssays?: EssayListFields[];
   /** Programmatic hub listings (state / topic). */
   initialRelatedHubLinks?: { href: string; label: string }[];
+  /** Peer universities for versus-page links (catalog-backed). */
+  initialComparePeers?: ComparePeerRow[];
 } = {}) {
   const layoutInitialScholarship = useScholarshipDetailInitialData();
   const serverScholarship = initialScholarship ?? layoutInitialScholarship;
   const params = useParams();
+  const searchParams = useSearchParams();
   const routeParam = useMemo((): string | undefined => {
     const raw = params?.slugPath;
     if (Array.isArray(raw)) {
@@ -569,6 +574,13 @@ export default function ScholarshipDetailPageClient({
     if (typeof raw === 'string' && raw.trim()) return raw.trim();
     return undefined;
   }, [params]);
+  const backToMatchesHref = useMemo(() => {
+    const raw = searchParams?.get('return_to')?.trim() ?? '';
+    if (!raw || !raw.startsWith('/') || raw.startsWith('//')) {
+      return SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
+    }
+    return raw;
+  }, [searchParams]);
 
   useLayoutEffect(() => {
     if (!routeParam) return;
@@ -830,7 +842,7 @@ export default function ScholarshipDetailPageClient({
         >
           <div className={scholarshipDetailShellClass}>
             <Link
-              href={SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}
+              href={backToMatchesHref}
               scroll
               className="mb-6 inline-flex items-center text-sm font-medium text-zinc-600 transition hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
             >
@@ -1196,7 +1208,7 @@ export default function ScholarshipDetailPageClient({
       >
         <div className={scholarshipDetailShellClass}>
         <Link
-          href={SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}
+          href={backToMatchesHref}
           scroll
           className={detailBackToMatchesLinkClass}
         >
@@ -1208,7 +1220,7 @@ export default function ScholarshipDetailPageClient({
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-zinc-500">
             <li>
               <Link
-                href={SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}
+                href={backToMatchesHref}
                 scroll
                 className="font-medium text-zinc-600 underline-offset-2 transition hover:text-zinc-900 hover:underline"
               >
@@ -1473,6 +1485,36 @@ export default function ScholarshipDetailPageClient({
                     className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:border-slate-300 hover:bg-slate-50"
                   >
                     {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {initialComparePeers.length > 0 ? (
+          <div
+            className="mt-10"
+            aria-labelledby="scholarship-compare-peers-heading"
+          >
+            <h2
+              id="scholarship-compare-peers-heading"
+              className="mb-3 text-base font-semibold tracking-tight text-zinc-900"
+            >
+              Compare with other universities
+            </h2>
+            <p className="mb-3 text-sm leading-relaxed text-zinc-600">
+              See how aid and essay expectations differ when this provider is
+              stacked against other schools in our catalog.
+            </p>
+            <ul className="flex flex-wrap gap-2" role="list">
+              {initialComparePeers.map((peer) => (
+                <li key={peer.compareSlug}>
+                  <Link
+                    href={`/compare/universities/${encodeURIComponent(peer.compareSlug)}`}
+                    className="inline-flex rounded-full border border-sky-200 bg-sky-50/80 px-3 py-1.5 text-sm font-medium text-sky-950 transition hover:border-sky-300 hover:bg-sky-100"
+                  >
+                    vs {peer.peerName}
                   </Link>
                 </li>
               ))}
@@ -2328,7 +2370,7 @@ export default function ScholarshipDetailPageClient({
                 )}
               </div>
               <Link
-                href={SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}
+                href={backToMatchesHref}
                 scroll
                 className={`shrink-0 self-start sm:self-auto ${detailBackToMatchesLinkClass}`}
               >
@@ -2419,7 +2461,7 @@ export default function ScholarshipDetailPageClient({
 
             <div className="mt-6 border-t border-zinc-100 pt-4">
               <Link
-                href={SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}
+                href={backToMatchesHref}
                 scroll
                 className={detailBackToMatchesLinkClass}
               >

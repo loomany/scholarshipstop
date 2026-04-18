@@ -821,7 +821,8 @@ function ScholarshipsPageInner({
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
-          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+          providerSlug: routeScope?.providerSlug ?? null
         });
         if (cancelled) return;
         setScholarships(data.scholarships);
@@ -915,7 +916,8 @@ function ScholarshipsPageInner({
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
-          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+          providerSlug: routeScope?.providerSlug ?? null
         });
         if (cancelled) return;
         if (metaResponse.meta) {
@@ -1022,7 +1024,8 @@ function ScholarshipsPageInner({
         longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
         requiredSeoTags: routeScope?.requiredSeoTags ?? [],
         seoListingFallback: routeScope?.seoListingFallback,
-        slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters
+        slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+        providerSlug: routeScope?.providerSlug ?? null
       })
         .then((r) => {
           if (cancelled) return;
@@ -1061,6 +1064,23 @@ function ScholarshipsPageInner({
       return qs ? `${pathname}?${qs}` : pathname;
     },
     [pathname, searchParams]
+  );
+
+  const currentListingHref = useMemo(() => {
+    return searchParamsString ? `${pathname}?${searchParamsString}` : pathname;
+  }, [pathname, searchParamsString]);
+
+  const buildSidebarTabHref = useCallback(
+    (id: ScholarshipListTabId) => {
+      const p = buildScholarshipListSearchParams(new URLSearchParams(), {
+        tab: id,
+        scope: 'catalog',
+        resetPage: true
+      });
+      const qs = p.toString();
+      return qs ? `${pathname}?${qs}` : pathname;
+    },
+    [pathname]
   );
 
   const moreFiltersOffDefault = useMemo(() => {
@@ -1296,6 +1316,7 @@ function ScholarshipsPageInner({
             onGuestRestrictedNav={!isAuthenticated ? openRegistrationWall : undefined}
             subscriptionLocked={isSubscriptionLocked}
             onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
+            buildTabHref={routeScope?.providerSlug ? buildSidebarTabHref : undefined}
             internationalStudentsFilter={{
               active: internationalSidebarChecked,
               onActivate: toggleInternationalAudienceSidebar,
@@ -1416,6 +1437,7 @@ function ScholarshipsPageInner({
                         ? () => openRegistrationWall('card-unlock')
                         : undefined
                     }
+                    returnToHref={currentListingHref}
                   />
                 ))}
               </div>

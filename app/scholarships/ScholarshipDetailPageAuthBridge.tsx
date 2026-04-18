@@ -5,6 +5,7 @@ import ScholarshipDetailPageClient from '@/app/scholarships/ScholarshipDetailPag
 import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import type { EssayListFields } from '@/lib/essays/essaysServer';
+import type { ComparePeerRow } from '@/lib/seo/comparePeersServer';
 
 type ScholarshipDetailPageAuthBridgeProps = {
   initialScholarship: Scholarship | null;
@@ -14,13 +15,16 @@ type ScholarshipDetailPageAuthBridgeProps = {
   initialRelatedEssays?: EssayListFields[];
   /** Programmatic SEO hub links (state / state + topic). */
   initialRelatedHubLinks?: { href: string; label: string }[];
+  /** Top peer universities for versus-page internal links. */
+  initialComparePeers?: ComparePeerRow[];
 };
 
 export default function ScholarshipDetailPageAuthBridge({
   initialScholarship,
   initialRelatedArticles = [],
   initialRelatedEssays = [],
-  initialRelatedHubLinks = []
+  initialRelatedHubLinks = [],
+  initialComparePeers = []
 }: ScholarshipDetailPageAuthBridgeProps) {
   return (
     <AuthStatusProvider>
@@ -33,6 +37,7 @@ export default function ScholarshipDetailPageAuthBridge({
           initialRelatedArticles={initialRelatedArticles}
           initialRelatedEssays={initialRelatedEssays}
           initialRelatedHubLinks={initialRelatedHubLinks}
+          initialComparePeers={initialComparePeers}
         />
       )}
     </AuthStatusProvider>

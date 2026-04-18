@@ -153,6 +153,7 @@ function buildGuestPublicCacheControl(args: {
   if (args.req.categoryPageSlug || args.req.catalogSubjectCategoryId) return null;
   if (args.req.stateCodes.length > 0) return null;
   if (args.req.longTailLegacySlugs.length > 0) return null;
+  if (args.req.providerSlug) return null;
   if (args.req.similarToId) return null;
   if (args.req.saved.length > 0) return null;
   if (args.req.ignored.length > 0) return null;
@@ -169,7 +170,8 @@ async function handleList(
   bodyLongTail: string[] | undefined,
   seoBody?: SeoListBodyOpts,
   /** Hub: optional saved-filter snapshot for `recommended` sidebar count (`null` = none saved). */
-  savedFiltersSnapshotBody?: MoreFiltersJson | null
+  savedFiltersSnapshotBody?: MoreFiltersJson | null,
+  providerSlugBody?: string | null
 ) {
   const cookieSupabase = createClient() as any;
   const publicSupabase = createPublicClient() as any;
@@ -254,6 +256,7 @@ async function handleList(
       sort,
       tab,
       q,
+      providerSlug: providerSlugBody,
       category,
       categoryPageSlug: legacyCategoryPageSlug,
       catalogSubjectCategoryId,
@@ -692,6 +695,7 @@ export async function POST(request: Request) {
       seoListingFallback?: boolean;
       slugOnlyMoreFilters?: MoreFiltersJson;
       requiredSeoTags?: string[];
+      providerSlug?: string | null;
       /** `null` = client has no saved filter preset (Saved Filters count = 0). */
       savedFiltersSnapshot?: MoreFiltersJson | null;
     };
@@ -700,14 +704,15 @@ export async function POST(request: Request) {
       keys: Object.keys(json),
       requiredSeoTags: json.requiredSeoTags,
       seoListingFallback: json.seoListingFallback,
-      longTailLegacySlugs: json.longTailLegacySlugs
+      longTailLegacySlugs: json.longTailLegacySlugs,
+      providerSlug: json.providerSlug
     });
     const sp = new URLSearchParams(json.searchParams ?? '');
     return await handleList(sp, json.moreFilters, json.longTailLegacySlugs, {
       seoListingFallback: json.seoListingFallback,
       slugOnlyMoreFilters: json.slugOnlyMoreFilters,
       requiredSeoTags: json.requiredSeoTags
-    }, json.savedFiltersSnapshot);
+    }, json.savedFiltersSnapshot, json.providerSlug);
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     // eslint-disable-next-line no-console -- API diagnostics

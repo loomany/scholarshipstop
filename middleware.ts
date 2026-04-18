@@ -1,9 +1,35 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { preferredScholarshipSlugForLegacySlug } from '@/lib/seo/legacyScholarshipSlugAliases';
+import { canonicalStateVsSlug } from '@/lib/seo/stateCompareSlug';
+import { canonicalUniversityVsSlug } from '@/lib/seo/universityCompareSlug';
 import { updateSession } from '@/utils/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  /** Canonical alphabetically sorted `-vs-` pairs for university comparison URLs. */
+  const compareSeg = pathname.match(/^\/compare\/universities\/([^/]+)\/?$/i);
+  if (compareSeg?.[1]) {
+    const raw = decodeURIComponent(compareSeg[1]).trim().toLowerCase();
+    const canon = canonicalUniversityVsSlug(raw);
+    if (canon && canon !== raw) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/compare/universities/${encodeURIComponent(canon)}`;
+      return NextResponse.redirect(url, 301);
+    }
+  }
+
+  /** Canonical alphabetically sorted `-vs-` pairs for state comparison URLs. */
+  const stateCompareSeg = pathname.match(/^\/compare\/states\/([^/]+)\/?$/i);
+  if (stateCompareSeg?.[1]) {
+    const raw = decodeURIComponent(stateCompareSeg[1]).trim().toLowerCase();
+    const canon = canonicalStateVsSlug(raw);
+    if (canon && canon !== raw) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/compare/states/${encodeURIComponent(canon)}`;
+      return NextResponse.redirect(url, 301);
+    }
+  }
 
   /**
    * Legacy URLs from the previous stack used scholarship slugs at the domain root

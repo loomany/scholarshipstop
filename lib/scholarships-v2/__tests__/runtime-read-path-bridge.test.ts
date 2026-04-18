@@ -13,6 +13,7 @@ function baseRequest(): ScholarshipListRequest {
     sort: 'magic',
     tab: 'matches',
     q: '',
+    providerSlug: null,
     categoryIds: new Set(),
     categoryPageSlug: null,
     deadline: 'any',

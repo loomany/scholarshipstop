@@ -229,6 +229,12 @@ export async function checkUrlIndexStatus(
 
     const data = (await response.json()) as {
       inspectionResult?: {
+        /** Official field name per Search Console API `UrlInspectionResult`. */
+        indexStatusResult?: {
+          verdict?: string;
+          coverageState?: string;
+        };
+        /** Legacy / mistaken key — keep as fallback if responses ever vary. */
         indexStatus?: {
           verdict?: string;
           coverageState?: string;
@@ -236,9 +242,11 @@ export async function checkUrlIndexStatus(
       };
     };
 
-    const verdict =
-      data.inspectionResult?.indexStatus?.verdict ?? 'UNKNOWN_VERDICT';
-    const coverageState = data.inspectionResult?.indexStatus?.coverageState;
+    const indexBlock =
+      data.inspectionResult?.indexStatusResult ??
+      data.inspectionResult?.indexStatus;
+    const verdict = indexBlock?.verdict ?? 'UNKNOWN_VERDICT';
+    const coverageState = indexBlock?.coverageState;
 
     return {
       ok: true,

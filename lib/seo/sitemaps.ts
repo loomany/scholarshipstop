@@ -32,7 +32,8 @@ type SitemapBucket =
   | 'providers'
   | 'categories'
   | 'seo'
-  | 'scholarships';
+  | 'scholarships'
+  | 'compare';
 
 type ScholarshipSitemapRow = Pick<
   Database['public']['Tables']['scholarships']['Row'],
@@ -177,6 +178,35 @@ type SeoGenerationSitemapRow = {
   updated_at: string;
 };
 
+type CompareSitemapRow = {
+  slug: string;
+  updated_at: string;
+};
+
+/** Published `/compare/universities/[slug]` pages. */
+async function fetchCompareSitemapRows(): Promise<CompareSitemapRow[]> {
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.rpc('compare_pages_sitemap_rows', {});
+  if (error) {
+    console.error('[sitemap] compare_pages_sitemap_rows failed:', error);
+    return [];
+  }
+  return (data ?? []) as CompareSitemapRow[];
+}
+
+/** Published `/compare/states/[slug]` pages. */
+async function fetchStateCompareSitemapRows(): Promise<CompareSitemapRow[]> {
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.rpc('state_compare_pages_sitemap_rows', {});
+  if (error) {
+    console.error('[sitemap] state_compare_pages_sitemap_rows failed:', error);
+    return [];
+  }
+  return (data ?? []) as CompareSitemapRow[];
+}
+
 /** Programmatic hub URLs completed via `seo_generation_queue` (grant_count &gt; min). */
 async function fetchSeoGenerationSitemapRows(
   minGrants = 3
@@ -296,6 +326,9 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
   const core: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified: new Date() },
     { url: `${base}/scholarships`, lastModified: new Date() },
+    { url: `${base}/compare`, lastModified: new Date() },
+    { url: `${base}/compare/universities`, lastModified: new Date() },
+    { url: `${base}/compare/states`, lastModified: new Date() },
     { url: `${base}/resources`, lastModified: new Date() },
     { url: `${base}/essays`, lastModified: new Date() },
     { url: `${base}/providers`, lastModified: new Date() }
@@ -379,7 +412,7 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     ...programmaticHubPages
   ]);
 
-  const [scholarships, providers] = await Promise.all([
+  const [scholarships, providers, compareRows, stateCompareRows] = await Promise.all([
     fetchScholarshipSitemapEntries(base).catch((err) => {
       console.error('[sitemap] fetchScholarshipSitemapEntries failed:', err);
       return [];
@@ -387,8 +420,31 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     fetchProviderSitemapEntries(base).catch((err) => {
       console.error('[sitemap] fetchProviderSitemapEntries failed:', err);
       return [];
+    }),
+    fetchCompareSitemapRows().catch((err) => {
+      console.error('[sitemap] fetchCompareSitemapRows failed:', err);
+      return [];
+    }),
+    fetchStateCompareSitemapRows().catch((err) => {
+      console.error('[sitemap] fetchStateCompareSitemapRows failed:', err);
+      return [];
     })
   ]);
+
+  const compare: MetadataRoute.Sitemap = [
+    ...compareRows
+      .filter((row) => Boolean(row.slug?.trim()))
+      .map((row) => ({
+        url: `${base}/compare/universities/${encodeURIComponent(row.slug.trim())}`,
+        lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
+      })),
+    ...stateCompareRows
+      .filter((row) => Boolean(row.slug?.trim()))
+      .map((row) => ({
+        url: `${base}/compare/states/${encodeURIComponent(row.slug.trim())}`,
+        lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
+      }))
+  ];
 
   return {
     core: dedupeSitemapEntries(core),
@@ -397,7 +453,8 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     providers: dedupeSitemapEntries(providers),
     categories: dedupeSitemapEntries(categories),
     seo,
-    scholarships: dedupeSitemapEntries(scholarships)
+    scholarships: dedupeSitemapEntries(scholarships),
+    compare: dedupeSitemapEntries(compare)
   };
 });
 
@@ -432,6 +489,12 @@ export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> 
       'scholarships',
       buckets.scholarships,
       'always-indexed'
+    ),
+    ...buildDocumentsForBucket(
+      'compare',
+      'compare',
+      buckets.compare,
+      'single-or-indexed'
     )
   ];
 });

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-04-17T20:50:27.963Z",
+  "generatedAt": "2026-04-18T17:26:40.471Z",
   "summary": {
-    "active_scholarships_scanned": 6379,
-    "usa_scholarships_for_matching": 6379,
+    "active_scholarships_scanned": 6821,
+    "usa_scholarships_for_matching": 6821,
     "route_combinations_tested": 1632,
     "valid_urls_count_gt_0": 799,
     "valid_urls_count_gt_3": 546,

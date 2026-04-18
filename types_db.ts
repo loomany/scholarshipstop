@@ -143,6 +143,51 @@ export interface Database {
         }
         Relationships: []
       },
+      seo_page_inspection_queue: {
+        Row: {
+          id: string
+          url: string
+          source: string | null
+          status: string
+          added_at: string
+          updated_at: string
+          next_check_at: string
+          last_checked_at: string | null
+          attempt_count: number
+          last_verdict: string | null
+          last_coverage_state: string | null
+          last_error: string | null
+        }
+        Insert: {
+          id?: string
+          url: string
+          source?: string | null
+          status?: string
+          added_at?: string
+          updated_at?: string
+          next_check_at?: string
+          last_checked_at?: string | null
+          attempt_count?: number
+          last_verdict?: string | null
+          last_coverage_state?: string | null
+          last_error?: string | null
+        }
+        Update: {
+          id?: string
+          url?: string
+          source?: string | null
+          status?: string
+          added_at?: string
+          updated_at?: string
+          next_check_at?: string
+          last_checked_at?: string | null
+          attempt_count?: number
+          last_verdict?: string | null
+          last_coverage_state?: string | null
+          last_error?: string | null
+        }
+        Relationships: []
+      },
       onboarding_oauth_pending: {
         Row: {
           token: string
@@ -1007,6 +1052,192 @@ export interface Database {
         }
         Relationships: []
       }
+      institutions: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          logo_url: string | null
+          city: string | null
+          state: string | null
+          country: string | null
+          website_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          logo_url?: string | null
+          city?: string | null
+          state?: string | null
+          country?: string | null
+          website_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          logo_url?: string | null
+          city?: string | null
+          state?: string | null
+          country?: string | null
+          website_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      compare_pages: {
+        Row: {
+          id: string
+          slug: string
+          inst_a_id: string
+          inst_b_id: string
+          content_json: Json
+          ai_verdict: string | null
+          meta_title: string | null
+          meta_description: string | null
+          created_at: string
+          updated_at: string
+          status: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          inst_a_id: string
+          inst_b_id: string
+          content_json?: Json
+          ai_verdict?: string | null
+          meta_title?: string | null
+          meta_description?: string | null
+          created_at?: string
+          updated_at?: string
+          status?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          inst_a_id?: string
+          inst_b_id?: string
+          content_json?: Json
+          ai_verdict?: string | null
+          meta_title?: string | null
+          meta_description?: string | null
+          created_at?: string
+          updated_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compare_pages_inst_a_id_fkey"
+            columns: ["inst_a_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compare_pages_inst_b_id_fkey"
+            columns: ["inst_b_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      state_compare_pages: {
+        Row: {
+          id: string
+          slug: string
+          state_a_code: string
+          state_b_code: string
+          content_json: Json
+          ai_verdict: string | null
+          meta_title: string | null
+          meta_description: string | null
+          created_at: string
+          updated_at: string
+          status: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          state_a_code: string
+          state_b_code: string
+          content_json?: Json
+          ai_verdict?: string | null
+          meta_title?: string | null
+          meta_description?: string | null
+          created_at?: string
+          updated_at?: string
+          status?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          state_a_code?: string
+          state_b_code?: string
+          content_json?: Json
+          ai_verdict?: string | null
+          meta_title?: string | null
+          meta_description?: string | null
+          created_at?: string
+          updated_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "state_compare_pages_state_a_code_fkey"
+            columns: ["state_a_code"]
+            isOneToOne: false
+            referencedRelation: "states"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "state_compare_pages_state_b_code_fkey"
+            columns: ["state_b_code"]
+            isOneToOne: false
+            referencedRelation: "states"
+            referencedColumns: ["code"]
+          }
+        ]
+      }
+      states: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          code: string
+          region: string
+          description_json: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          code: string
+          region: string
+          description_json?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          code?: string
+          region?: string
+          description_json?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       scholarships: {
         Row: {
           id: string
@@ -1142,6 +1373,7 @@ export interface Database {
           indexing_status: string
           /** Last Google URL Inspection attempt (see scholarshipIndexInspectionWorker). */
           last_index_check: string | null
+          institution_id: string | null
         }
         Insert: {
           id?: string
@@ -1275,6 +1507,7 @@ export interface Database {
           applicants_count_is_estimated?: boolean | null
           indexing_status?: string
           last_index_check?: string | null
+          institution_id?: string | null
         }
         Update: {
           id?: string
@@ -1408,8 +1641,17 @@ export interface Database {
           applicants_count_is_estimated?: boolean | null
           indexing_status?: string
           last_index_check?: string | null
+          institution_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "scholarships_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       categories: {
         Row: {
@@ -1770,6 +2012,42 @@ export interface Database {
       google_indexing_try_consume_quota: {
         Args: { p_max?: number }
         Returns: boolean
+      }
+      comparison_metrics_bundle: {
+        Args: { p_inst: string }
+        Returns: Json
+      }
+      get_comparison_data: {
+        Args: { p_inst_a: string; p_inst_b: string }
+        Returns: Json
+      }
+      get_state_comparison_data: {
+        Args: { p_state_a_code: string; p_state_b_code: string }
+        Returns: Json
+      }
+      compare_pages_sitemap_rows: {
+        Args: Record<string, never>
+        Returns: {
+          slug: string
+          updated_at: string
+        }[]
+      }
+      state_compare_pages_sitemap_rows: {
+        Args: Record<string, never>
+        Returns: {
+          slug: string
+          updated_at: string
+        }[]
+      }
+      get_compare_peer_institutions: {
+        Args: { p_institution_id: string; p_limit?: number }
+        Returns: {
+          peer_id: string
+          peer_slug: string
+          peer_name: string
+          compare_slug: string
+          peer_grant_count: number
+        }[]
       }
     }
     Enums: {

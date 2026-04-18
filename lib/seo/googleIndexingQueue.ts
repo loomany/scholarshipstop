@@ -11,7 +11,8 @@ export type GoogleIndexingContentKind =
   | 'scholarship'
   | 'resource'
   | 'provider'
-  | 'essay';
+  | 'essay'
+  | 'page';
 
 export type GoogleIndexingNotificationType = 'URL_UPDATED' | 'URL_DELETED';
 
@@ -101,7 +102,11 @@ function dedupeCanonicalIndexingUrls(urls: string[]): string[] {
 function inferGoogleIndexingKindFromUrl(url: string): GoogleIndexingContentKind | null {
   try {
     const pathname = new URL(url).pathname.replace(/\/+$/, '');
-    if (pathname.startsWith('/scholarships/')) return 'scholarship';
+    if (pathname.startsWith('/scholarships/')) {
+      const parts = pathname.split('/').filter(Boolean);
+      return parts.length === 2 ? 'scholarship' : 'page';
+    }
+    if (pathname.startsWith('/compare/')) return 'page';
     if (pathname.startsWith('/resources/')) return 'resource';
     if (pathname.startsWith('/providers/')) return 'provider';
     if (pathname.startsWith('/essays/')) return 'essay';
@@ -423,6 +428,65 @@ export async function enqueueGoogleIndexingUrls(input: {
     enqueued: uniqueUrls.length,
     total: totalCount ?? 0,
     pending: pendingCount ?? 0
+  };
+}
+
+export async function markGoogleIndexingUrlsProcessed(
+  urls: string[],
+  input?: { lastError?: string | null }
+) {
+  const admin = createServiceRoleSupabaseClient();
+  if (!admin) {
+    throw new Error('Server missing Supabase service role for indexing queue');
+  }
+
+  const normalizedUrls = dedupeCanonicalIndexingUrls(
+    urls.map(normalizeIndexingUrl).filter((value): value is string => Boolean(value))
+  );
+  if (normalizedUrls.length === 0) return { ok: true, updated: 0 };
+
+  const { error } = await admin
+    .from('google_indexing_queue')
+    .update({
+      status: 'processed',
+      last_error: input?.lastError ?? null
+    })
+    .in('url', normalizedUrls);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return { ok: true, updated: normalizedUrls.length };
+}
+
+export async function submitUrlsForImmediateIndexing(input: {
+  urls: string[];
+  kind: GoogleIndexingContentKind;
+  notificationType?: GoogleIndexingNotificationType;
+  source?: string;
+}) {
+  const queueResult = await enqueueGoogleIndexingUrls(input);
+  const results: Array<{
+    url: string;
+    ping: PingGoogleIndexingDirectResult;
+  }> = [];
+
+  for (const url of input.urls) {
+    const ping = await pingGoogleIndexingDirect(url, input.notificationType);
+    const normalized = normalizeIndexingUrl(url);
+    if (normalized && ping.ok) {
+      await markGoogleIndexingUrlsProcessed([normalized]);
+    }
+    results.push({
+      url: normalized ?? url,
+      ping
+    });
+  }
+
+  return {
+    ...queueResult,
+    results
   };
 }
 

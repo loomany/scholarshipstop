@@ -206,7 +206,87 @@ export type LongTailRouteScopePayload = {
   baseMoreFilters: MoreFiltersJson;
   slugOnlyMoreFilters: MoreFiltersJson;
   seoListingFallback: boolean;
+  providerSlug?: string | null;
 };
+
+export async function fetchInitialUniversityHubScholarshipsPayload(
+  supabase: ServerSupabaseClient | null,
+  providerSlug: string
+): Promise<{
+  result: ScholarshipListResult;
+  routeScope: LongTailRouteScopePayload;
+}> {
+  const trimmedProviderSlug = providerSlug.trim();
+  const offlineBounds = {
+    amountMin: 0,
+    amountMax: 50000,
+    applicantsMin: 0,
+    applicantsMax: 200000
+  } as Awaited<ReturnType<typeof fetchGlobalFilterBounds>>;
+
+  if (!supabase) {
+    return {
+      result: {
+        scholarships: [],
+        total: 0,
+        page: 1,
+        limit: SCHOLARSHIPS_PAGE_SIZE
+      },
+      routeScope: {
+        longTailLegacySlugs: [],
+        requiredSeoTags: [],
+        baseMoreFilters: moreFiltersToJson(defaultMoreFiltersFromBounds(offlineBounds)),
+        slugOnlyMoreFilters: moreFiltersToJson(defaultMoreFiltersFromBounds(offlineBounds)),
+        seoListingFallback: false,
+        providerSlug: trimmedProviderSlug
+      }
+    };
+  }
+
+  const bounds = await fetchGlobalFilterBounds(supabase);
+  const defaultFilters = defaultMoreFiltersFromBounds(bounds);
+  const req = scholarshipListRequestFromParts({
+    page: 1,
+    limit: SCHOLARSHIPS_PAGE_SIZE,
+    sort: 'magic',
+    tab: 'matches',
+    q: '',
+    providerSlug: trimmedProviderSlug,
+    category: null,
+    categoryPageSlug: null,
+    catalogSubjectCategoryId: null,
+    deadline: 'any',
+    state: null,
+    ignored: null,
+    saved: null,
+    started: null,
+    submitted: null,
+    moreFilters: defaultFilters,
+    longTailLegacySlugs: [],
+    similarTo: null,
+    similarCategorySlug: null,
+    listScope: 'catalog',
+    requiredSeoTags: []
+  });
+  const result = await executeScholarshipListQuery(supabase, req, {
+    countOnly: false,
+    includeMeta: true,
+    includeCategoryCounts: true,
+    isProSubscriber: false
+  });
+
+  return {
+    result,
+    routeScope: {
+      longTailLegacySlugs: [],
+      requiredSeoTags: [],
+      baseMoreFilters: moreFiltersToJson(defaultFilters),
+      slugOnlyMoreFilters: moreFiltersToJson(defaultFilters),
+      seoListingFallback: false,
+      providerSlug: trimmedProviderSlug
+    }
+  };
+}
 
 export async function fetchInitialCategoryScholarshipsPayload(
   supabase: ServerSupabaseClient | null,

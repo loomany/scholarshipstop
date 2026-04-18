@@ -166,6 +166,7 @@ const LISTING_CARD_SELECT_COLUMNS = [
   'listing_completeness_score',
   'listing_completeness_bucket',
   'applicants_count_is_estimated',
+  'institution_id',
   'study_levels',
   'field_of_study',
   'citizenship_statuses',
@@ -412,6 +413,7 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
         : undefined,
     slug: row.slug?.trim() || undefined,
     providerSlug: row.provider_slug?.trim() || undefined,
+    institutionId: row.institution_id ?? undefined,
     scholarshipStatus: row.scholarship_status?.trim() || undefined,
     daysUntilDeadline:
       row.days_until_deadline != null && !Number.isNaN(row.days_until_deadline)
@@ -737,6 +739,50 @@ export async function fetchScholarshipsByIdsForListing(
   return ids
     .map((id) => mapped.get(id))
     .filter((x): x is Scholarship => x != null);
+}
+
+export async function fetchActiveScholarshipsByInstitutionIdForListing(
+  institutionId: string,
+  limit = 3
+): Promise<Scholarship[]> {
+  const id = institutionId.trim();
+  if (!id) return [];
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+
+  const cap = Math.min(24, Math.max(1, Math.floor(limit) * 4));
+  const { data, error } = await supabase
+    .from('scholarships')
+    .select(LIST_CARD_SELECT)
+    .eq('is_active', true)
+    .eq('institution_id', id)
+    .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
+    .order('ranking_score', { ascending: false, nullsFirst: false })
+    .order('updated_at', { ascending: false })
+    .limit(cap);
+
+  if (error) throw new Error(error.message);
+
+  const rows = (data ?? []) as unknown as ScholarshipRow[];
+  const now = Date.now();
+  const withStatus = rows.map((row) => {
+    const daysUntil =
+      row.days_until_deadline != null && !Number.isNaN(row.days_until_deadline)
+        ? row.days_until_deadline
+        : null;
+    const deadlineMs = row.deadline_date
+      ? Date.parse(`${row.deadline_date}T23:59:59.999Z`)
+      : null;
+    const isExpired =
+      daysUntil != null ? daysUntil < 0 : deadlineMs != null ? deadlineMs < now : false;
+    return { row, isExpired };
+  });
+
+  const liveRows = withStatus.filter((item) => !item.isExpired).map((item) => item.row);
+  const expiredRows = withStatus.filter((item) => item.isExpired).map((item) => item.row);
+  const chosen = (liveRows.length > 0 ? liveRows : expiredRows).slice(0, limit);
+
+  return chosen.map((row) => mapScholarshipRow(row));
 }
 
 /** One recent active scholarship for email/Telegram preview cards (service role). */

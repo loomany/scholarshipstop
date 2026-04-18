@@ -34,6 +34,7 @@ export type ScholarshipsListPostBody = {
   seoListingFallback?: boolean;
   slugOnlyMoreFilters?: MoreFiltersJson;
   requiredSeoTags?: string[];
+  providerSlug?: string | null;
 };
 
 export async function postScholarshipsList(
@@ -81,7 +82,8 @@ export async function postScholarshipsCount(
       longTailLegacySlugs: body.longTailLegacySlugs,
       seoListingFallback: body.seoListingFallback,
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
-      requiredSeoTags: body.requiredSeoTags
+      requiredSeoTags: body.requiredSeoTags,
+      providerSlug: body.providerSlug
     })
   });
   if (!res.ok) throw new Error('count failed');
@@ -103,7 +105,8 @@ export async function postScholarshipsMeta(
       longTailLegacySlugs: body.longTailLegacySlugs,
       seoListingFallback: body.seoListingFallback,
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
-      requiredSeoTags: body.requiredSeoTags
+      requiredSeoTags: body.requiredSeoTags,
+      providerSlug: body.providerSlug
     })
   });
   if (!res.ok) throw new Error('meta failed');

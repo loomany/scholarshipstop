@@ -57,6 +57,8 @@ export type Scholarship = {
   categories?: string[];
   /** Supabase `category_slug` — канонический slug для страниц категорий и похожих грантов. */
   categorySlug?: string | null;
+  /** Linked university row when `institutions` backfill matches `provider_slug`. */
+  institutionId?: string | null;
   /** External catalog source (Supabase `source`). */
   source?: string | null;
   /** Canonical listing URL in the upstream catalog (Supabase `url`). */

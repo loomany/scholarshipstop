@@ -51,6 +51,20 @@ const ABOUT_SUBLINKS = [
 ] as const;
 
 const ESSAY_MENTOR_PATH = '/essay';
+const VERSUS_HUB_PATH = '/compare';
+
+const VERSUS_SUBLINKS = [
+  {
+    href: '/compare/universities',
+    label: 'Universities',
+    description: 'School-vs-school scholarship and essay comparisons.'
+  },
+  {
+    href: '/compare/states',
+    label: 'States',
+    description: 'State scholarship climate battles across the U.S.'
+  }
+] as const;
 
 /** Подменю Essay Guides: хаб статей и инструмент ментора (не путать с `/essays`). */
 const ESSAYS_GUIDE_SUBLINKS: {
@@ -85,6 +99,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
   const [essaysExpanded, setEssaysExpanded] = useState(false);
+  const [versusExpanded, setVersusExpanded] = useState(false);
   /** After choosing a desktop Essay Guides item, hide the flyout until pointer leaves the trigger. */
   const [suppressEssayGuidesFlyout, setSuppressEssayGuidesFlyout] =
     useState(false);
@@ -141,6 +156,11 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
   const pricingActive = useMemo(
     () =>
       pathname === '/subscription' || pathname.startsWith('/subscription/'),
+    [pathname]
+  );
+
+  const versusActive = useMemo(
+    () => pathname === VERSUS_HUB_PATH || pathname.startsWith(`${VERSUS_HUB_PATH}/`),
     [pathname]
   );
 
@@ -206,8 +226,9 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
     if (menuOpen) {
       setAboutExpanded(aboutSectionActive);
       setEssaysExpanded(essayGuidesNavActive);
+      setVersusExpanded(versusActive);
     }
-  }, [menuOpen, aboutSectionActive, essayGuidesNavActive]);
+  }, [menuOpen, aboutSectionActive, essayGuidesNavActive, versusActive]);
 
   return (
     <>
@@ -287,6 +308,45 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
             >
               Providers
             </Link>
+            <div className="group/versus relative">
+              <Link
+                href={VERSUS_HUB_PATH}
+                className={clsx(nav.dark, versusActive && nav.darkActive)}
+                aria-haspopup="menu"
+              >
+                Versus
+              </Link>
+              <div
+                className="pointer-events-none invisible absolute left-0 top-full z-[110] pt-2 opacity-0 transition-[opacity,visibility] duration-150 ease-out group-hover/versus:pointer-events-auto group-hover/versus:visible group-hover/versus:opacity-100 group-focus-within/versus:pointer-events-auto group-focus-within/versus:visible group-focus-within/versus:opacity-100"
+                role="presentation"
+              >
+                <div
+                  className="min-w-[280px] max-w-[320px] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg"
+                  aria-label="Versus menu"
+                >
+                  {VERSUS_SUBLINKS.map((item) => {
+                    const active = sublinkActive(item.href, pathname);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={clsx(
+                          'flex flex-col gap-1 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-zinc-50',
+                          active && 'bg-zinc-50'
+                        )}
+                      >
+                        <span className="text-sm font-semibold text-zinc-900">
+                          {item.label}
+                        </span>
+                        <span className="text-xs leading-snug text-zinc-500">
+                          {item.description}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
             <Link
               href={RESOURCES_SECTION_PATH}
               className={clsx(
@@ -546,6 +606,90 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 />
                 <span className="min-w-0">Providers</span>
               </Link>
+              <div className="w-full max-w-full">
+                <div
+                  className="flex w-full min-w-0 items-stretch overflow-hidden rounded-lg"
+                  onMouseEnter={() => {
+                    if (
+                      typeof window !== 'undefined' &&
+                      window.matchMedia('(hover: hover)').matches
+                    ) {
+                      setVersusExpanded(true);
+                    }
+                  }}
+                >
+                  <Link
+                    href={VERSUS_HUB_PATH}
+                    className={clsx(
+                      nav.darkDrawer,
+                      'flex min-w-0 flex-1 items-center rounded-none rounded-l-lg py-3 pl-3 pr-2',
+                      versusActive && nav.darkDrawerActive
+                    )}
+                    onClick={closeMenu}
+                  >
+                    <span className="min-w-0">Versus</span>
+                  </Link>
+                  <button
+                    type="button"
+                    className="flex w-11 shrink-0 items-center justify-center rounded-none rounded-r-lg border-0 bg-transparent text-zinc-300 transition hover:bg-white/10 hover:text-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                    aria-expanded={versusExpanded}
+                    aria-controls={`${menuId}-versus-sub`}
+                    id={`${menuId}-versus-chevron`}
+                    aria-label={
+                      versusExpanded ? 'Collapse Versus submenu' : 'Expand Versus submenu'
+                    }
+                    onClick={() => setVersusExpanded((o) => !o)}
+                  >
+                    <ChevronDown
+                      className={clsx(
+                        'h-5 w-5 shrink-0 transition-transform duration-200 ease-out',
+                        versusExpanded && 'rotate-180'
+                      )}
+                      aria-hidden
+                    />
+                  </button>
+                </div>
+                <div
+                  id={`${menuId}-versus-sub`}
+                  role="region"
+                  aria-label="Versus links"
+                  className={clsx(
+                    'grid transition-[grid-template-rows] duration-200 ease-out',
+                    versusExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <div
+                      className="mb-1 ml-3 mt-0.5 flex flex-col gap-1 border-l border-white/15 pl-3"
+                      role="group"
+                      aria-label="University and state comparisons"
+                    >
+                      {VERSUS_SUBLINKS.map((item) => {
+                        const active = sublinkActive(item.href, pathname);
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className={clsx(
+                              nav.darkDrawerSub,
+                              'flex flex-col gap-0.5 py-2.5',
+                              active && nav.darkDrawerSubActive
+                            )}
+                            onClick={closeMenu}
+                          >
+                            <span className="text-sm font-semibold text-zinc-200">
+                              {item.label}
+                            </span>
+                            <span className="text-xs font-normal leading-snug text-zinc-500">
+                              {item.description}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <Link
                 href={RESOURCES_SECTION_PATH}
                 className={clsx(

@@ -8,12 +8,13 @@ import {
   buildUniversityHubFaqJsonLd,
   resolveUniversityHubFaqItems
 } from '@/lib/scholarships/universityHubJsonLd';
+import { createInitialScholarshipsPayload, fetchInitialUniversityHubScholarshipsPayload } from '@/app/scholarships/scholarshipListServerPayload';
 import {
   fetchProviderAiFaqBySlug,
-  fetchScholarshipsForUniversitySlug,
   fetchUniversityHubRow
 } from '@/lib/scholarships/universityHubServer';
 import { getURL } from '@/utils/helpers';
+import { createPublicClient } from '@/utils/supabase/public';
 
 export const revalidate = 300;
 
@@ -79,10 +80,16 @@ export default async function UniversityScholarshipsPage({
     );
   }
 
-  const [{ scholarships, error }, providerFaq] = await Promise.all([
-    fetchScholarshipsForUniversitySlug(hub.slug),
+  const supabase = createPublicClient();
+  const [{ result: initialListResult, routeScope }, providerFaq] = await Promise.all([
+    fetchInitialUniversityHubScholarshipsPayload(supabase, hub.slug),
     fetchProviderAiFaqBySlug(hub.slug)
   ]);
+  const scholarships = initialListResult.scholarships;
+  const initialPayload = createInitialScholarshipsPayload(
+    `university-hub:${hub.slug}`,
+    initialListResult
+  );
 
   const canonicalPath = `/scholarships/${hub.stateSlug}/${hub.slug}`;
   const faqItems = resolveUniversityHubFaqItems({
@@ -105,8 +112,8 @@ export default async function UniversityScholarshipsPage({
       />
       <UniversityHubPageContent
         hub={hub}
-        scholarships={scholarships}
-        loadError={error}
+        initialPayload={initialPayload}
+        routeScope={routeScope}
         faqItems={faqItems}
       />
     </>

@@ -28,10 +28,12 @@ export async function POST(request: Request) {
         kind?: GoogleIndexingContentKind;
         notificationType?: GoogleIndexingNotificationType;
         source?: string;
+      url?: string;
         scholarship?: { id: string; slug?: string | null };
         resource?: { slug: string };
         provider?: { routeId: string };
         essay?: { slug: string };
+      page?: { url: string };
       }
     | null;
 
@@ -49,6 +51,10 @@ export async function POST(request: Request) {
           ? [providerIndexingUrl(body.provider.routeId.trim())]
           : kind === 'essay' && body?.essay?.slug?.trim()
             ? [essayIndexingUrl(body.essay.slug.trim())]
+            : kind === 'page' && body?.page?.url?.trim()
+              ? [body.page.url.trim()]
+              : typeof body?.url === 'string' && body.url.trim()
+                ? [body.url.trim()]
             : [];
 
   if (urls.length === 0) {

@@ -95,6 +95,7 @@ export type ScholarshipListRequest = {
   sort: SortOption;
   tab: ScholarshipListTabId;
   q: string;
+  providerSlug: string | null;
   /** Multi-select category filter (OR semantics). */
   categoryIds: Set<ScholarshipCategoryId>;
   /** Narrow listing to one catalog slug (category page). */
@@ -321,6 +322,7 @@ export function scholarshipListRequestFromParts(parts: {
   sort: SortOption;
   tab: ScholarshipListTabId;
   q?: string | null;
+  providerSlug?: string | null;
   category?: string | null;
   categoryPageSlug?: string | null;
   deadline: DeadlinePreset;
@@ -362,6 +364,7 @@ export function scholarshipListRequestFromParts(parts: {
     sort: parts.sort,
     tab: parts.tab,
     q: parts.q?.trim() ?? '',
+    providerSlug: parts.providerSlug?.trim() || null,
     categoryIds: parseCommaCategories(parts.category ?? null),
     categoryPageSlug: parts.categoryPageSlug?.trim() || null,
     deadline: parts.deadline,
@@ -909,6 +912,9 @@ function applyCommonFilters(req: ScholarshipListRequest, q: any): any {
   if (!seoListing && req.q) {
     q = applyCatalogTextSearchFilter(q, req.q);
   }
+  if (req.providerSlug) {
+    q = q.eq('provider_slug', req.providerSlug);
+  }
   if (req.catalogSubjectCategoryId) {
     q = q.eq('scholarship_categories.category_id', req.catalogSubjectCategoryId);
   } else if (req.categoryPageSlug) {
@@ -951,6 +957,7 @@ function metaBasisRequest(
   return {
     ...req,
     q: '',
+    providerSlug: req.providerSlug,
     categoryIds: new Set(),
     categoryPageSlug: null,
     catalogSubjectCategoryId: null,
@@ -1055,6 +1062,7 @@ function buildListMetaCacheKey(
     `seo:${requiredSeoTags}`,
     `bounds:${boundsKey}`,
     `q:${qNorm}`,
+    `provider:${req.providerSlug ?? ''}`,
     `catIds:${categoryIds}`,
     `catPage:${req.categoryPageSlug ?? ''}`,
     `catSubj:${req.catalogSubjectCategoryId ?? ''}`,

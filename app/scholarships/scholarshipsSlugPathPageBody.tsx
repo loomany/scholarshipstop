@@ -42,6 +42,7 @@ import {
 import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
 import { relatedScholarshipHubLinks } from '@/lib/seo/relatedScholarshipHubLinks';
+import { fetchComparePeersForInstitution } from '@/lib/seo/comparePeersServer';
 import { createPublicClient } from '@/utils/supabase/public';
 
 /** Set DEBUG_SEO_SCHOLARSHIP=1 to log which SEO bundle and copy the server picked. */
@@ -121,6 +122,9 @@ export default async function ScholarshipsSlugPathPageBody({
       scholarship.id,
       4
     );
+    const initialComparePeers = await fetchComparePeersForInstitution(
+      scholarship.institutionId
+    );
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
@@ -141,6 +145,7 @@ export default async function ScholarshipsSlugPathPageBody({
             initialRelatedArticles={initialRelatedArticles}
             initialRelatedEssays={initialRelatedEssays}
             initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
+            initialComparePeers={initialComparePeers}
           />
         </Suspense>
       </>
@@ -176,6 +181,9 @@ export default async function ScholarshipsSlugPathPageBody({
       scholarship.id,
       4
     );
+    const initialComparePeers = await fetchComparePeersForInstitution(
+      scholarship.institutionId
+    );
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
@@ -196,6 +204,7 @@ export default async function ScholarshipsSlugPathPageBody({
             initialRelatedArticles={initialRelatedArticles}
             initialRelatedEssays={initialRelatedEssays}
             initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
+            initialComparePeers={initialComparePeers}
           />
         </Suspense>
       </>

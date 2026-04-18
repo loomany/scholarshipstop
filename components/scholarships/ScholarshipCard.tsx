@@ -31,6 +31,7 @@ import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCata
 type ScholarshipCardProps = {
   scholarship: Scholarship;
   isUnread?: boolean;
+  badgeLabelOverride?: string | null;
   saved: boolean;
   onToggleSave: (id: string) => void;
   onHide?: (id: string) => void;
@@ -56,6 +57,8 @@ type ScholarshipCardProps = {
    * the next click opens the parent’s registration modal instead of navigating.
    */
   onGuestDetailNavigate?: () => void;
+  /** Optional listing URL used by the detail page Back link. */
+  returnToHref?: string;
 };
 
 const METRIC_LABEL =
@@ -64,6 +67,7 @@ const METRIC_LABEL =
 export default function ScholarshipCard({
   scholarship,
   isUnread = false,
+  badgeLabelOverride,
   saved,
   onToggleSave,
   onHide,
@@ -73,9 +77,17 @@ export default function ScholarshipCard({
   subscriptionLocked = false,
   listingTab,
   onSubscriptionLockedCategoryClick,
-  onGuestDetailNavigate
+  onGuestDetailNavigate,
+  returnToHref
 }: ScholarshipCardProps) {
-  const detailHref = scholarshipPublicPath(scholarship);
+  const detailHref = useMemo(() => {
+    const base = scholarshipPublicPath(scholarship);
+    const safeReturnToHref = returnToHref?.trim();
+    if (!safeReturnToHref) return base;
+    const params = new URLSearchParams();
+    params.set('return_to', safeReturnToHref);
+    return `${base}?${params.toString()}`;
+  }, [scholarship, returnToHref]);
   const deadlinePassed = scholarshipDeadlineHasPassed(scholarship);
 
   const gridShell = stackedListing
@@ -175,6 +187,10 @@ export default function ScholarshipCard({
     easyApplyIds.some((id) => LOCKED_CARD_CATEGORY_IDS.has(id));
   const showTopRightLockBadge =
     showHotDeadlinesLockBadge || showEasyApplyLockBadge;
+  const topRightBadgeLabel = badgeLabelOverride?.trim() || (isUnread ? 'NEW' : null);
+  const topRightBadgeAriaLabel = badgeLabelOverride?.trim()
+    ? badgeLabelOverride.trim()
+    : 'New - not opened yet';
   const payoutLine = payoutMethodChipLabel(scholarship.payoutMethod);
 
   const hasApplicants =
@@ -315,12 +331,12 @@ export default function ScholarshipCard({
               ) : null}
             </div>
             <div className="flex shrink-0 items-center gap-1.5 self-start">
-              {isUnread ? (
+              {topRightBadgeLabel ? (
                 <span
                   className="pointer-events-none inline-flex h-5 shrink-0 items-center rounded-md bg-[#FF7A1A] px-2 text-[10px] font-bold uppercase leading-none tracking-wide text-white shadow-sm"
-                  aria-label="New — not opened yet"
+                  aria-label={topRightBadgeAriaLabel}
                 >
-                  NEW
+                  {topRightBadgeLabel}
                 </span>
               ) : null}
               {showTopRightLockBadge ? (

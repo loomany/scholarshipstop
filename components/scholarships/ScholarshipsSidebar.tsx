@@ -127,7 +127,7 @@ const ACTION_NAV_DEFS: NavDef[] = [
 ];
 
 function isScholarshipListPath(pathname: string): boolean {
-  return pathname === '/scholarships';
+  return pathname === '/scholarships' || pathname.startsWith('/scholarships/');
 }
 
 function resolveActiveTabId(
@@ -163,6 +163,7 @@ type ScholarshipsSidebarProps = {
   onSubscriptionRestrictedNav?: () => void;
   /** Optional row under Hot Deadlines — international audience filter + lock for free signed-in users. */
   internationalStudentsFilter?: ScholarshipsSidebarInternationalFilterProps | null;
+  buildTabHref?: (id: ScholarshipListTabId) => string;
 };
 
 export default function ScholarshipsSidebar({
@@ -173,7 +174,8 @@ export default function ScholarshipsSidebar({
   onGuestRestrictedNav,
   subscriptionLocked = false,
   onSubscriptionRestrictedNav,
-  internationalStudentsFilter = null
+  internationalStudentsFilter = null,
+  buildTabHref
 }: ScholarshipsSidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -225,7 +227,7 @@ export default function ScholarshipsSidebar({
         {STATIC_TOP_ROWS.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
-          const href = buildScholarshipTabHref(item.id);
+          const href = buildTabHref?.(item.id) ?? buildScholarshipTabHref(item.id);
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);
@@ -347,7 +349,7 @@ export default function ScholarshipsSidebar({
           const navLooksActive =
             isActive && !(item.id === 'matches' && intlFilterOn);
           const Icon = item.icon;
-          const href = buildScholarshipTabHref(item.id);
+          const href = buildTabHref?.(item.id) ?? buildScholarshipTabHref(item.id);
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);

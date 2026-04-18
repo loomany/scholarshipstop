@@ -58,6 +58,40 @@ function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+/** PostgREST sometimes returns HTML bodies (502/Cloudflare) as the error message. */
+function isTransientPostgrestError(message: string): boolean {
+  const m = message.toLowerCase();
+  if (m.includes('<!doctype') || m.includes('<html')) return true;
+  if (m.includes('bad gateway') || m.includes('cloudflare')) return true;
+  if (/\b502\b|\b503\b|\b504\b|\b524\b/.test(m)) return true;
+  return false;
+}
+
+async function upsertProvidersBatchWithRetry(
+  supabase: ReturnType<typeof createClient<Database>>,
+  chunk: { slug: string; display_name: string; official_url?: string }[],
+  batchLabel: string
+): Promise<void> {
+  const maxAttempts = 6;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const { error } = await supabase.from('providers').upsert(chunk, {
+      onConflict: 'slug',
+      ignoreDuplicates: true
+    });
+    if (!error) return;
+    const retryable = isTransientPostgrestError(error.message);
+    if (!retryable || attempt >= maxAttempts) {
+      console.error(`Batch upsert failed at ${batchLabel}:`, error.message);
+      process.exit(1);
+    }
+    const delayMs = Math.min(45_000, 1500 * 2 ** (attempt - 1));
+    console.warn(
+      `[providers upsert] transient error (attempt ${attempt}/${maxAttempts}), retry in ${delayMs}ms`
+    );
+    await sleep(delayMs);
+  }
+}
+
 async function revalidateProviderPages(slugs: string[]): Promise<void> {
   const uniqueSlugs = Array.from(
     new Set(slugs.map((slug) => slug.trim()).filter(Boolean))
@@ -200,14 +234,11 @@ async function main() {
     const BATCH = 150;
     for (let i = 0; i < upsertRows.length; i += BATCH) {
       const chunk = upsertRows.slice(i, i + BATCH);
-      const { error } = await supabase.from('providers').upsert(chunk, {
-        onConflict: 'slug',
-        ignoreDuplicates: true
-      });
-      if (error) {
-        console.error(`Batch upsert failed at offset ${i}:`, error.message);
-        process.exit(1);
-      }
+      await upsertProvidersBatchWithRetry(
+        supabase,
+        chunk,
+        `offset ${i}`
+      );
       synced += chunk.length;
       syncedProviderSlugs.push(...chunk.map((row) => row.slug));
       console.log(
