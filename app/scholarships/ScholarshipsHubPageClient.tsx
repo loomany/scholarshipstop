@@ -1318,6 +1318,9 @@ function ScholarshipsPageInner({
     if (!isAuthenticated && activeTab === 'recommended') {
       return 'Create an account to see personalized recommendations.';
     }
+    if (!isAuthenticated && activeTab === 'best-matches') {
+      return 'Sign in and complete your profile to see best recommendations tailored to you.';
+    }
     switch (activeTab) {
       case 'saved':
         return 'No saved scholarships yet. Tap the heart on a grant to save it here.';

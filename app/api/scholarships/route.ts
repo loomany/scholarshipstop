@@ -363,6 +363,15 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     };
   }
 
+  /**
+   * Best recommendation tab is profile-backed. Without a session or without a
+   * non-empty profile seed, the SQL stack falls back to the generic
+   * credibility/verified slice (~224 rows) — confusing vs sidebar + product.
+   */
+  const bestMatchesNeedsProfile =
+    req.tab === 'best-matches' &&
+    (!sessionUser || !profileFilterSeed);
+
   if (hubDbg) {
     // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
     console.log('[scholarships-hub-meta-debug] api after auth/profile', {
@@ -390,6 +399,9 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     applyListingMetaGuestPatches(meta, {
       authUser: Boolean(authUser)
     });
+    if (bestMatchesNeedsProfile) {
+      meta.sidebarCounts.bestMatches = 0;
+    }
     const response = NextResponse.json({
       meta,
       page: req.page,
@@ -397,6 +409,53 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     });
     response.headers.set('Cache-Control', 'private, no-store');
     return withRuntimePathDebugHeaders(response, searchParams, runtimeReadPath, v2ReadPathEligible);
+  }
+
+  if (bestMatchesNeedsProfile) {
+    if (countOnly) {
+      return withRuntimePathDebugHeaders(
+        NextResponse.json({
+          total: 0,
+          page: req.page,
+          limit: req.limit
+        }),
+        searchParams,
+        runtimeReadPath,
+        v2ReadPathEligible
+      );
+    }
+    const empty = await emptyListResult(
+      req,
+      includeMeta && !countOnly,
+      Boolean(sessionUser),
+      listingSupabase
+    );
+    if (profileRow && empty.meta) {
+      empty.meta.profileMatchSummary = profileMatchSummaryFromRow(profileRow);
+      empty.meta.profileFilterSeed = profileFilterSeed;
+    } else if (empty.meta && profileFilterSeed) {
+      empty.meta.profileFilterSeed = profileFilterSeed;
+    }
+    if (empty.meta) {
+      applyListingMetaGuestPatches(empty.meta, {
+        authUser: Boolean(authUser)
+      });
+      empty.meta.sidebarCounts.bestMatches = 0;
+    }
+    return withRuntimePathDebugHeaders(
+      NextResponse.json({
+        scholarships: empty.scholarships,
+        results: empty.scholarships,
+        total: 0,
+        page: req.page,
+        limit: req.limit,
+        meta: empty.meta,
+        isProSubscriber
+      }),
+      searchParams,
+      runtimeReadPath,
+      v2ReadPathEligible
+    );
   }
 
   if (!similarTo && isEmptyIdTab(req)) {
