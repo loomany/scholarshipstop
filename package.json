@@ -70,7 +70,9 @@
     "seo:daily-digest-telegram": "dotenv -e .env.local -- node scripts/post-seo-daily-digest-telegram.mjs",
     "cron:check-index-worker": "npx tsx scripts/cron-check-index-worker.ts",
     "cron:scan-indexing": "npx tsx scripts/cron-scan-indexing.ts",
-    "cron:google-indexing-flush": "npx tsx scripts/cron-google-indexing-flush.ts"
+    "cron:google-indexing-flush": "npx tsx scripts/cron-google-indexing-flush.ts",
+    "audit:jsonld-sitemap": "dotenv -e .env.local -- npx tsx scripts/audit-jsonld-sitemap.ts",
+    "audit:jsonld-sitemap:dry": "dotenv -e .env.local -- npx tsx scripts/audit-jsonld-sitemap.ts --dry-run"
   },
   "dependencies": {
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
