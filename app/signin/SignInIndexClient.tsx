@@ -1,5 +1,6 @@
 'use client';
 
+import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { getDefaultSignInView } from '@/utils/auth-helpers/settings';
 import { useRouter } from 'next/navigation';
 import { useLayoutEffect } from 'react';
@@ -29,8 +30,6 @@ export default function SignInIndexClient() {
   }, [router]);
 
   return (
-    <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center bg-zinc-50 px-4 py-10 text-sm text-zinc-500">
-      Loading…
-    </div>
+    <SiteBrandLoading className="min-h-[calc(100vh-5rem)] px-4 py-10" />
   );
 }

@@ -1,5 +1,7 @@
 import { GraduationCap } from 'lucide-react';
 
+import { NAVIGATION_PROGRESS_COLOR } from '@/lib/constants/navigationProgress';
+
 type ScholarshipsBrandLoadingProps = {
   /** Shown under the mark; pass empty string to hide. */
   label?: string;
@@ -9,6 +11,10 @@ type ScholarshipsBrandLoadingProps = {
    * `comfortable` — full-route Suspense / centered empty state.
    */
   density?: 'comfortable' | 'compact';
+  /**
+   * Brand orange strip (same hue as `NavigationProgress`). Use on full-page / route fallbacks.
+   */
+  showTopAccentBar?: boolean;
 };
 
 /**
@@ -18,14 +24,15 @@ type ScholarshipsBrandLoadingProps = {
 export function ScholarshipsBrandLoading({
   label = 'Loading scholarships…',
   className = '',
-  density = 'comfortable'
+  density = 'comfortable',
+  showTopAccentBar = false
 }: ScholarshipsBrandLoadingProps) {
   const minH =
     density === 'compact'
       ? 'min-h-[12rem] py-8 sm:min-h-[14rem]'
       : 'min-h-[min(28rem,60vh)] py-16 sm:py-20';
 
-  return (
+  const inner = (
     <div
       role="status"
       aria-live="polite"
@@ -50,6 +57,19 @@ export function ScholarshipsBrandLoading({
           {label}
         </p>
       ) : null}
+    </div>
+  );
+
+  if (!showTopAccentBar) return inner;
+
+  return (
+    <div className="flex w-full flex-col">
+      <div
+        className="h-[3px] w-full shrink-0"
+        style={{ backgroundColor: NAVIGATION_PROGRESS_COLOR }}
+        aria-hidden
+      />
+      {inner}
     </div>
   );
 }

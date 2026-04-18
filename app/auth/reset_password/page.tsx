@@ -9,6 +9,7 @@ import {
   parseOAuthStyleHash,
   userFacingRecoveryHashError
 } from '@/lib/auth/recoveryUrlErrors';
+import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import {
   getErrorRedirect,
   getStatusRedirect,
@@ -185,9 +186,7 @@ export default function ResetPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center bg-zinc-50 px-4">
-          <p className="text-sm text-zinc-600">Loading…</p>
-        </div>
+        <SiteBrandLoading className="min-h-[calc(100vh-5rem)] px-4" />
       }
     >
       <ResetPasswordExchange />

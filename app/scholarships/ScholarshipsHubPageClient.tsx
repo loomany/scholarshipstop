@@ -1338,7 +1338,7 @@ function ScholarshipsPageInner({
           />
 
           {isLoading ? (
-            <ScholarshipsBrandLoading density="compact" />
+            <ScholarshipsBrandLoading density="compact" showTopAccentBar />
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
           ) : totalCount === 0 ? (
@@ -1482,9 +1482,9 @@ export default function ScholarshipsHubPageClient({
   return (
     <Suspense
       fallback={
-        <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 text-slate-600 sm:px-5 md:py-12 lg:px-8">
+        <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
           <div className="mx-auto max-w-5xl">
-            <ScholarshipsBrandLoading />
+            <ScholarshipsBrandLoading showTopAccentBar />
           </div>
         </section>
       }

@@ -852,7 +852,7 @@ export default function ScholarshipCategoryPageClient({
               </div>
             </div>
           ) : isLoading ? (
-            <ScholarshipsBrandLoading density="compact" />
+            <ScholarshipsBrandLoading density="compact" showTopAccentBar />
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
           ) : showEmptyState ? (

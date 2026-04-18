@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { GOOGLE_ADS_SIGNUP_CONVERSION_SEND_TO } from '@/lib/analytics/googleAdsSignupConversion';
 import { createClient } from '@/utils/supabase/client';
 
@@ -79,9 +80,5 @@ export default function RegisterConversionClient() {
 
   if (!showFallback) return null;
 
-  return (
-    <div className="flex min-h-[40vh] items-center justify-center px-4 text-sm text-zinc-600">
-      Loading…
-    </div>
-  );
+  return <SiteBrandLoading className="min-h-[40vh]" />;
 }

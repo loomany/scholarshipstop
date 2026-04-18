@@ -30,6 +30,7 @@ import { enqueueRegistrationVerificationEmail } from '@/app/actions/registration
 import { syncOnboardingToProfiles } from '@/lib/onboarding/syncScholarshipProfile';
 import { validateScholarshipOnboardingStep2 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
 import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
+import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { toast } from '@/components/ui/Toasts/use-toast';
 
 /** Default landing page after “Create account & find scholarships” (pricing / trial). */
@@ -362,9 +363,10 @@ function OnboardingWizard() {
 
   if (!draft) {
     return (
-      <div className="flex min-h-[calc(100dvh-4rem)] items-center justify-center bg-zinc-50 px-4">
-        <p className="text-sm text-zinc-600">Loading your progress…</p>
-      </div>
+      <SiteBrandLoading
+        label="Loading your progress…"
+        className="min-h-[calc(100dvh-4rem)]"
+      />
     );
   }
 
@@ -422,9 +424,7 @@ export default function OnboardingPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-[calc(100dvh-4rem)] items-center justify-center bg-zinc-50">
-          <p className="text-sm text-zinc-600">Loading…</p>
-        </div>
+        <SiteBrandLoading label="" className="min-h-[calc(100dvh-4rem)]" />
       }
     >
       <OnboardingWizard />

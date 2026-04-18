@@ -23,6 +23,7 @@ import { SITE_SEARCH_INPUT_CHROME } from '@/lib/constants/catalogControlBar';
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import MentorPremiumAccessMessage from '@/components/essay/MentorPremiumAccessMessage';
 import MentorTrialSubscribeModal from '@/components/essay/MentorTrialSubscribeModal';
+import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import {
   ESSAY_GUEST_INTERVIEW_STORAGE_KEY,
@@ -1391,9 +1392,13 @@ export function EssayQuestionnaire({
 
   if (!authChecked || bootLoading) {
     return (
-      <div className="flex min-h-[320px] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-zinc-400" aria-hidden />
-        <span className="sr-only">Loading…</span>
+      <div className="w-full min-h-[320px]">
+        <ScholarshipsBrandLoading
+          density="compact"
+          label=""
+          showTopAccentBar
+          className="min-h-[300px] py-10"
+        />
       </div>
     );
   }

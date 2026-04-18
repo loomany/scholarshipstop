@@ -796,6 +796,7 @@ export default function ScholarshipDetailPageClient({
             <ScholarshipsBrandLoading
               density="comfortable"
               label="Loading scholarship…"
+              showTopAccentBar
             />
           </div>
         </section>

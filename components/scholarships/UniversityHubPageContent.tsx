@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 
+import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
+
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { ProviderFaqItem } from '@/lib/providers/providerProfileTypes';
 import type { UniversityHubRow } from '@/lib/scholarships/universityHubServer';
@@ -82,8 +84,12 @@ export default function UniversityHubPageContent({
 
         <Suspense
           fallback={
-            <aside className="mt-12 rounded-2xl border border-dashed border-slate-200 bg-white/60 p-6 text-sm text-slate-500">
-              Loading related schools…
+            <aside className="mt-12 rounded-2xl border border-dashed border-slate-200 bg-white/60 p-6">
+              <ScholarshipsBrandLoading
+                density="compact"
+                label="Loading related schools…"
+                className="!min-h-[10rem] py-6"
+              />
             </aside>
           }
         >

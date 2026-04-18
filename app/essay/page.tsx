@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
+import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
+
 import EssayPageClient from './EssayPageClient';
 
 export const metadata: Metadata = {
@@ -9,15 +11,7 @@ export const metadata: Metadata = {
 };
 
 function EssayPageFallback() {
-  return (
-    <div className="flex min-h-[100dvh] items-center justify-center bg-zinc-50">
-      <div
-        className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-200 border-t-zinc-500"
-        role="status"
-        aria-label="Loading"
-      />
-    </div>
-  );
+  return <SiteBrandLoading className="min-h-[100dvh]" />;
 }
 
 export default function EssayPage() {
