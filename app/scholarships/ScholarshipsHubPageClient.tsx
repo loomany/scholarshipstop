@@ -9,6 +9,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -96,6 +97,7 @@ import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMet
 import { buildHubTabPresetMoreFilters } from '@/lib/scholarships/hubTabPresetMoreFilters';
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
 import { LANDING_QUIZ_HUB_SEED_KEY } from '@/lib/scholarships/landingQuizHubSession';
+import { tryBuildProfileSeedFromPendingLandingSession } from '@/lib/onboarding/mergeLandingQuizIntoOnboardingDraft';
 import {
   mergeBestRecommendationFiltersFromProfile,
   type ScholarshipProfileFilterSeed
@@ -216,6 +218,15 @@ function ScholarshipsPageInner({
   const sortBy = parsedList.sort;
   const appliedCategoryIds = parsedList.categories;
   const catalogListScope = 'catalog' as const;
+
+  /**
+   * Until Supabase `getSession()` finishes, `isAuthenticated` is false even for signed-in users.
+   * Do not show guest padlocks / guest empty states in that window.
+   */
+  const hubTreatAsGuest = !isAuthenticated && Boolean(authResolved);
+  /** Best tab: avoid one frame of guest UI before we know the session (prevents card ↔ locks flicker). */
+  const bestTabAuthPending =
+    activeTab === 'best-matches' && !authResolved;
 
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [scholarships, setScholarships] = useState<Scholarship[]>(
@@ -546,23 +557,31 @@ function ScholarshipsPageInner({
 
   const landingQuizHubSeedAppliedRef = useRef(false);
 
-  /** One-shot: `/get-scholarships` quiz stores a filter seed in sessionStorage before redirect. */
-  useEffect(() => {
+  /**
+   * `/get-scholarships` finish: one-shot `LANDING_QUIZ_HUB_SEED_KEY`, or after refresh rebuild from
+   * `PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY` (kept until `/onboarding` merge).
+   * `useLayoutEffect` runs before paint so we do not flash guest “Found 0 + locks” before the seed applies.
+   */
+  useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
     if (landingQuizHubSeedAppliedRef.current) return;
-    const raw = sessionStorage.getItem(LANDING_QUIZ_HUB_SEED_KEY);
-    if (!raw) return;
 
-    let seed: ScholarshipProfileFilterSeed;
-    try {
-      seed = JSON.parse(raw) as ScholarshipProfileFilterSeed;
-    } catch {
+    let seed: ScholarshipProfileFilterSeed | null = null;
+    const rawOneShot = sessionStorage.getItem(LANDING_QUIZ_HUB_SEED_KEY);
+    if (rawOneShot) {
+      try {
+        seed = JSON.parse(rawOneShot) as ScholarshipProfileFilterSeed;
+      } catch {
+        /* ignore */
+      }
       sessionStorage.removeItem(LANDING_QUIZ_HUB_SEED_KEY);
-      return;
     }
+    if (!seed) {
+      seed = tryBuildProfileSeedFromPendingLandingSession();
+    }
+    if (!seed) return;
 
     landingQuizHubSeedAppliedRef.current = true;
-    sessionStorage.removeItem(LANDING_QUIZ_HUB_SEED_KEY);
     setLandingQuizProfileSeed(seed);
     replaceListingParams({ resetPage: true });
   }, [replaceListingParams]);
@@ -600,20 +619,31 @@ function ScholarshipsPageInner({
   }, [routeBaseMoreFilters, moreFiltersApplied, filterBounds]);
 
   /**
-   * Listing POST body: signed-in users rely on server profile merge for best/recommended.
-   * Guests: merge landing quiz seed only on best/recommended so Matches stays full catalog.
+   * Listing POST body: server merges DB profile into best/recommended when present.
+   * Landing quiz seed is merged here when there is no DB profile seed yet (guest or new account),
+   * so `moreFiltersHasProfileOrQuizListingSignals` is true and Best is not blocked as “generic”.
    */
   const hubListingBodyMoreFilters = useMemo(() => {
     const merged = hubMergedBaseMoreFilters;
-    if (isAuthenticated) {
+    const tabOk =
+      activeTab === 'best-matches' || activeTab === 'recommended';
+    if (!landingQuizProfileSeed || !tabOk) {
       return merged;
     }
-    if (
-      landingQuizProfileSeed &&
-      (activeTab === 'best-matches' || activeTab === 'recommended')
-    ) {
+    if (isAuthenticated && listMeta?.profileFilterSeed) {
+      return merged;
+    }
+    if (hubTreatAsGuest && activeTab === 'recommended') {
       return mergeBestRecommendationFiltersFromProfile(
-        activeTab,
+        'recommended',
+        cloneMoreFilters(merged),
+        landingQuizProfileSeed,
+        filterBounds
+      );
+    }
+    if (activeTab === 'best-matches') {
+      return mergeBestRecommendationFiltersFromProfile(
+        'best-matches',
         cloneMoreFilters(merged),
         landingQuizProfileSeed,
         filterBounds
@@ -625,7 +655,9 @@ function ScholarshipsPageInner({
     isAuthenticated,
     landingQuizProfileSeed,
     activeTab,
-    filterBounds
+    filterBounds,
+    listMeta?.profileFilterSeed,
+    hubTreatAsGuest
   ]);
 
   useEffect(() => {
@@ -899,9 +931,9 @@ function ScholarshipsPageInner({
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
   /** Guests on Best recommendation only load page 1; URL may still carry `page` until normalized. */
   const hubListingPage =
-    !isAuthenticated && activeTab === 'best-matches' ? 1 : pageFromUrl;
+    hubTreatAsGuest && activeTab === 'best-matches' ? 1 : pageFromUrl;
   const listPageForUi =
-    !isAuthenticated && activeTab === 'best-matches' ? 1 : currentPage;
+    hubTreatAsGuest && activeTab === 'best-matches' ? 1 : currentPage;
 
   useEffect(() => {
     let cancelled = false;
@@ -1047,6 +1079,7 @@ function ScholarshipsPageInner({
     };
   }, [
     isAuthenticated,
+    authResolved,
     searchParamsString,
     hubListingPage,
     activeTab,
@@ -1478,10 +1511,10 @@ function ScholarshipsPageInner({
     (hasListingParams || moreFiltersOffDefault || query.trim().length > 0);
 
   const emptyMessage = useMemo(() => {
-    if (!isAuthenticated && activeTab === 'recommended') {
+    if (hubTreatAsGuest && activeTab === 'recommended') {
       return 'Create an account to see personalized recommendations.';
     }
-    if (!isAuthenticated && activeTab === 'best-matches') {
+    if (hubTreatAsGuest && activeTab === 'best-matches') {
       return 'Sign in and complete your profile to see best recommendations tailored to you.';
     }
     switch (activeTab) {
@@ -1503,16 +1536,52 @@ function ScholarshipsPageInner({
       default:
         return 'No scholarships match your filters. Try adjusting search or filters.';
     }
-  }, [activeTab, isAuthenticated, savedFiltersForHub]);
+  }, [activeTab, hubTreatAsGuest, isAuthenticated, savedFiltersForHub]);
 
   const guestPersonalizedEmpty =
-    !isAuthenticated && activeTab === 'recommended';
-  const profileIncompletePersonalizedEmpty =
-    isAuthenticated &&
+    hubTreatAsGuest && activeTab === 'recommended';
+
+  /** Guest Best (0), after load, no quiz: centered signup CTA below the list toolbar. */
+  const guestBestMatchesEmptySurface =
+    hubTreatAsGuest &&
+    activeTab === 'best-matches' &&
     totalCount === 0 &&
     !isLoading &&
-    (activeTab === 'best-matches' || activeTab === 'recommended') &&
-    listMeta?.personalizedMatchReady === false;
+    !landingQuizProfileSeed;
+
+  /**
+   * Signed-in Best, empty list, no quiz carry-over, meta loaded: incomplete DB profile only.
+   */
+  const authBestProfileIncompleteEmptySurface =
+    Boolean(authResolved) &&
+    isAuthenticated &&
+    activeTab === 'best-matches' &&
+    totalCount === 0 &&
+    !isLoading &&
+    !landingQuizProfileSeed &&
+    listMeta != null &&
+    listMeta.personalizedMatchReady === false;
+
+  /**
+   * Saved Filters: completion card only when meta explicitly says profile is not ready for personalization.
+   * Avoid `!== true` on undefined so we do not flash this card before the first meta response.
+   */
+  const authRecommendedProfileIncompleteEmpty =
+    Boolean(authResolved) &&
+    isAuthenticated &&
+    activeTab === 'recommended' &&
+    totalCount === 0 &&
+    !isLoading &&
+    listMeta != null &&
+    listMeta.personalizedMatchReady === false;
+
+  /**
+   * Centered completion / signup card (toolbar with search · filters · categories stays visible above).
+   */
+  const profileCompletionEmptyOnly =
+    guestBestMatchesEmptySurface ||
+    authBestProfileIncompleteEmptySurface ||
+    authRecommendedProfileIncompleteEmpty;
 
   return (
     <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 text-left text-zinc-900 sm:px-5 md:py-12 lg:px-8">
@@ -1524,7 +1593,7 @@ function ScholarshipsPageInner({
               <ScholarshipsEmailConfirmationBanner />
               <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
                 {scholarshipListPageTitle(activeTab, {
-                  guest: !isAuthenticated
+                  guest: hubTreatAsGuest
                 })}
               </h1>
             </div>
@@ -1534,15 +1603,15 @@ function ScholarshipsPageInner({
           <ScholarshipsSidebar
             counts={sidebarCounts}
             matchesNewIndicator={null}
-            guestMode={!isAuthenticated}
-            onGuestRestrictedNav={!isAuthenticated ? openRegistrationWall : undefined}
+            guestMode={hubTreatAsGuest}
+            onGuestRestrictedNav={hubTreatAsGuest ? openRegistrationWall : undefined}
             subscriptionLocked={isSubscriptionLocked}
             onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
             buildTabHref={routeScope?.providerSlug ? buildSidebarTabHref : undefined}
             internationalStudentsFilter={{
               active: internationalSidebarChecked,
               onActivate: toggleInternationalAudienceSidebar,
-              showGuestLock: !isAuthenticated,
+              showGuestLock: hubTreatAsGuest,
               showSubscriptionLock: isSubscriptionLocked,
               onGuestRestrictedClick: openRegistrationWall,
               onSubscriptionRestrictedClick: openSubscriptionOffer
@@ -1551,39 +1620,83 @@ function ScholarshipsPageInner({
         }
       >
         <>
-          <ScholarshipsListHeader
-            query={query}
-            onQueryChange={onQueryChange}
-            categoryCounts={categoryCounts}
-            appliedCategoryIds={appliedCategoryIds}
-            onApplyCategories={onApplyCategories}
-            sortBy={sortBy}
-            onSortChange={onSortChange}
-            resultCount={resultCountForHeader}
-            showingFrom={showingFrom}
-            showingTo={showingTo}
-            onOpenMoreFilters={openMoreFilters}
-            pageTitle={scholarshipListPageTitle(activeTab, {
-              guest: !isAuthenticated
-            })}
-            omitHeadlineBlock
-            loadingCountText={scholarshipListLoadingText(activeTab)}
-            listTab={activeTab}
-            categoriesDisabled={!isLoading && totalCount === 0}
-            moreFiltersActiveCount={moreFiltersActiveCount}
-            isAuthenticated={isAuthenticated}
-            hasSubscription={hasSubscription}
-            onGuestSortBlocked={!isAuthenticated ? openRegistrationWall : undefined}
-            onSubscriptionSortBlocked={
-              isSubscriptionLocked ? openSubscriptionOffer : undefined
-            }
-            onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
-          />
+          {bestTabAuthPending ? (
+            <ScholarshipsBrandLoading density="compact" showTopAccentBar />
+          ) : (
+            <>
+              <ScholarshipsListHeader
+                query={query}
+                onQueryChange={onQueryChange}
+                categoryCounts={categoryCounts}
+                appliedCategoryIds={appliedCategoryIds}
+                onApplyCategories={onApplyCategories}
+                sortBy={sortBy}
+                onSortChange={onSortChange}
+                resultCount={resultCountForHeader}
+                showingFrom={showingFrom}
+                showingTo={showingTo}
+                onOpenMoreFilters={openMoreFilters}
+                pageTitle={scholarshipListPageTitle(activeTab, {
+                  guest: hubTreatAsGuest
+                })}
+                omitHeadlineBlock
+                loadingCountText={scholarshipListLoadingText(activeTab)}
+                listTab={activeTab}
+                categoriesDisabled={!isLoading && totalCount === 0}
+                moreFiltersActiveCount={moreFiltersActiveCount}
+                isAuthenticated={authResolved && isAuthenticated}
+                hasSubscription={hasSubscription}
+                onGuestSortBlocked={
+                  hubTreatAsGuest ? openRegistrationWall : undefined
+                }
+                onSubscriptionSortBlocked={
+                  isSubscriptionLocked ? openSubscriptionOffer : undefined
+                }
+                onGuestLockedAction={
+                  hubTreatAsGuest ? openRegistrationWall : undefined
+                }
+              />
 
-          {isLoading ? (
+              {isLoading ? (
             <ScholarshipsBrandLoading density="compact" showTopAccentBar />
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
+          ) : profileCompletionEmptyOnly ? (
+            <div className="mt-4 flex w-full flex-col items-center px-2 pb-10 pt-2 sm:mt-6 sm:pb-16 sm:pt-4">
+              <div className="w-full max-w-xl rounded-2xl border border-[#FFD9B3] bg-gradient-to-b from-[#FFF8F1] to-white p-6 text-center shadow-sm sm:p-8">
+                <h3 className="text-base font-semibold text-[#7A3B00] sm:text-lg">
+                  {guestBestMatchesEmptySurface
+                    ? 'Create a free account to unlock best recommendations'
+                    : activeTab === 'best-matches'
+                      ? 'Complete your profile to unlock best recommendations'
+                      : 'Complete your profile so we can align saved filters with your profile defaults.'}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#8C5A2B]">
+                  {guestBestMatchesEmptySurface
+                    ? 'Sign up, add your school level, field of study, citizenship, GPA, and location — then we can rank scholarships that fit you.'
+                    : activeTab === 'best-matches'
+                      ? 'Add your school level, field of study, citizenship, GPA, and location so we can show scholarships that fit you better.'
+                      : 'Fill in your academic and eligibility details so saved filters can merge with your profile where helpful.'}
+                </p>
+                <div className="mt-6 flex justify-center">
+                  {guestBestMatchesEmptySurface ? (
+                    <Link
+                      href="/onboarding"
+                      className="inline-flex items-center justify-center rounded-xl bg-[#FF7A1A] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2"
+                    >
+                      Create free account
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/account"
+                      className="inline-flex items-center justify-center rounded-xl bg-[#FF7A1A] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2"
+                    >
+                      Complete profile
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
           ) : totalCount === 0 ? (
             <div className="rounded-xl border border-zinc-200 bg-white px-5 py-10 text-center text-slate-600 shadow-sm">
               <p className="text-base font-medium text-zinc-800">
@@ -1598,27 +1711,6 @@ function ScholarshipsPageInner({
                     Create a free account
                   </Link>
                 </p>
-              ) : profileIncompletePersonalizedEmpty ? (
-                <div className="mx-auto mt-5 max-w-xl rounded-2xl border border-[#FFD9B3] bg-gradient-to-b from-[#FFF8F1] to-white p-6 text-left shadow-sm">
-                  <h3 className="text-base font-semibold text-[#7A3B00] sm:text-lg">
-                    {activeTab === 'best-matches'
-                      ? 'Complete your profile to unlock best recommendations'
-                      : 'Complete your profile so we can align saved filters with your profile defaults.'}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#8C5A2B]">
-                    {activeTab === 'best-matches'
-                      ? 'Add your school level, field of study, citizenship, GPA, and location so we can show scholarships that fit you better.'
-                      : 'Fill in your academic and eligibility details so saved filters can merge with your profile where helpful.'}
-                  </p>
-                  <div className="mt-4">
-                    <Link
-                      href="https://scholarshiptop.com/account"
-                      className="inline-flex items-center justify-center rounded-xl bg-[#FF7A1A] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2"
-                    >
-                      Complete profile
-                    </Link>
-                  </div>
-                </div>
               ) : null}
               {showClearFilters ? (
                 <p className="mt-4">
@@ -1655,7 +1747,7 @@ function ScholarshipsPageInner({
                       isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
                     }
                     onGuestDetailNavigate={
-                      !isAuthenticated
+                      hubTreatAsGuest
                         ? () => openRegistrationWall('card-unlock')
                         : undefined
                     }
@@ -1668,14 +1760,16 @@ function ScholarshipsPageInner({
                 totalPages={totalPages}
                 buildHref={buildPageHref}
                 guestPaginationLocked={
-                  !isAuthenticated && activeTab === 'best-matches'
+                  hubTreatAsGuest && activeTab === 'best-matches'
                 }
                 onGuestLockedClick={
-                  !isAuthenticated && activeTab === 'best-matches'
+                  hubTreatAsGuest && activeTab === 'best-matches'
                     ? () => openRegistrationWall()
                     : undefined
                 }
               />
+            </>
+          )}
             </>
           )}
           {postListingContent}
@@ -1696,8 +1790,10 @@ function ScholarshipsPageInner({
         previewCountLoading={previewCountLoading}
         previewCountFallback={lastKnownPreviewCount}
         locationOptions={[]}
-        isAuthenticated={isAuthenticated}
-        onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
+        isAuthenticated={authResolved && isAuthenticated}
+        onGuestLockedAction={
+          hubTreatAsGuest ? openRegistrationWall : undefined
+        }
         hasSubscription={hasSubscription}
         onSubscriptionLockedAction={isSubscriptionLocked ? openSubscriptionOffer : undefined}
       />

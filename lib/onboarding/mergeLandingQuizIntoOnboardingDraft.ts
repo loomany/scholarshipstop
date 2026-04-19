@@ -19,6 +19,10 @@ import { validateScholarshipOnboarding } from '@/lib/validation/scholarshipOnboa
 import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
 import { validateScholarshipOnboardingStep4Draft } from '@/lib/validation/scholarshipOnboardingStep4Schema';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
+import {
+  buildScholarshipProfileFilterSeedFromQuizDraft,
+  type ScholarshipProfileFilterSeed
+} from '@/lib/scholarships/profileFilterDefaults';
 
 /** sessionStorage: full quiz draft after “finish” before landing key is cleared. */
 export const PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY =
@@ -75,6 +79,23 @@ export function stashLandingQuizDraftForOnboardingMerge(
     );
   } catch {
     /* quota / private mode */
+  }
+}
+
+/**
+ * Rebuild the hub filter seed after refresh: `LANDING_QUIZ_HUB_SEED_KEY` is one-shot removed on
+ * first hub load, but `PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY` stays until `/onboarding` merge.
+ */
+export function tryBuildProfileSeedFromPendingLandingSession(): ScholarshipProfileFilterSeed | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = sessionStorage.getItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY);
+    if (!raw) return null;
+    const draft = parseSessionDraft(raw);
+    if (!draft) return null;
+    return buildScholarshipProfileFilterSeedFromQuizDraft(draft);
+  } catch {
+    return null;
   }
 }
 

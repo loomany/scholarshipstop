@@ -59,9 +59,9 @@ export function buildHubTabPresetMoreFilters(options: {
     case 'submitted':
       return cloneMoreFilters(base);
     case 'best-matches': {
+      /** Account profile wins; otherwise landing quiz (guest or signed-in before profile row). */
       const seed =
-        options.profileFilterSeed ??
-        (!options.isAuthenticated ? options.landingQuizProfileSeed : null);
+        options.profileFilterSeed ?? options.landingQuizProfileSeed;
       if (seed) {
         return mergeBestRecommendationFiltersFromProfile(
           'best-matches',
