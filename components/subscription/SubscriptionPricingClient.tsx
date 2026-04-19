@@ -14,6 +14,7 @@ import {
 } from '@/lib/constants/scholarshipActionUi';
 import { cn } from '@/utils/cn';
 import { type BillingPlanKey, getCheckoutURL } from '@/app/actions/billing';
+import { onboardingStepHref } from '@/lib/onboarding/onboardingResume';
 
 declare global {
   interface Window {
@@ -459,6 +460,7 @@ const PLANS: PlanConfig[] = [
 ];
 
 export default function SubscriptionPricingClient({
+  isAuthenticated = true,
   currentPlanKey = null,
   currentPlanStatusLabel = 'Active Plan',
   hasActiveSubscription: hasActiveSubscriptionProp,
@@ -469,6 +471,8 @@ export default function SubscriptionPricingClient({
   pastDueBillingAccent = false,
   isEligibleForSkipTrial = false
 }: {
+  /** From server: guest must not call checkout (redirect to onboarding with `next` instead). */
+  isAuthenticated?: boolean;
   currentPlanKey?: BillingPlanKey | null;
   /** Shown on the disabled button for the tier that matches `currentPlanKey`. */
   currentPlanStatusLabel?: string;
@@ -609,6 +613,13 @@ export default function SubscriptionPricingClient({
       hasActiveSubscription &&
       currentPlanKey != null &&
       currentPlanKey !== planKey;
+
+    /** Guest + new trial (not plan change): onboarding, then return to subscribe. */
+    if (!isAuthenticated && !shouldChangeExistingPlan) {
+      setActivePlanTitle(null);
+      router.push(onboardingStepHref(1, '/subscription'));
+      return;
+    }
 
     startTransition(async () => {
       try {

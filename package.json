@@ -77,8 +77,8 @@
     "seo:daily-digest-telegram": "dotenv -e .env.local -- node scripts/post-seo-daily-digest-telegram.mjs",
     "cron:check-index-worker": "npx tsx scripts/cron-check-index-worker.ts",
     "cron:scan-indexing": "npx tsx scripts/cron-scan-indexing.ts",
-    "cron:google-indexing-flush": "npx tsx scripts/cron-google-indexing-flush.ts",
-    "cron:seo-page-inspection": "npx tsx scripts/cron-seo-page-inspection.ts",
+    "cron:google-indexing-flush": "dotenv -e .env.local -- npx tsx scripts/cron-google-indexing-flush.ts",
+    "cron:seo-page-inspection": "dotenv -e .env.local -- npx tsx scripts/cron-seo-page-inspection.ts",
     "audit:jsonld-sitemap": "dotenv -e .env.local -- npx tsx scripts/audit-jsonld-sitemap.ts",
     "audit:jsonld-sitemap:dry": "dotenv -e .env.local -- npx tsx scripts/audit-jsonld-sitemap.ts --dry-run",
     "audit:jsonld-sitemap:prod": "npx tsx scripts/audit-jsonld-sitemap.ts"

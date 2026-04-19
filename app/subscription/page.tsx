@@ -117,6 +117,7 @@ export default async function SubscriptionPage() {
           </header>
 
           <SubscriptionPricingClient
+            isAuthenticated={Boolean(user)}
             currentPlanKey={currentPlanKey}
             currentPlanStatusLabel={subscriptionPricingPlanStatusLabel(
               presentation,
