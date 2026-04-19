@@ -1,4 +1,6 @@
-const SAVED_SCHOLARSHIPS_KEY = 'savedScholarships';
+import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
+
+export const SAVED_SCHOLARSHIPS_KEY = 'savedScholarships';
 
 function isBrowser() {
   return typeof window !== 'undefined';
@@ -8,7 +10,9 @@ export function getSavedScholarshipIds(): string[] {
   if (!isBrowser()) return [];
 
   try {
-    const raw = window.localStorage.getItem(SAVED_SCHOLARSHIPS_KEY);
+    const raw = window.localStorage.getItem(
+      getScopedScholarshipStorageKey(SAVED_SCHOLARSHIPS_KEY)
+    );
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed)
@@ -24,7 +28,10 @@ export function saveScholarship(id: string): string[] {
   if (current.includes(id)) return current;
   const next = [...current, id];
   if (isBrowser()) {
-    window.localStorage.setItem(SAVED_SCHOLARSHIPS_KEY, JSON.stringify(next));
+    window.localStorage.setItem(
+      getScopedScholarshipStorageKey(SAVED_SCHOLARSHIPS_KEY),
+      JSON.stringify(next)
+    );
   }
   return next;
 }
@@ -37,7 +44,10 @@ export function saveScholarshipToUserProfile(id: string): string[] {
 export function removeScholarship(id: string): string[] {
   const next = getSavedScholarshipIds().filter((item) => item !== id);
   if (isBrowser()) {
-    window.localStorage.setItem(SAVED_SCHOLARSHIPS_KEY, JSON.stringify(next));
+    window.localStorage.setItem(
+      getScopedScholarshipStorageKey(SAVED_SCHOLARSHIPS_KEY),
+      JSON.stringify(next)
+    );
   }
   return next;
 }

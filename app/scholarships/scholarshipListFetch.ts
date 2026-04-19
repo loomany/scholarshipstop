@@ -30,6 +30,8 @@ export type ScholarshipsListPostBody = {
   moreFilters?: MoreFiltersJson;
   /** `null` = no saved preset (Saved Filters sidebar count = 0). Omit on legacy clients. */
   savedFiltersSnapshot?: MoreFiltersJson | null;
+  /** Guest Best recommendation: allow result preview after the inline wizard is finished. */
+  guestBestRecommendationPreviewEnabled?: boolean;
   longTailLegacySlugs?: string[];
   seoListingFallback?: boolean;
   slugOnlyMoreFilters?: MoreFiltersJson;
@@ -79,6 +81,8 @@ export async function postScholarshipsCount(
       searchParams: sp.toString(),
       moreFilters: body.moreFilters,
       savedFiltersSnapshot: body.savedFiltersSnapshot,
+      guestBestRecommendationPreviewEnabled:
+        body.guestBestRecommendationPreviewEnabled,
       longTailLegacySlugs: body.longTailLegacySlugs,
       seoListingFallback: body.seoListingFallback,
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
@@ -102,6 +106,8 @@ export async function postScholarshipsMeta(
       searchParams: sp.toString(),
       moreFilters: body.moreFilters,
       savedFiltersSnapshot: body.savedFiltersSnapshot,
+      guestBestRecommendationPreviewEnabled:
+        body.guestBestRecommendationPreviewEnabled,
       longTailLegacySlugs: body.longTailLegacySlugs,
       seoListingFallback: body.seoListingFallback,
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,

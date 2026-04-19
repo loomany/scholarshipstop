@@ -1,9 +1,12 @@
 'use client';
 
 import { useMemo } from 'react';
-import DOMPurify from 'isomorphic-dompurify';
+import createDOMPurify from 'dompurify';
 
-import { absolutizeResourceGuideLinksInHtml } from '@/lib/scholarships/resourceGuideRoutes';
+import {
+  absolutizeResourceGuideLinksInHtml,
+  normalizeScholarshipEntryLinksInHtml
+} from '@/lib/scholarships/resourceGuideRoutes';
 import { stripScholarshipSourceHtmlNoise } from '@/lib/scholarships/stripSourceHtmlNoise';
 import { scholarshipDetailCardPrimaryClass } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
 
@@ -23,9 +26,15 @@ export function SafeScholarshipHtml({
   className
 }: SafeScholarshipHtmlProps) {
   const clean = useMemo(
-    () =>
-      DOMPurify.sanitize(
-        stripScholarshipSourceHtmlNoise(absolutizeResourceGuideLinksInHtml(html)),
+    () => {
+      if (typeof window === 'undefined') return '';
+      const DOMPurify = createDOMPurify(window);
+      return DOMPurify.sanitize(
+        stripScholarshipSourceHtmlNoise(
+          normalizeScholarshipEntryLinksInHtml(
+            absolutizeResourceGuideLinksInHtml(html)
+          )
+        ),
         {
           ALLOWED_TAGS: [
             'p',
@@ -60,7 +69,8 @@ export function SafeScholarshipHtml({
           ALLOWED_ATTR: ['href', 'target', 'rel', 'colspan', 'rowspan'],
           ALLOW_DATA_ATTR: false
         }
-      ),
+      );
+    },
     [html]
   );
 

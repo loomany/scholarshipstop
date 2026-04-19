@@ -1,5 +1,8 @@
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
-import { gpaForProfile } from '@/lib/constants/scholarshipGpaOptions';
+import {
+  gpaForProfile,
+  withProfileGpaSelectionSnapshot
+} from '@/lib/constants/scholarshipGpaOptions';
 import type { UserProfile } from '@/lib/onboarding/userProfile';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import {
@@ -44,6 +47,7 @@ export function buildCompleteScholarshipUserProfile(
   const fn = draft.step2.firstName.trim() || null;
   const ln = draft.step2.lastName.trim() || null;
   const stateRegion = normalizeUsStateToCanonical(draft.step4.state);
+  const gpaChoice = draft.step3.gpa.trim();
   return {
     ok: true,
     profile: {
@@ -53,7 +57,8 @@ export function buildCompleteScholarshipUserProfile(
       countryCode: null,
       stateRegion,
       city: null,
-      gpa: gpaForProfile(draft.step3.gpa),
+      gpa: gpaForProfile(gpaChoice),
+      savedFiltersSnapshot: withProfileGpaSelectionSnapshot(null, gpaChoice),
       onboardingCompleted: true,
       emailVerified: false
     }

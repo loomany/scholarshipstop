@@ -13,7 +13,7 @@ import {
   getServerAuthSiteOrigin
 } from '@/utils/auth-email-redirect.server';
 import { sendPasswordResetEmail } from '@/lib/email/sendPasswordResetEmail';
-import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { getErrorRedirect, getStatusRedirect } from 'utils/helpers';
 import { getAuthTypes } from 'utils/auth-helpers/settings';
 
@@ -147,7 +147,7 @@ export async function signInWithPassword(formData: FormData) {
   } else if (data.user) {
     cookieStore.set('preferredSignInView', 'password_signin', { path: '/' });
     redirectPath = getStatusRedirect(
-      '/scholarships',
+      SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF,
       'Success!',
       'You are now signed in.'
     );
@@ -185,7 +185,9 @@ export async function signUp(formData: FormData) {
     email,
     password,
     options: {
-      emailRedirectTo: getServerAuthCallbackUrl()
+      emailRedirectTo: `${getServerAuthCallbackUrl()}?next=${encodeURIComponent(
+        SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF
+      )}`
     }
   });
 
@@ -214,7 +216,7 @@ export async function signUp(formData: FormData) {
       }
     }
     redirectPath = getStatusRedirect(
-      SCHOLARSHIPS_HUB_BEST_MATCHES_HREF,
+      SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF,
       'Success!',
       'You are now signed in.'
     );
@@ -244,7 +246,7 @@ export async function signUp(formData: FormData) {
       console.error('[signUp] notifyTelegramSignup failed', e);
     }
     redirectPath = getStatusRedirect(
-      '/',
+      SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF,
       'Success!',
       'Please check your email for a confirmation link. You may now close this tab.'
     );

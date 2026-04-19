@@ -1,7 +1,13 @@
 /** Stored in `profiles.citizenship_status` / `citizenship_status_label`. */
+export const DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP = 'domestic_or_unspecified' as const;
+
 export const CITIZENSHIP_OPTIONS = [
   { value: 'us_citizen', label: 'U.S. Citizen' },
   { value: 'us_permanent_resident', label: 'U.S. Permanent Resident (Green Card)' },
+  {
+    value: DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP,
+    label: 'No Citizenship Listed'
+  },
   { value: 'international_student', label: 'International Student' }
 ] as const;
 

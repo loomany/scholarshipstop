@@ -1,6 +1,6 @@
 'use client';
 
-import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
 import {
   getImplicitGrantTokensFromHash,
   hasOAuthStyleHashError,
@@ -95,7 +95,7 @@ export function MagicLinkImplicitSession() {
 
       const sp = new URLSearchParams(window.location.search);
       const nextRaw = sp.get('next');
-      let dest = SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
+      let dest = SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF;
       if (nextRaw) {
         try {
           const decoded = decodeURIComponent(nextRaw);

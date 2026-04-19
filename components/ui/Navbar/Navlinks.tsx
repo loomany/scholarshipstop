@@ -35,6 +35,7 @@ import {
 } from '@/lib/content-hub/resourcesSection';
 import { ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
 import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
+import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
 import NavbarUserSlot from './NavbarUserSlot';
 import s from './Navbar.module.css';
 
@@ -298,7 +299,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               </div>
             </div>
             <Link
-              href="/scholarships"
+              href={SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF}
               className={clsx(nav.dark, scholarshipsActive && nav.darkActive)}
             >
               Find Scholarships
@@ -578,7 +579,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 </div>
               </div>
               <Link
-                href="/scholarships"
+                href={SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF}
                 className={clsx(
                   nav.darkDrawer,
                   'flex w-full max-w-full items-center gap-3',

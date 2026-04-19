@@ -1,6 +1,14 @@
+import dynamic from 'next/dynamic';
 import { getNavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import s from './Navbar.module.css';
-import Navlinks from './Navlinks';
+
+/**
+ * `usePathname()` in `Navlinks` can throw under Next dev + Turbopack SSR.
+ * Keep the auth preload on the server, but render the interactive nav client-only.
+ */
+const Navlinks = dynamic(() => import('./Navlinks'), {
+  ssr: false
+});
 
 export default async function Navbar() {
   const initialNavbarAuth = await getNavbarInitialAuth();

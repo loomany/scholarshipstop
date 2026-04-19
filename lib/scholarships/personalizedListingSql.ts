@@ -1,8 +1,10 @@
 import { fieldOfStudySlug } from '@/lib/constants/scholarshipFieldOfStudyOptions';
+import { DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
   normalizeUsStateToCanonical,
   US_STATE_NAME_TO_CODE
 } from '@/lib/constants/usStates';
+import { profileGpaSelectionFromSnapshot } from '@/lib/constants/scholarshipGpaOptions';
 import { parseUserGpa, type ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 
 function csLiteral(values: string[]): string {
@@ -14,8 +16,14 @@ function csLiteral(values: string[]): string {
  * without per-user id arrays. Combined with `applyTabScopeFixed` for best / recommended / matches / easy.
  */
 export function applyPersonalizedProfileFitSql(q: any, profile: ProfilesRow): any {
+  const bucketChoice = profileGpaSelectionFromSnapshot(profile.saved_filters_snapshot);
   const userGpa = parseUserGpa(profile.gpa);
-  if (userGpa != null) {
+  if (bucketChoice) {
+    const gpaFloor = parseUserGpa(bucketChoice);
+    if (gpaFloor != null) {
+      q = q.or(`gpa_requirement_min.gte.${gpaFloor}`);
+    }
+  } else if (userGpa != null) {
     q = q.or(`gpa_requirement_min.is.null,gpa_requirement_min.lte.${userGpa}`);
   }
 
@@ -77,6 +85,9 @@ export function applyPersonalizedProfileFitSql(q: any, profile: ProfilesRow): an
     orParts.push(`citizenship_statuses.cs.${csLiteral(['us_citizen'])}`);
     orParts.push(`citizenship_statuses.cs.${csLiteral(['us'])}`);
     orParts.push(`citizenship_statuses.cs.${csLiteral(['domestic'])}`);
+    orParts.push(`citizenship_statuses.cs.${csLiteral(['us_permanent_resident'])}`);
+  } else if (cit === DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP) {
+    orParts.push('citizenship_statuses.eq.[]');
   } else if (cit === 'international_student') {
     orParts.push(`citizenship_statuses.cs.${csLiteral(['international'])}`);
     orParts.push(`citizenship_statuses.cs.${csLiteral(['international_students'])}`);

@@ -2,26 +2,27 @@ import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServ
 
 /**
  * Hub listing meta for guests: strip signed-in-only collections and profile blobs.
- * Best / Saved Filters counts come from the anonymous `meta` query (may include landing-quiz merge).
+ * `Best recommendation` must stay locked for guests, so its sidebar counter is
+ * always zeroed even if the anonymous base query can enumerate catalog rows.
  * Mirrors POST `/api/scholarships` after list queries.
  */
 export function applyListingMetaGuestPatches(
   meta: ScholarshipListMeta,
-  ctx: { authUser: boolean }
+  ctx: { authUser: boolean; keepBestRecommendationCount?: boolean }
 ): void {
   delete meta.matchedTotal;
   if (!ctx.authUser) {
-    /**
-     * Keep `bestMatches` / `recommended` from the anonymous listing query (e.g. landing-quiz
-     * merge). Zeroing them hid real counts while the Best tab list used quiz filters.
-     */
     meta.personalizedMatchReady = false;
+    if (!ctx.keepBestRecommendationCount) {
+      meta.sidebarCounts.bestRecommendation = 0;
+    }
     meta.sidebarCounts.saved = 0;
     meta.sidebarCounts.ignored = 0;
     meta.sidebarCounts.started = 0;
     meta.sidebarCounts.submitted = 0;
     delete meta.profileMatchSummary;
     delete meta.profileFilterSeed;
+    delete meta.savedFiltersSnapshotJson;
     delete meta.matchedTotal;
   }
 }

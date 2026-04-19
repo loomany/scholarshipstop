@@ -2,10 +2,13 @@
 
 import { useMemo, type ReactNode } from 'react';
 import clsx from 'clsx';
-import DOMPurify from 'isomorphic-dompurify';
+import createDOMPurify from 'dompurify';
 
 import { contentHubProseClassName } from '@/lib/content-hub/contentHubProseClassName';
-import { absolutizeResourceGuideLinksInHtml } from '@/lib/scholarships/resourceGuideRoutes';
+import {
+  absolutizeResourceGuideLinksInHtml,
+  normalizeScholarshipEntryLinksInHtml
+} from '@/lib/scholarships/resourceGuideRoutes';
 
 const SANITIZE_OPTIONS = {
   ALLOWED_TAGS: [
@@ -66,11 +69,16 @@ export default function SafeContentPostBody({
   footer
 }: SafeContentPostBodyProps) {
   const clean = useMemo(
-    () =>
-      DOMPurify.sanitize(
-        absolutizeResourceGuideLinksInHtml(html),
+    () => {
+      if (typeof window === 'undefined') return '';
+      const DOMPurify = createDOMPurify(window);
+      return DOMPurify.sanitize(
+        normalizeScholarshipEntryLinksInHtml(
+          absolutizeResourceGuideLinksInHtml(html)
+        ),
         SANITIZE_OPTIONS
-      ),
+      );
+    },
     [html]
   );
 

@@ -13,6 +13,7 @@ import { toast } from '@/components/ui/Toasts/use-toast';
 import { createClient } from '@/utils/supabase/client';
 import { cn } from '@/utils/cn';
 import { getURL } from '@/utils/helpers';
+import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
 
 type ProfileEmailVerified = Pick<
   Database['public']['Tables']['profiles']['Row'],
@@ -64,7 +65,7 @@ export function ScholarshipsEmailConfirmationBanner() {
       } else if (resendMode === 'supabase') {
         const supabase = createClient();
         const emailRedirectTo = getURL(
-          `auth/callback?next=${encodeURIComponent('/scholarships')}`
+          `auth/callback?next=${encodeURIComponent(SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF)}`
         );
         const { error } = await supabase.auth.resend({
           type: 'signup',

@@ -1,4 +1,5 @@
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
+import { profileGpaSelectionFromSnapshot } from '@/lib/constants/scholarshipGpaOptions';
 import type { Database } from '@/types_db';
 
 export type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
@@ -8,6 +9,10 @@ export function parseUserGpa(raw: ProfilesRow['gpa']): number | null {
   if (typeof raw === 'number' && Number.isFinite(raw)) return raw;
   const s = String(raw).trim().toLowerCase();
   if (s === 'prefer_not_to_say' || s === 'n/a') return null;
+  if (s === 'gpa_2_0_plus') return 2.0;
+  if (s === 'gpa_2_5_plus') return 2.5;
+  if (s === 'gpa_3_0_plus') return 3.0;
+  if (s === 'gpa_3_5_plus') return 3.5;
   const n = Number.parseFloat(s);
   return Number.isFinite(n) ? n : null;
 }
@@ -21,7 +26,16 @@ export type ScholarshipProfileMatchFields = Pick<
   | 'citizenship_status'
   | 'state_region'
   | 'gpa'
+  | 'saved_filters_snapshot'
 >;
+
+export function parseUserGpaSelectionFloor(
+  profile: Pick<ProfilesRow, 'gpa' | 'saved_filters_snapshot'>
+): number | null {
+  const bucketChoice = profileGpaSelectionFromSnapshot(profile.saved_filters_snapshot);
+  if (bucketChoice) return parseUserGpa(bucketChoice);
+  return parseUserGpa(profile.gpa);
+}
 
 /**
  * Profile completeness for similar-scholarship cards: 100% when all five facets are set.

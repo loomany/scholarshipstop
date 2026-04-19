@@ -7,10 +7,7 @@ import {
 } from '@/app/scholarships/moreFilters';
 import type { Database } from '@/types_db';
 import { sendGrantDigestBatchEmail } from '@/lib/email/sendGrantDigestEmail';
-import {
-  buildScholarshipProfileFilterSeed,
-  mergeBestRecommendationFiltersFromProfile
-} from '@/lib/scholarships/profileFilterDefaults';
+import { stripHubProfileHardMatchMoreFilters } from '@/lib/scholarships/profileFilterDefaults';
 import { moreFiltersFromJson, type MoreFiltersJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import {
   fetchGlobalFilterBounds,
@@ -117,23 +114,24 @@ export async function profileMatchesBest(
   bounds: Awaited<ReturnType<typeof fetchGlobalFilterBounds>>,
   scholarshipId: string
 ): Promise<boolean> {
-  const seed = buildScholarshipProfileFilterSeed(profile);
-  const mf = mergeBestRecommendationFiltersFromProfile(
-    'best-matches',
-    defaultMoreFiltersFromBounds(bounds),
-    seed,
-    bounds
+  const mf = stripHubProfileHardMatchMoreFilters(
+    defaultMoreFiltersFromBounds(bounds)
   );
   const req = scholarshipListRequestFromParts({
     page: 1,
     limit: 12,
     sort: 'best_match',
-    tab: 'best-matches',
+    tab: 'best-recommendation',
     q: '',
     deadline: 'any',
     moreFilters: mf
   });
-  return scholarshipMatchesTabListSql(admin, req, 'best-matches', scholarshipId);
+  return scholarshipMatchesTabListSql(
+    admin,
+    req,
+    'best-recommendation',
+    scholarshipId
+  );
 }
 
 async function profileMatchesSavedFilters(

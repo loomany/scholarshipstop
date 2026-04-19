@@ -50,3 +50,12 @@ export function absolutizeResourceGuideLinksInHtml(html: string): string {
   }
   return s;
 }
+
+/** Rewrite generic scholarship-hub entry links to the guest questionnaire entry point. */
+export function normalizeScholarshipEntryLinksInHtml(html: string): string {
+  if (!html.includes('href')) return html;
+  return html.replace(
+    /(href\s*=\s*)(["'])\/scholarships\/?\2/gi,
+    '$1$2/get-scholarships$2'
+  );
+}

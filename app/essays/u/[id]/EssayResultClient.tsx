@@ -391,6 +391,18 @@ export default function EssayResultClient({
   const router = useRouter();
   const { toast } = useToast();
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+    string | undefined
+  >(undefined);
+  const openScholarshipSubscriptionOfferModal = useCallback((arg?: unknown) => {
+    const notice = typeof arg === 'string' ? arg : undefined;
+    setSubscriptionOfferNotice(notice);
+    setSubscriptionOfferOpen(true);
+  }, []);
+  const closeScholarshipSubscriptionOfferModal = useCallback(() => {
+    setSubscriptionOfferOpen(false);
+    setSubscriptionOfferNotice(undefined);
+  }, []);
   const [trialAiCheckPremiumModalOpen, setTrialAiCheckPremiumModalOpen] =
     useState(false);
   const [preAiCheckPromoOpen, setPreAiCheckPromoOpen] = useState(false);
@@ -1572,7 +1584,7 @@ export default function EssayResultClient({
   const humanizeEntireEssay = async (model: UndetectableHumanizeModelId) => {
     if (busy) return;
     if (!hasSubscription) {
-      setSubscriptionOfferOpen(true);
+      openScholarshipSubscriptionOfferModal();
       return;
     }
     const text = mergedEssayText.trim();
@@ -1614,7 +1626,7 @@ export default function EssayResultClient({
           return;
         }
         if (res.status === 403) {
-          setSubscriptionOfferOpen(true);
+          openScholarshipSubscriptionOfferModal();
           return;
         }
         toast({
@@ -1704,7 +1716,8 @@ export default function EssayResultClient({
     >
       <ScholarshipSubscriptionOfferModal
         open={subscriptionOfferOpen}
-        onClose={() => setSubscriptionOfferOpen(false)}
+        onClose={closeScholarshipSubscriptionOfferModal}
+        notice={subscriptionOfferNotice}
       />
       <MentorTrialSubscribeModal
         open={trialAiCheckPremiumModalOpen}
@@ -1999,7 +2012,7 @@ export default function EssayResultClient({
               showHumanizeEntireDraft={showToolbarHumanizeResolved}
               downloadPdfDisabled={downloadPdfDisabled}
               hasSubscription={hasSubscription}
-              onHumanizePremiumBlocked={() => setSubscriptionOfferOpen(true)}
+              onHumanizePremiumBlocked={() => openScholarshipSubscriptionOfferModal()}
               onCopy={copyEssay}
               onCheckAi={checkAi}
               onHumanizeEntireDraft={(model) => void humanizeEntireEssay(model)}
@@ -2238,7 +2251,7 @@ export default function EssayResultClient({
                       sentenceEditInteractive={sentenceEditUiActive}
                       humanizeSnippetPremiumLocked={!hasSubscription}
                       onHumanizeSnippetPremiumBlocked={() =>
-                        setSubscriptionOfferOpen(true)
+                        openScholarshipSubscriptionOfferModal()
                       }
                       onManualSnippetTouchRecorded={() =>
                         setHasManualSnippetTouch(true)
@@ -2277,7 +2290,7 @@ export default function EssayResultClient({
                   sentenceEditInteractive={sentenceEditUiActive}
                   humanizeSnippetPremiumLocked={!hasSubscription}
                   onHumanizeSnippetPremiumBlocked={() =>
-                    setSubscriptionOfferOpen(true)
+                    openScholarshipSubscriptionOfferModal()
                   }
                   onManualSnippetTouchRecorded={() =>
                     setHasManualSnippetTouch(true)

@@ -1,19 +1,9 @@
 'use client';
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type FormEvent
-} from 'react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { DarkSelect } from '@/components/home/DarkSelect';
-import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { CITIZENSHIP_OPTIONS } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
-  buildBirthMonthSelectOptions,
   FIELD_OF_STUDY_OPTIONS,
   SCHOOL_LEVEL_OPTIONS
 } from '@/lib/constants/scholarshipProfileOptions';
@@ -24,12 +14,7 @@ import {
   type OnboardingFormValues
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
-import { validateScholarshipOnboarding } from '@/lib/validation/scholarshipOnboardingSchema';
-import {
-  sanitizeBirthDayInput,
-  sanitizeBirthYearInput,
-  validateBirthDateFields
-} from '@/lib/validation/birthDateFields';
+import { validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
 
 const schoolLevelSelectOptions = [
   { value: '', label: 'Select your school level' },
@@ -46,10 +31,7 @@ const citizenshipSelectOptions = [
   ...CITIZENSHIP_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 ];
 
-const birthMonthOptions = buildBirthMonthSelectOptions();
-
 const fieldHintClass = 'mt-1 text-sm text-zinc-600';
-const datePartInputBaseClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm outline-none transition-all duration-200 placeholder:text-zinc-400 disabled:cursor-not-allowed disabled:opacity-50 ${SITE_INPUT_FOCUS_CLASS}`;
 
 const sectionLabelClass =
   'mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-gray-700';
@@ -84,15 +66,6 @@ export function ScholarshipOnboardingStep1({
   const [errors, setErrors] = useState<
     Partial<Record<keyof OnboardingFormValues | 'birthDate' | 'age', string>>
   >({});
-  const liveBirthErrors = useMemo(
-    () => validateBirthDateFields(values, { requireAll: false }),
-    [values]
-  );
-  const birthMonthError = errors.birthMonth ?? liveBirthErrors.birthMonth;
-  const birthDayError = errors.birthDay ?? liveBirthErrors.birthDay;
-  const birthYearError = errors.birthYear ?? liveBirthErrors.birthYear;
-  const birthDateError = errors.birthDate ?? liveBirthErrors.birthDate;
-  const birthAgeError = errors.age ?? liveBirthErrors.age;
 
   const setField = useCallback(
     <K extends keyof OnboardingFormValues>(key: K, v: OnboardingFormValues[K]) => {
@@ -100,33 +73,15 @@ export function ScholarshipOnboardingStep1({
       setErrors((e) => {
         const next = { ...e };
         delete next[key];
-        if (key === 'birthMonth' || key === 'birthDay' || key === 'birthYear') {
-          delete next.birthDate;
-          delete next.age;
-        }
         return next;
       });
     },
     []
   );
 
-  const handleBirthDayChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setField('birthDay', sanitizeBirthDayInput(e.target.value));
-    },
-    [setField]
-  );
-
-  const handleBirthYearChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setField('birthYear', sanitizeBirthYearInput(e.target.value));
-    },
-    [setField]
-  );
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const result = validateScholarshipOnboarding(values);
+    const result = validateScholarshipOnboardingBasicsWithoutBirth(values);
     if (!result.ok) {
       setErrors(result.errors);
       return;
@@ -160,75 +115,6 @@ export function ScholarshipOnboardingStep1({
       </div>
 
       <div className="space-y-5 text-left">
-        <div>
-          <p className={sectionLabelClass}>Birthday</p>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3">
-            <div>
-              <DarkSelect
-                ariaLabel="Birth month"
-                options={birthMonthOptions}
-                value={values.birthMonth}
-                onChange={(v) => setField('birthMonth', v)}
-                disabled={disabled}
-                hasError={Boolean(birthMonthError)}
-              />
-              {birthMonthError ? (
-                <p className={fieldHintClass}>{birthMonthError}</p>
-              ) : null}
-            </div>
-            <div>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                aria-label="Birth day"
-                value={values.birthDay}
-                onChange={handleBirthDayChange}
-                disabled={disabled}
-                placeholder="Day"
-                maxLength={2}
-                className={`${datePartInputBaseClass} ${
-                  birthDayError
-                    ? 'border-amber-400/80 hover:border-amber-500/70'
-                    : 'border-zinc-200 hover:border-zinc-300'
-                }`}
-                aria-invalid={Boolean(birthDayError)}
-              />
-              {birthDayError ? (
-                <p className={fieldHintClass}>{birthDayError}</p>
-              ) : null}
-            </div>
-            <div>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                aria-label="Birth year"
-                value={values.birthYear}
-                onChange={handleBirthYearChange}
-                disabled={disabled}
-                placeholder="Year"
-                maxLength={4}
-                className={`${datePartInputBaseClass} ${
-                  birthYearError
-                    ? 'border-amber-400/80 hover:border-amber-500/70'
-                    : 'border-zinc-200 hover:border-zinc-300'
-                }`}
-                aria-invalid={Boolean(birthYearError)}
-              />
-              {birthYearError ? (
-                <p className={fieldHintClass}>{birthYearError}</p>
-              ) : null}
-            </div>
-          </div>
-          {birthDateError ? (
-            <p className={`${fieldHintClass} mt-2`}>{birthDateError}</p>
-          ) : null}
-          {birthAgeError ? (
-            <p className={`${fieldHintClass} mt-2`}>{birthAgeError}</p>
-          ) : null}
-        </div>
-
         <div>
           <label htmlFor="onb-school-level" className={sectionLabelClass}>
             Current school level

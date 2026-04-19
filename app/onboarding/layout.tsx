@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { createClient } from '@/utils/supabase/server';
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default async function OnboardingLayout({
   } = await supabase.auth.getUser();
 
   if (user) {
-    redirect(SCHOLARSHIPS_HUB_ALL_MATCHES_HREF);
+    redirect(SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF);
   }
 
   return children;

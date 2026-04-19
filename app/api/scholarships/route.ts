@@ -17,6 +17,7 @@ import {
   fetchGlobalFilterBounds,
   fetchScholarshipListMeta,
   resolveCatalogSubjectCategoryForPageSlug,
+  savedFiltersSnapshotJsonFromProfile,
   scholarshipListRequestFromParts,
   type ScholarshipListMeta,
   type ScholarshipListRequest
@@ -26,7 +27,7 @@ import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMet
 import { profileMatchSummaryFromRow } from '@/lib/scholarships/profileMatchMeta';
 import {
   buildScholarshipProfileFilterSeed,
-  mergeBestRecommendationFiltersFromProfile
+  stripHubProfileHardMatchMoreFilters
 } from '@/lib/scholarships/profileFilterDefaults';
 import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
 
@@ -36,7 +37,6 @@ import {
   moreFiltersToJson,
   type MoreFiltersJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
-import { moreFiltersHasProfileOrQuizListingSignals } from '@/app/scholarships/moreFilters';
 import {
   LIST_CARD_SELECT,
   mapScholarshipRow,
@@ -78,6 +78,7 @@ async function emptyListResult(
   req: ScholarshipListRequest,
   includeMeta: boolean,
   authUser: boolean,
+  keepBestRecommendationCount: boolean,
   /** Listing/meta queries: public client for guests (no cookies), cookie client when session exists. */
   listDb: NonNullable<ReturnType<typeof createPublicClient>>
 ) {
@@ -85,7 +86,10 @@ async function emptyListResult(
   if (includeMeta) {
     const bounds = await fetchGlobalFilterBounds(listDb);
     meta = await fetchScholarshipListMeta(listDb, req, bounds);
-    applyListingMetaGuestPatches(meta, { authUser });
+    applyListingMetaGuestPatches(meta, {
+      authUser,
+      keepBestRecommendationCount
+    });
   }
   return {
     scholarships: [],
@@ -154,7 +158,8 @@ async function handleList(
   seoBody?: SeoListBodyOpts,
   /** Hub: optional saved-filter snapshot for `recommended` sidebar count (`null` = none saved). */
   savedFiltersSnapshotBody?: MoreFiltersJson | null,
-  providerSlugBody?: string | null
+  providerSlugBody?: string | null,
+  guestBestRecommendationPreviewEnabled = false
 ) {
   const cookieSupabase = createClient() as any;
   const publicSupabase = createPublicClient() as any;
@@ -301,7 +306,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     includeMeta ||
     metaOnly ||
     req.listScope === 'personalized' ||
-    req.tab === 'best-matches' ||
+    req.tab === 'best-recommendation' ||
     req.tab === 'recommended' ||
     req.tab === 'easy-apply' ||
     req.tab === 'hot-deadlines' ||
@@ -345,34 +350,38 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       sessionUser.id
     );
   }
+  const profileSavedFiltersSnapshotJson =
+    savedFiltersSnapshotJsonFromProfile(profileRow);
+  const profileSavedFiltersSnapshot =
+    profileSavedFiltersSnapshotJson == null
+      ? null
+      : moreFiltersFromJson(profileSavedFiltersSnapshotJson, bounds);
   if (profileRow) {
     req = { ...req, personalizedProfile: profileRow };
   }
-
+  if (profileRow && req.savedFiltersSnapshot === undefined) {
+    req = {
+      ...req,
+      savedFiltersSnapshot: profileSavedFiltersSnapshot
+    };
+  }
   if (
-    profileFilterSeed &&
-    (req.tab === 'best-matches' || req.tab === 'recommended')
+    req.tab === 'recommended' &&
+    bodyMoreFilters === undefined &&
+    profileSavedFiltersSnapshot != null
   ) {
     req = {
       ...req,
-      moreFilters: mergeBestRecommendationFiltersFromProfile(
-        req.tab,
-        req.moreFilters,
-        profileFilterSeed,
-        bounds
-      )
+      moreFilters: stripHubProfileHardMatchMoreFilters(profileSavedFiltersSnapshot)
     };
   }
 
-  /**
-   * Block the generic “best” credibility slice only when there is no profile seed
-   * **and** the client did not send quiz / manual narrowing in `moreFilters`
-   * (guests after `/get-scholarships` send real dimensions in the POST body).
-   */
-  const shouldBlockGenericBestMatchesSlice =
-    req.tab === 'best-matches' &&
-    !profileFilterSeed &&
-    !moreFiltersHasProfileOrQuizListingSignals(req.moreFilters);
+  if (req.tab === 'recommended') {
+    req = {
+      ...req,
+      moreFilters: stripHubProfileHardMatchMoreFilters(req.moreFilters)
+    };
+  }
 
   if (hubDbg) {
     // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
@@ -395,15 +404,15 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     if (profileRow) {
       meta.profileMatchSummary = profileMatchSummaryFromRow(profileRow);
       meta.profileFilterSeed = profileFilterSeed;
+      meta.savedFiltersSnapshotJson = profileSavedFiltersSnapshotJson;
     } else if (profileFilterSeed) {
       meta.profileFilterSeed = profileFilterSeed;
     }
     applyListingMetaGuestPatches(meta, {
-      authUser: Boolean(authUser)
+      authUser: Boolean(authUser),
+      keepBestRecommendationCount:
+        !authUser && guestBestRecommendationPreviewEnabled
     });
-    if (shouldBlockGenericBestMatchesSlice) {
-      meta.sidebarCounts.bestMatches = 0;
-    }
     const response = NextResponse.json({
       meta,
       page: req.page,
@@ -413,58 +422,12 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     return withRuntimePathDebugHeaders(response, searchParams, runtimeReadPath, v2ReadPathEligible);
   }
 
-  if (shouldBlockGenericBestMatchesSlice) {
-    if (countOnly) {
-      return withRuntimePathDebugHeaders(
-        NextResponse.json({
-          total: 0,
-          page: req.page,
-          limit: req.limit
-        }),
-        searchParams,
-        runtimeReadPath,
-        v2ReadPathEligible
-      );
-    }
-    const empty = await emptyListResult(
-      req,
-      includeMeta && !countOnly,
-      Boolean(sessionUser),
-      listingSupabase
-    );
-    if (profileRow && empty.meta) {
-      empty.meta.profileMatchSummary = profileMatchSummaryFromRow(profileRow);
-      empty.meta.profileFilterSeed = profileFilterSeed;
-    } else if (empty.meta && profileFilterSeed) {
-      empty.meta.profileFilterSeed = profileFilterSeed;
-    }
-    if (empty.meta) {
-      applyListingMetaGuestPatches(empty.meta, {
-        authUser: Boolean(authUser)
-      });
-      empty.meta.sidebarCounts.bestMatches = 0;
-    }
-    return withRuntimePathDebugHeaders(
-      NextResponse.json({
-        scholarships: empty.scholarships,
-        results: empty.scholarships,
-        total: 0,
-        page: req.page,
-        limit: req.limit,
-        meta: empty.meta,
-        isProSubscriber
-      }),
-      searchParams,
-      runtimeReadPath,
-      v2ReadPathEligible
-    );
-  }
-
   if (!similarTo && isEmptyIdTab(req)) {
     const r = await emptyListResult(
       req,
       includeMeta && !countOnly,
       Boolean(sessionUser),
+      false,
       listingSupabase
     );
     if (hubDbg) {
@@ -472,7 +435,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       console.log('[scholarships-hub-meta-debug] api early emptyIdTab branch', {
         reqId: hubDebugReqId,
         tab: req.tab,
-        metaBest: r.meta?.sidebarCounts.bestMatches,
+        metaBest: r.meta?.sidebarCounts.bestRecommendation,
         metaRec: r.meta?.sidebarCounts.recommended
       });
     }
@@ -491,6 +454,43 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
         page: req.page,
         limit: req.limit,
         meta: r.meta
+      }),
+      searchParams,
+      runtimeReadPath,
+      v2ReadPathEligible
+    );
+  }
+
+  if (
+    !similarTo &&
+    !authUser &&
+    req.tab === 'best-recommendation' &&
+    !guestBestRecommendationPreviewEnabled
+  ) {
+    const r = await emptyListResult(
+      req,
+      includeMeta && !countOnly,
+      false,
+      false,
+      listingSupabase
+    );
+    if (countOnly) {
+      return withRuntimePathDebugHeaders(
+        NextResponse.json({ total: 0, page: req.page, limit: req.limit }),
+        searchParams,
+        runtimeReadPath,
+        v2ReadPathEligible
+      );
+    }
+    return withRuntimePathDebugHeaders(
+      NextResponse.json({
+        scholarships: [],
+        results: [],
+        total: 0,
+        page: req.page,
+        limit: req.limit,
+        meta: r.meta,
+        isProSubscriber
       }),
       searchParams,
       runtimeReadPath,
@@ -610,6 +610,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   if (result.meta && profileRow) {
     result.meta.profileMatchSummary = profileMatchSummaryFromRow(profileRow);
     result.meta.profileFilterSeed = profileFilterSeed;
+    result.meta.savedFiltersSnapshotJson = profileSavedFiltersSnapshotJson;
   } else if (result.meta && profileFilterSeed) {
     result.meta.profileFilterSeed = profileFilterSeed;
   }
@@ -623,7 +624,9 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   }
   if (result.meta) {
     applyListingMetaGuestPatches(result.meta, {
-      authUser: Boolean(authUser)
+      authUser: Boolean(authUser),
+      keepBestRecommendationCount:
+        !authUser && guestBestRecommendationPreviewEnabled
     });
   }
   if (hubDbg && result.meta && !countOnly) {
@@ -701,7 +704,15 @@ export async function GET(request: Request) {
       }
     }
     const lt = searchParams.get('long_tail')?.split(',').map((s) => s.trim());
-    return await handleList(searchParams, bodyMore, lt, undefined, undefined);
+    return await handleList(
+      searchParams,
+      bodyMore,
+      lt,
+      undefined,
+      undefined,
+      undefined,
+      false
+    );
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     // eslint-disable-next-line no-console -- API diagnostics
@@ -732,6 +743,7 @@ export async function POST(request: Request) {
       providerSlug?: string | null;
       /** `null` = client has no saved filter preset (Saved Filters count = 0). */
       savedFiltersSnapshot?: MoreFiltersJson | null;
+      guestBestRecommendationPreviewEnabled?: boolean;
     };
     // eslint-disable-next-line no-console -- API diagnostics (SEO listing debugging)
     console.log('[scholarships api] POST body snapshot', {
@@ -746,7 +758,7 @@ export async function POST(request: Request) {
       seoListingFallback: json.seoListingFallback,
       slugOnlyMoreFilters: json.slugOnlyMoreFilters,
       requiredSeoTags: json.requiredSeoTags
-    }, json.savedFiltersSnapshot, json.providerSlug);
+    }, json.savedFiltersSnapshot, json.providerSlug, json.guestBestRecommendationPreviewEnabled === true);
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     // eslint-disable-next-line no-console -- API diagnostics

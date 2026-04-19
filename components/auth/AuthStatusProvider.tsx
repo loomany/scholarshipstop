@@ -13,6 +13,7 @@ import {
   hasActiveSubscriptionAccess,
   type SubscriptionWithPriceAndProduct
 } from '@/lib/payments/subscriptionEntitlements';
+import { setScholarshipStorageUserScope } from '@/app/scholarships/userScopedStorage';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
 
@@ -39,6 +40,7 @@ export default function AuthStatusProvider({
 
     const syncSubscription = async (nextUser: User | null) => {
       setUser(nextUser);
+      setScholarshipStorageUserScope(nextUser?.id ?? null);
       if (!nextUser) {
         setHasSubscription(false);
         setSubscriptionPaused(false);

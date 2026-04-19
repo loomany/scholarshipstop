@@ -9,6 +9,7 @@ import type { LongTailRouteScopePayload } from '@/app/scholarships/scholarshipLi
 import { moreFiltersFromJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import {
   mergeBestRecommendationFiltersFromProfile,
+  stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
@@ -58,35 +59,31 @@ export function buildHubTabPresetMoreFilters(options: {
     case 'started':
     case 'submitted':
       return cloneMoreFilters(base);
-    case 'best-matches': {
-      /** Account profile wins; otherwise landing quiz (guest or signed-in before profile row). */
+    case 'best-recommendation': {
       const seed =
-        options.profileFilterSeed ?? options.landingQuizProfileSeed;
-      if (seed) {
-        return mergeBestRecommendationFiltersFromProfile(
-          'best-matches',
-          cloneMoreFilters(base),
-          seed,
-          options.filterBounds
-        );
-      }
-      return cloneMoreFilters(base);
+        options.profileFilterSeed ?? options.landingQuizProfileSeed ?? null;
+      return mergeBestRecommendationFiltersFromProfile(
+        'best-recommendation',
+        cloneMoreFilters(base),
+        seed,
+        options.filterBounds
+      );
     }
     case 'recommended': {
       if (options.savedFiltersFromStorage) {
         const saved = cloneMoreFilters(options.savedFiltersFromStorage);
-        if (options.routeScope?.baseMoreFilters) {
-          return mergeMoreFilterStates(
-            moreFiltersFromJson(
-              options.routeScope.baseMoreFilters,
-              options.filterBounds
-            ),
-            saved
-          );
-        }
-        return saved;
+        const merged = options.routeScope?.baseMoreFilters
+          ? mergeMoreFilterStates(
+              moreFiltersFromJson(
+                options.routeScope.baseMoreFilters,
+                options.filterBounds
+              ),
+              saved
+            )
+          : saved;
+        return stripHubProfileHardMatchMoreFilters(merged);
       }
-      return cloneMoreFilters(base);
+      return stripHubProfileHardMatchMoreFilters(cloneMoreFilters(base));
     }
     case 'easy-apply':
     case 'hot-deadlines':

@@ -19,6 +19,8 @@ export type UserProfile = {
   stateRegion: string | null;
   city: string | null;
   gpa: string | null;
+  /** Keeps bucket-style GPA selections like `GPA 2.5+` stable after signup. */
+  savedFiltersSnapshot?: Record<string, unknown> | null;
   onboardingCompleted: boolean;
   /**
    * When false, first profiles upsert sets `email_verified = false` (custom verify link).

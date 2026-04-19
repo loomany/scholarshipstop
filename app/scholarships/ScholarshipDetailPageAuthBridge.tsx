@@ -9,6 +9,8 @@ import type { ComparePeerRow } from '@/lib/seo/comparePeersServer';
 
 type ScholarshipDetailPageAuthBridgeProps = {
   initialScholarship: Scholarship | null;
+  routeParam?: string;
+  returnToHref?: string;
   /** Articles that list this scholarship in `related_scholarships` (server-resolved). */
   initialRelatedArticles?: ContentPostListFields[];
   /** Published essay hub guides linked via `scholarship_essays` (max 4). */
@@ -21,6 +23,8 @@ type ScholarshipDetailPageAuthBridgeProps = {
 
 export default function ScholarshipDetailPageAuthBridge({
   initialScholarship,
+  routeParam,
+  returnToHref,
   initialRelatedArticles = [],
   initialRelatedEssays = [],
   initialRelatedHubLinks = [],
@@ -34,6 +38,8 @@ export default function ScholarshipDetailPageAuthBridge({
           hasSubscription={hasSubscription}
           authResolved={authResolved}
           initialScholarship={initialScholarship}
+          routeParam={routeParam}
+          returnToHref={returnToHref}
           initialRelatedArticles={initialRelatedArticles}
           initialRelatedEssays={initialRelatedEssays}
           initialRelatedHubLinks={initialRelatedHubLinks}

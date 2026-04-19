@@ -10,7 +10,6 @@ import {
 import {
   cloneMoreFilters,
   defaultMoreFiltersFromBounds,
-  moreFiltersHasProfileOrQuizListingSignals,
   type DeadlinePreset,
   type MoreFiltersState
 } from '@/app/scholarships/moreFilters';
@@ -18,6 +17,7 @@ import {
   normalizeUsStateToCanonical,
   US_STATE_NAME_TO_CODE
 } from '@/lib/constants/usStates';
+import { DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import type { SortOption } from '@/app/scholarships/scholarshipSort';
 import type { ScholarshipListTabId, ScholarshipSidebarCounts } from '@/app/scholarships/scholarshipTabs';
 import type { LongTailSlug } from '@/app/scholarships/scholarshipLongTailPresets';
@@ -37,8 +37,11 @@ import {
 import {
   buildScholarshipProfileFilterSeed,
   mergeBestRecommendationFiltersFromProfile,
+  stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
+import { buildBestRecommendationProfileGpaOrParts } from '@/lib/scholarships/bestRecommendationGpa';
+import { computeHubProfileMatchPercent } from '@/lib/scholarships/hubProfileMatchScore';
 import {
   scholarshipMatchProfileVersion,
   type ProfilesRow
@@ -46,7 +49,10 @@ import {
 import { AWARD_SIGNAL_SEO_TAGS } from '@/lib/scholarships/seoTags/awardSignalTags';
 import { isSeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
 import { requirementTypesToDbColumns } from '@/lib/scholarships/requirementTypeMapping';
-import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
+import {
+  moreFiltersToJson,
+  type MoreFiltersJson
+} from '@/lib/scholarships/scholarshipListApiCodec';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import type { createClient } from '@/utils/supabase/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -83,6 +89,8 @@ export type ScholarshipListMeta = {
   profileFilterSeed?: ScholarshipProfileFilterSeed | null;
   /** True when profile has enough signals for personalized bucket matching. */
   personalizedMatchReady?: boolean;
+  /** Authenticated hub: saved preset persisted on the user profile. */
+  savedFiltersSnapshotJson?: MoreFiltersJson | null;
   /**
    * Personalized hub: count in the “Matches” bucket after ignored + listing SQL filters (aligned with sidebar).
    * Catalog / fallback: raw index bucket size after ignored only.
@@ -212,6 +220,9 @@ function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMet
         }
       : meta.profileFilterSeed,
     personalizedMatchReady: meta.personalizedMatchReady,
+    savedFiltersSnapshotJson: meta.savedFiltersSnapshotJson
+      ? { ...meta.savedFiltersSnapshotJson }
+      : meta.savedFiltersSnapshotJson,
     matchedTotal: meta.matchedTotal
   };
 }
@@ -258,6 +269,16 @@ function normalizeStateNameOrCodeToCode(raw: string | null | undefined): string 
   if (!canonicalName) return null;
   const code = US_STATE_NAME_TO_CODE[canonicalName];
   return code ? code.toUpperCase() : null;
+}
+
+export function savedFiltersSnapshotJsonFromProfile(
+  profile: ProfilesRow | null | undefined
+): MoreFiltersJson | null {
+  const raw = profile?.saved_filters_snapshot;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    return null;
+  }
+  return raw as unknown as MoreFiltersJson;
 }
 
 /** `similar_state_slug` query param → 2-letter code for RPC (or null). */
@@ -796,6 +817,29 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   return q;
 }
 
+function applyBestRecommendationProfileGpaFilter(
+  req: ScholarshipListRequest,
+  q: any
+): any {
+  if (req.tab !== 'best-recommendation') return q;
+  if (req.moreFilters.includeGpaBuckets.size > 0) return q;
+  const orParts = buildBestRecommendationProfileGpaOrParts(
+    req.personalizedProfile ?? null
+  );
+  if (orParts.length === 0) return q;
+  return q.or(orParts.join(','));
+}
+
+function applyBestRecommendationNoCitizenshipListedFilter(
+  req: ScholarshipListRequest,
+  q: any
+): any {
+  if (req.tab !== 'best-recommendation') return q;
+  const raw = req.personalizedProfile?.citizenship_status?.trim().toLowerCase() ?? '';
+  if (raw !== DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP) return q;
+  return q.or('citizenship_statuses.eq.[]');
+}
+
 function applySort(q: any, sort: SortOption): any {
   switch (sort) {
     /** Best tab: largest awards first, then freshest rows (tie-break). */
@@ -846,9 +890,14 @@ function applySort(q: any, sort: SortOption): any {
 function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
   const { tab, ignored, saved, started, submitted } = req;
   switch (tab) {
-    case 'best-matches': {
-      let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
-      return nq.or('credibility_score.gte.90,is_verified.eq.true');
+    case 'best-recommendation': {
+      if (ignored.length > 0) {
+        for (let i = 0; i < ignored.length; i += 120) {
+          const chunk = ignored.slice(i, i + 120);
+          q = q.not('id', 'in', `(${chunk.join(',')})`);
+        }
+      }
+      return q;
     }
     case 'matches':
       if (ignored.length > 0) {
@@ -983,6 +1032,10 @@ function applyCommonFilters(req: ScholarshipListRequest, q: any): any {
     q = applyEligibilityTextSearchClauses(q, moreFilters);
   }
   q = applyMoreFilters(q, moreFilters);
+  if (!seoListing) {
+    q = applyBestRecommendationNoCitizenshipListedFilter(req, q);
+    q = applyBestRecommendationProfileGpaFilter(req, q);
+  }
   return q;
 }
 
@@ -1022,7 +1075,7 @@ function sidebarTabCountsListingAlignedRequest(req: ScholarshipListRequest): Sch
 
 /**
  * Hub legacy L1 category dropdown counts: align with catalog “All / matches” semantics (ignored + long-tail),
- * not personalized `best-matches` / `recommended` SQL tab narrowing (which produced zeros vs live lists).
+ * not personalized `best-recommendation` / `recommended` SQL tab narrowing (which produced zeros vs live lists).
  */
 function categoryDropdownCountsRequest(
   req: ScholarshipListRequest,
@@ -1118,7 +1171,7 @@ function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRe
     listScope: 'catalog',
     personalizedProfile: undefined
   };
-  if (base.tab === 'best-matches') {
+  if (base.tab === 'best-recommendation') {
     return { ...base, sort: 'best_recommendation' };
   }
   return base;
@@ -1162,6 +1215,9 @@ export async function countScholarshipsForTabRequest(
  * Final order is always: open listings first (same category, then catalog backfill), then expired (for context).
  */
 const SIMILAR_LIST_MAX_EXPIRED = 3;
+
+/** Max rows loaded for in-memory profile match ranking (Best / Recommended). */
+const PROFILE_SOFT_MATCH_SQL_WINDOW = 2500;
 
 /**
  * Legacy similar pool (bounded window, category filter + deadline sort).
@@ -1374,6 +1430,120 @@ export async function executeScholarshipListQuery(
     };
   }
 
+  const personalizedHubTab =
+    (req.tab === 'best-recommendation' || req.tab === 'recommended') &&
+    Boolean(req.personalizedProfile) &&
+    !req.similarToId;
+
+  if (personalizedHubTab && req.personalizedProfile) {
+    const personalizedReq =
+      req.tab === 'best-recommendation'
+        ? bestRecommendationRequest(
+            req,
+            bounds ?? (await fetchGlobalFilterBounds(supabase))
+          )
+        : req;
+    const personalizedEff = effectiveListingRequest(personalizedReq);
+    const qc: any = buildScholarshipListFilterQuery(
+      supabase,
+      true,
+      personalizedEff
+    );
+    const { error: cErr, count } = await qc;
+    if (cErr) throw new Error(cErr.message);
+    const rawTotal = count ?? 0;
+
+    let meta: ScholarshipListMeta | undefined;
+    if (opts.includeMeta && bounds) {
+      meta = await fetchScholarshipListMeta(supabase, personalizedReq, bounds, {
+        includeCategoryCounts: opts.includeCategoryCounts
+      });
+    }
+
+    const globalMaxPage = Math.max(1, Math.ceil(rawTotal / req.limit) || 1);
+    let effectivePage = Math.min(Math.max(1, req.page), globalMaxPage);
+
+    const cap = Math.min(PROFILE_SOFT_MATCH_SQL_WINDOW, rawTotal);
+    const pagesRanked = Math.max(1, Math.ceil(cap / req.limit));
+    let scholarships: Scholarship[];
+
+    if (rawTotal > cap && effectivePage > pagesRanked) {
+      const from = (effectivePage - 1) * req.limit;
+      const to = from + req.limit - 1;
+      let qn: any = buildScholarshipListFilterQuery(
+        supabase,
+        false,
+        personalizedEff
+      );
+      qn = applySort(qn, personalizedEff.sort);
+      const { data, error: dErr } = await qn.range(from, to);
+      if (dErr) throw new Error(dErr.message);
+      const rows = (data ?? []) as unknown as ScholarshipRow[];
+      scholarships = rows.map((r) => ({ ...mapScholarshipRow(r), profileMatchPercent: null }));
+    } else {
+      const slicePage =
+        rawTotal > cap ? Math.min(effectivePage, pagesRanked) : effectivePage;
+      effectivePage = slicePage;
+
+      if (cap === 0) {
+        scholarships = [];
+      } else {
+        let qn: any = buildScholarshipListFilterQuery(
+          supabase,
+          false,
+          personalizedEff
+        );
+        qn = applySort(qn, 'best_match');
+        const { data, error: dErr } = await qn.range(0, cap - 1);
+        if (dErr) throw new Error(dErr.message);
+        const rows = (data ?? []) as unknown as ScholarshipRow[];
+        const profile = req.personalizedProfile;
+        const ranked = rows.map((r) => {
+          const scholarship = mapScholarshipRow(r);
+          return {
+            scholarship,
+            pct: computeHubProfileMatchPercent(scholarship, profile)
+          };
+        });
+        ranked.sort((a, b) => {
+          if (b.pct !== a.pct) return b.pct - a.pct;
+          const ra = a.scholarship.rankingScore ?? 0;
+          const rb = b.scholarship.rankingScore ?? 0;
+          if (rb !== ra) return rb - ra;
+          const aa = a.scholarship.awardAmountNumericSort ?? 0;
+          const ab = b.scholarship.awardAmountNumericSort ?? 0;
+          return ab - aa;
+        });
+        const start = (slicePage - 1) * req.limit;
+        scholarships = ranked
+          .slice(start, start + req.limit)
+          .map(({ scholarship, pct }) => ({ ...scholarship, profileMatchPercent: pct }));
+      }
+    }
+
+    if (process.env.SCHOLARSHIPS_LIST_SYNC_DEBUG === '1') {
+      // eslint-disable-next-line no-console -- opt-in listing vs sidebar diagnostics
+      console.log('[scholarships-list-sync]', {
+        tab: personalizedEff.tab,
+        listScope: personalizedEff.listScope,
+        personalizedRank: true,
+        sqlTotal: rawTotal,
+        listRowsReturned: scholarships.length,
+        sidebarMatches: meta?.sidebarCounts.matches ?? null,
+        page: effectivePage,
+        limit: req.limit
+      });
+    }
+
+    return {
+      scholarships,
+      total: rawTotal,
+      page: effectivePage,
+      limit: req.limit,
+      meta
+    };
+  }
+
   const buildListPageQuery = (fromIdx: number, toIdx: number) => {
     let qn: any = buildScholarshipListFilterQuery(supabase, false, rEff);
     qn = applySort(qn, rEff.sort);
@@ -1443,6 +1613,29 @@ async function countFor(
   return countScholarshipsForTabRequest(supabase, req, tab);
 }
 
+function bestRecommendationRequest(
+  req: ScholarshipListRequest,
+  bounds: ScholarshipListMeta['filterBounds']
+): ScholarshipListRequest {
+  const moreFilters = mergeBestRecommendationFiltersFromProfile(
+    'best-recommendation',
+    cloneMoreFilters(req.moreFilters),
+    buildScholarshipProfileFilterSeed(req.personalizedProfile ?? null),
+    bounds
+  );
+  if (
+    req.moreFilters.includeGpaBuckets.size === 0 &&
+    buildBestRecommendationProfileGpaOrParts(req.personalizedProfile ?? null).length > 0
+  ) {
+    moreFilters.includeGpaBuckets = new Set();
+  }
+  return {
+    ...req,
+    tab: 'best-recommendation',
+    moreFilters
+  };
+}
+
 function easyApplyListCanonicalRequest(
   req: ScholarshipListRequest
 ): ScholarshipListRequest {
@@ -1492,26 +1685,6 @@ function sidebarCountsIgnoreCitizenshipAudience(
   return { ...req, moreFilters };
 }
 
-/**
- * Profile merge (school level, GPA, citizenship tags, state) narrows the hub for
- * **Best recommendation** — but sidebar rows for catalog tabs must stay independent:
- * Matches / Hot deadlines / Easy apply / International Friendly count at catalog scale
- * (same ignored list + URL/catalog filters), not the same tight pool as Best.
- */
-function stripProfileMergedMoreFiltersForSidebarCatalog(
-  mf: MoreFiltersState
-): MoreFiltersState {
-  const out = cloneMoreFilters(mf);
-  out.includeEducationLevels = new Set();
-  out.includeGpaBuckets = new Set();
-  out.includeEligibility = new Set();
-  out.filterStateInput = '';
-  out.profileFieldOfStudySlug = '';
-  out.profileCitizenshipNarrow = 'none';
-  out.citizenshipAudience = 'any';
-  return out;
-}
-
 function sidebarCatalogTabCountsBasisReq(
   req: ScholarshipListRequest
 ): ScholarshipListRequest {
@@ -1520,7 +1693,7 @@ function sidebarCatalogTabCountsBasisReq(
   }
   return {
     ...req,
-    moreFilters: stripProfileMergedMoreFiltersForSidebarCatalog(req.moreFilters)
+    moreFilters: stripHubProfileHardMatchMoreFilters(req.moreFilters)
   };
 }
 
@@ -1538,30 +1711,15 @@ function normalizeTabScopedMoreFilters(
  */
 export function moreFiltersForRecommendedSidebarCount(
   req: ScholarshipListRequest,
-  bounds: ScholarshipListMeta['filterBounds']
+  _bounds: ScholarshipListMeta['filterBounds']
 ): MoreFiltersState | null {
-  const profile = req.personalizedProfile ?? null;
-  const seed = profile ? buildScholarshipProfileFilterSeed(profile) : null;
-
   if (req.savedFiltersSnapshot === undefined) {
-    const base = cloneMoreFilters(req.moreFilters);
-    return mergeBestRecommendationFiltersFromProfile(
-      'recommended',
-      base,
-      seed,
-      bounds
-    );
+    return cloneMoreFilters(req.moreFilters);
   }
   if (req.savedFiltersSnapshot === null) {
     return null;
   }
-  const base = cloneMoreFilters(req.savedFiltersSnapshot);
-  return mergeBestRecommendationFiltersFromProfile(
-    'recommended',
-    base,
-    seed,
-    bounds
-  );
+  return cloneMoreFilters(req.savedFiltersSnapshot);
 }
 
 /**
@@ -1580,7 +1738,7 @@ export async function fetchScholarshipSidebarCounts(
   const catalogSidebarBasisReq =
     sidebarCatalogTabCountsBasisReq(countsBasisReq);
   const tabs: ScholarshipListTabId[] = [
-    'best-matches',
+    'best-recommendation',
     'recommended',
     'easy-apply',
     'hot-deadlines',
@@ -1621,40 +1779,15 @@ export async function fetchScholarshipSidebarCounts(
             )
           };
         }
-        if (t === 'best-matches') {
-          /**
-           * Sidebar Best must match the same SQL as the Best tab listing.
-           * - Profile merge: same as listing (tab is often still `matches` on the incoming req).
-           * - Do **not** use `countsBasisReq` here: that path runs `sidebarCountsIgnoreCitizenshipAudience`,
-           *   which clears `citizenshipAudience` so Matches/Easy/Hot counts ignore the IF toggle.
-           *   The live Best list still applies that toggle → inflated Best count vs short list (e.g. 33 vs 10).
-           * - Hub signed-in + empty profile row (no seed) + no quiz/manual narrowing in `moreFilters`:
-           *   same as `shouldBlockGenericBestMatchesSlice` in `/api/scholarships` — do not show generic 224.
-           */
-          const base = effectiveReq;
-          const seed = base.personalizedProfile
-            ? buildScholarshipProfileFilterSeed(base.personalizedProfile)
-            : null;
-          if (
-            base.personalizedProfile &&
-            seed == null &&
-            !moreFiltersHasProfileOrQuizListingSignals(base.moreFilters)
-          ) {
-            return { t, n: 0 };
-          }
-          const rowReq =
-            seed != null
-              ? {
-                  ...base,
-                  moreFilters: mergeBestRecommendationFiltersFromProfile(
-                    'best-matches',
-                    cloneMoreFilters(base.moreFilters),
-                    seed,
-                    bounds
-                  )
-                }
-              : base;
-          return { t, n: await countFor(supabase, rowReq, t) };
+        if (t === 'best-recommendation') {
+          return {
+            t,
+            n: await countFor(
+              supabase,
+              bestRecommendationRequest(effectiveReq, bounds),
+              t
+            )
+          };
         }
         const rowReq = t === 'matches' ? catalogSidebarBasisReq : countsBasisReq;
         return {
@@ -1670,7 +1803,7 @@ export async function fetchScholarshipSidebarCounts(
     )
   ]);
   const sidebarCounts: ScholarshipSidebarCounts = {
-    bestMatches: 0,
+    bestRecommendation: 0,
     recommended: 0,
     easyApply: 0,
     hotDeadlines: 0,
@@ -1682,7 +1815,7 @@ export async function fetchScholarshipSidebarCounts(
     ignored: 0
   };
   for (const { t, n } of sidebarParts) {
-    if (t === 'best-matches') sidebarCounts.bestMatches = n;
+    if (t === 'best-recommendation') sidebarCounts.bestRecommendation = n;
     if (t === 'recommended') sidebarCounts.recommended = n;
     if (t === 'easy-apply') sidebarCounts.easyApply = n;
     if (t === 'hot-deadlines') sidebarCounts.hotDeadlines = n;

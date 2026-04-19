@@ -1,5 +1,5 @@
-import GetScholarshipsClient from './GetScholarshipsClient';
+import { GetScholarshipsQuizWizard } from '@/components/get-scholarships/GetScholarshipsQuizWizard';
 
 export default function GetScholarshipsPage() {
-  return <GetScholarshipsClient />;
+  return <GetScholarshipsQuizWizard />;
 }

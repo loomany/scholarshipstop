@@ -15,8 +15,11 @@ export const SCHOLARSHIPS_HUB_ALL_MATCHES_HREF =
   '/scholarships?tab=matches&scope=catalog';
 
 /** Hub URL for Best recommendation: tab + default sort (amount ↓, then newest). */
+export const SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF =
+  '/scholarships?tab=best-recommendation&scope=catalog&sort=best_recommendation';
+/** Backward-compat alias while old imports are being migrated. */
 export const SCHOLARSHIPS_HUB_BEST_MATCHES_HREF =
-  '/scholarships?tab=best-matches&scope=catalog&sort=best_recommendation';
+  SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF;
 
 /** Saved grants (My scholarships → Saved); same data as `user_saved_scholarships`. */
 export const SCHOLARSHIPS_HUB_SAVED_TAB_HREF = '/scholarships?tab=saved';
@@ -235,8 +238,9 @@ export function buildScholarshipCategoryPageSearchParams(
  * Сбрасываем page, q, category, sort, deadline — предсказуемо при смене Matches ↔ Saved и т.д.
  */
 export function buildScholarshipTabHref(id: ScholarshipListTabId): string {
-  if (id === 'best-matches')
-    return '/scholarships?tab=best-matches&scope=catalog&sort=best_recommendation';
+  if (id === 'best-recommendation') {
+    return SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF;
+  }
   if (id === 'matches') return '/scholarships?scope=catalog&tab=matches';
   if (id === 'hot-deadlines') return '/scholarships?tab=hot-deadlines';
   return `/scholarships?tab=${encodeURIComponent(id)}`;

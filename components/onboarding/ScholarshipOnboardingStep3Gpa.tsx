@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { DarkSelect } from '@/components/home/DarkSelect';
 import {
   normalizeGpaForSelect,
+  SCHOLARSHIP_GPA_BUCKET_OPTIONS,
   SCHOLARSHIP_GPA_OPTIONS,
   SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY
 } from '@/lib/constants/scholarshipGpaOptions';
@@ -21,6 +22,10 @@ import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholars
 
 const gpaSelectOptions = [
   { value: '', label: 'Select your GPA' },
+  ...SCHOLARSHIP_GPA_BUCKET_OPTIONS.map((o) => ({
+    value: o.value,
+    label: o.label
+  })),
   ...SCHOLARSHIP_GPA_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 ];
 
@@ -37,6 +42,8 @@ type Props = {
   draftStore?: 'onboarding' | 'landing';
   progressEyebrow?: string;
   submitButtonLabel?: string;
+  title?: string;
+  description?: string;
 };
 
 export function ScholarshipOnboardingStep3Gpa({
@@ -46,7 +53,9 @@ export function ScholarshipOnboardingStep3Gpa({
   onContinue,
   draftStore = 'onboarding',
   progressEyebrow,
-  submitButtonLabel
+  submitButtonLabel,
+  title,
+  description
 }: Props) {
   const loadDraft =
     draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
@@ -100,14 +109,10 @@ export function ScholarshipOnboardingStep3Gpa({
           {progressEyebrow ?? 'Step 3 of 4 · GPA'}
         </p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
-          What&apos;s your GPA?
+          {title ?? "What's your GPA?"}
         </h2>
-        <p className="mx-auto mt-3 flex max-w-md flex-col gap-1 text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
-          <span>Some scholarships use academic standing.</span>
-        </p>
-        <p className="mx-auto mt-2.5 max-w-md text-sm leading-relaxed text-zinc-500 sm:max-w-lg">
-          Adding your GPA can help surface scholarships that better match your
-          academic profile.
+        <p className="mx-auto mt-3 max-w-md text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
+          {description ?? 'Some scholarships use academic standing.'}
         </p>
       </div>
 

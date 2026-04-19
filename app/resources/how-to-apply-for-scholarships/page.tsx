@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
 import { resourceGuideHref } from '@/lib/scholarships/resourceGuideRoutes';
@@ -66,9 +67,9 @@ export default function HowToApplyForScholarshipsPage() {
         <p>
           Start with your school’s financial aid office and any major portals
           your counselor recommends. Then add national databases and{' '}
-          <Link href="/scholarships" className={resourceGuideLinkClassName}>
+          <ScholarshipCatalogEntryLink className={resourceGuideLinkClassName}>
             browse scholarships by subject and state
-          </Link>{' '}
+          </ScholarshipCatalogEntryLink>{' '}
           so you are not only chasing the same huge national prizes everyone
           sees. Local clubs, employers, and professional associations often run
           smaller awards with fewer applicants.

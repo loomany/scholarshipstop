@@ -14,6 +14,7 @@ import {
   fetchInitialHubScholarshipsPayload,
   fetchInitialLongTailScholarshipsPayload
 } from '@/app/scholarships/scholarshipListServerPayload';
+import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import {
   getLongTailPreset,
   isScholarshipDetailUuidParam,
@@ -66,6 +67,14 @@ function normalizeSeoTextLines(
   return [text];
 }
 
+function safeScholarshipReturnToHref(searchParamsString: string): string {
+  const raw = new URLSearchParams(searchParamsString).get('return_to')?.trim() ?? '';
+  if (!raw || !raw.startsWith('/') || raw.startsWith('//')) {
+    return SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
+  }
+  return raw;
+}
+
 function isPromotedManifestSeoRoute(entry: {
   indexable?: boolean;
   qualityBucket?: string;
@@ -84,6 +93,8 @@ function shouldShowManifestSeoPromotedChrome(
 export type ScholarshipsSlugPathPageBodyProps = {
   /** Normalized URL segments (same rules as `normalizeScholarshipDynamicParam`). */
   segments: string[];
+  /** Raw query string for hub root SSR alignment. */
+  searchParamsString?: string;
 };
 
 /**
@@ -91,8 +102,11 @@ export type ScholarshipsSlugPathPageBodyProps = {
  * `/scholarships/[state]/[university]` when the path is not a provider-university hub.
  */
 export default async function ScholarshipsSlugPathPageBody({
-  segments
+  segments,
+  searchParamsString = ''
 }: ScholarshipsSlugPathPageBodyProps) {
+  const returnToHref = safeScholarshipReturnToHref(searchParamsString);
+
   if (segments.length === 0) {
     type HubListingClient = ReturnType<typeof createPublicClient>;
     let profile: ProfilesRow | null = null;
@@ -117,7 +131,8 @@ export default async function ScholarshipsSlugPathPageBody({
     }
     const initialListPayload = await fetchInitialHubScholarshipsPayload(
       supabase,
-      profile
+      profile,
+      searchParamsString
     );
     return (
       <ScholarshipsHubPageAuthBridge
@@ -125,7 +140,7 @@ export default async function ScholarshipsSlugPathPageBody({
           buildInitialListRequestKey({
             kind: 'hub',
             routeKey: 'hub',
-            searchParamsString: ''
+            searchParamsString
           }),
           initialListPayload
         )}
@@ -166,6 +181,8 @@ export default async function ScholarshipsSlugPathPageBody({
         >
           <ScholarshipDetailPageAuthBridge
             initialScholarship={redactPremiumScholarshipFields(scholarship)}
+            routeParam={segments[0]}
+            returnToHref={returnToHref}
             initialRelatedArticles={initialRelatedArticles}
             initialRelatedEssays={initialRelatedEssays}
             initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
@@ -225,6 +242,8 @@ export default async function ScholarshipsSlugPathPageBody({
         >
           <ScholarshipDetailPageAuthBridge
             initialScholarship={redactPremiumScholarshipFields(scholarship)}
+            routeParam={segments[0]}
+            returnToHref={returnToHref}
             initialRelatedArticles={initialRelatedArticles}
             initialRelatedEssays={initialRelatedEssays}
             initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}

@@ -1,4 +1,6 @@
-const KEY = 'scholarshipSubmitted';
+import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
+
+export const SUBMITTED_SCHOLARSHIPS_KEY = 'scholarshipSubmitted';
 
 function isBrowser() {
   return typeof window !== 'undefined';
@@ -7,7 +9,9 @@ function isBrowser() {
 export function getSubmittedScholarshipIds(): string[] {
   if (!isBrowser()) return [];
   try {
-    const raw = window.localStorage.getItem(KEY);
+    const raw = window.localStorage.getItem(
+      getScopedScholarshipStorageKey(SUBMITTED_SCHOLARSHIPS_KEY)
+    );
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed)
@@ -23,7 +27,10 @@ export function addSubmittedScholarship(id: string): string[] {
   if (current.includes(id)) return current;
   const next = [...current, id];
   if (isBrowser()) {
-    window.localStorage.setItem(KEY, JSON.stringify(next));
+    window.localStorage.setItem(
+      getScopedScholarshipStorageKey(SUBMITTED_SCHOLARSHIPS_KEY),
+      JSON.stringify(next)
+    );
   }
   return next;
 }
@@ -31,7 +38,10 @@ export function addSubmittedScholarship(id: string): string[] {
 export function removeSubmittedScholarship(id: string): string[] {
   const next = getSubmittedScholarshipIds().filter((x) => x !== id);
   if (isBrowser()) {
-    window.localStorage.setItem(KEY, JSON.stringify(next));
+    window.localStorage.setItem(
+      getScopedScholarshipStorageKey(SUBMITTED_SCHOLARSHIPS_KEY),
+      JSON.stringify(next)
+    );
   }
   return next;
 }

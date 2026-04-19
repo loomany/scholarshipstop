@@ -4,10 +4,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { createClient } from '@/utils/supabase/client';
-import {
-  HOME_PRIMARY_CTA_AUTH_HREF,
-  HOME_PRIMARY_CTA_GUEST_HREF
-} from '@/lib/nav/homePrimaryCta';
+import { HOME_PRIMARY_CTA_GUEST_HREF } from '@/lib/nav/homePrimaryCta';
+import { resolveScholarshipEntryHrefClient } from '@/lib/nav/scholarshipEntryHrefClient';
 
 type HomePrimaryCtaClientProps = {
   className: string;
@@ -25,10 +23,10 @@ export default function HomePrimaryCtaClient({
   useEffect(() => {
     const supabase = createClient();
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setHref(session?.user ? HOME_PRIMARY_CTA_AUTH_HREF : HOME_PRIMARY_CTA_GUEST_HREF);
+      setHref(resolveScholarshipEntryHrefClient(Boolean(session?.user)));
     });
     void supabase.auth.getSession().then(({ data: { session } }) => {
-      setHref(session?.user ? HOME_PRIMARY_CTA_AUTH_HREF : HOME_PRIMARY_CTA_GUEST_HREF);
+      setHref(resolveScholarshipEntryHrefClient(Boolean(session?.user)));
     });
     return () => {
       sub.subscription.unsubscribe();

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useParams, useSearchParams } from 'next/navigation';
 import {
   BookOpen,
   CalendarClock,
@@ -26,6 +25,7 @@ import {
 } from '@/components/ui/DarkTooltip';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
+import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
@@ -51,6 +51,12 @@ import {
   getIgnoredScholarshipIds,
   removeIgnoredScholarship
 } from '@/app/scholarships/ignoredScholarships';
+import {
+  recordScholarshipDetailFreeNavigation,
+  resolveScholarshipDetailClickBudgetMode,
+  shouldBlockScholarshipDetailNavigation
+} from '@/lib/scholarships/guestScholarshipDetailClickBudget';
+import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import {
   deleteUserSavedScholarship,
   fetchUserSavedScholarshipIds,
@@ -94,10 +100,8 @@ import {
   SIMILAR_MAX
 } from '@/lib/scholarships/similarScholarships';
 import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
-import {
-  computeScholarshipProfileMatchPercent,
-  type ScholarshipProfileMatchFields
-} from '@/lib/scholarships/scholarshipMatch';
+import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
+import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCurrentUserScholarshipMatchProfile';
 import { createClient } from '@/utils/supabase/client';
 import {
   filterApplicationTipsForUi,
@@ -289,7 +293,8 @@ function SimilarScholarshipDetailListItem({
   eligibleForMatchPill,
   isAuthenticated,
   hasSubscription,
-  onSubscriptionOffer
+  onSubscriptionOffer,
+  onGuestDetailNavigate
 }: {
   scholarship: Scholarship;
   highlightPrimary: boolean;
@@ -299,7 +304,8 @@ function SimilarScholarshipDetailListItem({
   eligibleForMatchPill: boolean;
   isAuthenticated: boolean;
   hasSubscription: boolean;
-  onSubscriptionOffer: () => void;
+  onSubscriptionOffer: (arg?: unknown) => void;
+  onGuestDetailNavigate?: () => void;
 }) {
   const deadlinePassed = scholarshipDeadlineHasPassed(s);
   const simDd = getScholarshipDeadlineDisplayParts(s);
@@ -317,9 +323,7 @@ function SimilarScholarshipDetailListItem({
   const showMatchPercentPill =
     eligibleForMatchPill &&
     !showBestRecommendation &&
-    profileMatchPercent != null &&
-    profileMatchPercent >= 70 &&
-    profileMatchPercent <= 90;
+    profileMatchPercent != null;
 
   const awardLine = formatScholarshipAwardLine(s);
 
@@ -419,7 +423,7 @@ function SimilarScholarshipDetailListItem({
         <button
           type="button"
           className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
-          onClick={onSubscriptionOffer}
+          onClick={() => onSubscriptionOffer()}
           title="Start your free access to open this scholarship"
           aria-label="Locked scholarship. Start free access to open."
         >
@@ -428,6 +432,26 @@ function SimilarScholarshipDetailListItem({
       ) : (
         <Link
           href={scholarshipPublicPath(s)}
+          onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            const budgetMode = resolveScholarshipDetailClickBudgetMode({
+              isAuthenticated,
+              hasSubscription
+            });
+            if (!budgetMode) return;
+            if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
+              e.preventDefault();
+              if (budgetMode === 'guest') {
+                onGuestDetailNavigate?.();
+                return;
+              }
+              if (budgetMode === 'signed-in-no-subscription') {
+                onSubscriptionOffer(SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE);
+                return;
+              }
+            }
+            recordScholarshipDetailFreeNavigation(budgetMode);
+          }}
           className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
         >
           {cardInner}
@@ -549,7 +573,9 @@ export default function ScholarshipDetailPageClient({
   initialRelatedArticles = [],
   initialRelatedEssays = [],
   initialRelatedHubLinks = [],
-  initialComparePeers = []
+  initialComparePeers = [],
+  routeParam,
+  returnToHref = SCHOLARSHIPS_HUB_ALL_MATCHES_HREF
 }: {
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
@@ -563,30 +589,14 @@ export default function ScholarshipDetailPageClient({
   initialRelatedHubLinks?: { href: string; label: string }[];
   /** Peer universities for versus-page links (catalog-backed). */
   initialComparePeers?: ComparePeerRow[];
+  /** Canonical route segment used for client refreshes of the scholarship detail. */
+  routeParam?: string;
+  /** Safe back destination inherited from the listing card. */
+  returnToHref?: string;
 } = {}) {
   const layoutInitialScholarship = useScholarshipDetailInitialData();
   const serverScholarship = initialScholarship ?? layoutInitialScholarship;
-  const params = useParams();
-  const searchParams = useSearchParams();
-  const routeParam = useMemo((): string | undefined => {
-    const raw = params?.slugPath;
-    if (Array.isArray(raw)) {
-      const parts = raw
-        .map((s) => decodeURIComponent(String(s)).trim())
-        .filter(Boolean);
-      if (parts.length === 1) return parts[0];
-      return undefined;
-    }
-    if (typeof raw === 'string' && raw.trim()) return raw.trim();
-    return undefined;
-  }, [params]);
-  const backToMatchesHref = useMemo(() => {
-    const raw = searchParams?.get('return_to')?.trim() ?? '';
-    if (!raw || !raw.startsWith('/') || raw.startsWith('//')) {
-      return SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
-    }
-    return raw;
-  }, [searchParams]);
+  const backToMatchesHref = returnToHref;
 
   useLayoutEffect(() => {
     if (!routeParam) return;
@@ -606,20 +616,23 @@ export default function ScholarshipDetailPageClient({
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
-  const [profileMatchPercent, setProfileMatchPercent] = useState<number | null>(
-    null
-  );
+  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+    string | undefined
+  >(undefined);
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
   }, []);
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
-  const openSubscriptionOffer = useCallback(() => {
+  const openSubscriptionOffer = useCallback((arg?: unknown) => {
+    const notice = typeof arg === 'string' ? arg : undefined;
+    setSubscriptionOfferNotice(notice);
     setSubscriptionOfferOpen(true);
   }, []);
   const closeSubscriptionOffer = useCallback(() => {
     setSubscriptionOfferOpen(false);
+    setSubscriptionOfferNotice(undefined);
   }, []);
   const syncIdsFromStorage = useCallback(async () => {
     setIgnoredIds(getIgnoredScholarshipIds());
@@ -648,48 +661,12 @@ export default function ScholarshipDetailPageClient({
     !hasSubscription &&
     (easyApplyIds.includes('easy_apply') || easyApplyIds.includes('quick_apply'));
   const hasDetailAccess = isAuthenticated && !isEasyApplySubscriptionLocked;
+  const { profile: currentMatchProfile } =
+    useCurrentUserScholarshipMatchProfile(isAuthenticated && authResolved);
 
   useEffect(() => {
     void syncIdsFromStorage();
   }, [syncIdsFromStorage]);
-
-  useEffect(() => {
-    if (!isAuthenticated || !authResolved) {
-      setProfileMatchPercent(null);
-      return;
-    }
-    const supabase = createClient();
-    let cancelled = false;
-    void (async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-      if (!user || cancelled) {
-        if (!cancelled) setProfileMatchPercent(null);
-        return;
-      }
-      const { data: row } = await supabase
-        .from('profiles')
-        .select(
-          'field_of_study, field_of_study_label, school_level, citizenship_status, state_region, gpa'
-        )
-        .eq('id', user.id)
-        .maybeSingle();
-      if (cancelled) return;
-      if (!row) {
-        setProfileMatchPercent(null);
-        return;
-      }
-      setProfileMatchPercent(
-        computeScholarshipProfileMatchPercent(
-          row as ScholarshipProfileMatchFields
-        )
-      );
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [isAuthenticated, authResolved]);
 
   useEffect(() => {
     if (!scholarship?.id) return;
@@ -796,12 +773,21 @@ export default function ScholarshipDetailPageClient({
     <ScholarshipSubscriptionOfferModal
       open={subscriptionOfferOpen}
       onClose={closeSubscriptionOffer}
+      notice={subscriptionOfferNotice}
     />
   );
 
   const categorySlugForLinks = useMemo(
     () => (scholarship ? resolveScholarshipCategorySlug(scholarship) : null),
     [scholarship]
+  );
+  const similarScholarshipsWithMatch = useMemo(
+    () =>
+      applyProfileMatchPercentToScholarships(
+        similarScholarships,
+        currentMatchProfile
+      ),
+    [similarScholarships, currentMatchProfile]
   );
 
   if (detailLoadState === 'loading') {
@@ -1147,10 +1133,10 @@ export default function ScholarshipDetailPageClient({
       })
     : [];
 
-  const similarOpenList = similarScholarships.filter(
+  const similarOpenList = similarScholarshipsWithMatch.filter(
     (s) => !scholarshipDeadlineHasPassed(s)
   );
-  const similarClosedList = similarScholarships.filter((s) =>
+  const similarClosedList = similarScholarshipsWithMatch.filter((s) =>
     scholarshipDeadlineHasPassed(s)
   );
   const similarSplitIntoSections =
@@ -2372,12 +2358,11 @@ export default function ScholarshipDetailPageClient({
                   </p>
                 ) : (
                   <p className="text-sm">
-                    <Link
-                      href="/scholarships"
+                    <ScholarshipCatalogEntryLink
                       className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
                     >
                       Browse all scholarships
-                    </Link>
+                    </ScholarshipCatalogEntryLink>
                   </p>
                 )}
               </div>
@@ -2411,12 +2396,13 @@ export default function ScholarshipDetailPageClient({
                         key={s.id}
                         scholarship={s}
                         highlightPrimary={s.id === similarFirstOpenId}
-                        profileMatchPercent={profileMatchPercent}
+                        profileMatchPercent={s.profileMatchPercent ?? null}
                         isPrimarySimilarOpen={s.id === similarFirstOpenId}
                         eligibleForMatchPill
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
                         onSubscriptionOffer={openSubscriptionOffer}
+                        onGuestDetailNavigate={openRegistrationWall}
                       />
                     ))}
                   </ul>
@@ -2438,12 +2424,13 @@ export default function ScholarshipDetailPageClient({
                         key={s.id}
                         scholarship={s}
                         highlightPrimary={false}
-                        profileMatchPercent={profileMatchPercent}
+                        profileMatchPercent={s.profileMatchPercent ?? null}
                         isPrimarySimilarOpen={false}
                         eligibleForMatchPill={false}
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
                         onSubscriptionOffer={openSubscriptionOffer}
+                        onGuestDetailNavigate={openRegistrationWall}
                       />
                     ))}
                   </ul>
@@ -2451,7 +2438,7 @@ export default function ScholarshipDetailPageClient({
               </div>
             ) : (
               <ul className={`${similarScholarshipsGridClass} mt-5`} role="list">
-                {similarScholarships.map((s) => {
+                {similarScholarshipsWithMatch.map((s) => {
                   const isOpen = !scholarshipDeadlineHasPassed(s);
                   const isPrimaryOpen = isOpen && s.id === similarFirstOpenId;
                   return (
@@ -2459,12 +2446,13 @@ export default function ScholarshipDetailPageClient({
                       key={s.id}
                       scholarship={s}
                       highlightPrimary={Boolean(isPrimaryOpen)}
-                      profileMatchPercent={profileMatchPercent}
+                      profileMatchPercent={s.profileMatchPercent ?? null}
                       isPrimarySimilarOpen={Boolean(isPrimaryOpen)}
                       eligibleForMatchPill={isOpen}
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
                       onSubscriptionOffer={openSubscriptionOffer}
+                      onGuestDetailNavigate={openRegistrationWall}
                     />
                   );
                 })}

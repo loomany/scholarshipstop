@@ -5,9 +5,11 @@ import { type Provider } from '@supabase/supabase-js';
 import { getAuthTypes } from '@/utils/auth-helpers/settings';
 import {
   getErrorRedirect,
+  getOAuthCallbackUrlWithNext,
   getOAuthRedirectURL,
   getStatusRedirect
 } from '@/utils/helpers';
+import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { redirectToPath } from './server';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
@@ -42,7 +44,9 @@ export async function signInWithOAuth(e: React.FormEvent<HTMLFormElement>) {
 
   // Create client-side supabase client and call signInWithOAuth
   const supabase = createClient();
-  const redirectURL = getOAuthRedirectURL('/auth/callback');
+  const redirectURL = getOAuthCallbackUrlWithNext(
+    SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF
+  );
   await supabase.auth.signInWithOAuth({
     provider: provider,
     options: {
@@ -72,7 +76,11 @@ export async function signInWithPasswordClient(
 
   if (data.user) {
     setPreferredSignInViewCookie('password_signin');
-    return getStatusRedirect('/scholarships', 'Success!', 'You are now signed in.');
+    return getStatusRedirect(
+      SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF,
+      'Success!',
+      'You are now signed in.'
+    );
   }
 
   return getErrorRedirect(
@@ -98,7 +106,9 @@ export async function signInWithEmailClient(formData: FormData): Promise<string>
   const { data, error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: getOAuthRedirectURL('/auth/callback'),
+      emailRedirectTo: getOAuthCallbackUrlWithNext(
+        SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF
+      ),
       shouldCreateUser: !allowPassword
     }
   });

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import ContentHubArticleMatchedScholarshipCards from '@/components/content-hub/ContentHubArticleMatchedScholarshipCards';
+import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import type { RelatedScholarshipStored } from '@/lib/content-hub/articleScholarshipMatching/types';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 
@@ -121,12 +122,11 @@ export default function ContentHubArticleMatchedScholarships({
       <p
         className={`text-left text-sm text-gray-600 ${subheading ? 'mt-4' : 'mt-3'}`}
       >
-        <Link
-          href="/scholarships"
+        <ScholarshipCatalogEntryLink
           className="font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
         >
           Browse the full scholarship catalog
-        </Link>{' '}
+        </ScholarshipCatalogEntryLink>{' '}
         — filter by deadline, category, and more.
       </p>
 

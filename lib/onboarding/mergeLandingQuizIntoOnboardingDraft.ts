@@ -1,13 +1,17 @@
 /**
  * When a guest fills the `/get-scholarships` quiz, data lives in a separate
  * localStorage key. On account creation (`/onboarding`), merge it into the
- * main onboarding draft so they only add DOB + account fields when missing.
+ * main onboarding draft so they add DOB (account step) and account fields when missing.
  *
  * After a completed quiz we also stash a sessionStorage snapshot before
  * clearing the landing draft (hub redirect), so browsing still allows merge.
  */
 
-import { clearLandingQuizDraft, loadLandingQuizDraft } from '@/lib/onboarding/getScholarshipsLandingDraft';
+import {
+  clearLandingQuizDraft,
+  loadCompletedLandingQuizDraft,
+  loadLandingQuizDraft
+} from '@/lib/onboarding/getScholarshipsLandingDraft';
 import {
   loadStoredOnboardingDraft,
   mergeDraftWithDefaults,
@@ -15,11 +19,12 @@ import {
   type OnboardingFormValues,
   type StoredOnboardingDraft
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
-import { validateScholarshipOnboarding } from '@/lib/validation/scholarshipOnboardingSchema';
+import { validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
 import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
 import { validateScholarshipOnboardingStep4Draft } from '@/lib/validation/scholarshipOnboardingStep4Schema';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import {
+  buildScholarshipProfileFilterSeedFromDraftWithoutBirth,
   buildScholarshipProfileFilterSeedFromQuizDraft,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
@@ -66,6 +71,32 @@ function parseSessionDraft(raw: string): StoredOnboardingDraft | null {
 }
 
 /**
+ * Best recommendation “Edit answers” for guests who only have `/get-scholarships` (or pending session)
+ * data — not necessarily `scholarship_best_recommendation_wizard_draft_v1`.
+ */
+export function loadGuestLandingQuizDraftForHubReEdit(): StoredOnboardingDraft | null {
+  if (typeof window === 'undefined') return null;
+
+  const completed = loadCompletedLandingQuizDraft();
+  if (completed && hasUsableLandingQuizData(completed)) return completed;
+
+  try {
+    const raw = sessionStorage.getItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY);
+    if (raw) {
+      const draft = parseSessionDraft(raw);
+      if (draft && hasUsableLandingQuizData(draft)) return draft;
+    }
+  } catch {
+    /* ignore */
+  }
+
+  const live = loadLandingQuizDraft();
+  if (live && hasUsableLandingQuizData(live)) return live;
+
+  return null;
+}
+
+/**
  * Call when the user finishes the landing quiz, before `clearLandingQuizDraft()`.
  */
 export function stashLandingQuizDraftForOnboardingMerge(
@@ -94,6 +125,17 @@ export function tryBuildProfileSeedFromPendingLandingSession(): ScholarshipProfi
     const draft = parseSessionDraft(raw);
     if (!draft) return null;
     return buildScholarshipProfileFilterSeedFromQuizDraft(draft);
+  } catch {
+    return null;
+  }
+}
+
+export function tryBuildProfileSeedFromCompletedLandingQuiz(): ScholarshipProfileFilterSeed | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const draft = loadCompletedLandingQuizDraft();
+    if (!draft) return null;
+    return buildScholarshipProfileFilterSeedFromDraftWithoutBirth(draft);
   } catch {
     return null;
   }
@@ -135,13 +177,13 @@ function mergeSourceIntoBase(
 }
 
 /**
- * First incomplete step after merge (full DOB required on step 1).
+ * First incomplete step after merge (basics without DOB; DOB on account step).
  * Wizard order: 1 basics → 2 state → 3 GPA → 4 account.
  */
 export function computeResumeStepAfterLandingMerge(
   d: StoredOnboardingDraft
 ): OnboardingStep {
-  if (!validateScholarshipOnboarding(d.step1).ok) return 1;
+  if (!validateScholarshipOnboardingBasicsWithoutBirth(d.step1).ok) return 1;
   if (!validateScholarshipOnboardingStep4Draft(d.step4).ok) return 2;
   if (!validateScholarshipOnboardingStep3Gpa(d.step3).ok) return 3;
   return 4;

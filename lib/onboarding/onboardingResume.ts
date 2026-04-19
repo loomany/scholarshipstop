@@ -1,7 +1,4 @@
-import {
-  validateScholarshipOnboarding,
-  validateScholarshipOnboardingBasicsWithoutBirth
-} from '@/lib/validation/scholarshipOnboardingSchema';
+import { validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 
@@ -13,10 +10,7 @@ const UI_MAX_STEP = 4 as OnboardingStep;
  * has progressed. Account fields are not required until step 4.
  */
 function step1ValidForDraft(draft: StoredOnboardingDraft): boolean {
-  if (draft.quizVariant === 'landing_no_birth') {
-    return validateScholarshipOnboardingBasicsWithoutBirth(draft.step1).ok;
-  }
-  return validateScholarshipOnboarding(draft.step1).ok;
+  return validateScholarshipOnboardingBasicsWithoutBirth(draft.step1).ok;
 }
 
 export function getMaxAllowedOnboardingStep(

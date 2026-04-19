@@ -28,6 +28,7 @@ export const PROFILES_UPSERT_ALLOWED_KEYS = new Set([
   'citizenship_status',
   'citizenship_status_label',
   'gpa',
+  'saved_filters_snapshot',
   'state_region',
   'onboarding_completed',
   'email_verified',
@@ -60,6 +61,7 @@ export type ProfilesOnboardingRow = {
   citizenship_status: string | null;
   citizenship_status_label: string | null;
   gpa: number | null;
+  saved_filters_snapshot?: Record<string, unknown> | null;
   state_region: string | null;
   onboarding_completed: boolean;
   email_verified?: boolean;
@@ -126,6 +128,11 @@ export function profileToProfilesOnboardingRow(profile: UserProfile): ProfilesOn
     citizenship_status: profile.citizenshipStatus,
     citizenship_status_label: profile.citizenshipStatusLabel,
     gpa: gpaForProfileDb(profile.gpa),
+    ...(Object.prototype.hasOwnProperty.call(profile, 'savedFiltersSnapshot')
+      ? {
+          saved_filters_snapshot: profile.savedFiltersSnapshot ?? null
+        }
+      : {}),
     state_region: profile.stateRegion?.trim() || null,
     onboarding_completed: profile.onboardingCompleted,
     ...(profile.emailVerified === false ? { email_verified: false } : {}),
@@ -175,6 +182,12 @@ function userProfileFromAuthMetadata(
     stateRegion: p.stateRegion ?? null,
     city: p.city ?? null,
     gpa: p.gpa ?? null,
+    ...(Object.prototype.hasOwnProperty.call(p, 'savedFiltersSnapshot')
+      ? {
+          savedFiltersSnapshot:
+            (p.savedFiltersSnapshot as Record<string, unknown> | null) ?? null
+        }
+      : {}),
     onboardingCompleted: Boolean(p.onboardingCompleted),
     ...(p.emailVerified === false ? { emailVerified: false } : {})
   };

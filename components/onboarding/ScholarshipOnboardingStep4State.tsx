@@ -28,6 +28,10 @@ type Props = {
   draftStore?: 'onboarding' | 'landing';
   /** Overrides “Step 2 of 4 · State” (e.g. landing quiz uses 3 steps). */
   progressEyebrow?: string;
+  allowSkipEmpty?: boolean;
+  title?: string;
+  description?: string;
+  helperText?: string;
 };
 
 export function ScholarshipOnboardingStep4State({
@@ -36,7 +40,11 @@ export function ScholarshipOnboardingStep4State({
   onBack,
   onContinue,
   draftStore = 'onboarding',
-  progressEyebrow
+  progressEyebrow,
+  allowSkipEmpty = false,
+  title,
+  description,
+  helperText
 }: Props) {
   const loadDraft =
     draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
@@ -58,12 +66,20 @@ export function ScholarshipOnboardingStep4State({
 
   const persistAndContinue = () => {
     const trimmed = stateInput.trim();
+    if (allowSkipEmpty && !trimmed) {
+      setError(null);
+      saveStep4Fields({ state: '' }, loadDraft());
+      onContinue();
+      return;
+    }
     const canonical = normalizeUsStateToCanonical(trimmed);
     if (!canonical) {
       setError(
         trimmed
           ? 'Choose a state from the suggestions — we only save a valid U.S. state name.'
-          : 'Please select your U.S. state.'
+          : allowSkipEmpty
+            ? 'Choose a valid state from the suggestions, or leave this field empty.'
+            : 'Please select your U.S. state.'
       );
       return;
     }
@@ -92,14 +108,13 @@ export function ScholarshipOnboardingStep4State({
           {progressEyebrow ?? 'Step 2 of 4 · State'}
         </p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
-          What state are you in?
+          {title ?? 'What state are you in?'}
         </h2>
-        <p className="mx-auto mt-3 flex max-w-md flex-col gap-1 text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
-          <span>This helps us filter scholarships by state.</span>
-        </p>
-        <p className="mx-auto mt-2.5 max-w-md text-sm leading-relaxed text-zinc-500 sm:max-w-lg">
-          Adding your state helps us narrow scholarships that may be more relevant
-          to you.
+        <p className="mx-auto mt-3 max-w-md text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
+          {description ??
+            (allowSkipEmpty
+              ? 'Add your state if you want more local scholarship matches.'
+              : 'This helps us filter scholarships by state.')}
         </p>
       </div>
 
@@ -119,7 +134,10 @@ export function ScholarshipOnboardingStep4State({
             disabled={disabled}
           />
           <p className={hintClass}>
-            Choose a suggestion from the list — we only save a valid U.S. state name.
+            {helperText ??
+              (allowSkipEmpty
+                ? 'Optional. If you add one, choose a suggestion from the list so we save a valid U.S. state name.'
+                : 'Choose a suggestion from the list — we only save a valid U.S. state name.')}
           </p>
           {error ? <p className={hintClass}>{error}</p> : null}
         </div>

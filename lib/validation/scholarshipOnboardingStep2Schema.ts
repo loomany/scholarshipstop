@@ -1,4 +1,5 @@
 import type { OnboardingStep2DraftFields } from '@/lib/onboarding/onboardingFlowTypes';
+import { validateBirthDateFields } from '@/lib/validation/birthDateFields';
 import { getPasswordPolicyError } from '@/lib/validation/passwordPolicy';
 
 export type Step2FormValues = {
@@ -7,10 +8,13 @@ export type Step2FormValues = {
   email: string;
   password: string;
   confirmPassword: string;
+  birthMonth: string;
+  birthDay: string;
+  birthYear: string;
 };
 
 export type Step2FieldErrors = Partial<
-  Record<keyof Step2FormValues | 'submit', string>
+  Record<keyof Step2FormValues | 'submit' | 'birthDate' | 'age', string>
 >;
 
 export type Step2ValidationResult =
@@ -70,6 +74,16 @@ export function validateScholarshipOnboardingStep2(
     email: values.email
   });
   const errors: Step2FieldErrors = draft.ok ? {} : { ...draft.errors };
+
+  const birthErrors = validateBirthDateFields(
+    {
+      birthMonth: values.birthMonth,
+      birthDay: values.birthDay,
+      birthYear: values.birthYear
+    },
+    { requireAll: true }
+  );
+  Object.assign(errors, birthErrors);
 
   const pwdMsg = getPasswordPolicyError(values.password);
   if (pwdMsg) {

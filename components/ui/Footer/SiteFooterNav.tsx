@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 
 import { siteNavLink as n } from '@/components/ui/nav/siteNavLink';
 
@@ -62,7 +62,12 @@ const ITEMS: {
 ];
 
 export default function SiteFooterNav() {
-  const pathname = usePathname() ?? '';
+  const [pathname, setPathname] = useState('');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setPathname(window.location.pathname || '');
+  }, []);
 
   return (
     <nav

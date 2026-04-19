@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
-import { Check, ExternalLink, Info } from 'lucide-react';
+import { Check, Info } from 'lucide-react';
 import type { Metadata } from 'next';
 
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import MobileSplitHeading from '@/components/ui/MobileSplitHeading';
 import ProviderProfilePageAuthBridge from '@/app/providers/ProviderProfilePageAuthBridge';
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
+import { ProviderOfficialWebsiteGate } from '@/components/providers/ProviderOfficialWebsiteGate';
 import { ProviderProfileScholarshipsScroll } from '@/components/providers/ProviderProfileScholarshipsScroll';
 import {
   getCachedProviderProfilePage,
@@ -143,15 +144,11 @@ export default async function ProviderProfilePage({
               </div>
             </div>
             {data.officialUrl ? (
-              <a
+              <ProviderOfficialWebsiteGate
                 href={normalizeAiSourceHref(data.officialUrl)}
-                target="_blank"
-                rel="noopener noreferrer"
+                label="Visit official website"
                 className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"
-              >
-                Visit official website
-                <ExternalLink className="h-4 w-4 text-gray-500" aria-hidden />
-              </a>
+              />
             ) : null}
           </div>
         </header>
@@ -183,15 +180,13 @@ export default async function ProviderProfilePage({
                 />
                 <span>
                   Information aggregated from the provider&apos;s official website:{' '}
-                  <a
+                  <ProviderOfficialWebsiteGate
                     href={normalizeAiSourceHref(data.officialUrl)}
+                    label="Official website"
+                    variant="inline"
                     title={normalizeAiSourceHref(data.officialUrl)}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="font-medium text-emerald-700 underline decoration-emerald-600/30 underline-offset-2 hover:text-emerald-800"
-                  >
-                    Official website
-                  </a>
+                  />
                 </span>
               </p>
             </div>

@@ -22,8 +22,9 @@ import {
 } from '@/lib/scholarships/scholarshipCatalog';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import {
-  recordGuestScholarshipDetailFreeNavigation,
-  shouldBlockGuestScholarshipDetailNavigation
+  recordScholarshipDetailFreeNavigation,
+  resolveScholarshipDetailClickBudgetMode,
+  shouldBlockScholarshipDetailNavigation
 } from '@/lib/scholarships/guestScholarshipDetailClickBudget';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCatalogChipRow';
@@ -49,10 +50,13 @@ type ScholarshipCardProps = {
   stackedListing?: boolean;
   /** Signed-in user without active subscription. */
   subscriptionLocked?: boolean;
+  isAuthenticated?: boolean;
+  hasSubscription?: boolean;
   /** Hub listing tab — used for Hot Deadlines lock affordance. */
   listingTab?: ScholarshipListTabId;
   /** Open subscription modal when premium category chip is clicked. */
   onSubscriptionLockedCategoryClick?: (categoryId: string) => void;
+  onSubscriptionDetailNavigate?: () => void;
   /**
    * Guest-only: after two free navigations to scholarship details (per browser tab session),
    * the next click opens the parent’s registration modal instead of navigating.
@@ -76,8 +80,11 @@ export default function ScholarshipCard({
   showCardActions = true,
   stackedListing = false,
   subscriptionLocked = false,
+  isAuthenticated = false,
+  hasSubscription = false,
   listingTab,
   onSubscriptionLockedCategoryClick,
+  onSubscriptionDetailNavigate,
   onGuestDetailNavigate,
   returnToHref
 }: ScholarshipCardProps) {
@@ -266,14 +273,24 @@ export default function ScholarshipCard({
       <Link
         href={detailHref}
         onClick={(e) => {
-          if (!onGuestDetailNavigate) return;
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-          if (shouldBlockGuestScholarshipDetailNavigation()) {
+          const budgetMode = resolveScholarshipDetailClickBudgetMode({
+            isAuthenticated,
+            hasSubscription
+          });
+          const onBlockedNavigate =
+            budgetMode === 'guest'
+              ? onGuestDetailNavigate
+              : budgetMode === 'signed-in-no-subscription'
+                ? onSubscriptionDetailNavigate
+                : undefined;
+          if (!budgetMode || !onBlockedNavigate) return;
+          if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
             e.preventDefault();
-            onGuestDetailNavigate();
+            onBlockedNavigate();
             return;
           }
-          recordGuestScholarshipDetailFreeNavigation();
+          recordScholarshipDetailFreeNavigation(budgetMode);
         }}
         className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A1A]/50"
         aria-label={`View scholarship: ${scholarship.title}`}
@@ -329,6 +346,15 @@ export default function ScholarshipCard({
                   className="pointer-events-none shrink-0 rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/70"
                 >
                   Verified
+                </span>
+              ) : null}
+              {typeof scholarship.profileMatchPercent === 'number' &&
+              !Number.isNaN(scholarship.profileMatchPercent) ? (
+                <span
+                  className="pointer-events-none shrink-0 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold tabular-nums text-slate-700 ring-1 ring-slate-200/80"
+                  title="Match score from your profile"
+                >
+                  Match: {Math.round(scholarship.profileMatchPercent)}%
                 </span>
               ) : null}
             </div>

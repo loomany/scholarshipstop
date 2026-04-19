@@ -2,15 +2,19 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
+import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
   addIgnoredScholarship,
-  getIgnoredScholarshipIds
+  getIgnoredScholarshipIds,
+  IGNORED_SCHOLARSHIPS_KEY
 } from '@/app/scholarships/ignoredScholarships';
 import {
   deleteUserSavedScholarship,
@@ -20,10 +24,15 @@ import {
 import {
   getSavedScholarshipIds,
   removeScholarship,
-  saveScholarship
+  saveScholarship,
+  SAVED_SCHOLARSHIPS_KEY
 } from '@/app/scholarships/savedScholarships';
 import { getViewedScholarshipIds } from '@/app/scholarships/viewedScholarships';
-import { createClient } from '@/utils/supabase/client';
+import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCurrentUserScholarshipMatchProfile';
+import {
+  storageKeyMatchesBase
+} from '@/app/scholarships/userScopedStorage';
+import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
 
 type Props = {
   scholarships: Scholarship[];
@@ -33,16 +42,26 @@ type Props = {
  * Same `ScholarshipCard` layout as the scholarship hub listing (not the narrow stacked variant)
  * for resource/essay “Related scholarships” — save/ignore + registration modal.
  */
-export default function ContentHubArticleMatchedScholarshipCards({
-  scholarships
-}: Props) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+function ContentHubArticleMatchedScholarshipCardsInner({
+  scholarships,
+  isAuthenticated,
+  hasSubscription
+}: Props & {
+  isAuthenticated: boolean;
+  hasSubscription: boolean;
+}) {
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
+  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+    string | undefined
+  >(undefined);
+  const { profile: currentMatchProfile } =
+    useCurrentUserScholarshipMatchProfile(isAuthenticated);
 
   const refreshSavedIds = useCallback(async () => {
     if (!isAuthenticated) {
@@ -72,21 +91,6 @@ export default function ContentHubArticleMatchedScholarshipCards({
   }, [isAuthenticated]);
 
   useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      const supabase = createClient();
-      const {
-        data: { session }
-      } = await supabase.auth.getSession();
-      if (cancelled) return;
-      setIsAuthenticated(Boolean(session?.user?.id));
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
     syncFromStorage();
     void refreshSavedIds();
   }, [syncFromStorage, refreshSavedIds]);
@@ -94,8 +98,8 @@ export default function ContentHubArticleMatchedScholarshipCards({
   useEffect(() => {
     function onStorage(e: StorageEvent) {
       if (
-        e.key === 'savedScholarships' ||
-        e.key === 'scholarshipIgnored' ||
+        storageKeyMatchesBase(e.key, SAVED_SCHOLARSHIPS_KEY) ||
+        storageKeyMatchesBase(e.key, IGNORED_SCHOLARSHIPS_KEY) ||
         e.key === 'scholarshipViewedIds'
       ) {
         syncFromStorage();
@@ -116,6 +120,17 @@ export default function ContentHubArticleMatchedScholarshipCards({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
+  const openSubscriptionOffer = useCallback((arg?: unknown) => {
+    const notice = typeof arg === 'string' ? arg : undefined;
+    setSubscriptionOfferNotice(notice);
+    setSubscriptionOfferOpen(true);
+  }, []);
+  const closeSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(false);
+    setSubscriptionOfferNotice(undefined);
+  }, []);
+
+  const isSubscriptionLocked = isAuthenticated && !hasSubscription;
 
   const toggleSave = useCallback(
     async (id: string) => {
@@ -155,6 +170,10 @@ export default function ContentHubArticleMatchedScholarshipCards({
     () => scholarships.filter((s) => !ignoredIds.includes(s.id)),
     [scholarships, ignoredIds]
   );
+  const visibleWithMatch = useMemo(
+    () => applyProfileMatchPercentToScholarships(visible, currentMatchProfile),
+    [visible, currentMatchProfile]
+  );
 
   if (visible.length === 0) {
     return (
@@ -172,7 +191,7 @@ export default function ContentHubArticleMatchedScholarshipCards({
   return (
     <>
       <ul className="mt-6 list-none space-y-4">
-        {visible.map((scholarship) => (
+        {visibleWithMatch.map((scholarship) => (
           <li key={scholarship.id} className="block min-w-0 w-full">
             <div className="relative z-0 w-full min-w-0">
               <ScholarshipCard
@@ -182,7 +201,20 @@ export default function ContentHubArticleMatchedScholarshipCards({
                 onToggleSave={toggleSave}
                 onHide={ignoreScholarship}
                 showCardActions
-                subscriptionLocked={false}
+                subscriptionLocked={isSubscriptionLocked}
+                isAuthenticated={isAuthenticated}
+                hasSubscription={hasSubscription}
+                onSubscriptionLockedCategoryClick={
+                  isSubscriptionLocked ? openSubscriptionOffer : undefined
+                }
+                onSubscriptionDetailNavigate={
+                  isSubscriptionLocked
+                    ? () =>
+                        openSubscriptionOffer(
+                          SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE
+                        )
+                    : undefined
+                }
                 onGuestDetailNavigate={
                   !isAuthenticated
                     ? () => openRegistrationWall('card-unlock')
@@ -198,6 +230,25 @@ export default function ContentHubArticleMatchedScholarshipCards({
         onClose={closeRegistrationWall}
         contentMode={registrationWallContent}
       />
+      <ScholarshipSubscriptionOfferModal
+        open={subscriptionOfferOpen}
+        onClose={closeSubscriptionOffer}
+        notice={subscriptionOfferNotice}
+      />
     </>
+  );
+}
+
+export default function ContentHubArticleMatchedScholarshipCards(props: Props) {
+  return (
+    <AuthStatusProvider>
+      {({ isAuthenticated, hasSubscription }) => (
+        <ContentHubArticleMatchedScholarshipCardsInner
+          {...props}
+          isAuthenticated={isAuthenticated}
+          hasSubscription={hasSubscription}
+        />
+      )}
+    </AuthStatusProvider>
   );
 }

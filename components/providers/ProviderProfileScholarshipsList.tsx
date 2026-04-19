@@ -8,11 +8,13 @@ import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
+import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
   addIgnoredScholarship,
-  getIgnoredScholarshipIds
+  getIgnoredScholarshipIds,
+  IGNORED_SCHOLARSHIPS_KEY
 } from '@/app/scholarships/ignoredScholarships';
 import {
   deleteUserSavedScholarship,
@@ -22,9 +24,13 @@ import {
 import {
   getSavedScholarshipIds,
   removeScholarship,
-  saveScholarship
+  saveScholarship,
+  SAVED_SCHOLARSHIPS_KEY
 } from '@/app/scholarships/savedScholarships';
+import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCurrentUserScholarshipMatchProfile';
 import { getViewedScholarshipIds } from '@/app/scholarships/viewedScholarships';
+import { storageKeyMatchesBase } from '@/app/scholarships/userScopedStorage';
+import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
 
 type Props = {
   scholarships: Scholarship[];
@@ -44,6 +50,11 @@ export function ProviderProfileScholarshipsList({
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+    string | undefined
+  >(undefined);
+  const { profile: currentMatchProfile } =
+    useCurrentUserScholarshipMatchProfile(isAuthenticated);
 
   const isSubscriptionLocked = isAuthenticated && !hasSubscription;
 
@@ -82,8 +93,8 @@ export function ProviderProfileScholarshipsList({
   useEffect(() => {
     function onStorage(e: StorageEvent) {
       if (
-        e.key === 'savedScholarships' ||
-        e.key === 'scholarshipIgnored' ||
+        storageKeyMatchesBase(e.key, SAVED_SCHOLARSHIPS_KEY) ||
+        storageKeyMatchesBase(e.key, IGNORED_SCHOLARSHIPS_KEY) ||
         e.key === 'scholarshipViewedIds'
       ) {
         syncFromStorage();
@@ -104,11 +115,14 @@ export function ProviderProfileScholarshipsList({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
-  const openSubscriptionOffer = useCallback(() => {
+  const openSubscriptionOffer = useCallback((arg?: unknown) => {
+    const notice = typeof arg === 'string' ? arg : undefined;
+    setSubscriptionOfferNotice(notice);
     setSubscriptionOfferOpen(true);
   }, []);
   const closeSubscriptionOffer = useCallback(() => {
     setSubscriptionOfferOpen(false);
+    setSubscriptionOfferNotice(undefined);
   }, []);
 
   const toggleSave = useCallback(
@@ -149,6 +163,10 @@ export function ProviderProfileScholarshipsList({
     () => scholarships.filter((s) => !ignoredIds.includes(s.id)),
     [scholarships, ignoredIds]
   );
+  const visibleWithMatch = useMemo(
+    () => applyProfileMatchPercentToScholarships(visible, currentMatchProfile),
+    [visible, currentMatchProfile]
+  );
 
   if (scholarships.length === 0) {
     return null;
@@ -176,7 +194,7 @@ export function ProviderProfileScholarshipsList({
   return (
     <>
       <div className="relative z-0 flex w-full min-w-0 flex-col gap-4">
-        {visible.map((s) => (
+        {visibleWithMatch.map((s) => (
           <ScholarshipCard
             key={s.id}
             scholarship={s}
@@ -186,8 +204,18 @@ export function ProviderProfileScholarshipsList({
             onHide={ignoreScholarship}
             showCardActions
             subscriptionLocked={isSubscriptionLocked}
+            isAuthenticated={isAuthenticated}
+            hasSubscription={hasSubscription}
             onSubscriptionLockedCategoryClick={
               isSubscriptionLocked ? openSubscriptionOffer : undefined
+            }
+            onSubscriptionDetailNavigate={
+              isSubscriptionLocked
+                ? () =>
+                    openSubscriptionOffer(
+                      SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE
+                    )
+                : undefined
             }
             onGuestDetailNavigate={
               !isAuthenticated
@@ -205,6 +233,7 @@ export function ProviderProfileScholarshipsList({
       <ScholarshipSubscriptionOfferModal
         open={subscriptionOfferOpen}
         onClose={closeSubscriptionOffer}
+        notice={subscriptionOfferNotice}
       />
     </>
   );

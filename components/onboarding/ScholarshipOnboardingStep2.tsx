@@ -1,17 +1,22 @@
 'use client';
 
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { DarkSelect } from '@/components/home/DarkSelect';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { buildCompleteScholarshipUserProfile } from '@/lib/onboarding/buildScholarshipUserProfile';
 import {
   loadLandingQuizDraft,
+  mergeAndSaveStep1LandingForm,
   saveStep2LandingDraftFields
 } from '@/lib/onboarding/getScholarshipsLandingDraft';
 import {
   loadStoredOnboardingDraft,
+  mergeAndSaveStep1Form,
   saveStep2DraftFields,
+  type OnboardingFormValues,
   type OnboardingStep2DraftFields
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
+import { buildBirthMonthSelectOptions } from '@/lib/constants/scholarshipProfileOptions';
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
 import { PASSWORD_POLICY_HINT } from '@/lib/validation/passwordPolicy';
@@ -20,12 +25,24 @@ import {
   type Step2FormValues,
   type Step2FieldErrors
 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
+import {
+  sanitizeBirthDayInput,
+  sanitizeBirthYearInput,
+  validateBirthDateFields
+} from '@/lib/validation/birthDateFields';
 import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/client';
+
+const birthMonthOptions = buildBirthMonthSelectOptions();
 
 const inputClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 hover:border-zinc-300 ${SITE_INPUT_FOCUS_CLASS}`;
 
 const inputErrorClass = `w-full rounded-xl border border-amber-400/90 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 ${SITE_INPUT_FOCUS_CLASS}`;
+
+const datePartInputBaseClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm outline-none transition-all duration-200 placeholder:text-zinc-400 disabled:cursor-not-allowed disabled:opacity-50 ${SITE_INPUT_FOCUS_CLASS}`;
+
+const sectionLabelClass =
+  'mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-gray-700';
 
 const hintClass = 'mt-1 text-sm text-zinc-600';
 
@@ -35,6 +52,8 @@ type Props = {
   disabled?: boolean;
   /** True while parent runs sign-up / finalize (inline button loading, no fullscreen overlay). */
   isSubmitting?: boolean;
+  /** Step 1 draft (school / field / citizenship + DOB saved from this screen). */
+  initialStep1: OnboardingFormValues;
   initialStep2: OnboardingStep2DraftFields;
   onBack: () => void;
   /** Saves account draft (no password). Password stays in memory via parent callback only. */
@@ -51,6 +70,7 @@ type Props = {
 export function ScholarshipOnboardingStep2({
   disabled = false,
   isSubmitting = false,
+  initialStep1,
   initialStep2,
   onBack,
   onContinue,
@@ -61,16 +81,39 @@ export function ScholarshipOnboardingStep2({
     draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
   const saveStep2Fields =
     draftStore === 'landing' ? saveStep2LandingDraftFields : saveStep2DraftFields;
+  const saveStep1Birth =
+    draftStore === 'landing' ? mergeAndSaveStep1LandingForm : mergeAndSaveStep1Form;
   const [values, setValues] = useState<Step2FormValues>(() => ({
     firstName: initialStep2.firstName,
     lastName: initialStep2.lastName,
     email: initialStep2.email,
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    birthMonth: initialStep1.birthMonth,
+    birthDay: initialStep1.birthDay,
+    birthYear: initialStep1.birthYear
   }));
   const [errors, setErrors] = useState<Step2FieldErrors>({});
   const [oauthPending, setOauthPending] = useState(false);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const liveBirthErrors = useMemo(
+    () =>
+      validateBirthDateFields(
+        {
+          birthMonth: values.birthMonth,
+          birthDay: values.birthDay,
+          birthYear: values.birthYear
+        },
+        { requireAll: false }
+      ),
+    [values.birthMonth, values.birthDay, values.birthYear]
+  );
+  const birthMonthError = errors.birthMonth ?? liveBirthErrors.birthMonth;
+  const birthDayError = errors.birthDay ?? liveBirthErrors.birthDay;
+  const birthYearError = errors.birthYear ?? liveBirthErrors.birthYear;
+  const birthDateError = errors.birthDate ?? liveBirthErrors.birthDate;
+  const birthAgeError = errors.age ?? liveBirthErrors.age;
 
   const handleGoogleAuth = async () => {
     const base = loadDraft();
@@ -84,16 +127,46 @@ export function ScholarshipOnboardingStep2({
       return;
     }
 
+    const birthGate = validateBirthDateFields(
+      {
+        birthMonth: values.birthMonth,
+        birthDay: values.birthDay,
+        birthYear: values.birthYear
+      },
+      { requireAll: true }
+    );
+    if (Object.keys(birthGate).length > 0) {
+      setErrors((prev) => ({ ...prev, ...birthGate }));
+      toast({
+        variant: 'destructive',
+        title: 'Add your birthday',
+        description: 'We need your date of birth before you continue with Google.'
+      });
+      return;
+    }
+
     /** Merge step 2 in memory + persist — avoids losing steps 1–3 when base was ever null. */
     const draft: typeof base = {
       ...base,
+      step1: {
+        ...base.step1,
+        birthMonth: values.birthMonth.trim(),
+        birthDay: values.birthDay.trim(),
+        birthYear: values.birthYear.trim()
+      },
       step2: {
         firstName: values.firstName.trim(),
         lastName: values.lastName.trim(),
         email: values.email.trim()
       }
     };
-    saveStep2Fields(draft.step2, base);
+    saveStep1Birth(
+      {
+        ...draft.step1
+      },
+      base
+    );
+    saveStep2Fields(draft.step2, loadDraft());
 
     const built = buildCompleteScholarshipUserProfile(draft, { forGoogleOAuth: true });
     if (!built.ok) {
@@ -152,9 +225,42 @@ export function ScholarshipOnboardingStep2({
     }
   };
 
+  function setField<K extends keyof Step2FormValues>(key: K, v: Step2FormValues[K]) {
+    setValues((prev) => ({ ...prev, [key]: v }));
+    setErrors((e) => {
+      const next = { ...e };
+      delete next[key];
+      delete next.submit;
+      if (key === 'birthMonth' || key === 'birthDay' || key === 'birthYear') {
+        delete next.birthDate;
+        delete next.age;
+      }
+      return next;
+    });
+  }
+
+  const handleBirthDayChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setField('birthDay', sanitizeBirthDayInput(e.target.value));
+  };
+
+  const handleBirthYearChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setField('birthYear', sanitizeBirthYearInput(e.target.value));
+  };
+
   useEffect(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
+      const base = loadDraft();
+      if (!base) return;
+      saveStep1Birth(
+        {
+          ...base.step1,
+          birthMonth: values.birthMonth,
+          birthDay: values.birthDay,
+          birthYear: values.birthYear
+        },
+        base
+      );
       saveStep2Fields(
         {
           firstName: values.firstName,
@@ -167,17 +273,14 @@ export function ScholarshipOnboardingStep2({
     return () => {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     };
-  }, [values.firstName, values.lastName, values.email]);
-
-  const setField = <K extends keyof Step2FormValues>(key: K, v: Step2FormValues[K]) => {
-    setValues((prev) => ({ ...prev, [key]: v }));
-    setErrors((e) => {
-      const next = { ...e };
-      delete next[key];
-      delete next.submit;
-      return next;
-    });
-  };
+  }, [
+    values.firstName,
+    values.lastName,
+    values.email,
+    values.birthMonth,
+    values.birthDay,
+    values.birthYear
+  ]);
 
   const fieldClass = (key: keyof Step2FormValues) =>
     errors[key] ? inputErrorClass : inputClass;
@@ -190,6 +293,18 @@ export function ScholarshipOnboardingStep2({
       return;
     }
     setErrors({});
+    const base = loadDraft();
+    if (base) {
+      saveStep1Birth(
+        {
+          ...base.step1,
+          birthMonth: values.birthMonth.trim(),
+          birthDay: values.birthDay.trim(),
+          birthYear: values.birthYear.trim()
+        },
+        base
+      );
+    }
     saveStep2Fields(
       {
         firstName: values.firstName.trim(),
@@ -198,7 +313,15 @@ export function ScholarshipOnboardingStep2({
       },
       loadDraft()
     );
-    onContinue(values);
+    onContinue({
+      ...values,
+      firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
+      email: values.email.trim(),
+      birthMonth: values.birthMonth.trim(),
+      birthDay: values.birthDay.trim(),
+      birthYear: values.birthYear.trim()
+    });
   };
 
   return (
@@ -230,6 +353,69 @@ export function ScholarshipOnboardingStep2({
       </div>
 
       <form className="space-y-5 text-left" onSubmit={handleSubmit} noValidate>
+        <div>
+          <p className={sectionLabelClass}>Birthday</p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3">
+            <div>
+              <DarkSelect
+                ariaLabel="Birth month"
+                options={birthMonthOptions}
+                value={values.birthMonth}
+                onChange={(v) => setField('birthMonth', v)}
+                disabled={disabled}
+                hasError={Boolean(birthMonthError)}
+              />
+              {birthMonthError ? (
+                <p className={hintClass}>{birthMonthError}</p>
+              ) : null}
+            </div>
+            <div>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                aria-label="Birth day"
+                value={values.birthDay}
+                onChange={handleBirthDayChange}
+                disabled={disabled}
+                placeholder="Day"
+                maxLength={2}
+                className={`${datePartInputBaseClass} ${
+                  birthDayError
+                    ? 'border-amber-400/80 hover:border-amber-500/70'
+                    : 'border-zinc-200 hover:border-zinc-300'
+                }`}
+                aria-invalid={Boolean(birthDayError)}
+              />
+              {birthDayError ? <p className={hintClass}>{birthDayError}</p> : null}
+            </div>
+            <div>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                aria-label="Birth year"
+                value={values.birthYear}
+                onChange={handleBirthYearChange}
+                disabled={disabled}
+                placeholder="Year"
+                maxLength={4}
+                className={`${datePartInputBaseClass} ${
+                  birthYearError
+                    ? 'border-amber-400/80 hover:border-amber-500/70'
+                    : 'border-zinc-200 hover:border-zinc-300'
+                }`}
+                aria-invalid={Boolean(birthYearError)}
+              />
+              {birthYearError ? <p className={hintClass}>{birthYearError}</p> : null}
+            </div>
+          </div>
+          {birthDateError ? (
+            <p className={`${hintClass} mt-2`}>{birthDateError}</p>
+          ) : null}
+          {birthAgeError ? <p className={`${hintClass} mt-2`}>{birthAgeError}</p> : null}
+        </div>
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="onb-first" className="sr-only">

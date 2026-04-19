@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import type { User } from '@supabase/supabase-js';
+
+import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 
 import SubscriptionPausedBanner from '@/components/billing/SubscriptionPausedBanner';
 import SubscriptionDebug from '@/components/debug/SubscriptionDebug';
@@ -76,12 +77,11 @@ export default function AccountDashboardClient({
           />
 
           <div>
-            <Link
-              href="/scholarships"
+            <ScholarshipCatalogEntryLink
               className="text-sm font-medium text-zinc-500 transition hover:text-zinc-800"
             >
               ← Back to scholarships
-            </Link>
+            </ScholarshipCatalogEntryLink>
           </div>
         </section>
       </div>

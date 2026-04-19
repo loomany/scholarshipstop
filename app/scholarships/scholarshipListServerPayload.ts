@@ -13,29 +13,47 @@ import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMet
 import {
   executeScholarshipListQuery,
   executeScholarshipListQueryWithSeoFallback,
+  fetchScholarshipListMeta,
   fetchGlobalFilterBounds,
   resolveCatalogSubjectCategoryForPageSlug,
+  savedFiltersSnapshotJsonFromProfile,
   scholarshipListRequestFromParts,
   type ScholarshipListResult
 } from '@/lib/scholarships/scholarshipListServer';
-import { SCHOLARSHIPS_PAGE_SIZE } from '@/app/scholarships/scholarshipListUrl';
+import {
+  parseDeadlineFromParam,
+  parseSortFromParam,
+  SCHOLARSHIPS_PAGE_SIZE
+} from '@/app/scholarships/scholarshipListUrl';
+import { parseHubScholarshipTabParam } from '@/app/scholarships/scholarshipTabs';
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import type { createClient } from '@/utils/supabase/server';
 import {
+  moreFiltersFromJson,
   moreFiltersToJson,
   type MoreFiltersJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
+import { stripHubProfileHardMatchMoreFilters } from '@/lib/scholarships/profileFilterDefaults';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types_db';
 
 type ServerSupabaseClient = SupabaseClient<Database>;
+
+function getSearchParamValue(
+  searchParams: URLSearchParams,
+  key: string
+): string | null {
+  const value = searchParams.get(key);
+  return value?.trim() ? value : null;
+}
 
 /**
  * Hub `/scholarships` first paint: same catalog pipeline for signed-in and anonymous users.
  */
 export async function fetchInitialHubScholarshipsPayload(
   supabase: ServerSupabaseClient | null,
-  profile?: ProfilesRow | null
+  profile?: ProfilesRow | null,
+  searchParamsString = ''
 ): Promise<ScholarshipListResult> {
   if (!supabase) {
     return {
@@ -45,23 +63,19 @@ export async function fetchInitialHubScholarshipsPayload(
       limit: SCHOLARSHIPS_PAGE_SIZE
     };
   }
-  const defaultBounds = {
-    amountMin: 0,
-    amountMax: 50000,
-    applicantsMin: 0,
-    applicantsMax: 200000
-  };
-  const req = scholarshipListRequestFromParts({
-    page: 1,
+  const defaultBounds = await fetchGlobalFilterBounds(supabase);
+  const searchParams = new URLSearchParams(searchParamsString);
+  let req = scholarshipListRequestFromParts({
+    page: getSearchParamValue(searchParams, 'page'),
     limit: SCHOLARSHIPS_PAGE_SIZE,
-    sort: 'magic',
-    tab: 'matches',
-    q: '',
-    category: null,
+    sort: parseSortFromParam(searchParams.get('sort')),
+    tab: parseHubScholarshipTabParam(searchParams.get('tab')),
+    q: getSearchParamValue(searchParams, 'q'),
+    category: getSearchParamValue(searchParams, 'category'),
     categoryPageSlug: null,
     catalogSubjectCategoryId: null,
-    deadline: 'any',
-    state: null,
+    deadline: parseDeadlineFromParam(searchParams.get('deadline')) ?? 'any',
+    state: getSearchParamValue(searchParams, 'state'),
     ignored: null,
     saved: null,
     started: null,
@@ -73,6 +87,38 @@ export async function fetchInitialHubScholarshipsPayload(
     listScope: 'catalog',
     requiredSeoTags: []
   });
+  const profileSavedFiltersSnapshotJson =
+    savedFiltersSnapshotJsonFromProfile(profile);
+  const profileSavedFiltersSnapshot =
+    profileSavedFiltersSnapshotJson == null
+      ? null
+      : moreFiltersFromJson(profileSavedFiltersSnapshotJson, defaultBounds);
+  if (profile) {
+    req = {
+      ...req,
+      savedFiltersSnapshot: profileSavedFiltersSnapshot
+    };
+    if (req.tab === 'recommended' && profileSavedFiltersSnapshot != null) {
+      req = {
+        ...req,
+        moreFilters: stripHubProfileHardMatchMoreFilters(profileSavedFiltersSnapshot)
+      };
+    }
+  }
+
+  if (!profile && req.tab === 'best-recommendation') {
+    const meta = await fetchScholarshipListMeta(supabase, req, defaultBounds, {
+      includeCategoryCounts: true
+    });
+    applyListingMetaGuestPatches(meta, { authUser: false });
+    return {
+      scholarships: [],
+      total: 0,
+      page: req.page,
+      limit: req.limit,
+      meta
+    };
+  }
 
   const result = await executeScholarshipListQuery(
     supabase,
@@ -92,6 +138,9 @@ export async function fetchInitialHubScholarshipsPayload(
   /** Hub SSR uses public Supabase only; align sidebar with POST `/api/scholarships` for guests. */
   if (!profile && result.meta) {
     applyListingMetaGuestPatches(result.meta, { authUser: false });
+  }
+  if (profile && result.meta) {
+    result.meta.savedFiltersSnapshotJson = profileSavedFiltersSnapshotJson;
   }
 
   return result;
@@ -296,7 +345,8 @@ export async function fetchInitialUniversityHubScholarshipsPayload(
 
 export async function fetchInitialCategoryScholarshipsPayload(
   supabase: ServerSupabaseClient | null,
-  categorySlug: string
+  categorySlug: string,
+  searchParamsString = ''
 ): Promise<ScholarshipListResult> {
   if (!supabase) {
     return {
@@ -311,17 +361,18 @@ export async function fetchInitialCategoryScholarshipsPayload(
     supabase,
     categorySlug
   );
+  const searchParams = new URLSearchParams(searchParamsString);
   const req = scholarshipListRequestFromParts({
-    page: 1,
+    page: getSearchParamValue(searchParams, 'page'),
     limit: SCHOLARSHIPS_PAGE_SIZE,
-    sort: 'magic',
+    sort: parseSortFromParam(searchParams.get('sort')),
     tab: 'matches',
-    q: '',
-    category: null,
+    q: getSearchParamValue(searchParams, 'q'),
+    category: getSearchParamValue(searchParams, 'category'),
     categoryPageSlug: resolved.legacyCategoryPageSlug,
     catalogSubjectCategoryId: resolved.catalogSubjectCategoryId,
-    deadline: 'any',
-    state: null,
+    deadline: parseDeadlineFromParam(searchParams.get('deadline')) ?? 'any',
+    state: getSearchParamValue(searchParams, 'state'),
     ignored: null,
     saved: null,
     started: null,

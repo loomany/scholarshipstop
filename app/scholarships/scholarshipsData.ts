@@ -165,6 +165,11 @@ export type Scholarship = {
   scholarshipCatalog?: ScholarshipCatalogView;
   /** When true, `applicantCount` may be an estimate from the source. */
   applicantsCountIsEstimated?: boolean;
+  /**
+   * Personalized match strength (0–100), from listing API or client-side profile scoring
+   * when an authenticated user views scholarship cards outside the ranked hub tabs.
+   */
+  profileMatchPercent?: number | null;
 };
 
 /** Quick facts / copy: prefer `catalog_ui`, else legacy columns (may be slug-like). */

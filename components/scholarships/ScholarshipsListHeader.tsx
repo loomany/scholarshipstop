@@ -450,7 +450,7 @@ export default function ScholarshipsListHeader({
                 className="relative w-full shrink-0 sm:w-auto sm:min-w-[11rem]"
                 ref={sortRef}
               >
-                {listTab === 'best-matches' ? (
+                {listTab === 'best-recommendation' ? (
                   <div
                     className={`${CATALOG_CONTROL_BAR_BTN} w-full cursor-default justify-between sm:min-w-[11rem]`}
                     title="Largest awards first; when amounts tie, newest updates first."

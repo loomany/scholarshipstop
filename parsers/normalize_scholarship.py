@@ -11,6 +11,8 @@ import re
 from datetime import date, datetime, timezone
 from typing import Any
 
+from catalog_match_fields import apply_catalog_match_fields
+
 # Maps to UI category ids (scholarshipCategories.ts)
 CATEGORY_RULES: list[tuple[str, list[str]]] = [
     (
@@ -192,6 +194,21 @@ _US_STATE_RE = re.compile(
     r"\b(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|"
     r"MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY)\b"
 )
+
+
+def _hub_match_blob(record: dict[str, Any]) -> str:
+    """Text for hub match-field heuristics (includes fields built mid-normalization)."""
+    parts: list[str] = [_blob(record)]
+    for k in (
+        "who_can_apply",
+        "summary_short",
+        "summary_long",
+        "requirements_text_clean",
+    ):
+        v = record.get(k)
+        if v:
+            parts.append(str(v))
+    return " ".join(parts).lower()
 
 
 def _blob(record: dict[str, Any]) -> str:
@@ -1091,10 +1108,6 @@ def apply_normalization(record: dict[str, Any]) -> None:
     else:
         record["category_slug"] = None
 
-    record["study_levels"] = []
-    record["field_of_study"] = []
-    record["citizenship_statuses"] = []
-
     stt = record.get("state_territory_text")
     if isinstance(stt, str):
         record["location_scope"] = _location_scope(stt)
@@ -1126,6 +1139,11 @@ def apply_normalization(record: dict[str, Any]) -> None:
         rt0 = record.get("requirements_text")
         cleaned = _clean_requirements_line(str(rt0)) if rt0 else ""
         record["requirements_text_clean"] = cleaned.strip() or None
+
+    apply_catalog_match_fields(record, _hub_match_blob(record))
+    for _k in ("study_levels", "field_of_study", "citizenship_statuses", "catalog_education_levels"):
+        if record.get(_k) is None:
+            record[_k] = []
 
     record["official_source_name"] = (
         record.get("source") or "catalog"

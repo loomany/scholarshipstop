@@ -29,7 +29,10 @@ import {
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { enqueueRegistrationVerificationEmail } from '@/app/actions/registrationVerification';
 import { syncOnboardingToProfiles } from '@/lib/onboarding/syncScholarshipProfile';
-import { validateScholarshipOnboardingStep2 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
+import {
+  validateScholarshipOnboardingStep2,
+  type Step2FormValues
+} from '@/lib/validation/scholarshipOnboardingStep2Schema';
 import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
 import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { toast } from '@/components/ui/Toasts/use-toast';
@@ -232,7 +235,10 @@ export function ScholarshipOnboardingWizard({
         lastName: base.step2.lastName,
         email: base.step2.email,
         password,
-        confirmPassword
+        confirmPassword,
+        birthMonth: base.step1.birthMonth,
+        birthDay: base.step1.birthDay,
+        birthYear: base.step1.birthYear
       });
       if (!authCheck.ok) {
         finalizeInFlight.current = false;
@@ -243,6 +249,11 @@ export function ScholarshipOnboardingWizard({
           authCheck.errors.confirmPassword ??
           authCheck.errors.firstName ??
           authCheck.errors.lastName ??
+          authCheck.errors.birthMonth ??
+          authCheck.errors.birthDay ??
+          authCheck.errors.birthYear ??
+          authCheck.errors.birthDate ??
+          authCheck.errors.age ??
           'Please review your account details.';
         notifyDestructive('Check your details', first);
         return;
@@ -393,17 +404,17 @@ export function ScholarshipOnboardingWizard({
   );
 
   const handleAccountSubmit = useCallback(
-    (payload: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      password: string;
-      confirmPassword: string;
-    }) => {
+    (payload: Step2FormValues) => {
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       persistFull({
         ...base,
         v: 7,
+        step1: {
+          ...base.step1,
+          birthMonth: payload.birthMonth.trim(),
+          birthDay: payload.birthDay.trim(),
+          birthYear: payload.birthYear.trim()
+        },
         step2: {
           firstName: payload.firstName.trim(),
           lastName: payload.lastName.trim(),
@@ -478,6 +489,7 @@ export function ScholarshipOnboardingWizard({
             <ScholarshipOnboardingStep2
               disabled={loading}
               isSubmitting={loading}
+              initialStep1={draft.step1}
               initialStep2={draft.step2}
               onBack={() => handleBack(3)}
               onContinue={handleAccountSubmit}

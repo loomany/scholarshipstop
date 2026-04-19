@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
+import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 
 import { SCHOLARSHIP_GPA_OPTIONS } from '@/lib/constants/scholarshipGpaOptions';
 import {
@@ -207,12 +208,11 @@ export function UniversityCompareMatcher({
             </div>
           </div>
           <p className="mt-3">
-            <Link
-              href="/scholarships"
+            <ScholarshipCatalogEntryLink
               className="font-semibold text-sky-700 underline-offset-2 hover:underline"
             >
               View your matches
-            </Link>{' '}
+            </ScholarshipCatalogEntryLink>{' '}
             in the full hub — filters apply to the live catalog, not just this
             pair.
           </p>

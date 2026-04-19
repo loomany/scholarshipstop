@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import clsx from 'clsx';
+import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 
 const buttonClass =
   'inline-flex items-center justify-center rounded-full bg-black px-6 py-2.5 text-center text-sm font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.35)] transition duration-200 ease-out hover:scale-[1.02] hover:bg-zinc-900 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.4)] active:scale-[0.99] sm:px-8 sm:py-3 sm:text-base';
@@ -32,9 +32,9 @@ export default function ContentHubScholarshipCta({
         {description}
       </p>
       <div className="mt-3 flex w-full justify-center sm:mt-3.5">
-        <Link href="/scholarships" className={buttonClass}>
+        <ScholarshipCatalogEntryLink className={buttonClass}>
           {buttonText}
-        </Link>
+        </ScholarshipCatalogEntryLink>
       </div>
     </aside>
   );

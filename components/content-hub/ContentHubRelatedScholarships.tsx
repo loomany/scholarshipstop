@@ -1,7 +1,25 @@
+'use client';
+
 import Link from 'next/link';
 import clsx from 'clsx';
+import { useCallback, useEffect, useState } from 'react';
 
+import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import type { ContentPostScholarshipLink } from '@/lib/content-hub/contentPostScholarshipLinks';
+import {
+  recordScholarshipDetailFreeNavigation,
+  resolveScholarshipDetailClickBudgetMode,
+  shouldBlockScholarshipDetailNavigation
+} from '@/lib/scholarships/guestScholarshipDetailClickBudget';
+import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
+import {
+  hasActiveSubscriptionAccess,
+  type SubscriptionWithPriceAndProduct
+} from '@/lib/payments/subscriptionEntitlements';
+import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
+import { createClient } from '@/utils/supabase/client';
+import type { Database } from '@/types_db';
 
 function contextLabel(
   reason: string,
@@ -29,7 +47,19 @@ const featuredShellClass =
 const featuredCtaClass =
   'inline-flex w-full shrink-0 items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition group-hover:bg-gray-800 sm:w-auto sm:px-7';
 
-function ScholarshipLinkCardCompact({ item }: { item: ContentPostScholarshipLink }) {
+function ScholarshipLinkCardCompact({
+  item,
+  isAuthenticated,
+  hasSubscription,
+  onSubscriptionOffer,
+  onGuestDetailNavigate
+}: {
+  item: ContentPostScholarshipLink;
+  isAuthenticated: boolean;
+  hasSubscription: boolean;
+  onSubscriptionOffer: (arg?: unknown) => void;
+  onGuestDetailNavigate: () => void;
+}) {
   const label = contextLabel(item.reason, item.kind);
   const reasonSnippet =
     item.reason.trim() &&
@@ -76,13 +106,43 @@ function ScholarshipLinkCardCompact({ item }: { item: ContentPostScholarshipLink
       href={`/scholarships/${encodeURIComponent(item.slug)}`}
       scroll
       className={compactCardClass}
+      onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        const budgetMode = resolveScholarshipDetailClickBudgetMode({
+          isAuthenticated,
+          hasSubscription
+        });
+        if (!budgetMode) return;
+        if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
+          e.preventDefault();
+          if (budgetMode === 'guest') {
+            onGuestDetailNavigate();
+            return;
+          }
+          onSubscriptionOffer(SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE);
+          return;
+        }
+        recordScholarshipDetailFreeNavigation(budgetMode);
+      }}
     >
       {inner}
     </Link>
   );
 }
 
-function ScholarshipLinkCardFeatured({ item }: { item: ContentPostScholarshipLink }) {
+function ScholarshipLinkCardFeatured({
+  item,
+  isAuthenticated,
+  hasSubscription,
+  onSubscriptionOffer,
+  onGuestDetailNavigate
+}: {
+  item: ContentPostScholarshipLink;
+  isAuthenticated: boolean;
+  hasSubscription: boolean;
+  onSubscriptionOffer: (arg?: unknown) => void;
+  onGuestDetailNavigate: () => void;
+}) {
   const label = contextLabel(item.reason, item.kind);
   const reasonSnippet =
     item.reason.trim() &&
@@ -127,6 +187,24 @@ function ScholarshipLinkCardFeatured({ item }: { item: ContentPostScholarshipLin
       href={`/scholarships/${encodeURIComponent(item.slug)}`}
       scroll
       className={featuredShellClass}
+      onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        const budgetMode = resolveScholarshipDetailClickBudgetMode({
+          isAuthenticated,
+          hasSubscription
+        });
+        if (!budgetMode) return;
+        if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
+          e.preventDefault();
+          if (budgetMode === 'guest') {
+            onGuestDetailNavigate();
+            return;
+          }
+          onSubscriptionOffer(SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE);
+          return;
+        }
+        recordScholarshipDetailFreeNavigation(budgetMode);
+      }}
     >
       {body}
     </Link>
@@ -140,6 +218,68 @@ type ContentHubRelatedScholarshipsProps = {
 export default function ContentHubRelatedScholarships({
   links
 }: ContentHubRelatedScholarshipsProps) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasSubscription, setHasSubscription] = useState(false);
+  const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+    string | undefined
+  >(undefined);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const supabase = createClient();
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+      if (cancelled) return;
+      setIsAuthenticated(Boolean(session?.user?.id));
+      if (!session?.user?.id) {
+        setHasSubscription(false);
+        return;
+      }
+      const [{ data: profile }, { data: subscriptions }] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .maybeSingle<Database['public']['Tables']['profiles']['Row']>(),
+        supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .order('created', { ascending: false })
+          .limit(20)
+      ]);
+      if (cancelled) return;
+      const subscription = pickCanonicalSubscription(
+        (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
+      ) as SubscriptionWithPriceAndProduct | null;
+      setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const openRegistrationWall = useCallback(() => {
+    setRegistrationWallOpen(true);
+  }, []);
+
+  const closeRegistrationWall = useCallback(() => {
+    setRegistrationWallOpen(false);
+  }, []);
+  const openSubscriptionOffer = useCallback((arg?: unknown) => {
+    const notice = typeof arg === 'string' ? arg : undefined;
+    setSubscriptionOfferNotice(notice);
+    setSubscriptionOfferOpen(true);
+  }, []);
+  const closeSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(false);
+    setSubscriptionOfferNotice(undefined);
+  }, []);
+
   if (!links.length) return null;
 
   const count = links.length;
@@ -175,6 +315,10 @@ export default function ContentHubRelatedScholarships({
                 item.kind === 'internal' ? item.slug : `${item.url}-${index}`
               }
               item={item}
+              isAuthenticated={isAuthenticated}
+              hasSubscription={hasSubscription}
+              onSubscriptionOffer={openSubscriptionOffer}
+              onGuestDetailNavigate={openRegistrationWall}
             />
           ) : (
             <ScholarshipLinkCardCompact
@@ -182,10 +326,24 @@ export default function ContentHubRelatedScholarships({
                 item.kind === 'internal' ? item.slug : `${item.url}-${index}`
               }
               item={item}
+              isAuthenticated={isAuthenticated}
+              hasSubscription={hasSubscription}
+              onSubscriptionOffer={openSubscriptionOffer}
+              onGuestDetailNavigate={openRegistrationWall}
             />
           )
         )}
       </div>
+      <ScholarshipRegistrationWallModal
+        open={registrationWallOpen}
+        onClose={closeRegistrationWall}
+        contentMode="card-unlock"
+      />
+      <ScholarshipSubscriptionOfferModal
+        open={subscriptionOfferOpen}
+        onClose={closeSubscriptionOffer}
+        notice={subscriptionOfferNotice}
+      />
     </section>
   );
 }

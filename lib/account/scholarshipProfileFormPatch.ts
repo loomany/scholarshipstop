@@ -1,7 +1,12 @@
 import {
   citizenshipLabelForValue
 } from '@/lib/constants/onboardingCitizenshipAndLocation';
-import { gpaForProfileDb } from '@/lib/constants/scholarshipGpaOptions';
+import {
+  isGpaBucketChoice,
+  profileGpaSelectionFromSnapshot,
+  withProfileGpaSelectionSnapshot,
+  gpaForProfileDb
+} from '@/lib/constants/scholarshipGpaOptions';
 import {
   fieldOfStudyLabelForValue,
   schoolLevelLabelForValue
@@ -148,6 +153,16 @@ export function buildScholarshipProfileFormPatch(
   const formGpa = gpaForProfileDb(v.gpaChoice);
   /** `prefer_not_to_say` must always persist as `null` in DB. */
   patch.gpa = formGpa;
+  const currentGpaSelection = profileGpaSelectionFromSnapshot(
+    profile?.saved_filters_snapshot
+  );
+  const nextGpaSelection = isGpaBucketChoice(v.gpaChoice) ? v.gpaChoice.trim() : null;
+  if (currentGpaSelection !== nextGpaSelection) {
+    patch.saved_filters_snapshot = withProfileGpaSelectionSnapshot(
+      profile?.saved_filters_snapshot,
+      v.gpaChoice
+    );
+  }
 
   const formState =
     normalizeUsStateToCanonical(v.stateRegionInput) || null;

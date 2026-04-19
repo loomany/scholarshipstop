@@ -6,7 +6,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
   addIgnoredScholarship,
-  getIgnoredScholarshipIds
+  getIgnoredScholarshipIds,
+  IGNORED_SCHOLARSHIPS_KEY
 } from '@/app/scholarships/ignoredScholarships';
 import {
   deleteUserSavedScholarship,
@@ -16,15 +17,30 @@ import {
 import {
   getSavedScholarshipIds,
   removeScholarship,
-  saveScholarship
+  saveScholarship,
+  SAVED_SCHOLARSHIPS_KEY
 } from '@/app/scholarships/savedScholarships';
+import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCurrentUserScholarshipMatchProfile';
 import { getViewedScholarshipIds } from '@/app/scholarships/viewedScholarships';
+import {
+  setScholarshipStorageUserScope,
+  storageKeyMatchesBase
+} from '@/app/scholarships/userScopedStorage';
+import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
+import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import { toast } from '@/components/ui/Toasts/use-toast';
+import {
+  hasActiveSubscriptionAccess,
+  type SubscriptionWithPriceAndProduct
+} from '@/lib/payments/subscriptionEntitlements';
+import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
 import { createClient } from '@/utils/supabase/client';
+import type { Database } from '@/types_db';
 
 type Column = {
   title: string;
@@ -42,12 +58,19 @@ export default function CompareInstitutionScholarshipColumns({
   right
 }: CompareInstitutionScholarshipColumnsProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasSubscription, setHasSubscription] = useState(false);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
+  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+    string | undefined
+  >(undefined);
+  const { profile: currentMatchProfile } =
+    useCurrentUserScholarshipMatchProfile(isAuthenticated);
 
   const refreshSavedIds = useCallback(async () => {
     if (!isAuthenticated) {
@@ -84,7 +107,30 @@ export default function CompareInstitutionScholarshipColumns({
         data: { session }
       } = await supabase.auth.getSession();
       if (cancelled) return;
+      setScholarshipStorageUserScope(session?.user?.id ?? null);
       setIsAuthenticated(Boolean(session?.user?.id));
+      if (!session?.user?.id) {
+        setHasSubscription(false);
+        return;
+      }
+      const [{ data: profile }, { data: subscriptions }] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .maybeSingle<Database['public']['Tables']['profiles']['Row']>(),
+        supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .order('created', { ascending: false })
+          .limit(20)
+      ]);
+      if (cancelled) return;
+      const subscription = pickCanonicalSubscription(
+        (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
+      ) as SubscriptionWithPriceAndProduct | null;
+      setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
     })();
     return () => {
       cancelled = true;
@@ -99,8 +145,8 @@ export default function CompareInstitutionScholarshipColumns({
   useEffect(() => {
     function onStorage(e: StorageEvent) {
       if (
-        e.key === 'savedScholarships' ||
-        e.key === 'scholarshipIgnored' ||
+        storageKeyMatchesBase(e.key, SAVED_SCHOLARSHIPS_KEY) ||
+        storageKeyMatchesBase(e.key, IGNORED_SCHOLARSHIPS_KEY) ||
         e.key === 'scholarshipViewedIds'
       ) {
         syncFromStorage();
@@ -121,6 +167,17 @@ export default function CompareInstitutionScholarshipColumns({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
+  const openSubscriptionOffer = useCallback((arg?: unknown) => {
+    const notice = typeof arg === 'string' ? arg : undefined;
+    setSubscriptionOfferNotice(notice);
+    setSubscriptionOfferOpen(true);
+  }, []);
+  const closeSubscriptionOffer = useCallback(() => {
+    setSubscriptionOfferOpen(false);
+    setSubscriptionOfferNotice(undefined);
+  }, []);
+
+  const isSubscriptionLocked = isAuthenticated && !hasSubscription;
 
   const toggleSave = useCallback(
     async (id: string) => {
@@ -164,7 +221,18 @@ export default function CompareInstitutionScholarshipColumns({
     () => right.scholarships.filter((s) => !ignoredIds.includes(s.id)),
     [right.scholarships, ignoredIds]
   );
-  const rowCount = Math.max(visibleLeft.length, visibleRight.length);
+  const visibleLeftWithMatch = useMemo(
+    () => applyProfileMatchPercentToScholarships(visibleLeft, currentMatchProfile),
+    [visibleLeft, currentMatchProfile]
+  );
+  const visibleRightWithMatch = useMemo(
+    () => applyProfileMatchPercentToScholarships(visibleRight, currentMatchProfile),
+    [visibleRight, currentMatchProfile]
+  );
+  const rowCount = Math.max(
+    visibleLeftWithMatch.length,
+    visibleRightWithMatch.length
+  );
 
   const renderScholarshipCard = (
     scholarship: Scholarship,
@@ -180,7 +248,20 @@ export default function CompareInstitutionScholarshipColumns({
           onHide={ignoreScholarship}
           showCardActions
           stackedListing
-          subscriptionLocked={false}
+          subscriptionLocked={isSubscriptionLocked}
+          isAuthenticated={isAuthenticated}
+          hasSubscription={hasSubscription}
+          onSubscriptionLockedCategoryClick={
+            isSubscriptionLocked ? openSubscriptionOffer : undefined
+          }
+          onSubscriptionDetailNavigate={
+            isSubscriptionLocked
+              ? () =>
+                  openSubscriptionOffer(
+                    SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE
+                  )
+              : undefined
+          }
           onGuestDetailNavigate={
             !isAuthenticated ? () => openRegistrationWall('card-unlock') : undefined
           }
@@ -259,15 +340,15 @@ export default function CompareInstitutionScholarshipColumns({
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2 lg:gap-8">
-          {renderColumnHeader(left.title, visibleLeft, left.href)}
-          {renderColumnHeader(right.title, visibleRight, right.href)}
+          {renderColumnHeader(left.title, visibleLeftWithMatch, left.href)}
+          {renderColumnHeader(right.title, visibleRightWithMatch, right.href)}
         </div>
 
         {rowCount > 0 ? (
           <div className="space-y-3">
             {Array.from({ length: rowCount }, (_, index) => {
-              const leftScholarship = visibleLeft[index] ?? null;
-              const rightScholarship = visibleRight[index] ?? null;
+              const leftScholarship = visibleLeftWithMatch[index] ?? null;
+              const rightScholarship = visibleRightWithMatch[index] ?? null;
 
               return (
                 <div
@@ -299,6 +380,11 @@ export default function CompareInstitutionScholarshipColumns({
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
         contentMode={registrationWallContent}
+      />
+      <ScholarshipSubscriptionOfferModal
+        open={subscriptionOfferOpen}
+        onClose={closeSubscriptionOffer}
+        notice={subscriptionOfferNotice}
       />
     </>
   );

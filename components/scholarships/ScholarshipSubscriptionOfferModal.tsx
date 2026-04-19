@@ -7,6 +7,8 @@ import { X } from 'lucide-react';
 type ScholarshipSubscriptionOfferModalProps = {
   open: boolean;
   onClose: () => void;
+  /** Optional context line (e.g. why the modal appeared). */
+  notice?: string;
   /**
    * Backdrop, X, Escape — e.g. continue another flow after closing.
    * If omitted, only `onClose` runs.
@@ -19,6 +21,7 @@ type ScholarshipSubscriptionOfferModalProps = {
 export default function ScholarshipSubscriptionOfferModal({
   open,
   onClose,
+  notice,
   onSecondaryAction,
   onPrimaryClick
 }: ScholarshipSubscriptionOfferModalProps) {
@@ -84,12 +87,23 @@ export default function ScholarshipSubscriptionOfferModal({
           <h2
             id="subscription-offer-title"
             className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-[1.65rem]"
+            aria-describedby={
+              notice?.trim() ? 'subscription-offer-notice' : undefined
+            }
           >
             Unlock Premium Access
           </h2>
           <p className="mt-3 text-sm text-zinc-500 sm:text-base">
             Start 3-Day Free Trial, then as low as $12/mo.
           </p>
+          {notice?.trim() ? (
+            <p
+              id="subscription-offer-notice"
+              className="mt-4 rounded-xl border border-orange-100 bg-orange-50/80 px-3 py-2.5 text-left text-xs font-medium leading-relaxed text-orange-950 sm:text-sm"
+            >
+              {notice.trim()}
+            </p>
+          ) : null}
 
           <div className="mt-8">
             <Link

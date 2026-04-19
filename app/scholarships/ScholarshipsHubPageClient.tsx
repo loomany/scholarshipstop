@@ -16,9 +16,11 @@ import {
   type ReactNode
 } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
+import BestRecommendationWizard from '@/components/scholarships/BestRecommendationWizard';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
+import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
 import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagination';
@@ -37,7 +39,8 @@ import type { Scholarship } from './scholarshipsData';
 import {
   getIgnoredScholarshipIds,
   addIgnoredScholarship,
-  removeIgnoredScholarship
+  removeIgnoredScholarship,
+  IGNORED_SCHOLARSHIPS_KEY
 } from './ignoredScholarships';
 import {
   cloneMoreFilters,
@@ -48,9 +51,9 @@ import {
 } from './moreFilters';
 import {
   readSavedFiltersFromStorage,
-  writeSavedFiltersToStorage,
   SAVED_FILTERS_STORAGE_KEY
 } from '@/lib/scholarships/savedFiltersStorage';
+import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import {
   deleteUserSavedScholarship,
   fetchUserSavedScholarshipIds,
@@ -59,12 +62,21 @@ import {
 import {
   getSavedScholarshipIds,
   removeScholarship,
-  saveScholarship
+  saveScholarship,
+  SAVED_SCHOLARSHIPS_KEY
 } from './savedScholarships';
-import { getStartedScholarshipIds } from './startedScholarships';
-import { getSubmittedScholarshipIds } from './submittedScholarships';
+import {
+  getStartedScholarshipIds,
+  STARTED_SCHOLARSHIPS_KEY
+} from './startedScholarships';
+import {
+  getSubmittedScholarshipIds,
+  SUBMITTED_SCHOLARSHIPS_KEY
+} from './submittedScholarships';
+import { useCurrentUserScholarshipMatchProfile } from './useCurrentUserScholarshipMatchProfile';
 import { type SortOption } from './scholarshipSort';
 import {
+  LEGACY_BEST_RECOMMENDATION_TAB_ID,
   parseHubScholarshipTabParam,
   scholarshipListLoadingText,
   scholarshipListPageTitle,
@@ -96,13 +108,37 @@ import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServ
 import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMetaGuestPatches';
 import { buildHubTabPresetMoreFilters } from '@/lib/scholarships/hubTabPresetMoreFilters';
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
-import { LANDING_QUIZ_HUB_SEED_KEY } from '@/lib/scholarships/landingQuizHubSession';
-import { tryBuildProfileSeedFromPendingLandingSession } from '@/lib/onboarding/mergeLandingQuizIntoOnboardingDraft';
+import {
+  LANDING_QUIZ_HUB_SEED_KEY,
+  SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY
+} from '@/lib/scholarships/landingQuizHubSession';
+import {
+  loadGuestLandingQuizDraftForHubReEdit,
+  tryBuildProfileSeedFromCompletedLandingQuiz,
+  tryBuildProfileSeedFromPendingLandingSession
+} from '@/lib/onboarding/mergeLandingQuizIntoOnboardingDraft';
+import {
+  BEST_RECOMMENDATION_WIZARD_DRAFT_KEY,
+  bestRecommendationWizardHasUsableData,
+  bridgeBestRecommendationWizardToOnboardingDraft,
+  buildBestRecommendationWizardSeed,
+  emptyBestRecommendationWizardDraft,
+  loadBestRecommendationWizardDraft,
+  saveBestRecommendationWizardDraft,
+  type BestRecommendationWizardStore
+} from '@/lib/onboarding/bestRecommendationWizardDraft';
 import {
   mergeBestRecommendationFiltersFromProfile,
+  stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
+import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
+import { storageKeyMatchesBase } from '@/app/scholarships/userScopedStorage';
 import { toast } from '@/components/ui/Toasts/use-toast';
+import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
+import { pickAllowedProfilesUpsertFields } from '@/lib/onboarding/profilesOnboardingSync';
+import { createClient } from '@/utils/supabase/client';
+import type { Database } from '@/types_db';
 
 /** Temporary: trace hub meta overwrite. Remove after diagnosis. */
 function hubClientSidebarDebugEnabled(): boolean {
@@ -113,7 +149,7 @@ function hubClientSidebarDebugEnabled(): boolean {
 }
 
 const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
-  bestMatches: 0,
+  bestRecommendation: 0,
   recommended: 0,
   easyApply: 0,
   hotDeadlines: 0,
@@ -124,10 +160,8 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   submitted: 0,
   ignored: 0
 };
-const SAVED_STORAGE_KEY = 'savedScholarships';
-const IGNORED_STORAGE_KEY = 'scholarshipIgnored';
-const STARTED_STORAGE_KEY = 'startedScholarships';
-const SUBMITTED_STORAGE_KEY = 'submittedScholarships';
+
+type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 
 function buildHubListingSearchParams(options: {
   base: URLSearchParams;
@@ -203,9 +237,9 @@ function ScholarshipsPageInner({
   leadContent?: ReactNode;
   postListingContent?: ReactNode;
 }) {
-  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [pathname, setPathname] = useState('/scholarships');
   const searchParamsString = searchParams.toString();
   const activeTab: ScholarshipListTabId = parseHubScholarshipTabParam(
     searchParams.get('tab')
@@ -219,6 +253,11 @@ function ScholarshipsPageInner({
   const appliedCategoryIds = parsedList.categories;
   const catalogListScope = 'catalog' as const;
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setPathname(window.location.pathname || '/scholarships');
+  }, []);
+
   /**
    * Until Supabase `getSession()` finishes, `isAuthenticated` is false even for signed-in users.
    * Do not show guest padlocks / guest empty states in that window.
@@ -226,7 +265,7 @@ function ScholarshipsPageInner({
   const hubTreatAsGuest = !isAuthenticated && Boolean(authResolved);
   /** Best tab: avoid one frame of guest UI before we know the session (prevents card ↔ locks flicker). */
   const bestTabAuthPending =
-    activeTab === 'best-matches' && !authResolved;
+    activeTab === 'best-recommendation' && !authResolved;
 
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [scholarships, setScholarships] = useState<Scholarship[]>(
@@ -249,6 +288,17 @@ function ScholarshipsPageInner({
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+    string | undefined
+  >(undefined);
+  const [bestRecommendationWizardStore, setBestRecommendationWizardStore] =
+    useState<BestRecommendationWizardStore | null>(null);
+  const [bestRecommendationWizardHydrated, setBestRecommendationWizardHydrated] =
+    useState(false);
+  const [bestRecommendationWizardSaving, setBestRecommendationWizardSaving] =
+    useState(false);
+  const { profile: currentMatchProfile } =
+    useCurrentUserScholarshipMatchProfile(isAuthenticated && authResolved);
   const isSubscriptionLocked = isAuthenticated && !hasSubscription;
   const LOCKED_TABS_FOR_UNSUBSCRIBED = useMemo(
     () =>
@@ -289,23 +339,107 @@ function ScholarshipsPageInner({
 
   const openRegistrationWall = useCallback(
     (mode?: ScholarshipRegistrationWallContentMode) => {
+      if (activeTab === 'best-recommendation') {
+        bridgeBestRecommendationWizardToOnboardingDraft(
+          bestRecommendationWizardStore
+        );
+      }
       setRegistrationWallContent(mode ?? 'hub');
       setRegistrationWallOpen(true);
     },
-    []
+    [activeTab, bestRecommendationWizardStore]
   );
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
 
-  const openSubscriptionOffer = useCallback(() => {
+  const openSubscriptionOffer = useCallback((arg?: unknown) => {
+    const notice = typeof arg === 'string' ? arg : undefined;
+    setSubscriptionOfferNotice(notice);
     setSubscriptionOfferOpen(true);
   }, []);
 
   const closeSubscriptionOffer = useCallback(() => {
     setSubscriptionOfferOpen(false);
+    setSubscriptionOfferNotice(undefined);
   }, []);
+
+  const persistBestRecommendationWizardStore = useCallback(
+    (next: BestRecommendationWizardStore) => {
+      setBestRecommendationWizardStore(next);
+      saveBestRecommendationWizardDraft(next);
+    },
+    []
+  );
+
+  const handleBestRecommendationWizardCreateAccount = useCallback(() => {
+    bridgeBestRecommendationWizardToOnboardingDraft(bestRecommendationWizardStore);
+    router.push('/onboarding');
+  }, [bestRecommendationWizardStore, router]);
+
+  const persistBestRecommendationWizardProfileStep = useCallback(
+    async (next: BestRecommendationWizardStore) => {
+      if (!isAuthenticated) return;
+      setBestRecommendationWizardSaving(true);
+      try {
+        const supabase = createClient();
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data: currentProfile } = await supabase
+          .from('profiles')
+          .select(
+            'first_name,last_name,birth_month,birth_day,birth_year,date_of_birth,school_level,field_of_study,citizenship_status,gpa,saved_filters_snapshot,state_region'
+          )
+          .eq('id', user.id)
+          .maybeSingle();
+
+        const currentProfileRow = (currentProfile ?? null) as ProfilesRow | null;
+
+        const patch = buildScholarshipProfileFormPatch(
+          currentProfileRow,
+          {
+            firstName: currentProfileRow?.first_name ?? '',
+            lastName: currentProfileRow?.last_name ?? '',
+            birthMonth:
+              currentProfileRow?.birth_month != null
+                ? String(currentProfileRow.birth_month)
+                : '',
+            birthDay:
+              currentProfileRow?.birth_day != null
+                ? String(currentProfileRow.birth_day)
+                : '',
+            birthYear:
+              currentProfileRow?.birth_year != null
+                ? String(currentProfileRow.birth_year)
+                : '',
+            schoolLevel: next.draft.step1.schoolLevel,
+            fieldOfStudy: next.draft.step1.fieldOfStudy,
+            citizenshipStatus: next.draft.step1.citizenship,
+            gpaChoice: next.draft.step3.gpa,
+            stateRegionInput: next.draft.step4.state
+          }
+        );
+
+        const payload = pickAllowedProfilesUpsertFields({
+          id: user.id,
+          updated_at: new Date().toISOString(),
+          ...patch
+        }) as Database['public']['Tables']['profiles']['Insert'];
+
+        await supabase
+          .schema('public')
+          .from('profiles')
+          .upsert(payload, { onConflict: 'id' });
+      } finally {
+        setBestRecommendationWizardSaving(false);
+      }
+    },
+    [isAuthenticated]
+  );
 
   const replaceListingParams = useCallback(
     (
@@ -322,6 +456,55 @@ function ScholarshipsPageInner({
     },
     [pathname, router, searchParams]
   );
+
+  const handleGuestBestRecommendationEditAnswers = useCallback(() => {
+    if (!hubTreatAsGuest || activeTab !== 'best-recommendation') return;
+    try {
+      sessionStorage.setItem(SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY, '1');
+    } catch {
+      /* ignore */
+    }
+    setLandingQuizProfileSeed(null);
+
+    if (
+      bestRecommendationWizardStore &&
+      bestRecommendationWizardHasUsableData(bestRecommendationWizardStore)
+    ) {
+      persistBestRecommendationWizardStore({
+        ...bestRecommendationWizardStore,
+        submitted: false,
+        draft: {
+          ...bestRecommendationWizardStore.draft,
+          activeStep: 1
+        }
+      });
+    } else {
+      const landingDraft = loadGuestLandingQuizDraftForHubReEdit();
+      if (landingDraft) {
+        persistBestRecommendationWizardStore({
+          v: 1,
+          mode: 'guest',
+          submitted: false,
+          draft: {
+            ...landingDraft,
+            activeStep: 1
+          }
+        });
+      } else {
+        persistBestRecommendationWizardStore(
+          emptyBestRecommendationWizardDraft('guest')
+        );
+      }
+    }
+
+    replaceListingParams({ resetPage: true });
+  }, [
+    activeTab,
+    bestRecommendationWizardStore,
+    hubTreatAsGuest,
+    persistBestRecommendationWizardStore,
+    replaceListingParams
+  ]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -399,7 +582,11 @@ function ScholarshipsPageInner({
         profileFilterSeed: meta.profileFilterSeed,
         landingQuizProfileSeed: null,
         savedFiltersFromStorage:
-          typeof window !== 'undefined'
+          isAuthenticated
+            ? meta.savedFiltersSnapshotJson
+              ? moreFiltersFromJson(meta.savedFiltersSnapshotJson, meta.filterBounds)
+              : null
+            : typeof window !== 'undefined'
             ? readSavedFiltersFromStorage(meta.filterBounds)
             : null,
         isAuthenticated
@@ -410,6 +597,21 @@ function ScholarshipsPageInner({
   /** `/get-scholarships` quiz: merged into API body only for best/recommended (guest); not into Matches. */
   const [landingQuizProfileSeed, setLandingQuizProfileSeed] =
     useState<ScholarshipProfileFilterSeed | null>(null);
+  const bestRecommendationWizardSeed = useMemo(
+    () => buildBestRecommendationWizardSeed(bestRecommendationWizardStore),
+    [bestRecommendationWizardStore]
+  );
+  const transientBestRecommendationProfileSeed = useMemo(
+    () => bestRecommendationWizardSeed ?? landingQuizProfileSeed ?? null,
+    [bestRecommendationWizardSeed, landingQuizProfileSeed]
+  );
+  const guestBestRecommendationPreviewEnabled =
+    hubTreatAsGuest &&
+    activeTab === 'best-recommendation' &&
+    transientBestRecommendationProfileSeed != null;
+  const bestRecommendationWizardInProgress =
+    bestRecommendationWizardStore != null &&
+    bestRecommendationWizardStore.submitted === false;
   const appliedProviderSlug =
     routeScope?.providerSlug ?? moreFiltersApplied?.filterUniversitySlug ?? null;
   const [previewCount, setPreviewCount] = useState<number | null>(null);
@@ -435,6 +637,17 @@ function ScholarshipsPageInner({
     started: startedIds,
     submitted: submittedIds
   };
+
+  /** Strip hidden hub tabs from the URL (Started / Submitted still exist in types & API). */
+  useEffect(() => {
+    const raw = searchParams.get('tab');
+    if (raw !== LEGACY_BEST_RECOMMENDATION_TAB_ID) return;
+    replaceListingParams({
+      tab: 'best-recommendation',
+      scope: 'catalog',
+      resetPage: false
+    });
+  }, [searchParams, replaceListingParams]);
 
   /** Strip hidden hub tabs from the URL (Started / Submitted still exist in types & API). */
   useEffect(() => {
@@ -524,13 +737,16 @@ function ScholarshipsPageInner({
         setViewedIds(getViewedScholarshipIds());
       }
       if (
-        e.key === SAVED_STORAGE_KEY ||
-        e.key === IGNORED_STORAGE_KEY ||
-        e.key === STARTED_STORAGE_KEY ||
-        e.key === SUBMITTED_STORAGE_KEY ||
+        storageKeyMatchesBase(e.key, SAVED_SCHOLARSHIPS_KEY) ||
+        storageKeyMatchesBase(e.key, IGNORED_SCHOLARSHIPS_KEY) ||
+        storageKeyMatchesBase(e.key, STARTED_SCHOLARSHIPS_KEY) ||
+        storageKeyMatchesBase(e.key, SUBMITTED_SCHOLARSHIPS_KEY) ||
         e.key === null
       ) {
         syncUserCollectionIdsFromStorage();
+      }
+      if (e.key === BEST_RECOMMENDATION_WIZARD_DRAFT_KEY || e.key === null) {
+        setBestRecommendationWizardStore(loadBestRecommendationWizardDraft());
       }
     };
     window.addEventListener('storage', onStorage);
@@ -555,6 +771,12 @@ function ScholarshipsPageInner({
     applicantsMax: 200000
   };
 
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return;
+    setBestRecommendationWizardStore(loadBestRecommendationWizardDraft());
+    setBestRecommendationWizardHydrated(true);
+  }, []);
+
   const landingQuizHubSeedAppliedRef = useRef(false);
 
   /**
@@ -565,6 +787,18 @@ function ScholarshipsPageInner({
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
     if (landingQuizHubSeedAppliedRef.current) return;
+    try {
+      if (
+        sessionStorage.getItem(SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY) ===
+        '1'
+      ) {
+        sessionStorage.removeItem(SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY);
+        landingQuizHubSeedAppliedRef.current = true;
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
 
     let seed: ScholarshipProfileFilterSeed | null = null;
     const rawOneShot = sessionStorage.getItem(LANDING_QUIZ_HUB_SEED_KEY);
@@ -579,6 +813,9 @@ function ScholarshipsPageInner({
     if (!seed) {
       seed = tryBuildProfileSeedFromPendingLandingSession();
     }
+    if (!seed) {
+      seed = tryBuildProfileSeedFromCompletedLandingQuiz();
+    }
     if (!seed) return;
 
     landingQuizHubSeedAppliedRef.current = true;
@@ -587,9 +824,15 @@ function ScholarshipsPageInner({
   }, [replaceListingParams]);
 
   const [savedFiltersRevision, setSavedFiltersRevision] = useState(0);
+  const serverSavedFiltersForHub = useMemo(() => {
+    if (!isAuthenticated) return null;
+    if (!listMeta?.savedFiltersSnapshotJson) return null;
+    return moreFiltersFromJson(listMeta.savedFiltersSnapshotJson, filterBounds);
+  }, [isAuthenticated, listMeta?.savedFiltersSnapshotJson, filterBounds]);
   const savedFiltersForHub = useMemo(() => {
+    if (isAuthenticated) return serverSavedFiltersForHub;
     return readSavedFiltersFromStorage(filterBounds);
-  }, [filterBounds, savedFiltersRevision]);
+  }, [filterBounds, isAuthenticated, savedFiltersRevision, serverSavedFiltersForHub]);
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
@@ -619,63 +862,82 @@ function ScholarshipsPageInner({
   }, [routeBaseMoreFilters, moreFiltersApplied, filterBounds]);
 
   /**
-   * Listing POST body: server merges DB profile into best/recommended when present.
-   * Landing quiz seed is merged here when there is no DB profile seed yet (guest or new account),
-   * so `moreFiltersHasProfileOrQuizListingSignals` is true and Best is not blocked as “generic”.
+   * Best recommendation gets profile-derived hard filters; Recommended keeps the wide catalog
+   * and strips profile dimensions so saved preset logic remains the only narrowing source.
    */
   const hubListingBodyMoreFilters = useMemo(() => {
     const merged = hubMergedBaseMoreFilters;
-    const tabOk =
-      activeTab === 'best-matches' || activeTab === 'recommended';
-    if (!landingQuizProfileSeed || !tabOk) {
-      return merged;
-    }
-    if (isAuthenticated && listMeta?.profileFilterSeed) {
-      return merged;
-    }
-    if (hubTreatAsGuest && activeTab === 'recommended') {
+    if (activeTab === 'best-recommendation') {
       return mergeBestRecommendationFiltersFromProfile(
-        'recommended',
+        'best-recommendation',
         cloneMoreFilters(merged),
-        landingQuizProfileSeed,
+        listMeta?.profileFilterSeed ?? transientBestRecommendationProfileSeed,
         filterBounds
       );
     }
-    if (activeTab === 'best-matches') {
-      return mergeBestRecommendationFiltersFromProfile(
-        'best-matches',
-        cloneMoreFilters(merged),
-        landingQuizProfileSeed,
-        filterBounds
-      );
+    if (activeTab === 'recommended') {
+      return stripHubProfileHardMatchMoreFilters(cloneMoreFilters(merged));
     }
     return merged;
   }, [
     hubMergedBaseMoreFilters,
-    isAuthenticated,
-    landingQuizProfileSeed,
     activeTab,
-    filterBounds,
     listMeta?.profileFilterSeed,
-    hubTreatAsGuest
+    transientBestRecommendationProfileSeed,
+    filterBounds
   ]);
 
   /**
-   * `meta_only` sidebar counts must match list POST filters (incl. landing quiz on Best).
+   * `meta_only` sidebar counts must match list POST filters.
    * Easy apply / hot deadlines: keep hub-merged base only so “Matches” is not narrowed by tab scope.
    */
   const hubMetaSidebarMoreFilters = useMemo(() => {
-    if (activeTab === 'easy-apply' || activeTab === 'hot-deadlines') {
+    if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
+      return stripHubProfileHardMatchMoreFilters(
+        cloneMoreFilters(hubMergedBaseMoreFilters)
+      );
+    }
+    if (
+      activeTab === 'easy-apply' ||
+      activeTab === 'hot-deadlines' ||
+      (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled)
+    ) {
       return hubMergedBaseMoreFilters;
     }
     return withTabEnforcedMoreFilters(hubListingBodyMoreFilters, activeTab);
-  }, [activeTab, hubMergedBaseMoreFilters, hubListingBodyMoreFilters]);
+  }, [
+    activeTab,
+    guestBestRecommendationPreviewEnabled,
+    hubMergedBaseMoreFilters,
+    hubListingBodyMoreFilters
+  ]);
 
   useEffect(() => {
     if (isAuthenticated && listMeta?.profileFilterSeed) {
       setLandingQuizProfileSeed(null);
     }
   }, [isAuthenticated, listMeta?.profileFilterSeed]);
+
+  useEffect(() => {
+    if (!bestRecommendationWizardHydrated) return;
+    if (activeTab !== 'best-recommendation') return;
+    if (!isAuthenticated || !authResolved) return;
+    if (bestRecommendationWizardStore) return;
+    if (currentMatchProfile) return;
+    if (listMeta?.personalizedMatchReady !== false) return;
+
+    const emptyStore = emptyBestRecommendationWizardDraft('signed-in');
+    persistBestRecommendationWizardStore(emptyStore);
+  }, [
+    activeTab,
+    authResolved,
+    bestRecommendationWizardHydrated,
+    bestRecommendationWizardStore,
+    currentMatchProfile,
+    isAuthenticated,
+    listMeta?.personalizedMatchReady,
+    persistBestRecommendationWizardStore
+  ]);
 
   const savedFiltersSnapshotJson = useMemo(() => {
     if (!isAuthenticated || !savedFiltersForHub) return null;
@@ -700,7 +962,7 @@ function ScholarshipsPageInner({
       deadlineFromUrl: parsedList.deadline,
       routeScope,
       profileFilterSeed: listMeta.profileFilterSeed,
-      landingQuizProfileSeed,
+      landingQuizProfileSeed: transientBestRecommendationProfileSeed,
       savedFiltersFromStorage: savedFiltersForHub,
       isAuthenticated
     });
@@ -710,7 +972,7 @@ function ScholarshipsPageInner({
     listMeta?.profileFilterSeed,
     parsedList.deadline,
     routeScope,
-    landingQuizProfileSeed,
+    transientBestRecommendationProfileSeed,
     savedFiltersForHub,
     isAuthenticated
   ]);
@@ -729,8 +991,8 @@ function ScholarshipsPageInner({
     const profileSig = listMeta.profileFilterSeed
       ? JSON.stringify(listMeta.profileFilterSeed)
       : '';
-    const landingSig = landingQuizProfileSeed
-      ? JSON.stringify(landingQuizProfileSeed)
+    const landingSig = transientBestRecommendationProfileSeed
+      ? JSON.stringify(transientBestRecommendationProfileSeed)
       : '';
     const prev = presetSyncStateRef.current;
 
@@ -742,7 +1004,7 @@ function ScholarshipsPageInner({
       setMoreFiltersDraft(null);
       setMoreFiltersOpen(false);
     } else if (
-      activeTab === 'best-matches' &&
+      activeTab === 'best-recommendation' &&
       (prev.profileSig !== profileSig || prev.landingSig !== landingSig)
     ) {
       shouldReset = true;
@@ -761,7 +1023,7 @@ function ScholarshipsPageInner({
           deadlineFromUrl: parsedList.deadline,
           routeScope,
           profileFilterSeed: listMeta.profileFilterSeed,
-          landingQuizProfileSeed,
+          landingQuizProfileSeed: transientBestRecommendationProfileSeed,
           savedFiltersFromStorage: savedFiltersForHub,
           isAuthenticated
         })
@@ -777,7 +1039,7 @@ function ScholarshipsPageInner({
     activeTab,
     listMeta?.filterBounds,
     listMeta?.profileFilterSeed,
-    landingQuizProfileSeed,
+    transientBestRecommendationProfileSeed,
     savedFiltersForHub,
     savedFiltersRevision,
     routeScope,
@@ -834,11 +1096,19 @@ function ScholarshipsPageInner({
       routeBaseMoreFilters != null
         ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersDraft)
         : cloneMoreFilters(moreFiltersDraft);
-    writeSavedFiltersToStorage(merged);
+    const mergedJson = moreFiltersToJson(merged);
+    setListMeta((prev) =>
+      prev
+        ? {
+            ...prev,
+            savedFiltersSnapshotJson: mergedJson
+          }
+        : prev
+    );
     void fetch('/api/account/saved-filters-snapshot', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ snapshot: moreFiltersToJson(merged) })
+      body: JSON.stringify({ snapshot: mergedJson })
     }).catch(() => {});
     setSavedFiltersRevision((n) => n + 1);
     setMoreFiltersApplied(cloneMoreFilters(merged));
@@ -883,11 +1153,30 @@ function ScholarshipsPageInner({
         ...listMeta,
         sidebarCounts: { ...raw }
       };
-      applyListingMetaGuestPatches(patched, { authUser: false });
+      applyListingMetaGuestPatches(patched, {
+        authUser: false,
+        keepBestRecommendationCount: guestBestRecommendationPreviewEnabled
+      });
+      if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
+        patched.sidebarCounts.bestRecommendation = totalCount;
+      }
       return patched.sidebarCounts;
     }
+    if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
+      return {
+        ...raw,
+        bestRecommendation: totalCount
+      };
+    }
     return raw;
-  }, [listMeta, isAuthenticated, authResolved]);
+  }, [
+    activeTab,
+    totalCount,
+    listMeta,
+    isAuthenticated,
+    authResolved,
+    guestBestRecommendationPreviewEnabled
+  ]);
 
   const categoryCounts = useMemo(() => {
     if (listMeta?.categoryCounts) return listMeta.categoryCounts;
@@ -895,6 +1184,10 @@ function ScholarshipsPageInner({
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) z[id] = 0;
     return z;
   }, [listMeta?.categoryCounts]);
+  const scholarshipsForCards = useMemo(
+    () => applyProfileMatchPercentToScholarships(scholarships, currentMatchProfile),
+    [scholarships, currentMatchProfile]
+  );
 
   /** Invalidates list fetch when landing quiz, tab, auth, or server profile seed changes. */
   const listingRequestFingerprint = useMemo(
@@ -903,14 +1196,14 @@ function ScholarshipsPageInner({
         applied: moreFiltersApplied
           ? moreFiltersToJson(moreFiltersApplied)
           : null,
-        landingQuiz: landingQuizProfileSeed,
+        landingQuiz: transientBestRecommendationProfileSeed,
         tab: activeTab,
         auth: isAuthenticated,
         serverProfileSeed: listMeta?.profileFilterSeed ?? null
       }),
     [
       moreFiltersApplied,
-      landingQuizProfileSeed,
+      transientBestRecommendationProfileSeed,
       activeTab,
       isAuthenticated,
       listMeta?.profileFilterSeed
@@ -932,6 +1225,25 @@ function ScholarshipsPageInner({
       }),
     [savedIds, ignoredIds, startedIds, submittedIds]
   );
+  const sidebarMetaRequestKey = useMemo(
+    () =>
+      `${activeTab}|${catalogListScope}|${searchParamsString}|${sidebarCountsMetaFingerprint}|${userCollectionsFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|gb:${guestBestRecommendationPreviewEnabled ? 1 : 0}|au:${isAuthenticated ? 1 : 0}|ar:${authResolved ? 1 : 0}`,
+    [
+      activeTab,
+      catalogListScope,
+      searchParamsString,
+      sidebarCountsMetaFingerprint,
+      userCollectionsFingerprint,
+      savedFiltersSnapshotJson,
+      guestBestRecommendationPreviewEnabled,
+      isAuthenticated,
+      authResolved
+    ]
+  );
+  const sidebarMetaRequestKeyRef = useRef(sidebarMetaRequestKey);
+  sidebarMetaRequestKeyRef.current = sidebarMetaRequestKey;
+  const sidebarCountsReady =
+    authResolved && metaKeySynced.current === sidebarMetaRequestKey;
 
   const totalPages = Math.max(
     1,
@@ -942,13 +1254,13 @@ function ScholarshipsPageInner({
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
   /** Guests on Best recommendation only load page 1; URL may still carry `page` until normalized. */
   const hubListingPage =
-    hubTreatAsGuest && activeTab === 'best-matches' ? 1 : pageFromUrl;
+    hubTreatAsGuest && activeTab === 'best-recommendation' ? 1 : pageFromUrl;
   const listPageForUi =
-    hubTreatAsGuest && activeTab === 'best-matches' ? 1 : currentPage;
+    hubTreatAsGuest && activeTab === 'best-recommendation' ? 1 : currentPage;
 
   useEffect(() => {
     let cancelled = false;
-    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${listingRequestFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}`;
+    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${listingRequestFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|gb:${guestBestRecommendationPreviewEnabled ? 1 : 0}`;
     /**
      * Keep visible list stable on membership mutations (save/ignore/restore):
      * collection changes are handled optimistically in local state and should not
@@ -969,7 +1281,7 @@ function ScholarshipsPageInner({
     ) {
       initialRequestKeyRef.current = null;
       if (initialPayload.result.meta) {
-        metaKeySynced.current = requestCacheKey;
+        metaKeySynced.current = sidebarMetaRequestKey;
       }
       setIsLoading(false);
       return () => {
@@ -1043,6 +1355,7 @@ function ScholarshipsPageInner({
             ? moreFiltersToJson(tabAwareMoreFilters)
             : undefined,
           savedFiltersSnapshot: savedFiltersSnapshotJson,
+          guestBestRecommendationPreviewEnabled,
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
@@ -1059,21 +1372,24 @@ function ScholarshipsPageInner({
             ts: new Date().toISOString(),
             responseTotal: data.total,
             responsePage: data.page,
-            responseMetaBest: nextMeta?.sidebarCounts.bestMatches,
+            responseMetaBest: nextMeta?.sidebarCounts.bestRecommendation,
             responseMetaRec: nextMeta?.sidebarCounts.recommended,
             responseMetaMatches: nextMeta?.sidebarCounts.matches,
             responseMetaEasyApply: nextMeta?.sidebarCounts.easyApply,
             hadMetaInResponse: Boolean(nextMeta),
             willCallSetListMeta: Boolean(nextMeta),
-            prevListMetaBest: prevMeta?.sidebarCounts.bestMatches,
+            prevListMetaBest: prevMeta?.sidebarCounts.bestRecommendation,
             prevListMetaRec: prevMeta?.sidebarCounts.recommended,
-            nextListMetaBest: nextMeta?.sidebarCounts.bestMatches,
+            nextListMetaBest: nextMeta?.sidebarCounts.bestRecommendation,
             nextListMetaRec: nextMeta?.sidebarCounts.recommended
           });
         }
-        if (data.meta) {
+        if (
+          data.meta &&
+          sidebarMetaRequestKeyRef.current === sidebarMetaRequestKey
+        ) {
           setListMeta(data.meta);
-          metaKeySynced.current = requestCacheKey;
+          metaKeySynced.current = sidebarMetaRequestKey;
         }
       } catch (e) {
         // eslint-disable-next-line no-console -- list fetch diagnostics
@@ -1102,7 +1418,9 @@ function ScholarshipsPageInner({
     hubListingBodyMoreFilters,
     savedFiltersForHub,
     savedFiltersSnapshotJson,
-    appliedProviderSlug
+    appliedProviderSlug,
+    sidebarMetaRequestKey,
+    guestBestRecommendationPreviewEnabled
   ]);
 
   useEffect(() => {
@@ -1111,7 +1429,7 @@ function ScholarshipsPageInner({
      * Include auth in the key so we refetch after `authResolved` / login transitions.
      * Otherwise SSR guest meta (Best = 0) can stick while the session is already signed in.
      */
-    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${sidebarCountsMetaFingerprint}|${userCollectionsFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|au:${isAuthenticated ? 1 : 0}|ar:${authResolved ? 1 : 0}`;
+    const metaKey = sidebarMetaRequestKey;
     if (metaKeySynced.current === metaKey) return;
     if (metaRequestInFlightRef.current === metaKey) return;
     metaRequestInFlightRef.current = metaKey;
@@ -1139,6 +1457,7 @@ function ScholarshipsPageInner({
            */
           moreFilters: moreFiltersToJson(hubMetaSidebarMoreFilters),
           savedFiltersSnapshot: savedFiltersSnapshotJson,
+          guestBestRecommendationPreviewEnabled,
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
@@ -1179,7 +1498,9 @@ function ScholarshipsPageInner({
     savedFiltersSnapshotJson,
     appliedProviderSlug,
     isAuthenticated,
-    authResolved
+    authResolved,
+    sidebarMetaRequestKey,
+    guestBestRecommendationPreviewEnabled
   ]);
 
   useEffect(() => {
@@ -1194,7 +1515,7 @@ function ScholarshipsPageInner({
   /** Guests on Best recommendation only see page 1; strip `page` from URL if they land with page>1. */
   useEffect(() => {
     if (isAuthenticated) return;
-    if (activeTab !== 'best-matches') return;
+    if (activeTab !== 'best-recommendation') return;
     const n = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
     if (n > 1) {
       replaceListingParams({ page: 1, resetPage: false });
@@ -1261,6 +1582,7 @@ function ScholarshipsPageInner({
             activeTab
           )
         ),
+        guestBestRecommendationPreviewEnabled,
         longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
         requiredSeoTags: routeScope?.requiredSeoTags ?? [],
         seoListingFallback: routeScope?.seoListingFallback,
@@ -1292,7 +1614,8 @@ function ScholarshipsPageInner({
     catalogListScope,
     routeScope,
     filterBounds,
-    routeBaseMoreFilters
+    routeBaseMoreFilters,
+    guestBestRecommendationPreviewEnabled
   ]);
 
   const buildPageHref = useCallback(
@@ -1350,9 +1673,22 @@ function ScholarshipsPageInner({
     return moreFiltersApplied ?? routeBaseMoreFilters ?? null;
   }, [routeBaseMoreFilters, moreFiltersApplied]);
 
-  const internationalSidebarChecked =
-    mergedHubCitizenshipSource?.citizenshipAudience ===
-    'international_friendly';
+  const internationalSidebarChecked = useMemo(() => {
+    const currentAudience =
+      mergedHubCitizenshipSource?.citizenshipAudience ?? 'any';
+    const baselineAudience = moreFiltersBaseline?.citizenshipAudience ?? 'any';
+
+    /**
+     * Do not highlight the sidebar row when International Friendly comes from the
+     * current tab preset itself (for example, profile-driven Best recommendation).
+     * The row should look active only when the user turned on this extra sidebar filter
+     * relative to the canonical preset of the current tab.
+     */
+    return (
+      currentAudience === 'international_friendly' &&
+      baselineAudience !== 'international_friendly'
+    );
+  }, [mergedHubCitizenshipSource, moreFiltersBaseline]);
 
   const toggleInternationalAudienceSidebar = useCallback(() => {
     const current =
@@ -1393,7 +1729,7 @@ function ScholarshipsPageInner({
           deadlineFromUrl: null,
           routeScope,
           profileFilterSeed: listMeta.profileFilterSeed,
-          landingQuizProfileSeed,
+          landingQuizProfileSeed: transientBestRecommendationProfileSeed,
           savedFiltersFromStorage: savedFiltersForHub,
           isAuthenticated
         })
@@ -1411,7 +1747,7 @@ function ScholarshipsPageInner({
     listMeta?.filterBounds,
     listMeta?.profileFilterSeed,
     routeScope,
-    landingQuizProfileSeed,
+    transientBestRecommendationProfileSeed,
     savedFiltersForHub,
     isAuthenticated
   ]);
@@ -1442,17 +1778,6 @@ function ScholarshipsPageInner({
         setTotalCount((c) => Math.max(0, c - 1));
       }
       setSavedIds(wasSaved ? removeScholarship(id) : saveScholarship(id));
-      setListMeta((prev) =>
-        prev
-          ? {
-              ...prev,
-              sidebarCounts: {
-                ...prev.sidebarCounts,
-                saved: Math.max(0, prev.sidebarCounts.saved + (wasSaved ? -1 : 1))
-              }
-            }
-          : prev
-      );
     },
     [activeTab, isAuthenticated, openRegistrationWall, savedIds]
   );
@@ -1464,17 +1789,6 @@ function ScholarshipsPageInner({
         return;
       }
       setIgnoredIds(addIgnoredScholarship(id));
-      setListMeta((prev) =>
-        prev
-          ? {
-              ...prev,
-              sidebarCounts: {
-                ...prev.sidebarCounts,
-                ignored: prev.sidebarCounts.ignored + 1
-              }
-            }
-          : prev
-      );
       if (activeTab !== 'ignored') {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
@@ -1490,17 +1804,6 @@ function ScholarshipsPageInner({
         return;
       }
       setIgnoredIds(removeIgnoredScholarship(id));
-      setListMeta((prev) =>
-        prev
-          ? {
-              ...prev,
-              sidebarCounts: {
-                ...prev.sidebarCounts,
-                ignored: Math.max(0, prev.sidebarCounts.ignored - 1)
-              }
-            }
-          : prev
-      );
       if (activeTab === 'ignored') {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
@@ -1522,11 +1825,37 @@ function ScholarshipsPageInner({
     !hasError &&
     (hasListingParams || moreFiltersOffDefault || query.trim().length > 0);
 
+  const wizardDisplayStore = useMemo(
+    () =>
+      bestRecommendationWizardStore ??
+      emptyBestRecommendationWizardDraft(
+        hubTreatAsGuest ? 'guest' : 'signed-in'
+      ),
+    [bestRecommendationWizardStore, hubTreatAsGuest]
+  );
+
+  const shouldShowBestRecommendationWizard =
+    activeTab === 'best-recommendation' &&
+    bestRecommendationWizardHydrated &&
+    !bestTabAuthPending &&
+    ((hubTreatAsGuest && !guestBestRecommendationPreviewEnabled) ||
+      (!hubTreatAsGuest &&
+        (bestRecommendationWizardInProgress ||
+          (!bestRecommendationWizardStore &&
+            isAuthenticated &&
+            authResolved &&
+            currentMatchProfile == null &&
+            listMeta?.personalizedMatchReady === false))));
+  const bestRecommendationWizardPendingHydration =
+    activeTab === 'best-recommendation' &&
+    !bestTabAuthPending &&
+    !bestRecommendationWizardHydrated;
+
   const emptyMessage = useMemo(() => {
     if (hubTreatAsGuest && activeTab === 'recommended') {
       return 'Create an account to see personalized recommendations.';
     }
-    if (hubTreatAsGuest && activeTab === 'best-matches') {
+    if (hubTreatAsGuest && activeTab === 'best-recommendation') {
       return 'Sign in and complete your profile to see best recommendations tailored to you.';
     }
     switch (activeTab) {
@@ -1534,7 +1863,7 @@ function ScholarshipsPageInner({
         return 'No saved scholarships yet. Tap the heart on a grant to save it here.';
       case 'ignored':
         return 'No ignored scholarships. Use “Not relevant” on a card to hide a grant from your matches.';
-      case 'best-matches':
+      case 'best-recommendation':
         return 'No best recommendations for the current filters. Try broadening your search or opening Matches.';
       case 'recommended':
         if (isAuthenticated && !savedFiltersForHub) {
@@ -1553,27 +1882,6 @@ function ScholarshipsPageInner({
   const guestPersonalizedEmpty =
     hubTreatAsGuest && activeTab === 'recommended';
 
-  /** Guest Best (0), after load, no quiz: centered signup CTA below the list toolbar. */
-  const guestBestMatchesEmptySurface =
-    hubTreatAsGuest &&
-    activeTab === 'best-matches' &&
-    totalCount === 0 &&
-    !isLoading &&
-    !landingQuizProfileSeed;
-
-  /**
-   * Signed-in Best, empty list, no quiz carry-over, meta loaded: incomplete DB profile only.
-   */
-  const authBestProfileIncompleteEmptySurface =
-    Boolean(authResolved) &&
-    isAuthenticated &&
-    activeTab === 'best-matches' &&
-    totalCount === 0 &&
-    !isLoading &&
-    !landingQuizProfileSeed &&
-    listMeta != null &&
-    listMeta.personalizedMatchReady === false;
-
   /**
    * Saved Filters: completion card only when meta explicitly says profile is not ready for personalization.
    * Avoid `!== true` on undefined so we do not flash this card before the first meta response.
@@ -1590,10 +1898,7 @@ function ScholarshipsPageInner({
   /**
    * Centered completion / signup card (toolbar with search · filters · categories stays visible above).
    */
-  const profileCompletionEmptyOnly =
-    guestBestMatchesEmptySurface ||
-    authBestProfileIncompleteEmptySurface ||
-    authRecommendedProfileIncompleteEmpty;
+  const profileCompletionEmptyOnly = authRecommendedProfileIncompleteEmpty;
 
   return (
     <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 text-left text-zinc-900 sm:px-5 md:py-12 lg:px-8">
@@ -1614,6 +1919,7 @@ function ScholarshipsPageInner({
         sidebar={
           <ScholarshipsSidebar
             counts={sidebarCounts}
+            showCounts={sidebarCountsReady}
             matchesNewIndicator={null}
             guestMode={hubTreatAsGuest}
             onGuestRestrictedNav={hubTreatAsGuest ? openRegistrationWall : undefined}
@@ -1669,7 +1975,22 @@ function ScholarshipsPageInner({
                 }
               />
 
-              {isLoading ? (
+              {bestRecommendationWizardPendingHydration ? (
+                <ScholarshipsBrandLoading density="compact" showTopAccentBar />
+              ) : shouldShowBestRecommendationWizard ? (
+                <BestRecommendationWizard
+                  store={wizardDisplayStore}
+                  saving={bestRecommendationWizardSaving}
+                  onChange={persistBestRecommendationWizardStore}
+                  onPersistSignedInStep={
+                    isAuthenticated ? persistBestRecommendationWizardProfileStep : undefined
+                  }
+                  onSubmit={async (next) => {
+                    persistBestRecommendationWizardStore(next);
+                    replaceListingParams({ resetPage: true });
+                  }}
+                />
+              ) : isLoading ? (
             <ScholarshipsBrandLoading density="compact" showTopAccentBar />
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
@@ -1677,35 +1998,18 @@ function ScholarshipsPageInner({
             <div className="mt-4 flex w-full flex-col items-center px-2 pb-10 pt-2 sm:mt-6 sm:pb-16 sm:pt-4">
               <div className="w-full max-w-xl rounded-2xl border border-[#FFD9B3] bg-gradient-to-b from-[#FFF8F1] to-white p-6 text-center shadow-sm sm:p-8">
                 <h3 className="text-base font-semibold text-[#7A3B00] sm:text-lg">
-                  {guestBestMatchesEmptySurface
-                    ? 'Create a free account to unlock best recommendations'
-                    : activeTab === 'best-matches'
-                      ? 'Complete your profile to unlock best recommendations'
-                      : 'Complete your profile so we can align saved filters with your profile defaults.'}
+                  Complete your profile so we can align saved filters with your profile defaults.
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#8C5A2B]">
-                  {guestBestMatchesEmptySurface
-                    ? 'Sign up, add your school level, field of study, citizenship, GPA, and location — then we can rank scholarships that fit you.'
-                    : activeTab === 'best-matches'
-                      ? 'Add your school level, field of study, citizenship, GPA, and location so we can show scholarships that fit you better.'
-                      : 'Fill in your academic and eligibility details so saved filters can merge with your profile where helpful.'}
+                  Fill in your academic and eligibility details so saved filters can merge with your profile where helpful.
                 </p>
                 <div className="mt-6 flex justify-center">
-                  {guestBestMatchesEmptySurface ? (
-                    <Link
-                      href="/onboarding"
-                      className="inline-flex items-center justify-center rounded-xl bg-[#FF7A1A] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2"
-                    >
-                      Create free account
-                    </Link>
-                  ) : (
-                    <Link
-                      href="/account"
-                      className="inline-flex items-center justify-center rounded-xl bg-[#FF7A1A] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2"
-                    >
-                      Complete profile
-                    </Link>
-                  )}
+                  <Link
+                    href="/account"
+                    className="inline-flex items-center justify-center rounded-xl bg-[#FF7A1A] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2"
+                  >
+                    Complete profile
+                  </Link>
                 </div>
               </div>
             </div>
@@ -1738,8 +2042,60 @@ function ScholarshipsPageInner({
             </div>
           ) : (
             <>
+              {hubTreatAsGuest && activeTab === 'matches' ? (
+                <div className="mb-4 rounded-2xl border border-gray-200/90 bg-gradient-to-br from-gray-50 via-white to-gray-50/80 p-4 text-center shadow-sm ring-1 ring-gray-100 sm:p-5">
+                  <p className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
+                    Want better scholarship matches?
+                  </p>
+                  <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-[0.9375rem]">
+                    Answer 5 quick questions about your background and goals, then
+                    we&apos;ll open your Best recommendation list with scholarships
+                    tailored to you.
+                  </p>
+                  <div className="mt-4">
+                    <ScholarshipCatalogEntryLink className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-3 text-center text-sm font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.35)] transition duration-200 ease-out hover:bg-zinc-900 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.4)] sm:text-base">
+                      Answer 5 questions and find scholarships
+                    </ScholarshipCatalogEntryLink>
+                  </div>
+                </div>
+              ) : null}
+              {hubTreatAsGuest &&
+              activeTab === 'best-recommendation' &&
+              transientBestRecommendationProfileSeed ? (
+                <div className="mb-4 rounded-2xl border border-[#FFD9B3] bg-[#FFF8F1] p-4 text-[#7A3B00] shadow-sm">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-sm font-semibold">
+                        Your best recommendations are based on
+                        <br />
+                        the answers you just added.
+                      </p>
+                      <p className="mt-1 text-sm text-[#8C5A2B]">
+                        Open two scholarship details for free. On the third one, we&apos;ll ask you
+                        to create an account.
+                      </p>
+                    </div>
+                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[148px]">
+                      <button
+                        type="button"
+                        onClick={handleGuestBestRecommendationEditAnswers}
+                        className="inline-flex w-full items-center justify-center rounded-xl border border-[#FFD9B3] bg-white px-4 py-2.5 text-sm font-semibold text-[#7A3B00] shadow-sm transition hover:bg-[#FFF3E8]"
+                      >
+                        Edit answers
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleBestRecommendationWizardCreateAccount}
+                        className="inline-flex w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C]"
+                      >
+                        Create free account
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
               <div className="relative z-0 flex flex-col gap-4">
-                {scholarships.map((s) => (
+                {scholarshipsForCards.map((s) => (
                   <ScholarshipCard
                     key={s.id}
                     scholarship={s}
@@ -1754,9 +2110,19 @@ function ScholarshipsPageInner({
                     ignoreAction={activeTab === 'ignored' ? 'restore' : 'hide'}
                     showCardActions={scholarshipTabShowsCardActions(activeTab)}
                     subscriptionLocked={isSubscriptionLocked}
+                    isAuthenticated={isAuthenticated}
+                    hasSubscription={hasSubscription}
                     listingTab={activeTab}
                     onSubscriptionLockedCategoryClick={
                       isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
+                    }
+                    onSubscriptionDetailNavigate={
+                      isSubscriptionLocked
+                        ? () =>
+                            openSubscriptionOffer(
+                              SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE
+                            )
+                        : undefined
                     }
                     onGuestDetailNavigate={
                       hubTreatAsGuest
@@ -1772,10 +2138,10 @@ function ScholarshipsPageInner({
                 totalPages={totalPages}
                 buildHref={buildPageHref}
                 guestPaginationLocked={
-                  hubTreatAsGuest && activeTab === 'best-matches'
+                  hubTreatAsGuest && activeTab === 'best-recommendation'
                 }
                 onGuestLockedClick={
-                  hubTreatAsGuest && activeTab === 'best-matches'
+                  hubTreatAsGuest && activeTab === 'best-recommendation'
                     ? () => openRegistrationWall()
                     : undefined
                 }
@@ -1817,6 +2183,7 @@ function ScholarshipsPageInner({
       <ScholarshipSubscriptionOfferModal
         open={subscriptionOfferOpen}
         onClose={closeSubscriptionOffer}
+        notice={subscriptionOfferNotice}
       />
     </section>
   );

@@ -1,24 +1,29 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
-import { GetScholarshipsQuizStep1Basics } from '@/components/get-scholarships/GetScholarshipsQuizStep1Basics';
+import { GetScholarshipsQuizSingleSelectStep } from '@/components/get-scholarships/GetScholarshipsQuizSingleSelectStep';
 import { ScholarshipOnboardingStep3Gpa } from '@/components/onboarding/ScholarshipOnboardingStep3Gpa';
 import { ScholarshipOnboardingStep4State } from '@/components/onboarding/ScholarshipOnboardingStep4State';
+import { CITIZENSHIP_OPTIONS } from '@/lib/constants/onboardingCitizenshipAndLocation';
+import {
+  FIELD_OF_STUDY_OPTIONS,
+  SCHOOL_LEVEL_OPTIONS
+} from '@/lib/constants/scholarshipProfileOptions';
 import {
   clearLandingQuizDraft,
   emptyLandingQuizDraft,
   loadLandingQuizDraft,
+  loadCompletedLandingQuizDraft,
+  saveCompletedLandingQuizDraft,
   saveFullLandingQuizDraft
 } from '@/lib/onboarding/getScholarshipsLandingDraft';
 import type { OnboardingFormValues, StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
-import { buildScholarshipProfileFilterSeedFromQuizDraft } from '@/lib/scholarships/profileFilterDefaults';
+import { buildScholarshipProfileFilterSeedFromDraftWithoutBirth } from '@/lib/scholarships/profileFilterDefaults';
 import { stashLandingQuizDraftForOnboardingMerge } from '@/lib/onboarding/mergeLandingQuizIntoOnboardingDraft';
 import { LANDING_QUIZ_HUB_SEED_KEY } from '@/lib/scholarships/landingQuizHubSession';
-import { validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
 import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
-import { validateScholarshipOnboardingStep4Draft } from '@/lib/validation/scholarshipOnboardingStep4Schema';
 import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
@@ -31,13 +36,30 @@ function notifyDestructive(title: string, description?: string) {
   });
 }
 
-type LandingQuizStep = 1 | 2 | 3;
+type LandingQuizStep = 1 | 2 | 3 | 4 | 5;
+
+const schoolLevelOptions = [
+  { value: '', label: 'Select your school level' },
+  ...SCHOOL_LEVEL_OPTIONS.map((option) => ({ value: option.value, label: option.label }))
+];
+
+const fieldOfStudyOptions = [
+  { value: '', label: 'Select your field of study' },
+  ...FIELD_OF_STUDY_OPTIONS.map((option) => ({ value: option.value, label: option.label }))
+];
+
+const citizenshipOptions = [
+  { value: '', label: 'Select citizenship status' },
+  ...CITIZENSHIP_OPTIONS.map((option) => ({ value: option.value, label: option.label }))
+];
 
 function defaultResumeLandingQuizStep(draft: StoredOnboardingDraft): LandingQuizStep {
-  if (!validateScholarshipOnboardingBasicsWithoutBirth(draft.step1).ok) return 1;
-  if (!validateScholarshipOnboardingStep4Draft(draft.step4).ok) return 2;
-  if (!validateScholarshipOnboardingStep3Gpa(draft.step3).ok) return 3;
-  return 3;
+  if (!draft.step1.schoolLevel.trim()) return 1;
+  if (!draft.step1.fieldOfStudy.trim()) return 2;
+  if (!draft.step1.citizenship.trim()) return 3;
+  if (draft.activeStep === 4) return 4;
+  if (!validateScholarshipOnboardingStep3Gpa(draft.step3).ok) return 5;
+  return 5;
 }
 
 type Props = {
@@ -64,6 +86,15 @@ export function GetScholarshipsQuizWizard({
     void supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         router.replace(afterAuthPath);
+        return;
+      }
+      const completedDraft = loadCompletedLandingQuizDraft();
+      const completedSeed =
+        completedDraft
+          ? buildScholarshipProfileFilterSeedFromDraftWithoutBirth(completedDraft)
+          : null;
+      if (completedSeed) {
+        router.replace(afterAuthPath);
       }
     });
   }, [router, afterAuthPath]);
@@ -79,17 +110,20 @@ export function GetScholarshipsQuizWizard({
     setDraft(next);
   }, []);
 
-  const handleStep1Continue = useCallback(
-    (values: OnboardingFormValues) => {
+  const updateStep1AndAdvance = useCallback(
+    (key: keyof OnboardingFormValues, value: string, nextStep: LandingQuizStep) => {
       const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
       persistFull({
         ...base,
         v: 7,
         quizVariant: 'landing_no_birth',
-        step1: values,
-        activeStep: 2
+        step1: {
+          ...base.step1,
+          [key]: value
+        },
+        activeStep: nextStep
       });
-      setQuizStep(2);
+      setQuizStep(nextStep);
     },
     [persistFull]
   );
@@ -100,9 +134,9 @@ export function GetScholarshipsQuizWizard({
       ...base,
       v: 7,
       quizVariant: 'landing_no_birth',
-      activeStep: 3
+      activeStep: 5
     });
-    setQuizStep(3);
+    setQuizStep(5);
   }, [persistFull]);
 
   const landingQuizCompleteRef = useRef(false);
@@ -110,7 +144,7 @@ export function GetScholarshipsQuizWizard({
   const completeAndGoToHub = useCallback(() => {
     if (landingQuizCompleteRef.current) return;
     const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
-    const seed = buildScholarshipProfileFilterSeedFromQuizDraft(base);
+    const seed = buildScholarshipProfileFilterSeedFromDraftWithoutBirth(base);
     if (!seed) {
       notifyDestructive(
         'Almost there',
@@ -129,6 +163,7 @@ export function GetScholarshipsQuizWizard({
       );
       return;
     }
+    saveCompletedLandingQuizDraft(base);
     stashLandingQuizDraftForOnboardingMerge(base);
     clearLandingQuizDraft();
     router.push(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF);
@@ -174,30 +209,126 @@ export function GetScholarshipsQuizWizard({
 
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
           {step === 1 ? (
-            <GetScholarshipsQuizStep1Basics
+            <GetScholarshipsQuizSingleSelectStep
               disabled={false}
-              initialStep1={draft.step1}
-              onContinue={handleStep1Continue}
+              progressEyebrow="Step 1 of 5 · Basics"
+              title="What is your school level?"
+              description="We use this to match scholarships to the right education stage."
+              label="Current school level"
+              selectId="gsq-school-level"
+              options={schoolLevelOptions}
+              value={draft.step1.schoolLevel}
+              error={null}
+              onChange={(value) =>
+                persistFull({
+                  ...draft,
+                  v: 7,
+                  quizVariant: 'landing_no_birth',
+                  step1: {
+                    ...draft.step1,
+                    schoolLevel: value
+                  }
+                })
+              }
+              onContinue={() => {
+                if (!draft.step1.schoolLevel.trim()) {
+                  notifyDestructive('Choose your school level to continue.');
+                  return;
+                }
+                updateStep1AndAdvance('schoolLevel', draft.step1.schoolLevel, 2);
+              }}
             />
           ) : null}
           {step === 2 ? (
-            <ScholarshipOnboardingStep4State
+            <GetScholarshipsQuizSingleSelectStep
               disabled={false}
-              draftStore="landing"
-              progressEyebrow="Step 2 of 3 · State"
-              initialStep4={draft.step4}
+              progressEyebrow="Step 2 of 5 · Basics"
+              title="What field of study are you pursuing?"
+              description="Many scholarships are targeted to a specific major or academic path."
+              label="Field of study"
+              selectId="gsq-field-of-study"
+              options={fieldOfStudyOptions}
+              value={draft.step1.fieldOfStudy}
+              error={null}
+              menuClassName="max-h-72"
+              onChange={(value) =>
+                persistFull({
+                  ...draft,
+                  v: 7,
+                  quizVariant: 'landing_no_birth',
+                  step1: {
+                    ...draft.step1,
+                    fieldOfStudy: value
+                  }
+                })
+              }
               onBack={() => handleBack(1)}
-              onContinue={handleAfterState}
+              onContinue={() => {
+                if (!draft.step1.fieldOfStudy.trim()) {
+                  notifyDestructive('Choose your field of study to continue.');
+                  return;
+                }
+                updateStep1AndAdvance('fieldOfStudy', draft.step1.fieldOfStudy, 3);
+              }}
             />
           ) : null}
           {step === 3 ? (
+            <GetScholarshipsQuizSingleSelectStep
+              disabled={false}
+              progressEyebrow="Step 3 of 5 · Basics"
+              title="What is your citizenship status?"
+              description="Citizenship affects eligibility for many scholarships."
+              label="Citizenship status"
+              selectId="gsq-citizenship"
+              ariaLabel="Citizenship status"
+              options={citizenshipOptions}
+              value={draft.step1.citizenship}
+              error={null}
+              onChange={(value) =>
+                persistFull({
+                  ...draft,
+                  v: 7,
+                  quizVariant: 'landing_no_birth',
+                  step1: {
+                    ...draft.step1,
+                    citizenship: value
+                  }
+                })
+              }
+              onBack={() => handleBack(2)}
+              onContinue={() => {
+                if (!draft.step1.citizenship.trim()) {
+                  notifyDestructive('Choose your citizenship status to continue.');
+                  return;
+                }
+                updateStep1AndAdvance('citizenship', draft.step1.citizenship, 4);
+              }}
+            />
+          ) : null}
+          {step === 4 ? (
+            <ScholarshipOnboardingStep4State
+              disabled={false}
+              draftStore="landing"
+              progressEyebrow="Step 4 of 5 · State"
+              initialStep4={draft.step4}
+              allowSkipEmpty
+              title="What U.S. state are you in?"
+              description="Optional. Add it if you want to surface state-specific scholarships too."
+              helperText="Leave it empty if you want a broader recommendation set."
+              onBack={() => handleBack(3)}
+              onContinue={handleAfterState}
+            />
+          ) : null}
+          {step === 5 ? (
             <ScholarshipOnboardingStep3Gpa
               disabled={false}
               draftStore="landing"
-              progressEyebrow="Step 3 of 3 · GPA"
+              progressEyebrow="Step 5 of 5 · GPA"
               submitButtonLabel="See scholarship matches →"
               initialStep3={draft.step3}
-              onBack={() => handleBack(2)}
+              title="What's your GPA?"
+              description="This helps us rank scholarships with academic requirements."
+              onBack={() => handleBack(4)}
               onContinue={completeAndGoToHub}
             />
           ) : null}

@@ -25,6 +25,22 @@ export const revalidate = 300;
 
 type PageProps = { params: { slug: string } };
 
+function toSearchParamsString(
+  searchParams?: Record<string, string | string[] | undefined>
+): string {
+  const qs = new URLSearchParams();
+  for (const [key, value] of Object.entries(searchParams ?? {})) {
+    if (Array.isArray(value)) {
+      for (const part of value) {
+        if (typeof part === 'string') qs.append(key, part);
+      }
+      continue;
+    }
+    if (typeof value === 'string') qs.set(key, value);
+  }
+  return qs.toString();
+}
+
 function resolveCategorySlugParam(slug: string): {
   canonicalSlug: string;
   pageTitle: string;
@@ -96,12 +112,19 @@ export async function generateMetadata({
   return meta;
 }
 
-export default async function ScholarshipCategoryPage({ params }: PageProps) {
+export default async function ScholarshipCategoryPage({
+  params,
+  searchParams
+}: PageProps & {
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
   const { canonicalSlug, pageTitle } = resolveCategorySlugParam(params.slug);
   const supabase = createPublicClient();
+  const searchParamsString = toSearchParamsString(searchParams);
   const initialListPayload = await fetchInitialCategoryScholarshipsPayload(
     supabase,
-    canonicalSlug
+    canonicalSlug,
+    searchParamsString
   );
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
@@ -150,7 +173,7 @@ export default async function ScholarshipCategoryPage({ params }: PageProps) {
             buildInitialListRequestKey({
               kind: 'category',
               routeKey: canonicalSlug,
-              searchParamsString: ''
+              searchParamsString
             }),
             initialListPayload
           )}

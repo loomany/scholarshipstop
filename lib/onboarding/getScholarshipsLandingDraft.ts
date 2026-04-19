@@ -14,6 +14,8 @@ import { mergeDraftWithDefaults } from '@/lib/onboarding/scholarshipOnboardingDr
 
 export const GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY =
   'scholarship_get_scholarships_quiz_draft_v1';
+export const COMPLETED_GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY =
+  'scholarship_get_scholarships_quiz_completed_v1';
 
 function withLandingMeta(draft: StoredOnboardingDraft): StoredOnboardingDraft {
   return { ...draft, v: 7, quizVariant: 'landing_no_birth' };
@@ -59,6 +61,33 @@ export function loadLandingQuizDraft(): StoredOnboardingDraft | null {
 
 export function saveFullLandingQuizDraft(draft: StoredOnboardingDraft): void {
   writeLanding(draft);
+}
+
+export function loadCompletedLandingQuizDraft(): StoredOnboardingDraft | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(COMPLETED_GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as StoredOnboardingDraft;
+    if (!parsed || parsed.v !== 7 || typeof parsed.step1 !== 'object') {
+      return null;
+    }
+    return withLandingMeta(parsed);
+  } catch {
+    return null;
+  }
+}
+
+export function saveCompletedLandingQuizDraft(draft: StoredOnboardingDraft): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(
+      COMPLETED_GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY,
+      JSON.stringify(withLandingMeta(draft))
+    );
+  } catch {
+    /* quota */
+  }
 }
 
 export function mergeAndSaveStep1LandingForm(

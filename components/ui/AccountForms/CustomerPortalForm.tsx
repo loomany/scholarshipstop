@@ -1,8 +1,8 @@
 'use client';
 
 import Button from '@/components/ui/Button';
-import { useRouter, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { createStripePortal } from '@/utils/stripe/server';
 import Link from 'next/link';
 import Card from '@/components/ui/Card';
@@ -31,8 +31,13 @@ export default function CustomerPortalForm({
   variant = 'default'
 }: Props) {
   const router = useRouter();
-  const currentPath = usePathname();
+  const [currentPath, setCurrentPath] = useState('/');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setCurrentPath(window.location.pathname || '/');
+  }, []);
 
   const subscriptionPrice =
     subscription &&

@@ -35,6 +35,11 @@ function profileToProfilesRowPartial(profile: UserProfile) {
       citizenship_status: profile.citizenshipStatus,
       citizenship_status_label: profile.citizenshipStatusLabel,
       gpa: gpaForProfileDb(profile.gpa),
+      ...(Object.prototype.hasOwnProperty.call(profile, 'savedFiltersSnapshot')
+        ? {
+            saved_filters_snapshot: profile.savedFiltersSnapshot ?? null
+          }
+        : {}),
       state_region: profile.stateRegion?.trim() || null,
       onboarding_completed: profile.onboardingCompleted,
       updated_at: new Date().toISOString()

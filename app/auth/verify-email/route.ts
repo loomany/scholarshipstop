@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { parseEmailVerificationToken } from '@/lib/auth/emailVerificationToken';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
     return withNoStore(
       NextResponse.redirect(
         getStatusRedirect(
-          `${origin}${SCHOLARSHIPS_HUB_BEST_MATCHES_HREF}`,
+          `${origin}${SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF}`,
           'Email confirmed',
           'Thanks — your email is verified.'
         )
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const redirectTo = `${getServerAuthCallbackUrl()}?next=${encodeURIComponent(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF)}`;
+  const redirectTo = `${getServerAuthCallbackUrl()}?next=${encodeURIComponent(SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF)}`;
   const { data: linkData, error: linkErr } = await admin.auth.admin.generateLink({
     type: 'magiclink',
     email,
@@ -120,7 +120,7 @@ export async function GET(request: NextRequest) {
     return withNoStore(
       NextResponse.redirect(
         getStatusRedirect(
-          `${origin}${SCHOLARSHIPS_HUB_BEST_MATCHES_HREF}`,
+          `${origin}${SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF}`,
           'Email confirmed',
           'Thanks — your email is verified.'
         )

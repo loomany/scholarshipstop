@@ -57,7 +57,7 @@ type NavDef = {
 };
 
 type StaticNavDef = {
-  id: 'best-matches' | 'recommended';
+  id: 'best-recommendation' | 'recommended';
   label: string;
   icon: LucideIcon;
 };
@@ -80,7 +80,7 @@ const SUBSCRIPTION_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
 
 const STATIC_TOP_ROWS: StaticNavDef[] = [
   {
-    id: 'best-matches',
+    id: 'best-recommendation',
     label: 'Best recommendation',
     icon: Flame
   },
@@ -148,6 +148,8 @@ function resolveActiveTabId(
 
 type ScholarshipsSidebarProps = {
   counts: ScholarshipSidebarCounts;
+  /** Hide numeric badges until counts are synced for the current page state. */
+  showCounts?: boolean;
   /** Оранжевый блок NEW + число непрочитанных во вкладке Matches (локально). */
   matchesNewIndicator?: { count: number } | null;
   useDarkTooltips?: boolean;
@@ -166,6 +168,7 @@ type ScholarshipsSidebarProps = {
 
 export default function ScholarshipsSidebar({
   counts,
+  showCounts = true,
   matchesNewIndicator,
   useDarkTooltips = false,
   guestMode = false,
@@ -180,10 +183,11 @@ export default function ScholarshipsSidebar({
   const activeTab = resolveActiveTabId(pathname, searchParams, guestMode);
 
   const suffix = (id: ScholarshipListTabId): string | undefined => {
+    if (!showCounts) return undefined;
     let n: number;
     switch (id) {
-      case 'best-matches':
-        n = counts.bestMatches;
+      case 'best-recommendation':
+        n = counts.bestRecommendation;
         break;
       case 'recommended':
         n = counts.recommended;
@@ -455,7 +459,7 @@ export default function ScholarshipsSidebar({
               href={href}
               title={useDarkTooltips ? undefined : tip}
               className={`${rowClass} ${!navLooksActive ? 'group' : ''}`}
-              aria-current={isActive ? 'page' : undefined}
+              aria-current={navLooksActive ? 'page' : undefined}
             >
               {content}
             </Link>
@@ -484,7 +488,9 @@ export default function ScholarshipsSidebar({
           ) {
             const intl = internationalStudentsFilter;
             const intlActive = intl.active;
-            const intlCountSuffix = `(${counts.internationalFriendly})`;
+            const intlCountSuffix = showCounts
+              ? `(${counts.internationalFriendly})`
+              : undefined;
             const showGuestLockIntl = intl.showGuestLock;
             const showSubscriptionLockIntl = intl.showSubscriptionLock;
             const intlRowClass = `flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${

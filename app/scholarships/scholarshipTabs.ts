@@ -2,8 +2,8 @@ import { matchesDeadlinePreset } from './moreFilters';
 import type { Scholarship } from './scholarshipsData';
 
 export type ScholarshipSidebarCounts = {
-  /** Personalized: SQL tab scope (high credibility / verified). */
-  bestMatches: number;
+  /** Personalized: profile-narrowed Best recommendation pool. */
+  bestRecommendation: number;
   /** Personalized: SQL tab scope (verified or strong credibility). */
   recommended: number;
   easyApply: number;
@@ -23,7 +23,7 @@ export type ScholarshipSidebarCounts = {
 };
 
 export const SCHOLARSHIP_LIST_TAB_IDS = [
-  'best-matches',
+  'best-recommendation',
   'recommended',
   'easy-apply',
   'hot-deadlines',
@@ -40,6 +40,7 @@ export const DEFAULT_SCHOLARSHIP_TAB: ScholarshipListTabId = 'matches';
 
 /** Hub `/scholarships` default when `tab` is absent (catalog browse). */
 export const HUB_DEFAULT_SCHOLARSHIP_TAB: ScholarshipListTabId = 'matches';
+export const LEGACY_BEST_RECOMMENDATION_TAB_ID = 'best-matches';
 
 const TAB_PARAM_VALUES = new Set<string>(SCHOLARSHIP_LIST_TAB_IDS);
 
@@ -49,8 +50,12 @@ const HUB_HIDDEN_TAB_IDS = new Set<ScholarshipListTabId>(['started', 'submitted'
 export function parseScholarshipTabParam(
   raw: string | null | undefined
 ): ScholarshipListTabId {
-  if (!raw || !TAB_PARAM_VALUES.has(raw)) return DEFAULT_SCHOLARSHIP_TAB;
-  return raw as ScholarshipListTabId;
+  const normalized =
+    raw === LEGACY_BEST_RECOMMENDATION_TAB_ID ? 'best-recommendation' : raw;
+  if (!normalized || !TAB_PARAM_VALUES.has(normalized)) {
+    return DEFAULT_SCHOLARSHIP_TAB;
+  }
+  return normalized as ScholarshipListTabId;
 }
 
 /** Hub listing: same defaults as guest — catalog `matches` when `tab` is missing. */
@@ -62,13 +67,12 @@ export function parseHubScholarshipTabParam(
 
 /**
  * Hub for guests: default **All** (`matches`); explicit `tab` in URL is respected
- * (e.g. `best-matches` for landing quiz / Best recommendation).
+ * (e.g. `best-recommendation` for landing quiz / Best recommendation).
  */
 export function parseHubScholarshipTabParamForGuest(
   raw: string | null | undefined
 ): ScholarshipListTabId {
-  if (!raw || !TAB_PARAM_VALUES.has(raw)) return 'matches';
-  const t = raw as ScholarshipListTabId;
+  const t = parseScholarshipTabParam(raw);
   if (HUB_HIDDEN_TAB_IDS.has(t)) return 'matches';
   return t;
 }
@@ -79,8 +83,8 @@ export function scholarshipTabShowsCardActions(tab: ScholarshipListTabId): boole
   return SCHOLARSHIP_LIST_TAB_IDS.includes(tab);
 }
 
-/** Mirrors SQL tab scope for best-matches (high credibility or verified). */
-function isBestMatchesTabScholarship(s: Scholarship): boolean {
+/** Static fallback only: high-credibility rows when API data is unavailable. */
+function isBestRecommendationTabScholarship(s: Scholarship): boolean {
   if (s.verified) return true;
   const c = s.credibilityScore;
   return c != null && Number.isFinite(c) && c >= 90;
@@ -104,9 +108,9 @@ export function scholarshipsInTab(
   const submitted = new Set(ids.submitted);
 
   switch (tab) {
-    case 'best-matches':
+    case 'best-recommendation':
       return usa.filter(
-        (s) => !ign.has(s.id) && isBestMatchesTabScholarship(s)
+        (s) => !ign.has(s.id) && isBestRecommendationTabScholarship(s)
       );
     case 'matches':
       return usa.filter((s) => !ign.has(s.id));
@@ -141,7 +145,7 @@ export function computeScholarshipSidebarCounts(
   ids: TabIdSets
 ): ScholarshipSidebarCounts {
   return {
-    bestMatches: scholarshipsInTab(usa, 'best-matches', ids).length,
+    bestRecommendation: scholarshipsInTab(usa, 'best-recommendation', ids).length,
     recommended: scholarshipsInTab(usa, 'recommended', ids).length,
     easyApply: scholarshipsInTab(usa, 'easy-apply', ids).length,
     hotDeadlines: scholarshipsInTab(usa, 'hot-deadlines', ids).length,
@@ -169,7 +173,7 @@ export function scholarshipListPageTitle(
 ): string {
   const guest = options?.guest === true;
   switch (tab) {
-    case 'best-matches':
+    case 'best-recommendation':
       return guest ? 'Best recommendations' : 'Best recommendations for you';
     case 'saved':
       return 'Saved scholarships';
@@ -193,7 +197,7 @@ export function scholarshipListPageTitle(
 
 export function scholarshipListLoadingText(tab: ScholarshipListTabId): string {
   if (tab === 'saved') return 'Loading saved…';
-  if (tab === 'best-matches') return 'Loading best recommendations…';
+  if (tab === 'best-recommendation') return 'Loading best recommendations…';
   if (tab === 'recommended') return 'Loading saved filters…';
   if (tab === 'hot-deadlines') return 'Loading hot deadlines…';
   return 'Loading matches…';

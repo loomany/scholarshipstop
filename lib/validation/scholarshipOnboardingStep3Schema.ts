@@ -3,7 +3,7 @@ import {
   SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY
 } from '@/lib/constants/scholarshipGpaOptions';
 
-/** Step 3 (GPA) — required; must be a known numeric GPA. */
+/** Step 3 (GPA) — required; must be a known exact GPA or supported GPA bucket. */
 export type Step3GpaFormValues = {
   gpa: string;
 };

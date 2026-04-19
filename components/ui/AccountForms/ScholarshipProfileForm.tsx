@@ -18,9 +18,10 @@ import Card from '@/components/ui/Card';
 import { DarkSelect } from '@/components/home/DarkSelect';
 import { CITIZENSHIP_OPTIONS } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
+  resolveStoredProfileGpaChoice,
+  SCHOLARSHIP_GPA_BUCKET_OPTIONS,
   SCHOLARSHIP_GPA_OPTIONS,
-  SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY,
-  normalizeGpaForSelect
+  SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY
 } from '@/lib/constants/scholarshipGpaOptions';
 import {
   FIELD_OF_STUDY_OPTIONS,
@@ -142,6 +143,10 @@ const gpaProfileSelectOptions = [
     value: SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY,
     label: 'Prefer not to say (optional)'
   },
+  ...SCHOLARSHIP_GPA_BUCKET_OPTIONS.map((o) => ({
+    value: o.value,
+    label: o.label
+  })),
   ...SCHOLARSHIP_GPA_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 ];
 
@@ -156,7 +161,8 @@ const ELIGIBILITY_PATCH_KEYS = [
   'citizenship_status',
   'citizenship_status_label',
   'state_region',
-  'gpa'
+  'gpa',
+  'saved_filters_snapshot'
 ] as const;
 
 /** Personal card: replaces the removed global bar for name + DOB (selects do not submit the form on Enter). */
@@ -314,9 +320,7 @@ export default function ScholarshipProfileForm({
     profile?.citizenship_status ?? ''
   );
   const [gpaChoice, setGpaChoice] = useState(() =>
-    normalizeGpaForSelect(
-      profile?.gpa != null && profile.gpa !== '' ? String(profile.gpa) : ''
-    )
+    resolveStoredProfileGpaChoice(profile?.gpa, profile?.saved_filters_snapshot)
   );
   const [stateRegionInput, setStateRegionInput] = useState(
     () => profile?.state_region?.trim() ?? ''
@@ -354,11 +358,7 @@ export default function ScholarshipProfileForm({
     setSchoolLevel(profile.school_level ?? '');
     setFieldOfStudy(profile.field_of_study ?? '');
     setCitizenshipStatus(profile.citizenship_status ?? '');
-    setGpaChoice(
-      normalizeGpaForSelect(
-        profile.gpa != null && profile.gpa !== '' ? String(profile.gpa) : ''
-      )
-    );
+    setGpaChoice(resolveStoredProfileGpaChoice(profile.gpa, profile.saved_filters_snapshot));
     setStateRegionInput(profile.state_region?.trim() ?? '');
   }, [profile, profileSnapshot]);
 
@@ -1491,7 +1491,6 @@ export default function ScholarshipProfileForm({
                 onChange={(e) => setLastName(e.target.value)}
                 autoComplete="family-name"
               />
-              {birthDateFields}
               <label className={lc} htmlFor="spf-email">
                 Email
               </label>
@@ -1551,6 +1550,7 @@ export default function ScholarshipProfileForm({
                   stay limited until you confirm.
                 </p>
               ) : null}
+              {birthDateFields}
             </div>
             {sectionSaveRow('personal', onSavePersonal, {
               middleSlot: showResendConfirmationButton ? (

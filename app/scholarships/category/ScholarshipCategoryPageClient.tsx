@@ -10,6 +10,7 @@ import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
+import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
 import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagination';
@@ -37,6 +38,7 @@ import {
   getReportedScholarshipIds,
   toggleReportedScholarship
 } from '@/app/scholarships/reportedScholarships';
+import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCurrentUserScholarshipMatchProfile';
 import {
   deleteUserSavedScholarship,
   fetchUserSavedScholarshipIds,
@@ -68,13 +70,14 @@ import {
 } from '@/app/scholarships/scholarshipListFetch';
 import type { InitialScholarshipsPayload } from '@/app/scholarships/scholarshipListServerPayload';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
+import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
 import type {
   ScholarshipListMeta,
   SeoListingFallbackMeta
 } from '@/lib/scholarships/scholarshipListServer';
 
 const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
-  bestMatches: 0,
+  bestRecommendation: 0,
   recommended: 0,
   easyApply: 0,
   hotDeadlines: 0,
@@ -185,6 +188,11 @@ export default function ScholarshipCategoryPageClient({
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
   const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
+  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+    string | undefined
+  >(undefined);
+  const { profile: currentMatchProfile } =
+    useCurrentUserScholarshipMatchProfile(isAuthenticated);
   const isSubscriptionLocked = isAuthenticated && !hasSubscription;
   const isLockedPremiumCategory = useMemo(() => {
     const normalized = categorySlug.trim().toLowerCase().replace(/_/g, '-');
@@ -205,11 +213,14 @@ export default function ScholarshipCategoryPageClient({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
-  const openSubscriptionOffer = useCallback(() => {
+  const openSubscriptionOffer = useCallback((arg?: unknown) => {
+    const notice = typeof arg === 'string' ? arg : undefined;
+    setSubscriptionOfferNotice(notice);
     setSubscriptionOfferOpen(true);
   }, []);
   const closeSubscriptionOffer = useCallback(() => {
     setSubscriptionOfferOpen(false);
+    setSubscriptionOfferNotice(undefined);
   }, []);
   useEffect(() => {
     if (!isLockedPremiumCategory) return;
@@ -346,7 +357,7 @@ export default function ScholarshipCategoryPageClient({
     if (!isAuthenticated) {
       return {
         ...base,
-        bestMatches: 0,
+        bestRecommendation: 0,
         recommended: 0,
         saved: 0,
         ignored: 0,
@@ -376,6 +387,10 @@ export default function ScholarshipCategoryPageClient({
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) z[id] = 0;
     return z;
   }, [listMeta?.categoryCounts]);
+  const scholarshipsForCards = useMemo(
+    () => applyProfileMatchPercentToScholarships(scholarships, currentMatchProfile),
+    [scholarships, currentMatchProfile]
+  );
 
   useEffect(() => {
     if (!listMeta) return;
@@ -542,8 +557,17 @@ export default function ScholarshipCategoryPageClient({
     replaceListingParams
   ]);
 
-  const internationalSidebarChecked =
-    moreFiltersApplied?.citizenshipAudience === 'international_friendly';
+  const internationalSidebarChecked = useMemo(() => {
+    const currentAudience =
+      moreFiltersApplied?.citizenshipAudience ?? 'any';
+    const baselineAudience =
+      defaultMoreFiltersFromBounds(filterBounds).citizenshipAudience ?? 'any';
+
+    return (
+      currentAudience === 'international_friendly' &&
+      baselineAudience !== 'international_friendly'
+    );
+  }, [moreFiltersApplied, filterBounds]);
 
   const toggleInternationalAudienceSidebar = useCallback(() => {
     const current =
@@ -889,7 +913,7 @@ export default function ScholarshipCategoryPageClient({
                 </div>
               ) : null}
               <div className="relative z-0 flex flex-col gap-4">
-                {scholarships.map((s) => (
+                {scholarshipsForCards.map((s) => (
                   <ScholarshipCard
                     key={s.id}
                     scholarship={s}
@@ -901,8 +925,18 @@ export default function ScholarshipCategoryPageClient({
                     reported={reportedIds.includes(s.id)}
                     onToggleReport={toggleReport}
                     subscriptionLocked={isSubscriptionLocked}
+                    isAuthenticated={isAuthenticated}
+                    hasSubscription={hasSubscription}
                     onSubscriptionLockedCategoryClick={
                       isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
+                    }
+                    onSubscriptionDetailNavigate={
+                      isSubscriptionLocked
+                        ? () =>
+                            openSubscriptionOffer(
+                              SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE
+                            )
+                        : undefined
                     }
                     onGuestDetailNavigate={
                       !isAuthenticated
@@ -949,6 +983,7 @@ export default function ScholarshipCategoryPageClient({
       <ScholarshipSubscriptionOfferModal
         open={subscriptionOfferOpen}
         onClose={closeSubscriptionOffer}
+        notice={subscriptionOfferNotice}
       />
     </section>
   );
