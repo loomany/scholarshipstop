@@ -658,15 +658,6 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     );
   }
 
-  // eslint-disable-next-line no-console -- temporary SEO list diagnostics
-  console.log('SEO DEBUG RESPONSE', {
-    countOnly: false,
-    resultsLength: result.scholarships?.length,
-    total: result.total,
-    fallbackUsed: result.seoFallback?.used,
-    tier: result.seoFallback?.tier
-  });
-
   const response = NextResponse.json({
     scholarships: result.scholarships,
     /** Alias for clients expecting `results` (SEO fallback debugging). */

@@ -43,7 +43,9 @@ import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
 import { relatedScholarshipHubLinks } from '@/lib/seo/relatedScholarshipHubLinks';
 import { fetchComparePeersForInstitution } from '@/lib/seo/comparePeersServer';
+import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { createPublicClient } from '@/utils/supabase/public';
+import { createClient as createServerSupabase } from '@/utils/supabase/server';
 
 /** Set DEBUG_SEO_SCHOLARSHIP=1 to log which SEO bundle and copy the server picked. */
 function debugLogListingSeo(payload: Record<string, unknown>) {
@@ -92,9 +94,31 @@ export default async function ScholarshipsSlugPathPageBody({
   segments
 }: ScholarshipsSlugPathPageBodyProps) {
   if (segments.length === 0) {
-    const supabase = createPublicClient();
-    const initialListPayload =
-      await fetchInitialHubScholarshipsPayload(supabase, null);
+    type HubListingClient = ReturnType<typeof createPublicClient>;
+    let profile: ProfilesRow | null = null;
+    let supabase: HubListingClient = createPublicClient();
+    try {
+      const serverSb = createServerSupabase();
+      const {
+        data: { user }
+      } = await serverSb.auth.getUser();
+      if (user?.id) {
+        const { data: prof } = await serverSb
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .maybeSingle();
+        profile = prof ?? null;
+        supabase = serverSb as unknown as HubListingClient;
+      }
+    } catch {
+      profile = null;
+      supabase = createPublicClient();
+    }
+    const initialListPayload = await fetchInitialHubScholarshipsPayload(
+      supabase,
+      profile
+    );
     return (
       <ScholarshipsHubPageAuthBridge
         initialPayload={createInitialScholarshipsPayload(

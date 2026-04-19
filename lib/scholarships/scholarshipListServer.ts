@@ -1584,6 +1584,32 @@ export async function fetchScholarshipSidebarCounts(
             )
           };
         }
+        if (t === 'best-matches') {
+          /**
+           * Sidebar Best must match the same SQL as the Best tab listing.
+           * - Profile merge: same as listing (tab is often still `matches` on the incoming req).
+           * - Do **not** use `countsBasisReq` here: that path runs `sidebarCountsIgnoreCitizenshipAudience`,
+           *   which clears `citizenshipAudience` so Matches/Easy/Hot counts ignore the IF toggle.
+           *   The live Best list still applies that toggle → inflated Best count vs short list (e.g. 33 vs 10).
+           */
+          const base = effectiveReq;
+          const seed = base.personalizedProfile
+            ? buildScholarshipProfileFilterSeed(base.personalizedProfile)
+            : null;
+          const rowReq =
+            seed != null
+              ? {
+                  ...base,
+                  moreFilters: mergeBestRecommendationFiltersFromProfile(
+                    'best-matches',
+                    cloneMoreFilters(base.moreFilters),
+                    seed,
+                    bounds
+                  )
+                }
+              : base;
+          return { t, n: await countFor(supabase, rowReq, t) };
+        }
         const rowReq = t === 'matches' ? catalogSidebarBasisReq : countsBasisReq;
         return {
           t,

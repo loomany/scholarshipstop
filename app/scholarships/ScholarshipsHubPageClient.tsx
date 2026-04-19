@@ -1063,7 +1063,11 @@ function ScholarshipsPageInner({
 
   useEffect(() => {
     let cancelled = false;
-    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${sidebarCountsMetaFingerprint}|${userCollectionsFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}`;
+    /**
+     * Include auth in the key so we refetch after `authResolved` / login transitions.
+     * Otherwise SSR guest meta (Best = 0) can stick while the session is already signed in.
+     */
+    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${sidebarCountsMetaFingerprint}|${userCollectionsFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|au:${isAuthenticated ? 1 : 0}|ar:${authResolved ? 1 : 0}`;
     if (metaKeySynced.current === metaKey) return;
     if (metaRequestInFlightRef.current === metaKey) return;
     metaRequestInFlightRef.current = metaKey;
@@ -1128,7 +1132,9 @@ function ScholarshipsPageInner({
     filterBounds,
     routeBaseMoreFilters,
     savedFiltersSnapshotJson,
-    appliedProviderSlug
+    appliedProviderSlug,
+    isAuthenticated,
+    authResolved
   ]);
 
   useEffect(() => {
