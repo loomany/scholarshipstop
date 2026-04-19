@@ -13,10 +13,10 @@ const siteOrigin = getURL().replace(/\/+$/, '');
 const homeCanonical = `${siteOrigin}/`;
 
 /** Page segment for root `title.template` (`ScholarshipTop | %s`). */
-const homeTitleSegment = 'Verified Scholarships That Fit Your Profile';
+const homeTitleSegment = 'Get Matched With Scholarships in 2 Minutes';
 
 const homeDescription =
-  `${SITE_BRAND} helps you find verified scholarships that fit your profile, stay on top of deadlines, and apply through official provider websites with less guesswork.`;
+  `${SITE_BRAND} — answer a few quick questions and find scholarships you can apply for today.`;
 
 const homeOgTitle = `${SITE_BRAND} | ${homeTitleSegment}`;
 

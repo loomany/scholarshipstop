@@ -9,14 +9,14 @@ export function buildHomePageJsonLd(): Record<string, unknown> {
   const siteUrl = getURL().replace(/\/+$/, '');
   const pageUrl = `${siteUrl}/`;
   const desc =
-    `${SITE_BRAND} helps you find verified scholarships that fit your profile, stay on top of deadlines, and apply through official provider websites with less guesswork.`;
+    `${SITE_BRAND} — answer a few quick questions and find scholarships you can apply for today.`;
 
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     '@id': `${pageUrl}#webpage`,
     url: pageUrl,
-    name: `${SITE_BRAND} | Verified Scholarships That Fit Your Profile`,
+    name: `${SITE_BRAND} | Get Matched With Scholarships in 2 Minutes`,
     description: desc,
     isPartOf: { '@id': `${siteUrl}#website` },
     about: { '@id': `${siteUrl}#scholarshiptop-publisher` },

@@ -33,7 +33,7 @@ export default function HomeFinalCta({
         <HomePrimaryCtaClient
           className={`${homePrimaryCtaClass} mx-auto mt-9 inline-flex w-full max-w-md sm:mt-10 sm:max-w-lg`}
         >
-          Get my matches
+          Find My Scholarships
         </HomePrimaryCtaClient>
         <p className="mx-auto mt-3.5 max-w-md text-sm leading-relaxed text-gray-500 sm:mt-4 sm:text-base">
           Verified listings • Updated regularly • Official-source application links

@@ -10,8 +10,7 @@ import HomeGuidedEssaySupport from '@/components/home/HomeGuidedEssaySupport';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import {
   homePremiumCtaClass,
-  homePrimaryCtaClass,
-  homeSecondaryCtaClass
+  homePrimaryCtaClass
 } from '@/components/home/homeMarketingCtaClasses';
 import HomeTrustStrip from '@/components/home/HomeTrustStrip';
 import HomeWhatWeVerify from '@/components/home/HomeWhatWeVerify';
@@ -84,28 +83,21 @@ export default function HomePageClient() {
       >
         <div className={`${container} max-w-4xl text-center`}>
           <h1 className="text-pretty text-[clamp(1.8125rem,5.25vw+0.8rem,2.25rem)] font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 animate-home-fade-up sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
-            Find verified scholarships that actually fit your profile
+            Get matched with scholarships in 2 minutes
           </h1>
           <p
             className={`mx-auto mt-5 max-w-2xl text-pretty opacity-0 animate-home-fade-up-delay-1 sm:mt-6 ${ledeMuted}`}
           >
-            Discover relevant opportunities faster, stay on top of deadlines, and apply through
-            official provider websites with less guesswork.
+            Answer a few quick questions and find scholarships you can apply for today
           </p>
 
-          <div className="mx-auto mt-8 flex w-full max-w-lg flex-col gap-3 opacity-0 animate-home-fade-up-delay-2 sm:mt-9 sm:max-w-2xl sm:flex-row sm:justify-center sm:gap-4">
+          <div className="mx-auto mt-8 flex w-full max-w-lg justify-center opacity-0 animate-home-fade-up-delay-2 sm:mt-9 sm:max-w-2xl">
             <HomePrimaryCtaClient
               id="onboarding-cta"
-              className={`${homePrimaryCtaClass} sm:min-w-[220px]`}
+              className={`${homePrimaryCtaClass} w-full sm:w-auto sm:min-w-[220px]`}
             >
-              Get my matches
+              Find My Scholarships
             </HomePrimaryCtaClient>
-            <Link
-              href="/scholarships"
-              className={`${homeSecondaryCtaClass} sm:min-w-[220px]`}
-            >
-              Browse scholarships
-            </Link>
           </div>
           <p
             className={`mx-auto mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-gray-500 opacity-0 animate-home-fade-up-delay-2 sm:mt-6 sm:text-[0.9375rem]`}
@@ -192,21 +184,15 @@ export default function HomePageClient() {
               </p>
               <p>Deadlines slip. Good options disappear.</p>
             </div>
-            <p className="mt-9 text-center text-2xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-3xl lg:text-left">
+            <p className="mt-9 text-center text-2xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-3xl">
               We make it simple.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:gap-4">
+            <div className="mt-9 flex w-full justify-center sm:mt-10">
               <HomePrimaryCtaClient
-                className={`${homePrimaryCtaClass} w-full sm:w-auto sm:min-w-[200px]`}
+                className={`${homePrimaryCtaClass} w-full max-w-md sm:w-auto sm:min-w-[200px]`}
               >
-                Get my matches
+                Find My Scholarships
               </HomePrimaryCtaClient>
-              <Link
-                href="/scholarships"
-                className={`${homeSecondaryCtaClass} w-full sm:w-auto sm:min-w-[200px]`}
-              >
-                Browse scholarships
-              </Link>
             </div>
           </div>
           <figure className="mx-auto w-full max-w-xl shrink-0 lg:mx-0 lg:max-w-[min(600px,50%)]">
@@ -283,18 +269,12 @@ export default function HomePageClient() {
                   <span className="leading-snug">Stay focused on what matters</span>
                 </li>
               </ul>
-              <div className="mt-9 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:gap-4">
+              <div className="mt-9 flex w-full justify-center sm:mt-10">
                 <HomePrimaryCtaClient
-                  className={`${homePrimaryCtaClass} w-full sm:w-auto sm:min-w-[200px]`}
+                  className={`${homePrimaryCtaClass} w-full max-w-md sm:w-auto sm:min-w-[200px]`}
                 >
-                  Get my matches
+                  Find My Scholarships
                 </HomePrimaryCtaClient>
-                <Link
-                  href="/scholarships"
-                  className={`${homeSecondaryCtaClass} w-full sm:w-auto sm:min-w-[200px]`}
-                >
-                  Browse scholarships
-                </Link>
               </div>
             </div>
           </div>
