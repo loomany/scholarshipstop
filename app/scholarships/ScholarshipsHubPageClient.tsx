@@ -660,6 +660,17 @@ function ScholarshipsPageInner({
     hubTreatAsGuest
   ]);
 
+  /**
+   * `meta_only` sidebar counts must match list POST filters (incl. landing quiz on Best).
+   * Easy apply / hot deadlines: keep hub-merged base only so “Matches” is not narrowed by tab scope.
+   */
+  const hubMetaSidebarMoreFilters = useMemo(() => {
+    if (activeTab === 'easy-apply' || activeTab === 'hot-deadlines') {
+      return hubMergedBaseMoreFilters;
+    }
+    return withTabEnforcedMoreFilters(hubListingBodyMoreFilters, activeTab);
+  }, [activeTab, hubMergedBaseMoreFilters, hubListingBodyMoreFilters]);
+
   useEffect(() => {
     if (isAuthenticated && listMeta?.profileFilterSeed) {
       setLandingQuizProfileSeed(null);
@@ -906,10 +917,10 @@ function ScholarshipsPageInner({
     ]
   );
 
-  /** Sidebar meta: hub filters only (no landing-quiz merge) so “Matches” matches catalog scope. */
+  /** Sidebar meta: same filter basis as `hubMetaSidebarMoreFilters` / list alignment rules. */
   const sidebarCountsMetaFingerprint = useMemo(
-    () => JSON.stringify(moreFiltersToJson(hubMergedBaseMoreFilters)),
-    [hubMergedBaseMoreFilters]
+    () => JSON.stringify(moreFiltersToJson(hubMetaSidebarMoreFilters)),
+    [hubMetaSidebarMoreFilters]
   );
   const userCollectionsFingerprint = useMemo(
     () =>
@@ -1122,11 +1133,11 @@ function ScholarshipsPageInner({
         const metaResponse = await postScholarshipsMeta({
           searchParams: sp.toString(),
           /**
-           * Sidebar meta counts are cross-tab numbers (matches/saved/ignored/easy).
-           * Do not inject tab-enforced Easy apply filter here, otherwise `matches`
-           * gets narrowed by the active tab's extra filter when tab=easy-apply.
+           * Align with list POST (`hubListingBodyMoreFilters` + tab rules) so Best / Matches
+           * sidebar counts match what the user sees (landing quiz on Best). Easy apply /
+           * hot deadlines use `hubMergedBaseMoreFilters` only so Matches is not tab-narrowed.
            */
-          moreFilters: moreFiltersToJson(hubMergedBaseMoreFilters),
+          moreFilters: moreFiltersToJson(hubMetaSidebarMoreFilters),
           savedFiltersSnapshot: savedFiltersSnapshotJson,
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
@@ -1161,6 +1172,7 @@ function ScholarshipsPageInner({
     userCollectionsFingerprint,
     catalogListScope,
     hubMergedBaseMoreFilters,
+    hubMetaSidebarMoreFilters,
     routeScope,
     filterBounds,
     routeBaseMoreFilters,

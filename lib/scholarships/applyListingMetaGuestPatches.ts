@@ -1,8 +1,8 @@
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
 
 /**
- * Hub listing meta is personalized for signed-in users. Anonymous SSR and guests
- * must not show signed-in sidebar counts (Best / Saved filters / lists).
+ * Hub listing meta for guests: strip signed-in-only collections and profile blobs.
+ * Best / Saved Filters counts come from the anonymous `meta` query (may include landing-quiz merge).
  * Mirrors POST `/api/scholarships` after list queries.
  */
 export function applyListingMetaGuestPatches(
@@ -11,8 +11,10 @@ export function applyListingMetaGuestPatches(
 ): void {
   delete meta.matchedTotal;
   if (!ctx.authUser) {
-    meta.sidebarCounts.bestMatches = 0;
-    meta.sidebarCounts.recommended = 0;
+    /**
+     * Keep `bestMatches` / `recommended` from the anonymous listing query (e.g. landing-quiz
+     * merge). Zeroing them hid real counts while the Best tab list used quiz filters.
+     */
     meta.personalizedMatchReady = false;
     meta.sidebarCounts.saved = 0;
     meta.sidebarCounts.ignored = 0;
