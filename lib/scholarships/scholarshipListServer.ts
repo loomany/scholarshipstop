@@ -1508,6 +1508,7 @@ function stripProfileMergedMoreFiltersForSidebarCatalog(
   out.filterStateInput = '';
   out.profileFieldOfStudySlug = '';
   out.profileCitizenshipNarrow = 'none';
+  out.citizenshipAudience = 'any';
   return out;
 }
 

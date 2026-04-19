@@ -58,6 +58,27 @@ test('mergeBestRecommendationFiltersFromProfile fills empty facets from profile 
   assert.deepEqual(Array.from(out.includeGpaBuckets).sort(), ['gpa_3_0_plus']);
 });
 
+test('mergeBestRecommendationFiltersFromProfile sets international_friendly for international_student profile', () => {
+  const base = defaultMoreFiltersFromBounds(bounds);
+  const seed: ScholarshipProfileFilterSeed = {
+    fieldOfStudy: null,
+    schoolLevel: null,
+    citizenship: 'international_student',
+    stateInput: '',
+    educationLevelIds: [],
+    gpaBucketIds: [],
+    eligibilityIds: []
+  };
+  const out = mergeBestRecommendationFiltersFromProfile(
+    'best-matches',
+    base,
+    seed,
+    bounds
+  );
+  assert.equal(out.citizenshipAudience, 'international_friendly');
+  assert.equal(out.includeEligibility.size, 0);
+});
+
 test('mergeBestRecommendationFiltersFromProfile merges field of study and US domestic citizenship', () => {
   const base = defaultMoreFiltersFromBounds(bounds);
   const seed: ScholarshipProfileFilterSeed = {

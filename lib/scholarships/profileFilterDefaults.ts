@@ -54,12 +54,18 @@ function educationLevelIdsFromProfileSchoolLevel(
   return [];
 }
 
+/**
+ * Eligibility-tag include list from citizenship only for cases where a concrete tag exists.
+ * International students: do **not** require `eligibility_tags` @ `international_students` — in prod
+ * that tag is rare (~0.5% of rows); use `citizenshipAudience: international_friendly` instead (see
+ * `buildMoreFiltersWithProfileDefaults`).
+ */
 function eligibilityIdsFromProfileCitizenship(
   citizenship: string | null | undefined
 ): string[] {
   const raw = citizenship?.trim() ?? '';
   if (raw === 'international_student') {
-    return ['international_students'];
+    return [];
   }
   return [];
 }
@@ -169,6 +175,9 @@ export function buildMoreFiltersWithProfileDefaults(
   next.profileCitizenshipNarrow = profileCitizenshipNarrowFromCitizenship(
     seed.citizenship
   );
+  if (seed.citizenship?.trim().toLowerCase() === 'international_student') {
+    next.citizenshipAudience = 'international_friendly';
+  }
   return next;
 }
 
@@ -215,6 +224,9 @@ export function mergeBestRecommendationFiltersFromProfile(
     prof.profileCitizenshipNarrow !== 'none'
   ) {
     out.profileCitizenshipNarrow = prof.profileCitizenshipNarrow;
+  }
+  if (out.citizenshipAudience === 'any' && prof.citizenshipAudience !== 'any') {
+    out.citizenshipAudience = prof.citizenshipAudience;
   }
 
   return out;

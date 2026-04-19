@@ -63,6 +63,7 @@
     "weekly-free-digest:preview": "dotenv -e .env.local -- node scripts/preview-weekly-free-digest.mjs",
     "weekly-free-digest:quick": "dotenv -e .env.local -- npx tsx scripts/quick-weekly-digest-email.ts",
     "audit:scholarship-facets": "dotenv -e .env.local -- npx tsx scripts/audit-scholarship-facets.ts",
+    "audit:profile-grant-coverage": "dotenv -e .env.local -- npx tsx scripts/audit-profile-grant-coverage.ts",
     "seo:pilot-launch": "dotenv -e .env.local -- npx tsx scripts/seo-pilot-launch.ts",
     "seo:grand-audit": "dotenv -e .env.local -- npx tsx scripts/seo-grand-audit.ts",
     "seo:worker-generate": "dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts",
