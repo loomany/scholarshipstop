@@ -117,7 +117,15 @@ export function mergeMoreFilterStates(
       a.filterUniversityInput.trim() !== ''
         ? a.filterUniversityInput
         : b.filterUniversityInput,
-    filterUniversitySlug: a.filterUniversitySlug ?? b.filterUniversitySlug
+    filterUniversitySlug: a.filterUniversitySlug ?? b.filterUniversitySlug,
+    profileFieldOfStudySlug:
+      a.profileFieldOfStudySlug.trim() !== ''
+        ? a.profileFieldOfStudySlug
+        : b.profileFieldOfStudySlug,
+    profileCitizenshipNarrow:
+      a.profileCitizenshipNarrow !== 'none'
+        ? a.profileCitizenshipNarrow
+        : b.profileCitizenshipNarrow
   };
 }
 

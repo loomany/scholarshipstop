@@ -58,6 +58,27 @@ test('mergeBestRecommendationFiltersFromProfile fills empty facets from profile 
   assert.deepEqual(Array.from(out.includeGpaBuckets).sort(), ['gpa_3_0_plus']);
 });
 
+test('mergeBestRecommendationFiltersFromProfile merges field of study and US domestic citizenship', () => {
+  const base = defaultMoreFiltersFromBounds(bounds);
+  const seed: ScholarshipProfileFilterSeed = {
+    fieldOfStudy: 'engineering',
+    schoolLevel: null,
+    citizenship: 'us_citizen',
+    stateInput: '',
+    educationLevelIds: [],
+    gpaBucketIds: [],
+    eligibilityIds: []
+  };
+  const out = mergeBestRecommendationFiltersFromProfile(
+    'best-matches',
+    base,
+    seed,
+    bounds
+  );
+  assert.equal(out.profileFieldOfStudySlug, 'engineering');
+  assert.equal(out.profileCitizenshipNarrow, 'us_domestic');
+});
+
 test('mergeBestRecommendationFiltersFromProfile does not override user-picked education levels', () => {
   const base = defaultMoreFiltersFromBounds(bounds);
   base.includeEducationLevels.add('graduate');

@@ -32,6 +32,12 @@ export type PayoutFlags = {
  */
 export type CitizenshipAudienceFilter = 'any' | 'international_friendly';
 
+/**
+ * Cabinet-driven citizenship slice for Best / recommended (not the IF catalog toggle).
+ * International students use `includeEligibility` (`international_students`); this is only for US domestic signals.
+ */
+export type ProfileCitizenshipNarrow = 'none' | 'us_domestic';
+
 export type MoreFiltersState = {
   deadlinePreset: DeadlinePreset;
   /** When `international_friendly`, require catalog signals for international / foreign eligibility. */
@@ -61,6 +67,13 @@ export type MoreFiltersState = {
    */
   filterUniversityInput: string;
   filterUniversitySlug: string | null;
+  /**
+   * Profile-backed field-of-study slug (same space as `profiles.field_of_study` / onboarding).
+   * When set, listing SQL ORs `field_of_study` JSON + soft title/summary match.
+   */
+  profileFieldOfStudySlug: string;
+  /** Narrow listing toward domestic vs international signals when the profile says so. */
+  profileCitizenshipNarrow: ProfileCitizenshipNarrow;
 };
 
 export const REQUIREMENT_TYPE_OPTIONS: {
@@ -290,7 +303,9 @@ export function defaultMoreFiltersFromBounds(bounds: {
     includeEasyApply: new Set(),
     filterStateInput: '',
     filterUniversityInput: '',
-    filterUniversitySlug: null
+    filterUniversitySlug: null,
+    profileFieldOfStudySlug: '',
+    profileCitizenshipNarrow: 'none'
   };
 }
 
@@ -364,6 +379,19 @@ export function scholarshipPassesMoreFilters(
     if (!matchesInternationalFriendlyAudience(s)) return false;
   }
 
+  const fos = f.profileFieldOfStudySlug.trim().toLowerCase();
+  if (fos) {
+    const hay = (s.fieldOfStudy ?? []).map((x) => String(x).toLowerCase());
+    if (!hay.some((x) => x === fos || x.includes(fos) || fos.includes(x))) {
+      const blob = [s.title, s.summaryShort].filter(Boolean).join(' ').toLowerCase();
+      if (!blob.includes(fos.replace(/_/g, ' ')) && !blob.includes(fos)) {
+        return false;
+      }
+    }
+  }
+
+  /** `us_domestic`: server SQL is authoritative; client pass-through avoids false negatives. */
+
   return true;
 }
 
@@ -380,7 +408,9 @@ export function cloneMoreFilters(f: MoreFiltersState): MoreFiltersState {
     includeEasyApply: new Set(f.includeEasyApply),
     filterStateInput: f.filterStateInput,
     filterUniversityInput: f.filterUniversityInput,
-    filterUniversitySlug: f.filterUniversitySlug
+    filterUniversitySlug: f.filterUniversitySlug,
+    profileFieldOfStudySlug: f.profileFieldOfStudySlug,
+    profileCitizenshipNarrow: f.profileCitizenshipNarrow
   };
 }
 
@@ -404,6 +434,8 @@ export function moreFiltersHasProfileOrQuizListingSignals(
   if (mf.includeRequirementTypes.size > 0) return true;
   if (mf.includeLocationLabels.size > 0) return true;
   if (mf.includeEasyApply.size > 0) return true;
+  if (mf.profileFieldOfStudySlug.trim().length > 0) return true;
+  if (mf.profileCitizenshipNarrow !== 'none') return true;
   return false;
 }
 
@@ -436,6 +468,8 @@ export function countMoreFilterSelections(
   n += f.includeEasyApply.size;
   if (f.filterStateInput.trim() !== '') n++;
   if (f.filterUniversitySlug?.trim()) n++;
+  if (f.profileFieldOfStudySlug.trim()) n++;
+  if (f.profileCitizenshipNarrow !== 'none') n++;
   return n;
 }
 
@@ -496,5 +530,7 @@ export function countMoreFilterDeltaFromBaseline(
   n += setSymmetricDiffCount(f.includeEasyApply, baseline.includeEasyApply);
   if (f.filterStateInput.trim() !== baseline.filterStateInput.trim()) n++;
   if ((f.filterUniversitySlug ?? '') !== (baseline.filterUniversitySlug ?? '')) n++;
+  if (f.profileFieldOfStudySlug.trim() !== baseline.profileFieldOfStudySlug.trim()) n++;
+  if (f.profileCitizenshipNarrow !== baseline.profileCitizenshipNarrow) n++;
   return n;
 }

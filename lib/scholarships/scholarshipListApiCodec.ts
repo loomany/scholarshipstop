@@ -1,4 +1,4 @@
-import type { MoreFiltersState } from '@/app/scholarships/moreFilters';
+import type { MoreFiltersState, ProfileCitizenshipNarrow } from '@/app/scholarships/moreFilters';
 import { defaultMoreFiltersFromBounds } from '@/app/scholarships/moreFilters';
 
 /** JSON-safe shape (no Sets) for POST body / localStorage. */
@@ -13,11 +13,16 @@ export type MoreFiltersJson = Omit<
   | 'citizenshipAudience'
   | 'filterUniversityInput'
   | 'filterUniversitySlug'
+  | 'profileFieldOfStudySlug'
+  | 'profileCitizenshipNarrow'
 > & {
   /** Omitted in older saved snapshots — decoded as `any`. */
   citizenshipAudience?: MoreFiltersState['citizenshipAudience'];
   filterUniversityInput?: string;
   filterUniversitySlug?: string | null;
+  /** Omitted in older snapshots — decoded as empty / `none`. */
+  profileFieldOfStudySlug?: string;
+  profileCitizenshipNarrow?: ProfileCitizenshipNarrow;
   includeRequirementTypes: string[];
   includeEligibility: string[];
   includeEducationLevels: string[];
@@ -107,6 +112,12 @@ export function moreFiltersFromJson(
     filterUniversitySlug:
       typeof raw.filterUniversitySlug === 'string' && raw.filterUniversitySlug.trim()
         ? raw.filterUniversitySlug.trim()
-        : null
+        : null,
+    profileFieldOfStudySlug:
+      typeof raw.profileFieldOfStudySlug === 'string'
+        ? raw.profileFieldOfStudySlug.trim()
+        : '',
+    profileCitizenshipNarrow:
+      raw.profileCitizenshipNarrow === 'us_domestic' ? 'us_domestic' : 'none'
   };
 }

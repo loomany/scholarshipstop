@@ -698,7 +698,15 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     q = q.or(parts.join(','));
   };
   addIncludeCs('eligibility_tags', f.includeEligibility);
-  addIncludeCs('catalog_education_levels', f.includeEducationLevels);
+  if (f.includeEducationLevels.size > 0) {
+    const eduParts: string[] = [];
+    for (const id of f.includeEducationLevels) {
+      const j = JSON.stringify([id]);
+      eduParts.push(`catalog_education_levels.cs.${j}`);
+      eduParts.push(`study_levels.cs.${j}`);
+    }
+    q = q.or(eduParts.join(','));
+  }
   if (f.includeGpaBuckets.size > 0) {
     q = q.in('gpa_bucket', Array.from(f.includeGpaBuckets));
   }
@@ -733,6 +741,31 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
      */
     const stateJson = JSON.stringify([stateCode]);
     q = q.or(`state_codes.cs.${stateJson},location_tags.cs.${stateJson}`);
+  }
+
+  const fos = f.profileFieldOfStudySlug?.trim().toLowerCase() ?? '';
+  if (fos) {
+    const j = JSON.stringify([fos]);
+    const safe = fos.replace(/[%_]/g, '').slice(0, 64);
+    const fosParts = [`field_of_study.cs.${j}`];
+    if (safe.length > 0) {
+      fosParts.push(`title.ilike.%${safe}%`);
+      fosParts.push(`summary_short.ilike.%${safe}%`);
+    }
+    q = q.or(fosParts.join(','));
+  }
+
+  if (f.profileCitizenshipNarrow === 'us_domestic') {
+    q = q.or(
+      [
+        'citizenship_statuses.cs.["us_citizen"]',
+        'citizenship_statuses.cs.["us"]',
+        'citizenship_statuses.cs.["domestic"]',
+        'citizenship_statuses.cs.["us_permanent_resident"]',
+        'eligibility_tags.cs.["us_citizens"]',
+        'eligibility_tags.cs.["us_students"]'
+      ].join(',')
+    );
   }
 
   if (f.citizenshipAudience === 'international_friendly') {
@@ -1473,6 +1506,8 @@ function stripProfileMergedMoreFiltersForSidebarCatalog(
   out.includeGpaBuckets = new Set();
   out.includeEligibility = new Set();
   out.filterStateInput = '';
+  out.profileFieldOfStudySlug = '';
+  out.profileCitizenshipNarrow = 'none';
   return out;
 }
 

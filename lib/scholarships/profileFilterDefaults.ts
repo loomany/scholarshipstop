@@ -1,9 +1,11 @@
 import {
   cloneMoreFilters,
   defaultMoreFiltersFromBounds,
-  type MoreFiltersState
+  type MoreFiltersState,
+  type ProfileCitizenshipNarrow
 } from '@/app/scholarships/moreFilters';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
+import { fieldOfStudySlug } from '@/lib/constants/scholarshipFieldOfStudyOptions';
 import { gpaForProfile, gpaForProfileDb } from '@/lib/constants/scholarshipGpaOptions';
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
@@ -62,6 +64,22 @@ function eligibilityIdsFromProfileCitizenship(
   return [];
 }
 
+function profileCitizenshipNarrowFromCitizenship(
+  citizenship: string | null | undefined
+): ProfileCitizenshipNarrow {
+  const raw = citizenship?.trim().toLowerCase() ?? '';
+  if (raw === 'us_citizen' || raw === 'us_permanent_resident') return 'us_domestic';
+  return 'none';
+}
+
+function resolvedFieldOfStudySlugFromProfile(profile: ProfilesRow): string | null {
+  let slug = profile.field_of_study?.trim().toLowerCase() || null;
+  if (!slug && profile.field_of_study_label?.trim()) {
+    slug = fieldOfStudySlug(profile.field_of_study_label) || null;
+  }
+  return slug;
+}
+
 /**
  * Builds the same filter seed shape as a saved profile, from the `/get-scholarships`
  * landing quiz draft (no account step). Used for guest redirect to `/scholarships`.
@@ -100,7 +118,7 @@ export function buildScholarshipProfileFilterSeed(
 ): ScholarshipProfileFilterSeed | null {
   if (!profile) return null;
 
-  const fieldOfStudy = profile.field_of_study?.trim() || null;
+  const fieldOfStudy = resolvedFieldOfStudySlugFromProfile(profile);
   const schoolLevel = profile.school_level?.trim() || null;
   const citizenship = profile.citizenship_status?.trim() || null;
   const stateInput = normalizeUsStateToCanonical(profile.state_region?.trim() ?? '') ?? '';
@@ -147,6 +165,10 @@ export function buildMoreFiltersWithProfileDefaults(
   next.includeEducationLevels = new Set(seed.educationLevelIds);
   next.includeGpaBuckets = new Set(seed.gpaBucketIds);
   next.includeEligibility = new Set(seed.eligibilityIds);
+  next.profileFieldOfStudySlug = seed.fieldOfStudy?.trim().toLowerCase() ?? '';
+  next.profileCitizenshipNarrow = profileCitizenshipNarrowFromCitizenship(
+    seed.citizenship
+  );
   return next;
 }
 
@@ -184,6 +206,15 @@ export function mergeBestRecommendationFiltersFromProfile(
   }
   if (out.includeEligibility.size === 0 && prof.includeEligibility.size > 0) {
     out.includeEligibility = new Set(prof.includeEligibility);
+  }
+  if (!out.profileFieldOfStudySlug.trim() && prof.profileFieldOfStudySlug.trim()) {
+    out.profileFieldOfStudySlug = prof.profileFieldOfStudySlug;
+  }
+  if (
+    out.profileCitizenshipNarrow === 'none' &&
+    prof.profileCitizenshipNarrow !== 'none'
+  ) {
+    out.profileCitizenshipNarrow = prof.profileCitizenshipNarrow;
   }
 
   return out;
