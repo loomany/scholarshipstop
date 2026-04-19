@@ -10,6 +10,7 @@ import {
 import {
   cloneMoreFilters,
   defaultMoreFiltersFromBounds,
+  moreFiltersHasProfileOrQuizListingSignals,
   type DeadlinePreset,
   type MoreFiltersState
 } from '@/app/scholarships/moreFilters';
@@ -1591,11 +1592,20 @@ export async function fetchScholarshipSidebarCounts(
            * - Do **not** use `countsBasisReq` here: that path runs `sidebarCountsIgnoreCitizenshipAudience`,
            *   which clears `citizenshipAudience` so Matches/Easy/Hot counts ignore the IF toggle.
            *   The live Best list still applies that toggle → inflated Best count vs short list (e.g. 33 vs 10).
+           * - Hub signed-in + empty profile row (no seed) + no quiz/manual narrowing in `moreFilters`:
+           *   same as `shouldBlockGenericBestMatchesSlice` in `/api/scholarships` — do not show generic 224.
            */
           const base = effectiveReq;
           const seed = base.personalizedProfile
             ? buildScholarshipProfileFilterSeed(base.personalizedProfile)
             : null;
+          if (
+            base.personalizedProfile &&
+            seed == null &&
+            !moreFiltersHasProfileOrQuizListingSignals(base.moreFilters)
+          ) {
+            return { t, n: 0 };
+          }
           const rowReq =
             seed != null
               ? {
