@@ -33,9 +33,10 @@ import { validateScholarshipOnboardingStep2 } from '@/lib/validation/scholarship
 import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
 import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { toast } from '@/components/ui/Toasts/use-toast';
+import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 
-/** Default landing page after “Create account & find scholarships” (pricing / trial). */
-const POST_ONBOARDING_PATH = '/subscription';
+/** Default landing after onboarding: scholarship hub, Best recommendation tab. */
+const POST_ONBOARDING_PATH = SCHOLARSHIPS_HUB_BEST_MATCHES_HREF;
 
 function notifyDestructive(title: string, description?: string) {
   toast({
@@ -70,7 +71,7 @@ export type ScholarshipOnboardingWizardProps = {
    */
   mode: 'standalone' | 'embedded';
   /**
-   * Post-auth redirect when `mode="embedded"`. For standalone, `?next=` or default `/subscription` applies.
+   * Post-auth redirect when `mode="embedded"`. For standalone, `?next=` or default Best tab applies.
    */
   embeddedAfterAuthPath?: string;
   /** Optional: embedded-only — return to intro (hero) from step 1. */
@@ -79,7 +80,7 @@ export type ScholarshipOnboardingWizardProps = {
 
 export function ScholarshipOnboardingWizard({
   mode,
-  embeddedAfterAuthPath = '/subscription',
+  embeddedAfterAuthPath = SCHOLARSHIPS_HUB_BEST_MATCHES_HREF,
   onLeaveEmbeddedQuiz
 }: ScholarshipOnboardingWizardProps) {
   const router = useRouter();

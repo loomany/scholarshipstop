@@ -13,6 +13,7 @@ import {
   getServerAuthSiteOrigin
 } from '@/utils/auth-email-redirect.server';
 import { sendPasswordResetEmail } from '@/lib/email/sendPasswordResetEmail';
+import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { getErrorRedirect, getStatusRedirect } from 'utils/helpers';
 import { getAuthTypes } from 'utils/auth-helpers/settings';
 
@@ -212,7 +213,11 @@ export async function signUp(formData: FormData) {
         console.error('[signUp] notifyTelegramSignup failed', e);
       }
     }
-    redirectPath = getStatusRedirect('/', 'Success!', 'You are now signed in.');
+    redirectPath = getStatusRedirect(
+      SCHOLARSHIPS_HUB_BEST_MATCHES_HREF,
+      'Success!',
+      'You are now signed in.'
+    );
   } else if (
     data.user &&
     data.user.identities &&
