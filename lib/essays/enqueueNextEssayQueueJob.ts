@@ -17,6 +17,77 @@ function maxScanRows(): number {
 
 type CandidateRow = { id: string; title: string | null; slug: string | null };
 
+/** Transient gateway / network strings often seen when PostgREST or Cloudflare hiccups. */
+const RETRYABLE_ERROR_SUBSTRINGS = [
+  '502',
+  '503',
+  '504',
+  'bad gateway',
+  'cloudflare',
+  'etimedout',
+  'econnreset',
+  'econnrefused',
+  'fetch failed',
+  'network request failed',
+  'socket hang up',
+  'timeout',
+  'service unavailable',
+  'temporarily unavailable'
+] as const;
+
+function postgrestMessageLooksRetryable(message: string | undefined | null): boolean {
+  if (!message?.trim()) return false;
+  const m = message.toLowerCase();
+  return RETRYABLE_ERROR_SUBSTRINGS.some((s) => m.includes(s));
+}
+
+function enqueueSupabaseMaxAttempts(): number {
+  const raw = process.env.ESSAY_ENQUEUE_SUPABASE_MAX_ATTEMPTS?.trim();
+  const n = raw ? Number(raw) : 5;
+  return Number.isFinite(n) && n >= 1 ? Math.min(Math.floor(n), 12) : 5;
+}
+
+function enqueueSupabaseRetryBaseMs(): number {
+  const raw = process.env.ESSAY_ENQUEUE_SUPABASE_RETRY_BASE_MS?.trim();
+  const n = raw ? Number(raw) : 1000;
+  return Number.isFinite(n) && n >= 100 ? Math.min(Math.floor(n), 30_000) : 1000;
+}
+
+/**
+ * Retries a PostgREST call when `error.message` looks like a transient HTTP/network failure
+ * (e.g. Cloudflare 502 HTML body), not for logical/RLS errors.
+ */
+type PostgrestResult = { error: { message: string } | null };
+
+async function executePostgrestWithRetries<T extends PostgrestResult>(
+  operation: string,
+  run: () => Promise<T>
+): Promise<T> {
+  const attempts = enqueueSupabaseMaxAttempts();
+  const baseMs = enqueueSupabaseRetryBaseMs();
+  let last: T | undefined;
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    last = await run();
+    if (!last.error) return last;
+    const msg = last.error.message;
+    if (!postgrestMessageLooksRetryable(msg)) return last;
+    if (attempt >= attempts) return last;
+
+    const delay = Math.min(baseMs * 2 ** (attempt - 1), 20_000);
+    if (process.env.ESSAY_ENQUEUE_DEBUG_RETRIES === '1') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[essay-enqueue] PostgREST retry "${operation}" ${attempt}/${attempts} after ${delay}ms:`,
+        msg.slice(0, 240)
+      );
+    }
+    await new Promise((r) => setTimeout(r, delay));
+  }
+
+  return last!;
+}
+
 /** PostgREST default max rows per request is 1000; load everything for correct eligibility. */
 const ID_PAGE = 1000;
 
@@ -25,11 +96,15 @@ async function loadAllScholarshipIdsWithEssay(
 ): Promise<Set<string>> {
   const out = new Set<string>();
   for (let from = 0; ; from += ID_PAGE) {
-    const { data, error } = await supabase
-      .from('scholarship_essays')
-      .select('scholarship_id')
-      .order('scholarship_id', { ascending: true })
-      .range(from, from + ID_PAGE - 1);
+    const { data, error } = await executePostgrestWithRetries(
+      `scholarship_essays.range:${from}`,
+      async () =>
+        await supabase
+          .from('scholarship_essays')
+          .select('scholarship_id')
+          .order('scholarship_id', { ascending: true })
+          .range(from, from + ID_PAGE - 1)
+    );
     if (error) throw new Error(error.message);
     const rows = data ?? [];
     for (const r of rows) {
@@ -45,12 +120,16 @@ async function loadQueuedScholarshipIdsPendingOrProcessing(
 ): Promise<Set<string>> {
   const out = new Set<string>();
   for (let from = 0; ; from += ID_PAGE) {
-    const { data, error } = await supabase
-      .from('essay_generation_queue')
-      .select('scholarship_id')
-      .in('status', ['pending', 'processing', 'awaiting_hero'])
-      .order('id', { ascending: true })
-      .range(from, from + ID_PAGE - 1);
+    const { data, error } = await executePostgrestWithRetries(
+      `essay_generation_queue.active_ids.range:${from}`,
+      async () =>
+        await supabase
+          .from('essay_generation_queue')
+          .select('scholarship_id')
+          .in('status', ['pending', 'processing', 'awaiting_hero'])
+          .order('id', { ascending: true })
+          .range(from, from + ID_PAGE - 1)
+    );
     if (error) throw new Error(error.message);
     const rows = data ?? [];
     for (const r of rows) {
@@ -88,10 +167,14 @@ export type EnqueueNextEssayQueueJobResult =
 export async function enqueueNextEssayQueueJob(
   supabase: SupabaseClient<Database>
 ): Promise<EnqueueNextEssayQueueJobResult> {
-  const { count: pendingBefore, error: cErr } = await supabase
-    .from('essay_generation_queue')
-    .select('id', { count: 'exact', head: true })
-    .in('status', ['pending', 'processing', 'awaiting_hero']);
+  const { count: pendingBefore, error: cErr } = await executePostgrestWithRetries(
+    'essay_generation_queue.pending_count',
+    async () =>
+      await supabase
+        .from('essay_generation_queue')
+        .select('id', { count: 'exact', head: true })
+        .in('status', ['pending', 'processing', 'awaiting_hero'])
+  );
   if (cErr) throw new Error(cErr.message);
 
   const withEssay = await loadAllScholarshipIdsWithEssay(supabase);
@@ -114,9 +197,11 @@ export async function enqueueNextEssayQueueJob(
       if (essayFlagsOnly) {
         q = q.or('requires_essay.eq.true,essay_required.eq.true');
       }
-      const { data, error } = await q
-        .order('updated_at', { ascending: false })
-        .range(from, to);
+      const { data, error } = await executePostgrestWithRetries(
+        `scholarships.scan:${essayFlagsOnly ? 'essay' : 'any'}:${from}-${to}`,
+        async () =>
+          await q.order('updated_at', { ascending: false }).range(from, to)
+      );
       if (error) throw new Error(error.message);
       const batch = (data ?? []) as CandidateRow[];
       const pick = eligible(batch)[0];
@@ -133,14 +218,18 @@ export async function enqueueNextEssayQueueJob(
     return { ok: false, reason: 'no_eligible_scholarship' };
   }
 
-  const { data: failedPrev, error: fPrevErr } = await supabase
-    .from('essay_generation_queue')
-    .select('id')
-    .eq('scholarship_id', next.id)
-    .eq('status', 'failed')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  const { data: failedPrev, error: fPrevErr } = await executePostgrestWithRetries(
+    `essay_generation_queue.failed_prev:${next.id}`,
+    async () =>
+      await supabase
+        .from('essay_generation_queue')
+        .select('id')
+        .eq('scholarship_id', next.id)
+        .eq('status', 'failed')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+  );
   if (fPrevErr) throw new Error(fPrevErr.message);
 
   const title = (next.title ?? '').slice(0, 200);
@@ -148,14 +237,18 @@ export async function enqueueNextEssayQueueJob(
   const pending = pendingBefore ?? 0;
 
   if (failedPrev?.id) {
-    const { error: upErr } = await supabase
-      .from('essay_generation_queue')
-      .update({
-        status: 'pending',
-        error_message: null,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', failedPrev.id);
+    const { error: upErr } = await executePostgrestWithRetries(
+      `essay_generation_queue.requeue_failed:${failedPrev.id}`,
+      async () =>
+        await supabase
+          .from('essay_generation_queue')
+          .update({
+            status: 'pending',
+            error_message: null,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', failedPrev.id)
+    );
     if (upErr) throw new Error(upErr.message);
     return {
       ok: true,
@@ -168,10 +261,14 @@ export async function enqueueNextEssayQueueJob(
     };
   }
 
-  const { error: insErr } = await supabase.from('essay_generation_queue').insert({
-    scholarship_id: next.id,
-    status: 'pending'
-  });
+  const { error: insErr } = await executePostgrestWithRetries(
+    `essay_generation_queue.insert:${next.id}`,
+    async () =>
+      await supabase.from('essay_generation_queue').insert({
+        scholarship_id: next.id,
+        status: 'pending'
+      })
+  );
   if (insErr) throw new Error(insErr.message);
 
   return {
