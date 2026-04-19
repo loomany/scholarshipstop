@@ -36,6 +36,7 @@ import {
   moreFiltersToJson,
   type MoreFiltersJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
+import { moreFiltersHasProfileOrQuizListingSignals } from '@/app/scholarships/moreFilters';
 import {
   LIST_CARD_SELECT,
   mapScholarshipRow,
@@ -364,13 +365,14 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   }
 
   /**
-   * Best recommendation tab is profile-backed. Without a session or without a
-   * non-empty profile seed, the SQL stack falls back to the generic
-   * credibility/verified slice (~224 rows) — confusing vs sidebar + product.
+   * Block the generic “best” credibility slice only when there is no profile seed
+   * **and** the client did not send quiz / manual narrowing in `moreFilters`
+   * (guests after `/get-scholarships` send real dimensions in the POST body).
    */
-  const bestMatchesNeedsProfile =
+  const shouldBlockGenericBestMatchesSlice =
     req.tab === 'best-matches' &&
-    (!sessionUser || !profileFilterSeed);
+    !profileFilterSeed &&
+    !moreFiltersHasProfileOrQuizListingSignals(req.moreFilters);
 
   if (hubDbg) {
     // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
@@ -399,7 +401,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     applyListingMetaGuestPatches(meta, {
       authUser: Boolean(authUser)
     });
-    if (bestMatchesNeedsProfile) {
+    if (shouldBlockGenericBestMatchesSlice) {
       meta.sidebarCounts.bestMatches = 0;
     }
     const response = NextResponse.json({
@@ -411,7 +413,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     return withRuntimePathDebugHeaders(response, searchParams, runtimeReadPath, v2ReadPathEligible);
   }
 
-  if (bestMatchesNeedsProfile) {
+  if (shouldBlockGenericBestMatchesSlice) {
     if (countOnly) {
       return withRuntimePathDebugHeaders(
         NextResponse.json({

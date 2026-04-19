@@ -1458,6 +1458,35 @@ function sidebarCountsIgnoreCitizenshipAudience(
   return { ...req, moreFilters };
 }
 
+/**
+ * Profile merge (school level, GPA, citizenship tags, state) narrows the hub for
+ * **Best recommendation** — but sidebar rows for catalog tabs must stay independent:
+ * Matches / Hot deadlines / Easy apply / International Friendly count at catalog scale
+ * (same ignored list + URL/catalog filters), not the same tight pool as Best.
+ */
+function stripProfileMergedMoreFiltersForSidebarCatalog(
+  mf: MoreFiltersState
+): MoreFiltersState {
+  const out = cloneMoreFilters(mf);
+  out.includeEducationLevels = new Set();
+  out.includeGpaBuckets = new Set();
+  out.includeEligibility = new Set();
+  out.filterStateInput = '';
+  return out;
+}
+
+function sidebarCatalogTabCountsBasisReq(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  if (!req.personalizedProfile) {
+    return req;
+  }
+  return {
+    ...req,
+    moreFilters: stripProfileMergedMoreFiltersForSidebarCatalog(req.moreFilters)
+  };
+}
+
 /** Align `moreFilters` / URL deadline with tab-only SQL (easy-apply, hot-deadlines). */
 function normalizeTabScopedMoreFilters(
   req: ScholarshipListRequest
@@ -1510,6 +1539,9 @@ export async function fetchScholarshipSidebarCounts(
   const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
   /** Basis for every tab count except the dedicated International Friendly pill. */
   const countsBasisReq = sidebarCountsIgnoreCitizenshipAudience(effectiveReq);
+  /** Matches / easy / hot / IF: drop profile-fit dimensions so counts ≠ Best pool. */
+  const catalogSidebarBasisReq =
+    sidebarCatalogTabCountsBasisReq(countsBasisReq);
   const tabs: ScholarshipListTabId[] = [
     'best-matches',
     'recommended',
@@ -1532,23 +1564,36 @@ export async function fetchScholarshipSidebarCounts(
           const r = { ...countsBasisReq, moreFilters: mf };
           return { t, n: await countFor(supabase, r, 'recommended') };
         }
+        if (t === 'easy-apply') {
+          return {
+            t,
+            n: await countFor(
+              supabase,
+              easyApplyListCanonicalRequest(catalogSidebarBasisReq),
+              t
+            )
+          };
+        }
+        if (t === 'hot-deadlines') {
+          return {
+            t,
+            n: await countFor(
+              supabase,
+              hotDeadlinesListCanonicalRequest(catalogSidebarBasisReq),
+              t
+            )
+          };
+        }
+        const rowReq = t === 'matches' ? catalogSidebarBasisReq : countsBasisReq;
         return {
           t,
-          n: await countFor(
-            supabase,
-            t === 'easy-apply'
-              ? easyApplyListCanonicalRequest(countsBasisReq)
-              : t === 'hot-deadlines'
-                ? hotDeadlinesListCanonicalRequest(countsBasisReq)
-                : countsBasisReq,
-            t
-          )
+          n: await countFor(supabase, rowReq, t)
         };
       })
     ),
     countScholarshipsForTabRequest(
       supabase,
-      internationalFriendlySidebarCountRequest(countsBasisReq),
+      internationalFriendlySidebarCountRequest(catalogSidebarBasisReq),
       'matches'
     )
   ]);

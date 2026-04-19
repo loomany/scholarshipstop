@@ -384,6 +384,29 @@ export function cloneMoreFilters(f: MoreFiltersState): MoreFiltersState {
   };
 }
 
+/**
+ * True when hub `moreFilters` carry quiz / profile / manual narrowing. Used by
+ * `/api/scholarships` to avoid serving the generic “best” credibility slice (~224)
+ * when there is no DB profile seed but the client sent real filter dimensions.
+ */
+export function moreFiltersHasProfileOrQuizListingSignals(
+  mf: MoreFiltersState
+): boolean {
+  if (mf.filterStateInput.trim().length > 0) return true;
+  if (mf.filterUniversitySlug && mf.filterUniversitySlug.trim().length > 0) {
+    return true;
+  }
+  if (mf.includeEducationLevels.size > 0) return true;
+  if (mf.includeGpaBuckets.size > 0) return true;
+  if (mf.includeEligibility.size > 0) return true;
+  if (mf.citizenshipAudience !== 'any') return true;
+  if (mf.deadlinePreset !== 'any') return true;
+  if (mf.includeRequirementTypes.size > 0) return true;
+  if (mf.includeLocationLabels.size > 0) return true;
+  if (mf.includeEasyApply.size > 0) return true;
+  return false;
+}
+
 /** Count of non-default filter selections (for toolbar badge). */
 export function countMoreFilterSelections(
   f: MoreFiltersState,
