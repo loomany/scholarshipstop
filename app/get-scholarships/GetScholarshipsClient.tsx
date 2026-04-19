@@ -1,7 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { GetScholarshipsQuizWizard } from '@/components/get-scholarships/GetScholarshipsQuizWizard';
+import Link from 'next/link';
 
 /** Match `app/HomePageClient.tsx` section rhythm (hero + “How it works”). */
 const homeSectionPadX =
@@ -18,13 +17,13 @@ const h2Section =
 const HOW_IT_WORKS_STEPS = [
   {
     n: 1,
-    title: 'Answer 3 quick questions',
-    body: 'Tell us a bit about your background so we can match you instantly'
+    title: 'Create a free account',
+    body: 'Sign up with email and password — quick and secure'
   },
   {
     n: 2,
-    title: 'Get instant matches',
-    body: 'We show scholarships you actually qualify for based on your profile'
+    title: 'Complete your profile',
+    body: 'Tell us about your background so we can surface scholarships you qualify for'
   },
   {
     n: 3,
@@ -34,23 +33,6 @@ const HOW_IT_WORKS_STEPS = [
 ] as const;
 
 export default function GetScholarshipsClient() {
-  const [quizOpen, setQuizOpen] = useState(false);
-
-  const openQuiz = useCallback(() => {
-    setQuizOpen(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
-
-  const closeQuiz = useCallback(() => {
-    setQuizOpen(false);
-  }, []);
-
-  if (quizOpen) {
-    return (
-      <GetScholarshipsQuizWizard onLeaveQuiz={closeQuiz} />
-    );
-  }
-
   return (
     <>
       <section
@@ -61,18 +43,17 @@ export default function GetScholarshipsClient() {
             Get matched with scholarships in 2 minutes
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-gray-600 sm:mt-6 sm:text-xl sm:leading-relaxed">
-            Answer a few quick questions and find scholarships you can actually
-            apply for today
+            Create a free account and find scholarships you can actually apply
+            for today
           </p>
 
           <div className="mx-auto mt-8 flex w-full max-w-lg justify-center sm:mt-9">
-            <button
-              type="button"
-              onClick={openQuiz}
+            <Link
+              href="/signin/signup"
               className="inline-flex h-12 min-h-[48px] items-center justify-center rounded-xl bg-zinc-950 px-8 text-sm font-bold text-white shadow-md transition hover:bg-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
             >
               Get My Matches
-            </button>
+            </Link>
           </div>
 
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-gray-500 sm:mt-6 sm:text-[0.9375rem]">
@@ -115,7 +96,8 @@ export default function GetScholarshipsClient() {
             ))}
           </ul>
           <p className="mx-auto mt-8 max-w-2xl text-center text-pretty text-sm leading-relaxed text-gray-500 sm:mt-10 sm:text-[0.9375rem]">
-            Takes less than 2 minutes to get started
+            Sign up in about a minute — then finish your profile for the best
+            matches
           </p>
         </div>
       </section>
