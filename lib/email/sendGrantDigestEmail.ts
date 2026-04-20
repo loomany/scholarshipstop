@@ -92,12 +92,18 @@ function buildCategorySectionHtml(
 
   const cta =
     hiddenCount > 0
-      ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 4px;">
+      ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 4px;">
           <tr>
-            <td align="center" style="border-radius:10px;background:#10b981;">
-              <a href="${escapeHtml(category.viewAllUrl)}" style="display:inline-block;padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.3;font-weight:700;color:#ffffff!important;text-decoration:none;">
-                View all ${escapeHtml(String(category.totalCount))} scholarships
-              </a>
+            <td align="center">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="border-radius:10px;background:#10b981;">
+                    <a href="${escapeHtml(category.viewAllUrl)}" style="display:inline-block;padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.3;font-weight:700;color:#ffffff!important;text-decoration:none;">
+                      View all ${escapeHtml(String(category.totalCount))} scholarships
+                    </a>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
         </table>`

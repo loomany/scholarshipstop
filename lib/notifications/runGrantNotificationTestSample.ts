@@ -40,10 +40,18 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
     };
   }
 
-  const email = process.env.GRANT_NOTIFICATION_TEST_SAMPLE_EMAIL?.trim();
+  const emailRaw = process.env.GRANT_NOTIFICATION_TEST_SAMPLE_EMAIL?.trim() || '';
+  const emails = Array.from(
+    new Set(
+      emailRaw
+        .split(',')
+        .map((v) => v.trim())
+        .filter((v) => v.length > 0)
+    )
+  );
   const chatIdRaw = process.env.GRANT_NOTIFICATION_TEST_SAMPLE_TELEGRAM_CHAT_ID?.trim();
 
-  if (!email && !chatIdRaw) {
+  if (emails.length === 0 && !chatIdRaw) {
     return {
       ok: false,
       emailSent: false,
@@ -96,13 +104,16 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
   let emailSent = false;
   let telegramSent = false;
 
-  if (email) {
-    const r = await sendGrantDigestBatchEmail({
-      toEmail: email,
-      categories,
-      firstName: 'there'
-    });
-    emailSent = r.ok;
+  if (emails.length > 0) {
+    emailSent = true;
+    for (const toEmail of emails) {
+      const r = await sendGrantDigestBatchEmail({
+        toEmail,
+        categories,
+        firstName: 'there'
+      });
+      if (!r.ok) emailSent = false;
+    }
   }
 
   if (chatIdRaw) {

@@ -7,7 +7,10 @@ import {
 } from '@/app/scholarships/moreFilters';
 import type { Database } from '@/types_db';
 import { sendGrantDigestBatchEmail, type GrantDigestCategory } from '@/lib/email/sendGrantDigestEmail';
-import { stripHubProfileHardMatchMoreFilters } from '@/lib/scholarships/profileFilterDefaults';
+import {
+  buildScholarshipProfileFilterSeed,
+  mergeBestRecommendationFiltersFromProfile
+} from '@/lib/scholarships/profileFilterDefaults';
 import { moreFiltersFromJson, type MoreFiltersJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import {
   fetchGlobalFilterBounds,
@@ -154,8 +157,12 @@ export async function profileMatchesBest(
   bounds: Awaited<ReturnType<typeof fetchGlobalFilterBounds>>,
   scholarshipId: string
 ): Promise<boolean> {
-  const mf = stripHubProfileHardMatchMoreFilters(
-    defaultMoreFiltersFromBounds(bounds)
+  const profileSeed = buildScholarshipProfileFilterSeed(profile);
+  const mf = mergeBestRecommendationFiltersFromProfile(
+    'best-recommendation',
+    defaultMoreFiltersFromBounds(bounds),
+    profileSeed,
+    bounds
   );
   const req = scholarshipListRequestFromParts({
     page: 1,
