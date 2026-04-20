@@ -2,15 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Lock } from 'lucide-react';
-
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
-import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
-import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
 import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagination';
@@ -93,23 +89,14 @@ type Props = {
   categorySlug: string;
   pageTitle: string;
   isAuthenticated?: boolean;
+  /** When true and user is signed out, hide My scholarships sidebar. */
+  authResolved?: boolean;
   hasSubscription?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
 };
 
 /** SEO category POST must not send saved/ignored/started/submitted — they skew SQL / fallback. */
 const SEO_LIST_FETCH_ID_LISTS: string[] = [];
-const LOCKED_CATEGORY_SLUGS_FOR_UNSUBSCRIBED = new Set([
-  'no-essay',
-  'easy-apply',
-  'quick-apply',
-  'few-requirements',
-  'no_essay',
-  'easy_apply',
-  'quick_apply',
-  'few_requirements'
-]);
-
 function buildCategoryListingSearchParams(options: {
   base: URLSearchParams;
   page: number;
@@ -144,6 +131,7 @@ export default function ScholarshipCategoryPageClient({
   categorySlug,
   pageTitle,
   isAuthenticated = false,
+  authResolved = false,
   hasSubscription = false,
   initialPayload = null
 }: Props) {
@@ -187,20 +175,9 @@ export default function ScholarshipCategoryPageClient({
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
-  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
-  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
-    string | undefined
-  >(undefined);
   const { profile: currentMatchProfile } =
     useCurrentUserScholarshipMatchProfile(isAuthenticated);
-  const isSubscriptionLocked = isAuthenticated && !hasSubscription;
-  const isLockedPremiumCategory = useMemo(() => {
-    const normalized = categorySlug.trim().toLowerCase().replace(/_/g, '-');
-    return (
-      isSubscriptionLocked &&
-      LOCKED_CATEGORY_SLUGS_FOR_UNSUBSCRIBED.has(normalized)
-    );
-  }, [categorySlug, isSubscriptionLocked]);
+  const catalogFreeTier = authResolved && !hasSubscription;
 
   const openRegistrationWall = useCallback(
     (mode?: ScholarshipRegistrationWallContentMode) => {
@@ -213,20 +190,6 @@ export default function ScholarshipCategoryPageClient({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
-  const openSubscriptionOffer = useCallback((arg?: unknown) => {
-    const notice = typeof arg === 'string' ? arg : undefined;
-    setSubscriptionOfferNotice(notice);
-    setSubscriptionOfferOpen(true);
-  }, []);
-  const closeSubscriptionOffer = useCallback(() => {
-    setSubscriptionOfferOpen(false);
-    setSubscriptionOfferNotice(undefined);
-  }, []);
-  useEffect(() => {
-    if (!isLockedPremiumCategory) return;
-    openSubscriptionOffer();
-  }, [isLockedPremiumCategory, openSubscriptionOffer]);
-
   const metaKeySynced = useRef('');
   const listFetchSeqRef = useRef(0);
   const prevSlugRef = useRef<string | null>(null);
@@ -424,13 +387,6 @@ export default function ScholarshipCategoryPageClient({
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
 
   useEffect(() => {
-    if (isLockedPremiumCategory) {
-      setIsLoading(false);
-      setHasError(false);
-      setScholarships([]);
-      setTotalCount(0);
-      return;
-    }
     let cancelled = false;
     const seq = ++listFetchSeqRef.current;
     const metaKey = `cat:${categorySlug}`;
@@ -514,7 +470,6 @@ export default function ScholarshipCategoryPageClient({
     categorySlug,
     moreFiltersApplied,
     replaceListingParams,
-    isLockedPremiumCategory,
     appliedProviderSlug
   ]);
 
@@ -809,20 +764,26 @@ export default function ScholarshipCategoryPageClient({
           </h1>
         }
         sidebar={
-          <ScholarshipsSidebar
-            counts={sidebarCounts}
-            matchesNewIndicator={null}
-            subscriptionLocked={isSubscriptionLocked}
-            onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
-            internationalStudentsFilter={{
-              active: internationalSidebarChecked,
-              onActivate: toggleInternationalAudienceSidebar,
-              showGuestLock: !isAuthenticated,
-              showSubscriptionLock: isSubscriptionLocked,
-              onGuestRestrictedClick: openRegistrationWall,
-              onSubscriptionRestrictedClick: openSubscriptionOffer
-            }}
-          />
+          isAuthenticated || !authResolved ? (
+            <ScholarshipsSidebar
+              counts={sidebarCounts}
+              matchesNewIndicator={null}
+              guestMode={catalogFreeTier}
+              onGuestRestrictedNav={
+                catalogFreeTier ? openRegistrationWall : undefined
+              }
+              subscriptionLocked={false}
+              onSubscriptionRestrictedNav={undefined}
+              internationalStudentsFilter={{
+                active: internationalSidebarChecked,
+                onActivate: toggleInternationalAudienceSidebar,
+                showGuestLock: false,
+                showSubscriptionLock: false,
+                onGuestRestrictedClick: openRegistrationWall,
+                onSubscriptionRestrictedClick: openRegistrationWall
+              }}
+            />
+          ) : null
         }
       >
         <>
@@ -847,40 +808,18 @@ export default function ScholarshipCategoryPageClient({
             onClearAllListingChips={
               activeListingChips.length > 0 ? clearAllListingChips : undefined
             }
-            isAuthenticated={isAuthenticated}
+            isAuthenticated={authResolved && isAuthenticated}
             hasSubscription={hasSubscription}
-            onGuestSortBlocked={!isAuthenticated ? openRegistrationWall : undefined}
-            onSubscriptionSortBlocked={
-              isSubscriptionLocked ? openSubscriptionOffer : undefined
+            onGuestSortBlocked={
+              catalogFreeTier ? openRegistrationWall : undefined
             }
-            onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
+            onSubscriptionSortBlocked={undefined}
+            onGuestLockedAction={
+              catalogFreeTier ? openRegistrationWall : undefined
+            }
           />
 
-          {isLockedPremiumCategory ? (
-            <div className="max-w-3xl rounded-xl border border-zinc-200 bg-white px-5 py-10 text-left text-slate-600 shadow-sm">
-              <div className="flex items-start gap-3">
-                <Lock
-                  className="mt-0.5 h-5 w-5 shrink-0 text-[#FF7A1A]"
-                  aria-hidden
-                />
-                <div>
-                  <p className="text-base font-semibold text-zinc-900">
-                    This category is available for subscribers only.
-                  </p>
-                  <p className="mt-2 text-sm text-zinc-600">
-                    Start your free access to unlock No Essay, Easy Apply, Quick Apply, and Few Requirements categories.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={openSubscriptionOffer}
-                    className="mt-4 inline-flex items-center rounded-xl bg-[#FF7A1A] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#E6670C]"
-                  >
-                    Get Free Access
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : isLoading ? (
+          {isLoading ? (
             <ScholarshipsBrandLoading density="compact" showTopAccentBar />
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
@@ -924,22 +863,13 @@ export default function ScholarshipCategoryPageClient({
                     ignoreAction="hide"
                     reported={reportedIds.includes(s.id)}
                     onToggleReport={toggleReport}
-                    subscriptionLocked={isSubscriptionLocked}
+                    subscriptionLocked={false}
                     isAuthenticated={isAuthenticated}
                     hasSubscription={hasSubscription}
-                    onSubscriptionLockedCategoryClick={
-                      isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
-                    }
-                    onSubscriptionDetailNavigate={
-                      isSubscriptionLocked
-                        ? () =>
-                            openSubscriptionOffer(
-                              SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE
-                            )
-                        : undefined
-                    }
+                    onSubscriptionLockedCategoryClick={undefined}
+                    onSubscriptionDetailNavigate={undefined}
                     onGuestDetailNavigate={
-                      !isAuthenticated
+                      catalogFreeTier
                         ? () => openRegistrationWall('card-unlock')
                         : undefined
                     }
@@ -970,20 +900,20 @@ export default function ScholarshipCategoryPageClient({
         previewCountLoading={false}
         previewCountFallback={null}
         locationOptions={[]}
-        isAuthenticated={isAuthenticated}
-        onGuestLockedAction={!isAuthenticated ? openRegistrationWall : undefined}
+        isAuthenticated={authResolved && isAuthenticated}
+        onGuestLockedAction={
+          catalogFreeTier ? openRegistrationWall : undefined
+        }
         hasSubscription={hasSubscription}
-        onSubscriptionLockedAction={isSubscriptionLocked ? openSubscriptionOffer : undefined}
+        onSubscriptionLockedAction={undefined}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
         contentMode={registrationWallContent}
-      />
-      <ScholarshipSubscriptionOfferModal
-        open={subscriptionOfferOpen}
-        onClose={closeSubscriptionOffer}
-        notice={subscriptionOfferNotice}
+        signedInWithoutSubscription={
+          Boolean(isAuthenticated && authResolved && !hasSubscription)
+        }
       />
     </section>
   );

@@ -15,8 +15,8 @@ import {
   parseCompareIndexSearchParams,
 } from '@/lib/seo/compareIndexFilters';
 import { buildCombinedCompareItems } from '@/lib/seo/compareIndexData';
-import { fetchRecentPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
-import { fetchRecentPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
+import { fetchAllPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
+import { fetchAllPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
 import { getURL } from '@/utils/helpers';
 
 export const revalidate = 3600;
@@ -64,8 +64,8 @@ export default async function CompareHubPage({
   const queryState = parseCompareIndexSearchParams(searchParams);
 
   const [universityBattles, stateWars] = await Promise.all([
-    fetchRecentPublishedUniversityComparePages(120),
-    fetchRecentPublishedStateComparePages(120)
+    fetchAllPublishedUniversityComparePages(),
+    fetchAllPublishedStateComparePages()
   ]);
 
   const allItems = buildCombinedCompareItems({

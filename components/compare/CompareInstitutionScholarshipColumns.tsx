@@ -31,8 +31,6 @@ import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
-import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
-import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import {
   hasActiveSubscriptionAccess,
@@ -65,10 +63,6 @@ export default function CompareInstitutionScholarshipColumns({
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
-  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
-  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
-    string | undefined
-  >(undefined);
   const { profile: currentMatchProfile } =
     useCurrentUserScholarshipMatchProfile(isAuthenticated);
 
@@ -167,25 +161,16 @@ export default function CompareInstitutionScholarshipColumns({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
-  const openSubscriptionOffer = useCallback((arg?: unknown) => {
-    const notice = typeof arg === 'string' ? arg : undefined;
-    setSubscriptionOfferNotice(notice);
-    setSubscriptionOfferOpen(true);
-  }, []);
-  const closeSubscriptionOffer = useCallback(() => {
-    setSubscriptionOfferOpen(false);
-    setSubscriptionOfferNotice(undefined);
-  }, []);
 
-  const isSubscriptionLocked = isAuthenticated && !hasSubscription;
+  const catalogFreeTier = !hasSubscription;
 
   const toggleSave = useCallback(
     async (id: string) => {
+      const wasSaved = savedIds.includes(id);
       if (!isAuthenticated) {
-        openRegistrationWall();
+        setSavedIds(wasSaved ? removeScholarship(id) : saveScholarship(id));
         return;
       }
-      const wasSaved = savedIds.includes(id);
       const ok = wasSaved
         ? await deleteUserSavedScholarship(id)
         : await postUserSavedScholarship(id);
@@ -199,19 +184,12 @@ export default function CompareInstitutionScholarshipColumns({
       }
       setSavedIds(wasSaved ? removeScholarship(id) : saveScholarship(id));
     },
-    [isAuthenticated, openRegistrationWall, savedIds]
+    [isAuthenticated, savedIds]
   );
 
-  const ignoreScholarship = useCallback(
-    (id: string) => {
-      if (!isAuthenticated) {
-        openRegistrationWall();
-        return;
-      }
-      setIgnoredIds(addIgnoredScholarship(id));
-    },
-    [isAuthenticated, openRegistrationWall]
-  );
+  const ignoreScholarship = useCallback((id: string) => {
+    setIgnoredIds(addIgnoredScholarship(id));
+  }, []);
 
   const visibleLeft = useMemo(
     () => left.scholarships.filter((s) => !ignoredIds.includes(s.id)),
@@ -248,22 +226,13 @@ export default function CompareInstitutionScholarshipColumns({
           onHide={ignoreScholarship}
           showCardActions
           stackedListing
-          subscriptionLocked={isSubscriptionLocked}
+          subscriptionLocked={false}
           isAuthenticated={isAuthenticated}
           hasSubscription={hasSubscription}
-          onSubscriptionLockedCategoryClick={
-            isSubscriptionLocked ? openSubscriptionOffer : undefined
-          }
-          onSubscriptionDetailNavigate={
-            isSubscriptionLocked
-              ? () =>
-                  openSubscriptionOffer(
-                    SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE
-                  )
-              : undefined
-          }
+          onSubscriptionLockedCategoryClick={undefined}
+          onSubscriptionDetailNavigate={undefined}
           onGuestDetailNavigate={
-            !isAuthenticated ? () => openRegistrationWall('card-unlock') : undefined
+            catalogFreeTier ? () => openRegistrationWall('card-unlock') : undefined
           }
         />
       </div>
@@ -380,11 +349,7 @@ export default function CompareInstitutionScholarshipColumns({
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
         contentMode={registrationWallContent}
-      />
-      <ScholarshipSubscriptionOfferModal
-        open={subscriptionOfferOpen}
-        onClose={closeSubscriptionOffer}
-        notice={subscriptionOfferNotice}
+        signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
       />
     </>
   );

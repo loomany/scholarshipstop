@@ -14,7 +14,7 @@ import {
   parseCompareIndexSearchParams
 } from '@/lib/seo/compareIndexFilters';
 import { buildStateCompareItems } from '@/lib/seo/compareIndexData';
-import { fetchRecentPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
+import { fetchAllPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
 import { getURL } from '@/utils/helpers';
 
 export const revalidate = 3600;
@@ -58,7 +58,7 @@ export default async function StateBattlesPage({
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const queryState = parseCompareIndexSearchParams(searchParams);
-  const pages = await fetchRecentPublishedStateComparePages(120);
+  const pages = await fetchAllPublishedStateComparePages();
   const items = buildStateCompareItems(pages);
   const filtered = filterAndSortCompareIndexItems(items, {
     q: queryState.q,

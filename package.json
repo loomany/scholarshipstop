@@ -67,6 +67,8 @@
     "seo:pilot-launch": "dotenv -e .env.local -- npx tsx scripts/seo-pilot-launch.ts",
     "seo:grand-audit": "dotenv -e .env.local -- npx tsx scripts/seo-grand-audit.ts",
     "seo:worker-generate": "dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts",
+    "seo:compare-battle-stats": "dotenv -e .env.local -- npx tsx scripts/compare-battle-stats.ts",
+    "seo:compare-battle-sequential": "dotenv -e .env.local -- npx tsx scripts/compare-battle-sequential.ts",
     "seo:worker-drain": "dotenv -e .env.local -- npx tsx scripts/seo-worker-drain.ts",
     "seo:batch-local": "powershell -ExecutionPolicy Bypass -File scripts/run-seo-batch.ps1",
     "seo:enqueue-missing": "dotenv -e .env.local -- npx tsx scripts/seo-enqueue-missing-hubs.ts",

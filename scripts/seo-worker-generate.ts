@@ -4,6 +4,7 @@
  *
  *   dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts
  *   dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts --dry-run --limit=50
+ *   dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts --compare-only --limit=1
  *
  * Requires: OPENAI_API_KEY, SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_SUPABASE_URL
  *
@@ -134,6 +135,11 @@ function looksLikeUniversityInstitution(input: {
 async function queueGeneratedSeoPageForPostPublishChecks(input: {
   url: string;
   source: string;
+  /**
+   * When true: still enqueue URL inspection + `google_indexing_queue`, but do not call the
+   * Indexing API immediately — cron flush processes pending rows in order.
+   */
+  deferIndexingToQueueOnly?: boolean;
 }) {
   await enqueueSeoPageInspectionUrls({
     urls: [input.url],
@@ -143,7 +149,8 @@ async function queueGeneratedSeoPageForPostPublishChecks(input: {
   const submission = await submitUrlsForImmediateIndexing({
     urls: [input.url],
     kind: 'page',
-    source: `${input.source}:publish`
+    source: `${input.source}:publish`,
+    immediatePing: !input.deferIndexingToQueueOnly
   });
 
   return submission.results[0]?.ping ?? { ok: false as const, error: 'missing_ping_result' };
@@ -391,15 +398,16 @@ async function runUniversityCompareFlow(args: {
   const publicUrl = `${base}/compare/universities/${encodeURIComponent(canon)}`;
   const ping = await queueGeneratedSeoPageForPostPublishChecks({
     url: publicUrl,
-    source: 'seo-worker-generate:university-compare'
+    source: 'seo-worker-generate:university-compare',
+    deferIndexingToQueueOnly: true
   });
   await revalidatePublishedSeoPaths([
-    `/compare/universities/${encodeURIComponent(canon)}`
+    `/compare/universities/${encodeURIComponent(canon)}`,
+    '/compare',
+    '/compare/universities'
   ]);
   const skipLabel =
-    ping.ok || !('skipped' in ping) || ping.skipped == null
-      ? 'n/a'
-      : ping.skipped;
+    ping.ok || !('skipped' in ping) || ping.skipped == null ? 'n/a' : ping.skipped;
   console.log(`[ok] compare ${canon} indexed=${ping.ok} skipped=${skipLabel}`);
 }
 
@@ -631,25 +639,38 @@ async function runStateCompareFlow(args: {
   const publicUrl = `${base}/compare/states/${encodeURIComponent(canon)}`;
   const ping = await queueGeneratedSeoPageForPostPublishChecks({
     url: publicUrl,
-    source: 'seo-worker-generate:state-compare'
+    source: 'seo-worker-generate:state-compare',
+    deferIndexingToQueueOnly: true
   });
-  await revalidatePublishedSeoPaths([`/compare/states/${encodeURIComponent(canon)}`]);
+  await revalidatePublishedSeoPaths([
+    `/compare/states/${encodeURIComponent(canon)}`,
+    '/compare',
+    '/compare/states'
+  ]);
   const skipLabel =
-    ping.ok || !('skipped' in ping) || ping.skipped == null
-      ? 'n/a'
-      : ping.skipped;
+    ping.ok || !('skipped' in ping) || ping.skipped == null ? 'n/a' : ping.skipped;
   console.log(`[ok] state compare ${canon} indexed=${ping.ok} skipped=${skipLabel}`);
 }
 
 async function main() {
   const dryRun = argFlag('dry-run');
+  const compareOnly = argFlag('compare-only');
   const limit = argNum('limit', DEFAULT_BATCH);
   const admin = loadAdmin();
 
-  const { data: rows, error } = await admin
+  let pendingQuery = admin
     .from('seo_generation_queue')
     .select('id, canonical_path, filters, priority, grant_count')
-    .eq('status', 'pending')
+    .eq('status', 'pending');
+
+  if (compareOnly) {
+    // PostgREST `like` in `.or()` uses `*` as wildcard (not `%`).
+    pendingQuery = pendingQuery.or(
+      'canonical_path.like.compare/universities*,canonical_path.like.compare/states*'
+    );
+  }
+
+  const { data: rows, error } = await pendingQuery
     .order('priority', { ascending: false })
     .order('created_at', { ascending: true })
     .limit(limit);

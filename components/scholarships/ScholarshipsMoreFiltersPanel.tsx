@@ -400,15 +400,15 @@ export default function ScholarshipsMoreFiltersPanel({
   }, [open, onClose]);
 
   if (!open) return null;
-  const easyApplyLocked = isAuthenticated && !hasSubscription;
-  const amountLocked = isAuthenticated && !hasSubscription;
-  const eligibilityLocked = isAuthenticated && !hasSubscription;
-  const applicantsLocked = isAuthenticated && !hasSubscription;
-  const universityLocked = isAuthenticated && !hasSubscription;
-  const deadlineShortRangeLocked = isAuthenticated && !hasSubscription;
-  /** Guests + signed-in without subscription — same gating as sidebar Hot Deadlines row. */
-  const internationalAudienceGated =
-    !isAuthenticated || (isAuthenticated && !hasSubscription);
+  /** Match guest: these sections are not subscription-gated for signed-in free users. */
+  const easyApplyLocked = false;
+  const amountLocked = false;
+  const eligibilityLocked = false;
+  const applicantsLocked = false;
+  const universityLocked = false;
+  const deadlineShortRangeLocked = false;
+  /** Same as guest: international-friendly preset requires paid catalog (guest: not signed in). */
+  const internationalAudienceGated = !hasSubscription;
   const SUBSCRIPTION_LOCKED_EASY_APPLY_IDS = new Set([
     'easy_apply',
     'quick_apply'
@@ -518,7 +518,7 @@ export default function ScholarshipsMoreFiltersPanel({
                         checked={value.deadlinePreset === id}
                         onChange={() => {
                           if (optionLocked) {
-                            onSubscriptionLockedAction?.();
+                            onGuestLockedAction?.();
                             return;
                           }
                           setDeadline(presetId);
@@ -570,11 +570,7 @@ export default function ScholarshipsMoreFiltersPanel({
                         checked={value.citizenshipAudience === id}
                         onChange={() => {
                           if (optionLocked) {
-                            if (!isAuthenticated) {
-                              onGuestLockedAction?.();
-                            } else {
-                              onSubscriptionLockedAction?.();
-                            }
+                            onGuestLockedAction?.();
                             return;
                           }
                           onChange({
@@ -617,7 +613,7 @@ export default function ScholarshipsMoreFiltersPanel({
                   type="button"
                   aria-label="Start your free access to use amount filter"
                   title="Start your free access to use amount filter"
-                  onClick={() => onSubscriptionLockedAction?.()}
+                  onClick={() => onGuestLockedAction?.()}
                   className="absolute inset-0 z-10 cursor-pointer rounded-lg"
                 />
               ) : null}
@@ -727,7 +723,7 @@ export default function ScholarshipsMoreFiltersPanel({
                   type="button"
                   aria-label="Start your free access to use applicants filter"
                   title="Start your free access to use applicants filter"
-                  onClick={() => onSubscriptionLockedAction?.()}
+                  onClick={() => onGuestLockedAction?.()}
                   className="absolute inset-0 z-10 cursor-pointer rounded-lg"
                 />
               ) : null}
@@ -814,7 +810,7 @@ export default function ScholarshipsMoreFiltersPanel({
                   type="button"
                   aria-label="Start your free access to use eligibility filter"
                   title="Start your free access to use eligibility filter"
-                  onClick={() => onSubscriptionLockedAction?.()}
+                  onClick={() => onGuestLockedAction?.()}
                   className="absolute inset-0 z-10 cursor-pointer rounded-lg"
                 />
               ) : null}
@@ -993,7 +989,7 @@ export default function ScholarshipsMoreFiltersPanel({
                   type="button"
                   aria-label="Unlock Premium to filter by university"
                   title="Unlock Premium to filter by university"
-                  onClick={() => onSubscriptionLockedAction?.()}
+                  onClick={() => onGuestLockedAction?.()}
                   className="absolute inset-0 z-10 cursor-pointer rounded-xl"
                 />
               ) : null}
@@ -1054,7 +1050,7 @@ export default function ScholarshipsMoreFiltersPanel({
                     checked={value.includeEasyApply.has(opt.id)}
                     onChange={(e) => {
                       if (optionLocked) {
-                        onSubscriptionLockedAction?.();
+                        onGuestLockedAction?.();
                         return;
                       }
                       onChange({
@@ -1257,29 +1253,21 @@ export default function ScholarshipsMoreFiltersPanel({
               <button
                 type="button"
                 onClick={() => {
-                  if (!isAuthenticated) {
-                    onGuestLockedAction?.();
-                    return;
-                  }
                   if (!hasSubscription) {
-                    onSubscriptionLockedAction?.();
+                    onGuestLockedAction?.();
                     return;
                   }
                   onSaveFilter();
                 }}
-                disabled={
-                  isAuthenticated && hasSubscription ? !saveFilterEnabled : false
-                }
+                disabled={hasSubscription ? !saveFilterEnabled : false}
                 title={
-                  !isAuthenticated
-                    ? 'Save filter preset after you create a free account'
-                    : !hasSubscription
-                      ? 'Start your free access to save filter presets'
-                      : undefined
+                  !hasSubscription
+                    ? 'Save filter preset after you start your free trial'
+                    : undefined
                 }
-                className={`${scholarshipSaveFilterButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
+                className={`${scholarshipSaveFilterButtonClass} ${!hasSubscription ? 'opacity-95' : ''}`}
               >
-                {!isAuthenticated || !hasSubscription ? (
+                {!hasSubscription ? (
                   <Lock
                     className="mr-1.5 inline-block h-3.5 w-3.5 shrink-0 text-white"
                     strokeWidth={2}
@@ -1292,20 +1280,20 @@ export default function ScholarshipsMoreFiltersPanel({
             <button
               type="button"
               onClick={() => {
-                if (!isAuthenticated) {
+                if (!hasSubscription) {
                   onGuestLockedAction?.();
                   return;
                 }
                 onApply();
               }}
               title={
-                !isAuthenticated
-                  ? 'Apply filters after you create a free account'
+                !hasSubscription
+                  ? 'Apply filters after you start your free trial'
                   : undefined
               }
-              className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
+              className={`${scholarshipSeeResultsButtonClass} ${!hasSubscription ? 'opacity-95' : ''}`}
             >
-              {!isAuthenticated ? (
+              {!hasSubscription ? (
                 <Lock
                   className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
                   strokeWidth={2}

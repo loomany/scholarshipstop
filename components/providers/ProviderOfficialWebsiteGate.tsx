@@ -5,7 +5,6 @@ import { ExternalLink, Lock } from 'lucide-react';
 
 import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
-import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 
 type ProviderOfficialWebsiteGateProps = {
   href: string;
@@ -28,30 +27,15 @@ function ProviderOfficialWebsiteGateInner({
   hasSubscription: boolean;
 }) {
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
-  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
-  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
-    string | undefined
-  >(undefined);
 
   const isBlocked = !isAuthenticated || !hasSubscription;
-  const isSubscriptionBlocked = isAuthenticated && !hasSubscription;
 
   const openBlockedModal = useCallback(() => {
-    if (isSubscriptionBlocked) {
-      setSubscriptionOfferNotice(undefined);
-      setSubscriptionOfferOpen(true);
-      return;
-    }
     setRegistrationWallOpen(true);
-  }, [isSubscriptionBlocked]);
+  }, []);
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
-  }, []);
-
-  const closeSubscriptionOffer = useCallback(() => {
-    setSubscriptionOfferOpen(false);
-    setSubscriptionOfferNotice(undefined);
   }, []);
 
   const baseClassName =
@@ -90,11 +74,7 @@ function ProviderOfficialWebsiteGateInner({
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
-      />
-      <ScholarshipSubscriptionOfferModal
-        open={subscriptionOfferOpen}
-        onClose={closeSubscriptionOffer}
-        notice={subscriptionOfferNotice}
+        signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
       />
     </>
   );

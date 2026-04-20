@@ -1,6 +1,7 @@
 'use client';
 
 import { Sparkles } from 'lucide-react';
+import type { ReactNode } from 'react';
 import type { ScholarshipSeoFaqItem } from '@/app/scholarships/scholarshipsData';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import ai from './aiInsightsLocked.module.css';
@@ -68,11 +69,13 @@ export function HeroDecisionBadges({
 function QuickCard({
   title,
   items,
-  tone
+  tone,
+  renderLine
 }: {
   title: string;
   items: string[];
   tone: 'teal' | 'violet' | 'sky' | 'amber';
+  renderLine?: (text: string) => ReactNode;
 }) {
   if (items.length === 0) return null;
   const ring =
@@ -91,7 +94,9 @@ function QuickCard({
       </p>
       <ul className="mt-2 list-disc space-y-1.5 pl-4 text-sm leading-snug text-zinc-800">
         {items.map((line, i) => (
-          <li key={`${title}-${i}-${line.slice(0, 24)}`}>{line}</li>
+          <li key={`${title}-${i}-${line.slice(0, 24)}`}>
+            {renderLine ? renderLine(line) : line}
+          </li>
         ))}
       </ul>
     </div>
@@ -102,12 +107,14 @@ export function ScholarshipQuickDecisionGrid({
   bestFor,
   highlights,
   whyApply,
-  importantChecks
+  importantChecks,
+  renderLine
 }: {
   bestFor: string[];
   highlights: string[];
   whyApply: string[];
   importantChecks: string[];
+  renderLine?: (text: string) => ReactNode;
 }) {
   const any =
     bestFor.length ||
@@ -127,13 +134,29 @@ export function ScholarshipQuickDecisionGrid({
       </div>
 
       <div className={ai.content}>
-        <QuickCard title="Best for" items={bestFor} tone="teal" />
-        <QuickCard title="Key highlights" items={highlights} tone="violet" />
-        <QuickCard title="Why apply" items={whyApply} tone="sky" />
+        <QuickCard
+          title="Best for"
+          items={bestFor}
+          tone="teal"
+          renderLine={renderLine}
+        />
+        <QuickCard
+          title="Key highlights"
+          items={highlights}
+          tone="violet"
+          renderLine={renderLine}
+        />
+        <QuickCard
+          title="Why apply"
+          items={whyApply}
+          tone="sky"
+          renderLine={renderLine}
+        />
         <QuickCard
           title="Important checks"
           items={importantChecks}
           tone="amber"
+          renderLine={renderLine}
         />
       </div>
     </div>
@@ -174,23 +197,33 @@ export function AiInsightSection({
 
 export function BulletList({
   items,
-  className = ''
+  className = '',
+  renderLine
 }: {
   items: string[];
   className?: string;
+  renderLine?: (text: string) => ReactNode;
 }) {
   return (
     <ul
       className={`list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-800 ${className}`}
     >
       {items.map((item, i) => (
-        <li key={`${i}-${item.slice(0, 40)}`}>{item}</li>
+        <li key={`${i}-${item.slice(0, 40)}`}>
+          {renderLine ? renderLine(item) : item}
+        </li>
       ))}
     </ul>
   );
 }
 
-export function ScholarshipWhyApplyBlock({ items }: { items: string[] }) {
+export function ScholarshipWhyApplyBlock({
+  items,
+  renderLine
+}: {
+  items: string[];
+  renderLine?: (text: string) => ReactNode;
+}) {
   if (items.length === 0) return null;
   const show = items.slice(0, 5);
   return (
@@ -198,24 +231,36 @@ export function ScholarshipWhyApplyBlock({ items }: { items: string[] }) {
       title="Why this may be worth applying to"
       subtitle="Student-friendly angle based on the listing — not official rules."
     >
-      <BulletList items={show} />
+      <BulletList items={show} renderLine={renderLine} />
     </AiInsightSection>
   );
 }
 
-export function ScholarshipApplicationTipsBlock({ items }: { items: string[] }) {
+export function ScholarshipApplicationTipsBlock({
+  items,
+  renderLine
+}: {
+  items: string[];
+  renderLine?: (text: string) => ReactNode;
+}) {
   if (items.length === 0) return null;
   return (
     <AiInsightSection
       title="Application tips"
       subtitle="Listing-specific ideas from our AI layer — not official rules. Skip anything that does not match the program page."
     >
-      <BulletList items={items.slice(0, 3)} />
+      <BulletList items={items.slice(0, 3)} renderLine={renderLine} />
     </AiInsightSection>
   );
 }
 
-export function ScholarshipNextStepsBlock({ items }: { items: string[] }) {
+export function ScholarshipNextStepsBlock({
+  items,
+  renderLine
+}: {
+  items: string[];
+  renderLine?: (text: string) => ReactNode;
+}) {
   if (items.length === 0) return null;
   return (
     <AiInsightSection
@@ -224,7 +269,9 @@ export function ScholarshipNextStepsBlock({ items }: { items: string[] }) {
     >
       <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-zinc-800">
         {items.map((item, i) => (
-          <li key={`ns-${i}-${item.slice(0, 36)}`}>{item}</li>
+          <li key={`ns-${i}-${item.slice(0, 36)}`}>
+            {renderLine ? renderLine(item) : item}
+          </li>
         ))}
       </ol>
     </AiInsightSection>
@@ -234,11 +281,13 @@ export function ScholarshipNextStepsBlock({ items }: { items: string[] }) {
 export function ScholarshipBeforeYouApplyBlock({
   checks,
   missing,
-  redFlags
+  redFlags,
+  renderLine
 }: {
   checks: string[];
   missing: string[];
   redFlags: string[];
+  renderLine?: (text: string) => ReactNode;
 }) {
   const hasChecks = checks.length > 0;
   const hasMissing = missing.length > 0;
@@ -256,7 +305,7 @@ export function ScholarshipBeforeYouApplyBlock({
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
               Important checks
             </p>
-            <BulletList items={checks} />
+            <BulletList items={checks} renderLine={renderLine} />
           </div>
         ) : null}
         {hasMissing ? (
@@ -264,7 +313,7 @@ export function ScholarshipBeforeYouApplyBlock({
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
               Missing or unclear on the listing
             </p>
-            <BulletList items={missing} />
+            <BulletList items={missing} renderLine={renderLine} />
           </div>
         ) : null}
         {hasFlags ? (
@@ -274,7 +323,9 @@ export function ScholarshipBeforeYouApplyBlock({
             </p>
             <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-rose-900">
               {redFlags.map((item, i) => (
-                <li key={`rf-${i}-${item.slice(0, 32)}`}>{item}</li>
+                <li key={`rf-${i}-${item.slice(0, 32)}`}>
+                  {renderLine ? renderLine(item) : item}
+                </li>
               ))}
             </ul>
           </div>

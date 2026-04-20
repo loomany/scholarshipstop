@@ -137,7 +137,9 @@ export type PingGoogleIndexingDirectResult =
         | 'missing_credentials'
         | 'no_token'
         | 'daily_quota_exceeded'
-        | 'quota_rpc_unavailable';
+        | 'quota_rpc_unavailable'
+        /** URL is in google_indexing_queue only; cron flush will call the API in FIFO order. */
+        | 'deferred_to_indexing_queue';
       status?: number;
       error?: string;
     };
@@ -465,12 +467,34 @@ export async function submitUrlsForImmediateIndexing(input: {
   kind: GoogleIndexingContentKind;
   notificationType?: GoogleIndexingNotificationType;
   source?: string;
+  /**
+   * When false, rows are only upserted into `google_indexing_queue` (FIFO by `added_at`);
+   * `cron-google-indexing-flush` / flush worker sends them without competing for the immediate ping path.
+   * Default true preserves historical behaviour (enqueue + try Google API now).
+   */
+  immediatePing?: boolean;
 }) {
   const queueResult = await enqueueGoogleIndexingUrls(input);
   const results: Array<{
     url: string;
     ping: PingGoogleIndexingDirectResult;
   }> = [];
+
+  const immediatePing = input.immediatePing !== false;
+
+  if (!immediatePing) {
+    for (const url of input.urls) {
+      const normalized = normalizeIndexingUrl(url);
+      results.push({
+        url: normalized ?? url.trim(),
+        ping: { ok: false, skipped: 'deferred_to_indexing_queue' }
+      });
+    }
+    return {
+      ...queueResult,
+      results
+    };
+  }
 
   for (const url of input.urls) {
     const ping = await pingGoogleIndexingDirect(url, input.notificationType);

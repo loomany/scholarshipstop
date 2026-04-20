@@ -1,12 +1,11 @@
 import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
 
-/** Number of free navigations to scholarship detail before the registration modal (3rd click opens it). */
-const FREE_DETAIL_NAVIGATIONS = 2;
-const AUTH_NO_SUBSCRIPTION_FREE_DETAIL_NAVIGATIONS = 10;
+/** Guest and signed-in without subscription: same free detail views before paywall. */
+const FREE_DETAIL_NAVIGATIONS = 4;
 
 const GUEST_STORAGE_KEY = 'scholarshipGuestDetailFreeClicksUsed';
-const AUTH_NO_SUBSCRIPTION_STORAGE_KEY =
-  'scholarshipAuthNoSubscriptionDetailFreeClicksUsed';
+/** Same cap as guest; scoped per user when signed in (see `storageKeyForMode`). */
+const AUTH_NO_SUBSCRIPTION_STORAGE_KEY = GUEST_STORAGE_KEY;
 
 export type ScholarshipDetailClickBudgetMode =
   | 'guest'
@@ -18,10 +17,8 @@ function storageKeyForMode(mode: ScholarshipDetailClickBudgetMode): string {
     : getScopedScholarshipStorageKey(AUTH_NO_SUBSCRIPTION_STORAGE_KEY);
 }
 
-function freeNavigationsForMode(mode: ScholarshipDetailClickBudgetMode): number {
-  return mode === 'guest'
-    ? FREE_DETAIL_NAVIGATIONS
-    : AUTH_NO_SUBSCRIPTION_FREE_DETAIL_NAVIGATIONS;
+function freeNavigationsForMode(_mode: ScholarshipDetailClickBudgetMode): number {
+  return FREE_DETAIL_NAVIGATIONS;
 }
 
 export function resolveScholarshipDetailClickBudgetMode(options: {

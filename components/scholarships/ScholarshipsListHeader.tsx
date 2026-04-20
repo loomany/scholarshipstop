@@ -34,7 +34,6 @@ import {
 } from '@/lib/constants/scholarshipActionUi';
 import {
   GUEST_LOCKED_SORT_OPTIONS,
-  SUBSCRIPTION_LOCKED_SORT_OPTIONS,
   type SortOption
 } from '@/app/scholarships/scholarshipSort';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
@@ -192,6 +191,8 @@ export default function ScholarshipsListHeader({
   onSubscriptionSortBlocked,
   onGuestLockedAction
 }: ScholarshipsListHeaderProps) {
+  /** Guest parity for anyone without an active subscription (including guests). */
+  const catalogLocked = !hasSubscription;
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [categorySearch, setCategorySearch] = useState('');
@@ -354,7 +355,7 @@ export default function ScholarshipsListHeader({
             type="button"
             className={scholarshipCategoriesApplyButtonClass}
             onClick={() => {
-              if (!isAuthenticated) {
+              if (catalogLocked) {
                 onGuestLockedAction?.();
                 return;
               }
@@ -413,32 +414,32 @@ export default function ScholarshipsListHeader({
                 <input
                   value={query}
                   onChange={(e) => {
-                    if (!isAuthenticated) return;
+                    if (catalogLocked) return;
                     onQueryChange(e.target.value);
                   }}
                   onFocus={(e) => {
-                    if (isAuthenticated) return;
+                    if (!catalogLocked) return;
                     e.currentTarget.blur();
                     onGuestLockedAction?.();
                   }}
                   onMouseDown={(e) => {
-                    if (isAuthenticated) return;
+                    if (!catalogLocked) return;
                     e.preventDefault();
                     onGuestLockedAction?.();
                   }}
-                  readOnly={!isAuthenticated}
+                  readOnly={catalogLocked}
                   placeholder="Search by keyword"
                   aria-label="Search by keyword"
                   title={
-                    !isAuthenticated
-                      ? 'Search by keyword after you create a free account'
+                    catalogLocked
+                      ? 'Search by keyword after you start your free trial'
                       : undefined
                   }
                   className={`${CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS} ${
-                    !isAuthenticated ? 'cursor-pointer bg-gray-50 pr-10' : ''
+                    catalogLocked ? 'cursor-pointer bg-gray-50 pr-10' : ''
                   }`}
                 />
-                {!isAuthenticated ? (
+                {catalogLocked ? (
                   <Lock
                     className={`pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 ${scholarshipGuestLockIconClass}`}
                     strokeWidth={2}
@@ -492,15 +493,9 @@ export default function ScholarshipsListHeader({
                         className="absolute left-0 z-[200] mt-2 w-full min-w-[12rem] max-w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-xl border border-gray-200 bg-white py-2 shadow-lg ring-1 ring-gray-900/5 sm:left-auto sm:right-0 sm:w-max"
                       >
                         {SORT_OPTIONS.map((opt) => {
-                          const guestSortLocked =
-                            !isAuthenticated &&
-                            GUEST_LOCKED_SORT_OPTIONS.has(opt.value);
-                          const subscriptionSortLocked =
-                            isAuthenticated &&
-                            !hasSubscription &&
-                            SUBSCRIPTION_LOCKED_SORT_OPTIONS.has(opt.value);
                           const sortLocked =
-                            guestSortLocked || subscriptionSortLocked;
+                            catalogLocked &&
+                            GUEST_LOCKED_SORT_OPTIONS.has(opt.value);
                           return (
                             <li
                               key={opt.value}
@@ -515,12 +510,8 @@ export default function ScholarshipsListHeader({
                                     : optionDefaultClass
                                 }`}
                                 onClick={() => {
-                                  if (guestSortLocked) {
+                                  if (sortLocked) {
                                     onGuestSortBlocked?.();
-                                    return;
-                                  }
-                                  if (subscriptionSortLocked) {
-                                    onSubscriptionSortBlocked?.();
                                     return;
                                   }
                                   onSortChange(opt.value);
@@ -554,8 +545,8 @@ export default function ScholarshipsListHeader({
                   type="button"
                   aria-label="Open more filters"
                   title={
-                    !isAuthenticated
-                      ? 'Apply filters after you create a free account'
+                    catalogLocked
+                      ? 'Apply filters after you start your free trial'
                       : undefined
                   }
                   onClick={() => {
@@ -570,7 +561,7 @@ export default function ScholarshipsListHeader({
                     strokeWidth={2}
                     aria-hidden
                   />
-                  {!isAuthenticated ? (
+                  {catalogLocked ? (
                     <Lock
                       className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
                       strokeWidth={2}
@@ -593,8 +584,8 @@ export default function ScholarshipsListHeader({
                     type="button"
                     disabled={categoriesDisabled}
                     title={
-                      !isAuthenticated
-                        ? 'Apply categories after you create a free account'
+                      catalogLocked
+                        ? 'Apply categories after you start your free trial'
                         : undefined
                     }
                     onClick={() => {
@@ -614,7 +605,7 @@ export default function ScholarshipsListHeader({
                     className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
                   >
                     <LayoutGrid className="h-[18px] w-[18px] text-gray-600" />
-                    {!isAuthenticated ? (
+                    {catalogLocked ? (
                       <Lock
                         className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
                         strokeWidth={2}

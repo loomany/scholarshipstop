@@ -10,7 +10,8 @@ const MAX_WIDTH: Record<ScholarshipsTwoColumnMaxWidth, string> = {
 };
 
 type ScholarshipsTwoColumnLayoutProps = {
-  sidebar: ReactNode;
+  /** Omitted or `null`: only main column (e.g. signed-out hub / category). */
+  sidebar?: ReactNode | null;
   children: ReactNode;
   /** Listing catalog vs scholarship detail (max width). */
   maxWidth?: ScholarshipsTwoColumnMaxWidth;
@@ -22,17 +23,18 @@ type ScholarshipsTwoColumnLayoutProps = {
 };
 
 /**
- * Shared scholarships shell: main column + My scholarships sidebar.
- * Mobile: sidebar first (stacked), then main — same as before.
+ * Shared scholarships shell: main column + optional My scholarships sidebar.
+ * Mobile: when `sidebar` is set, it stacks above main — same as before.
  * Desktop (lg+): main left (~72%+), sidebar right (~28% max), sticky sidebar.
  */
 export default function ScholarshipsTwoColumnLayout({
-  sidebar,
+  sidebar = null,
   children,
   maxWidth = 'listing',
   lead = null
 }: ScholarshipsTwoColumnLayoutProps) {
   const mw = MAX_WIDTH[maxWidth];
+  const hasSidebar = sidebar != null;
 
   return (
     <div className={`mx-auto flex w-full ${mw} flex-col gap-5 sm:gap-6`}>
@@ -43,15 +45,17 @@ export default function ScholarshipsTwoColumnLayout({
         <div className="order-2 min-w-0 flex-1 basis-0 lg:order-1">
           {children}
         </div>
-        <aside
-          className="order-1 w-full shrink-0 lg:order-2 lg:w-[min(100%,280px)] lg:max-w-[30%] xl:w-[300px] 2xl:w-[320px]"
-          aria-label="My scholarships navigation"
-        >
-          {/* top-20 = 5rem — matches Navbar h-16 default; md+ uses h-20, sticky still clears bar */}
-          <div className="lg:sticky lg:top-20 lg:z-10 lg:w-full">
-            {sidebar}
-          </div>
-        </aside>
+        {hasSidebar ? (
+          <aside
+            className="order-1 w-full shrink-0 lg:order-2 lg:w-[min(100%,280px)] lg:max-w-[30%] xl:w-[300px] 2xl:w-[320px]"
+            aria-label="My scholarships navigation"
+          >
+            {/* top-20 = 5rem — matches Navbar h-16 default; md+ uses h-20, sticky still clears bar */}
+            <div className="lg:sticky lg:top-20 lg:z-10 lg:w-full">
+              {sidebar}
+            </div>
+          </aside>
+        ) : null}
       </div>
     </div>
   );

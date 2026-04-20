@@ -14,7 +14,7 @@ import {
   parseCompareIndexSearchParams
 } from '@/lib/seo/compareIndexFilters';
 import { buildUniversityCompareItems } from '@/lib/seo/compareIndexData';
-import { fetchRecentPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
+import { fetchAllPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
 import { getURL } from '@/utils/helpers';
 
 export const revalidate = 3600;
@@ -58,7 +58,7 @@ export default async function UniversityBattlesPage({
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const queryState = parseCompareIndexSearchParams(searchParams);
-  const pages = await fetchRecentPublishedUniversityComparePages(120);
+  const pages = await fetchAllPublishedUniversityComparePages();
   const items = buildUniversityCompareItems(pages);
   const filtered = filterAndSortCompareIndexItems(items, {
     q: queryState.q,

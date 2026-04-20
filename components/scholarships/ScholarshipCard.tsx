@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Info, Lock, Star } from 'lucide-react';
 import {
   formatDeadlineTooltipText,
@@ -13,8 +13,10 @@ import {
 import {
   SCHOLARSHIP_ACTION_FILL,
   SCHOLARSHIP_ACTION_FILL_PRESSED,
-  SCHOLARSHIP_ACTION_FOCUS_VISIBLE
+  SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
+  SCHOLARSHIP_PROVIDER_OBSCURE_CLASS
 } from '@/lib/constants/scholarshipActionUi';
+import { renderTextWithObscuredProviderName } from '@/lib/scholarships/renderObscuredProviderText';
 import {
   getScholarshipCatalog,
   payoutMethodChipLabel,
@@ -212,6 +214,8 @@ export default function ScholarshipCard({
     ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
     : null;
 
+  const providerNameObscured = Boolean(providerLine) && !hasSubscription;
+
   const deadlineTooltipText = formatDeadlineTooltipText(scholarship);
 
   const showBadgeRow =
@@ -279,11 +283,9 @@ export default function ScholarshipCard({
             hasSubscription
           });
           const onBlockedNavigate =
-            budgetMode === 'guest'
-              ? onGuestDetailNavigate
-              : budgetMode === 'signed-in-no-subscription'
-                ? onSubscriptionDetailNavigate
-                : undefined;
+            budgetMode === 'guest' || budgetMode === 'signed-in-no-subscription'
+              ? onGuestDetailNavigate ?? onSubscriptionDetailNavigate
+              : undefined;
           if (!budgetMode || !onBlockedNavigate) return;
           if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
             e.preventDefault();
@@ -318,7 +320,20 @@ export default function ScholarshipCard({
                 </span>
               ) : null}
               {providerLine ? (
-                providerProfileHref ? (
+                providerNameObscured ? (
+                  <span
+                    className="inline-flex min-w-0 max-w-full items-center gap-1.5 text-gray-400"
+                    aria-label="Sponsor name hidden. Sign in and start a trial to see the provider."
+                  >
+                    <Info className="h-3.5 w-3.5 shrink-0 text-gray-300" aria-hidden />
+                    <span
+                      className={`min-w-0 max-w-[min(100%,18rem)] truncate ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
+                      aria-hidden
+                    >
+                      {providerLine}
+                    </span>
+                  </span>
+                ) : providerProfileHref ? (
                   <Link
                     href={providerProfileHref}
                     className="group relative z-10 inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-md text-gray-500 outline-none transition pointer-events-auto hover:text-emerald-700 hover:underline decoration-emerald-600/40 underline-offset-2 focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1"
@@ -394,15 +409,36 @@ export default function ScholarshipCard({
                 ? 'text-gray-600 group-hover:text-gray-600'
                 : 'text-gray-900 group-hover:text-gray-800'
             }`}
-            title={scholarship.title}
+            title={
+              providerNameObscured
+                ? 'Scholarship title — sponsor name may be obscured until you subscribe.'
+                : scholarship.title
+            }
           >
-            {scholarship.title}
+            {providerNameObscured
+              ? renderTextWithObscuredProviderName(scholarship.title, providerLine, {
+                  blurEntireWhenNoSubstringMatch: false
+                })
+              : scholarship.title}
           </h2>
           <p
             className="mt-1 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-400 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
-            title={summaryLine}
+            title={
+              providerNameObscured
+                ? 'Summary preview. Sponsor name is hidden until you subscribe.'
+                : summaryLine
+            }
+            aria-label={
+              providerNameObscured
+                ? 'Scholarship summary. Sponsor name in the text is obscured until you subscribe.'
+                : undefined
+            }
           >
-            {summaryLine}
+            {providerNameObscured
+              ? renderTextWithObscuredProviderName(summaryLine, providerLine, {
+                  blurEntireWhenNoSubstringMatch: false
+                })
+              : summaryLine}
           </p>
           {hasApplicants ? (
             <p

@@ -8,8 +8,8 @@ import {
   buildStateCompareSourceCandidates,
   parseCompareSources
 } from '../lib/seo/compareSources';
-import { enqueueSeoPageInspectionUrls } from '../lib/seo/seoPageInspectionQueue';
 import { submitUrlsForImmediateIndexing } from '../lib/seo/googleIndexingQueue';
+import { enqueueSeoPageInspectionUrls } from '../lib/seo/seoPageInspectionQueue';
 import { getURL } from '../utils/helpers';
 import type { Database, Json } from '../types_db';
 
@@ -76,7 +76,8 @@ async function queuePostPublishChecks(url: string, source: string) {
   await submitUrlsForImmediateIndexing({
     urls: [url],
     kind: 'page',
-    source: `${source}:publish`
+    source: `${source}:publish`,
+    immediatePing: false
   });
 }
 
@@ -177,7 +178,7 @@ async function refreshPage(
   const path = `/compare/states/${encodeURIComponent(row.slug)}`;
   const base = getURL().replace(/\/$/, '');
   const url = `${base}${path}`;
-  await revalidatePublishedSeoPaths([path]);
+  await revalidatePublishedSeoPaths([path, '/compare', '/compare/states']);
   await queuePostPublishChecks(url, 'refresh-state-compare-pages');
 }
 

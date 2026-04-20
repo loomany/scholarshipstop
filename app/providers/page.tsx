@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import { ProvidersHubBulkEnrichButton } from '@/components/providers/ProvidersHubBulkEnrichButton';
-import { ProvidersHubCard } from '@/components/providers/ProvidersHubCard';
+import { ProvidersHubCardsGrid } from '@/components/providers/ProvidersHubCardsGrid';
 import { ProvidersHubToolbar } from '@/components/providers/ProvidersHubToolbar';
 import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
 import {
@@ -174,11 +174,7 @@ export default async function ProvidersHubPage({ searchParams }: PageProps) {
           </div>
         ) : (
           <>
-            <ul className="mt-10 grid list-none grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {rows.map((row) => (
-                <ProvidersHubCard key={row.slug} row={row} />
-              ))}
-            </ul>
+            <ProvidersHubCardsGrid rows={rows} />
             <ResourcesPagination
               currentPage={currentPage}
               totalPages={totalPages}

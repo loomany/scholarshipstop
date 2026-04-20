@@ -75,12 +75,16 @@ export async function fetchPublishedComparePageBySlug(
   return { page, instA, instB };
 }
 
-export async function fetchRecentPublishedUniversityComparePages(limit = 10): Promise<
-  Pick<
-    Database['public']['Tables']['compare_pages']['Row'],
-    'slug' | 'meta_title' | 'meta_description' | 'updated_at'
-  >[]
-> {
+export type UniversityCompareIndexRow = Pick<
+  Database['public']['Tables']['compare_pages']['Row'],
+  'slug' | 'meta_title' | 'meta_description' | 'updated_at'
+>;
+
+const PUBLISHED_COMPARE_FETCH_BATCH = 1000;
+
+export async function fetchRecentPublishedUniversityComparePages(
+  limit = 10
+): Promise<UniversityCompareIndexRow[]> {
   const supabase = createPublicClient();
   if (!supabase) return [];
   const { data, error } = await supabase
@@ -91,6 +95,29 @@ export async function fetchRecentPublishedUniversityComparePages(limit = 10): Pr
     .limit(limit);
   if (error) return [];
   return data ?? [];
+}
+
+/** All published rows for compare index (paginates past PostgREST default cap). */
+export async function fetchAllPublishedUniversityComparePages(): Promise<UniversityCompareIndexRow[]> {
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+  const out: UniversityCompareIndexRow[] = [];
+  for (let from = 0; ; from += PUBLISHED_COMPARE_FETCH_BATCH) {
+    const { data, error } = await supabase
+      .from('compare_pages')
+      .select('slug, meta_title, meta_description, updated_at')
+      .eq('status', 'published')
+      .order('updated_at', { ascending: false })
+      .range(from, from + PUBLISHED_COMPARE_FETCH_BATCH - 1);
+    if (error) {
+      console.error('[fetchAllPublishedUniversityComparePages]', error.message);
+      return out;
+    }
+    const batch = data ?? [];
+    out.push(...batch);
+    if (batch.length < PUBLISHED_COMPARE_FETCH_BATCH) break;
+  }
+  return out;
 }
 
 export function comparisonGrantCountsOk(data: ComparisonDataJson | null): boolean {

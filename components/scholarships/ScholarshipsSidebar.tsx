@@ -62,14 +62,11 @@ type StaticNavDef = {
   icon: LucideIcon;
 };
 
-/** Hub guests: these tabs open the registration wall instead of navigating. */
-const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
-  'recommended',
-  'easy-apply',
-  'hot-deadlines',
-  'saved',
-  'ignored'
-]);
+/**
+ * Hub guests: tabs that render as locked buttons instead of links.
+ * Empty — guests may open every sidebar tab (subscription locks still apply when signed in without a plan).
+ */
+const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>();
 
 /** Paid-only tabs for signed-in users without active subscription. */
 const SUBSCRIPTION_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
@@ -292,7 +289,7 @@ export default function ScholarshipsSidebar({
                       </span>
                     ) : null}
                   </span>
-                  {(showGuestLock || showSubscriptionLock) ? (
+                  {showSubscriptionLock ? (
                     <Lock
                       className={`h-3.5 w-3.5 shrink-0 ${
                         isActive ? 'text-white/85 stroke-white/85' : scholarshipGuestLockIconClass
@@ -389,7 +386,7 @@ export default function ScholarshipsSidebar({
                   </span>
                 ) : null}
               </span>
-              {(showGuestLock || showSubscriptionLock) ? (
+              {showSubscriptionLock ? (
                 <Lock
                   className={`h-3.5 w-3.5 shrink-0 ${
                     navLooksActive
@@ -532,7 +529,7 @@ export default function ScholarshipsSidebar({
                     </span>
                   ) : null}
                 </span>
-                {showGuestLockIntl || showSubscriptionLockIntl ? (
+                {showSubscriptionLockIntl ? (
                   <Lock
                     className={`h-3.5 w-3.5 shrink-0 ${
                       intlActive

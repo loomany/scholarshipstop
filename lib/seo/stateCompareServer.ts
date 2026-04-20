@@ -96,12 +96,14 @@ export async function fetchPublishedStateCompareSlugByCodes(
   return data?.slug?.trim() || null;
 }
 
-export async function fetchRecentPublishedStateComparePages(limit = 10): Promise<
-  Pick<
-    Database['public']['Tables']['state_compare_pages']['Row'],
-    'slug' | 'meta_title' | 'meta_description' | 'updated_at'
-  >[]
-> {
+export type StateCompareIndexRow = Pick<
+  Database['public']['Tables']['state_compare_pages']['Row'],
+  'slug' | 'meta_title' | 'meta_description' | 'updated_at'
+>;
+
+const PUBLISHED_COMPARE_FETCH_BATCH = 1000;
+
+export async function fetchRecentPublishedStateComparePages(limit = 10): Promise<StateCompareIndexRow[]> {
   const supabase = createPublicClient();
   if (!supabase) return [];
   const { data, error } = await supabase
@@ -112,6 +114,29 @@ export async function fetchRecentPublishedStateComparePages(limit = 10): Promise
     .limit(limit);
   if (error) return [];
   return data ?? [];
+}
+
+/** All published rows for compare index / sitemap-style listing (paginates past PostgREST default cap). */
+export async function fetchAllPublishedStateComparePages(): Promise<StateCompareIndexRow[]> {
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+  const out: StateCompareIndexRow[] = [];
+  for (let from = 0; ; from += PUBLISHED_COMPARE_FETCH_BATCH) {
+    const { data, error } = await supabase
+      .from('state_compare_pages')
+      .select('slug, meta_title, meta_description, updated_at')
+      .eq('status', 'published')
+      .order('updated_at', { ascending: false })
+      .range(from, from + PUBLISHED_COMPARE_FETCH_BATCH - 1);
+    if (error) {
+      console.error('[fetchAllPublishedStateComparePages]', error.message);
+      return out;
+    }
+    const batch = data ?? [];
+    out.push(...batch);
+    if (batch.length < PUBLISHED_COMPARE_FETCH_BATCH) break;
+  }
+  return out;
 }
 
 export function stateComparisonGrantCountsOk(data: StateComparisonDataJson | null): boolean {

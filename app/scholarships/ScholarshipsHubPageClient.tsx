@@ -30,7 +30,6 @@ import { ScholarshipsEmailConfirmationBanner } from '@/components/scholarships/S
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
-import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import {
   SCHOLARSHIP_CATEGORY_ORDER,
   type ScholarshipCategoryId
@@ -53,7 +52,6 @@ import {
   readSavedFiltersFromStorage,
   SAVED_FILTERS_STORAGE_KEY
 } from '@/lib/scholarships/savedFiltersStorage';
-import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import {
   deleteUserSavedScholarship,
   fetchUserSavedScholarshipIds,
@@ -263,6 +261,8 @@ function ScholarshipsPageInner({
    * Do not show guest padlocks / guest empty states in that window.
    */
   const hubTreatAsGuest = !isAuthenticated && Boolean(authResolved);
+  /** Guest parity limits for anyone without a subscription (includes guests). */
+  const catalogFreeTier = authResolved && !hasSubscription;
   /** Best tab: avoid one frame of guest UI before we know the session (prevents card ↔ locks flicker). */
   const bestTabAuthPending =
     activeTab === 'best-recommendation' && !authResolved;
@@ -287,10 +287,6 @@ function ScholarshipsPageInner({
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
-  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
-  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
-    string | undefined
-  >(undefined);
   const [bestRecommendationWizardStore, setBestRecommendationWizardStore] =
     useState<BestRecommendationWizardStore | null>(null);
   const [bestRecommendationWizardHydrated, setBestRecommendationWizardHydrated] =
@@ -299,17 +295,6 @@ function ScholarshipsPageInner({
     useState(false);
   const { profile: currentMatchProfile } =
     useCurrentUserScholarshipMatchProfile(isAuthenticated && authResolved);
-  const isSubscriptionLocked = isAuthenticated && !hasSubscription;
-  const LOCKED_TABS_FOR_UNSUBSCRIBED = useMemo(
-    () =>
-      new Set<ScholarshipListTabId>([
-        'recommended',
-        'easy-apply',
-        'hot-deadlines'
-      ]),
-    []
-  );
-
   /** Merge server-backed saves (Telegram, heart on site) with localStorage for guests→login edge cases. */
   const refreshSavedIdsFromApi = useCallback(async () => {
     const fromStorage = getSavedScholarshipIds();
@@ -352,17 +337,6 @@ function ScholarshipsPageInner({
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
-  }, []);
-
-  const openSubscriptionOffer = useCallback((arg?: unknown) => {
-    const notice = typeof arg === 'string' ? arg : undefined;
-    setSubscriptionOfferNotice(notice);
-    setSubscriptionOfferOpen(true);
-  }, []);
-
-  const closeSubscriptionOffer = useCallback(() => {
-    setSubscriptionOfferOpen(false);
-    setSubscriptionOfferNotice(undefined);
   }, []);
 
   const persistBestRecommendationWizardStore = useCallback(
@@ -458,7 +432,7 @@ function ScholarshipsPageInner({
   );
 
   const handleGuestBestRecommendationEditAnswers = useCallback(() => {
-    if (!hubTreatAsGuest || activeTab !== 'best-recommendation') return;
+    if (!catalogFreeTier || activeTab !== 'best-recommendation') return;
     try {
       sessionStorage.setItem(SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY, '1');
     } catch {
@@ -501,7 +475,7 @@ function ScholarshipsPageInner({
   }, [
     activeTab,
     bestRecommendationWizardStore,
-    hubTreatAsGuest,
+    catalogFreeTier,
     persistBestRecommendationWizardStore,
     replaceListingParams
   ]);
@@ -516,57 +490,6 @@ function ScholarshipsPageInner({
     }
     syncUserCollectionIdsFromStorage();
   }, [isAuthenticated, syncUserCollectionIdsFromStorage]);
-  const routeScopeHasLockedEasyApplyCategory = useMemo(() => {
-    if (!routeScope) return false;
-    const premiumLegacySlugs = new Set([
-      'no-essay',
-      'easy-apply',
-      'quick-apply',
-      'few-requirements'
-    ]);
-    const hasPremiumLegacySlug = routeScope.longTailLegacySlugs.some((slug) =>
-      premiumLegacySlugs.has(slug)
-    );
-    if (hasPremiumLegacySlug) return true;
-    const requiredTags = new Set(routeScope.requiredSeoTags);
-    return (
-      requiredTags.has('no_essay') ||
-      requiredTags.has('easy_apply') ||
-      requiredTags.has('quick_apply') ||
-      requiredTags.has('few_requirements')
-    );
-  }, [routeScope]);
-  useEffect(() => {
-    if (!isSubscriptionLocked) return;
-    if (!LOCKED_TABS_FOR_UNSUBSCRIBED.has(activeTab)) return;
-    openSubscriptionOffer();
-    replaceListingParams({
-      tab: 'matches',
-      scope: 'catalog',
-      resetPage: true
-    });
-  }, [
-    activeTab,
-    isSubscriptionLocked,
-    openSubscriptionOffer,
-    replaceListingParams,
-    LOCKED_TABS_FOR_UNSUBSCRIBED
-  ]);
-  useEffect(() => {
-    if (!isSubscriptionLocked) return;
-    if (!routeScopeHasLockedEasyApplyCategory) return;
-    openSubscriptionOffer();
-    replaceListingParams({
-      tab: 'matches',
-      scope: 'catalog',
-      resetPage: true
-    });
-  }, [
-    isSubscriptionLocked,
-    routeScopeHasLockedEasyApplyCategory,
-    openSubscriptionOffer,
-    replaceListingParams
-  ]);
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const [moreFiltersApplied, setMoreFiltersApplied] =
     useState<MoreFiltersState | null>(() => {
@@ -606,7 +529,7 @@ function ScholarshipsPageInner({
     [bestRecommendationWizardSeed, landingQuizProfileSeed]
   );
   const guestBestRecommendationPreviewEnabled =
-    hubTreatAsGuest &&
+    catalogFreeTier &&
     activeTab === 'best-recommendation' &&
     transientBestRecommendationProfileSeed != null;
   const bestRecommendationWizardInProgress =
@@ -1083,12 +1006,8 @@ function ScholarshipsPageInner({
   ]);
 
   const saveMoreFiltersPreset = useCallback(() => {
-    if (!isAuthenticated) {
+    if (!hasSubscription) {
       openRegistrationWall();
-      return;
-    }
-    if (isSubscriptionLocked) {
-      openSubscriptionOffer();
       return;
     }
     if (!moreFiltersDraft || !saveFilterEnabled) return;
@@ -1129,13 +1048,11 @@ function ScholarshipsPageInner({
       description: `Your criteria are stored in Saved Filters${countPhrase} under My scholarships. Open that tab anytime to browse scholarships that match this preset.`
     });
   }, [
-    isAuthenticated,
+    hasSubscription,
     moreFiltersDraft,
     saveFilterEnabled,
     routeBaseMoreFilters,
     openRegistrationWall,
-    openSubscriptionOffer,
-    isSubscriptionLocked,
     replaceListingParams,
     previewCount,
     lastKnownPreviewCount
@@ -1146,6 +1063,7 @@ function ScholarshipsPageInner({
     /**
      * Guests: never show signed-in sidebar totals from stale SSR/ISR or a failed
      * `meta_only` refetch (must match POST `/api/scholarships` + `applyListingMetaGuestPatches`).
+     * Guest patches force saved/ignored/started/submitted to 0 — use local collection state for those.
      */
     if (!isAuthenticated && authResolved) {
       if (!listMeta) return EMPTY_SIDEBAR_COUNTS;
@@ -1160,7 +1078,13 @@ function ScholarshipsPageInner({
       if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
         patched.sidebarCounts.bestRecommendation = totalCount;
       }
-      return patched.sidebarCounts;
+      return {
+        ...patched.sidebarCounts,
+        saved: savedIds.length,
+        ignored: ignoredIds.length,
+        started: startedIds.length,
+        submitted: submittedIds.length
+      };
     }
     if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
       return {
@@ -1175,7 +1099,11 @@ function ScholarshipsPageInner({
     listMeta,
     isAuthenticated,
     authResolved,
-    guestBestRecommendationPreviewEnabled
+    guestBestRecommendationPreviewEnabled,
+    savedIds,
+    ignoredIds,
+    startedIds,
+    submittedIds
   ]);
 
   const categoryCounts = useMemo(() => {
@@ -1242,8 +1170,15 @@ function ScholarshipsPageInner({
   );
   const sidebarMetaRequestKeyRef = useRef(sidebarMetaRequestKey);
   sidebarMetaRequestKeyRef.current = sidebarMetaRequestKey;
+  /**
+   * Show sidebar counts whenever we have meta — not only when `metaKeySynced` matches
+   * `sidebarMetaRequestKey`. After a tab change, the preset-sync effect updates
+   * `moreFiltersApplied`, which bumps `sidebarCountsMetaFingerprint` and thus
+   * `sidebarMetaRequestKey` *after* the meta-only fetch already synced the previous key,
+   * leaving the strict equality false forever on tabs like Matches.
+   */
   const sidebarCountsReady =
-    authResolved && metaKeySynced.current === sidebarMetaRequestKey;
+    authResolved && listMeta != null && Boolean(listMeta.sidebarCounts);
 
   const totalPages = Math.max(
     1,
@@ -1254,9 +1189,9 @@ function ScholarshipsPageInner({
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
   /** Guests on Best recommendation only load page 1; URL may still carry `page` until normalized. */
   const hubListingPage =
-    hubTreatAsGuest && activeTab === 'best-recommendation' ? 1 : pageFromUrl;
+    catalogFreeTier && activeTab === 'best-recommendation' ? 1 : pageFromUrl;
   const listPageForUi =
-    hubTreatAsGuest && activeTab === 'best-recommendation' ? 1 : currentPage;
+    catalogFreeTier && activeTab === 'best-recommendation' ? 1 : currentPage;
 
   useEffect(() => {
     let cancelled = false;
@@ -1264,7 +1199,8 @@ function ScholarshipsPageInner({
     /**
      * Keep visible list stable on membership mutations (save/ignore/restore):
      * collection changes are handled optimistically in local state and should not
-     * invalidate this effect.
+     * invalidate this effect. Do not add `sidebarMetaRequestKey` here — it includes
+     * collection fingerprints and would refetch the full list on every save (flash).
      */
     const requestCacheKey = metaKey;
     const currentRequestKey = routeScope
@@ -1419,7 +1355,6 @@ function ScholarshipsPageInner({
     savedFiltersForHub,
     savedFiltersSnapshotJson,
     appliedProviderSlug,
-    sidebarMetaRequestKey,
     guestBestRecommendationPreviewEnabled
   ]);
 
@@ -1757,11 +1692,15 @@ function ScholarshipsPageInner({
   const listStart = (listPageForUi - 1) * SCHOLARSHIPS_PAGE_SIZE;
   const toggleSave = useCallback(
     async (id: string) => {
+      const wasSaved = savedIds.includes(id);
       if (!isAuthenticated) {
-        openRegistrationWall();
+        if (activeTab === 'saved' && wasSaved) {
+          setScholarships((prev) => prev.filter((s) => s.id !== id));
+          setTotalCount((c) => Math.max(0, c - 1));
+        }
+        setSavedIds(wasSaved ? removeScholarship(id) : saveScholarship(id));
         return;
       }
-      const wasSaved = savedIds.includes(id);
       const ok = wasSaved
         ? await deleteUserSavedScholarship(id)
         : await postUserSavedScholarship(id);
@@ -1779,37 +1718,29 @@ function ScholarshipsPageInner({
       }
       setSavedIds(wasSaved ? removeScholarship(id) : saveScholarship(id));
     },
-    [activeTab, isAuthenticated, openRegistrationWall, savedIds]
+    [activeTab, isAuthenticated, savedIds]
   );
 
   const ignoreScholarship = useCallback(
     (id: string) => {
-      if (!isAuthenticated) {
-        openRegistrationWall();
-        return;
-      }
       setIgnoredIds(addIgnoredScholarship(id));
       if (activeTab !== 'ignored') {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
       }
     },
-    [activeTab, isAuthenticated, openRegistrationWall]
+    [activeTab]
   );
 
   const restoreScholarship = useCallback(
     (id: string) => {
-      if (!isAuthenticated) {
-        openRegistrationWall();
-        return;
-      }
       setIgnoredIds(removeIgnoredScholarship(id));
       if (activeTab === 'ignored') {
         setScholarships((prev) => prev.filter((s) => s.id !== id));
         setTotalCount((c) => Math.max(0, c - 1));
       }
     },
-    [activeTab, isAuthenticated, openRegistrationWall]
+    [activeTab]
   );
 
   const resultCountForHeader = isLoading ? null : totalCount;
@@ -1838,7 +1769,7 @@ function ScholarshipsPageInner({
     activeTab === 'best-recommendation' &&
     bestRecommendationWizardHydrated &&
     !bestTabAuthPending &&
-    ((hubTreatAsGuest && !guestBestRecommendationPreviewEnabled) ||
+    ((catalogFreeTier && !guestBestRecommendationPreviewEnabled) ||
       (!hubTreatAsGuest &&
         (bestRecommendationWizardInProgress ||
           (!bestRecommendationWizardStore &&
@@ -1921,18 +1852,20 @@ function ScholarshipsPageInner({
             counts={sidebarCounts}
             showCounts={sidebarCountsReady}
             matchesNewIndicator={null}
-            guestMode={hubTreatAsGuest}
-            onGuestRestrictedNav={hubTreatAsGuest ? openRegistrationWall : undefined}
-            subscriptionLocked={isSubscriptionLocked}
-            onSubscriptionRestrictedNav={isSubscriptionLocked ? openSubscriptionOffer : undefined}
+            guestMode={catalogFreeTier}
+            onGuestRestrictedNav={
+              catalogFreeTier ? openRegistrationWall : undefined
+            }
+            subscriptionLocked={false}
+            onSubscriptionRestrictedNav={undefined}
             buildTabHref={routeScope?.providerSlug ? buildSidebarTabHref : undefined}
             internationalStudentsFilter={{
               active: internationalSidebarChecked,
               onActivate: toggleInternationalAudienceSidebar,
-              showGuestLock: hubTreatAsGuest,
-              showSubscriptionLock: isSubscriptionLocked,
+              showGuestLock: false,
+              showSubscriptionLock: false,
               onGuestRestrictedClick: openRegistrationWall,
-              onSubscriptionRestrictedClick: openSubscriptionOffer
+              onSubscriptionRestrictedClick: openRegistrationWall
             }}
           />
         }
@@ -1965,13 +1898,11 @@ function ScholarshipsPageInner({
                 isAuthenticated={authResolved && isAuthenticated}
                 hasSubscription={hasSubscription}
                 onGuestSortBlocked={
-                  hubTreatAsGuest ? openRegistrationWall : undefined
+                  catalogFreeTier ? openRegistrationWall : undefined
                 }
-                onSubscriptionSortBlocked={
-                  isSubscriptionLocked ? openSubscriptionOffer : undefined
-                }
+                onSubscriptionSortBlocked={undefined}
                 onGuestLockedAction={
-                  hubTreatAsGuest ? openRegistrationWall : undefined
+                  catalogFreeTier ? openRegistrationWall : undefined
                 }
               />
 
@@ -2042,7 +1973,7 @@ function ScholarshipsPageInner({
             </div>
           ) : (
             <>
-              {hubTreatAsGuest && activeTab === 'matches' ? (
+              {catalogFreeTier && activeTab === 'matches' ? (
                 <div className="mb-4 rounded-2xl border border-gray-200/90 bg-gradient-to-br from-gray-50 via-white to-gray-50/80 p-4 text-center shadow-sm ring-1 ring-gray-100 sm:p-5">
                   <p className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
                     Want better scholarship matches?
@@ -2059,7 +1990,7 @@ function ScholarshipsPageInner({
                   </div>
                 </div>
               ) : null}
-              {hubTreatAsGuest &&
+              {catalogFreeTier &&
               activeTab === 'best-recommendation' &&
               transientBestRecommendationProfileSeed ? (
                 <div className="mb-4 rounded-2xl border border-[#FFD9B3] bg-[#FFF8F1] p-4 text-[#7A3B00] shadow-sm">
@@ -2109,23 +2040,14 @@ function ScholarshipsPageInner({
                     }
                     ignoreAction={activeTab === 'ignored' ? 'restore' : 'hide'}
                     showCardActions={scholarshipTabShowsCardActions(activeTab)}
-                    subscriptionLocked={isSubscriptionLocked}
+                    subscriptionLocked={false}
                     isAuthenticated={isAuthenticated}
                     hasSubscription={hasSubscription}
                     listingTab={activeTab}
-                    onSubscriptionLockedCategoryClick={
-                      isSubscriptionLocked ? () => openSubscriptionOffer() : undefined
-                    }
-                    onSubscriptionDetailNavigate={
-                      isSubscriptionLocked
-                        ? () =>
-                            openSubscriptionOffer(
-                              SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE
-                            )
-                        : undefined
-                    }
+                    onSubscriptionLockedCategoryClick={undefined}
+                    onSubscriptionDetailNavigate={undefined}
                     onGuestDetailNavigate={
-                      hubTreatAsGuest
+                      catalogFreeTier
                         ? () => openRegistrationWall('card-unlock')
                         : undefined
                     }
@@ -2138,10 +2060,10 @@ function ScholarshipsPageInner({
                 totalPages={totalPages}
                 buildHref={buildPageHref}
                 guestPaginationLocked={
-                  hubTreatAsGuest && activeTab === 'best-recommendation'
+                  catalogFreeTier && activeTab === 'best-recommendation'
                 }
                 onGuestLockedClick={
-                  hubTreatAsGuest && activeTab === 'best-recommendation'
+                  catalogFreeTier && activeTab === 'best-recommendation'
                     ? () => openRegistrationWall()
                     : undefined
                 }
@@ -2170,20 +2092,18 @@ function ScholarshipsPageInner({
         locationOptions={[]}
         isAuthenticated={authResolved && isAuthenticated}
         onGuestLockedAction={
-          hubTreatAsGuest ? openRegistrationWall : undefined
+          catalogFreeTier ? openRegistrationWall : undefined
         }
         hasSubscription={hasSubscription}
-        onSubscriptionLockedAction={isSubscriptionLocked ? openSubscriptionOffer : undefined}
+        onSubscriptionLockedAction={undefined}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
         contentMode={registrationWallContent}
-      />
-      <ScholarshipSubscriptionOfferModal
-        open={subscriptionOfferOpen}
-        onClose={closeSubscriptionOffer}
-        notice={subscriptionOfferNotice}
+        signedInWithoutSubscription={
+          Boolean(isAuthenticated && authResolved && !hasSubscription)
+        }
       />
     </section>
   );

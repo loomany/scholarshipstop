@@ -41,6 +41,21 @@ export function clampBullets(lines: string[], max: number): string[] {
     .slice(0, max);
 }
 
+/** Shown under “Missing or unclear” — suppress low-signal repeats of structured fields. */
+const AI_MISSING_INFO_SUPPRESSED = new Set([
+  'provider url',
+  'payout method details'
+]);
+
+export function filterAiMissingInfoForDisplay(
+  items: string[] | null | undefined
+): string[] {
+  return (items ?? [])
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0)
+    .filter((s) => !AI_MISSING_INFO_SUPPRESSED.has(s.toLowerCase()));
+}
+
 /** Use for tips, next steps, on-page FAQ: only when model reported sufficient confidence. */
 export function hasTrustworthyAiConfidence(s: Scholarship): boolean {
   const v = s.aiConfidenceScore;
@@ -117,7 +132,7 @@ export function isDecisionAndChecksTooSimilar(s: Scholarship): boolean {
     .filter((x) => x.length > 8);
   const before = [
     ...(s.aiImportantChecks ?? []),
-    ...(s.aiMissingInfo ?? []),
+    ...filterAiMissingInfoForDisplay(s.aiMissingInfo),
     ...(s.aiRedFlags ?? [])
   ]
     .map((x) => x.trim())
@@ -151,7 +166,8 @@ export function pickQuickDecisionAndBeforePanels(s: Scholarship): {
     return { showQuickDecision: true, showBeforeYouApply: true };
   }
   const hasExtra =
-    hasNonEmptyArray(s.aiMissingInfo) || hasNonEmptyArray(s.aiRedFlags);
+    hasNonEmptyArray(filterAiMissingInfoForDisplay(s.aiMissingInfo)) ||
+    hasNonEmptyArray(s.aiRedFlags);
   if (hasExtra) return { showQuickDecision: false, showBeforeYouApply: true };
   return { showQuickDecision: true, showBeforeYouApply: false };
 }
@@ -257,7 +273,7 @@ export function shouldRenderQuickDecision(s: Scholarship): boolean {
 export function shouldRenderBeforeYouApply(s: Scholarship): boolean {
   return (
     hasNonEmptyArray(s.aiImportantChecks) ||
-    hasNonEmptyArray(s.aiMissingInfo) ||
+    hasNonEmptyArray(filterAiMissingInfoForDisplay(s.aiMissingInfo)) ||
     hasNonEmptyArray(s.aiRedFlags)
   );
 }

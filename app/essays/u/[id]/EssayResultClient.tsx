@@ -39,12 +39,7 @@ import {
   friendlyUndetectableError,
   UNDETECTABLE_MIN_CONTENT_CHARS
 } from '@/lib/essay/undetectableUserMessages';
-import {
-  TRIAL_CHAT_DIALOGUE_LIMIT,
-  TRIAL_FEATURE_LIMIT,
-  trialQuotasAllExhausted,
-  type TrialFeatureQuotaSnapshot
-} from '@/lib/payments/trialFeatureQuotas';
+import type { TrialFeatureQuotaSnapshot } from '@/lib/payments/trialFeatureQuotas';
 import {
   clearEssayBrowserStorage,
   clearEssaySessionStorageCaches
@@ -54,8 +49,7 @@ import { INTERVIEW_DRAFT_STRONG_MIN_PERCENT } from '@/lib/essay/interviewDraftPr
 import EssaySendForAiCheckButton from '@/components/essay/EssaySendForAiCheckButton';
 import type { EssaySendForAiDetectorChoice } from '@/components/essay/EssaySendForAiCheckButton';
 import ManualGreenCoverageModal from '@/components/essay/ManualGreenCoverageModal';
-import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
-import MentorTrialSubscribeModal from '@/components/essay/MentorTrialSubscribeModal';
+import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import {
   getManualGreenCoverageRatio,
   MANUAL_GREEN_COVERAGE_THRESHOLD
@@ -103,7 +97,7 @@ type Props = {
   essayChatId?: string | null;
   /** Active subscription or trial — otherwise Humanize entire draft shows the paywall. */
   hasSubscription: boolean;
-  /** Per-feature limits during the 3-day trial (from server). */
+  /** Server-side feature quotas while the user has subscription access (from server). */
   trialFeatureQuota?: TrialFeatureQuotaSnapshot | null;
 };
 
@@ -390,26 +384,19 @@ export default function EssayResultClient({
 }: Props) {
   const router = useRouter();
   const { toast } = useToast();
-  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
-  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
+  const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallNotice, setRegistrationWallNotice] = useState<
     string | undefined
   >(undefined);
-  const openScholarshipSubscriptionOfferModal = useCallback((arg?: unknown) => {
-    const notice = typeof arg === 'string' ? arg : undefined;
-    setSubscriptionOfferNotice(notice);
-    setSubscriptionOfferOpen(true);
+  const openRegistrationWall = useCallback((notice?: string) => {
+    setRegistrationWallNotice(notice);
+    setRegistrationWallOpen(true);
   }, []);
-  const closeScholarshipSubscriptionOfferModal = useCallback(() => {
-    setSubscriptionOfferOpen(false);
-    setSubscriptionOfferNotice(undefined);
+  const closeRegistrationWall = useCallback(() => {
+    setRegistrationWallOpen(false);
+    setRegistrationWallNotice(undefined);
   }, []);
-  const [trialAiCheckPremiumModalOpen, setTrialAiCheckPremiumModalOpen] =
-    useState(false);
-  const [preAiCheckPromoOpen, setPreAiCheckPromoOpen] = useState(false);
   const [manualCoverageModalOpen, setManualCoverageModalOpen] = useState(false);
-  const pendingTextEditorDetectorRef = useRef<EssaySendForAiDetectorChoice | null>(
-    null
-  );
   const [draftPersistenceReady, setDraftPersistenceReady] = useState(false);
   const restoredSentenceDraftChainRef = useRef<string | null>(null);
   const essaySentenceDraftPersistRef = useRef<{
@@ -1170,7 +1157,9 @@ export default function EssayResultClient({
 
       if (opts.clientCheckDetector) {
         if (trialFeatureQuota?.applies && trialFeatureQuota.aiRemaining <= 0) {
-          setTrialAiCheckPremiumModalOpen(true);
+          openRegistrationWall(
+            'You have reached your AI authenticity check limit for this period. Open subscription to upgrade or change your plan.'
+          );
         } else {
           setCheckLoading(true);
           try {
@@ -1180,7 +1169,9 @@ export default function EssayResultClient({
               data.content
             );
             if (outcome === 'trial_ai_check_exhausted') {
-              setTrialAiCheckPremiumModalOpen(true);
+              openRegistrationWall(
+                'You have reached your AI authenticity check limit for this period. Open subscription to upgrade or change your plan.'
+              );
             }
           } catch {
             toast({
@@ -1194,13 +1185,17 @@ export default function EssayResultClient({
         }
       } else if (!opts.skipAutoAiCheck && !hasServerHighlights) {
         if (trialFeatureQuota?.applies && trialFeatureQuota.aiRemaining <= 0) {
-          setTrialAiCheckPremiumModalOpen(true);
+          openRegistrationWall(
+            'You have reached your AI authenticity check limit for this period. Open subscription to upgrade or change your plan.'
+          );
         } else {
           setCheckLoading(true);
           try {
             const outcome = await checkAiForEssayId(data.id, 'gptzero', data.content);
             if (outcome === 'trial_ai_check_exhausted') {
-              setTrialAiCheckPremiumModalOpen(true);
+              openRegistrationWall(
+                'You have reached your AI authenticity check limit for this period. Open subscription to upgrade or change your plan.'
+              );
             }
           } catch {
             toast({
@@ -1246,6 +1241,7 @@ export default function EssayResultClient({
       essayChainKey,
       mergeGpt,
       checkAiForEssayId,
+      openRegistrationWall,
       router,
       toast,
       trialFeatureQuota
@@ -1256,7 +1252,9 @@ export default function EssayResultClient({
 
   const runAiCheckFlow = async (detector: EssayAiDetectorChoice = 'gptzero') => {
     if (trialFeatureQuota?.applies && trialFeatureQuota.aiRemaining <= 0) {
-      setTrialAiCheckPremiumModalOpen(true);
+      openRegistrationWall(
+        'You have reached your AI authenticity check limit for this period. Open subscription to upgrade or change your plan.'
+      );
       return;
     }
     if (showVersionTabs) setEditorView('corrections');
@@ -1265,7 +1263,9 @@ export default function EssayResultClient({
       /** Latest version only (Corrections text); do not send Source from the toolbar to GPTZero. */
       const outcome = await checkAiForEssayId(latest.id, detector, mergedEssayText);
       if (outcome === 'trial_ai_check_exhausted') {
-        setTrialAiCheckPremiumModalOpen(true);
+        openRegistrationWall(
+          'You have reached your AI authenticity check limit for this period. Open subscription to upgrade or change your plan.'
+        );
         return;
       }
       setHasManualSnippetTouch(false);
@@ -1305,7 +1305,9 @@ export default function EssayResultClient({
   ) => {
     if (!originalEssayRow) return;
     if (trialFeatureQuota?.applies && trialFeatureQuota.aiRemaining <= 0) {
-      setTrialAiCheckPremiumModalOpen(true);
+      openRegistrationWall(
+        'You have reached your AI authenticity check limit for this period. Open subscription to upgrade or change your plan.'
+      );
       return;
     }
     setEditorView('original');
@@ -1350,7 +1352,9 @@ export default function EssayResultClient({
         mergedEssayText
       );
       if (outcome === 'trial_ai_check_exhausted') {
-        setTrialAiCheckPremiumModalOpen(true);
+        openRegistrationWall(
+          'You have reached your AI authenticity check limit for this period. Open subscription to upgrade or change your plan.'
+        );
         return;
       }
       setHasManualSnippetTouch(false);
@@ -1528,22 +1532,9 @@ export default function EssayResultClient({
         setManualCoverageModalOpen(true);
         return;
       }
-      if (!hasSubscription && typeof window !== 'undefined') {
-        try {
-          if (
-            sessionStorage.getItem(
-              `essay_pre_ai_check_trial_promo:${essayChainKey}`
-            ) !== '1'
-          ) {
-            pendingTextEditorDetectorRef.current = detector;
-            setPreAiCheckPromoOpen(true);
-            return;
-          }
-        } catch {
-          pendingTextEditorDetectorRef.current = detector;
-          setPreAiCheckPromoOpen(true);
-          return;
-        }
+      if (!hasSubscription) {
+        openRegistrationWall();
+        return;
       }
       await runSendFromTextEditorForAiCheck(detector);
     },
@@ -1552,9 +1543,9 @@ export default function EssayResultClient({
       activeMergeRow.id,
       displayed.sentences,
       editorView,
-      essayChainKey,
       gptOriginal?.sentences,
       hasSubscription,
+      openRegistrationWall,
       humanizeSourceByRow,
       runSendFromTextEditorForAiCheck,
       sentenceUserEdits,
@@ -1584,7 +1575,7 @@ export default function EssayResultClient({
   const humanizeEntireEssay = async (model: UndetectableHumanizeModelId) => {
     if (busy) return;
     if (!hasSubscription) {
-      openScholarshipSubscriptionOfferModal();
+      openRegistrationWall();
       return;
     }
     const text = mergedEssayText.trim();
@@ -1626,7 +1617,7 @@ export default function EssayResultClient({
           return;
         }
         if (res.status === 403) {
-          openScholarshipSubscriptionOfferModal();
+          openRegistrationWall();
           return;
         }
         toast({
@@ -1714,42 +1705,12 @@ export default function EssayResultClient({
         showStickyMergeFooter ? 'pb-32' : ''
       }`}
     >
-      <ScholarshipSubscriptionOfferModal
-        open={subscriptionOfferOpen}
-        onClose={closeScholarshipSubscriptionOfferModal}
-        notice={subscriptionOfferNotice}
-      />
-      <MentorTrialSubscribeModal
-        open={trialAiCheckPremiumModalOpen}
-        onClose={() => setTrialAiCheckPremiumModalOpen(false)}
-      />
-      <ScholarshipSubscriptionOfferModal
-        open={preAiCheckPromoOpen}
-        onClose={() => setPreAiCheckPromoOpen(false)}
-        onSecondaryAction={() => {
-          try {
-            sessionStorage.setItem(
-              `essay_pre_ai_check_trial_promo:${essayChainKey}`,
-              '1'
-            );
-          } catch {
-            /* ignore */
-          }
-          const det = pendingTextEditorDetectorRef.current;
-          pendingTextEditorDetectorRef.current = null;
-          if (det) void runSendFromTextEditorForAiCheck(det);
-        }}
-        onPrimaryClick={() => {
-          try {
-            sessionStorage.setItem(
-              `essay_pre_ai_check_trial_promo:${essayChainKey}`,
-              '1'
-            );
-          } catch {
-            /* ignore */
-          }
-          pendingTextEditorDetectorRef.current = null;
-        }}
+      <ScholarshipRegistrationWallModal
+        open={registrationWallOpen}
+        onClose={closeRegistrationWall}
+        variant="essay"
+        signedInWithoutSubscription
+        noticeOverride={registrationWallNotice}
       />
       <ManualGreenCoverageModal
         open={manualCoverageModalOpen}
@@ -1962,37 +1923,6 @@ export default function EssayResultClient({
                 <h1 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl sm:leading-snug">
                   Your essay is ready
                 </h1>
-                {trialFeatureQuota?.applies ? (
-                  <div className="flex w-full max-w-xl flex-col items-center gap-2">
-                    {trialQuotasAllExhausted(trialFeatureQuota) ? (
-                      <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-3">
-                        <p className="text-sm font-medium text-zinc-700">
-                          Subscribe to keep going
-                        </p>
-                        <Link
-                          href="/start"
-                          className="inline-flex shrink-0 items-center justify-center rounded-xl border border-zinc-900 bg-zinc-900 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-zinc-800"
-                        >
-                          Get started
-                        </Link>
-                      </div>
-                    ) : trialFeatureQuota.chatRemaining === TRIAL_CHAT_DIALOGUE_LIMIT &&
-                      trialFeatureQuota.aiRemaining === TRIAL_FEATURE_LIMIT &&
-                      trialFeatureQuota.humanizeRemaining === TRIAL_FEATURE_LIMIT ? (
-                      <p className="max-w-lg text-xs font-semibold leading-relaxed text-zinc-800 sm:text-sm">
-                        Trial includes 1 AI mentor conversation · {TRIAL_FEATURE_LIMIT} AI authenticity
-                        check (GPTZero or Undetectable — one total) · {TRIAL_FEATURE_LIMIT}{' '}
-                        full-draft humanize run (whole essay at once).
-                      </p>
-                    ) : (
-                      <p className="max-w-lg text-xs font-medium leading-relaxed text-zinc-600 sm:text-sm">
-                        Trial uses left — Essay mentor chat: {trialFeatureQuota.chatRemaining} · AI
-                        authenticity check: {trialFeatureQuota.aiRemaining} · Full-draft humanize
-                        (whole essay at once): {trialFeatureQuota.humanizeRemaining}
-                      </p>
-                    )}
-                  </div>
-                ) : null}
               </div>
             </div>
           ) : null}
@@ -2012,7 +1942,7 @@ export default function EssayResultClient({
               showHumanizeEntireDraft={showToolbarHumanizeResolved}
               downloadPdfDisabled={downloadPdfDisabled}
               hasSubscription={hasSubscription}
-              onHumanizePremiumBlocked={() => openScholarshipSubscriptionOfferModal()}
+              onHumanizePremiumBlocked={() => openRegistrationWall()}
               onCopy={copyEssay}
               onCheckAi={checkAi}
               onHumanizeEntireDraft={(model) => void humanizeEntireEssay(model)}
@@ -2250,9 +2180,7 @@ export default function EssayResultClient({
                       onSaveUserEdit={onSaveUserSentenceEdit}
                       sentenceEditInteractive={sentenceEditUiActive}
                       humanizeSnippetPremiumLocked={!hasSubscription}
-                      onHumanizeSnippetPremiumBlocked={() =>
-                        openScholarshipSubscriptionOfferModal()
-                      }
+                      onHumanizeSnippetPremiumBlocked={() => openRegistrationWall()}
                       onManualSnippetTouchRecorded={() =>
                         setHasManualSnippetTouch(true)
                       }
@@ -2290,7 +2218,7 @@ export default function EssayResultClient({
                   sentenceEditInteractive={sentenceEditUiActive}
                   humanizeSnippetPremiumLocked={!hasSubscription}
                   onHumanizeSnippetPremiumBlocked={() =>
-                    openScholarshipSubscriptionOfferModal()
+                    openRegistrationWall()
                   }
                   onManualSnippetTouchRecorded={() =>
                     setHasManualSnippetTouch(true)

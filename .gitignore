@@ -19,6 +19,9 @@
 .DS_Store
 *.pem
 
+# long-running SEO batch log (scripts/compare-battle-sequential.ts)
+/logs/compare-battle-sequential.log
+
 # debug
 npm-debug.log*
 yarn-debug.log*

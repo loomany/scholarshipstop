@@ -17,11 +17,12 @@ export default function ScholarshipCategoryPageAuthBridge({
 }: ScholarshipCategoryPageAuthBridgeProps) {
   return (
     <AuthStatusProvider>
-      {({ isAuthenticated, hasSubscription }) => (
+      {({ isAuthenticated, hasSubscription, authResolved }) => (
         <ScholarshipCategoryPageClient
           categorySlug={categorySlug}
           pageTitle={pageTitle}
           isAuthenticated={isAuthenticated}
+          authResolved={authResolved}
           hasSubscription={hasSubscription}
           initialPayload={initialPayload}
         />

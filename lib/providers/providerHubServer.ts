@@ -1,15 +1,10 @@
 import 'server-only';
 
 import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
+import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 import { createClient } from '@/utils/supabase/server';
 
-export type ProviderHubRow = {
-  slug: string;
-  display_name: string | null;
-  scholarship_count: number;
-  state: string | null;
-  ai_description: string | null;
-};
+export type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 
 const PROVIDER_HUB_LISTING =
   'provider_hub_listing' as unknown as 'scholarships';

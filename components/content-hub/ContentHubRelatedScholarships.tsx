@@ -5,14 +5,12 @@ import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
 
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
-import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import type { ContentPostScholarshipLink } from '@/lib/content-hub/contentPostScholarshipLinks';
 import {
   recordScholarshipDetailFreeNavigation,
   resolveScholarshipDetailClickBudgetMode,
   shouldBlockScholarshipDetailNavigation
 } from '@/lib/scholarships/guestScholarshipDetailClickBudget';
-import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import {
   hasActiveSubscriptionAccess,
   type SubscriptionWithPriceAndProduct
@@ -51,14 +49,12 @@ function ScholarshipLinkCardCompact({
   item,
   isAuthenticated,
   hasSubscription,
-  onSubscriptionOffer,
-  onGuestDetailNavigate
+  onDetailNavigateBlocked
 }: {
   item: ContentPostScholarshipLink;
   isAuthenticated: boolean;
   hasSubscription: boolean;
-  onSubscriptionOffer: (arg?: unknown) => void;
-  onGuestDetailNavigate: () => void;
+  onDetailNavigateBlocked: () => void;
 }) {
   const label = contextLabel(item.reason, item.kind);
   const reasonSnippet =
@@ -115,11 +111,7 @@ function ScholarshipLinkCardCompact({
         if (!budgetMode) return;
         if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
           e.preventDefault();
-          if (budgetMode === 'guest') {
-            onGuestDetailNavigate();
-            return;
-          }
-          onSubscriptionOffer(SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE);
+          onDetailNavigateBlocked();
           return;
         }
         recordScholarshipDetailFreeNavigation(budgetMode);
@@ -134,14 +126,12 @@ function ScholarshipLinkCardFeatured({
   item,
   isAuthenticated,
   hasSubscription,
-  onSubscriptionOffer,
-  onGuestDetailNavigate
+  onDetailNavigateBlocked
 }: {
   item: ContentPostScholarshipLink;
   isAuthenticated: boolean;
   hasSubscription: boolean;
-  onSubscriptionOffer: (arg?: unknown) => void;
-  onGuestDetailNavigate: () => void;
+  onDetailNavigateBlocked: () => void;
 }) {
   const label = contextLabel(item.reason, item.kind);
   const reasonSnippet =
@@ -196,11 +186,7 @@ function ScholarshipLinkCardFeatured({
         if (!budgetMode) return;
         if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
           e.preventDefault();
-          if (budgetMode === 'guest') {
-            onGuestDetailNavigate();
-            return;
-          }
-          onSubscriptionOffer(SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE);
+          onDetailNavigateBlocked();
           return;
         }
         recordScholarshipDetailFreeNavigation(budgetMode);
@@ -221,10 +207,6 @@ export default function ContentHubRelatedScholarships({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasSubscription, setHasSubscription] = useState(false);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
-  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
-  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
-    string | undefined
-  >(undefined);
 
   useEffect(() => {
     let cancelled = false;
@@ -270,15 +252,6 @@ export default function ContentHubRelatedScholarships({
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
-  const openSubscriptionOffer = useCallback((arg?: unknown) => {
-    const notice = typeof arg === 'string' ? arg : undefined;
-    setSubscriptionOfferNotice(notice);
-    setSubscriptionOfferOpen(true);
-  }, []);
-  const closeSubscriptionOffer = useCallback(() => {
-    setSubscriptionOfferOpen(false);
-    setSubscriptionOfferNotice(undefined);
-  }, []);
 
   if (!links.length) return null;
 
@@ -317,8 +290,7 @@ export default function ContentHubRelatedScholarships({
               item={item}
               isAuthenticated={isAuthenticated}
               hasSubscription={hasSubscription}
-              onSubscriptionOffer={openSubscriptionOffer}
-              onGuestDetailNavigate={openRegistrationWall}
+              onDetailNavigateBlocked={openRegistrationWall}
             />
           ) : (
             <ScholarshipLinkCardCompact
@@ -328,8 +300,7 @@ export default function ContentHubRelatedScholarships({
               item={item}
               isAuthenticated={isAuthenticated}
               hasSubscription={hasSubscription}
-              onSubscriptionOffer={openSubscriptionOffer}
-              onGuestDetailNavigate={openRegistrationWall}
+              onDetailNavigateBlocked={openRegistrationWall}
             />
           )
         )}
@@ -338,11 +309,7 @@ export default function ContentHubRelatedScholarships({
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
         contentMode="card-unlock"
-      />
-      <ScholarshipSubscriptionOfferModal
-        open={subscriptionOfferOpen}
-        onClose={closeSubscriptionOffer}
-        notice={subscriptionOfferNotice}
+        signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
       />
     </section>
   );

@@ -3,8 +3,8 @@ import {
   sortCompareIndexSlice,
   type CompareIndexItem
 } from '@/lib/seo/compareIndexFilters';
-import type { fetchRecentPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
-import type { fetchRecentPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
+import type { StateCompareIndexRow } from '@/lib/seo/stateCompareServer';
+import type { UniversityCompareIndexRow } from '@/lib/seo/universityCompareServer';
 
 export function normalizeCompareTitle(rawTitle: string | null, slug: string): string {
   return rawTitle?.trim() || slug.replace(/-/g, ' ');
@@ -22,9 +22,7 @@ export function compareDescription(
     : 'Compare statewide scholarship climate, grant volume, and funding context across both states.';
 }
 
-export function buildUniversityCompareItems(
-  rows: Awaited<ReturnType<typeof fetchRecentPublishedUniversityComparePages>>
-): CompareIndexItem[] {
+export function buildUniversityCompareItems(rows: UniversityCompareIndexRow[]): CompareIndexItem[] {
   return rows.map((row) => ({
     id: `universities:${row.slug}`,
     type: 'universities' as const,
@@ -36,9 +34,7 @@ export function buildUniversityCompareItems(
   }));
 }
 
-export function buildStateCompareItems(
-  rows: Awaited<ReturnType<typeof fetchRecentPublishedStateComparePages>>
-): CompareIndexItem[] {
+export function buildStateCompareItems(rows: StateCompareIndexRow[]): CompareIndexItem[] {
   return rows.map((row) => ({
     id: `states:${row.slug}`,
     type: 'states' as const,
@@ -51,8 +47,8 @@ export function buildStateCompareItems(
 }
 
 export function buildCombinedCompareItems(args: {
-  universities: Awaited<ReturnType<typeof fetchRecentPublishedUniversityComparePages>>;
-  states: Awaited<ReturnType<typeof fetchRecentPublishedStateComparePages>>;
+  universities: UniversityCompareIndexRow[];
+  states: StateCompareIndexRow[];
 }): CompareIndexItem[] {
   const universities = buildUniversityCompareItems(args.universities);
   const states = buildStateCompareItems(args.states);

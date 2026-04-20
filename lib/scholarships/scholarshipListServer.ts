@@ -59,6 +59,25 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 type ServerSupabaseClient = SupabaseClient<Database>;
 
+/** PostgREST errors may omit `message`; Next.js surfaces empty `Error` text as “no message was provided”. */
+function postgrestErrorToMessage(err: unknown): string {
+  if (err && typeof err === 'object') {
+    const e = err as {
+      message?: string;
+      details?: string;
+      hint?: string;
+      code?: string;
+    };
+    const combined = [e.message, e.details, e.hint, e.code]
+      .map((s) => (typeof s === 'string' ? s.trim() : ''))
+      .filter(Boolean)
+      .join(' | ');
+    if (combined) return combined;
+  }
+  if (err instanceof Error && err.message) return err.message;
+  return 'Unknown database request error';
+}
+
 export type ScholarshipListScope = 'personalized' | 'catalog';
 
 export type ScholarshipListQueryOpts = {
@@ -329,7 +348,7 @@ export async function resolveCatalogSubjectCategoryForPageSlug(
     .eq('level', 2)
     .eq('is_active', true)
     .maybeSingle();
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(postgrestErrorToMessage(error));
   const categoryRow = data as { id: string } | null;
   if (categoryRow?.id) {
     return { legacyCategoryPageSlug: null, catalogSubjectCategoryId: categoryRow.id };
@@ -1206,7 +1225,7 @@ export async function countScholarshipsForTabRequest(
   const r = { ...effectiveListingRequest(req), tab };
   const q: any = buildScholarshipListFilterQuery(supabase, true, r);
   const { error, count } = await q;
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(postgrestErrorToMessage(error));
   return count ?? 0;
 }
 
@@ -1246,7 +1265,7 @@ async function loadSimilarScholarshipsLegacyRows(
     .order('updated_at', { ascending: false, nullsFirst: true })
     .range(0, Math.max(0, similarPoolSize - 1));
   const { data, error } = await q;
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(postgrestErrorToMessage(error));
   return (data ?? []) as unknown as ScholarshipRow[];
 }
 
@@ -1296,7 +1315,7 @@ async function fetchSimilarListFillerScholarships(
 
   const windowSize = Math.min(160, Math.max(need * 8, 32));
   const { data, error } = await q.range(0, windowSize - 1);
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(postgrestErrorToMessage(error));
   const rows = (data ?? []) as unknown as ScholarshipRow[];
   const mapped = rows.map((r) => mapScholarshipRow(r));
   const out: Scholarship[] = [];
@@ -1381,7 +1400,7 @@ export async function executeScholarshipListQuery(
     }
     if (opts.countOnly) {
       const { error, count } = await qCount;
-      if (error) throw new Error(error.message);
+      if (error) throw new Error(postgrestErrorToMessage(error));
       return {
         scholarships: [],
         total: count ?? 0,
@@ -1421,7 +1440,7 @@ export async function executeScholarshipListQuery(
   if (opts.countOnly) {
     const q: any = buildScholarshipListFilterQuery(supabase, true, rEff);
     const { error, count } = await q;
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(postgrestErrorToMessage(error));
     return {
       scholarships: [],
       total: count ?? 0,
@@ -1450,7 +1469,7 @@ export async function executeScholarshipListQuery(
       personalizedEff
     );
     const { error: cErr, count } = await qc;
-    if (cErr) throw new Error(cErr.message);
+    if (cErr) throw new Error(postgrestErrorToMessage(cErr));
     const rawTotal = count ?? 0;
 
     let meta: ScholarshipListMeta | undefined;
@@ -1477,7 +1496,7 @@ export async function executeScholarshipListQuery(
       );
       qn = applySort(qn, personalizedEff.sort);
       const { data, error: dErr } = await qn.range(from, to);
-      if (dErr) throw new Error(dErr.message);
+      if (dErr) throw new Error(postgrestErrorToMessage(dErr));
       const rows = (data ?? []) as unknown as ScholarshipRow[];
       scholarships = rows.map((r) => ({ ...mapScholarshipRow(r), profileMatchPercent: null }));
     } else {
@@ -1495,7 +1514,7 @@ export async function executeScholarshipListQuery(
         );
         qn = applySort(qn, 'best_match');
         const { data, error: dErr } = await qn.range(0, cap - 1);
-        if (dErr) throw new Error(dErr.message);
+        if (dErr) throw new Error(postgrestErrorToMessage(dErr));
         const rows = (data ?? []) as unknown as ScholarshipRow[];
         const profile = req.personalizedProfile;
         const ranked = rows.map((r) => {
@@ -1554,7 +1573,7 @@ export async function executeScholarshipListQuery(
   let from = (effectivePage - 1) * req.limit;
   let to = from + req.limit - 1;
   const { data, error, count } = await buildListPageQuery(from, to);
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(postgrestErrorToMessage(error));
   const rawTotal = count ?? 0;
   const sqlTotalBeforePostProcessing = rawTotal;
 
@@ -1568,7 +1587,7 @@ export async function executeScholarshipListQuery(
     from = (effectivePage - 1) * req.limit;
     to = from + req.limit - 1;
     const r2 = await buildListPageQuery(from, to);
-    if (r2.error) throw new Error(r2.error.message);
+    if (r2.error) throw new Error(postgrestErrorToMessage(r2.error));
     rows = (r2.data ?? []) as unknown as ScholarshipRow[];
   }
 
@@ -1748,60 +1767,79 @@ export async function fetchScholarshipSidebarCounts(
     'submitted',
     'ignored'
   ];
-  const [sidebarParts, internationalFriendly] = await Promise.all([
-    Promise.all(
-      tabs.map(async (t) => {
-        if (t === 'recommended') {
-          const mf = moreFiltersForRecommendedSidebarCount(countsBasisReq, bounds);
-          if (mf === null) {
-            return { t, n: 0 };
-          }
-          const r = { ...countsBasisReq, moreFilters: mf };
-          return { t, n: await countFor(supabase, r, 'recommended') };
+  const tabSettled = await Promise.allSettled(
+    tabs.map(async (t) => {
+      if (t === 'recommended') {
+        const mf = moreFiltersForRecommendedSidebarCount(countsBasisReq, bounds);
+        if (mf === null) {
+          return { t, n: 0 };
         }
-        if (t === 'easy-apply') {
-          return {
-            t,
-            n: await countFor(
-              supabase,
-              easyApplyListCanonicalRequest(catalogSidebarBasisReq),
-              t
-            )
-          };
-        }
-        if (t === 'hot-deadlines') {
-          return {
-            t,
-            n: await countFor(
-              supabase,
-              hotDeadlinesListCanonicalRequest(catalogSidebarBasisReq),
-              t
-            )
-          };
-        }
-        if (t === 'best-recommendation') {
-          return {
-            t,
-            n: await countFor(
-              supabase,
-              bestRecommendationRequest(effectiveReq, bounds),
-              t
-            )
-          };
-        }
-        const rowReq = t === 'matches' ? catalogSidebarBasisReq : countsBasisReq;
+        const r = { ...countsBasisReq, moreFilters: mf };
+        return { t, n: await countFor(supabase, r, 'recommended') };
+      }
+      if (t === 'easy-apply') {
         return {
           t,
-          n: await countFor(supabase, rowReq, t)
+          n: await countFor(
+            supabase,
+            easyApplyListCanonicalRequest(catalogSidebarBasisReq),
+            t
+          )
         };
-      })
-    ),
-    countScholarshipsForTabRequest(
+      }
+      if (t === 'hot-deadlines') {
+        return {
+          t,
+          n: await countFor(
+            supabase,
+            hotDeadlinesListCanonicalRequest(catalogSidebarBasisReq),
+            t
+          )
+        };
+      }
+      if (t === 'best-recommendation') {
+        return {
+          t,
+          n: await countFor(
+            supabase,
+            bestRecommendationRequest(effectiveReq, bounds),
+            t
+          )
+        };
+      }
+      const rowReq = t === 'matches' ? catalogSidebarBasisReq : countsBasisReq;
+      return {
+        t,
+        n: await countFor(supabase, rowReq, t)
+      };
+    })
+  );
+  const sidebarParts = tabSettled.map((result, i) => {
+    if (result.status === 'fulfilled') return result.value;
+    const t = tabs[i]!;
+    // eslint-disable-next-line no-console -- sidebar count diagnostics (avoid blank RSC errors)
+    console.warn(
+      '[fetchScholarshipSidebarCounts] tab count failed',
+      t,
+      postgrestErrorToMessage(result.reason)
+    );
+    return { t, n: 0 };
+  });
+
+  let internationalFriendly = 0;
+  try {
+    internationalFriendly = await countScholarshipsForTabRequest(
       supabase,
       internationalFriendlySidebarCountRequest(catalogSidebarBasisReq),
       'matches'
-    )
-  ]);
+    );
+  } catch (e) {
+    // eslint-disable-next-line no-console -- sidebar count diagnostics
+    console.warn(
+      '[fetchScholarshipSidebarCounts] internationalFriendly count failed',
+      postgrestErrorToMessage(e)
+    );
+  }
   const sidebarCounts: ScholarshipSidebarCounts = {
     bestRecommendation: 0,
     recommended: 0,
@@ -1846,7 +1884,7 @@ async function countCategory(
   let q: any = buildScholarshipListFilterQuery(supabase, true, eff);
   q = applySelectedCategoriesFilter(q, new Set([catId]));
   const { error, count } = await q;
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(postgrestErrorToMessage(error));
   return count ?? 0;
 }
 
@@ -2144,7 +2182,7 @@ export async function scholarshipMatchesTabListSql(
   let q: any = buildScholarshipListFilterQuery(supabase, true, r);
   q = q.eq('id', scholarshipId);
   const { error, count } = await q;
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(postgrestErrorToMessage(error));
   return (count ?? 0) > 0;
 }
 

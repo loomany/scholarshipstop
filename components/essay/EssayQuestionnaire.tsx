@@ -1,6 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { useSubscriptionAccess } from '@/hooks/useSubscriptionAccess';
 import { useRouter } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
 import {
@@ -22,7 +24,6 @@ import { useToast } from '@/components/ui/Toasts/use-toast';
 import { SITE_SEARCH_INPUT_CHROME } from '@/lib/constants/catalogControlBar';
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import MentorPremiumAccessMessage from '@/components/essay/MentorPremiumAccessMessage';
-import MentorTrialSubscribeModal from '@/components/essay/MentorTrialSubscribeModal';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import {
@@ -293,6 +294,11 @@ export function EssayQuestionnaire({
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [userId, setUserId] = useState<string | null>(null);
+  const { hasSubscription, subscriptionReady } = useSubscriptionAccess(userId);
+  const mentorPaywallLocked = useMemo(
+    () => !userId || !subscriptionReady || !hasSubscription,
+    [userId, subscriptionReady, hasSubscription]
+  );
   const [authChecked, setAuthChecked] = useState(false);
   const [bootLoading, setBootLoading] = useState(true);
 
@@ -318,7 +324,6 @@ export function EssayQuestionnaire({
   );
   const [draftLinkResolved, setDraftLinkResolved] = useState(false);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
-  const [mentorTrialModalOpen, setMentorTrialModalOpen] = useState(false);
   /** Guest-only: after first LLM reply, subsequent turns omit onboarding system appendix. */
   const [guestMentorInterviewStarted, setGuestMentorInterviewStarted] =
     useState(false);
@@ -516,16 +521,9 @@ export function EssayQuestionnaire({
   );
 
   const initChat = useCallback(async () => {
-    if (!userId) {
-      const seed = buildGuestSeedMessages(initialScholarshipTitle);
-      setMessages(seed);
-      setProgress(EMPTY_PROGRESS);
-      setChatId(null);
-      setGuestMentorInterviewStarted(false);
-      persistGuestBlob(seed, EMPTY_PROGRESS, false, {
-        scholarshipTitle: initialScholarshipTitle,
-        mentorInterviewStarted: false
-      });
+    if (userId && !subscriptionReady) return;
+    if (mentorPaywallLocked) {
+      setRegistrationWallOpen(true);
       return;
     }
     try {
@@ -538,7 +536,7 @@ export function EssayQuestionnaire({
         };
         if (trialData.mentor_dialogue_exhausted) {
           setMessages((prev) => applyMentorQuotaExhaustedMessages(prev));
-          setMentorTrialModalOpen(true);
+          setRegistrationWallOpen(true);
           return;
         }
       }
@@ -556,7 +554,7 @@ export function EssayQuestionnaire({
     } catch (e) {
       if (e instanceof MentorTrialQuotaExceededError) {
         setMessages((prev) => applyMentorQuotaExhaustedMessages(prev));
-        setMentorTrialModalOpen(true);
+        setRegistrationWallOpen(true);
       } else if (e instanceof Error && e.name === 'AbortError') {
         toast({
           variant: 'destructive',
@@ -577,7 +575,9 @@ export function EssayQuestionnaire({
   }, [
     applyInitPayload,
     initialScholarshipTitle,
+    mentorPaywallLocked,
     persistGuestBlob,
+    subscriptionReady,
     syncMentorTrialBanner,
     toast,
     userId
@@ -801,6 +801,10 @@ export function EssayQuestionnaire({
       if (!t || sending || generating || devBypassing) return false;
       if (messages.some((m) => m.variant === 'premium_access')) return false;
       if (messages.length === 0) return false;
+      if (mentorPaywallLocked) {
+        setRegistrationWallOpen(true);
+        return false;
+      }
       setSending(true);
       try {
         const res = await fetch('/api/interviewer/guest', {
@@ -860,6 +864,7 @@ export function EssayQuestionnaire({
       generating,
       guestMentorInterviewStarted,
       initialScholarshipTitle,
+      mentorPaywallLocked,
       messages,
       persistGuestBlob,
       sending,
@@ -874,6 +879,11 @@ export function EssayQuestionnaire({
       if (messages.some((m) => m.variant === 'premium_access')) return false;
       if (!userId) {
         return submitGuestMessage(t);
+      }
+      if (!subscriptionReady) return false;
+      if (!hasSubscription) {
+        setRegistrationWallOpen(true);
+        return false;
       }
       if (!chatId) return false;
       setSending(true);
@@ -911,8 +921,10 @@ export function EssayQuestionnaire({
       chatId,
       devBypassing,
       generating,
+      hasSubscription,
       sending,
       submitGuestMessage,
+      subscriptionReady,
       toast,
       userId,
       messages
@@ -941,6 +953,10 @@ export function EssayQuestionnaire({
   }, []);
 
   const toggleVoiceInput = useCallback(async () => {
+    if (mentorPaywallLocked) {
+      setRegistrationWallOpen(true);
+      return;
+    }
     if (
       isTranscribing ||
       sending ||
@@ -1069,6 +1085,7 @@ export function EssayQuestionnaire({
     isTranscribing,
     messageMutating,
     sending,
+    mentorPaywallLocked,
     stopMediaStream,
     submitUserMessageInChat,
     toast
@@ -1336,7 +1353,8 @@ export function EssayQuestionnaire({
   };
 
   const generateEssay = async () => {
-    if (!userId) {
+    if (userId && !subscriptionReady) return;
+    if (!userId || !hasSubscription) {
       setRegistrationWallOpen(true);
       return;
     }
@@ -1799,10 +1817,7 @@ export function EssayQuestionnaire({
         open={registrationWallOpen}
         onClose={() => setRegistrationWallOpen(false)}
         variant="essay"
-      />
-      <MentorTrialSubscribeModal
-        open={mentorTrialModalOpen}
-        onClose={() => setMentorTrialModalOpen(false)}
+        signedInWithoutSubscription={Boolean(userId && !hasSubscription)}
       />
     </>
   );

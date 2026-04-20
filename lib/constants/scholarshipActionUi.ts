@@ -64,6 +64,12 @@ export const scholarshipBrandOrangeStrokeClass =
  */
 export const scholarshipGuestLockIconClass = scholarshipBrandOrangeStrokeClass;
 
+/**
+ * Blur for hidden sponsor / provider name on cards and detail (guest limit or no subscription).
+ */
+export const SCHOLARSHIP_PROVIDER_OBSCURE_CLASS =
+  'select-none blur-[6px] opacity-[0.55] [text-shadow:0_0_12px_rgba(156,163,175,0.9)]';
+
 /** Sidebar selected row — black bar + white stripe, matches “My scholarships” header. */
 export const scholarshipSidebarActiveRowClass =
   'border-white bg-black text-white';

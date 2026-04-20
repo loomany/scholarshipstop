@@ -1,6 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState
+} from 'react';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import {
   BookOpen,
@@ -28,7 +35,6 @@ import { ScholarshipsBrandLoading } from '@/components/scholarships/Scholarships
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
-import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
@@ -56,7 +62,6 @@ import {
   resolveScholarshipDetailClickBudgetMode,
   shouldBlockScholarshipDetailNavigation
 } from '@/lib/scholarships/guestScholarshipDetailClickBudget';
-import { SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE } from '@/lib/scholarships/scholarshipSubscriptionOfferCopy';
 import {
   deleteUserSavedScholarship,
   fetchUserSavedScholarshipIds,
@@ -76,6 +81,8 @@ import {
 import {
   SCHOLARSHIP_ACTION_FILL,
   SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
+  SCHOLARSHIP_PROVIDER_OBSCURE_CLASS,
+  scholarshipGuestLockIconClass,
   scholarshipSavedButtonClass,
   scholarshipSaveButtonClass
 } from '@/lib/constants/scholarshipActionUi';
@@ -94,6 +101,10 @@ import {
   prepareKeyRequirementBullets
 } from '@/lib/scholarships/scholarshipDetailCopy';
 import {
+  buildScholarshipProviderBlurPhrases,
+  renderTextWithObscuredPhrases
+} from '@/lib/scholarships/renderObscuredProviderText';
+import {
   formatScholarshipAwardLine,
   resolveScholarshipCategorySlug,
   scholarshipDeadlineHasPassed,
@@ -104,6 +115,7 @@ import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profi
 import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCurrentUserScholarshipMatchProfile';
 import { createClient } from '@/utils/supabase/client';
 import {
+  filterAiMissingInfoForDisplay,
   filterApplicationTipsForUi,
   filterFaqForOnPageDisplay,
   filterImportantNoteChunks,
@@ -293,7 +305,6 @@ function SimilarScholarshipDetailListItem({
   eligibleForMatchPill,
   isAuthenticated,
   hasSubscription,
-  onSubscriptionOffer,
   onGuestDetailNavigate
 }: {
   scholarship: Scholarship;
@@ -304,17 +315,10 @@ function SimilarScholarshipDetailListItem({
   eligibleForMatchPill: boolean;
   isAuthenticated: boolean;
   hasSubscription: boolean;
-  onSubscriptionOffer: (arg?: unknown) => void;
   onGuestDetailNavigate?: () => void;
 }) {
   const deadlinePassed = scholarshipDeadlineHasPassed(s);
   const simDd = getScholarshipDeadlineDisplayParts(s);
-  const similarEasyApplyIds = getScholarshipCatalog(s).easyApplyIds;
-  const similarSubscriptionLocked =
-    isAuthenticated &&
-    !hasSubscription &&
-    (similarEasyApplyIds.includes('easy_apply') ||
-      similarEasyApplyIds.includes('quick_apply'));
 
   const showBestRecommendation =
     eligibleForMatchPill &&
@@ -365,25 +369,31 @@ function SimilarScholarshipDetailListItem({
             {s.title}
           </span>
           {s.provider ? (
-            <span
-              className={`mt-1.5 block text-left text-sm ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'}`}
-            >
-              {s.provider}
-            </span>
+            !hasSubscription ? (
+              <span
+                className="mt-1.5 block text-left text-sm"
+                aria-label="Sponsor name hidden until you subscribe."
+              >
+                <span
+                  className={`${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'} ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
+                  aria-hidden
+                >
+                  {s.provider}
+                </span>
+              </span>
+            ) : (
+              <span
+                className={`mt-1.5 block text-left text-sm ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'}`}
+              >
+                {s.provider}
+              </span>
+            )
           ) : null}
           {recommendationPill ? (
             <div className="mt-2.5 flex min-h-[1.75rem] items-start">{recommendationPill}</div>
           ) : null}
         </div>
         <div className="flex w-[min(11rem,42%)] shrink-0 flex-col items-end gap-1.5 text-right">
-          {similarSubscriptionLocked ? (
-            <span
-              className="pointer-events-none inline-flex h-[22px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm"
-              aria-hidden
-            >
-              <Lock className="h-3.5 w-3.5" strokeWidth={2.2} />
-            </span>
-          ) : null}
           <span
             className={`block w-full text-base font-semibold tabular-nums leading-tight sm:text-[1.0625rem] ${
               deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'
@@ -419,44 +429,26 @@ function SimilarScholarshipDetailListItem({
 
   return (
     <li className="min-w-0">
-      {similarSubscriptionLocked ? (
-        <button
-          type="button"
-          className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
-          onClick={() => onSubscriptionOffer()}
-          title="Start your free access to open this scholarship"
-          aria-label="Locked scholarship. Start free access to open."
-        >
-          {cardInner}
-        </button>
-      ) : (
-        <Link
-          href={scholarshipPublicPath(s)}
-          onClick={(e) => {
-            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-            const budgetMode = resolveScholarshipDetailClickBudgetMode({
-              isAuthenticated,
-              hasSubscription
-            });
-            if (!budgetMode) return;
-            if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
-              e.preventDefault();
-              if (budgetMode === 'guest') {
-                onGuestDetailNavigate?.();
-                return;
-              }
-              if (budgetMode === 'signed-in-no-subscription') {
-                onSubscriptionOffer(SCHOLARSHIP_FREE_PLAN_DETAIL_PREVIEW_LIMIT_NOTICE);
-                return;
-              }
-            }
-            recordScholarshipDetailFreeNavigation(budgetMode);
-          }}
-          className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
-        >
-          {cardInner}
-        </Link>
-      )}
+      <Link
+        href={scholarshipPublicPath(s)}
+        onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          const budgetMode = resolveScholarshipDetailClickBudgetMode({
+            isAuthenticated,
+            hasSubscription
+          });
+          if (!budgetMode) return;
+          if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
+            e.preventDefault();
+            onGuestDetailNavigate?.();
+            return;
+          }
+          recordScholarshipDetailFreeNavigation(budgetMode);
+        }}
+        className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
+      >
+        {cardInner}
+      </Link>
     </li>
   );
 }
@@ -486,10 +478,12 @@ function SectionLabel({
 
 function RequirementsRichOrList({
   html,
-  lines
+  lines,
+  renderLine
 }: {
   html?: string | null;
   lines: string[];
+  renderLine?: (text: string) => ReactNode;
 }) {
   const h = html?.trim();
   if (h) {
@@ -500,7 +494,9 @@ function RequirementsRichOrList({
     <ul className="mx-auto max-w-2xl list-disc space-y-2 pl-5 text-left text-sm leading-relaxed text-zinc-700 md:text-base">
       {lines.map((item, i) => (
         <li key={`${i}-${item.slice(0, 48)}`}>
-          <span className="whitespace-pre-line">{item}</span>
+          <span className="whitespace-pre-line">
+            {renderLine ? renderLine(item) : item}
+          </span>
         </li>
       ))}
     </ul>
@@ -615,25 +611,15 @@ export default function ScholarshipDetailPageClient({
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
-  const [subscriptionOfferOpen, setSubscriptionOfferOpen] = useState(false);
-  const [subscriptionOfferNotice, setSubscriptionOfferNotice] = useState<
-    string | undefined
-  >(undefined);
   const openRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(true);
   }, []);
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
-  const openSubscriptionOffer = useCallback((arg?: unknown) => {
-    const notice = typeof arg === 'string' ? arg : undefined;
-    setSubscriptionOfferNotice(notice);
-    setSubscriptionOfferOpen(true);
-  }, []);
-  const closeSubscriptionOffer = useCallback(() => {
-    setSubscriptionOfferOpen(false);
-    setSubscriptionOfferNotice(undefined);
-  }, []);
+  const openProviderAccessWall = useCallback(() => {
+    openRegistrationWall();
+  }, [openRegistrationWall]);
   const syncIdsFromStorage = useCallback(async () => {
     setIgnoredIds(getIgnoredScholarshipIds());
     setStartedIds(getStartedScholarshipIds());
@@ -655,12 +641,8 @@ export default function ScholarshipDetailPageClient({
       setSavedIds(fromStorage);
     }
   }, [isAuthenticated, authResolved]);
-  const easyApplyIds = scholarship ? getScholarshipCatalog(scholarship).easyApplyIds : [];
-  const isEasyApplySubscriptionLocked =
-    isAuthenticated &&
-    !hasSubscription &&
-    (easyApplyIds.includes('easy_apply') || easyApplyIds.includes('quick_apply'));
-  const hasDetailAccess = isAuthenticated && !isEasyApplySubscriptionLocked;
+  /** Same as guest: only paid subscribers fetch unredacted premium fields. */
+  const hasDetailAccess = Boolean(hasSubscription);
   const { profile: currentMatchProfile } =
     useCurrentUserScholarshipMatchProfile(isAuthenticated && authResolved);
 
@@ -767,13 +749,9 @@ export default function ScholarshipDetailPageClient({
     <ScholarshipRegistrationWallModal
       open={registrationWallOpen}
       onClose={closeRegistrationWall}
-    />
-  );
-  const subscriptionOfferModal = (
-    <ScholarshipSubscriptionOfferModal
-      open={subscriptionOfferOpen}
-      onClose={closeSubscriptionOffer}
-      notice={subscriptionOfferNotice}
+      signedInWithoutSubscription={
+        Boolean(isAuthenticated && authResolved && !hasSubscription)
+      }
     />
   );
 
@@ -929,6 +907,19 @@ export default function ScholarshipDetailPageClient({
     Boolean(logoUrl) ||
     hasSocial ||
     hasMission;
+
+  /** Without an active subscription, provider name stays blurred (listing cards use the same rule). */
+  const providerNameLocked = Boolean(providerName) && !hasSubscription;
+  const providerBlurPhrases = providerNameLocked
+    ? buildScholarshipProviderBlurPhrases(scholarship)
+    : [];
+  const obscureDetailLine = (text: string) =>
+    providerNameLocked
+      ? renderTextWithObscuredPhrases(text, providerBlurPhrases, {
+          blurEntireWhenNoSubstringMatch: false,
+          onLockedSegmentClick: openProviderAccessWall
+        })
+      : text;
 
   const detailDeadlinePassed = scholarshipDeadlineHasPassed(scholarship);
   const deadlineDisplay = getScholarshipDeadlineDisplayParts(scholarship);
@@ -1176,7 +1167,9 @@ export default function ScholarshipDetailPageClient({
   });
 
   const beforeChecks = scholarship.aiImportantChecks ?? [];
-  const beforeMissing = scholarship.aiMissingInfo ?? [];
+  const beforeMissing = filterAiMissingInfoForDisplay(
+    scholarship.aiMissingInfo
+  );
   const beforeFlags = scholarship.aiRedFlags ?? [];
   const hasBeforeYouApplyContent =
     panelPick.showBeforeYouApply &&
@@ -1184,15 +1177,11 @@ export default function ScholarshipDetailPageClient({
       beforeMissing.length > 0 ||
       beforeFlags.length > 0);
 
-  const isApplySubscriptionLocked = isAuthenticated && !hasSubscription;
+  const isApplySubscriptionLocked = !hasSubscription;
   /** Guest blur + “Sign in to unlock AI insights” overlay disabled — full detail body stays readable. */
   const showLockedDetailOverlay = false;
-  const openLockedAccessWall = isEasyApplySubscriptionLocked
-    ? openSubscriptionOffer
-    : openRegistrationWall;
-  const openApplyAccessWall = isApplySubscriptionLocked
-    ? openSubscriptionOffer
-    : openRegistrationWall;
+  const openLockedAccessWall = openRegistrationWall;
+  const openApplyAccessWall = openRegistrationWall;
 
   return (
     <DarkTooltipProvider>
@@ -1264,7 +1253,7 @@ export default function ScholarshipDetailPageClient({
           />
           {heroIntro ? (
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-600 md:text-lg">
-              {heroIntro}
+              {obscureDetailLine(heroIntro)}
             </p>
           ) : null}
         </div>
@@ -1311,6 +1300,7 @@ export default function ScholarshipDetailPageClient({
             highlights={ui.quickDecision.highlights}
             whyApply={ui.quickDecision.whyApply}
             importantChecks={quickChecksForGrid}
+            renderLine={obscureDetailLine}
           />
         ) : null}
         {ui.lowConfidenceAi ? (
@@ -1324,7 +1314,9 @@ export default function ScholarshipDetailPageClient({
             <div className={scholarshipDetailCardPrimaryClass}>
               <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
                 {whoLines.map((item, i) => (
-                  <li key={`who-${i}-${item.slice(0, 40)}`}>{item}</li>
+                  <li key={`who-${i}-${item.slice(0, 40)}`}>
+                    {obscureDetailLine(item)}
+                  </li>
                 ))}
               </ul>
               {eligibilityFromAi ? (
@@ -1384,8 +1376,15 @@ export default function ScholarshipDetailPageClient({
                   <p className="text-xs font-medium text-zinc-500">
                     Eligible institutions
                   </p>
-                  <p className="mt-1 text-sm leading-relaxed text-zinc-700">
-                    {institutionsLine}
+                  <p
+                    className="mt-1 text-sm leading-relaxed text-zinc-700"
+                    title={
+                      providerNameLocked
+                        ? 'Institution details may name the sponsor — hidden until you subscribe.'
+                        : undefined
+                    }
+                  >
+                    {obscureDetailLine(institutionsLine)}
                   </p>
                 </div>
               ) : null}
@@ -1452,13 +1451,17 @@ export default function ScholarshipDetailPageClient({
         {panelPick.showBeforeYouApply ? (
           <ScholarshipBeforeYouApplyBlock
             checks={scholarship.aiImportantChecks ?? []}
-            missing={scholarship.aiMissingInfo ?? []}
+            missing={filterAiMissingInfoForDisplay(scholarship.aiMissingInfo)}
             redFlags={scholarship.aiRedFlags ?? []}
+            renderLine={obscureDetailLine}
           />
         ) : null}
 
         {showNextStepsBlock ? (
-          <ScholarshipNextStepsBlock items={nextStepActions} />
+          <ScholarshipNextStepsBlock
+            items={nextStepActions}
+            renderLine={obscureDetailLine}
+          />
         ) : null}
 
         {initialRelatedHubLinks.length > 0 ? (
@@ -1637,7 +1640,10 @@ export default function ScholarshipDetailPageClient({
         ) : null}
 
         {showApplicationTips ? (
-          <ScholarshipApplicationTipsBlock items={filteredTips} />
+          <ScholarshipApplicationTipsBlock
+            items={filteredTips}
+            renderLine={obscureDetailLine}
+          />
         ) : null}
 
         {mergeAppDetails &&
@@ -1670,7 +1676,9 @@ export default function ScholarshipDetailPageClient({
                   {reqDisplayLines.length > 0 ? (
                     <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
                       {reqDisplayLines.map((item, i) => (
-                        <li key={`req-${i}-${item.slice(0, 40)}`}>{item}</li>
+                        <li key={`req-${i}-${item.slice(0, 40)}`}>
+                          {obscureDetailLine(item)}
+                        </li>
                       ))}
                     </ul>
                   ) : null}
@@ -1678,6 +1686,7 @@ export default function ScholarshipDetailPageClient({
                     <RequirementsRichOrList
                       html={scholarship.requirementsHtml}
                       lines={eligibilityItems}
+                      renderLine={obscureDetailLine}
                     />
                   ) : null}
                   {reqCleanLines.length === 0 &&
@@ -1685,7 +1694,9 @@ export default function ScholarshipDetailPageClient({
                   eligibilityItems.length > 0 ? (
                     <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
                       {eligibilityItems.map((item, i) => (
-                        <li key={`elig-${i}-${item.slice(0, 40)}`}>{item}</li>
+                        <li key={`elig-${i}-${item.slice(0, 40)}`}>
+                          {obscureDetailLine(item)}
+                        </li>
                       ))}
                     </ul>
                   ) : null}
@@ -1748,7 +1759,9 @@ export default function ScholarshipDetailPageClient({
                   {reqDisplayLines.length > 0 ? (
                     <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
                       {reqDisplayLines.map((item, i) => (
-                        <li key={`req-${i}-${item.slice(0, 40)}`}>{item}</li>
+                        <li key={`req-${i}-${item.slice(0, 40)}`}>
+                          {obscureDetailLine(item)}
+                        </li>
                       ))}
                     </ul>
                   ) : null}
@@ -1756,6 +1769,7 @@ export default function ScholarshipDetailPageClient({
                     <RequirementsRichOrList
                       html={scholarship.requirementsHtml}
                       lines={eligibilityItems}
+                      renderLine={obscureDetailLine}
                     />
                   ) : null}
                   {reqCleanLines.length === 0 &&
@@ -1763,7 +1777,9 @@ export default function ScholarshipDetailPageClient({
                   eligibilityItems.length > 0 ? (
                     <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
                       {eligibilityItems.map((item, i) => (
-                        <li key={`elig-${i}-${item.slice(0, 40)}`}>{item}</li>
+                        <li key={`elig-${i}-${item.slice(0, 40)}`}>
+                          {obscureDetailLine(item)}
+                        </li>
                       ))}
                     </ul>
                   ) : null}
@@ -1897,46 +1913,120 @@ export default function ScholarshipDetailPageClient({
             <div className={scholarshipDetailCardSupportClass}>
               <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
                 {providerProfileHref ? (
-                  <Link
-                    href={providerProfileHref}
-                    className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 sm:gap-4"
-                    aria-label={
-                      providerName
-                        ? `View provider profile: ${providerName}`
-                        : 'View provider profile'
-                    }
+                  providerNameLocked && providerName ? (
+                    <button
+                      type="button"
+                      onClick={openProviderAccessWall}
+                      className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
+                      aria-label="Provider name hidden. Sign in or start a trial to see the sponsor."
+                    >
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
+                        {logoUrl ? (
+                          <img
+                            src={logoUrl}
+                            alt="Scholarship provider logo"
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <Shield
+                            className="h-5 w-5 text-zinc-500"
+                            strokeWidth={1.5}
+                            aria-hidden
+                          />
+                        )}
+                      </div>
+                      <div className="flex min-w-0 flex-1 items-center gap-2">
+                        <Lock
+                          className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
+                          strokeWidth={2}
+                          aria-hidden
+                        />
+                        <p
+                          className={`min-w-0 text-lg font-semibold text-zinc-900 ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
+                          aria-hidden
+                        >
+                          {providerName}
+                        </p>
+                      </div>
+                    </button>
+                  ) : (
+                    <Link
+                      href={providerProfileHref}
+                      className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 sm:gap-4"
+                      aria-label={
+                        providerName
+                          ? `View provider profile: ${providerName}`
+                          : 'View provider profile'
+                      }
+                    >
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm transition group-hover:border-emerald-200/80">
+                        {logoUrl ? (
+                          <img
+                            src={logoUrl}
+                            alt={
+                              providerName
+                                ? `${providerName} logo`
+                                : 'Scholarship provider logo'
+                            }
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <Shield
+                            className="h-5 w-5 text-zinc-500 transition group-hover:text-emerald-700"
+                            strokeWidth={1.5}
+                            aria-hidden
+                          />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        {providerName ? (
+                          <p className="text-lg font-semibold text-zinc-900 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
+                            {providerName}
+                          </p>
+                        ) : (
+                          <p className="text-sm font-medium text-zinc-600 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
+                            View provider profile
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  )
+                ) : providerNameLocked && providerName ? (
+                  <button
+                    type="button"
+                    onClick={openProviderAccessWall}
+                    className="flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
+                    aria-label="Provider name hidden. Sign in or start a trial to see the sponsor."
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm transition group-hover:border-emerald-200/80">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
                       {logoUrl ? (
                         <img
                           src={logoUrl}
-                          alt={
-                            providerName
-                              ? `${providerName} logo`
-                              : 'Scholarship provider logo'
-                          }
+                          alt="Scholarship provider logo"
                           className="h-full w-full object-cover"
                         />
                       ) : (
                         <Shield
-                          className="h-5 w-5 text-zinc-500 transition group-hover:text-emerald-700"
+                          className="h-5 w-5 text-zinc-500"
                           strokeWidth={1.5}
                           aria-hidden
                         />
                       )}
                     </div>
-                    <div className="min-w-0 flex-1">
-                      {providerName ? (
-                        <p className="text-lg font-semibold text-zinc-900 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
-                          {providerName}
-                        </p>
-                      ) : (
-                        <p className="text-sm font-medium text-zinc-600 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
-                          View provider profile
-                        </p>
-                      )}
+                    <div className="flex min-w-0 flex-1 items-center gap-2">
+                      <Lock
+                        className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                      <p
+                        className={`min-w-0 text-lg font-semibold text-zinc-900 ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
+                        aria-hidden
+                      >
+                        {providerName}
+                      </p>
                     </div>
-                  </Link>
+                  </button>
                 ) : (
                   <div className="flex min-w-0 gap-3 sm:gap-4">
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
@@ -2091,7 +2181,7 @@ export default function ScholarshipDetailPageClient({
               {overviewBody ? (
                 <div className={showCredibilityInOverview ? 'pt-6' : ''}>
                   <p className="whitespace-pre-line text-sm leading-relaxed text-zinc-600 md:text-base">
-                    {overviewShown}
+                    {obscureDetailLine(overviewShown)}
                   </p>
                   {overviewLong ? (
                     <button
@@ -2165,106 +2255,64 @@ export default function ScholarshipDetailPageClient({
                   </li>
                 ) : null}
                 <li className="min-w-0 flex-1 basis-0">
-                  {hasDetailAccess ? (
-                    <button
-                      type="button"
-                      aria-pressed={savedIds.includes(scholarship.id)}
-                      aria-label={
-                        savedIds.includes(scholarship.id)
-                          ? 'Remove from saved'
-                          : 'Save scholarship'
-                      }
-                      className={
-                        savedIds.includes(scholarship.id)
-                          ? `${detailOfficialSavedPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
-                          : `${detailOfficialSavePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
-                      }
-                      onClick={async () => {
-                        const id = scholarship.id;
-                        const wasSaved = savedIds.includes(id);
-                        const ok = wasSaved
-                          ? await deleteUserSavedScholarship(id)
-                          : await postUserSavedScholarship(id);
-                        if (!ok) {
-                          toast({
-                            title: 'Could not update saved scholarships',
-                            description: 'Check your connection and try again.',
-                            variant: 'destructive'
-                          });
-                          return;
-                        }
+                  <button
+                    type="button"
+                    aria-pressed={savedIds.includes(scholarship.id)}
+                    aria-label={
+                      savedIds.includes(scholarship.id)
+                        ? 'Remove from saved'
+                        : 'Save scholarship'
+                    }
+                    className={
+                      savedIds.includes(scholarship.id)
+                        ? `${detailOfficialSavedPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
+                        : `${detailOfficialSavePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
+                    }
+                    onClick={async () => {
+                      const id = scholarship.id;
+                      const wasSaved = savedIds.includes(id);
+                      const syncServer =
+                        isAuthenticated && hasSubscription;
+                      if (!syncServer) {
                         setSavedIds(
                           wasSaved ? removeScholarship(id) : saveScholarship(id)
                         );
-                      }}
-                    >
-                      {savedIds.includes(scholarship.id) ? 'Saved ✓' : 'Save'}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className={`${detailOfficialSavePillClass} flex h-11 min-h-[2.75rem] items-center justify-center gap-2`}
-                      onClick={openLockedAccessWall}
-                      title={
-                        isEasyApplySubscriptionLocked
-                          ? 'Start your free access to save scholarships'
-                          : 'Create a free account to save scholarships'
+                        return;
                       }
-                      aria-label={
-                        isEasyApplySubscriptionLocked
-                          ? 'Start your free access to save scholarships'
-                          : 'Create a free account to save scholarships'
+                      const ok = wasSaved
+                        ? await deleteUserSavedScholarship(id)
+                        : await postUserSavedScholarship(id);
+                      if (!ok) {
+                        toast({
+                          title: 'Could not update saved scholarships',
+                          description: 'Check your connection and try again.',
+                          variant: 'destructive'
+                        });
+                        return;
                       }
-                    >
-                      <Lock
-                        className="h-4 w-4 shrink-0 text-white stroke-white"
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                      Save
-                    </button>
-                  )}
+                      setSavedIds(
+                        wasSaved ? removeScholarship(id) : saveScholarship(id)
+                      );
+                    }}
+                  >
+                    {savedIds.includes(scholarship.id) ? 'Saved ✓' : 'Save'}
+                  </button>
                 </li>
                 <li className="min-w-0 flex-1 basis-0">
                   {ignoredIds.includes(scholarship.id) ? (
-                    hasDetailAccess ? (
-                      <button
-                        type="button"
-                        className={`${detailOfficialRestorePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
-                        aria-label="Restore scholarship to matches"
-                        onClick={() => {
-                          setIgnoredIds(
-                            removeIgnoredScholarship(scholarship.id)
-                          );
-                        }}
-                      >
-                        Restore to matches
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className={`${detailOfficialRestorePillClass} flex h-11 min-h-[2.75rem] items-center justify-center gap-2`}
-                        onClick={openLockedAccessWall}
-                        title={
-                          isEasyApplySubscriptionLocked
-                            ? 'Start your free access to restore this scholarship to matches'
-                            : 'Create a free account to restore this scholarship to matches'
-                        }
-                        aria-label={
-                          isEasyApplySubscriptionLocked
-                            ? 'Start your free access to restore this scholarship to matches'
-                            : 'Create a free account to restore this scholarship to matches'
-                        }
-                      >
-                        <Lock
-                          className="h-4 w-4 shrink-0 text-white stroke-white"
-                          strokeWidth={2}
-                          aria-hidden
-                        />
-                        Restore to matches
-                      </button>
-                    )
-                  ) : hasDetailAccess ? (
+                    <button
+                      type="button"
+                      className={`${detailOfficialRestorePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
+                      aria-label="Restore scholarship to matches"
+                      onClick={() => {
+                        setIgnoredIds(
+                          removeIgnoredScholarship(scholarship.id)
+                        );
+                      }}
+                    >
+                      Restore to matches
+                    </button>
+                  ) : (
                     <button
                       type="button"
                       className={`${detailOfficialNotRelevantPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
@@ -2273,29 +2321,6 @@ export default function ScholarshipDetailPageClient({
                         setIgnoredIds(addIgnoredScholarship(scholarship.id));
                       }}
                     >
-                      Not relevant
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className={`${detailOfficialNotRelevantPillClass} flex h-11 min-h-[2.75rem] items-center justify-center gap-2`}
-                      onClick={openLockedAccessWall}
-                      title={
-                        isEasyApplySubscriptionLocked
-                          ? 'Start your free access to hide scholarships from matches'
-                          : 'Create a free account to hide scholarships from matches'
-                      }
-                      aria-label={
-                        isEasyApplySubscriptionLocked
-                          ? 'Start your free access to hide scholarships from matches'
-                          : 'Create a free account to hide scholarships from matches'
-                      }
-                    >
-                      <Lock
-                        className="h-4 w-4 shrink-0 text-white stroke-white"
-                        strokeWidth={2}
-                        aria-hidden
-                      />
                       Not relevant
                     </button>
                   )}
@@ -2401,7 +2426,6 @@ export default function ScholarshipDetailPageClient({
                         eligibleForMatchPill
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
-                        onSubscriptionOffer={openSubscriptionOffer}
                         onGuestDetailNavigate={openRegistrationWall}
                       />
                     ))}
@@ -2429,7 +2453,6 @@ export default function ScholarshipDetailPageClient({
                         eligibleForMatchPill={false}
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
-                        onSubscriptionOffer={openSubscriptionOffer}
                         onGuestDetailNavigate={openRegistrationWall}
                       />
                     ))}
@@ -2451,7 +2474,6 @@ export default function ScholarshipDetailPageClient({
                       eligibleForMatchPill={isOpen}
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
-                      onSubscriptionOffer={openSubscriptionOffer}
                       onGuestDetailNavigate={openRegistrationWall}
                     />
                   );
@@ -2474,7 +2496,6 @@ export default function ScholarshipDetailPageClient({
         </div>
     </section>
     {registrationWallModal}
-    {subscriptionOfferModal}
     </DarkTooltipProvider>
   );
 }

@@ -11,6 +11,7 @@ import { createClient } from '@supabase/supabase-js';
 import { canonicalStateVsSlug } from '../lib/seo/stateCompareSlug';
 import type { Database, Json } from '../types_db';
 
+const PAGE_SIZE = 1000;
 const MIN_GRANTS_PER_SIDE = 3;
 const INSERT_RETRY_MAX = 4;
 
@@ -73,6 +74,11 @@ function parseArgs() {
   }
 
   return { limit, dryRun };
+}
+
+function isCliMain(): boolean {
+  const a = (process.argv[1] ?? '').replace(/\\/g, '/');
+  return a.includes('/enqueue-state-compare.ts');
 }
 
 function isTransientPostgrestError(message: string): boolean {
@@ -176,31 +182,66 @@ function buildPairCandidates(states: RankedState[]): PairCandidate[] {
 
 async function fetchExistingQueuePaths(admin: Admin) {
   const existing = new Set<string>();
-  const { data, error } = await admin
-    .from('seo_generation_queue')
-    .select('canonical_path');
-  if (error) throw new Error(error.message);
-  for (const row of data ?? []) {
-    const path = row.canonical_path?.trim().toLowerCase();
-    if (path) existing.add(path);
+  let from = 0;
+
+  for (;;) {
+    const { data, error } = await admin
+      .from('seo_generation_queue')
+      .select('canonical_path')
+      .range(from, from + PAGE_SIZE - 1);
+
+    if (error) throw new Error(error.message);
+
+    const batch = data ?? [];
+    for (const row of batch) {
+      const path = row.canonical_path?.trim().toLowerCase();
+      if (path) existing.add(path);
+    }
+
+    if (batch.length < PAGE_SIZE) break;
+    from += PAGE_SIZE;
   }
+
   return existing;
 }
 
 async function fetchCompletedCompareSlugs(admin: Admin) {
   const completed = new Set<string>();
-  const { data, error } = await admin
-    .from('state_compare_pages')
-    .select('slug, status, ai_verdict');
-  if (error) throw new Error(error.message);
-  for (const row of data ?? []) {
-    const slug = row.slug?.trim().toLowerCase();
-    if (!slug) continue;
-    if (row.status === 'published' || Boolean(row.ai_verdict?.trim())) {
-      completed.add(slug);
+  let from = 0;
+
+  for (;;) {
+    const { data, error } = await admin
+      .from('state_compare_pages')
+      .select('slug, status, ai_verdict')
+      .range(from, from + PAGE_SIZE - 1);
+
+    if (error) throw new Error(error.message);
+
+    const batch = data ?? [];
+    for (const row of batch) {
+      const slug = row.slug?.trim().toLowerCase();
+      if (!slug) continue;
+      if (row.status === 'published' || Boolean(row.ai_verdict?.trim())) {
+        completed.add(slug);
+      }
     }
+
+    if (batch.length < PAGE_SIZE) break;
+    from += PAGE_SIZE;
   }
+
   return completed;
+}
+
+/** Pair count from the same rules as enqueue (≥3 active grants per state). */
+export async function countStateComparePairCandidates(): Promise<{
+  statesWithMinGrants: number;
+  pairCandidates: number;
+}> {
+  const admin = loadAdmin();
+  const ranked = await fetchRankedStates(admin);
+  const pairs = buildPairCandidates(ranked);
+  return { statesWithMinGrants: ranked.length, pairCandidates: pairs.length };
 }
 
 async function main() {
@@ -334,7 +375,9 @@ async function main() {
   );
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (isCliMain()) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

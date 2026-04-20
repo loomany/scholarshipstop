@@ -86,6 +86,11 @@ function parseArgs() {
   return { limit, dryRun };
 }
 
+function isCliMain(): boolean {
+  const a = (process.argv[1] ?? '').replace(/\\/g, '/');
+  return a.includes('/enqueue-university-compare.ts');
+}
+
 function looksLikeUniversityInstitution(input: {
   slug?: string | null;
   name?: string | null;
@@ -293,6 +298,17 @@ async function fetchCompletedCompareSlugs(admin: Admin) {
   return completed;
 }
 
+/** Pair count from the same rules as enqueue (top institutions + university-like filter). */
+export async function countUniversityComparePairCandidates(): Promise<{
+  institutionsRanked: number;
+  pairCandidates: number;
+}> {
+  const admin = loadAdmin();
+  const ranked = await fetchTopInstitutions(admin);
+  const pairs = buildPairCandidates(ranked);
+  return { institutionsRanked: ranked.length, pairCandidates: pairs.length };
+}
+
 async function main() {
   const { limit, dryRun } = parseArgs();
   const admin = loadAdmin();
@@ -435,7 +451,9 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (isCliMain()) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}
