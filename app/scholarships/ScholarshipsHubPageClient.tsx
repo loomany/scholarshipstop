@@ -588,6 +588,9 @@ function ScholarshipsPageInner({
    * Guests: one-shot URL normalization (avoids races between multiple effects).
    * — default hub tab + catalog scope when `tab` is missing
    * — strip only unsupported guest params from the URL
+   *
+   * `recommended` (Saved Filters) is allowed: sidebar links there and the hub shows the guest
+   * empty state / signup prompts. Do not rewrite it back to `matches` or clicks appear “broken”.
    */
   useEffect(() => {
     if (isAuthenticated) return;
@@ -595,7 +598,7 @@ function ScholarshipsPageInner({
     const sp = new URLSearchParams(searchParamsString);
     const tab = sp.get('tab');
     /** Personal tabs (saved/ignored) stay in the URL for deep links (e.g. Telegram → hub). */
-    const badTab = tab === 'recommended' || tab === 'hot-deadlines';
+    const badTab = tab === 'hot-deadlines';
     const needDefaultHubTab = !tab;
     const parsedDeadline = parseDeadlineFromParam(sp.get('deadline'));
     const hasAdvDeadline = parsedDeadline != null && parsedDeadline !== 'any';
@@ -908,6 +911,11 @@ function ScholarshipsPageInner({
     landingSig: string;
     savedRev: number;
   } | null>(null);
+  /**
+   * Turning on International Friendly from Best recommendation switches `tab` to Matches; the
+   * preset sync effect would otherwise rebuild the Matches preset and drop `citizenshipAudience`.
+   */
+  const intlFriendlyHandoffFromBestTabRef = useRef(false);
 
   useEffect(() => {
     if (!listMeta?.filterBounds) return;
@@ -939,18 +947,22 @@ function ScholarshipsPageInner({
     }
 
     if (shouldReset) {
-      setMoreFiltersApplied(
-        buildHubTabPresetMoreFilters({
-          tab: activeTab,
-          filterBounds: listMeta.filterBounds,
-          deadlineFromUrl: parsedList.deadline,
-          routeScope,
-          profileFilterSeed: listMeta.profileFilterSeed,
-          landingQuizProfileSeed: transientBestRecommendationProfileSeed,
-          savedFiltersFromStorage: savedFiltersForHub,
-          isAuthenticated
-        })
-      );
+      let nextPreset = buildHubTabPresetMoreFilters({
+        tab: activeTab,
+        filterBounds: listMeta.filterBounds,
+        deadlineFromUrl: parsedList.deadline,
+        routeScope,
+        profileFilterSeed: listMeta.profileFilterSeed,
+        landingQuizProfileSeed: transientBestRecommendationProfileSeed,
+        savedFiltersFromStorage: savedFiltersForHub,
+        isAuthenticated
+      });
+      if (intlFriendlyHandoffFromBestTabRef.current) {
+        intlFriendlyHandoffFromBestTabRef.current = false;
+        nextPreset = cloneMoreFilters(nextPreset);
+        nextPreset.citizenshipAudience = 'international_friendly';
+      }
+      setMoreFiltersApplied(nextPreset);
     }
     presetSyncStateRef.current = {
       tab: activeTab,
@@ -1636,12 +1648,30 @@ function ScholarshipsPageInner({
     const nowOn = merged.citizenshipAudience === 'international_friendly';
     next.citizenshipAudience = nowOn ? 'any' : 'international_friendly';
     setMoreFiltersApplied(next);
-    replaceListingParams({ deadline: next.deadlinePreset, resetPage: true });
+    /**
+     * International Friendly is defined as catalog Matches + this filter (see sidebar counts).
+     * Leaving `tab=best-recommendation` would still run the best-tab list / empty state while the
+     * sidebar row looks selected — switch to Matches when turning the filter on from Best.
+     */
+    const turningOnInternational = !nowOn;
+    const switchToMatchesForIntl =
+      turningOnInternational && activeTab === 'best-recommendation';
+    if (switchToMatchesForIntl) {
+      intlFriendlyHandoffFromBestTabRef.current = true;
+    }
+    replaceListingParams({
+      deadline: next.deadlinePreset,
+      resetPage: true,
+      ...(switchToMatchesForIntl
+        ? { tab: 'matches', scope: 'catalog', sort: 'magic' }
+        : {})
+    });
   }, [
     moreFiltersApplied,
     emptyMoreFiltersState,
     routeBaseMoreFilters,
-    replaceListingParams
+    replaceListingParams,
+    activeTab
   ]);
 
   const hasListingParams =

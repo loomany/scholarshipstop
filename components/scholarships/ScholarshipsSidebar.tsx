@@ -226,6 +226,9 @@ export default function ScholarshipsSidebar({
         {STATIC_TOP_ROWS.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
+          /** Same idea as Matches + International Friendly: don’t paint two rows “selected”. */
+          const intlFilterOn = internationalStudentsFilter?.active === true;
+          const navLooksActive = isActive && !intlFilterOn;
           const href = buildTabHref?.(item.id) ?? buildScholarshipTabHref(item.id);
           const countSuffix = suffix(item.id);
           const showGuestLock =
@@ -234,7 +237,7 @@ export default function ScholarshipsSidebar({
             subscriptionLocked && SUBSCRIPTION_GATED_TAB_IDS.has(item.id);
           const gated = showGuestLock || showSubscriptionLock;
           const baseClass = `group flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
-            isActive
+            navLooksActive
               ? scholarshipSidebarActiveRowClass
               : 'border-transparent hover:bg-gray-50/80'
           }`;
@@ -262,7 +265,7 @@ export default function ScholarshipsSidebar({
                 >
                   <Icon
                     className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
-                      isActive
+                      navLooksActive
                         ? 'text-white stroke-white'
                         : 'text-[#FF7A1A] stroke-[#FF7A1A]'
                     }`}
@@ -270,7 +273,7 @@ export default function ScholarshipsSidebar({
                   />
                   <span
                     className={`min-w-0 flex-1 text-left text-sm ${
-                      isActive
+                      navLooksActive
                         ? 'font-semibold text-white'
                         : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
                     }`}
@@ -279,7 +282,7 @@ export default function ScholarshipsSidebar({
                     {countSuffix ? (
                       <span
                         className={
-                          isActive
+                          navLooksActive
                             ? 'font-normal text-white'
                             : 'font-normal text-gray-400'
                         }
@@ -292,7 +295,7 @@ export default function ScholarshipsSidebar({
                   {showSubscriptionLock ? (
                     <Lock
                       className={`h-3.5 w-3.5 shrink-0 ${
-                        isActive ? 'text-white/85 stroke-white/85' : scholarshipGuestLockIconClass
+                        navLooksActive ? 'text-white/85 stroke-white/85' : scholarshipGuestLockIconClass
                       }`}
                       strokeWidth={2}
                       aria-hidden
@@ -304,11 +307,11 @@ export default function ScholarshipsSidebar({
                   href={href}
                   prefetch={false}
                   className={baseClass}
-                  aria-current={isActive ? 'page' : undefined}
+                  aria-current={navLooksActive ? 'page' : undefined}
                 >
                   <Icon
                     className={`h-[18px] w-[18px] shrink-0 stroke-[1.75] ${
-                      isActive
+                      navLooksActive
                         ? 'text-white stroke-white'
                         : 'text-[#FF7A1A] stroke-[#FF7A1A]'
                     }`}
@@ -316,7 +319,7 @@ export default function ScholarshipsSidebar({
                   />
                   <span
                     className={`min-w-0 flex-1 text-left text-sm ${
-                      isActive
+                      navLooksActive
                         ? 'font-semibold text-white'
                         : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
                     }`}
@@ -325,7 +328,7 @@ export default function ScholarshipsSidebar({
                     {countSuffix ? (
                       <span
                         className={
-                          isActive
+                          navLooksActive
                             ? 'font-normal text-white'
                             : 'font-normal text-gray-400'
                         }
