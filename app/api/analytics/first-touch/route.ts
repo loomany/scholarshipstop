@@ -4,6 +4,7 @@ import {
   isLikelyAutomatedUserAgent,
   normalizeClientUserAgent
 } from '@/lib/analytics/clientBot';
+import { deriveAttribution } from '@/lib/analytics/deriveAttribution';
 import { normalizeFirstTouchLandingUrl } from '@/lib/analytics/firstTouchLandingNormalization';
 import { resolveTrafficChannel } from '@/lib/analytics/resolveTrafficChannel';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
@@ -78,6 +79,16 @@ export async function POST(request: Request) {
     utm_medium,
     utm_campaign
   });
+  const attribution = deriveAttribution({
+    landingUrl: landing_url_raw,
+    normalizedLandingUrl: landing_url,
+    referrer,
+    utm_source,
+    utm_medium,
+    utm_campaign,
+    clickId: click_id,
+    clickIdParam
+  });
 
   const supabase = createServiceRoleSupabaseClient();
   if (!supabase) {
@@ -90,6 +101,26 @@ export async function POST(request: Request) {
       status: 'skipped',
       reason: 'service_role_unconfigured'
     });
+  }
+
+  const { error: attributionError } = await (supabase as any).rpc(
+    'upsert_visitor_attribution',
+    {
+      p_visitor_id: visitorId,
+      p_user_id: null,
+      p_source: attribution.source,
+      p_medium: attribution.medium,
+      p_campaign: attribution.campaign,
+      p_referrer: attribution.referrer,
+      p_landing_path: attribution.landingPath,
+      p_gclid: attribution.gclid,
+      p_fbclid: attribution.fbclid,
+      p_ttclid: attribution.ttclid
+    }
+  );
+  if (attributionError) {
+    // Attribution table is additive telemetry; keep first-touch API successful.
+    console.error('[analytics/first-touch] visitor_attribution upsert error', attributionError);
   }
 
   const { data, error } = await supabase

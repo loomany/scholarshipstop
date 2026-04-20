@@ -25,7 +25,7 @@
 #
 # Secrets (set in Railway Variables):
 #   GOOGLE_INDEXING_SECRET — Bearer for SEO + Google Indexing API routes
-#   GRANT_NOTIFICATION_CRON_SECRET — grant notifications + fallback for weekly digest + SEO Telegram digest
+#   GRANT_NOTIFICATION_CRON_SECRET — fallback Bearer for weekly digest + SEO Telegram digest
 #   SEO_DAILY_DIGEST_CRON_SECRET — optional; overrides Bearer for seo-daily-telegram (else GRANT_NOTIFICATION_CRON_SECRET)
 #   WEEKLY_FREE_DIGEST_CRON_SECRET — optional; else GRANT_NOTIFICATION_CRON_SECRET is used
 #
@@ -122,9 +122,14 @@ task_google_indexing_flush() {
 }
 
 task_grant_notifications() {
-  require_env GRANT_NOTIFICATION_CRON_SECRET
-  http_post_json "Grant notification dispatch" \
-    "/api/internal/grant-notifications/run" "$GRANT_NOTIFICATION_CRON_SECRET" "{}"
+  echo "[railway-cron] Starting task: grant-notifications (local tsx)"
+  export NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-$BASE_URL}"
+  require_env NEXT_PUBLIC_SUPABASE_URL
+  require_env SUPABASE_SERVICE_ROLE_KEY
+  require_env RESEND_API_KEY
+  require_env RESEND_FROM
+  require_npm_or_exit || return 0
+  run_tsx_cron "cron-grant-notifications" "scripts/cron-grant-notifications.ts"
 }
 
 task_seo_daily_telegram() {
