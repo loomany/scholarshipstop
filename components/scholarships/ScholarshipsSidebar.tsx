@@ -41,6 +41,8 @@ export type { ScholarshipSidebarCounts };
 export type ScholarshipsSidebarInternationalFilterProps = {
   /** Row highlight when the international filter is applied. */
   active: boolean;
+  /** Canonical listing URL for international-friendly scope. */
+  href?: string;
   /** Ungated: apply filter and refresh grants immediately. */
   onActivate: () => void;
   showGuestLock: boolean;
@@ -569,21 +571,27 @@ export default function ScholarshipsSidebar({
               >
                 {intlInner}
               </button>
-            ) : (
+            ) : intlActive ? (
               <button
                 type="button"
                 onClick={() => intl.onActivate()}
                 className={`${intlRowClass} w-full cursor-pointer text-left group`}
                 title={useDarkTooltips ? undefined : intlTip}
-                aria-pressed={intlActive}
-                aria-label={
-                  intlActive
-                    ? 'International Friendly on — click to clear'
-                    : 'Show International Friendly scholarships'
-                }
+                aria-pressed
+                aria-label="International Friendly on — click to clear"
               >
                 {intlInner}
               </button>
+            ) : (
+              <Link
+                href={intl.href ?? '/scholarships?tab=matches&scope=catalog&aud=international_friendly'}
+                prefetch={false}
+                className={`${intlRowClass} w-full cursor-pointer text-left group`}
+                title={useDarkTooltips ? undefined : intlTip}
+                aria-label="Show International Friendly scholarships"
+              >
+                {intlInner}
+              </Link>
             );
             const internationalRow = (
               <li key="sidebar-international-students">

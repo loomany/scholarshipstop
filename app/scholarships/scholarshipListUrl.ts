@@ -20,6 +20,9 @@ export const SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF =
 /** Backward-compat alias while old imports are being migrated. */
 export const SCHOLARSHIPS_HUB_BEST_MATCHES_HREF =
   SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF;
+/** Catalog Matches narrowed to international-friendly audience. */
+export const SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF =
+  '/scholarships?tab=matches&scope=catalog&aud=international_friendly';
 
 /** Saved grants (My scholarships → Saved); same data as `user_saved_scholarships`. */
 export const SCHOLARSHIPS_HUB_SAVED_TAB_HREF = '/scholarships?tab=saved';

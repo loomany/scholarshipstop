@@ -85,6 +85,7 @@ import {
 import { getViewedScholarshipIds } from './viewedScholarships';
 import {
   buildScholarshipListSearchParams,
+  SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF,
   buildScholarshipTabHref,
   clampScholarshipListPage,
   parseDeadlineFromParam,
@@ -599,21 +600,18 @@ function ScholarshipsPageInner({
   }, [searchParams, replaceListingParams]);
 
   /**
-   * International Friendly is catalog Matches scope. Keep URL deterministic when deep links
-   * carry `aud=international_friendly` together with `tab=best-recommendation`.
+   * International-friendly audience is a dedicated Matches scope in the hub URL model.
+   * Normalize deep links like `tab=best-recommendation&aud=international_friendly`.
    */
   useEffect(() => {
-    if (
-      activeTab === 'best-recommendation' &&
-      parsedList.audience === 'international_friendly'
-    ) {
-      replaceListingParams({
-        tab: 'matches',
-        scope: 'catalog',
-        sort: 'magic',
-        resetPage: true
-      });
-    }
+    if (parsedList.audience !== 'international_friendly') return;
+    if (activeTab === 'matches') return;
+    replaceListingParams({
+      tab: 'matches',
+      scope: 'catalog',
+      sort: 'magic',
+      resetPage: true
+    });
   }, [activeTab, parsedList.audience, replaceListingParams]);
 
   /**
@@ -1631,6 +1629,17 @@ function ScholarshipsPageInner({
     },
     [pathname]
   );
+  const internationalFriendlyHref = useMemo(() => {
+    if (!routeScope?.providerSlug) return SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF;
+    const p = buildScholarshipListSearchParams(new URLSearchParams(), {
+      tab: 'matches',
+      scope: 'catalog',
+      audience: 'international_friendly',
+      resetPage: true
+    });
+    const qs = p.toString();
+    return qs ? `${pathname}?${qs}` : pathname;
+  }, [pathname, routeScope?.providerSlug]);
 
   const moreFiltersOffDefault = useMemo(() => {
     if (!moreFiltersApplied) return false;
@@ -1676,23 +1685,19 @@ function ScholarshipsPageInner({
     const nextAudience = nowOn ? 'any' : 'international_friendly';
     next.citizenshipAudience = nextAudience;
     setMoreFiltersApplied(next);
-    const switchToMatchesForIntl =
-      nextAudience === 'international_friendly' &&
-      activeTab === 'best-recommendation';
     replaceListingParams({
+      tab: 'matches',
+      scope: 'catalog',
+      sort: 'magic',
       deadline: next.deadlinePreset,
       audience: nextAudience,
-      resetPage: true,
-      ...(switchToMatchesForIntl
-        ? { tab: 'matches', scope: 'catalog', sort: 'magic' }
-        : {})
+      resetPage: true
     });
   }, [
     moreFiltersApplied,
     emptyMoreFiltersState,
     routeBaseMoreFilters,
-    replaceListingParams,
-    activeTab
+    replaceListingParams
   ]);
 
   const hasListingParams =
@@ -1912,6 +1917,7 @@ function ScholarshipsPageInner({
             buildTabHref={routeScope?.providerSlug ? buildSidebarTabHref : undefined}
             internationalStudentsFilter={{
               active: internationalSidebarChecked,
+              href: internationalFriendlyHref,
               onActivate: toggleInternationalAudienceSidebar,
               showGuestLock: false,
               showSubscriptionLock: false,
