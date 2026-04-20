@@ -14,58 +14,57 @@ function truncatePlain(text: string, max: number): string {
 
 /** Category labels aligned with grant notification channels (email digest). */
 export const GRANT_DIGEST_DEMO_CHANNEL_LABELS = [
-  'Best recommendations',
-  'Saved filters',
+  'Best recommendation',
   'Easy apply',
-  'Hot deadlines'
+  'Hot Deadlines',
+  'Saved Filters'
 ] as const;
 
-function buildGrantCardExtraHtml(
+export type GrantDigestCategory = {
+  id: 'best' | 'easy_apply' | 'hot_deadlines' | 'saved_filters';
+  label: string;
+  totalCount: number;
+  viewAllUrl: string;
+  items: Scholarship[];
+};
+
+function formatDeadlineLabel(raw: string | null | undefined): string {
+  const text = raw?.trim();
+  if (!text) return 'No deadline';
+  return text;
+}
+
+function buildGrantListRowHtml(
   s: Scholarship,
   origin: string,
-  categoryLabel: string
+  categoryId: GrantDigestCategory['id']
 ): string {
   const path = scholarshipPublicPath(s);
   const href = `${origin.replace(/\/+$/, '')}${path}`;
-  const category = escapeHtml(categoryLabel.trim() || 'Match');
   const title = escapeHtml(s.title?.trim() || 'Scholarship');
-  const deadline = escapeHtml(s.deadline?.trim() || 'See listing');
   const amountRaw = s.awardAmount ?? s.amount;
   const amount = escapeHtml(
     amountRaw?.trim() ? formatScholarshipAwardDisplay(amountRaw) : 'Amount varies'
   );
-  const snippet = escapeHtml(truncatePlain(s.description || s.benefits || '', 220));
-  const provider = s.provider?.trim()
-    ? escapeHtml(s.provider.trim())
-    : escapeHtml(s.country?.trim() || 'Scholarship');
+  const deadline =
+    categoryId === 'hot_deadlines'
+      ? `<span style="display:block;margin-top:4px;font-size:12px;line-height:1.4;color:#a7f3d0;">Deadline: ${escapeHtml(formatDeadlineLabel(s.deadline))}</span>`
+      : '';
 
   return `
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 10px;">
   <tr>
-    <td style="border-radius:16px;border:1px solid #e5e7eb;background:#f9fafb;padding:0;overflow:hidden;">
+    <td style="border-radius:12px;border:1px solid #374151;background:#111827;padding:12px 14px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
-          <td style="width:4px;background:#10b981;"></td>
-          <td style="padding:18px 20px;">
-            <p style="margin:0 0 8px;font-size:13px;font-weight:700;line-height:1.3;color:#059669;">${category}</p>
-            <p style="margin:0 0 10px;font-size:18px;font-weight:800;line-height:1.25;color:#111827;letter-spacing:-0.02em;">${title}</p>
-            <p style="margin:0 0 6px;font-size:13px;color:#374151;"><span style="color:#6b7280;">Provider</span> · ${provider}</p>
-            <p style="margin:0 0 6px;font-size:13px;color:#374151;"><span style="color:#6b7280;">Deadline</span> · ${deadline}</p>
-            <p style="margin:0 0 12px;font-size:13px;color:#374151;"><span style="color:#6b7280;">Award</span> · ${amount}</p>
-            <p style="margin:0 0 16px;font-size:14px;line-height:1.55;color:#4b5563;">${snippet}</p>
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-              <tr>
-                <td align="center" style="padding:0;">
-                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
-                    <tr>
-                      <td align="center" style="border-radius:12px;background:#10b981;">
-                        <a href="${escapeHtml(href)}" style="display:inline-block;padding:12px 22px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:700;color:#ffffff!important;text-decoration:none;">View scholarship</a>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+          <td valign="top" style="padding:0 8px 0 0;">
+            <a href="${escapeHtml(href)}" style="display:block;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.35;font-weight:700;color:#f3f4f6;text-decoration:none;word-break:break-word;">
+              ${title}
+            </a>
+            ${deadline}
+          </td>
+          <td valign="top" align="right" style="white-space:nowrap;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:700;color:#34d399;">
+            ${amount}
           </td>
         </tr>
       </table>
@@ -74,9 +73,54 @@ function buildGrantCardExtraHtml(
 </table>`;
 }
 
+function buildCategorySectionHtml(
+  category: GrantDigestCategory,
+  origin: string
+): string {
+  if (category.totalCount <= 0 || category.items.length <= 0) return '';
+
+  const visibleItems = category.items.slice(0, 4);
+  const hiddenCount = Math.max(0, category.totalCount - visibleItems.length);
+  const rows = visibleItems
+    .map((item) => buildGrantListRowHtml(item, origin, category.id))
+    .join('\n');
+
+  const moreText =
+    hiddenCount > 0
+      ? `<p style="margin:4px 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.45;color:#9ca3af;">+ ${hiddenCount} more scholarships</p>`
+      : '';
+
+  const cta =
+    hiddenCount > 0
+      ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 4px;">
+          <tr>
+            <td align="center" style="border-radius:10px;background:#10b981;">
+              <a href="${escapeHtml(category.viewAllUrl)}" style="display:inline-block;padding:11px 16px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.3;font-weight:700;color:#ffffff!important;text-decoration:none;">
+                View all ${escapeHtml(String(category.totalCount))} scholarships
+              </a>
+            </td>
+          </tr>
+        </table>`
+      : '';
+
+  return `
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 18px;">
+  <tr>
+    <td style="border-radius:14px;border:1px solid #374151;background:#0f172a;padding:14px;">
+      <p style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:800;color:#34d399;text-transform:uppercase;letter-spacing:0.04em;">
+        ${escapeHtml(category.label)} (${escapeHtml(String(category.totalCount))} new)
+      </p>
+      ${rows}
+      ${moreText}
+      ${cta}
+    </td>
+  </tr>
+</table>`;
+}
+
 export async function sendGrantDigestBatchEmail(params: {
   toEmail: string;
-  items: { scholarship: Scholarship; channelLabel: string }[];
+  categories: GrantDigestCategory[];
   firstName?: string | null;
 }): Promise<{ ok: boolean; skipped?: string }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
@@ -89,40 +133,35 @@ export async function sendGrantDigestBatchEmail(params: {
     return { ok: false, skipped: 'RESEND_FROM not set' };
   }
 
-  const items = params.items;
-  if (items.length === 0) {
+  const categories = params.categories.filter((c) => c.totalCount > 0 && c.items.length > 0);
+  if (categories.length === 0) {
     return { ok: false, skipped: 'No digest items' };
   }
 
   const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
   const name = params.firstName?.trim() || 'there';
-  const first = items[0]!;
-  const grantPath = scholarshipPublicPath(first.scholarship);
+  const firstCategory = categories[0]!;
+  const firstItem = firstCategory.items[0]!;
+  const grantPath = scholarshipPublicPath(firstItem);
   const grantUrl = `${origin}${grantPath}`;
-  const n = items.length;
+  const totalMatches = categories.reduce((sum, c) => sum + c.totalCount, 0);
 
-  const extraHtml = items
-    .map((it) => buildGrantCardExtraHtml(it.scholarship, origin, it.channelLabel))
+  const extraHtml = categories
+    .map((category) => buildCategorySectionHtml(category, origin))
     .join('\n');
 
-  const titlesPreview = items
-    .map((it) => it.scholarship.title?.trim() || 'Scholarship')
+  const titlesPreview = categories
+    .flatMap((c) => c.items.slice(0, 2))
+    .map((it) => it.title?.trim() || 'Scholarship')
     .join(' · ');
   const preheader =
     titlesPreview.length > 140 ? `${titlesPreview.slice(0, 137)}…` : titlesPreview;
 
-  const subject =
-    n === 1
-      ? `New scholarship — ${first.channelLabel}`
-      : `New scholarships for you (${n} matches)`;
-
-  const headline = n === 1 ? 'A new grant worth a look' : 'New grants worth a look';
-  const accentLine = n === 1 ? first.channelLabel : `${n} new matches`;
-
+  const subject = `New scholarships for you (${totalMatches} matches)`;
+  const headline = 'Your 24-hour scholarship digest';
+  const accentLine = `${totalMatches} new matches`;
   const bodySecond =
-    n === 1
-      ? `We added a scholarship that lines up with <strong>${escapeHtml(first.channelLabel)}</strong>. Use the button in the card below to open the listing.`
-      : `We found <strong>${n}</strong> opportunities that match your alert channels. Each card is labeled with its category at the top — open any listing below.`;
+    'Here are fresh opportunities from your active alert categories. We only show the most relevant scholarships in each section to keep this email compact.';
 
   const html = buildScholarshipTopPremiumEmailHtml({
     preheader,
@@ -169,7 +208,15 @@ export async function sendGrantDigestEmail(params: {
 }): Promise<{ ok: boolean; skipped?: string }> {
   return sendGrantDigestBatchEmail({
     toEmail: params.toEmail,
-    items: [{ scholarship: params.scholarship, channelLabel: params.channelLabel }],
+    categories: [
+      {
+        id: 'best',
+        label: params.channelLabel,
+        totalCount: 1,
+        viewAllUrl: `${getServerAuthSiteOrigin().replace(/\/+$/, '')}/scholarships`,
+        items: [params.scholarship]
+      }
+    ],
     firstName: params.firstName
   });
 }

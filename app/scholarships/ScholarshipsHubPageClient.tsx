@@ -88,6 +88,7 @@ import {
   buildScholarshipTabHref,
   clampScholarshipListPage,
   parseDeadlineFromParam,
+  type ScholarshipAudienceParam,
   parseScholarshipListUrl,
   SCHOLARSHIPS_PAGE_SIZE
 } from './scholarshipListUrl';
@@ -215,6 +216,16 @@ function withTabEnforcedMoreFilters(
     return next;
   }
   return filters;
+}
+
+function withUrlAudience(
+  filters: MoreFiltersState,
+  audience: ScholarshipAudienceParam
+): MoreFiltersState {
+  if (filters.citizenshipAudience === audience) return filters;
+  const next = cloneMoreFilters(filters);
+  next.citizenshipAudience = audience;
+  return next;
 }
 
 function ScholarshipsPageInner({
@@ -497,23 +508,26 @@ function ScholarshipsPageInner({
       if (!meta?.filterBounds) return null;
       const pl = parseScholarshipListUrl(new URLSearchParams(searchParamsString));
       const tab = parseHubScholarshipTabParam(pl.tab);
-      return buildHubTabPresetMoreFilters({
-        tab,
-        filterBounds: meta.filterBounds,
-        deadlineFromUrl: pl.deadline,
-        routeScope,
-        profileFilterSeed: meta.profileFilterSeed,
-        landingQuizProfileSeed: null,
-        savedFiltersFromStorage:
+      return withUrlAudience(
+        buildHubTabPresetMoreFilters({
+          tab,
+          filterBounds: meta.filterBounds,
+          deadlineFromUrl: pl.deadline,
+          routeScope,
+          profileFilterSeed: meta.profileFilterSeed,
+          landingQuizProfileSeed: null,
+          savedFiltersFromStorage:
+            isAuthenticated
+              ? meta.savedFiltersSnapshotJson
+                ? moreFiltersFromJson(meta.savedFiltersSnapshotJson, meta.filterBounds)
+                : null
+              : typeof window !== 'undefined'
+              ? readSavedFiltersFromStorage(meta.filterBounds)
+              : null,
           isAuthenticated
-            ? meta.savedFiltersSnapshotJson
-              ? moreFiltersFromJson(meta.savedFiltersSnapshotJson, meta.filterBounds)
-              : null
-            : typeof window !== 'undefined'
-            ? readSavedFiltersFromStorage(meta.filterBounds)
-            : null,
-        isAuthenticated
-      });
+        }),
+        pl.audience
+      );
     });
   const [moreFiltersDraft, setMoreFiltersDraft] =
     useState<MoreFiltersState | null>(null);
@@ -583,6 +597,24 @@ function ScholarshipsPageInner({
       });
     }
   }, [searchParams, replaceListingParams]);
+
+  /**
+   * International Friendly is catalog Matches scope. Keep URL deterministic when deep links
+   * carry `aud=international_friendly` together with `tab=best-recommendation`.
+   */
+  useEffect(() => {
+    if (
+      activeTab === 'best-recommendation' &&
+      parsedList.audience === 'international_friendly'
+    ) {
+      replaceListingParams({
+        tab: 'matches',
+        scope: 'catalog',
+        sort: 'magic',
+        resetPage: true
+      });
+    }
+  }, [activeTab, parsedList.audience, replaceListingParams]);
 
   /**
    * Guests: one-shot URL normalization (avoids races between multiple effects).
@@ -911,11 +943,6 @@ function ScholarshipsPageInner({
     landingSig: string;
     savedRev: number;
   } | null>(null);
-  /**
-   * Turning on International Friendly from Best recommendation switches `tab` to Matches; the
-   * preset sync effect would otherwise rebuild the Matches preset and drop `citizenshipAudience`.
-   */
-  const intlFriendlyHandoffFromBestTabRef = useRef(false);
 
   useEffect(() => {
     if (!listMeta?.filterBounds) return;
@@ -947,22 +974,21 @@ function ScholarshipsPageInner({
     }
 
     if (shouldReset) {
-      let nextPreset = buildHubTabPresetMoreFilters({
-        tab: activeTab,
-        filterBounds: listMeta.filterBounds,
-        deadlineFromUrl: parsedList.deadline,
-        routeScope,
-        profileFilterSeed: listMeta.profileFilterSeed,
-        landingQuizProfileSeed: transientBestRecommendationProfileSeed,
-        savedFiltersFromStorage: savedFiltersForHub,
-        isAuthenticated
-      });
-      if (intlFriendlyHandoffFromBestTabRef.current) {
-        intlFriendlyHandoffFromBestTabRef.current = false;
-        nextPreset = cloneMoreFilters(nextPreset);
-        nextPreset.citizenshipAudience = 'international_friendly';
-      }
-      setMoreFiltersApplied(nextPreset);
+      setMoreFiltersApplied(
+        withUrlAudience(
+          buildHubTabPresetMoreFilters({
+            tab: activeTab,
+            filterBounds: listMeta.filterBounds,
+            deadlineFromUrl: parsedList.deadline,
+            routeScope,
+            profileFilterSeed: listMeta.profileFilterSeed,
+            landingQuizProfileSeed: transientBestRecommendationProfileSeed,
+            savedFiltersFromStorage: savedFiltersForHub,
+            isAuthenticated
+          }),
+          parsedList.audience
+        )
+      );
     }
     presetSyncStateRef.current = {
       tab: activeTab,
@@ -978,22 +1004,31 @@ function ScholarshipsPageInner({
     savedFiltersForHub,
     savedFiltersRevision,
     routeScope,
-    isAuthenticated
+    isAuthenticated,
+    parsedList.deadline,
+    parsedList.audience
   ]);
 
-  /** Keep More filters deadline aligned with the URL without resetting the whole preset (e.g. after search changes). */
+  /** Keep URL-owned pieces (deadline + audience) aligned without resetting the whole preset. */
   useEffect(() => {
     const dl = parsedList.deadline;
     const target =
       dl != null && dl !== 'any' ? dl : ('any' as const);
+    const audienceTarget = parsedList.audience;
     setMoreFiltersApplied((prev) => {
       if (!prev) return prev;
-      if (prev.deadlinePreset === target) return prev;
+      if (
+        prev.deadlinePreset === target &&
+        prev.citizenshipAudience === audienceTarget
+      ) {
+        return prev;
+      }
       const next = cloneMoreFilters(prev);
       next.deadlinePreset = target;
+      next.citizenshipAudience = audienceTarget;
       return next;
     });
-  }, [parsedList.deadline]);
+  }, [parsedList.deadline, parsedList.audience]);
 
   const emptyMoreFiltersState = useMemo(
     () =>
@@ -1046,6 +1081,7 @@ function ScholarshipsPageInner({
     replaceListingParams({
       tab: 'recommended',
       deadline: merged.deadlinePreset,
+      audience: merged.citizenshipAudience,
       resetPage: true
     });
     setMoreFiltersOpen(false);
@@ -1484,6 +1520,7 @@ function ScholarshipsPageInner({
       setMoreFiltersApplied(next);
       replaceListingParams({
         deadline: next.deadlinePreset,
+        audience: next.citizenshipAudience,
         resetPage: true
       });
     }
@@ -1586,6 +1623,7 @@ function ScholarshipsPageInner({
       const p = buildScholarshipListSearchParams(new URLSearchParams(), {
         tab: id,
         scope: 'catalog',
+        audience: 'any',
         resetPage: true
       });
       const qs = p.toString();
@@ -1623,19 +1661,8 @@ function ScholarshipsPageInner({
   const internationalSidebarChecked = useMemo(() => {
     const currentAudience =
       mergedHubCitizenshipSource?.citizenshipAudience ?? 'any';
-    const baselineAudience = moreFiltersBaseline?.citizenshipAudience ?? 'any';
-
-    /**
-     * Do not highlight the sidebar row when International Friendly comes from the
-     * current tab preset itself (for example, profile-driven Best recommendation).
-     * The row should look active only when the user turned on this extra sidebar filter
-     * relative to the canonical preset of the current tab.
-     */
-    return (
-      currentAudience === 'international_friendly' &&
-      baselineAudience !== 'international_friendly'
-    );
-  }, [mergedHubCitizenshipSource, moreFiltersBaseline]);
+    return currentAudience === 'international_friendly';
+  }, [mergedHubCitizenshipSource]);
 
   const toggleInternationalAudienceSidebar = useCallback(() => {
     const current =
@@ -1646,21 +1673,15 @@ function ScholarshipsPageInner({
         : cloneMoreFilters(current);
     const next = cloneMoreFilters(current);
     const nowOn = merged.citizenshipAudience === 'international_friendly';
-    next.citizenshipAudience = nowOn ? 'any' : 'international_friendly';
+    const nextAudience = nowOn ? 'any' : 'international_friendly';
+    next.citizenshipAudience = nextAudience;
     setMoreFiltersApplied(next);
-    /**
-     * International Friendly is defined as catalog Matches + this filter (see sidebar counts).
-     * Leaving `tab=best-recommendation` would still run the best-tab list / empty state while the
-     * sidebar row looks selected — switch to Matches when turning the filter on from Best.
-     */
-    const turningOnInternational = !nowOn;
     const switchToMatchesForIntl =
-      turningOnInternational && activeTab === 'best-recommendation';
-    if (switchToMatchesForIntl) {
-      intlFriendlyHandoffFromBestTabRef.current = true;
-    }
+      nextAudience === 'international_friendly' &&
+      activeTab === 'best-recommendation';
     replaceListingParams({
       deadline: next.deadlinePreset,
+      audience: nextAudience,
       resetPage: true,
       ...(switchToMatchesForIntl
         ? { tab: 'matches', scope: 'catalog', sort: 'magic' }

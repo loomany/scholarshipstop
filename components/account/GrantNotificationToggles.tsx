@@ -26,10 +26,10 @@ export default function GrantNotificationToggles({
   disabled?: boolean;
 }) {
   const [prefs, setPrefs] = useState<Prefs>(() => ({
-    email_notify_best_matches: profile?.email_notify_best_matches ?? false,
-    email_notify_saved_filters: profile?.email_notify_saved_filters ?? false,
-    email_notify_easy_apply: profile?.email_notify_easy_apply ?? false,
-    email_notify_hot_deadlines: profile?.email_notify_hot_deadlines ?? false
+    email_notify_best_matches: profile?.email_notify_best_matches ?? true,
+    email_notify_saved_filters: profile?.email_notify_saved_filters ?? true,
+    email_notify_easy_apply: profile?.email_notify_easy_apply ?? true,
+    email_notify_hot_deadlines: profile?.email_notify_hot_deadlines ?? true
   }));
 
   const [pendingKey, setPendingKey] = useState<string | null>(null);
@@ -37,10 +37,10 @@ export default function GrantNotificationToggles({
 
   useEffect(() => {
     setPrefs({
-      email_notify_best_matches: profile?.email_notify_best_matches ?? false,
-      email_notify_saved_filters: profile?.email_notify_saved_filters ?? false,
-      email_notify_easy_apply: profile?.email_notify_easy_apply ?? false,
-      email_notify_hot_deadlines: profile?.email_notify_hot_deadlines ?? false
+      email_notify_best_matches: profile?.email_notify_best_matches ?? true,
+      email_notify_saved_filters: profile?.email_notify_saved_filters ?? true,
+      email_notify_easy_apply: profile?.email_notify_easy_apply ?? true,
+      email_notify_hot_deadlines: profile?.email_notify_hot_deadlines ?? true
     });
   }, [
     profile?.email_notify_best_matches,

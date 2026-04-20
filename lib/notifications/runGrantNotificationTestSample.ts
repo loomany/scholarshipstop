@@ -2,7 +2,8 @@ import 'server-only';
 
 import {
   GRANT_DIGEST_DEMO_CHANNEL_LABELS,
-  sendGrantDigestBatchEmail
+  sendGrantDigestBatchEmail,
+  type GrantDigestCategory
 } from '@/lib/email/sendGrantDigestEmail';
 import { grantNotifyTelegramCardCategoryLabel } from '@/lib/notifications/grantNotificationPrefs';
 import { fetchActiveScholarshipPreviews } from '@/lib/scholarships/supabase';
@@ -18,10 +19,14 @@ export type GrantNotificationTestSampleResult = {
   message?: string;
 };
 
-/**
- * Sends a 4-card digest email (demo category labels) and/or one Telegram card.
- * Guarded by GRANT_NOTIFICATION_TEST_SAMPLE_CRON so it cannot run by accident.
- */
+type DemoCategoryId = GrantDigestCategory['id'];
+const DEMO_CHANNEL_ORDER: DemoCategoryId[] = [
+  'best',
+  'easy_apply',
+  'hot_deadlines',
+  'saved_filters'
+];
+
 export async function runGrantNotificationTestSample(): Promise<GrantNotificationTestSampleResult> {
   const cronFlag = process.env.GRANT_NOTIFICATION_TEST_SAMPLE_CRON?.trim();
   if (cronFlag !== '1' && cronFlag?.toLowerCase() !== 'true') {
@@ -48,7 +53,7 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
     };
   }
 
-  const digestList = await fetchActiveScholarshipPreviews(4);
+  const digestList = await fetchActiveScholarshipPreviews(24);
   if (digestList.length === 0) {
     return {
       ok: false,
@@ -59,10 +64,30 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
   }
 
   const labels = [...GRANT_DIGEST_DEMO_CHANNEL_LABELS];
-  const emailItems = digestList.map((scholarship, i) => ({
-    scholarship,
-    channelLabel: `${labels[i % labels.length]!} (test)`
-  }));
+  const groups = new Map<DemoCategoryId, typeof digestList>();
+  for (const id of DEMO_CHANNEL_ORDER) groups.set(id, []);
+  for (let i = 0; i < digestList.length; i++) {
+    const id = DEMO_CHANNEL_ORDER[i % DEMO_CHANNEL_ORDER.length]!;
+    groups.get(id)!.push(digestList[i]!);
+  }
+  const categories: GrantDigestCategory[] = DEMO_CHANNEL_ORDER.map((id, i) => {
+    const items = groups.get(id)!;
+    return {
+      id,
+      label: `${labels[i]!} (test)`,
+      totalCount: items.length,
+      viewAllUrl: `https://scholarshiptop.com/scholarships?tab=${
+        id === 'best'
+          ? 'best-recommendation'
+          : id === 'easy_apply'
+            ? 'easy-apply'
+            : id === 'hot_deadlines'
+              ? 'hot-deadlines'
+              : 'recommended'
+      }`,
+      items: items.slice(0, 4)
+    };
+  }).filter((c) => c.totalCount > 0 && c.items.length > 0);
 
   const previewTelegram = digestList[0]!;
   const sid = previewTelegram.id;
@@ -74,7 +99,7 @@ export async function runGrantNotificationTestSample(): Promise<GrantNotificatio
   if (email) {
     const r = await sendGrantDigestBatchEmail({
       toEmail: email,
-      items: emailItems,
+      categories,
       firstName: 'there'
     });
     emailSent = r.ok;

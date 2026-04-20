@@ -45,7 +45,7 @@ export type PremiumEmailLayoutOptions = {
 };
 
 /**
- * Table-based layout for broad client support; palette matches ScholarshipTop (light EdTech).
+ * Table-based layout for broad client support; palette tuned for dark digest emails.
  */
 export function buildScholarshipTopPremiumEmailHtml(
   opts: PremiumEmailLayoutOptions
@@ -57,7 +57,7 @@ export function buildScholarshipTopPremiumEmailHtml(
   const paragraphs = opts.bodyParagraphsHtml
     .map(
       (p) =>
-        `<p style="margin:0 0 16px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.6;color:#374151;">${p}</p>`
+        `<p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#d1d5db;">${p}</p>`
     )
     .join('');
 
@@ -86,16 +86,16 @@ export function buildScholarshipTopPremiumEmailHtml(
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <title>${escapeHtml(opts.headline)}</title>
 </head>
-<body style="margin:0;padding:0;background-color:#f9fafb;">
-  <div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0;color:#f9fafb;">
+<body style="margin:0;padding:0;background-color:#0b0f14;">
+  <div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0;color:#0b0f14;">
     ${preEscaped}
   </div>
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f9fafb;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#0b0f14;">
     <tr>
       <td align="center" style="padding:40px 16px;">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;">
           <tr>
-            <td style="background-color:#ffffff;border-radius:24px;padding:40px 36px;box-shadow:0 4px 24px rgba(17,24,39,0.06);border:1px solid #e5e7eb;">
+            <td style="background-color:#111827;border-radius:24px;padding:34px 28px;box-shadow:0 4px 24px rgba(0,0,0,0.35);border:1px solid #374151;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                   <td align="center" style="padding-bottom:28px;">
@@ -104,8 +104,8 @@ export function buildScholarshipTopPremiumEmailHtml(
                         <td align="center" style="padding-bottom:10px;">${LOGO_CAP_SVG}</td>
                       </tr>
                       <tr>
-                        <td align="center" style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">
-                          <span style="color:#111827;">Scholarship</span><span style="color:#f97316;">Top</span>
+                        <td align="center" style="font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">
+                          <span style="color:#f3f4f6;">Scholarship</span><span style="color:#f97316;">Top</span>
                         </td>
                       </tr>
                     </table>
@@ -113,7 +113,7 @@ export function buildScholarshipTopPremiumEmailHtml(
                 </tr>
                 <tr>
                   <td>
-                    <h1 style="margin:0 0 12px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;line-height:1.25;color:#111827;letter-spacing:-0.02em;text-align:center;">
+                    <h1 style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:800;line-height:1.25;color:#f9fafb;letter-spacing:-0.02em;text-align:center;">
                       ${escapeHtml(opts.headline)}
                     </h1>
                     ${accentBlock}
@@ -125,7 +125,7 @@ export function buildScholarshipTopPremiumEmailHtml(
                         : `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0 8px;">
                       <tr>
                         <td align="center">
-                          <a href="${escapeHtml(opts.ctaHref)}" style="display:inline-block;background-color:#000000;color:#ffffff!important;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:12px;">
+                          <a href="${escapeHtml(opts.ctaHref)}" style="display:inline-block;background-color:#10b981;color:#ffffff!important;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:12px;">
                             ${escapeHtml(opts.ctaLabel)}
                           </a>
                         </td>
@@ -134,12 +134,12 @@ export function buildScholarshipTopPremiumEmailHtml(
                     }
                     ${
                       opts.postCtaMutedText
-                        ? `<p style="margin:16px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.5;color:#9ca3af;text-align:center;">${escapeHtml(opts.postCtaMutedText)}</p>`
+                        ? `<p style="margin:16px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#9ca3af;text-align:center;">${escapeHtml(opts.postCtaMutedText)}</p>`
                         : ''
                     }
                     ${
                       secondary
-                        ? `<p style="margin:20px 0 0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.55;color:#6b7280;">
+                        ? `<p style="margin:20px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:#9ca3af;">
                       ${secondary}
                     </p>`
                         : ''
@@ -151,13 +151,13 @@ export function buildScholarshipTopPremiumEmailHtml(
           </tr>
           <tr>
             <td style="padding:28px 8px 0;text-align:center;">
-              <p style="margin:0 0 8px;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:12px;line-height:1.5;color:#9ca3af;">
+              <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#6b7280;">
                 &copy; ${new Date().getFullYear()} ScholarshipTop. Built for students chasing scholarships.
               </p>
-              <p style="margin:0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:12px;line-height:1.5;">
-                <a href="${escapeHtml(unsub)}" style="color:#6b7280;text-decoration:underline;">Unsubscribe</a>
-                <span style="color:#d1d5db;"> &middot; </span>
-                <a href="${escapeHtml(origin)}" style="color:#6b7280;text-decoration:underline;">scholarshiptop.com</a>
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;">
+                <a href="${escapeHtml(unsub)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe</a>
+                <span style="color:#4b5563;"> &middot; </span>
+                <a href="${escapeHtml(origin)}" style="color:#9ca3af;text-decoration:underline;">scholarshiptop.com</a>
               </p>
             </td>
           </tr>

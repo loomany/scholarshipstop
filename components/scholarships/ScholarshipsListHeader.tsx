@@ -238,7 +238,7 @@ export default function ScholarshipsListHeader({
 
   useEffect(() => {
     if (!categoriesOpen && !sortOpen) return;
-    const onDown = (e: MouseEvent) => {
+    const onDown = (e: PointerEvent) => {
       const t = e.target as Node;
       if (categoriesRef.current?.contains(t)) return;
       if (categoryDropdownRef.current?.contains(t)) return;
@@ -246,8 +246,8 @@ export default function ScholarshipsListHeader({
       setCategoriesOpen(false);
       setSortOpen(false);
     };
-    document.addEventListener('mousedown', onDown);
-    return () => document.removeEventListener('mousedown', onDown);
+    document.addEventListener('pointerdown', onDown);
+    return () => document.removeEventListener('pointerdown', onDown);
   }, [categoriesOpen, sortOpen]);
 
   useEffect(() => {

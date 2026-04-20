@@ -6,7 +6,7 @@ import {
   defaultMoreFiltersFromBounds
 } from '@/app/scholarships/moreFilters';
 import type { Database } from '@/types_db';
-import { sendGrantDigestBatchEmail } from '@/lib/email/sendGrantDigestEmail';
+import { sendGrantDigestBatchEmail, type GrantDigestCategory } from '@/lib/email/sendGrantDigestEmail';
 import { stripHubProfileHardMatchMoreFilters } from '@/lib/scholarships/profileFilterDefaults';
 import { moreFiltersFromJson, type MoreFiltersJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import {
@@ -28,11 +28,15 @@ export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 type ChannelId = 'best' | 'saved_filters' | 'easy_apply' | 'hot_deadlines';
 
 const LOOKBACK_HOURS = Number(
-  process.env.GRANT_NOTIFICATION_LOOKBACK_HOURS?.trim() || '36'
+  process.env.GRANT_NOTIFICATION_LOOKBACK_HOURS?.trim() || '24'
 );
 const MAX_SCHOLARSHIPS = Number(process.env.GRANT_NOTIFICATION_MAX_SCHOLARSHIPS?.trim() || '40');
 const MAX_PROFILES = Number(process.env.GRANT_NOTIFICATION_MAX_PROFILES?.trim() || '500');
 const MAX_OPS = Number(process.env.GRANT_NOTIFICATION_MAX_OPS?.trim() || '2500');
+const EMAIL_COOLDOWN_HOURS = Math.max(
+  1,
+  Number(process.env.GRANT_NOTIFICATION_EMAIL_COOLDOWN_HOURS?.trim() || '24')
+);
 /** Max grant cards per single digest email (remaining matches stay queued for the next run). */
 const GRANT_DIGEST_EMAIL_MAX_ITEMS = Math.max(
   1,
@@ -40,11 +44,14 @@ const GRANT_DIGEST_EMAIL_MAX_ITEMS = Math.max(
 );
 
 const CHANNEL_LABEL: Record<ChannelId, string> = {
-  best: 'Best recommendations',
-  saved_filters: 'Saved filters',
+  best: 'Best recommendation',
+  saved_filters: 'Saved Filters',
   easy_apply: 'Easy apply',
-  hot_deadlines: 'Hot deadlines'
+  hot_deadlines: 'Hot Deadlines'
 };
+
+const EMAIL_CHANNEL_ORDER: ChannelId[] = ['best', 'easy_apply', 'hot_deadlines', 'saved_filters'];
+const MAX_EMAIL_ITEMS_PER_TOPIC = 4;
 
 function channelProfileColumn(c: ChannelId): keyof ProfileRow {
   switch (c) {
@@ -105,6 +112,39 @@ async function recordDelivery(
   });
   if (error && error.code !== '23505') {
     console.error('[grant-notify] delivery insert', error.message);
+  }
+}
+
+async function userHasRecentEmailDelivery(
+  admin: SupabaseClient<Database>,
+  userId: string
+): Promise<boolean> {
+  const sinceIso = new Date(Date.now() - EMAIL_COOLDOWN_HOURS * 60 * 60 * 1000).toISOString();
+  const { data, error } = await admin
+    .from('grant_notification_deliveries')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('medium', 'email')
+    .gte('created_at', sinceIso)
+    .limit(1);
+  if (error) {
+    console.error('[grant-notify] recent-email-check', userId, error.message);
+    return false;
+  }
+  return Array.isArray(data) && data.length > 0;
+}
+
+function viewAllUrlForChannel(origin: string, channel: ChannelId): string {
+  const base = origin.replace(/\/+$/, '');
+  switch (channel) {
+    case 'best':
+      return `${base}/scholarships?tab=best-recommendation`;
+    case 'easy_apply':
+      return `${base}/scholarships?tab=easy-apply`;
+    case 'hot_deadlines':
+      return `${base}/scholarships?tab=hot-deadlines`;
+    case 'saved_filters':
+      return `${base}/scholarships?tab=recommended`;
   }
 }
 
@@ -286,7 +326,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   let ops = 0;
   let cappedOps = false;
 
-  const channels: ChannelId[] = ['easy_apply', 'hot_deadlines', 'best', 'saved_filters'];
+  const channels: ChannelId[] = ['best', 'saved_filters', 'easy_apply', 'hot_deadlines'];
   const savedGrantByUserScholarship = new Map<string, boolean>();
 
   type PendingEmailLine = {
@@ -296,6 +336,8 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     firstName: string | null;
   };
   const pendingEmailByUser = new Map<string, PendingEmailLine[]>();
+  const publicOrigin =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim()?.replace(/\/+$/, '') || 'https://scholarshiptop.com';
 
   for (let i = 0; i < scholarships.length; i++) {
     const s = scholarships[i]!;
@@ -398,31 +440,45 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   }
 
   for (const [uid, lines] of pendingEmailByUser) {
-    let remaining = lines;
-    while (remaining.length > 0) {
-      const email = await getEmail(uid);
-      if (!email) break;
+    const email = await getEmail(uid);
+    if (!email) continue;
+    if (await userHasRecentEmailDelivery(admin, uid)) continue;
 
-      const slice = remaining.slice(0, GRANT_DIGEST_EMAIL_MAX_ITEMS);
-      remaining = remaining.slice(GRANT_DIGEST_EMAIL_MAX_ITEMS);
+    const categories: GrantDigestCategory[] = EMAIL_CHANNEL_ORDER.map((channel) => {
+      const categoryLines = lines.filter((line) => line.channel === channel);
+      return {
+        id: channel,
+        label: CHANNEL_LABEL[channel],
+        totalCount: categoryLines.length,
+        viewAllUrl: viewAllUrlForChannel(publicOrigin, channel),
+        items: categoryLines.slice(0, MAX_EMAIL_ITEMS_PER_TOPIC).map((line) => line.scholarship)
+      };
+    }).filter((c) => c.totalCount > 0 && c.items.length > 0);
 
-      const r = await sendGrantDigestBatchEmail({
-        toEmail: email,
-        items: slice.map((line) => ({
-          scholarship: line.scholarship,
-          channelLabel: CHANNEL_LABEL[line.channel]
-        })),
-        firstName: slice[0]?.firstName ?? null
+    if (categories.length === 0) {
+      const fallbackLines = lines.slice(0, GRANT_DIGEST_EMAIL_MAX_ITEMS);
+      if (fallbackLines.length === 0) continue;
+      categories.push({
+        id: 'best',
+        label: 'Matches',
+        totalCount: fallbackLines.length,
+        viewAllUrl: `${publicOrigin}/scholarships`,
+        items: fallbackLines.map((line) => line.scholarship)
       });
-      if (r.ok) {
-        for (const line of slice) {
-          await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
-          emailSent += 1;
-        }
-      } else {
-        errors += 1;
-        break;
+    }
+
+    const r = await sendGrantDigestBatchEmail({
+      toEmail: email,
+      categories,
+      firstName: lines[0]?.firstName ?? null
+    });
+    if (r.ok) {
+      for (const line of lines) {
+        await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
+        emailSent += 1;
       }
+    } else {
+      errors += 1;
     }
   }
 

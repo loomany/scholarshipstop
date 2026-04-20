@@ -106,6 +106,13 @@ export function clampScholarshipListPage(
 }
 
 export type ScholarshipListScope = 'personalized' | 'catalog';
+export type ScholarshipAudienceParam = 'any' | 'international_friendly';
+
+export function parseAudienceFromParam(
+  raw: string | null
+): ScholarshipAudienceParam {
+  return raw === 'international_friendly' ? 'international_friendly' : 'any';
+}
 
 export type ScholarshipListUrlState = {
   tab: string | null;
@@ -114,6 +121,7 @@ export type ScholarshipListUrlState = {
   q: string;
   categories: Set<ScholarshipCategoryId>;
   deadline: DeadlinePreset | null;
+  audience: ScholarshipAudienceParam;
   scope: ScholarshipListScope;
 };
 
@@ -130,6 +138,7 @@ export function parseScholarshipListUrl(
     q: searchParams.get('q')?.trim() ?? '',
     categories: parseCategoriesFromParam(searchParams.get('category')),
     deadline: parseDeadlineFromParam(searchParams.get('deadline')),
+    audience: parseAudienceFromParam(searchParams.get('aud')),
     /** Listing is catalog-only; `scope` in the URL is ignored by the API. */
     scope: 'catalog'
   };
@@ -144,6 +153,7 @@ export function buildScholarshipListSearchParams(
     q?: string | null;
     categories?: Set<ScholarshipCategoryId> | null;
     deadline?: DeadlinePreset | null;
+    audience?: ScholarshipAudienceParam | null;
     scope?: ScholarshipListScope | null;
     /** When true, omit page from output (same as page 1). */
     resetPage?: boolean;
@@ -210,6 +220,14 @@ export function buildScholarshipListSearchParams(
       p.delete('deadline');
     } else {
       p.set('deadline', patch.deadline);
+    }
+  }
+
+  if (patch.audience !== undefined && patch.audience !== null) {
+    if (patch.audience === 'any') {
+      p.delete('aud');
+    } else {
+      p.set('aud', patch.audience);
     }
   }
 

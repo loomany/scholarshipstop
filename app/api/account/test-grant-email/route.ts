@@ -2,12 +2,13 @@ import { NextResponse } from 'next/server';
 
 import {
   GRANT_DIGEST_DEMO_CHANNEL_LABELS,
-  sendGrantDigestBatchEmail
+  sendGrantDigestBatchEmail,
+  type GrantDigestCategory
 } from '@/lib/email/sendGrantDigestEmail';
 import { fetchActiveScholarshipPreviews } from '@/lib/scholarships/supabase';
 import { createClient } from '@/utils/supabase/server';
 
-const TEST_RECIPIENT = 'loomany.self@gmail.com';
+const TEST_RECIPIENT = 'loomany.self@mail.ru';
 
 /**
  * Sends a sample grant digest to the preview inbox (restricted to that account).
@@ -32,20 +33,46 @@ export async function POST() {
     .eq('id', user.id)
     .maybeSingle();
 
-  const scholarships = await fetchActiveScholarshipPreviews(4);
+  const scholarships = await fetchActiveScholarshipPreviews(24);
   if (scholarships.length === 0) {
     return NextResponse.json({ error: 'No scholarship available for preview' }, { status: 503 });
   }
 
   const labels = [...GRANT_DIGEST_DEMO_CHANNEL_LABELS];
-  const items = scholarships.map((scholarship, i) => ({
-    scholarship,
-    channelLabel: `${labels[i % labels.length]!} (test)`
-  }));
+  const categoryOrder: GrantDigestCategory['id'][] = [
+    'best',
+    'easy_apply',
+    'hot_deadlines',
+    'saved_filters'
+  ];
+  const groups = new Map<GrantDigestCategory['id'], typeof scholarships>();
+  for (const id of categoryOrder) groups.set(id, []);
+  for (let i = 0; i < scholarships.length; i++) {
+    const id = categoryOrder[i % categoryOrder.length]!;
+    groups.get(id)!.push(scholarships[i]!);
+  }
+  const categories: GrantDigestCategory[] = categoryOrder.map((id, i) => {
+    const items = groups.get(id)!;
+    return {
+      id,
+      label: `${labels[i]!} (test)`,
+      totalCount: items.length,
+      viewAllUrl: `https://scholarshiptop.com/scholarships?tab=${
+        id === 'best'
+          ? 'best-recommendation'
+          : id === 'easy_apply'
+            ? 'easy-apply'
+            : id === 'hot_deadlines'
+              ? 'hot-deadlines'
+              : 'recommended'
+      }`,
+      items: items.slice(0, 4)
+    };
+  }).filter((c) => c.totalCount > 0 && c.items.length > 0);
 
   const result = await sendGrantDigestBatchEmail({
     toEmail: TEST_RECIPIENT,
-    items,
+    categories,
     firstName: profile?.first_name ?? null
   });
 

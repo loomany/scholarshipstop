@@ -46,10 +46,10 @@ export async function GET() {
   const row = profile as NotifyCols | null;
 
   return NextResponse.json({
-    email_notify_best_matches: row?.email_notify_best_matches ?? false,
-    email_notify_saved_filters: row?.email_notify_saved_filters ?? false,
-    email_notify_easy_apply: row?.email_notify_easy_apply ?? false,
-    email_notify_hot_deadlines: row?.email_notify_hot_deadlines ?? false
+    email_notify_best_matches: row?.email_notify_best_matches ?? true,
+    email_notify_saved_filters: row?.email_notify_saved_filters ?? true,
+    email_notify_easy_apply: row?.email_notify_easy_apply ?? true,
+    email_notify_hot_deadlines: row?.email_notify_hot_deadlines ?? true
   });
 }
 
@@ -98,9 +98,9 @@ export async function PATCH(request: Request) {
   const row = data as NotifyCols | null;
 
   return NextResponse.json({
-    email_notify_best_matches: row?.email_notify_best_matches ?? false,
-    email_notify_saved_filters: row?.email_notify_saved_filters ?? false,
-    email_notify_easy_apply: row?.email_notify_easy_apply ?? false,
-    email_notify_hot_deadlines: row?.email_notify_hot_deadlines ?? false
+    email_notify_best_matches: row?.email_notify_best_matches ?? true,
+    email_notify_saved_filters: row?.email_notify_saved_filters ?? true,
+    email_notify_easy_apply: row?.email_notify_easy_apply ?? true,
+    email_notify_hot_deadlines: row?.email_notify_hot_deadlines ?? true
   });
 }
