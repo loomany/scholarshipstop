@@ -57,16 +57,15 @@ export function ProvidersHubCard({
   const snippet = descriptionSnippet(row.ai_description);
   const headingId = `provider-hub-card-title-${row.slug}`;
 
-  const hubBudgetScope: HubBudgetScope =
-    isAuthenticated && authResolved && !hasSubscription ? 'account' : 'guest';
-  const catalogFreeTier = authResolved && !hasSubscription;
+  const hubBudgetScope: HubBudgetScope = !isAuthenticated ? 'guest' : 'account';
+  const catalogFreeTier = authResolved && !isAuthenticated;
   const showLock =
     catalogFreeTier && shouldBlockGuestProviderHubNavigation(hubBudgetScope);
 
   const onCardClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       if (!authResolved) return;
-      if (hasSubscription) return;
+      if (isAuthenticated) return;
       if (shouldBlockGuestProviderHubNavigation(hubBudgetScope)) {
         e.preventDefault();
         onSubscriptionRequired();

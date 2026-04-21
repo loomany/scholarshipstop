@@ -9,22 +9,25 @@ import { createClient } from '@/utils/supabase/client';
 
 type Result = {
   profile: CurrentUserScholarshipMatchProfile | null;
+  profileInitialized: boolean;
   resolved: boolean;
 };
 
 const PROFILE_MATCH_FIELDS =
-  'field_of_study, field_of_study_label, school_level, citizenship_status, state_region, gpa, saved_filters_snapshot';
+  'field_of_study, field_of_study_label, school_level, citizenship_status, state_region, gpa, saved_filters_snapshot, onboarding_completed';
 
 export function useCurrentUserScholarshipMatchProfile(
   enabled: boolean
 ): Result {
   const [profile, setProfile] =
     useState<CurrentUserScholarshipMatchProfile | null>(null);
+  const [profileInitialized, setProfileInitialized] = useState(false);
   const [resolved, setResolved] = useState(!enabled);
 
   useEffect(() => {
     if (!enabled) {
       setProfile(null);
+      setProfileInitialized(false);
       setResolved(true);
       return;
     }
@@ -40,6 +43,7 @@ export function useCurrentUserScholarshipMatchProfile(
       if (!user || cancelled) {
         if (!cancelled) {
           setProfile(null);
+          setProfileInitialized(false);
           setResolved(true);
         }
         return;
@@ -54,6 +58,7 @@ export function useCurrentUserScholarshipMatchProfile(
       if (cancelled) return;
 
       const next = (row ?? null) as CurrentUserScholarshipMatchProfile | null;
+      setProfileInitialized(Boolean((row as { onboarding_completed?: boolean } | null)?.onboarding_completed));
       if (!next || !buildScholarshipProfileFilterSeed(next as ProfilesRow)) {
         setProfile(null);
         setResolved(true);
@@ -69,5 +74,5 @@ export function useCurrentUserScholarshipMatchProfile(
     };
   }, [enabled]);
 
-  return { profile, resolved };
+  return { profile, profileInitialized, resolved };
 }

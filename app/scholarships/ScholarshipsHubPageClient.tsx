@@ -305,7 +305,11 @@ function ScholarshipsPageInner({
     useState(false);
   const [bestRecommendationWizardSaving, setBestRecommendationWizardSaving] =
     useState(false);
-  const { profile: currentMatchProfile } =
+  const {
+    profile: currentMatchProfile,
+    profileInitialized,
+    resolved: profileInitResolved
+  } =
     useCurrentUserScholarshipMatchProfile(isAuthenticated && authResolved);
   /** Merge server-backed saves (Telegram, heart on site) with localStorage for guests→login edge cases. */
   const refreshSavedIdsFromApi = useCallback(async () => {
@@ -550,6 +554,10 @@ function ScholarshipsPageInner({
   const bestRecommendationWizardInProgress =
     bestRecommendationWizardStore != null &&
     bestRecommendationWizardStore.submitted === false;
+  const shouldPromptScholarshipQuiz =
+    authResolved &&
+    (hubTreatAsGuest ||
+      (isAuthenticated && profileInitResolved && !profileInitialized));
   const appliedProviderSlug =
     routeScope?.providerSlug ?? moreFiltersApplied?.filterUniversitySlug ?? null;
   const [previewCount, setPreviewCount] = useState<number | null>(null);
@@ -878,6 +886,7 @@ function ScholarshipsPageInner({
     if (!bestRecommendationWizardHydrated) return;
     if (activeTab !== 'best-recommendation') return;
     if (!isAuthenticated || !authResolved) return;
+    if (!profileInitResolved || profileInitialized) return;
     if (bestRecommendationWizardStore) return;
     if (currentMatchProfile) return;
     if (listMeta?.personalizedMatchReady !== false) return;
@@ -891,6 +900,8 @@ function ScholarshipsPageInner({
     bestRecommendationWizardStore,
     currentMatchProfile,
     isAuthenticated,
+    profileInitialized,
+    profileInitResolved,
     listMeta?.personalizedMatchReady,
     persistBestRecommendationWizardStore
   ]);
@@ -1825,12 +1836,14 @@ function ScholarshipsPageInner({
     activeTab === 'best-recommendation' &&
     bestRecommendationWizardHydrated &&
     !bestTabAuthPending &&
-    ((catalogFreeTier && !guestBestRecommendationPreviewEnabled) ||
+    ((shouldPromptScholarshipQuiz && !guestBestRecommendationPreviewEnabled) ||
       (!hubTreatAsGuest &&
         (bestRecommendationWizardInProgress ||
           (!bestRecommendationWizardStore &&
             isAuthenticated &&
             authResolved &&
+            profileInitResolved &&
+            !profileInitialized &&
             currentMatchProfile == null &&
             listMeta?.personalizedMatchReady === false))));
   const bestRecommendationWizardPendingHydration =
@@ -2030,7 +2043,7 @@ function ScholarshipsPageInner({
             </div>
           ) : (
             <>
-              {catalogFreeTier && activeTab === 'matches' ? (
+              {shouldPromptScholarshipQuiz && activeTab === 'matches' ? (
                 <div className="mb-4 rounded-2xl border border-gray-200/90 bg-gradient-to-br from-gray-50 via-white to-gray-50/80 p-4 text-center shadow-sm ring-1 ring-gray-100 sm:p-5">
                   <p className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
                     Want better scholarship matches?
@@ -2047,7 +2060,7 @@ function ScholarshipsPageInner({
                   </div>
                 </div>
               ) : null}
-              {catalogFreeTier &&
+              {shouldPromptScholarshipQuiz &&
               activeTab === 'best-recommendation' &&
               transientBestRecommendationProfileSeed ? (
                 <div className="mb-4 rounded-2xl border border-[#FFD9B3] bg-[#FFF8F1] p-4 text-[#7A3B00] shadow-sm">

@@ -192,7 +192,6 @@ task_essay_pipeline() {
 task_all() {
   task_seo_url_inspection
   task_google_indexing_flush
-  task_grant_notifications
   task_enrich_providers
   task_essay_pipeline
 }

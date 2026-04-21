@@ -214,7 +214,8 @@ export default function ScholarshipCard({
     ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
     : null;
 
-  const providerNameObscured = Boolean(providerLine) && !hasSubscription;
+  const canSeeFullText = Boolean(isAuthenticated);
+  const providerNameObscured = Boolean(providerLine) && !canSeeFullText;
 
   const deadlineTooltipText = formatDeadlineTooltipText(scholarship);
 
@@ -278,10 +279,12 @@ export default function ScholarshipCard({
         href={detailHref}
         onClick={(e) => {
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-          const budgetMode = resolveScholarshipDetailClickBudgetMode({
-            isAuthenticated,
-            hasSubscription
-          });
+          const budgetMode = !isAuthenticated
+            ? resolveScholarshipDetailClickBudgetMode({
+                isAuthenticated,
+                hasSubscription
+              })
+            : null;
           const onBlockedNavigate =
             budgetMode === 'guest' || budgetMode === 'signed-in-no-subscription'
               ? onGuestDetailNavigate ?? onSubscriptionDetailNavigate

@@ -28,7 +28,7 @@ function ProviderOfficialWebsiteGateInner({
 }) {
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
 
-  const isBlocked = !isAuthenticated || !hasSubscription;
+  const isBlocked = !isAuthenticated;
 
   const openBlockedModal = useCallback(() => {
     setRegistrationWallOpen(true);

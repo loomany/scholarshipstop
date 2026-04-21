@@ -188,7 +188,8 @@ function userProfileFromAuthMetadata(
             (p.savedFiltersSnapshot as Record<string, unknown> | null) ?? null
         }
       : {}),
-    onboardingCompleted: Boolean(p.onboardingCompleted),
+    // `scholarship_profile` payload means onboarding/profile init was completed.
+    onboardingCompleted: p.onboardingCompleted === false ? false : true,
     ...(p.emailVerified === false ? { emailVerified: false } : {})
   };
 }

@@ -369,7 +369,7 @@ function SimilarScholarshipDetailListItem({
             {s.title}
           </span>
           {s.provider ? (
-            !hasSubscription ? (
+            !isAuthenticated ? (
               <span
                 className="mt-1.5 block text-left text-sm"
                 aria-label="Sponsor name hidden until you subscribe."
@@ -908,8 +908,9 @@ export default function ScholarshipDetailPageClient({
     hasSocial ||
     hasMission;
 
-  /** Without an active subscription, provider name stays blurred (listing cards use the same rule). */
-  const providerNameLocked = Boolean(providerName) && !hasSubscription;
+  /** Keep provider text blurred only for non-authenticated visitors. */
+  const providerNameLocked =
+    Boolean(providerName) && !(isAuthenticated && authResolved);
   const providerBlurPhrases = providerNameLocked
     ? buildScholarshipProviderBlurPhrases(scholarship)
     : [];
@@ -1177,7 +1178,7 @@ export default function ScholarshipDetailPageClient({
       beforeMissing.length > 0 ||
       beforeFlags.length > 0);
 
-  const isApplySubscriptionLocked = !hasSubscription;
+  const isApplySubscriptionLocked = !isAuthenticated;
   /** Guest blur + “Sign in to unlock AI insights” overlay disabled — full detail body stays readable. */
   const showLockedDetailOverlay = false;
   const openLockedAccessWall = openRegistrationWall;
