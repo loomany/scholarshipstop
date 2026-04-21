@@ -109,11 +109,6 @@ export default async function SubscriptionPage() {
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Unlock Premium Precision
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-base text-gray-500 sm:text-lg">
-              {hasSubscriptionForPricingUi
-                ? 'Change billing cadence or upgrade anytime. Cancel through your billing portal.'
-                : 'Start your 3-day free trial today. Cancel anytime.'}
-            </p>
           </header>
 
           <SubscriptionPricingClient
