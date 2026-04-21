@@ -1421,6 +1421,18 @@ function shortVisitorId(v: string): string {
   return `${v.slice(0, 8)}…${v.slice(-4)}`;
 }
 
+function formatDurationRu(totalSec: number): string {
+  if (!Number.isFinite(totalSec) || totalSec <= 0) return '0 сек';
+  if (totalSec < 60) return `${totalSec} сек`;
+  const minutes = Math.floor(totalSec / 60);
+  const seconds = totalSec % 60;
+  if (minutes < 60) return seconds > 0 ? `${minutes} мин ${seconds} сек` : `${minutes} мин`;
+  const hours = Math.floor(minutes / 60);
+  const restMinutes = minutes % 60;
+  if (restMinutes > 0) return `${hours} ч ${restMinutes} мин`;
+  return `${hours} ч`;
+}
+
 function buildAdminUsersInlineKeyboard(
   rows: VisitorFirstTouchRow[],
   offset: number,
@@ -1484,13 +1496,27 @@ async function sendAdminUsersList(user: TelegramUserRow, offset = 0) {
     return;
   }
 
+  const visitorIds = visibleRows.map((row) => row.visitor_id);
+  const { data: attributionRows } = await (admin as any)
+    .from('visitor_attribution')
+    .select('visitor_id,user_id')
+    .in('visitor_id', visitorIds);
+  const registeredVisitorIds = new Set<string>(
+    ((attributionRows ?? []) as Array<{ visitor_id: string; user_id: string | null }>)
+      .filter((row) => Boolean(row.user_id))
+      .map((row) => row.visitor_id)
+  );
+
   const lines: string[] = ['<b>Пользователи за 48ч (без ботов)</b>', ''];
   for (const row of visibleRows) {
     const source = formatTrafficChannelLabel((row.traffic_channel as TrafficChannel) ?? null);
+    const registrationTag = registeredVisitorIds.has(row.visitor_id)
+      ? ' · 🟢 зарегистрирован'
+      : '';
     lines.push(
       `• <b>${escapeTelegramHtml(source)}</b> · ${escapeTelegramHtml(
         toLandingPath(row.landing_url)
-      )} · ${escapeTelegramHtml(new Date(row.created_at).toISOString().slice(0, 16).replace('T', ' '))}`
+      )} · ${escapeTelegramHtml(new Date(row.created_at).toISOString().slice(0, 16).replace('T', ' '))}${registrationTag}`
     );
   }
   lines.push('', 'Нажми на пользователя ниже, чтобы открыть полную карточку.');
@@ -1537,10 +1563,24 @@ async function sendAdminUserAudit(user: TelegramUserRow, visitorId: string) {
   const { data: attribution } = await (admin as any)
     .from('visitor_attribution')
     .select(
-      'first_seen_at,last_seen_at,first_source,first_medium,first_campaign,first_referrer,first_landing_path,last_source,last_medium,last_campaign,last_referrer,last_landing_path'
+      'user_id,first_seen_at,last_seen_at,first_source,first_medium,first_campaign,first_referrer,first_landing_path,last_source,last_medium,last_campaign,last_referrer,last_landing_path'
     )
     .eq('visitor_id', visitorId)
     .maybeSingle();
+
+  const registeredUserId =
+    attribution && typeof attribution.user_id === 'string' ? attribution.user_id : null;
+  const [authUser, profile] = registeredUserId
+    ? await Promise.all([
+        getAuthUserById(registeredUserId),
+        admin
+          .from('profiles')
+          .select('id, created_at, first_name, last_name')
+          .eq('id', registeredUserId)
+          .maybeSingle()
+          .then((res) => (res.error ? null : (res.data as ProfileRow | null)))
+      ])
+    : [null, null];
 
   const firstSeen = attribution?.first_seen_at ?? touch.created_at;
   const lastSeen = attribution?.last_seen_at ?? touch.created_at;
@@ -1556,6 +1596,23 @@ async function sendAdminUserAudit(user: TelegramUserRow, visitorId: string) {
       : 'google-referrer:no',
     touch.is_likely_bot ? 'bot:yes' : 'bot:no'
   ];
+  const firstLanding = (attribution?.first_landing_path ?? '-').slice(0, 200);
+  const lastLanding = (attribution?.last_landing_path ?? '-').slice(0, 200);
+  const visitedPages: string[] = [];
+  if (firstLanding && firstLanding !== '-') visitedPages.push(firstLanding);
+  if (lastLanding && lastLanding !== '-' && lastLanding !== firstLanding) {
+    visitedPages.push(lastLanding);
+  }
+  const durationHuman = formatDurationRu(durationSec);
+  const visitedBlock =
+    visitedPages.length > 0
+      ? visitedPages
+          .map(
+            (path, idx) =>
+              `${idx + 1}) ${escapeTelegramHtml(path)} — ~${escapeTelegramHtml(durationHuman)}`
+          )
+          .join('\n')
+      : '1) Нет данных о переходах (виден только первый визит).';
 
   const text = [
     '<b>Карточка пользователя (без ботов)</b>',
@@ -1564,7 +1621,18 @@ async function sendAdminUserAudit(user: TelegramUserRow, visitorId: string) {
     `<b>Источник:</b> ${escapeTelegramHtml(source)}`,
     `<b>Первый заход:</b> ${escapeTelegramHtml(firstSeen)}`,
     `<b>Последний заход:</b> ${escapeTelegramHtml(lastSeen)}`,
-    `<b>Время на сайте:</b> ${durationSec} сек`,
+    `<b>Время на сайте:</b> ${escapeTelegramHtml(durationHuman)}`,
+    `<b>Статус регистрации:</b> ${registeredUserId ? 'Да' : 'Нет'}`,
+    ...(registeredUserId
+      ? [
+          `<b>User ID:</b> <code>${escapeTelegramHtml(registeredUserId)}</code>`,
+          `<b>Email:</b> ${escapeTelegramHtml(authUser?.email ?? '-')}`,
+          `<b>Дата регистрации:</b> ${escapeTelegramHtml(profile?.created_at ?? '-')}`,
+          `<b>Имя:</b> ${escapeTelegramHtml(
+            `${profile?.first_name ?? ''} ${profile?.last_name ?? ''}`.trim() || '-'
+          )}`
+        ]
+      : []),
     '',
     '<b>Переход / атрибуция</b>',
     `<b>Landing:</b> ${escapeTelegramHtml(toLandingPath(touch.landing_url))}`,
@@ -1577,9 +1645,9 @@ async function sendAdminUserAudit(user: TelegramUserRow, visitorId: string) {
     '<b>Качество сигнала</b>',
     `${escapeTelegramHtml(qualityFlags.join(' | '))}`,
     '',
-    '<b>Путь пользователя (что есть в БД)</b>',
-    `first_landing=${escapeTelegramHtml((attribution?.first_landing_path ?? '-').slice(0, 200))}`,
-    `last_landing=${escapeTelegramHtml((attribution?.last_landing_path ?? '-').slice(0, 200))}`,
+    '<b>Страницы, куда заходил (по текущим данным)</b>',
+    visitedBlock,
+    '<i>Примечание: точный таймер по каждой странице пока не ведется, поэтому показываю общую длительность визита.</i>',
     '',
     `<b>User-Agent:</b> ${escapeTelegramHtml((touch.user_agent_snapshot ?? '-').slice(0, 320))}`
   ].join('\n');
