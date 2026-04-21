@@ -133,6 +133,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className={fontSans.variable}>
       <head>
+        <meta name="fo-verify" content="5b534bf7-226a-4032-8ba7-1ce652711bd1" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
       </head>
       <body className={`${fontSans.className} bg-zinc-50 text-zinc-900`}>
