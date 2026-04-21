@@ -60,7 +60,7 @@ type ScholarshipCardProps = {
   onSubscriptionLockedCategoryClick?: (categoryId: string) => void;
   onSubscriptionDetailNavigate?: () => void;
   /**
-   * Guest-only: after two free navigations to scholarship details (per browser tab session),
+   * Guest-only: after ten free navigations to scholarship details,
    * the next click opens the parent’s registration modal instead of navigating.
    */
   onGuestDetailNavigate?: () => void;

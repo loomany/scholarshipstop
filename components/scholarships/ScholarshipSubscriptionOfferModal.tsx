@@ -11,6 +11,7 @@ type ScholarshipSubscriptionOfferModalProps = {
   onSecondaryAction?: () => void;
   onPrimaryClick?: () => void;
   marketingMode?: GuestTrialMarketingModalProps['marketingMode'];
+  copyVariant?: GuestTrialMarketingModalProps['copyVariant'];
 };
 
 /**
@@ -24,7 +25,8 @@ export default function ScholarshipSubscriptionOfferModal({
   primaryHref = '/subscription',
   onSecondaryAction,
   onPrimaryClick,
-  marketingMode = 'trial'
+  marketingMode = 'trial',
+  copyVariant = 'modern-free-account'
 }: ScholarshipSubscriptionOfferModalProps) {
   return (
     <GuestTrialMarketingModal
@@ -35,6 +37,7 @@ export default function ScholarshipSubscriptionOfferModal({
       onSecondaryAction={onSecondaryAction}
       onPrimaryClick={onPrimaryClick}
       marketingMode={marketingMode}
+      copyVariant={copyVariant}
     />
   );
 }

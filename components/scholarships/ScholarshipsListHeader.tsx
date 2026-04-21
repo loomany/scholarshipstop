@@ -191,8 +191,8 @@ export default function ScholarshipsListHeader({
   onSubscriptionSortBlocked,
   onGuestLockedAction
 }: ScholarshipsListHeaderProps) {
-  /** Guest parity for anyone without an active subscription (including guests). */
-  const catalogLocked = !hasSubscription;
+  /** Locks apply to guests only; authenticated users are fully unlocked. */
+  const catalogLocked = !isAuthenticated;
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [categorySearch, setCategorySearch] = useState('');

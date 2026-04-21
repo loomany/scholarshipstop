@@ -1,0 +1,48 @@
+{
+  "partnerPathCandidates": [
+    "/partners",
+    "/partner",
+    "/affiliate",
+    "/affiliates",
+    "/referral",
+    "/referrals",
+    "/for-partners",
+    "/program",
+    "/contact",
+    "/about",
+    "/privacy",
+    "/terms"
+  ],
+  "keywordsRu": [
+    "партнерская программа",
+    "партнёрская программа",
+    "партнерка",
+    "партнёрка",
+    "реферальная программа",
+    "реферальная ссылка",
+    "вознаграждение партнерам",
+    "агентская программа",
+    "для партнеров",
+    "для партнёров"
+  ],
+  "keywordsEn": [
+    "affiliate program",
+    "affiliate partnership",
+    "partner program",
+    "referral program",
+    "refer and earn",
+    "commission",
+    "revshare",
+    "revenue share",
+    "for partners"
+  ],
+  "ignoreEmailFragments": [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+    ".svg",
+    "@example.com",
+    "@test.com"
+  ]
+}

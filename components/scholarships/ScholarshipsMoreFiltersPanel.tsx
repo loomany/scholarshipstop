@@ -407,8 +407,8 @@ export default function ScholarshipsMoreFiltersPanel({
   const applicantsLocked = false;
   const universityLocked = false;
   const deadlineShortRangeLocked = false;
-  /** Same as guest: international-friendly preset requires paid catalog (guest: not signed in). */
-  const internationalAudienceGated = !hasSubscription;
+  /** Gating applies to guests only; authenticated users are fully unlocked. */
+  const internationalAudienceGated = !isAuthenticated;
   const SUBSCRIPTION_LOCKED_EASY_APPLY_IDS = new Set([
     'easy_apply',
     'quick_apply'
@@ -1253,21 +1253,21 @@ export default function ScholarshipsMoreFiltersPanel({
               <button
                 type="button"
                 onClick={() => {
-                  if (!hasSubscription) {
+                  if (!isAuthenticated) {
                     onGuestLockedAction?.();
                     return;
                   }
                   onSaveFilter();
                 }}
-                disabled={hasSubscription ? !saveFilterEnabled : false}
+                disabled={isAuthenticated ? !saveFilterEnabled : false}
                 title={
-                  !hasSubscription
+                  !isAuthenticated
                     ? 'Save filter preset after you start your free trial'
                     : undefined
                 }
-                className={`${scholarshipSaveFilterButtonClass} ${!hasSubscription ? 'opacity-95' : ''}`}
+                className={`${scholarshipSaveFilterButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
               >
-                {!hasSubscription ? (
+                {!isAuthenticated ? (
                   <Lock
                     className="mr-1.5 inline-block h-3.5 w-3.5 shrink-0 text-white"
                     strokeWidth={2}
@@ -1280,20 +1280,20 @@ export default function ScholarshipsMoreFiltersPanel({
             <button
               type="button"
               onClick={() => {
-                if (!hasSubscription) {
+                if (!isAuthenticated) {
                   onGuestLockedAction?.();
                   return;
                 }
                 onApply();
               }}
               title={
-                !hasSubscription
+                !isAuthenticated
                   ? 'Apply filters after you start your free trial'
                   : undefined
               }
-              className={`${scholarshipSeeResultsButtonClass} ${!hasSubscription ? 'opacity-95' : ''}`}
+              className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
             >
-              {!hasSubscription ? (
+              {!isAuthenticated ? (
                 <Lock
                   className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
                   strokeWidth={2}

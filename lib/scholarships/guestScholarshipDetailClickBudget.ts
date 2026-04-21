@@ -1,7 +1,7 @@
 import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
 
 /** Guest and signed-in without subscription: same free detail views before paywall. */
-const FREE_DETAIL_NAVIGATIONS = 4;
+const FREE_DETAIL_NAVIGATIONS = 10;
 
 const GUEST_STORAGE_KEY = 'scholarshipGuestDetailFreeClicksUsed';
 /** Same cap as guest; scoped per user when signed in (see `storageKeyForMode`). */
@@ -26,7 +26,9 @@ export function resolveScholarshipDetailClickBudgetMode(options: {
   hasSubscription: boolean;
 }): ScholarshipDetailClickBudgetMode | null {
   if (!options.isAuthenticated) return 'guest';
-  if (!options.hasSubscription) return 'signed-in-no-subscription';
+  // Authenticated users should navigate freely across scholarship pages.
+  // Essay-specific gating is handled separately in essay flows.
+  if (!options.hasSubscription) return null;
   return null;
 }
 

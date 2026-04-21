@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
   Ban,
   Bookmark,
@@ -177,8 +177,33 @@ export default function ScholarshipsSidebar({
   internationalStudentsFilter = null,
   buildTabHref
 }: ScholarshipsSidebarProps) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [pathname, setPathname] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useState<URLSearchParams | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const syncFromLocation = () => {
+      setPathname(window.location.pathname);
+      setSearchParams(new URLSearchParams(window.location.search));
+    };
+    const originalPushState = window.history.pushState;
+    const originalReplaceState = window.history.replaceState;
+    window.history.pushState = function (...args) {
+      originalPushState.apply(this, args);
+      syncFromLocation();
+    };
+    window.history.replaceState = function (...args) {
+      originalReplaceState.apply(this, args);
+      syncFromLocation();
+    };
+    syncFromLocation();
+    window.addEventListener('popstate', syncFromLocation);
+    return () => {
+      window.history.pushState = originalPushState;
+      window.history.replaceState = originalReplaceState;
+      window.removeEventListener('popstate', syncFromLocation);
+    };
+  }, []);
   const activeTab = resolveActiveTabId(pathname, searchParams, guestMode);
 
   const suffix = (id: ScholarshipListTabId): string | undefined => {
@@ -235,8 +260,7 @@ export default function ScholarshipsSidebar({
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);
-          const showSubscriptionLock =
-            subscriptionLocked && SUBSCRIPTION_GATED_TAB_IDS.has(item.id);
+          const showSubscriptionLock = false;
           const gated = showGuestLock || showSubscriptionLock;
           const baseClass = `group flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
             navLooksActive
@@ -357,8 +381,7 @@ export default function ScholarshipsSidebar({
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);
-          const showSubscriptionLock =
-            subscriptionLocked && SUBSCRIPTION_GATED_TAB_IDS.has(item.id);
+          const showSubscriptionLock = false;
 
           const content = (
             <>
@@ -429,10 +452,7 @@ export default function ScholarshipsSidebar({
             guestMode &&
             GUEST_GATED_TAB_IDS.has(item.id) &&
             typeof onGuestRestrictedNav === 'function';
-          const subscriptionGated =
-            subscriptionLocked &&
-            SUBSCRIPTION_GATED_TAB_IDS.has(item.id) &&
-            typeof onSubscriptionRestrictedNav === 'function';
+          const subscriptionGated = false;
           const gated = guestGated || subscriptionGated;
 
           const link = gated ? (
@@ -494,7 +514,7 @@ export default function ScholarshipsSidebar({
               ? `(${counts.internationalFriendly})`
               : undefined;
             const showGuestLockIntl = intl.showGuestLock;
-            const showSubscriptionLockIntl = intl.showSubscriptionLock;
+            const showSubscriptionLockIntl = false;
             const intlRowClass = `flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
               intlActive
                 ? scholarshipSidebarActiveRowClass

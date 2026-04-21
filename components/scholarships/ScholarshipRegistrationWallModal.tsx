@@ -21,7 +21,8 @@ type ScholarshipRegistrationWallModalProps = {
   noticeOverride?: string;
 };
 
-/** Guests complete onboarding, then land on `/subscription` to start the trial. */
+/** Guests complete onboarding, then land on a variant-specific destination. */
+const REGISTRATION_THEN_SCHOLARSHIPS_HREF = onboardingStepHref(1, '/scholarships');
 const REGISTRATION_THEN_SUBSCRIPTION_HREF = onboardingStepHref(1, '/subscription');
 
 export default function ScholarshipRegistrationWallModal({
@@ -36,9 +37,8 @@ export default function ScholarshipRegistrationWallModal({
   if (noticeOverride?.trim()) {
     notice = noticeOverride.trim();
   } else if (variant === 'essay') {
-    notice = signedInWithoutSubscription
-      ? "Subscribe for full AI Essay Mentor, authenticity checks, and draft tools. We'll open the subscription page next so you can choose a plan."
-      : "Create a free account to save your essay draft, unlock every essay guide, and use the full AI Essay Mentor. After sign-up we'll open the subscription page to choose a plan.";
+    notice =
+      "Create a free account for filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor. After sign-up we'll open the subscription page so you can start your 3-day trial.";
   } else if (contentMode === 'card-unlock') {
     notice =
       "You've used your free previews. Continue with a free trial — we'll open the subscription page after sign-up.";
@@ -49,9 +49,13 @@ export default function ScholarshipRegistrationWallModal({
 
   const primaryHref = signedInWithoutSubscription
     ? '/subscription'
-    : REGISTRATION_THEN_SUBSCRIPTION_HREF;
+    : variant === 'essay'
+      ? REGISTRATION_THEN_SUBSCRIPTION_HREF
+      : REGISTRATION_THEN_SCHOLARSHIPS_HREF;
 
   const marketingMode = variant === 'essay' ? 'subscription' : 'trial';
+  const copyVariant =
+    variant === 'essay' ? 'classic-trial' : 'modern-free-account';
 
   return (
     <ScholarshipSubscriptionOfferModal
@@ -60,6 +64,7 @@ export default function ScholarshipRegistrationWallModal({
       notice={notice}
       primaryHref={primaryHref}
       marketingMode={marketingMode}
+      copyVariant={copyVariant}
     />
   );
 }

@@ -9,9 +9,9 @@ import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedSto
 const PROVIDER_KEY = 'scholarshipGuestProviderHubNavigationsUsed';
 const COMPARE_KEY = 'scholarshipGuestCompareHubNavigationsUsed';
 
-/** Free navigations before the trial modal (3rd click is blocked). */
-const FREE_PROVIDER_NAVIGATIONS = 2;
-const FREE_COMPARE_NAVIGATIONS = 2;
+/** Free navigations before the trial modal (11th click is blocked). */
+const FREE_PROVIDER_NAVIGATIONS = 10;
+const FREE_COMPARE_NAVIGATIONS = 10;
 
 export type HubBudgetScope = 'guest' | 'account';
 
@@ -48,12 +48,15 @@ export function getGuestProviderHubNavigationsUsed(
 export function shouldBlockGuestProviderHubNavigation(
   scope: HubBudgetScope = 'guest'
 ): boolean {
+  // Signed-in users should not hit guest hub paywalls.
+  if (scope === 'account') return false;
   return getGuestProviderHubNavigationsUsed(scope) >= FREE_PROVIDER_NAVIGATIONS;
 }
 
 export function recordGuestProviderHubNavigation(
   scope: HubBudgetScope = 'guest'
 ): void {
+  if (scope === 'account') return;
   const next = getGuestProviderHubNavigationsUsed(scope) + 1;
   writeCount(providerStorageKey(scope), next, FREE_PROVIDER_NAVIGATIONS);
 }
@@ -67,12 +70,15 @@ export function getGuestCompareHubNavigationsUsed(
 export function shouldBlockGuestCompareHubNavigation(
   scope: HubBudgetScope = 'guest'
 ): boolean {
+  // Signed-in users should not hit guest hub paywalls.
+  if (scope === 'account') return false;
   return getGuestCompareHubNavigationsUsed(scope) >= FREE_COMPARE_NAVIGATIONS;
 }
 
 export function recordGuestCompareHubNavigation(
   scope: HubBudgetScope = 'guest'
 ): void {
+  if (scope === 'account') return;
   const next = getGuestCompareHubNavigationsUsed(scope) + 1;
   writeCount(compareStorageKey(scope), next, FREE_COMPARE_NAVIGATIONS);
 }

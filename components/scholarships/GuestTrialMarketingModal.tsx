@@ -18,12 +18,14 @@ export type GuestTrialMarketingModalProps = {
    * `subscription` — essay and other flows without trial framing (plans / subscribe).
    */
   marketingMode?: 'trial' | 'subscription';
+  /** Controls copy deck only; destination stays in `primaryHref`. */
+  copyVariant?: 'modern-free-account' | 'classic-trial';
 };
 
 const BULLETS = [
-  'Get personalized scholarship matches instantly',
-  'Find opportunities faster with smart filters',
-  'Write winning essays with AI Mentor'
+  'View all hidden scholarships and deadlines',
+  'Unlock smart filters & personalized matching',
+  'Save your favorites & track applications'
 ] as const;
 
 export default function GuestTrialMarketingModal({
@@ -33,7 +35,7 @@ export default function GuestTrialMarketingModal({
   primaryHref,
   onSecondaryAction,
   onPrimaryClick,
-  marketingMode = 'trial'
+  copyVariant = 'modern-free-account'
 }: GuestTrialMarketingModalProps) {
   const dismiss = useCallback(() => {
     onSecondaryAction?.();
@@ -59,6 +61,7 @@ export default function GuestTrialMarketingModal({
   }, [open, dismiss]);
 
   if (!open) return null;
+  const isClassicTrial = copyVariant === 'classic-trial';
 
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6">
@@ -89,16 +92,20 @@ export default function GuestTrialMarketingModal({
             id="guest-trial-modal-title"
             className="text-xl font-bold tracking-tight text-zinc-900 sm:text-[1.4rem]"
           >
-            Find Scholarships Faster + AI Essay Help
+            {isClassicTrial
+              ? 'Find Scholarships Faster + AI Essay Help'
+              : 'Unlock All Scholarships & AI Tools'}
           </h2>
           <p className="mt-2 text-sm text-zinc-500 sm:text-base">
-            {marketingMode === 'subscription'
-              ? 'Plans from $12/mo — continue to choose your access.'
-              : 'Try everything free for 3 days, then from $12/mo.'}
+            {isClassicTrial
+              ? 'Try everything free for 3 days, then from $12/mo.'
+              : 'Create a 100% free account to access our full database.'}
           </p>
 
           <h3 className="mt-6 text-base font-bold text-zinc-900 sm:text-lg">
-            Unlock scholarships you can actually win + AI tools
+            {isClassicTrial
+              ? 'Unlock scholarships you can actually win + AI tools'
+              : "What's inside your free account:"}
           </h3>
 
           <ul className="mt-4 space-y-2.5 rounded-xl border border-zinc-100 bg-zinc-50/80 px-4 py-3 text-left text-sm text-zinc-800 sm:text-[0.9375rem]">
@@ -114,16 +121,15 @@ export default function GuestTrialMarketingModal({
             ))}
           </ul>
 
-          {notice?.trim() ? (
-            <p className="mt-4 rounded-xl border border-orange-100 bg-orange-50/80 px-3 py-2.5 text-left text-xs font-medium leading-relaxed text-orange-950 sm:text-sm">
-              {notice.trim()}
-            </p>
-          ) : null}
+          <p className="mt-4 rounded-xl border border-orange-100 bg-orange-50/80 px-3 py-2.5 text-left text-xs font-medium leading-relaxed text-orange-950 sm:text-sm">
+            {(notice?.trim() ||
+              (isClassicTrial
+                ? "Create a free account for filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor. After sign-up we'll open the subscription page so you can start your 3-day trial."
+                : 'Create a free account to instantly unlock advanced search filters, personalized grant matches, and full access to our database. No paywalls, just pure opportunities to fund your education.'))}
+          </p>
 
           <p className="mt-4 text-xs font-medium text-zinc-700 sm:text-sm">
-            {marketingMode === 'subscription'
-              ? '⚡ Continue to subscription to finish setup'
-              : '⚡ Takes less than 10 seconds'}
+            ⚡ Takes less than 10 seconds
           </p>
 
           <div className="mt-6">
@@ -135,14 +141,12 @@ export default function GuestTrialMarketingModal({
               }}
               className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 text-sm font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 sm:text-base"
             >
-              {marketingMode === 'subscription' ? '👉 Subscribe' : '👉 Start 3-day free trial'}
+              {isClassicTrial ? '👉 Start 3-day free trial' : '👉 Create Free Account'}
             </Link>
           </div>
 
           <p className="mt-3 text-xs text-zinc-400 sm:text-sm">
-            {marketingMode === 'subscription'
-              ? 'Manage your plan anytime from your account'
-              : 'Cancel anytime'}
+            {isClassicTrial ? 'Cancel anytime' : '100% Free • No credit card required'}
           </p>
         </div>
       </div>

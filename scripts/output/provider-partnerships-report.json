@@ -1,0 +1,40 @@
+[
+  {
+    "domain": "example.com",
+    "scannedAt": "2026-04-21T13:22:55.949Z",
+    "success": true,
+    "errors": [],
+    "checkedUrls": [
+      "https://example.com",
+      "http://example.com",
+      "https://example.com/partners",
+      "http://example.com/partners",
+      "https://example.com/partner",
+      "http://example.com/partner",
+      "https://example.com/affiliate",
+      "http://example.com/affiliate",
+      "https://example.com/affiliates",
+      "http://example.com/affiliates",
+      "https://example.com/referral",
+      "http://example.com/referral",
+      "https://example.com/referrals",
+      "http://example.com/referrals",
+      "https://example.com/for-partners",
+      "http://example.com/for-partners",
+      "https://example.com/program",
+      "http://example.com/program",
+      "https://example.com/contact",
+      "http://example.com/contact",
+      "https://example.com/about",
+      "http://example.com/about",
+      "https://example.com/privacy",
+      "http://example.com/privacy",
+      "https://example.com/terms",
+      "http://example.com/terms"
+    ],
+    "emails": [],
+    "hasPartnershipSignals": false,
+    "evidence": [],
+    "confidenceScore": 10
+  }
+]
