@@ -221,6 +221,17 @@ export type GrantNotificationDispatchResult = {
   skippedDup: number;
   errors: number;
   cappedOps: boolean;
+  bottleneckHint?: string;
+  diagnostics?: {
+    profilesLoaded: number;
+    telegramUsersLoaded: number;
+    matchedPairs: number;
+    emailCandidates: number;
+    telegramCandidates: number;
+    emailSkippedCooldownUsers: number;
+    emailDigestAttempts: number;
+    emailDigestFailed: number;
+  };
   message?: string;
 };
 
@@ -332,6 +343,12 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   let errors = 0;
   let ops = 0;
   let cappedOps = false;
+  let matchedPairs = 0;
+  let emailCandidates = 0;
+  let telegramCandidates = 0;
+  let emailSkippedCooldownUsers = 0;
+  let emailDigestAttempts = 0;
+  let emailDigestFailed = 0;
 
   const channels: ChannelId[] = ['best', 'saved_filters', 'easy_apply', 'hot_deadlines'];
   const savedGrantByUserScholarship = new Map<string, boolean>();
@@ -346,9 +363,44 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   const publicOrigin =
     process.env.NEXT_PUBLIC_SITE_URL?.trim()?.replace(/\/+$/, '') || 'https://scholarshiptop.com';
 
+  console.log(
+    '[grant-notify] config',
+    JSON.stringify({
+      lookbackHours: LOOKBACK_HOURS,
+      maxScholarships: MAX_SCHOLARSHIPS,
+      maxProfiles: MAX_PROFILES,
+      maxOps: MAX_OPS,
+      emailCooldownHours: EMAIL_COOLDOWN_HOURS,
+      digestMaxItems: GRANT_DIGEST_EMAIL_MAX_ITEMS
+    })
+  );
+  console.log(
+    '[grant-notify] loaded',
+    JSON.stringify({
+      scholarships: scholarships.length,
+      profiles: profiles.length,
+      telegramUsers: telegramByUser.size
+    })
+  );
+
   for (let i = 0; i < scholarships.length; i++) {
     const s = scholarships[i]!;
     const sid = s.id;
+    if (i === 0 || (i + 1) % 5 === 0) {
+      console.log(
+        '[grant-notify] progress',
+        JSON.stringify({
+          scholarshipIndex: i + 1,
+          scholarshipsTotal: scholarships.length,
+          currentScholarshipId: sid,
+          ops,
+          emailSent,
+          telegramSent,
+          skippedDup,
+          errors
+        })
+      );
+    }
 
     let easyOk = false;
     let hotOk = false;
@@ -393,6 +445,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
         }
 
         if (!match) continue;
+        matchedPairs += 1;
 
         ops += 1;
         if (ops > MAX_OPS) {
@@ -406,6 +459,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
           if (dup) {
             skippedDup += 1;
           } else {
+            emailCandidates += 1;
             let lines = pendingEmailByUser.get(uid);
             if (!lines) {
               lines = [];
@@ -422,6 +476,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
 
         const tg = telegramByUser.get(uid);
         if (tg && tg[telegramColumn(ch)]) {
+          telegramCandidates += 1;
           const dupT = await alreadySent(admin, uid, sid, ch, 'telegram');
           if (dupT) {
             skippedDup += 1;
@@ -449,7 +504,10 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   for (const [uid, lines] of pendingEmailByUser) {
     const email = await getEmail(uid);
     if (!email) continue;
-    if (await userHasRecentEmailDelivery(admin, uid)) continue;
+    if (await userHasRecentEmailDelivery(admin, uid)) {
+      emailSkippedCooldownUsers += 1;
+      continue;
+    }
 
     const categories: GrantDigestCategory[] = EMAIL_CHANNEL_ORDER.map((channel) => {
       const categoryLines = lines.filter((line) => line.channel === channel);
@@ -474,6 +532,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       });
     }
 
+    emailDigestAttempts += 1;
     const r = await sendGrantDigestBatchEmail({
       toEmail: email,
       categories,
@@ -486,8 +545,49 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       }
     } else {
       errors += 1;
+      emailDigestFailed += 1;
+      console.error(
+        '[grant-notify] digest-send-failed',
+        JSON.stringify({
+          userId: uid,
+          toEmail: email,
+          reason: r.skipped ?? 'unknown',
+          lines: lines.length,
+          categories: categories.map((c) => ({ id: c.id, totalCount: c.totalCount }))
+        })
+      );
     }
   }
+
+  let bottleneckHint = '';
+  if (cappedOps) bottleneckHint = 'MAX_OPS cap reached; increase limit or narrow audience.';
+  else if (emailDigestFailed > 0) bottleneckHint = 'Email digest failures occurred; inspect sendGrantDigestBatchEmail reasons.';
+  else if (emailSkippedCooldownUsers > 0 && emailSent === 0)
+    bottleneckHint = 'Most email candidates skipped by cooldown window.';
+  else if (matchedPairs === 0) bottleneckHint = 'No profile/scholarship matches found for enabled channels.';
+  else if (telegramSent === 0 && emailSent === 0)
+    bottleneckHint = 'Matches exist but all deliveries were duplicates or skipped.';
+  else bottleneckHint = 'Dispatch completed with deliveries.';
+
+  console.log(
+    '[grant-notify] summary',
+    JSON.stringify({
+      scholarshipsConsidered: scholarships.length,
+      profilesLoaded: profiles.length,
+      telegramUsersLoaded: telegramByUser.size,
+      matchedPairs,
+      emailCandidates,
+      telegramCandidates,
+      emailDigestAttempts,
+      emailSkippedCooldownUsers,
+      emailSent,
+      telegramSent,
+      skippedDup,
+      errors,
+      cappedOps,
+      bottleneckHint
+    })
+  );
 
   return {
     ok: true,
@@ -496,6 +596,17 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     telegramSent,
     skippedDup,
     errors,
-    cappedOps
+    cappedOps,
+    bottleneckHint,
+    diagnostics: {
+      profilesLoaded: profiles.length,
+      telegramUsersLoaded: telegramByUser.size,
+      matchedPairs,
+      emailCandidates,
+      telegramCandidates,
+      emailSkippedCooldownUsers,
+      emailDigestAttempts,
+      emailDigestFailed
+    }
   };
 }
