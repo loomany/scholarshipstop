@@ -817,6 +817,7 @@ export default function ScholarshipCategoryPageClient({
             onGuestLockedAction={
               catalogFreeTier ? openRegistrationWall : undefined
             }
+            catalogListingLocked={catalogFreeTier}
           />
 
           {isLoading ? (

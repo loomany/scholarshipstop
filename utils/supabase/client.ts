@@ -14,6 +14,12 @@ export const createClient = () => {
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
+        /**
+         * `@supabase/ssr` 0.1.0: if `options` is passed without `cookies`, destructuring sets
+         * `cookies` to `undefined`, then storage getItem does `cookies.get` → runtime error.
+         * Empty object keeps the built-in `document.cookie` path (no `get` on cookies).
+         */
+        cookies: {},
         auth: {
           /**
            * Default GoTrue uses `navigator.locks` with a timeout → "steal", which

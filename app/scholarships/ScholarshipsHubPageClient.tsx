@@ -2503,6 +2503,7 @@ function ScholarshipsPageInner({
                 onGuestLockedAction={
                   catalogFreeTier ? openRegistrationWall : undefined
                 }
+                catalogListingLocked={catalogFreeTier}
                 savedFilterPresetButtons={
                   activeTab === 'recommended'
                     ? savedFilterPresets.map((preset) => ({

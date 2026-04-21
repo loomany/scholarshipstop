@@ -80,6 +80,12 @@ type ScholarshipsListHeaderProps = {
   onGuestSortBlocked?: () => void;
   onSubscriptionSortBlocked?: () => void;
   onGuestLockedAction?: () => void;
+  /**
+   * When set (e.g. hub passes `catalogFreeTier`), search/filters/categories locks and
+   * `onGuestLockedAction` stay in sync. Without it, `isAuthenticated` alone drives locks
+   * and can disagree with `onGuestLockedAction` while `authResolved` is still false.
+   */
+  catalogListingLocked?: boolean;
   savedFilterPresetButtons?: { id: string; name: string; active?: boolean }[];
   onSavedFilterPresetSelect?: (id: string) => void;
 };
@@ -192,11 +198,14 @@ export default function ScholarshipsListHeader({
   onGuestSortBlocked,
   onSubscriptionSortBlocked,
   onGuestLockedAction,
+  catalogListingLocked,
   savedFilterPresetButtons = [],
   onSavedFilterPresetSelect
 }: ScholarshipsListHeaderProps) {
-  /** Locks apply to guests only; authenticated users are fully unlocked. */
-  const catalogLocked = !isAuthenticated;
+  const catalogLocked =
+    catalogListingLocked !== undefined
+      ? catalogListingLocked
+      : !isAuthenticated;
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [categorySearch, setCategorySearch] = useState('');
@@ -556,6 +565,10 @@ export default function ScholarshipsListHeader({
                   onClick={() => {
                     setCategoriesOpen(false);
                     setSortOpen(false);
+                    if (catalogLocked) {
+                      onGuestLockedAction?.();
+                      return;
+                    }
                     onOpenMoreFilters?.();
                   }}
                   className={CATALOG_CONTROL_BAR_BTN}
@@ -594,6 +607,10 @@ export default function ScholarshipsListHeader({
                     }
                     onClick={() => {
                       if (categoriesDisabled) return;
+                      if (catalogLocked) {
+                        onGuestLockedAction?.();
+                        return;
+                      }
                       setSortOpen(false);
                       setCategoriesOpen((o) => {
                         const next = !o;

@@ -48,43 +48,60 @@ export default function AuthStatusProvider({
         setAuthResolved(true);
         return;
       }
-      const [{ data: profile }, { data: subscriptions }] = await Promise.all([
-        supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', nextUser.id)
-        .maybeSingle<Database['public']['Tables']['profiles']['Row']>(),
-        supabase
-          .from('subscriptions')
-          .select('*')
-          .eq('user_id', nextUser.id)
-          .order('created', { ascending: false })
-          .limit(20)
-      ]);
-      const subscription = pickCanonicalSubscription(
-        (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
-      ) as SubscriptionWithPriceAndProduct | null;
-      setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
-      const paused = normalizeSubscriptionStatus(subscription?.status) === 'paused';
-      setSubscriptionPaused(paused);
-      setPausedResumeUrl(
-        paused ? resolveResumeSubscriptionHref(subscription, '/subscription') : null
-      );
-      setAuthResolved(true);
+      try {
+        const [{ data: profile }, { data: subscriptions }] = await Promise.all([
+          supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', nextUser.id)
+            .maybeSingle<Database['public']['Tables']['profiles']['Row']>(),
+          supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', nextUser.id)
+            .order('created', { ascending: false })
+            .limit(20)
+        ]);
+        const subscription = pickCanonicalSubscription(
+          (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
+        ) as SubscriptionWithPriceAndProduct | null;
+        setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
+        const paused = normalizeSubscriptionStatus(subscription?.status) === 'paused';
+        setSubscriptionPaused(paused);
+        setPausedResumeUrl(
+          paused ? resolveResumeSubscriptionHref(subscription, '/subscription') : null
+        );
+      } catch {
+        setHasSubscription(false);
+        setSubscriptionPaused(false);
+        setPausedResumeUrl(null);
+      } finally {
+        setAuthResolved(true);
+      }
     };
 
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      void syncSubscription(session?.user ?? null);
-    });
+    void supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        void syncSubscription(session?.user ?? null);
+      })
+      .catch(() => {
+        void syncSubscription(null);
+      });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       void syncSubscription(session?.user ?? null);
     });
 
     const handleSubscriptionDebugUpdated = () => {
-      void supabase.auth.getSession().then(({ data: { session } }) => {
-        void syncSubscription(session?.user ?? null);
-      });
+      void supabase.auth
+        .getSession()
+        .then(({ data: { session } }) => {
+          void syncSubscription(session?.user ?? null);
+        })
+        .catch(() => {
+          void syncSubscription(null);
+        });
     };
 
     window.addEventListener(
