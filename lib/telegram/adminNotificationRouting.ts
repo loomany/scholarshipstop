@@ -23,11 +23,11 @@ export const FIRST_TOUCH_NOTIFY_SOURCE_KEYS: readonly FirstTouchNotifySourceKey[
 
 export const FIRST_TOUCH_NOTIFY_LABEL_RU: Record<FirstTouchNotifySourceKey, string> = {
   google_ads: 'Google Ads',
-  facebook_paid: 'Facebook',
+  facebook_paid: 'Facebook Ads',
   organic_search: 'Органика (поиск)',
-  other_paid: 'Платный не Google',
-  referral: 'Referral',
-  direct_unknown: 'Direct / unknown',
+  other_paid: 'Другая реклама',
+  referral: 'Переходы с сайтов',
+  direct_unknown: 'Прямой / неизвестный',
   tiktok: 'TikTok',
   reddit: 'Reddit'
 };
@@ -46,12 +46,12 @@ export type AdminNotifyCategory = (typeof ADMIN_NOTIFY_KEYS)[number];
 
 /** Short labels for inline buttons (Telegram limit ~64 bytes per callback). */
 export const ADMIN_NOTIFY_LABEL_RU: Record<AdminNotifyCategory, string> = {
-  grants: '🆕 Гранты (новые в БД)',
-  traffic: '👤 Первый визит',
-  auth: '✨ Регистрация / email',
+  grants: '🆕 Новые гранты',
+  traffic: '👤 Трафик и визиты',
+  auth: '✨ Регистрация и email',
   billing: '💳 Платежи Lemon',
-  seo: '🔍 SEO / индексация',
-  resources: '📰 Статьи / ресурсы'
+  seo: '🔍 SEO и индексация',
+  resources: '📰 Статьи и ресурсы'
 };
 
 export const ADMIN_NOTIFY_CALLBACK_PREFIX = 'tg:an:';

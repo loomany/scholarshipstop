@@ -809,11 +809,11 @@ function formatVisitorFirstTouchLandingTelegramHtml(landingUrl: string): string 
     }
 
     return (
-      `<b>Landing:</b> <a href="${escapeTelegramHtml(safeUrl)}">${escapeTelegramHtml(displayPath)}</a>` +
+      `<b>Страница входа:</b> <a href="${escapeTelegramHtml(safeUrl)}">${escapeTelegramHtml(displayPath)}</a>` +
       hint
     );
   } catch {
-    return `<b>Landing:</b> ${escapeTelegramHtml(landingUrl)}`;
+    return `<b>Страница входа:</b> ${escapeTelegramHtml(landingUrl)}`;
   }
 }
 
@@ -848,7 +848,7 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
       utm_campaign: payload.utm_campaign
     });
 
-    const lines: string[] = ['<b>New Visitor on ScholarshipTop!</b>'];
+    const lines: string[] = ['<b>Новый визит на ScholarshipTop</b>', '<b>Статус:</b> Успешно'];
     const showGoogleAdsTag = payload.clickIdParam === 'gclid';
     const showPaidTag = payload.clickIdParam === 'fbclid';
     if (showGoogleAdsTag) {
@@ -858,7 +858,7 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
     }
     lines.push(
       '',
-      `<b>Channel:</b> ${escapeTelegramHtml(channelDisplay)}`,
+      `<b>Канал:</b> ${escapeTelegramHtml(channelDisplay)}`,
       '',
       formatVisitorFirstTouchLandingTelegramHtml(payload.landingUrl)
     );
@@ -928,7 +928,13 @@ export async function notifyAdminsScholarshipIndexed(payload: {
   title: string;
   url: string;
 }) {
-  const text = `🚀 Google проиндексировал страницу!\n\n${payload.title}\n${payload.url}`;
+  const text = [
+    '🚀 Индексация в Google подтверждена',
+    'Статус: Успешно',
+    '',
+    `Страница: ${payload.title}`,
+    `URL: ${payload.url}`
+  ].join('\n');
   await notifyEnvTelegramAdminsPlainText(text, 'seo');
 }
 
@@ -938,13 +944,19 @@ export async function notifyEnvTelegramAdminsNewScholarship(row: {
   slug?: string | null;
   title?: string | null;
 }) {
-  const title = row.title?.trim() || 'New scholarship';
+  const title = row.title?.trim() || 'Новый грант';
   const path = scholarshipPublicPath({
     id: row.id,
     slug: row.slug ?? undefined
   });
   const url = `${getSiteUrl()}${path}`;
-  const text = ['🆕 New grant', '', title, '', url].join('\n');
+  const text = [
+    '🆕 Добавлен новый грант',
+    'Статус: Требует внимания',
+    '',
+    `Название: ${title}`,
+    `URL: ${url}`
+  ].join('\n');
   await notifyEnvTelegramAdminsPlainText(text);
 }
 
@@ -981,6 +993,7 @@ export async function notifyTelegramSignup(payload: {
     await sendTelegramAdminBroadcastHtml(
       [
         '<b>✨ Новая регистрация в ScholarshipTop</b>',
+        '<b>Статус:</b> Успешно',
         '',
         `<b>Email:</b> ${emailSafe}`,
         `<b>Источник:</b> ${sourceSafe}`
@@ -1022,7 +1035,8 @@ export async function notifyTelegramEmailVerified(payload: {
     const emailSafe = escapeTelegramHtml(payload.email);
     await sendTelegramAdminBroadcastHtml(
       [
-        '<b>Пользователь подтвердил email</b> (флаг в <code>profiles</code> или GoTrue)',
+        '<b>Подтверждение email</b>',
+        '<b>Статус:</b> Успешно',
         '',
         `<b>Email:</b> ${emailSafe}`
       ].join('\n'),
@@ -1088,7 +1102,8 @@ export async function notifyTelegramPayment(payload: {
   }
 
   const text = [
-    'Получено платежное событие',
+    '💳 Событие оплаты',
+    'Статус: Требует внимания',
     `Событие Lemon: ${formatLemonWebhookEventRu(payload.eventName)}`,
     `Тариф: ${formatAdminPlanLabel(payload.plan, payload.plan !== 'free')}`,
     `Статус в БД: ${formatAdminStatusLabel(payload.status)}`,
@@ -1276,7 +1291,7 @@ async function sendAdminPanel(user: TelegramUserRow) {
   if (!user.is_admin) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'Admin access is not enabled for this Telegram account.',
+      'Для этого Telegram-аккаунта админ-доступ не включен.',
       buildProfileKeyboard(user)
     );
     return;
@@ -1635,7 +1650,7 @@ async function sendAdminUserAudit(user: TelegramUserRow, visitorId: string) {
       : []),
     '',
     '<b>Переход / атрибуция</b>',
-    `<b>Landing:</b> ${escapeTelegramHtml(toLandingPath(touch.landing_url))}`,
+    `<b>Страница входа:</b> ${escapeTelegramHtml(toLandingPath(touch.landing_url))}`,
     `<b>Referrer:</b> ${escapeTelegramHtml((touch.referrer ?? '-').slice(0, 300))}`,
     `<b>UTM:</b> source=${escapeTelegramHtml(touch.utm_source ?? '-')} medium=${escapeTelegramHtml(
       touch.utm_medium ?? '-'
@@ -1674,19 +1689,19 @@ async function sendSeoQueueReport(user: TelegramUserRow) {
   const snap = getSeoDripFeedSnapshot();
 
   const lines: string[] = [
-    '📊 SEO drip — снимок с сервера',
-    `(копируй блок целиком для анализа; Google Search Console сюда не входит)`,
+    '📊 SEO Drip: статус',
+    'Сводка по текущей очереди и лимитам публикации.',
     '',
     `Сайт: ${site}`,
     `SEO_DRIP_START_DATE: ${startRaw}`,
     `SEO_PAGES_PER_HOUR: ${pphRaw}`,
-    `Drip включён: ${snap.active ? 'да' : 'нет (нет одной из env или 0)'}`
+    `Drip включён: ${snap.active ? 'Да' : 'Нет (проверь env-переменные)'}`
   ];
 
   if (!snap.active) {
     lines.push(
       '',
-      'Пока drip выключен — все пути из очереди не режутся этим механизмом (см. код seoDripFeed).'
+      'Drip сейчас выключен. Ограничение очереди этим механизмом не применяется.'
     );
     await sendTelegramMessage(user.telegram_chat_id, lines.join('\n'), buildProfileKeyboard(user));
     return;
@@ -1698,12 +1713,12 @@ async function sendSeoQueueReport(user: TelegramUserRow) {
   const remaining = Math.max(0, n - unlocked);
 
   lines.push(
-    `Всего URL в data/seo-pending-queue.json: ${n}`,
-    `Текущий лимит (слоты×страниц/час): ${limit}`,
-    `Уже «открыто» первых в списке: ${unlocked}`,
-    `Ещё ждут очереди: ${remaining}`,
+    `Всего URL в очереди: ${n}`,
+    `Текущий лимит (слоты × страниц/час): ${limit}`,
+    `Доступно к публикации сейчас: ${unlocked}`,
+    `Ожидают публикации: ${remaining}`,
     '',
-    'Уже открытые (до 10 путей):'
+    'Уже доступны (до 10 URL):'
   );
   for (const p of orderedQueue.slice(0, Math.min(10, unlocked))) {
     lines.push(`• ${site}/scholarships/${p}`);
@@ -1712,7 +1727,7 @@ async function sendSeoQueueReport(user: TelegramUserRow) {
     lines.push('— пока 0 (проверь дату старта и лимит)');
   }
 
-  lines.push('', 'Следующие в очереди (до 15):');
+  lines.push('', 'Следующие в очереди (до 15 URL):');
   for (const p of orderedQueue.slice(unlocked, unlocked + 15)) {
     lines.push(`• ${site}/scholarships/${p}`);
   }
@@ -1984,10 +1999,10 @@ async function handleCodeInput(user: TelegramUserRow, rawText: string) {
 function formatAdminNotifyPanelHtml(user: TelegramUserRow): string {
   const master = user.notifications_enabled;
   const lines = [
-    '<b>Админ-уведомления</b>',
+    '<b>Админ-уведомления: настройки</b>',
     master
-      ? 'Серверные пинги (не путать с грантами в Alerts Setup).'
-      : '<i>Все типы выключены.</i> Нажми «Включить все» или включи отдельные пункты.',
+      ? 'Статус: Успешно. Активные категории указаны ниже.'
+      : '<i>Статус: Выключено.</i> Нажми «Включить все» или включи отдельные категории.',
     ''
   ];
   for (const k of ADMIN_NOTIFY_KEYS) {
@@ -2034,8 +2049,8 @@ function buildAdminNotifyInlineKeyboard(user: TelegramUserRow): TelegramReplyMar
 
 function formatTrafficSourcesPanelHtml(user: TelegramUserRow): string {
   const lines = [
-    '<b>Первый визит — источники</b>',
-    'Включи только нужные каналы. Пока список не трогали — пуши приходят со всех источников.',
+    '<b>Трафик: источники первого визита</b>',
+    'Включи только нужные каналы. По умолчанию уведомления идут со всех источников.',
     ''
   ];
   for (const k of FIRST_TOUCH_NOTIFY_SOURCE_KEYS) {
@@ -2064,7 +2079,7 @@ async function sendAdminNotificationSettingsPanel(user: TelegramUserRow) {
   if (!user.is_admin) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'Admin access is not enabled for this Telegram account.',
+      'Для этого Telegram-аккаунта админ-доступ не включен.',
       buildProfileKeyboard(user)
     );
     return;
@@ -2085,7 +2100,7 @@ async function handleAdminNotifyCallback(
 ) {
   if (!user.is_admin) {
     if (callback.id) {
-      await answerTelegramCallbackQuery(callback.id, 'Not an admin.');
+      await answerTelegramCallbackQuery(callback.id, 'Недостаточно прав: только для админа.');
     }
     return;
   }
@@ -2192,7 +2207,7 @@ async function sendTestResourceCard(user: TelegramUserRow) {
   if (!admin) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'Database is not configured.',
+      'База данных не настроена.',
       buildMainKeyboard()
     );
     return;
@@ -2212,7 +2227,7 @@ async function sendTestResourceCard(user: TelegramUserRow) {
     console.error('[telegram] /testresources query failed', error.message);
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'Could not load resources from the database.',
+      'Не удалось загрузить ресурсы из базы данных.',
       buildProfileKeyboard(user)
     );
     return;
@@ -2221,7 +2236,7 @@ async function sendTestResourceCard(user: TelegramUserRow) {
   if (!post?.slug) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'No published resource with a slug was found.',
+      'Опубликованный ресурс со slug не найден.',
       buildProfileKeyboard(user)
     );
     return;
@@ -2240,7 +2255,7 @@ async function sendTestResourceCard(user: TelegramUserRow) {
   if (!ok) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'Failed to send the preview. Check TELEGRAM_BOT_TOKEN and that the bot can message this chat.',
+      'Не удалось отправить превью. Проверь TELEGRAM_BOT_TOKEN и права бота в чате.',
       buildProfileKeyboard(user)
     );
   }
@@ -2270,7 +2285,7 @@ async function sendTestGrantPreview(user: TelegramUserRow) {
   if (!scholarship) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'No active scholarship was found for a preview.',
+      'Для превью не найден активный грант.',
       buildProfileKeyboard(user)
     );
     return;
@@ -2289,7 +2304,7 @@ async function sendTestGrantPreview(user: TelegramUserRow) {
   if (!ok) {
     await sendTelegramMessage(
       user.telegram_chat_id,
-      'Failed to send the grant preview. Check TELEGRAM_BOT_TOKEN.',
+      'Не удалось отправить превью гранта. Проверь TELEGRAM_BOT_TOKEN.',
       buildProfileKeyboard(user)
     );
   }
