@@ -137,6 +137,7 @@ import { storageKeyMatchesBase } from '@/app/scholarships/userScopedStorage';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
 import { pickAllowedProfilesUpsertFields } from '@/lib/onboarding/profilesOnboardingSync';
+import { notifyQuizCompletionClient } from '@/lib/analytics/notifyQuizCompletionClient';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
 
@@ -1988,6 +1989,12 @@ function ScholarshipsPageInner({
                   }
                   onSubmit={async (next) => {
                     persistBestRecommendationWizardStore(next);
+                    void notifyQuizCompletionClient({
+                      flow: 'best_recommendation_wizard',
+                      landingPath: '/scholarships',
+                      authState: isAuthenticated ? 'authenticated' : 'guest',
+                      onceKey: `st_quiz_complete_best_recommendation_${isAuthenticated ? 'auth' : 'guest'}`
+                    });
                     replaceListingParams({ resetPage: true });
                   }}
                 />

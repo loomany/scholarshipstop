@@ -6,11 +6,17 @@
  *   npx tsx scripts/discover-provider-partnerships.ts --input=scripts/data/providers-seed.csv
  *   npx tsx scripts/discover-provider-partnerships.ts --concurrency=4 --delay-ms=800 --limit=100
  *   npx tsx scripts/discover-provider-partnerships.ts --discover-web --discover-limit=200
+ *   npx tsx scripts/discover-provider-partnerships.ts --from-site --skip-scanned
+ *   npx tsx scripts/discover-provider-partnerships.ts --from-site --skip-scanned --rescan-after-days=14
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
+import {
+  sendProviderDiscoveryTelegramFailure,
+  sendProviderDiscoveryTelegramSummary
+} from '@/lib/telegram/providerDiscoveryReport';
 
 type SignalsConfig = {
   partnerPathCandidates: string[];
@@ -79,6 +85,25 @@ const BLOCKED_DISCOVERY_HOSTS = [
   't.me'
 ];
 const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships';
+const PROVIDER_SCAN_RUNS_TABLE =
+  'provider_partnership_scan_runs' as unknown as 'scholarships';
+const PROVIDER_CONTACTS_TABLE =
+  'provider_partnership_contacts' as unknown as 'scholarships';
+const PROVIDER_DOMAIN_SCANS_TABLE =
+  'provider_partnership_domain_scans' as unknown as 'scholarships';
+
+type ProviderContactUpsertRow = {
+  run_id: string | null;
+  contact_key: string;
+  domain: string;
+  email: string | null;
+  partner_url: string | null;
+  evidence_url: string | null;
+  confidence_score: number;
+  has_partnership_signal: boolean;
+  scanned_at: string;
+  updated_at: string;
+};
 
 function parseArg(name: string): string | null {
   const prefix = `--${name}=`;
@@ -200,6 +225,15 @@ function extractEmailsFromHtml(html: string, ignoreFragments: string[]): string[
     out.add(email);
   }
   return [...out];
+}
+
+function isLikelyCampaignReadyEmail(value: string): boolean {
+  const email = value.trim().toLowerCase();
+  if (!email) return false;
+  if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) return false;
+  if (email.endsWith('.phone')) return false;
+  if (email.includes('..')) return false;
+  return true;
 }
 
 function stripHtml(html: string): string {
@@ -527,6 +561,194 @@ function computeConfidence(report: Omit<DomainReport, 'confidenceScore'>): numbe
   return Math.max(0, Math.min(100, score));
 }
 
+function buildProviderContactRows(
+  reports: DomainReport[],
+  runId: string | null
+): ProviderContactUpsertRow[] {
+  const rows: ProviderContactUpsertRow[] = [];
+  const nowIso = new Date().toISOString();
+  const seen = new Set<string>();
+  for (const report of reports) {
+    const domain = report.domain.trim().toLowerCase();
+    const partnerLinks = report.evidence
+      .filter((item) => item.matchedKeywords.length > 0)
+      .map((item) => item.url.trim())
+      .filter(Boolean);
+    for (const rawEmail of report.emails) {
+      const email = rawEmail.trim().toLowerCase();
+      if (!isLikelyCampaignReadyEmail(email)) continue;
+      const key = `email:${domain}:${email}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      rows.push({
+        run_id: runId,
+        contact_key: key,
+        domain,
+        email,
+        partner_url: partnerLinks[0] ?? null,
+        evidence_url: report.evidence[0]?.url ?? null,
+        confidence_score: report.confidenceScore,
+        has_partnership_signal: report.hasPartnershipSignals,
+        scanned_at: report.scannedAt,
+        updated_at: nowIso
+      });
+    }
+    for (const partnerUrl of partnerLinks) {
+      const key = `partner:${domain}:${partnerUrl}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      rows.push({
+        run_id: runId,
+        contact_key: key,
+        domain,
+        email: null,
+        partner_url: partnerUrl,
+        evidence_url: partnerUrl,
+        confidence_score: report.confidenceScore,
+        has_partnership_signal: true,
+        scanned_at: report.scannedAt,
+        updated_at: nowIso
+      });
+    }
+  }
+  return rows;
+}
+
+async function persistProviderScanResultsToSupabase(
+  reports: DomainReport[],
+  startedAtIso: string
+): Promise<void> {
+  loadEnvFiles();
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!url || !key) {
+    liveLog('Skip Supabase persistence: missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY.');
+    return;
+  }
+  const supabase = createClient(url, key);
+  const uniqueEmails = new Set<string>();
+  for (const report of reports) {
+    for (const email of report.emails) {
+      if (isLikelyCampaignReadyEmail(email)) uniqueEmails.add(email.trim().toLowerCase());
+    }
+  }
+  const partnerDomainCount = reports.filter((item) => item.hasPartnershipSignals).length;
+  const nowIso = new Date().toISOString();
+  const runInsert = {
+    started_at: startedAtIso,
+    finished_at: nowIso,
+    input_domain_count: reports.length,
+    scanned_domain_count: reports.length,
+    unique_emails_count: uniqueEmails.size,
+    partner_domain_count: partnerDomainCount,
+    status: 'ok',
+    error_message: null,
+    report_json_path: OUT_JSON,
+    report_csv_path: OUT_CSV,
+    live_log_path: OUT_LIVE_LOG
+  };
+  const { data: runRow, error: runError } = await supabase
+    .from(PROVIDER_SCAN_RUNS_TABLE)
+    .insert(runInsert)
+    .select('id')
+    .single();
+  if (runError) {
+    throw new Error(`Failed to insert provider scan run: ${runError.message}`);
+  }
+  const runId = String((runRow as { id?: string }).id ?? '');
+  const rows = buildProviderContactRows(reports, runId || null);
+  if (rows.length === 0) {
+    liveLog(`Supabase run saved (${runId}) with 0 contact rows.`);
+  } else {
+    const { error: contactsError } = await supabase
+      .from(PROVIDER_CONTACTS_TABLE)
+      .upsert(rows, { onConflict: 'contact_key' });
+    if (contactsError) {
+      throw new Error(`Failed to upsert provider contacts: ${contactsError.message}`);
+    }
+    liveLog(`Supabase contacts upserted: run=${runId}, rows=${rows.length}`);
+  }
+
+  const domainRows = reports.map((report) => ({
+    domain: report.domain.trim().toLowerCase(),
+    last_run_id: runId || null,
+    scanned_at: report.scannedAt,
+    success: report.success,
+    updated_at: nowIso
+  }));
+  const { error: domainScansError } = await supabase
+    .from(PROVIDER_DOMAIN_SCANS_TABLE)
+    .upsert(domainRows, { onConflict: 'domain' });
+  if (domainScansError) {
+    throw new Error(`Failed to upsert provider domain scans: ${domainScansError.message}`);
+  }
+  liveLog(`Supabase domain scan checkpoints updated: ${domainRows.length}`);
+}
+
+async function loadRecentlyScannedDomainsFromSupabase(
+  rescanAfterDays: number
+): Promise<Set<string>> {
+  loadEnvFiles();
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!url || !key) return new Set<string>();
+  const supabase = createClient(url, key);
+  const { data, error } = await supabase
+    .from(PROVIDER_DOMAIN_SCANS_TABLE)
+    .select('domain, scanned_at')
+    .order('scanned_at', { ascending: false })
+    .limit(50_000);
+  if (error) {
+    liveLog(`Skip scanned-domain prefilter (supabase error): ${error.message}`);
+    // Fallback: use previous JSON report so reruns continue from domains not seen before.
+    if (fs.existsSync(OUT_JSON)) {
+      try {
+        const raw = fs.readFileSync(OUT_JSON, 'utf8');
+        const parsed = JSON.parse(raw) as { domain?: string; scannedAt?: string }[];
+        const out = new Set<string>();
+        const cutoffMs =
+          rescanAfterDays > 0 ? Date.now() - rescanAfterDays * 24 * 60 * 60 * 1000 : null;
+        for (const row of parsed ?? []) {
+          const domain = String(row.domain ?? '')
+            .trim()
+            .toLowerCase();
+          if (!domain) continue;
+          if (cutoffMs != null) {
+            const scannedAtMs = row.scannedAt ? Date.parse(row.scannedAt) : NaN;
+            if (!Number.isFinite(scannedAtMs) || scannedAtMs < cutoffMs) continue;
+          }
+          out.add(domain);
+        }
+        liveLog(`Skip scanned fallback from JSON report: domains=${out.size}`);
+        return out;
+      } catch (fallbackError) {
+        liveLog(
+          `Skip scanned fallback JSON parse failed: ${
+            fallbackError instanceof Error ? fallbackError.message : String(fallbackError)
+          }`
+        );
+      }
+    }
+    return new Set<string>();
+  }
+  const cutoffMs =
+    rescanAfterDays > 0 ? Date.now() - rescanAfterDays * 24 * 60 * 60 * 1000 : null;
+  const out = new Set<string>();
+  for (const row of data ?? []) {
+    const domain = String((row as { domain?: string }).domain ?? '')
+      .trim()
+      .toLowerCase();
+    if (!domain) continue;
+    if (cutoffMs != null) {
+      const scannedAtRaw = String((row as { scanned_at?: string }).scanned_at ?? '').trim();
+      const scannedAtMs = scannedAtRaw ? Date.parse(scannedAtRaw) : NaN;
+      if (!Number.isFinite(scannedAtMs) || scannedAtMs < cutoffMs) continue;
+    }
+    out.add(domain);
+  }
+  return out;
+}
+
 async function inspectDomain(
   domain: string,
   signals: SignalsConfig,
@@ -754,6 +976,7 @@ function printSummary(reports: DomainReport[]): void {
 }
 
 async function main() {
+  const startedAtIso = new Date().toISOString();
   const appendLiveLog = hasFlag('append-live-log');
   resetLiveLog(appendLiveLog);
   const inputPath = path.resolve(parseArg('input') ?? DEFAULT_INPUT);
@@ -767,7 +990,14 @@ async function main() {
   const fromSiteLimit = parseNumberArg('from-site-limit', 300);
   const discoverLimit = parseNumberArg('discover-limit', 250);
   const captchaPauseMs = parseNumberArg('captcha-pause-ms', 90_000);
-  const scanInBrowser = hasFlag('scan-in-browser');
+  /**
+   * For site-provider runs we keep browser scan on by default so the operator
+   * always sees what the scanner is doing in real time.
+   */
+  const scanInBrowser = hasFlag('scan-in-browser') || fromSite;
+  const skipScanned = hasFlag('skip-scanned');
+  const rescanAfterDaysRaw = parseNumberArg('rescan-after-days', 0);
+  const rescanAfterDays = Math.max(0, rescanAfterDaysRaw);
   const discoverQueries = parseListArg('discover-queries');
 
   const signals = loadSignals(configPath);
@@ -809,7 +1039,19 @@ async function main() {
     liveLog(`Discovered domains saved: ${OUT_DISCOVERED}`);
     allDomains = [...new Set([...allDomains, ...discovered])];
   }
-  const target = limit > 0 ? allDomains.slice(0, limit) : allDomains;
+  let target = limit > 0 ? allDomains.slice(0, limit) : allDomains;
+  if (skipScanned) {
+    const scanned = await loadRecentlyScannedDomainsFromSupabase(rescanAfterDays);
+    if (scanned.size > 0) {
+      const before = target.length;
+      target = target.filter((domain) => !scanned.has(domain));
+      liveLog(
+        `Skip scanned enabled: removed=${before - target.length}, remaining=${target.length}, scanned_cache=${scanned.size}, rescan_after_days=${rescanAfterDays}`
+      );
+    } else {
+      liveLog('Skip scanned enabled, but no scanned domains loaded from Supabase.');
+    }
+  }
 
   if (target.length === 0) {
     console.log('No domains to scan. Check input CSV.');
@@ -854,10 +1096,15 @@ async function main() {
 
   writeOutputs(reports);
   printSummary(reports);
+  await persistProviderScanResultsToSupabase(reports, startedAtIso);
+  await sendProviderDiscoveryTelegramSummary(reports);
   liveLog(`Live log saved: ${OUT_LIVE_LOG}`);
 }
 
 main().catch((error) => {
   console.error(error);
+  void sendProviderDiscoveryTelegramFailure(
+    error instanceof Error ? error.message : String(error)
+  );
   process.exit(1);
 });

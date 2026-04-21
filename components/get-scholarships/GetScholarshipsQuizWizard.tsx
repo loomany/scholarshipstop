@@ -27,6 +27,7 @@ import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholars
 import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { notifyQuizCompletionClient } from '@/lib/analytics/notifyQuizCompletionClient';
 
 function notifyDestructive(title: string, description?: string) {
   toast({
@@ -166,6 +167,12 @@ export function GetScholarshipsQuizWizard({
     saveCompletedLandingQuizDraft(base);
     stashLandingQuizDraftForOnboardingMerge(base);
     clearLandingQuizDraft();
+    void notifyQuizCompletionClient({
+      flow: 'get_scholarships_quiz',
+      landingPath: '/get-scholarships',
+      authState: 'guest',
+      onceKey: 'st_quiz_complete_get_scholarships'
+    });
     router.push(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF);
   }, [router]);
 

@@ -15,6 +15,13 @@ export type GoogleIndexingContentKind =
   | 'page';
 
 export type GoogleIndexingNotificationType = 'URL_UPDATED' | 'URL_DELETED';
+export type GoogleIndexingQuotaLane = 'immediate' | 'queue';
+export type GoogleIndexingQuotaBucket =
+  | 'scholarship'
+  | 'resource'
+  | 'provider'
+  | 'essay'
+  | 'page';
 
 /** DB + legacy API shape for queue rows */
 export type GoogleIndexingQueueItem = {
@@ -32,6 +39,12 @@ export type GoogleIndexingQueueItem = {
 
 const GOOGLE_INDEXING_ENDPOINT =
   'https://indexing.googleapis.com/v3/urlNotifications:publish';
+const NON_SCHOLARSHIP_BUCKETS: GoogleIndexingQuotaBucket[] = [
+  'resource',
+  'provider',
+  'essay',
+  'page'
+];
 
 /** Default matches GCP Indexing API quota (200 publish requests/day per project). */
 function maxPublishPerDay(): number {
@@ -40,6 +53,72 @@ function maxPublishPerDay(): number {
   const n = parseInt(raw, 10);
   if (!Number.isFinite(n) || n < 0) return 200;
   return Math.min(Math.floor(n), 50_000);
+}
+
+function parsePercent(value: string | undefined, fallback: number): number {
+  const n = Number(value ?? '');
+  if (!Number.isFinite(n)) return fallback;
+  return Math.max(0, Math.min(100, Math.floor(n)));
+}
+
+function computeLaneCaps(total: number): Record<GoogleIndexingQuotaLane, number> {
+  const immediateShare = parsePercent(
+    process.env.GOOGLE_INDEXING_IMMEDIATE_SHARE_PERCENT,
+    50
+  );
+  const immediate = Math.floor((total * immediateShare) / 100);
+  return {
+    immediate,
+    queue: Math.max(0, total - immediate)
+  };
+}
+
+function distributeEvenly(total: number, buckets: GoogleIndexingQuotaBucket[]) {
+  const out: Record<GoogleIndexingQuotaBucket, number> = {
+    scholarship: 0,
+    resource: 0,
+    provider: 0,
+    essay: 0,
+    page: 0
+  };
+  if (total <= 0 || buckets.length === 0) return out;
+  const base = Math.floor(total / buckets.length);
+  let remainder = total - base * buckets.length;
+  for (const bucket of buckets) {
+    out[bucket] = base + (remainder > 0 ? 1 : 0);
+    if (remainder > 0) remainder -= 1;
+  }
+  return out;
+}
+
+function computeBucketCapsPerLane(
+  laneCap: number
+): Record<GoogleIndexingQuotaBucket, number> {
+  const scholarshipShare = parsePercent(
+    process.env.GOOGLE_INDEXING_SCHOLARSHIP_SHARE_PERCENT,
+    80
+  );
+  const scholarshipCap = Math.floor((laneCap * scholarshipShare) / 100);
+  const remaining = Math.max(0, laneCap - scholarshipCap);
+  const distributed = distributeEvenly(remaining, NON_SCHOLARSHIP_BUCKETS);
+  return {
+    scholarship: scholarshipCap,
+    resource: distributed.resource,
+    provider: distributed.provider,
+    essay: distributed.essay,
+    page: distributed.page
+  };
+}
+
+function quotaBucketForKind(
+  kind: GoogleIndexingContentKind | GoogleIndexingQuotaBucket | null | undefined
+): GoogleIndexingQuotaBucket {
+  if (!kind) return 'page';
+  if (kind === 'scholarship') return 'scholarship';
+  if (kind === 'resource') return 'resource';
+  if (kind === 'provider') return 'provider';
+  if (kind === 'essay') return 'essay';
+  return 'page';
 }
 
 type ReserveIndexingSlotResult =
@@ -53,16 +132,46 @@ type ReserveIndexingSlotResult =
  * When SUPABASE_SERVICE_ROLE_KEY is unset, returns no_service_role so callers can still ping (local dev).
  */
 async function tryReserveIndexingPublish(
-  admin?: ReturnType<typeof createServiceRoleSupabaseClient>
+  input: {
+    lane: GoogleIndexingQuotaLane;
+    bucket: GoogleIndexingQuotaBucket;
+    admin?: ReturnType<typeof createServiceRoleSupabaseClient>;
+  }
 ): Promise<ReserveIndexingSlotResult> {
-  const client = admin ?? createServiceRoleSupabaseClient();
+  const client = input.admin ?? createServiceRoleSupabaseClient();
   if (!client) return 'no_service_role';
-  const { data, error } = await client.rpc('google_indexing_try_consume_quota', {
-    p_max: maxPublishPerDay()
+  const totalCap = maxPublishPerDay();
+  const laneCaps = computeLaneCaps(totalCap);
+  const bucketCaps = computeBucketCapsPerLane(laneCaps[input.lane]);
+  const rpcUntyped = client.rpc as unknown as (
+    fn: string,
+    args: Record<string, unknown>
+  ) => Promise<{ data: boolean | null; error: { message: string } | null }>;
+  const { data, error } = await rpcUntyped('google_indexing_try_consume_quota_bucket', {
+    p_lane: input.lane,
+    p_bucket: input.bucket,
+    p_max_total: totalCap,
+    p_max_lane: laneCaps[input.lane],
+    p_max_bucket: bucketCaps[input.bucket]
   });
   if (error) {
-    console.error('[google-indexing] quota RPC', error.message);
-    return 'rpc_error';
+    const { data: fallbackData, error: fallbackError } = await client.rpc(
+      'google_indexing_try_consume_quota',
+      {
+        p_max: totalCap
+      }
+    );
+    if (fallbackError) {
+      console.error(
+        '[google-indexing] quota RPC',
+        error.message,
+        '| fallback:',
+        fallbackError.message
+      );
+      return 'rpc_error';
+    }
+    if (fallbackData === true) return 'ok';
+    return 'quota_exhausted';
   }
   if (data === true) return 'ok';
   return 'quota_exhausted';
@@ -151,7 +260,8 @@ export type PingGoogleIndexingDirectResult =
  */
 export async function pingGoogleIndexingDirect(
   url: string,
-  notificationType: GoogleIndexingNotificationType = 'URL_UPDATED'
+  notificationType: GoogleIndexingNotificationType = 'URL_UPDATED',
+  kind?: GoogleIndexingContentKind
 ): Promise<PingGoogleIndexingDirectResult> {
   const normalized = normalizeIndexingUrl(url);
   if (!normalized) {
@@ -168,9 +278,17 @@ export async function pingGoogleIndexingDirect(
       return { ok: false, skipped: 'missing_credentials' };
     }
 
-    const slot = await tryReserveIndexingPublish();
+    const inferredKind = kind ?? inferGoogleIndexingKindFromUrl(normalized);
+    const slot = await tryReserveIndexingPublish({
+      lane: 'immediate',
+      bucket: quotaBucketForKind(inferredKind)
+    });
     if (slot === 'quota_exhausted') {
-      await deferIndexingUrlWhenQuotaDeferred(normalized, notificationType);
+      await deferIndexingUrlWhenQuotaDeferred(
+        normalized,
+        notificationType,
+        inferredKind
+      );
       console.warn(
         `[google-indexing-direct] daily publish cap (${maxPublishPerDay()}/day) — URL queued, API not called`
       );
@@ -497,7 +615,11 @@ export async function submitUrlsForImmediateIndexing(input: {
   }
 
   for (const url of input.urls) {
-    const ping = await pingGoogleIndexingDirect(url, input.notificationType);
+    const ping = await pingGoogleIndexingDirect(
+      url,
+      input.notificationType,
+      input.kind
+    );
     const normalized = normalizeIndexingUrl(url);
     if (normalized && ping.ok) {
       await markGoogleIndexingUrlsProcessed([normalized]);
@@ -516,9 +638,10 @@ export async function submitUrlsForImmediateIndexing(input: {
 
 async function deferIndexingUrlWhenQuotaDeferred(
   normalizedUrl: string,
-  notificationType: GoogleIndexingNotificationType
+  notificationType: GoogleIndexingNotificationType,
+  kindHint?: GoogleIndexingContentKind | null
 ): Promise<void> {
-  const kind = inferGoogleIndexingKindFromUrl(normalizedUrl);
+  const kind = kindHint ?? inferGoogleIndexingKindFromUrl(normalizedUrl);
   if (!kind) return;
   try {
     await enqueueGoogleIndexingUrls({
@@ -548,8 +671,9 @@ export async function flushGoogleIndexingQueue(limit = 50) {
 
   const { data: pending, error: selErr } = await admin
     .from('google_indexing_queue')
-    .select('id, url, notification_type, attempt_count')
+    .select('id, url, notification_type, attempt_count, content_kind')
     .eq('status', 'pending')
+    .or('lane.is.null,lane.eq.queue')
     .order('added_at', { ascending: true })
     .limit(cap);
 
@@ -599,7 +723,14 @@ export async function flushGoogleIndexingQueue(limit = 50) {
 
   for (const row of batch) {
     const notificationType = row.notification_type as GoogleIndexingNotificationType;
-    const slot = await tryReserveIndexingPublish(admin);
+    const slot = await tryReserveIndexingPublish({
+      lane: 'queue',
+      bucket: quotaBucketForKind(
+        (row.content_kind as GoogleIndexingContentKind | null) ??
+          inferGoogleIndexingKindFromUrl(row.url)
+      ),
+      admin
+    });
     if (slot === 'quota_exhausted') {
       console.warn(
         `[google-indexing-queue] daily publish cap (${maxPublishPerDay()}/day) — leaving remaining rows pending`

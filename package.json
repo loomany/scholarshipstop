@@ -77,6 +77,7 @@
     "seo:refresh-university-compare-sources": "dotenv -e .env.local -- npx tsx scripts/refresh-university-compare-sources.ts",
     "seo:refresh-state-compare-pages": "dotenv -e .env.local -- npx tsx scripts/refresh-state-compare-pages.ts",
     "seo:daily-digest-telegram": "dotenv -e .env.local -- node scripts/post-seo-daily-digest-telegram.mjs",
+    "providers:telegram-report": "dotenv -e .env.local -- npx tsx scripts/send-provider-discovery-telegram-report.ts",
     "cron:check-index-worker": "npx tsx scripts/cron-check-index-worker.ts",
     "cron:scan-indexing": "npx tsx scripts/cron-scan-indexing.ts",
     "cron:google-indexing-flush": "dotenv -e .env.local -- npx tsx scripts/cron-google-indexing-flush.ts",

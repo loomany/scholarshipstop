@@ -117,7 +117,7 @@ task_google_indexing_flush() {
   require_env GOOGLE_INDEXING_CLIENT_EMAIL
   require_env GOOGLE_INDEXING_PRIVATE_KEY
   require_npm_or_exit || return 0
-  export GOOGLE_INDEXING_FLUSH_LIMIT="${GOOGLE_INDEXING_FLUSH_LIMIT:-200}"
+  export GOOGLE_INDEXING_FLUSH_LIMIT="${GOOGLE_INDEXING_FLUSH_LIMIT:-100}"
   run_tsx_cron "cron-google-indexing-flush" "scripts/cron-google-indexing-flush.ts"
 }
 
