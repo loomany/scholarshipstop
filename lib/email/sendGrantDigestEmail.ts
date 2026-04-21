@@ -58,6 +58,15 @@ function buildGrantListRowHtml(
     categoryId === 'hot_deadlines'
       ? `<span style="display:block;margin-top:4px;font-size:12px;line-height:1.4;color:#a7f3d0;">Deadline: ${escapeHtml(formatDeadlineLabel(s.deadline))}</span>`
       : '';
+  const matchPercentRaw = s.profileMatchPercent;
+  const matchPercent =
+    typeof matchPercentRaw === 'number' && Number.isFinite(matchPercentRaw)
+      ? Math.max(0, Math.min(100, Math.round(matchPercentRaw)))
+      : null;
+  const matchLabel =
+    matchPercent != null
+      ? `<span style="display:block;margin-top:4px;font-size:12px;line-height:1.35;color:#9ca3af;">${escapeHtml(String(matchPercent))}% match</span>`
+      : '';
 
   return `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 10px;">
@@ -73,6 +82,7 @@ function buildGrantListRowHtml(
           </td>
           <td valign="top" align="right" style="white-space:nowrap;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:700;color:#34d399;">
             ${amount}
+            ${matchLabel}
           </td>
         </tr>
       </table>

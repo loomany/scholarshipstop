@@ -22,6 +22,8 @@ import {
 import { mapScholarshipRow, type ScholarshipRow } from '@/lib/scholarships/supabase';
 import { userHasSavedScholarship } from '@/lib/account/userSavedScholarships';
 import { grantNotifyTelegramCardCategoryLabel } from '@/lib/notifications/grantNotificationPrefs';
+import { createGrantDigestToken } from '@/lib/notifications/grantDigestToken';
+import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { sendScholarshipTelegramCardToChat } from '@/lib/telegram/scholarshipTelegramCard';
 
@@ -46,15 +48,7 @@ const GRANT_DIGEST_EMAIL_MAX_ITEMS = Math.max(
   Number(process.env.GRANT_DIGEST_EMAIL_MAX_ITEMS?.trim() || '4')
 );
 
-const CHANNEL_LABEL: Record<ChannelId, string> = {
-  best: 'Best recommendation',
-  saved_filters: 'Saved Filters',
-  easy_apply: 'Easy apply',
-  hot_deadlines: 'Hot Deadlines'
-};
-
-const EMAIL_CHANNEL_ORDER: ChannelId[] = ['best', 'easy_apply', 'hot_deadlines', 'saved_filters'];
-const MAX_EMAIL_ITEMS_PER_TOPIC = 4;
+const EMAIL_DIGEST_MIN_MATCH_PERCENT = 50;
 
 function channelProfileColumn(c: ChannelId): keyof ProfileRow {
   switch (c) {
@@ -137,18 +131,10 @@ async function userHasRecentEmailDelivery(
   return Array.isArray(data) && data.length > 0;
 }
 
-function viewAllUrlForChannel(origin: string, channel: ChannelId): string {
-  const base = origin.replace(/\/+$/, '');
-  switch (channel) {
-    case 'best':
-      return `${base}/scholarships?tab=best-recommendation`;
-    case 'easy_apply':
-      return `${base}/scholarships?tab=easy-apply`;
-    case 'hot_deadlines':
-      return `${base}/scholarships?tab=hot-deadlines`;
-    case 'saved_filters':
-      return `${base}/scholarships?tab=recommended`;
-  }
+function scoreForEmailOrdering(s: Scholarship): number {
+  const match = typeof s.profileMatchPercent === 'number' ? s.profileMatchPercent : 0;
+  const updatedAtMs = s.updatedAt ? Date.parse(s.updatedAt) : 0;
+  return match * 100_000_000 + (Number.isFinite(updatedAtMs) ? updatedAtMs : 0);
 }
 
 export async function profileMatchesBest(
@@ -231,6 +217,9 @@ export type GrantNotificationDispatchResult = {
     emailSkippedCooldownUsers: number;
     emailDigestAttempts: number;
     emailDigestFailed: number;
+    freshSelected: number;
+    tailSelected: number;
+    fallbackUsers: number;
   };
   message?: string;
 };
@@ -349,6 +338,9 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   let emailSkippedCooldownUsers = 0;
   let emailDigestAttempts = 0;
   let emailDigestFailed = 0;
+  let freshSelected = 0;
+  let tailSelected = 0;
+  let fallbackUsers = 0;
 
   const channels: ChannelId[] = ['best', 'saved_filters', 'easy_apply', 'hot_deadlines'];
   const savedGrantByUserScholarship = new Map<string, boolean>();
@@ -360,8 +352,26 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     firstName: string | null;
   };
   const pendingEmailByUser = new Map<string, PendingEmailLine[]>();
+  const scoredScholarshipCache = new Map<string, Map<string, Scholarship>>();
   const publicOrigin =
     process.env.NEXT_PUBLIC_SITE_URL?.trim()?.replace(/\/+$/, '') || 'https://scholarshiptop.com';
+
+  function getScoredScholarshipForUser(
+    profile: ProfileRow,
+    scholarship: Scholarship
+  ): Scholarship {
+    let userCache = scoredScholarshipCache.get(profile.id);
+    if (!userCache) {
+      userCache = new Map<string, Scholarship>();
+      scoredScholarshipCache.set(profile.id, userCache);
+    }
+    const cached = userCache.get(scholarship.id);
+    if (cached) return cached;
+    const scored =
+      applyProfileMatchPercentToScholarships([scholarship], profile)[0] ?? scholarship;
+    userCache.set(scholarship.id, scored);
+    return scored;
+  }
 
   console.log(
     '[grant-notify] config',
@@ -467,7 +477,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
             }
             lines.push({
               scholarshipId: sid,
-              scholarship: s,
+              scholarship: getScoredScholarshipForUser(profile, s),
               channel: ch,
               firstName: profile.first_name ?? null
             });
@@ -501,6 +511,40 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     if (cappedOps) break;
   }
 
+  for (const profile of profiles) {
+    const uid = profile.id;
+    const hasAnyEmailChannel =
+      Boolean(profile.email_notify_best_matches) ||
+      Boolean(profile.email_notify_saved_filters) ||
+      Boolean(profile.email_notify_easy_apply) ||
+      Boolean(profile.email_notify_hot_deadlines);
+    if (!hasAnyEmailChannel) continue;
+    const existing = pendingEmailByUser.get(uid);
+    if (existing && existing.length > 0) continue;
+
+    const fallbackLines: PendingEmailLine[] = applyProfileMatchPercentToScholarships(
+      scholarships,
+      profile
+    )
+      .filter((s) => {
+        const p = typeof s.profileMatchPercent === 'number' ? s.profileMatchPercent : 0;
+        return p >= EMAIL_DIGEST_MIN_MATCH_PERCENT;
+      })
+      .sort((a, b) => scoreForEmailOrdering(b) - scoreForEmailOrdering(a))
+      .slice(0, Math.max(12, GRANT_DIGEST_EMAIL_MAX_ITEMS))
+      .map((s) => ({
+        scholarshipId: s.id,
+        scholarship: s,
+        channel: 'best' as const,
+        firstName: profile.first_name ?? null
+      }));
+
+    if (fallbackLines.length > 0) {
+      pendingEmailByUser.set(uid, fallbackLines);
+      fallbackUsers += 1;
+    }
+  }
+
   for (const [uid, lines] of pendingEmailByUser) {
     const email = await getEmail(uid);
     if (!email) continue;
@@ -509,37 +553,66 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       continue;
     }
 
-    const categories: GrantDigestCategory[] = EMAIL_CHANNEL_ORDER.map((channel) => {
-      const categoryLines = lines.filter((line) => line.channel === channel);
-      return {
-        id: channel,
-        label: CHANNEL_LABEL[channel],
-        totalCount: categoryLines.length,
-        viewAllUrl: viewAllUrlForChannel(publicOrigin, channel),
-        items: categoryLines.slice(0, MAX_EMAIL_ITEMS_PER_TOPIC).map((line) => line.scholarship)
-      };
-    }).filter((c) => c.totalCount > 0 && c.items.length > 0);
+    const historySinceIso = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const { data: recentHistoryRows } = await admin
+      .from('grant_notification_deliveries')
+      .select('scholarship_id')
+      .eq('user_id', uid)
+      .eq('medium', 'email')
+      .gte('created_at', historySinceIso);
+    const seenScholarshipIds = new Set(
+      (recentHistoryRows ?? []).map((row) => row.scholarship_id)
+    );
 
-    if (categories.length === 0) {
-      const fallbackLines = lines.slice(0, GRANT_DIGEST_EMAIL_MAX_ITEMS);
-      if (fallbackLines.length === 0) continue;
-      categories.push({
-        id: 'best',
-        label: 'Matches',
-        totalCount: fallbackLines.length,
-        viewAllUrl: `${publicOrigin}/scholarships`,
-        items: fallbackLines.map((line) => line.scholarship)
-      });
+    const byScholarship = new Map<string, PendingEmailLine>();
+    for (const line of lines) {
+      const prev = byScholarship.get(line.scholarshipId);
+      if (!prev || scoreForEmailOrdering(line.scholarship) > scoreForEmailOrdering(prev.scholarship)) {
+        byScholarship.set(line.scholarshipId, line);
+      }
     }
+    const uniqueLines = Array.from(byScholarship.values());
+    if (uniqueLines.length === 0) continue;
+    const fresh = uniqueLines
+      .filter((line) => !seenScholarshipIds.has(line.scholarshipId))
+      .sort((a, b) => scoreForEmailOrdering(b.scholarship) - scoreForEmailOrdering(a.scholarship));
+    const tail = uniqueLines
+      .filter((line) => seenScholarshipIds.has(line.scholarshipId))
+      .sort((a, b) => scoreForEmailOrdering(b.scholarship) - scoreForEmailOrdering(a.scholarship));
+
+    const selectedLines = [...fresh.slice(0, GRANT_DIGEST_EMAIL_MAX_ITEMS)];
+    if (selectedLines.length < GRANT_DIGEST_EMAIL_MAX_ITEMS) {
+      selectedLines.push(...tail.slice(0, GRANT_DIGEST_EMAIL_MAX_ITEMS - selectedLines.length));
+    }
+    if (selectedLines.length === 0) continue;
+
+    freshSelected += Math.min(fresh.length, GRANT_DIGEST_EMAIL_MAX_ITEMS);
+    tailSelected += Math.max(0, selectedLines.length - Math.min(fresh.length, GRANT_DIGEST_EMAIL_MAX_ITEMS));
+
+    const rankedIds = [...fresh, ...tail].map((line) => line.scholarshipId);
+    const token = createGrantDigestToken(rankedIds);
+    const digestViewAllUrl = token
+      ? `${publicOrigin}/scholarships/email-digest/${encodeURIComponent(token)}`
+      : `${publicOrigin}/scholarships?tab=best-recommendation&scope=catalog&sort=best_recommendation`;
+
+    const categories: GrantDigestCategory[] = [
+      {
+        id: 'best',
+        label: 'Best recommendation',
+        totalCount: rankedIds.length,
+        viewAllUrl: digestViewAllUrl,
+        items: selectedLines.map((line) => line.scholarship)
+      }
+    ];
 
     emailDigestAttempts += 1;
     const r = await sendGrantDigestBatchEmail({
       toEmail: email,
       categories,
-      firstName: lines[0]?.firstName ?? null
+      firstName: selectedLines[0]?.firstName ?? null
     });
     if (r.ok) {
-      for (const line of lines) {
+      for (const line of selectedLines) {
         await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
         emailSent += 1;
       }
@@ -580,6 +653,9 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       telegramCandidates,
       emailDigestAttempts,
       emailSkippedCooldownUsers,
+      freshSelected,
+      tailSelected,
+      fallbackUsers,
       emailSent,
       telegramSent,
       skippedDup,
@@ -606,7 +682,10 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       telegramCandidates,
       emailSkippedCooldownUsers,
       emailDigestAttempts,
-      emailDigestFailed
+      emailDigestFailed,
+      freshSelected,
+      tailSelected,
+      fallbackUsers
     }
   };
 }
