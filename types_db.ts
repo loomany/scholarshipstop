@@ -733,6 +733,7 @@ export interface Database {
           email_notify_hot_deadlines: boolean
           email_notify_saved_filters: boolean
           saved_filters_snapshot: Json | null
+          saved_filter_presets: Json | null
           field_of_study: string | null
           field_of_study_label: string | null
           first_name: string | null
@@ -773,6 +774,7 @@ export interface Database {
           email_notify_hot_deadlines?: boolean
           email_notify_saved_filters?: boolean
           saved_filters_snapshot?: Json | null
+          saved_filter_presets?: Json | null
           field_of_study?: string | null
           field_of_study_label?: string | null
           first_name?: string | null
@@ -813,6 +815,7 @@ export interface Database {
           email_notify_hot_deadlines?: boolean
           email_notify_saved_filters?: boolean
           saved_filters_snapshot?: Json | null
+          saved_filter_presets?: Json | null
           field_of_study?: string | null
           field_of_study_label?: string | null
           first_name?: string | null

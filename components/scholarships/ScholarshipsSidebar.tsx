@@ -140,6 +140,7 @@ function resolveActiveTabId(
   if (!isScholarshipListPath(pathname)) return null;
 
   const raw = searchParams?.get('tab') ?? null;
+  if (raw === 'from-email') return null;
   return guestMode
     ? parseHubScholarshipTabParamForGuest(raw)
     : parseHubScholarshipTabParam(raw);

@@ -22,10 +22,14 @@ import BestRecommendationWizard from '@/components/scholarships/BestRecommendati
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
-import ScholarshipsMoreFiltersPanel from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
+import ScholarshipsMoreFiltersPanel, {
+  type ScholarshipsMoreFiltersContextNotice
+} from '@/components/scholarships/ScholarshipsMoreFiltersPanel';
 import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagination';
 import ScholarshipsSidebar from '@/components/scholarships/ScholarshipsSidebar';
 import ScholarshipsTwoColumnLayout from '@/components/scholarships/ScholarshipsTwoColumnLayout';
+import ManageSavedFilterPresetModal from '@/components/scholarships/ManageSavedFilterPresetModal';
+import SaveFilterPresetModal from '@/components/scholarships/SaveFilterPresetModal';
 import { ScholarshipsEmailConfirmationBanner } from '@/components/scholarships/ScholarshipsEmailConfirmationBanner';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
@@ -49,6 +53,13 @@ import {
   type MoreFiltersState
 } from './moreFilters';
 import {
+  type SavedFilterPreset,
+  readSavedFilterPresetsFromStorage,
+  writeSavedFilterPresetsToStorage,
+  upsertSavedFilterPresetInStorage,
+  SAVED_FILTER_PRESETS_STORAGE_KEY,
+  readSavedFilterPresetsAccountMigratedFlag,
+  markSavedFilterPresetsAccountMigrated,
   readSavedFiltersFromStorage,
   SAVED_FILTERS_STORAGE_KEY
 } from '@/lib/scholarships/savedFiltersStorage';
@@ -164,6 +175,19 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 
+function parseIdCsv(raw: string | null): string[] {
+  if (!raw?.trim()) return [];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const part of raw.split(',')) {
+    const id = part.trim();
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    out.push(id);
+  }
+  return out;
+}
+
 function buildHubListingSearchParams(options: {
   base: URLSearchParams;
   page: number;
@@ -260,6 +284,10 @@ function ScholarshipsPageInner({
     () => parseScholarshipListUrl(new URLSearchParams(searchParamsString)),
     [searchParamsString]
   );
+  const fromEmailIds = useMemo(
+    () => parseIdCsv(new URLSearchParams(searchParamsString).get('email_ids')),
+    [searchParamsString]
+  );
   const sortBy = parsedList.sort;
   const appliedCategoryIds = parsedList.categories;
   const catalogListScope = 'catalog' as const;
@@ -279,6 +307,15 @@ function ScholarshipsPageInner({
   /** Best tab: avoid one frame of guest UI before we know the session (prevents card ↔ locks flicker). */
   const bestTabAuthPending =
     activeTab === 'best-recommendation' && !authResolved;
+
+  const isAuthenticatedRef = useRef(isAuthenticated);
+  const authResolvedRef = useRef(authResolved);
+  useEffect(() => {
+    isAuthenticatedRef.current = isAuthenticated;
+  }, [isAuthenticated]);
+  useEffect(() => {
+    authResolvedRef.current = authResolved;
+  }, [authResolved]);
 
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [scholarships, setScholarships] = useState<Scholarship[]>(
@@ -576,13 +613,13 @@ function ScholarshipsPageInner({
   listMetaRef.current = listMeta;
 
   const userListIdsRef = useRef({
-    saved: savedIds,
+    saved: activeTab === 'from-email' ? fromEmailIds : savedIds,
     ignored: ignoredIds,
     started: startedIds,
     submitted: submittedIds
   });
   userListIdsRef.current = {
-    saved: savedIds,
+    saved: activeTab === 'from-email' ? fromEmailIds : savedIds,
     ignored: ignoredIds,
     started: startedIds,
     submitted: submittedIds
@@ -610,6 +647,17 @@ function ScholarshipsPageInner({
       });
     }
   }, [searchParams, replaceListingParams]);
+
+  /** From email tab works only with explicit ids from digest token landing URL. */
+  useEffect(() => {
+    if (activeTab !== 'from-email') return;
+    if (fromEmailIds.length > 0) return;
+    replaceListingParams({
+      tab: 'saved',
+      scope: 'catalog',
+      resetPage: true
+    });
+  }, [activeTab, fromEmailIds.length, replaceListingParams]);
 
   /**
    * International-friendly audience is a dedicated Matches scope in the hub URL model.
@@ -789,20 +837,180 @@ function ScholarshipsPageInner({
   }, [replaceListingParams]);
 
   const [savedFiltersRevision, setSavedFiltersRevision] = useState(0);
+  const [savedFilterPresetsRevision, setSavedFilterPresetsRevision] = useState(0);
+  const [savedFilterPresets, setSavedFilterPresets] = useState<SavedFilterPreset[]>([]);
+  const [activeSavedFilterPresetId, setActiveSavedFilterPresetId] = useState<string | null>(null);
+  const [recommendedAppliedFilters, setRecommendedAppliedFilters] =
+    useState<MoreFiltersState | null>(null);
+  const [isSavePresetModalOpen, setIsSavePresetModalOpen] = useState(false);
+  const [presetNameDraft, setPresetNameDraft] = useState('My filter');
+  const [presetNameError, setPresetNameError] = useState<string | null>(null);
+  const [pendingPresetFilters, setPendingPresetFilters] =
+    useState<MoreFiltersState | null>(null);
+  const [managedPresetId, setManagedPresetId] = useState<string | null>(null);
+  const [managePresetNameDraft, setManagePresetNameDraft] = useState('');
+  const [managePresetError, setManagePresetError] = useState<string | null>(null);
   const serverSavedFiltersForHub = useMemo(() => {
     if (!isAuthenticated) return null;
     if (!listMeta?.savedFiltersSnapshotJson) return null;
     return moreFiltersFromJson(listMeta.savedFiltersSnapshotJson, filterBounds);
   }, [isAuthenticated, listMeta?.savedFiltersSnapshotJson, filterBounds]);
   const savedFiltersForHub = useMemo(() => {
+    if (recommendedAppliedFilters) return recommendedAppliedFilters;
     if (isAuthenticated) return serverSavedFiltersForHub;
     return readSavedFiltersFromStorage(filterBounds);
-  }, [filterBounds, isAuthenticated, savedFiltersRevision, serverSavedFiltersForHub]);
+  }, [
+    filterBounds,
+    isAuthenticated,
+    savedFiltersRevision,
+    serverSavedFiltersForHub,
+    recommendedAppliedFilters
+  ]);
+
+  const syncSavedFilterPresetsToAccount = useCallback(
+    async (payload: { activePresetId: string | null; presets: SavedFilterPreset[] }) => {
+      if (!isAuthenticated || !authResolved) return;
+      try {
+        await fetch('/api/account/saved-filter-presets', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch {
+        // ignore: offline / transient errors; local cache still applies
+      }
+    },
+    [isAuthenticated, authResolved]
+  );
+
+  const commitSavedFilterPresets = useCallback(
+    (
+      payload: { activePresetId: string | null; presets: SavedFilterPreset[] },
+      options?: { applyActiveToRecommended?: boolean }
+    ) => {
+      const applyActiveToRecommended = options?.applyActiveToRecommended !== false;
+      writeSavedFilterPresetsToStorage(payload);
+      setSavedFilterPresets(payload.presets);
+      setActiveSavedFilterPresetId(payload.activePresetId);
+      if (applyActiveToRecommended) {
+        if (payload.activePresetId) {
+          const active = payload.presets.find((p) => p.id === payload.activePresetId);
+          if (active) {
+            setRecommendedAppliedFilters(moreFiltersFromJson(active.snapshot, filterBounds));
+          } else {
+            setRecommendedAppliedFilters(null);
+          }
+        } else {
+          setRecommendedAppliedFilters(null);
+        }
+      }
+      void syncSavedFilterPresetsToAccount(payload);
+    },
+    [filterBounds, syncSavedFilterPresetsToAccount]
+  );
+
+  useEffect(() => {
+    if (!authResolved) return;
+    if (isAuthenticated) return;
+    const payload = readSavedFilterPresetsFromStorage();
+    setSavedFilterPresets(payload.presets);
+    setActiveSavedFilterPresetId(payload.activePresetId);
+    if (payload.activePresetId) {
+      const active = payload.presets.find((p) => p.id === payload.activePresetId);
+      if (active) {
+        setRecommendedAppliedFilters(moreFiltersFromJson(active.snapshot, filterBounds));
+        return;
+      }
+    }
+    setRecommendedAppliedFilters(null);
+  }, [authResolved, isAuthenticated, filterBounds, savedFilterPresetsRevision]);
+
+  useEffect(() => {
+    if (!authResolved || !isAuthenticated) return;
+    let cancelled = false;
+
+    const run = async () => {
+      try {
+        const res = await fetch('/api/account/saved-filter-presets', { method: 'GET' });
+        if (!res.ok) return;
+        const remote = (await res.json()) as {
+          activePresetId?: string | null;
+          presets?: SavedFilterPreset[];
+        };
+        if (cancelled) return;
+
+        const remotePresets = Array.isArray(remote.presets) ? remote.presets : [];
+        const remoteActive =
+          typeof remote.activePresetId === 'string' && remote.activePresetId
+            ? remote.activePresetId
+            : null;
+        const remoteNormalized = {
+          presets: remotePresets,
+          activePresetId:
+            remoteActive && remotePresets.some((p) => p.id === remoteActive) ? remoteActive : null
+        };
+
+        const local = readSavedFilterPresetsFromStorage();
+        const localHasPresets = local.presets.length > 0;
+        const remoteEmpty = remoteNormalized.presets.length === 0;
+        const shouldMigrate =
+          remoteEmpty &&
+          localHasPresets &&
+          !readSavedFilterPresetsAccountMigratedFlag();
+
+        let next = remoteNormalized;
+        if (shouldMigrate) {
+          try {
+            const putRes = await fetch('/api/account/saved-filter-presets', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(local)
+            });
+            if (putRes.ok) {
+              markSavedFilterPresetsAccountMigrated();
+              next = local;
+            }
+          } catch {
+            // ignore: keep remoteNormalized
+          }
+        }
+
+        writeSavedFilterPresetsToStorage(next);
+        setSavedFilterPresets(next.presets);
+        setActiveSavedFilterPresetId(next.activePresetId);
+        if (next.activePresetId) {
+          const active = next.presets.find((p) => p.id === next.activePresetId);
+          if (active) {
+            setRecommendedAppliedFilters(moreFiltersFromJson(active.snapshot, filterBounds));
+            return;
+          }
+        }
+        setRecommendedAppliedFilters(null);
+      } catch {
+        if (!cancelled) {
+          const payload = readSavedFilterPresetsFromStorage();
+          setSavedFilterPresets(payload.presets);
+          setActiveSavedFilterPresetId(payload.activePresetId);
+        }
+      }
+    };
+
+    void run();
+    return () => {
+      cancelled = true;
+    };
+  }, [authResolved, isAuthenticated, filterBounds]);
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key === SAVED_FILTERS_STORAGE_KEY || e.key === null) {
         setSavedFiltersRevision((n) => n + 1);
+      }
+      if (e.key === SAVED_FILTER_PRESETS_STORAGE_KEY || e.key === null) {
+        // Signed-in users sync presets from Supabase; avoid re-triggering guest hydration loops.
+        if (!isAuthenticatedRef.current || !authResolvedRef.current) {
+          setSavedFilterPresetsRevision((n) => n + 1);
+        }
       }
     };
     window.addEventListener('storage', onStorage);
@@ -849,7 +1057,9 @@ function ScholarshipsPageInner({
     activeTab,
     listMeta?.profileFilterSeed,
     transientBestRecommendationProfileSeed,
-    filterBounds
+    filterBounds,
+    savedFiltersForHub,
+    routeBaseMoreFilters
   ]);
 
   useEffect(() => {
@@ -1029,12 +1239,13 @@ function ScholarshipsPageInner({
       routeBaseMoreFilters != null
         ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersDraft)
         : cloneMoreFilters(moreFiltersDraft);
-    return countMoreFilterSelections(merged, filterBounds) > 0;
+    return countMoreFilterSelections(merged, filterBounds) > 0 || activeTab === 'recommended';
   }, [
     moreFiltersDraft,
     isAuthenticated,
     routeBaseMoreFilters,
-    filterBounds
+    filterBounds,
+    activeTab
   ]);
 
   const saveMoreFiltersPreset = useCallback(() => {
@@ -1047,7 +1258,61 @@ function ScholarshipsPageInner({
       routeBaseMoreFilters != null
         ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersDraft)
         : cloneMoreFilters(moreFiltersDraft);
-    const mergedJson = moreFiltersToJson(merged);
+    const mergedSelectionCount = countMoreFilterSelections(merged, filterBounds);
+    if (mergedSelectionCount <= 0) {
+      setRecommendedAppliedFilters(null);
+      commitSavedFilterPresets(
+        { presets: savedFilterPresets, activePresetId: null },
+        { applyActiveToRecommended: false }
+      );
+      setMoreFiltersOpen(false);
+      toast({
+        title: 'Add at least one filter',
+        description: 'Saved Filters stays at 0 until at least one criterion is selected.'
+      });
+      return;
+    }
+    setPendingPresetFilters(cloneMoreFilters(merged));
+    setPresetNameError(null);
+    setPresetNameDraft('My filter');
+    setIsSavePresetModalOpen(true);
+  }, [
+    hasSubscription,
+    moreFiltersDraft,
+    saveFilterEnabled,
+    routeBaseMoreFilters,
+    openRegistrationWall,
+    activeTab,
+    filterBounds,
+    savedFilterPresets,
+    commitSavedFilterPresets
+  ]);
+
+  const closeSavePresetModal = useCallback(() => {
+    setIsSavePresetModalOpen(false);
+    setPresetNameError(null);
+    setPendingPresetFilters(null);
+  }, []);
+
+  const submitSavePresetModal = useCallback(() => {
+    if (!pendingPresetFilters) return;
+    const presetName = presetNameDraft.trim();
+    if (!presetName) {
+      setPresetNameError('Preset name is required.');
+      return;
+    }
+    if (presetName.length > 64) {
+      setPresetNameError('Preset name must be 64 characters or fewer.');
+      return;
+    }
+    setPresetNameError(null);
+    const mergedJson = moreFiltersToJson(pendingPresetFilters);
+    const nextPresetsPayload = upsertSavedFilterPresetInStorage(
+      presetName,
+      pendingPresetFilters
+    );
+    commitSavedFilterPresets(nextPresetsPayload, { applyActiveToRecommended: false });
+    setRecommendedAppliedFilters(cloneMoreFilters(pendingPresetFilters));
     setListMeta((prev) =>
       prev
         ? {
@@ -1061,15 +1326,16 @@ function ScholarshipsPageInner({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ snapshot: mergedJson })
     }).catch(() => {});
-    setSavedFiltersRevision((n) => n + 1);
-    setMoreFiltersApplied(cloneMoreFilters(merged));
+    setMoreFiltersApplied(cloneMoreFilters(pendingPresetFilters));
     replaceListingParams({
       tab: 'recommended',
-      deadline: merged.deadlinePreset,
-      audience: merged.citizenshipAudience,
+      deadline: pendingPresetFilters.deadlinePreset,
+      audience: pendingPresetFilters.citizenshipAudience,
       resetPage: true
     });
     setMoreFiltersOpen(false);
+    setIsSavePresetModalOpen(false);
+    setPendingPresetFilters(null);
 
     const approxCount = previewCount ?? lastKnownPreviewCount;
     const countPhrase =
@@ -1078,21 +1344,170 @@ function ScholarshipsPageInner({
         : '';
     toast({
       title: 'Filter saved',
-      description: `Your criteria are stored in Saved Filters${countPhrase} under My scholarships. Open that tab anytime to browse scholarships that match this preset.`
+      description: `Saved as "${presetName}"${countPhrase}. Open Saved Filters to run this preset anytime.`
     });
   }, [
-    hasSubscription,
-    moreFiltersDraft,
-    saveFilterEnabled,
-    routeBaseMoreFilters,
-    openRegistrationWall,
-    replaceListingParams,
+    pendingPresetFilters,
+    presetNameDraft,
     previewCount,
-    lastKnownPreviewCount
+    lastKnownPreviewCount,
+    replaceListingParams,
+    commitSavedFilterPresets
+  ]);
+
+  const applySavedFilterPreset = useCallback(
+    (presetId: string) => {
+      const preset = savedFilterPresets.find((p) => p.id === presetId);
+      if (!preset) return;
+      const nextState = moreFiltersFromJson(preset.snapshot, filterBounds);
+      setRecommendedAppliedFilters(cloneMoreFilters(nextState));
+      setMoreFiltersApplied(cloneMoreFilters(nextState));
+      commitSavedFilterPresets(
+        { presets: savedFilterPresets, activePresetId: preset.id },
+        { applyActiveToRecommended: false }
+      );
+      replaceListingParams({
+        tab: 'recommended',
+        deadline: nextState.deadlinePreset,
+        audience: nextState.citizenshipAudience,
+        resetPage: true
+      });
+    },
+    [savedFilterPresets, filterBounds, replaceListingParams, commitSavedFilterPresets]
+  );
+
+  const openManageSavedFilterPreset = useCallback(
+    (presetId: string) => {
+      const preset = savedFilterPresets.find((p) => p.id === presetId);
+      if (!preset) return;
+      setManagedPresetId(preset.id);
+      setManagePresetNameDraft(preset.name);
+      setManagePresetError(null);
+    },
+    [savedFilterPresets]
+  );
+
+  const closeManageSavedFilterPreset = useCallback(() => {
+    setManagedPresetId(null);
+    setManagePresetNameDraft('');
+    setManagePresetError(null);
+  }, []);
+
+  const applyManagedSavedFilterPreset = useCallback(() => {
+    if (!managedPresetId) return;
+    const nextName = managePresetNameDraft.trim();
+    if (!nextName) {
+      setManagePresetError('Preset name is required.');
+      return;
+    }
+    if (nextName.length > 64) {
+      setManagePresetError('Preset name must be 64 characters or fewer.');
+      return;
+    }
+    const nextPresets = savedFilterPresets.map((preset) => {
+      if (preset.id !== managedPresetId) return preset;
+      if (preset.name === nextName) return preset;
+      return {
+        ...preset,
+        name: nextName,
+        updatedAt: new Date().toISOString()
+      };
+    });
+    const targetPreset = nextPresets.find((preset) => preset.id === managedPresetId);
+    if (!targetPreset) {
+      setManagePresetError('Preset not found.');
+      return;
+    }
+    commitSavedFilterPresets(
+      { presets: nextPresets, activePresetId: managedPresetId },
+      { applyActiveToRecommended: false }
+    );
+    setManagePresetError(null);
+    const nextState = moreFiltersFromJson(targetPreset.snapshot, filterBounds);
+    setRecommendedAppliedFilters(cloneMoreFilters(nextState));
+    setMoreFiltersApplied(cloneMoreFilters(nextState));
+    replaceListingParams({
+      tab: 'recommended',
+      deadline: nextState.deadlinePreset,
+      audience: nextState.citizenshipAudience,
+      resetPage: true
+    });
+    closeManageSavedFilterPreset();
+    toast({
+      title: 'Preset applied',
+      description:
+        targetPreset.name === nextName
+          ? `Applied "${nextName}" preset.`
+          : `Renamed and applied "${nextName}" preset.`
+    });
+  }, [
+    managedPresetId,
+    managePresetNameDraft,
+    closeManageSavedFilterPreset,
+    filterBounds,
+    replaceListingParams,
+    savedFilterPresets,
+    commitSavedFilterPresets
+  ]);
+
+  const deleteManagedSavedFilterPreset = useCallback(() => {
+    if (!managedPresetId) return;
+    const deletingActive = activeSavedFilterPresetId === managedPresetId;
+    const nextPresets = savedFilterPresets.filter((preset) => preset.id !== managedPresetId);
+    const nextActiveId = deletingActive ? null : activeSavedFilterPresetId;
+    commitSavedFilterPresets(
+      { presets: nextPresets, activePresetId: nextActiveId },
+      { applyActiveToRecommended: false }
+    );
+    if (deletingActive) {
+      setRecommendedAppliedFilters(null);
+      setMoreFiltersApplied(null);
+      setListMeta((prev) =>
+        prev
+          ? {
+              ...prev,
+              savedFiltersSnapshotJson: null
+            }
+          : prev
+      );
+      replaceListingParams({ tab: 'recommended', resetPage: true });
+    }
+    closeManageSavedFilterPreset();
+    toast({
+      title: 'Preset deleted',
+      description: 'Saved filter preset removed.'
+    });
+  }, [
+    managedPresetId,
+    closeManageSavedFilterPreset,
+    replaceListingParams,
+    savedFilterPresets,
+    activeSavedFilterPresetId,
+    commitSavedFilterPresets
   ]);
 
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
     const raw = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
+    if (activeTab === 'recommended') {
+      const recommendedCount =
+        savedFiltersForHub == null
+          ? 0
+          : isLoading
+            ? raw.recommended
+            : totalCount;
+      return {
+        ...raw,
+        recommended: recommendedCount,
+        saved: savedIds.length,
+        ignored: ignoredIds.length,
+        ...(isAuthenticated && authResolved
+          ? {
+              started: startedIds.length,
+              submitted: submittedIds.length
+            }
+          : {})
+      };
+    }
     /**
      * Guests: never show signed-in sidebar totals from stale SSR/ISR or a failed
      * `meta_only` refetch (must match POST `/api/scholarships` + `applyListingMetaGuestPatches`).
@@ -1122,12 +1537,20 @@ function ScholarshipsPageInner({
     if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
       return {
         ...raw,
-        bestRecommendation: totalCount
+        bestRecommendation: totalCount,
+        saved: savedIds.length,
+        ignored: ignoredIds.length
       };
     }
-    return raw;
+    return {
+      ...raw,
+      saved: savedIds.length,
+      ignored: ignoredIds.length
+    };
   }, [
     activeTab,
+    savedFiltersForHub,
+    isLoading,
     totalCount,
     listMeta,
     isAuthenticated,
@@ -1145,10 +1568,27 @@ function ScholarshipsPageInner({
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) z[id] = 0;
     return z;
   }, [listMeta?.categoryCounts]);
-  const scholarshipsForCards = useMemo(
-    () => applyProfileMatchPercentToScholarships(scholarships, currentMatchProfile),
-    [scholarships, currentMatchProfile]
-  );
+  const scholarshipsForCards = useMemo(() => {
+    const base = applyProfileMatchPercentToScholarships(
+      scholarships,
+      currentMatchProfile
+    );
+    if (activeTab !== 'from-email' || fromEmailIds.length === 0) {
+      return base;
+    }
+    const emailRank = new Map<string, number>();
+    for (let i = 0; i < fromEmailIds.length; i += 1) {
+      emailRank.set(fromEmailIds[i]!, i);
+    }
+    return [...base].sort((a, b) => {
+      const ai = emailRank.get(a.id);
+      const bi = emailRank.get(b.id);
+      if (ai == null && bi == null) return 0;
+      if (ai != null && bi == null) return -1;
+      if (ai == null && bi != null) return 1;
+      return (ai ?? 0) - (bi ?? 0);
+    });
+  }, [activeTab, fromEmailIds, scholarships, currentMatchProfile]);
 
   /** Invalidates list fetch when landing quiz, tab, auth, or server profile seed changes. */
   const listingRequestFingerprint = useMemo(
@@ -1183,11 +1623,25 @@ function ScholarshipsPageInner({
   );
   const sidebarMetaRequestKey = useMemo(
     () =>
-      `global-sidebar|scope:catalog|${userCollectionsFingerprint}|au:${isAuthenticated ? 1 : 0}|ar:${authResolved ? 1 : 0}`,
+      [
+        'global-sidebar',
+        'scope:catalog',
+        userCollectionsFingerprint,
+        `au:${isAuthenticated ? 1 : 0}`,
+        `ar:${authResolved ? 1 : 0}`,
+        `sf:${savedFiltersSnapshotJson ?? 'none'}`,
+        `ap:${activeSavedFilterPresetId ?? 'none'}`,
+        `lfp:${listingRequestFingerprint}`,
+        `url:${searchParamsString}`
+      ].join('|'),
     [
       userCollectionsFingerprint,
       isAuthenticated,
-      authResolved
+      authResolved,
+      savedFiltersSnapshotJson,
+      activeSavedFilterPresetId,
+      listingRequestFingerprint,
+      searchParamsString
     ]
   );
   const sidebarMetaRequestKeyRef = useRef(sidebarMetaRequestKey);
@@ -1244,7 +1698,7 @@ function ScholarshipsPageInner({
 
     const run = async () => {
       try {
-        if (isAuthenticated && activeTab === 'recommended' && !savedFiltersForHub) {
+        if (activeTab === 'recommended' && !savedFiltersForHub) {
           setScholarships([]);
           setTotalCount(0);
           setHasError(false);
@@ -1342,8 +1796,8 @@ function ScholarshipsPageInner({
           setListMeta((prev) =>
             prev
               ? {
-                  ...nextMeta,
-                  sidebarCounts: prev.sidebarCounts
+                  ...prev,
+                  ...nextMeta
                 }
               : nextMeta
           );
@@ -1399,7 +1853,7 @@ function ScholarshipsPageInner({
       try {
         const ids = userListIdsRef.current;
         const sp = buildHubListingSearchParams({
-          base: new URLSearchParams(),
+          base: new URLSearchParams(searchParamsString),
           page: 1,
           tab: 'matches',
           meta: true,
@@ -1411,14 +1865,16 @@ function ScholarshipsPageInner({
         });
         const metaResponse = await postScholarshipsMeta({
           searchParams: sp.toString(),
-          moreFilters: undefined,
-          savedFiltersSnapshot: undefined,
-          guestBestRecommendationPreviewEnabled: false,
-          longTailLegacySlugs: [],
-          requiredSeoTags: [],
-          seoListingFallback: undefined,
-          slugOnlyMoreFilters: undefined,
-          providerSlug: null
+          moreFilters: hubListingBodyMoreFilters
+            ? moreFiltersToJson(hubListingBodyMoreFilters)
+            : undefined,
+          savedFiltersSnapshot: savedFiltersSnapshotJson,
+          guestBestRecommendationPreviewEnabled,
+          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+          seoListingFallback: routeScope?.seoListingFallback,
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+          providerSlug: appliedProviderSlug
         });
         if (cancelled) return;
         const sidebarMeta = metaResponse.meta ?? null;
@@ -1453,7 +1909,16 @@ function ScholarshipsPageInner({
     userCollectionsFingerprint,
     isAuthenticated,
     authResolved,
-    sidebarMetaRequestKey
+    sidebarMetaRequestKey,
+    savedFiltersSnapshotJson,
+    searchParamsString,
+    hubListingBodyMoreFilters,
+    guestBestRecommendationPreviewEnabled,
+    routeScope?.longTailLegacySlugs,
+    routeScope?.requiredSeoTags,
+    routeScope?.seoListingFallback,
+    routeScope?.slugOnlyMoreFilters,
+    appliedProviderSlug
   ]);
 
   useEffect(() => {
@@ -1475,6 +1940,41 @@ function ScholarshipsPageInner({
     }
   }, [isAuthenticated, activeTab, rawPageParam, replaceListingParams]);
 
+  const moreFiltersPanelContextNotices = useMemo((): ScholarshipsMoreFiltersContextNotice[] => {
+    const out: ScholarshipsMoreFiltersContextNotice[] = [];
+    if (activeTab === 'easy-apply') {
+      out.push({
+        key: 'scope-easy-apply',
+        title: 'This view',
+        body: 'Easy Apply uses our catalog rules for quick applications (few requirements, optional essay, or tags like easy apply). That layer is applied on top of the filters you set below.'
+      });
+    }
+    if (activeTab === 'hot-deadlines') {
+      out.push({
+        key: 'scope-hot-deadlines',
+        title: 'This view',
+        body: 'Hot deadlines shows scholarships whose deadline is in about the next seven days (database deadline buckets). The deadline radio buttons below further narrow that list when you choose one.'
+      });
+    }
+    if (activeTab === 'matches' && parsedList.audience === 'international_friendly') {
+      out.push({
+        key: 'scope-international-friendly',
+        title: 'This view',
+        body: 'International friendly prefers scholarships that mention international students, foreign nationals, visas, or similar in our catalog. The audience setting matches “International students & others” below when it is selected.'
+      });
+    }
+    if (activeTab === 'best-recommendation') {
+      out.push({
+        key: 'scope-best-profile',
+        title: 'Best recommendations',
+        body: 'We use your profile (GPA, school level, field of study, state, citizenship) to rank results and sometimes apply extra database filters. A few rules may not map to a single checkbox in this panel.',
+        learnMoreHref: '/account',
+        learnMoreLabel: 'Edit profile'
+      });
+    }
+    return out;
+  }, [activeTab, parsedList.audience]);
+
   const openMoreFilters = useCallback(() => {
     const basis = withTabEnforcedMoreFilters(
       moreFiltersApplied ?? emptyMoreFiltersState,
@@ -1488,6 +1988,53 @@ function ScholarshipsPageInner({
     if (moreFiltersDraft) {
       const next = cloneMoreFilters(moreFiltersDraft);
       setMoreFiltersApplied(next);
+      if (activeTab === 'recommended') {
+        const nextWithBase =
+          routeBaseMoreFilters != null
+            ? mergeMoreFilterStates(routeBaseMoreFilters, next)
+            : cloneMoreFilters(next);
+        const hasSelections = countMoreFilterSelections(nextWithBase, filterBounds) > 0;
+        setRecommendedAppliedFilters(hasSelections ? cloneMoreFilters(next) : null);
+        if (!hasSelections) {
+          commitSavedFilterPresets(
+            { presets: savedFilterPresets, activePresetId: null },
+            { applyActiveToRecommended: false }
+          );
+        } else if (activeSavedFilterPresetId) {
+          const now = new Date().toISOString();
+          const snapshotState = cloneMoreFilters(next);
+          const nextPresets = savedFilterPresets.map((preset) =>
+            preset.id === activeSavedFilterPresetId
+              ? {
+                  ...preset,
+                  snapshot: moreFiltersToJson(snapshotState),
+                  updatedAt: now
+                }
+              : preset
+          );
+          commitSavedFilterPresets(
+            { presets: nextPresets, activePresetId: activeSavedFilterPresetId },
+            { applyActiveToRecommended: false }
+          );
+
+          if (isAuthenticated) {
+            const mergedJson = moreFiltersToJson(nextWithBase);
+            setListMeta((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    savedFiltersSnapshotJson: mergedJson
+                  }
+                : prev
+            );
+            void fetch('/api/account/saved-filters-snapshot', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ snapshot: mergedJson })
+            }).catch(() => {});
+          }
+        }
+      }
       replaceListingParams({
         deadline: next.deadlinePreset,
         audience: next.citizenshipAudience,
@@ -1497,7 +2044,14 @@ function ScholarshipsPageInner({
     setMoreFiltersOpen(false);
   }, [
     moreFiltersDraft,
-    replaceListingParams
+    replaceListingParams,
+    activeTab,
+    routeBaseMoreFilters,
+    filterBounds,
+    activeSavedFilterPresetId,
+    isAuthenticated,
+    savedFilterPresets,
+    commitSavedFilterPresets
   ]);
 
   const clearMoreFiltersDraft = useCallback(() => {
@@ -1510,10 +2064,24 @@ function ScholarshipsPageInner({
       setPreviewCountLoading(false);
       return;
     }
+    const previewBaseline =
+      moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds);
+    const hasDraftDelta =
+      countMoreFilterDeltaFromBaseline(moreFiltersDraft, previewBaseline) > 0;
+    if (!hasDraftDelta) {
+      setPreviewCount(totalCount);
+      setLastKnownPreviewCount(totalCount);
+      setPreviewCountLoading(false);
+      return;
+    }
     setPreviewCountLoading(true);
     let cancelled = false;
     const t = setTimeout(() => {
       const ids = userListIdsRef.current;
+      const previewBaseFilters = mergeMoreFilterStates(
+        routeBaseMoreFilters ?? defaultMoreFiltersFromBounds(filterBounds),
+        moreFiltersDraft
+      );
       const sp = buildHubListingSearchParams({
         base: new URLSearchParams(searchParamsString),
         page: 1,
@@ -1528,13 +2096,7 @@ function ScholarshipsPageInner({
       postScholarshipsCount({
         searchParams: sp.toString(),
         moreFilters: moreFiltersToJson(
-          withTabEnforcedMoreFilters(
-            mergeMoreFilterStates(
-              routeBaseMoreFilters ?? defaultMoreFiltersFromBounds(filterBounds),
-              moreFiltersDraft
-            ),
-            activeTab
-          )
+          withTabEnforcedMoreFilters(previewBaseFilters, activeTab)
         ),
         guestBestRecommendationPreviewEnabled,
         longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
@@ -1568,7 +2130,10 @@ function ScholarshipsPageInner({
     catalogListScope,
     routeScope,
     filterBounds,
+    moreFiltersBaseline,
+    totalCount,
     routeBaseMoreFilters,
+    savedFiltersForHub,
     guestBestRecommendationPreviewEnabled
   ]);
 
@@ -1821,6 +2386,8 @@ function ScholarshipsPageInner({
       return 'Sign in and complete your profile to see best recommendations tailored to you.';
     }
     switch (activeTab) {
+      case 'from-email':
+        return 'No scholarships from this email are available now. Open Saved or Matches to keep browsing.';
       case 'saved':
         return 'No saved scholarships yet. Tap the heart on a grant to save it here.';
       case 'ignored':
@@ -1936,7 +2503,22 @@ function ScholarshipsPageInner({
                 onGuestLockedAction={
                   catalogFreeTier ? openRegistrationWall : undefined
                 }
+                savedFilterPresetButtons={
+                  activeTab === 'recommended'
+                    ? savedFilterPresets.map((preset) => ({
+                        id: preset.id,
+                        name: preset.name,
+                        active: preset.id === activeSavedFilterPresetId
+                      }))
+                    : []
+                }
+                onSavedFilterPresetSelect={openManageSavedFilterPreset}
               />
+              {activeTab === 'from-email' ? (
+                <div className="mb-3 rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 text-sm text-orange-900">
+                  From email: showing scholarships from your digest link.
+                </div>
+              ) : null}
 
               {bestRecommendationWizardPendingHydration ? (
                 <ScholarshipsBrandLoading density="compact" showTopAccentBar />
@@ -2139,6 +2721,24 @@ function ScholarshipsPageInner({
         }
         hasSubscription={hasSubscription}
         onSubscriptionLockedAction={undefined}
+        contextNotices={moreFiltersPanelContextNotices}
+      />
+      <SaveFilterPresetModal
+        open={isSavePresetModalOpen}
+        value={presetNameDraft}
+        error={presetNameError}
+        onChange={setPresetNameDraft}
+        onClose={closeSavePresetModal}
+        onSubmit={submitSavePresetModal}
+      />
+      <ManageSavedFilterPresetModal
+        open={managedPresetId != null}
+        presetName={managePresetNameDraft}
+        error={managePresetError}
+        onNameChange={setManagePresetNameDraft}
+        onClose={closeManageSavedFilterPreset}
+        onApply={applyManagedSavedFilterPreset}
+        onDelete={deleteManagedSavedFilterPreset}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}

@@ -929,6 +929,9 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
     case 'saved':
       if (saved.length === 0) return q.eq('id', '00000000-0000-0000-0000-000000000000');
       return q.in('id', saved);
+    case 'from-email':
+      if (saved.length === 0) return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      return q.in('id', saved);
     case 'ignored':
       if (ignored.length === 0) return q.eq('id', '00000000-0000-0000-0000-000000000000');
       return q.in('id', ignored);
@@ -1113,6 +1116,7 @@ function tabUsesEmptyIdSet(
 ): boolean {
   switch (tab) {
     case 'saved':
+    case 'from-email':
       return req.saved.length === 0;
     case 'ignored':
       return req.ignored.length === 0;

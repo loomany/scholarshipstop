@@ -80,6 +80,8 @@ type ScholarshipsListHeaderProps = {
   onGuestSortBlocked?: () => void;
   onSubscriptionSortBlocked?: () => void;
   onGuestLockedAction?: () => void;
+  savedFilterPresetButtons?: { id: string; name: string; active?: boolean }[];
+  onSavedFilterPresetSelect?: (id: string) => void;
 };
 
 function listingResultUnit(
@@ -189,7 +191,9 @@ export default function ScholarshipsListHeader({
   hasSubscription = true,
   onGuestSortBlocked,
   onSubscriptionSortBlocked,
-  onGuestLockedAction
+  onGuestLockedAction,
+  savedFilterPresetButtons = [],
+  onSavedFilterPresetSelect
 }: ScholarshipsListHeaderProps) {
   /** Locks apply to guests only; authenticated users are fully unlocked. */
   const catalogLocked = !isAuthenticated;
@@ -623,6 +627,25 @@ export default function ScholarshipsListHeader({
                     />
                   </button>
                 </div>
+                {listTab === 'recommended' && savedFilterPresetButtons.length > 0 ? (
+                  <div className="flex min-w-0 flex-wrap items-center gap-2">
+                    {savedFilterPresetButtons.map((preset) => (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => onSavedFilterPresetSelect?.(preset.id)}
+                        className={`max-w-[12rem] truncate rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                          preset.active
+                            ? 'border-[#FF7A1A] bg-[#FF7A1A] text-white'
+                            : 'border-[#FF7A1A] bg-white text-[#FF7A1A] hover:bg-orange-50'
+                        }`}
+                        title={preset.name}
+                      >
+                        {preset.name}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>

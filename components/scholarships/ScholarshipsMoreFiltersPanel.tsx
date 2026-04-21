@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Lock, X } from 'lucide-react';
 
 import type {
@@ -30,6 +31,15 @@ type Bounds = {
   applicantsMax: number;
 };
 
+/** Optional callouts for hub tab scope (easy apply / hot deadlines / best profile, etc.). */
+export type ScholarshipsMoreFiltersContextNotice = {
+  key: string;
+  title: string;
+  body: string;
+  learnMoreHref?: string;
+  learnMoreLabel?: string;
+};
+
 type ScholarshipsMoreFiltersPanelProps = {
   open: boolean;
   onClose: () => void;
@@ -38,6 +48,8 @@ type ScholarshipsMoreFiltersPanelProps = {
   onChange: (next: MoreFiltersState) => void;
   onClear: () => void;
   onApply: () => void;
+  /** Hub: explain tab-only SQL / profile layers above the form. */
+  contextNotices?: ScholarshipsMoreFiltersContextNotice[];
   /** Persist current draft as the “Saved filters” tab preset (hub). */
   onSaveFilter?: () => void;
   /** False when nothing is selected vs defaults or guest. */
@@ -379,7 +391,8 @@ export default function ScholarshipsMoreFiltersPanel({
   isAuthenticated = true,
   onGuestLockedAction,
   hasSubscription = true,
-  onSubscriptionLockedAction
+  onSubscriptionLockedAction,
+  contextNotices
 }: ScholarshipsMoreFiltersPanelProps) {
   useEffect(() => {
     if (!open) return;
@@ -444,10 +457,10 @@ export default function ScholarshipsMoreFiltersPanel({
     });
 
   const previewLabel = (() => {
-    if (previewCountLoading) return 'Updating...';
     const effectiveCount = previewCount ?? previewCountFallback;
-    if (effectiveCount == null) return 'See results';
-    return `See ${effectiveCount} results`;
+    if (effectiveCount == null) return 'Show results';
+    if (previewCountLoading) return `Show ${effectiveCount} results`;
+    return `Show ${effectiveCount} results`;
   })();
 
   return (
@@ -485,6 +498,31 @@ export default function ScholarshipsMoreFiltersPanel({
         </header>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-28">
+          {contextNotices && contextNotices.length > 0 ? (
+            <div className="space-y-3 border-b border-zinc-200 py-4">
+              {contextNotices.map((n) => (
+                <div
+                  key={n.key}
+                  className="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5"
+                >
+                  <p className="text-[11px] font-bold uppercase tracking-wide text-zinc-600">
+                    {n.title}
+                  </p>
+                  <p className="mt-1 text-sm leading-snug text-zinc-800">{n.body}</p>
+                  {n.learnMoreHref && n.learnMoreLabel ? (
+                    <p className="mt-2">
+                      <Link
+                        href={n.learnMoreHref}
+                        className="text-sm font-semibold text-emerald-700 underline-offset-2 hover:underline"
+                      >
+                        {n.learnMoreLabel}
+                      </Link>
+                    </p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>
               Filter by time until deadline

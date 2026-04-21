@@ -27,6 +27,7 @@ export const SCHOLARSHIP_LIST_TAB_IDS = [
   'recommended',
   'easy-apply',
   'hot-deadlines',
+  'from-email',
   'matches',
   'saved',
   'started',
@@ -45,7 +46,10 @@ export const LEGACY_BEST_RECOMMENDATION_TAB_ID = 'best-matches';
 const TAB_PARAM_VALUES = new Set<string>(SCHOLARSHIP_LIST_TAB_IDS);
 
 /** Hidden from hub nav / URL UX; types and API paths for these tabs stay for later. */
-const HUB_HIDDEN_TAB_IDS = new Set<ScholarshipListTabId>(['started', 'submitted']);
+const HUB_HIDDEN_TAB_IDS = new Set<ScholarshipListTabId>([
+  'started',
+  'submitted'
+]);
 
 export function parseScholarshipTabParam(
   raw: string | null | undefined
@@ -116,6 +120,8 @@ export function scholarshipsInTab(
       return usa.filter((s) => !ign.has(s.id));
     case 'saved':
       return usa.filter((s) => saved.has(s.id));
+    case 'from-email':
+      return usa.filter((s) => saved.has(s.id));
     case 'ignored':
       return usa.filter((s) => ign.has(s.id));
     case 'recommended':
@@ -177,6 +183,8 @@ export function scholarshipListPageTitle(
       return guest ? 'Best recommendations' : 'Best recommendations for you';
     case 'saved':
       return 'Saved scholarships';
+    case 'from-email':
+      return 'From email';
     case 'recommended':
       return guest ? 'Saved filters' : 'Saved filters';
     case 'easy-apply':
@@ -197,6 +205,7 @@ export function scholarshipListPageTitle(
 
 export function scholarshipListLoadingText(tab: ScholarshipListTabId): string {
   if (tab === 'saved') return 'Loading saved…';
+  if (tab === 'from-email') return 'Loading grants from email…';
   if (tab === 'best-recommendation') return 'Loading best recommendations…';
   if (tab === 'recommended') return 'Loading saved filters…';
   if (tab === 'hot-deadlines') return 'Loading hot deadlines…';

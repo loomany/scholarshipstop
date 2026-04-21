@@ -12,7 +12,20 @@ export const createClient = () => {
   if (!browserClient) {
     browserClient = createBrowserClient<Database>(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        auth: {
+          /**
+           * Default GoTrue uses `navigator.locks` with a timeout → "steal", which
+           * rejects the other holder with `AbortError: Lock broken by another request
+           * with the 'steal' option.` (common with Turbo/HMR, multiple tabs, or fast
+           * successive auth calls). A no-op lock runs the critical section without
+           * cross-tab exclusivity; session sync still uses cookies + BroadcastChannel.
+           */
+          lock: async <R>(_name: string, _acquireTimeout: number, fn: () => Promise<R>) =>
+            fn()
+        }
+      }
     );
   }
   return browserClient;

@@ -17,8 +17,8 @@ export default function ScholarshipEmailDigestTokenPage({ params }: PageProps) {
   if (!decoded.ok || decoded.scholarshipIds.length === 0) {
     redirect('/scholarships?tab=best-recommendation&scope=catalog&sort=best_recommendation');
   }
-  const saved = decoded.scholarshipIds.join(',');
+  const emailIds = decoded.scholarshipIds.join(',');
   redirect(
-    `/scholarships?tab=saved&scope=catalog&sort=best_recommendation&saved=${encodeURIComponent(saved)}`
+    `/scholarships?tab=from-email&scope=catalog&sort=best_recommendation&email_ids=${encodeURIComponent(emailIds)}`
   );
 }

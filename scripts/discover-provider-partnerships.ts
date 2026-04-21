@@ -131,6 +131,15 @@ function parseListArg(name: string): string[] {
     .filter(Boolean);
 }
 
+function chunkArray<T>(items: T[], chunkSize: number): T[][] {
+  if (chunkSize <= 0) return [items];
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += chunkSize) {
+    out.push(items.slice(i, i + chunkSize));
+  }
+  return out;
+}
+
 function loadEnvFiles(): void {
   for (const name of ['.env', '.env.local']) {
     const p = path.join(ROOT, name);
@@ -405,28 +414,61 @@ async function fetchProvidersFromSite(limit: number): Promise<ProviderSeed[]> {
     );
   }
   const supabase = createClient(url, key);
-  const { data, error } = await supabase
-    .from(PROVIDER_STATS)
-    .select('slug, display_name')
-    .order('scholarship_count', { ascending: false })
-    .limit(limit);
-  if (error) throw new Error(`Failed to load providers from site: ${error.message}`);
-  const baseRows = (data ?? [])
+  const pageSize = 1000;
+  const maxRows = Math.max(1, limit);
+  const baseRowsRaw: { slug?: string; display_name?: string }[] = [];
+  for (let offset = 0; offset < maxRows; offset += pageSize) {
+    const to = Math.min(offset + pageSize - 1, maxRows - 1);
+    const { data, error } = await supabase
+      .from(PROVIDER_STATS)
+      .select('slug, display_name')
+      .order('scholarship_count', { ascending: false })
+      .range(offset, to);
+    if (error) throw new Error(`Failed to load providers from site: ${error.message}`);
+    const pageRows = (data ?? []) as { slug?: string; display_name?: string }[];
+    if (pageRows.length === 0) break;
+    baseRowsRaw.push(...pageRows);
+    if (pageRows.length < pageSize) break;
+  }
+  const baseRows = baseRowsRaw
     .map((row) => ({
       slug: String((row as { slug?: string }).slug ?? '').trim(),
       displayName: String((row as { display_name?: string }).display_name ?? '').trim()
     }))
     .filter((row) => row.slug);
 
-  const { data: providersData, error: providersError } = await supabase
-    .from('providers')
-    .select('slug, official_url')
-    .in(
-      'slug',
-      baseRows.map((row) => row.slug)
-    );
-  if (providersError) {
-    throw new Error(`Failed to load official URLs from providers: ${providersError.message}`);
+  const providersData: { slug?: string; official_url?: string }[] = [];
+  const slugChunks = chunkArray(
+    baseRows.map((row) => row.slug),
+    200
+  );
+  for (const slugChunk of slugChunks) {
+    let chunkData: { slug?: string; official_url?: string }[] | null = null;
+    let lastError: string | null = null;
+    for (let attempt = 1; attempt <= 8; attempt++) {
+      try {
+        const { data, error: providersError } = await supabase
+          .from('providers')
+          .select('slug, official_url')
+          .in('slug', slugChunk);
+        if (providersError) {
+          lastError = providersError.message;
+        } else {
+          chunkData = (data ?? []) as { slug?: string; official_url?: string }[];
+          lastError = null;
+          break;
+        }
+      } catch (error) {
+        lastError = error instanceof Error ? error.message : String(error);
+      }
+      await sleep(Math.min(4_000, 500 * 2 ** (attempt - 1)));
+    }
+    if (lastError) {
+      throw new Error(`Failed to load official URLs from providers: ${lastError}`);
+    }
+    for (const row of chunkData ?? []) {
+      providersData.push(row as { slug?: string; official_url?: string });
+    }
   }
   const officialBySlug = new Map<string, string>();
   for (const row of providersData ?? []) {
