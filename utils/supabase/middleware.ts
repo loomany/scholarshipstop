@@ -1,6 +1,19 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
+/** GoTrue rejects refresh; cookies must be cleared or every request will retry and spam logs. */
+function isStaleRefreshAuthError(err: unknown): boolean {
+  if (!err || typeof err !== 'object') return false;
+  const e = err as { code?: string; message?: string };
+  const code = typeof e.code === 'string' ? e.code : '';
+  if (code === 'refresh_token_not_found') return true;
+  if (code === 'invalid_grant') return true;
+  const msg = (typeof e.message === 'string' ? e.message : '').toLowerCase();
+  if (msg.includes('refresh token not found')) return true;
+  if (msg.includes('invalid refresh token')) return true;
+  return false;
+}
+
 export const createClient = (request: NextRequest) => {
   // Create an unmodified response
   let response = NextResponse.next({
@@ -62,19 +75,25 @@ export const createClient = (request: NextRequest) => {
 
 export const updateSession = async (request: NextRequest) => {
   try {
-    // This `try/catch` block is only here for the interactive tutorial.
-    // Feel free to remove once you have Supabase connected.
     const { supabase, response } = createClient(request);
 
-    // This will refresh session if expired - required for Server Components
+    // Refreshes session when needed (Server Components / RSC cookie contract).
     // https://supabase.com/docs/guides/auth/server-side/nextjs
-    await supabase.auth.getUser();
+    try {
+      const { error } = await supabase.auth.getUser();
+      if (error && isStaleRefreshAuthError(error)) {
+        await supabase.auth.signOut();
+      }
+    } catch (authErr) {
+      if (isStaleRefreshAuthError(authErr)) {
+        await supabase.auth.signOut();
+      } else {
+        throw authErr;
+      }
+    }
 
     return response;
-  } catch (e) {
-    // If you are here, a Supabase client could not be created!
-    // This is likely because you have not set up environment variables.
-    // Verify Supabase env vars and Next.js setup.
+  } catch {
     return NextResponse.next({
       request: {
         headers: request.headers
