@@ -136,7 +136,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <meta name="fo-verify" content="5b534bf7-226a-4032-8ba7-1ce652711bd1" />
         <meta
           name="impact-site-verification"
-          value="1c28c304-5034-41b3-b4c0-4cf9063f3cb3"
+          content="1c28c304-5034-41b3-b4c0-4cf9063f3cb3"
         />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
       </head>
