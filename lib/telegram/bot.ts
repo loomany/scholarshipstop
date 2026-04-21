@@ -34,6 +34,12 @@ import {
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 import {
+  buildVisitorAdminCardHtml,
+  type VisitorCardAttribution,
+  type VisitorCardTouch,
+  type VisitorPageViewRow
+} from '@/lib/telegram/adminVisitorCard';
+import {
   ADMIN_NOTIFY_CALLBACK_PREFIX,
   ADMIN_NOTIFY_ENABLE_ALL_CALLBACK,
   ADMIN_NOTIFY_LABEL_RU,
@@ -456,6 +462,53 @@ async function answerTelegramCallbackQuery(callbackQueryId: string, text?: strin
     callback_query_id: callbackQueryId,
     text
   });
+}
+
+type EditVisitorCardResult = 'edited' | 'not_modified' | 'failed';
+
+async function editTelegramVisitorCardMessage(args: {
+  chatId: number;
+  messageId: number;
+  text: string;
+  replyMarkup: TelegramReplyMarkup;
+}): Promise<EditVisitorCardResult> {
+  const token = getTelegramBotToken();
+  if (!token) {
+    return 'failed';
+  }
+  try {
+    const response = await fetch(
+      `https://api.telegram.org/bot${token}/editMessageText`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: args.chatId,
+          message_id: args.messageId,
+          text: args.text,
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+          reply_markup: args.replyMarkup
+        })
+      }
+    );
+    const json = (await response.json().catch(() => null)) as {
+      ok?: boolean;
+      description?: string;
+    } | null;
+    const desc = json?.description ?? '';
+    if (!response.ok) {
+      if (desc.includes('message is not modified')) {
+        return 'not_modified';
+      }
+      console.error('[telegram] editMessageText failed', response.status, desc);
+      return 'failed';
+    }
+    return json?.ok ? 'edited' : 'failed';
+  } catch (e) {
+    console.error('[telegram] editMessageText request error', e);
+    return 'failed';
+  }
 }
 
 function grantNotifyChannelStatus(on: boolean): 'ON' | 'OFF' {
@@ -1544,7 +1597,20 @@ async function sendAdminUsersList(user: TelegramUserRow, offset = 0) {
   );
 }
 
-async function sendAdminUserAudit(user: TelegramUserRow, visitorId: string) {
+function buildVisitorCardRefreshMarkup(visitorId: string): TelegramReplyMarkup {
+  return {
+    inline_keyboard: [[button('🔄 Обновить', buildUsersOpenCallbackData(visitorId))]]
+  };
+}
+
+async function sendAdminUserAudit(
+  user: TelegramUserRow,
+  visitorId: string,
+  opts?: {
+    editTarget?: { chatId: number; messageId: number };
+    callbackQueryId?: string;
+  }
+) {
   const envAdmin = getTelegramAdminIds().has(Number(user.telegram_user_id));
   if (!user.is_admin && !envAdmin) {
     await sendTelegramMessage(user.telegram_chat_id, 'Только для админов.', buildProfileKeyboard(user));
@@ -1583,6 +1649,18 @@ async function sendAdminUserAudit(user: TelegramUserRow, visitorId: string) {
     .eq('visitor_id', visitorId)
     .maybeSingle();
 
+  const { data: pageViewsRaw, error: pvErr } = await (admin as any)
+    .from('visitor_page_views')
+    .select('path, kind, seen_at')
+    .eq('visitor_id', visitorId)
+    .order('seen_at', { ascending: false })
+    .limit(80);
+
+  if (pvErr) {
+    console.error('[telegram] visitor_page_views select', pvErr);
+  }
+  const pageViews = (pageViewsRaw ?? []) as VisitorPageViewRow[];
+
   const registeredUserId =
     attribution && typeof attribution.user_id === 'string' ? attribution.user_id : null;
   const [authUser, profile] = registeredUserId
@@ -1597,79 +1675,53 @@ async function sendAdminUserAudit(user: TelegramUserRow, visitorId: string) {
       ])
     : [null, null];
 
-  const firstSeen = attribution?.first_seen_at ?? touch.created_at;
-  const lastSeen = attribution?.last_seen_at ?? touch.created_at;
-  const durationSec = Math.max(
-    0,
-    Math.floor((new Date(lastSeen).getTime() - new Date(firstSeen).getTime()) / 1000)
-  );
-  const source = formatTrafficChannelLabel((touch.traffic_channel as TrafficChannel) ?? null);
-  const qualityFlags = [
-    touch.click_id ? 'paid-marker:yes' : 'paid-marker:no',
-    (touch.referrer ?? '').toLowerCase().includes('google.com')
-      ? 'google-referrer:yes'
-      : 'google-referrer:no',
-    touch.is_likely_bot ? 'bot:yes' : 'bot:no'
-  ];
-  const firstLanding = (attribution?.first_landing_path ?? '-').slice(0, 200);
-  const lastLanding = (attribution?.last_landing_path ?? '-').slice(0, 200);
-  const visitedPages: string[] = [];
-  if (firstLanding && firstLanding !== '-') visitedPages.push(firstLanding);
-  if (lastLanding && lastLanding !== '-' && lastLanding !== firstLanding) {
-    visitedPages.push(lastLanding);
+  const text = buildVisitorAdminCardHtml({
+    visitorId,
+    touch: touch as VisitorCardTouch,
+    attribution: (attribution ?? null) as VisitorCardAttribution | null,
+    pageViews,
+    registeredUserId,
+    authUser: authUser ? { email: authUser.email ?? null } : null,
+    profile: profile
+      ? {
+          created_at: profile.created_at,
+          first_name: profile.first_name,
+          last_name: profile.last_name
+        }
+      : null
+  });
+
+  const refreshMarkup = buildVisitorCardRefreshMarkup(visitorId);
+  const cq = opts?.callbackQueryId;
+
+  if (opts?.editTarget) {
+    const editResult = await editTelegramVisitorCardMessage({
+      chatId: opts.editTarget.chatId,
+      messageId: opts.editTarget.messageId,
+      text,
+      replyMarkup: refreshMarkup
+    });
+    if (cq) {
+      if (editResult === 'not_modified') {
+        await answerTelegramCallbackQuery(cq, 'Уже актуально');
+      } else if (editResult === 'edited') {
+        await answerTelegramCallbackQuery(cq);
+      } else {
+        await sendTelegramMessage(user.telegram_chat_id, text, refreshMarkup, {
+          parse_mode: 'HTML'
+        });
+        await answerTelegramCallbackQuery(cq, 'Отправлено новым сообщением');
+      }
+    }
+    return;
   }
-  const durationHuman = formatDurationRu(durationSec);
-  const visitedBlock =
-    visitedPages.length > 0
-      ? visitedPages
-          .map(
-            (path, idx) =>
-              `${idx + 1}) ${escapeTelegramHtml(path)} — ~${escapeTelegramHtml(durationHuman)}`
-          )
-          .join('\n')
-      : '1) Нет данных о переходах (виден только первый визит).';
 
-  const text = [
-    '<b>Карточка пользователя (без ботов)</b>',
-    '',
-    `<b>ID:</b> <code>${escapeTelegramHtml(visitorId)}</code>`,
-    `<b>Источник:</b> ${escapeTelegramHtml(source)}`,
-    `<b>Первый заход:</b> ${escapeTelegramHtml(firstSeen)}`,
-    `<b>Последний заход:</b> ${escapeTelegramHtml(lastSeen)}`,
-    `<b>Время на сайте:</b> ${escapeTelegramHtml(durationHuman)}`,
-    `<b>Статус регистрации:</b> ${registeredUserId ? 'Да' : 'Нет'}`,
-    ...(registeredUserId
-      ? [
-          `<b>User ID:</b> <code>${escapeTelegramHtml(registeredUserId)}</code>`,
-          `<b>Email:</b> ${escapeTelegramHtml(authUser?.email ?? '-')}`,
-          `<b>Дата регистрации:</b> ${escapeTelegramHtml(profile?.created_at ?? '-')}`,
-          `<b>Имя:</b> ${escapeTelegramHtml(
-            `${profile?.first_name ?? ''} ${profile?.last_name ?? ''}`.trim() || '-'
-          )}`
-        ]
-      : []),
-    '',
-    '<b>Переход / атрибуция</b>',
-    `<b>Страница входа:</b> ${escapeTelegramHtml(toLandingPath(touch.landing_url))}`,
-    `<b>Referrer:</b> ${escapeTelegramHtml((touch.referrer ?? '-').slice(0, 300))}`,
-    `<b>UTM:</b> source=${escapeTelegramHtml(touch.utm_source ?? '-')} medium=${escapeTelegramHtml(
-      touch.utm_medium ?? '-'
-    )} campaign=${escapeTelegramHtml(touch.utm_campaign ?? '-')}`,
-    `<b>Click ID:</b> ${escapeTelegramHtml(touch.click_id ?? '-')}`,
-    '',
-    '<b>Качество сигнала</b>',
-    `${escapeTelegramHtml(qualityFlags.join(' | '))}`,
-    '',
-    '<b>Страницы, куда заходил (по текущим данным)</b>',
-    visitedBlock,
-    '<i>Примечание: точный таймер по каждой странице пока не ведется, поэтому показываю общую длительность визита.</i>',
-    '',
-    `<b>User-Agent:</b> ${escapeTelegramHtml((touch.user_agent_snapshot ?? '-').slice(0, 320))}`
-  ].join('\n');
-
-  await sendTelegramMessage(user.telegram_chat_id, text, buildProfileKeyboard(user), {
+  await sendTelegramMessage(user.telegram_chat_id, text, refreshMarkup, {
     parse_mode: 'HTML'
   });
+  if (cq) {
+    await answerTelegramCallbackQuery(cq);
+  }
 }
 
 async function sendSeoQueueReport(user: TelegramUserRow) {
@@ -2637,10 +2689,17 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
 
     if (callbackData.startsWith(USERS_OPEN_PREFIX)) {
       const visitorId = callbackData.slice(USERS_OPEN_PREFIX.length).trim();
-      await sendAdminUserAudit(user, visitorId);
-      if (callback.id) {
-        await answerTelegramCallbackQuery(callback.id);
-      }
+      const msg = callback.message;
+      const msgText = typeof msg?.text === 'string' ? msg.text : '';
+      /** Do not replace the multi-user list message on first open from inline buttons. */
+      const isExistingVisitorCard = msgText.includes('Карточка пользователя');
+      await sendAdminUserAudit(user, visitorId, {
+        editTarget:
+          isExistingVisitorCard && msg?.chat?.id != null && msg?.message_id != null
+            ? { chatId: msg.chat.id, messageId: msg.message_id }
+            : undefined,
+        callbackQueryId: callback.id
+      });
       return;
     }
 
