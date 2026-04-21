@@ -56,25 +56,6 @@ function openLemonHostedUrl(url: string) {
   window.location.assign(url);
 }
 
-/** Compact trial note — same language as `ScholarshipsEmailConfirmationBanner`. */
-function PlanTrialBetweenFeaturesAndCta() {
-  return (
-    <div
-      className="w-full rounded-xl border border-zinc-200 bg-zinc-50/80 px-3 py-2.5 text-xs shadow-sm sm:text-sm"
-      role="status"
-    >
-      <p className="text-center leading-snug">
-        <span className="block font-semibold text-zinc-900">
-          🎁 3-Day Free Trial
-        </span>
-        <span className="mt-0.5 block text-zinc-600">
-          included with all plans.
-        </span>
-      </p>
-    </div>
-  );
-}
-
 function PlanFeatureList({ items }: { items: string[] }) {
   return (
     <ul
@@ -98,15 +79,17 @@ function PlanFeatureList({ items }: { items: string[] }) {
 
 type PlanRowProps = {
   title: string;
+  buttonLabel: string;
   badge?: ReactNode;
   price: string;
+  priceSuffix?: string;
   billing: string;
   features: string[];
   buttonClassName: string;
+  cardClassName?: string;
   planKey: BillingPlanKey;
   featured?: boolean;
   ctaAbove?: ReactNode;
-  hasActiveSubscription?: boolean;
   /** Disabled CTA label when this tier is the user’s current plan (from subscription status). */
   currentPlanStatusLabel?: string;
   manageSubscriptionUrl?: string | null;
@@ -115,11 +98,6 @@ type PlanRowProps = {
   showResumeAction?: boolean;
   showUpdatePaymentAction?: boolean;
   pastDueBillingAccent?: boolean;
-  showSkipTrialAction?: boolean;
-  isSkippingTrial?: boolean;
-  onSkipTrial?: () => void;
-  /** False when user already maps to a tier (e.g. past_due — subscription exists, payment failed). */
-  showNewSubscriberTrialPromo?: boolean;
   /** Server API cancel (preferred); else `manageSubscriptionUrl` opens Lemon portal. */
   onCancelSubscription?: () => void | Promise<void>;
   isCancellingSubscription?: boolean;
@@ -135,11 +113,7 @@ type PlanConfig = Omit<
   | 'isLoading'
   | 'isBusy'
   | 'onSelect'
-  | 'showSkipTrialAction'
-  | 'isSkippingTrial'
-  | 'onSkipTrial'
   | 'currentPlanStatusLabel'
-  | 'showNewSubscriberTrialPromo'
   | 'onCancelSubscription'
   | 'isCancellingSubscription'
   | 'onResumeSubscription'
@@ -148,15 +122,17 @@ type PlanConfig = Omit<
 
 function PlanGrantCard({
   title,
+  buttonLabel,
   badge,
   price,
+  priceSuffix = '/mo',
   billing,
   features,
   buttonClassName,
+  cardClassName,
   planKey,
   featured = false,
   ctaAbove,
-  hasActiveSubscription = false,
   currentPlanStatusLabel = 'Active Plan',
   manageSubscriptionUrl = null,
   updatePaymentUrl = null,
@@ -164,10 +140,6 @@ function PlanGrantCard({
   showResumeAction = false,
   showUpdatePaymentAction = false,
   pastDueBillingAccent = false,
-  showSkipTrialAction = false,
-  isSkippingTrial = false,
-  onSkipTrial,
-  showNewSubscriberTrialPromo = false,
   onCancelSubscription,
   isCancellingSubscription = false,
   onResumeSubscription,
@@ -177,11 +149,7 @@ function PlanGrantCard({
   onSelect
 }: PlanRowProps) {
   const isBusyOrLocked = isBusy || isCurrentPlan;
-  const buttonLabel = !isCurrentPlan
-    ? hasActiveSubscription
-      ? `Upgrade to ${title}`
-      : 'Start Free Trial'
-    : currentPlanStatusLabel;
+  const resolvedButtonLabel = isCurrentPlan ? currentPlanStatusLabel : buttonLabel;
 
   const showCancelSplit =
     isCurrentPlan &&
@@ -195,7 +163,8 @@ function PlanGrantCard({
         featured
           ? 'border-emerald-200 shadow-md ring-1 ring-emerald-500/15'
           : 'border-gray-200',
-        featured ? 'border-l-4 border-l-emerald-500' : 'border-l-4 border-l-gray-900'
+        featured ? 'border-l-4 border-l-emerald-500' : 'border-l-4 border-l-gray-900',
+        cardClassName
       )}
     >
       <div className="flex min-h-0 min-w-0 flex-1 flex-col p-4 sm:p-5">
@@ -218,7 +187,7 @@ function PlanGrantCard({
             <span className="text-3xl font-bold tabular-nums text-gray-900 sm:text-4xl">
               {price}
             </span>
-            <span className="text-sm text-gray-500">/mo</span>
+            {priceSuffix ? <span className="text-sm text-gray-500">{priceSuffix}</span> : null}
           </div>
           <p className="mt-0.5 text-sm text-gray-500">{billing}</p>
         </div>
@@ -228,14 +197,13 @@ function PlanGrantCard({
         </div>
 
         <div className="mt-auto flex w-full min-w-0 flex-col gap-3 border-t border-gray-100 pt-4">
-          {showNewSubscriberTrialPromo ? <PlanTrialBetweenFeaturesAndCta /> : null}
           <div className="flex w-full flex-col gap-2">
             {isCurrentPlan ? (
               showCancelSplit ? (
                 <div
                   role="group"
-                  aria-label={`${buttonLabel}. Cancel ends renewal at period end.`}
-                  title={`${buttonLabel} | Cancel`}
+                  aria-label={`${resolvedButtonLabel}. Cancel ends renewal at period end.`}
+                  title={`${resolvedButtonLabel} | Cancel`}
                   className={cn(
                     'inline-flex w-full min-w-0 items-stretch overflow-hidden rounded-xl text-center text-xs font-semibold leading-none text-white sm:text-sm sm:leading-tight',
                     SUBSCRIPTION_CURRENT_PLAN_BUTTON_FILL
@@ -245,7 +213,7 @@ function PlanGrantCard({
                     className="flex min-w-0 flex-1 cursor-default items-center justify-center px-2 py-2.5 sm:px-3"
                     aria-current="page"
                   >
-                    <span className="truncate">{buttonLabel}</span>
+                    <span className="truncate">{resolvedButtonLabel}</span>
                   </span>
                   <span
                     className="flex shrink-0 items-center px-0.5 text-white/50"
@@ -279,7 +247,7 @@ function PlanGrantCard({
                   disabled
                   tabIndex={-1}
                   aria-current="page"
-                  title={buttonLabel}
+                  title={resolvedButtonLabel}
                   className={cn(
                     'inline-flex w-full min-w-0 cursor-default items-center justify-center rounded-xl px-2 py-2.5 text-center text-xs font-semibold leading-none whitespace-nowrap text-white sm:px-3 sm:text-sm sm:leading-tight',
                     SUBSCRIPTION_CURRENT_PLAN_BUTTON_FILL,
@@ -287,7 +255,7 @@ function PlanGrantCard({
                     'disabled:opacity-100'
                   )}
                 >
-                  {buttonLabel}
+                  {resolvedButtonLabel}
                 </button>
               )
             ) : (
@@ -297,7 +265,7 @@ function PlanGrantCard({
                 loading={isLoading}
                 disabled={isBusyOrLocked}
                 onClick={() => onSelect(planKey, title)}
-                title={isLoading ? undefined : buttonLabel}
+                title={isLoading ? undefined : resolvedButtonLabel}
                 className={cn(
                   'lemonsqueezy-button',
                   'inline-flex w-full min-w-0 items-center justify-center rounded-xl px-2 py-2.5 text-center text-xs font-semibold leading-none whitespace-nowrap transition focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:px-3 sm:text-sm sm:leading-tight',
@@ -305,7 +273,7 @@ function PlanGrantCard({
                   buttonClassName
                 )}
               >
-                {isLoading ? 'Redirecting...' : buttonLabel}
+                {isLoading ? 'Redirecting...' : resolvedButtonLabel}
               </Button>
             )}
             {isCurrentPlan && showUpdatePaymentAction && updatePaymentUrl ? (
@@ -320,23 +288,6 @@ function PlanGrantCard({
                 )}
               >
                 Update Billing Info
-              </button>
-            ) : null}
-            {showSkipTrialAction && onSkipTrial ? (
-              <button
-                type="button"
-                onClick={onSkipTrial}
-                disabled={isSkippingTrial}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-600 bg-emerald-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:border-emerald-700 hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {isSkippingTrial ? (
-                  <>
-                    <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden />
-                    Processing…
-                  </>
-                ) : (
-                  'Skip Trial & Pay Now'
-                )}
               </button>
             ) : null}
             {isCurrentPlan &&
@@ -372,49 +323,49 @@ function PlanGrantCard({
 }
 
 const MONTHLY_FEATURES: string[] = [
-  'Full access to AI scholarship matches',
-  'Smart filters to find the best opportunities',
-  'Save hours of manual research',
-  'AI Essay Mentor for drafts & improvements'
+  'Smart Interview & Voice Input',
+  '"Humanize" Engine for natural tone',
+  'Built-in AI Detector Check (GPTZero)',
+  'Unlimited essay generations'
 ];
 
 const QUARTERLY_FEATURES: string[] = [
   'Everything in Monthly, plus:',
-  'Better value — save 24% on your plan',
-  'Stay consistent with your applications',
-  'Improve essays faster with AI support'
+  'Perfect for the college application season',
+  'Save 35% compared to monthly',
+  'Priority AI processing'
 ];
 
-const YEARLY_FEATURES: string[] = [
+const LIFETIME_FEATURES: string[] = [
   'Everything in Quarterly, plus:',
-  'Best value — save 52% long-term',
-  'Focus on winning scholarships, not searching',
-  'Unlimited AI support all year'
+  'No recurring subscriptions ever',
+  'Lifetime access to all future AI updates',
+  'Ultimate peace of mind'
 ];
 
 const PLANS: PlanConfig[] = [
   {
     title: 'Monthly',
+    buttonLabel: 'Start Plan',
     planKey: 'monthly',
-    price: '$25',
-    billing: 'Billed $25 every month.',
+    price: '$14.99',
+    priceSuffix: '/mo',
+    billing: 'Billed $14.99 every month.',
     features: MONTHLY_FEATURES,
     buttonClassName:
-      'border border-gray-300 bg-white text-gray-900 hover:bg-gray-50'
+      'border border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm hover:border-[#E6670C] hover:bg-[#E6670C] focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2'
   },
   {
     title: 'Quarterly',
+    buttonLabel: 'Start Plan',
     planKey: 'quarterly',
-    price: '$19',
-    billing: 'Billed $57 every 3 months.',
+    price: '$9.66',
+    priceSuffix: '/mo',
+    billing: 'Billed $29 every 3 months.',
     features: QUARTERLY_FEATURES,
+    cardClassName: 'border-zinc-900 ring-1 ring-zinc-900/20',
     buttonClassName:
       'border border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm hover:border-[#E6670C] hover:bg-[#E6670C] focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2',
-    badge: (
-      <span className="shrink-0 rounded-full bg-[#FF7A1A]/18 px-2.5 py-0.5 text-xs font-semibold text-[#C2410C] ring-1 ring-[#FF7A1A]/35">
-        Save 24%
-      </span>
-    ),
     ctaAbove: (
       <span
         className="inline-flex max-w-full shrink-0 items-center justify-center gap-1.5 self-center whitespace-nowrap rounded-full bg-amber-50/95 px-2.5 py-1 text-[11px] font-semibold text-amber-900 ring-1 ring-amber-200/60 sm:px-3 sm:text-xs"
@@ -425,24 +376,21 @@ const PLANS: PlanConfig[] = [
           strokeWidth={2}
           aria-hidden
         />
-        Most Popular
+        ⭐ Most Popular
       </span>
     )
   },
   {
-    title: 'Yearly',
+    title: 'Lifetime',
+    buttonLabel: 'Start Plan',
     planKey: 'yearly',
-    price: '$12',
-    billing: 'Billed $144 annually.',
-    features: YEARLY_FEATURES,
+    price: '$49',
+    priceSuffix: '',
+    billing: 'One-time payment. Yours forever.',
+    features: LIFETIME_FEATURES,
+    cardClassName: 'border-emerald-400 ring-1 ring-emerald-400/35',
     buttonClassName:
       'border border-emerald-500 bg-emerald-500 text-white shadow-sm hover:border-emerald-600 hover:bg-emerald-600',
-    featured: true,
-    badge: (
-      <span className="shrink-0 rounded-full bg-emerald-500/18 px-2.5 py-0.5 text-xs font-semibold text-emerald-800 ring-1 ring-emerald-500/35">
-        Save 52% 🔥
-      </span>
-    ),
     ctaAbove: (
       <span
         className="inline-flex max-w-full shrink-0 items-center justify-center gap-1.5 self-center whitespace-nowrap rounded-full bg-emerald-50/95 px-2.5 py-1 text-[11px] font-semibold text-emerald-900 ring-1 ring-emerald-200/70 sm:px-3 sm:text-xs"
@@ -453,7 +401,7 @@ const PLANS: PlanConfig[] = [
           strokeWidth={2.2}
           aria-hidden
         />
-        Smart Choice
+        ✨ Smart Choice
       </span>
     )
   }
@@ -468,8 +416,7 @@ export default function SubscriptionPricingClient({
   updatePaymentUrl = null,
   showResumeAction = false,
   showUpdatePaymentAction = false,
-  pastDueBillingAccent = false,
-  isEligibleForSkipTrial = false
+  pastDueBillingAccent = false
 }: {
   /** From server: guest must not call checkout (redirect to onboarding with `next` instead). */
   isAuthenticated?: boolean;
@@ -483,15 +430,13 @@ export default function SubscriptionPricingClient({
   showResumeAction?: boolean;
   showUpdatePaymentAction?: boolean;
   pastDueBillingAccent?: boolean;
-  /** Server-computed: Lemon Squeezy trial row matches `skip-trial` API eligibility. */
+  /** Legacy prop accepted to keep page-level callsite type-safe. */
   isEligibleForSkipTrial?: boolean;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [activePlanTitle, setActivePlanTitle] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const [isSkippingTrial, setIsSkippingTrial] = useState(false);
-  const [skipTrialError, setSkipTrialError] = useState<string | null>(null);
   const [isCancellingSubscription, setIsCancellingSubscription] = useState(false);
   const [isResumingSubscription, setIsResumingSubscription] = useState(false);
   const [billingActionError, setBillingActionError] = useState<string | null>(null);
@@ -500,10 +445,6 @@ export default function SubscriptionPricingClient({
     typeof hasActiveSubscriptionProp === 'boolean'
       ? hasActiveSubscriptionProp
       : currentPlanKey !== null;
-
-  /** Trial blurb is for first-time checkout only — not when a Lemon tier is already tied (incl. past_due). */
-  const showNewSubscriberTrialPromo =
-    !hasActiveSubscription && currentPlanKey == null;
 
   useEffect(() => {
     window.LemonSqueezy?.Setup?.({
@@ -577,44 +518,16 @@ export default function SubscriptionPricingClient({
     }
   };
 
-  const handleSkipTrial = async () => {
-    setSkipTrialError(null);
-    setCheckoutError(null);
-    setIsSkippingTrial(true);
-    try {
-      const res = await fetch('/api/billing/skip-trial', { method: 'POST' });
-      let message = 'Something went wrong.';
-      try {
-        const data = (await res.json()) as { error?: string };
-        if (typeof data.error === 'string' && data.error.trim()) {
-          message = data.error.trim();
-        }
-      } catch {
-        /* ignore */
-      }
-      if (!res.ok) {
-        setSkipTrialError(message);
-        return;
-      }
-      router.refresh();
-    } catch {
-      setSkipTrialError('Something went wrong. Please try again.');
-    } finally {
-      setIsSkippingTrial(false);
-    }
-  };
-
   const handleCheckout = (planKey: BillingPlanKey, title: string) => {
     setActivePlanTitle(title);
     setCheckoutError(null);
-    setSkipTrialError(null);
 
     const shouldChangeExistingPlan =
       hasActiveSubscription &&
       currentPlanKey != null &&
       currentPlanKey !== planKey;
 
-    /** Guest + new trial (not plan change): onboarding, then return to subscribe. */
+    /** Guest checkout path: onboarding, then return to subscribe. */
     if (!isAuthenticated && !shouldChangeExistingPlan) {
       setActivePlanTitle(null);
       router.push(onboardingStepHref(1, '/subscription'));
@@ -682,15 +595,17 @@ export default function SubscriptionPricingClient({
           <PlanGrantCard
             key={plan.title}
             title={plan.title}
+            buttonLabel={plan.buttonLabel}
             price={plan.price}
+            priceSuffix={plan.priceSuffix}
             billing={plan.billing}
             features={plan.features}
             planKey={plan.planKey}
             buttonClassName={plan.buttonClassName}
+            cardClassName={plan.cardClassName}
             badge={plan.badge}
             featured={plan.featured}
             ctaAbove={plan.ctaAbove}
-            hasActiveSubscription={hasActiveSubscription}
             currentPlanStatusLabel={currentPlanStatusLabel}
             manageSubscriptionUrl={manageSubscriptionUrl}
             updatePaymentUrl={updatePaymentUrl}
@@ -698,26 +613,19 @@ export default function SubscriptionPricingClient({
             showResumeAction={showResumeAction}
             showUpdatePaymentAction={showUpdatePaymentAction}
             pastDueBillingAccent={pastDueBillingAccent}
-            showSkipTrialAction={
-              Boolean(isEligibleForSkipTrial) && currentPlanKey === plan.planKey
-            }
-            showNewSubscriberTrialPromo={showNewSubscriberTrialPromo}
             onCancelSubscription={handleCancelSubscription}
             isCancellingSubscription={isCancellingSubscription}
             onResumeSubscription={handleResumeSubscription}
             isResumingSubscription={isResumingSubscription}
-            isSkippingTrial={isSkippingTrial}
-            onSkipTrial={handleSkipTrial}
             isLoading={isPending && activePlanTitle === plan.title}
             isBusy={isBusy}
             onSelect={handleCheckout}
           />
         ))}
       </div>
-      {checkoutError || skipTrialError || billingActionError ? (
+      {checkoutError || billingActionError ? (
         <div className="mx-auto mt-6 flex max-w-2xl flex-col gap-2 text-center text-sm">
           {checkoutError ? <p className="text-red-600">{checkoutError}</p> : null}
-          {skipTrialError ? <p className="text-red-600">{skipTrialError}</p> : null}
           {billingActionError ? (
             <div className="flex flex-col items-center gap-3">
               <p className="text-red-600">{billingActionError}</p>

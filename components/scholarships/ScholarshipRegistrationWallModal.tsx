@@ -38,13 +38,13 @@ export default function ScholarshipRegistrationWallModal({
     notice = noticeOverride.trim();
   } else if (variant === 'essay') {
     notice =
-      "Create a free account for filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor. After sign-up we'll open the subscription page so you can start your 3-day trial.";
+      "Stop worrying about AI detection. Our Mentor doesn't just write; it conducts an interview to capture your true story, then polishes the text so it easily passes academic AI checks.";
   } else if (contentMode === 'card-unlock') {
     notice =
-      "You've used your free previews. Continue with a free trial — we'll open the subscription page after sign-up.";
+      "You've used your free previews. Continue with trial access — we will open plan selection after sign-up.";
   } else {
     notice =
-      "Create a free account for filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor. After sign-up we'll open the subscription page so you can start your 3-day trial.";
+      'Unlock filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor right after sign-up.';
   }
 
   const primaryHref = signedInWithoutSubscription

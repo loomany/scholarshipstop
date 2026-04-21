@@ -14,7 +14,7 @@ export type GuestTrialMarketingModalProps = {
   onSecondaryAction?: () => void;
   onPrimaryClick?: () => void;
   /**
-   * `trial` — default marketing with 3-day trial line + CTA.
+   * `trial` — default marketing with no-cost entry copy + CTA.
    * `subscription` — essay and other flows without trial framing (plans / subscribe).
    */
   marketingMode?: 'trial' | 'subscription';
@@ -26,6 +26,12 @@ const BULLETS = [
   'View all hidden scholarships and deadlines',
   'Unlock smart filters & personalized matching',
   'Save your favorites & track applications'
+] as const;
+
+const ESSAY_BULLETS = [
+  'Smart Interview & Voice Input: Chat or speak your background to generate a highly personalized draft.',
+  '"Humanize" Engine: Rewrite AI text to sound 100% natural, matching your unique voice and tone.',
+  'Built-in AI Detector Check: Scan against GPTZero to ensure your essay passes as human-written.'
 ] as const;
 
 export default function GuestTrialMarketingModal({
@@ -93,23 +99,23 @@ export default function GuestTrialMarketingModal({
             className="text-xl font-bold tracking-tight text-zinc-900 sm:text-[1.4rem]"
           >
             {isClassicTrial
-              ? 'Find Scholarships Faster + AI Essay Help'
+              ? 'Unlock the Premium AI Essay Mentor'
               : 'Unlock All Scholarships & AI Tools'}
           </h2>
           <p className="mt-2 text-sm text-zinc-500 sm:text-base">
             {isClassicTrial
-              ? 'Try everything free for 3 days, then from $12/mo.'
-              : 'Create a 100% free account to access our full database.'}
+              ? 'Searching for grants is free. But to win them, you need an essay that sounds like YOU. Upgrade to build, humanize, and perfect your application.'
+              : 'Create a 100% no-cost profile to access our full database.'}
           </p>
 
           <h3 className="mt-6 text-base font-bold text-zinc-900 sm:text-lg">
             {isClassicTrial
-              ? 'Unlock scholarships you can actually win + AI tools'
-              : "What's inside your free account:"}
+              ? 'What you get with Premium:'
+              : "What's inside your no-cost profile:"}
           </h3>
 
           <ul className="mt-4 space-y-2.5 rounded-xl border border-zinc-100 bg-zinc-50/80 px-4 py-3 text-left text-sm text-zinc-800 sm:text-[0.9375rem]">
-            {BULLETS.map((line) => (
+            {(isClassicTrial ? ESSAY_BULLETS : BULLETS).map((line) => (
               <li key={line} className="flex gap-2.5">
                 <Check
                   className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
@@ -122,14 +128,16 @@ export default function GuestTrialMarketingModal({
           </ul>
 
           <p className="mt-4 rounded-xl border border-orange-100 bg-orange-50/80 px-3 py-2.5 text-left text-xs font-medium leading-relaxed text-orange-950 sm:text-sm">
-            {(notice?.trim() ||
-              (isClassicTrial
-                ? "Create a free account for filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor. After sign-up we'll open the subscription page so you can start your 3-day trial."
-                : 'Create a free account to instantly unlock advanced search filters, personalized grant matches, and full access to our database. No paywalls, just pure opportunities to fund your education.'))}
+            {isClassicTrial
+              ? "Stop worrying about AI detection. Our Mentor doesn't just write; it conducts an interview to capture your true story, then polishes the text so it easily passes academic AI checks."
+              : (notice?.trim() ||
+                'Create a no-cost profile to instantly unlock advanced search filters, personalized grant matches, and full access to our database. No paywalls, just pure opportunities to fund your education.')}
           </p>
 
           <p className="mt-4 text-xs font-medium text-zinc-700 sm:text-sm">
-            ⚡ Takes less than 10 seconds
+            {isClassicTrial
+              ? '⚡ Instant access after payment'
+              : '⚡ Takes less than 10 seconds'}
           </p>
 
           <div className="mt-6">
@@ -141,12 +149,16 @@ export default function GuestTrialMarketingModal({
               }}
               className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 text-sm font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 sm:text-base"
             >
-              {isClassicTrial ? '👉 Start 3-day free trial' : '👉 Create Free Account'}
+              {isClassicTrial
+                ? '👉 Unlock AI Mentor for $14.99/mo'
+                : '👉 Create Free Account'}
             </Link>
           </div>
 
           <p className="mt-3 text-xs text-zinc-400 sm:text-sm">
-            {isClassicTrial ? 'Cancel anytime' : '100% Free • No credit card required'}
+            {isClassicTrial
+              ? 'Secure payment • Cancel anytime'
+              : '100% Free • No credit card required'}
           </p>
         </div>
       </div>
