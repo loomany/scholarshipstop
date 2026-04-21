@@ -291,6 +291,9 @@ function ScholarshipsPageInner({
     initialPayload?.result.meta ?? null
   );
   const [isLoading, setIsLoading] = useState(initialPayload == null);
+  const [hasInitialLoadCompleted, setHasInitialLoadCompleted] = useState(
+    Boolean(initialPayload?.result)
+  );
   const [hasError, setHasError] = useState(false);
   const [query, setQuery] = useState(parsedList.q);
   const [savedIds, setSavedIds] = useState<string[]>([]);
@@ -637,18 +640,15 @@ function ScholarshipsPageInner({
     const sp = new URLSearchParams(searchParamsString);
     const tab = sp.get('tab');
     /** Personal tabs (saved/ignored) stay in the URL for deep links (e.g. Telegram → hub). */
-    const badTab = tab === 'hot-deadlines';
     const needDefaultHubTab = !tab;
     const parsedDeadline = parseDeadlineFromParam(sp.get('deadline'));
     const hasAdvDeadline = parsedDeadline != null && parsedDeadline !== 'any';
-    if (!badTab && !needDefaultHubTab && !hasAdvDeadline) {
+    if (!needDefaultHubTab && !hasAdvDeadline) {
       return;
     }
-    const resetPage = badTab || hasAdvDeadline;
+    const resetPage = hasAdvDeadline;
     replaceListingParams({
-      ...(needDefaultHubTab || badTab
-        ? { tab: 'matches', scope: 'catalog' }
-        : {}),
+      ...(needDefaultHubTab ? { tab: 'matches', scope: 'catalog' } : {}),
       ...(hasAdvDeadline ? { deadline: 'any' } : {}),
       resetPage
     });
@@ -850,31 +850,6 @@ function ScholarshipsPageInner({
     listMeta?.profileFilterSeed,
     transientBestRecommendationProfileSeed,
     filterBounds
-  ]);
-
-  /**
-   * `meta_only` sidebar counts must match list POST filters.
-   * Easy apply / hot deadlines: keep hub-merged base only so “Matches” is not narrowed by tab scope.
-   */
-  const hubMetaSidebarMoreFilters = useMemo(() => {
-    if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
-      return stripHubProfileHardMatchMoreFilters(
-        cloneMoreFilters(hubMergedBaseMoreFilters)
-      );
-    }
-    if (
-      activeTab === 'easy-apply' ||
-      activeTab === 'hot-deadlines' ||
-      (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled)
-    ) {
-      return hubMergedBaseMoreFilters;
-    }
-    return withTabEnforcedMoreFilters(hubListingBodyMoreFilters, activeTab);
-  }, [
-    activeTab,
-    guestBestRecommendationPreviewEnabled,
-    hubMergedBaseMoreFilters,
-    hubListingBodyMoreFilters
   ]);
 
   useEffect(() => {
@@ -1196,11 +1171,6 @@ function ScholarshipsPageInner({
     ]
   );
 
-  /** Sidebar meta: same filter basis as `hubMetaSidebarMoreFilters` / list alignment rules. */
-  const sidebarCountsMetaFingerprint = useMemo(
-    () => JSON.stringify(moreFiltersToJson(hubMetaSidebarMoreFilters)),
-    [hubMetaSidebarMoreFilters]
-  );
   const userCollectionsFingerprint = useMemo(
     () =>
       JSON.stringify({
@@ -1213,28 +1183,16 @@ function ScholarshipsPageInner({
   );
   const sidebarMetaRequestKey = useMemo(
     () =>
-      `${activeTab}|${catalogListScope}|${searchParamsString}|${sidebarCountsMetaFingerprint}|${userCollectionsFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|gb:${guestBestRecommendationPreviewEnabled ? 1 : 0}|au:${isAuthenticated ? 1 : 0}|ar:${authResolved ? 1 : 0}`,
+      `global-sidebar|scope:catalog|${userCollectionsFingerprint}|au:${isAuthenticated ? 1 : 0}|ar:${authResolved ? 1 : 0}`,
     [
-      activeTab,
-      catalogListScope,
-      searchParamsString,
-      sidebarCountsMetaFingerprint,
       userCollectionsFingerprint,
-      savedFiltersSnapshotJson,
-      guestBestRecommendationPreviewEnabled,
       isAuthenticated,
       authResolved
     ]
   );
   const sidebarMetaRequestKeyRef = useRef(sidebarMetaRequestKey);
   sidebarMetaRequestKeyRef.current = sidebarMetaRequestKey;
-  /**
-   * Show sidebar counts whenever we have meta — not only when `metaKeySynced` matches
-   * `sidebarMetaRequestKey`. After a tab change, the preset-sync effect updates
-   * `moreFiltersApplied`, which bumps `sidebarCountsMetaFingerprint` and thus
-   * `sidebarMetaRequestKey` *after* the meta-only fetch already synced the previous key,
-   * leaving the strict equality false forever on tabs like Matches.
-   */
+  /** Show sidebar counts whenever we have meta — not only when `metaKeySynced` matches key. */
   const sidebarCountsReady =
     authResolved && listMeta != null && Boolean(listMeta.sidebarCounts);
 
@@ -1277,6 +1235,7 @@ function ScholarshipsPageInner({
       if (initialPayload.result.meta) {
         metaKeySynced.current = sidebarMetaRequestKey;
       }
+      setHasInitialLoadCompleted(true);
       setIsLoading(false);
       return () => {
         cancelled = true;
@@ -1378,11 +1337,16 @@ function ScholarshipsPageInner({
             nextListMetaRec: nextMeta?.sidebarCounts.recommended
           });
         }
-        if (
-          data.meta &&
-          sidebarMetaRequestKeyRef.current === sidebarMetaRequestKey
-        ) {
-          setListMeta(data.meta);
+        const nextMeta = data.meta ?? null;
+        if (nextMeta && sidebarMetaRequestKeyRef.current === sidebarMetaRequestKey) {
+          setListMeta((prev) =>
+            prev
+              ? {
+                  ...nextMeta,
+                  sidebarCounts: prev.sidebarCounts
+                }
+              : nextMeta
+          );
           metaKeySynced.current = sidebarMetaRequestKey;
         }
       } catch (e) {
@@ -1390,7 +1354,10 @@ function ScholarshipsPageInner({
         console.error('[ScholarshipsHub] postScholarshipsList failed', e);
         if (!cancelled) setHasError(true);
       } finally {
-        if (!cancelled) setIsLoading(false);
+        if (!cancelled) {
+          setIsLoading(false);
+          setHasInitialLoadCompleted(true);
+        }
       }
     };
 
@@ -1423,6 +1390,7 @@ function ScholarshipsPageInner({
      * Otherwise SSR guest meta (Best = 0) can stick while the session is already signed in.
      */
     const metaKey = sidebarMetaRequestKey;
+    if (isLoading) return;
     if (metaKeySynced.current === metaKey) return;
     if (metaRequestInFlightRef.current === metaKey) return;
     metaRequestInFlightRef.current = metaKey;
@@ -1431,35 +1399,38 @@ function ScholarshipsPageInner({
       try {
         const ids = userListIdsRef.current;
         const sp = buildHubListingSearchParams({
-          base: new URLSearchParams(searchParamsString),
+          base: new URLSearchParams(),
           page: 1,
-          tab: activeTab,
+          tab: 'matches',
           meta: true,
           saved: ids.saved,
           ignored: ids.ignored,
           started: ids.started,
           submitted: ids.submitted,
-          scope: catalogListScope
+          scope: 'catalog'
         });
         const metaResponse = await postScholarshipsMeta({
           searchParams: sp.toString(),
-          /**
-           * Align with list POST (`hubListingBodyMoreFilters` + tab rules) so Best / Matches
-           * sidebar counts match what the user sees (landing quiz on Best). Easy apply /
-           * hot deadlines use `hubMergedBaseMoreFilters` only so Matches is not tab-narrowed.
-           */
-          moreFilters: moreFiltersToJson(hubMetaSidebarMoreFilters),
-          savedFiltersSnapshot: savedFiltersSnapshotJson,
-          guestBestRecommendationPreviewEnabled,
-          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
-          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
-          seoListingFallback: routeScope?.seoListingFallback,
-          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-          providerSlug: appliedProviderSlug
+          moreFilters: undefined,
+          savedFiltersSnapshot: undefined,
+          guestBestRecommendationPreviewEnabled: false,
+          longTailLegacySlugs: [],
+          requiredSeoTags: [],
+          seoListingFallback: undefined,
+          slugOnlyMoreFilters: undefined,
+          providerSlug: null
         });
         if (cancelled) return;
-        if (metaResponse.meta) {
-          setListMeta(metaResponse.meta);
+        const sidebarMeta = metaResponse.meta ?? null;
+        if (sidebarMeta) {
+          setListMeta((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  sidebarCounts: sidebarMeta.sidebarCounts
+                }
+              : sidebarMeta
+          );
           metaKeySynced.current = metaKey;
         }
       } catch {
@@ -1478,22 +1449,11 @@ function ScholarshipsPageInner({
       cancelled = true;
     };
   }, [
-    activeTab,
-    searchParamsString,
-    sidebarCountsMetaFingerprint,
+    isLoading,
     userCollectionsFingerprint,
-    catalogListScope,
-    hubMergedBaseMoreFilters,
-    hubMetaSidebarMoreFilters,
-    routeScope,
-    filterBounds,
-    routeBaseMoreFilters,
-    savedFiltersSnapshotJson,
-    appliedProviderSlug,
     isAuthenticated,
     authResolved,
-    sidebarMetaRequestKey,
-    guestBestRecommendationPreviewEnabled
+    sidebarMetaRequestKey
   ]);
 
   useEffect(() => {
@@ -1811,16 +1771,17 @@ function ScholarshipsPageInner({
     [activeTab]
   );
 
-  const resultCountForHeader = isLoading ? null : totalCount;
-  const showingFrom = !isLoading && totalCount > 0 ? listStart + 1 : null;
+  const blockingInitialLoad = isLoading && !hasInitialLoadCompleted;
+  const resultCountForHeader = blockingInitialLoad ? null : totalCount;
+  const showingFrom = !blockingInitialLoad && totalCount > 0 ? listStart + 1 : null;
   const showingTo =
-    !isLoading && totalCount > 0
+    !blockingInitialLoad && totalCount > 0
       ? Math.min(listStart + SCHOLARSHIPS_PAGE_SIZE, totalCount)
       : null;
 
   const showClearFilters =
     totalCount === 0 &&
-    !isLoading &&
+    !blockingInitialLoad &&
     !hasError &&
     (hasListingParams || moreFiltersOffDefault || query.trim().length > 0);
 
@@ -1998,7 +1959,7 @@ function ScholarshipsPageInner({
                     replaceListingParams({ resetPage: true });
                   }}
                 />
-              ) : isLoading ? (
+              ) : blockingInitialLoad ? (
             <ScholarshipsBrandLoading density="compact" showTopAccentBar />
           ) : hasError ? (
             <div className="text-red-600">Failed to load scholarships</div>
@@ -2050,6 +2011,11 @@ function ScholarshipsPageInner({
             </div>
           ) : (
             <>
+              {isLoading ? (
+                <div className="mb-3 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-600 shadow-sm">
+                  Updating scholarships and counts...
+                </div>
+              ) : null}
               {shouldPromptScholarshipQuiz && activeTab === 'matches' ? (
                 <div className="mb-4 rounded-2xl border border-gray-200/90 bg-gradient-to-br from-gray-50 via-white to-gray-50/80 p-4 text-center shadow-sm ring-1 ring-gray-100 sm:p-5">
                   <p className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">

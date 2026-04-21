@@ -955,6 +955,14 @@ function writeDiscoveredDomains(domains: string[]): void {
   fs.writeFileSync(OUT_DISCOVERED, `${rows.join('\n')}\n`, 'utf8');
 }
 
+function isMissingSupabaseTableError(message: string): boolean {
+  return (
+    message.includes("Could not find the table 'public.provider_partnership_scan_runs'") ||
+    message.includes("Could not find the table 'public.provider_partnership_contacts'") ||
+    message.includes("Could not find the table 'public.provider_partnership_domain_scans'")
+  );
+}
+
 function printSummary(reports: DomainReport[]): void {
   const withEmail = reports.filter((item) => item.emails.length > 0).length;
   const withPartnerSignal = reports.filter((item) => item.hasPartnershipSignals).length;
@@ -1096,7 +1104,16 @@ async function main() {
 
   writeOutputs(reports);
   printSummary(reports);
-  await persistProviderScanResultsToSupabase(reports, startedAtIso);
+  try {
+    await persistProviderScanResultsToSupabase(reports, startedAtIso);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (isMissingSupabaseTableError(message)) {
+      liveLog(`Skip Supabase persistence: ${message}`);
+    } else {
+      throw error;
+    }
+  }
   await sendProviderDiscoveryTelegramSummary(reports);
   liveLog(`Live log saved: ${OUT_LIVE_LOG}`);
 }
