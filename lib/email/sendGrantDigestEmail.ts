@@ -4,7 +4,15 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { formatScholarshipAwardDisplay, scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
-import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
+
+const EMAIL_SITE_ORIGIN_FALLBACK = 'https://scholarshiptop.com';
+
+function resolveDigestSiteOrigin(): string {
+  const site = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!site) return EMAIL_SITE_ORIGIN_FALLBACK;
+  const normalized = site.replace(/\/+$/, '');
+  return normalized.startsWith('http') ? normalized : `https://${normalized}`;
+}
 
 function truncatePlain(text: string, max: number): string {
   const t = text.replace(/\s+/g, ' ').trim();
@@ -144,7 +152,11 @@ export async function sendGrantDigestBatchEmail(params: {
     return { ok: false, skipped: 'No digest items' };
   }
 
-  const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
+  /**
+   * Cron/tsx jobs run without a Next request scope, so `headers()` is unavailable.
+   * Prefer static site origin from env; request-derived origin is used only in web flows.
+   */
+  const origin = resolveDigestSiteOrigin().replace(/\/+$/, '');
   const name = params.firstName?.trim() || 'there';
   const firstCategory = categories[0]!;
   const firstItem = firstCategory.items[0]!;
@@ -219,7 +231,7 @@ export async function sendGrantDigestEmail(params: {
         id: 'best',
         label: params.channelLabel,
         totalCount: 1,
-        viewAllUrl: `${getServerAuthSiteOrigin().replace(/\/+$/, '')}/scholarships`,
+        viewAllUrl: `${resolveDigestSiteOrigin().replace(/\/+$/, '')}/scholarships`,
         items: [params.scholarship]
       }
     ],
