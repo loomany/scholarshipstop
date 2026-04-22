@@ -18,7 +18,10 @@ import {
   type OnboardingStep3DraftFields
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
-import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
+import {
+  validateScholarshipOnboardingStep3Gpa,
+  validateScholarshipOnboardingStep3GpaOptional
+} from '@/lib/validation/scholarshipOnboardingStep3Schema';
 
 const gpaSelectOptions = [
   { value: '', label: 'Select your GPA' },
@@ -79,7 +82,10 @@ export function ScholarshipOnboardingStep3Gpa({
   }, [gpa]);
 
   const runFinish = (gpaValue: string) => {
-    const v = validateScholarshipOnboardingStep3Gpa({ gpa: gpaValue });
+    const v =
+      draftStore === 'landing'
+        ? validateScholarshipOnboardingStep3GpaOptional({ gpa: gpaValue })
+        : validateScholarshipOnboardingStep3Gpa({ gpa: gpaValue });
     if (!v.ok) {
       setError(v.errors.gpa ?? 'Invalid selection');
       return;

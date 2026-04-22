@@ -17,8 +17,8 @@ import {
   buildScholarshipProfileFilterSeedFromDraftWithoutBirth,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
-import { validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
-import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
+import { validateScholarshipOnboardingBasicsOptionalWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
+import { validateScholarshipOnboardingStep3GpaOptional } from '@/lib/validation/scholarshipOnboardingStep3Schema';
 
 export const BEST_RECOMMENDATION_WIZARD_DRAFT_KEY =
   'scholarship_best_recommendation_wizard_draft_v1';
@@ -181,10 +181,10 @@ export function isBestRecommendationWizardDraftComplete(
   store: BestRecommendationWizardStore | null
 ): boolean {
   if (!store) return false;
-  if (!validateScholarshipOnboardingBasicsWithoutBirth(store.draft.step1).ok) {
+  if (!validateScholarshipOnboardingBasicsOptionalWithoutBirth(store.draft.step1).ok) {
     return false;
   }
-  if (!validateScholarshipOnboardingStep3Gpa(store.draft.step3).ok) {
+  if (!validateScholarshipOnboardingStep3GpaOptional(store.draft.step3).ok) {
     return false;
   }
   const trimmedState = store.draft.step4.state.trim();

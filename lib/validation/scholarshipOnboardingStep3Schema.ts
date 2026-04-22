@@ -28,3 +28,18 @@ export function validateScholarshipOnboardingStep3Gpa(
   }
   return Object.keys(errors).length > 0 ? { ok: false, errors } : { ok: true };
 }
+
+/**
+ * Optional GPA mode for recommendation wizards:
+ * empty / "prefer not to say" are allowed, but non-empty values must be valid.
+ */
+export function validateScholarshipOnboardingStep3GpaOptional(
+  values: Step3GpaFormValues
+): Step3GpaValidationResult {
+  const errors: Step3GpaFieldErrors = {};
+  const g = values.gpa.trim();
+  if (g && g !== SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY && !isValidGpaValue(g)) {
+    errors.gpa = 'Please select a valid GPA';
+  }
+  return Object.keys(errors).length > 0 ? { ok: false, errors } : { ok: true };
+}

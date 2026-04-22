@@ -16,7 +16,7 @@ import {
   SCHOLARSHIP_GPA_OPTIONS
 } from '@/lib/constants/scholarshipGpaOptions';
 import type { BestRecommendationWizardStore } from '@/lib/onboarding/bestRecommendationWizardDraft';
-import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
+import { validateScholarshipOnboardingStep3GpaOptional } from '@/lib/validation/scholarshipOnboardingStep3Schema';
 
 const schoolLevelOptions = [
   { value: '', label: 'Select your school level' },
@@ -80,17 +80,20 @@ const STEP_CONFIG: WizardStepConfig[] = [
   {
     step: 1,
     title: 'What is your school level?',
-    description: 'We use this to match scholarships to the right education stage.'
+    description:
+      'Optional. Pick it to tighten recommendations by education stage, or skip for broader results.'
   },
   {
     step: 2,
     title: 'What field of study are you pursuing?',
-    description: 'Many scholarships are targeted to a specific major or academic path.'
+    description:
+      'Optional. Pick a major to narrow matches, or skip to keep recommendations broader.'
   },
   {
     step: 3,
     title: 'What is your citizenship status?',
-    description: 'Citizenship affects eligibility for many scholarships.'
+    description:
+      'Optional. Add it for stricter eligibility matching, or skip for a wider set of grants.'
   },
   {
     step: 4,
@@ -100,7 +103,7 @@ const STEP_CONFIG: WizardStepConfig[] = [
   {
     step: 5,
     title: "What's your GPA?",
-    description: 'This helps us rank scholarships with academic requirements.'
+    description: 'Optional. Add it if you want GPA-aware ranking, or skip for broader results.'
   }
 ];
 
@@ -137,18 +140,6 @@ export default function BestRecommendationWizard({
   };
 
   const continueStep = async () => {
-    if (currentStep === 1 && !store.draft.step1.schoolLevel.trim()) {
-      setError('Please select your school level.');
-      return;
-    }
-    if (currentStep === 2 && !store.draft.step1.fieldOfStudy.trim()) {
-      setError('Please select your field of study.');
-      return;
-    }
-    if (currentStep === 3 && !store.draft.step1.citizenship.trim()) {
-      setError('Please select your citizenship status.');
-      return;
-    }
     if (currentStep === 4) {
       const trimmed = store.draft.step4.state.trim();
       if (trimmed && !normalizeUsStateToCanonical(trimmed)) {
@@ -159,7 +150,7 @@ export default function BestRecommendationWizard({
       }
     }
     if (currentStep === 5) {
-      const result = validateScholarshipOnboardingStep3Gpa(store.draft.step3);
+      const result = validateScholarshipOnboardingStep3GpaOptional(store.draft.step3);
       if (!result.ok) {
         setError(result.errors.gpa ?? 'Please select your GPA.');
         return;

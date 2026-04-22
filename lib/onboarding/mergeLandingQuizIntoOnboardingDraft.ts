@@ -158,7 +158,10 @@ export function stashLandingQuizDraftForOnboardingMerge(
 export function tryBuildProfileSeedFromPendingLandingSession(): ScholarshipProfileFilterSeed | null {
   const draft = readPendingLandingDraftFromStorage();
   if (!draft) return null;
-  return buildScholarshipProfileFilterSeedFromQuizDraft(draft);
+  return (
+    buildScholarshipProfileFilterSeedFromQuizDraft(draft) ??
+    buildScholarshipProfileFilterSeedFromDraftWithoutBirth(draft)
+  );
 }
 
 export function tryBuildProfileSeedFromCompletedLandingQuiz(): ScholarshipProfileFilterSeed | null {

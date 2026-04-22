@@ -594,8 +594,9 @@ function ScholarshipsPageInner({
     [bestRecommendationWizardStore]
   );
   const transientBestRecommendationProfileSeed = useMemo(
-    () => bestRecommendationWizardSeed ?? landingQuizProfileSeed ?? null,
-    [bestRecommendationWizardSeed, landingQuizProfileSeed]
+    // Fresh landing quiz answers should win over stale wizard drafts.
+    () => landingQuizProfileSeed ?? bestRecommendationWizardSeed ?? null,
+    [landingQuizProfileSeed, bestRecommendationWizardSeed]
   );
   const guestBestRecommendationPreviewEnabled =
     catalogFreeTier &&
@@ -844,10 +845,11 @@ function ScholarshipsPageInner({
     if (rawOneShot) {
       try {
         seed = JSON.parse(rawOneShot) as ScholarshipProfileFilterSeed;
+        // Remove one-shot key only after successful parse.
+        sessionStorage.removeItem(LANDING_QUIZ_HUB_SEED_KEY);
       } catch {
         /* ignore */
       }
-      sessionStorage.removeItem(LANDING_QUIZ_HUB_SEED_KEY);
     }
     if (!seed) {
       seed = tryBuildProfileSeedFromPendingLandingSession();
@@ -2676,44 +2678,51 @@ function ScholarshipsPageInner({
               </div>
             </div>
           ) : totalCount === 0 ? (
-            guestBestRecommendationEmptyHidden ? null : (
-            guestPersonalizedEmpty ? (
-              <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm sm:p-6">
-                <p className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
-                  Want better scholarship matches?
-                </p>
-                <p className="mx-auto mt-3 max-w-3xl text-pretty text-base leading-relaxed text-slate-600 sm:mt-4 sm:text-lg">
-                  Answer 5 quick questions about your background and goals, then we&apos;ll open
-                  your Best recommendation list with scholarships tailored to you.
-                </p>
-                <div className="mt-5 sm:mt-6">
-                  <Link
-                    href="/onboarding"
-                    className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-3 text-center text-sm font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.35)] transition duration-200 ease-out hover:bg-zinc-900 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.4)] sm:text-base"
-                  >
-                    Answer 5 questions and find scholarships
-                  </Link>
+            <>
+              {isLoading ? (
+                <div className="mb-3 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-600 shadow-sm">
+                  Updating scholarships and counts...
                 </div>
-              </div>
-            ) : (
-              <div className="rounded-xl border border-zinc-200 bg-white px-5 py-10 text-center text-slate-600 shadow-sm">
-                <p className="text-base font-medium text-zinc-800">
-                  {emptyMessage}
-                </p>
-                {showClearFilters ? (
-                  <p className="mt-4">
-                    <button
-                      type="button"
-                      onClick={clearListingFilters}
-                      className="text-sm font-semibold text-teal-700 underline decoration-teal-600/40 underline-offset-2 transition hover:text-teal-900"
-                    >
-                      Clear filters
-                    </button>
-                  </p>
-                ) : null}
-              </div>
-            )
-            )
+              ) : null}
+              {guestBestRecommendationEmptyHidden ? null : (
+                guestPersonalizedEmpty ? (
+                  <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm sm:p-6">
+                    <p className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
+                      Want better scholarship matches?
+                    </p>
+                    <p className="mx-auto mt-3 max-w-3xl text-pretty text-base leading-relaxed text-slate-600 sm:mt-4 sm:text-lg">
+                      Answer 5 quick questions about your background and goals, then we&apos;ll open
+                      your Best recommendation list with scholarships tailored to you.
+                    </p>
+                    <div className="mt-5 sm:mt-6">
+                      <Link
+                        href="/onboarding"
+                        className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-3 text-center text-sm font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.35)] transition duration-200 ease-out hover:bg-zinc-900 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.4)] sm:text-base"
+                      >
+                        Answer 5 questions and find scholarships
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-xl border border-zinc-200 bg-white px-5 py-10 text-center text-slate-600 shadow-sm">
+                    <p className="text-base font-medium text-zinc-800">
+                      {emptyMessage}
+                    </p>
+                    {showClearFilters ? (
+                      <p className="mt-4">
+                        <button
+                          type="button"
+                          onClick={clearListingFilters}
+                          className="text-sm font-semibold text-teal-700 underline decoration-teal-600/40 underline-offset-2 transition hover:text-teal-900"
+                        >
+                          Clear filters
+                        </button>
+                      </p>
+                    ) : null}
+                  </div>
+                )
+              )}
+            </>
           ) : (
             <>
               {isLoading ? (

@@ -16,7 +16,7 @@ import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { parseUserGpa, type ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { validateScholarshipOnboardingBasicsOptionalWithoutBirth, validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
-import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
+import { validateScholarshipOnboardingStep3GpaOptional } from '@/lib/validation/scholarshipOnboardingStep3Schema';
 import { validateScholarshipOnboardingStep4Draft } from '@/lib/validation/scholarshipOnboardingStep4Schema';
 
 export type ScholarshipProfileFilterSeed = {
@@ -120,7 +120,7 @@ export function buildScholarshipProfileFilterSeedFromDraftWithoutBirth(
   draft: StoredOnboardingDraft
 ): ScholarshipProfileFilterSeed | null {
   if (!validateScholarshipOnboardingBasicsOptionalWithoutBirth(draft.step1).ok) return null;
-  if (!validateScholarshipOnboardingStep3Gpa(draft.step3).ok) return null;
+  if (!validateScholarshipOnboardingStep3GpaOptional(draft.step3).ok) return null;
 
   const stateInput =
     normalizeUsStateToCanonical(draft.step4.state.trim()) ?? '';
@@ -156,7 +156,7 @@ export function buildScholarshipProfileFilterSeedFromQuizDraft(
   if (draft.quizVariant !== 'landing_no_birth') return null;
   if (!validateScholarshipOnboardingBasicsOptionalWithoutBirth(draft.step1).ok) return null;
   if (!validateScholarshipOnboardingStep4Draft(draft.step4).ok) return null;
-  if (!validateScholarshipOnboardingStep3Gpa(draft.step3).ok) return null;
+  if (!validateScholarshipOnboardingStep3GpaOptional(draft.step3).ok) return null;
   return buildScholarshipProfileFilterSeedFromDraftWithoutBirth(draft);
 }
 
