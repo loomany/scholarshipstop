@@ -2513,6 +2513,8 @@ function ScholarshipsPageInner({
 
   const guestPersonalizedEmpty =
     hubTreatAsGuest && activeTab === 'recommended';
+  const guestBestRecommendationEmptyHidden =
+    hubTreatAsGuest && activeTab === 'best-recommendation';
 
   /**
    * Saved Filters: completion card only when meta explicitly says profile is not ready for personalization.
@@ -2669,6 +2671,7 @@ function ScholarshipsPageInner({
               </div>
             </div>
           ) : totalCount === 0 ? (
+            guestBestRecommendationEmptyHidden ? null : (
             guestPersonalizedEmpty ? (
               <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm sm:p-6">
                 <p className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
@@ -2704,6 +2707,7 @@ function ScholarshipsPageInner({
                   </p>
                 ) : null}
               </div>
+            )
             )
           ) : (
             <>

@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 
 import CompareInstitutionScholarshipColumns from '@/components/compare/CompareInstitutionScholarshipColumns';
 import { SafeCompareHtml } from '@/components/compare/SafeCompareHtml';
+import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
@@ -423,6 +424,25 @@ export default async function UniversityComparePage({
           left={{ title: instA.name, href: instAHref, scholarships: topScholarshipsA }}
           right={{ title: instB.name, href: instBHref, scholarships: topScholarshipsB }}
         />
+
+        <section
+          className="mt-10 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5"
+          aria-label="Scholarship matches call to action"
+        >
+          <div className="mx-auto flex items-center justify-center gap-3 sm:gap-4">
+            <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
+              🎯
+            </span>
+            <h2 className="text-left text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap">
+              Get matched with scholarships in 2 minutes
+            </h2>
+          </div>
+          <HomePrimaryCtaClient
+            className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
+          >
+            Find My Scholarships
+          </HomePrimaryCtaClient>
+        </section>
 
         {stateBattleSlug && stateLabelA && stateLabelB ? (
           <section

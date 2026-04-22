@@ -216,9 +216,9 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
               <SafeContentPostBody html={primarySplit.before} />
               <ContentHubScholarshipCta
                 className="mt-4 sm:mt-5"
-                title="🎯 Find scholarships that match your goals"
-                description="Browse real scholarships and discover opportunities that fit your background, degree level, and study plans."
-                buttonText="Browse Scholarships"
+                title="🎯 Get matched with scholarships in 2 minutes"
+                description="Answer a few quick questions and find scholarships you can apply for today"
+                buttonText="Find My Scholarships"
               />
               {midSplit ? (
                 <>

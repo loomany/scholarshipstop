@@ -17,21 +17,43 @@ export default function ContentHubScholarshipCta({
   buttonText,
   className
 }: ContentHubScholarshipCtaProps) {
+  const hadTargetEmoji = /^🎯\s*/.test(title);
+  const normalizedTitle = title.replace(/^🎯\s*/, '').trim();
+  const isMatchesVisual = normalizedTitle === 'Get matched with scholarships in 2 minutes';
+
   return (
     <aside
       className={clsx(
-        'flex w-full flex-col items-center text-center rounded-2xl border border-gray-200/90 bg-gradient-to-br from-gray-50 via-white to-gray-50/80 px-4 py-3 ring-1 ring-gray-100 sm:px-5 sm:py-3.5',
+        isMatchesVisual
+          ? 'flex w-full flex-col items-center text-center rounded-2xl border border-gray-200/90 bg-white px-4 py-7 ring-1 ring-gray-100 sm:px-5'
+          : 'flex w-full flex-col items-center text-center rounded-2xl border border-gray-200/90 bg-gradient-to-br from-gray-50 via-white to-gray-50/80 px-4 py-3 ring-1 ring-gray-100 sm:px-5 sm:py-3.5',
         className
       )}
       aria-label="Scholarship directory"
     >
-      <h2 className="w-full text-lg font-bold tracking-tight text-gray-900 sm:text-xl">
-        {title}
-      </h2>
-      <p className="mt-2 max-w-lg text-sm leading-snug text-gray-600 sm:text-[0.9375rem] sm:leading-relaxed">
+      {isMatchesVisual ? (
+        <div className="flex w-full items-center justify-center gap-2">
+          <span className="text-3xl leading-none" aria-hidden>
+            🎯
+          </span>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900">{normalizedTitle}</h2>
+        </div>
+      ) : (
+        <h2 className="w-full text-lg font-bold tracking-tight text-gray-900 sm:text-xl">
+          {hadTargetEmoji ? `🎯 ${normalizedTitle}` : normalizedTitle}
+        </h2>
+      )}
+      <p
+        className={clsx(
+          'max-w-lg text-gray-600',
+          isMatchesVisual
+            ? 'mx-auto mt-3 max-w-2xl text-lg leading-relaxed text-slate-600'
+            : 'mt-2 text-sm leading-snug sm:text-[0.9375rem] sm:leading-relaxed'
+        )}
+      >
         {description}
       </p>
-      <div className="mt-3 flex w-full justify-center sm:mt-3.5">
+      <div className={clsx('flex w-full justify-center', isMatchesVisual ? 'mt-6' : 'mt-3 sm:mt-3.5')}>
         <ScholarshipCatalogEntryLink className={buttonClass}>
           {buttonText}
         </ScholarshipCatalogEntryLink>

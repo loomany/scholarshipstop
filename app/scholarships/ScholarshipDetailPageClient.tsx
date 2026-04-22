@@ -35,6 +35,7 @@ import { ScholarshipsBrandLoading } from '@/components/scholarships/Scholarships
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
@@ -1336,6 +1337,24 @@ export default function ScholarshipDetailPageClient({
             html={scholarship.eligibilityHtml}
             fallbackText={scholarship.eligibilityText ?? undefined}
           />
+        ) : null}
+
+        {hasQuickFacts ? (
+          <div className="mt-8 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
+            <div className="mx-auto flex items-center justify-center gap-2.5">
+              <span className="text-xl leading-none" aria-hidden>
+                🎯
+              </span>
+              <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
+                Get matched with scholarships in 2 minutes
+              </p>
+            </div>
+            <HomePrimaryCtaClient
+              className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
+            >
+              Find My Scholarships
+            </HomePrimaryCtaClient>
+          </div>
         ) : null}
 
         {hasQuickFacts ? (

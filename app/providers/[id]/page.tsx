@@ -4,11 +4,11 @@ import { Check, Info } from 'lucide-react';
 import type { Metadata } from 'next';
 
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
-import MobileSplitHeading from '@/components/ui/MobileSplitHeading';
 import ProviderProfilePageAuthBridge from '@/app/providers/ProviderProfilePageAuthBridge';
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
 import { ProviderOfficialWebsiteGate } from '@/components/providers/ProviderOfficialWebsiteGate';
 import { ProviderProfileScholarshipsScroll } from '@/components/providers/ProviderProfileScholarshipsScroll';
+import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import {
   getCachedProviderProfilePage,
   resolveProviderProfileSlug
@@ -96,13 +96,6 @@ export default async function ProviderProfilePage({
           data.totalScholarshipCount
         );
 
-  const findMatchesHref =
-    '/scholarships?' +
-    new URLSearchParams({
-      tab: 'matches',
-      scope: 'catalog',
-      q: data.displayName
-    }).toString();
   const providerPath = `/providers/${encodeURIComponent(data.slug)}`;
   const providerUrl = getURL(providerPath);
   const providerSchema = {
@@ -195,26 +188,24 @@ export default async function ProviderProfilePage({
 
         <ProviderProfileFaqAccordion items={data.aiFaq} />
 
-        <section
-          id="provider-scholarships"
-          className="mt-12 scroll-mt-24"
-          aria-labelledby="provider-scholarships-heading"
-        >
+        <section id="provider-scholarships" className="mt-12 scroll-mt-24">
           <ProviderProfileScholarshipsScroll page={currentPage} />
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <MobileSplitHeading
-              as="h2"
-              id="provider-scholarships-heading"
-              className="text-xl font-bold text-gray-900"
-              firstOnMobile={<>Active scholarships by </>}
-              secondOnMobile={data.displayName}
-            />
-            <Link
-              href={findMatchesHref}
-              className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"
-            >
-              Find matches
-            </Link>
+          <div className="mb-6 flex flex-col gap-4">
+            <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
+                  🎯
+                </span>
+                <h3 className="text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap">
+                  Get matched with scholarships in 2 minutes
+                </h3>
+              </div>
+              <HomePrimaryCtaClient
+                className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
+              >
+                Find My Scholarships
+              </HomePrimaryCtaClient>
+            </div>
           </div>
 
           {data.totalScholarshipCount === 0 ? (

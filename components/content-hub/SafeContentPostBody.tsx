@@ -42,6 +42,7 @@ const SANITIZE_OPTIONS = {
     'caption'
   ],
   ALLOWED_ATTR: [
+    'id',
     'href',
     'target',
     'rel',
