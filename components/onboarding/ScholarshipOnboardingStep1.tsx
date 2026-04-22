@@ -39,12 +39,24 @@ const sectionLabelClass =
 export type ScholarshipOnboardingStep1Props = {
   disabled?: boolean;
   initialStep1: OnboardingFormValues;
+  basicStep?: 'schoolLevel' | 'fieldOfStudy' | 'citizenship';
+  progressEyebrow?: string;
+  title?: string;
+  description?: string;
+  helperText?: string;
+  onBack?: () => void;
   onContinue: (values: OnboardingFormValues) => void;
 };
 
 export function ScholarshipOnboardingStep1({
   disabled = false,
   initialStep1,
+  basicStep = 'schoolLevel',
+  progressEyebrow,
+  title,
+  description,
+  helperText,
+  onBack,
   onContinue
 }: ScholarshipOnboardingStep1Props) {
   const [values, setValues] = useState<OnboardingFormValues>(() => ({
@@ -81,15 +93,53 @@ export function ScholarshipOnboardingStep1({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const result = validateScholarshipOnboardingBasicsWithoutBirth(values);
-    if (!result.ok) {
-      setErrors(result.errors);
+    const validation = validateScholarshipOnboardingBasicsWithoutBirth(values);
+    const nextErrors: Partial<
+      Record<keyof OnboardingFormValues | 'birthDate' | 'age', string>
+    > = {};
+    if (!validation.ok) {
+      const fieldError = validation.errors[basicStep];
+      if (fieldError) nextErrors[basicStep] = fieldError;
+    }
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
       return;
     }
     setErrors({});
     mergeAndSaveStep1Form(values, loadStoredOnboardingDraft());
     onContinue(values);
   };
+
+  const fieldConfig =
+    basicStep === 'schoolLevel'
+      ? {
+          selectId: 'onb-school-level',
+          label: 'Current school level',
+          options: schoolLevelSelectOptions,
+          value: values.schoolLevel,
+          error: errors.schoolLevel,
+          onChange: (v: string) => setField('schoolLevel', v),
+          menuClassName: undefined as string | undefined
+        }
+      : basicStep === 'fieldOfStudy'
+        ? {
+            selectId: 'onb-field-of-study',
+            label: 'Field of study',
+            options: fieldOfStudySelectOptions,
+            value: values.fieldOfStudy,
+            error: errors.fieldOfStudy,
+            onChange: (v: string) => setField('fieldOfStudy', v),
+            menuClassName: 'max-h-72'
+          }
+        : {
+            selectId: 'onb-citizenship',
+            label: 'Citizenship status',
+            options: citizenshipSelectOptions,
+            value: values.citizenship,
+            error: errors.citizenship,
+            onChange: (v: string) => setField('citizenship', v),
+            menuClassName: undefined as string | undefined
+          };
 
   return (
     <form
@@ -98,74 +148,49 @@ export function ScholarshipOnboardingStep1({
       className="w-full space-y-6"
       noValidate
     >
+      {typeof onBack === 'function' ? (
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={disabled}
+          className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
+        >
+          ← Back
+        </button>
+      ) : null}
+
       <div className="mx-auto max-w-lg text-center">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
-          Step 1 of 4 · Basics
+          {progressEyebrow ?? 'Step 1 of 6 · Basics'}
         </p>
         <h1 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
-          Tell us about you
+          {title ?? 'Tell us about you'}
         </h1>
         <p className="mx-auto mt-3 max-w-md text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
-          We use this to match scholarships to your background and goals.
+          {description ?? 'We use this to match scholarships to your background and goals.'}
         </p>
         <p className="mx-auto mt-2.5 max-w-md text-sm leading-relaxed text-zinc-500 sm:max-w-lg">
-          The more details you share, the better we can tailor scholarship matches
-          to you.
+          {helperText ??
+            'The more details you share, the better we can tailor scholarship matches to you.'}
         </p>
       </div>
 
       <div className="space-y-5 text-left">
         <div>
-          <label htmlFor="onb-school-level" className={sectionLabelClass}>
-            Current school level
+          <label htmlFor={fieldConfig.selectId} className={sectionLabelClass}>
+            {fieldConfig.label}
           </label>
           <DarkSelect
-            id="onb-school-level"
-            options={schoolLevelSelectOptions}
-            value={values.schoolLevel}
-            onChange={(v) => setField('schoolLevel', v)}
+            id={fieldConfig.selectId}
+            ariaLabel={fieldConfig.label}
+            options={fieldConfig.options}
+            value={fieldConfig.value}
+            onChange={fieldConfig.onChange}
             disabled={disabled}
-            hasError={Boolean(errors.schoolLevel)}
+            hasError={Boolean(fieldConfig.error)}
+            menuClassName={fieldConfig.menuClassName}
           />
-          {errors.schoolLevel ? (
-            <p className={fieldHintClass}>{errors.schoolLevel}</p>
-          ) : null}
-        </div>
-
-        <div>
-          <label htmlFor="onb-field-of-study" className={sectionLabelClass}>
-            Field of study
-          </label>
-          <DarkSelect
-            id="onb-field-of-study"
-            options={fieldOfStudySelectOptions}
-            value={values.fieldOfStudy}
-            onChange={(v) => setField('fieldOfStudy', v)}
-            disabled={disabled}
-            hasError={Boolean(errors.fieldOfStudy)}
-            menuClassName="max-h-72"
-          />
-          {errors.fieldOfStudy ? (
-            <p className={fieldHintClass}>{errors.fieldOfStudy}</p>
-          ) : null}
-        </div>
-
-        <div>
-          <label htmlFor="onb-citizenship" className={sectionLabelClass}>
-            Citizenship status
-          </label>
-          <DarkSelect
-            id="onb-citizenship"
-            ariaLabel="Citizenship status"
-            options={citizenshipSelectOptions}
-            value={values.citizenship}
-            onChange={(v) => setField('citizenship', v)}
-            disabled={disabled}
-            hasError={Boolean(errors.citizenship)}
-          />
-          {errors.citizenship ? (
-            <p className={fieldHintClass}>{errors.citizenship}</p>
-          ) : null}
+          {fieldConfig.error ? <p className={fieldHintClass}>{fieldConfig.error}</p> : null}
         </div>
       </div>
 

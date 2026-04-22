@@ -72,7 +72,7 @@ function defaultStored(): StoredOnboardingDraft {
 }
 
 function normalizeActiveStep(n: unknown): OnboardingStep {
-  if (n === 2 || n === 3 || n === 4 || n === 5) return n;
+  if (n === 2 || n === 3 || n === 4 || n === 5 || n === 6 || n === 7) return n;
   return 1;
 }
 

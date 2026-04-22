@@ -1,25 +1,27 @@
-import { validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 
 /** Last onboarding screen in the wizard (account creation). Email confirm is no longer a step. */
-const UI_MAX_STEP = 4 as OnboardingStep;
+const UI_MAX_STEP = 6 as OnboardingStep;
 
 /**
- * Furthest URL step: after basics (step 1) user may open 2–4 only as far as `activeStep`
- * has progressed. Account fields are not required until step 4.
+ * Furthest URL step: basics are split into 3 screens, then steps 4-6 open by progress.
+ * Account fields are not required until step 6.
  */
-function step1ValidForDraft(draft: StoredOnboardingDraft): boolean {
-  return validateScholarshipOnboardingBasicsWithoutBirth(draft.step1).ok;
-}
-
 export function getMaxAllowedOnboardingStep(
   draft: StoredOnboardingDraft
 ): OnboardingStep {
-  if (!step1ValidForDraft(draft)) return 1;
+  const schoolLevelReady = draft.step1.schoolLevel.trim().length > 0;
+  if (!schoolLevelReady) return 1;
+
+  const fieldOfStudyReady = draft.step1.fieldOfStudy.trim().length > 0;
+  if (!fieldOfStudyReady) return 2;
+
+  const citizenshipReady = draft.step1.citizenship.trim().length > 0;
+  if (!citizenshipReady) return 3;
+
   const furthest = Math.min(draft.activeStep, UI_MAX_STEP) as OnboardingStep;
-  const cap = Math.min(UI_MAX_STEP, Math.max(2, furthest)) as OnboardingStep;
-  return cap;
+  return Math.min(UI_MAX_STEP, Math.max(4, furthest)) as OnboardingStep;
 }
 
 export function onboardingStepHref(
@@ -47,7 +49,7 @@ export function clampOnboardingStepToProgress(
 }
 
 export function normalizeOnboardingStepParam(n: number): OnboardingStep | null {
-  if (n === 1 || n === 2 || n === 3 || n === 4 || n === 5) return n;
+  if (n === 1 || n === 2 || n === 3 || n === 4 || n === 5 || n === 6 || n === 7) return n;
   return null;
 }
 

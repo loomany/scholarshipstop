@@ -214,6 +214,15 @@ export function GetScholarshipsQuizWizard({
           </button>
         ) : null}
 
+        <div className="mb-8 text-center sm:mb-10">
+          <h1 className="text-balance text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
+            Get matched with scholarships in 2 minutes
+          </h1>
+          <p className="mx-auto mt-4 max-w-md text-pretty text-lg leading-relaxed text-zinc-600">
+            Answer a few quick questions and find scholarships you can apply for today
+          </p>
+        </div>
+
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
           {step === 1 ? (
             <GetScholarshipsQuizSingleSelectStep

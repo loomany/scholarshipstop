@@ -65,6 +65,7 @@ type Props = {
   oauthRedirectAfterAuthPath: string;
   /** `/get-scholarships` quiz uses a separate localStorage draft from `/onboarding`. */
   draftStore?: 'onboarding' | 'landing';
+  progressEyebrow?: string;
 };
 
 export function ScholarshipOnboardingStep2({
@@ -75,7 +76,8 @@ export function ScholarshipOnboardingStep2({
   onBack,
   onContinue,
   oauthRedirectAfterAuthPath,
-  draftStore = 'onboarding'
+  draftStore = 'onboarding',
+  progressEyebrow
 }: Props) {
   const loadDraft =
     draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
@@ -336,7 +338,7 @@ export function ScholarshipOnboardingStep2({
       </button>
       <div className="mx-auto max-w-lg text-center">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
-          Step 4 of 4 · Account
+          {progressEyebrow ?? 'Step 4 of 4 · Account'}
         </p>
         <h2
           id="onboarding-step2-title"
