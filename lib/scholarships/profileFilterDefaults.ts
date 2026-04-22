@@ -15,7 +15,7 @@ import { DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP } from '@/lib/constants/onboardingC
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { parseUserGpa, type ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
-import { validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
+import { validateScholarshipOnboardingBasicsOptionalWithoutBirth, validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
 import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
 import { validateScholarshipOnboardingStep4Draft } from '@/lib/validation/scholarshipOnboardingStep4Schema';
 
@@ -119,7 +119,7 @@ function resolvedFieldOfStudySlugFromProfile(profile: ProfilesRow): string | nul
 export function buildScholarshipProfileFilterSeedFromDraftWithoutBirth(
   draft: StoredOnboardingDraft
 ): ScholarshipProfileFilterSeed | null {
-  if (!validateScholarshipOnboardingBasicsWithoutBirth(draft.step1).ok) return null;
+  if (!validateScholarshipOnboardingBasicsOptionalWithoutBirth(draft.step1).ok) return null;
   if (!validateScholarshipOnboardingStep3Gpa(draft.step3).ok) return null;
 
   const stateInput =
@@ -154,7 +154,7 @@ export function buildScholarshipProfileFilterSeedFromQuizDraft(
   draft: StoredOnboardingDraft
 ): ScholarshipProfileFilterSeed | null {
   if (draft.quizVariant !== 'landing_no_birth') return null;
-  if (!validateScholarshipOnboardingBasicsWithoutBirth(draft.step1).ok) return null;
+  if (!validateScholarshipOnboardingBasicsOptionalWithoutBirth(draft.step1).ok) return null;
   if (!validateScholarshipOnboardingStep4Draft(draft.step4).ok) return null;
   if (!validateScholarshipOnboardingStep3Gpa(draft.step3).ok) return null;
   return buildScholarshipProfileFilterSeedFromDraftWithoutBirth(draft);

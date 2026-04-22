@@ -59,9 +59,9 @@ const citizenshipOptions = [
 ];
 
 function defaultResumeLandingQuizStep(draft: StoredOnboardingDraft): LandingQuizStep {
-  if (!draft.step1.schoolLevel.trim()) return 1;
-  if (!draft.step1.fieldOfStudy.trim()) return 2;
-  if (!draft.step1.citizenship.trim()) return 3;
+  if (draft.activeStep === 1 || draft.activeStep === 2 || draft.activeStep === 3) {
+    return draft.activeStep;
+  }
   if (draft.activeStep === 4) return 4;
   if (!validateScholarshipOnboardingStep3Gpa(draft.step3).ok) return 5;
   return 5;
@@ -237,7 +237,7 @@ export function GetScholarshipsQuizWizard({
               disabled={false}
               progressEyebrow="Step 1 of 5 · Basics"
               title="What is your school level?"
-              description="We use this to match scholarships to the right education stage."
+              description="Optional. Pick it to tighten recommendations by education stage, or skip for broader results."
               label="Current school level"
               selectId="gsq-school-level"
               options={schoolLevelOptions}
@@ -255,10 +255,6 @@ export function GetScholarshipsQuizWizard({
                 })
               }
               onContinue={() => {
-                if (!draft.step1.schoolLevel.trim()) {
-                  notifyDestructive('Choose your school level to continue.');
-                  return;
-                }
                 updateStep1AndAdvance('schoolLevel', draft.step1.schoolLevel, 2);
               }}
             />
@@ -268,7 +264,7 @@ export function GetScholarshipsQuizWizard({
               disabled={false}
               progressEyebrow="Step 2 of 5 · Basics"
               title="What field of study are you pursuing?"
-              description="Many scholarships are targeted to a specific major or academic path."
+              description="Optional. Pick a major to narrow matches, or skip to keep recommendations broader."
               label="Field of study"
               selectId="gsq-field-of-study"
               options={fieldOfStudyOptions}
@@ -288,10 +284,6 @@ export function GetScholarshipsQuizWizard({
               }
               onBack={() => handleBack(1)}
               onContinue={() => {
-                if (!draft.step1.fieldOfStudy.trim()) {
-                  notifyDestructive('Choose your field of study to continue.');
-                  return;
-                }
                 updateStep1AndAdvance('fieldOfStudy', draft.step1.fieldOfStudy, 3);
               }}
             />
@@ -301,7 +293,7 @@ export function GetScholarshipsQuizWizard({
               disabled={false}
               progressEyebrow="Step 3 of 5 · Basics"
               title="What is your citizenship status?"
-              description="Citizenship affects eligibility for many scholarships."
+              description="Optional. Add it for stricter eligibility matching, or skip for a wider set of grants."
               label="Citizenship status"
               selectId="gsq-citizenship"
               ariaLabel="Citizenship status"
@@ -321,10 +313,6 @@ export function GetScholarshipsQuizWizard({
               }
               onBack={() => handleBack(2)}
               onContinue={() => {
-                if (!draft.step1.citizenship.trim()) {
-                  notifyDestructive('Choose your citizenship status to continue.');
-                  return;
-                }
                 updateStep1AndAdvance('citizenship', draft.step1.citizenship, 4);
               }}
             />
