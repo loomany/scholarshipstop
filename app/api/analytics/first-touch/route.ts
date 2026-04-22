@@ -155,6 +155,7 @@ export async function POST(request: Request) {
 
   if (!is_likely_bot) {
     void notifyTelegramAdminsVisitorFirstTouch({
+      visitorId,
       trafficChannel: traffic_channel,
       landingUrl: landing_url,
       referrer: referrer || null,

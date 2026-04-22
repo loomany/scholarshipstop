@@ -14,6 +14,7 @@
     "billing:reset:loomany": "dotenv -e .env.local -- npx tsx scripts/reset-user-billing-state.ts loomany.self@gmail.com",
     "telegram:sync-resource-webhook": "dotenv -e .env.local -- tsx scripts/sync-telegram-resource-webhook-config.ts",
     "telegram:sync-scholarship-admin-notify": "dotenv -e .env.local -- tsx scripts/sync-scholarship-admin-notify-config.ts",
+    "telegram:verify-env": "dotenv -e .env.local -- node scripts/verify-telegram-setup.mjs",
     "test:scholarship-admin-notify": "dotenv -e .env.local -- tsx scripts/test-scholarship-admin-notify.ts",
     "supabase:start": "npx supabase start",
     "supabase:stop": "npx supabase stop",

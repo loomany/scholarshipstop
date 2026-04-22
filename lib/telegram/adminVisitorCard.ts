@@ -127,6 +127,36 @@ export function formatKaragandaDateTime(iso: string | null | undefined): string 
   }
 }
 
+/** `23.04 = 02:49` in Karaganda time — inline list buttons for admin “Пользователи”. */
+export function formatFirstTouchListButtonTime(iso: string | null | undefined): string {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '—';
+  const opts: Intl.DateTimeFormatOptions = {
+    timeZone: KARAGANDA_TZ,
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  };
+  try {
+    const parts = new Intl.DateTimeFormat('ru-RU', opts).formatToParts(d);
+    const get = (t: Intl.DateTimeFormatPartTypes) =>
+      parts.find((p) => p.type === t)?.value ?? '';
+    return `${get('day')}.${get('month')} = ${get('hour')}:${get('minute')}`;
+  } catch {
+    try {
+      const parts = new Intl.DateTimeFormat('ru-RU', { ...opts, timeZone: 'UTC' }).formatToParts(d);
+      const get = (t: Intl.DateTimeFormatPartTypes) =>
+        parts.find((p) => p.type === t)?.value ?? '';
+      return `${get('day')}.${get('month')} = ${get('hour')}:${get('minute')} UTC`;
+    } catch {
+      return '—';
+    }
+  }
+}
+
 export function summarizeUserAgent(ua: string | null | undefined): string {
   if (!ua?.trim()) return '—';
   const s = ua.trim();

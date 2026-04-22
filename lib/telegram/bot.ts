@@ -28,13 +28,13 @@ import {
   getFirstTouchNotifySourceKey,
   labelForVisitorRow,
   type TrafficChannel,
-  formatFirstTouchVisitorAlertLabel,
-  formatTrafficChannelLabel
+  formatFirstTouchVisitorAlertLabel
 } from '@/lib/analytics/resolveTrafficChannel';
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 import {
   buildVisitorAdminCardHtml,
+  formatFirstTouchListButtonTime,
   type VisitorCardAttribution,
   type VisitorCardTouch,
   type VisitorPageViewRow
@@ -68,10 +68,9 @@ type TelegramUserRow = Database['public']['Tables']['telegram_users']['Row'];
 type TelegramEventType = Database['public']['Tables']['telegram_event_logs']['Row']['event_type'];
 type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 
-type TelegramInlineButton = {
-  text: string;
-  callback_data: string;
-};
+type TelegramInlineButton =
+  | { text: string; callback_data: string }
+  | { text: string; url: string };
 
 type TelegramReplyMarkup = {
   inline_keyboard: TelegramInlineButton[][];
@@ -142,6 +141,9 @@ const CALLBACKS = {
 
 const USERS_OPEN_PREFIX = 'tg:users:open:';
 const USERS_PAGE_PREFIX = 'tg:users:page:';
+/** 7 + 36 = 43b — in-place expand/collapse for «Новый визит…» (rebuilt from Supabase in handler). */
+const ADMIN_FIRST_TOUCH_SHORT_PREFIX = 'tg:ft:S';
+const ADMIN_FIRST_TOUCH_FULL_PREFIX = 'tg:ft:F';
 
 export function buildUsersOpenCallbackData(visitorId: string): string {
   return `${USERS_OPEN_PREFIX}${visitorId.trim()}`;
@@ -248,6 +250,10 @@ function button(text: string, callback_data: string): TelegramInlineButton {
   return { text, callback_data };
 }
 
+function urlButton(text: string, url: string): TelegramInlineButton {
+  return { text, url };
+}
+
 function keyboardButton(text: string): TelegramKeyboardButton {
   return { text };
 }
@@ -275,8 +281,10 @@ function buildProfileKeyboard(user: TelegramUserRow): TelegramReplyKeyboardMarku
     return {
       keyboard: [
         [primaryConnectButton, keyboardButton(BUTTON_LABELS.admin)],
-        [keyboardButton(BUTTON_LABELS.adminAlertsMenu)],
-        [keyboardButton(BUTTON_LABELS.adminUsers)],
+        [
+          keyboardButton(BUTTON_LABELS.adminAlertsMenu),
+          keyboardButton(BUTTON_LABELS.adminUsers)
+        ],
         [keyboardButton(BUTTON_LABELS.backToMenu)]
       ],
       resize_keyboard: true,
@@ -821,9 +829,10 @@ async function sendTelegramAdminBroadcastHtml(text: string, category: AdminNotif
       );
       return;
     }
+    const merged = mergeAdminAlertReplyMarkup(undefined);
     for (const chatId of chatIds) {
       try {
-        await sendTelegramMessage(chatId, text, undefined, { parse_mode: 'HTML' });
+        await sendTelegramMessage(chatId, text, merged, { parse_mode: 'HTML' });
       } catch (e) {
         console.error('[telegram] sendTelegramAdminBroadcastHtml chat failed', chatId, e);
       }
@@ -870,12 +879,27 @@ function formatVisitorFirstTouchLandingTelegramHtml(landingUrl: string): string 
   }
 }
 
-/**
- * First-touch anonymous visit (after DB insert). Same audience as signup admin pings (env + DB admins).
- */
-export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
+function formatVisitorFirstTouchLandingTelegramHtmlCompact(landingUrl: string): string {
+  try {
+    const u = new URL(landingUrl);
+    u.hash = '';
+    u.searchParams.delete('code');
+    u.searchParams.delete('token_hash');
+    const safeUrl = u.toString();
+    const pathQuery = `${u.pathname}${u.search}` || '/';
+    const displayPath =
+      pathQuery.length > 90 ? `${pathQuery.slice(0, 87)}…` : pathQuery;
+    return (
+      `<b>Страница входа:</b> <a href="${escapeTelegramHtml(safeUrl)}">${escapeTelegramHtml(displayPath)}</a>` +
+      '\n<i>Полные UTM и подсказки — кнопка «Подробнее».</i>'
+    );
+  } catch {
+    return `<b>Страница входа:</b> ${escapeTelegramHtml(landingUrl.slice(0, 90))}…`;
+  }
+}
+
+type VisitorFirstTouchAdminPayload = {
   trafficChannel: TrafficChannel;
-  /** Normalized landing URL (no gclid/fbclid tail). */
   landingUrl: string;
   referrer?: string | null;
   utm_source?: string | null;
@@ -883,7 +907,156 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
   utm_campaign?: string | null;
   clickId?: string | null;
   clickIdParam?: 'gclid' | 'fbclid' | null;
-}) {
+};
+
+function buildVisitorFirstTouchMessageHtml(
+  payload: VisitorFirstTouchAdminPayload,
+  view: 'short' | 'full'
+): string {
+  const channelDisplay = formatFirstTouchVisitorAlertLabel({
+    traffic_channel: payload.trafficChannel,
+    landing_url: payload.landingUrl,
+    referrer: payload.referrer,
+    utm_source: payload.utm_source,
+    utm_medium: payload.utm_medium,
+    utm_campaign: payload.utm_campaign
+  });
+
+  const lines: string[] = ['<b>Новый визит на ScholarshipTop</b>', '<b>Статус:</b> Успешно'];
+  const showGoogleAdsTag = payload.clickIdParam === 'gclid';
+  const showPaidTag = payload.clickIdParam === 'fbclid';
+  if (showGoogleAdsTag) {
+    lines.push('', '💰 <b>Источник:</b> Google Ads');
+  } else if (showPaidTag) {
+    lines.push('', '🚀 <b>Источник:</b> Реклама');
+  }
+  lines.push(
+    '',
+    `<b>Канал:</b> ${escapeTelegramHtml(channelDisplay)}`,
+    '',
+    view === 'short'
+      ? formatVisitorFirstTouchLandingTelegramHtmlCompact(payload.landingUrl)
+      : formatVisitorFirstTouchLandingTelegramHtml(payload.landingUrl)
+  );
+  return lines.join('\n');
+}
+
+function getTelegramAdminGalleryKeyboardUrlRows(): TelegramInlineButton[][] {
+  const raw = process.env.TELEGRAM_ADMIN_GALLERY_URLS?.trim();
+  if (!raw) {
+    return [];
+  }
+  const parts = raw.split(/[,\n\r]+/).map((s) => s.trim()).filter(Boolean);
+  const rows: TelegramInlineButton[][] = [];
+  let i = 0;
+  for (const p of parts) {
+    if (!/^https?:\/\//i.test(p) || p.length > 2000) {
+      continue;
+    }
+    i += 1;
+    const cell = urlButton(`📷 Скрин ${i}`, p);
+    const last = rows[rows.length - 1];
+    if (!last || last.length >= 2) {
+      rows.push([cell]);
+    } else {
+      last.push(cell);
+    }
+  }
+  return rows;
+}
+
+function mergeAdminAlertReplyMarkup(markup?: TelegramReplyMarkup | null): TelegramReplyMarkup | undefined {
+  const gallery = getTelegramAdminGalleryKeyboardUrlRows();
+  if (gallery.length === 0) {
+    return markup ?? undefined;
+  }
+  if (!markup?.inline_keyboard?.length) {
+    return { inline_keyboard: gallery };
+  }
+  return { inline_keyboard: [...markup.inline_keyboard, ...gallery] };
+}
+
+function buildFirstTouchAdminAlertKeyboard(visitorId: string, view: 'short' | 'full'): TelegramReplyMarkup {
+  const v = visitorId.trim();
+  const fold =
+    view === 'short'
+      ? button('👁 Подробнее', `${ADMIN_FIRST_TOUCH_FULL_PREFIX}${v}`)
+      : button('⬅️ Скрыть', `${ADMIN_FIRST_TOUCH_SHORT_PREFIX}${v}`);
+  return {
+    inline_keyboard: [
+      [fold],
+      [button('👤 Открыть пользователя', buildUsersOpenCallbackData(v))],
+      ...getTelegramAdminGalleryKeyboardUrlRows()
+    ]
+  };
+}
+
+/**
+ * Rebuilds first-touch HTML + keyboard for callback toggles. Uses the latest row in Supabase.
+ */
+async function applyAdminFirstTouchFoldToMessage(
+  user: TelegramUserRow,
+  args: { visitorId: string; view: 'short' | 'full'; edit: { chatId: number; messageId: number } }
+): Promise<void> {
+  const envAdmin = getTelegramAdminIds().has(Number(user.telegram_user_id));
+  if (!user.is_admin && !envAdmin) {
+    return;
+  }
+  if (!VISITOR_ID_RE.test(args.visitorId)) {
+    return;
+  }
+  const admin = getAdminClient();
+  if (!admin) {
+    return;
+  }
+  const { data: row, error } = await admin
+    .from('anonymous_visitor_first_touch')
+    .select(
+      'visitor_id, landing_url, traffic_channel, referrer, utm_source, utm_medium, utm_campaign, click_id, id'
+    )
+    .eq('visitor_id', args.visitorId)
+    .maybeSingle();
+  if (error || !row) {
+    await callTelegramApi('editMessageText', {
+      chat_id: args.edit.chatId,
+      message_id: args.edit.messageId,
+      text: 'Не найдена запись визита (возможно, удалена).',
+      disable_web_page_preview: true
+    });
+    return;
+  }
+
+  const payload: VisitorFirstTouchAdminPayload = {
+    trafficChannel: (row.traffic_channel as TrafficChannel) ?? 'direct_unknown',
+    landingUrl: row.landing_url,
+    referrer: row.referrer,
+    utm_source: row.utm_source,
+    utm_medium: row.utm_medium,
+    utm_campaign: row.utm_campaign,
+    clickId: row.click_id
+  };
+
+  const text = buildVisitorFirstTouchMessageHtml(
+    payload,
+    args.view === 'short' ? 'short' : 'full'
+  );
+  const keyboard = buildFirstTouchAdminAlertKeyboard(row.visitor_id, args.view === 'short' ? 'short' : 'full');
+  await callTelegramApi('editMessageText', {
+    chat_id: args.edit.chatId,
+    message_id: args.edit.messageId,
+    text,
+    parse_mode: 'HTML',
+    disable_web_page_preview: true,
+    reply_markup: keyboard
+  });
+}
+
+/**
+ * First-touch anonymous visit (after DB insert). Same audience as signup admin pings (env + DB admins).
+ */
+export async function notifyTelegramAdminsVisitorFirstTouch(
+  payload: VisitorFirstTouchAdminPayload & { visitorId: string }
+) {
   try {
     if (!getTelegramBotToken()) {
       console.warn(
@@ -892,31 +1065,7 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
       return;
     }
 
-    const channelDisplay = formatFirstTouchVisitorAlertLabel({
-      traffic_channel: payload.trafficChannel,
-      landing_url: payload.landingUrl,
-      referrer: payload.referrer,
-      utm_source: payload.utm_source,
-      utm_medium: payload.utm_medium,
-      utm_campaign: payload.utm_campaign
-    });
-
-    const lines: string[] = ['<b>Новый визит на ScholarshipTop</b>', '<b>Статус:</b> Успешно'];
-    const showGoogleAdsTag = payload.clickIdParam === 'gclid';
-    const showPaidTag = payload.clickIdParam === 'fbclid';
-    if (showGoogleAdsTag) {
-      lines.push('', '💰 <b>Источник:</b> Google Ads');
-    } else if (showPaidTag) {
-      lines.push('', '🚀 <b>Источник:</b> Реклама');
-    }
-    lines.push(
-      '',
-      `<b>Канал:</b> ${escapeTelegramHtml(channelDisplay)}`,
-      '',
-      formatVisitorFirstTouchLandingTelegramHtml(payload.landingUrl)
-    );
-
-    const text = lines.join('\n');
+    const text = buildVisitorFirstTouchMessageHtml(payload, 'short');
 
     const sourceKey = getFirstTouchNotifySourceKey({
       traffic_channel: payload.trafficChannel,
@@ -934,9 +1083,10 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
       );
       return;
     }
+    const replyMarkup = buildFirstTouchAdminAlertKeyboard(payload.visitorId, 'short');
     for (const chatId of chatIds) {
       try {
-        await sendTelegramMessage(chatId, text, undefined, { parse_mode: 'HTML' });
+        await sendTelegramMessage(chatId, text, replyMarkup, { parse_mode: 'HTML' });
       } catch (e) {
         console.error('[telegram] notifyTelegramAdminsVisitorFirstTouch chat failed', chatId, e);
       }
@@ -953,7 +1103,8 @@ export async function notifyTelegramAdminsVisitorFirstTouch(payload: {
 export async function notifyEnvTelegramAdminsPlainText(
   text: string,
   category: AdminNotifyCategory = 'grants',
-  replyMarkup?: TelegramReplyMarkup
+  replyMarkup?: TelegramReplyMarkup,
+  options?: { parse_mode?: 'HTML' }
 ) {
   if (!getTelegramBotToken()) {
     console.warn('[telegram] notifyEnvTelegramAdminsPlainText: missing TELEGRAM_BOT_TOKEN');
@@ -967,9 +1118,10 @@ export async function notifyEnvTelegramAdminsPlainText(
     );
     return;
   }
+  const merged = mergeAdminAlertReplyMarkup(replyMarkup);
   for (const chatId of chatIds) {
     try {
-      await sendTelegramMessage(chatId, text, replyMarkup);
+      await sendTelegramMessage(chatId, text, merged, options);
     } catch (e) {
       console.error('[telegram] notifyEnvTelegramAdminsPlainText chat failed', chatId, e);
     }
@@ -1477,8 +1629,14 @@ async function sendAdminPanel(user: TelegramUserRow) {
 type VisitorFirstTouchRow =
   Database['public']['Tables']['anonymous_visitor_first_touch']['Row'];
 
-function shortVisitorId(v: string): string {
-  return `${v.slice(0, 8)}…${v.slice(-4)}`;
+/** Newest `created_at` first; `id` breaks ties (stable, matches DB order). */
+function sortFirstTouchRowsNewestFirst(rows: VisitorFirstTouchRow[]) {
+  rows.sort((a, b) => {
+    const ta = new Date(a.created_at).getTime();
+    const tb = new Date(b.created_at).getTime();
+    if (tb !== ta) return tb - ta;
+    return b.id.localeCompare(a.id);
+  });
 }
 
 function formatDurationRu(totalSec: number): string {
@@ -1498,29 +1656,68 @@ function buildAdminUsersInlineKeyboard(
   offset: number,
   hasMore: boolean
 ): TelegramReplyMarkup {
-  const buttons: TelegramInlineButton[][] = rows.map((row, idx) => {
-    const source = formatTrafficChannelLabel((row.traffic_channel as TrafficChannel) ?? null);
-    const title = `${idx + 1 + offset}. ${source} · ${shortVisitorId(row.visitor_id)}`;
-    return [button(title.slice(0, 64), `${USERS_OPEN_PREFIX}${row.visitor_id}`)];
+  const userButtons: TelegramInlineButton[] = rows.map((row, idx) => {
+    const timePart = formatFirstTouchListButtonTime(row.created_at);
+    const title = `${idx + 1 + offset}. ${timePart}`.slice(0, 64);
+    return button(title, `${USERS_OPEN_PREFIX}${row.visitor_id}`);
   });
+  const inline_keyboard: TelegramInlineButton[][] = [];
+  for (let i = 0; i < userButtons.length; i += 2) {
+    inline_keyboard.push(userButtons.slice(i, i + 2));
+  }
+  const navRow: TelegramInlineButton[] = [];
   if (offset > 0) {
     const prev = Math.max(0, offset - rows.length);
-    buttons.push([button('⬅️ Назад', `${USERS_PAGE_PREFIX}${prev}`)]);
+    navRow.push(button('⬅️ Назад', `${USERS_PAGE_PREFIX}${prev}`));
   }
   if (hasMore) {
-    buttons.push([button('➡️ Еще', `${USERS_PAGE_PREFIX}${offset + rows.length}`)]);
+    navRow.push(button('➡️ Еще', `${USERS_PAGE_PREFIX}${offset + rows.length}`));
   }
-  return { inline_keyboard: buttons };
+  if (navRow.length > 0) {
+    inline_keyboard.push(navRow);
+  }
+  return { inline_keyboard };
 }
 
-async function sendAdminUsersList(user: TelegramUserRow, offset = 0) {
+async function sendAdminUsersList(
+  user: TelegramUserRow,
+  offset = 0,
+  opts?: { editTarget?: { chatId: number; messageId: number }; callbackQueryId?: string }
+) {
+  const { editTarget, callbackQueryId } = opts ?? {};
+  const finish = async () => {
+    if (callbackQueryId) {
+      try {
+        await answerTelegramCallbackQuery(callbackQueryId);
+      } catch (e) {
+        console.error('[telegram] answerCallbackQuery (admin users list)', e);
+      }
+    }
+  };
+
   const envAdmin = getTelegramAdminIds().has(Number(user.telegram_user_id));
   if (!user.is_admin && !envAdmin) {
     await sendTelegramMessage(user.telegram_chat_id, 'Только для админов.', buildProfileKeyboard(user));
+    await finish();
     return;
   }
   const admin = getAdminClient();
-  if (!admin) return;
+  if (!admin) {
+    const t = 'Админ-клиент Supabase недоступен (проверь service role / env).';
+    if (editTarget) {
+      await callTelegramApi('editMessageText', {
+        chat_id: editTarget.chatId,
+        message_id: editTarget.messageId,
+        text: t,
+        disable_web_page_preview: true,
+        reply_markup: { inline_keyboard: [] }
+      });
+    } else {
+      await sendTelegramMessage(user.telegram_chat_id, t, buildProfileKeyboard(user));
+    }
+    await finish();
+    return;
+  }
 
   const limit = 12;
   const since = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
@@ -1532,27 +1729,50 @@ async function sendAdminUsersList(user: TelegramUserRow, offset = 0) {
     .eq('is_likely_bot', false)
     .gte('created_at', since)
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(offset, offset + limit);
 
   if (error) {
-    await sendTelegramMessage(
-      user.telegram_chat_id,
-      `Не удалось загрузить пользователей: ${error.message}`,
-      buildProfileKeyboard(user)
-    );
+    const errText = `Не удалось загрузить пользователей: ${error.message}`;
+    if (editTarget) {
+      await callTelegramApi('editMessageText', {
+        chat_id: editTarget.chatId,
+        message_id: editTarget.messageId,
+        text: errText,
+        disable_web_page_preview: true,
+        reply_markup: { inline_keyboard: [] }
+      });
+    } else {
+      await sendTelegramMessage(user.telegram_chat_id, errText, buildProfileKeyboard(user));
+    }
+    await finish();
     return;
   }
 
   const rows = (data ?? []) as VisitorFirstTouchRow[];
+  sortFirstTouchRowsNewestFirst(rows);
   const hasMore = rows.length > limit;
   const visibleRows = hasMore ? rows.slice(0, limit) : rows;
 
   if (visibleRows.length === 0) {
-    await sendTelegramMessage(
-      user.telegram_chat_id,
-      'За последние 48 часов (кроме ботов) новых пользователей не найдено.',
-      buildProfileKeyboard(user)
-    );
+    const emptyText =
+      'За последние 48 часов (кроме ботов) новых пользователей не найдено.';
+    if (editTarget) {
+      await callTelegramApi('editMessageText', {
+        chat_id: editTarget.chatId,
+        message_id: editTarget.messageId,
+        text: emptyText,
+        disable_web_page_preview: true,
+        reply_markup: { inline_keyboard: [] }
+      });
+    } else {
+      await sendTelegramMessage(
+        user.telegram_chat_id,
+        emptyText,
+        buildProfileKeyboard(user)
+      );
+    }
+    await finish();
     return;
   }
 
@@ -1562,17 +1782,41 @@ async function sendAdminUsersList(user: TelegramUserRow, offset = 0) {
     'Нажми на пользователя ниже, чтобы открыть полную карточку.'
   ];
 
+  const listMarkup = buildAdminUsersInlineKeyboard(visibleRows, offset, hasMore);
+  if (editTarget) {
+    const result = await editTelegramVisitorCardMessage({
+      chatId: editTarget.chatId,
+      messageId: editTarget.messageId,
+      text: lines.join('\n'),
+      replyMarkup: listMarkup
+    });
+    if (result === 'failed') {
+      await sendTelegramMessage(
+        user.telegram_chat_id,
+        lines.join('\n'),
+        listMarkup,
+        { parse_mode: 'HTML' }
+      );
+    }
+    await finish();
+    return;
+  }
+
   await sendTelegramMessage(
     user.telegram_chat_id,
     lines.join('\n'),
-    buildAdminUsersInlineKeyboard(visibleRows, offset, hasMore),
+    listMarkup,
     { parse_mode: 'HTML' }
   );
+  await finish();
 }
 
 function buildVisitorCardRefreshMarkup(visitorId: string): TelegramReplyMarkup {
   return {
-    inline_keyboard: [[button('🔄 Обновить', buildUsersOpenCallbackData(visitorId))]]
+    inline_keyboard: [
+      [button('🔄 Обновить', buildUsersOpenCallbackData(visitorId))],
+      [button('⬅️ Скрыть', `${USERS_PAGE_PREFIX}0`)]
+    ]
   };
 }
 
@@ -1597,23 +1841,34 @@ async function sendAdminUserAudit(
     }
   }
 
+  const editTarget = opts?.editTarget;
+  const failPlain = async (message: string) => {
+    if (editTarget) {
+      await callTelegramApi('editMessageText', {
+        chat_id: editTarget.chatId,
+        message_id: editTarget.messageId,
+        text: message,
+        disable_web_page_preview: true,
+        reply_markup: { inline_keyboard: [] }
+      });
+    } else {
+      await sendTelegramMessage(user.telegram_chat_id, message, buildProfileKeyboard(user));
+    }
+  };
+
   const envAdmin = getTelegramAdminIds().has(Number(user.telegram_user_id));
   if (!user.is_admin && !envAdmin) {
-    await sendTelegramMessage(user.telegram_chat_id, 'Только для админов.', buildProfileKeyboard(user));
+    await failPlain('Только для админов.');
     return;
   }
   if (!VISITOR_ID_RE.test(visitorId)) {
-    await sendTelegramMessage(user.telegram_chat_id, 'Некорректный visitor_id.', buildProfileKeyboard(user));
+    await failPlain('Некорректный visitor_id.');
     return;
   }
 
   const admin = getAdminClient();
   if (!admin) {
-    await sendTelegramMessage(
-      user.telegram_chat_id,
-      'Админ-клиент Supabase недоступен (проверь service role / env).',
-      buildProfileKeyboard(user)
-    );
+    await failPlain('Админ-клиент Supabase недоступен (проверь service role / env).');
     return;
   }
 
@@ -1626,11 +1881,7 @@ async function sendAdminUserAudit(
     .maybeSingle();
 
   if (touchErr || !touch) {
-    await sendTelegramMessage(
-      user.telegram_chat_id,
-      `Пользователь не найден: ${visitorId}`,
-      buildProfileKeyboard(user)
-    );
+    await failPlain(`Пользователь не найден: ${visitorId}`);
     return;
   }
 
@@ -1687,20 +1938,16 @@ async function sendAdminUserAudit(
     });
   } catch (e) {
     console.error('[telegram] buildVisitorAdminCardHtml', e);
-    await sendTelegramMessage(
-      user.telegram_chat_id,
-      'Не удалось собрать карточку пользователя (см. логи сервера).',
-      buildProfileKeyboard(user)
-    );
+    await failPlain('Не удалось собрать карточку пользователя (см. логи сервера).');
     return;
   }
 
   const refreshMarkup = buildVisitorCardRefreshMarkup(visitorId);
 
-  if (opts?.editTarget) {
+  if (editTarget) {
     const editResult = await editTelegramVisitorCardMessage({
-      chatId: opts.editTarget.chatId,
-      messageId: opts.editTarget.messageId,
+      chatId: editTarget.chatId,
+      messageId: editTarget.messageId,
       text,
       replyMarkup: refreshMarkup
     });
@@ -2670,27 +2917,52 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
       return;
     }
 
-    if (callbackData.startsWith(USERS_PAGE_PREFIX)) {
-      const raw = callbackData.slice(USERS_PAGE_PREFIX.length).trim();
-      const offset = Number(raw);
-      await sendAdminUsersList(user, Number.isFinite(offset) && offset >= 0 ? offset : 0);
+    if (
+      callbackData.startsWith(ADMIN_FIRST_TOUCH_SHORT_PREFIX) ||
+      callbackData.startsWith(ADMIN_FIRST_TOUCH_FULL_PREFIX)
+    ) {
+      const msg = callback.message;
+      if (msg?.chat?.id != null && msg?.message_id != null) {
+        const isFull = callbackData.startsWith(ADMIN_FIRST_TOUCH_FULL_PREFIX);
+        const prefix = isFull ? ADMIN_FIRST_TOUCH_FULL_PREFIX : ADMIN_FIRST_TOUCH_SHORT_PREFIX;
+        const visitorId = callbackData.slice(prefix.length).trim();
+        await applyAdminFirstTouchFoldToMessage(user, {
+          visitorId,
+          view: isFull ? 'full' : 'short',
+          edit: { chatId: msg.chat.id, messageId: msg.message_id }
+        });
+      }
       if (callback.id) {
         await answerTelegramCallbackQuery(callback.id);
       }
       return;
     }
 
+    if (callbackData.startsWith(USERS_PAGE_PREFIX)) {
+      const raw = callbackData.slice(USERS_PAGE_PREFIX.length).trim();
+      const offset = Number(raw);
+      const msg = callback.message;
+      const pageEdit =
+        msg?.chat?.id != null && msg?.message_id != null
+          ? { chatId: msg.chat.id, messageId: msg.message_id }
+          : undefined;
+      await sendAdminUsersList(
+        user,
+        Number.isFinite(offset) && offset >= 0 ? offset : 0,
+        { editTarget: pageEdit, callbackQueryId: callback.id }
+      );
+      return;
+    }
+
     if (callbackData.startsWith(USERS_OPEN_PREFIX)) {
       const visitorId = callbackData.slice(USERS_OPEN_PREFIX.length).trim();
       const msg = callback.message;
-      const msgText = typeof msg?.text === 'string' ? msg.text : '';
-      /** Do not replace the multi-user list message on first open from inline buttons. */
-      const isExistingVisitorCard = msgText.includes('Карточка пользователя');
+      const openEdit =
+        msg?.chat?.id != null && msg?.message_id != null
+          ? { chatId: msg.chat.id, messageId: msg.message_id }
+          : undefined;
       await sendAdminUserAudit(user, visitorId, {
-        editTarget:
-          isExistingVisitorCard && msg?.chat?.id != null && msg?.message_id != null
-            ? { chatId: msg.chat.id, messageId: msg.message_id }
-            : undefined,
+        editTarget: openEdit,
         callbackQueryId: callback.id
       });
       return;

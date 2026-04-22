@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { formatTrafficChannelLabel, type TrafficChannel } from '@/lib/analytics/resolveTrafficChannel';
+import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
+import { formatFirstTouchListButtonTime } from '@/lib/telegram/adminVisitorCard';
 import {
   buildUsersOpenCallbackData,
   notifyEnvTelegramAdminsPlainText
@@ -72,23 +74,30 @@ export async function POST(request: Request) {
     }
   }
 
+  const nowIso = new Date().toISOString();
+  const timeLocal = formatFirstTouchListButtonTime(nowIso);
   const lines = [
-    '✅ Quiz completed',
-    `Flow: ${flow}`,
-    `Auth: ${authState}`,
-    `Source: ${sourceLabel}`,
-    `Landing: ${landingPath}`,
-    `Referrer: ${firstReferrer}`,
-    `Visitor: ${visitorId ?? '-'}`,
-    `Time: ${new Date().toISOString()}`
+    '<b>✅ Quiz completed</b>',
+    `<b>Flow:</b> ${escapeTelegramHtml(flow)}`,
+    `<b>Auth:</b> ${escapeTelegramHtml(authState)}`,
+    `<b>Source:</b> ${escapeTelegramHtml(sourceLabel)}`,
+    `<b>Landing:</b> ${escapeTelegramHtml(landingPath)}`,
+    `<b>Referrer:</b> ${escapeTelegramHtml(firstReferrer)}`,
+    `<b>Visitor:</b> ${escapeTelegramHtml(visitorId ?? '-')}`,
+    `<b>Time:</b> ${escapeTelegramHtml(timeLocal)} <i>(Asia/Almaty)</i>`,
+    `<code>${escapeTelegramHtml(nowIso)}</code>`
   ];
 
   const replyMarkup = visitorId
     ? {
-        inline_keyboard: [[{ text: '👤 Открыть пользователя', callback_data: buildUsersOpenCallbackData(visitorId) }]]
+        inline_keyboard: [
+          [{ text: '👤 Открыть пользователя', callback_data: buildUsersOpenCallbackData(visitorId) }]
+        ]
       }
     : undefined;
-  await notifyEnvTelegramAdminsPlainText(lines.join('\n'), 'traffic', replyMarkup);
+  await notifyEnvTelegramAdminsPlainText(lines.join('\n'), 'traffic', replyMarkup, {
+    parse_mode: 'HTML'
+  });
   return NextResponse.json({ ok: true });
 }
 
