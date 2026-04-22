@@ -17,8 +17,12 @@ export function ProviderProfileScholarshipsScroll({ page }: Props) {
 
     if (isFirstMount.current) {
       isFirstMount.current = false;
-      if (page <= 1) return;
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (page <= 1) {
+        // Force top on initial provider page open; prevents restored mid-page offsets.
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        return;
+      }
+      el.scrollIntoView({ behavior: 'auto', block: 'start' });
       return;
     }
 

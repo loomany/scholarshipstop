@@ -202,12 +202,18 @@ export async function GET(request: NextRequest) {
 
   /** Full onboarding from DB + HttpOnly cookie (before Google OAuth) — does not rely on localStorage. */
   if (userForSync && session?.access_token) {
+    console.info('[auth:callback] attempting oauth pending consume', {
+      userId: userForSync.id
+    });
     await consumePendingOnboardingDraftAfterOAuth(
       request,
       response,
       userForSync.id,
       session.access_token
     );
+    console.info('[auth:callback] oauth pending consume finished', {
+      userId: userForSync.id
+    });
   }
 
   if (userForSync && session?.access_token && metaObj) {

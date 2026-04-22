@@ -34,7 +34,10 @@ export async function consumePendingOnboardingDraftAfterOAuth(
   accessToken: string
 ): Promise<void> {
   const token = request.cookies.get(OAUTH_PENDING_DRAFT_COOKIE)?.value?.trim();
-  if (!token) return;
+  if (!token) {
+    console.info('[oauth-pending] skip consume: cookie missing');
+    return;
+  }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -45,6 +48,14 @@ export async function consumePendingOnboardingDraftAfterOAuth(
   }
 
   const admin = createClient<Database>(url, serviceKey);
+  const nowIso = new Date().toISOString();
+  const { error: cleanupErr } = await admin
+    .from('onboarding_oauth_pending')
+    .delete()
+    .lt('expires_at', nowIso);
+  if (cleanupErr) {
+    console.warn('[oauth-pending] cleanup failed', cleanupErr.message);
+  }
 
   const { data: row, error: fetchErr } = await admin
     .from('onboarding_oauth_pending')
@@ -53,13 +64,23 @@ export async function consumePendingOnboardingDraftAfterOAuth(
     .maybeSingle();
 
   if (fetchErr || !row) {
-    console.warn('[oauth-pending] no row or fetch error', fetchErr?.message);
+    console.warn('[oauth-pending] no row or fetch error', {
+      error: fetchErr?.message ?? null,
+      userId
+    });
     clearPendingDraftCookie(response);
     return;
   }
 
   if (new Date(row.expires_at).getTime() < Date.now()) {
-    await admin.from('onboarding_oauth_pending').delete().eq('token', token);
+    const { error: deleteExpiredErr } = await admin
+      .from('onboarding_oauth_pending')
+      .delete()
+      .eq('token', token);
+    if (deleteExpiredErr) {
+      console.warn('[oauth-pending] delete expired row failed', deleteExpiredErr.message);
+    }
+    console.info('[oauth-pending] pending draft expired before consume', { userId });
     clearPendingDraftCookie(response);
     return;
   }
@@ -67,8 +88,14 @@ export async function consumePendingOnboardingDraftAfterOAuth(
   const draft = row.draft as unknown as StoredOnboardingDraft;
   const built = buildCompleteScholarshipUserProfile(draft, { forGoogleOAuth: true });
   if (!built.ok) {
-    console.warn('[oauth-pending] stored draft failed validation');
-    await admin.from('onboarding_oauth_pending').delete().eq('token', token);
+    console.warn('[oauth-pending] stored draft failed validation', { userId });
+    const { error: deleteInvalidErr } = await admin
+      .from('onboarding_oauth_pending')
+      .delete()
+      .eq('token', token);
+    if (deleteInvalidErr) {
+      console.warn('[oauth-pending] delete invalid row failed', deleteInvalidErr.message);
+    }
     clearPendingDraftCookie(response);
     return;
   }
@@ -84,10 +111,20 @@ export async function consumePendingOnboardingDraftAfterOAuth(
 
   const result = await syncOnboardingToProfiles(syncClient, userId, built.profile);
   if (!result.ok) {
-    console.error('[oauth-pending] profiles upsert failed', result.error);
+    console.error('[oauth-pending] profiles upsert failed', {
+      userId,
+      error: result.error
+    });
     return;
   }
 
-  await admin.from('onboarding_oauth_pending').delete().eq('token', token);
+  const { error: deleteErr } = await admin
+    .from('onboarding_oauth_pending')
+    .delete()
+    .eq('token', token);
+  if (deleteErr) {
+    console.warn('[oauth-pending] delete consumed row failed', deleteErr.message);
+  }
+  console.info('[oauth-pending] consume success', { userId });
   clearPendingDraftCookie(response);
 }

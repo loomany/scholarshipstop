@@ -15,9 +15,11 @@ import type { Database, Json } from '@/types_db';
  * Sets HttpOnly cookie so /auth/callback can upsert profiles without relying on localStorage.
  */
 export async function POST(request: Request) {
+  const requestId = `pending-oauth-${Date.now().toString(36)}`;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !serviceKey) {
+    console.warn('[pending-oauth-draft] missing env', { requestId });
     return NextResponse.json(
       { error: 'Server configuration error' },
       { status: 503 }
@@ -28,16 +30,19 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
+    console.warn('[pending-oauth-draft] invalid json', { requestId });
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
   const draft = (body as { draft?: unknown })?.draft as StoredOnboardingDraft | undefined;
   if (!draft || typeof draft !== 'object') {
+    console.warn('[pending-oauth-draft] missing draft payload', { requestId });
     return NextResponse.json({ error: 'Missing draft' }, { status: 400 });
   }
 
   const built = buildCompleteScholarshipUserProfile(draft, { forGoogleOAuth: true });
   if (!built.ok) {
+    console.warn('[pending-oauth-draft] incomplete onboarding draft', { requestId });
     return NextResponse.json(
       { error: 'Onboarding is incomplete — finish all steps before Google sign-in.' },
       { status: 422 }
@@ -48,7 +53,16 @@ export async function POST(request: Request) {
   const expiresAt = new Date(Date.now() + OAUTH_PENDING_TTL_MS).toISOString();
 
   const admin = createClient<Database>(url, serviceKey);
-  await admin.from('onboarding_oauth_pending').delete().lt('expires_at', new Date().toISOString());
+  const { error: cleanupErr } = await admin
+    .from('onboarding_oauth_pending')
+    .delete()
+    .lt('expires_at', new Date().toISOString());
+  if (cleanupErr) {
+    console.warn('[pending-oauth-draft] cleanup failed', {
+      requestId,
+      error: cleanupErr.message
+    });
+  }
 
   const { error: insErr } = await admin.from('onboarding_oauth_pending').insert({
     token,
@@ -57,7 +71,10 @@ export async function POST(request: Request) {
   });
 
   if (insErr) {
-    console.error('[pending-oauth-draft] insert', insErr.message);
+    console.error('[pending-oauth-draft] insert failed', {
+      requestId,
+      error: insErr.message
+    });
     return NextResponse.json({ error: 'Could not save draft' }, { status: 500 });
   }
 
@@ -71,5 +88,6 @@ export async function POST(request: Request) {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true
   });
+  console.info('[pending-oauth-draft] stored draft', { requestId });
   return res;
 }

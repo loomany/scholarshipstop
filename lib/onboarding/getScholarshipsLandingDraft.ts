@@ -28,8 +28,8 @@ function writeLanding(draft: StoredOnboardingDraft): void {
       GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY,
       JSON.stringify(withLandingMeta(draft))
     );
-  } catch {
-    /* quota */
+  } catch (error) {
+    console.warn('[landing-quiz] write draft failed', error);
   }
 }
 
@@ -54,7 +54,8 @@ export function loadLandingQuizDraft(): StoredOnboardingDraft | null {
       return null;
     }
     return withLandingMeta(parsed);
-  } catch {
+  } catch (error) {
+    console.warn('[landing-quiz] read draft failed', error);
     return null;
   }
 }
@@ -73,7 +74,8 @@ export function loadCompletedLandingQuizDraft(): StoredOnboardingDraft | null {
       return null;
     }
     return withLandingMeta(parsed);
-  } catch {
+  } catch (error) {
+    console.warn('[landing-quiz] read completed draft failed', error);
     return null;
   }
 }
@@ -85,8 +87,8 @@ export function saveCompletedLandingQuizDraft(draft: StoredOnboardingDraft): voi
       COMPLETED_GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY,
       JSON.stringify(withLandingMeta(draft))
     );
-  } catch {
-    /* quota */
+  } catch (error) {
+    console.warn('[landing-quiz] write completed draft failed', error);
   }
 }
 
@@ -138,7 +140,7 @@ export function clearLandingQuizDraft(): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.removeItem(GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY);
-  } catch {
-    /* ignore */
+  } catch (error) {
+    console.warn('[landing-quiz] clear draft failed', error);
   }
 }

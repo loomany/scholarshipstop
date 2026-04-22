@@ -28,6 +28,10 @@ import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { notifyQuizCompletionClient } from '@/lib/analytics/notifyQuizCompletionClient';
+import {
+  isBestRecommendationWizardDraftComplete,
+  loadBestRecommendationWizardDraft
+} from '@/lib/onboarding/bestRecommendationWizardDraft';
 
 function notifyDestructive(title: string, description?: string) {
   toast({
@@ -94,7 +98,11 @@ export function GetScholarshipsQuizWizard({
         completedDraft
           ? buildScholarshipProfileFilterSeedFromDraftWithoutBirth(completedDraft)
           : null;
-      if (completedSeed) {
+      const bestWizardDraft = loadBestRecommendationWizardDraft();
+      const hasCompletedBestWizard =
+        Boolean(bestWizardDraft?.submitted) &&
+        isBestRecommendationWizardDraftComplete(bestWizardDraft);
+      if (completedSeed || hasCompletedBestWizard) {
         router.replace(afterAuthPath);
       }
     });

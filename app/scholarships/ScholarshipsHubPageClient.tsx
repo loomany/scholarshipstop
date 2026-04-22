@@ -125,9 +125,11 @@ import {
 } from '@/lib/scholarships/landingQuizHubSession';
 import {
   loadGuestLandingQuizDraftForHubReEdit,
+  stashLandingQuizDraftForOnboardingMerge,
   tryBuildProfileSeedFromCompletedLandingQuiz,
   tryBuildProfileSeedFromPendingLandingSession
 } from '@/lib/onboarding/mergeLandingQuizIntoOnboardingDraft';
+import { saveCompletedLandingQuizDraft } from '@/lib/onboarding/getScholarshipsLandingDraft';
 import {
   BEST_RECOMMENDATION_WIZARD_DRAFT_KEY,
   bestRecommendationWizardHasUsableData,
@@ -2476,6 +2478,7 @@ function ScholarshipsPageInner({
             !profileInitialized &&
             currentMatchProfile == null &&
             listMeta?.personalizedMatchReady === false))));
+
   const bestRecommendationWizardPendingHydration =
     activeTab === 'best-recommendation' &&
     !bestTabAuthPending &&
@@ -2638,6 +2641,8 @@ function ScholarshipsPageInner({
                   }
                   onSubmit={async (next) => {
                     persistBestRecommendationWizardStore(next);
+                    saveCompletedLandingQuizDraft(next.draft);
+                    stashLandingQuizDraftForOnboardingMerge(next.draft);
                     void notifyQuizCompletionClient({
                       flow: 'best_recommendation_wizard',
                       landingPath: '/scholarships',

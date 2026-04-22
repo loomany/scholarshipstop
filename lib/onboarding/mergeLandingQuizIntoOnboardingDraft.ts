@@ -32,6 +32,8 @@ import {
 /** sessionStorage: full quiz draft after “finish” before landing key is cleared. */
 export const PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY =
   'scholarship_pending_onboarding_from_landing_v1';
+export const PENDING_ONBOARDING_FROM_LANDING_LOCAL_KEY =
+  'scholarship_pending_onboarding_from_landing_local_v1';
 
 function preferNonEmpty(landingVal: string, baseVal: string): string {
   const l = landingVal?.trim() ?? '';
@@ -70,6 +72,46 @@ function parseSessionDraft(raw: string): StoredOnboardingDraft | null {
   }
 }
 
+function readPendingLandingDraftFromStorage(): StoredOnboardingDraft | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const rawSession = sessionStorage.getItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY);
+    if (rawSession) {
+      const parsed = parseSessionDraft(rawSession);
+      if (parsed) return parsed;
+    }
+  } catch (error) {
+    console.warn('[landing-merge] session read failed', error);
+  }
+
+  try {
+    const rawLocal = localStorage.getItem(PENDING_ONBOARDING_FROM_LANDING_LOCAL_KEY);
+    if (rawLocal) {
+      const parsed = parseSessionDraft(rawLocal);
+      if (parsed) return parsed;
+    }
+  } catch (error) {
+    console.warn('[landing-merge] local read failed', error);
+  }
+
+  return null;
+}
+
+function clearPendingLandingDraftFromStorage(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.removeItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY);
+  } catch (error) {
+    console.warn('[landing-merge] session clear failed', error);
+  }
+  try {
+    localStorage.removeItem(PENDING_ONBOARDING_FROM_LANDING_LOCAL_KEY);
+  } catch (error) {
+    console.warn('[landing-merge] local clear failed', error);
+  }
+}
+
 /**
  * Best recommendation “Edit answers” for guests who only have `/get-scholarships` (or pending session)
  * data — not necessarily `scholarship_best_recommendation_wizard_draft_v1`.
@@ -80,15 +122,8 @@ export function loadGuestLandingQuizDraftForHubReEdit(): StoredOnboardingDraft |
   const completed = loadCompletedLandingQuizDraft();
   if (completed && hasUsableLandingQuizData(completed)) return completed;
 
-  try {
-    const raw = sessionStorage.getItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY);
-    if (raw) {
-      const draft = parseSessionDraft(raw);
-      if (draft && hasUsableLandingQuizData(draft)) return draft;
-    }
-  } catch {
-    /* ignore */
-  }
+  const pending = readPendingLandingDraftFromStorage();
+  if (pending && hasUsableLandingQuizData(pending)) return pending;
 
   const live = loadLandingQuizDraft();
   if (live && hasUsableLandingQuizData(live)) return live;
@@ -103,13 +138,16 @@ export function stashLandingQuizDraftForOnboardingMerge(
   draft: StoredOnboardingDraft
 ): void {
   if (typeof window === 'undefined') return;
+  const serialized = JSON.stringify(draft);
   try {
-    sessionStorage.setItem(
-      PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY,
-      JSON.stringify(draft)
-    );
-  } catch {
-    /* quota / private mode */
+    sessionStorage.setItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY, serialized);
+  } catch (error) {
+    console.warn('[landing-merge] session stash failed', error);
+  }
+  try {
+    localStorage.setItem(PENDING_ONBOARDING_FROM_LANDING_LOCAL_KEY, serialized);
+  } catch (error) {
+    console.warn('[landing-merge] local stash failed', error);
   }
 }
 
@@ -118,16 +156,9 @@ export function stashLandingQuizDraftForOnboardingMerge(
  * first hub load, but `PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY` stays until `/onboarding` merge.
  */
 export function tryBuildProfileSeedFromPendingLandingSession(): ScholarshipProfileFilterSeed | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    const raw = sessionStorage.getItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY);
-    if (!raw) return null;
-    const draft = parseSessionDraft(raw);
-    if (!draft) return null;
-    return buildScholarshipProfileFilterSeedFromQuizDraft(draft);
-  } catch {
-    return null;
-  }
+  const draft = readPendingLandingDraftFromStorage();
+  if (!draft) return null;
+  return buildScholarshipProfileFilterSeedFromQuizDraft(draft);
 }
 
 export function tryBuildProfileSeedFromCompletedLandingQuiz(): ScholarshipProfileFilterSeed | null {
@@ -196,18 +227,18 @@ export function computeResumeStepAfterLandingMerge(
 export function applyPendingLandingQuizMergeIfNeeded(): StoredOnboardingDraft | null {
   if (typeof window === 'undefined') return null;
 
-  let sessionDraft: StoredOnboardingDraft | null = null;
-  try {
-    const raw = sessionStorage.getItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY);
-    if (raw) sessionDraft = parseSessionDraft(raw);
-  } catch {
-    /* ignore */
-  }
-
+  const pendingDraft = readPendingLandingDraftFromStorage();
   const landingDraft = loadLandingQuizDraft();
+  const completedDraft = loadCompletedLandingQuizDraft();
+  let sourceType: 'pending' | 'landing' | 'completed' | null = null;
   const source =
-    sessionDraft ??
-    (landingDraft && hasUsableLandingQuizData(landingDraft) ? landingDraft : null);
+    pendingDraft
+      ? ((sourceType = 'pending'), pendingDraft)
+      : landingDraft && hasUsableLandingQuizData(landingDraft)
+        ? ((sourceType = 'landing'), landingDraft)
+        : completedDraft && hasUsableLandingQuizData(completedDraft)
+          ? ((sourceType = 'completed'), completedDraft)
+          : null;
 
   if (!source) return null;
 
@@ -219,12 +250,9 @@ export function applyPendingLandingQuizMergeIfNeeded(): StoredOnboardingDraft | 
   };
 
   saveFullOnboardingDraft(next);
-  try {
-    sessionStorage.removeItem(PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY);
-  } catch {
-    /* ignore */
-  }
+  clearPendingLandingDraftFromStorage();
   clearLandingQuizDraft();
+  console.info('[landing-merge] merged quiz draft into onboarding', { sourceType });
 
   return next;
 }
