@@ -346,6 +346,13 @@ function ScholarshipsPageInner({
     useState(false);
   const [bestRecommendationWizardSaving, setBestRecommendationWizardSaving] =
     useState(false);
+  /**
+   * Guest Best preview list total while `tab=best-recommendation`; reused in the sidebar row
+   * after navigating to Matches etc. (meta + guest patches otherwise force Best → 0 off-tab).
+   */
+  const [guestBestPreviewSidebarCount, setGuestBestPreviewSidebarCount] = useState<
+    number | null
+  >(null);
   const {
     profile: currentMatchProfile,
     profileInitialized,
@@ -592,6 +599,23 @@ function ScholarshipsPageInner({
     catalogFreeTier &&
     activeTab === 'best-recommendation' &&
     transientBestRecommendationProfileSeed != null;
+
+  useEffect(() => {
+    if (!catalogFreeTier || transientBestRecommendationProfileSeed == null) {
+      setGuestBestPreviewSidebarCount(null);
+      return;
+    }
+    if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
+      setGuestBestPreviewSidebarCount(totalCount);
+    }
+  }, [
+    catalogFreeTier,
+    transientBestRecommendationProfileSeed,
+    activeTab,
+    guestBestRecommendationPreviewEnabled,
+    totalCount
+  ]);
+
   const bestRecommendationWizardInProgress =
     bestRecommendationWizardStore != null &&
     bestRecommendationWizardStore.submitted === false;
@@ -1062,6 +1086,28 @@ function ScholarshipsPageInner({
     routeBaseMoreFilters
   ]);
 
+  /**
+   * `meta_only` sidebar counts must reflect catalog-wide totals per row (Matches, Hot deadlines, …).
+   * Guest Best preview narrows `hubListingBodyMoreFilters` with quiz seed for the main list only;
+   * reusing that object for sidebar meta collapses those counts to the preview pool (wrong UX).
+   */
+  const hubSidebarMetaMoreFilters = useMemo(() => {
+    if (!hubListingBodyMoreFilters || !hubMergedBaseMoreFilters) {
+      return hubListingBodyMoreFilters;
+    }
+    if (guestBestRecommendationPreviewEnabled && !isAuthenticated) {
+      return stripHubProfileHardMatchMoreFilters(
+        cloneMoreFilters(hubMergedBaseMoreFilters)
+      );
+    }
+    return hubListingBodyMoreFilters;
+  }, [
+    guestBestRecommendationPreviewEnabled,
+    isAuthenticated,
+    hubListingBodyMoreFilters,
+    hubMergedBaseMoreFilters
+  ]);
+
   useEffect(() => {
     if (isAuthenticated && listMeta?.profileFilterSeed) {
       setLandingQuizProfileSeed(null);
@@ -1486,6 +1532,25 @@ function ScholarshipsPageInner({
     commitSavedFilterPresets
   ]);
 
+  /**
+   * After switching from Matches → Best (guest preview), `totalCount` still reflects the old
+   * tab until the next POST returns — it often equals catalog `matches` (e.g. 8527). Avoid
+   * flashing that number in the header and in the Best sidebar row.
+   */
+  const guestBestPreviewStaleMatchesTotal = useMemo(() => {
+    if (!guestBestRecommendationPreviewEnabled || !listMeta?.sidebarCounts) {
+      return false;
+    }
+    const m = listMeta.sidebarCounts.matches;
+    return m >= 50 && totalCount === m;
+  }, [guestBestRecommendationPreviewEnabled, listMeta?.sidebarCounts, totalCount]);
+
+  /** `null` = hide aggregate in header until the real Best list total arrives. */
+  const headerTotalCount = useMemo((): number | null => {
+    if (!guestBestPreviewStaleMatchesTotal) return totalCount;
+    return guestBestPreviewSidebarCount;
+  }, [guestBestPreviewStaleMatchesTotal, guestBestPreviewSidebarCount, totalCount]);
+
   const sidebarCounts = useMemo((): ScholarshipSidebarCounts => {
     const raw = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
     if (activeTab === 'recommended') {
@@ -1524,7 +1589,22 @@ function ScholarshipsPageInner({
         keepBestRecommendationCount: guestBestRecommendationPreviewEnabled
       });
       if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
-        patched.sidebarCounts.bestRecommendation = totalCount;
+        const catalogMatches = patched.sidebarCounts.matches;
+        const staleListTotal =
+          catalogMatches >= 50 && totalCount === catalogMatches;
+        if (staleListTotal && guestBestPreviewSidebarCount != null) {
+          patched.sidebarCounts.bestRecommendation = guestBestPreviewSidebarCount;
+        } else if (staleListTotal) {
+          patched.sidebarCounts.bestRecommendation = 0;
+        } else {
+          patched.sidebarCounts.bestRecommendation = totalCount;
+        }
+      } else if (
+        catalogFreeTier &&
+        transientBestRecommendationProfileSeed != null &&
+        guestBestPreviewSidebarCount != null
+      ) {
+        patched.sidebarCounts.bestRecommendation = guestBestPreviewSidebarCount;
       }
       return {
         ...patched.sidebarCounts,
@@ -1535,9 +1615,17 @@ function ScholarshipsPageInner({
       };
     }
     if (activeTab === 'best-recommendation' && guestBestRecommendationPreviewEnabled) {
+      const catalogMatches = raw.matches;
+      const staleListTotal = catalogMatches >= 50 && totalCount === catalogMatches;
+      const bestRec =
+        staleListTotal && guestBestPreviewSidebarCount != null
+          ? guestBestPreviewSidebarCount
+          : staleListTotal
+            ? 0
+            : totalCount;
       return {
         ...raw,
-        bestRecommendation: totalCount,
+        bestRecommendation: bestRec,
         saved: savedIds.length,
         ignored: ignoredIds.length
       };
@@ -1556,6 +1644,9 @@ function ScholarshipsPageInner({
     isAuthenticated,
     authResolved,
     guestBestRecommendationPreviewEnabled,
+    guestBestPreviewSidebarCount,
+    catalogFreeTier,
+    transientBestRecommendationProfileSeed,
     savedIds,
     ignoredIds,
     startedIds,
@@ -1793,15 +1884,19 @@ function ScholarshipsPageInner({
         }
         const nextMeta = data.meta ?? null;
         if (nextMeta && sidebarMetaRequestKeyRef.current === sidebarMetaRequestKey) {
-          setListMeta((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  ...nextMeta
-                }
-              : nextMeta
-          );
-          metaKeySynced.current = sidebarMetaRequestKey;
+          setListMeta((prev) => {
+            const merged = prev ? { ...prev, ...nextMeta } : nextMeta;
+            if (guestBestRecommendationPreviewEnabled) {
+              return {
+                ...merged,
+                sidebarCounts: prev?.sidebarCounts ?? merged.sidebarCounts
+              };
+            }
+            return merged;
+          });
+          if (!guestBestRecommendationPreviewEnabled) {
+            metaKeySynced.current = sidebarMetaRequestKey;
+          }
         }
       } catch (e) {
         // eslint-disable-next-line no-console -- list fetch diagnostics
@@ -1865,8 +1960,8 @@ function ScholarshipsPageInner({
         });
         const metaResponse = await postScholarshipsMeta({
           searchParams: sp.toString(),
-          moreFilters: hubListingBodyMoreFilters
-            ? moreFiltersToJson(hubListingBodyMoreFilters)
+          moreFilters: hubSidebarMetaMoreFilters
+            ? moreFiltersToJson(hubSidebarMetaMoreFilters)
             : undefined,
           savedFiltersSnapshot: savedFiltersSnapshotJson,
           guestBestRecommendationPreviewEnabled,
@@ -1912,7 +2007,7 @@ function ScholarshipsPageInner({
     sidebarMetaRequestKey,
     savedFiltersSnapshotJson,
     searchParamsString,
-    hubListingBodyMoreFilters,
+    hubSidebarMetaMoreFilters,
     guestBestRecommendationPreviewEnabled,
     routeScope?.longTailLegacySlugs,
     routeScope?.requiredSeoTags,
@@ -2337,11 +2432,19 @@ function ScholarshipsPageInner({
   );
 
   const blockingInitialLoad = isLoading && !hasInitialLoadCompleted;
-  const resultCountForHeader = blockingInitialLoad ? null : totalCount;
-  const showingFrom = !blockingInitialLoad && totalCount > 0 ? listStart + 1 : null;
+  const resultCountForHeader =
+    blockingInitialLoad ? null : headerTotalCount === null ? null : headerTotalCount;
+  const rangeTotalForPager =
+    headerTotalCount === null
+      ? guestBestPreviewStaleMatchesTotal
+        ? 0
+        : totalCount
+      : headerTotalCount;
+  const showingFrom =
+    !blockingInitialLoad && rangeTotalForPager > 0 ? listStart + 1 : null;
   const showingTo =
-    !blockingInitialLoad && totalCount > 0
-      ? Math.min(listStart + SCHOLARSHIPS_PAGE_SIZE, totalCount)
+    !blockingInitialLoad && rangeTotalForPager > 0
+      ? Math.min(listStart + SCHOLARSHIPS_PAGE_SIZE, rangeTotalForPager)
       : null;
 
   const showClearFilters =

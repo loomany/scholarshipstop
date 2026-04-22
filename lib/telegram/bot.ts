@@ -1477,14 +1477,6 @@ async function sendAdminPanel(user: TelegramUserRow) {
 type VisitorFirstTouchRow =
   Database['public']['Tables']['anonymous_visitor_first_touch']['Row'];
 
-function toLandingPath(rawUrl: string): string {
-  try {
-    return new URL(rawUrl).pathname || '/';
-  } catch {
-    return rawUrl || '/';
-  }
-}
-
 function shortVisitorId(v: string): string {
   return `${v.slice(0, 8)}…${v.slice(-4)}`;
 }
@@ -1564,30 +1556,11 @@ async function sendAdminUsersList(user: TelegramUserRow, offset = 0) {
     return;
   }
 
-  const visitorIds = visibleRows.map((row) => row.visitor_id);
-  const { data: attributionRows } = await (admin as any)
-    .from('visitor_attribution')
-    .select('visitor_id,user_id')
-    .in('visitor_id', visitorIds);
-  const registeredVisitorIds = new Set<string>(
-    ((attributionRows ?? []) as Array<{ visitor_id: string; user_id: string | null }>)
-      .filter((row) => Boolean(row.user_id))
-      .map((row) => row.visitor_id)
-  );
-
-  const lines: string[] = ['<b>Пользователи за 48ч (без ботов)</b>', ''];
-  for (const row of visibleRows) {
-    const source = formatTrafficChannelLabel((row.traffic_channel as TrafficChannel) ?? null);
-    const registrationTag = registeredVisitorIds.has(row.visitor_id)
-      ? ' · 🟢 зарегистрирован'
-      : '';
-    lines.push(
-      `• <b>${escapeTelegramHtml(source)}</b> · ${escapeTelegramHtml(
-        toLandingPath(row.landing_url)
-      )} · ${escapeTelegramHtml(new Date(row.created_at).toISOString().slice(0, 16).replace('T', ' '))}${registrationTag}`
-    );
-  }
-  lines.push('', 'Нажми на пользователя ниже, чтобы открыть полную карточку.');
+  const lines = [
+    '<b>Пользователи за 48ч (без ботов)</b>',
+    '',
+    'Нажми на пользователя ниже, чтобы открыть полную карточку.'
+  ];
 
   await sendTelegramMessage(
     user.telegram_chat_id,
@@ -1611,6 +1584,19 @@ async function sendAdminUserAudit(
     callbackQueryId?: string;
   }
 ) {
+  const cq = opts?.callbackQueryId;
+  /**
+   * Telegram shows a loading spinner on the inline button until `answerCallbackQuery` runs.
+   * Answer immediately so the UI does not hang while Supabase + card HTML are built.
+   */
+  if (cq) {
+    try {
+      await answerTelegramCallbackQuery(cq);
+    } catch (e) {
+      console.error('[telegram] answerCallbackQuery (visitor card)', e);
+    }
+  }
+
   const envAdmin = getTelegramAdminIds().has(Number(user.telegram_user_id));
   if (!user.is_admin && !envAdmin) {
     await sendTelegramMessage(user.telegram_chat_id, 'Только для админов.', buildProfileKeyboard(user));
@@ -1622,7 +1608,14 @@ async function sendAdminUserAudit(
   }
 
   const admin = getAdminClient();
-  if (!admin) return;
+  if (!admin) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Админ-клиент Supabase недоступен (проверь service role / env).',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
 
   const { data: touch, error: touchErr } = await admin
     .from('anonymous_visitor_first_touch')
@@ -1692,7 +1685,6 @@ async function sendAdminUserAudit(
   });
 
   const refreshMarkup = buildVisitorCardRefreshMarkup(visitorId);
-  const cq = opts?.callbackQueryId;
 
   if (opts?.editTarget) {
     const editResult = await editTelegramVisitorCardMessage({
@@ -1701,17 +1693,10 @@ async function sendAdminUserAudit(
       text,
       replyMarkup: refreshMarkup
     });
-    if (cq) {
-      if (editResult === 'not_modified') {
-        await answerTelegramCallbackQuery(cq, 'Уже актуально');
-      } else if (editResult === 'edited') {
-        await answerTelegramCallbackQuery(cq);
-      } else {
-        await sendTelegramMessage(user.telegram_chat_id, text, refreshMarkup, {
-          parse_mode: 'HTML'
-        });
-        await answerTelegramCallbackQuery(cq, 'Отправлено новым сообщением');
-      }
+    if (editResult === 'failed') {
+      await sendTelegramMessage(user.telegram_chat_id, text, refreshMarkup, {
+        parse_mode: 'HTML'
+      });
     }
     return;
   }
@@ -1719,9 +1704,6 @@ async function sendAdminUserAudit(
   await sendTelegramMessage(user.telegram_chat_id, text, refreshMarkup, {
     parse_mode: 'HTML'
   });
-  if (cq) {
-    await answerTelegramCallbackQuery(cq);
-  }
 }
 
 async function sendSeoQueueReport(user: TelegramUserRow) {
