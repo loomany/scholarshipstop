@@ -5,7 +5,11 @@ import type { TrafficChannel } from '@/lib/analytics/resolveTrafficChannel';
 import { getEmailSiteOrigin } from '@/lib/email/emailSiteOrigin';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 
-const KARAGANDA_TZ = 'Asia/Qaraganda';
+/**
+ * Karaganda uses the same civil time as most of Kazakhstan (UTC+5, no DST).
+ * `Asia/Qaraganda` is not a valid IANA id in Node/ICU and throws RangeError.
+ */
+const KARAGANDA_TZ = 'Asia/Almaty';
 
 export type VisitorCardTouch = {
   visitor_id: string;
@@ -90,7 +94,7 @@ export function formatKaragandaDateTime(iso: string | null | undefined): string 
   if (!iso) return '—';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return String(iso);
-  const parts = new Intl.DateTimeFormat('ru-RU', {
+  const opts: Intl.DateTimeFormatOptions = {
     timeZone: KARAGANDA_TZ,
     day: '2-digit',
     month: '2-digit',
@@ -98,15 +102,29 @@ export function formatKaragandaDateTime(iso: string | null | undefined): string 
     hour: '2-digit',
     minute: '2-digit',
     hour12: false
-  }).formatToParts(d);
-  const get = (t: Intl.DateTimeFormatPartTypes) =>
-    parts.find((p) => p.type === t)?.value ?? '';
-  const dd = get('day');
-  const mm = get('month');
-  const yy = get('year');
-  const hh = get('hour');
-  const min = get('minute');
-  return `${dd}.${mm}.${yy} ${hh}:${min}`;
+  };
+  try {
+    const parts = new Intl.DateTimeFormat('ru-RU', opts).formatToParts(d);
+    const get = (t: Intl.DateTimeFormatPartTypes) =>
+      parts.find((p) => p.type === t)?.value ?? '';
+    const dd = get('day');
+    const mm = get('month');
+    const yy = get('year');
+    const hh = get('hour');
+    const min = get('minute');
+    return `${dd}.${mm}.${yy} ${hh}:${min}`;
+  } catch {
+    try {
+      const parts = new Intl.DateTimeFormat('ru-RU', { ...opts, timeZone: 'UTC' }).formatToParts(
+        d
+      );
+      const get = (t: Intl.DateTimeFormatPartTypes) =>
+        parts.find((p) => p.type === t)?.value ?? '';
+      return `${get('day')}.${get('month')}.${get('year')} ${get('hour')}:${get('minute')} UTC`;
+    } catch {
+      return d.toISOString().slice(0, 16).replace('T', ' ');
+    }
+  }
 }
 
 export function summarizeUserAgent(ua: string | null | undefined): string {

@@ -1668,21 +1668,32 @@ async function sendAdminUserAudit(
       ])
     : [null, null];
 
-  const text = buildVisitorAdminCardHtml({
-    visitorId,
-    touch: touch as VisitorCardTouch,
-    attribution: (attribution ?? null) as VisitorCardAttribution | null,
-    pageViews,
-    registeredUserId,
-    authUser: authUser ? { email: authUser.email ?? null } : null,
-    profile: profile
-      ? {
-          created_at: profile.created_at,
-          first_name: profile.first_name,
-          last_name: profile.last_name
-        }
-      : null
-  });
+  let text: string;
+  try {
+    text = buildVisitorAdminCardHtml({
+      visitorId,
+      touch: touch as VisitorCardTouch,
+      attribution: (attribution ?? null) as VisitorCardAttribution | null,
+      pageViews,
+      registeredUserId,
+      authUser: authUser ? { email: authUser.email ?? null } : null,
+      profile: profile
+        ? {
+            created_at: profile.created_at,
+            first_name: profile.first_name,
+            last_name: profile.last_name
+          }
+        : null
+    });
+  } catch (e) {
+    console.error('[telegram] buildVisitorAdminCardHtml', e);
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      'Не удалось собрать карточку пользователя (см. логи сервера).',
+      buildProfileKeyboard(user)
+    );
+    return;
+  }
 
   const refreshMarkup = buildVisitorCardRefreshMarkup(visitorId);
 
