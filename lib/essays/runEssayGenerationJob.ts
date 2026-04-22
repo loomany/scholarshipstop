@@ -26,6 +26,11 @@ import {
 } from '@/lib/fal/falAttemptRetry';
 import type { FalImageAttemptResult } from '@/lib/fal/falAttemptTypes';
 import { postFluxDevImageOnce } from '@/lib/fal/postFluxDevImageOnce';
+import { notifyEnvTelegramAdminsPlainText } from '@/lib/telegram/bot';
+
+const FIRST_THREE_ESSAYS_PAGES_WINDOW = 36;
+const SHORTAGE_ALERT_COOLDOWN_MINUTES = 180;
+let lastReusableHeroShortageAlertAt = 0;
 
 export function buildGrantCategoryHaystack(input: {
   category: string | null;
@@ -146,6 +151,121 @@ export type FalHeroResolveMeta = {
   detail: string;
   httpStatus: number;
 };
+
+function isTruthyEnvFlag(raw: string | undefined): boolean {
+  const v = raw?.trim().toLowerCase();
+  return v === '1' || v === 'true' || v === 'yes';
+}
+
+function isEssayHeroReuseOnly(): boolean {
+  return isTruthyEnvFlag(process.env.ESSAY_HUB_HERO_REUSE_ONLY);
+}
+
+function shortageAlertCooldownMs(): number {
+  const raw = process.env.ESSAY_HUB_HERO_SHORTAGE_ALERT_COOLDOWN_MINUTES?.trim();
+  const mins = Math.max(1, Number(raw || String(SHORTAGE_ALERT_COOLDOWN_MINUTES)) || SHORTAGE_ALERT_COOLDOWN_MINUTES);
+  return mins * 60_000;
+}
+
+function normalizedHeroUrl(value: string | null | undefined): string | null {
+  const x = value?.trim();
+  return x ? x : null;
+}
+
+async function fetchPublishedHeroReusePool(
+  supabase: SupabaseClient<Database>,
+  limit = 800
+): Promise<string[]> {
+  const size = Math.max(1, Math.min(2000, Math.floor(limit)));
+  const { data, error } = await supabase
+    .from('essays')
+    .select('hero_image_url')
+    .eq('is_published', true)
+    .not('hero_image_url', 'is', null)
+    .neq('hero_image_url', '')
+    .order('created_at', { ascending: false, nullsFirst: false })
+    .limit(size);
+  if (error) throw new Error(error.message);
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const row of data ?? []) {
+    const url = normalizedHeroUrl(row.hero_image_url);
+    if (!url || seen.has(url)) continue;
+    seen.add(url);
+    out.push(url);
+  }
+  return out;
+}
+
+async function fetchRecentPublishedHeroUsage(
+  supabase: SupabaseClient<Database>,
+  limit: number
+): Promise<Set<string>> {
+  const size = Math.max(0, Math.floor(limit));
+  if (size <= 0) return new Set();
+  const { data, error } = await supabase
+    .from('essays')
+    .select('hero_image_url')
+    .eq('is_published', true)
+    .order('created_at', { ascending: false, nullsFirst: false })
+    .limit(size);
+  if (error) throw new Error(error.message);
+  const used = new Set<string>();
+  for (const row of data ?? []) {
+    const url = normalizedHeroUrl(row.hero_image_url);
+    if (url) used.add(url);
+  }
+  return used;
+}
+
+async function maybeNotifyReusableHeroShortage(params: {
+  poolUniqueCount: number;
+  recentUniqueCount: number;
+  queueId: string;
+  scholarshipId: string;
+}): Promise<void> {
+  const now = Date.now();
+  if (now - lastReusableHeroShortageAlertAt < shortageAlertCooldownMs()) return;
+  lastReusableHeroShortageAlertAt = now;
+  const text = [
+    '⚠️ Essay Hub hero pool shortage',
+    'Статус: Требует внимания',
+    '',
+    `Режим: ESSAY_HUB_HERO_REUSE_ONLY=1 (FAL отключен)`,
+    `Окно без дублей: ${FIRST_THREE_ESSAYS_PAGES_WINDOW} карточек (/essays первые 3 страницы)`,
+    `Уникальных hero в пуле: ${params.poolUniqueCount}`,
+    `Уникальных hero в недавних публикациях: ${params.recentUniqueCount}`,
+    `queue_id: ${params.queueId}`,
+    `scholarship_id: ${params.scholarshipId}`,
+    '',
+    'Уникальные картинки заканчиваются — подключите FAL, чтобы продолжить без дублей.'
+  ].join('\n');
+  await notifyEnvTelegramAdminsPlainText(text, 'seo');
+}
+
+async function pickReusableHeroUrlForNextEssay(
+  supabase: SupabaseClient<Database>,
+  input: { queueId: string; scholarshipId: string }
+): Promise<string | null> {
+  const pool = await fetchPublishedHeroReusePool(
+    supabase,
+    FIRST_THREE_ESSAYS_PAGES_WINDOW * 8
+  );
+  const recentUsed = await fetchRecentPublishedHeroUsage(
+    supabase,
+    FIRST_THREE_ESSAYS_PAGES_WINDOW - 1
+  );
+  for (const heroUrl of pool) {
+    if (!recentUsed.has(heroUrl)) return heroUrl;
+  }
+  await maybeNotifyReusableHeroShortage({
+    poolUniqueCount: pool.length,
+    recentUniqueCount: recentUsed.size,
+    queueId: input.queueId,
+    scholarshipId: input.scholarshipId
+  });
+  return null;
+}
 
 /**
  * POST to fal.run with bounded retries. Returns `url: null` if `FAL_KEY` is missing or FAL returns no URL.
@@ -452,6 +572,7 @@ async function processResumeAwaitingHeroJob(
   | { outcome: 'failed'; error: string }
 > {
   const { queueId, scholarshipId, createdEssayId } = job;
+  const reuseOnly = isEssayHeroReuseOnly();
 
   const { data: essay, error: ge } = await supabase
     .from('essays')
@@ -522,6 +643,50 @@ async function processResumeAwaitingHeroJob(
     summary_short: scholarship.summary_short ?? null,
     title: scholarshipTitle
   });
+
+  if (reuseOnly) {
+    const reuseHeroUrl = await pickReusableHeroUrlForNextEssay(supabase, {
+      queueId,
+      scholarshipId
+    });
+    if (!reuseHeroUrl) {
+      await supabase
+        .from('essay_generation_queue')
+        .update({
+          status: 'awaiting_hero',
+          error_message:
+            'Reuse-only hero pool exhausted: no unique image available for first 3 /essays pages.',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', queueId);
+      return { outcome: 'deferred', queueId };
+    }
+    const { error: upEssayErr } = await supabase
+      .from('essays')
+      .update({
+        hero_image_url: reuseHeroUrl,
+        hero_is_real: true,
+        is_published: true,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', essay.id);
+    if (upEssayErr) {
+      return { outcome: 'failed', error: upEssayErr.message };
+    }
+    await supabase
+      .from('essay_generation_queue')
+      .update({
+        status: 'completed',
+        created_essay_id: essay.id,
+        error_message: null,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', queueId);
+    void pingGoogleIndexingDirect(essayIndexingUrl(essay.slug)).catch(() => {
+      /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
+    });
+    return { outcome: 'published', essaySlug: essay.slug, queueId };
+  }
 
   const heroPrompt = buildEssayHubHeroImagePrompt({
     existingIndex,
@@ -610,6 +775,7 @@ export async function processOneEssayQueueItem(
     }
   | { ok: false; error: string }
 > {
+  const reuseOnly = isEssayHeroReuseOnly();
   if (isEssayGenerationPaused()) {
     return { ok: true, skipped: 'generation_paused' };
   }
@@ -739,7 +905,9 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
       grantTitle: scholarshipTitle,
       grantCategory
     });
-    const falMeta = await tryResolveHeroImageUrlWithMeta(heroPrompt);
+    const falMeta: FalHeroResolveMeta = reuseOnly
+      ? { url: null, detail: 'FAL disabled by ESSAY_HUB_HERO_REUSE_ONLY', httpStatus: 0 }
+      : await tryResolveHeroImageUrlWithMeta(heroPrompt);
 
     const insertDraftLinkAndAwaitHero = async (
       reason: string
@@ -779,6 +947,59 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
       if (quErr) throw new Error(quErr.message);
       return { slug: insertedSlug };
     };
+
+    if (reuseOnly) {
+      const reuseHeroUrl = await pickReusableHeroUrlForNextEssay(supabase, {
+        queueId: queueId!,
+        scholarshipId: scholarship.id
+      });
+      if (!reuseHeroUrl) {
+        const { slug: draftSlug } = await insertDraftLinkAndAwaitHero(
+          'Reuse-only hero pool exhausted: no unique image available for first 3 /essays pages.'
+        );
+        return {
+          ok: true,
+          essaySlug: draftSlug,
+          queueId,
+          phase: 'draft_saved_awaiting_hero'
+        };
+      }
+      const { id: essayId, slug } = await insertEssayRowWithSlugRetry(
+        supabase,
+        baseSlug,
+        (s) => ({
+          slug: s,
+          title: parsed.title.trim(),
+          meta_description: parsed.meta_description?.trim() || null,
+          content_html: parsed.content_html.trim(),
+          hero_image_url: reuseHeroUrl,
+          hero_is_real: true,
+          hero_variant_index: existingIndex,
+          sources: verifiedSources as unknown as Json,
+          faq: faqJson as unknown as Json,
+          is_published: true
+        })
+      );
+      const { error: jErr } = await supabase.from('scholarship_essays').insert({
+        scholarship_id: scholarship.id,
+        essay_id: essayId
+      });
+      if (jErr) throw new Error(jErr.message);
+      const { error: quErr } = await supabase
+        .from('essay_generation_queue')
+        .update({
+          status: 'completed',
+          created_essay_id: essayId,
+          error_message: null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', queueId);
+      if (quErr) throw new Error(quErr.message);
+      void pingGoogleIndexingDirect(essayIndexingUrl(slug)).catch(() => {
+        /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
+      });
+      return { ok: true, essaySlug: slug, queueId, phase: 'published' };
+    }
 
     if (!falMeta.url) {
       const { slug: draftSlug } = await insertDraftLinkAndAwaitHero(
