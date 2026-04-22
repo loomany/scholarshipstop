@@ -143,11 +143,19 @@ async function tryReserveIndexingPublish(
   const totalCap = maxPublishPerDay();
   const laneCaps = computeLaneCaps(totalCap);
   const bucketCaps = computeBucketCapsPerLane(laneCaps[input.lane]);
-  const rpcUntyped = client.rpc as unknown as (
-    fn: string,
-    args: Record<string, unknown>
-  ) => Promise<{ data: boolean | null; error: { message: string } | null }>;
-  const { data, error } = await rpcUntyped('google_indexing_try_consume_quota_bucket', {
+  /**
+   * Call `client.rpc(...)` on the client — do not assign `client.rpc` to a variable and invoke it,
+   * or `this` is lost inside @supabase/supabase-js and you get `Cannot read properties of undefined (reading 'rest')`.
+   * RPC name is not in generated `Database` types yet; narrow via assertion.
+   */
+  const { data, error } = await (
+    client as unknown as {
+      rpc: (
+        fn: string,
+        args: Record<string, unknown>
+      ) => Promise<{ data: boolean | null; error: { message: string } | null }>;
+    }
+  ).rpc('google_indexing_try_consume_quota_bucket', {
     p_lane: input.lane,
     p_bucket: input.bucket,
     p_max_total: totalCap,
