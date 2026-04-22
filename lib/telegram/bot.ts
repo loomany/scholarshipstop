@@ -1651,20 +1651,47 @@ function formatDurationRu(totalSec: number): string {
   return `${hours} ч`;
 }
 
+const TELEGRAM_INLINE_BUTTON_MAX = 64;
+
+function truncateAdminListButtonText(s: string, maxLen: number): string {
+  const t = s.replace(/\s+/g, ' ').trim();
+  if (t.length <= maxLen) return t;
+  return maxLen < 2 ? t.slice(0, maxLen) : `${t.slice(0, maxLen - 1)}…`;
+}
+
+function buildAdminUsersListButtonTitle(
+  row: VisitorFirstTouchRow,
+  indexOneBased: number
+): string {
+  const timePart = formatFirstTouchListButtonTime(row.created_at);
+  const sourceLabel = labelForVisitorRow({
+    traffic_channel: row.traffic_channel,
+    landing_url: row.landing_url,
+    referrer: row.referrer,
+    utm_source: row.utm_source,
+    utm_medium: row.utm_medium,
+    utm_campaign: row.utm_campaign
+  });
+  // `${n}. {source} · {date = time}` — trim source so total ≤ 64 (Telegram limit)
+  const prefix = `${indexOneBased}. `;
+  const glue = ' · ';
+  const reserved = prefix.length + glue.length + timePart.length;
+  const sourceBudget = Math.max(8, TELEGRAM_INLINE_BUTTON_MAX - reserved);
+  const sourceShort = truncateAdminListButtonText(sourceLabel, sourceBudget);
+  const title = `${prefix}${sourceShort}${glue}${timePart}`;
+  return truncateAdminListButtonText(title, TELEGRAM_INLINE_BUTTON_MAX);
+}
+
 function buildAdminUsersInlineKeyboard(
   rows: VisitorFirstTouchRow[],
   offset: number,
   hasMore: boolean
 ): TelegramReplyMarkup {
   const userButtons: TelegramInlineButton[] = rows.map((row, idx) => {
-    const timePart = formatFirstTouchListButtonTime(row.created_at);
-    const title = `${idx + 1 + offset}. ${timePart}`.slice(0, 64);
+    const title = buildAdminUsersListButtonTitle(row, idx + 1 + offset);
     return button(title, `${USERS_OPEN_PREFIX}${row.visitor_id}`);
   });
-  const inline_keyboard: TelegramInlineButton[][] = [];
-  for (let i = 0; i < userButtons.length; i += 2) {
-    inline_keyboard.push(userButtons.slice(i, i + 2));
-  }
+  const inline_keyboard: TelegramInlineButton[][] = userButtons.map((b) => [b]);
   const navRow: TelegramInlineButton[] = [];
   if (offset > 0) {
     const prev = Math.max(0, offset - rows.length);
