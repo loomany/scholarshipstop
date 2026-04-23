@@ -17,7 +17,7 @@ This project creates Lemon Squeezy overlay checkouts, verifies webhooks, syncs
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SITE_URL` (used for links in transactional emails from the webhook)
-- `RESEND_API_KEY` and `RESEND_FROM` (optional; if unset, subscription status emails are skipped — DB sync still succeeds)
+- `RESEND_API_KEY` (if unset, subscription status emails are skipped — DB sync still succeeds). `RESEND_FROM` is optional (defaults to `ScholarshipTop <hello@mail.scholarshiptop.com>`). Optional `REPLY_TO_EMAIL` sets Resend `reply_to` on transactional sends.
 - `LEMONSQUEEZY_API_KEY` — **recommended in production.** Used when Lemon delivers `subscription_payment_success` / `subscription_payment_recovered` as a **subscription-invoices** body (no variant/status fields). The webhook handler then **GET**s `https://api.lemonsqueezy.com/v1/subscriptions/:id` and runs the same upsert as `subscription_updated`, so plan upgrades and trial conversions update `profiles` even if a full `subscription_updated` event is delayed or missing.
 
 Legacy aliases `LEMONSQUEEZY_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_QUARTERLY_VARIANT_ID`, and `LEMONSQUEEZY_YEARLY_VARIANT_ID` are also accepted for server-side tier inference, but `NEXT_PUBLIC_LS_*` is the canonical naming used by the current app code.

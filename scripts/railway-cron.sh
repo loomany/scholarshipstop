@@ -127,7 +127,6 @@ task_grant_notifications() {
   require_env NEXT_PUBLIC_SUPABASE_URL
   require_env SUPABASE_SERVICE_ROLE_KEY
   require_env RESEND_API_KEY
-  require_env RESEND_FROM
   require_npm_or_exit || return 0
   run_tsx_cron "cron-grant-notifications" "scripts/cron-grant-notifications.ts"
 }

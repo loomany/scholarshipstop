@@ -115,3 +115,86 @@ export async function sendProviderDiscoveryTelegramFailure(
   const chatIds = await resolveProviderDiscoveryChatIds();
   await sendTelegramTextToChats(text, chatIds);
 }
+
+/** Resend delivered (HTTP 200). */
+export type ProviderOutreachMailingTelegramPayload = {
+  /** e.g. "Боевая рассылка по списку", "Dry-run", "--test-samples" */
+  modeLabel: string;
+  totalInRun: number;
+  /** Successful Resend send (HTTP 200). */
+  sentResend: number;
+  /** Marketing guard: unsubscribed in DB (no HTTP send to Resend). */
+  skippedUnsubscribed: number;
+  /** Already in `provider_outreach_log` for this campaign (no Resend call). */
+  skippedCampaignDedupe: number;
+  failed: number;
+  listPath?: string;
+  limit?: number | null;
+  exitCode: number;
+};
+
+function isProviderOutreachTelegramNotifyDisabled(): boolean {
+  const t = process.env.PROVIDER_OUTREACH_TELEGRAM_NOTIFY?.trim().toLowerCase();
+  return t === '0' || t === 'false' || t === 'no' || t === 'off';
+}
+
+export function buildProviderOutreachMailingTelegramText(
+  p: ProviderOutreachMailingTelegramPayload
+): string {
+  const lines: string[] = [
+    '📧 Provider outreach — отчёт',
+    '',
+    `Режим: ${p.modeLabel}`
+  ];
+  if (p.listPath) {
+    const short =
+      p.listPath.length > 200 ? `…${p.listPath.slice(-180)}` : p.listPath;
+    lines.push(`Список: ${short}`);
+  }
+  if (p.limit != null && p.limit > 0) {
+    lines.push(`Лимит --limit: ${p.limit}`);
+  }
+  lines.push(
+    `В прогоне адресов: ${p.totalInRun}`,
+    `✅ Отправлено (Resend 200): ${p.sentResend}`,
+    `⏭ Пропущено (unsubscribe в базе): ${p.skippedUnsubscribed}`,
+    `⏭ Уже в кампании (provider_outreach_log): ${p.skippedCampaignDedupe ?? 0}`,
+    `❌ Ошибки / не ушло: ${p.failed}`,
+    '',
+    `Код завершения: ${p.exitCode}`
+  );
+  const text = lines.join('\n');
+  return text.length > 3900 ? `${text.slice(0, 3896)}\n...` : text;
+}
+
+/**
+ * Same chat routing as provider discovery (`grants` admins → TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID).
+ * Set `PROVIDER_OUTREACH_TELEGRAM_NOTIFY=0` to disable. Needs `TELEGRAM_BOT_TOKEN`.
+ */
+export async function notifyProviderOutreachMailingComplete(
+  p: ProviderOutreachMailingTelegramPayload
+): Promise<void> {
+  if (isProviderOutreachTelegramNotifyDisabled()) {
+    console.log(
+      '[provider-outreach] Telegram summary skipped (PROVIDER_OUTREACH_TELEGRAM_NOTIFY off)'
+    );
+    return;
+  }
+  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
+  if (!token) {
+    console.log(
+      '[provider-outreach] Telegram summary skipped (no TELEGRAM_BOT_TOKEN)'
+    );
+    return;
+  }
+  const chatIds = await resolveProviderDiscoveryChatIds();
+  if (chatIds.length === 0) {
+    console.log(
+      '[provider-outreach] Telegram summary skipped (no target chats; grants routing / TELEGRAM_ADMIN_IDS / TELEGRAM_CHAT_ID)'
+    );
+    return;
+  }
+  const text = buildProviderOutreachMailingTelegramText(p);
+  await sendTelegramTextToChats(text, chatIds);
+  console.log('[provider-outreach] Telegram summary sent.');
+}

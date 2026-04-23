@@ -91,7 +91,7 @@ export function buildWeeklyFreeDigestEmailHtml(params: {
           <tr>
             <td style="padding:16px 22px 26px;border-top:1px solid #1f2937;">
               <p style="margin:0 0 10px;font-size:12px;line-height:1.5;color:#6b7280;text-align:center;font-family:${font};">
-                You receive this because you have an account on ScholarshipTop. <a href="${escapeHtml(params.unsubscribeHref)}" style="color:#9ca3af;text-decoration:underline;">Email preferences</a>
+                You receive this because you have an account on ScholarshipTop. <a href="${escapeHtml(params.unsubscribeHref)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe</a>
               </p>
               <p style="margin:0;font-size:12px;line-height:1.5;color:#4b5563;text-align:center;font-family:${font};">
                 <a href="${escapeHtml(origin)}" style="color:#6b7280;text-decoration:none;">scholarshiptop.com</a>

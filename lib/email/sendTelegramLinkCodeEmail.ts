@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
 import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
@@ -14,13 +15,10 @@ export async function sendTelegramLinkCodeEmail(
   }
 ): Promise<{ ok: boolean; skipped?: string }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM?.trim();
+  const from = resolveResendFrom();
 
   if (!apiKey) {
     return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  }
-  if (!from) {
-    return { ok: false, skipped: 'RESEND_FROM not set' };
   }
 
   const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
@@ -64,7 +62,8 @@ export async function sendTelegramLinkCodeEmail(
       from,
       to: [toEmail],
       subject: TELEGRAM_LINK_EMAIL_SUBJECT,
-      html
+      html,
+      ...resendReplyToFields()
     })
   });
 

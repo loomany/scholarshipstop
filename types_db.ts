@@ -1914,6 +1914,45 @@ export interface Database {
           }
         ]
       }
+      unsubscribed_emails: {
+        Row: {
+          id: string
+          email: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          email: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      provider_outreach_log: {
+        Row: {
+          id: string
+          email: string
+          sent_at: string
+          campaign_key: string
+        }
+        Insert: {
+          id?: string
+          email: string
+          sent_at?: string
+          campaign_key?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          sent_at?: string
+          campaign_key?: string
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           avatar_url: string | null

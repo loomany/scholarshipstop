@@ -6,6 +6,7 @@ import {
   buildConfirmSignupEmailHtml,
   EMAIL_SUBJECT_CONFIRM_SIGNUP
 } from '@/lib/email/templates/premiumTemplates';
+import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
 import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
 
 export type SendRegistrationVerificationOptions = {
@@ -15,7 +16,8 @@ export type SendRegistrationVerificationOptions = {
 
 /**
  * Sends “verify when convenient” email via Resend HTTP API.
- * Requires RESEND_API_KEY and RESEND_FROM (e.g. ScholarshipTop <no-reply@mail.scholarshiptop.com>).
+ * Requires RESEND_API_KEY. From defaults to hello@mail.scholarshiptop.com unless RESEND_FROM is set.
+ * Optional REPLY_TO_EMAIL sets Reply-To on the Resend payload.
  */
 export async function sendRegistrationVerificationEmail(
   toEmail: string,
@@ -23,12 +25,9 @@ export async function sendRegistrationVerificationEmail(
   options?: SendRegistrationVerificationOptions
 ): Promise<{ ok: boolean; skipped?: string }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM?.trim();
+  const from = resolveResendFrom();
   if (!apiKey) {
     return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  }
-  if (!from) {
-    return { ok: false, skipped: 'RESEND_FROM not set' };
   }
 
   const token = createEmailVerificationToken(userId);
@@ -51,7 +50,8 @@ export async function sendRegistrationVerificationEmail(
       from,
       to: [toEmail],
       subject: EMAIL_SUBJECT_CONFIRM_SIGNUP,
-      html
+      html,
+      ...resendReplyToFields()
     })
   });
 

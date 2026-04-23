@@ -1,7 +1,14 @@
 /**
  * Sends one visual sample of the weekly free digest (no Supabase / no Next).
- * Usage: npx dotenv-cli -e .env.local -- npx tsx scripts/quick-weekly-digest-email.ts you@example.com
+ * Usage: dotenv -e .env.local -- npx tsx scripts/quick-weekly-digest-email.ts you@example.com
+ * Requires RESEND_API_KEY; RESEND_FROM defaults to hello@mail.scholarshiptop.com if unset.
  */
+import {
+  buildMarketingUnsubscribeListHeaderUrl,
+  buildMarketingUnsubscribePageUrl
+} from '../lib/email/buildMarketingUnsubscribeUrl';
+import { postResend } from '../lib/email/postResend';
+import { resolveResendFrom } from '../lib/email/resendEnvelope';
 import { buildWeeklyFreeDigestEmailHtml } from '../lib/email/templates/weeklyFreeDigestEmailHtml';
 import { buildWeeklyFreeDigestSubject } from '../lib/email/sendWeeklyFreeDigestEmail';
 import type { Scholarship } from '../app/scholarships/scholarshipsData';
@@ -30,10 +37,9 @@ async function main() {
     process.exit(1);
   }
 
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM?.trim();
-  if (!apiKey || !from) {
-    console.error('RESEND_API_KEY and RESEND_FROM required');
+  const from = resolveResendFrom();
+  if (!process.env.RESEND_API_KEY?.trim()) {
+    console.error('RESEND_API_KEY required');
     process.exit(1);
   }
 
@@ -104,21 +110,21 @@ async function main() {
     },
     hubHref: `${origin}/scholarships?tab=matches&scope=catalog`,
     subscriptionHref: `${origin}/subscription`,
-    unsubscribeHref: `${origin}/account`
+    unsubscribeHref: buildMarketingUnsubscribePageUrl(origin, to)
   });
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ from, to: [to], subject, html })
+  const listUrl = buildMarketingUnsubscribeListHeaderUrl(origin, to);
+  const r = await postResend({
+    to,
+    subject,
+    html,
+    category: 'marketing',
+    marketingListUnsubscribeUrl: listUrl,
+    from
   });
 
-  const text = await res.text();
-  console.log(res.status, text);
-  process.exit(res.ok ? 0 : 1);
+  console.log(r.ok ? '200' : 'ERR', r.skipped ?? 'ok');
+  process.exit(r.ok ? 0 : 1);
 }
 
 main().catch((e) => {

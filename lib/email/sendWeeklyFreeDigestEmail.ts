@@ -4,7 +4,13 @@ import {
   type Scholarship
 } from '@/app/scholarships/scholarshipsData';
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import {
+  buildMarketingUnsubscribeListHeaderUrl,
+  buildMarketingUnsubscribePageUrl
+} from '@/lib/email/buildMarketingUnsubscribeUrl';
 import { getEmailSiteOrigin } from '@/lib/email/emailSiteOrigin';
+import { postResend } from '@/lib/email/postResend';
+import { resolveResendFrom } from '@/lib/email/resendEnvelope';
 import {
   buildWeeklyFreeDigestEmailHtml,
   type WeeklyFreeDigestFreeRow,
@@ -79,15 +85,17 @@ export async function sendWeeklyFreeDigestEmail(params: {
   topThree: Scholarship[];
   premiumTeaser: WeeklyFreeDigestPremiumRow;
 }): Promise<{ ok: boolean; skipped?: string }> {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM?.trim();
-  if (!apiKey) return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  if (!from) return { ok: false, skipped: 'RESEND_FROM not set' };
+  const from = resolveResendFrom();
+  if (!process.env.RESEND_API_KEY?.trim()) {
+    return { ok: false, skipped: 'RESEND_API_KEY not set' };
+  }
 
   const origin = getEmailSiteOrigin().replace(/\/+$/, '');
   const hubHref = `${origin}${SCHOLARSHIPS_HUB_ALL_MATCHES_HREF}`;
   const subscriptionHref = `${origin}/subscription`;
-  const unsubscribeHref = `${origin}/account`;
+  const to = params.toEmail.trim();
+  const unsubscribeHref = buildMarketingUnsubscribePageUrl(origin, to);
+  const listUnsubUrl = buildMarketingUnsubscribeListHeaderUrl(origin, to);
 
   const preheader = `We scanned ${params.platformNewScholarships7d} new grants this week. Here are your top picks.`;
   const name = params.firstName?.trim() || 'there';
@@ -108,24 +116,18 @@ export async function sendWeeklyFreeDigestEmail(params: {
     unsubscribeHref
   });
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from,
-      to: [params.toEmail],
-      subject,
-      html
-    })
+  const r = await postResend({
+    to,
+    subject,
+    html,
+    category: 'marketing',
+    marketingListUnsubscribeUrl: listUnsubUrl,
+    from
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('[email:weekly-free-digest] Resend error', res.status, text);
-    return { ok: false, skipped: `Resend HTTP ${res.status}` };
+  if (!r.ok) {
+    console.error('[email:weekly-free-digest]', r.skipped);
+    return { ok: false, skipped: r.skipped };
   }
-  return { ok: true };
+  return { ok: true, skipped: r.skipped };
 }

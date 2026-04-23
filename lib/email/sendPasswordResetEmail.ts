@@ -4,6 +4,7 @@ import {
   buildResetPasswordEmailHtml,
   EMAIL_SUBJECT_RESET_PASSWORD
 } from '@/lib/email/templates/premiumTemplates';
+import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { getServerAuthResetPasswordUrl } from '@/utils/auth-email-redirect.server';
 
@@ -18,12 +19,9 @@ export async function sendPasswordResetEmail(
   toEmail: string
 ): Promise<{ ok: boolean; skipped?: string }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM?.trim();
+  const from = resolveResendFrom();
   if (!apiKey) {
     return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  }
-  if (!from) {
-    return { ok: false, skipped: 'RESEND_FROM not set' };
   }
 
   const admin = createServiceRoleSupabaseClient();
@@ -81,7 +79,8 @@ export async function sendPasswordResetEmail(
       from,
       to: [toEmail],
       subject: EMAIL_SUBJECT_RESET_PASSWORD,
-      html
+      html,
+      ...resendReplyToFields()
     })
   });
 

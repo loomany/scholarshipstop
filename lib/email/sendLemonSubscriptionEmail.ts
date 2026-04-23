@@ -14,6 +14,7 @@ import {
   EMAIL_SUBJECT_SUBSCRIPTION_CANCELLED,
   EMAIL_SUBJECT_SUBSCRIPTION_PAYMENT_FAILED
 } from '@/lib/email/templates/subscriptionEmailTemplates';
+import { postResend } from '@/lib/email/postResend';
 import { defaultEmailUnsubscribeUrl } from '@/lib/email/templates/premiumTemplates';
 
 function getEmailSiteOrigin(): string {
@@ -129,42 +130,6 @@ export function lemonWebhookShouldSendSubscriptionPaymentFailedEmail(
   return eventName === 'subscription_payment_failed';
 }
 
-async function postResend(params: {
-  to: string;
-  subject: string;
-  html: string;
-}): Promise<{ ok: boolean; skipped?: string }> {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM?.trim();
-  if (!apiKey) {
-    return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  }
-  if (!from) {
-    return { ok: false, skipped: 'RESEND_FROM not set' };
-  }
-
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from,
-      to: [params.to],
-      subject: params.subject,
-      html: params.html
-    })
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('[email:lemon-subscription] Resend error', res.status, text);
-    return { ok: false, skipped: `Resend HTTP ${res.status}` };
-  }
-  return { ok: true };
-}
-
 export async function sendLemonSubscriptionActiveEmail(options: {
   toEmail: string;
   payload: LemonWebhookPayload;
@@ -183,7 +148,8 @@ export async function sendLemonSubscriptionActiveEmail(options: {
   return postResend({
     to: options.toEmail,
     subject: EMAIL_SUBJECT_SUBSCRIPTION_ACTIVE,
-    html
+    html,
+    category: 'transactional'
   });
 }
 
@@ -202,7 +168,8 @@ export async function sendLemonSubscriptionCancelledEmail(options: {
   return postResend({
     to: options.toEmail,
     subject: EMAIL_SUBJECT_SUBSCRIPTION_CANCELLED,
-    html
+    html,
+    category: 'transactional'
   });
 }
 
@@ -225,6 +192,7 @@ export async function sendLemonSubscriptionPaymentFailedEmail(options: {
   return postResend({
     to: options.toEmail,
     subject: EMAIL_SUBJECT_SUBSCRIPTION_PAYMENT_FAILED,
-    html
+    html,
+    category: 'transactional'
   });
 }

@@ -283,6 +283,9 @@ export async function runWeeklyFreeDigestDispatch(): Promise<WeeklyFreeDigestRes
       errors += 1;
       continue;
     }
+    if (r.skipped === 'unsubscribed') {
+      continue;
+    }
 
     const { error: insErr } = await admin.from('weekly_free_digest_sent').insert({
       user_id: uid,

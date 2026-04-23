@@ -1,7 +1,11 @@
-import 'server-only';
-
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { formatScholarshipAwardDisplay, scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import {
+  buildMarketingUnsubscribeListHeaderUrl,
+  buildMarketingUnsubscribePageUrl
+} from '@/lib/email/buildMarketingUnsubscribeUrl';
+import { postResend } from '@/lib/email/postResend';
+import { resolveResendFrom } from '@/lib/email/resendEnvelope';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
 
@@ -147,14 +151,10 @@ export async function sendGrantDigestBatchEmail(params: {
   categories: GrantDigestCategory[];
   firstName?: string | null;
 }): Promise<{ ok: boolean; skipped?: string }> {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM?.trim();
+  const from = resolveResendFrom();
 
-  if (!apiKey) {
+  if (!process.env.RESEND_API_KEY?.trim()) {
     return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  }
-  if (!from) {
-    return { ok: false, skipped: 'RESEND_FROM not set' };
   }
 
   const categories = params.categories.filter((c) => c.totalCount > 0 && c.items.length > 0);
@@ -167,6 +167,9 @@ export async function sendGrantDigestBatchEmail(params: {
    * Prefer static site origin from env; request-derived origin is used only in web flows.
    */
   const origin = resolveDigestSiteOrigin().replace(/\/+$/, '');
+  const to = params.toEmail.trim();
+  const unsubPage = buildMarketingUnsubscribePageUrl(origin, to);
+  const listUnsubUrl = buildMarketingUnsubscribeListHeaderUrl(origin, to);
   const name = params.firstName?.trim() || 'there';
   const firstCategory = categories[0]!;
   const firstItem = firstCategory.items[0]!;
@@ -201,31 +204,25 @@ export async function sendGrantDigestBatchEmail(params: {
     ctaLabel: 'Open full listing',
     omitPrimaryCta: true,
     siteOrigin: origin,
-    unsubscribeUrl: `${origin}/account`,
+    unsubscribeUrl: unsubPage,
     secondaryLinkNote: ''
   });
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from,
-      to: [params.toEmail],
-      subject,
-      html
-    })
+  const r = await postResend({
+    to,
+    subject,
+    html,
+    category: 'marketing',
+    marketingListUnsubscribeUrl: listUnsubUrl,
+    from
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('[email:grant-digest] Resend error', res.status, text);
-    return { ok: false, skipped: `Resend HTTP ${res.status}` };
+  if (!r.ok) {
+    console.error('[email:grant-digest]', r.skipped);
+    return { ok: false, skipped: r.skipped };
   }
 
-  return { ok: true };
+  return { ok: true, skipped: r.skipped };
 }
 
 export async function sendGrantDigestEmail(params: {

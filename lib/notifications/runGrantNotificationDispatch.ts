@@ -611,12 +611,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       categories,
       firstName: selectedLines[0]?.firstName ?? null
     });
-    if (r.ok) {
-      for (const line of selectedLines) {
-        await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
-        emailSent += 1;
-      }
-    } else {
+    if (!r.ok) {
       errors += 1;
       emailDigestFailed += 1;
       console.error(
@@ -629,6 +624,11 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
           categories: categories.map((c) => ({ id: c.id, totalCount: c.totalCount }))
         })
       );
+    } else if (r.skipped !== 'unsubscribed') {
+      for (const line of selectedLines) {
+        await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
+        emailSent += 1;
+      }
     }
   }
 

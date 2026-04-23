@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
 import type { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/server';
 
@@ -35,8 +36,8 @@ export async function POST(request: Request) {
   }
 
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = process.env.RESEND_FROM?.trim();
-  if (!apiKey || !from) {
+  const from = resolveResendFrom();
+  if (!apiKey) {
     return NextResponse.json(
       { error: 'Email delivery is not configured' },
       { status: 503 }
@@ -100,7 +101,8 @@ export async function POST(request: Request) {
       from,
       to: [toEmail],
       subject,
-      html
+      html,
+      ...resendReplyToFields()
     })
   });
 
