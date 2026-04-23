@@ -141,7 +141,7 @@ const CALLBACKS = {
 
 const USERS_OPEN_PREFIX = 'tg:users:open:';
 const USERS_PAGE_PREFIX = 'tg:users:page:';
-/** 7 + 36 = 43b — in-place expand/collapse for «Новый визит…» (rebuilt from Supabase in handler). */
+/** 7 + 36 = 43b — «Скрыть» after legacy expand (full detail view); new alerts have no expand button. */
 const ADMIN_FIRST_TOUCH_SHORT_PREFIX = 'tg:ft:S';
 const ADMIN_FIRST_TOUCH_FULL_PREFIX = 'tg:ft:F';
 
@@ -890,8 +890,7 @@ function formatVisitorFirstTouchLandingTelegramHtmlCompact(landingUrl: string): 
     const displayPath =
       pathQuery.length > 90 ? `${pathQuery.slice(0, 87)}…` : pathQuery;
     return (
-      `<b>Страница входа:</b> <a href="${escapeTelegramHtml(safeUrl)}">${escapeTelegramHtml(displayPath)}</a>` +
-      '\n<i>Полные UTM и подсказки — кнопка «Подробнее».</i>'
+      `<b>Страница входа:</b> <a href="${escapeTelegramHtml(safeUrl)}">${escapeTelegramHtml(displayPath)}</a>`
     );
   } catch {
     return `<b>Страница входа:</b> ${escapeTelegramHtml(landingUrl.slice(0, 90))}…`;
@@ -978,16 +977,18 @@ function mergeAdminAlertReplyMarkup(markup?: TelegramReplyMarkup | null): Telegr
 
 function buildFirstTouchAdminAlertKeyboard(visitorId: string, view: 'short' | 'full'): TelegramReplyMarkup {
   const v = visitorId.trim();
-  const fold =
-    view === 'short'
-      ? button('👁 Подробнее', `${ADMIN_FIRST_TOUCH_FULL_PREFIX}${v}`)
-      : button('⬅️ Скрыть', `${ADMIN_FIRST_TOUCH_SHORT_PREFIX}${v}`);
+  const openUserRow = [button('👤 Открыть пользователя', buildUsersOpenCallbackData(v))];
+  if (view === 'full') {
+    return {
+      inline_keyboard: [
+        [button('⬅️ Скрыть', `${ADMIN_FIRST_TOUCH_SHORT_PREFIX}${v}`)],
+        openUserRow,
+        ...getTelegramAdminGalleryKeyboardUrlRows()
+      ]
+    };
+  }
   return {
-    inline_keyboard: [
-      [fold],
-      [button('👤 Открыть пользователя', buildUsersOpenCallbackData(v))],
-      ...getTelegramAdminGalleryKeyboardUrlRows()
-    ]
+    inline_keyboard: [openUserRow, ...getTelegramAdminGalleryKeyboardUrlRows()]
   };
 }
 
