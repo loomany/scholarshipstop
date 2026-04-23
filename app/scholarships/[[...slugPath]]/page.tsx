@@ -2,26 +2,11 @@ import type { Metadata } from 'next';
 
 import ScholarshipsSlugPathPageBody from '@/app/scholarships/scholarshipsSlugPathPageBody';
 import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarshipLongTailPresets';
+import { scholarshipHubQueryStringFromNextSearchParamsRecord } from '@/app/scholarships/scholarshipHubCanonicalQueryString';
 
 export const revalidate = 300;
 
 type PageProps = { params: { slugPath?: string[] } };
-
-function toSearchParamsString(
-  searchParams?: Record<string, string | string[] | undefined>
-): string {
-  const qs = new URLSearchParams();
-  for (const [key, value] of Object.entries(searchParams ?? {})) {
-    if (Array.isArray(value)) {
-      for (const part of value) {
-        if (typeof part === 'string') qs.append(key, part);
-      }
-      continue;
-    }
-    if (typeof value === 'string') qs.set(key, value);
-  }
-  return qs.toString();
-}
 
 export function generateMetadata({
   params,
@@ -75,7 +60,9 @@ export default async function ScholarshipsCatchAllPage({
   return (
     <ScholarshipsSlugPathPageBody
       segments={segments}
-      searchParamsString={toSearchParamsString(searchParams)}
+      searchParamsString={scholarshipHubQueryStringFromNextSearchParamsRecord(
+        searchParams
+      )}
     />
   );
 }

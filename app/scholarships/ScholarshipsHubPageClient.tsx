@@ -114,6 +114,7 @@ import {
   type ScholarshipsListResponse
 } from './scholarshipListFetch';
 import { buildInitialListRequestKey } from './buildInitialListRequestKey';
+import { scholarshipHubQueryStringFromURLSearchParams } from './scholarshipHubCanonicalQueryString';
 import type {
   InitialScholarshipsPayload,
   LongTailRouteScopePayload
@@ -285,7 +286,11 @@ function ScholarshipsPageInner({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [pathname, setPathname] = useState('/scholarships');
-  const searchParamsString = searchParams.toString();
+  /** Business-only, stable order — matches SSR `searchParamsString` and excludes framework keys. */
+  const searchParamsString = useMemo(
+    () => scholarshipHubQueryStringFromURLSearchParams(searchParams),
+    [searchParams]
+  );
   const hubListRequestKey = useMemo(
     () =>
       routeScope
@@ -690,6 +695,7 @@ function ScholarshipsPageInner({
     string | null
   >(null);
   const initialSidebarMetaHydratedRef = useRef(false);
+  const listRequestKeyClientLogRef = useRef<string | null>(null);
   const listMetaRef = useRef<ScholarshipListMeta | null>(listMeta);
   listMetaRef.current = listMeta;
 
@@ -1755,7 +1761,11 @@ function ScholarshipsPageInner({
     [viewedIds, savedIds]
   );
 
-  /** Invalidates list fetch when landing quiz, tab, auth, or server profile seed changes. */
+  /**
+   * List/cache identity: tab, filter UI, guest quiz, auth. Intentionally omits
+   * `listMeta.profileFilterSeed` so the React Query key does not change after
+   * hydration when meta loads (tab switching can hit cache).
+   */
   const listingRequestFingerprint = useMemo(
     () =>
       JSON.stringify({
@@ -1764,15 +1774,13 @@ function ScholarshipsPageInner({
           : null,
         landingQuiz: transientBestRecommendationProfileSeed,
         tab: activeTab,
-        auth: isAuthenticated,
-        serverProfileSeed: listMeta?.profileFilterSeed ?? null
+        auth: isAuthenticated
       }),
     [
       moreFiltersApplied,
       transientBestRecommendationProfileSeed,
       activeTab,
-      isAuthenticated,
-      listMeta?.profileFilterSeed
+      isAuthenticated
     ]
   );
 
@@ -1918,6 +1926,15 @@ function ScholarshipsPageInner({
       routeScopeKey
     ]
   );
+
+  if (
+    process.env.NODE_ENV === 'development' &&
+    listRequestKeyClientLogRef.current !== hubListRequestKey
+  ) {
+    listRequestKeyClientLogRef.current = hubListRequestKey;
+    // eslint-disable-next-line no-console -- dev: should match `initialPayload.requestKey` on hydration
+    console.log('CLIENT KEY:', hubListRequestKey);
+  }
 
   const listQuery = useQuery({
     queryKey: hubListQueryKey,
