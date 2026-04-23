@@ -16,7 +16,9 @@ import {
   type ReactNode
 } from 'react';
 import Link from 'next/link';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { ScholarshipsHubQueryProvider } from '@/components/providers/ScholarshipsHubQueryProvider';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import BestRecommendationWizard from '@/components/scholarships/BestRecommendationWizard';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
@@ -108,13 +110,18 @@ import {
   postScholarshipsList,
   postScholarshipsCount,
   postScholarshipsMeta,
-  scholarshipRequestErrorMessage
+  scholarshipRequestErrorMessage,
+  type ScholarshipsListResponse
 } from './scholarshipListFetch';
-import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
-import type { LongTailRouteScopePayload } from './scholarshipListServerPayload';
+import { buildInitialListRequestKey } from './buildInitialListRequestKey';
+import type {
+  InitialScholarshipsPayload,
+  LongTailRouteScopePayload
+} from './scholarshipListServerPayload';
 import {
   moreFiltersFromJson,
-  moreFiltersToJson
+  moreFiltersToJson,
+  type MoreFiltersJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
 import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMetaGuestPatches';
@@ -279,6 +286,17 @@ function ScholarshipsPageInner({
   const searchParams = useSearchParams();
   const [pathname, setPathname] = useState('/scholarships');
   const searchParamsString = searchParams.toString();
+  const hubListRequestKey = useMemo(
+    () =>
+      routeScope
+        ? `long_tail:${pathname.replace(/^\/scholarships\//, '')}:${searchParamsString}`
+        : buildInitialListRequestKey({
+            kind: 'hub',
+            routeKey: 'hub',
+            searchParamsString
+          }),
+    [routeScope, pathname, searchParamsString]
+  );
   const activeTab: ScholarshipListTabId = parseHubScholarshipTabParam(
     searchParams.get('tab')
   );
@@ -618,6 +636,21 @@ function ScholarshipsPageInner({
     activeTab === 'best-recommendation' &&
     transientBestRecommendationProfileSeed != null;
 
+  const routeScopeKey = useMemo(
+    () =>
+      routeScope
+        ? JSON.stringify({
+            longTailLegacySlugs: routeScope.longTailLegacySlugs,
+            requiredSeoTags: routeScope.requiredSeoTags,
+            baseMoreFilters: routeScope.baseMoreFilters,
+            slugOnlyMoreFilters: routeScope.slugOnlyMoreFilters,
+            seoListingFallback: routeScope.seoListingFallback,
+            providerSlug: routeScope.providerSlug
+          })
+        : 'hub',
+    [routeScope]
+  );
+
   useEffect(() => {
     if (!catalogFreeTier || transientBestRecommendationProfileSeed == null) {
       setGuestBestPreviewSidebarCount(null);
@@ -649,7 +682,6 @@ function ScholarshipsPageInner({
     number | null
   >(null);
   const metaKeySynced = useRef('');
-  const metaRequestInFlightRef = useRef<string | null>(null);
   /**
    * When this equals `sidebarMetaRequestKey`, `listMeta.sidebarCounts` matches the
    * current filter/tab URL state (avoids showing stale all-zero placeholders).
@@ -658,7 +690,6 @@ function ScholarshipsPageInner({
     string | null
   >(null);
   const initialSidebarMetaHydratedRef = useRef(false);
-  const initialRequestKeyRef = useRef(initialPayload?.requestKey ?? null);
   const listMetaRef = useRef<ScholarshipListMeta | null>(listMeta);
   listMetaRef.current = listMeta;
 
@@ -918,6 +949,9 @@ function ScholarshipsPageInner({
     recommendedAppliedFilters
   ]);
 
+  /** Recommended tab: only run list POST when we have filter payload to query (avoids empty DB work). */
+  const hasPresets = Boolean(savedFiltersForHub);
+
   const syncSavedFilterPresetsToAccount = useCallback(
     async (payload: { activePresetId: string | null; presets: SavedFilterPreset[] }) => {
       if (!isAuthenticated || !authResolved) return;
@@ -1112,6 +1146,17 @@ function ScholarshipsPageInner({
     savedFiltersForHub,
     routeBaseMoreFilters
   ]);
+
+  const listMoreFiltersJson = useMemo((): MoreFiltersJson | null => {
+    if (!hubListingBodyMoreFilters) return null;
+    try {
+      return moreFiltersToJson(
+        withTabEnforcedMoreFilters(hubListingBodyMoreFilters, activeTab)
+      );
+    } catch {
+      return null;
+    }
+  }, [hubListingBodyMoreFilters, activeTab]);
 
   /**
    * `meta_only` sidebar counts must reflect catalog-wide totals per row (Matches, Hot deadlines, …).
@@ -1795,281 +1840,303 @@ function ScholarshipsPageInner({
   const listPageForUi =
     catalogFreeTier && activeTab === 'best-recommendation' ? 1 : currentPage;
 
-  useEffect(() => {
-    let cancelled = false;
-    const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${listingRequestFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|gb:${guestBestRecommendationPreviewEnabled ? 1 : 0}`;
-    /**
-     * Keep visible list stable on membership mutations (save/ignore/restore):
-     * collection changes are handled optimistically in local state and should not
-     * invalidate this effect. Do not add `sidebarMetaRequestKey` here — it includes
-     * collection fingerprints and would refetch the full list on every save (flash).
-     */
-    const requestCacheKey = metaKey;
-    const currentRequestKey = routeScope
-      ? `long_tail:${pathname.replace(/^\/scholarships\//, '')}:${searchParamsString}`
-      : `hub:hub:${searchParamsString}`;
-    /**
-     * Hub first paint: reuse SSR `initialPayload` when the URL matches the server request key
-     * (`hub:hub:` + same search string). Avoids a duplicate POST /api/scholarships on hydration.
-     * Any change to tab, page, filters, or query params changes `currentRequestKey` or effect deps → fetch.
-     */
-    if (
-      initialRequestKeyRef.current === currentRequestKey &&
-      initialPayload?.result
-    ) {
-      initialRequestKeyRef.current = null;
-      if (initialPayload.result.meta) {
-        metaKeySynced.current = sidebarMetaRequestKey;
-        if (initialPayload.result.meta.sidebarCounts) {
-          setSidebarGlobalMetaAppliedKey(sidebarMetaRequestKey);
+  const queryClient = useQueryClient();
+
+  const initialListData = useMemo((): ScholarshipsListResponse | undefined => {
+    if (!initialPayload?.result) return undefined;
+    if (initialPayload.requestKey !== hubListRequestKey) return undefined;
+    const r = initialPayload.result;
+    return {
+      scholarships: r.scholarships,
+      total: r.total,
+      page: r.page,
+      limit: r.limit,
+      meta: r.meta,
+      errorMessage: r.errorMessage,
+      matchPaywall: r.matchPaywall,
+      seoFallback: r.seoFallback
+    } as ScholarshipsListResponse;
+  }, [initialPayload, hubListRequestKey]);
+
+  const hubListQueryKey = useMemo(
+    () =>
+      [
+        'scholarships',
+        'hub',
+        'list',
+        searchParamsString,
+        listMoreFiltersJson,
+        routeScopeKey,
+        appliedProviderSlug,
+        guestBestRecommendationPreviewEnabled ? 1 : 0,
+        listingRequestFingerprint,
+        hubListingPage,
+        savedFiltersSnapshotJson,
+        catalogListScope,
+        pathname
+      ] as const,
+    [
+      searchParamsString,
+      listMoreFiltersJson,
+      routeScopeKey,
+      appliedProviderSlug,
+      guestBestRecommendationPreviewEnabled,
+      listingRequestFingerprint,
+      hubListingPage,
+      savedFiltersSnapshotJson,
+      catalogListScope,
+      pathname
+    ]
+  );
+
+  const listQueryEnabled = activeTab !== 'recommended' || hasPresets;
+
+  const initialMetaData = useMemo(() => {
+    if (!initialPayload?.result?.meta) return undefined;
+    if (initialPayload.requestKey !== hubListRequestKey) return undefined;
+    const r = initialPayload.result;
+    return { meta: r.meta, page: r.page, limit: r.limit };
+  }, [initialPayload, hubListRequestKey]);
+
+  const hubMetaQueryKey = useMemo(
+    () =>
+      [
+        'scholarships',
+        'hub',
+        'meta',
+        sidebarMetaRequestKey,
+        searchParamsString,
+        appliedProviderSlug,
+        guestBestRecommendationPreviewEnabled ? 1 : 0,
+        routeScopeKey
+      ] as const,
+    [
+      sidebarMetaRequestKey,
+      searchParamsString,
+      appliedProviderSlug,
+      guestBestRecommendationPreviewEnabled,
+      routeScopeKey
+    ]
+  );
+
+  const listQuery = useQuery({
+    queryKey: hubListQueryKey,
+    queryFn: async (): Promise<ScholarshipsListResponse> => {
+      const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${listingRequestFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|gb:${guestBestRecommendationPreviewEnabled ? 1 : 0}`;
+      const requestCacheKey = metaKey;
+      const ids = userListIdsRef.current;
+      const sp = buildHubListingSearchParams({
+        base: new URLSearchParams(searchParamsString),
+        page: hubListingPage,
+        tab: activeTab,
+        meta: false,
+        saved: ids.saved,
+        ignored: ids.ignored,
+        started: ids.started,
+        submitted: ids.submitted,
+        scope: catalogListScope
+      });
+      const cDbg = hubClientSidebarDebugEnabled();
+      if (cDbg) {
+        let moreFiltersSummary: unknown = null;
+        try {
+          moreFiltersSummary =
+            moreFiltersApplied != null
+              ? moreFiltersToJson(moreFiltersApplied)
+              : null;
+        } catch {
+          moreFiltersSummary = '(serialize error)';
         }
+        // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
+        console.log('[scholarships-hub-meta-debug] client before fetch', {
+          ts: new Date().toISOString(),
+          pathname,
+          searchParamsString,
+          activeTab,
+          effectiveListScope: catalogListScope,
+          q: parsedList.q,
+          includeMetaRequested: false,
+          requestCacheKey,
+          metaKeySyncedBefore: metaKeySynced.current,
+          idCounts: {
+            saved: ids.saved.length,
+            ignored: ids.ignored.length,
+            started: ids.started.length,
+            submitted: ids.submitted.length
+          },
+          moreFiltersSummary,
+          isAuthenticated,
+          requestSearchParams: sp.toString()
+        });
       }
-      setHasInitialLoadCompleted(true);
+      const prevMeta = listMetaRef.current;
+      const tabAwareMoreFilters = hubListingBodyMoreFilters
+        ? withTabEnforcedMoreFilters(hubListingBodyMoreFilters, activeTab)
+        : undefined;
+      const data = await postScholarshipsList({
+        searchParams: sp.toString(),
+        moreFilters: tabAwareMoreFilters
+          ? moreFiltersToJson(tabAwareMoreFilters)
+          : undefined,
+        savedFiltersSnapshot: savedFiltersSnapshotJson,
+        guestBestRecommendationPreviewEnabled,
+        longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+        requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+        seoListingFallback: routeScope?.seoListingFallback,
+        slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+        providerSlug: appliedProviderSlug
+      });
+      if (cDbg) {
+        const nextMeta = data.meta;
+        // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
+        console.log('[scholarships-hub-meta-debug] client after fetch', {
+          ts: new Date().toISOString(),
+          responseTotal: data.total,
+          responsePage: data.page,
+          responseMetaBest: nextMeta?.sidebarCounts.bestRecommendation,
+          responseMetaRec: nextMeta?.sidebarCounts.recommended,
+          responseMetaMatches: nextMeta?.sidebarCounts.matches,
+          responseMetaEasyApply: nextMeta?.sidebarCounts.easyApply,
+          hadMetaInResponse: Boolean(nextMeta),
+          willCallSetListMeta: Boolean(nextMeta),
+          prevListMetaBest: prevMeta?.sidebarCounts.bestRecommendation,
+          prevListMetaRec: prevMeta?.sidebarCounts.recommended,
+          nextListMetaBest: nextMeta?.sidebarCounts.bestRecommendation,
+          nextListMetaRec: nextMeta?.sidebarCounts.recommended
+        });
+      }
+      return data;
+    },
+    enabled: listQueryEnabled,
+    initialData: initialListData,
+    staleTime: 300_000,
+    refetchOnMount: false
+  });
+
+  const sidebarMetaQuery = useQuery({
+    queryKey: hubMetaQueryKey,
+    queryFn: () => {
+      const ids = userListIdsRef.current;
+      const sp = buildHubListingSearchParams({
+        base: new URLSearchParams(searchParamsString),
+        page: 1,
+        tab: 'matches',
+        meta: true,
+        saved: ids.saved,
+        ignored: ids.ignored,
+        started: ids.started,
+        submitted: ids.submitted,
+        scope: 'catalog'
+      });
+      return postScholarshipsMeta({
+        searchParams: sp.toString(),
+        moreFilters: hubSidebarMetaMoreFilters
+          ? moreFiltersToJson(hubSidebarMetaMoreFilters)
+          : undefined,
+        savedFiltersSnapshot: savedFiltersSnapshotJson,
+        guestBestRecommendationPreviewEnabled,
+        longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+        requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+        seoListingFallback: routeScope?.seoListingFallback,
+        slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+        providerSlug: appliedProviderSlug,
+        sidebarOnlyMeta: true
+      });
+    },
+    enabled: authResolved,
+    initialData: initialMetaData,
+    staleTime: 300_000,
+    refetchOnMount: false
+  });
+
+  useEffect(() => {
+    if (activeTab === 'recommended' && !savedFiltersForHub) {
+      setScholarships([]);
+      setTotalCount(0);
+      setHasError(false);
+      setErrorMessage('');
       setIsLoading(false);
-      return () => {
-        cancelled = true;
-      };
+      setHasInitialLoadCompleted(true);
+      return;
     }
-
-    const run = async () => {
-      try {
-        if (activeTab === 'recommended' && !savedFiltersForHub) {
-          setScholarships([]);
-          setTotalCount(0);
-          setHasError(false);
-          setErrorMessage('');
-          setIsLoading(false);
-          return;
+    if (listQuery.isError) {
+      // eslint-disable-next-line no-console -- list fetch diagnostics
+      console.error(
+        '[ScholarshipsHub] postScholarshipsList failed',
+        listQuery.error
+      );
+      setHasError(true);
+      setErrorMessage(
+        scholarshipRequestErrorMessage(
+          listQuery.error,
+          'Failed to load scholarships.'
+        )
+      );
+      setIsLoading(false);
+      setHasInitialLoadCompleted(true);
+      return;
+    }
+    const d = listQuery.data;
+    if (d) {
+      setScholarships(d.scholarships);
+      setTotalCount(d.total);
+      setHasError(Boolean(d.errorMessage));
+      setErrorMessage(d.errorMessage ?? '');
+    }
+    setIsLoading(listQuery.isPending && !d);
+    if (listQuery.isFetched || d) {
+      setHasInitialLoadCompleted(true);
+    }
+    if (!d) return;
+    const nextMeta = d.meta ?? null;
+    if (nextMeta && sidebarMetaRequestKeyRef.current === sidebarMetaRequestKey) {
+      setListMeta((prev) => {
+        const merged = prev ? { ...prev, ...nextMeta } : nextMeta;
+        if (guestBestRecommendationPreviewEnabled) {
+          return {
+            ...merged,
+            sidebarCounts: prev?.sidebarCounts ?? merged.sidebarCounts
+          };
         }
-        setIsLoading(true);
-        setHasError(false);
-        setErrorMessage('');
-        const ids = userListIdsRef.current;
-        const sp = buildHubListingSearchParams({
-          base: new URLSearchParams(searchParamsString),
-          page: hubListingPage,
-          tab: activeTab,
-          meta: false,
-          saved: ids.saved,
-          ignored: ids.ignored,
-          started: ids.started,
-          submitted: ids.submitted,
-          scope: catalogListScope
+        return merged;
+      });
+      if (!guestBestRecommendationPreviewEnabled) {
+        metaKeySynced.current = sidebarMetaRequestKey;
+        queryClient.setQueryData(hubMetaQueryKey, {
+          meta: nextMeta,
+          page: 1,
+          limit: d.limit
         });
-        const cDbg = hubClientSidebarDebugEnabled();
-        if (cDbg) {
-          let moreFiltersSummary: unknown = null;
-          try {
-            moreFiltersSummary =
-              moreFiltersApplied != null
-                ? moreFiltersToJson(moreFiltersApplied)
-                : null;
-          } catch {
-            moreFiltersSummary = '(serialize error)';
-          }
-          // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
-          console.log('[scholarships-hub-meta-debug] client before fetch', {
-            ts: new Date().toISOString(),
-            pathname,
-            searchParamsString,
-            activeTab,
-            effectiveListScope: catalogListScope,
-            q: parsedList.q,
-            includeMetaRequested: false,
-            requestCacheKey,
-            metaKeySyncedBefore: metaKeySynced.current,
-            idCounts: {
-              saved: ids.saved.length,
-              ignored: ids.ignored.length,
-              started: ids.started.length,
-              submitted: ids.submitted.length
-            },
-            moreFiltersSummary,
-            isAuthenticated,
-            requestSearchParams: sp.toString()
-          });
-        }
-        const prevMeta = listMetaRef.current;
-        const tabAwareMoreFilters = hubListingBodyMoreFilters
-          ? withTabEnforcedMoreFilters(hubListingBodyMoreFilters, activeTab)
-          : undefined;
-        const data = await postScholarshipsList({
-          searchParams: sp.toString(),
-          moreFilters: tabAwareMoreFilters
-            ? moreFiltersToJson(tabAwareMoreFilters)
-            : undefined,
-          savedFiltersSnapshot: savedFiltersSnapshotJson,
-          guestBestRecommendationPreviewEnabled,
-          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
-          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
-          seoListingFallback: routeScope?.seoListingFallback,
-          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-          providerSlug: appliedProviderSlug
-        });
-        if (cancelled) return;
-        setScholarships(data.scholarships);
-        setTotalCount(data.total);
-        setHasError(Boolean(data.errorMessage));
-        setErrorMessage(data.errorMessage ?? '');
-        if (cDbg) {
-          const nextMeta = data.meta;
-          // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
-          console.log('[scholarships-hub-meta-debug] client after fetch', {
-            ts: new Date().toISOString(),
-            responseTotal: data.total,
-            responsePage: data.page,
-            responseMetaBest: nextMeta?.sidebarCounts.bestRecommendation,
-            responseMetaRec: nextMeta?.sidebarCounts.recommended,
-            responseMetaMatches: nextMeta?.sidebarCounts.matches,
-            responseMetaEasyApply: nextMeta?.sidebarCounts.easyApply,
-            hadMetaInResponse: Boolean(nextMeta),
-            willCallSetListMeta: Boolean(nextMeta),
-            prevListMetaBest: prevMeta?.sidebarCounts.bestRecommendation,
-            prevListMetaRec: prevMeta?.sidebarCounts.recommended,
-            nextListMetaBest: nextMeta?.sidebarCounts.bestRecommendation,
-            nextListMetaRec: nextMeta?.sidebarCounts.recommended
-          });
-        }
-        const nextMeta = data.meta ?? null;
-        if (nextMeta && sidebarMetaRequestKeyRef.current === sidebarMetaRequestKey) {
-          setListMeta((prev) => {
-            const merged = prev ? { ...prev, ...nextMeta } : nextMeta;
-            if (guestBestRecommendationPreviewEnabled) {
-              return {
-                ...merged,
-                sidebarCounts: prev?.sidebarCounts ?? merged.sidebarCounts
-              };
-            }
-            return merged;
-          });
-          if (!guestBestRecommendationPreviewEnabled) {
-            metaKeySynced.current = sidebarMetaRequestKey;
-          }
-        }
-      } catch (e) {
-        // eslint-disable-next-line no-console -- list fetch diagnostics
-        console.error('[ScholarshipsHub] postScholarshipsList failed', e);
-        if (!cancelled) {
-          setHasError(true);
-          setErrorMessage(scholarshipRequestErrorMessage(e));
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-          setHasInitialLoadCompleted(true);
-        }
       }
-    };
-
-    run();
-    return () => {
-      cancelled = true;
-    };
+    }
   }, [
-    isAuthenticated,
-    authResolved,
-    searchParamsString,
-    hubListingPage,
     activeTab,
-    listingRequestFingerprint,
-    catalogListScope,
-    routeScope,
-    pathname,
-    routeBaseMoreFilters,
-    hubListingBodyMoreFilters,
     savedFiltersForHub,
-    savedFiltersSnapshotJson,
-    appliedProviderSlug,
-    guestBestRecommendationPreviewEnabled
+    listQuery.data,
+    listQuery.isError,
+    listQuery.isPending,
+    listQuery.isFetched,
+    listQuery.error,
+    sidebarMetaRequestKey,
+    guestBestRecommendationPreviewEnabled,
+    queryClient,
+    hubMetaQueryKey
   ]);
 
   useEffect(() => {
-    let cancelled = false;
-    /**
-     * Include auth in the key so we refetch after `authResolved` / login transitions.
-     * Otherwise SSR guest meta (Best = 0) can stick while the session is already signed in.
-     */
-    const metaKey = sidebarMetaRequestKey;
-    if (metaKeySynced.current === metaKey) return;
-    if (metaRequestInFlightRef.current === metaKey) return;
-    metaRequestInFlightRef.current = metaKey;
-
-    const run = async () => {
-      try {
-        const ids = userListIdsRef.current;
-        const sp = buildHubListingSearchParams({
-          base: new URLSearchParams(searchParamsString),
-          page: 1,
-          tab: 'matches',
-          meta: true,
-          saved: ids.saved,
-          ignored: ids.ignored,
-          started: ids.started,
-          submitted: ids.submitted,
-          scope: 'catalog'
-        });
-        const metaResponse = await postScholarshipsMeta({
-          searchParams: sp.toString(),
-          moreFilters: hubSidebarMetaMoreFilters
-            ? moreFiltersToJson(hubSidebarMetaMoreFilters)
-            : undefined,
-          savedFiltersSnapshot: savedFiltersSnapshotJson,
-          guestBestRecommendationPreviewEnabled,
-          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
-          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
-          seoListingFallback: routeScope?.seoListingFallback,
-          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-          providerSlug: appliedProviderSlug,
-          sidebarOnlyMeta: true
-        });
-        if (cancelled) return;
-        const sidebarMeta = metaResponse.meta ?? null;
-        if (sidebarMeta) {
-          setListMeta((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  sidebarCounts: sidebarMeta.sidebarCounts
-                }
-              : sidebarMeta
-          );
-          metaKeySynced.current = metaKey;
-          setSidebarGlobalMetaAppliedKey(metaKey);
-        }
-      } catch (e) {
-        if (!cancelled) {
-          // eslint-disable-next-line no-console -- sidebar meta diagnostics
-          console.warn(
-            '[ScholarshipsHub] postScholarshipsMeta failed',
-            scholarshipRequestErrorMessage(e, 'Scholarship meta failed.')
-          );
-        }
-      } finally {
-        if (metaRequestInFlightRef.current === metaKey) {
-          metaRequestInFlightRef.current = null;
-        }
-      }
-    };
-
-    run();
-    return () => {
-      cancelled = true;
-    };
-  }, [
-    userCollectionsFingerprint,
-    isAuthenticated,
-    authResolved,
-    sidebarMetaRequestKey,
-    savedFiltersSnapshotJson,
-    searchParamsString,
-    hubSidebarMetaMoreFilters,
-    guestBestRecommendationPreviewEnabled,
-    routeScope?.longTailLegacySlugs,
-    routeScope?.requiredSeoTags,
-    routeScope?.seoListingFallback,
-    routeScope?.slugOnlyMoreFilters,
-    appliedProviderSlug
-  ]);
+    const sidebarMeta = sidebarMetaQuery.data?.meta;
+    if (!sidebarMeta) return;
+    setListMeta((prev) =>
+      prev
+        ? {
+            ...prev,
+            sidebarCounts: sidebarMeta.sidebarCounts
+          }
+        : sidebarMeta
+    );
+    metaKeySynced.current = sidebarMetaRequestKey;
+    setSidebarGlobalMetaAppliedKey(sidebarMetaRequestKey);
+  }, [sidebarMetaQuery.data, sidebarMetaRequestKey]);
 
   useEffect(() => {
     if (isLoading || totalCount === 0) return;
@@ -2957,24 +3024,26 @@ export default function ScholarshipsHubPageClient({
   postListingContent?: ReactNode;
 }) {
   return (
-    <Suspense
-      fallback={
-        <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
-          <div className="mx-auto max-w-5xl">
-            <ScholarshipsBrandLoading showTopAccentBar />
-          </div>
-        </section>
-      }
-    >
-      <ScholarshipsPageInner
-        isAuthenticated={isAuthenticated}
-        authResolved={authResolved}
-        hasSubscription={hasSubscription}
-        initialPayload={initialPayload}
-        routeScope={routeScope}
-        leadContent={leadContent}
-        postListingContent={postListingContent}
-      />
-    </Suspense>
+    <ScholarshipsHubQueryProvider>
+      <Suspense
+        fallback={
+          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
+            <div className="mx-auto max-w-5xl">
+              <ScholarshipsBrandLoading showTopAccentBar />
+            </div>
+          </section>
+        }
+      >
+        <ScholarshipsPageInner
+          isAuthenticated={isAuthenticated}
+          authResolved={authResolved}
+          hasSubscription={hasSubscription}
+          initialPayload={initialPayload}
+          routeScope={routeScope}
+          leadContent={leadContent}
+          postListingContent={postListingContent}
+        />
+      </Suspense>
+    </ScholarshipsHubQueryProvider>
   );
 }

@@ -37,8 +37,9 @@ import {
 import { stripHubProfileHardMatchMoreFilters } from '@/lib/scholarships/profileFilterDefaults';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types_db';
-
 type ServerSupabaseClient = SupabaseClient<Database>;
+
+export { buildInitialListRequestKey } from '@/app/scholarships/buildInitialListRequestKey';
 
 function getSearchParamValue(
   searchParams: URLSearchParams,
@@ -446,15 +447,6 @@ export async function fetchInitialCategoryScholarshipsPayload(
       isCategorySeo: true
     }
   );
-}
-
-export function buildInitialListRequestKey(args: {
-  kind: 'hub' | 'long_tail' | 'category';
-  routeKey: string;
-  searchParamsString?: string;
-}): string {
-  const search = args.searchParamsString?.trim() ?? '';
-  return `${args.kind}:${args.routeKey}:${search}`;
 }
 
 export type InitialScholarshipsPayload = {
