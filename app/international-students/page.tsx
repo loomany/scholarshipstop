@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Check } from 'lucide-react';
 
 import { homePrimaryCtaClass } from '@/components/home/homeMarketingCtaClasses';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
@@ -208,18 +209,20 @@ export default function InternationalStudentsPage() {
             {painPoints.map((item) => (
               <article
                 key={item.title}
-                className="flex min-h-[230px] items-start gap-4 rounded-2xl border border-gray-200 bg-white p-7 shadow-[0_4px_20px_-10px_rgba(15,23,42,0.07)] transition duration-200 hover:border-gray-300 hover:shadow-[0_10px_32px_-18px_rgba(15,23,42,0.11)]"
+                className="flex min-h-[230px] w-full flex-col justify-center rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-[0_4px_20px_-10px_rgba(15,23,42,0.07)] transition duration-200 hover:border-gray-300 hover:shadow-[0_10px_32px_-18px_rgba(15,23,42,0.11)] sm:justify-start sm:px-7 sm:py-7 sm:text-left"
               >
-                <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-2xl ring-1 ring-gray-100">
-                  {item.icon}
-                </span>
-                <div className="min-w-0">
-                  <h3 className="text-lg font-semibold leading-snug tracking-tight text-gray-900">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-[0.9375rem]">
-                    {item.body}
-                  </p>
+                <div className="flex w-full min-w-0 flex-row items-center justify-start gap-3 sm:gap-4">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-lg ring-1 ring-gray-100 sm:h-12 sm:w-12 sm:rounded-xl sm:text-2xl">
+                    {item.icon}
+                  </span>
+                  <div className="min-w-0 flex-1 text-balance">
+                    <h3 className="text-pretty text-lg font-semibold leading-snug tracking-tight text-gray-900 sm:text-left">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:mt-3 sm:text-left sm:text-[0.9375rem]">
+                      {item.body}
+                    </p>
+                  </div>
                 </div>
               </article>
             ))}
@@ -256,24 +259,31 @@ export default function InternationalStudentsPage() {
         className={`border-b border-gray-100 bg-white py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
         aria-labelledby="what-you-get-heading"
       >
-        <div className={`${container} max-w-2xl`}>
+        <div className={`${container} max-w-3xl`}>
           <h2
             id="what-you-get-heading"
             className={`text-center text-pretty ${h2Section}`}
           >
             What you get with ScholarshipTop
           </h2>
-          <ul className="mt-8 space-y-3 sm:mt-10 sm:space-y-3.5">
+          <ul
+            className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5"
+            role="list"
+          >
             {whatYouGetBullets.map((line) => (
               <li
                 key={line}
-                className="flex items-start gap-3 text-base leading-relaxed text-gray-700"
+                className="flex h-full items-center justify-center gap-3 rounded-2xl border border-gray-200/90 bg-gray-50/80 px-4 py-3.5 sm:px-5 sm:py-4"
               >
                 <span
-                  className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-900"
+                  className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700"
                   aria-hidden
-                />
-                {line}
+                >
+                  <Check className="h-4 w-4" strokeWidth={2.5} />
+                </span>
+                <span className="text-center text-balance text-sm font-medium leading-snug text-gray-900 sm:text-[0.9375rem] sm:leading-relaxed">
+                  {line}
+                </span>
               </li>
             ))}
           </ul>
