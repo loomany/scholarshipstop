@@ -1819,6 +1819,13 @@ export async function fetchScholarshipSidebarCounts(
     'submitted',
     'ignored'
   ];
+  const internationalFriendlyCountPromise = countScholarshipsForTabRequest(
+    supabase,
+    internationalFriendlySidebarCountRequest(catalogSidebarBasisReq),
+    'matches'
+  )
+    .then((n) => ({ ok: true as const, n }))
+    .catch((e) => ({ ok: false as const, e }));
   const tabSettled = await Promise.allSettled(
     tabs.map(async (t) => {
       if (t === 'recommended') {
@@ -1890,6 +1897,7 @@ export async function fetchScholarshipSidebarCounts(
       };
     })
   );
+  const internationalFriendlyResult = await internationalFriendlyCountPromise;
   const sidebarParts = tabSettled.map((result, i) => {
     if (result.status === 'fulfilled') return result.value;
     const t = tabs[i]!;
@@ -1903,17 +1911,13 @@ export async function fetchScholarshipSidebarCounts(
   });
 
   let internationalFriendly = 0;
-  try {
-    internationalFriendly = await countScholarshipsForTabRequest(
-      supabase,
-      internationalFriendlySidebarCountRequest(catalogSidebarBasisReq),
-      'matches'
-    );
-  } catch (e) {
+  if (internationalFriendlyResult.ok) {
+    internationalFriendly = internationalFriendlyResult.n;
+  } else {
     // eslint-disable-next-line no-console -- sidebar count diagnostics
     console.warn(
       '[fetchScholarshipSidebarCounts] internationalFriendly count failed',
-      postgrestErrorToMessage(e)
+      postgrestErrorToMessage(internationalFriendlyResult.e)
     );
   }
   const sidebarCounts: ScholarshipSidebarCounts = {

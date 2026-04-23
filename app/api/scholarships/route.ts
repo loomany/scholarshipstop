@@ -6,6 +6,7 @@ import {
   parseSortFromParam,
   SCHOLARSHIPS_PAGE_SIZE
 } from '@/app/scholarships/scholarshipListUrl';
+import { defaultMoreFiltersFromBounds } from '@/app/scholarships/moreFilters';
 import {
   parseHubScholarshipTabParam,
   parseScholarshipTabParam
@@ -133,12 +134,13 @@ function buildGuestPublicCacheControl(args: {
   countOnly: boolean;
   metaOnly: boolean;
   req: ScholarshipListRequest;
+  bounds: ScholarshipListMeta['filterBounds'];
 }): string | null {
   if (args.authUser) return null;
   if (!args.isHubPrimaryListing) return null;
   if (args.countOnly || args.includeMeta || args.metaOnly) return null;
   if (args.req.page !== 1 || args.req.limit !== SCHOLARSHIPS_PAGE_SIZE) return null;
-  if (args.req.tab !== 'matches') return null;
+  if (args.req.tab !== 'matches' && args.req.tab !== 'easy-apply') return null;
   if (args.req.q.trim().length > 0) return null;
   if (args.req.categoryIds.size > 0) return null;
   if (args.req.categoryPageSlug || args.req.catalogSubjectCategoryId) return null;
@@ -152,6 +154,14 @@ function buildGuestPublicCacheControl(args: {
   if (args.req.submitted.length > 0) return null;
   if (args.req.requiredSeoTags.length > 0) return null;
   if (args.req.deadline !== 'any') return null;
+  if (args.req.tab === 'easy-apply') {
+    const defaultFilters = defaultMoreFiltersFromBounds(args.bounds);
+    const defaultJson = JSON.stringify(moreFiltersToJson(defaultFilters));
+    defaultFilters.includeEasyApply.add('easy_apply');
+    const easyApplyJson = JSON.stringify(moreFiltersToJson(defaultFilters));
+    const requestJson = JSON.stringify(moreFiltersToJson(args.req.moreFilters));
+    if (requestJson !== defaultJson && requestJson !== easyApplyJson) return null;
+  }
   return 'public, s-maxage=45, stale-while-revalidate=300';
 }
 
@@ -318,7 +328,6 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     req.listScope === 'personalized' ||
     req.tab === 'best-recommendation' ||
     req.tab === 'recommended' ||
-    req.tab === 'easy-apply' ||
     req.tab === 'hot-deadlines' ||
     req.saved.length > 0 ||
     req.ignored.length > 0 ||
@@ -696,7 +705,8 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     includeMeta,
     countOnly,
     metaOnly,
-    req
+    req,
+    bounds
   });
   if (cacheControl) {
     response.headers.set('Cache-Control', cacheControl);

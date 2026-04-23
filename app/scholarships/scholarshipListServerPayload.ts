@@ -22,6 +22,7 @@ import {
 } from '@/lib/scholarships/scholarshipListServer';
 import {
   parseDeadlineFromParam,
+  parseAudienceFromParam,
   parseSortFromParam,
   SCHOLARSHIPS_PAGE_SIZE
 } from '@/app/scholarships/scholarshipListUrl';
@@ -87,6 +88,16 @@ export async function fetchInitialHubScholarshipsPayload(
     listScope: 'catalog',
     requiredSeoTags: []
   });
+  const audience = parseAudienceFromParam(searchParams.get('aud'));
+  if (audience !== 'any') {
+    req = {
+      ...req,
+      moreFilters: {
+        ...req.moreFilters,
+        citizenshipAudience: audience
+      }
+    };
+  }
   const profileSavedFiltersSnapshotJson =
     savedFiltersSnapshotJsonFromProfile(profile);
   const profileSavedFiltersSnapshot =
