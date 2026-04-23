@@ -154,6 +154,12 @@ import {
   stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
+import {
+  hubSaveSectionUserLabel,
+  hubScopeFromListContext,
+  listingNavPatchForHubScope,
+  presetHubScopeMatchesListContext
+} from '@/lib/scholarships/hubSavedFilterScope';
 import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
 import { storageKeyMatchesBase } from '@/app/scholarships/userScopedStorage';
 import { toast } from '@/components/ui/Toasts/use-toast';
@@ -991,6 +997,28 @@ function ScholarshipsPageInner({
     recommendedAppliedFilters
   ]);
 
+  const presetsForCurrentHubSection = useMemo(
+    () =>
+      savedFilterPresets.filter((p) =>
+        presetHubScopeMatchesListContext(
+          p.hubScope,
+          activeTab,
+          parsedList.audience
+        )
+      ),
+    [savedFilterPresets, activeTab, parsedList.audience]
+  );
+
+  const saveFilterSectionLabel = useMemo(
+    () => hubSaveSectionUserLabel(activeTab, parsedList.audience),
+    [activeTab, parsedList.audience]
+  );
+
+  const savedFilterBarHint = useMemo(() => {
+    if (presetsForCurrentHubSection.length === 0) return undefined;
+    return `Saved in this section · ${saveFilterSectionLabel}`;
+  }, [presetsForCurrentHubSection.length, saveFilterSectionLabel]);
+
   /** Recommended tab: only run list POST when we have filter payload to query (avoids empty DB work). */
   const hasPresets = Boolean(savedFiltersForHub);
 
@@ -1461,9 +1489,11 @@ function ScholarshipsPageInner({
     }
     setPresetNameError(null);
     const mergedJson = moreFiltersToJson(pendingPresetFilters);
+    const hubScope = hubScopeFromListContext(activeTab, parsedList.audience);
     const nextPresetsPayload = upsertSavedFilterPresetInStorage(
       presetName,
-      pendingPresetFilters
+      pendingPresetFilters,
+      hubScope
     );
     commitSavedFilterPresets(nextPresetsPayload, { applyActiveToRecommended: false });
     setRecommendedAppliedFilters(cloneMoreFilters(pendingPresetFilters));
@@ -1481,10 +1511,12 @@ function ScholarshipsPageInner({
       body: JSON.stringify({ snapshot: mergedJson })
     }).catch(() => {});
     setMoreFiltersApplied(cloneMoreFilters(pendingPresetFilters));
+    const nav = listingNavPatchForHubScope(hubScope, pendingPresetFilters);
     replaceListingParams({
-      tab: 'recommended',
-      deadline: pendingPresetFilters.deadlinePreset,
-      audience: pendingPresetFilters.citizenshipAudience,
+      tab: nav.tab,
+      deadline: nav.deadline,
+      audience: nav.audience,
+      scope: nav.scope,
       resetPage: true
     });
     setMoreFiltersOpen(false);
@@ -1498,7 +1530,7 @@ function ScholarshipsPageInner({
         : '';
     toast({
       title: 'Filter saved',
-      description: `Saved as "${presetName}"${countPhrase}. Open Saved Filters to run this preset anytime.`
+      description: `Saved as "${presetName}"${countPhrase} for ${saveFilterSectionLabel}. Use the chips next to Filters to switch presets.`
     });
   }, [
     pendingPresetFilters,
@@ -1506,29 +1538,11 @@ function ScholarshipsPageInner({
     previewCount,
     lastKnownPreviewCount,
     replaceListingParams,
-    commitSavedFilterPresets
+    commitSavedFilterPresets,
+    activeTab,
+    parsedList.audience,
+    saveFilterSectionLabel
   ]);
-
-  const applySavedFilterPreset = useCallback(
-    (presetId: string) => {
-      const preset = savedFilterPresets.find((p) => p.id === presetId);
-      if (!preset) return;
-      const nextState = moreFiltersFromJson(preset.snapshot, filterBounds);
-      setRecommendedAppliedFilters(cloneMoreFilters(nextState));
-      setMoreFiltersApplied(cloneMoreFilters(nextState));
-      commitSavedFilterPresets(
-        { presets: savedFilterPresets, activePresetId: preset.id },
-        { applyActiveToRecommended: false }
-      );
-      replaceListingParams({
-        tab: 'recommended',
-        deadline: nextState.deadlinePreset,
-        audience: nextState.citizenshipAudience,
-        resetPage: true
-      });
-    },
-    [savedFilterPresets, filterBounds, replaceListingParams, commitSavedFilterPresets]
-  );
 
   const openManageSavedFilterPreset = useCallback(
     (presetId: string) => {
@@ -1580,10 +1594,12 @@ function ScholarshipsPageInner({
     const nextState = moreFiltersFromJson(targetPreset.snapshot, filterBounds);
     setRecommendedAppliedFilters(cloneMoreFilters(nextState));
     setMoreFiltersApplied(cloneMoreFilters(nextState));
+    const nav = listingNavPatchForHubScope(targetPreset.hubScope, nextState);
     replaceListingParams({
-      tab: 'recommended',
-      deadline: nextState.deadlinePreset,
-      audience: nextState.citizenshipAudience,
+      tab: nav.tab,
+      deadline: nav.deadline,
+      audience: nav.audience,
+      scope: nav.scope,
       resetPage: true
     });
     closeManageSavedFilterPreset();
@@ -1624,7 +1640,13 @@ function ScholarshipsPageInner({
             }
           : prev
       );
-      replaceListingParams({ tab: 'recommended', resetPage: true });
+      replaceListingParams({
+        tab: 'matches',
+        scope: 'catalog',
+        deadline: 'any',
+        audience: 'any',
+        resetPage: true
+      });
     }
     closeManageSavedFilterPreset();
     toast({
@@ -2790,15 +2812,12 @@ function ScholarshipsPageInner({
                   catalogFreeTier ? openRegistrationWall : undefined
                 }
                 catalogListingLocked={false}
-                savedFilterPresetButtons={
-                  activeTab === 'recommended'
-                    ? savedFilterPresets.map((preset) => ({
-                        id: preset.id,
-                        name: preset.name,
-                        active: preset.id === activeSavedFilterPresetId
-                      }))
-                    : []
-                }
+                savedFilterBarHint={savedFilterBarHint}
+                savedFilterPresetButtons={presetsForCurrentHubSection.map((preset) => ({
+                  id: preset.id,
+                  name: preset.name,
+                  active: preset.id === activeSavedFilterPresetId
+                }))}
                 onSavedFilterPresetSelect={openManageSavedFilterPreset}
               />
               {activeTab === 'from-email' ? (
@@ -3038,6 +3057,7 @@ function ScholarshipsPageInner({
         open={isSavePresetModalOpen}
         value={presetNameDraft}
         error={presetNameError}
+        saveSectionLabel={saveFilterSectionLabel}
         onChange={setPresetNameDraft}
         onClose={closeSavePresetModal}
         onSubmit={submitSavePresetModal}

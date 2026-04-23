@@ -88,6 +88,8 @@ type ScholarshipsListHeaderProps = {
   catalogListingLocked?: boolean;
   savedFilterPresetButtons?: { id: string; name: string; active?: boolean }[];
   onSavedFilterPresetSelect?: (id: string) => void;
+  /** Short line before preset chips (e.g. “Saved in this section”). */
+  savedFilterBarHint?: string;
 };
 
 function listingResultUnit(
@@ -200,7 +202,8 @@ export default function ScholarshipsListHeader({
   onGuestLockedAction,
   catalogListingLocked,
   savedFilterPresetButtons = [],
-  onSavedFilterPresetSelect
+  onSavedFilterPresetSelect,
+  savedFilterBarHint
 }: ScholarshipsListHeaderProps) {
   const catalogLocked =
     catalogListingLocked !== undefined
@@ -665,8 +668,13 @@ export default function ScholarshipsListHeader({
                     />
                   </button>
                 </div>
-                {listTab === 'recommended' && savedFilterPresetButtons.length > 0 ? (
-                  <div className="flex min-w-0 flex-wrap items-center gap-2">
+                {savedFilterPresetButtons.length > 0 ? (
+                  <div className="flex min-w-0 max-w-full flex-1 flex-wrap items-center justify-end gap-2 sm:justify-end">
+                    {savedFilterBarHint ? (
+                      <span className="min-w-0 max-w-full text-[11px] font-medium leading-snug text-zinc-500 sm:max-w-[11rem] sm:shrink-0 sm:truncate">
+                        {savedFilterBarHint}
+                      </span>
+                    ) : null}
                     {savedFilterPresetButtons.map((preset) => (
                       <button
                         key={preset.id}

@@ -1,6 +1,10 @@
 import type { MoreFiltersJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import { moreFiltersFromJson, moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { MoreFiltersState } from '@/app/scholarships/moreFilters';
+import {
+  isHubSavedFilterScope,
+  type HubSavedFilterScope
+} from '@/lib/scholarships/hubSavedFilterScope';
 
 export const SAVED_FILTERS_STORAGE_KEY = 'scholarshiptop_saved_filters_v1';
 export const SAVED_FILTER_PRESETS_STORAGE_KEY = 'scholarshiptop_saved_filter_presets_v1';
@@ -15,6 +19,8 @@ export type SavedFilterPreset = {
   snapshot: MoreFiltersJson;
   createdAt: string;
   updatedAt: string;
+  /** Hub section this preset was saved from (My scholarships sidebar context). */
+  hubScope?: HubSavedFilterScope;
 };
 
 type SavedFilterPresetsPayload = {
@@ -87,8 +93,15 @@ function normalizePayload(raw: unknown): SavedFilterPresetsPayload {
         typeof r.createdAt === 'string' && r.createdAt ? r.createdAt : new Date().toISOString();
       const updatedAt =
         typeof r.updatedAt === 'string' && r.updatedAt ? r.updatedAt : createdAt;
+      const hubRaw = r.hubScope;
+      const hubScope =
+        typeof hubRaw === 'string' && isHubSavedFilterScope(hubRaw)
+          ? hubRaw
+          : undefined;
       if (!name || !snapshot) return null;
-      return { id, name, snapshot, createdAt, updatedAt };
+      const built: SavedFilterPreset = { id, name, snapshot, createdAt, updatedAt };
+      if (hubScope) built.hubScope = hubScope;
+      return built;
     })
     .filter((v): v is SavedFilterPreset => Boolean(v))
     .slice(0, SAVED_FILTER_PRESETS_MAX);
@@ -153,7 +166,8 @@ export function markSavedFilterPresetsAccountMigrated(): void {
 
 export function upsertSavedFilterPresetInStorage(
   name: string,
-  state: MoreFiltersState
+  state: MoreFiltersState,
+  hubScope: HubSavedFilterScope
 ): SavedFilterPresetsPayload {
   const label = sanitizeName(name);
   if (!label) return readSavedFilterPresetsFromStorage();
@@ -171,6 +185,7 @@ export function upsertSavedFilterPresetInStorage(
       ...existing,
       name: label,
       snapshot,
+      hubScope,
       updatedAt: now
     };
     activePresetId = existing.id;
@@ -179,6 +194,7 @@ export function upsertSavedFilterPresetInStorage(
       id: randomId(),
       name: label,
       snapshot,
+      hubScope,
       createdAt: now,
       updatedAt: now
     };

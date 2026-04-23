@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 
 import type { Json } from '@/types_db';
 import type { MoreFiltersJson } from '@/lib/scholarships/scholarshipListApiCodec';
+import {
+  isHubSavedFilterScope,
+  type HubSavedFilterScope
+} from '@/lib/scholarships/hubSavedFilterScope';
 import { createClient } from '@/utils/supabase/server';
 
 type SavedFilterPresetPayload = {
@@ -10,6 +14,7 @@ type SavedFilterPresetPayload = {
   snapshot: MoreFiltersJson;
   createdAt: string;
   updatedAt: string;
+  hubScope?: HubSavedFilterScope;
 };
 
 type SavedFilterPresetsPayload = {
@@ -42,8 +47,13 @@ function normalizePresetsPayload(raw: unknown): SavedFilterPresetsPayload | null
         typeof r.createdAt === 'string' && r.createdAt ? r.createdAt : new Date().toISOString();
       const updatedAt =
         typeof r.updatedAt === 'string' && r.updatedAt ? r.updatedAt : createdAt;
+      const hubRaw = r.hubScope;
+      const hubScope =
+        typeof hubRaw === 'string' && isHubSavedFilterScope(hubRaw) ? hubRaw : undefined;
       if (!name || !snapshot) return null;
-      return { id, name, snapshot, createdAt, updatedAt };
+      const built: SavedFilterPresetPayload = { id, name, snapshot, createdAt, updatedAt };
+      if (hubScope) built.hubScope = hubScope;
+      return built;
     })
     .filter((v): v is SavedFilterPresetPayload => Boolean(v))
     .slice(0, MAX_PRESETS);

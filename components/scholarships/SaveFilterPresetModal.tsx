@@ -8,6 +8,8 @@ type SaveFilterPresetModalProps = {
   value: string;
   error?: string | null;
   submitting?: boolean;
+  /** Current hub section name (e.g. “Matches”, “Best recommendation”). */
+  saveSectionLabel?: string;
   onChange: (next: string) => void;
   onClose: () => void;
   onSubmit: () => void;
@@ -18,6 +20,7 @@ export default function SaveFilterPresetModal({
   value,
   error = null,
   submitting = false,
+  saveSectionLabel,
   onChange,
   onClose,
   onSubmit
@@ -88,7 +91,15 @@ export default function SaveFilterPresetModal({
           Save filter preset
         </h2>
         <p className="mt-1 text-sm text-zinc-500">
-          Name this preset to reuse it quickly in Saved Filters.
+          {saveSectionLabel ? (
+            <>
+              Name this preset. It will stay available in this section —{' '}
+              <span className="font-semibold text-zinc-700">{saveSectionLabel}</span> — next to
+              Filters.
+            </>
+          ) : (
+            'Name this preset to reuse it quickly in Saved Filters.'
+          )}
         </p>
 
         <div className="mt-4 space-y-2">
