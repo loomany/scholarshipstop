@@ -365,7 +365,8 @@ export async function getCheckoutURLForPreferredPlan(): Promise<PreferredPlanChe
       subscription,
       profile as Tables<'profiles'> | null
     );
-    const plan: BillingPlanKey = tier ?? 'monthly';
+    const plan: BillingPlanKey =
+      tier === 'yearly' ? 'yearly' : tier === 'quarterly' ? 'quarterly' : 'quarterly';
 
     const r = await createLemonSkipTrialCheckout(plan, user.email, user.id);
     if (r.ok) return { ok: true, url: r.url };

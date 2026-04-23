@@ -24,11 +24,14 @@ import {
   type ThemeProgress
 } from '@/lib/essay/interviewerAi';
 import {
+  hasEssayMentorAccess,
+  type SubscriptionWithPriceAndProduct
+} from '@/lib/payments/subscriptionEntitlements';
+import {
   shouldApplyTrialFeatureQuotas,
   trialReleaseQuota,
   trialReserveQuota
 } from '@/lib/payments/trialFeatureQuotas';
-import type { SubscriptionWithPriceAndProduct } from '@/lib/payments/subscriptionEntitlements';
 import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
 import type { Json, Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/server';
@@ -76,22 +79,34 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const [{ data: profile }, { data: subRows }] = await Promise.all([
+    (supabase as Sb).from('profiles').select('*').eq('id', user.id).maybeSingle(),
+    (supabase as Sb)
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created', { ascending: false })
+      .limit(20)
+  ]);
+  const subscription = pickCanonicalSubscription(
+    subRows ?? []
+  ) as SubscriptionWithPriceAndProduct | null;
+  const mentorAccess = hasEssayMentorAccess(profile ?? null, subscription);
+  if (!mentorAccess) {
+    return NextResponse.json(
+      {
+        error:
+          'AI Essay Mentor is available on Quarterly and Yearly plans only.',
+        code: 'essay_plan_required'
+      },
+      { status: 402 }
+    );
+  }
+
   const now = new Date().toISOString();
 
   if ('action' in body && body.action === 'init') {
     const scholarshipTitle = parseScholarshipTitleFromBody(body);
-    const [{ data: profile }, { data: subRows }] = await Promise.all([
-      (supabase as Sb).from('profiles').select('*').eq('id', user.id).maybeSingle(),
-      (supabase as Sb)
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created', { ascending: false })
-        .limit(20)
-    ]);
-    const subscription = pickCanonicalSubscription(
-      subRows ?? []
-    ) as SubscriptionWithPriceAndProduct | null;
     const applyTrialQuotas = shouldApplyTrialFeatureQuotas(profile, subscription);
 
     let chatQuotaReserved = false;

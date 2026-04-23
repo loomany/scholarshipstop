@@ -340,6 +340,9 @@ function ScholarshipsPageInner({
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallVariant, setRegistrationWallVariant] = useState<
+    'scholarships' | 'essay' | 'locked-category'
+  >('scholarships');
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
   const [bestRecommendationWizardStore, setBestRecommendationWizardStore] =
@@ -395,11 +398,17 @@ function ScholarshipsPageInner({
           bestRecommendationWizardStore
         );
       }
+      setRegistrationWallVariant('scholarships');
       setRegistrationWallContent(mode ?? 'hub');
       setRegistrationWallOpen(true);
     },
     [activeTab, bestRecommendationWizardStore]
   );
+
+  const openLockedCategoryWall = useCallback(() => {
+    setRegistrationWallVariant('locked-category');
+    setRegistrationWallOpen(true);
+  }, []);
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
@@ -2565,7 +2574,7 @@ function ScholarshipsPageInner({
               catalogFreeTier ? openRegistrationWall : undefined
             }
             subscriptionLocked={false}
-            onSubscriptionRestrictedNav={undefined}
+            onSubscriptionRestrictedNav={openLockedCategoryWall}
             buildTabHref={routeScope?.providerSlug ? buildSidebarTabHref : undefined}
             internationalStudentsFilter={{
               active: internationalSidebarChecked,
@@ -2574,7 +2583,7 @@ function ScholarshipsPageInner({
               showGuestLock: false,
               showSubscriptionLock: false,
               onGuestRestrictedClick: openRegistrationWall,
-              onSubscriptionRestrictedClick: openRegistrationWall
+              onSubscriptionRestrictedClick: openLockedCategoryWall
             }}
           />
         }
@@ -2613,7 +2622,7 @@ function ScholarshipsPageInner({
                 onGuestLockedAction={
                   catalogFreeTier ? openRegistrationWall : undefined
                 }
-                catalogListingLocked={catalogFreeTier}
+                catalogListingLocked={false}
                 savedFilterPresetButtons={
                   activeTab === 'recommended'
                     ? savedFilterPresets.map((preset) => ({
@@ -2801,7 +2810,8 @@ function ScholarshipsPageInner({
                     isAuthenticated={isAuthenticated}
                     hasSubscription={hasSubscription}
                     listingTab={activeTab}
-                    onSubscriptionLockedCategoryClick={undefined}
+                    onSubscriptionLockedCategoryClick={openLockedCategoryWall}
+                    onLockedScholarshipNavigate={openLockedCategoryWall}
                     onSubscriptionDetailNavigate={undefined}
                     onGuestDetailNavigate={
                       catalogFreeTier
@@ -2852,7 +2862,7 @@ function ScholarshipsPageInner({
           catalogFreeTier ? openRegistrationWall : undefined
         }
         hasSubscription={hasSubscription}
-        onSubscriptionLockedAction={undefined}
+        onSubscriptionLockedAction={openLockedCategoryWall}
         contextNotices={moreFiltersPanelContextNotices}
       />
       <SaveFilterPresetModal
@@ -2875,6 +2885,7 @@ function ScholarshipsPageInner({
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+        variant={registrationWallVariant}
         contentMode={registrationWallContent}
         signedInWithoutSubscription={
           Boolean(isAuthenticated && authResolved && !hasSubscription)

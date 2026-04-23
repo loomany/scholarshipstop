@@ -625,3 +625,19 @@ export function hasActiveSubscriptionAccess(
 ) {
   return deriveSubscriptionPresentation(profile, subscription).isSubscribed;
 }
+
+/**
+ * AI Essay Mentor is available only on paid Quarterly/Yearly tiers.
+ * Monthly, trial, and free plans are intentionally excluded.
+ */
+export function hasEssayMentorAccess(
+  profile: Profile | null,
+  subscription: SubscriptionWithPriceAndProduct | null
+) {
+  const presentation = deriveSubscriptionPresentation(profile, subscription);
+  if (!presentation.isSubscribed) return false;
+  if (presentation.plan === 'trial') return false;
+
+  const tier = inferSubscriptionBillingTier(subscription, profile);
+  return tier === 'quarterly' || tier === 'yearly';
+}

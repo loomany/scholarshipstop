@@ -206,6 +206,7 @@ export default function ScholarshipsListHeader({
     catalogListingLocked !== undefined
       ? catalogListingLocked
       : !isAuthenticated;
+  const guestCatalogUiLocked = !isAuthenticated;
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [categorySearch, setCategorySearch] = useState('');
@@ -366,9 +367,14 @@ export default function ScholarshipsListHeader({
           </button>
           <button
             type="button"
-            className={scholarshipCategoriesApplyButtonClass}
+            className={`${scholarshipCategoriesApplyButtonClass} inline-flex items-center justify-center gap-1.5`}
+            title={
+              guestCatalogUiLocked
+                ? 'Apply categories after you start your free trial'
+                : undefined
+            }
             onClick={() => {
-              if (catalogLocked) {
+              if (guestCatalogUiLocked) {
                 onGuestLockedAction?.();
                 return;
               }
@@ -376,6 +382,13 @@ export default function ScholarshipsListHeader({
               setCategoriesOpen(false);
             }}
           >
+            {guestCatalogUiLocked ? (
+              <Lock
+                className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
+                strokeWidth={2}
+                aria-hidden
+              />
+            ) : null}
             Apply
           </button>
         </div>
@@ -480,6 +493,11 @@ export default function ScholarshipsListHeader({
                   <>
                     <button
                       type="button"
+                      title={
+                        guestCatalogUiLocked
+                          ? 'Some sort options require a free account'
+                          : undefined
+                      }
                       onClick={() => {
                         setCategoriesOpen(false);
                         setSortOpen((o) => !o);
@@ -494,6 +512,13 @@ export default function ScholarshipsListHeader({
                           {sortTriggerLabel}
                         </span>
                       </span>
+                      {guestCatalogUiLocked ? (
+                        <Lock
+                          className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
+                          strokeWidth={2}
+                          aria-hidden
+                        />
+                      ) : null}
                       <ChevronDown
                         className={`h-4 w-4 shrink-0 text-gray-500 transition ${sortOpen ? 'rotate-180' : ''}`}
                         aria-hidden
@@ -507,7 +532,7 @@ export default function ScholarshipsListHeader({
                       >
                         {SORT_OPTIONS.map((opt) => {
                           const sortLocked =
-                            catalogLocked &&
+                            guestCatalogUiLocked &&
                             GUEST_LOCKED_SORT_OPTIONS.has(opt.value);
                           return (
                             <li
@@ -601,16 +626,12 @@ export default function ScholarshipsListHeader({
                     type="button"
                     disabled={categoriesDisabled}
                     title={
-                      catalogLocked
+                      guestCatalogUiLocked
                         ? 'Apply categories after you start your free trial'
                         : undefined
                     }
                     onClick={() => {
                       if (categoriesDisabled) return;
-                      if (catalogLocked) {
-                        onGuestLockedAction?.();
-                        return;
-                      }
                       setSortOpen(false);
                       setCategoriesOpen((o) => {
                         const next = !o;
@@ -626,7 +647,7 @@ export default function ScholarshipsListHeader({
                     className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
                   >
                     <LayoutGrid className="h-[18px] w-[18px] text-gray-600" />
-                    {catalogLocked ? (
+                    {guestCatalogUiLocked ? (
                       <Lock
                         className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
                         strokeWidth={2}

@@ -12,10 +12,13 @@ export type SortOption =
   | 'most_recent'
   | 'verified_first';
 
-/** Hub guests: profile- and scoring-heavy sorts require registration. */
+/** Hub guests: only Newest and Recommended stay open. */
 export const GUEST_LOCKED_SORT_OPTIONS = new Set<SortOption>([
+  'closest_deadline',
+  'best_recommendation',
+  'highest_amount',
+  'lowest_amount',
   'best_match',
-  'magic',
   'verified_first',
   'least_requirements',
   'fewest_applicants'

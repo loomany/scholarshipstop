@@ -8,6 +8,7 @@ import type {
   ScholarshipCatalogView,
   ScholarshipDbCatalogFields
 } from '@/lib/scholarships/scholarshipCatalogTypes';
+import { hasExplicitNoEssaySignal } from '@/lib/scholarships/noEssay';
 
 export type { ScholarshipCatalogView, ScholarshipDbCatalogFields };
 
@@ -291,12 +292,11 @@ function deriveGpa(
 }
 
 function deriveEasyApply(s: Scholarship, blob: string, seed: string[]): string[] {
-  const out = new Set(seed);
+  const out = new Set(seed.filter((id) => id !== 'no_essay'));
   const reqN =
     s.requirementSignalsCount ??
     (s.requirementsCount != null ? s.requirementsCount : (s.eligibility?.length ?? 0));
-  if (!s.essayRequired && !/\bessay\b/i.test(blob)) out.add('no_essay');
-  if (/\bno\s+essay\b|\bwithout\s+an\s+essay\b/i.test(blob)) out.add('no_essay');
+  if (hasExplicitNoEssaySignal(blob)) out.add('no_essay');
   if (/\beasy\s+apply\b|\bquick\s+apply\b|\bsimple\s+application\b/i.test(blob)) {
     out.add('easy_apply');
     out.add('quick_apply');

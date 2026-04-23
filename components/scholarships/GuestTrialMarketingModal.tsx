@@ -23,15 +23,16 @@ export type GuestTrialMarketingModalProps = {
 };
 
 const BULLETS = [
-  'View all hidden scholarships and deadlines',
-  'Unlock smart filters & personalized matching',
-  'Save your favorites & track applications'
+  'Unlimited Standard Grants: Browse thousands of regular scholarships without view limits.',
+  'Save & Track: Bookmark your favorite grants and never miss a deadline.',
+  'Weekly Alerts: Get notified via email when new standard grants are added.'
 ] as const;
 
 const ESSAY_BULLETS = [
-  'Smart Interview & Voice Input: Chat or speak your background to generate a highly personalized draft.',
-  '"Humanize" Engine: Rewrite AI text to sound 100% natural, matching your unique voice and tone.',
-  'Built-in AI Detector Check: Scan against GPTZero to ensure your essay passes as human-written.'
+  'Everything in Monthly, plus:',
+  'Unlock AI Essay Mentor (Quarterly & Yearly plans)',
+  'Smart Interview & Voice Input',
+  'Unlimited essay generations'
 ] as const;
 
 export default function GuestTrialMarketingModal({
@@ -82,7 +83,11 @@ export default function GuestTrialMarketingModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="guest-trial-modal-title"
-        className="relative z-10 w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl sm:p-8"
+        className={`relative z-10 w-full rounded-2xl border border-zinc-200 bg-white shadow-2xl ${
+          isClassicTrial
+            ? 'max-w-sm p-4 sm:p-5'
+            : 'max-w-md p-5 sm:p-6'
+        }`}
       >
         <button
           type="button"
@@ -93,28 +98,44 @@ export default function GuestTrialMarketingModal({
           <X className="h-5 w-5" strokeWidth={2} aria-hidden />
         </button>
 
-        <div className="px-1 text-center sm:px-2">
+        <div className="px-1 text-center">
           <h2
             id="guest-trial-modal-title"
-            className="text-xl font-bold tracking-tight text-zinc-900 sm:text-[1.4rem]"
+            className={`font-bold tracking-tight text-zinc-900 ${
+              isClassicTrial ? 'text-[1.7rem] sm:text-[1.95rem]' : 'text-xl sm:text-[1.4rem]'
+            }`}
           >
             {isClassicTrial
-              ? 'Unlock the Premium AI Essay Mentor'
-              : 'Unlock All Scholarships & AI Tools'}
+              ? 'Unlock AI Essay Mentor'
+              : 'Keep Exploring Scholarships 🚀'}
           </h2>
-          <p className="mt-2 text-sm text-zinc-500 sm:text-base">
+          <p
+            className={`mt-2 text-zinc-500 ${
+              isClassicTrial ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
+            }`}
+          >
             {isClassicTrial
-              ? 'Searching for grants is free. But to win them, you need an essay that sounds like YOU. Upgrade to build, humanize, and perfect your application.'
-              : 'Create a 100% no-cost profile to access our full database.'}
+              ? 'AI Essay Mentor is available only on Quarterly and Yearly plans. Upgrade to access mentor chat, voice interview, and full draft generation.'
+              : "You've reached your guest limit. Create a 100% free profile to continue browsing our database."}
           </p>
 
-          <h3 className="mt-6 text-base font-bold text-zinc-900 sm:text-lg">
+          <h3
+            className={`font-bold text-zinc-900 ${
+              isClassicTrial ? 'mt-4 text-[0.98rem] sm:text-base' : 'mt-5 text-base sm:text-lg'
+            }`}
+          >
             {isClassicTrial
-              ? 'What you get with Premium:'
-              : "What's inside your no-cost profile:"}
+              ? 'What you unlock on Quarterly/Yearly:'
+              : "What's inside your free profile:"}
           </h3>
 
-          <ul className="mt-4 space-y-2.5 rounded-xl border border-zinc-100 bg-zinc-50/80 px-4 py-3 text-left text-sm text-zinc-800 sm:text-[0.9375rem]">
+          <ul
+            className={`rounded-xl border border-zinc-100 bg-zinc-50/80 text-left text-zinc-800 ${
+              isClassicTrial
+                ? 'mt-3 space-y-1.5 px-3 py-2 text-[0.95rem] sm:text-sm'
+                : 'mt-3.5 space-y-2 px-3.5 py-2.5 text-sm sm:text-[0.9375rem]'
+            }`}
+          >
             {(isClassicTrial ? ESSAY_BULLETS : BULLETS).map((line) => (
               <li key={line} className="flex gap-2.5">
                 <Check
@@ -127,35 +148,50 @@ export default function GuestTrialMarketingModal({
             ))}
           </ul>
 
-          <p className="mt-4 rounded-xl border border-orange-100 bg-orange-50/80 px-3 py-2.5 text-left text-xs font-medium leading-relaxed text-orange-950 sm:text-sm">
+          <p
+            className={`rounded-xl border border-orange-100 bg-orange-50/80 px-3 text-left font-medium leading-relaxed text-orange-950 ${
+              isClassicTrial
+                ? 'mt-3 py-1.5 text-[0.9rem] sm:text-xs'
+                : 'mt-3.5 py-2 text-xs sm:text-sm'
+            }`}
+          >
             {isClassicTrial
-              ? "Stop worrying about AI detection. Our Mentor doesn't just write; it conducts an interview to capture your true story, then polishes the text so it easily passes academic AI checks."
-              : (notice?.trim() ||
-                'Create a no-cost profile to instantly unlock advanced search filters, personalized grant matches, and full access to our database. No paywalls, just pure opportunities to fund your education.')}
+              ? 'Monthly unlocks premium scholarships only. AI Essay Mentor tools require Quarterly or Yearly.'
+              : 'Join thousands of students and get your own personal dashboard to track your application progress.'}
           </p>
 
-          <p className="mt-4 text-xs font-medium text-zinc-700 sm:text-sm">
+          <p
+            className={`font-medium text-zinc-700 ${
+              isClassicTrial ? 'mt-3 text-[0.9rem] sm:text-xs' : 'mt-3.5 text-xs sm:text-sm'
+            }`}
+          >
             {isClassicTrial
               ? '⚡ Instant access after payment'
               : '⚡ Takes less than 10 seconds'}
           </p>
 
-          <div className="mt-6">
+          <div className={isClassicTrial ? 'mt-4' : 'mt-5'}>
             <Link
               href={primaryHref}
               onClick={() => {
                 onPrimaryClick?.();
                 onClose();
               }}
-              className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 text-sm font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 sm:text-base"
+              className={`inline-flex w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 ${
+                isClassicTrial ? 'h-10 text-sm' : 'h-11 text-sm sm:text-base'
+              }`}
             >
               {isClassicTrial
-                ? '👉 Unlock AI Mentor for $14.99/mo'
+                ? '👉 View Quarterly & Yearly Plans'
                 : '👉 Create Free Account'}
             </Link>
           </div>
 
-          <p className="mt-3 text-xs text-zinc-400 sm:text-sm">
+          <p
+            className={`text-zinc-400 ${
+              isClassicTrial ? 'mt-2 text-[0.8rem] sm:text-xs' : 'mt-2.5 text-xs sm:text-sm'
+            }`}
+          >
             {isClassicTrial
               ? 'Secure payment • Cancel anytime'
               : '100% Free • No credit card required'}

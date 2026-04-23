@@ -8,6 +8,11 @@ import {
   parseInterviewProgressFromJson
 } from '@/lib/essay/interviewDraftProgressGate';
 import type { Json, Tables, TablesInsert } from '@/types_db';
+import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
+import {
+  hasEssayMentorAccess,
+  type SubscriptionWithPriceAndProduct
+} from '@/lib/payments/subscriptionEntitlements';
 import { createClient } from '@/utils/supabase/server';
 
 /** `from()` для новых таблиц иногда выводится как `never` до полной синхронизации типов с PostgREST. */
@@ -452,6 +457,28 @@ export async function POST(request: Request) {
   } = await supabase.auth.getUser();
   if (!user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const [{ data: profile }, { data: subRows }] = await Promise.all([
+    (supabase as Sb).from('profiles').select('*').eq('id', user.id).maybeSingle(),
+    (supabase as Sb)
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created', { ascending: false })
+      .limit(20)
+  ]);
+  const subscription = pickCanonicalSubscription(
+    subRows ?? []
+  ) as SubscriptionWithPriceAndProduct | null;
+  if (!hasEssayMentorAccess(profile ?? null, subscription)) {
+    return NextResponse.json(
+      {
+        error:
+          'AI Essay Mentor is available on Quarterly and Yearly plans only.'
+      },
+      { status: 402 }
+    );
   }
 
   let draftUser: string;

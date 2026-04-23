@@ -40,6 +40,7 @@ import {
   stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
+import { NO_ESSAY_SQL_PARTS } from '@/lib/scholarships/noEssay';
 import { buildBestRecommendationProfileGpaOrParts } from '@/lib/scholarships/bestRecommendationGpa';
 import { computeHubProfileMatchPercent } from '@/lib/scholarships/hubProfileMatchScore';
 import {
@@ -749,6 +750,15 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     const parts = Array.from(sel).map((id) => `${col}.cs.${JSON.stringify([id])}`);
     q = q.or(parts.join(','));
   };
+  const addIncludeEasyApply = (sel: Set<string>) => {
+    if (sel.size === 0) return;
+    const parts: string[] = [];
+    for (const id of Array.from(sel)) {
+      if (id === 'no_essay') parts.push(...NO_ESSAY_SQL_PARTS);
+      else parts.push(`easy_apply_flags.cs.${JSON.stringify([id])}`);
+    }
+    if (parts.length > 0) q = q.or(parts.join(','));
+  };
   addIncludeCs('eligibility_tags', f.includeEligibility);
   if (f.includeEducationLevels.size > 0) {
     const eduParts: string[] = [];
@@ -777,7 +787,7 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     }
     addIncludeCs('location_tags', normalizedLocationTags);
   }
-  addIncludeCs('easy_apply_flags', f.includeEasyApply);
+  addIncludeEasyApply(f.includeEasyApply);
 
   const stateCode = normalizeStateNameOrCodeToCode(f.filterStateInput);
   if (stateCode) {
@@ -965,15 +975,7 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
       let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
       const flag = (id: string) =>
         `easy_apply_flags.cs.${JSON.stringify([id])}`;
-      return nq.or(
-        [
-          'and(or(essay_required.is.null,essay_required.eq.false),or(requirements_count.is.null,requirements_count.lte.2),or(requirement_signals_count.is.null,requirement_signals_count.lte.2))',
-          flag('no_essay'),
-          flag('few_requirements'),
-          flag('easy_apply'),
-          flag('quick_apply')
-        ].join(',')
-      );
+      return nq.or([...NO_ESSAY_SQL_PARTS, flag('easy_apply'), flag('quick_apply')].join(','));
     }
     case 'hot-deadlines': {
       const nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
@@ -1682,7 +1684,9 @@ function easyApplyListCanonicalRequest(
   req: ScholarshipListRequest
 ): ScholarshipListRequest {
   const moreFilters = cloneMoreFilters(req.moreFilters);
+  moreFilters.includeEasyApply.add('no_essay');
   moreFilters.includeEasyApply.add('easy_apply');
+  moreFilters.includeEasyApply.add('quick_apply');
   return {
     ...req,
     moreFilters

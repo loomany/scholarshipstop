@@ -23,6 +23,9 @@ import {
   ELIGIBILITY_OPTIONS,
   GPA_BUCKET_OPTIONS
 } from '@/lib/scholarships/scholarshipCatalog';
+import {
+  SUBSCRIPTION_LOCKED_EASY_APPLY_IDS
+} from '@/lib/scholarships/subscriptionLockedCategory';
 
 type Bounds = {
   amountMin: number;
@@ -413,19 +416,15 @@ export default function ScholarshipsMoreFiltersPanel({
   }, [open, onClose]);
 
   if (!open) return null;
-  /** Match guest: these sections are not subscription-gated for signed-in free users. */
-  const easyApplyLocked = false;
+  const targetedCategoryLockAction = !hasSubscription
+    ? onSubscriptionLockedAction ?? onGuestLockedAction
+    : undefined;
   const amountLocked = false;
   const eligibilityLocked = false;
   const applicantsLocked = false;
   const universityLocked = false;
   const deadlineShortRangeLocked = false;
-  /** Gating applies to guests only; authenticated users are fully unlocked. */
-  const internationalAudienceGated = !isAuthenticated;
-  const SUBSCRIPTION_LOCKED_EASY_APPLY_IDS = new Set([
-    'easy_apply',
-    'quick_apply'
-  ]);
+  const internationalAudienceGated = !hasSubscription;
   const SUBSCRIPTION_LOCKED_DEADLINE_PRESETS = new Set<DeadlinePreset>([
     'lt1d',
     'd1_7'
@@ -608,7 +607,7 @@ export default function ScholarshipsMoreFiltersPanel({
                         checked={value.citizenshipAudience === id}
                         onChange={() => {
                           if (optionLocked) {
-                            onGuestLockedAction?.();
+                            targetedCategoryLockAction?.();
                             return;
                           }
                           onChange({
@@ -1061,12 +1060,6 @@ export default function ScholarshipsMoreFiltersPanel({
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>
               Easy apply
-              {easyApplyLocked ? (
-                <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
-                  <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
-                  Locked
-                </span>
-              ) : null}
             </h3>
             <p className={sectionHint}>
               Highlights no-essay and lighter applications when we can detect
@@ -1076,7 +1069,7 @@ export default function ScholarshipsMoreFiltersPanel({
               {EASY_APPLY_OPTIONS.map((opt) => (
                 (() => {
                   const optionLocked =
-                    easyApplyLocked &&
+                    !hasSubscription &&
                     SUBSCRIPTION_LOCKED_EASY_APPLY_IDS.has(opt.id);
                   return (
                 <label
@@ -1088,7 +1081,7 @@ export default function ScholarshipsMoreFiltersPanel({
                     checked={value.includeEasyApply.has(opt.id)}
                     onChange={(e) => {
                       if (optionLocked) {
-                        onGuestLockedAction?.();
+                        targetedCategoryLockAction?.();
                         return;
                       }
                       onChange({

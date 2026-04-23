@@ -3,7 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
-import { hasActiveSubscriptionAccess } from '@/lib/payments/subscriptionEntitlements';
+import {
+  hasActiveSubscriptionAccess,
+  hasEssayMentorAccess
+} from '@/lib/payments/subscriptionEntitlements';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
 import type { SubscriptionWithPriceAndProduct } from '@/lib/payments/subscriptionEntitlements';
@@ -14,14 +17,17 @@ import type { SubscriptionWithPriceAndProduct } from '@/lib/payments/subscriptio
  */
 export function useSubscriptionAccess(userId: string | null): {
   hasSubscription: boolean;
+  hasEssayMentorTierAccess: boolean;
   subscriptionReady: boolean;
 } {
   const [hasSubscription, setHasSubscription] = useState(false);
+  const [hasEssayMentorTierAccess, setHasEssayMentorTierAccess] = useState(false);
   const [subscriptionReady, setSubscriptionReady] = useState(userId === null);
 
   useEffect(() => {
     if (!userId) {
       setHasSubscription(false);
+      setHasEssayMentorTierAccess(false);
       setSubscriptionReady(true);
       return;
     }
@@ -48,7 +54,11 @@ export function useSubscriptionAccess(userId: string | null): {
       const subscription = pickCanonicalSubscription(
         (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
       ) as SubscriptionWithPriceAndProduct | null;
-      setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
+      const resolvedProfile = profile ?? null;
+      setHasSubscription(hasActiveSubscriptionAccess(resolvedProfile, subscription));
+      setHasEssayMentorTierAccess(
+        hasEssayMentorAccess(resolvedProfile, subscription)
+      );
       setSubscriptionReady(true);
     };
 
@@ -59,5 +69,5 @@ export function useSubscriptionAccess(userId: string | null): {
     };
   }, [userId]);
 
-  return { hasSubscription, subscriptionReady };
+  return { hasSubscription, hasEssayMentorTierAccess, subscriptionReady };
 }

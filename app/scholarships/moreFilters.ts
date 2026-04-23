@@ -8,6 +8,7 @@ import {
   getScholarshipCatalog,
   NATIONWIDE_LOCATION
 } from '@/lib/scholarships/scholarshipCatalog';
+import { isInternationalFriendlyScholarship } from '@/lib/scholarships/internationalFriendly';
 
 export type DeadlinePreset = 'any' | 'lt1d' | 'd1_7' | 'w1_4' | 'gt4w';
 
@@ -195,32 +196,7 @@ function matchesLocation(s: Scholarship, selected: Set<string>): boolean {
 }
 
 function matchesInternationalFriendlyAudience(s: Scholarship): boolean {
-  const cat = getScholarshipCatalog(s);
-  if (cat.eligibilityIds.includes('international_students')) return true;
-  const cit = (s.citizenshipStatuses ?? [])
-    .map((x) => String(x).toLowerCase())
-    .join(' ');
-  if (
-    /international|f-1|f1|foreign|non.u\.s|non-us|global student|visa holder|outside the u\.s/i.test(
-      cit
-    )
-  ) {
-    return true;
-  }
-  const blob = [
-    s.title,
-    s.description,
-    s.summaryShort,
-    s.whoCanApplyText,
-    s.eligibilityText,
-    s.requirementsTextClean
-  ]
-    .filter(Boolean)
-    .join('\n')
-    .toLowerCase();
-  return /international student|foreign student|f-1|f1 visa|foreign national|students outside|non-u\.s\. citizen|non us citizen|eligible.*international/i.test(
-    blob
-  );
+  return isInternationalFriendlyScholarship(s);
 }
 
 function matchesFilterStateInput(s: Scholarship, filterStateInput: string): boolean {

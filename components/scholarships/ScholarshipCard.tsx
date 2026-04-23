@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Info, Lock, Star } from 'lucide-react';
 import {
   formatDeadlineTooltipText,
@@ -16,12 +16,19 @@ import {
   SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
   SCHOLARSHIP_PROVIDER_OBSCURE_CLASS
 } from '@/lib/constants/scholarshipActionUi';
-import { renderTextWithObscuredProviderName } from '@/lib/scholarships/renderObscuredProviderText';
+import {
+  renderTextWithObscuredPhrases,
+  renderTextWithObscuredProviderName
+} from '@/lib/scholarships/renderObscuredProviderText';
 import {
   getScholarshipCatalog,
   payoutMethodChipLabel,
   scholarshipCardChips
 } from '@/lib/scholarships/scholarshipCatalog';
+import {
+  isSubscriptionLockedScholarship,
+  pickScholarshipLockedTitleBlurPhrase
+} from '@/lib/scholarships/subscriptionLockedCategory';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import {
   recordScholarshipDetailFreeNavigation,
@@ -58,6 +65,8 @@ type ScholarshipCardProps = {
   listingTab?: ScholarshipListTabId;
   /** Open subscription modal when premium category chip is clicked. */
   onSubscriptionLockedCategoryClick?: (categoryId: string) => void;
+  /** Open the dedicated subscription modal for always-locked grant categories. */
+  onLockedScholarshipNavigate?: () => void;
   onSubscriptionDetailNavigate?: () => void;
   /**
    * Guest-only: after ten free navigations to scholarship details,
@@ -86,6 +95,7 @@ export default function ScholarshipCard({
   hasSubscription = false,
   listingTab,
   onSubscriptionLockedCategoryClick,
+  onLockedScholarshipNavigate,
   onSubscriptionDetailNavigate,
   onGuestDetailNavigate,
   returnToHref
@@ -184,6 +194,8 @@ export default function ScholarshipCard({
     () => scholarshipCardChips(scholarship).visible,
     [scholarship]
   );
+  const targetedCategoryLocked =
+    !hasSubscription && isSubscriptionLockedScholarship(scholarship);
   const LOCKED_CARD_CATEGORY_IDS = new Set([
     'easy_apply',
     'quick_apply'
@@ -195,8 +207,11 @@ export default function ScholarshipCard({
     subscriptionLocked &&
     !showHotDeadlinesLockBadge &&
     easyApplyIds.some((id) => LOCKED_CARD_CATEGORY_IDS.has(id));
+  const showTargetedCategoryLockBadge = targetedCategoryLocked;
   const showTopRightLockBadge =
-    showHotDeadlinesLockBadge || showEasyApplyLockBadge;
+    showHotDeadlinesLockBadge ||
+    showEasyApplyLockBadge ||
+    showTargetedCategoryLockBadge;
   const topRightBadgeLabel =
     badgeLabelOverride?.trim() || (isUnread ? 'NEW' : null);
   const topRightBadgeAriaLabel = badgeLabelOverride?.trim()
@@ -212,6 +227,9 @@ export default function ScholarshipCard({
   const providerSlugTrimmed = scholarship.providerSlug?.trim() ?? '';
   const providerProfileHref = providerSlugTrimmed
     ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
+    : null;
+  const titleBlurPhrase = targetedCategoryLocked
+    ? pickScholarshipLockedTitleBlurPhrase(scholarship.title, providerLine)
     : null;
 
   const canSeeFullText = Boolean(isAuthenticated);
@@ -279,6 +297,11 @@ export default function ScholarshipCard({
         href={detailHref}
         onClick={(e) => {
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          if (targetedCategoryLocked) {
+            e.preventDefault();
+            onLockedScholarshipNavigate?.();
+            return;
+          }
           const budgetMode = !isAuthenticated
             ? resolveScholarshipDetailClickBudgetMode({
                 isAuthenticated,
@@ -298,7 +321,11 @@ export default function ScholarshipCard({
           recordScholarshipDetailFreeNavigation(budgetMode);
         }}
         className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A1A]/50"
-        aria-label={`View scholarship: ${scholarship.title}`}
+        aria-label={
+          targetedCategoryLocked
+            ? `Locked scholarship: ${scholarship.title}`
+            : `View scholarship: ${scholarship.title}`
+        }
       >
         <span className="sr-only">Open scholarship details</span>
       </Link>
@@ -393,13 +420,25 @@ export default function ScholarshipCard({
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    if (showTargetedCategoryLockBadge) {
+                      onLockedScholarshipNavigate?.();
+                      return;
+                    }
                     onSubscriptionLockedCategoryClick?.(
                       showHotDeadlinesLockBadge ? 'hot_deadlines' : 'easy_apply'
                     );
                   }}
                   className="relative z-30 inline-flex h-5 w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-1 pointer-events-auto"
-                  title="Start your free access to unlock this category"
-                  aria-label="Locked category. Start free access to unlock."
+                  title={
+                    showTargetedCategoryLockBadge
+                      ? 'Premium subscription required'
+                      : 'Start your free access to unlock this category'
+                  }
+                  aria-label={
+                    showTargetedCategoryLockBadge
+                      ? 'Locked scholarship category. Open subscription plans.'
+                      : 'Locked category. Start free access to unlock.'
+                  }
                 >
                   <Lock className="h-3 w-3" strokeWidth={2.2} aria-hidden />
                 </button>
@@ -415,10 +454,17 @@ export default function ScholarshipCard({
             title={
               providerNameObscured
                 ? 'Scholarship title — sponsor name may be obscured until you subscribe.'
-                : scholarship.title
+                : targetedCategoryLocked && titleBlurPhrase
+                  ? 'Scholarship title preview. Upgrade to reveal the full program name.'
+                  : scholarship.title
             }
           >
-            {providerNameObscured
+            {targetedCategoryLocked && titleBlurPhrase
+              ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
+                  blurEntireWhenNoSubstringMatch: false,
+                  lockedObscuredInteractive: false
+                })
+              : providerNameObscured
               ? renderTextWithObscuredProviderName(scholarship.title, providerLine, {
                   blurEntireWhenNoSubstringMatch: false
                 })

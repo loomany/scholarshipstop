@@ -2,6 +2,6 @@
 export const MENTOR_PREMIUM_ACCESS_TITLE = 'Premium Access';
 
 export const MENTOR_PREMIUM_ACCESS_BODY =
-  'You have 3 days of free access to the platform, but the AI Mentor is not included.\n\n' +
-  'Start your subscription now to use the AI Mentor without limits.\n' +
-  'You can skip the free trial — payment will be charged immediately.';
+  'AI Essay Mentor is available on Quarterly and Yearly plans.\n\n' +
+  'Monthly unlocks the premium scholarship database only.\n' +
+  'Upgrade now to start mentor chat, voice interview, and unlimited essay generations.';

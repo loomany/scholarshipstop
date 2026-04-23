@@ -1,5 +1,8 @@
 import { matchesDeadlinePreset } from './moreFilters';
 import type { Scholarship } from './scholarshipsData';
+import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
+
+const EASY_APPLY_TAB_IDS = new Set(['no_essay', 'easy_apply', 'quick_apply']);
 
 export type ScholarshipSidebarCounts = {
   /** Personalized: profile-narrowed Best recommendation pool. */
@@ -128,9 +131,11 @@ export function scholarshipsInTab(
       /** Hub uses API for this tab; static catalog fallback mirrors Matches scope. */
       return usa.filter((s) => !ign.has(s.id));
     case 'easy-apply':
-      return usa.filter(
-        (s) => !ign.has(s.id) && (s.eligibility?.length ?? 0) === 0
-      );
+      return usa.filter((s) => {
+        if (ign.has(s.id)) return false;
+        const easyApplyIds = getScholarshipCatalog(s).easyApplyIds;
+        return easyApplyIds.some((id) => EASY_APPLY_TAB_IDS.has(id));
+      });
     case 'hot-deadlines':
       return usa.filter(
         (s) =>

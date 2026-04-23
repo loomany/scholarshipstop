@@ -9,7 +9,6 @@ import {
   Globe,
   Heart,
   Layers,
-  Lock,
   Timer,
   Trophy,
   type LucideIcon
@@ -27,7 +26,6 @@ import {
 } from '@/app/scholarships/scholarshipTabs';
 import { DarkTooltip } from '@/components/ui/DarkTooltip';
 import {
-  scholarshipGuestLockIconClass,
   scholarshipSidebarActiveRowClass
 } from '@/lib/constants/scholarshipActionUi';
 import { ScholarshipsSidebarAiMentorCard } from '@/components/scholarships/ScholarshipsSidebarAiMentorCard';
@@ -319,15 +317,6 @@ export default function ScholarshipsSidebar({
                       </span>
                     ) : null}
                   </span>
-                  {showSubscriptionLock ? (
-                    <Lock
-                      className={`h-3.5 w-3.5 shrink-0 ${
-                        navLooksActive ? 'text-white/85 stroke-white/85' : scholarshipGuestLockIconClass
-                      }`}
-                      strokeWidth={2}
-                      aria-hidden
-                    />
-                  ) : null}
                 </button>
               ) : (
                 <Link
@@ -382,7 +371,8 @@ export default function ScholarshipsSidebar({
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);
-          const showSubscriptionLock = false;
+          const showSubscriptionLock =
+            subscriptionLocked && item.id === 'easy-apply';
 
           const content = (
             <>
@@ -415,17 +405,6 @@ export default function ScholarshipsSidebar({
                   </span>
                 ) : null}
               </span>
-              {showSubscriptionLock ? (
-                <Lock
-                  className={`h-3.5 w-3.5 shrink-0 ${
-                    navLooksActive
-                      ? 'text-white stroke-white'
-                      : 'text-[#FF7A1A] stroke-[#FF7A1A]'
-                  }`}
-                  strokeWidth={2}
-                  aria-hidden
-                />
-              ) : null}
               {item.id === 'matches' &&
               matchesNewIndicator &&
               matchesNewIndicator.count > 0 ? (
@@ -453,7 +432,9 @@ export default function ScholarshipsSidebar({
             guestMode &&
             GUEST_GATED_TAB_IDS.has(item.id) &&
             typeof onGuestRestrictedNav === 'function';
-          const subscriptionGated = false;
+          const subscriptionGated =
+            showSubscriptionLock &&
+            typeof onSubscriptionRestrictedNav === 'function';
           const gated = guestGated || subscriptionGated;
 
           const link = gated ? (
@@ -515,7 +496,7 @@ export default function ScholarshipsSidebar({
               ? `(${counts.internationalFriendly})`
               : undefined;
             const showGuestLockIntl = intl.showGuestLock;
-            const showSubscriptionLockIntl = false;
+            const showSubscriptionLockIntl = intl.showSubscriptionLock;
             const intlRowClass = `flex w-full items-center gap-3 rounded-lg border-l-2 py-2.5 pr-2 pl-3 transition-colors ${
               intlActive
                 ? scholarshipSidebarActiveRowClass
@@ -555,17 +536,6 @@ export default function ScholarshipsSidebar({
                     </span>
                   ) : null}
                 </span>
-                {showSubscriptionLockIntl ? (
-                  <Lock
-                    className={`h-3.5 w-3.5 shrink-0 ${
-                      intlActive
-                        ? 'text-white stroke-white'
-                        : 'text-[#FF7A1A] stroke-[#FF7A1A]'
-                    }`}
-                    strokeWidth={2}
-                    aria-hidden
-                  />
-                ) : null}
               </>
             );
             const intlControl = intlGated ? (

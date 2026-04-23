@@ -70,7 +70,14 @@ function PlanFeatureList({ items }: { items: string[] }) {
           >
             ✓
           </span>
-          <span className="text-sm text-gray-600">{line}</span>
+          <span
+            className={cn(
+              'text-sm text-gray-600',
+              line.includes('Unlock AI Essay Mentor') && 'font-semibold text-gray-900'
+            )}
+          >
+            {line}
+          </span>
         </li>
       ))}
     </ul>
@@ -323,24 +330,27 @@ function PlanGrantCard({
 }
 
 const MONTHLY_FEATURES: string[] = [
-  'Smart Interview & Voice Input',
-  '"Humanize" Engine for natural tone',
-  'Built-in AI Detector Check (GPTZero)',
-  'Unlimited essay generations'
+  'Unlock Premium Scholarships',
+  'Access "Easy Apply" & "International"',
+  'Unblur all grant names & links',
+  'Unlimited Smart Filters'
 ];
 
 const QUARTERLY_FEATURES: string[] = [
   'Everything in Monthly, plus:',
-  'Perfect for the college application season',
+  'Unlock AI Essay Mentor',
+  'Smart Interview & Voice Input',
+  'Unlimited essay generations',
   'Save 35% compared to monthly',
-  'Priority AI processing'
 ];
 
 const LIFETIME_FEATURES: string[] = [
   'Everything in Quarterly, plus:',
-  'No recurring subscriptions ever',
-  'Lifetime access to all future AI updates',
-  'Ultimate peace of mind'
+  'Unlock AI Essay Mentor',
+  'Best price per month',
+  'Priority AI processing',
+  'Full access for the entire application season',
+  'Save 50% compared to monthly'
 ];
 
 const PLANS: PlanConfig[] = [
@@ -381,12 +391,12 @@ const PLANS: PlanConfig[] = [
     )
   },
   {
-    title: 'Lifetime',
+    title: 'Yearly',
     buttonLabel: 'Start Plan',
     planKey: 'yearly',
-    price: '$49',
-    priceSuffix: '',
-    billing: 'One-time payment. Yours forever.',
+    price: '$7.40',
+    priceSuffix: '/mo',
+    billing: 'Billed $89 every year.',
     features: LIFETIME_FEATURES,
     cardClassName: 'border-emerald-400 ring-1 ring-emerald-400/35',
     buttonClassName:
@@ -394,14 +404,14 @@ const PLANS: PlanConfig[] = [
     ctaAbove: (
       <span
         className="inline-flex max-w-full shrink-0 items-center justify-center gap-1.5 self-center whitespace-nowrap rounded-full bg-emerald-50/95 px-2.5 py-1 text-[11px] font-semibold text-emerald-900 ring-1 ring-emerald-200/70 sm:px-3 sm:text-xs"
-        aria-label="Smart choice plan"
+        aria-label="Best value plan"
       >
         <Sparkles
           className="h-3 w-3 shrink-0 text-emerald-600"
           strokeWidth={2.2}
           aria-hidden
         />
-        ✨ Smart Choice
+        ✨ Best Value
       </span>
     )
   }

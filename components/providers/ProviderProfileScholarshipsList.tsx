@@ -45,6 +45,9 @@ export function ProviderProfileScholarshipsList({
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallVariant, setRegistrationWallVariant] = useState<
+    'scholarships' | 'essay' | 'locked-category'
+  >('scholarships');
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
   const { profile: currentMatchProfile } =
@@ -101,11 +104,16 @@ export function ProviderProfileScholarshipsList({
 
   const openRegistrationWall = useCallback(
     (mode?: ScholarshipRegistrationWallContentMode) => {
+      setRegistrationWallVariant('scholarships');
       setRegistrationWallContent(mode ?? 'hub');
       setRegistrationWallOpen(true);
     },
     []
   );
+  const openLockedCategoryWall = useCallback(() => {
+    setRegistrationWallVariant('locked-category');
+    setRegistrationWallOpen(true);
+  }, []);
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
@@ -184,7 +192,8 @@ export function ProviderProfileScholarshipsList({
             subscriptionLocked={false}
             isAuthenticated={isAuthenticated}
             hasSubscription={hasSubscription}
-            onSubscriptionLockedCategoryClick={undefined}
+            onSubscriptionLockedCategoryClick={openLockedCategoryWall}
+            onLockedScholarshipNavigate={openLockedCategoryWall}
             onSubscriptionDetailNavigate={undefined}
             onGuestDetailNavigate={
               catalogFreeTier
@@ -197,6 +206,7 @@ export function ProviderProfileScholarshipsList({
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+        variant={registrationWallVariant}
         contentMode={registrationWallContent}
         signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
       />

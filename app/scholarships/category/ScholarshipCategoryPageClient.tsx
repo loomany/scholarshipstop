@@ -173,6 +173,9 @@ export default function ScholarshipCategoryPageClient({
   const [seoFallbackMeta, setSeoFallbackMeta] =
     useState<SeoListingFallbackMeta | null>(null);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallVariant, setRegistrationWallVariant] = useState<
+    'scholarships' | 'essay' | 'locked-category'
+  >('scholarships');
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
   const { profile: currentMatchProfile } =
@@ -181,11 +184,17 @@ export default function ScholarshipCategoryPageClient({
 
   const openRegistrationWall = useCallback(
     (mode?: ScholarshipRegistrationWallContentMode) => {
+      setRegistrationWallVariant('scholarships');
       setRegistrationWallContent(mode ?? 'hub');
       setRegistrationWallOpen(true);
     },
     []
   );
+
+  const openLockedCategoryWall = useCallback(() => {
+    setRegistrationWallVariant('locked-category');
+    setRegistrationWallOpen(true);
+  }, []);
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
@@ -773,14 +782,14 @@ export default function ScholarshipCategoryPageClient({
                 catalogFreeTier ? openRegistrationWall : undefined
               }
               subscriptionLocked={false}
-              onSubscriptionRestrictedNav={undefined}
+              onSubscriptionRestrictedNav={openLockedCategoryWall}
               internationalStudentsFilter={{
                 active: internationalSidebarChecked,
                 onActivate: toggleInternationalAudienceSidebar,
                 showGuestLock: false,
                 showSubscriptionLock: false,
                 onGuestRestrictedClick: openRegistrationWall,
-                onSubscriptionRestrictedClick: openRegistrationWall
+                onSubscriptionRestrictedClick: openLockedCategoryWall
               }}
             />
           ) : null
@@ -817,7 +826,7 @@ export default function ScholarshipCategoryPageClient({
             onGuestLockedAction={
               catalogFreeTier ? openRegistrationWall : undefined
             }
-            catalogListingLocked={catalogFreeTier}
+            catalogListingLocked={false}
           />
 
           {isLoading ? (
@@ -867,7 +876,8 @@ export default function ScholarshipCategoryPageClient({
                     subscriptionLocked={false}
                     isAuthenticated={isAuthenticated}
                     hasSubscription={hasSubscription}
-                    onSubscriptionLockedCategoryClick={undefined}
+                    onSubscriptionLockedCategoryClick={openLockedCategoryWall}
+                    onLockedScholarshipNavigate={openLockedCategoryWall}
                     onSubscriptionDetailNavigate={undefined}
                     onGuestDetailNavigate={
                       catalogFreeTier
@@ -906,11 +916,12 @@ export default function ScholarshipCategoryPageClient({
           catalogFreeTier ? openRegistrationWall : undefined
         }
         hasSubscription={hasSubscription}
-        onSubscriptionLockedAction={undefined}
+        onSubscriptionLockedAction={openLockedCategoryWall}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
+        variant={registrationWallVariant}
         contentMode={registrationWallContent}
         signedInWithoutSubscription={
           Boolean(isAuthenticated && authResolved && !hasSubscription)

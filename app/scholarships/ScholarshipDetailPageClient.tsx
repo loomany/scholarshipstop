@@ -106,6 +106,10 @@ import {
   renderTextWithObscuredPhrases
 } from '@/lib/scholarships/renderObscuredProviderText';
 import {
+  isSubscriptionLockedScholarship,
+  pickScholarshipLockedTitleBlurPhrase
+} from '@/lib/scholarships/subscriptionLockedCategory';
+import {
   formatScholarshipAwardLine,
   resolveScholarshipCategorySlug,
   scholarshipDeadlineHasPassed,
@@ -306,7 +310,8 @@ function SimilarScholarshipDetailListItem({
   eligibleForMatchPill,
   isAuthenticated,
   hasSubscription,
-  onGuestDetailNavigate
+  onGuestDetailNavigate,
+  onLockedScholarshipNavigate
 }: {
   scholarship: Scholarship;
   highlightPrimary: boolean;
@@ -317,9 +322,15 @@ function SimilarScholarshipDetailListItem({
   isAuthenticated: boolean;
   hasSubscription: boolean;
   onGuestDetailNavigate?: () => void;
+  onLockedScholarshipNavigate?: () => void;
 }) {
   const deadlinePassed = scholarshipDeadlineHasPassed(s);
   const simDd = getScholarshipDeadlineDisplayParts(s);
+  const targetedCategoryLocked =
+    !hasSubscription && isSubscriptionLockedScholarship(s);
+  const titleBlurPhrase = targetedCategoryLocked
+    ? pickScholarshipLockedTitleBlurPhrase(s.title, s.provider)
+    : null;
 
   const showBestRecommendation =
     eligibleForMatchPill &&
@@ -367,7 +378,12 @@ function SimilarScholarshipDetailListItem({
           <span
             className={`block text-left text-base font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'}`}
           >
-            {s.title}
+            {targetedCategoryLocked && titleBlurPhrase
+              ? renderTextWithObscuredPhrases(s.title, [titleBlurPhrase], {
+                  blurEntireWhenNoSubstringMatch: false,
+                  lockedObscuredInteractive: false
+                })
+              : s.title}
           </span>
           {s.provider ? (
             !isAuthenticated ? (
@@ -434,6 +450,11 @@ function SimilarScholarshipDetailListItem({
         href={scholarshipPublicPath(s)}
         onClick={(e) => {
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          if (targetedCategoryLocked) {
+            e.preventDefault();
+            onLockedScholarshipNavigate?.();
+            return;
+          }
           const budgetMode = resolveScholarshipDetailClickBudgetMode({
             isAuthenticated,
             hasSubscription
@@ -612,7 +633,15 @@ export default function ScholarshipDetailPageClient({
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallVariant, setRegistrationWallVariant] = useState<
+    'scholarships' | 'essay' | 'locked-category'
+  >('scholarships');
   const openRegistrationWall = useCallback(() => {
+    setRegistrationWallVariant('scholarships');
+    setRegistrationWallOpen(true);
+  }, []);
+  const openLockedCategoryWall = useCallback(() => {
+    setRegistrationWallVariant('locked-category');
     setRegistrationWallOpen(true);
   }, []);
   const closeRegistrationWall = useCallback(() => {
@@ -750,6 +779,7 @@ export default function ScholarshipDetailPageClient({
     <ScholarshipRegistrationWallModal
       open={registrationWallOpen}
       onClose={closeRegistrationWall}
+      variant={registrationWallVariant}
       signedInWithoutSubscription={
         Boolean(isAuthenticated && authResolved && !hasSubscription)
       }
@@ -891,6 +921,11 @@ export default function ScholarshipDetailPageClient({
   const providerProfileHref = providerSlugTrimmed
     ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
     : null;
+  const targetedCategoryLocked =
+    !hasSubscription && isSubscriptionLockedScholarship(scholarship);
+  const titleBlurPhrase = targetedCategoryLocked
+    ? pickScholarshipLockedTitleBlurPhrase(scholarship.title, providerName)
+    : null;
   const providerMissionRaw = scholarship.providerMission?.trim() ?? '';
   const hasMission = Boolean(providerMissionRaw);
   const showMissionCompact =
@@ -915,11 +950,18 @@ export default function ScholarshipDetailPageClient({
   const providerBlurPhrases = providerNameLocked
     ? buildScholarshipProviderBlurPhrases(scholarship)
     : [];
+  const lockedTextPhrases = [
+    ...providerBlurPhrases,
+    ...(targetedCategoryLocked && titleBlurPhrase ? [titleBlurPhrase] : [])
+  ];
+  const openLockedTextWall = targetedCategoryLocked
+    ? openLockedCategoryWall
+    : openProviderAccessWall;
   const obscureDetailLine = (text: string) =>
-    providerNameLocked
-      ? renderTextWithObscuredPhrases(text, providerBlurPhrases, {
+    providerNameLocked || targetedCategoryLocked
+      ? renderTextWithObscuredPhrases(text, lockedTextPhrases, {
           blurEntireWhenNoSubstringMatch: false,
-          onLockedSegmentClick: openProviderAccessWall
+          onLockedSegmentClick: openLockedTextWall
         })
       : text;
 
@@ -1179,11 +1221,15 @@ export default function ScholarshipDetailPageClient({
       beforeMissing.length > 0 ||
       beforeFlags.length > 0);
 
-  const isApplySubscriptionLocked = !isAuthenticated;
+  const isApplySubscriptionLocked = !isAuthenticated || targetedCategoryLocked;
   /** Guest blur + “Sign in to unlock AI insights” overlay disabled — full detail body stays readable. */
   const showLockedDetailOverlay = false;
-  const openLockedAccessWall = openRegistrationWall;
-  const openApplyAccessWall = openRegistrationWall;
+  const openLockedAccessWall = targetedCategoryLocked
+    ? openLockedCategoryWall
+    : openRegistrationWall;
+  const openApplyAccessWall = targetedCategoryLocked
+    ? openLockedCategoryWall
+    : openRegistrationWall;
 
   return (
     <DarkTooltipProvider>
@@ -1234,14 +1280,24 @@ export default function ScholarshipDetailPageClient({
               title={scholarship.title}
               aria-current="page"
             >
-              {scholarship.title}
+              {targetedCategoryLocked && titleBlurPhrase
+                ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
+                    blurEntireWhenNoSubstringMatch: false,
+                    onLockedSegmentClick: openLockedCategoryWall
+                  })
+                : scholarship.title}
             </li>
           </ol>
         </nav>
 
         <div className="mt-5 min-w-0">
           <h1 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl md:text-[2.25rem] md:leading-tight">
-            {scholarship.title}
+            {targetedCategoryLocked && titleBlurPhrase
+              ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
+                  blurEntireWhenNoSubstringMatch: false,
+                  onLockedSegmentClick: openLockedCategoryWall
+                })
+              : scholarship.title}
           </h1>
           {detailDeadlinePassed ? (
             <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -1936,7 +1992,7 @@ export default function ScholarshipDetailPageClient({
                   providerNameLocked && providerName ? (
                     <button
                       type="button"
-                      onClick={openProviderAccessWall}
+                      onClick={openLockedAccessWall}
                       className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
                       aria-label="Provider name hidden. Sign in or start a trial to see the sponsor."
                     >
@@ -2014,7 +2070,7 @@ export default function ScholarshipDetailPageClient({
                 ) : providerNameLocked && providerName ? (
                   <button
                     type="button"
-                    onClick={openProviderAccessWall}
+                    onClick={openLockedAccessWall}
                     className="flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
                     aria-label="Provider name hidden. Sign in or start a trial to see the sponsor."
                   >
@@ -2259,8 +2315,10 @@ export default function ScholarshipDetailPageClient({
                         className={detailApplyPrimaryClass}
                         onClick={openApplyAccessWall}
                         title={
-                          isApplySubscriptionLocked
-                            ? 'Start your free access to apply on the official site'
+                          targetedCategoryLocked
+                            ? 'Premium subscription required to open this scholarship'
+                            : isApplySubscriptionLocked
+                              ? 'Start your free access to apply on the official site'
                             : 'Create a free account to apply on the official site'
                         }
                       >
@@ -2447,6 +2505,7 @@ export default function ScholarshipDetailPageClient({
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
                         onGuestDetailNavigate={openRegistrationWall}
+                        onLockedScholarshipNavigate={openLockedCategoryWall}
                       />
                     ))}
                   </ul>
@@ -2474,6 +2533,7 @@ export default function ScholarshipDetailPageClient({
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
                         onGuestDetailNavigate={openRegistrationWall}
+                        onLockedScholarshipNavigate={openLockedCategoryWall}
                       />
                     ))}
                   </ul>
@@ -2495,6 +2555,7 @@ export default function ScholarshipDetailPageClient({
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
                       onGuestDetailNavigate={openRegistrationWall}
+                      onLockedScholarshipNavigate={openLockedCategoryWall}
                     />
                   );
                 })}

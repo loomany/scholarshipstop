@@ -15,6 +15,11 @@ import {
   toOpenAiHistory,
   type ThemeProgress
 } from '@/lib/essay/interviewerAi';
+import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
+import {
+  hasEssayMentorAccess,
+  type SubscriptionWithPriceAndProduct
+} from '@/lib/payments/subscriptionEntitlements';
 import type { Json, Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/server';
 
@@ -38,6 +43,22 @@ type DeleteBody = {
   message_id?: string;
 };
 
+async function ensureEssayMentorPlanAccess(supabase: Sb, userId: string) {
+  const [{ data: profile }, { data: subRows }] = await Promise.all([
+    (supabase as Sb).from('profiles').select('*').eq('id', userId).maybeSingle(),
+    (supabase as Sb)
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created', { ascending: false })
+      .limit(20)
+  ]);
+  const subscription = pickCanonicalSubscription(
+    subRows ?? []
+  ) as SubscriptionWithPriceAndProduct | null;
+  return hasEssayMentorAccess(profile ?? null, subscription);
+}
+
 export async function PATCH(request: Request) {
   const supabase = createClient();
   const {
@@ -45,6 +66,15 @@ export async function PATCH(request: Request) {
   } = await supabase.auth.getUser();
   if (!user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (!(await ensureEssayMentorPlanAccess(supabase, user.id))) {
+    return NextResponse.json(
+      {
+        error:
+          'AI Essay Mentor is available on Quarterly and Yearly plans only.'
+      },
+      { status: 402 }
+    );
   }
 
   if (!process.env.OPENAI_API_KEY?.trim()) {
@@ -188,6 +218,15 @@ export async function DELETE(request: Request) {
   } = await supabase.auth.getUser();
   if (!user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (!(await ensureEssayMentorPlanAccess(supabase, user.id))) {
+    return NextResponse.json(
+      {
+        error:
+          'AI Essay Mentor is available on Quarterly and Yearly plans only.'
+      },
+      { status: 402 }
+    );
   }
 
   let body: DeleteBody;

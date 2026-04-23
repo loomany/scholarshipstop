@@ -200,6 +200,13 @@ class MentorTrialQuotaExceededError extends Error {
   }
 }
 
+class EssayPlanRequiredError extends Error {
+  constructor() {
+    super('essay_plan_required');
+    this.name = 'EssayPlanRequiredError';
+  }
+}
+
 async function requestInterviewInit(
   signal?: AbortSignal,
   scholarshipTitle?: string | null
@@ -227,6 +234,9 @@ async function requestInterviewInit(
   if (!res.ok) {
     if (res.status === 402 && data.code === 'trial_quota_exceeded') {
       throw new MentorTrialQuotaExceededError();
+    }
+    if (res.status === 402 && data.code === 'essay_plan_required') {
+      throw new EssayPlanRequiredError();
     }
     throw new Error(data.error || `Error ${res.status}`);
   }
@@ -294,10 +304,11 @@ export function EssayQuestionnaire({
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [userId, setUserId] = useState<string | null>(null);
-  const { hasSubscription, subscriptionReady } = useSubscriptionAccess(userId);
+  const { hasSubscription, hasEssayMentorTierAccess, subscriptionReady } =
+    useSubscriptionAccess(userId);
   const mentorPaywallLocked = useMemo(
-    () => !userId || !subscriptionReady || !hasSubscription,
-    [userId, subscriptionReady, hasSubscription]
+    () => !userId || !subscriptionReady || !hasEssayMentorTierAccess,
+    [userId, subscriptionReady, hasEssayMentorTierAccess]
   );
   const [authChecked, setAuthChecked] = useState(false);
   const [bootLoading, setBootLoading] = useState(true);
@@ -324,6 +335,11 @@ export function EssayQuestionnaire({
   );
   const [draftLinkResolved, setDraftLinkResolved] = useState(false);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  /**
+   * Server can reject mentor init for monthly/free tiers.
+   * In that case keep composer enabled so user can type, and show paywall only on Send/Voice.
+   */
+  const [essayPlanRequiredLocked, setEssayPlanRequiredLocked] = useState(false);
   /** Guest-only: after first LLM reply, subsequent turns omit onboarding system appendix. */
   const [guestMentorInterviewStarted, setGuestMentorInterviewStarted] =
     useState(false);
@@ -377,6 +393,7 @@ export function EssayQuestionnaire({
 
   const applyInitPayload = useCallback(
     (data: InitPayload, persistForUserId?: string | null) => {
+      setEssayPlanRequiredLocked(false);
       setChatId(data.chat_id);
       setMessages(data.messages);
       setProgress(data.progress ?? EMPTY_PROGRESS);
@@ -526,6 +543,7 @@ export function EssayQuestionnaire({
       setRegistrationWallOpen(true);
       return;
     }
+    setEssayPlanRequiredLocked(false);
     try {
       const st = await fetch('/api/interviewer/mentor-trial-status', {
         credentials: 'same-origin'
@@ -555,6 +573,11 @@ export function EssayQuestionnaire({
       if (e instanceof MentorTrialQuotaExceededError) {
         setMessages((prev) => applyMentorQuotaExhaustedMessages(prev));
         setRegistrationWallOpen(true);
+      } else if (e instanceof EssayPlanRequiredError) {
+        setEssayPlanRequiredLocked(true);
+        setChatId(null);
+        setMessages(buildGuestSeedMessages(initialScholarshipTitle));
+        setProgress(EMPTY_PROGRESS);
       } else if (e instanceof Error && e.name === 'AbortError') {
         toast({
           variant: 'destructive',
@@ -694,6 +717,13 @@ export function EssayQuestionnaire({
         if (e instanceof MentorTrialQuotaExceededError) {
           setChatId(null);
           setMessages((prev) => applyMentorQuotaExhaustedMessages(prev));
+          setProgress(EMPTY_PROGRESS);
+          setInput('');
+        } else if (e instanceof EssayPlanRequiredError) {
+          const seed = buildGuestSeedMessages(initialScholarshipTitle);
+          setEssayPlanRequiredLocked(true);
+          setChatId(null);
+          setMessages(seed);
           setProgress(EMPTY_PROGRESS);
           setInput('');
         } else if (e instanceof Error && e.name === 'AbortError') {
@@ -881,7 +911,7 @@ export function EssayQuestionnaire({
         return submitGuestMessage(t);
       }
       if (!subscriptionReady) return false;
-      if (!hasSubscription) {
+      if (!hasEssayMentorTierAccess) {
         setRegistrationWallOpen(true);
         return false;
       }
@@ -921,7 +951,7 @@ export function EssayQuestionnaire({
       chatId,
       devBypassing,
       generating,
-      hasSubscription,
+      hasEssayMentorTierAccess,
       sending,
       submitGuestMessage,
       subscriptionReady,
@@ -932,8 +962,8 @@ export function EssayQuestionnaire({
   );
 
   const conversationReady = useMemo(
-    () => Boolean(userId ? chatId : messages.length > 0),
-    [userId, chatId, messages.length]
+    () => Boolean(userId ? chatId || essayPlanRequiredLocked : messages.length > 0),
+    [userId, chatId, essayPlanRequiredLocked, messages.length]
   );
 
   /** Trial / paywall: inline Premium card is shown — block typing, voice, send, draft. */
@@ -1354,7 +1384,7 @@ export function EssayQuestionnaire({
 
   const generateEssay = async () => {
     if (userId && !subscriptionReady) return;
-    if (!userId || !hasSubscription) {
+    if (!userId || !hasEssayMentorTierAccess) {
       setRegistrationWallOpen(true);
       return;
     }
@@ -1817,7 +1847,7 @@ export function EssayQuestionnaire({
         open={registrationWallOpen}
         onClose={() => setRegistrationWallOpen(false)}
         variant="essay"
-        signedInWithoutSubscription={Boolean(userId && !hasSubscription)}
+        signedInWithoutSubscription={Boolean(userId && !hasEssayMentorTierAccess)}
       />
     </>
   );

@@ -1,6 +1,7 @@
 'use client';
 
 import { onboardingStepHref } from '@/lib/onboarding/onboardingResume';
+import ScholarshipLockedCategoryModal from '@/components/scholarships/ScholarshipLockedCategoryModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 
 export type ScholarshipRegistrationWallContentMode = 'hub' | 'card-unlock';
@@ -9,7 +10,7 @@ type ScholarshipRegistrationWallModalProps = {
   open: boolean;
   onClose: () => void;
   /** Essay mentor: distinct notice; same subscription UI and signup → /subscription. */
-  variant?: 'scholarships' | 'essay';
+  variant?: 'scholarships' | 'essay' | 'locked-category';
   /** Catalog card click vs. filters/save — controls notice text only. */
   contentMode?: ScholarshipRegistrationWallContentMode;
   /**
@@ -33,12 +34,16 @@ export default function ScholarshipRegistrationWallModal({
   signedInWithoutSubscription = false,
   noticeOverride
 }: ScholarshipRegistrationWallModalProps) {
+  if (variant === 'locked-category') {
+    return <ScholarshipLockedCategoryModal open={open} onClose={onClose} />;
+  }
+
   let notice: string | undefined;
   if (noticeOverride?.trim()) {
     notice = noticeOverride.trim();
   } else if (variant === 'essay') {
     notice =
-      "Stop worrying about AI detection. Our Mentor doesn't just write; it conducts an interview to capture your true story, then polishes the text so it easily passes academic AI checks.";
+      'AI Essay Mentor is available only on Quarterly and Yearly plans. Monthly unlocks the premium scholarship database only.';
   } else if (contentMode === 'card-unlock') {
     notice =
       "You've used your free previews. Continue with trial access — we will open plan selection after sign-up.";
