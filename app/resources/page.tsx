@@ -9,8 +9,10 @@ import {
   fetchAllPublishedContentPostsListFields,
   type ContentPostListFields
 } from '@/lib/content-hub/contentPostsServer';
+import { fetchLatestPublishedEssayHubList } from '@/lib/essays/essaysServer';
 import {
   buildResourcesIndexHref,
+  type ClassifiedResourcePost,
   classifyResourcePosts,
   filterAndSortResourcePosts,
   paginateResources,
@@ -60,8 +62,121 @@ export function generateMetadata({
   };
 }
 
-function ResourcesGrid({ posts }: { posts: ContentPostListFields[] }) {
-  const withSlug = posts.filter((p) => p.slug?.trim());
+function buildResourceFallbackCovers(
+  rows: ClassifiedResourcePost[],
+  preferredGlobalCovers: string[] = []
+): Map<string, string> {
+  const bySubcategory = new Map<string, string[]>();
+  const byCategory = new Map<string, string[]>();
+  const global: string[] = [];
+  const seenGlobal = new Set<string>();
+
+  for (const row of rows) {
+    const cover = row.post.cover_image_url?.trim();
+    const c = row.classification;
+    if (!cover || !c) continue;
+
+    const subKey = `${c.categoryId}::${c.subcategoryId}`;
+    const subList = bySubcategory.get(subKey) ?? [];
+    if (!subList.includes(cover)) subList.push(cover);
+    bySubcategory.set(subKey, subList);
+
+    const categoryList = byCategory.get(c.categoryId) ?? [];
+    if (!categoryList.includes(cover)) categoryList.push(cover);
+    byCategory.set(c.categoryId, categoryList);
+
+    if (!seenGlobal.has(cover)) {
+      seenGlobal.add(cover);
+      global.push(cover);
+    }
+  }
+
+  const prioritizedGlobal = [...preferredGlobalCovers, ...global].filter(
+    (value, index, arr) => arr.indexOf(value) === index
+  );
+
+  const fallbackByPostId = new Map<string, string>();
+  const nextIndexByPool = new Map<string, number>();
+  const pickFromPool = (poolKey: string, pool: string[]): string | undefined => {
+    if (pool.length === 0) return undefined;
+    const idx = nextIndexByPool.get(poolKey) ?? 0;
+    const cover = pool[idx % pool.length];
+    nextIndexByPool.set(poolKey, idx + 1);
+    return cover;
+  };
+
+  for (const row of rows) {
+    if (row.post.cover_image_url?.trim()) continue;
+    const c = row.classification;
+    if (!c) {
+      const globalCover = pickFromPool('global', prioritizedGlobal);
+      if (globalCover) fallbackByPostId.set(row.post.id, globalCover);
+      continue;
+    }
+
+    const subKey = `${c.categoryId}::${c.subcategoryId}`;
+    const fallback =
+      pickFromPool(`sub:${subKey}`, bySubcategory.get(subKey) ?? []) ??
+      pickFromPool(`cat:${c.categoryId}`, byCategory.get(c.categoryId) ?? []) ??
+      pickFromPool('global', prioritizedGlobal);
+    if (fallback) fallbackByPostId.set(row.post.id, fallback);
+  }
+
+  return fallbackByPostId;
+}
+
+function resolveCoverSrc(
+  post: ContentPostListFields,
+  fallbackCoverByPostId: Map<string, string>
+): string | null {
+  return post.cover_image_url?.trim() ?? fallbackCoverByPostId.get(post.id) ?? null;
+}
+
+function rebalanceAdjacentDuplicateCovers(
+  posts: ContentPostListFields[],
+  fallbackCoverByPostId: Map<string, string>
+): ContentPostListFields[] {
+  const out = [...posts];
+  for (let i = 1; i < out.length; i += 1) {
+    const prevCover = resolveCoverSrc(out[i - 1], fallbackCoverByPostId);
+    const currentCover = resolveCoverSrc(out[i], fallbackCoverByPostId);
+    if (!prevCover || !currentCover || prevCover !== currentCover) continue;
+
+    let swapIdx = -1;
+    for (let j = i + 1; j < out.length; j += 1) {
+      const candidateCover = resolveCoverSrc(out[j], fallbackCoverByPostId);
+      if (!candidateCover || candidateCover === prevCover) continue;
+      const beforeOk =
+        i - 1 < 0 ||
+        resolveCoverSrc(out[i - 1], fallbackCoverByPostId) !== candidateCover;
+      const afterOk =
+        i + 1 >= out.length ||
+        resolveCoverSrc(out[i + 1], fallbackCoverByPostId) !== candidateCover;
+      if (beforeOk && afterOk) {
+        swapIdx = j;
+        break;
+      }
+    }
+    if (swapIdx !== -1) {
+      const tmp = out[i];
+      out[i] = out[swapIdx];
+      out[swapIdx] = tmp;
+    }
+  }
+  return out;
+}
+
+function ResourcesGrid({
+  posts,
+  fallbackCoverByPostId
+}: {
+  posts: ContentPostListFields[];
+  fallbackCoverByPostId: Map<string, string>;
+}) {
+  const withSlug = rebalanceAdjacentDuplicateCovers(
+    posts.filter((p) => p.slug?.trim()),
+    fallbackCoverByPostId
+  );
   if (withSlug.length === 0) {
     return (
       <p className="mt-12 text-center text-gray-600">
@@ -76,6 +191,7 @@ function ResourcesGrid({ posts }: { posts: ContentPostListFields[] }) {
         const title = post.title?.trim() || 'Untitled';
         const desc = post.meta_description?.trim() || '';
         const href = resourcesArticlePath(slug);
+        const coverSrc = resolveCoverSrc(post, fallbackCoverByPostId);
         return (
           <li key={post.id}>
             <Link
@@ -83,10 +199,10 @@ function ResourcesGrid({ posts }: { posts: ContentPostListFields[] }) {
               className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_12px_40px_-16px_rgba(15,23,42,0.12)] ring-1 ring-gray-100 transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_48px_-12px_rgba(15,23,42,0.16)]"
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
-                {post.cover_image_url?.trim() ? (
+                {coverSrc ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={post.cover_image_url.trim()}
+                    src={coverSrc}
                     alt={
                       post.title?.trim()
                         ? `Cover image for ${post.title.trim()}`
@@ -132,6 +248,15 @@ export default async function ResourcesIndexPage({
   const queryState = parseResourcesIndexSearchParams(searchParams);
   const allPosts = await fetchAllPublishedContentPostsListFields();
   const classified = classifyResourcePosts(allPosts);
+  const essayCovers = (
+    await fetchLatestPublishedEssayHubList(240)
+  )
+    .map((essay) => essay.hero_image_url?.trim() ?? '')
+    .filter(Boolean);
+  const fallbackCoverByPostId = buildResourceFallbackCovers(
+    classified,
+    essayCovers
+  );
   const categoryCounts = resourcesCategoryCountsAfterQuery(
     classified,
     queryState.q
@@ -274,7 +399,10 @@ export default async function ResourcesIndexPage({
             No published articles yet. Check back soon.
           </p>
         ) : (
-          <ResourcesGrid posts={withSlug} />
+          <ResourcesGrid
+            posts={withSlug}
+            fallbackCoverByPostId={fallbackCoverByPostId}
+          />
         )}
 
         {hasAnyPublished && withSlug.length > 0 ? (

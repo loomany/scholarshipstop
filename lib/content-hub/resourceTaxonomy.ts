@@ -11,6 +11,7 @@ export type ResourceCategoryId =
   | 'finding-scholarships'
   | 'applications'
   | 'eligibility'
+  | 'international-students'
   | 'deadlines-planning'
   | 'essays-writing'
   | 'financial-aid-funding'
@@ -98,6 +99,28 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
       {
         id: 'demographic-eligibility',
         label: 'Demographic eligibility'
+      }
+    ]
+  },
+  {
+    id: 'international-students',
+    label: 'International Students',
+    subcategories: [
+      {
+        id: 'scholarships-for-international-students',
+        label: 'Scholarships for international students'
+      },
+      {
+        id: 'f1-visa-and-non-us-citizen-eligibility',
+        label: 'F1 visa and non-US citizen eligibility'
+      },
+      {
+        id: 'country-specific-opportunities',
+        label: 'Country-specific opportunities'
+      },
+      {
+        id: 'international-application-documents',
+        label: 'International application documents'
       }
     ]
   },
@@ -290,7 +313,10 @@ const SLUG_HINTS: { test: RegExp; subId: string }[] = [
   { test: /fafsa|financial aid|grant/i, subId: 'fafsa-and-aid-basics' },
   { test: /scam|fraud|fake scholarship/i, subId: 'scholarship-scam-warning-signs' },
   { test: /gpa/i, subId: 'gpa-requirements' },
-  { test: /international/i, subId: 'scholarships-for-international-students' }
+  {
+    test: /international|f1|visa|non[-\s]?us citizen|overseas/i,
+    subId: 'scholarships-for-international-students'
+  }
 ];
 
 export type ResourceArticleClassification = {

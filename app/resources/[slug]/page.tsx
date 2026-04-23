@@ -61,8 +61,10 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   if (!post || !post.slug?.trim()) notFound();
 
   const faq = contentPostFaqFromJson(post.faq);
-  const matchedRelatedScholarships =
-    await getRelatedScholarshipsForResourceArticle(post);
+  const [matchedRelatedScholarships, related] = await Promise.all([
+    getRelatedScholarshipsForResourceArticle(post),
+    fetchRelatedPublishedContentPosts(post.slug, 3)
+  ]);
   const hubScholarshipKeys = matchedRelatedScholarships.map((r) =>
     r.slug.trim()
   );
@@ -81,7 +83,6 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
       ? splitForMidCtaInRemainder(primarySplit.after)
       : null;
 
-  const related = await fetchRelatedPublishedContentPosts(post.slug, 3);
   const relatedWithSlug = related.filter((r) => r.slug?.trim());
   const articlePath = resourcesArticlePath(post.slug.trim());
   const articleUrl = getURL(articlePath);

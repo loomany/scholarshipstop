@@ -10,12 +10,27 @@ import { fetchScholarshipsForArticleMatching } from '@/lib/content-hub/articleSc
 import { findScholarshipsForArticle } from '@/lib/content-hub/articleScholarshipMatching/scoreScholarshipsForArticle';
 import { selectRelatedScholarshipsForArticle } from '@/lib/content-hub/articleScholarshipMatching/selectRelatedForArticle';
 import { stripDisallowedAnchorsFromHtml } from '@/lib/content-hub/articleScholarshipMatching/stripArticleAnchors';
-import type { RelatedScholarshipStored } from '@/lib/content-hub/articleScholarshipMatching/types';
+import type {
+  RelatedScholarshipStored,
+  ScholarshipMatchDbRow
+} from '@/lib/content-hub/articleScholarshipMatching/types';
 import { sortPreferDeadlineFirst } from '@/lib/content-hub/relatedScholarshipSort';
 import { createPublicClient } from '@/utils/supabase/public';
 
 /** Max scholarship cards at the bottom of `/resources/[slug]`. */
 export const RESOURCE_ARTICLE_RELATED_SCHOLARSHIPS_MAX = 3;
+
+async function fetchArticleMatchingCatalogRowsCached(): Promise<ScholarshipMatchDbRow[]> {
+  return unstable_cache(
+    async () => {
+      const supabase = createPublicClient();
+      if (!supabase) return [];
+      return fetchScholarshipsForArticleMatching(supabase);
+    },
+    ['resource-article-matching-catalog-v1'],
+    { revalidate: 300, tags: ['scholarships:article-matching-catalog'] }
+  )();
+}
 
 async function enrichFromCatalog(
   items: RelatedScholarshipStored[]
@@ -64,8 +79,6 @@ async function relatedFromMatchingExcluding(
   const bodyHtml = post.body_html?.trim() ?? '';
   if (!bodyHtml) return [];
 
-  const supabase = createPublicClient();
-  if (!supabase) return [];
   const strippedBody = deduplicateQuickSummaryBlocksInHtml(
     stripDisallowedAnchorsFromHtml(bodyHtml)
   );
@@ -77,7 +90,7 @@ async function relatedFromMatchingExcluding(
     bodyHtml: strippedBody
   });
 
-  const rows = await fetchScholarshipsForArticleMatching(supabase);
+  const rows = await fetchArticleMatchingCatalogRowsCached();
   const ranked = findScholarshipsForArticle(signals, title, rows);
   const picked = selectRelatedScholarshipsForArticle(ranked);
 

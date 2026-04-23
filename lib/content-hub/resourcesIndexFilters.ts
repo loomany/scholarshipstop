@@ -8,6 +8,7 @@ import {
   type ResourceArticleClassification,
   type ResourceCategoryId
 } from '@/lib/content-hub/resourceTaxonomy';
+import { RESOURCES_INDEX_PAGE_SIZE } from '@/lib/content-hub/resourcesSection';
 export type ResourceIndexSort = 'latest' | 'oldest';
 
 export type ResourcesIndexQueryState = {
@@ -86,10 +87,10 @@ export function filterAndSortResourcePosts(
   rows: ClassifiedResourcePost[],
   state: Pick<
     ResourcesIndexQueryState,
-    'q' | 'categoryId' | 'subcategoryIds' | 'sort'
+    'q' | 'categoryId' | 'subcategoryIds' | 'sort' | 'page'
   >
 ): ContentPostListFields[] {
-  const { q, categoryId, subcategoryIds, sort } = state;
+  const { q, categoryId, subcategoryIds, sort, page } = state;
 
   let filtered = rows.filter((row) =>
     postMatchesResourceQuery(row.post, q, row.classification)
@@ -109,6 +110,62 @@ export function filterAndSortResourcePosts(
     if (ta !== tb) return (ta - tb) * mult;
     return a.post.id.localeCompare(b.post.id);
   });
+
+  // Keep the first resources page diverse when many international articles are
+  // published together: cap International Students entries to 2 on page 1.
+  if (
+    page === 1 &&
+    sort === 'latest' &&
+    q.trim().length === 0 &&
+    categoryId === null &&
+    subcategoryIds.size === 0
+  ) {
+    const firstPageSize = RESOURCES_INDEX_PAGE_SIZE;
+    const maxInternationalOnFirstPage = 2;
+    const minGapBetweenInternational = 3;
+
+    const selectedFirstPage: ClassifiedResourcePost[] = [];
+    const deferredInternational: ClassifiedResourcePost[] = [];
+    let internationalCount = 0;
+    let lastInternationalPos: number | null = null;
+
+    for (const row of sorted) {
+      if (selectedFirstPage.length >= firstPageSize) break;
+      const isInternational =
+        row.classification?.categoryId === 'international-students';
+      if (!isInternational) {
+        selectedFirstPage.push(row);
+        continue;
+      }
+
+      const distanceOk =
+        lastInternationalPos === null ||
+        selectedFirstPage.length - lastInternationalPos >= minGapBetweenInternational;
+      const underLimit = internationalCount < maxInternationalOnFirstPage;
+
+      if (distanceOk && underLimit) {
+        selectedFirstPage.push(row);
+        internationalCount += 1;
+        lastInternationalPos = selectedFirstPage.length - 1;
+      } else {
+        deferredInternational.push(row);
+      }
+    }
+
+    // In extreme cases (e.g. feed is almost all international), keep page full.
+    let deferredIdx = 0;
+    while (
+      selectedFirstPage.length < firstPageSize &&
+      deferredIdx < deferredInternational.length
+    ) {
+      selectedFirstPage.push(deferredInternational[deferredIdx]);
+      deferredIdx += 1;
+    }
+
+    const selectedIds = new Set(selectedFirstPage.map((row) => row.post.id));
+    const remaining = sorted.filter((row) => !selectedIds.has(row.post.id));
+    return [...selectedFirstPage, ...remaining].map((r) => r.post);
+  }
 
   return sorted.map((r) => r.post);
 }
