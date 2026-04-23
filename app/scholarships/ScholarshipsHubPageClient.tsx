@@ -1322,10 +1322,6 @@ function ScholarshipsPageInner({
   ]);
 
   const saveMoreFiltersPreset = useCallback(() => {
-    if (!hasSubscription) {
-      openRegistrationWall();
-      return;
-    }
     if (!moreFiltersDraft || !saveFilterEnabled) return;
     const merged =
       routeBaseMoreFilters != null
@@ -1350,11 +1346,9 @@ function ScholarshipsPageInner({
     setPresetNameDraft('My filter');
     setIsSavePresetModalOpen(true);
   }, [
-    hasSubscription,
     moreFiltersDraft,
     saveFilterEnabled,
     routeBaseMoreFilters,
-    openRegistrationWall,
     activeTab,
     filterBounds,
     savedFilterPresets,

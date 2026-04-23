@@ -20,6 +20,11 @@ export type GuestTrialMarketingModalProps = {
   marketingMode?: 'trial' | 'subscription';
   /** Controls copy deck only; destination stays in `primaryHref`. */
   copyVariant?: 'modern-free-account' | 'classic-trial';
+  /**
+   * Logged in but no active plan: avoid "guest" copy; CTA is usually `/subscription`.
+   * Ignored for `classic-trial` (essay upsell has its own copy).
+   */
+  signedInWithoutSubscription?: boolean;
 };
 
 const BULLETS = [
@@ -42,7 +47,8 @@ export default function GuestTrialMarketingModal({
   primaryHref,
   onSecondaryAction,
   onPrimaryClick,
-  copyVariant = 'modern-free-account'
+  copyVariant = 'modern-free-account',
+  signedInWithoutSubscription = false
 }: GuestTrialMarketingModalProps) {
   const dismiss = useCallback(() => {
     onSecondaryAction?.();
@@ -69,6 +75,7 @@ export default function GuestTrialMarketingModal({
 
   if (!open) return null;
   const isClassicTrial = copyVariant === 'classic-trial';
+  const isSignedInUpsell = !isClassicTrial && signedInWithoutSubscription;
 
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6">
@@ -107,7 +114,9 @@ export default function GuestTrialMarketingModal({
           >
             {isClassicTrial
               ? 'Unlock AI Essay Mentor'
-              : 'Keep Exploring Scholarships 🚀'}
+              : isSignedInUpsell
+                ? 'Save filters with a plan'
+                : 'Keep Exploring Scholarships 🚀'}
           </h2>
           <p
             className={`mt-2 text-zinc-500 ${
@@ -116,7 +125,9 @@ export default function GuestTrialMarketingModal({
           >
             {isClassicTrial
               ? 'AI Essay Mentor is available only on Quarterly and Yearly plans. Upgrade to access mentor chat, voice interview, and full draft generation.'
-              : "You've reached your guest limit. Create a 100% free profile to continue browsing our database."}
+              : isSignedInUpsell
+                ? 'Saved filter presets and other premium tools are included with a Standard Grants subscription. Choose a plan to continue.'
+                : "You've reached your guest limit. Create a 100% free profile to continue browsing our database."}
           </p>
 
           <h3
@@ -126,7 +137,9 @@ export default function GuestTrialMarketingModal({
           >
             {isClassicTrial
               ? 'What you unlock on Quarterly/Yearly:'
-              : "What's inside your free profile:"}
+              : isSignedInUpsell
+                ? 'What you unlock on a plan:'
+                : "What's inside your free profile:"}
           </h3>
 
           <ul
@@ -157,7 +170,9 @@ export default function GuestTrialMarketingModal({
           >
             {isClassicTrial
               ? 'Monthly unlocks premium scholarships only. AI Essay Mentor tools require Quarterly or Yearly.'
-              : 'Join thousands of students and get your own personal dashboard to track your application progress.'}
+              : isSignedInUpsell
+                ? 'Subscribers can save custom filter presets, get personalized matches, and use advanced catalog tools.'
+                : 'Join thousands of students and get your own personal dashboard to track your application progress.'}
           </p>
 
           <p
@@ -167,7 +182,9 @@ export default function GuestTrialMarketingModal({
           >
             {isClassicTrial
               ? '⚡ Instant access after payment'
-              : '⚡ Takes less than 10 seconds'}
+              : isSignedInUpsell
+                ? '⚡ Choose a plan and keep your saved filters in sync'
+                : '⚡ Takes less than 10 seconds'}
           </p>
 
           <div className={isClassicTrial ? 'mt-4' : 'mt-5'}>
@@ -183,7 +200,9 @@ export default function GuestTrialMarketingModal({
             >
               {isClassicTrial
                 ? '👉 View Quarterly & Yearly Plans'
-                : '👉 Create Free Account'}
+                : isSignedInUpsell
+                  ? '👉 View subscription plans'
+                  : '👉 Create Free Account'}
             </Link>
           </div>
 
@@ -194,7 +213,9 @@ export default function GuestTrialMarketingModal({
           >
             {isClassicTrial
               ? 'Secure payment • Cancel anytime'
-              : '100% Free • No credit card required'}
+              : isSignedInUpsell
+                ? 'Secure payment • Cancel anytime'
+                : '100% Free • No credit card required'}
           </p>
         </div>
       </div>

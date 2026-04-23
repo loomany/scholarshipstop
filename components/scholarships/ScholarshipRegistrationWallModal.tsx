@@ -70,6 +70,7 @@ export default function ScholarshipRegistrationWallModal({
       primaryHref={primaryHref}
       marketingMode={marketingMode}
       copyVariant={copyVariant}
+      signedInWithoutSubscription={signedInWithoutSubscription}
     />
   );
 }
