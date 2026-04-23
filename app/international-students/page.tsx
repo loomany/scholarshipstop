@@ -74,17 +74,30 @@ const painPoints = [
 
 const howWeHelpItems = [
   {
-    title: 'International-Eligible Filter',
-    body: 'See only scholarships that accept non-US citizens and F1 visa holders. No more reading fine print.'
+    title: 'International-only results',
+    body: 'See only scholarships that accept international students.'
   },
   {
-    title: 'Matched to Your Profile',
-    body: 'Tell us your degree level and field — we surface the most relevant opportunities first.'
+    title: 'Smart matching',
+    body: 'We show scholarships based on your profile.'
   },
   {
-    title: 'Deadline Alerts',
-    body: "Get notified before deadlines close on scholarships you've saved."
+    title: 'Deadline alerts',
+    body: 'Never miss an application again.'
   }
+] as const;
+
+const whatYouGetBullets = [
+  'Only scholarships you qualify for',
+  'No wasted time reading eligibility rules',
+  'Faster applications',
+  'Clear deadlines'
+] as const;
+
+const trustPoints = [
+  'Thousands of scholarships tracked',
+  'Updated daily',
+  'Built specifically for international students'
 ] as const;
 
 const stats = [
@@ -133,11 +146,6 @@ const faqItems: SiteFaqItem[] = [
       "Yes, though competitive. Fulbright, Hubert Humphrey, and many university-specific programs offer full tuition + living stipend. We list these and flag when they're open to your country."
   },
   {
-    question: 'Do I need a Social Security Number to apply?',
-    answer:
-      'Not for most private scholarships. Some government-linked programs may require it, but the majority of private foundation awards do not.'
-  },
-  {
     question: 'How is ScholarshipTop different from Fastweb or Scholarships.com?',
     answer:
       'Those platforms show all scholarships together with no clean international filter. We built a dedicated pathway for international students so you only see what you can actually apply to.'
@@ -152,31 +160,50 @@ export default function InternationalStudentsPage() {
       >
         <div className={`${container} max-w-4xl text-center`}>
           <h1 className="text-pretty text-[clamp(1.8125rem,5.25vw+0.8rem,2.25rem)] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
-            Find Scholarships You Can Actually Apply to — as an International
-            Student
+            Find scholarships you can actually apply to
           </h1>
           <p className={`mx-auto mt-5 max-w-3xl text-pretty sm:mt-6 ${ledeMuted}`}>
-            Answer a few quick questions and get matched with scholarships open
-            to F1 visa holders and non-US citizens.
+            Stop wasting time on scholarships you don’t qualify for. We show only
+            opportunities open to international students.
           </p>
           <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-4 sm:mt-10 sm:flex-row sm:justify-center sm:gap-5">
             <Link href={internationalFriendlyHref} className={homePrimaryCtaClass}>
               Find My Scholarships
             </Link>
           </div>
-          <p className="mt-5 text-sm font-medium text-gray-500 sm:mt-6">
-            Verified listings · International-eligible filter · Official
-            application links
-          </p>
         </div>
       </section>
 
       <section
-        className={`border-b border-gray-100 bg-gray-50 py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-gray-50 py-8 sm:py-10 ${homeSectionPadX}`}
+        aria-label="Why trust ScholarshipTop"
+      >
+        <div className={`${container} max-w-5xl`}>
+          <ul className="grid gap-4 sm:grid-cols-3 sm:gap-6">
+            {trustPoints.map((line) => (
+              <li
+                key={line}
+                className="flex items-start gap-3 rounded-2xl border border-gray-200/80 bg-white px-5 py-4 text-left text-sm font-medium text-gray-800 shadow-sm sm:flex-col sm:items-center sm:px-4 sm:py-5 sm:text-center"
+              >
+                <span
+                  className="mt-0.5 text-lg text-emerald-600 sm:mt-0"
+                  aria-hidden
+                >
+                  ✔
+                </span>
+                <span className="leading-snug sm:text-base">{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section
+        className={`border-b border-gray-100 bg-white py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
       >
         <div className={`${container} max-w-5xl`}>
           <h2 className={`text-center text-pretty ${h2Section}`}>
-            The problem every international student knows
+            Why international students struggle to find scholarships
           </h2>
           <div className="mt-10 grid gap-6 sm:mt-12 sm:grid-cols-3 sm:gap-7">
             {painPoints.map((item) => (
@@ -202,7 +229,7 @@ export default function InternationalStudentsPage() {
       </section>
 
       <section
-        className={`border-b border-gray-100 bg-white py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-gray-50 py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
       >
         <div className={`${container} max-w-5xl`}>
           <h2 className={`text-center text-pretty ${h2Section}`}>
@@ -223,6 +250,34 @@ export default function InternationalStudentsPage() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section
+        className={`border-b border-gray-100 bg-white py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
+        aria-labelledby="what-you-get-heading"
+      >
+        <div className={`${container} max-w-2xl`}>
+          <h2
+            id="what-you-get-heading"
+            className={`text-center text-pretty ${h2Section}`}
+          >
+            What you get with ScholarshipTop
+          </h2>
+          <ul className="mt-8 space-y-3 sm:mt-10 sm:space-y-3.5">
+            {whatYouGetBullets.map((line) => (
+              <li
+                key={line}
+                className="flex items-start gap-3 text-base leading-relaxed text-gray-700"
+              >
+                <span
+                  className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-900"
+                  aria-hidden
+                />
+                {line}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -253,7 +308,7 @@ export default function InternationalStudentsPage() {
       >
         <div className={`${container} max-w-5xl`}>
           <h2 className={`text-center text-pretty ${h2Section}`}>
-            What kinds of scholarships can international students get?
+            Real scholarships you can apply to
           </h2>
           <div className="mt-10 grid gap-6 sm:mt-12 sm:grid-cols-2 sm:gap-7">
             {scholarshipTypes.map((item) => (
@@ -298,7 +353,7 @@ export default function InternationalStudentsPage() {
             id="international-students-final-cta-heading"
             className="text-pretty text-2xl font-bold leading-[1.1] tracking-tight text-gray-900 sm:text-4xl sm:leading-[1.08] lg:text-[2.5rem]"
           >
-            Stop filtering. Start applying.
+            Stop wasting time. Start applying.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-gray-600 sm:mt-5 sm:text-xl">
             Answer a few questions about your background and degree — we&apos;ll
