@@ -21,6 +21,8 @@ const pageDescription =
   'Find scholarships open to international students and F1 visa holders in the USA. Filter by eligibility, country, and degree level. Updated listings with official application links.';
 
 const pageCanonical = getURL('international-students');
+const internationalFriendlyHref =
+  '/scholarships?tab=matches&scope=catalog&aud=international_friendly';
 
 export const metadata: Metadata = {
   title: 'Scholarships for International Students in the USA 2026 | ScholarshipTop',
@@ -100,24 +102,6 @@ const stats = [
   }
 ] as const;
 
-const countryNames = [
-  'India',
-  'Nigeria',
-  'China',
-  'Brazil',
-  'Kenya',
-  'Pakistan',
-  'Ghana',
-  'South Korea',
-  'Mexico',
-  'Philippines',
-  'Bangladesh',
-  'Indonesia',
-  'Nepal',
-  'Ethiopia',
-  'Colombia'
-] as const;
-
 const scholarshipTypes = [
   {
     title: 'University Merit Scholarships',
@@ -176,7 +160,7 @@ export default function InternationalStudentsPage() {
             to F1 visa holders and non-US citizens.
           </p>
           <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-4 sm:mt-10 sm:flex-row sm:justify-center sm:gap-5">
-            <Link href="/get-scholarships" className={homePrimaryCtaClass}>
+            <Link href={internationalFriendlyHref} className={homePrimaryCtaClass}>
               Find My Scholarships
             </Link>
           </div>
@@ -269,40 +253,6 @@ export default function InternationalStudentsPage() {
       >
         <div className={`${container} max-w-5xl`}>
           <h2 className={`text-center text-pretty ${h2Section}`}>
-            Scholarships by your home country
-          </h2>
-          <p className={`mx-auto mt-4 max-w-2xl text-center text-pretty ${ledeMuted}`}>
-            Many programs target students from specific regions. Browse by where
-            you&apos;re from.
-          </p>
-          <div className="mx-auto mt-9 flex max-w-4xl flex-wrap justify-center gap-3 sm:mt-10">
-            {countryNames.map((country) => (
-              <Link
-                key={country}
-                href={`/scholarships?country=${encodeURIComponent(country)}`}
-                className="inline-flex items-center rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-[0_4px_14px_-10px_rgba(15,23,42,0.2)] transition duration-200 hover:border-gray-300 hover:bg-gray-50"
-              >
-                {country}
-              </Link>
-            ))}
-          </div>
-          <div className="mt-8 text-center sm:mt-10">
-            <Link
-              href="/get-scholarships"
-              className="text-base font-semibold text-gray-900 underline decoration-gray-300 underline-offset-4 transition hover:decoration-gray-700"
-            >
-              Don&apos;t see your country? Build your profile and we&apos;ll
-              match you →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section
-        className={`border-b border-gray-100 bg-gray-50 py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
-      >
-        <div className={`${container} max-w-5xl`}>
-          <h2 className={`text-center text-pretty ${h2Section}`}>
             What kinds of scholarships can international students get?
           </h2>
           <div className="mt-10 grid gap-6 sm:mt-12 sm:grid-cols-2 sm:gap-7">
@@ -324,7 +274,7 @@ export default function InternationalStudentsPage() {
       </section>
 
       <section
-        className={`border-b border-gray-100 bg-white py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
+        className={`border-b border-gray-100 bg-gray-50 py-12 sm:py-14 lg:py-16 ${homeSectionPadX}`}
       >
         <div className={`${container} max-w-3xl`}>
           <SiteFaqAccordion
@@ -355,7 +305,7 @@ export default function InternationalStudentsPage() {
             show you scholarships you&apos;re actually eligible for.
           </p>
           <Link
-            href="/get-scholarships"
+            href={internationalFriendlyHref}
             className={`mx-auto mt-9 w-full max-w-md sm:mt-10 sm:max-w-lg ${homePrimaryCtaClass}`}
           >
             Find My Scholarships
