@@ -184,6 +184,20 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   ignored: 0
 };
 
+/**
+ * Hub SSR (`fetchInitialHubScholarshipsPayload`) does not pass per-user saved/ignored/email_ids into
+ * the list request. Using that empty SSR list as `useQuery` initialData still matches
+ * `hubListRequestKey` (URL-only), so with `staleTime` the client would not refetch after
+ * collection ids hydrate — Saved/Ignored stayed at 0 despite sidebar counts.
+ */
+const HUB_TABS_SSR_NEVER_SEEDS_ID_LIST: readonly ScholarshipListTabId[] = [
+  'saved',
+  'ignored',
+  'started',
+  'submitted',
+  'from-email'
+];
+
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 
 function parseIdCsv(raw: string | null): string[] {
@@ -1876,6 +1890,7 @@ function ScholarshipsPageInner({
     if (skipSsrListForGuestHubBest) return undefined;
     if (!initialPayload?.result) return undefined;
     if (initialPayload.requestKey !== hubListRequestKey) return undefined;
+    if (HUB_TABS_SSR_NEVER_SEEDS_ID_LIST.includes(activeTab)) return undefined;
     const r = initialPayload.result;
     return {
       scholarships: r.scholarships,
@@ -1887,7 +1902,7 @@ function ScholarshipsPageInner({
       matchPaywall: r.matchPaywall,
       seoFallback: r.seoFallback
     } as ScholarshipsListResponse;
-  }, [initialPayload, hubListRequestKey, skipSsrListForGuestHubBest]);
+  }, [initialPayload, hubListRequestKey, skipSsrListForGuestHubBest, activeTab]);
 
   /** Incl. user collections so list refetches when saved/ignored ids hydrate after `refreshSavedIdsFromApi` (sidebar would show counts from state while list stayed a stale 0 from first empty-id POST). */
   const hubListQueryKey = useMemo(

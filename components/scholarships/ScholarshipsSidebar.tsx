@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
   Ban,
-  Bookmark,
   Flame,
   Globe,
   Heart,
@@ -57,7 +56,7 @@ type NavDef = {
 };
 
 type StaticNavDef = {
-  id: 'best-recommendation' | 'recommended';
+  id: 'best-recommendation';
   label: string;
   icon: LucideIcon;
 };
@@ -70,7 +69,6 @@ const GUEST_GATED_TAB_IDS = new Set<ScholarshipListTabId>();
 
 /** Paid-only tabs for signed-in users without active subscription. */
 const SUBSCRIPTION_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
-  'recommended',
   'easy-apply',
   'hot-deadlines'
 ]);
@@ -80,11 +78,6 @@ const STATIC_TOP_ROWS: StaticNavDef[] = [
     id: 'best-recommendation',
     label: 'Best recommendation',
     icon: Flame
-  },
-  {
-    id: 'recommended',
-    label: 'Saved Filters',
-    icon: Bookmark
   }
 ];
 

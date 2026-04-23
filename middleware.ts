@@ -56,6 +56,18 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  /** Old hub tab «Saved Filters» (tab=recommended) — send users to catalog Matches. */
+  if (pathname === '/scholarships' || pathname === '/scholarships/') {
+    if (request.nextUrl.searchParams.get('tab') === 'recommended') {
+      const url = request.nextUrl.clone();
+      url.searchParams.set('tab', 'matches');
+      if (!url.searchParams.get('scope')) {
+        url.searchParams.set('scope', 'catalog');
+      }
+      return NextResponse.redirect(url, 308);
+    }
+  }
+
   if (pathname === '/content-hub' || pathname.startsWith('/content-hub/')) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.replace(/^\/content-hub/, '/resources');
