@@ -1889,6 +1889,7 @@ function ScholarshipsPageInner({
     } as ScholarshipsListResponse;
   }, [initialPayload, hubListRequestKey, skipSsrListForGuestHubBest]);
 
+  /** Incl. user collections so list refetches when saved/ignored ids hydrate after `refreshSavedIdsFromApi` (sidebar would show counts from state while list stayed a stale 0 from first empty-id POST). */
   const hubListQueryKey = useMemo(
     () =>
       [
@@ -1901,6 +1902,7 @@ function ScholarshipsPageInner({
         appliedProviderSlug,
         guestBestRecommendationPreviewEnabled ? 1 : 0,
         listingRequestFingerprint,
+        userCollectionsFingerprint,
         hubListingPage,
         savedFiltersSnapshotJson,
         catalogListScope,
@@ -1913,6 +1915,7 @@ function ScholarshipsPageInner({
       appliedProviderSlug,
       guestBestRecommendationPreviewEnabled,
       listingRequestFingerprint,
+      userCollectionsFingerprint,
       hubListingPage,
       savedFiltersSnapshotJson,
       catalogListScope,
