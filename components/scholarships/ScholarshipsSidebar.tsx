@@ -183,8 +183,10 @@ export default function ScholarshipsSidebar({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const syncFromLocation = () => {
-      setPathname(window.location.pathname);
-      setSearchParams(new URLSearchParams(window.location.search));
+      setTimeout(() => {
+        setPathname(window.location.pathname);
+        setSearchParams(new URLSearchParams(window.location.search));
+      }, 0);
     };
     const originalPushState = window.history.pushState;
     const originalReplaceState = window.history.replaceState;

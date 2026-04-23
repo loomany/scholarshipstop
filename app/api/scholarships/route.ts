@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
 import { createClient } from '@/utils/supabase/server';
 import { createPublicClient } from '@/utils/supabase/public';
 import {
@@ -31,9 +32,8 @@ import {
   buildScholarshipProfileFilterSeed,
   stripHubProfileHardMatchMoreFilters
 } from '@/lib/scholarships/profileFilterDefaults';
-import { getUserSubscriptionStatus } from '@/utils/supabase/queries';
-
-type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
+import { getSubscription } from '@/utils/supabase/queries';
+import { hasActiveSubscriptionAccess } from '@/lib/payments/subscriptionEntitlements';
 import {
   moreFiltersFromJson,
   moreFiltersToJson,
@@ -45,6 +45,8 @@ import {
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
 import { applyV2ReadPathToLegacyRequest } from '@/lib/scholarships-v2/runtime/applyV2ReadPathToLegacyRequest';
+
+type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 
 export const dynamic = 'force-dynamic';
 
@@ -74,6 +76,46 @@ function hubSidebarMetaDebugEnabled(): boolean {
     process.env.NODE_ENV === 'development' ||
     process.env.SCHOLARSHIPS_HUB_SIDEBAR_DEBUG === '1'
   );
+}
+
+const SCHOLARSHIPS_API_PROFILE_CACHE_SEC = 20;
+
+/**
+ * One `profiles` row: short `unstable_cache` with direct fallback (avoids 500 on cache hiccup;
+ * also avoids a second `profiles` SELECT that `getUserSubscriptionStatus` would do).
+ */
+async function loadProfileForScholarshipsList(
+  userId: string,
+  requestSupabase: any
+): Promise<ProfilesRow | null> {
+  const selectProfile = async (client: any): Promise<ProfilesRow | null> => {
+    const { data, error } = await client
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle();
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  };
+
+  const cached = unstable_cache(
+    async () => selectProfile(createClient() as any),
+    ['api-scholarships-profile', userId],
+    { revalidate: SCHOLARSHIPS_API_PROFILE_CACHE_SEC }
+  );
+
+  try {
+    return await cached();
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.warn('[scholarships api] profile cache path failed, direct read', {
+      userId,
+      message: e instanceof Error ? e.message : String(e)
+    });
+    return selectProfile(requestSupabase);
+  }
 }
 
 async function emptyListResult(
@@ -300,7 +342,7 @@ async function handleList(
     !seoBody?.seoListingFallback &&
     !metaOnly &&
     !countOnly;
-let runtimeReadPath: RuntimeReadPath = 'legacy';
+  let runtimeReadPath: RuntimeReadPath = 'legacy';
 
   if (v2ReadPathEligible) {
     req = applyV2ReadPathToLegacyRequest({
@@ -318,6 +360,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   let profileRow: ProfilesRow | null = null;
   let isProSubscriber = false;
   let profileFilterSeed = null as ReturnType<typeof buildScholarshipProfileFilterSeed>;
+  let authBlockMs: number | undefined;
   /**
    * Load auth/profile only when the response actually needs personalized context.
    * Session is resolved once via `cookieSupabase` so listing can use `publicSupabase` for guests.
@@ -347,6 +390,9 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       shouldLoadAuthAndProfile,
       countOnly,
       includeMeta,
+      metaOnly,
+      sidebarOnlyMeta,
+      includeCategoryCounts,
       category_page: Boolean(categoryPageParam?.trim()),
       long_tail: lt.filter(Boolean).length > 0,
       similar_to: Boolean(similarTo?.trim()),
@@ -356,18 +402,32 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   }
 
   if (shouldLoadAuthAndProfile && sessionUser?.id) {
+    const tAuth0 = performance.now();
     authUser = sessionUser;
-    const { data: prof } = await cookieSupabase
-      .from('profiles')
-      .select('*')
-      .eq('id', sessionUser.id)
-      .maybeSingle();
+    const [prof, subscription] = await Promise.all([
+      loadProfileForScholarshipsList(sessionUser.id, cookieSupabase),
+      getSubscription(sessionUser.id)
+    ]);
     profileRow = prof;
     profileFilterSeed = buildScholarshipProfileFilterSeed(prof);
-    isProSubscriber = await getUserSubscriptionStatus(
-      cookieSupabase,
-      sessionUser.id
-    );
+    isProSubscriber = hasActiveSubscriptionAccess(prof, subscription);
+    authBlockMs = performance.now() - tAuth0;
+  }
+
+  if (
+    process.env.NODE_ENV === 'development' &&
+    shouldLoadAuthAndProfile &&
+    sessionUser?.id
+  ) {
+    // eslint-disable-next-line no-console -- list/meta auth timing
+    console.log('[scholarships api] profile+subscription block', {
+      reqId: hubDebugReqId,
+      authBlockMs: authBlockMs ?? null,
+      metaOnly,
+      sidebarOnlyMeta,
+      includeCategoryCounts,
+      tab: req.tab
+    });
   }
   const profileSavedFiltersSnapshotJson =
     savedFiltersSnapshotJsonFromProfile(profileRow);
@@ -407,6 +467,10 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     console.log('[scholarships-hub-meta-debug] api after auth/profile', {
       reqId: hubDebugReqId,
       ts: new Date().toISOString(),
+      authBlockMs: authBlockMs ?? null,
+      metaOnly,
+      sidebarOnlyMeta,
+      includeCategoryCounts,
       authUserId: authUser?.id ?? null,
       profileExists: profileRow != null
     });

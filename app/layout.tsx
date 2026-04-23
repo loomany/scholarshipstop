@@ -79,12 +79,11 @@ export const metadata: Metadata = {
     description: SITE_TITLE_TAGLINE,
     images: ['/logo-preview.png']
   },
-  appleWebApp: {
-    title: SITE_DEFAULT_TITLE,
-    statusBarStyle: 'black'
-  },
   other: {
-    'msapplication-TileColor': '#000000'
+    'msapplication-TileColor': '#000000',
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-title': SITE_DEFAULT_TITLE,
+    'apple-mobile-web-app-status-bar-style': 'black'
   }
 };
 

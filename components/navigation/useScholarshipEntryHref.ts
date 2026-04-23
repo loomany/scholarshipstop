@@ -22,9 +22,6 @@ export function useScholarshipEntryHref(): ScholarshipEntryHrefState {
 
     const resolveForSession = (isAuthenticated: boolean) => {
       const decision = resolveScholarshipEntryDecisionClient(isAuthenticated);
-      if (!isAuthenticated && decision.reason === 'guest_missing_quiz') {
-        console.info('[scholarship-entry-cta] unresolved guest quiz completion');
-      }
       setState({ href: decision.href, resolved: true });
     };
 
