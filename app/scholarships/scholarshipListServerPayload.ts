@@ -107,35 +107,68 @@ export async function fetchInitialHubScholarshipsPayload(
   }
 
   if (!profile && req.tab === 'best-recommendation') {
-    const meta = await fetchScholarshipListMeta(supabase, req, defaultBounds, {
-      includeCategoryCounts: true,
-      skipBestRecommendationSidebarCount: true,
-      skipGuestZeroedSidebarCounts: true
+    try {
+      const meta = await fetchScholarshipListMeta(supabase, req, defaultBounds, {
+        includeCategoryCounts: true,
+        skipBestRecommendationSidebarCount: true,
+        skipGuestZeroedSidebarCounts: true
+      });
+      applyListingMetaGuestPatches(meta, { authUser: false });
+      return {
+        scholarships: [],
+        total: 0,
+        page: req.page,
+        limit: req.limit,
+        meta
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      // eslint-disable-next-line no-console -- keep SSR hub rendering alive on meta failures
+      console.error('[fetchInitialHubScholarshipsPayload] guest best meta failed', {
+        tab: req.tab,
+        message
+      });
+      return {
+        scholarships: [],
+        total: 0,
+        page: req.page,
+        limit: req.limit,
+        errorMessage: `Scholarship meta failed during initial load: ${message}`
+      };
+    }
+  }
+
+  let result: ScholarshipListResult;
+  try {
+    result = await executeScholarshipListQuery(
+      supabase,
+      profile ? { ...req, personalizedProfile: profile } : req,
+      {
+        countOnly: false,
+        /**
+         * Include list meta on first paint so category counters are populated even
+         * before client-side `/api/scholarships?meta=1` warms up.
+         */
+        includeMeta: true,
+        includeCategoryCounts: true,
+        isProSubscriber: false
+      }
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    // eslint-disable-next-line no-console -- keep SSR hub rendering alive on list failures
+    console.error('[fetchInitialHubScholarshipsPayload] initial query failed', {
+      tab: req.tab,
+      message
     });
-    applyListingMetaGuestPatches(meta, { authUser: false });
     return {
       scholarships: [],
       total: 0,
       page: req.page,
       limit: req.limit,
-      meta
+      errorMessage: `Scholarship list failed during initial load: ${message}`
     };
   }
-
-  const result = await executeScholarshipListQuery(
-    supabase,
-    profile ? { ...req, personalizedProfile: profile } : req,
-    {
-      countOnly: false,
-      /**
-       * Include list meta on first paint so category counters are populated even
-       * before client-side `/api/scholarships?meta=1` warms up.
-       */
-      includeMeta: true,
-      includeCategoryCounts: true,
-      isProSubscriber: false
-    }
-  );
 
   /** Hub SSR uses public Supabase only; align sidebar with POST `/api/scholarships` for guests. */
   if (!profile && result.meta) {

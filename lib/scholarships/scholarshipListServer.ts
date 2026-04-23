@@ -92,6 +92,8 @@ type ScholarshipListMetaOpts = {
   includeCategoryCounts?: boolean;
   /** Reuse an already computed exact total when it matches sidebar Best recommendation semantics. */
   bestRecommendationCountOverride?: number;
+  /** Reuse an already computed exact total when it matches sidebar Easy apply semantics. */
+  easyApplyCountOverride?: number;
   /** Reuse an already computed exact total when it matches sidebar Matches semantics. */
   matchesCountOverride?: number;
   /** Guest SSR first-load: safe only where downstream patches always zero this count. */
@@ -193,6 +195,7 @@ export type ScholarshipListResult = {
   page: number;
   limit: number;
   meta?: ScholarshipListMeta;
+  errorMessage?: string;
   /** Free plan: extra matches exist beyond `visibleMax`. */
   matchPaywall?: { lockedCount: number; visibleMax: number };
   /** Long-tail / category SEO listing relax metadata (API only). */
@@ -216,6 +219,15 @@ const listMetaCache = new Map<
     expiresAt: number;
   }
 >();
+
+function buildEasyApplyOrParts(sel: Iterable<string>): string[] {
+  const parts: string[] = [];
+  for (const id of sel) {
+    if (id === 'no_essay') parts.push(...NO_ESSAY_SQL_PARTS);
+    else parts.push(`easy_apply_flags.cs.${JSON.stringify([id])}`);
+  }
+  return parts;
+}
 
 function readTtlValue<T>(entry: { value: T; expiresAt: number } | null | undefined): T | null {
   const now = Date.now();
@@ -752,11 +764,7 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   };
   const addIncludeEasyApply = (sel: Set<string>) => {
     if (sel.size === 0) return;
-    const parts: string[] = [];
-    for (const id of Array.from(sel)) {
-      if (id === 'no_essay') parts.push(...NO_ESSAY_SQL_PARTS);
-      else parts.push(`easy_apply_flags.cs.${JSON.stringify([id])}`);
-    }
+    const parts = buildEasyApplyOrParts(sel);
     if (parts.length > 0) q = q.or(parts.join(','));
   };
   addIncludeCs('eligibility_tags', f.includeEligibility);
@@ -971,12 +979,8 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
       /** Saved Filters tab: same catalog scope as Matches; narrowing is via `moreFilters` only. */
       return applyTabScopeFixed({ ...req, tab: 'matches' }, q);
     }
-    case 'easy-apply': {
-      let nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
-      const flag = (id: string) =>
-        `easy_apply_flags.cs.${JSON.stringify([id])}`;
-      return nq.or([...NO_ESSAY_SQL_PARTS, flag('easy_apply'), flag('quick_apply')].join(','));
-    }
+    case 'easy-apply':
+      return applyTabScopeFixed({ ...req, tab: 'matches' }, q);
     case 'hot-deadlines': {
       const nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
       return nq.in('deadline_bucket', ['lt_1d', 'd1_7']);
@@ -1180,6 +1184,7 @@ function buildListMetaCacheKey(
   return [
     req.tab,
     `bestMode:${opts?.skipBestRecommendationSidebarCount ? 'skip' : typeof opts?.bestRecommendationCountOverride === 'number' ? 'override' : 'live'}`,
+    `easyMode:${typeof opts?.easyApplyCountOverride === 'number' ? 'override' : 'live'}`,
     `matchesMode:${typeof opts?.matchesCountOverride === 'number' ? 'override' : 'live'}`,
     `guestZeroed:${opts?.skipGuestZeroedSidebarCounts ? 'skip' : 'live'}`,
     savedSnapKey,
@@ -1619,6 +1624,7 @@ export async function executeScholarshipListQuery(
   if (opts.includeMeta && bounds) {
     meta = await fetchScholarshipListMeta(supabase, req, bounds, {
       includeCategoryCounts: opts.includeCategoryCounts,
+      easyApplyCountOverride: canReuseEasyApplyTotalForSidebar(req) ? rawTotal : undefined,
       matchesCountOverride: canReuseMatchesTotalForSidebar(req) ? rawTotal : undefined
     });
   }
@@ -1750,6 +1756,10 @@ function canReuseMatchesTotalForSidebar(req: ScholarshipListRequest): boolean {
   return JSON.stringify(moreFiltersToJson(req.moreFilters)) === JSON.stringify(moreFiltersToJson(stripped));
 }
 
+function canReuseEasyApplyTotalForSidebar(req: ScholarshipListRequest): boolean {
+  return req.tab === 'easy-apply' && req.moreFilters.citizenshipAudience === 'any';
+}
+
 /** Align `moreFilters` / URL deadline with tab-only SQL (easy-apply, hot-deadlines). */
 function normalizeTabScopedMoreFilters(
   req: ScholarshipListRequest
@@ -1786,6 +1796,7 @@ export async function fetchScholarshipSidebarCounts(
   opts?: Pick<
     ScholarshipListMetaOpts,
     | 'bestRecommendationCountOverride'
+    | 'easyApplyCountOverride'
     | 'matchesCountOverride'
     | 'skipBestRecommendationSidebarCount'
     | 'skipGuestZeroedSidebarCounts'
@@ -1819,6 +1830,9 @@ export async function fetchScholarshipSidebarCounts(
         return { t, n: await countFor(supabase, r, 'recommended') };
       }
       if (t === 'easy-apply') {
+        if (typeof opts?.easyApplyCountOverride === 'number') {
+          return { t, n: opts.easyApplyCountOverride };
+        }
         return {
           t,
           n: await countFor(
@@ -2196,7 +2210,7 @@ export async function fetchScholarshipListMeta(
   const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
   const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
-  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v7`;
+  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v8`;
   const cached = readTtlValue(listMetaCache.get(cacheKey));
   if (cached) {
     return cloneScholarshipListMeta(cached);
@@ -2207,13 +2221,26 @@ export async function fetchScholarshipListMeta(
 
   const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
   if (includeCategoryCounts) {
-    const categoryParts = await Promise.all(
+    const categoryParts = await Promise.allSettled(
       SCHOLARSHIP_CATEGORY_ORDER.map(async (id) => ({
         id,
         n: await countCategory(supabase, categoryReq, id)
       }))
     );
-    for (const { id, n } of categoryParts) categoryCounts[id] = n;
+    categoryParts.forEach((part, index) => {
+      const id = SCHOLARSHIP_CATEGORY_ORDER[index]!;
+      if (part.status === 'fulfilled') {
+        categoryCounts[id] = part.value.n;
+        return;
+      }
+      // eslint-disable-next-line no-console -- keep list rendering even if one count query fails
+      console.warn(
+        '[fetchScholarshipListMeta] category count failed',
+        id,
+        postgrestErrorToMessage(part.reason)
+      );
+      categoryCounts[id] = 0;
+    });
   } else {
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) categoryCounts[id] = 0;
   }

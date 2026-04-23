@@ -107,7 +107,8 @@ import {
 import {
   postScholarshipsList,
   postScholarshipsCount,
-  postScholarshipsMeta
+  postScholarshipsMeta,
+  scholarshipRequestErrorMessage
 } from './scholarshipListFetch';
 import type { InitialScholarshipsPayload } from './scholarshipListServerPayload';
 import type { LongTailRouteScopePayload } from './scholarshipListServerPayload';
@@ -333,7 +334,12 @@ function ScholarshipsPageInner({
   const [hasInitialLoadCompleted, setHasInitialLoadCompleted] = useState(
     Boolean(initialPayload?.result)
   );
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(
+    Boolean(initialPayload?.result.errorMessage)
+  );
+  const [errorMessage, setErrorMessage] = useState(
+    initialPayload?.result.errorMessage ?? ''
+  );
   const [query, setQuery] = useState(parsedList.q);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
@@ -1806,11 +1812,13 @@ function ScholarshipsPageInner({
           setScholarships([]);
           setTotalCount(0);
           setHasError(false);
+          setErrorMessage('');
           setIsLoading(false);
           return;
         }
         setIsLoading(true);
         setHasError(false);
+        setErrorMessage('');
         const ids = userListIdsRef.current;
         const sp = buildHubListingSearchParams({
           base: new URLSearchParams(searchParamsString),
@@ -1876,6 +1884,8 @@ function ScholarshipsPageInner({
         if (cancelled) return;
         setScholarships(data.scholarships);
         setTotalCount(data.total);
+        setHasError(Boolean(data.errorMessage));
+        setErrorMessage(data.errorMessage ?? '');
         if (cDbg) {
           const nextMeta = data.meta;
           // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
@@ -1914,7 +1924,10 @@ function ScholarshipsPageInner({
       } catch (e) {
         // eslint-disable-next-line no-console -- list fetch diagnostics
         console.error('[ScholarshipsHub] postScholarshipsList failed', e);
-        if (!cancelled) setHasError(true);
+        if (!cancelled) {
+          setHasError(true);
+          setErrorMessage(scholarshipRequestErrorMessage(e));
+        }
       } finally {
         if (!cancelled) {
           setIsLoading(false);
@@ -1982,7 +1995,8 @@ function ScholarshipsPageInner({
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-          providerSlug: appliedProviderSlug
+          providerSlug: appliedProviderSlug,
+          sidebarOnlyMeta: true
         });
         if (cancelled) return;
         const sidebarMeta = metaResponse.meta ?? null;
@@ -1997,9 +2011,13 @@ function ScholarshipsPageInner({
           );
           metaKeySynced.current = metaKey;
         }
-      } catch {
+      } catch (e) {
         if (!cancelled) {
-          // no-op: keep fallback sidebar until next attempt
+          // eslint-disable-next-line no-console -- sidebar meta diagnostics
+          console.warn(
+            '[ScholarshipsHub] postScholarshipsMeta failed',
+            scholarshipRequestErrorMessage(e, 'Scholarship meta failed.')
+          );
         }
       } finally {
         if (metaRequestInFlightRef.current === metaKey) {
@@ -2054,7 +2072,7 @@ function ScholarshipsPageInner({
       out.push({
         key: 'scope-easy-apply',
         title: 'This view',
-        body: 'Easy Apply uses our catalog rules for quick applications (few requirements, optional essay, or tags like easy apply). That layer is applied on top of the filters you set below.'
+        body: 'Easy Apply uses our catalog rules for No Essay, Easy Apply, and Quick Apply scholarships. That layer is applied on top of the filters you set below.'
       });
     }
     if (activeTab === 'hot-deadlines') {
@@ -2666,7 +2684,9 @@ function ScholarshipsPageInner({
               ) : blockingInitialLoad ? (
             <ScholarshipsBrandLoading density="compact" showTopAccentBar />
           ) : hasError ? (
-            <div className="text-red-600">Failed to load scholarships</div>
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {errorMessage || 'Failed to load scholarships.'}
+            </div>
           ) : profileCompletionEmptyOnly ? (
             <div className="mt-4 flex w-full flex-col items-center px-2 pb-10 pt-2 sm:mt-6 sm:pb-16 sm:pt-4">
               <div className="w-full max-w-xl rounded-2xl border border-[#FFD9B3] bg-gradient-to-b from-[#FFF8F1] to-white p-6 text-center shadow-sm sm:p-8">

@@ -131,6 +131,7 @@ function resolveActiveTabId(
   guestMode?: boolean
 ): ScholarshipListTabId | null {
   if (!pathname) return null;
+  if (pathname.startsWith('/scholarships/category/')) return 'matches';
   const isDetail =
     /^\/scholarships\/[^/]+$/.test(pathname) && pathname !== '/scholarships';
   if (isDetail) return 'matches';

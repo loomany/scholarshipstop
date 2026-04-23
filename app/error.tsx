@@ -12,6 +12,11 @@ export default function ErrorPage({
   useEffect(() => {
     console.error(error);
   }, [error]);
+  const detail = error.message?.trim();
+  const safeDetail =
+    detail && detail !== 'An unexpected error occurred.'
+      ? detail.slice(0, 240)
+      : null;
 
   return (
     <div className="mx-auto flex min-h-[50vh] max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
@@ -21,6 +26,14 @@ export default function ErrorPage({
       <p className="mt-3 text-sm leading-relaxed text-zinc-600">
         An unexpected error occurred. You can try again or return to the home page.
       </p>
+      {safeDetail ? (
+        <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+          {safeDetail}
+        </p>
+      ) : null}
+      {error.digest ? (
+        <p className="mt-2 text-xs text-zinc-500">Error ID: {error.digest}</p>
+      ) : null}
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <button
           type="button"

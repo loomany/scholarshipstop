@@ -20,6 +20,7 @@ import {
   savedFiltersSnapshotJsonFromProfile,
   scholarshipListRequestFromParts,
   type ScholarshipListMeta,
+  type ScholarshipListResult,
   type ScholarshipListRequest
 } from '@/lib/scholarships/scholarshipListServer';
 import type { Database } from '@/types_db';
@@ -162,7 +163,8 @@ async function handleList(
   /** Hub: optional saved-filter snapshot for `recommended` sidebar count (`null` = none saved). */
   savedFiltersSnapshotBody?: MoreFiltersJson | null,
   providerSlugBody?: string | null,
-  guestBestRecommendationPreviewEnabled = false
+  guestBestRecommendationPreviewEnabled = false,
+  sidebarOnlyMeta = false
 ) {
   const cookieSupabase = createClient() as any;
   const publicSupabase = createPublicClient() as any;
@@ -229,6 +231,11 @@ async function handleList(
     !(categoryPageParam?.trim()) &&
     lt.filter(Boolean).length === 0 &&
     !(similarTo?.trim());
+  const includeCategoryCounts =
+    !sidebarOnlyMeta &&
+    (Boolean(isHubPrimaryListing) ||
+      !anonymousCatalogFastPath ||
+      Boolean(categoryPageParam?.trim()));
 
   const tab = isHubPrimaryListing
     ? parseHubScholarshipTabParam(searchParams.get('tab'))
@@ -397,16 +404,18 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
   }
 
   if (metaOnly) {
-    const includeCategoryCounts =
-      Boolean(isHubPrimaryListing) ||
-      !anonymousCatalogFastPath ||
-      Boolean(categoryPageParam?.trim());
-    const meta = await fetchScholarshipListMeta(listingSupabase, req, bounds, {
-      includeCategoryCounts,
-      skipBestRecommendationSidebarCount:
-        !authUser && !guestBestRecommendationPreviewEnabled,
-      skipGuestZeroedSidebarCounts: !authUser
-    });
+    let meta: ScholarshipListMeta;
+    try {
+      meta = await fetchScholarshipListMeta(listingSupabase, req, bounds, {
+        includeCategoryCounts,
+        skipBestRecommendationSidebarCount:
+          !authUser && !guestBestRecommendationPreviewEnabled,
+        skipGuestZeroedSidebarCounts: !authUser
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Scholarship meta query failed for tab "${req.tab}": ${message}`);
+    }
     if (profileRow) {
       meta.profileMatchSummary = profileMatchSummaryFromRow(profileRow);
       meta.profileFilterSeed = profileFilterSeed;
@@ -573,37 +582,38 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     );
   }
 
-  const result = seoFallbackEnabled
-    ? await executeScholarshipListQueryWithSeoFallback(
-        listingSupabase,
-        req,
-        {
+  let result: ScholarshipListResult;
+  try {
+    result = seoFallbackEnabled
+      ? await executeScholarshipListQueryWithSeoFallback(
+          listingSupabase,
+          req,
+          {
+            countOnly,
+            includeMeta: includeMeta && !countOnly,
+            includeCategoryCounts,
+            isProSubscriber
+          },
+          {
+            enable: true,
+            slugOnlyMoreFilters: slugOnlyMf,
+            bounds,
+            isCategorySeo: Boolean(
+              req.categoryPageSlug?.trim() || req.catalogSubjectCategoryId
+            )
+          }
+        )
+      : await executeScholarshipListQuery(listingSupabase, req, {
           countOnly,
           includeMeta: includeMeta && !countOnly,
-          includeCategoryCounts:
-            Boolean(isHubPrimaryListing) ||
-            !anonymousCatalogFastPath ||
-            Boolean(categoryPageParam?.trim()),
+          includeCategoryCounts,
           isProSubscriber
-        },
-        {
-          enable: true,
-          slugOnlyMoreFilters: slugOnlyMf,
-          bounds,
-          isCategorySeo: Boolean(
-            req.categoryPageSlug?.trim() || req.catalogSubjectCategoryId
-          )
-        }
-      )
-    : await executeScholarshipListQuery(listingSupabase, req, {
-        countOnly,
-        includeMeta: includeMeta && !countOnly,
-        includeCategoryCounts:
-          Boolean(isHubPrimaryListing) ||
-          !anonymousCatalogFastPath ||
-          Boolean(categoryPageParam?.trim()),
-        isProSubscriber
-      });
+        });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const phase = countOnly ? 'count' : includeMeta ? 'list+meta' : 'list';
+    throw new Error(`Scholarship ${phase} query failed for tab "${req.tab}": ${message}`);
+  }
 
   if (seoFallbackEnabled && !countOnly) {
     // eslint-disable-next-line no-console -- temporary SEO list diagnostics
@@ -675,6 +685,7 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
     page: result.page,
     limit: result.limit,
     meta: result.meta,
+    errorMessage: result.errorMessage,
     matchPaywall: result.matchPaywall,
     isProSubscriber,
     seoFallback: result.seoFallback
@@ -750,6 +761,7 @@ export async function POST(request: Request) {
       /** `null` = client has no saved filter preset (Saved Filters count = 0). */
       savedFiltersSnapshot?: MoreFiltersJson | null;
       guestBestRecommendationPreviewEnabled?: boolean;
+      sidebarOnlyMeta?: boolean;
     };
     // eslint-disable-next-line no-console -- API diagnostics (SEO listing debugging)
     console.log('[scholarships api] POST body snapshot', {
@@ -757,14 +769,15 @@ export async function POST(request: Request) {
       requiredSeoTags: json.requiredSeoTags,
       seoListingFallback: json.seoListingFallback,
       longTailLegacySlugs: json.longTailLegacySlugs,
-      providerSlug: json.providerSlug
+      providerSlug: json.providerSlug,
+      sidebarOnlyMeta: json.sidebarOnlyMeta === true
     });
     const sp = new URLSearchParams(json.searchParams ?? '');
     return await handleList(sp, json.moreFilters, json.longTailLegacySlugs, {
       seoListingFallback: json.seoListingFallback,
       slugOnlyMoreFilters: json.slugOnlyMoreFilters,
       requiredSeoTags: json.requiredSeoTags
-    }, json.savedFiltersSnapshot, json.providerSlug, json.guestBestRecommendationPreviewEnabled === true);
+    }, json.savedFiltersSnapshot, json.providerSlug, json.guestBestRecommendationPreviewEnabled === true, json.sidebarOnlyMeta === true);
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     // eslint-disable-next-line no-console -- API diagnostics

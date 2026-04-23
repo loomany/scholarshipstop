@@ -13,6 +13,7 @@ export type ScholarshipsListResponse = {
   page: number;
   limit: number;
   meta?: ScholarshipListMeta;
+  errorMessage?: string;
   matchPaywall?: { lockedCount: number; visibleMax: number };
   isProSubscriber?: boolean;
   seoFallback?: SeoListingFallbackMeta;
@@ -37,7 +38,33 @@ export type ScholarshipsListPostBody = {
   slugOnlyMoreFilters?: MoreFiltersJson;
   requiredSeoTags?: string[];
   providerSlug?: string | null;
+  /** Sidebar-only meta refresh can skip category dropdown counts. */
+  sidebarOnlyMeta?: boolean;
 };
+
+async function readScholarshipsApiError(res: Response, fallback: string): Promise<Error> {
+  const raw = await res.text();
+  let detail = '';
+  try {
+    const j = JSON.parse(raw) as { error?: string };
+    if (typeof j?.error === 'string' && j.error.trim()) detail = j.error.trim();
+  } catch {
+    if (raw.trim()) detail = raw.trim().slice(0, 500);
+  }
+  return new Error(
+    detail ? `${fallback} (${res.status}): ${detail}` : `${fallback} (${res.status})`
+  );
+}
+
+export function scholarshipRequestErrorMessage(
+  error: unknown,
+  fallback = 'Failed to load scholarships.'
+): string {
+  if (error instanceof Error && error.message.trim()) {
+    return error.message.trim();
+  }
+  return fallback;
+}
 
 export async function postScholarshipsList(
   body: ScholarshipsListPostBody
@@ -48,19 +75,7 @@ export async function postScholarshipsList(
     body: JSON.stringify(body)
   });
   if (!res.ok) {
-    const raw = await res.text();
-    let detail = '';
-    try {
-      const j = JSON.parse(raw) as { error?: string };
-      if (typeof j?.error === 'string' && j.error.trim()) detail = j.error.trim();
-    } catch {
-      if (raw.trim()) detail = raw.trim().slice(0, 500);
-    }
-    throw new Error(
-      detail
-        ? `Failed to load scholarships (${res.status}): ${detail}`
-        : `Failed to load scholarships (${res.status})`
-    );
+    throw await readScholarshipsApiError(res, 'Failed to load scholarships');
   }
   const data = (await res.json()) as ScholarshipsListResponse;
   if (!data.scholarships && Array.isArray(data.results)) {
@@ -87,10 +102,11 @@ export async function postScholarshipsCount(
       seoListingFallback: body.seoListingFallback,
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
       requiredSeoTags: body.requiredSeoTags,
-      providerSlug: body.providerSlug
+      providerSlug: body.providerSlug,
+      sidebarOnlyMeta: body.sidebarOnlyMeta
     })
   });
-  if (!res.ok) throw new Error('count failed');
+  if (!res.ok) throw await readScholarshipsApiError(res, 'Scholarship count failed');
   return res.json();
 }
 
@@ -112,10 +128,11 @@ export async function postScholarshipsMeta(
       seoListingFallback: body.seoListingFallback,
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
       requiredSeoTags: body.requiredSeoTags,
-      providerSlug: body.providerSlug
+      providerSlug: body.providerSlug,
+      sidebarOnlyMeta: body.sidebarOnlyMeta
     })
   });
-  if (!res.ok) throw new Error('meta failed');
+  if (!res.ok) throw await readScholarshipsApiError(res, 'Scholarship meta failed');
   return res.json();
 }
 

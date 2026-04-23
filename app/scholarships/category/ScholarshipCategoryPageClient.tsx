@@ -62,7 +62,8 @@ import {
 import {
   normalizeScholarshipsListRows,
   postScholarshipsList,
-  postScholarshipsCount
+  postScholarshipsCount,
+  scholarshipRequestErrorMessage
 } from '@/app/scholarships/scholarshipListFetch';
 import type { InitialScholarshipsPayload } from '@/app/scholarships/scholarshipListServerPayload';
 import { moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
@@ -156,7 +157,12 @@ export default function ScholarshipCategoryPageClient({
     initialPayload?.result.meta ?? null
   );
   const [isLoading, setIsLoading] = useState(initialPayload == null);
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(
+    Boolean(initialPayload?.result.errorMessage)
+  );
+  const [errorMessage, setErrorMessage] = useState(
+    initialPayload?.result.errorMessage ?? ''
+  );
   const [query, setQuery] = useState(parsedList.q);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
@@ -396,6 +402,11 @@ export default function ScholarshipCategoryPageClient({
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
 
   useEffect(() => {
+    if (!searchParams.get('tab')) return;
+    replaceListingParams({ resetPage: false });
+  }, [replaceListingParams, searchParams]);
+
+  useEffect(() => {
     let cancelled = false;
     const seq = ++listFetchSeqRef.current;
     const metaKey = `cat:${categorySlug}`;
@@ -419,6 +430,7 @@ export default function ScholarshipCategoryPageClient({
       try {
         setIsLoading(true);
         setHasError(false);
+        setErrorMessage('');
         const sp = buildCategoryListingSearchParams({
           base: new URLSearchParams(searchParamsString),
           page: pageFromUrl,
@@ -450,6 +462,8 @@ export default function ScholarshipCategoryPageClient({
         });
         setScholarships(rows);
         setTotalCount(data.total);
+        setHasError(Boolean(data.errorMessage));
+        setErrorMessage(data.errorMessage ?? '');
         setSeoFallbackMeta(data.seoFallback ?? null);
         if (
           typeof data.page === 'number' &&
@@ -462,8 +476,11 @@ export default function ScholarshipCategoryPageClient({
           setListMeta(data.meta);
           metaKeySynced.current = metaKey;
         }
-      } catch {
-        if (!cancelled && seq === listFetchSeqRef.current) setHasError(true);
+      } catch (e) {
+        if (!cancelled && seq === listFetchSeqRef.current) {
+          setHasError(true);
+          setErrorMessage(scholarshipRequestErrorMessage(e));
+        }
       } finally {
         if (!cancelled && seq === listFetchSeqRef.current) setIsLoading(false);
       }
@@ -832,7 +849,9 @@ export default function ScholarshipCategoryPageClient({
           {isLoading ? (
             <ScholarshipsBrandLoading density="compact" showTopAccentBar />
           ) : hasError ? (
-            <div className="text-red-600">Failed to load scholarships</div>
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {errorMessage || 'Failed to load scholarships.'}
+            </div>
           ) : showEmptyState ? (
             <div className="max-w-3xl rounded-xl border border-zinc-200 bg-white px-5 py-10 text-left text-slate-600 shadow-sm">
               <p className="text-base font-medium text-zinc-800">

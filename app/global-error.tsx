@@ -16,6 +16,11 @@ export default function GlobalError({
   useEffect(() => {
     console.error(error);
   }, [error]);
+  const detail = error.message?.trim();
+  const safeDetail =
+    detail && detail !== 'An unexpected error occurred.'
+      ? detail.slice(0, 240)
+      : null;
 
   return (
     <html lang="en">
@@ -27,6 +32,14 @@ export default function GlobalError({
           <p className="mt-3 text-sm leading-relaxed text-zinc-600">
             Please try again. If the problem continues, refresh the page.
           </p>
+          {safeDetail ? (
+            <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+              {safeDetail}
+            </p>
+          ) : null}
+          {error.digest ? (
+            <p className="mt-2 text-xs text-zinc-500">Error ID: {error.digest}</p>
+          ) : null}
           <button
             type="button"
             onClick={() => reset()}
