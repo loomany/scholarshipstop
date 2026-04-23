@@ -21,8 +21,7 @@ const pageDescription =
   'Find scholarships open to international students and F1 visa holders in the USA. Filter by eligibility, country, and degree level. Updated listings with official application links.';
 
 const pageCanonical = getURL('international-students');
-const internationalFriendlyHref =
-  '/scholarships?tab=matches&scope=catalog&aud=international_friendly';
+const getScholarshipsCtaPath = '/get-scholarships';
 
 export const metadata: Metadata = {
   title: 'Scholarships for International Students in the USA 2026 | ScholarshipTop',
@@ -167,7 +166,7 @@ export default function InternationalStudentsPage() {
             opportunities open to international students.
           </p>
           <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-4 sm:mt-10 sm:flex-row sm:justify-center sm:gap-5">
-            <Link href={internationalFriendlyHref} className={homePrimaryCtaClass}>
+            <Link href={getScholarshipsCtaPath} className={homePrimaryCtaClass}>
               Find My Scholarships
             </Link>
           </div>
@@ -360,7 +359,7 @@ export default function InternationalStudentsPage() {
             show you scholarships you&apos;re actually eligible for.
           </p>
           <Link
-            href={internationalFriendlyHref}
+            href={getScholarshipsCtaPath}
             className={`mx-auto mt-9 w-full max-w-md sm:mt-10 sm:max-w-lg ${homePrimaryCtaClass}`}
           >
             Find My Scholarships
