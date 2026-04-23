@@ -462,6 +462,7 @@ export default function ScholarshipsSidebar({
           ) : (
             <Link
               href={href}
+              prefetch={false}
               title={useDarkTooltips ? undefined : tip}
               className={`${rowClass} ${!navLooksActive ? 'group' : ''}`}
               aria-current={navLooksActive ? 'page' : undefined}

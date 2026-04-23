@@ -169,6 +169,7 @@ export function ProviderProfileScholarshipsList({
         </p>
         <Link
           href="/scholarships?tab=ignored"
+          prefetch={false}
           className="mt-5 inline-flex items-center justify-center rounded-xl bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800"
         >
           Open Ignored tab
