@@ -55,6 +55,7 @@ export default function FoundersNote() {
             >
               {CONTACT_EMAIL}
             </a>
+            <span className="text-gray-600"> = HELLO AWIN</span>
           </p>
         </div>
       </div>
