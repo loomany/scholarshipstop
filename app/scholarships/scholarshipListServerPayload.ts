@@ -108,7 +108,9 @@ export async function fetchInitialHubScholarshipsPayload(
 
   if (!profile && req.tab === 'best-recommendation') {
     const meta = await fetchScholarshipListMeta(supabase, req, defaultBounds, {
-      includeCategoryCounts: true
+      includeCategoryCounts: true,
+      skipBestRecommendationSidebarCount: true,
+      skipGuestZeroedSidebarCounts: true
     });
     applyListingMetaGuestPatches(meta, { authUser: false });
     return {

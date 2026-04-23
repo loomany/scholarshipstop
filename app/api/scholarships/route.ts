@@ -85,7 +85,10 @@ async function emptyListResult(
   let meta: ScholarshipListMeta | undefined = undefined;
   if (includeMeta) {
     const bounds = await fetchGlobalFilterBounds(listDb);
-    meta = await fetchScholarshipListMeta(listDb, req, bounds);
+    meta = await fetchScholarshipListMeta(listDb, req, bounds, {
+      skipBestRecommendationSidebarCount: !authUser && !keepBestRecommendationCount,
+      skipGuestZeroedSidebarCounts: !authUser
+    });
     applyListingMetaGuestPatches(meta, {
       authUser,
       keepBestRecommendationCount
@@ -399,7 +402,10 @@ let runtimeReadPath: RuntimeReadPath = 'legacy';
       !anonymousCatalogFastPath ||
       Boolean(categoryPageParam?.trim());
     const meta = await fetchScholarshipListMeta(listingSupabase, req, bounds, {
-      includeCategoryCounts
+      includeCategoryCounts,
+      skipBestRecommendationSidebarCount:
+        !authUser && !guestBestRecommendationPreviewEnabled,
+      skipGuestZeroedSidebarCounts: !authUser
     });
     if (profileRow) {
       meta.profileMatchSummary = profileMatchSummaryFromRow(profileRow);

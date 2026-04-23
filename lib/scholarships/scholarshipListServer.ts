@@ -87,6 +87,18 @@ export type ScholarshipListQueryOpts = {
   isProSubscriber?: boolean;
 };
 
+type ScholarshipListMetaOpts = {
+  includeCategoryCounts?: boolean;
+  /** Reuse an already computed exact total when it matches sidebar Best recommendation semantics. */
+  bestRecommendationCountOverride?: number;
+  /** Reuse an already computed exact total when it matches sidebar Matches semantics. */
+  matchesCountOverride?: number;
+  /** Guest SSR first-load: safe only where downstream patches always zero this count. */
+  skipBestRecommendationSidebarCount?: boolean;
+  /** Guest meta patch always zeroes these collection counts; skip exact DB work when safe. */
+  skipGuestZeroedSidebarCounts?: boolean;
+};
+
 export type ScholarshipListMeta = {
   filterBounds: {
     amountMin: number;
@@ -1132,7 +1144,8 @@ function tabUsesEmptyIdSet(
 function buildListMetaCacheKey(
   req: ScholarshipListRequest,
   bounds: ScholarshipListMeta['filterBounds'],
-  includeCategoryCounts: boolean
+  includeCategoryCounts: boolean,
+  opts?: ScholarshipListMetaOpts
 ): string {
   const stateCodes = Array.from(req.stateCodes).sort().join(',');
   const ignored = Array.from(req.ignored).sort().join(',');
@@ -1164,6 +1177,9 @@ function buildListMetaCacheKey(
     : 'none';
   return [
     req.tab,
+    `bestMode:${opts?.skipBestRecommendationSidebarCount ? 'skip' : typeof opts?.bestRecommendationCountOverride === 'number' ? 'override' : 'live'}`,
+    `matchesMode:${typeof opts?.matchesCountOverride === 'number' ? 'override' : 'live'}`,
+    `guestZeroed:${opts?.skipGuestZeroedSidebarCounts ? 'skip' : 'live'}`,
     savedSnapKey,
     req.deadline,
     req.listScope,
@@ -1479,7 +1495,9 @@ export async function executeScholarshipListQuery(
     let meta: ScholarshipListMeta | undefined;
     if (opts.includeMeta && bounds) {
       meta = await fetchScholarshipListMeta(supabase, personalizedReq, bounds, {
-        includeCategoryCounts: opts.includeCategoryCounts
+        includeCategoryCounts: opts.includeCategoryCounts,
+        bestRecommendationCountOverride:
+          personalizedReq.tab === 'best-recommendation' ? rawTotal : undefined
       });
     }
 
@@ -1598,7 +1616,8 @@ export async function executeScholarshipListQuery(
   let meta: ScholarshipListMeta | undefined;
   if (opts.includeMeta && bounds) {
     meta = await fetchScholarshipListMeta(supabase, req, bounds, {
-      includeCategoryCounts: opts.includeCategoryCounts
+      includeCategoryCounts: opts.includeCategoryCounts,
+      matchesCountOverride: canReuseMatchesTotalForSidebar(req) ? rawTotal : undefined
     });
   }
 
@@ -1720,6 +1739,13 @@ function sidebarCatalogTabCountsBasisReq(
   };
 }
 
+function canReuseMatchesTotalForSidebar(req: ScholarshipListRequest): boolean {
+  if (req.tab !== 'matches') return false;
+  if (!req.personalizedProfile) return true;
+  const stripped = stripHubProfileHardMatchMoreFilters(req.moreFilters);
+  return JSON.stringify(moreFiltersToJson(req.moreFilters)) === JSON.stringify(moreFiltersToJson(stripped));
+}
+
 /** Align `moreFilters` / URL deadline with tab-only SQL (easy-apply, hot-deadlines). */
 function normalizeTabScopedMoreFilters(
   req: ScholarshipListRequest
@@ -1752,7 +1778,14 @@ export function moreFiltersForRecommendedSidebarCount(
 export async function fetchScholarshipSidebarCounts(
   supabase: ServerSupabaseClient,
   req: ScholarshipListRequest,
-  bounds: ScholarshipListMeta['filterBounds']
+  bounds: ScholarshipListMeta['filterBounds'],
+  opts?: Pick<
+    ScholarshipListMetaOpts,
+    | 'bestRecommendationCountOverride'
+    | 'matchesCountOverride'
+    | 'skipBestRecommendationSidebarCount'
+    | 'skipGuestZeroedSidebarCounts'
+  >
 ): Promise<ScholarshipSidebarCounts> {
   const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
   /** Basis for every tab count except the dedicated International Friendly pill. */
@@ -1802,6 +1835,15 @@ export async function fetchScholarshipSidebarCounts(
         };
       }
       if (t === 'best-recommendation') {
+        if (typeof opts?.bestRecommendationCountOverride === 'number') {
+          return {
+            t,
+            n: opts.bestRecommendationCountOverride
+          };
+        }
+        if (opts?.skipBestRecommendationSidebarCount) {
+          return { t, n: 0 };
+        }
         return {
           t,
           n: await countFor(
@@ -1810,6 +1852,18 @@ export async function fetchScholarshipSidebarCounts(
             t
           )
         };
+      }
+      if (
+        opts?.skipGuestZeroedSidebarCounts &&
+        (t === 'saved' ||
+          t === 'ignored' ||
+          t === 'started' ||
+          t === 'submitted')
+      ) {
+        return { t, n: 0 };
+      }
+      if (t === 'matches' && typeof opts?.matchesCountOverride === 'number') {
+        return { t, n: opts.matchesCountOverride };
       }
       const rowReq = t === 'matches' ? catalogSidebarBasisReq : countsBasisReq;
       return {
@@ -2133,19 +2187,19 @@ export async function fetchScholarshipListMeta(
   supabase: ServerSupabaseClient,
   req: ScholarshipListRequest,
   bounds?: ScholarshipListMeta['filterBounds'],
-  opts?: { includeCategoryCounts?: boolean }
+  opts?: ScholarshipListMetaOpts
 ): Promise<ScholarshipListMeta> {
   const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
   const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
-  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts)}|catMc:v7`;
+  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v7`;
   const cached = readTtlValue(listMetaCache.get(cacheKey));
   if (cached) {
     return cloneScholarshipListMeta(cached);
   }
 
   const categoryReq = categoryDropdownCountsRequest(req, b);
-  const sidebarCounts = await fetchScholarshipSidebarCounts(supabase, req, b);
+  const sidebarCounts = await fetchScholarshipSidebarCounts(supabase, req, b, opts);
 
   const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
   if (includeCategoryCounts) {
