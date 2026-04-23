@@ -1326,6 +1326,12 @@ function ScholarshipsPageInner({
     landingSig: string;
     savedRev: number;
   } | null>(null);
+  /**
+   * Set when the user presses “Show results” in More filters. If `listMeta.filterBounds` arrives
+   * only after that, the tab-preset effect must not clobber the applied filters (would clear the
+   * list for signed-in users).
+   */
+  const moreFiltersUserApplyPendingMetaRef = useRef(false);
 
   useEffect(() => {
     if (!listMeta?.filterBounds) return;
@@ -1357,21 +1363,27 @@ function ScholarshipsPageInner({
     }
 
     if (shouldReset) {
-      setMoreFiltersApplied(
-        withUrlAudience(
-          buildHubTabPresetMoreFilters({
-            tab: activeTab,
-            filterBounds: listMeta.filterBounds,
-            deadlineFromUrl: parsedList.deadline,
-            routeScope,
-            profileFilterSeed: listMeta.profileFilterSeed,
-            landingQuizProfileSeed: transientBestRecommendationProfileSeed,
-            savedFiltersFromStorage: savedFiltersForHub,
-            isAuthenticated
-          }),
-          parsedList.audience
-        )
+      const nextPreset = withUrlAudience(
+        buildHubTabPresetMoreFilters({
+          tab: activeTab,
+          filterBounds: listMeta.filterBounds,
+          deadlineFromUrl: parsedList.deadline,
+          routeScope,
+          profileFilterSeed: listMeta.profileFilterSeed,
+          landingQuizProfileSeed: transientBestRecommendationProfileSeed,
+          savedFiltersFromStorage: savedFiltersForHub,
+          isAuthenticated
+        }),
+        parsedList.audience
       );
+      if (!prev && moreFiltersUserApplyPendingMetaRef.current) {
+        moreFiltersUserApplyPendingMetaRef.current = false;
+      } else {
+        setMoreFiltersApplied(nextPreset);
+        if (!prev) {
+          moreFiltersUserApplyPendingMetaRef.current = false;
+        }
+      }
     }
     presetSyncStateRef.current = {
       tab: activeTab,
@@ -1387,9 +1399,7 @@ function ScholarshipsPageInner({
     savedFiltersForHub,
     savedFiltersRevision,
     routeScope,
-    isAuthenticated,
-    parsedList.deadline,
-    parsedList.audience
+    isAuthenticated
   ]);
 
   /** Keep URL-owned pieces (deadline + audience) aligned without resetting the whole preset. */
@@ -2283,6 +2293,7 @@ function ScholarshipsPageInner({
 
   const applyMoreFilters = useCallback(() => {
     if (moreFiltersDraft) {
+      moreFiltersUserApplyPendingMetaRef.current = true;
       const next = cloneMoreFilters(moreFiltersDraft);
       setMoreFiltersApplied(next);
       if (activeTab === 'recommended') {
