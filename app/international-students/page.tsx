@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { homePrimaryCtaClass } from '@/components/home/homeMarketingCtaClasses';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
-import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
+import { SiteFaqAccordion, type SiteFaqItem } from '@/components/ui/SiteFaqAccordion';
 import { getURL } from '@/utils/helpers';
 
 const container = 'mx-auto w-full max-w-7xl';
@@ -137,7 +137,7 @@ const scholarshipTypes = [
   }
 ] as const;
 
-const faqItems = [
+const faqItems: SiteFaqItem[] = [
   {
     question: 'Can I apply to US scholarships on an F1 visa?',
     answer:
@@ -158,7 +158,7 @@ const faqItems = [
     answer:
       'Those platforms show all scholarships together with no clean international filter. We built a dedicated pathway for international students so you only see what you can actually apply to.'
   }
-] as const;
+];
 
 export default function InternationalStudentsPage() {
   return (
