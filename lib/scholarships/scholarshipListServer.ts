@@ -205,7 +205,7 @@ export type ScholarshipListResult = {
 const DEFAULT_LIMIT = SCHOLARSHIPS_PAGE_SIZE;
 const MAX_LIMIT = 50;
 const GLOBAL_FILTER_BOUNDS_TTL_MS = 5 * 60 * 1000;
-const LIST_META_CACHE_TTL_MS = 60 * 1000;
+const LIST_META_CACHE_TTL_MS = 120 * 1000;
 let globalFilterBoundsCache:
   | {
       value: ScholarshipListMeta['filterBounds'];

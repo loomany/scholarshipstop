@@ -1702,6 +1702,14 @@ function ScholarshipsPageInner({
     });
   }, [activeTab, fromEmailIds, scholarships, currentMatchProfile]);
 
+  const { viewedSet, savedSet } = useMemo(
+    () => ({
+      viewedSet: new Set(viewedIds),
+      savedSet: new Set(savedIds)
+    }),
+    [viewedIds, savedIds]
+  );
+
   /** Invalidates list fetch when landing quiz, tab, auth, or server profile seed changes. */
   const listingRequestFingerprint = useMemo(
     () =>
@@ -2832,8 +2840,8 @@ function ScholarshipsPageInner({
                   <ScholarshipCard
                     key={s.id}
                     scholarship={s}
-                    isUnread={!viewedIds.includes(s.id)}
-                    saved={savedIds.includes(s.id)}
+                    isUnread={!viewedSet.has(s.id)}
+                    saved={savedSet.has(s.id)}
                     onToggleSave={toggleSave}
                     onHide={
                       activeTab === 'ignored'
