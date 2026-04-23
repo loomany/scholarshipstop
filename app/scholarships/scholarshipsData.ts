@@ -170,6 +170,11 @@ export type Scholarship = {
    * when an authenticated user views scholarship cards outside the ranked hub tabs.
    */
   profileMatchPercent?: number | null;
+  /**
+   * When true, row matches the legacy “International Friendly” SQL predicate
+   * (`scholarships.international_friendly_listing`). Omitted on older payloads.
+   */
+  internationalFriendlyListing?: boolean;
 };
 
 /** Quick facts / copy: prefer `catalog_ui`, else legacy columns (may be slug-like). */

@@ -1377,6 +1377,8 @@ export interface Database {
           /** Last Google URL Inspection attempt (see scholarshipIndexInspectionWorker). */
           last_index_check: string | null
           institution_id: string | null
+          /** Precomputed: matches legacy “International Friendly” OR (see migration). */
+          international_friendly_listing: boolean
         }
         Insert: {
           id?: string
@@ -1511,6 +1513,7 @@ export interface Database {
           indexing_status?: string
           last_index_check?: string | null
           institution_id?: string | null
+          international_friendly_listing?: boolean
         }
         Update: {
           id?: string
@@ -1645,6 +1648,7 @@ export interface Database {
           indexing_status?: string
           last_index_check?: string | null
           institution_id?: string | null
+          international_friendly_listing?: boolean
         }
         Relationships: [
           {

@@ -167,6 +167,7 @@ const LISTING_CARD_SELECT_COLUMNS = [
   'listing_completeness_bucket',
   'applicants_count_is_estimated',
   'institution_id',
+  'international_friendly_listing',
   'study_levels',
   'field_of_study',
   'citizenship_statuses',
@@ -414,6 +415,7 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     slug: row.slug?.trim() || undefined,
     providerSlug: row.provider_slug?.trim() || undefined,
     institutionId: row.institution_id ?? undefined,
+    internationalFriendlyListing: row.international_friendly_listing === true,
     scholarshipStatus: row.scholarship_status?.trim() || undefined,
     daysUntilDeadline:
       row.days_until_deadline != null && !Number.isNaN(row.days_until_deadline)

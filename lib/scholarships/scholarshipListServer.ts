@@ -839,28 +839,37 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   }
 
   if (f.citizenshipAudience === 'international_friendly') {
-    const intlParts = [
-      'title.ilike.%international student%',
-      'summary_short.ilike.%international student%',
-      'title.ilike.%foreign student%',
-      'summary_short.ilike.%foreign student%',
-      'title.ilike.%foreign national%',
-      'summary_short.ilike.%foreign national%',
-      'title.ilike.%f-1%',
-      'summary_short.ilike.%f-1%',
-      'description.ilike.%international student%',
-      'description.ilike.%foreign student%',
-      'requirements_text.ilike.%international student%',
-      'requirements_text.ilike.%foreign student%',
-      'eligibility_text.ilike.%international student%',
-      'eligibility_text.ilike.%foreign student%',
-      'citizenship_statuses.cs.["international"]',
-      'citizenship_statuses.cs.["international_students"]',
-      /** Canonical slug from catalog parsers (`scholarship_taxonomy` citizenship rules). */
-      'citizenship_statuses.cs.["international_student"]',
-      'eligibility_tags.cs.["international_students"]'
-    ];
-    q = q.or(intlParts.join(','));
+    /**
+     * `international_friendly_listing` is maintained in DB (see migration) with the same
+     * disjunction as the legacy OR below — btree-friendly vs many `ilike` on text blobs.
+     * Opt-in legacy: SCHOLARSHIPS_INTL_LEGACY_OR=1 (diagnostics / emergency rollback only).
+     */
+    if (process.env.SCHOLARSHIPS_INTL_LEGACY_OR === '1') {
+      const intlParts = [
+        'title.ilike.%international student%',
+        'summary_short.ilike.%international student%',
+        'title.ilike.%foreign student%',
+        'summary_short.ilike.%foreign student%',
+        'title.ilike.%foreign national%',
+        'summary_short.ilike.%foreign national%',
+        'title.ilike.%f-1%',
+        'summary_short.ilike.%f-1%',
+        'description.ilike.%international student%',
+        'description.ilike.%foreign student%',
+        'requirements_text.ilike.%international student%',
+        'requirements_text.ilike.%foreign student%',
+        'eligibility_text.ilike.%international student%',
+        'eligibility_text.ilike.%foreign student%',
+        'citizenship_statuses.cs.["international"]',
+        'citizenship_statuses.cs.["international_students"]',
+        /** Canonical slug from catalog parsers (`scholarship_taxonomy` citizenship rules). */
+        'citizenship_statuses.cs.["international_student"]',
+        'eligibility_tags.cs.["international_students"]'
+      ];
+      q = q.or(intlParts.join(','));
+    } else {
+      q = q.eq('international_friendly_listing', true);
+    }
   }
 
   return q;
@@ -1242,18 +1251,48 @@ function buildScholarshipListFilterQuery(
   return q;
 }
 
+const SIDEBAR_COUNT_TIMING_ENABLED =
+  process.env.SCHOLARSHIPS_SIDEBAR_COUNT_TIMING === '1';
+
+function sleepMs(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 /** Head-count for a tab using the same SQL stack as the listing (for `matchedTotal` / diagnostics). */
 export async function countScholarshipsForTabRequest(
   supabase: ServerSupabaseClient,
   req: ScholarshipListRequest,
-  tab: ScholarshipListTabId
+  tab: ScholarshipListTabId,
+  opts?: { countLabel?: string }
 ): Promise<number> {
-  if (tabUsesEmptyIdSet(req, tab)) return 0;
-  const r = { ...effectiveListingRequest(req), tab };
-  const q: any = buildScholarshipListFilterQuery(supabase, true, r);
-  const { error, count } = await q;
-  if (error) throw new Error(postgrestErrorToMessage(error));
-  return count ?? 0;
+  const label = opts?.countLabel ?? tab;
+  const t0 = Date.now();
+  let attempt = 1;
+  const run = async () => {
+    if (tabUsesEmptyIdSet(req, tab)) return 0;
+    const r = { ...effectiveListingRequest(req), tab };
+    const q: any = buildScholarshipListFilterQuery(supabase, true, r);
+    const { error, count } = await q;
+    if (error) throw new Error(postgrestErrorToMessage(error));
+    return count ?? 0;
+  };
+  try {
+    return await run();
+  } catch {
+    attempt = 2;
+    await sleepMs(50);
+    return await run();
+  } finally {
+    if (SIDEBAR_COUNT_TIMING_ENABLED) {
+      // eslint-disable-next-line no-console -- opt-in head-count performance diagnostics
+      console.log(
+        '[sidebar-count]',
+        label,
+        `${Date.now() - t0}ms`,
+        `attempt=${attempt}`
+      );
+    }
+  }
 }
 
 /**
@@ -1658,9 +1697,15 @@ export async function executeScholarshipListQuery(
 async function countFor(
   supabase: ServerSupabaseClient,
   req: ScholarshipListRequest,
-  tab: ScholarshipListTabId
+  tab: ScholarshipListTabId,
+  countLabel?: string
 ): Promise<number> {
-  return countScholarshipsForTabRequest(supabase, req, tab);
+  return countScholarshipsForTabRequest(
+    supabase,
+    req,
+    tab,
+    countLabel ? { countLabel } : undefined
+  );
 }
 
 function bestRecommendationRequest(
@@ -1822,7 +1867,8 @@ export async function fetchScholarshipSidebarCounts(
   const internationalFriendlyCountPromise = countScholarshipsForTabRequest(
     supabase,
     internationalFriendlySidebarCountRequest(catalogSidebarBasisReq),
-    'matches'
+    'matches',
+    { countLabel: 'international-friendly' }
   )
     .then((n) => ({ ok: true as const, n }))
     .catch((e) => ({ ok: false as const, e }));
@@ -1845,7 +1891,8 @@ export async function fetchScholarshipSidebarCounts(
           n: await countFor(
             supabase,
             easyApplyListCanonicalRequest(catalogSidebarBasisReq),
-            t
+            t,
+            'easy-apply'
           )
         };
       }

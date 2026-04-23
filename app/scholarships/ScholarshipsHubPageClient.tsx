@@ -650,6 +650,14 @@ function ScholarshipsPageInner({
   >(null);
   const metaKeySynced = useRef('');
   const metaRequestInFlightRef = useRef<string | null>(null);
+  /**
+   * When this equals `sidebarMetaRequestKey`, `listMeta.sidebarCounts` matches the
+   * current filter/tab URL state (avoids showing stale all-zero placeholders).
+   */
+  const [sidebarGlobalMetaAppliedKey, setSidebarGlobalMetaAppliedKey] = useState<
+    string | null
+  >(null);
+  const initialSidebarMetaHydratedRef = useRef(false);
   const initialRequestKeyRef = useRef(initialPayload?.requestKey ?? null);
   const listMetaRef = useRef<ScholarshipListMeta | null>(listMeta);
   listMetaRef.current = listMeta;
@@ -1756,9 +1764,21 @@ function ScholarshipsPageInner({
   );
   const sidebarMetaRequestKeyRef = useRef(sidebarMetaRequestKey);
   sidebarMetaRequestKeyRef.current = sidebarMetaRequestKey;
-  /** Show sidebar counts whenever we have meta — not only when `metaKeySynced` matches key. */
+  useLayoutEffect(() => {
+    if (initialSidebarMetaHydratedRef.current) return;
+    if (!initialPayload?.result?.meta?.sidebarCounts) return;
+    initialSidebarMetaHydratedRef.current = true;
+    setSidebarGlobalMetaAppliedKey(sidebarMetaRequestKey);
+  }, [initialPayload, sidebarMetaRequestKey]);
+  /**
+   * Show tab counts only when `sidebarCounts` match the current URL/filter key
+   * (hides all-zero flash before `meta_only` or SSR meta lands).
+   */
   const sidebarCountsReady =
-    authResolved && listMeta != null && Boolean(listMeta.sidebarCounts);
+    authResolved &&
+    listMeta != null &&
+    Boolean(listMeta.sidebarCounts) &&
+    sidebarGlobalMetaAppliedKey === sidebarMetaRequestKey;
 
   const totalPages = Math.max(
     1,
@@ -1798,6 +1818,9 @@ function ScholarshipsPageInner({
       initialRequestKeyRef.current = null;
       if (initialPayload.result.meta) {
         metaKeySynced.current = sidebarMetaRequestKey;
+        if (initialPayload.result.meta.sidebarCounts) {
+          setSidebarGlobalMetaAppliedKey(sidebarMetaRequestKey);
+        }
       }
       setHasInitialLoadCompleted(true);
       setIsLoading(false);
@@ -1965,7 +1988,6 @@ function ScholarshipsPageInner({
      * Otherwise SSR guest meta (Best = 0) can stick while the session is already signed in.
      */
     const metaKey = sidebarMetaRequestKey;
-    if (isLoading) return;
     if (metaKeySynced.current === metaKey) return;
     if (metaRequestInFlightRef.current === metaKey) return;
     metaRequestInFlightRef.current = metaKey;
@@ -2010,6 +2032,7 @@ function ScholarshipsPageInner({
               : sidebarMeta
           );
           metaKeySynced.current = metaKey;
+          setSidebarGlobalMetaAppliedKey(metaKey);
         }
       } catch (e) {
         if (!cancelled) {
@@ -2031,7 +2054,6 @@ function ScholarshipsPageInner({
       cancelled = true;
     };
   }, [
-    isLoading,
     userCollectionsFingerprint,
     isAuthenticated,
     authResolved,

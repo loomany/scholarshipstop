@@ -196,6 +196,7 @@ function matchesLocation(s: Scholarship, selected: Set<string>): boolean {
 }
 
 function matchesInternationalFriendlyAudience(s: Scholarship): boolean {
+  if (s.internationalFriendlyListing === true) return true;
   return isInternationalFriendlyScholarship(s);
 }
 
