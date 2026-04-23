@@ -305,6 +305,15 @@ function ScholarshipsPageInner({
   const activeTab: ScholarshipListTabId = parseHubScholarshipTabParam(
     searchParams.get('tab')
   );
+  /**
+   * SSR list for guests on Best has no `guestBestRecommendationPreviewEnabled` and is always empty.
+   * Do not use it as `initialListData` / first paint — the client may still apply
+   * `LANDING_QUIZ_HUB_SEED_KEY` in `useLayoutEffect` and refetch with preview enabled.
+   */
+  const skipSsrListForGuestHubBest =
+    !routeScope &&
+    !isAuthenticated &&
+    activeTab === 'best-recommendation';
 
   const parsedList = useMemo(
     () => parseScholarshipListUrl(new URLSearchParams(searchParamsString)),
@@ -345,23 +354,31 @@ function ScholarshipsPageInner({
 
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [scholarships, setScholarships] = useState<Scholarship[]>(
-    initialPayload?.result.scholarships ?? []
+    skipSsrListForGuestHubBest
+      ? []
+      : (initialPayload?.result.scholarships ?? [])
   );
   const [totalCount, setTotalCount] = useState(
-    initialPayload?.result.total ?? 0
+    skipSsrListForGuestHubBest ? 0 : (initialPayload?.result.total ?? 0)
   );
   const [listMeta, setListMeta] = useState<ScholarshipListMeta | null>(
     initialPayload?.result.meta ?? null
   );
-  const [isLoading, setIsLoading] = useState(initialPayload == null);
+  const [isLoading, setIsLoading] = useState(
+    initialPayload == null || skipSsrListForGuestHubBest
+  );
   const [hasInitialLoadCompleted, setHasInitialLoadCompleted] = useState(
-    Boolean(initialPayload?.result)
+    Boolean(initialPayload?.result) && !skipSsrListForGuestHubBest
   );
   const [hasError, setHasError] = useState(
-    Boolean(initialPayload?.result.errorMessage)
+    skipSsrListForGuestHubBest
+      ? false
+      : Boolean(initialPayload?.result.errorMessage)
   );
   const [errorMessage, setErrorMessage] = useState(
-    initialPayload?.result.errorMessage ?? ''
+    skipSsrListForGuestHubBest
+      ? ''
+      : (initialPayload?.result.errorMessage ?? '')
   );
   const [query, setQuery] = useState(parsedList.q);
   const [savedIds, setSavedIds] = useState<string[]>([]);
@@ -636,6 +653,7 @@ function ScholarshipsPageInner({
     () => landingQuizProfileSeed ?? bestRecommendationWizardSeed ?? null,
     [landingQuizProfileSeed, bestRecommendationWizardSeed]
   );
+  /** When true, list POST must send `guestBestRecommendationPreviewEnabled` or the API returns an empty guest list. */
   const guestBestRecommendationPreviewEnabled =
     catalogFreeTier &&
     activeTab === 'best-recommendation' &&
@@ -883,6 +901,10 @@ function ScholarshipsPageInner({
    * `/get-scholarships` finish: one-shot `LANDING_QUIZ_HUB_SEED_KEY`, or after refresh rebuild from
    * `PENDING_ONBOARDING_FROM_LANDING_SESSION_KEY` (kept until `/onboarding` merge).
    * `useLayoutEffect` runs before paint so we do not flash guest “Found 0 + locks” before the seed applies.
+   *
+   * Manual check: DevTools → Application → Session Storage — `scholarship_landing_quiz_hub_seed_v1`
+   * (removed after read). If preview never enables, ensure `SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY`
+   * is not set to "1" (it intentionally skips re-applying the seed once).
    */
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1851,6 +1873,7 @@ function ScholarshipsPageInner({
   const queryClient = useQueryClient();
 
   const initialListData = useMemo((): ScholarshipsListResponse | undefined => {
+    if (skipSsrListForGuestHubBest) return undefined;
     if (!initialPayload?.result) return undefined;
     if (initialPayload.requestKey !== hubListRequestKey) return undefined;
     const r = initialPayload.result;
@@ -1864,7 +1887,7 @@ function ScholarshipsPageInner({
       matchPaywall: r.matchPaywall,
       seoFallback: r.seoFallback
     } as ScholarshipsListResponse;
-  }, [initialPayload, hubListRequestKey]);
+  }, [initialPayload, hubListRequestKey, skipSsrListForGuestHubBest]);
 
   const hubListQueryKey = useMemo(
     () =>
