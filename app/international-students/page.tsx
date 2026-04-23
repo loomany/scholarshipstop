@@ -79,7 +79,7 @@ const howWeHelpItems = [
   },
   {
     title: 'Matched to Your Profile',
-    body: 'Tell us your degree level, field, and home country — we surface the most relevant opportunities first.'
+    body: 'Tell us your degree level and field — we surface the most relevant opportunities first.'
   },
   {
     title: 'Deadline Alerts',
@@ -89,7 +89,7 @@ const howWeHelpItems = [
 
 const stats = [
   {
-    value: '500+',
+    value: '200+',
     label: 'Scholarships open to international students'
   },
   {
