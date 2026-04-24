@@ -445,6 +445,11 @@ function ScholarshipsListHeader({
                     if (catalogLocked) return;
                     onQueryChange(e.target.value);
                   }}
+                  onClick={(e) => {
+                    if (!catalogLocked) return;
+                    e.preventDefault();
+                    onGuestLockedAction?.();
+                  }}
                   onFocus={(e) => {
                     if (!catalogLocked) return;
                     e.currentTarget.blur();

@@ -2938,7 +2938,7 @@ function ScholarshipsPageInner({
                 }
                 onSubscriptionSortBlocked={undefined}
                 onGuestLockedAction={guestLockedAction}
-                catalogListingLocked={false}
+                catalogListingLocked={hubTreatAsGuest}
                 savedFilterBarHint={savedFilterBarHint}
                 savedFilterPresetButtons={headerSavedFilterPresetButtons}
                 onSavedFilterPresetSelect={openManageSavedFilterPreset}

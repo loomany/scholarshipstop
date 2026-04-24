@@ -240,28 +240,15 @@ export default async function ScholarshipsSlugPathPageBody({
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
-        <Suspense
-          fallback={
-            <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
-              <div className="mx-auto max-w-5xl">
-                <ScholarshipsBrandLoading
-                  label="Loading scholarship…"
-                  showTopAccentBar
-                />
-              </div>
-            </section>
-          }
-        >
-          <ScholarshipDetailPageAuthBridge
-            initialScholarship={redactPremiumScholarshipFields(scholarship)}
-            routeParam={segments[0]}
-            returnToHref={returnToHref}
-            initialRelatedArticles={initialRelatedArticles}
-            initialRelatedEssays={initialRelatedEssays}
-            initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
-            initialComparePeers={initialComparePeers}
-          />
-        </Suspense>
+        <ScholarshipDetailPageAuthBridge
+          initialScholarship={redactPremiumScholarshipFields(scholarship)}
+          routeParam={segments[0]}
+          returnToHref={returnToHref}
+          initialRelatedArticles={initialRelatedArticles}
+          initialRelatedEssays={initialRelatedEssays}
+          initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
+          initialComparePeers={initialComparePeers}
+        />
       </>
     );
   }
@@ -301,28 +288,15 @@ export default async function ScholarshipsSlugPathPageBody({
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
-        <Suspense
-          fallback={
-            <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
-              <div className="mx-auto max-w-5xl">
-                <ScholarshipsBrandLoading
-                  label="Loading scholarship…"
-                  showTopAccentBar
-                />
-              </div>
-            </section>
-          }
-        >
-          <ScholarshipDetailPageAuthBridge
-            initialScholarship={redactPremiumScholarshipFields(scholarship)}
-            routeParam={segments[0]}
-            returnToHref={returnToHref}
-            initialRelatedArticles={initialRelatedArticles}
-            initialRelatedEssays={initialRelatedEssays}
-            initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
-            initialComparePeers={initialComparePeers}
-          />
-        </Suspense>
+        <ScholarshipDetailPageAuthBridge
+          initialScholarship={redactPremiumScholarshipFields(scholarship)}
+          routeParam={segments[0]}
+          returnToHref={returnToHref}
+          initialRelatedArticles={initialRelatedArticles}
+          initialRelatedEssays={initialRelatedEssays}
+          initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
+          initialComparePeers={initialComparePeers}
+        />
       </>
     );
   }
