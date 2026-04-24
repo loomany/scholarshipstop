@@ -288,145 +288,155 @@ export function ScholarshipOnboardingWizard({
       }
 
       setLoading(true);
-      const supabase = createClient();
-      const email = base.step2.email.trim();
-      const emailRedirectTo = getURL(
-        `auth/callback?next=${encodeURIComponent(afterAuthPath)}`
-      );
-
-      const {
-        data: { session: existingSession }
-      } = await supabase.auth.getSession();
-      let session = existingSession;
-      console.info('[onboarding:auth] getSession', {
-        hasSession: Boolean(existingSession?.user),
-        userId: existingSession?.user?.id ?? null
-      });
-
-      const notifyTelegramRegistration = async (userId: string, userEmail: string) => {
-        try {
-          await fetch('/api/internal/telegram/registration', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              userId,
-              email: userEmail,
-              firstName: base.step2.firstName.trim() || null,
-              source: mode === 'embedded' ? 'get-scholarships' : 'onboarding'
-            })
-          });
-        } catch (error) {
-          console.warn('[onboarding:telegram] registration notify failed', error);
-        }
-      };
-
-      const finishWithSession = async () => {
-        if (!session?.user) return false;
-        const sync = await syncOnboardingToProfiles(
-          supabase,
-          session.user.id,
-          built.profile
+      try {
+        const supabase = createClient();
+        const email = base.step2.email.trim();
+        const emailRedirectTo = getURL(
+          `auth/callback?next=${encodeURIComponent(afterAuthPath)}`
         );
-        if (!sync.ok) {
+
+        const {
+          data: { session: existingSession }
+        } = await supabase.auth.getSession();
+        let session = existingSession;
+        console.info('[onboarding:auth] getSession', {
+          hasSession: Boolean(existingSession?.user),
+          userId: existingSession?.user?.id ?? null
+        });
+
+        const notifyTelegramRegistration = async (userId: string, userEmail: string) => {
+          try {
+            await fetch('/api/internal/telegram/registration', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                userId,
+                email: userEmail,
+                firstName: base.step2.firstName.trim() || null,
+                source: mode === 'embedded' ? 'get-scholarships' : 'onboarding'
+              })
+            });
+          } catch (error) {
+            console.warn('[onboarding:telegram] registration notify failed', error);
+          }
+        };
+
+        const finishWithSession = async () => {
+          if (!session?.user) return false;
+          const sync = await syncOnboardingToProfiles(
+            supabase,
+            session.user.id,
+            built.profile
+          );
+          if (!sync.ok) {
+            setLoading(false);
+            finalizeInFlight.current = false;
+            notifyDestructive(
+              'Could not save your profile',
+              sync.error ??
+                'Try again in a moment, or finish setup from your account page.'
+            );
+            return false;
+          }
+          const addr = session.user.email?.trim();
+          if (addr) {
+            void enqueueRegistrationVerificationEmail(addr, session.user.id);
+            void notifyTelegramRegistration(session.user.id, addr);
+          }
+          clearScholarshipOnboardingDraft();
+          finalizeInFlight.current = false;
+          setLoading(false);
+          router.refresh();
+          router.push(afterAuthPath);
+          return true;
+        };
+
+        if (session?.user) {
+          await finishWithSession();
+          return;
+        }
+
+        let signUpData: Awaited<ReturnType<typeof supabase.auth.signUp>>['data'];
+        let signUpError: Awaited<ReturnType<typeof supabase.auth.signUp>>['error'];
+        try {
+          const scholarshipProfilePayload = JSON.stringify(built.profile);
+          console.info('[onboarding:auth] signUp metadata payload', {
+            builtProfile: built.profile,
+            scholarship_profile_string_length: scholarshipProfilePayload.length
+          });
+          const result = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              emailRedirectTo,
+              data: {
+                scholarship_profile: scholarshipProfilePayload
+              }
+            }
+          });
+          signUpData = result.data;
+          signUpError = result.error;
+        } catch {
           setLoading(false);
           finalizeInFlight.current = false;
           notifyDestructive(
-            'Could not save your profile',
-            sync.error ??
-              'Try again in a moment, or finish setup from your account page.'
+            'Something went wrong',
+            'Check your connection and try again.'
           );
-          return false;
+          return;
         }
-        const addr = session.user.email?.trim();
-        if (addr) {
-          void enqueueRegistrationVerificationEmail(addr, session.user.id);
-          void notifyTelegramRegistration(session.user.id, addr);
+
+        console.info('[onboarding:auth] signUp result', {
+          error: signUpError?.message ?? null,
+          hasSession: Boolean(signUpData.session),
+          userId: signUpData.user?.id ?? null
+        });
+
+        if (signUpError) {
+          console.error('[onboarding:auth] signUp error (full)', {
+            message: signUpError.message,
+            status: signUpError.status,
+            code: signUpError.code,
+            name: signUpError.name
+          });
+          setLoading(false);
+          finalizeInFlight.current = false;
+          if (signUpError.message) {
+            const u = userFacingAuthError(signUpError);
+            notifyDestructive(u.title, u.description);
+          } else {
+            notifyDestructive(
+              'Something went wrong',
+              'Check your connection and try again.'
+            );
+          }
+          return;
         }
+
+        session = signUpData.session;
+
+        if (session?.user) {
+          const ok = await finishWithSession();
+          if (!ok) return;
+          return;
+        }
+
         clearScholarshipOnboardingDraft();
-        finalizeInFlight.current = false;
         setLoading(false);
+        finalizeInFlight.current = false;
         router.refresh();
         router.push(afterAuthPath);
-        return true;
-      };
-
-      if (session?.user) {
-        await finishWithSession();
-        return;
-      }
-
-      let signUpData: Awaited<ReturnType<typeof supabase.auth.signUp>>['data'];
-      let signUpError: Awaited<ReturnType<typeof supabase.auth.signUp>>['error'];
-      try {
-        const scholarshipProfilePayload = JSON.stringify(built.profile);
-        console.info('[onboarding:auth] signUp metadata payload', {
-          builtProfile: built.profile,
-          scholarship_profile_string_length: scholarshipProfilePayload.length
-        });
-        const result = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo,
-            data: {
-              scholarship_profile: scholarshipProfilePayload
-            }
-          }
-        });
-        signUpData = result.data;
-        signUpError = result.error;
-      } catch {
+      } catch (error) {
+        console.error('[onboarding:auth] finalize failed unexpectedly', error);
         setLoading(false);
         finalizeInFlight.current = false;
         notifyDestructive(
           'Something went wrong',
           'Check your connection and try again.'
         );
-        return;
       }
-
-      console.info('[onboarding:auth] signUp result', {
-        error: signUpError?.message ?? null,
-        hasSession: Boolean(signUpData.session),
-        userId: signUpData.user?.id ?? null
-      });
-
-      if (signUpError) {
-        console.error('[onboarding:auth] signUp error (full)', {
-          message: signUpError.message,
-          status: signUpError.status,
-          code: signUpError.code,
-          name: signUpError.name
-        });
-        setLoading(false);
-        finalizeInFlight.current = false;
-        if (signUpError.message) {
-          const u = userFacingAuthError(signUpError);
-          notifyDestructive(u.title, u.description);
-        } else {
-          notifyDestructive(
-            'Something went wrong',
-            'Check your connection and try again.'
-          );
-        }
-        return;
-      }
-
-      session = signUpData.session;
-
-      if (session?.user) {
-        const ok = await finishWithSession();
-        if (!ok) return;
-        return;
-      }
-
-      clearScholarshipOnboardingDraft();
-      setLoading(false);
-      finalizeInFlight.current = false;
-      router.refresh();
-      router.push(afterAuthPath);
     },
     [afterAuthPath, mode, persistFull, router]
   );

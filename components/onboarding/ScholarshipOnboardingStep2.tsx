@@ -292,6 +292,24 @@ export function ScholarshipOnboardingStep2({
     const result = validateScholarshipOnboardingStep2(values);
     if (!result.ok) {
       setErrors(result.errors);
+      const firstError =
+        result.errors.submit ??
+        result.errors.birthDate ??
+        result.errors.age ??
+        result.errors.birthMonth ??
+        result.errors.birthDay ??
+        result.errors.birthYear ??
+        result.errors.firstName ??
+        result.errors.lastName ??
+        result.errors.email ??
+        result.errors.password ??
+        result.errors.confirmPassword ??
+        'Please review your details.';
+      toast({
+        variant: 'destructive',
+        title: 'Please check your details',
+        description: firstError
+      });
       return;
     }
     setErrors({});
