@@ -113,6 +113,7 @@ export function ScholarshipOnboardingWizard({
   }, []);
 
   useEffect(() => {
+    void router.prefetch(afterAuthPath);
     const supabase = createClient();
     void supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
@@ -325,31 +326,27 @@ export function ScholarshipOnboardingWizard({
 
         const finishWithSession = async () => {
           if (!session?.user) return false;
-          const sync = await syncOnboardingToProfiles(
-            supabase,
-            session.user.id,
-            built.profile
-          );
-          if (!sync.ok) {
-            setLoading(false);
-            finalizeInFlight.current = false;
-            notifyDestructive(
-              'Could not save your profile',
-              sync.error ??
-                'Try again in a moment, or finish setup from your account page.'
-            );
-            return false;
-          }
-          const addr = session.user.email?.trim();
-          if (addr) {
-            void enqueueRegistrationVerificationEmail(addr, session.user.id);
-            void notifyTelegramRegistration(session.user.id, addr);
-          }
+          const userId = session.user.id;
+          const addr = session.user.email?.trim() ?? null;
           clearScholarshipOnboardingDraft();
           finalizeInFlight.current = false;
           setLoading(false);
           router.refresh();
           router.push(afterAuthPath);
+          void (async () => {
+            const sync = await syncOnboardingToProfiles(supabase, userId, built.profile);
+            if (!sync.ok) {
+              console.warn('[onboarding:profile-sync] async sync failed', {
+                userId,
+                error: sync.error ?? 'unknown'
+              });
+              return;
+            }
+            if (addr) {
+              void enqueueRegistrationVerificationEmail(addr, userId);
+              void notifyTelegramRegistration(userId, addr);
+            }
+          })();
           return true;
         };
 

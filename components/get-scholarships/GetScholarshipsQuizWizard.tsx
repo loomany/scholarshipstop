@@ -81,12 +81,14 @@ export function GetScholarshipsQuizWizard({
   const [draft, setDraft] = useState<StoredOnboardingDraft | null>(null);
   const [quizStep, setQuizStep] = useState<LandingQuizStep>(1);
   const [stepReady, setStepReady] = useState(false);
+  const [navigatingToHub, setNavigatingToHub] = useState(false);
 
   useEffect(() => {
     setDraft(loadLandingQuizDraft() ?? emptyLandingQuizDraft());
   }, []);
 
   useEffect(() => {
+    void router.prefetch(afterAuthPath);
     const supabase = createClient();
     void supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
@@ -175,6 +177,7 @@ export function GetScholarshipsQuizWizard({
     saveCompletedLandingQuizDraft(base);
     stashLandingQuizDraftForOnboardingMerge(base);
     clearLandingQuizDraft();
+    setNavigatingToHub(true);
     void notifyQuizCompletionClient({
       flow: 'get_scholarships_quiz',
       landingPath: '/get-scholarships',
@@ -333,10 +336,12 @@ export function GetScholarshipsQuizWizard({
           ) : null}
           {step === 5 ? (
             <ScholarshipOnboardingStep3Gpa
-              disabled={false}
+              disabled={navigatingToHub}
               draftStore="landing"
               progressEyebrow="Step 5 of 5 · GPA"
-              submitButtonLabel="See scholarship matches →"
+              submitButtonLabel={
+                navigatingToHub ? 'Preparing your matches…' : 'See scholarship matches →'
+              }
               initialStep3={draft.step3}
               title="What's your GPA?"
               description="This helps us rank scholarships with academic requirements."
