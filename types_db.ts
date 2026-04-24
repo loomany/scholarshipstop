@@ -2085,6 +2085,14 @@ export interface Database {
           updated_at: string
         }[]
       }
+      university_hub_sitemap_rows: {
+        Args: Record<string, never>
+        Returns: {
+          state_slug: string
+          university_slug: string
+          updated_at: string
+        }[]
+      }
       get_compare_peer_institutions: {
         Args: { p_institution_id: string; p_limit?: number }
         Returns: {

@@ -183,6 +183,12 @@ type CompareSitemapRow = {
   updated_at: string;
 };
 
+type UniversityHubSitemapRow = {
+  state_slug: string;
+  university_slug: string;
+  updated_at: string;
+};
+
 /** Published `/compare/universities/[slug]` pages. */
 async function fetchCompareSitemapRows(): Promise<CompareSitemapRow[]> {
   const supabase = createPublicClient();
@@ -205,6 +211,18 @@ async function fetchStateCompareSitemapRows(): Promise<CompareSitemapRow[]> {
     return [];
   }
   return (data ?? []) as CompareSitemapRow[];
+}
+
+/** `/scholarships/{state}/{university}` hubs backed by `provider_hub_listing` + `states` + `providers`. */
+async function fetchUniversityHubSitemapRows(): Promise<UniversityHubSitemapRow[]> {
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.rpc('university_hub_sitemap_rows', {});
+  if (error) {
+    console.error('[sitemap] university_hub_sitemap_rows failed:', error);
+    return [];
+  }
+  return (data ?? []) as UniversityHubSitemapRow[];
 }
 
 /** Programmatic hub URLs completed via `seo_generation_queue` (grant_count &gt; min). */
@@ -405,11 +423,31 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
       lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
     }));
 
+  const universityHubRows = await fetchUniversityHubSitemapRows().catch(
+    () => []
+  );
+  const universityHubPages: MetadataRoute.Sitemap = universityHubRows
+    .filter((row) => {
+      const state = row.state_slug?.trim().toLowerCase();
+      const uni = row.university_slug?.trim().toLowerCase();
+      if (!state || !uni) return false;
+      return canonicalPathAllowedInSeoSitemap(`${state}/${uni}`);
+    })
+    .map((row) => {
+      const state = row.state_slug.trim().toLowerCase();
+      const uni = row.university_slug.trim().toLowerCase();
+      return {
+        url: `${base}/scholarships/${encodeURIComponent(state)}/${encodeURIComponent(uni)}`,
+        lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
+      };
+    });
+
   const seo = dedupeSitemapEntries([
     ...manifestSeoPages,
     ...longTailPages,
     ...stateListingPages,
-    ...programmaticHubPages
+    ...programmaticHubPages,
+    ...universityHubPages
   ]);
 
   const [scholarships, providers, compareRows, stateCompareRows] = await Promise.all([
