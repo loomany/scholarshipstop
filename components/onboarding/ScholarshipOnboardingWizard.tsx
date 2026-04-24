@@ -328,25 +328,26 @@ export function ScholarshipOnboardingWizard({
           if (!session?.user) return false;
           const userId = session.user.id;
           const addr = session.user.email?.trim() ?? null;
+          const sync = await syncOnboardingToProfiles(supabase, userId, built.profile);
+          if (!sync.ok) {
+            setLoading(false);
+            finalizeInFlight.current = false;
+            notifyDestructive(
+              'Could not save your profile',
+              sync.error ??
+                'Try again in a moment, or finish setup from your account page.'
+            );
+            return false;
+          }
+          if (addr) {
+            void enqueueRegistrationVerificationEmail(addr, userId);
+            void notifyTelegramRegistration(userId, addr);
+          }
           clearScholarshipOnboardingDraft();
           finalizeInFlight.current = false;
           setLoading(false);
           router.refresh();
           router.push(afterAuthPath);
-          void (async () => {
-            const sync = await syncOnboardingToProfiles(supabase, userId, built.profile);
-            if (!sync.ok) {
-              console.warn('[onboarding:profile-sync] async sync failed', {
-                userId,
-                error: sync.error ?? 'unknown'
-              });
-              return;
-            }
-            if (addr) {
-              void enqueueRegistrationVerificationEmail(addr, userId);
-              void notifyTelegramRegistration(userId, addr);
-            }
-          })();
           return true;
         };
 
