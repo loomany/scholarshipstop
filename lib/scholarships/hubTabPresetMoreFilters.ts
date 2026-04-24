@@ -86,8 +86,18 @@ export function buildHubTabPresetMoreFilters(options: {
       return stripHubProfileHardMatchMoreFilters(cloneMoreFilters(base));
     }
     case 'easy-apply':
-    case 'hot-deadlines':
-      return cloneMoreFilters(base);
+    {
+      const next = cloneMoreFilters(base);
+      next.includeEasyApply.add('easy_apply');
+      return next;
+    }
+    case 'hot-deadlines': {
+      const next = cloneMoreFilters(base);
+      if (!options.deadlineFromUrl || options.deadlineFromUrl === 'any') {
+        next.deadlinePreset = 'd1_7';
+      }
+      return next;
+    }
     default:
       return cloneMoreFilters(base);
   }

@@ -15,10 +15,7 @@ export type SortOption =
 /** Hub guests: only Newest and Recommended stay open. */
 export const GUEST_LOCKED_SORT_OPTIONS = new Set<SortOption>([
   'closest_deadline',
-  'best_recommendation',
   'highest_amount',
-  'lowest_amount',
-  'best_match',
   'verified_first',
   'least_requirements',
   'fewest_applicants'
@@ -129,7 +126,9 @@ export function sortScholarshipsInPlace(
   list.sort((a, b) => {
     switch (sortBy) {
       case 'magic':
-      case 'best_match': {
+      case 'best_match':
+      case 'best_recommendation':
+      case 'lowest_amount': {
         /* Uses catalog ranking score (no per-user % on cards). */
         const d = ranking(b) - ranking(a);
         if (d !== 0) return d;
@@ -137,20 +136,8 @@ export function sortScholarshipsInPlace(
         if (tie !== 0) return tie;
         return orig(a) - orig(b);
       }
-      case 'best_recommendation': {
-        const d = parseAmount(b) - parseAmount(a);
-        if (d !== 0) return d;
-        const rec = recentMs(b) - recentMs(a);
-        if (rec !== 0) return rec;
-        return orig(a) - orig(b);
-      }
       case 'highest_amount': {
         const d = parseAmount(b) - parseAmount(a);
-        if (d !== 0) return d;
-        return orig(a) - orig(b);
-      }
-      case 'lowest_amount': {
-        const d = parseAmount(a) - parseAmount(b);
         if (d !== 0) return d;
         return orig(a) - orig(b);
       }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Lock, X } from 'lucide-react';
 
@@ -51,6 +51,7 @@ type ScholarshipsMoreFiltersPanelProps = {
   onChange: (next: MoreFiltersState) => void;
   onClear: () => void;
   onApply: () => void;
+  applyPending?: boolean;
   /** Hub: explain tab-only SQL / profile layers above the form. */
   contextNotices?: ScholarshipsMoreFiltersContextNotice[];
   /** Persist current draft as the “Saved filters” tab preset (hub). */
@@ -68,7 +69,7 @@ type ScholarshipsMoreFiltersPanelProps = {
   onSubscriptionLockedAction?: () => void;
 };
 
-function DualRangeSlider({
+const DualRangeSlider = memo(function DualRangeSlider({
   minBound,
   maxBound,
   low,
@@ -133,7 +134,8 @@ function DualRangeSlider({
       </div>
     </div>
   );
-}
+});
+DualRangeSlider.displayName = 'DualRangeSlider';
 
 const sectionTitle = 'text-sm font-bold text-zinc-900';
 const sectionHint = 'mt-1 text-xs text-zinc-500';
@@ -151,6 +153,53 @@ function toggleInSet(
   else next.delete(id);
   return next;
 }
+
+type CheckboxGroupOption = {
+  id: string;
+  label: string;
+  locked?: boolean;
+};
+
+const FilterCheckboxGroup = memo(function FilterCheckboxGroup({
+  options,
+  selected,
+  onCheckedChange,
+  columnsClassName = 'grid grid-cols-1 gap-2 sm:grid-cols-2'
+}: {
+  options: readonly CheckboxGroupOption[];
+  selected: Set<string>;
+  onCheckedChange: (id: string, checked: boolean) => void;
+  columnsClassName?: string;
+}) {
+  return (
+    <div className={columnsClassName}>
+      {options.map((opt) => (
+        <label
+          key={opt.id}
+          className="flex cursor-pointer items-start gap-2"
+        >
+          <input
+            type="checkbox"
+            checked={selected.has(opt.id)}
+            onChange={(e) => onCheckedChange(opt.id, e.target.checked)}
+            className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
+          />
+          <span className="inline-flex items-center gap-1 text-sm text-zinc-800">
+            {opt.label}
+            {opt.locked ? (
+              <Lock
+                className={`h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
+                strokeWidth={2}
+                aria-hidden
+              />
+            ) : null}
+          </span>
+        </label>
+      ))}
+    </div>
+  );
+});
+FilterCheckboxGroup.displayName = 'FilterCheckboxGroup';
 
 type UniversitySuggestion = {
   slug: string;
@@ -385,6 +434,7 @@ export default function ScholarshipsMoreFiltersPanel({
   onChange,
   onClear,
   onApply,
+  applyPending = false,
   onSaveFilter,
   saveFilterEnabled = false,
   previewCount,
@@ -397,6 +447,8 @@ export default function ScholarshipsMoreFiltersPanel({
   onSubscriptionLockedAction,
   contextNotices
 }: ScholarshipsMoreFiltersPanelProps) {
+  const [showSlowPreviewIndicator, setShowSlowPreviewIndicator] = useState(false);
+
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -414,6 +466,17 @@ export default function ScholarshipsMoreFiltersPanel({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open || !previewCountLoading) {
+      setShowSlowPreviewIndicator(false);
+      return;
+    }
+    const t = window.setTimeout(() => {
+      setShowSlowPreviewIndicator(true);
+    }, 300);
+    return () => window.clearTimeout(t);
+  }, [open, previewCountLoading]);
 
   if (!open) return null;
   const targetedCategoryLockAction = !hasSubscription
@@ -455,12 +518,67 @@ export default function ScholarshipsMoreFiltersPanel({
       payout: { ...value.payout, [key]: v }
     });
 
+  const requirementOptions = REQUIREMENT_TYPE_OPTIONS;
+  const educationOptions = EDUCATION_LEVEL_OPTIONS;
+  const gpaOptions = GPA_BUCKET_OPTIONS;
+  const easyApplyOptions: CheckboxGroupOption[] = EASY_APPLY_OPTIONS.map((opt) => ({
+    id: opt.id,
+    label: opt.label,
+    locked: !hasSubscription && SUBSCRIPTION_LOCKED_EASY_APPLY_IDS.has(opt.id)
+  }));
+
+  const onRequirementCheckedChange = (id: string, checked: boolean) => {
+    const next = new Set(value.includeRequirementTypes);
+    if (checked) next.add(id);
+    else next.delete(id);
+    onChange({ ...value, includeRequirementTypes: next });
+  };
+
+  const onEducationCheckedChange = (id: string, checked: boolean) =>
+    onChange({
+      ...value,
+      includeEducationLevels: toggleInSet(
+        value.includeEducationLevels,
+        id,
+        checked
+      )
+    });
+
+  const onGpaCheckedChange = (id: string, checked: boolean) =>
+    onChange({
+      ...value,
+      includeGpaBuckets: toggleInSet(value.includeGpaBuckets, id, checked)
+    });
+
+  const onEasyApplyCheckedChange = (id: string, checked: boolean) => {
+    const optionLocked =
+      !hasSubscription &&
+      SUBSCRIPTION_LOCKED_EASY_APPLY_IDS.has(id);
+    if (optionLocked) {
+      targetedCategoryLockAction?.();
+      return;
+    }
+    onChange({
+      ...value,
+      includeEasyApply: toggleInSet(value.includeEasyApply, id, checked)
+    });
+  };
+
   const previewLabel = (() => {
+    if (applyPending) return 'Applying filters...';
+    if (previewCountLoading) {
+      const continuityCount = previewCount ?? previewCountFallback;
+      if (continuityCount != null) {
+        return `Calculating... (${continuityCount})`;
+      }
+      return 'Calculating...';
+    }
     const effectiveCount = previewCount ?? previewCountFallback;
     if (effectiveCount == null) return 'Show results';
     if (previewCountLoading) return `Show ${effectiveCount} results`;
     return `Show ${effectiveCount} results`;
   })();
+  const applyButtonBusy = applyPending || previewCountLoading;
 
   return (
     <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
@@ -476,6 +594,12 @@ export default function ScholarshipsMoreFiltersPanel({
         aria-modal="true"
         aria-labelledby="more-filters-title"
       >
+        {showSlowPreviewIndicator ? (
+          <div
+            className="h-0.5 w-full animate-pulse bg-emerald-500/70"
+            aria-hidden
+          />
+        ) : null}
         <header
           className={`flex shrink-0 items-center justify-between border-b border-zinc-200 px-4 py-4`}
         >
@@ -726,21 +850,13 @@ export default function ScholarshipsMoreFiltersPanel({
             <p className={sectionHint}>
               Show scholarships that require the selected items.
             </p>
-            <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
-              {REQUIREMENT_TYPE_OPTIONS.map((opt) => (
-                <label
-                  key={opt.id}
-                  className="flex cursor-pointer items-start gap-2"
-                >
-                  <input
-                    type="checkbox"
-                    checked={value.includeRequirementTypes.has(opt.id)}
-                    onChange={() => toggleRequirementType(opt.id)}
-                    className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
-                  />
-                  <span className="text-sm text-zinc-800">{opt.label}</span>
-                </label>
-              ))}
+            <div className="mt-4">
+              <FilterCheckboxGroup
+                options={requirementOptions}
+                selected={value.includeRequirementTypes}
+                onCheckedChange={onRequirementCheckedChange}
+                columnsClassName="grid grid-cols-2 gap-x-4 gap-y-3"
+              />
             </div>
           </section>
 
@@ -895,30 +1011,12 @@ export default function ScholarshipsMoreFiltersPanel({
             <p className={sectionHint}>
               Show listings that match any selected level (OR).
             </p>
-            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {EDUCATION_LEVEL_OPTIONS.map((opt) => (
-                <label
-                  key={opt.id}
-                  className="flex cursor-pointer items-start gap-2"
-                >
-                  <input
-                    type="checkbox"
-                    checked={value.includeEducationLevels.has(opt.id)}
-                    onChange={(e) =>
-                      onChange({
-                        ...value,
-                        includeEducationLevels: toggleInSet(
-                          value.includeEducationLevels,
-                          opt.id,
-                          e.target.checked
-                        )
-                      })
-                    }
-                    className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
-                  />
-                  <span className="text-sm text-zinc-800">{opt.label}</span>
-                </label>
-              ))}
+            <div className="mt-4">
+              <FilterCheckboxGroup
+                options={educationOptions}
+                selected={value.includeEducationLevels}
+                onCheckedChange={onEducationCheckedChange}
+              />
             </div>
           </section>
 
@@ -927,30 +1025,13 @@ export default function ScholarshipsMoreFiltersPanel({
             <p className={sectionHint}>
               Show scholarships whose stated GPA bar matches any selection (OR).
             </p>
-            <div className="mt-4 grid grid-cols-1 gap-2">
-              {GPA_BUCKET_OPTIONS.map((opt) => (
-                <label
-                  key={opt.id}
-                  className="flex cursor-pointer items-start gap-2"
-                >
-                  <input
-                    type="checkbox"
-                    checked={value.includeGpaBuckets.has(opt.id)}
-                    onChange={(e) =>
-                      onChange({
-                        ...value,
-                        includeGpaBuckets: toggleInSet(
-                          value.includeGpaBuckets,
-                          opt.id,
-                          e.target.checked
-                        )
-                      })
-                    }
-                    className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
-                  />
-                  <span className="text-sm text-zinc-800">{opt.label}</span>
-                </label>
-              ))}
+            <div className="mt-4">
+              <FilterCheckboxGroup
+                options={gpaOptions}
+                selected={value.includeGpaBuckets}
+                onCheckedChange={onGpaCheckedChange}
+                columnsClassName="grid grid-cols-1 gap-2"
+              />
             </div>
           </section>
 
@@ -1065,46 +1146,12 @@ export default function ScholarshipsMoreFiltersPanel({
               Highlights no-essay and lighter applications when we can detect
               them (OR).
             </p>
-            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {EASY_APPLY_OPTIONS.map((opt) => (
-                (() => {
-                  const optionLocked =
-                    !hasSubscription &&
-                    SUBSCRIPTION_LOCKED_EASY_APPLY_IDS.has(opt.id);
-                  return (
-                <label
-                  key={opt.id}
-                  className="flex cursor-pointer items-start gap-2"
-                >
-                  <input
-                    type="checkbox"
-                    checked={value.includeEasyApply.has(opt.id)}
-                    onChange={(e) => {
-                      if (optionLocked) {
-                        targetedCategoryLockAction?.();
-                        return;
-                      }
-                      onChange({
-                        ...value,
-                        includeEasyApply: toggleInSet(
-                          value.includeEasyApply,
-                          opt.id,
-                          e.target.checked
-                        )
-                      });
-                    }}
-                    className="scholarship-filter-checkbox mt-0.5 h-4 w-4 shrink-0"
-                  />
-                  <span className="inline-flex items-center gap-1 text-sm text-zinc-800">
-                    {opt.label}
-                    {optionLocked ? (
-                      <Lock className={`h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`} strokeWidth={2} aria-hidden />
-                    ) : null}
-                  </span>
-                </label>
-                  );
-                })()
-              ))}
+            <div className="mt-4">
+              <FilterCheckboxGroup
+                options={easyApplyOptions}
+                selected={value.includeEasyApply}
+                onCheckedChange={onEasyApplyCheckedChange}
+              />
             </div>
           </section>
 
@@ -1311,19 +1358,30 @@ export default function ScholarshipsMoreFiltersPanel({
             <button
               type="button"
               onClick={() => {
+                if (applyButtonBusy) return;
                 if (!isAuthenticated) {
                   onGuestLockedAction?.();
                   return;
                 }
                 onApply();
               }}
+              disabled={applyButtonBusy}
+              aria-busy={applyButtonBusy}
               title={
                 !isAuthenticated
                   ? 'Apply filters after you start your free trial'
                   : undefined
               }
-              className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
+              className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''} ${
+                applyButtonBusy ? 'opacity-50' : ''
+              }`}
             >
+              {previewCountLoading && !applyPending ? (
+                <span
+                  className="mr-1.5 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/50 border-t-white"
+                  aria-hidden
+                />
+              ) : null}
               {!isAuthenticated ? (
                 <Lock
                   className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}

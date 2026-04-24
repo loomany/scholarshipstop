@@ -231,6 +231,30 @@ export default function ScholarshipsSidebar({
     }
     return `(${n})`;
   };
+  const renderCountSlot = (
+    countSuffix: string | undefined,
+    active: boolean
+  ) => {
+    const textClass = active ? 'text-white' : 'text-gray-400';
+    if (countSuffix) {
+      return (
+        <span
+          className={`inline-block shrink-0 text-right tabular-nums font-normal ${textClass}`}
+          aria-label={countSuffix}
+        >
+          {countSuffix}
+        </span>
+      );
+    }
+    return (
+      <span
+        className="inline-block shrink-0 text-right"
+        aria-hidden
+      >
+        <span className="inline-block h-3 w-[2.5ch] rounded bg-gray-200/90 align-middle" />
+      </span>
+    );
+  };
 
   return (
     <div className="flex w-full flex-col lg:max-w-[320px] lg:shrink-0">
@@ -299,19 +323,10 @@ export default function ScholarshipsSidebar({
                         : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
                     }`}
                   >
-                    {item.label}
-                    {countSuffix ? (
-                      <span
-                        className={
-                          navLooksActive
-                            ? 'font-normal text-white'
-                            : 'font-normal text-gray-400'
-                        }
-                      >
-                        {' '}
-                        {countSuffix}
-                      </span>
-                    ) : null}
+                    <span className="inline-flex items-baseline gap-1">
+                      <span className="min-w-0 truncate">{item.label}</span>
+                      {renderCountSlot(countSuffix, navLooksActive)}
+                    </span>
                   </span>
                 </button>
               ) : (
@@ -336,19 +351,10 @@ export default function ScholarshipsSidebar({
                         : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
                     }`}
                   >
-                    {item.label}
-                    {countSuffix ? (
-                      <span
-                        className={
-                          navLooksActive
-                            ? 'font-normal text-white'
-                            : 'font-normal text-gray-400'
-                        }
-                      >
-                        {' '}
-                        {countSuffix}
-                      </span>
-                    ) : null}
+                    <span className="inline-flex items-baseline gap-1">
+                      <span className="min-w-0 truncate">{item.label}</span>
+                      {renderCountSlot(countSuffix, navLooksActive)}
+                    </span>
                   </span>
                 </Link>
               )}
@@ -387,19 +393,10 @@ export default function ScholarshipsSidebar({
                     : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
                 }`}
               >
-                {item.label}
-                {countSuffix ? (
-                  <span
-                    className={
-                      navLooksActive
-                        ? 'font-normal text-white'
-                        : 'font-normal text-gray-400'
-                    }
-                  >
-                    {' '}
-                    {countSuffix}
-                  </span>
-                ) : null}
+                <span className="inline-flex items-baseline gap-1">
+                  <span className="min-w-0 truncate">{item.label}</span>
+                  {renderCountSlot(countSuffix, navLooksActive)}
+                </span>
               </span>
               {item.id === 'matches' &&
               matchesNewIndicator &&
@@ -519,19 +516,10 @@ export default function ScholarshipsSidebar({
                       : 'font-medium text-gray-500 transition-colors group-hover:text-gray-700'
                   }`}
                 >
-                  International Friendly
-                  {intlCountSuffix ? (
-                    <span
-                      className={
-                        intlActive
-                          ? 'font-normal text-white'
-                          : 'font-normal text-gray-400'
-                      }
-                    >
-                      {' '}
-                      {intlCountSuffix}
-                    </span>
-                  ) : null}
+                  <span className="inline-flex items-baseline gap-1">
+                    <span className="min-w-0 truncate">International Friendly</span>
+                    {renderCountSlot(intlCountSuffix, intlActive)}
+                  </span>
                 </span>
               </>
             );

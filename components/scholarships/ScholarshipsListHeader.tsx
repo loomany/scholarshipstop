@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  memo,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -117,25 +118,23 @@ function listingResultUnit(
 
 /** Порядок: сначала понятные дефолты, затем остальное; magic = рекомендации по скорингу. */
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: 'closest_deadline', label: 'Deadline soonest' },
-  { value: 'most_recent', label: 'Newest' },
-  { value: 'highest_amount', label: 'Amount high → low' },
-  { value: 'lowest_amount', label: 'Amount low → high' },
-  { value: 'best_match', label: 'Best recommendation' },
   { value: 'magic', label: 'Recommended' },
+  { value: 'most_recent', label: 'Newest' },
+  { value: 'closest_deadline', label: 'Deadline soonest' },
+  { value: 'highest_amount', label: 'Amount high → low' },
   { value: 'verified_first', label: 'Verified first' },
   { value: 'least_requirements', label: 'Fewest requirements' },
   { value: 'fewest_applicants', label: 'Least applicants' }
 ];
 
 const SORT_TRIGGER_LABEL: Record<SortOption, string> = {
-  best_match: 'Best recommendation',
-  best_recommendation: 'Highest amount · newest',
+  best_match: 'Recommended',
+  best_recommendation: 'Recommended',
   most_recent: 'Newest',
   closest_deadline: 'Deadline soonest',
   highest_amount: 'Amount high → low',
   magic: 'Recommended',
-  lowest_amount: 'Amount low → high',
+  lowest_amount: 'Recommended',
   least_requirements: 'Fewest requirements',
   fewest_applicants: 'Least applicants',
   verified_first: 'Verified first'
@@ -174,7 +173,7 @@ function measureCategoryPanel(el: HTMLElement): CategoryPanelLayout {
   return { top, left, width, maxHeight };
 }
 
-export default function ScholarshipsListHeader({
+function ScholarshipsListHeader({
   query,
   onQueryChange,
   categoryCounts,
@@ -480,108 +479,95 @@ export default function ScholarshipsListHeader({
                 className="relative w-full shrink-0 sm:w-auto sm:min-w-[11rem]"
                 ref={sortRef}
               >
-                {listTab === 'best-recommendation' ? (
-                  <div
-                    className={`${CATALOG_CONTROL_BAR_BTN} w-full cursor-default justify-between sm:min-w-[11rem]`}
-                    title="Largest awards first; when amounts tie, newest updates first."
+                <>
+                  <button
+                    type="button"
+                    title={
+                      guestCatalogUiLocked
+                        ? 'Some sort options require a free account'
+                        : undefined
+                    }
+                    onClick={() => {
+                      setCategoriesOpen(false);
+                      setSortOpen((o) => !o);
+                    }}
+                    aria-expanded={sortOpen}
+                    aria-haspopup="listbox"
+                    className={`${CATALOG_CONTROL_BAR_BTN} w-full justify-between sm:min-w-[11rem]`}
                   >
                     <span className="min-w-0 truncate">
                       <span className="text-gray-500">Sort:</span>{' '}
                       <span className="font-medium text-gray-900">
-                        {SORT_TRIGGER_LABEL.best_recommendation}
+                        {sortTriggerLabel}
                       </span>
                     </span>
-                  </div>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      title={
-                        guestCatalogUiLocked
-                          ? 'Some sort options require a free account'
-                          : undefined
-                      }
-                      onClick={() => {
-                        setCategoriesOpen(false);
-                        setSortOpen((o) => !o);
-                      }}
-                      aria-expanded={sortOpen}
-                      aria-haspopup="listbox"
-                      className={`${CATALOG_CONTROL_BAR_BTN} w-full justify-between sm:min-w-[11rem]`}
-                    >
-                      <span className="min-w-0 truncate">
-                        <span className="text-gray-500">Sort:</span>{' '}
-                        <span className="font-medium text-gray-900">
-                          {sortTriggerLabel}
-                        </span>
-                      </span>
-                      {guestCatalogUiLocked ? (
-                        <Lock
-                          className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                          strokeWidth={2}
-                          aria-hidden
-                        />
-                      ) : null}
-                      <ChevronDown
-                        className={`h-4 w-4 shrink-0 text-gray-500 transition ${sortOpen ? 'rotate-180' : ''}`}
+                    {guestCatalogUiLocked ? (
+                      <Lock
+                        className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
+                        strokeWidth={2}
                         aria-hidden
                       />
-                    </button>
-                    {sortOpen ? (
-                      <ul
-                        role="listbox"
-                        aria-label="Sort options"
-                        className="absolute left-0 z-[200] mt-2 w-full min-w-[12rem] max-w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-xl border border-gray-200 bg-white py-2 shadow-lg ring-1 ring-gray-900/5 sm:left-auto sm:right-0 sm:w-max"
-                      >
-                        {SORT_OPTIONS.map((opt) => {
-                          const sortLocked =
-                            guestCatalogUiLocked &&
-                            GUEST_LOCKED_SORT_OPTIONS.has(opt.value);
-                          return (
-                            <li
-                              key={opt.value}
-                              role="option"
-                              aria-selected={sortBy === opt.value}
-                            >
-                              <button
-                                type="button"
-                                className={`flex w-full items-center gap-2 whitespace-nowrap px-4 py-2.5 text-left text-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 ${
-                                  sortBy === opt.value
-                                    ? optionSelectedClass
-                                    : optionDefaultClass
-                                }`}
-                                onClick={() => {
-                                  if (sortLocked) {
-                                    onGuestSortBlocked?.();
-                                    return;
-                                  }
-                                  onSortChange(opt.value);
-                                  setSortOpen(false);
-                                }}
-                              >
-                                {sortLocked ? (
-                                  <Lock
-                                    className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                                    strokeWidth={2}
-                                    aria-hidden
-                                  />
-                                ) : (
-                                  <span className="w-3.5 shrink-0" aria-hidden />
-                                )}
-                                <span className="min-w-0">{opt.label}</span>
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
                     ) : null}
-                  </>
-                )}
+                    <ChevronDown
+                      className={`h-4 w-4 shrink-0 text-gray-500 transition ${sortOpen ? 'rotate-180' : ''}`}
+                      aria-hidden
+                    />
+                  </button>
+                  {sortOpen ? (
+                    <ul
+                      role="listbox"
+                      aria-label="Sort options"
+                      className="absolute left-0 z-[200] mt-2 w-full min-w-[12rem] max-w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-xl border border-gray-200 bg-white py-2 shadow-lg ring-1 ring-gray-900/5 sm:left-auto sm:right-0 sm:w-max"
+                    >
+                      {SORT_OPTIONS.map((opt) => {
+                        const sortLocked =
+                          guestCatalogUiLocked &&
+                          GUEST_LOCKED_SORT_OPTIONS.has(opt.value);
+                        return (
+                          <li
+                            key={opt.value}
+                            role="option"
+                            aria-selected={sortBy === opt.value}
+                          >
+                            <button
+                              type="button"
+                              className={`flex w-full items-center gap-2 whitespace-nowrap px-4 py-2.5 text-left text-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 ${
+                                sortBy === opt.value
+                                  ? optionSelectedClass
+                                  : optionDefaultClass
+                              }`}
+                              onClick={() => {
+                                if (sortLocked) {
+                                  onGuestSortBlocked?.();
+                                  return;
+                                }
+                                onSortChange(opt.value);
+                                setSortOpen(false);
+                              }}
+                            >
+                              {sortLocked ? (
+                                <Lock
+                                  className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
+                                  strokeWidth={2}
+                                  aria-hidden
+                                />
+                              ) : (
+                                <span className="w-3.5 shrink-0" aria-hidden />
+                              )}
+                              <span className="min-w-0">{opt.label}</span>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : null}
+                </>
               </div>
             </div>
 
             <div className="min-w-0">
-              <div className="flex w-full min-w-0 flex-wrap items-center gap-3 sm:gap-4">
+              <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <div className="flex min-w-0 flex-wrap items-center gap-3 sm:gap-4">
                 <button
                   type="button"
                   aria-label="Open more filters"
@@ -668,13 +654,9 @@ export default function ScholarshipsListHeader({
                     />
                   </button>
                 </div>
+                </div>
                 {savedFilterPresetButtons.length > 0 ? (
-                  <div className="flex min-w-0 max-w-full flex-1 flex-wrap items-center justify-end gap-2 sm:justify-end">
-                    {savedFilterBarHint ? (
-                      <span className="min-w-0 max-w-full text-[11px] font-medium leading-snug text-zinc-500 sm:max-w-[11rem] sm:shrink-0 sm:truncate">
-                        {savedFilterBarHint}
-                      </span>
-                    ) : null}
+                  <div className="mt-2 flex min-w-0 w-full max-w-full flex-wrap items-center justify-start gap-3 sm:mt-0 sm:w-auto sm:flex-1 sm:gap-4 sm:justify-start">
                     {savedFilterPresetButtons.map((preset) => (
                       <button
                         key={preset.id}
@@ -734,3 +716,5 @@ export default function ScholarshipsListHeader({
     </div>
   );
 }
+
+export default memo(ScholarshipsListHeader);

@@ -7,6 +7,7 @@
 
 import {
   Suspense,
+  startTransition,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -16,10 +17,9 @@ import {
   type ReactNode
 } from 'react';
 import Link from 'next/link';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ScholarshipsHubQueryProvider } from '@/components/providers/ScholarshipsHubQueryProvider';
-import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import BestRecommendationWizard from '@/components/scholarships/BestRecommendationWizard';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
@@ -150,7 +150,6 @@ import {
   type BestRecommendationWizardStore
 } from '@/lib/onboarding/bestRecommendationWizardDraft';
 import {
-  mergeBestRecommendationFiltersFromProfile,
   stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
@@ -168,14 +167,6 @@ import { pickAllowedProfilesUpsertFields } from '@/lib/onboarding/profilesOnboar
 import { notifyQuizCompletionClient } from '@/lib/analytics/notifyQuizCompletionClient';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
-
-/** Temporary: trace hub meta overwrite. Remove after diagnosis. */
-function hubClientSidebarDebugEnabled(): boolean {
-  return (
-    process.env.NODE_ENV === 'development' ||
-    process.env.NEXT_PUBLIC_SCHOLARSHIPS_HUB_SIDEBAR_DEBUG === '1'
-  );
-}
 
 const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   bestRecommendation: 0,
@@ -203,6 +194,84 @@ const HUB_TABS_SSR_NEVER_SEEDS_ID_LIST: readonly ScholarshipListTabId[] = [
   'submitted',
   'from-email'
 ];
+const EMPTY_LOCATION_OPTIONS: string[] = [];
+const PREVIEW_COUNT_CACHE_TTL_MS = 30_000;
+
+function HubListSkeleton({
+  showApplyingLabel = false
+}: {
+  showApplyingLabel?: boolean;
+}) {
+  return (
+    <div aria-live="polite" aria-busy className="space-y-4">
+      {showApplyingLabel ? (
+        <div className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-600 shadow-sm">
+          Applying filters...
+        </div>
+      ) : null}
+      {Array.from({ length: 3 }).map((_, idx) => (
+        <div
+          key={`hub-list-skeleton-${idx}`}
+          className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"
+        >
+          <div className="mb-3 h-5 w-2/3 rounded bg-gray-200" />
+          <div className="mb-2 h-4 w-full rounded bg-gray-100" />
+          <div className="mb-4 h-4 w-5/6 rounded bg-gray-100" />
+          <div className="grid grid-cols-3 gap-2">
+            <div className="h-9 rounded bg-gray-100" />
+            <div className="h-9 rounded bg-gray-100" />
+            <div className="h-9 rounded bg-gray-100" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function HubShellSuspenseFallback() {
+  return (
+    <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 sm:px-5 md:py-12 lg:px-8">
+      <div className="mx-auto w-full max-w-[1200px]">
+        <div className="space-y-5 sm:space-y-6">
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
+            Scholarship matches
+          </h1>
+          <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+            <div className="mb-3 h-4 w-48 rounded bg-gray-200" />
+            <div className="mb-3 h-11 w-full rounded-xl bg-gray-100" />
+            <div className="flex gap-3">
+              <div className="h-10 w-24 rounded-xl bg-gray-100" />
+              <div className="h-10 w-28 rounded-xl bg-gray-100" />
+              <div className="h-10 w-24 rounded-xl bg-gray-100" />
+            </div>
+          </div>
+        </div>
+        <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <HubListSkeleton />
+          <div className="space-y-4">
+            <div className="rounded-2xl bg-white p-3 shadow-sm">
+              <div className="rounded-lg bg-black px-4 py-3.5 text-center">
+                <span className="text-sm font-bold tracking-tight text-white">
+                  My scholarships
+                </span>
+              </div>
+              <ul className="mt-2 space-y-1">
+                {Array.from({ length: 7 }).map((_, idx) => (
+                  <li key={idx} className="flex items-center gap-3 rounded-lg py-2.5 pr-2 pl-3">
+                    <span className="h-[18px] w-[18px] rounded-full bg-orange-200" />
+                    <span className="h-4 flex-1 rounded bg-gray-200" />
+                    <span className="h-3 w-[4.5ch] rounded bg-gray-200" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="h-40 rounded-2xl bg-white shadow-sm" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 
@@ -256,23 +325,6 @@ function buildHubListingSearchParams(options: {
     sp.set('submitted', options.submitted.join(','));
   else sp.delete('submitted');
   return sp;
-}
-
-function withTabEnforcedMoreFilters(
-  filters: MoreFiltersState,
-  tab: ScholarshipListTabId
-): MoreFiltersState {
-  if (tab === 'easy-apply') {
-    const next = cloneMoreFilters(filters);
-    next.includeEasyApply.add('easy_apply');
-    return next;
-  }
-  if (tab === 'hot-deadlines') {
-    const next = cloneMoreFilters(filters);
-    next.deadlinePreset = 'any';
-    return next;
-  }
-  return filters;
 }
 
 function withUrlAudience(
@@ -343,7 +395,11 @@ function ScholarshipsPageInner({
     () => parseIdCsv(new URLSearchParams(searchParamsString).get('email_ids')),
     [searchParamsString]
   );
-  const sortBy = parsedList.sort;
+  const sortBy = useMemo<SortOption>(() => {
+    const hasSortInUrl = new URLSearchParams(searchParamsString).has('sort');
+    if (hasSortInUrl) return parsedList.sort;
+    return 'magic';
+  }, [parsedList.sort, searchParamsString, activeTab]);
   const appliedCategoryIds = parsedList.categories;
   const catalogListScope = 'catalog' as const;
 
@@ -562,14 +618,19 @@ function ScholarshipsPageInner({
       options?: { scroll?: boolean }
     ) => {
       const p = buildScholarshipListSearchParams(
-        new URLSearchParams(searchParams.toString()),
+        new URLSearchParams(searchParamsString),
         patch
       );
+      if (!p.get('tab')) {
+        p.set('tab', activeTab);
+      }
       const qs = p.toString();
       const url = qs ? `${pathname}?${qs}` : pathname;
-      router.replace(url, { scroll: options?.scroll ?? false });
+      startTransition(() => {
+        router.replace(url, { scroll: options?.scroll ?? false });
+      });
     },
-    [pathname, router, searchParams]
+    [pathname, router, searchParamsString, activeTab]
   );
 
   const handleGuestBestRecommendationEditAnswers = useCallback(() => {
@@ -724,6 +785,14 @@ function ScholarshipsPageInner({
   const [lastKnownPreviewCount, setLastKnownPreviewCount] = useState<
     number | null
   >(null);
+  const lastKnownPreviewCountRef = useRef<number | null>(null);
+  const [isApplyingMoreFilters, setIsApplyingMoreFilters] = useState(false);
+  const [isApplyingListControls, setIsApplyingListControls] = useState(false);
+  const applyingMoreFiltersSawFetchRef = useRef(false);
+  const applyingListControlsSawFetchRef = useRef(false);
+  const applyingListControlsBaseSearchRef = useRef<string | null>(null);
+  const previewCountRequestSeqRef = useRef(0);
+  const previewCountCacheRef = useRef<Map<string, { total: number; ts: number }>>(new Map());
   const metaKeySynced = useRef('');
   /**
    * When this equals `sidebarMetaRequestKey`, `listMeta.sidebarCounts` matches the
@@ -733,9 +802,9 @@ function ScholarshipsPageInner({
     string | null
   >(null);
   const initialSidebarMetaHydratedRef = useRef(false);
-  const listRequestKeyClientLogRef = useRef<string | null>(null);
   const listMetaRef = useRef<ScholarshipListMeta | null>(listMeta);
   listMetaRef.current = listMeta;
+  lastKnownPreviewCountRef.current = lastKnownPreviewCount;
 
   const userListIdsRef = useRef({
     saved: activeTab === 'from-email' ? fromEmailIds : savedIds,
@@ -845,24 +914,45 @@ function ScholarshipsPageInner({
       if (queryDebounceRef.current) clearTimeout(queryDebounceRef.current);
       queryDebounceRef.current = setTimeout(() => {
         queryDebounceRef.current = null;
-        replaceListingParams({ q: value, resetPage: true });
+        setIsApplyingListControls(true);
+        applyingListControlsSawFetchRef.current = false;
+        applyingListControlsBaseSearchRef.current = searchParamsString;
+        replaceListingParams({
+          tab: activeTab,
+          q: value,
+          resetPage: true
+        });
       }, 350);
     },
-    [replaceListingParams]
+    [replaceListingParams, activeTab, searchParamsString]
   );
 
   const onApplyCategories = useCallback(
     (next: Set<ScholarshipCategoryId>) => {
-      replaceListingParams({ categories: next, resetPage: true });
+      setIsApplyingListControls(true);
+      applyingListControlsSawFetchRef.current = false;
+      applyingListControlsBaseSearchRef.current = searchParamsString;
+      replaceListingParams({
+        tab: activeTab,
+        categories: next,
+        resetPage: true
+      });
     },
-    [replaceListingParams]
+    [replaceListingParams, activeTab, searchParamsString]
   );
 
   const onSortChange = useCallback(
     (value: SortOption) => {
-      replaceListingParams({ sort: value, resetPage: true });
+      setIsApplyingListControls(true);
+      applyingListControlsSawFetchRef.current = false;
+      applyingListControlsBaseSearchRef.current = searchParamsString;
+      replaceListingParams({
+        tab: activeTab,
+        sort: value,
+        resetPage: true
+      });
     },
-    [replaceListingParams]
+    [replaceListingParams, activeTab, searchParamsString]
   );
 
   useEffect(() => {
@@ -1180,75 +1270,71 @@ function ScholarshipsPageInner({
     [routeScope?.baseMoreFilters, filterBounds]
   );
 
-  /** Hub UI + URL filters only (no landing-quiz merge). Drives Matches + sidebar “Matches” counts. */
-  const hubMergedBaseMoreFilters = useMemo(() => {
-    return routeBaseMoreFilters && moreFiltersApplied
-      ? mergeMoreFilterStates(routeBaseMoreFilters, moreFiltersApplied)
-      : (moreFiltersApplied ??
-          routeBaseMoreFilters ??
-          defaultMoreFiltersFromBounds(filterBounds));
-  }, [routeBaseMoreFilters, moreFiltersApplied, filterBounds]);
-
-  /**
-   * Best recommendation gets profile-derived hard filters; Recommended keeps the wide catalog
-   * and strips profile dimensions so saved preset logic remains the only narrowing source.
-   */
-  const hubListingBodyMoreFilters = useMemo(() => {
-    const merged = hubMergedBaseMoreFilters;
-    if (activeTab === 'best-recommendation') {
-      return mergeBestRecommendationFiltersFromProfile(
-        'best-recommendation',
-        cloneMoreFilters(merged),
-        listMeta?.profileFilterSeed ?? transientBestRecommendationProfileSeed,
-        filterBounds
-      );
-    }
-    if (activeTab === 'recommended') {
-      return stripHubProfileHardMatchMoreFilters(cloneMoreFilters(merged));
-    }
-    return merged;
+  /** Canonical tab baseline (tab scope + profile/saved preset/route base + URL-owned audience/deadline). */
+  const hubTabCanonicalPreset = useMemo(() => {
+    if (!listMeta?.filterBounds) return null;
+    return withUrlAudience(
+      buildHubTabPresetMoreFilters({
+        tab: activeTab,
+        filterBounds: listMeta.filterBounds,
+        deadlineFromUrl: parsedList.deadline,
+        routeScope,
+        profileFilterSeed: listMeta.profileFilterSeed,
+        landingQuizProfileSeed: transientBestRecommendationProfileSeed,
+        savedFiltersFromStorage: savedFiltersForHub,
+        isAuthenticated
+      }),
+      parsedList.audience
+    );
   }, [
-    hubMergedBaseMoreFilters,
     activeTab,
+    listMeta?.filterBounds,
     listMeta?.profileFilterSeed,
+    parsedList.deadline,
+    parsedList.audience,
+    routeScope,
     transientBestRecommendationProfileSeed,
-    filterBounds,
     savedFiltersForHub,
-    routeBaseMoreFilters
+    isAuthenticated
   ]);
+
+  /** User overlay from Filters modal; null means “pure tab baseline”. */
+  const userOverlayMoreFilters = moreFiltersApplied;
+  /** Effective filters for list query only (tab baseline + user overlay). */
+  const hubListingBodyMoreFilters = useMemo(
+    () =>
+      cloneMoreFilters(
+        userOverlayMoreFilters ??
+          hubTabCanonicalPreset ??
+          defaultMoreFiltersFromBounds(filterBounds)
+      ),
+    [userOverlayMoreFilters, hubTabCanonicalPreset, filterBounds]
+  );
 
   const listMoreFiltersJson = useMemo((): MoreFiltersJson | null => {
     if (!hubListingBodyMoreFilters) return null;
     try {
-      return moreFiltersToJson(
-        withTabEnforcedMoreFilters(hubListingBodyMoreFilters, activeTab)
-      );
+      return moreFiltersToJson(hubListingBodyMoreFilters);
     } catch {
       return null;
     }
-  }, [hubListingBodyMoreFilters, activeTab]);
+  }, [hubListingBodyMoreFilters]);
 
   /**
    * `meta_only` sidebar counts must reflect catalog-wide totals per row (Matches, Hot deadlines, …).
    * Guest Best preview narrows `hubListingBodyMoreFilters` with quiz seed for the main list only;
    * reusing that object for sidebar meta collapses those counts to the preview pool (wrong UX).
    */
+  /** Sidebar meta must stay global per tab category; ignore temporary modal overlay. */
   const hubSidebarMetaMoreFilters = useMemo(() => {
-    if (!hubListingBodyMoreFilters || !hubMergedBaseMoreFilters) {
-      return hubListingBodyMoreFilters;
-    }
-    if (guestBestRecommendationPreviewEnabled && !isAuthenticated) {
-      return stripHubProfileHardMatchMoreFilters(
-        cloneMoreFilters(hubMergedBaseMoreFilters)
-      );
-    }
-    return hubListingBodyMoreFilters;
-  }, [
-    guestBestRecommendationPreviewEnabled,
-    isAuthenticated,
-    hubListingBodyMoreFilters,
-    hubMergedBaseMoreFilters
-  ]);
+    const base = routeBaseMoreFilters
+      ? cloneMoreFilters(routeBaseMoreFilters)
+      : defaultMoreFiltersFromBounds(filterBounds);
+    base.deadlinePreset = 'any';
+    base.citizenshipAudience = 'any';
+    base.includeEasyApply.clear();
+    return stripHubProfileHardMatchMoreFilters(base);
+  }, [routeBaseMoreFilters, filterBounds]);
 
   useEffect(() => {
     if (isAuthenticated && listMeta?.profileFilterSeed) {
@@ -1294,31 +1380,9 @@ function ScholarshipsPageInner({
     savedFiltersRevision
   ]);
 
-  /** Built-in preset for the active tab (profile / saved preset / catalog); used for reset + “active” counts. */
-  const hubTabCanonicalPreset = useMemo(() => {
-    if (!listMeta?.filterBounds) return null;
-    return buildHubTabPresetMoreFilters({
-      tab: activeTab,
-      filterBounds: listMeta.filterBounds,
-      deadlineFromUrl: parsedList.deadline,
-      routeScope,
-      profileFilterSeed: listMeta.profileFilterSeed,
-      landingQuizProfileSeed: transientBestRecommendationProfileSeed,
-      savedFiltersFromStorage: savedFiltersForHub,
-      isAuthenticated
-    });
-  }, [
-    activeTab,
-    listMeta?.filterBounds,
-    listMeta?.profileFilterSeed,
-    parsedList.deadline,
-    routeScope,
-    transientBestRecommendationProfileSeed,
-    savedFiltersForHub,
-    isAuthenticated
-  ]);
-
-  const moreFiltersBaseline = hubTabCanonicalPreset;
+  const moreFiltersBaseline = useMemo(() => {
+    return hubTabCanonicalPreset ?? defaultMoreFiltersFromBounds(filterBounds);
+  }, [hubTabCanonicalPreset, filterBounds]);
 
   const presetSyncStateRef = useRef<{
     tab: ScholarshipListTabId;
@@ -1423,12 +1487,11 @@ function ScholarshipsPageInner({
     });
   }, [parsedList.deadline, parsedList.audience]);
 
+  const tabBaselineMoreFilters = moreFiltersBaseline;
+
   const emptyMoreFiltersState = useMemo(
-    () =>
-      cloneMoreFilters(
-        hubTabCanonicalPreset ?? defaultMoreFiltersFromBounds(filterBounds)
-      ),
-    [hubTabCanonicalPreset, filterBounds]
+    () => cloneMoreFilters(tabBaselineMoreFilters),
+    [tabBaselineMoreFilters]
   );
 
   const saveFilterEnabled = useMemo(() => {
@@ -1695,11 +1758,7 @@ function ScholarshipsPageInner({
     const raw = listMeta?.sidebarCounts ?? EMPTY_SIDEBAR_COUNTS;
     if (activeTab === 'recommended') {
       const recommendedCount =
-        savedFiltersForHub == null
-          ? 0
-          : isLoading
-            ? raw.recommended
-            : totalCount;
+        savedFiltersForHub == null ? 0 : raw.recommended;
       return {
         ...raw,
         recommended: recommendedCount,
@@ -1778,7 +1837,6 @@ function ScholarshipsPageInner({
   }, [
     activeTab,
     savedFiltersForHub,
-    isLoading,
     totalCount,
     listMeta,
     isAuthenticated,
@@ -1862,6 +1920,18 @@ function ScholarshipsPageInner({
       }),
     [savedIds, ignoredIds, startedIds, submittedIds]
   );
+  /** Sidebar meta is global by tab buckets; ignore list-local text/category overlays. */
+  const sidebarMetaBaseSearchParamsString = useMemo(() => {
+    const sp = new URLSearchParams(searchParamsString);
+    sp.delete('q');
+    sp.delete('category');
+    sp.delete('categories');
+    sp.delete('category[]');
+    sp.delete('categories[]');
+    sp.delete('sort');
+    sp.delete('page');
+    return scholarshipHubQueryStringFromURLSearchParams(sp);
+  }, [searchParamsString]);
   const sidebarMetaRequestKey = useMemo(
     () =>
       [
@@ -1870,19 +1940,19 @@ function ScholarshipsPageInner({
         userCollectionsFingerprint,
         `au:${isAuthenticated ? 1 : 0}`,
         `ar:${authResolved ? 1 : 0}`,
+        `tab:${activeTab}`,
         `sf:${savedFiltersSnapshotJson ?? 'none'}`,
         `ap:${activeSavedFilterPresetId ?? 'none'}`,
-        `lfp:${listingRequestFingerprint}`,
-        `url:${searchParamsString}`
+        `route:${routeScopeKey}`
       ].join('|'),
     [
       userCollectionsFingerprint,
       isAuthenticated,
       authResolved,
+      activeTab,
       savedFiltersSnapshotJson,
       activeSavedFilterPresetId,
-      listingRequestFingerprint,
-      searchParamsString
+      routeScopeKey
     ]
   );
   const sidebarMetaRequestKeyRef = useRef(sidebarMetaRequestKey);
@@ -1916,13 +1986,19 @@ function ScholarshipsPageInner({
   const listPageForUi =
     catalogFreeTier && activeTab === 'best-recommendation' ? 1 : currentPage;
 
-  const queryClient = useQueryClient();
+  const hasClientAppliedDeltaMoreFilters = useMemo(() => {
+    if (!moreFiltersApplied) return false;
+    const baseline =
+      hubTabCanonicalPreset ?? defaultMoreFiltersFromBounds(filterBounds);
+    return countMoreFilterDeltaFromBaseline(moreFiltersApplied, baseline) > 0;
+  }, [moreFiltersApplied, hubTabCanonicalPreset, filterBounds]);
 
   const initialListData = useMemo((): ScholarshipsListResponse | undefined => {
     if (skipSsrListForGuestHubBest) return undefined;
     if (!initialPayload?.result) return undefined;
     if (initialPayload.requestKey !== hubListRequestKey) return undefined;
     if (HUB_TABS_SSR_NEVER_SEEDS_ID_LIST.includes(activeTab)) return undefined;
+    if (hasClientAppliedDeltaMoreFilters) return undefined;
     const r = initialPayload.result;
     return {
       scholarships: r.scholarships,
@@ -1934,7 +2010,13 @@ function ScholarshipsPageInner({
       matchPaywall: r.matchPaywall,
       seoFallback: r.seoFallback
     } as ScholarshipsListResponse;
-  }, [initialPayload, hubListRequestKey, skipSsrListForGuestHubBest, activeTab]);
+  }, [
+    initialPayload,
+    hubListRequestKey,
+    skipSsrListForGuestHubBest,
+    activeTab,
+    hasClientAppliedDeltaMoreFilters
+  ]);
 
   /** Incl. user collections so list refetches when saved/ignored ids hydrate after `refreshSavedIdsFromApi` (sidebar would show counts from state while list stayed a stale 0 from first empty-id POST). */
   const hubListQueryKey = useMemo(
@@ -1975,9 +2057,10 @@ function ScholarshipsPageInner({
   const initialMetaData = useMemo(() => {
     if (!initialPayload?.result?.meta) return undefined;
     if (initialPayload.requestKey !== hubListRequestKey) return undefined;
+    if (hasClientAppliedDeltaMoreFilters) return undefined;
     const r = initialPayload.result;
     return { meta: r.meta, page: r.page, limit: r.limit };
-  }, [initialPayload, hubListRequestKey]);
+  }, [initialPayload, hubListRequestKey, hasClientAppliedDeltaMoreFilters]);
 
   const hubMetaQueryKey = useMemo(
     () =>
@@ -1986,34 +2069,20 @@ function ScholarshipsPageInner({
         'hub',
         'meta',
         sidebarMetaRequestKey,
-        searchParamsString,
-        appliedProviderSlug,
-        guestBestRecommendationPreviewEnabled ? 1 : 0,
+        activeTab,
         routeScopeKey
       ] as const,
     [
       sidebarMetaRequestKey,
-      searchParamsString,
-      appliedProviderSlug,
-      guestBestRecommendationPreviewEnabled,
+      activeTab,
       routeScopeKey
     ]
   );
 
-  if (
-    process.env.NODE_ENV === 'development' &&
-    listRequestKeyClientLogRef.current !== hubListRequestKey
-  ) {
-    listRequestKeyClientLogRef.current = hubListRequestKey;
-    // eslint-disable-next-line no-console -- dev: should match `initialPayload.requestKey` on hydration
-    console.log('CLIENT KEY:', hubListRequestKey);
-  }
-
   const listQuery = useQuery({
     queryKey: hubListQueryKey,
-    queryFn: async (): Promise<ScholarshipsListResponse> => {
+    queryFn: async ({ signal }): Promise<ScholarshipsListResponse> => {
       const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${listingRequestFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|gb:${guestBestRecommendationPreviewEnabled ? 1 : 0}`;
-      const requestCacheKey = metaKey;
       const ids = userListIdsRef.current;
       const sp = buildHubListingSearchParams({
         base: new URLSearchParams(searchParamsString),
@@ -2026,89 +2095,36 @@ function ScholarshipsPageInner({
         submitted: ids.submitted,
         scope: catalogListScope
       });
-      const cDbg = hubClientSidebarDebugEnabled();
-      if (cDbg) {
-        let moreFiltersSummary: unknown = null;
-        try {
-          moreFiltersSummary =
-            moreFiltersApplied != null
-              ? moreFiltersToJson(moreFiltersApplied)
-              : null;
-        } catch {
-          moreFiltersSummary = '(serialize error)';
-        }
-        // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
-        console.log('[scholarships-hub-meta-debug] client before fetch', {
-          ts: new Date().toISOString(),
-          pathname,
-          searchParamsString,
-          activeTab,
-          effectiveListScope: catalogListScope,
-          q: parsedList.q,
-          includeMetaRequested: false,
-          requestCacheKey,
-          metaKeySyncedBefore: metaKeySynced.current,
-          idCounts: {
-            saved: ids.saved.length,
-            ignored: ids.ignored.length,
-            started: ids.started.length,
-            submitted: ids.submitted.length
-          },
-          moreFiltersSummary,
-          isAuthenticated,
-          requestSearchParams: sp.toString()
-        });
-      }
-      const prevMeta = listMetaRef.current;
-      const tabAwareMoreFilters = hubListingBodyMoreFilters
-        ? withTabEnforcedMoreFilters(hubListingBodyMoreFilters, activeTab)
-        : undefined;
-      const data = await postScholarshipsList({
-        searchParams: sp.toString(),
-        moreFilters: tabAwareMoreFilters
-          ? moreFiltersToJson(tabAwareMoreFilters)
-          : undefined,
-        savedFiltersSnapshot: savedFiltersSnapshotJson,
-        guestBestRecommendationPreviewEnabled,
-        longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
-        requiredSeoTags: routeScope?.requiredSeoTags ?? [],
-        seoListingFallback: routeScope?.seoListingFallback,
-        slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-        providerSlug: appliedProviderSlug
-      });
-      if (cDbg) {
-        const nextMeta = data.meta;
-        // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
-        console.log('[scholarships-hub-meta-debug] client after fetch', {
-          ts: new Date().toISOString(),
-          responseTotal: data.total,
-          responsePage: data.page,
-          responseMetaBest: nextMeta?.sidebarCounts.bestRecommendation,
-          responseMetaRec: nextMeta?.sidebarCounts.recommended,
-          responseMetaMatches: nextMeta?.sidebarCounts.matches,
-          responseMetaEasyApply: nextMeta?.sidebarCounts.easyApply,
-          hadMetaInResponse: Boolean(nextMeta),
-          willCallSetListMeta: Boolean(nextMeta),
-          prevListMetaBest: prevMeta?.sidebarCounts.bestRecommendation,
-          prevListMetaRec: prevMeta?.sidebarCounts.recommended,
-          nextListMetaBest: nextMeta?.sidebarCounts.bestRecommendation,
-          nextListMetaRec: nextMeta?.sidebarCounts.recommended
-        });
-      }
+      const data = await postScholarshipsList(
+        {
+          searchParams: sp.toString(),
+          moreFilters: hubListingBodyMoreFilters
+            ? moreFiltersToJson(hubListingBodyMoreFilters)
+            : undefined,
+          savedFiltersSnapshot: savedFiltersSnapshotJson,
+          guestBestRecommendationPreviewEnabled,
+          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+          seoListingFallback: routeScope?.seoListingFallback,
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+          providerSlug: appliedProviderSlug
+        },
+        { signal }
+      );
       return data;
     },
     enabled: listQueryEnabled,
     initialData: initialListData,
     staleTime: 300_000,
-    refetchOnMount: false
+    refetchOnMount: true
   });
 
   const sidebarMetaQuery = useQuery({
     queryKey: hubMetaQueryKey,
-    queryFn: () => {
+    queryFn: ({ signal }) => {
       const ids = userListIdsRef.current;
       const sp = buildHubListingSearchParams({
-        base: new URLSearchParams(searchParamsString),
+        base: new URLSearchParams(sidebarMetaBaseSearchParamsString),
         page: 1,
         tab: 'matches',
         meta: true,
@@ -2118,20 +2134,23 @@ function ScholarshipsPageInner({
         submitted: ids.submitted,
         scope: 'catalog'
       });
-      return postScholarshipsMeta({
-        searchParams: sp.toString(),
-        moreFilters: hubSidebarMetaMoreFilters
-          ? moreFiltersToJson(hubSidebarMetaMoreFilters)
-          : undefined,
-        savedFiltersSnapshot: savedFiltersSnapshotJson,
-        guestBestRecommendationPreviewEnabled,
-        longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
-        requiredSeoTags: routeScope?.requiredSeoTags ?? [],
-        seoListingFallback: routeScope?.seoListingFallback,
-        slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-        providerSlug: appliedProviderSlug,
-        sidebarOnlyMeta: true
-      });
+      return postScholarshipsMeta(
+        {
+          searchParams: sp.toString(),
+          moreFilters: hubSidebarMetaMoreFilters
+            ? moreFiltersToJson(hubSidebarMetaMoreFilters)
+            : undefined,
+          savedFiltersSnapshot: savedFiltersSnapshotJson,
+          guestBestRecommendationPreviewEnabled,
+          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+          seoListingFallback: routeScope?.seoListingFallback,
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+          providerSlug: appliedProviderSlug,
+          sidebarOnlyMeta: true
+        },
+        { signal }
+      );
     },
     enabled: authResolved,
     initialData: initialMetaData,
@@ -2181,23 +2200,17 @@ function ScholarshipsPageInner({
     const nextMeta = d.meta ?? null;
     if (nextMeta && sidebarMetaRequestKeyRef.current === sidebarMetaRequestKey) {
       setListMeta((prev) => {
-        const merged = prev ? { ...prev, ...nextMeta } : nextMeta;
-        if (guestBestRecommendationPreviewEnabled) {
-          return {
-            ...merged,
-            sidebarCounts: prev?.sidebarCounts ?? merged.sidebarCounts
-          };
+        // Keep sidebar counts sourced strictly from sidebarMetaQuery (meta_only).
+        // List query meta is allowed to refresh bounds/profile fields only.
+        if (!prev) {
+          return nextMeta;
         }
-        return merged;
+        return {
+          ...prev,
+          ...nextMeta,
+          sidebarCounts: prev.sidebarCounts
+        };
       });
-      if (!guestBestRecommendationPreviewEnabled) {
-        metaKeySynced.current = sidebarMetaRequestKey;
-        queryClient.setQueryData(hubMetaQueryKey, {
-          meta: nextMeta,
-          page: 1,
-          limit: d.limit
-        });
-      }
     }
   }, [
     activeTab,
@@ -2208,9 +2221,7 @@ function ScholarshipsPageInner({
     listQuery.isFetched,
     listQuery.error,
     sidebarMetaRequestKey,
-    guestBestRecommendationPreviewEnabled,
-    queryClient,
-    hubMetaQueryKey
+    guestBestRecommendationPreviewEnabled
   ]);
 
   useEffect(() => {
@@ -2283,18 +2294,13 @@ function ScholarshipsPageInner({
   }, [activeTab, parsedList.audience]);
 
   const openMoreFilters = useCallback(() => {
-    const basis = withTabEnforcedMoreFilters(
-      moreFiltersApplied ?? emptyMoreFiltersState,
-      activeTab
-    );
+    const basis = moreFiltersApplied ?? emptyMoreFiltersState;
     setMoreFiltersDraft(cloneMoreFilters(basis));
     setMoreFiltersOpen(true);
-  }, [moreFiltersApplied, emptyMoreFiltersState, activeTab]);
+  }, [moreFiltersApplied, emptyMoreFiltersState]);
 
-  const applyMoreFilters = useCallback(() => {
-    if (moreFiltersDraft) {
-      moreFiltersUserApplyPendingMetaRef.current = true;
-      const next = cloneMoreFilters(moreFiltersDraft);
+  const commitMoreFiltersApply = useCallback(
+    (next: MoreFiltersState) => {
       setMoreFiltersApplied(next);
       if (activeTab === 'recommended') {
         const nextWithBase =
@@ -2344,26 +2350,73 @@ function ScholarshipsPageInner({
         }
       }
       replaceListingParams({
+        tab: activeTab,
+        scope: 'catalog',
         deadline: next.deadlinePreset,
         audience: next.citizenshipAudience,
         resetPage: true
       });
+    },
+    [
+      replaceListingParams,
+      activeTab,
+      routeBaseMoreFilters,
+      filterBounds,
+      activeSavedFilterPresetId,
+      isAuthenticated,
+      savedFilterPresets,
+      commitSavedFilterPresets
+    ]
+  );
+
+  const applyMoreFilters = useCallback(() => {
+    if (moreFiltersDraft) {
+      setIsApplyingMoreFilters(true);
+      applyingMoreFiltersSawFetchRef.current = false;
+      moreFiltersUserApplyPendingMetaRef.current = true;
+      const next = cloneMoreFilters(moreFiltersDraft);
+      commitMoreFiltersApply(next);
     }
     setMoreFiltersOpen(false);
-  }, [
-    moreFiltersDraft,
-    replaceListingParams,
-    activeTab,
-    routeBaseMoreFilters,
-    filterBounds,
-    activeSavedFilterPresetId,
-    isAuthenticated,
-    savedFilterPresets,
-    commitSavedFilterPresets
-  ]);
+  }, [moreFiltersDraft, commitMoreFiltersApply]);
+
+  useEffect(() => {
+    if (!isApplyingMoreFilters) return;
+    if (listQuery.isFetching) {
+      applyingMoreFiltersSawFetchRef.current = true;
+      return;
+    }
+    if (applyingMoreFiltersSawFetchRef.current) {
+      setIsApplyingMoreFilters(false);
+      return;
+    }
+    const fallback = window.setTimeout(() => {
+      setIsApplyingMoreFilters(false);
+    }, 1200);
+    return () => window.clearTimeout(fallback);
+  }, [isApplyingMoreFilters, listQuery.isFetching]);
+
+  useEffect(() => {
+    if (!isApplyingListControls) return;
+    if (listQuery.isFetching) {
+      applyingListControlsSawFetchRef.current = true;
+      return;
+    }
+    if (applyingListControlsSawFetchRef.current) {
+      setIsApplyingListControls(false);
+      return;
+    }
+    // Wait for the actual network fetch to start/finish; URL change alone is not enough.
+    // Otherwise UI can briefly render stale cards right after Apply.
+    const fallback = window.setTimeout(() => {
+      setIsApplyingListControls(false);
+    }, 4000);
+    return () => window.clearTimeout(fallback);
+  }, [isApplyingListControls, listQuery.isFetching]);
 
   const clearMoreFiltersDraft = useCallback(() => {
-    setMoreFiltersDraft(cloneMoreFilters(emptyMoreFiltersState));
+    const resetState = cloneMoreFilters(emptyMoreFiltersState);
+    setMoreFiltersDraft(resetState);
   }, [emptyMoreFiltersState]);
 
   useEffect(() => {
@@ -2376,62 +2429,109 @@ function ScholarshipsPageInner({
       moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds);
     const hasDraftDelta =
       countMoreFilterDeltaFromBaseline(moreFiltersDraft, previewBaseline) > 0;
+    const hasAppliedDelta =
+      moreFiltersApplied != null &&
+      countMoreFilterDeltaFromBaseline(moreFiltersApplied, previewBaseline) > 0;
     if (!hasDraftDelta) {
-      setPreviewCount(totalCount);
-      setLastKnownPreviewCount(totalCount);
-      setPreviewCountLoading(false);
-      return;
+      // If applied state is already baseline, list total is the correct preview.
+      // If applied still has manual filters (e.g. right after Clear in modal),
+      // we must fetch baseline count instead of reusing current list total.
+      if (!hasAppliedDelta) {
+        setPreviewCount(totalCount);
+        setLastKnownPreviewCount(totalCount);
+        setPreviewCountLoading(false);
+        return;
+      }
     }
     setPreviewCountLoading(true);
-    let cancelled = false;
+    const requestSeq = ++previewCountRequestSeqRef.current;
+    const controller = new AbortController();
+    const failSafe = window.setTimeout(() => {
+      if (previewCountRequestSeqRef.current !== requestSeq) return;
+      setPreviewCountLoading(false);
+      setPreviewCount((prev) => prev ?? lastKnownPreviewCountRef.current ?? totalCount);
+    }, 10_000);
     const t = setTimeout(() => {
-      const ids = userListIdsRef.current;
-      const previewBaseFilters = mergeMoreFilterStates(
-        routeBaseMoreFilters ?? defaultMoreFiltersFromBounds(filterBounds),
-        moreFiltersDraft
-      );
-      const sp = buildHubListingSearchParams({
-        base: new URLSearchParams(searchParamsString),
-        page: 1,
-        tab: activeTab,
-        meta: false,
-        saved: ids.saved,
-        ignored: ids.ignored,
-        started: ids.started,
-        submitted: ids.submitted,
-        scope: catalogListScope
-      });
-      postScholarshipsCount({
-        searchParams: sp.toString(),
-        moreFilters: moreFiltersToJson(
-          withTabEnforcedMoreFilters(previewBaseFilters, activeTab)
-        ),
-        guestBestRecommendationPreviewEnabled,
-        longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
-        requiredSeoTags: routeScope?.requiredSeoTags ?? [],
-        seoListingFallback: routeScope?.seoListingFallback,
-        slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-        providerSlug:
-          routeScope?.providerSlug ?? moreFiltersDraft?.filterUniversitySlug ?? null
-      })
-        .then((r) => {
-          if (cancelled) return;
+      void (async () => {
+        try {
+          const ids = userListIdsRef.current;
+          const previewBaseFilters = cloneMoreFilters(moreFiltersDraft);
+          const previewBaseSearchParams = new URLSearchParams(searchParamsString);
+          if (moreFiltersDraft.deadlinePreset !== 'any') {
+            previewBaseSearchParams.set('deadline', moreFiltersDraft.deadlinePreset);
+          } else {
+            previewBaseSearchParams.delete('deadline');
+          }
+          if (moreFiltersDraft.citizenshipAudience !== 'any') {
+            previewBaseSearchParams.set('audience', moreFiltersDraft.citizenshipAudience);
+          } else {
+            previewBaseSearchParams.delete('audience');
+          }
+          const sp = buildHubListingSearchParams({
+            base: previewBaseSearchParams,
+            page: 1,
+            tab: activeTab,
+            meta: false,
+            saved: ids.saved,
+            ignored: ids.ignored,
+            started: ids.started,
+            submitted: ids.submitted,
+            scope: catalogListScope
+          });
+          const previewPayload = {
+            searchParams: sp.toString(),
+            moreFilters: moreFiltersToJson(previewBaseFilters),
+            guestBestRecommendationPreviewEnabled,
+            longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+            requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+            seoListingFallback: routeScope?.seoListingFallback,
+            slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+            providerSlug:
+              routeScope?.providerSlug ?? moreFiltersDraft?.filterUniversitySlug ?? null
+          } as const;
+          const previewCacheKey = JSON.stringify(previewPayload);
+          const cached = previewCountCacheRef.current.get(previewCacheKey);
+          if (cached && Date.now() - cached.ts < PREVIEW_COUNT_CACHE_TTL_MS) {
+            if (previewCountRequestSeqRef.current !== requestSeq) return;
+            setPreviewCount(cached.total);
+            setLastKnownPreviewCount(cached.total);
+            setPreviewCountLoading(false);
+            return;
+          }
+          const r = await postScholarshipsCount(
+            previewPayload,
+            { signal: controller.signal }
+          );
+          if (previewCountRequestSeqRef.current !== requestSeq) return;
+          previewCountCacheRef.current.set(previewCacheKey, {
+            total: r.total,
+            ts: Date.now()
+          });
+          if (previewCountCacheRef.current.size > 80) {
+            const firstKey = previewCountCacheRef.current.keys().next().value;
+            if (firstKey) previewCountCacheRef.current.delete(firstKey);
+          }
           setPreviewCount(r.total);
           setLastKnownPreviewCount(r.total);
           setPreviewCountLoading(false);
-        })
-        .catch(() => {
-          if (cancelled) return;
+        } catch (error) {
+          if (previewCountRequestSeqRef.current !== requestSeq) return;
+          if (error instanceof DOMException && error.name === 'AbortError') return;
           setPreviewCount(null);
           setPreviewCountLoading(false);
-        });
-    }, 320);
+        } finally {
+          window.clearTimeout(failSafe);
+        }
+      })();
+    }, 360);
     return () => {
-      cancelled = true;
+      controller.abort();
       clearTimeout(t);
+      clearTimeout(failSafe);
     };
   }, [
     moreFiltersDraft,
+    moreFiltersApplied,
     moreFiltersOpen,
     searchParamsString,
     activeTab,
@@ -2441,7 +2541,6 @@ function ScholarshipsPageInner({
     moreFiltersBaseline,
     totalCount,
     routeBaseMoreFilters,
-    savedFiltersForHub,
     guestBestRecommendationPreviewEnabled
   ]);
 
@@ -2645,8 +2744,10 @@ function ScholarshipsPageInner({
   );
 
   const blockingInitialLoad = isLoading && !hasInitialLoadCompleted;
+  const blockingApplyLoad = isApplyingMoreFilters || isApplyingListControls;
+  const blockingListLoad = blockingInitialLoad || blockingApplyLoad;
   const resultCountForHeader =
-    blockingInitialLoad ? null : headerTotalCount === null ? null : headerTotalCount;
+    blockingListLoad ? null : headerTotalCount === null ? null : headerTotalCount;
   const rangeTotalForPager =
     headerTotalCount === null
       ? guestBestPreviewStaleMatchesTotal
@@ -2654,15 +2755,15 @@ function ScholarshipsPageInner({
         : totalCount
       : headerTotalCount;
   const showingFrom =
-    !blockingInitialLoad && rangeTotalForPager > 0 ? listStart + 1 : null;
+    !blockingListLoad && rangeTotalForPager > 0 ? listStart + 1 : null;
   const showingTo =
-    !blockingInitialLoad && rangeTotalForPager > 0
+    !blockingListLoad && rangeTotalForPager > 0
       ? Math.min(listStart + SCHOLARSHIPS_PAGE_SIZE, rangeTotalForPager)
       : null;
 
   const showClearFilters =
     totalCount === 0 &&
-    !blockingInitialLoad &&
+    !blockingListLoad &&
     !hasError &&
     (hasListingParams || moreFiltersOffDefault || query.trim().length > 0);
 
@@ -2743,6 +2844,23 @@ function ScholarshipsPageInner({
     listMeta != null &&
     listMeta.personalizedMatchReady === false;
 
+  const headerSavedFilterPresetButtons = useMemo(
+    () =>
+      presetsForCurrentHubSection.map((preset) => ({
+        id: preset.id,
+        name: preset.name,
+        active: preset.id === activeSavedFilterPresetId
+      })),
+    [presetsForCurrentHubSection, activeSavedFilterPresetId]
+  );
+  const moreFiltersPanelValue = useMemo(
+    () => moreFiltersDraft ?? moreFiltersApplied ?? emptyMoreFiltersState,
+    [moreFiltersDraft, moreFiltersApplied, emptyMoreFiltersState]
+  );
+  const closeMoreFilters = useCallback(() => setMoreFiltersOpen(false), []);
+  const resolvedAuthenticated = authResolved && isAuthenticated;
+  const guestLockedAction = catalogFreeTier ? openRegistrationWall : undefined;
+
   /**
    * Centered completion / signup card (toolbar with search · filters · categories stays visible above).
    */
@@ -2790,7 +2908,7 @@ function ScholarshipsPageInner({
       >
         <>
           {bestTabAuthPending ? (
-            <ScholarshipsBrandLoading density="compact" showTopAccentBar />
+            <HubListSkeleton />
           ) : (
             <>
               <ScholarshipsListHeader
@@ -2813,22 +2931,16 @@ function ScholarshipsPageInner({
                 listTab={activeTab}
                 categoriesDisabled={!isLoading && totalCount === 0}
                 moreFiltersActiveCount={moreFiltersActiveCount}
-                isAuthenticated={authResolved && isAuthenticated}
+                isAuthenticated={resolvedAuthenticated}
                 hasSubscription={hasSubscription}
                 onGuestSortBlocked={
-                  catalogFreeTier ? openRegistrationWall : undefined
+                  guestLockedAction
                 }
                 onSubscriptionSortBlocked={undefined}
-                onGuestLockedAction={
-                  catalogFreeTier ? openRegistrationWall : undefined
-                }
+                onGuestLockedAction={guestLockedAction}
                 catalogListingLocked={false}
                 savedFilterBarHint={savedFilterBarHint}
-                savedFilterPresetButtons={presetsForCurrentHubSection.map((preset) => ({
-                  id: preset.id,
-                  name: preset.name,
-                  active: preset.id === activeSavedFilterPresetId
-                }))}
+                savedFilterPresetButtons={headerSavedFilterPresetButtons}
                 onSavedFilterPresetSelect={openManageSavedFilterPreset}
               />
               {activeTab === 'from-email' ? (
@@ -2838,7 +2950,7 @@ function ScholarshipsPageInner({
               ) : null}
 
               {bestRecommendationWizardPendingHydration ? (
-                <ScholarshipsBrandLoading density="compact" showTopAccentBar />
+                <HubListSkeleton />
               ) : shouldShowBestRecommendationWizard ? (
                 <BestRecommendationWizard
                   store={wizardDisplayStore}
@@ -2860,8 +2972,8 @@ function ScholarshipsPageInner({
                     replaceListingParams({ resetPage: true });
                   }}
                 />
-              ) : blockingInitialLoad ? (
-            <ScholarshipsBrandLoading density="compact" showTopAccentBar />
+              ) : blockingListLoad ? (
+            <HubListSkeleton showApplyingLabel={blockingApplyLoad} />
           ) : hasError ? (
             <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {errorMessage || 'Failed to load scholarships.'}
@@ -3044,22 +3156,21 @@ function ScholarshipsPageInner({
 
       <ScholarshipsMoreFiltersPanel
         open={moreFiltersOpen}
-        onClose={() => setMoreFiltersOpen(false)}
+        onClose={closeMoreFilters}
         bounds={filterBounds}
-        value={moreFiltersDraft ?? moreFiltersApplied ?? emptyMoreFiltersState}
+        value={moreFiltersPanelValue}
         onChange={setMoreFiltersDraft}
         onClear={clearMoreFiltersDraft}
         onApply={applyMoreFilters}
+        applyPending={isApplyingMoreFilters}
         onSaveFilter={saveMoreFiltersPreset}
         saveFilterEnabled={saveFilterEnabled}
         previewCount={previewCount}
         previewCountLoading={previewCountLoading}
         previewCountFallback={lastKnownPreviewCount}
-        locationOptions={[]}
-        isAuthenticated={authResolved && isAuthenticated}
-        onGuestLockedAction={
-          catalogFreeTier ? openRegistrationWall : undefined
-        }
+        locationOptions={EMPTY_LOCATION_OPTIONS}
+        isAuthenticated={resolvedAuthenticated}
+        onGuestLockedAction={guestLockedAction}
         hasSubscription={hasSubscription}
         onSubscriptionLockedAction={openLockedCategoryWall}
         contextNotices={moreFiltersPanelContextNotices}
@@ -3115,13 +3226,7 @@ export default function ScholarshipsHubPageClient({
   return (
     <ScholarshipsHubQueryProvider>
       <Suspense
-        fallback={
-          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
-            <div className="mx-auto max-w-5xl">
-              <ScholarshipsBrandLoading showTopAccentBar />
-            </div>
-          </section>
-        }
+        fallback={<HubShellSuspenseFallback />}
       >
         <ScholarshipsPageInner
           isAuthenticated={isAuthenticated}

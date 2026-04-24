@@ -613,7 +613,7 @@ async function handleList(
     // eslint-disable-next-line no-console -- SEO SQL debug
     console.log('[SEO_SQL_DEBUG_BYPASS] active: is_active=true, limit 10, no moreFilters');
     const { data, error, count } = await listingSupabase
-      .from('scholarships')
+      .from('scholarships_listing_view')
       .select(LIST_CARD_SELECT, { count: 'exact' })
       .eq('is_active', true)
       .limit(10);

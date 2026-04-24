@@ -204,6 +204,7 @@ export type ScholarshipListResult = {
 
 const DEFAULT_LIMIT = SCHOLARSHIPS_PAGE_SIZE;
 const MAX_LIMIT = 50;
+const SCHOLARSHIPS_LISTING_SOURCE = 'scholarships_listing_view';
 const GLOBAL_FILTER_BOUNDS_TTL_MS = 5 * 60 * 1000;
 const LIST_META_CACHE_TTL_MS = 120 * 1000;
 let globalFilterBoundsCache:
@@ -274,6 +275,10 @@ function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMet
 function clampInt(n: number, min: number, max: number): number {
   if (!Number.isFinite(n)) return min;
   return Math.min(max, Math.max(min, Math.floor(n)));
+}
+
+function listingFrom(supabase: ServerSupabaseClient): any {
+  return (supabase as any).from(SCHOLARSHIPS_LISTING_SOURCE);
 }
 
 export function parseCommaUuids(raw: string | null | undefined): string[] {
@@ -467,32 +472,28 @@ export async function fetchGlobalFilterBounds(
   try {
     const [{ data: minA }, { data: maxA }, { data: minP }, { data: maxP }] =
       await Promise.all([
-        supabase
-          .from('scholarships')
+        listingFrom(supabase)
           .select('award_amount_numeric_sort')
           .eq('is_active', true)
           .not('award_amount_numeric_sort', 'is', null)
           .order('award_amount_numeric_sort', { ascending: true, nullsFirst: false })
           .limit(1)
           .maybeSingle(),
-        supabase
-          .from('scholarships')
+        listingFrom(supabase)
           .select('award_amount_numeric_sort')
           .eq('is_active', true)
           .not('award_amount_numeric_sort', 'is', null)
           .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
           .limit(1)
           .maybeSingle(),
-        supabase
-          .from('scholarships')
+        listingFrom(supabase)
           .select('applicants_count')
           .eq('is_active', true)
           .not('applicants_count', 'is', null)
           .order('applicants_count', { ascending: true, nullsFirst: false })
           .limit(1)
           .maybeSingle(),
-        supabase
-          .from('scholarships')
+        listingFrom(supabase)
           .select('applicants_count')
           .eq('is_active', true)
           .not('applicants_count', 'is', null)
@@ -899,32 +900,24 @@ function applyBestRecommendationNoCitizenshipListedFilter(
 }
 
 function applySort(q: any, sort: SortOption): any {
+  q = q.order('is_expired', { ascending: true, nullsFirst: false });
   switch (sort) {
-    /** Best tab: largest awards first, then freshest rows (tie-break). */
-    case 'best_recommendation':
-      return q
-        .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
-        .order('updated_at', { ascending: false, nullsFirst: true })
-        .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'highest_amount':
       return q
         .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
         .order('ranking_score', { ascending: false, nullsFirst: false });
-    case 'lowest_amount':
-      return q
-        .order('award_amount_numeric_sort', { ascending: true, nullsFirst: false })
-        .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'least_requirements':
       return q
-        .order('requirement_signals_count', { ascending: true, nullsFirst: true })
-        .order('requirements_count', { ascending: true, nullsFirst: true });
+        .order('requirements_sort_value', { ascending: true, nullsFirst: false })
+        .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'closest_deadline':
       return q
         .order('deadline_date', { ascending: true, nullsFirst: false })
-        .order('days_until_deadline', { ascending: true, nullsFirst: false });
+        .order('days_until_deadline', { ascending: true, nullsFirst: false })
+        .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'fewest_applicants':
       return q
-        .order('applicants_count', { ascending: true, nullsFirst: true })
+        .order('applicants_sort_value', { ascending: true, nullsFirst: false })
         .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'most_recent':
       return q
@@ -932,10 +925,12 @@ function applySort(q: any, sort: SortOption): any {
         .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'verified_first':
       return q
-        .order('is_verified', { ascending: false, nullsFirst: true })
+        .order('verified_sort_key', { ascending: true, nullsFirst: false })
         .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'magic':
     case 'best_match':
+    case 'best_recommendation':
+    case 'lowest_amount':
     default:
       return q
         .order('ranking_score', { ascending: false, nullsFirst: false })
@@ -1008,9 +1003,9 @@ function baseSelect(
     ? scholarshipListSelectWithCatalogSubjectJoin()
     : LIST_CARD_SELECT;
   if (head) {
-    return supabase.from('scholarships').select(sel, { count: 'exact', head: true });
+    return listingFrom(supabase).select(sel, { count: 'exact', head: true });
   }
-  return supabase.from('scholarships').select(sel, { count: 'exact' });
+  return listingFrom(supabase).select(sel, { count: 'exact' });
 }
 
 /**
@@ -1110,31 +1105,52 @@ function metaBasisRequest(
 }
 
 /**
- * Sidebar tab counts must use the **same** filters as the main list (`buildScholarshipListFilterQuery`):
- * q, categories, long-tail, moreFilters, state, ignored, profile fit, scope, etc.
- * Only pagination is normalized (count queries ignore range anyway).
+ * Sidebar counts are global for tab buckets and must ignore list-local refinements
+ * (search text, category picks, sort, manual filter overlays, paging).
  */
-function sidebarTabCountsListingAlignedRequest(req: ScholarshipListRequest): ScholarshipListRequest {
+function sidebarGlobalCountsBasisRequest(
+  req: ScholarshipListRequest,
+  bounds: ScholarshipListMeta['filterBounds']
+): ScholarshipListRequest {
   return {
     ...req,
+    q: '',
+    sort: 'magic',
+    categoryIds: new Set<ScholarshipCategoryId>(),
+    categoryPageSlug: null,
+    catalogSubjectCategoryId: null,
+    deadline: 'any',
+    stateCodes: [],
+    moreFilters: defaultMoreFiltersFromBounds(bounds),
     page: 1,
     limit: 1
   };
 }
 
 /**
- * Hub legacy L1 category dropdown counts: align with catalog “All / matches” semantics (ignored + long-tail),
- * not personalized `best-recommendation` / `recommended` SQL tab narrowing (which produced zeros vs live lists).
+ * Category dropdown counts must follow the active tab baseline (same isolation family as sidebar meta):
+ * keep tab preset context, but strip list-local overlays (q/category/page/sort/manual filters).
  */
 function categoryDropdownCountsRequest(
   req: ScholarshipListRequest,
   bounds: ScholarshipListMeta['filterBounds']
 ): ScholarshipListRequest {
-  return {
-    ...metaBasisRequest(req, bounds),
-    tab: 'matches',
-    listScope: 'catalog'
-  };
+  const base = sidebarGlobalCountsBasisRequest(req, bounds);
+  // "International Friendly" is a tab-context foundation for Matches (audience in URL),
+  // so category counts must keep that baseline while still ignoring manual overlays.
+  if (req.tab === 'matches') {
+    base.moreFilters.citizenshipAudience = req.moreFilters.citizenshipAudience;
+  }
+  if (base.tab === 'best-recommendation') {
+    return bestRecommendationRequest(base, bounds);
+  }
+  if (base.tab === 'easy-apply') {
+    return easyApplyListCanonicalRequest(base);
+  }
+  if (base.tab === 'hot-deadlines') {
+    return hotDeadlinesListCanonicalRequest(base);
+  }
+  return base;
 }
 
 function tabUsesEmptyIdSet(
@@ -1227,7 +1243,7 @@ function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRe
     personalizedProfile: undefined
   };
   if (base.tab === 'best-recommendation') {
-    return { ...base, sort: 'best_recommendation' };
+    return { ...base, sort: 'magic' };
   }
   return base;
 }
@@ -1312,8 +1328,7 @@ async function loadSimilarScholarshipsLegacyRows(
   supabase: ServerSupabaseClient,
   req: ScholarshipListRequest
 ): Promise<ScholarshipRow[]> {
-  let q = supabase
-    .from('scholarships')
+  let q = listingFrom(supabase)
     .select(LIST_CARD_SELECT)
     .eq('is_active', true)
     .neq('id', req.similarToId!);
@@ -1327,6 +1342,7 @@ async function loadSimilarScholarshipsLegacyRows(
   }
   const similarPoolSize = Math.min(120, Math.max(req.limit * 6, 36));
   q = q
+    .order('is_expired', { ascending: true, nullsFirst: false })
     .order('deadline_date', { ascending: true, nullsFirst: false })
     .order('updated_at', { ascending: false, nullsFirst: true })
     .range(0, Math.max(0, similarPoolSize - 1));
@@ -1365,11 +1381,11 @@ async function fetchSimilarListFillerScholarships(
 ): Promise<Scholarship[]> {
   if (need <= 0) return [];
   const todayIso = new Date().toISOString().slice(0, 10);
-  let q: any = supabase
-    .from('scholarships')
+  let q: any = listingFrom(supabase)
     .select(LIST_CARD_SELECT)
     .eq('is_active', true)
     .or(`deadline_date.gte.${todayIso},deadline_date.is.null`)
+    .order('is_expired', { ascending: true, nullsFirst: false })
     .order('ranking_score', { ascending: false, nullsFirst: false })
     .order('updated_at', { ascending: false, nullsFirst: true });
 
@@ -1448,8 +1464,7 @@ export async function executeScholarshipListQuery(
    * Otherwise `similar_to` is ignored whenever a match bundle exists.
    */
   if (req.similarToId) {
-    let qCount = supabase
-      .from('scholarships')
+    let qCount = listingFrom(supabase)
       .select('id', {
         count: 'exact',
         head: true
@@ -1593,13 +1608,84 @@ export async function executeScholarshipListQuery(
           };
         });
         ranked.sort((a, b) => {
+          const aExpired = scholarshipDeadlineHasPassed(a.scholarship);
+          const bExpired = scholarshipDeadlineHasPassed(b.scholarship);
+          if (aExpired !== bExpired) {
+            return aExpired ? 1 : -1;
+          }
+          const amountA = a.scholarship.awardAmountNumericSort ?? 0;
+          const amountB = b.scholarship.awardAmountNumericSort ?? 0;
+          const reqA =
+            a.scholarship.requirementSignalsCount ??
+            a.scholarship.requirementsCount ??
+            Number.MAX_SAFE_INTEGER;
+          const reqB =
+            b.scholarship.requirementSignalsCount ??
+            b.scholarship.requirementsCount ??
+            Number.MAX_SAFE_INTEGER;
+          const applicantsA =
+            a.scholarship.applicantCount ?? Number.MAX_SAFE_INTEGER;
+          const applicantsB =
+            b.scholarship.applicantCount ?? Number.MAX_SAFE_INTEGER;
+          const updatedA = a.scholarship.updatedAt
+            ? Date.parse(a.scholarship.updatedAt)
+            : 0;
+          const updatedB = b.scholarship.updatedAt
+            ? Date.parse(b.scholarship.updatedAt)
+            : 0;
+          const daysA =
+            a.scholarship.daysUntilDeadline == null ||
+            Number.isNaN(a.scholarship.daysUntilDeadline)
+              ? Number.POSITIVE_INFINITY
+              : a.scholarship.daysUntilDeadline;
+          const daysB =
+            b.scholarship.daysUntilDeadline == null ||
+            Number.isNaN(b.scholarship.daysUntilDeadline)
+              ? Number.POSITIVE_INFINITY
+              : b.scholarship.daysUntilDeadline;
+          const deadlineA = a.scholarship.deadlineAt
+            ? Date.parse(a.scholarship.deadlineAt)
+            : Number.POSITIVE_INFINITY;
+          const deadlineB = b.scholarship.deadlineAt
+            ? Date.parse(b.scholarship.deadlineAt)
+            : Number.POSITIVE_INFINITY;
+          const verifiedA = a.scholarship.verified ? 1 : 0;
+          const verifiedB = b.scholarship.verified ? 1 : 0;
+
+          switch (personalizedEff.sort) {
+            case 'highest_amount':
+              if (amountB !== amountA) return amountB - amountA;
+              break;
+            case 'most_recent':
+              if (updatedB !== updatedA) return updatedB - updatedA;
+              break;
+            case 'closest_deadline':
+              if (deadlineA !== deadlineB) return deadlineA - deadlineB;
+              if (daysA !== daysB) return daysA - daysB;
+              break;
+            case 'verified_first':
+              if (verifiedB !== verifiedA) return verifiedB - verifiedA;
+              break;
+            case 'least_requirements':
+              if (reqA !== reqB) return reqA - reqB;
+              break;
+            case 'fewest_applicants':
+              if (applicantsA !== applicantsB) return applicantsA - applicantsB;
+              break;
+            case 'magic':
+            case 'best_match':
+            case 'best_recommendation':
+            case 'lowest_amount':
+            default:
+              if (b.pct !== a.pct) return b.pct - a.pct;
+              break;
+          }
+          // For non-recommended sorts, match percent is a tie-breaker only.
           if (b.pct !== a.pct) return b.pct - a.pct;
           const ra = a.scholarship.rankingScore ?? 0;
           const rb = b.scholarship.rankingScore ?? 0;
           if (rb !== ra) return rb - ra;
-          const aa = a.scholarship.awardAmountNumericSort ?? 0;
-          const ab = b.scholarship.awardAmountNumericSort ?? 0;
-          return ab - aa;
+          return amountB - amountA;
         });
         const start = (slicePage - 1) * req.limit;
         scholarships = ranked
@@ -1847,7 +1933,7 @@ export async function fetchScholarshipSidebarCounts(
     | 'skipGuestZeroedSidebarCounts'
   >
 ): Promise<ScholarshipSidebarCounts> {
-  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+  const effectiveReq = sidebarGlobalCountsBasisRequest(req, bounds);
   /** Basis for every tab count except the dedicated International Friendly pill. */
   const countsBasisReq = sidebarCountsIgnoreCitizenshipAudience(effectiveReq);
   /** Matches / easy / hot / IF: drop profile-fit dimensions so counts ≠ Best pool. */
@@ -2260,7 +2346,7 @@ export async function fetchScholarshipListMeta(
 ): Promise<ScholarshipListMeta> {
   const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
-  const effectiveReq = sidebarTabCountsListingAlignedRequest(req);
+  const effectiveReq = sidebarGlobalCountsBasisRequest(req, b);
   const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v8`;
   const cached = readTtlValue(listMetaCache.get(cacheKey));
   if (cached) {

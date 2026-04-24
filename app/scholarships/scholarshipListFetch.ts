@@ -67,11 +67,13 @@ export function scholarshipRequestErrorMessage(
 }
 
 export async function postScholarshipsList(
-  body: ScholarshipsListPostBody
+  body: ScholarshipsListPostBody,
+  options?: { signal?: AbortSignal }
 ): Promise<ScholarshipsListResponse> {
   const res = await fetch('/api/scholarships', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    signal: options?.signal,
     body: JSON.stringify(body)
   });
   if (!res.ok) {
@@ -85,13 +87,15 @@ export async function postScholarshipsList(
 }
 
 export async function postScholarshipsCount(
-  body: ScholarshipsListPostBody
+  body: ScholarshipsListPostBody,
+  options?: { signal?: AbortSignal }
 ): Promise<{ total: number; page: number; limit: number; seoFallback?: SeoListingFallbackMeta }> {
   const sp = new URLSearchParams(body.searchParams);
   sp.set('count_only', '1');
   const res = await fetch('/api/scholarships', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    signal: options?.signal,
     body: JSON.stringify({
       searchParams: sp.toString(),
       moreFilters: body.moreFilters,
@@ -111,13 +115,15 @@ export async function postScholarshipsCount(
 }
 
 export async function postScholarshipsMeta(
-  body: ScholarshipsListPostBody
+  body: ScholarshipsListPostBody,
+  options?: { signal?: AbortSignal }
 ): Promise<{ meta?: ScholarshipListMeta; page: number; limit: number }> {
   const sp = new URLSearchParams(body.searchParams);
   sp.set('meta_only', '1');
   const res = await fetch('/api/scholarships', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    signal: options?.signal,
     body: JSON.stringify({
       searchParams: sp.toString(),
       moreFilters: body.moreFilters,

@@ -16,7 +16,7 @@ export const SCHOLARSHIPS_HUB_ALL_MATCHES_HREF =
 
 /** Hub URL for Best recommendation: tab + default sort (amount ↓, then newest). */
 export const SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF =
-  '/scholarships?tab=best-recommendation&scope=catalog&sort=best_recommendation';
+  '/scholarships?tab=best-recommendation&scope=catalog';
 /** Backward-compat alias while old imports are being migrated. */
 export const SCHOLARSHIPS_HUB_BEST_MATCHES_HREF =
   SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF;
@@ -29,10 +29,7 @@ export const SCHOLARSHIPS_HUB_SAVED_TAB_HREF = '/scholarships?tab=saved';
 
 const SORT_VALUES = new Set<string>([
   'magic',
-  'best_match',
-  'best_recommendation',
   'highest_amount',
-  'lowest_amount',
   'least_requirements',
   'closest_deadline',
   'fewest_applicants',
@@ -65,7 +62,14 @@ export function parseSortFromParam(raw: string | null): SortOption {
   if (!raw?.trim()) return 'magic';
   const k = raw.trim().toLowerCase();
   if (k === 'newest') return 'most_recent';
-  if (k === 'best-match') return 'best_match';
+  if (
+    k === 'best-match' ||
+    k === 'best_match' ||
+    k === 'best_recommendation' ||
+    k === 'lowest_amount'
+  ) {
+    return 'magic';
+  }
   if (SORT_VALUES.has(k)) return k as SortOption;
   return 'magic';
 }
