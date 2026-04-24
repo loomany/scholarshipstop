@@ -9,6 +9,7 @@ import {
 } from 'react';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   BookOpen,
   CalendarClock,
@@ -34,7 +35,7 @@ import { toast } from '@/components/ui/Toasts/use-toast';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
-import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import PremiumPaywallModal from '@/components/scholarships/PremiumPaywallModal';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
@@ -386,7 +387,7 @@ function SimilarScholarshipDetailListItem({
               : s.title}
           </span>
           {s.provider ? (
-            !isAuthenticated ? (
+            !hasSubscription ? (
               <span
                 className="mt-1.5 block text-left text-sm"
                 aria-label="Sponsor name hidden until you subscribe."
@@ -632,24 +633,18 @@ export default function ScholarshipDetailPageClient({
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [startedIds, setStartedIds] = useState<string[]>([]);
   const [submittedIds, setSubmittedIds] = useState<string[]>([]);
-  const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
-  const [registrationWallVariant, setRegistrationWallVariant] = useState<
-    'scholarships' | 'essay' | 'locked-category'
-  >('scholarships');
-  const openRegistrationWall = useCallback(() => {
-    setRegistrationWallVariant('scholarships');
-    setRegistrationWallOpen(true);
+  const router = useRouter();
+  const [premiumPaywallOpen, setPremiumPaywallOpen] = useState(false);
+  const openPremiumPaywall = useCallback(() => {
+    setPremiumPaywallOpen(true);
   }, []);
-  const openLockedCategoryWall = useCallback(() => {
-    setRegistrationWallVariant('locked-category');
-    setRegistrationWallOpen(true);
+  const closePremiumPaywall = useCallback(() => {
+    setPremiumPaywallOpen(false);
   }, []);
-  const closeRegistrationWall = useCallback(() => {
-    setRegistrationWallOpen(false);
-  }, []);
-  const openProviderAccessWall = useCallback(() => {
-    openRegistrationWall();
-  }, [openRegistrationWall]);
+  const handlePremiumPaywallUpgrade = useCallback(() => {
+    setPremiumPaywallOpen(false);
+    router.push('/subscription');
+  }, [router]);
   const syncIdsFromStorage = useCallback(async () => {
     setIgnoredIds(getIgnoredScholarshipIds());
     setStartedIds(getStartedScholarshipIds());
@@ -775,14 +770,11 @@ export default function ScholarshipDetailPageClient({
     };
   }, [scholarship]);
 
-  const registrationWallModal = (
-    <ScholarshipRegistrationWallModal
-      open={registrationWallOpen}
-      onClose={closeRegistrationWall}
-      variant={registrationWallVariant}
-      signedInWithoutSubscription={
-        Boolean(isAuthenticated && authResolved && !hasSubscription)
-      }
+  const premiumPaywallModal = (
+    <PremiumPaywallModal
+      isOpen={premiumPaywallOpen}
+      onClose={closePremiumPaywall}
+      onUpgradeClick={handlePremiumPaywallUpgrade}
     />
   );
 
@@ -813,7 +805,7 @@ export default function ScholarshipDetailPageClient({
             />
           </div>
         </section>
-        {registrationWallModal}
+        {premiumPaywallModal}
       </DarkTooltipProvider>
     );
   }
@@ -830,7 +822,7 @@ export default function ScholarshipDetailPageClient({
             </div>
           </div>
         </section>
-        {registrationWallModal}
+        {premiumPaywallModal}
       </DarkTooltipProvider>
     );
   }
@@ -854,7 +846,7 @@ export default function ScholarshipDetailPageClient({
             </div>
           </div>
         </section>
-        {registrationWallModal}
+        {premiumPaywallModal}
       </DarkTooltipProvider>
     );
   }
@@ -944,9 +936,8 @@ export default function ScholarshipDetailPageClient({
     hasSocial ||
     hasMission;
 
-  /** Keep provider text blurred only for non-authenticated visitors. */
-  const providerNameLocked =
-    Boolean(providerName) && !(isAuthenticated && authResolved);
+  /** Provider identity and external links are visible only with an active subscription. */
+  const providerNameLocked = Boolean(providerName) && !hasSubscription;
   const providerBlurPhrases = providerNameLocked
     ? buildScholarshipProviderBlurPhrases(scholarship)
     : [];
@@ -954,9 +945,7 @@ export default function ScholarshipDetailPageClient({
     ...providerBlurPhrases,
     ...(targetedCategoryLocked && titleBlurPhrase ? [titleBlurPhrase] : [])
   ];
-  const openLockedTextWall = targetedCategoryLocked
-    ? openLockedCategoryWall
-    : openProviderAccessWall;
+  const openLockedTextWall = openPremiumPaywall;
   const obscureDetailLine = (text: string) =>
     providerNameLocked || targetedCategoryLocked
       ? renderTextWithObscuredPhrases(text, lockedTextPhrases, {
@@ -1221,15 +1210,10 @@ export default function ScholarshipDetailPageClient({
       beforeMissing.length > 0 ||
       beforeFlags.length > 0);
 
-  const isApplySubscriptionLocked = !isAuthenticated || targetedCategoryLocked;
   /** Guest blur + “Sign in to unlock AI insights” overlay disabled — full detail body stays readable. */
   const showLockedDetailOverlay = false;
-  const openLockedAccessWall = targetedCategoryLocked
-    ? openLockedCategoryWall
-    : openRegistrationWall;
-  const openApplyAccessWall = targetedCategoryLocked
-    ? openLockedCategoryWall
-    : openRegistrationWall;
+  const openLockedAccessWall = openPremiumPaywall;
+  const openApplyAccessWall = openPremiumPaywall;
 
   return (
     <DarkTooltipProvider>
@@ -1283,7 +1267,7 @@ export default function ScholarshipDetailPageClient({
               {targetedCategoryLocked && titleBlurPhrase
                 ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
                     blurEntireWhenNoSubstringMatch: false,
-                    onLockedSegmentClick: openLockedCategoryWall
+                    onLockedSegmentClick: openPremiumPaywall
                   })
                 : scholarship.title}
             </li>
@@ -1295,7 +1279,7 @@ export default function ScholarshipDetailPageClient({
             {targetedCategoryLocked && titleBlurPhrase
               ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
                   blurEntireWhenNoSubstringMatch: false,
-                  onLockedSegmentClick: openLockedCategoryWall
+                  onLockedSegmentClick: openPremiumPaywall
                 })
               : scholarship.title}
           </h1>
@@ -1994,7 +1978,7 @@ export default function ScholarshipDetailPageClient({
                       type="button"
                       onClick={openLockedAccessWall}
                       className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
-                      aria-label="Provider name hidden. Sign in or start a trial to see the sponsor."
+                      aria-label="Provider name hidden. Upgrade to premium to see the sponsor."
                     >
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
                         {logoUrl ? (
@@ -2072,7 +2056,7 @@ export default function ScholarshipDetailPageClient({
                     type="button"
                     onClick={openLockedAccessWall}
                     className="flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
-                    aria-label="Provider name hidden. Sign in or start a trial to see the sponsor."
+                    aria-label="Provider name hidden. Upgrade to premium to see the sponsor."
                   >
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
                       {logoUrl ? (
@@ -2134,26 +2118,41 @@ export default function ScholarshipDetailPageClient({
                   </div>
                 )}
                 {providerUrlRaw ? (
-                  <a
-                    href={providerUrlRaw}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex w-fit items-center gap-1 text-sm font-medium text-sky-700 underline-offset-2 hover:underline sm:ml-14"
-                  >
-                    <ExternalLink
-                      className="h-3.5 w-3.5 shrink-0"
-                      aria-hidden
-                    />
-                    Provider website
-                  </a>
+                  hasSubscription ? (
+                    <a
+                      href={providerUrlRaw}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-fit items-center gap-1 text-sm font-medium text-sky-700 underline-offset-2 hover:underline sm:ml-14"
+                    >
+                      <ExternalLink
+                        className="h-3.5 w-3.5 shrink-0"
+                        aria-hidden
+                      />
+                      Provider website
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={openPremiumPaywall}
+                      className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-sky-700 underline-offset-2 hover:underline sm:ml-14"
+                    >
+                      <Lock
+                        className="h-3.5 w-3.5 shrink-0"
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                      Provider website
+                    </button>
+                  )
                 ) : null}
               </div>
-              {showMissionCompact ? (
+              {showMissionCompact && hasSubscription ? (
                 <p className="mt-4 text-sm leading-relaxed text-zinc-600">
                   {providerMissionRaw}
                 </p>
               ) : null}
-              {social && hasSocial ? (
+              {social && hasSocial && hasSubscription ? (
                 <div className="mt-5 border-t border-zinc-100 pt-4">
                   <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-400">
                     Social
@@ -2300,7 +2299,7 @@ export default function ScholarshipDetailPageClient({
               <ul className="mt-4 flex list-none flex-col gap-3 p-0 sm:flex-row sm:items-stretch sm:gap-3">
                 {applyHref ? (
                   <li className="min-w-0 flex-1 basis-0">
-                    {isAuthenticated && !isApplySubscriptionLocked ? (
+                    {hasSubscription ? (
                       <a
                         href={applyHref}
                         target="_blank"
@@ -2314,13 +2313,7 @@ export default function ScholarshipDetailPageClient({
                         type="button"
                         className={detailApplyPrimaryClass}
                         onClick={openApplyAccessWall}
-                        title={
-                          targetedCategoryLocked
-                            ? 'Premium subscription required to open this scholarship'
-                            : isApplySubscriptionLocked
-                              ? 'Start your free access to apply on the official site'
-                            : 'Create a free account to apply on the official site'
-                        }
+                        title="Premium subscription required to apply on the official site"
                       >
                         <Lock
                           className="h-4 w-4 shrink-0 text-white stroke-white"
@@ -2504,8 +2497,8 @@ export default function ScholarshipDetailPageClient({
                         eligibleForMatchPill
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
-                        onGuestDetailNavigate={openRegistrationWall}
-                        onLockedScholarshipNavigate={openLockedCategoryWall}
+                        onGuestDetailNavigate={openPremiumPaywall}
+                        onLockedScholarshipNavigate={openPremiumPaywall}
                       />
                     ))}
                   </ul>
@@ -2532,8 +2525,8 @@ export default function ScholarshipDetailPageClient({
                         eligibleForMatchPill={false}
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
-                        onGuestDetailNavigate={openRegistrationWall}
-                        onLockedScholarshipNavigate={openLockedCategoryWall}
+                        onGuestDetailNavigate={openPremiumPaywall}
+                        onLockedScholarshipNavigate={openPremiumPaywall}
                       />
                     ))}
                   </ul>
@@ -2554,8 +2547,8 @@ export default function ScholarshipDetailPageClient({
                       eligibleForMatchPill={isOpen}
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
-                      onGuestDetailNavigate={openRegistrationWall}
-                      onLockedScholarshipNavigate={openLockedCategoryWall}
+                      onGuestDetailNavigate={openPremiumPaywall}
+                      onLockedScholarshipNavigate={openPremiumPaywall}
                     />
                   );
                 })}
@@ -2576,7 +2569,7 @@ export default function ScholarshipDetailPageClient({
 
         </div>
     </section>
-    {registrationWallModal}
+    {premiumPaywallModal}
     </DarkTooltipProvider>
   );
 }

@@ -1,10 +1,11 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ExternalLink, Lock } from 'lucide-react';
 
 import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
-import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
+import PremiumPaywallModal from '@/components/scholarships/PremiumPaywallModal';
 
 type ProviderOfficialWebsiteGateProps = {
   href: string;
@@ -20,23 +21,27 @@ function ProviderOfficialWebsiteGateInner({
   variant = 'button',
   className,
   title,
-  isAuthenticated,
   hasSubscription
 }: ProviderOfficialWebsiteGateProps & {
-  isAuthenticated: boolean;
   hasSubscription: boolean;
 }) {
-  const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const router = useRouter();
+  const [paywallOpen, setPaywallOpen] = useState(false);
 
-  const isBlocked = !isAuthenticated;
+  const isBlocked = !hasSubscription;
 
-  const openBlockedModal = useCallback(() => {
-    setRegistrationWallOpen(true);
+  const openPaywall = useCallback(() => {
+    setPaywallOpen(true);
   }, []);
 
-  const closeRegistrationWall = useCallback(() => {
-    setRegistrationWallOpen(false);
+  const closePaywall = useCallback(() => {
+    setPaywallOpen(false);
   }, []);
+
+  const handleUpgradeClick = useCallback(() => {
+    setPaywallOpen(false);
+    router.push('/subscription');
+  }, [router]);
 
   const baseClassName =
     variant === 'inline'
@@ -48,7 +53,7 @@ function ProviderOfficialWebsiteGateInner({
       {isBlocked ? (
         <button
           type="button"
-          onClick={openBlockedModal}
+          onClick={openPaywall}
           title={title}
           aria-label={label}
           className={baseClassName}
@@ -71,10 +76,10 @@ function ProviderOfficialWebsiteGateInner({
         </a>
       )}
 
-      <ScholarshipRegistrationWallModal
-        open={registrationWallOpen}
-        onClose={closeRegistrationWall}
-        signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
+      <PremiumPaywallModal
+        isOpen={paywallOpen}
+        onClose={closePaywall}
+        onUpgradeClick={handleUpgradeClick}
       />
     </>
   );
@@ -89,14 +94,13 @@ export function ProviderOfficialWebsiteGate({
 }: ProviderOfficialWebsiteGateProps) {
   return (
     <AuthStatusProvider>
-      {({ isAuthenticated, hasSubscription }) => (
+      {({ hasSubscription }) => (
         <ProviderOfficialWebsiteGateInner
           href={href}
           label={label}
           variant={variant}
           className={className}
           title={title}
-          isAuthenticated={isAuthenticated}
           hasSubscription={hasSubscription}
         />
       )}
