@@ -1,0 +1,32 @@
+{
+  "name": "content-hub-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "content:run-once": "node dist/jobs/runContentJob.js",
+    "seed:topics": "tsx src/scripts/seedTopics.ts",
+    "diagnose:metrics-fail": "tsx src/scripts/diagnoseArticleMetricsFail.ts",
+    "build": "tsc",
+    "lint": "eslint .",
+    "content:publish-next": "node dist/jobs/publishNextPost.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.9",
+    "dotenv": "^16.5.0",
+    "marked": "^15.0.7",
+    "openai": "^4.90.0",
+    "sanitize-html": "^2.14.0",
+    "sharp": "^0.34.4",
+    "slugify": "^1.6.6",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "@types/sanitize-html": "^2.13.0",
+    "eslint": "^9.23.0",
+    "pm2": "^6.0.14",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

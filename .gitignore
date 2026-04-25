@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+services/content-hub/node_modules/
 /.pnp
 .pnp.js
 
