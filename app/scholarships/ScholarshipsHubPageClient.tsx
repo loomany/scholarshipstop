@@ -18,7 +18,7 @@ import {
 } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ScholarshipsHubQueryProvider } from '@/components/providers/ScholarshipsHubQueryProvider';
 import BestRecommendationWizard from '@/components/scholarships/BestRecommendationWizard';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
@@ -200,6 +200,10 @@ const HUB_TABS_SSR_NEVER_SEEDS_ID_LIST: readonly ScholarshipListTabId[] = [
 const EMPTY_LOCATION_OPTIONS: string[] = [];
 const PREVIEW_COUNT_CACHE_TTL_MS = 30_000;
 
+function longTailRequestRouteKeyFromPathname(pathname: string): string {
+  return pathname.replace(/^\/scholarships\/?/, '');
+}
+
 function HubListSkeleton({
   showApplyingLabel = false
 }: {
@@ -360,7 +364,8 @@ function ScholarshipsPageInner({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [pathname, setPathname] = useState('/scholarships');
+  const currentPathname = usePathname();
+  const pathname = currentPathname || '/scholarships';
   /** Business-only, stable order — matches SSR `searchParamsString` and excludes framework keys. */
   const searchParamsString = useMemo(
     () => scholarshipHubQueryStringFromURLSearchParams(searchParams),
@@ -369,7 +374,11 @@ function ScholarshipsPageInner({
   const hubListRequestKey = useMemo(
     () =>
       routeScope
-        ? `long_tail:${pathname.replace(/^\/scholarships\//, '')}:${searchParamsString}`
+        ? buildInitialListRequestKey({
+            kind: 'long_tail',
+            routeKey: longTailRequestRouteKeyFromPathname(pathname),
+            searchParamsString
+          })
         : buildInitialListRequestKey({
             kind: 'hub',
             routeKey: 'hub',
@@ -405,11 +414,6 @@ function ScholarshipsPageInner({
   }, [parsedList.sort, searchParamsString, activeTab]);
   const appliedCategoryIds = parsedList.categories;
   const catalogListScope = 'catalog' as const;
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setPathname(window.location.pathname || '/scholarships');
-  }, []);
 
   /**
    * Until Supabase `getSession()` finishes, `isAuthenticated` is false even for signed-in users.
@@ -880,6 +884,7 @@ function ScholarshipsPageInner({
    * empty state / signup prompts. Do not rewrite it back to `matches` or clicks appear “broken”.
    */
   useEffect(() => {
+    if (routeScope) return;
     if (isAuthenticated) return;
     if (!authResolved) return;
     const sp = new URLSearchParams(searchParamsString);
@@ -897,7 +902,13 @@ function ScholarshipsPageInner({
       ...(hasAdvDeadline ? { deadline: 'any' } : {}),
       resetPage
     });
-  }, [isAuthenticated, authResolved, searchParamsString, replaceListingParams]);
+  }, [
+    routeScope,
+    isAuthenticated,
+    authResolved,
+    searchParamsString,
+    replaceListingParams
+  ]);
 
   const queryDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
