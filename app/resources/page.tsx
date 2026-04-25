@@ -132,26 +132,40 @@ function resolveCoverSrc(
   return post.cover_image_url?.trim() ?? fallbackCoverByPostId.get(post.id) ?? null;
 }
 
+function resolveCoverDedupeKey(
+  post: ContentPostListFields,
+  fallbackCoverByPostId: Map<string, string>
+): string | null {
+  return (
+    post.cover_image_source_url?.trim() ??
+    post.cover_image_url?.trim() ??
+    fallbackCoverByPostId.get(post.id) ??
+    null
+  );
+}
+
 function rebalanceAdjacentDuplicateCovers(
   posts: ContentPostListFields[],
   fallbackCoverByPostId: Map<string, string>
 ): ContentPostListFields[] {
   const out = [...posts];
   for (let i = 1; i < out.length; i += 1) {
-    const prevCover = resolveCoverSrc(out[i - 1], fallbackCoverByPostId);
-    const currentCover = resolveCoverSrc(out[i], fallbackCoverByPostId);
+    const prevCover = resolveCoverDedupeKey(out[i - 1], fallbackCoverByPostId);
+    const currentCover = resolveCoverDedupeKey(out[i], fallbackCoverByPostId);
     if (!prevCover || !currentCover || prevCover !== currentCover) continue;
 
     let swapIdx = -1;
     for (let j = i + 1; j < out.length; j += 1) {
-      const candidateCover = resolveCoverSrc(out[j], fallbackCoverByPostId);
+      const candidateCover = resolveCoverDedupeKey(out[j], fallbackCoverByPostId);
       if (!candidateCover || candidateCover === prevCover) continue;
       const beforeOk =
         i - 1 < 0 ||
-        resolveCoverSrc(out[i - 1], fallbackCoverByPostId) !== candidateCover;
+        resolveCoverDedupeKey(out[i - 1], fallbackCoverByPostId) !==
+          candidateCover;
       const afterOk =
         i + 1 >= out.length ||
-        resolveCoverSrc(out[i + 1], fallbackCoverByPostId) !== candidateCover;
+        resolveCoverDedupeKey(out[i + 1], fallbackCoverByPostId) !==
+          candidateCover;
       if (beforeOk && afterOk) {
         swapIdx = j;
         break;

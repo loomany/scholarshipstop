@@ -17,7 +17,7 @@ const envSchema = z.object({
     OPENAI_MODEL_SMART: z.string().default("gpt-4.1"),
     /** Chat Completions output cap (long articles + JSON). */
     OPENAI_MAX_COMPLETION_TOKENS: z.coerce.number().int().positive().default(16384),
-    FAL_KEY: z.string().min(1),
+    FAL_KEY: z.string().default(""),
     FAL_REQUEST_TIMEOUT_MS: z.coerce.number().int().positive().default(180000),
     /** FLUX.1 [dev] — generation size (default 704×16:9-style height, matches main-site Essay Hub). */
     FLUX_HERO_WIDTH: z.coerce.number().int().min(256).max(4096).default(704),
@@ -61,6 +61,10 @@ const envSchema = z.object({
     CONTENT_HUB_MAX_FAQ_LINKS: z.coerce.number().int().positive().default(3),
     CONTENT_HUB_MAX_RELATED_ARTICLES: z.coerce.number().int().positive().default(4),
     CONTENT_HUB_MIN_RELATED_ARTICLES: z.coerce.number().int().positive().default(2),
+    CONTENT_HUB_COVER_SOURCE: z.enum(["essay_reuse", "fal"]).default("essay_reuse"),
+    CONTENT_HUB_FAL_FALLBACK: z.coerce.number().int().min(0).max(1).default(0),
+    CONTENT_HUB_MAX_TOPIC_ATTEMPTS: z.coerce.number().int().positive().default(3),
+    CONTENT_HUB_STALE_PROCESSING_HOURS: z.coerce.number().positive().default(2),
     IMAGE_WATERMARK_ENABLED: z.coerce.number().default(1),
     IMAGE_WATERMARK_TEXT: z.string().default("ScholarshipTop.com")
 });

@@ -21,10 +21,34 @@ export async function pickQueuedTopic() {
         throw error;
     return data;
 }
-export async function updateTopicStatus(topicId, status) {
+function truncateNullable(value, maxLength) {
+    const clean = value?.trim();
+    if (!clean)
+        return null;
+    return clean.length > maxLength ? clean.slice(0, maxLength) : clean;
+}
+export async function updateTopicStatus(topicId, status, metadata = {}) {
     const payload = { status, updated_at: new Date().toISOString() };
+    const hasFailureMetadata = Boolean(metadata.error || metadata.stage || metadata.failureClass);
+    if (status === "processing") {
+        payload.last_attempt_at = new Date().toISOString();
+    }
     if (status === "done") {
         payload.processed_at = new Date().toISOString();
+        payload.last_error = null;
+        payload.last_stage = null;
+        payload.failure_class = null;
+    }
+    else if (hasFailureMetadata) {
+        payload.last_error = truncateNullable(metadata.error, 4000);
+        payload.last_stage = truncateNullable(metadata.stage, 120);
+        payload.failure_class = metadata.failureClass ?? null;
+    }
+    if (status === "processing") {
+        const { error } = await supabase.rpc("mark_content_topic_processing", { p_topic_id: topicId });
+        if (error)
+            throw error;
+        return;
     }
     const { error } = await supabase.from("content_topics").update(payload).eq("id", topicId);
     if (error)
@@ -52,6 +76,110 @@ export async function fetchPublishedArticleSlugs(slugs) {
     if (error)
         throw error;
     return (data ?? []).map((row) => row.slug);
+}
+function normalizeTokens(input) {
+    return new Set(input
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, " ")
+        .split(/[\s-]+/)
+        .map((token) => token.trim())
+        .filter((token) => token.length >= 4));
+}
+function stableHash(input) {
+    let hash = 0;
+    for (let i = 0; i < input.length; i += 1) {
+        hash = (hash * 31 + input.charCodeAt(i)) >>> 0;
+    }
+    return hash;
+}
+function scoreEssayHeroCandidate(candidate, topic, title) {
+    const targetTokens = normalizeTokens(`${topic} ${title}`);
+    const candidateTokens = normalizeTokens(`${candidate.title ?? ""} ${candidate.slug ?? ""}`);
+    let score = 0;
+    for (const token of targetTokens) {
+        if (candidateTokens.has(token))
+            score += 3;
+    }
+    for (const token of candidateTokens) {
+        if (token.includes("essay"))
+            score += 1;
+        if (token.includes("scholarship"))
+            score += 1;
+        if (token.includes("student"))
+            score += 1;
+    }
+    return score;
+}
+async function fetchRecentlyUsedCoverSourceUrls(limit = 36) {
+    const { data, error } = await supabase
+        .from("content_posts")
+        .select("cover_image_source_url, cover_image_url")
+        .eq("status", "published")
+        .order("published_at", { ascending: false, nullsFirst: false })
+        .limit(limit);
+    if (error)
+        throw error;
+    const used = new Set();
+    for (const row of data ?? []) {
+        const source = typeof row.cover_image_source_url === "string" ? row.cover_image_source_url.trim() : "";
+        const cover = typeof row.cover_image_url === "string" ? row.cover_image_url.trim() : "";
+        if (source)
+            used.add(source);
+        if (cover)
+            used.add(cover);
+    }
+    return used;
+}
+export async function reuseEssayHeroCover(params) {
+    const { data, error } = await supabase
+        .from("essays")
+        .select("title,slug,hero_image_url")
+        .eq("is_published", true)
+        .eq("hero_is_real", true)
+        .not("hero_image_url", "is", null)
+        .neq("hero_image_url", "")
+        .order("created_at", { ascending: false, nullsFirst: false })
+        .limit(800);
+    if (error)
+        throw error;
+    const seen = new Set();
+    const candidates = (data ?? []).filter((candidate) => {
+        const url = candidate.hero_image_url?.trim();
+        if (!url || seen.has(url))
+            return false;
+        seen.add(url);
+        return true;
+    });
+    if (candidates.length === 0)
+        return null;
+    const recentUsed = await fetchRecentlyUsedCoverSourceUrls();
+    const ranked = candidates
+        .map((candidate) => ({
+        candidate,
+        score: scoreEssayHeroCandidate(candidate, params.topic, params.title)
+    }))
+        .sort((a, b) => {
+        if (b.score !== a.score)
+            return b.score - a.score;
+        const ah = stableHash(`${params.slug}:${a.candidate.hero_image_url}`);
+        const bh = stableHash(`${params.slug}:${b.candidate.hero_image_url}`);
+        return ah - bh;
+    });
+    const picked = ranked.find(({ candidate }) => !recentUsed.has(candidate.hero_image_url.trim()))?.candidate ??
+        ranked[stableHash(params.slug) % ranked.length]?.candidate;
+    const sourceUrl = picked?.hero_image_url?.trim();
+    if (!sourceUrl)
+        return null;
+    const image = await uploadImageFromUrl({
+        imageUrl: sourceUrl,
+        fileName: params.fileName
+    });
+    return {
+        image,
+        sourceUrl,
+        sourceType: "essay_hero",
+        sourceTitle: picked.title ?? null
+    };
 }
 export async function slugExists(slug) {
     const { data, error } = await supabase.from("content_posts").select("id").eq("slug", slug).limit(1);

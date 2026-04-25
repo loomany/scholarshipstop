@@ -22,6 +22,11 @@ export interface ContentTopic {
   created_at: string;
   updated_at: string;
   processed_at: string | null;
+  last_error: string | null;
+  last_stage: string | null;
+  failure_class: string | null;
+  attempt_count: number;
+  last_attempt_at: string | null;
 }
 
 export interface RelatedArticle {

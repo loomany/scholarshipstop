@@ -14,7 +14,15 @@ import {
   injectInternalLinks,
   verifyScholarshipLinks
 } from "../lib/scholarshipMatching.js";
-import { fetchPublishedArticles, pickQueuedTopic, slugExists, supabase, updateTopicStatus, uploadImageFromUrl } from "../lib/supabase.js";
+import {
+  fetchPublishedArticles,
+  pickQueuedTopic,
+  reuseEssayHeroCover,
+  slugExists,
+  supabase,
+  updateTopicStatus,
+  uploadImageFromUrl
+} from "../lib/supabase.js";
 import { validateArticleMetrics } from "../lib/validators.js";
 import { triggerArticleMatching } from "../lib/articleMatchingNotifier.js";
 import {
@@ -27,7 +35,7 @@ import {
   selectScene
 } from "../lib/variation.js";
 import type { AnchorSuggestion } from "../lib/types.js";
-import type { UploadedImageResult } from "../lib/supabase.js";
+import type { TopicFailureClass, UploadedImageResult } from "../lib/supabase.js";
 import { countWords } from "../lib/markdown.js";
 
 type JobStage =
@@ -93,6 +101,20 @@ function isTransientPipelineError(error: unknown): boolean {
     "insufficient_quota",
     "timeout"
   ].some((needle) => haystack.includes(needle));
+}
+
+function classifyFailure(stage: JobStage, error: unknown): TopicFailureClass {
+  if (isTransientPipelineError(error)) return "transient";
+  const message = normalizeError(error).message.toLowerCase();
+  if (stage === "generating_seo" || stage === "generating_article" || message.includes("zod")) return "openai";
+  if (stage === "validating_metrics") return "metrics";
+  if (stage === "generating_image" || stage === "processing_image" || stage === "uploading_image") return "image";
+  if (stage === "inserting_post" || message.includes("duplicate key") || message.includes("violates")) return "db";
+  return "other";
+}
+
+function shouldRetryTopic(topicAttemptCount: number): boolean {
+  return topicAttemptCount < env.CONTENT_HUB_MAX_TOPIC_ATTEMPTS;
 }
 
 function imageFileName(slug: string): string {
@@ -471,6 +493,7 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
       externalLinksEnabled
     });
     let totalRetriesUsed = 0;
+    let forceReviewReason: string | null = null;
 
     let currentWordCount = countWords(article.body_markdown);
     if (currentWordCount < minWords && totalRetriesUsed < MAX_TOTAL_RETRIES) {
@@ -526,14 +549,13 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
       }
 
       if (currentWordCount < minWords) {
-        logger.error("[Expansion] Failed to reach target after all attempts. Topic status set to failed.", {
+        forceReviewReason = `Expansion did not reach target word count: ${currentWordCount}/${minWords}`;
+        logger.error("[Expansion] Failed to reach target after all attempts. Continuing as review_needed instead of failing topic.", {
           topicId: topic.id,
           slug: article.slug,
           currentWordCount,
           minWords
         });
-        await updateTopicStatus(topic.id, "failed");
-        return "deferred";
       }
     }
 
@@ -791,6 +813,7 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
     }
 
     if (validation.hardFailed) {
+      forceReviewReason = `Metrics hard fail: ${validation.failedChecks.join(", ")}`;
       logger.error("article metrics hard fail after retries exhausted", {
         topicId: topic.id,
         slug: article.slug,
@@ -799,8 +822,6 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
         totalRetriesUsed,
         maxTotalRetries: MAX_TOTAL_RETRIES
       });
-      await updateTopicStatus(topic.id, "failed");
-      return "deferred";
     }
 
     if (scholarshipLinkingEnabled) {
@@ -869,9 +890,43 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
     });
 
     let uploadedImage: UploadedImageResult | null = null;
+    let coverImageSourceUrl: string | null = null;
+    let coverImageSourceType: "essay_hero" | "fal" | null = null;
     try {
       stage = "generating_image";
       logger.info("before image generation", { stage, topicId: topic.id, topic: topic.topic });
+      const fileName = imageFileName(article.slug);
+      if (env.CONTENT_HUB_COVER_SOURCE === "essay_reuse") {
+        logger.info("attempting essay hero cover reuse", { topicId: topic.id, slug: article.slug });
+        const reusedCover = await reuseEssayHeroCover({
+          topic: topic.topic,
+          title: article.title,
+          slug: article.slug,
+          fileName
+        });
+        if (reusedCover) {
+          uploadedImage = reusedCover.image;
+          coverImageSourceUrl = reusedCover.sourceUrl;
+          coverImageSourceType = reusedCover.sourceType;
+          logger.info("essay hero cover reused and copied", {
+            topicId: topic.id,
+            slug: article.slug,
+            sourceTitle: reusedCover.sourceTitle,
+            storagePath: uploadedImage.path,
+            publicUrl: uploadedImage.publicUrl
+          });
+        } else {
+          logger.warn("essay hero cover reuse pool empty", { topicId: topic.id, slug: article.slug });
+        }
+      }
+      if (uploadedImage || (env.CONTENT_HUB_COVER_SOURCE === "essay_reuse" && env.CONTENT_HUB_FAL_FALLBACK !== 1)) {
+        if (!uploadedImage) {
+          logger.warn("cover generation skipped because essay reuse found no image and FAL fallback is disabled", {
+            topicId: topic.id,
+            slug: article.slug
+          });
+        }
+      } else {
       let imageStyle = pickImageStyle(topic.topic, articleType);
       let selectedScene = selectScene({
         topic: topic.topic,
@@ -910,8 +965,10 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
       logger.info("before image processing", { stage, topicId: topic.id, topic: topic.topic });
       uploadedImage = await uploadImageFromUrl({
         imageUrl: generatedImage.url,
-        fileName: imageFileName(article.slug)
+        fileName
       });
+      coverImageSourceUrl = generatedImage.url;
+      coverImageSourceType = "fal";
       logger.info("after image processing", {
         stage,
         topicId: topic.id,
@@ -934,6 +991,7 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
         storagePath: uploadedImage.path,
         publicUrl: uploadedImage.publicUrl
       });
+      }
     } catch (err) {
       if (err instanceof FalTimeoutError) {
         console.error(`FAL API Timeout (${err.timeoutMs} ms exceeded)`);
@@ -1035,6 +1093,9 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
     } else {
       status = shouldPublish && contentNotEmpty && !hasQualityWarnings ? "published" : "review_needed";
     }
+    if (forceReviewReason) {
+      status = "review_needed";
+    }
 
     if (!hasCoverImage && status === "published" && shouldRequireCoverImageForAutoPublish()) {
       status = "review_needed";
@@ -1057,6 +1118,9 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
         ? `${metricsDebug}; image missing`
         : "Auto-publish blocked: image missing";
     }
+    if (forceReviewReason) {
+      metricsDebug = metricsDebug ? `${metricsDebug}; ${forceReviewReason}` : forceReviewReason;
+    }
 
     if (metricsDebug && status === "published") {
       logger.warn("publishing with metrics warnings", {
@@ -1073,6 +1137,7 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
       headline: article.h1,
       description: article.meta_description,
       image: uploadedImage?.publicUrl ?? null,
+      imageSource: coverImageSourceType ? { type: coverImageSourceType, url: coverImageSourceUrl } : null,
       datePublished: status === "published" ? new Date().toISOString() : null,
       dateModified: new Date().toISOString(),
       quality: {
@@ -1107,6 +1172,8 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
       related_article_links: article.related_article_links,
       cover_image_url: uploadedImage?.publicUrl ?? null,
       cover_image_path: uploadedImage?.path ?? null,
+      cover_image_source_url: coverImageSourceUrl,
+      cover_image_source_type: coverImageSourceType,
       cover_image_alt: article.cover_image_alt,
       image_width: uploadedImage?.width ?? null,
       image_height: uploadedImage?.height ?? null,
@@ -1171,14 +1238,24 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
 
     let finalTopicStatus: "done" | "failed" | "queued" | "status_update_failed" = "status_update_failed";
     try {
+      const failureClass = classifyFailure(stage, error);
+      const currentAttempt = (topic.attempt_count ?? 0) + 1;
+      const statusMetadata = {
+        stage,
+        error: normalized.message,
+        failureClass
+      };
       if (postInserted) {
         await updateTopicStatus(topic.id, "done");
         finalTopicStatus = "done";
       } else if (error instanceof RequeueTopicError || isTransientPipelineError(error)) {
-        await updateTopicStatus(topic.id, "queued");
+        await updateTopicStatus(topic.id, "queued", statusMetadata);
+        finalTopicStatus = "queued";
+      } else if (shouldRetryTopic(currentAttempt)) {
+        await updateTopicStatus(topic.id, "queued", statusMetadata);
         finalTopicStatus = "queued";
       } else {
-        await updateTopicStatus(topic.id, "failed");
+        await updateTopicStatus(topic.id, "failed", statusMetadata);
         finalTopicStatus = "failed";
       }
     } catch (statusError) {

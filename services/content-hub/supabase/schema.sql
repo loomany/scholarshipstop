@@ -11,12 +11,37 @@ begin
 end;
 $$;
 
+create or replace function public.mark_content_topic_processing(p_topic_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update public.content_topics
+  set
+    status = 'processing',
+    updated_at = now(),
+    last_attempt_at = now(),
+    attempt_count = coalesce(attempt_count, 0) + 1,
+    last_error = null,
+    last_stage = null,
+    failure_class = null
+  where id = p_topic_id;
+end;
+$$;
+
 create table if not exists public.content_topics (
   id uuid primary key default gen_random_uuid(),
   topic text not null,
   status text not null default 'queued'
     check (status in ('queued', 'processing', 'done', 'failed')),
   priority integer not null default 100,
+  last_error text,
+  last_stage text,
+  failure_class text,
+  attempt_count integer not null default 0,
+  last_attempt_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   processed_at timestamptz
@@ -41,6 +66,8 @@ create table if not exists public.content_posts (
   related_article_links jsonb not null default '[]'::jsonb,
   cover_image_url text,
   cover_image_path text,
+  cover_image_source_url text,
+  cover_image_source_type text,
   cover_image_alt text not null,
   image_width integer,
   image_height integer,
@@ -75,6 +102,12 @@ create index if not exists content_posts_status_published_at_idx
 
 create index if not exists content_posts_slug_idx
   on public.content_posts(slug);
+
+create index if not exists content_topics_status_attempt_idx
+  on public.content_topics(status, attempt_count, updated_at);
+
+create index if not exists content_posts_cover_image_source_url_idx
+  on public.content_posts(cover_image_source_url);
 
 drop trigger if exists set_content_topics_updated_at on public.content_topics;
 create trigger set_content_topics_updated_at

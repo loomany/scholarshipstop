@@ -8,7 +8,7 @@ import { createPublicClient } from '@/utils/supabase/public';
 export type { ContentPostRow, ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 
 const publishedWithSlugSelect =
-  'id, title, slug, cover_image_url, meta_description, published_at' as const;
+  'id, title, slug, cover_image_url, cover_image_source_url, cover_image_source_type, meta_description, published_at' as const;
 
 function publishedPostsWithSlugQuery() {
   const supabase = createPublicClient();
@@ -183,7 +183,7 @@ export async function fetchRelatedPublishedContentPosts(
   let q = supabase
     .from('content_posts')
     .select(
-      'id, title, slug, cover_image_url, meta_description, published_at'
+      'id, title, slug, cover_image_url, cover_image_source_url, cover_image_source_type, meta_description, published_at'
     )
     .eq('status', 'published')
     .order('published_at', { ascending: false, nullsFirst: false })

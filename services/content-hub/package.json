@@ -7,6 +7,8 @@
     "content:run-once": "node dist/jobs/runContentJob.js",
     "seed:topics": "tsx src/scripts/seedTopics.ts",
     "diagnose:metrics-fail": "tsx src/scripts/diagnoseArticleMetricsFail.ts",
+    "audit:health": "tsx src/scripts/auditContentHubHealth.ts",
+    "topics:requeue-problems": "tsx src/scripts/requeueProblemContentTopics.ts",
     "build": "tsc",
     "lint": "eslint .",
     "content:publish-next": "node dist/jobs/publishNextPost.js"

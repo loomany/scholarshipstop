@@ -618,6 +618,8 @@ export interface Database {
           title: string | null
           slug: string | null
           cover_image_url: string | null
+          cover_image_source_url: string | null
+          cover_image_source_type: string | null
           meta_description: string | null
           meta_title: string | null
           body_html: string | null
@@ -636,6 +638,8 @@ export interface Database {
           title?: string | null
           slug?: string | null
           cover_image_url?: string | null
+          cover_image_source_url?: string | null
+          cover_image_source_type?: string | null
           meta_description?: string | null
           meta_title?: string | null
           body_html?: string | null
@@ -654,6 +658,8 @@ export interface Database {
           title?: string | null
           slug?: string | null
           cover_image_url?: string | null
+          cover_image_source_url?: string | null
+          cover_image_source_type?: string | null
           meta_description?: string | null
           meta_title?: string | null
           body_html?: string | null
