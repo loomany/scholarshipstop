@@ -74,6 +74,8 @@ export default async function EssaysIndexPage({
     total <= 0 ? 0 : Math.max(1, Math.ceil(total / ESSAYS_INDEX_PAGE_SIZE));
   const currentPage = queryState.page;
   const withSlug = indexRows.filter((p) => p.slug?.trim());
+  const displayRows =
+    currentPage === 1 ? prioritizeUniqueHeroImages(withSlug) : withSlug;
 
   if (total > 0 && queryState.page > totalPages) {
     redirect(
@@ -259,8 +261,8 @@ export default async function EssaysIndexPage({
           </p>
         ) : (
           <>
-            <EssaysGrid posts={withSlug} />
-            {total > 0 && withSlug.length > 0 ? (
+            <EssaysGrid posts={displayRows} />
+            {total > 0 && displayRows.length > 0 ? (
               <ResourcesPagination
                 currentPage={currentPage}
                 totalPages={totalPages}
@@ -334,4 +336,31 @@ function EssaysGrid({ posts }: { posts: EssayListFields[] }) {
       })}
     </ul>
   );
+}
+
+function normalizeHeroKey(url: string | null | undefined): string | null {
+  const value = url?.trim().toLowerCase();
+  return value ? value : null;
+}
+
+function prioritizeUniqueHeroImages(posts: EssayListFields[]): EssayListFields[] {
+  const unique: EssayListFields[] = [];
+  const duplicates: EssayListFields[] = [];
+  const used = new Set<string>();
+
+  for (const post of posts) {
+    const key = normalizeHeroKey(post.hero_image_url);
+    if (!key) {
+      unique.push(post);
+      continue;
+    }
+    if (used.has(key)) {
+      duplicates.push(post);
+      continue;
+    }
+    used.add(key);
+    unique.push(post);
+  }
+
+  return [...unique, ...duplicates];
 }
