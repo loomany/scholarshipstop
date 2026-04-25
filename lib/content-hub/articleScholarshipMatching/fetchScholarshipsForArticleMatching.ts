@@ -9,18 +9,23 @@ const PAGE = 1000;
 const BAD_STATUS = new Set(['archived', 'deleted', 'closed', 'inactive', 'draft']);
 
 const SELECT =
-  'id, slug, title, scholarship_status, is_indexable, description, summary_short, eligibility_text, category, category_slug, tags, study_levels, field_of_study, location_scope, award_amount_text, deadline_text, deadline_date';
+  'id, slug, title, scholarship_status, is_indexable, international_friendly_listing, description, summary_short, eligibility_text, category, category_slug, tags, study_levels, field_of_study, location_scope, award_amount_text, deadline_text, deadline_date';
 
 export async function fetchScholarshipsForArticleMatching(
-  supabase: SupabaseClient<Database>
+  supabase: SupabaseClient<Database>,
+  options: { onlyInternationalFriendly?: boolean } = {}
 ): Promise<ScholarshipMatchDbRow[]> {
   const out: ScholarshipMatchDbRow[] = [];
   let from = 0;
   for (;;) {
-    const { data, error } = await supabase
+    let query = supabase
       .from('scholarships')
       .select(SELECT)
       .range(from, from + PAGE - 1);
+    if (options.onlyInternationalFriendly) {
+      query = query.eq('international_friendly_listing', true);
+    }
+    const { data, error } = await query;
 
     if (error) throw new Error(error.message);
     const batch = (data ?? []) as ScholarshipMatchDbRow[];

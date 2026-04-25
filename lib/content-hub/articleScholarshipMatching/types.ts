@@ -15,6 +15,7 @@ export type ScholarshipMatchDbRow = {
   title: string | null;
   scholarship_status: string | null;
   is_indexable: boolean | null;
+  international_friendly_listing?: boolean | null;
   description: string | null;
   summary_short: string | null;
   eligibility_text: string | null;

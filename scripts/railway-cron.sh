@@ -8,6 +8,7 @@
 #   bash scripts/railway-cron.sh weekly-free-digest   # (optional; not part of default "all")
 #   bash scripts/railway-cron.sh enrich-providers
 #   bash scripts/railway-cron.sh essay-pipeline
+#   bash scripts/railway-cron.sh manual-essay-guides
 #   bash scripts/railway-cron.sh seo-daily-telegram   # daily digest of new SEO hub pages (Telegram)
 #
 # Default task "all" = SEO + indexing flush + grants + enrich + essay (same as your checklist).
@@ -188,16 +189,31 @@ task_essay_pipeline() {
   echo "[railway-cron] OK: essay-pipeline"
 }
 
+task_manual_essay_guides() {
+  echo "[railway-cron] Starting task: manual-essay-guides (local npm/tsx)"
+  export NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-$BASE_URL}"
+  require_env NEXT_PUBLIC_SUPABASE_URL
+  require_env SUPABASE_SERVICE_ROLE_KEY
+  require_env OPENAI_API_KEY
+  require_npm_or_exit || return 0
+  export MANUAL_ESSAY_GUIDES_LIMIT="${MANUAL_ESSAY_GUIDES_LIMIT:-5}"
+  (cd "$PROJECT_ROOT" && npx tsx scripts/enqueue-manual-essay-guides.ts)
+  (cd "$PROJECT_ROOT" && npx tsx scripts/run-manual-essay-guides.ts --limit="${MANUAL_ESSAY_GUIDES_LIMIT}")
+  (cd "$PROJECT_ROOT" && npx tsx scripts/audit-manual-essay-guides.ts)
+  echo "[railway-cron] OK: manual-essay-guides"
+}
+
 task_all() {
   task_seo_url_inspection
   task_google_indexing_flush
   task_enrich_providers
   task_essay_pipeline
+  task_manual_essay_guides
 }
 
 usage() {
   echo "Usage: $0 <task>"
-  echo "Tasks: all | seo-url-inspection | google-indexing-flush | grant-notifications | seo-daily-telegram | weekly-free-digest | enrich-providers | essay-pipeline"
+  echo "Tasks: all | seo-url-inspection | google-indexing-flush | grant-notifications | seo-daily-telegram | weekly-free-digest | enrich-providers | essay-pipeline | manual-essay-guides"
 }
 
 main() {
@@ -212,6 +228,7 @@ main() {
     weekly-free-digest) task_weekly_free_digest ;;
     enrich-providers) task_enrich_providers ;;
     essay-pipeline) task_essay_pipeline ;;
+    manual-essay-guides) task_manual_essay_guides ;;
     -h|--help|help) usage; exit 0 ;;
     *)
       echo "[railway-cron] Unknown task: $cmd" >&2

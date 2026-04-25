@@ -7,7 +7,6 @@ import ContentHubArticleMatchedScholarships from '@/components/content-hub/Conte
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
-import type { RelatedScholarshipStored } from '@/lib/content-hub/articleScholarshipMatching/types';
 import { fetchRelatedPublishedContentPosts } from '@/lib/content-hub/contentPostsServer';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
 import {
@@ -27,6 +26,7 @@ import {
   fetchPublishedEssayBySlug,
   fetchScholarshipRowsForEssay
 } from '@/lib/essays/essaysServer';
+import { getRelatedScholarshipsForEssayGuide } from '@/lib/essays/relatedScholarshipsForEssayGuide';
 import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 import { getURL } from '@/utils/helpers';
 
@@ -197,7 +197,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
     /^https:\/\//i.test(s.url)
   );
 
-  const relatedScholarshipRows = await fetchScholarshipRowsForEssay(essay.id, 3);
+  const relatedScholarshipRows = await fetchScholarshipRowsForEssay(essay.id, 1);
   const primaryScholarshipRow = relatedScholarshipRows[0];
   const parentScholarshipAbout =
     primaryScholarshipRow &&
@@ -214,13 +214,9 @@ export default async function EssayGuidePage({ params }: PageProps) {
       };
     })();
 
-  const relatedScholarshipItems: RelatedScholarshipStored[] =
-    relatedScholarshipRows.map((s) => ({
-      slug: (s.slug?.trim() || s.id) as string,
-      title: s.title?.trim() || 'Scholarship',
-      score: 0,
-      reason: 'Related to this essay'
-    }));
+  const relatedScholarshipItems = await getRelatedScholarshipsForEssayGuide(
+    essay
+  );
   const essayHubKeys = relatedScholarshipItems.map((i) => i.slug.trim());
   const essayHubScholarships =
     essayHubKeys.length > 0

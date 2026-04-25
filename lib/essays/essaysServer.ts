@@ -11,6 +11,10 @@ export type EssayListFields = {
   hero_image_url: string | null;
   hero_is_real: boolean;
   meta_description: string | null;
+  hub_category_slug: string | null;
+  hub_category_label: string | null;
+  hub_distribution_group: string | null;
+  hub_distribution_rank: number | null;
   created_at: string | null;
 };
 
@@ -32,13 +36,16 @@ export type EssayDetailRow = {
   sources: unknown;
   faq: unknown;
   meta_description: string | null;
+  hub_category_slug: string | null;
+  hub_category_label: string | null;
+  manual_topic: string | null;
   is_published: boolean;
   created_at: string | null;
   updated_at: string | null;
 };
 
 const listSelect =
-  'id, slug, title, hero_image_url, hero_is_real, meta_description, created_at' as const;
+  'id, slug, title, hero_image_url, hero_is_real, meta_description, hub_category_slug, hub_category_label, hub_distribution_group, hub_distribution_rank, created_at' as const;
 
 export const ESSAYS_INDEX_PAGE_SIZE = 12;
 
@@ -63,6 +70,10 @@ type RpcEssaysHubRow = {
   hero_image_url: string | null;
   hero_is_real: boolean;
   meta_description: string | null;
+      hub_category_slug?: string | null;
+      hub_category_label?: string | null;
+      hub_distribution_group?: string | null;
+      hub_distribution_rank?: number | null;
   created_at: string | null;
   linked_category_slug: string | null;
   linked_category_label: string | null;
@@ -77,6 +88,10 @@ function mapRpcEssayIndexRow(r: RpcEssaysHubRow): EssayIndexRow {
     hero_image_url: r.hero_image_url,
     hero_is_real: r.hero_is_real,
     meta_description: r.meta_description,
+      hub_category_slug: r.hub_category_slug ?? null,
+      hub_category_label: r.hub_category_label ?? null,
+      hub_distribution_group: r.hub_distribution_group ?? null,
+      hub_distribution_rank: r.hub_distribution_rank ?? null,
     created_at: r.created_at,
     linkedCategorySlug: r.linked_category_slug,
     linkedCategoryLabel: r.linked_category_label,
@@ -209,7 +224,7 @@ export const fetchPublishedEssayBySlug = cache(
     const { data, error } = await supabase
       .from('essays')
       .select(
-        'id, slug, title, content_html, hero_image_url, hero_is_real, sources, faq, meta_description, is_published, created_at, updated_at'
+        'id, slug, title, content_html, hero_image_url, hero_is_real, sources, faq, meta_description, hub_category_slug, hub_category_label, manual_topic, is_published, created_at, updated_at'
       )
       .eq('slug', raw)
       .eq('is_published', true)

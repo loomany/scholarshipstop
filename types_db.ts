@@ -465,6 +465,59 @@ export interface Database {
           }
         ]
       }
+      manual_essay_generation_queue: {
+        Row: {
+          id: string
+          topic: string
+          slug: string | null
+          hub_category_slug: string
+          hub_category_label: string
+          hub_distribution_group: string
+          hub_distribution_rank: number
+          status: string
+          error_message: string | null
+          created_essay_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          topic: string
+          slug?: string | null
+          hub_category_slug?: string
+          hub_category_label?: string
+          hub_distribution_group?: string
+          hub_distribution_rank?: number
+          status?: string
+          error_message?: string | null
+          created_essay_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          topic?: string
+          slug?: string | null
+          hub_category_slug?: string
+          hub_category_label?: string
+          hub_distribution_group?: string
+          hub_distribution_rank?: number
+          status?: string
+          error_message?: string | null
+          created_essay_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manual_essay_generation_queue_created_essay_id_fkey"
+            columns: ["created_essay_id"]
+            isOneToOne: false
+            referencedRelation: "essays"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       essays: {
         Row: {
           id: string
@@ -477,6 +530,11 @@ export interface Database {
           sources: Json
           faq: Json
           meta_description: string | null
+          hub_category_slug: string | null
+          hub_category_label: string | null
+          hub_distribution_group: string | null
+          hub_distribution_rank: number | null
+          manual_topic: string | null
           is_published: boolean
           created_at: string
           updated_at: string
@@ -492,6 +550,11 @@ export interface Database {
           sources?: Json
           faq?: Json
           meta_description?: string | null
+          hub_category_slug?: string | null
+          hub_category_label?: string | null
+          hub_distribution_group?: string | null
+          hub_distribution_rank?: number | null
+          manual_topic?: string | null
           is_published?: boolean
           created_at?: string
           updated_at?: string
@@ -507,6 +570,11 @@ export interface Database {
           sources?: Json
           faq?: Json
           meta_description?: string | null
+          hub_category_slug?: string | null
+          hub_category_label?: string | null
+          hub_distribution_group?: string | null
+          hub_distribution_rank?: number | null
+          manual_topic?: string | null
           is_published?: boolean
           created_at?: string
           updated_at?: string
