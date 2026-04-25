@@ -289,17 +289,6 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   const rows = (scholarshipRows ?? []) as unknown as ScholarshipRow[];
   const scholarships = rows.map((r) => mapScholarshipRow(r));
 
-  const { data: profileRows } = await admin
-    .from('profiles')
-    .select('*')
-    .or(
-      'email_notify_best_matches.eq.true,email_notify_saved_filters.eq.true,email_notify_easy_apply.eq.true,email_notify_hot_deadlines.eq.true'
-    )
-    .order('updated_at', { ascending: false })
-    .limit(MAX_PROFILES);
-
-  const profiles = (profileRows ?? []) as ProfileRow[];
-
   const { data: tgRows } = await admin
     .from('telegram_users')
     .select('*')
@@ -313,6 +302,38 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   for (const t of tgRows ?? []) {
     if (t.app_user_id) telegramByUser.set(t.app_user_id, t);
   }
+
+  const { data: profileRows } = await admin
+    .from('profiles')
+    .select('*')
+    .or(
+      'email_notify_best_matches.eq.true,email_notify_saved_filters.eq.true,email_notify_easy_apply.eq.true,email_notify_hot_deadlines.eq.true'
+    )
+    .order('updated_at', { ascending: false })
+    .limit(MAX_PROFILES);
+
+  const profileById = new Map<string, ProfileRow>();
+  for (const profile of (profileRows ?? []) as ProfileRow[]) {
+    profileById.set(profile.id, profile);
+  }
+
+  const telegramOnlyProfileIds = Array.from(telegramByUser.keys())
+    .filter((userId) => !profileById.has(userId))
+    .slice(0, MAX_PROFILES);
+  if (telegramOnlyProfileIds.length > 0) {
+    const { data: telegramProfileRows, error: telegramProfileErr } = await admin
+      .from('profiles')
+      .select('*')
+      .in('id', telegramOnlyProfileIds);
+    if (telegramProfileErr) {
+      console.error('[grant-notify] telegram profile load', telegramProfileErr.message);
+    }
+    for (const profile of (telegramProfileRows ?? []) as ProfileRow[]) {
+      profileById.set(profile.id, profile);
+    }
+  }
+
+  const profiles = Array.from(profileById.values());
 
   const emailCache = new Map<string, string | null>();
   async function getEmail(userId: string): Promise<string | null> {
@@ -425,6 +446,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
 
     for (const profile of profiles) {
       const uid = profile.id;
+      const tg = telegramByUser.get(uid);
       const savedKey = `${uid}:${sid}`;
       let savedInitially = savedGrantByUserScholarship.get(savedKey);
       if (savedInitially === undefined) {
@@ -434,7 +456,9 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
 
       for (const ch of channels) {
         const profCol = channelProfileColumn(ch);
-        if (!profile[profCol]) continue;
+        const wantsEmail = Boolean(profile[profCol]);
+        const wantsTelegram = Boolean(tg?.[telegramColumn(ch)]);
+        if (!wantsEmail && !wantsTelegram) continue;
 
         if (ch === 'easy_apply' && !easyOk) continue;
         if (ch === 'hot_deadlines' && !hotOk) continue;
@@ -463,29 +487,30 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
           break;
         }
 
-        const email = await getEmail(uid);
-        if (email) {
-          const dup = await alreadySent(admin, uid, sid, ch, 'email');
-          if (dup) {
-            skippedDup += 1;
-          } else {
-            emailCandidates += 1;
-            let lines = pendingEmailByUser.get(uid);
-            if (!lines) {
-              lines = [];
-              pendingEmailByUser.set(uid, lines);
+        if (wantsEmail) {
+          const email = await getEmail(uid);
+          if (email) {
+            const dup = await alreadySent(admin, uid, sid, ch, 'email');
+            if (dup) {
+              skippedDup += 1;
+            } else {
+              emailCandidates += 1;
+              let lines = pendingEmailByUser.get(uid);
+              if (!lines) {
+                lines = [];
+                pendingEmailByUser.set(uid, lines);
+              }
+              lines.push({
+                scholarshipId: sid,
+                scholarship: getScoredScholarshipForUser(profile, s),
+                channel: ch,
+                firstName: profile.first_name ?? null
+              });
             }
-            lines.push({
-              scholarshipId: sid,
-              scholarship: getScoredScholarshipForUser(profile, s),
-              channel: ch,
-              firstName: profile.first_name ?? null
-            });
           }
         }
 
-        const tg = telegramByUser.get(uid);
-        if (tg && tg[telegramColumn(ch)]) {
+        if (tg && wantsTelegram) {
           telegramCandidates += 1;
           const dupT = await alreadySent(admin, uid, sid, ch, 'telegram');
           if (dupT) {
