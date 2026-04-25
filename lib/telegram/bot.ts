@@ -33,7 +33,7 @@ import {
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 import {
-  buildVisitorAdminCardHtml,
+  buildVisitorAdminCardHtmlParts,
   formatFirstTouchListButtonTime,
   type VisitorCardAttribution,
   type VisitorCardTouch,
@@ -1947,9 +1947,9 @@ async function sendAdminUserAudit(
       ])
     : [null, null];
 
-  let text: string;
+  let textParts: string[];
   try {
-    text = buildVisitorAdminCardHtml({
+    textParts = buildVisitorAdminCardHtmlParts({
       visitorId,
       touch: touch as VisitorCardTouch,
       attribution: (attribution ?? null) as VisitorCardAttribution | null,
@@ -1973,23 +1973,47 @@ async function sendAdminUserAudit(
   const refreshMarkup = buildVisitorCardRefreshMarkup(visitorId);
 
   if (editTarget) {
+    if (textParts.length > 1) {
+      await callTelegramApi('editMessageText', {
+        chat_id: editTarget.chatId,
+        message_id: editTarget.messageId,
+        text: `Карточка пользователя открыта ниже: ${textParts.length} сообщения.`,
+        disable_web_page_preview: true,
+        reply_markup: { inline_keyboard: [] }
+      });
+      for (let idx = 0; idx < textParts.length; idx += 1) {
+        await sendTelegramMessage(
+          user.telegram_chat_id,
+          textParts[idx]!,
+          idx === textParts.length - 1 ? refreshMarkup : undefined,
+          { parse_mode: 'HTML' }
+        );
+      }
+      return;
+    }
+
     const editResult = await editTelegramVisitorCardMessage({
       chatId: editTarget.chatId,
       messageId: editTarget.messageId,
-      text,
+      text: textParts[0]!,
       replyMarkup: refreshMarkup
     });
     if (editResult === 'failed') {
-      await sendTelegramMessage(user.telegram_chat_id, text, refreshMarkup, {
+      await sendTelegramMessage(user.telegram_chat_id, textParts[0]!, refreshMarkup, {
         parse_mode: 'HTML'
       });
     }
     return;
   }
 
-  await sendTelegramMessage(user.telegram_chat_id, text, refreshMarkup, {
-    parse_mode: 'HTML'
-  });
+  for (let idx = 0; idx < textParts.length; idx += 1) {
+    await sendTelegramMessage(
+      user.telegram_chat_id,
+      textParts[idx]!,
+      idx === textParts.length - 1 ? refreshMarkup : undefined,
+      { parse_mode: 'HTML' }
+    );
+  }
 }
 
 async function sendSeoQueueReport(user: TelegramUserRow) {

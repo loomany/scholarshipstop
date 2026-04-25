@@ -287,7 +287,41 @@ function buildVisitedSection(
   return lines.join('\n');
 }
 
-export function buildVisitorAdminCardHtml(input: {
+const TELEGRAM_HTML_SOFT_LIMIT = 3400;
+
+function splitTelegramHtmlByLines(text: string): string[] {
+  const parts: string[] = [];
+  let current = '';
+  for (const line of text.split('\n')) {
+    const next = current ? `${current}\n${line}` : line;
+    if (next.length <= TELEGRAM_HTML_SOFT_LIMIT) {
+      current = next;
+      continue;
+    }
+    if (current) {
+      parts.push(current);
+      current = line;
+      continue;
+    }
+    parts.push(line);
+    current = '';
+  }
+  if (current) parts.push(current);
+  return parts.length > 0 ? parts : [text];
+}
+
+function labelTelegramParts(parts: string[]): string[] {
+  if (parts.length <= 1) return parts;
+  return parts.map((part, idx) =>
+    [
+      `<b>Карточка пользователя — часть ${idx + 1}/${parts.length}</b>`,
+      '',
+      part
+    ].join('\n')
+  );
+}
+
+function buildVisitorAdminCardLines(input: {
   visitorId: string;
   touch: VisitorCardTouch;
   attribution: VisitorCardAttribution | null;
@@ -295,7 +329,7 @@ export function buildVisitorAdminCardHtml(input: {
   registeredUserId: string | null;
   authUser: AuthUserLite | null;
   profile: ProfileLite | null;
-}): string {
+}): string[] {
   const { visitorId, touch, attribution, pageViews, registeredUserId, authUser, profile } =
     input;
 
@@ -319,7 +353,7 @@ export function buildVisitorAdminCardHtml(input: {
 
   const visitedBlock = buildVisitedSection(pageViews, lastSeen);
 
-  const lines = [
+  return [
     '<b>Карточка пользователя (без ботов)</b>',
     `<i>Время: Караганда (${KARAGANDA_TZ}, UTC+5)</i>`,
     '',
@@ -358,10 +392,30 @@ export function buildVisitorAdminCardHtml(input: {
     '',
     `<b>Устройство:</b> ${summarizeUserAgent(touch.user_agent_snapshot)}`
   ];
+}
 
-  let text = lines.join('\n');
-  if (text.length > 4000) {
-    text = `${text.slice(0, 3980)}\n<i>…обрезано (лимит Telegram 4096)</i>`;
-  }
-  return text;
+export function buildVisitorAdminCardHtmlParts(input: {
+  visitorId: string;
+  touch: VisitorCardTouch;
+  attribution: VisitorCardAttribution | null;
+  pageViews: VisitorPageViewRow[];
+  registeredUserId: string | null;
+  authUser: AuthUserLite | null;
+  profile: ProfileLite | null;
+}): string[] {
+  return labelTelegramParts(splitTelegramHtmlByLines(buildVisitorAdminCardLines(input).join('\n')));
+}
+
+export function buildVisitorAdminCardHtml(input: {
+  visitorId: string;
+  touch: VisitorCardTouch;
+  attribution: VisitorCardAttribution | null;
+  pageViews: VisitorPageViewRow[];
+  registeredUserId: string | null;
+  authUser: AuthUserLite | null;
+  profile: ProfileLite | null;
+}): string {
+  const parts = buildVisitorAdminCardHtmlParts(input);
+  if (parts.length === 1) return parts[0]!;
+  return `${parts[0]}\n\n<i>…продолжение отправлено отдельным сообщением</i>`;
 }
