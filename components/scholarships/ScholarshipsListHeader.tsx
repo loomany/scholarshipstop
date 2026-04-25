@@ -500,19 +500,19 @@ function ScholarshipsListHeader({
                     aria-haspopup="listbox"
                     className={`${CATALOG_CONTROL_BAR_BTN} w-full justify-between sm:min-w-[11rem]`}
                   >
-                    <span className="min-w-0 truncate">
-                      <span className="text-gray-500">Sort:</span>{' '}
-                      <span className="font-medium text-gray-900">
+                    <span className="flex min-w-0 flex-1 items-center gap-2 truncate">
+                      <span className="shrink-0 text-gray-500">Sort:</span>
+                      {guestCatalogUiLocked ? (
+                        <Lock
+                          className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
+                          strokeWidth={2}
+                          aria-hidden
+                        />
+                      ) : null}
+                      <span className="min-w-0 truncate font-medium text-gray-900">
                         {sortTriggerLabel}
                       </span>
                     </span>
-                    {guestCatalogUiLocked ? (
-                      <Lock
-                        className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                    ) : null}
                     <ChevronDown
                       className={`h-4 w-4 shrink-0 text-gray-500 transition ${sortOpen ? 'rotate-180' : ''}`}
                       aria-hidden

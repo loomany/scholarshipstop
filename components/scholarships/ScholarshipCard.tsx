@@ -393,6 +393,8 @@ export default function ScholarshipCard({
                   Verified
                 </span>
               ) : null}
+            </div>
+            <div className="flex shrink-0 items-center gap-1.5 self-start">
               {typeof scholarship.profileMatchPercent === 'number' &&
               !Number.isNaN(scholarship.profileMatchPercent) ? (
                 <span
@@ -402,8 +404,6 @@ export default function ScholarshipCard({
                   Match: {Math.round(scholarship.profileMatchPercent)}%
                 </span>
               ) : null}
-            </div>
-            <div className="flex shrink-0 items-center gap-1.5 self-start">
               {deadlinePassed ? (
                 <ScholarshipExpiredBadge />
               ) : topRightBadgeLabel ? (

@@ -7,6 +7,8 @@ import {
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import { fieldOfStudySlug } from '@/lib/constants/scholarshipFieldOfStudyOptions';
 import {
+  isGpaBucketChoice,
+  PROFILE_GPA_SELECTION_SNAPSHOT_KEY,
   gpaForProfile,
   gpaForProfileDb,
   profileGpaSelectionFromSnapshot
@@ -24,6 +26,8 @@ export type ScholarshipProfileFilterSeed = {
   schoolLevel: string | null;
   citizenship: string | null;
   stateInput: string;
+  gpa?: ProfilesRow['gpa'] | null;
+  gpaSelection?: string | null;
   educationLevelIds: string[];
   gpaBucketIds: string[];
   eligibilityIds: string[];
@@ -132,10 +136,14 @@ export function buildScholarshipProfileFilterSeedFromDraftWithoutBirth(
   const schoolLevel = draft.step1.schoolLevel.trim() || null;
   const citizenship = draft.step1.citizenship.trim() || null;
   const educationLevelIds = educationLevelIdsFromProfileSchoolLevel(schoolLevel);
-  const gpaNum = gpaForProfileDb(gpaForProfile(draft.step3.gpa));
+  const gpaChoice = gpaForProfile(draft.step3.gpa);
+  const gpaNum = gpaForProfileDb(gpaChoice);
+  const gpaSelection = isGpaBucketChoice(gpaChoice) ? gpaChoice : null;
   const gpaBucketIds = gpaBucketIdsFromProfile({
     gpa: gpaNum,
-    saved_filters_snapshot: null
+    saved_filters_snapshot: gpaSelection
+      ? { [PROFILE_GPA_SELECTION_SNAPSHOT_KEY]: gpaSelection }
+      : null
   });
   const eligibilityIds = eligibilityIdsFromProfileCitizenship(citizenship);
 
@@ -144,6 +152,8 @@ export function buildScholarshipProfileFilterSeedFromDraftWithoutBirth(
     schoolLevel,
     citizenship,
     stateInput,
+    gpa: gpaNum,
+    gpaSelection,
     educationLevelIds,
     gpaBucketIds,
     eligibilityIds
@@ -170,6 +180,7 @@ export function buildScholarshipProfileFilterSeed(
   const citizenship = profile.citizenship_status?.trim() || null;
   const stateInput = normalizeUsStateToCanonical(profile.state_region?.trim() ?? '') ?? '';
   const educationLevelIds = educationLevelIdsFromProfileSchoolLevel(schoolLevel);
+  const gpaSelection = profileGpaSelectionFromSnapshot(profile.saved_filters_snapshot);
   const gpaBucketIds = gpaBucketIdsFromProfile(profile);
   const eligibilityIds = eligibilityIdsFromProfileCitizenship(citizenship);
 
@@ -178,6 +189,8 @@ export function buildScholarshipProfileFilterSeed(
     !schoolLevel &&
     !citizenship &&
     !stateInput &&
+    profile.gpa == null &&
+    !gpaSelection &&
     educationLevelIds.length === 0 &&
     gpaBucketIds.length === 0 &&
     eligibilityIds.length === 0
@@ -190,6 +203,8 @@ export function buildScholarshipProfileFilterSeed(
     schoolLevel,
     citizenship,
     stateInput,
+    gpa: profile.gpa ?? null,
+    gpaSelection,
     educationLevelIds,
     gpaBucketIds,
     eligibilityIds

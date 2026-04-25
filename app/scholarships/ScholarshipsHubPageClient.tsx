@@ -159,7 +159,10 @@ import {
   listingNavPatchForHubScope,
   presetHubScopeMatchesListContext
 } from '@/lib/scholarships/hubSavedFilterScope';
-import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
+import {
+  applyGuestQuizMatchPercentToScholarships,
+  applyProfileMatchPercentToScholarships
+} from '@/lib/scholarships/profileMatchBadge';
 import { storageKeyMatchesBase } from '@/app/scholarships/userScopedStorage';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
@@ -1858,10 +1861,18 @@ function ScholarshipsPageInner({
     return z;
   }, [listMeta?.categoryCounts]);
   const scholarshipsForCards = useMemo(() => {
-    const base = applyProfileMatchPercentToScholarships(
-      scholarships,
-      currentMatchProfile
-    );
+    const base =
+      currentMatchProfile != null
+        ? applyProfileMatchPercentToScholarships(
+            scholarships,
+            currentMatchProfile
+          )
+        : applyGuestQuizMatchPercentToScholarships(
+            scholarships,
+            !isAuthenticated && authResolved
+              ? transientBestRecommendationProfileSeed
+              : null
+          );
     if (activeTab !== 'from-email' || fromEmailIds.length === 0) {
       return base;
     }
@@ -1877,7 +1888,15 @@ function ScholarshipsPageInner({
       if (ai == null && bi != null) return 1;
       return (ai ?? 0) - (bi ?? 0);
     });
-  }, [activeTab, fromEmailIds, scholarships, currentMatchProfile]);
+  }, [
+    activeTab,
+    authResolved,
+    currentMatchProfile,
+    fromEmailIds,
+    isAuthenticated,
+    scholarships,
+    transientBestRecommendationProfileSeed
+  ]);
 
   const { viewedSet, savedSet } = useMemo(
     () => ({

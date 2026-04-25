@@ -18,7 +18,6 @@ import {
   Facebook,
   Infinity as InfinityIcon,
   Instagram,
-  HelpCircle,
   Linkedin,
   Lock,
   Mail,
@@ -47,7 +46,6 @@ import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import {
   fieldOfStudyDisplayList,
-  formatDeadlineTooltipText,
   formatScholarshipAwardDisplay,
   getScholarshipDeadlineDisplayParts,
   scholarshipPublicPath,
@@ -178,12 +176,6 @@ const detailOfficialRestorePillClass = `w-full rounded-full px-4 py-2 text-cente
 const detailBackToMatchesLinkClass =
   'inline-flex items-center text-sm font-medium text-zinc-600 transition hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2';
 
-const TOOLTIP_APPLICANTS =
-  'This number shows applicants who submitted their applications through ScholarshipOwl.';
-
-const TOOLTIP_REQUIREMENTS =
-  'Counts how many eligibility requirements we list for this scholarship.';
-
 const TOOLTIP_NOT_VERIFIED =
   'We have not independently verified this scholarship yet.';
 
@@ -257,27 +249,6 @@ function requirementChips(s: Scholarship): string[] {
   if (s.specialEligibilityRequired) out.push('Special eligibility');
   if (s.financialNeedConsidered) out.push('Financial need');
   return out;
-}
-
-/** Full date/time + timezone name for deadline help tooltip (matches competitor-style detail). */
-function formatDeadlinePreciseTooltip(s: Scholarship): string {
-  if (s.deadlineAt) {
-    const d = new Date(s.deadlineAt);
-    if (!Number.isNaN(d.getTime())) {
-      return d.toLocaleString(undefined, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true,
-        timeZoneName: 'long'
-      });
-    }
-  }
-  return formatDeadlineTooltipText(s);
 }
 
 /**
@@ -526,45 +497,21 @@ function RequirementsRichOrList({
   );
 }
 
-type TooltipSide = 'top' | 'right' | 'bottom' | 'left';
-
 function StatCard({
   primary,
   secondary,
   extra,
-  tooltip,
-  tooltipSide = 'bottom',
-  tooltipAlign = 'end',
   deadlineFooter
 }: {
   primary: string;
   secondary: string;
   extra?: React.ReactNode;
-  tooltip?: React.ReactNode;
-  tooltipSide?: TooltipSide;
-  tooltipAlign?: 'start' | 'center' | 'end';
   /** Green calendar icon + label row (deadline card). */
   deadlineFooter?: boolean;
 }) {
   return (
     <div className="relative flex h-full min-h-[6.5rem] flex-col justify-center rounded-xl border border-zinc-200/90 bg-white px-5 py-4 shadow-sm ring-1 ring-zinc-100/50">
-      {tooltip != null ? (
-        <DarkTooltip
-          content={tooltip}
-          side={tooltipSide}
-          align={tooltipAlign}
-          className="absolute right-3 top-3 z-10"
-        >
-          <button
-            type="button"
-            aria-label="More information"
-            className="rounded-full p-0.5 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
-          >
-            <HelpCircle className="h-4 w-4" strokeWidth={1.75} />
-          </button>
-        </DarkTooltip>
-      ) : null}
-      <p className="pr-8 text-xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-2xl">
+      <p className="text-xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-2xl">
         {primary}
       </p>
       <p className="mt-2 flex flex-wrap items-center gap-1.5 text-xs font-medium leading-snug text-zinc-500">
@@ -1308,8 +1255,6 @@ export default function ScholarshipDetailPageClient({
               secondary={deadlineSecondaryLine ?? 'Scholarship deadline'}
               deadlineFooter
               extra={recurringExtra}
-              tooltip={formatDeadlinePreciseTooltip(scholarship)}
-              tooltipSide="bottom"
             />
           ) : null}
           {hasAwardStat ? (
@@ -1319,16 +1264,11 @@ export default function ScholarshipDetailPageClient({
             <StatCard
               primary={scholarship.applicantCount!.toLocaleString()}
               secondary="Scholarship applicants"
-              tooltip={TOOLTIP_APPLICANTS}
-              tooltipSide="right"
-              tooltipAlign="center"
             />
           ) : null}
           <StatCard
             primary={String(reqCount)}
             secondary="Requirements"
-            tooltip={TOOLTIP_REQUIREMENTS}
-            tooltipSide="bottom"
           />
         </div>
 
