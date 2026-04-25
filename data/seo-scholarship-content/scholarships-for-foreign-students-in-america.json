@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Scholarships for Foreign Students in America",
+  "seo_description": "Discover 196 scholarships available for foreign students in America. Find funding opportunities to support your education today!",
+  "h1": "Scholarships for Foreign Students in America",
+  "intro": "Studying in the United States can be a transformative experience, but financial barriers often stand in the way for many international students. Fortunately, there are numerous scholarships specifically designed to support foreign students pursuing their education in America. With 196 scholarships available, ranging from merit-based awards to need-based assistance, students can find opportunities that align with their academic goals and financial needs. This comprehensive guide will help you navigate the scholarship landscape, providing you with the information you need to secure funding for your studies in the U.S.",
+  "supporting": "Eligibility for scholarships for foreign students varies widely, but many require proof of academic excellence, financial need, or specific talents. For example, the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship are open to students from various countries, while the Paul and Daisy Soros Fellowships for New Americans focus on immigrants and children of immigrants. Deadlines also vary, so it's crucial to research each scholarship's requirements and apply early. When applying, ensure your application is complete, highlight your unique experiences, and tailor your essays to reflect the scholarship's values. This approach will enhance your chances of receiving funding.",
+  "related_intro": "In addition to scholarships, foreign students can explore grants, assistantships, and work-study programs to finance their education in the U.S.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare necessary documents and essays.",
+    "Submit applications before the deadlines.",
+    "Follow up on your applications as needed."
+  ],
+  "who_for": [
+    "International students seeking education in the U.S.",
+    "Students with exceptional academic or extracurricular achievements.",
+    "Those in need of financial assistance for their studies."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for foreign students?",
+      "answer": "There are merit-based, need-based, and talent-specific scholarships available for foreign students in America."
+    },
+    {
+      "question": "How do I apply for these scholarships?",
+      "answer": "Applications typically require personal statements, recommendation letters, and proof of academic performance."
+    },
+    {
+      "question": "Are there scholarships that cover full tuition?",
+      "answer": "Yes, some scholarships like the Paul and Daisy Soros Fellowships can cover full tuition and living expenses."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-foreign-students-in-america",
+    "generatedAt": "2026-04-25T11:19:38.904Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

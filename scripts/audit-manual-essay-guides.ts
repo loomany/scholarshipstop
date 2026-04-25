@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
 import { addToIndexingQueue, essayIndexingUrl } from '@/lib/seo/googleIndexingQueue';
-import { fetchAllPublishedEssaySitemapRows } from '@/lib/essays/essaysServer';
 import type { Database } from '@/types_db';
 
 function requiredEnv(name: string): string {
@@ -13,6 +12,28 @@ function requiredEnv(name: string): string {
       : undefined);
   if (!value) throw new Error(`${name} is required`);
   return value;
+}
+
+async function fetchAllPublishedEssaySitemapRows(
+  supabase: ReturnType<typeof createClient<Database>>
+): Promise<{ slug: string; updated_at: string | null }[]> {
+  const out: { slug: string; updated_at: string | null }[] = [];
+  const batchSize = 500;
+  let from = 0;
+  for (;;) {
+    const { data, error } = await supabase
+      .from('essays')
+      .select('slug, updated_at')
+      .eq('is_published', true)
+      .order('updated_at', { ascending: false, nullsFirst: false })
+      .range(from, from + batchSize - 1);
+    if (error) throw new Error(error.message);
+    const batch = (data ?? []).filter((row) => Boolean(row.slug?.trim()));
+    out.push(...batch);
+    if ((data ?? []).length < batchSize) break;
+    from += batchSize;
+  }
+  return out;
 }
 
 async function main() {
@@ -35,7 +56,7 @@ async function main() {
     .eq('hub_category_slug', 'international-students');
   if (essayError) throw new Error(essayError.message);
 
-  const sitemapRows = await fetchAllPublishedEssaySitemapRows();
+  const sitemapRows = await fetchAllPublishedEssaySitemapRows(supabase);
   const sitemapSlugs = new Set(sitemapRows.map((row) => row.slug.trim()));
   const manualPublished = (essayRows ?? []).filter(
     (row) => row.is_published && row.slug?.trim() && row.manual_topic?.trim()

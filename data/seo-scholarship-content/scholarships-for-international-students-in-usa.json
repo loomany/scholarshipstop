@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Scholarships for International Students in the USA",
+  "seo_description": "Discover 196 scholarships for international students in the USA, including various opportunities and eligibility criteria.",
+  "h1": "Scholarships for International Students in the USA",
+  "intro": "Navigating the financial landscape of studying in the USA can be daunting for international students. Fortunately, there are 196 scholarships available that cater specifically to your needs. These scholarships range from merit-based awards to need-based grants, providing essential financial support to help you achieve your academic goals. Whether you're pursuing undergraduate or graduate studies, these opportunities can significantly reduce your tuition burden. Explore scholarships like the International Student Scholarship and the Paul and Daisy Soros Fellowships for New Americans to find the right fit for you.",
+  "supporting": "Eligibility for these scholarships varies widely, with some requiring academic excellence, while others focus on community service or specific fields of study. For instance, the Vanna Christian Sun Legacy Scholarship is aimed at students demonstrating leadership potential, while the DC Tuition Assistance Grant (DCTAG) supports eligible residents of Washington, D.C. Most scholarships have deadlines ranging from early spring to late summer, so it's crucial to start your application process early. When applying, ensure that you meet all eligibility criteria and submit all required documents, including transcripts and recommendation letters, to enhance your chances of receiving funding.",
+  "related_intro": "In addition to the scholarships listed, there are numerous other funding opportunities available for international students. Researching thoroughly can uncover even more options tailored to your specific situation.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships available.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary documents like transcripts and essays.",
+    "Submit applications before the specified deadlines.",
+    "Follow up on your application status as needed."
+  ],
+  "who_for": [
+    "International students seeking financial aid.",
+    "Undergraduate and graduate students.",
+    "Students from diverse academic backgrounds."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students?",
+      "answer": "There are merit-based, need-based, and field-specific scholarships available for international students."
+    },
+    {
+      "question": "How can I find more scholarships?",
+      "answer": "Utilize scholarship search engines and university resources to discover additional funding opportunities."
+    },
+    {
+      "question": "What documents do I need to apply for scholarships?",
+      "answer": "Typically, you'll need transcripts, recommendation letters, and a personal statement or essay."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-international-students-in-usa",
+    "generatedAt": "2026-04-25T11:18:53.874Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

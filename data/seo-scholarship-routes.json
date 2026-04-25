@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-07T18:11:35.740Z",
+  "generatedAt": "2026-04-25T11:19:38.908Z",
   "promptVersion": "v1",
   "routes": [
     {
@@ -17,7 +17,9 @@
       "metaTitleFallback": "Full ride scholarships 2026 | USA catalog",
       "metaDescriptionFallback": "Find full-ride and full-tuition scholarships for 2026—programs that cover tuition, cost of attendance, or other high-value non-monetary awards. Compare deadlines and requirements, then confirm every detail on the official program page.",
       "priority": 82,
-      "reasonCodes": ["good_route"],
+      "reasonCodes": [
+        "good_route"
+      ],
       "notes": "Listing filter: seo_tags contains award_signal_high_value (parser high-value awards)."
     },
     {
@@ -19818,6 +19820,136 @@
       "lastEvaluatedAt": "2026-04-07T18:11:35.740Z",
       "source": "auto",
       "pageKind": "manifest"
+    },
+    {
+      "canonicalPath": "international-student-scholarships-usa-2026",
+      "seoId": "keyword:international-student-scholarships-usa-2026",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T11:18:46.118Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "International student scholarships USA 2026",
+      "metaTitleFallback": "International student scholarships USA 2026 | ScholarshipTop",
+      "metaDescriptionFallback": "Browse international student scholarships usa 2026 in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 142."
+    },
+    {
+      "canonicalPath": "scholarships-for-f1-visa-students",
+      "seoId": "keyword:scholarships-for-f1-visa-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T11:18:46.175Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for F-1 visa students",
+      "metaTitleFallback": "Scholarships for F-1 visa students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for f-1 visa students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 143."
+    },
+    {
+      "canonicalPath": "scholarships-for-foreign-students-in-america",
+      "seoId": "keyword:scholarships-for-foreign-students-in-america",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T11:18:46.287Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for foreign students in america",
+      "metaTitleFallback": "Scholarships for foreign students in america | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for foreign students in america in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 145."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-in-usa",
+      "seoId": "keyword:scholarships-for-international-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T11:18:46.062Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students in USA",
+      "metaTitleFallback": "Scholarships for international students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 141."
+    },
+    {
+      "canonicalPath": "scholarships-open-to-non-us-citizens",
+      "seoId": "keyword:scholarships-open-to-non-us-citizens",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T11:18:46.230Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships open to non us citizens",
+      "metaTitleFallback": "Scholarships open to non us citizens | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships open to non us citizens in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 144."
     }
   ]
 }

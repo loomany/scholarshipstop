@@ -14,6 +14,11 @@ type ManualTopicInput = {
   slug: string | null;
 };
 
+type TopicRange = {
+  fromLine: number;
+  toLine: number | null;
+};
+
 function requiredEnv(name: string): string {
   const primary = process.env[name]?.trim();
   const value =
@@ -41,19 +46,35 @@ function stableHash(input: string): number {
     hash ^= input.charCodeAt(i);
     hash = Math.imul(hash, 16777619);
   }
-  return hash >>> 0;
+  return (hash >>> 0) % 2147483647;
 }
 
-function parseTopics(raw: string): ManualTopicInput[] {
+function optionalPositiveIntArg(name: string): number | null {
+  const raw = process.argv.find((arg) => arg.startsWith(`--${name}=`));
+  if (!raw) return null;
+  const n = Number(raw.slice(name.length + 3));
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : null;
+}
+
+function topicKey(topic: string): string {
+  return topic.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function parseTopics(raw: string, range: TopicRange): ManualTopicInput[] {
   const seen = new Set<string>();
   const out: ManualTopicInput[] = [];
-  for (const line of raw.split(/\r?\n/)) {
+  const lines = raw.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i += 1) {
+    const lineNumber = i + 1;
+    if (lineNumber < range.fromLine) continue;
+    if (range.toLine != null && lineNumber > range.toLine) continue;
+    const line = lines[i] ?? '';
     const clean = line.trim().replace(/^\d+[.)]\s*/, '');
     if (!clean || clean.startsWith('#')) continue;
     const [topicRaw, slugRaw] = clean.split('|').map((part) => part.trim());
     const topic = topicRaw?.trim();
     if (!topic) continue;
-    const key = topic.toLowerCase().replace(/\s+/g, ' ');
+    const key = topicKey(topic);
     if (seen.has(key)) continue;
     seen.add(key);
     out.push({
@@ -66,9 +87,11 @@ function parseTopics(raw: string): ManualTopicInput[] {
 
 async function main() {
   const fileArg = process.argv.find((arg) => arg.startsWith('--file='));
+  const fromLine = optionalPositiveIntArg('from-line') ?? 1;
+  const toLine = optionalPositiveIntArg('to-line');
   const filePath = path.resolve(fileArg?.slice('--file='.length) || DEFAULT_TOPICS_PATH);
   const raw = await fs.readFile(filePath, 'utf8');
-  const topics = parseTopics(raw)
+  const topics = parseTopics(raw, { fromLine, toLine })
     .map((item) => ({
       ...item,
       distributionRank: stableHash(item.topic)
@@ -81,35 +104,41 @@ async function main() {
     auth: { persistSession: false }
   });
 
+  const { data: existingRows, error: existingError } = await supabase
+    .from('manual_essay_generation_queue')
+    .select('topic');
+  if (existingError) throw new Error(existingError.message);
+
+  const existing = new Set((existingRows ?? []).map((row) => topicKey(row.topic)));
+  const rows = topics
+    .filter((item) => !existing.has(topicKey(item.topic)))
+    .map((item) => ({
+      topic: item.topic,
+      slug: item.slug,
+      hub_category_slug: CATEGORY_SLUG,
+      hub_category_label: CATEGORY_LABEL,
+      hub_distribution_group: CATEGORY_SLUG,
+      hub_distribution_rank: item.distributionRank,
+      status: 'pending',
+      error_message: null
+    }));
+
   let inserted = 0;
-  let skipped = 0;
-  for (const item of topics) {
-    const { error } = await supabase.from('manual_essay_generation_queue').insert(
-      {
-        topic: item.topic,
-        slug: item.slug,
-        hub_category_slug: CATEGORY_SLUG,
-        hub_category_label: CATEGORY_LABEL,
-        hub_distribution_group: CATEGORY_SLUG,
-        hub_distribution_rank: item.distributionRank,
-        status: 'pending',
-        error_message: null
-      }
-    );
+  let skipped = topics.length - rows.length;
+  if (rows.length > 0) {
+    const { error } = await supabase.from('manual_essay_generation_queue').insert(rows);
     if (error) {
-      if (error.code === '23505' || /duplicate|conflict/i.test(error.message)) {
-        skipped += 1;
-        continue;
-      }
       throw new Error(error.message);
     }
-    inserted += 1;
+    inserted = rows.length;
   }
 
   console.log(
     JSON.stringify(
       {
         file: filePath,
+        from_line: fromLine,
+        to_line: toLine,
         parsed: topics.length,
         inserted_or_existing: inserted,
         skipped
