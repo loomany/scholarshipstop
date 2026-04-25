@@ -45,6 +45,8 @@ export type VisitorCardAttribution = {
 export type VisitorPageViewRow = {
   path: string;
   kind: string;
+  event_source?: string | null;
+  full_url?: string | null;
   seen_at: string;
 };
 
@@ -88,6 +90,28 @@ function pageLinkHtml(path: string): string {
   const href = escapeHref(absoluteUrl(pathNorm));
   const label = escapeTelegramHtml(pathNorm.length > 64 ? `${pathNorm.slice(0, 61)}…` : pathNorm);
   return `<a href="${href}">${label}</a>`;
+}
+
+function pageViewLinkHtml(row: VisitorPageViewRow): string {
+  const raw = (row.full_url || row.path || '/').trim();
+  const href = escapeHref(absoluteUrl(raw));
+  let label = row.path || '/';
+  try {
+    const resolved = new URL(absoluteUrl(raw));
+    label = `${resolved.pathname || '/'}${resolved.search || ''}`;
+  } catch {
+    label = raw.startsWith('/') ? raw : `/${raw}`;
+  }
+  const shortLabel = label.length > 96 ? `${label.slice(0, 93)}…` : label;
+  return `<a href="${href}">${escapeTelegramHtml(shortLabel)}</a>`;
+}
+
+function normalizeEventSource(row: VisitorPageViewRow): 'navigation' | 'heartbeat' | 'visibility' | 'leave' {
+  const source = (row.event_source ?? '').trim();
+  if (source === 'heartbeat') return 'heartbeat';
+  if (source === 'visibility') return 'visibility';
+  if (source === 'leave') return 'leave';
+  return 'navigation';
 }
 
 export function formatKaragandaDateTime(iso: string | null | undefined): string {
@@ -238,15 +262,23 @@ function buildVisitedSection(
   );
   const lastSeenMs = new Date(lastSeenIso).getTime();
   const lines: string[] = [];
-  const maxRows = 22;
-  const slice = asc.length > maxRows ? asc.slice(-maxRows) : asc;
-  const skipped = asc.length - slice.length;
+  const navigationViews = asc.filter((row) => normalizeEventSource(row) === 'navigation');
+  const technicalViews = asc.filter((row) => normalizeEventSource(row) !== 'navigation');
+
+  const maxRows = 16;
+  const navSlice = navigationViews.length > maxRows ? navigationViews.slice(-maxRows) : navigationViews;
+  const skipped = navigationViews.length - navSlice.length;
   const indexBase = skipped;
 
-  for (let i = 0; i < slice.length; i++) {
-    const row = slice[i]!;
+  lines.push('<b>Навигация по страницам (реальные переходы)</b>');
+  if (navSlice.length === 0) {
+    lines.push('Нет навигационных переходов, есть только служебные сигналы активности.');
+  }
+
+  for (let i = 0; i < navSlice.length; i++) {
+    const row = navSlice[i]!;
     const t = formatKaragandaDateTime(row.seen_at);
-    const next = slice[i + 1];
+    const next = navSlice[i + 1];
     let dwellLabel: string;
     if (next) {
       const sec = Math.max(
@@ -255,7 +287,7 @@ function buildVisitedSection(
           (new Date(next.seen_at).getTime() - new Date(row.seen_at).getTime()) / 1000
         )
       );
-      dwellLabel = `~${formatDurationRu(sec)} до следующего перехода`;
+      dwellLabel = `~${formatDurationRu(sec)} до следующего навигационного шага`;
     } else {
       const sec = Math.max(
         0,
@@ -264,14 +296,31 @@ function buildVisitedSection(
       dwellLabel = `~${formatDurationRu(sec)} до последней активности`;
     }
     lines.push(
-      `${indexBase + i + 1}) ${pageLinkHtml(row.path)} · ${escapeTelegramHtml(t)} · ${escapeTelegramHtml(dwellLabel)}`
+      `${indexBase + i + 1}) ${pageViewLinkHtml(row)} · ${escapeTelegramHtml(t)} · ${escapeTelegramHtml(dwellLabel)}`
     );
   }
 
   if (skipped > 0) {
     lines.unshift(
-      `<i>Показаны последние ${slice.length} из ${asc.length} переходов.</i>`
+      `<i>Показаны последние ${navSlice.length} из ${navigationViews.length} навигационных переходов.</i>`
     );
+  }
+
+  if (technicalViews.length > 0) {
+    const technicalSlice = technicalViews.slice(-6);
+    lines.push('', '<b>Служебные сигналы активности</b>');
+    for (const row of technicalSlice) {
+      const source = normalizeEventSource(row);
+      const sourceLabel =
+        source === 'heartbeat'
+          ? 'heartbeat'
+          : source === 'visibility'
+            ? 'visibility'
+            : source;
+      lines.push(
+        `• ${pageViewLinkHtml(row)} · ${escapeTelegramHtml(formatKaragandaDateTime(row.seen_at))} · ${escapeTelegramHtml(sourceLabel)}`
+      );
+    }
   }
 
   if (leaves.length > 0) {
@@ -388,7 +437,7 @@ function buildVisitorAdminCardLines(input: {
     '<b>Страницы (кликабельные ссылки)</b>',
     visitedBlock,
     '',
-    '<i>Длительность по строкам — оценка по времени до следующего перехода или до последнего пинга.</i>',
+    '<i>Время по навигации — оценка до следующего навигационного шага; heartbeat/visibility показывают подтверждение активности.</i>',
     '',
     `<b>Устройство:</b> ${summarizeUserAgent(touch.user_agent_snapshot)}`
   ];

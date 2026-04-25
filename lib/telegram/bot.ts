@@ -1923,7 +1923,7 @@ async function sendAdminUserAudit(
 
   const { data: pageViewsRaw, error: pvErr } = await (admin as any)
     .from('visitor_page_views')
-    .select('path, kind, seen_at')
+    .select('path, kind, event_source, full_url, seen_at')
     .eq('visitor_id', visitorId)
     .order('seen_at', { ascending: false })
     .limit(80);

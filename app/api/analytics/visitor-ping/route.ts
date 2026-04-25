@@ -20,17 +20,26 @@ const LEAVE_DEDUP_MS = 5_000;
 type Body = {
   visitor_id?: unknown;
   landing_url?: unknown;
+  full_url?: unknown;
   referrer?: unknown;
   utm_source?: unknown;
   utm_medium?: unknown;
   utm_campaign?: unknown;
   utm_content?: unknown;
   user_agent?: unknown;
+  event_source?: unknown;
   kind?: unknown;
 };
 
 function normalizeKind(raw: unknown): 'view' | 'leave' {
   return raw === 'leave' ? 'leave' : 'view';
+}
+
+function normalizeEventSource(raw: unknown, kind: 'view' | 'leave') {
+  if (kind === 'leave') return 'leave' as const;
+  if (raw === 'heartbeat') return 'heartbeat' as const;
+  if (raw === 'visibility') return 'visibility' as const;
+  return 'navigation' as const;
 }
 
 export async function POST(request: Request) {
@@ -48,12 +57,16 @@ export async function POST(request: Request) {
   }
 
   const kind = normalizeKind(body.kind);
+  const eventSource = normalizeEventSource(body.event_source, kind);
 
   const landing_url_raw =
     typeof body.landing_url === 'string' ? body.landing_url.trim() : '';
   if (!landing_url_raw || landing_url_raw.length > 4000) {
     return NextResponse.json({ error: 'Invalid landing_url' }, { status: 400 });
   }
+  const full_url_raw =
+    typeof body.full_url === 'string' ? body.full_url.trim() : '';
+  const full_url = (full_url_raw || landing_url_raw).slice(0, 4000);
 
   const referrer =
     typeof body.referrer === 'string' ? body.referrer.trim().slice(0, 4000) : '';
@@ -128,9 +141,10 @@ export async function POST(request: Request) {
   if (kind === 'leave') {
     const { data: lastLeave } = await db
       .from('visitor_page_views')
-      .select('seen_at, kind')
+      .select('seen_at, kind, event_source')
       .eq('visitor_id', visitorId)
       .eq('kind', 'leave')
+      .eq('event_source', 'leave')
       .order('seen_at', { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -145,6 +159,8 @@ export async function POST(request: Request) {
     const { error: insErr } = await db.from('visitor_page_views').insert({
       visitor_id: visitorId,
       path: landingPath || '/',
+      full_url,
+      event_source: 'leave',
       kind: 'leave'
     });
     if (insErr) {
@@ -156,8 +172,9 @@ export async function POST(request: Request) {
 
   const { data: lastRow } = await db
     .from('visitor_page_views')
-    .select('path, kind, seen_at')
+    .select('path, kind, event_source, seen_at')
     .eq('visitor_id', visitorId)
+    .eq('event_source', eventSource)
     .order('seen_at', { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -172,6 +189,8 @@ export async function POST(request: Request) {
   const { error: viewErr } = await db.from('visitor_page_views').insert({
     visitor_id: visitorId,
     path: landingPath || '/',
+    full_url,
+    event_source: eventSource,
     kind: 'view'
   });
   if (viewErr) {

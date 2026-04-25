@@ -11,6 +11,7 @@ const COOKIE_MAX_AGE_SEC = 60 * 60 * 24 * 365; // 1 year
 /** Wait for SPA navigations to settle so Landing + persisted UTM match the final page. */
 const FIRST_TOUCH_DEBOUNCE_MS = 320;
 const VISITOR_PING_INTERVAL_MS = 50_000;
+type VisitorPingSource = 'navigation' | 'heartbeat' | 'visibility' | 'leave';
 
 function readCookie(name: string): string {
   if (typeof document === 'undefined') return '';
@@ -71,9 +72,10 @@ export default function AnalyticsTracker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pingRef = useRef<(kind: 'view' | 'leave') => void>(() => {});
+  const pingRef = useRef<(kind: 'view' | 'leave', source?: VisitorPingSource) => void>(() => {});
 
-  const sendVisitorPing = useCallback(async (kind: 'view' | 'leave') => {
+  const sendVisitorPing = useCallback(
+    async (kind: 'view' | 'leave', source: VisitorPingSource = 'navigation') => {
     if (typeof window === 'undefined') return;
     if (!isFirstTouchDone() && kind === 'view') return;
 
@@ -94,15 +96,18 @@ export default function AnalyticsTracker() {
         ? navigator.userAgent.slice(0, 800)
         : '';
 
+    const event_source: VisitorPingSource = kind === 'leave' ? 'leave' : source;
     const payload = {
       visitor_id: visitorId,
       landing_url: href,
+      full_url: href,
       referrer,
       utm_source,
       utm_medium,
       utm_campaign,
       utm_content,
       user_agent,
+      event_source,
       ...(kind === 'leave' ? { kind: 'leave' as const } : {})
     };
 
@@ -126,7 +131,9 @@ export default function AnalyticsTracker() {
     }).catch(() => {
       /* non-fatal */
     });
-  }, []);
+    },
+    []
+  );
 
   pingRef.current = sendVisitorPing;
 
@@ -203,7 +210,7 @@ export default function AnalyticsTracker() {
               } catch {
                 /* ignore */
               }
-              void pingRef.current('view');
+              void pingRef.current('view', 'navigation');
             }
           })
           .catch(() => {
@@ -224,7 +231,7 @@ export default function AnalyticsTracker() {
     }
     debounceRef.current = setTimeout(() => {
       debounceRef.current = null;
-      void sendVisitorPing('view');
+      void sendVisitorPing('view', 'navigation');
     }, FIRST_TOUCH_DEBOUNCE_MS);
 
     return () => {
@@ -238,7 +245,7 @@ export default function AnalyticsTracker() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const id = window.setInterval(() => {
-      void sendVisitorPing('view');
+      void sendVisitorPing('view', 'heartbeat');
     }, VISITOR_PING_INTERVAL_MS);
     return () => clearInterval(id);
   }, [sendVisitorPing]);
@@ -246,7 +253,7 @@ export default function AnalyticsTracker() {
   useEffect(() => {
     const onVis = () => {
       if (document.visibilityState === 'visible') {
-        void sendVisitorPing('view');
+        void sendVisitorPing('view', 'visibility');
       }
     };
     document.addEventListener('visibilitychange', onVis);
@@ -255,7 +262,7 @@ export default function AnalyticsTracker() {
 
   useEffect(() => {
     const onLeave = () => {
-      void sendVisitorPing('leave');
+      void sendVisitorPing('leave', 'leave');
     };
     window.addEventListener('pagehide', onLeave);
     return () => window.removeEventListener('pagehide', onLeave);
