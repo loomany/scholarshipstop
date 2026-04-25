@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore Scholarships Available to F-1 Visa Holders in the USA",
+  "seo_description": "Discover 196 scholarships available to F-1 visa holders in the USA. Find funding opportunities tailored for international students.",
+  "h1": "Scholarships for F-1 Visa Holders in the USA",
+  "intro": "If you're an F-1 visa holder studying in the USA, you're in luck! There are currently 196 scholarships specifically available to help international students finance their education. These scholarships cater to a variety of fields and interests, making it easier for you to find one that fits your academic goals. From merit-based awards like the International Student Scholarship to unique opportunities such as the Vanna Christian Sun Legacy Scholarship, the options are diverse. Whether you're pursuing engineering, arts, or social sciences, there's likely a scholarship that aligns with your aspirations. Take advantage of these funding opportunities to alleviate the financial burden of studying abroad.",
+  "supporting": "Eligibility criteria for these scholarships vary, but most require you to be enrolled as a full-time student on an F-1 visa. Some scholarships may also consider academic performance, financial need, or specific fields of study. Deadlines can range from early spring to late summer, so it's essential to check each scholarship's requirements carefully. When applying, ensure you have all necessary documents, including transcripts, recommendation letters, and personal statements. Tailor your application to highlight your unique experiences and goals. Keep track of deadlines and apply early to maximize your chances of receiving funding.",
+  "related_intro": "In addition to the scholarships listed, there are various financial aid options and grants available for international students. Exploring these can further enhance your funding opportunities.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships available.",
+    "Identify scholarships that match your field of study.",
+    "Check eligibility requirements and deadlines.",
+    "Prepare your application materials carefully.",
+    "Submit your applications on time to maximize chances."
+  ],
+  "who_for": [
+    "International students on F-1 visas.",
+    "Undergraduate and graduate students.",
+    "Students pursuing various fields of study."
+  ],
+  "faq": [
+    {
+      "question": "Can F-1 visa holders apply for scholarships?",
+      "answer": "Yes, F-1 visa holders can apply for scholarships specifically designated for international students."
+    },
+    {
+      "question": "What types of scholarships are available?",
+      "answer": "Scholarships range from merit-based to need-based and can be specific to various fields of study."
+    },
+    {
+      "question": "How do I find scholarships for F-1 visa holders?",
+      "answer": "You can find scholarships by searching online databases, university websites, and scholarship portals."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-available-to-f1-visa-holders-usa",
+    "generatedAt": "2026-04-25T13:29:32.882Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

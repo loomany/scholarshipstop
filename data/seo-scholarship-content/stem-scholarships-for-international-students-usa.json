@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 STEM Scholarships for International Students in the USA",
+  "seo_description": "Discover 196 STEM scholarships available for international students in the USA. Find funding opportunities to support your education.",
+  "h1": "STEM Scholarships for International Students in the USA",
+  "intro": "Studying in the USA can be a transformative experience, especially for international students pursuing STEM fields. With 196 scholarships available, you can find financial support tailored to your academic goals. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship offer valuable funding to help cover tuition and living expenses. Whether you are interested in engineering, technology, or the sciences, there are numerous opportunities to ease the financial burden of your education. This guide will help you navigate the various scholarships available and assist you in securing the funding you need to succeed.",
+  "supporting": "Eligibility for these scholarships often varies, but many are open to international students enrolled in accredited STEM programs in the USA. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, may have specific criteria regarding residency or citizenship status. Deadlines can range from early fall to late spring, so it's crucial to check individual scholarship requirements. When applying, ensure you have a strong personal statement, letters of recommendation, and any required documentation ready. Tailoring your application to highlight your unique experiences and aspirations in STEM can significantly enhance your chances of receiving funding.",
+  "related_intro": "In addition to the scholarships listed, many universities offer their own funding opportunities for international students. Exploring these options can further increase your chances of securing financial aid.",
+  "how_to_use": [
+    "Browse through the list of 196 scholarships.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary documents like transcripts and essays.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "International students pursuing STEM degrees.",
+    "Undergraduate and graduate students looking for funding.",
+    "Students from diverse backgrounds seeking educational opportunities."
+  ],
+  "faq": [
+    {
+      "question": "What types of STEM scholarships are available?",
+      "answer": "There are various scholarships, including merit-based, need-based, and specific awards for certain fields like engineering or computer science."
+    },
+    {
+      "question": "How can I find more information about specific scholarships?",
+      "answer": "Visit the scholarship provider's website or your university's financial aid office for detailed information on eligibility and application processes."
+    },
+    {
+      "question": "Are there scholarships specifically for graduate international students?",
+      "answer": "Yes, many scholarships cater specifically to graduate students, including the Paul and Daisy Soros Fellowships for New Americans."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "stem-scholarships-for-international-students-usa",
+    "generatedAt": "2026-04-25T13:20:38.076Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore Computer Science Scholarships for International Students",
+  "seo_description": "Discover 5 computer science scholarships available for international students to support your education and career.",
+  "h1": "Computer Science Scholarships for International Students",
+  "intro": "Pursuing a degree in computer science can be a transformative journey, especially for international students seeking to study abroad. Scholarships specifically designed for international students can significantly alleviate the financial burden of tuition and living expenses. Currently, there are five notable scholarships available that cater to aspiring computer scientists from around the globe. These opportunities not only provide financial assistance but also enhance your academic profile and career prospects. Whether you are interested in coding, software development, or computer education, these scholarships can help you achieve your goals and make a meaningful impact in the tech industry.",
+  "supporting": "The five scholarships available for international students in computer science include the Vanna Christian Sun Legacy Scholarship, Lyndsey Scott Coding+ Scholarship, S3G Advisors NextGen Scholarship, Chris Jackson Computer Science Education Scholarship, and the Tinkerer’s Path Scholarship. Each scholarship has unique eligibility criteria, application processes, and deadlines. Generally, applicants should demonstrate academic excellence, a passion for computer science, and a commitment to contributing to the field. Be sure to check each scholarship's specific requirements and prepare your application well in advance to meet deadlines. Tailoring your application to highlight relevant experiences and aspirations can increase your chances of success.",
+  "related_intro": "In addition to the scholarships listed, there are numerous resources and organizations that support international students in computer science.",
+  "how_to_use": [
+    "Review the eligibility criteria for each scholarship.",
+    "Prepare your academic transcripts and recommendation letters.",
+    "Tailor your personal statement to reflect your passion for computer science.",
+    "Submit your application before the specified deadlines.",
+    "Follow up with the scholarship committees for any updates."
+  ],
+  "who_for": [
+    "International students pursuing a degree in computer science.",
+    "Students with a strong academic record and passion for technology.",
+    "Individuals looking for financial support to study abroad."
+  ],
+  "faq": [
+    {
+      "question": "What are the eligibility requirements for these scholarships?",
+      "answer": "Eligibility varies by scholarship but generally includes being an international student enrolled in a computer science program."
+    },
+    {
+      "question": "How do I apply for these scholarships?",
+      "answer": "Applications typically require academic transcripts, recommendation letters, and a personal statement."
+    },
+    {
+      "question": "What is the deadline for scholarship applications?",
+      "answer": "Deadlines differ for each scholarship; check the specific scholarship page for accurate dates."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "computer-science-scholarships-for-international-students",
+    "generatedAt": "2026-04-25T13:20:47.920Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 5,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

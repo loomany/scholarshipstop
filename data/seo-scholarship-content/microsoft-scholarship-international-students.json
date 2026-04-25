@@ -1,0 +1,43 @@
+{
+  "seo_title": "Microsoft Scholarship Opportunities for International Students",
+  "seo_description": "Explore 196 Microsoft scholarships available for international students. Apply now for financial support in your educational journey.",
+  "h1": "Microsoft Scholarships for International Students",
+  "intro": "Are you an international student seeking financial assistance for your education? Microsoft offers a range of scholarships designed to support students from diverse backgrounds. With 196 scholarships currently available, including options like the International Student Scholarship and the Razor's Edge Global Scholarship, there are numerous opportunities to help you achieve your academic goals. These scholarships not only provide financial aid but also connect you with a network of professionals and resources that can enhance your educational experience. Whether you're pursuing engineering, arts, or any other field, there's likely a scholarship that fits your needs.",
+  "supporting": "Eligibility for Microsoft scholarships varies by program, but generally, applicants must be enrolled or planning to enroll in an accredited institution. Many scholarships require a demonstrated financial need, academic excellence, or a commitment to community service. Be sure to check individual scholarship deadlines, as they can vary significantly. For application advice, focus on crafting a compelling personal statement and securing strong letters of recommendation. Highlight your unique experiences and aspirations to stand out in the competitive selection process. Don’t miss out on the chance to secure funding for your studies!",
+  "related_intro": "In addition to Microsoft scholarships, there are numerous other funding opportunities available for international students. These scholarships can help alleviate the financial burden of tuition and living expenses.",
+  "how_to_use": [
+    "Research available scholarships on the Microsoft website.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare your application materials, including essays and recommendations.",
+    "Submit your application before the deadline.",
+    "Follow up on your application status if necessary."
+  ],
+  "who_for": [
+    "International students pursuing higher education.",
+    "Students in STEM and other fields.",
+    "Those seeking financial assistance for tuition costs."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students?",
+      "answer": "There are various scholarships, including merit-based, need-based, and those focused on specific fields of study."
+    },
+    {
+      "question": "How do I apply for a Microsoft scholarship?",
+      "answer": "Visit the Microsoft scholarship page, review the requirements, and submit your application online."
+    },
+    {
+      "question": "Are there any specific eligibility requirements?",
+      "answer": "Eligibility varies by scholarship, but typically includes enrollment in an accredited institution and a strong academic record."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "microsoft-scholarship-international-students",
+    "generatedAt": "2026-04-25T13:23:58.137Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Google Scholarships for International Students",
+  "seo_description": "Discover 196 scholarships for international students, including the Vanna Christian Sun Legacy Scholarship and more. Apply today!",
+  "h1": "Google Scholarships for International Students",
+  "intro": "Are you an international student seeking financial assistance for your education? Google offers a variety of scholarships designed specifically for students like you. With 196 scholarships available, you can find opportunities that cater to different fields of study and personal circumstances. Scholarships such as the International Student Scholarship and the Razor's Edge Global Scholarship provide essential funding to help you achieve your academic goals. Whether you're pursuing undergraduate or graduate studies, these scholarships can significantly ease your financial burden and allow you to focus on your education.",
+  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited institutions. It's crucial to check each scholarship's specific requirements, including academic performance, field of study, and residency status. Deadlines also differ, so be sure to mark your calendar and prepare your application materials in advance. When applying, pay attention to the required documents, which often include transcripts, letters of recommendation, and personal essays. Tailoring your application to highlight your unique experiences and aspirations can increase your chances of receiving funding.",
+  "related_intro": "In addition to Google scholarships, there are numerous other funding opportunities available for international students. Explore various options to maximize your chances of financial support.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships available.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare required documents and application materials.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if necessary."
+  ],
+  "who_for": [
+    "International students pursuing higher education.",
+    "Students in need of financial assistance.",
+    "Those looking for scholarships in various fields of study."
+  ],
+  "faq": [
+    {
+      "question": "What are Google scholarships for international students?",
+      "answer": "These are financial awards offered by Google to support international students in their educational pursuits."
+    },
+    {
+      "question": "How can I apply for a Google scholarship?",
+      "answer": "Visit the scholarship's official website, review eligibility requirements, and submit your application before the deadline."
+    },
+    {
+      "question": "What types of scholarships are available?",
+      "answer": "Scholarships range from need-based awards to merit-based scholarships across various fields of study."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "google-scholarship-international-students",
+    "generatedAt": "2026-04-25T13:23:49.814Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

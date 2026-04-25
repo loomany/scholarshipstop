@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Scholarships for International Students at State Universities",
+  "seo_description": "Discover 196 scholarships available for international students at state universities. Find funding opportunities to support your education.",
+  "h1": "Scholarships for International Students at State Universities",
+  "intro": "International students seeking education at state universities have access to a wealth of scholarship opportunities. With 196 scholarships currently available, students can find financial support tailored to their unique backgrounds and academic pursuits. These scholarships not only help alleviate tuition costs but also enhance the overall educational experience by fostering diversity and inclusion on campus. From merit-based awards to need-based grants, there are options for every type of student. Whether you are pursuing engineering, arts, or sciences, there is likely a scholarship that aligns with your field of study. Start your journey toward funding your education today!",
+  "supporting": "Eligibility for these scholarships varies, with some requiring specific academic achievements, while others may focus on financial need or community involvement. Deadlines also differ, so it's crucial to check each scholarship's requirements closely. For instance, scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship offer substantial support for students who meet their criteria. When applying, ensure that you have all necessary documents, including transcripts, letters of recommendation, and personal statements. Tailoring your application to highlight your unique experiences and aspirations can significantly increase your chances of success.",
+  "related_intro": "In addition to scholarships, international students can explore various financial aid options, grants, and assistantships that may further support their educational endeavors.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary application materials.",
+    "Submit applications before the deadlines.",
+    "Follow up with scholarship providers for updates."
+  ],
+  "who_for": [
+    "International students enrolled in state universities.",
+    "Students from diverse academic backgrounds.",
+    "Those seeking financial assistance for their education."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available?",
+      "answer": "There are merit-based, need-based, and field-specific scholarships available for international students."
+    },
+    {
+      "question": "How do I find the right scholarship for me?",
+      "answer": "Review eligibility criteria and application requirements to identify scholarships that match your profile."
+    },
+    {
+      "question": "When are scholarship deadlines?",
+      "answer": "Deadlines vary by scholarship; always check individual listings for specific dates."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-international-students-at-state-universities",
+    "generatedAt": "2026-04-25T13:31:39.809Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

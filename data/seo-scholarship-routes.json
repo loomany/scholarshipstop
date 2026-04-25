@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-25T11:19:38.908Z",
+  "generatedAt": "2026-04-25T13:31:55.228Z",
   "promptVersion": "v1",
   "routes": [
     {
@@ -19837,7 +19837,7 @@
       "priorityBucket": "high",
       "manualLockedCopy": true,
       "manualLockedIndexable": true,
-      "lastEvaluatedAt": "2026-04-25T11:18:46.118Z",
+      "lastEvaluatedAt": "2026-04-25T13:30:11.650Z",
       "qualityBucket": "GOOD",
       "reasonCodes": [
         "good_route"
@@ -19863,7 +19863,7 @@
       "priorityBucket": "high",
       "manualLockedCopy": true,
       "manualLockedIndexable": true,
-      "lastEvaluatedAt": "2026-04-25T11:18:46.175Z",
+      "lastEvaluatedAt": "2026-04-25T13:30:11.706Z",
       "qualityBucket": "GOOD",
       "reasonCodes": [
         "good_route"
@@ -19889,7 +19889,7 @@
       "priorityBucket": "high",
       "manualLockedCopy": true,
       "manualLockedIndexable": true,
-      "lastEvaluatedAt": "2026-04-25T11:18:46.287Z",
+      "lastEvaluatedAt": "2026-04-25T13:30:11.817Z",
       "qualityBucket": "GOOD",
       "reasonCodes": [
         "good_route"
@@ -19915,7 +19915,7 @@
       "priorityBucket": "high",
       "manualLockedCopy": true,
       "manualLockedIndexable": true,
-      "lastEvaluatedAt": "2026-04-25T11:18:46.062Z",
+      "lastEvaluatedAt": "2026-04-25T13:30:11.594Z",
       "qualityBucket": "GOOD",
       "reasonCodes": [
         "good_route"
@@ -19941,7 +19941,7 @@
       "priorityBucket": "high",
       "manualLockedCopy": true,
       "manualLockedIndexable": true,
-      "lastEvaluatedAt": "2026-04-25T11:18:46.230Z",
+      "lastEvaluatedAt": "2026-04-25T13:30:11.760Z",
       "qualityBucket": "GOOD",
       "reasonCodes": [
         "good_route"
@@ -19950,6 +19950,1877 @@
       "metaTitleFallback": "Scholarships open to non us citizens | ScholarshipTop",
       "metaDescriptionFallback": "Browse scholarships open to non us citizens in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
       "notes": "Generated from keyword topic line 144."
+    },
+    {
+      "canonicalPath": "college-scholarships-for-international-students",
+      "seoId": "keyword:college-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:33.674Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "College scholarships for international students",
+      "metaTitleFallback": "College scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse college scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 146."
+    },
+    {
+      "canonicalPath": "no-essay-scholarships-for-international-students",
+      "seoId": "keyword:no-essay-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students",
+        "no-essay"
+      ],
+      "minCountSnapshot": 5,
+      "scholarshipsCount": 5,
+      "score": 45,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "medium",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:33.738Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "No essay scholarships for international students",
+      "metaTitleFallback": "No essay scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse no essay scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 147."
+    },
+    {
+      "canonicalPath": "fully-funded-scholarships-for-international-students-usa",
+      "seoId": "keyword:fully-funded-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:33.792Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Fully funded scholarships for international students USA",
+      "metaTitleFallback": "Fully funded scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse fully funded scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 148."
+    },
+    {
+      "canonicalPath": "easy-scholarships-for-international-students",
+      "seoId": "keyword:easy-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:33.856Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Easy scholarships for international students",
+      "metaTitleFallback": "Easy scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse easy scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 149."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-with-no-gpa-requirement",
+      "seoId": "keyword:scholarships-for-international-students-with-no-gpa-requirement",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeGpaBuckets": [
+          "no_gpa_requirement"
+        ]
+      },
+      "minCountSnapshot": 14,
+      "scholarshipsCount": 14,
+      "score": 54,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:33.917Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students with no GPA requirement",
+      "metaTitleFallback": "Scholarships for international students with no GPA requirement | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students with no gpa requirement in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 150."
+    },
+    {
+      "canonicalPath": "scholarships-for-indian-students-in-usa",
+      "seoId": "keyword:scholarships-for-indian-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:33.979Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for indian students in USA",
+      "metaTitleFallback": "Scholarships for indian students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for indian students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 151."
+    },
+    {
+      "canonicalPath": "scholarships-for-nigerian-students-in-usa",
+      "seoId": "keyword:scholarships-for-nigerian-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.042Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for nigerian students in USA",
+      "metaTitleFallback": "Scholarships for nigerian students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for nigerian students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 152."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-graduate-students",
+      "seoId": "keyword:scholarships-for-international-graduate-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEducationLevels": [
+          "graduate"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.096Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international graduate students",
+      "metaTitleFallback": "Scholarships for international graduate students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international graduate students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 153."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-undergraduate-students",
+      "seoId": "keyword:scholarships-for-international-undergraduate-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEducationLevels": [
+          "undergraduate",
+          "graduate"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.149Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international undergraduate students",
+      "metaTitleFallback": "Scholarships for international undergraduate students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international undergraduate students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 154."
+    },
+    {
+      "canonicalPath": "merit-scholarships-for-international-students",
+      "seoId": "keyword:merit-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.209Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Merit scholarships for international students",
+      "metaTitleFallback": "Merit scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse merit scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 155."
+    },
+    {
+      "canonicalPath": "scholarships-for-indian-students-studying-in-usa-2026",
+      "seoId": "keyword:scholarships-for-indian-students-studying-in-usa-2026",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.265Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for indian students studying in USA 2026",
+      "metaTitleFallback": "Scholarships for indian students studying in USA 2026 | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for indian students studying in usa 2026 in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 156."
+    },
+    {
+      "canonicalPath": "scholarships-for-nigerian-students-studying-abroad-usa",
+      "seoId": "keyword:scholarships-for-nigerian-students-studying-abroad-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.325Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for nigerian students studying abroad USA",
+      "metaTitleFallback": "Scholarships for nigerian students studying abroad USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for nigerian students studying abroad usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 157."
+    },
+    {
+      "canonicalPath": "scholarships-for-kenyan-students-in-usa",
+      "seoId": "keyword:scholarships-for-kenyan-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.381Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for kenyan students in USA",
+      "metaTitleFallback": "Scholarships for kenyan students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for kenyan students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 158."
+    },
+    {
+      "canonicalPath": "scholarships-for-pakistani-students-in-usa",
+      "seoId": "keyword:scholarships-for-pakistani-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.440Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for pakistani students in USA",
+      "metaTitleFallback": "Scholarships for pakistani students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for pakistani students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 159."
+    },
+    {
+      "canonicalPath": "scholarships-for-bangladeshi-students-in-usa",
+      "seoId": "keyword:scholarships-for-bangladeshi-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.498Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for bangladeshi students in USA",
+      "metaTitleFallback": "Scholarships for bangladeshi students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for bangladeshi students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 160."
+    },
+    {
+      "canonicalPath": "scholarships-for-nepali-students-in-usa",
+      "seoId": "keyword:scholarships-for-nepali-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.553Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for nepali students in USA",
+      "metaTitleFallback": "Scholarships for nepali students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for nepali students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 161."
+    },
+    {
+      "canonicalPath": "scholarships-for-ethiopian-students-in-usa",
+      "seoId": "keyword:scholarships-for-ethiopian-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.608Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for ethiopian students in USA",
+      "metaTitleFallback": "Scholarships for ethiopian students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for ethiopian students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 162."
+    },
+    {
+      "canonicalPath": "scholarships-for-ghanaian-students-in-usa",
+      "seoId": "keyword:scholarships-for-ghanaian-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.667Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for ghanaian students in USA",
+      "metaTitleFallback": "Scholarships for ghanaian students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for ghanaian students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 163."
+    },
+    {
+      "canonicalPath": "scholarships-for-colombian-students-in-usa",
+      "seoId": "keyword:scholarships-for-colombian-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.723Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for colombian students in USA",
+      "metaTitleFallback": "Scholarships for colombian students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for colombian students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 164."
+    },
+    {
+      "canonicalPath": "scholarships-for-brazilian-students-in-usa",
+      "seoId": "keyword:scholarships-for-brazilian-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.777Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for brazilian students in USA",
+      "metaTitleFallback": "Scholarships for brazilian students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for brazilian students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 165."
+    },
+    {
+      "canonicalPath": "scholarships-for-mexican-students-in-usa",
+      "seoId": "keyword:scholarships-for-mexican-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.834Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for mexican students in USA",
+      "metaTitleFallback": "Scholarships for mexican students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for mexican students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 166."
+    },
+    {
+      "canonicalPath": "scholarships-for-vietnamese-students-in-usa",
+      "seoId": "keyword:scholarships-for-vietnamese-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.892Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for vietnamese students in USA",
+      "metaTitleFallback": "Scholarships for vietnamese students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for vietnamese students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 167."
+    },
+    {
+      "canonicalPath": "scholarships-for-philippine-students-in-usa",
+      "seoId": "keyword:scholarships-for-philippine-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:34.948Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for philippine students in USA",
+      "metaTitleFallback": "Scholarships for philippine students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for philippine students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 168."
+    },
+    {
+      "canonicalPath": "scholarships-for-indonesian-students-in-usa",
+      "seoId": "keyword:scholarships-for-indonesian-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.007Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for indonesian students in USA",
+      "metaTitleFallback": "Scholarships for indonesian students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for indonesian students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 169."
+    },
+    {
+      "canonicalPath": "scholarships-for-latin-american-students-in-usa",
+      "seoId": "keyword:scholarships-for-latin-american-students-in-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.062Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for latin american students in USA",
+      "metaTitleFallback": "Scholarships for latin american students in USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for latin american students in usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 170."
+    },
+    {
+      "canonicalPath": "stem-scholarships-for-international-students-usa",
+      "seoId": "keyword:stem-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.118Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Stem scholarships for international students USA",
+      "metaTitleFallback": "Stem scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse stem scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 171."
+    },
+    {
+      "canonicalPath": "computer-science-scholarships-for-international-students",
+      "seoId": "keyword:computer-science-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students",
+        "computer-science"
+      ],
+      "minCountSnapshot": 5,
+      "scholarshipsCount": 5,
+      "score": 45,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "medium",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.172Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Computer science scholarships for international students",
+      "metaTitleFallback": "Computer science scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse computer science scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 172."
+    },
+    {
+      "canonicalPath": "engineering-scholarships-for-international-students-usa",
+      "seoId": "keyword:engineering-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students",
+        "engineering"
+      ],
+      "minCountSnapshot": 68,
+      "scholarshipsCount": 68,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.228Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Engineering scholarships for international students USA",
+      "metaTitleFallback": "Engineering scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse engineering scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 173."
+    },
+    {
+      "canonicalPath": "business-scholarships-for-international-students-usa",
+      "seoId": "keyword:business-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.295Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Business scholarships for international students USA",
+      "metaTitleFallback": "Business scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse business scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 174."
+    },
+    {
+      "canonicalPath": "mba-scholarships-for-international-students-usa",
+      "seoId": "keyword:mba-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.350Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "MBA scholarships for international students USA",
+      "metaTitleFallback": "MBA scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse mba scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 175."
+    },
+    {
+      "canonicalPath": "law-scholarships-for-international-students-usa",
+      "seoId": "keyword:law-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.577Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Law scholarships for international students USA",
+      "metaTitleFallback": "Law scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse law scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 179."
+    },
+    {
+      "canonicalPath": "phd-scholarships-for-international-students-usa",
+      "seoId": "keyword:phd-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEducationLevels": [
+          "phd"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.631Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "PhD scholarships for international students USA",
+      "metaTitleFallback": "PhD scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse phd scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 180."
+    },
+    {
+      "canonicalPath": "data-science-scholarships-for-international-students",
+      "seoId": "keyword:data-science-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students",
+        "computer-science"
+      ],
+      "minCountSnapshot": 5,
+      "scholarshipsCount": 5,
+      "score": 45,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "medium",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.697Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Data science scholarships for international students",
+      "metaTitleFallback": "Data science scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse data science scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 181."
+    },
+    {
+      "canonicalPath": "cybersecurity-scholarships-for-international-students",
+      "seoId": "keyword:cybersecurity-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students",
+        "computer-science"
+      ],
+      "minCountSnapshot": 5,
+      "scholarshipsCount": 5,
+      "score": 45,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "medium",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.753Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Cybersecurity scholarships for international students",
+      "metaTitleFallback": "Cybersecurity scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse cybersecurity scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 182."
+    },
+    {
+      "canonicalPath": "environmental-science-scholarships-for-international-students",
+      "seoId": "keyword:environmental-science-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.813Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Environmental science scholarships for international students",
+      "metaTitleFallback": "Environmental science scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse environmental science scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 183."
+    },
+    {
+      "canonicalPath": "architecture-scholarships-for-international-students-usa",
+      "seoId": "keyword:architecture-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.869Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Architecture scholarships for international students USA",
+      "metaTitleFallback": "Architecture scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse architecture scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 184."
+    },
+    {
+      "canonicalPath": "education-scholarships-for-international-students-usa",
+      "seoId": "keyword:education-scholarships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.921Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Education scholarships for international students USA",
+      "metaTitleFallback": "Education scholarships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse education scholarships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 185."
+    },
+    {
+      "canonicalPath": "corporate-scholarships-for-international-students",
+      "seoId": "keyword:corporate-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:35.976Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Corporate scholarships for international students",
+      "metaTitleFallback": "Corporate scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse corporate scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 186."
+    },
+    {
+      "canonicalPath": "google-scholarship-international-students",
+      "seoId": "keyword:google-scholarship-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.029Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Google scholarship international students",
+      "metaTitleFallback": "Google scholarship international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse google scholarship international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 187."
+    },
+    {
+      "canonicalPath": "microsoft-scholarship-international-students",
+      "seoId": "keyword:microsoft-scholarship-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.089Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Microsoft scholarship international students",
+      "metaTitleFallback": "Microsoft scholarship international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse microsoft scholarship international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 188."
+    },
+    {
+      "canonicalPath": "boeing-scholarship-international-students",
+      "seoId": "keyword:boeing-scholarship-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.147Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Boeing scholarship international students",
+      "metaTitleFallback": "Boeing scholarship international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse boeing scholarship international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 189."
+    },
+    {
+      "canonicalPath": "amazon-scholarship-international-students",
+      "seoId": "keyword:amazon-scholarship-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.201Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Amazon scholarship international students",
+      "metaTitleFallback": "Amazon scholarship international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse amazon scholarship international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 190."
+    },
+    {
+      "canonicalPath": "last-minute-scholarships-international-students",
+      "seoId": "keyword:last-minute-scholarships-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "deadlinePreset": "w1_4"
+      },
+      "minCountSnapshot": 31,
+      "scholarshipsCount": 31,
+      "score": 71,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.257Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Last minute scholarships international students",
+      "metaTitleFallback": "Last minute scholarships international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse last minute scholarships international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 191."
+    },
+    {
+      "canonicalPath": "monthly-scholarships-international-students-usa",
+      "seoId": "keyword:monthly-scholarships-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.313Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Monthly scholarships international students USA",
+      "metaTitleFallback": "Monthly scholarships international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse monthly scholarships international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 192."
+    },
+    {
+      "canonicalPath": "renewable-scholarships-international-students",
+      "seoId": "keyword:renewable-scholarships-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.371Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Renewable scholarships international students",
+      "metaTitleFallback": "Renewable scholarships international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse renewable scholarships international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 193."
+    },
+    {
+      "canonicalPath": "need-based-scholarships-international-students",
+      "seoId": "keyword:need-based-scholarships-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEligibility": [
+          "financial_need"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.426Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Need based scholarships international students",
+      "metaTitleFallback": "Need based scholarships international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse need based scholarships international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 194."
+    },
+    {
+      "canonicalPath": "leadership-scholarships-international-students",
+      "seoId": "keyword:leadership-scholarships-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.482Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Leadership scholarships international students",
+      "metaTitleFallback": "Leadership scholarships international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse leadership scholarships international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 195."
+    },
+    {
+      "canonicalPath": "research-grants-international-students-usa",
+      "seoId": "keyword:research-grants-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEducationLevels": [
+          "graduate"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.562Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Research grants international students USA",
+      "metaTitleFallback": "Research grants international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse research grants international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 196."
+    },
+    {
+      "canonicalPath": "fellowships-for-international-students-usa",
+      "seoId": "keyword:fellowships-for-international-students-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEducationLevels": [
+          "graduate"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.619Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Fellowships for international students USA",
+      "metaTitleFallback": "Fellowships for international students USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse fellowships for international students usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 197."
+    },
+    {
+      "canonicalPath": "university-scholarships-for-international-students",
+      "seoId": "keyword:university-scholarships-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.680Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "University scholarships for international students",
+      "metaTitleFallback": "University scholarships for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse university scholarships for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 198."
+    },
+    {
+      "canonicalPath": "community-college-scholarships-international-students",
+      "seoId": "keyword:community-college-scholarships-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.738Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Community college scholarships international students",
+      "metaTitleFallback": "Community college scholarships international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse community college scholarships international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 199."
+    },
+    {
+      "canonicalPath": "transfer-scholarships-international-students",
+      "seoId": "keyword:transfer-scholarships-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.794Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Transfer scholarships international students",
+      "metaTitleFallback": "Transfer scholarships international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse transfer scholarships international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 200."
+    },
+    {
+      "canonicalPath": "can-international-students-apply-for-scholarships-usa",
+      "seoId": "keyword:can-international-students-apply-for-scholarships-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.850Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Can international students apply for scholarships USA",
+      "metaTitleFallback": "Can international students apply for scholarships USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse can international students apply for scholarships usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 203."
+    },
+    {
+      "canonicalPath": "scholarship-essay-tips-international-students",
+      "seoId": "keyword:scholarship-essay-tips-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.907Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarship essay tips international students",
+      "metaTitleFallback": "Scholarship essay tips international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarship essay tips international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 206."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-no-citizenship-requirement",
+      "seoId": "keyword:scholarships-for-international-students-no-citizenship-requirement",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:36.968Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students no citizenship requirement",
+      "metaTitleFallback": "Scholarships for international students no citizenship requirement | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students no citizenship requirement in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 211."
+    },
+    {
+      "canonicalPath": "scholarships-available-to-f1-visa-holders-usa",
+      "seoId": "keyword:scholarships-available-to-f1-visa-holders-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.020Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships available to F-1 visa holders USA",
+      "metaTitleFallback": "Scholarships available to F-1 visa holders USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships available to f-1 visa holders usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 212."
+    },
+    {
+      "canonicalPath": "private-scholarships-for-international-students-no-ssn-required",
+      "seoId": "keyword:private-scholarships-for-international-students-no-ssn-required",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.077Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Private scholarships for international students no SSN required",
+      "metaTitleFallback": "Private scholarships for international students no SSN required | ScholarshipTop",
+      "metaDescriptionFallback": "Browse private scholarships for international students no ssn required in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 213."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-august-deadline",
+      "seoId": "keyword:scholarships-for-international-students-august-deadline",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "deadlinePreset": "w1_4"
+      },
+      "minCountSnapshot": 31,
+      "scholarshipsCount": 31,
+      "score": 71,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.132Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students august deadline",
+      "metaTitleFallback": "Scholarships for international students august deadline | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students august deadline in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 214."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-september-deadline",
+      "seoId": "keyword:scholarships-for-international-students-september-deadline",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "deadlinePreset": "w1_4"
+      },
+      "minCountSnapshot": 31,
+      "scholarshipsCount": 31,
+      "score": 71,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.185Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students september deadline",
+      "metaTitleFallback": "Scholarships for international students september deadline | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students september deadline in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 215."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-october-deadline",
+      "seoId": "keyword:scholarships-for-international-students-october-deadline",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "deadlinePreset": "w1_4"
+      },
+      "minCountSnapshot": 31,
+      "scholarshipsCount": 31,
+      "score": 71,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.246Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students october deadline",
+      "metaTitleFallback": "Scholarships for international students october deadline | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students october deadline in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 216."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-november-deadline",
+      "seoId": "keyword:scholarships-for-international-students-november-deadline",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "deadlinePreset": "w1_4"
+      },
+      "minCountSnapshot": 31,
+      "scholarshipsCount": 31,
+      "score": 71,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.301Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students november deadline",
+      "metaTitleFallback": "Scholarships for international students november deadline | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students november deadline in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 217."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-december-deadline",
+      "seoId": "keyword:scholarships-for-international-students-december-deadline",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "deadlinePreset": "w1_4"
+      },
+      "minCountSnapshot": 31,
+      "scholarshipsCount": 31,
+      "score": 71,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.356Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students december deadline",
+      "metaTitleFallback": "Scholarships for international students december deadline | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students december deadline in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 218."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-january-deadline",
+      "seoId": "keyword:scholarships-for-international-students-january-deadline",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "deadlinePreset": "w1_4"
+      },
+      "minCountSnapshot": 31,
+      "scholarshipsCount": 31,
+      "score": 71,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.415Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students january deadline",
+      "metaTitleFallback": "Scholarships for international students january deadline | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students january deadline in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 219."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-first-generation-college-students",
+      "seoId": "keyword:scholarships-for-international-first-generation-college-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.468Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international first generation college students",
+      "metaTitleFallback": "Scholarships for international first generation college students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international first generation college students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 220."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-women-in-stem-usa",
+      "seoId": "keyword:scholarships-for-international-women-in-stem-usa",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEligibility": [
+          "women"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.520Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international women in stem USA",
+      "metaTitleFallback": "Scholarships for international women in stem USA | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international women in stem usa in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 221."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-with-financial-need",
+      "seoId": "keyword:scholarships-for-international-students-with-financial-need",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEligibility": [
+          "financial_need"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.577Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students with financial need",
+      "metaTitleFallback": "Scholarships for international students with financial need | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students with financial need in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 222."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-at-ivy-league",
+      "seoId": "keyword:scholarships-for-international-students-at-ivy-league",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.632Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students at ivy league",
+      "metaTitleFallback": "Scholarships for international students at ivy league | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students at ivy league in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 223."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-students-at-state-universities",
+      "seoId": "keyword:scholarships-for-international-students-at-state-universities",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.693Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international students at state universities",
+      "metaTitleFallback": "Scholarships for international students at state universities | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international students at state universities in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 224."
+    },
+    {
+      "canonicalPath": "scholarships-for-international-phd-students-stem",
+      "seoId": "keyword:scholarships-for-international-phd-students-stem",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "filters": {
+        "includeEducationLevels": [
+          "phd"
+        ]
+      },
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.744Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "Scholarships for international PhD students stem",
+      "metaTitleFallback": "Scholarships for international PhD students stem | ScholarshipTop",
+      "metaDescriptionFallback": "Browse scholarships for international phd students stem in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 225."
     }
   ]
 }

@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 University Scholarships for International Students",
+  "seo_description": "Discover 196 scholarships for international students. Find funding opportunities tailored to your academic journey.",
+  "h1": "University Scholarships for International Students",
+  "intro": "Navigating the world of university scholarships can be challenging, especially for international students. With 196 scholarships available, there are numerous opportunities to help fund your education abroad. These scholarships vary in eligibility, award amounts, and application processes, providing options for students from diverse backgrounds and fields of study. Whether you're pursuing undergraduate or graduate studies, understanding the specifics of each scholarship can significantly enhance your chances of securing financial aid. This guide will help you explore various scholarships, their requirements, and tips for crafting a compelling application.",
+  "supporting": "Eligibility for these scholarships often includes factors such as academic performance, financial need, and specific demographic criteria. For example, the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship may focus on academic excellence, while the DC Tuition Assistance Grant (DCTAG) is aimed at residents of Washington, D.C. Deadlines vary, so it's crucial to check each scholarship's timeline. To apply, gather necessary documents such as transcripts, letters of recommendation, and personal statements. Tailoring your application to highlight your unique experiences and aspirations can set you apart from other candidates. Remember to follow application instructions carefully to avoid disqualification.",
+  "related_intro": "In addition to university scholarships, there are various funding options available for international students, including grants, fellowships, and assistantships. Exploring these avenues can further support your educational journey.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships available.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary application materials.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "International students seeking financial assistance.",
+    "Undergraduate and graduate students from diverse fields.",
+    "Students with varying academic backgrounds and achievements."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students?",
+      "answer": "There are various types of scholarships, including merit-based, need-based, and demographic-specific scholarships."
+    },
+    {
+      "question": "How can I increase my chances of receiving a scholarship?",
+      "answer": "Focus on crafting a strong personal statement, securing solid letters of recommendation, and meeting all application requirements."
+    },
+    {
+      "question": "Are there scholarships specifically for certain countries or regions?",
+      "answer": "Yes, many scholarships target students from specific countries or regions, so be sure to research those options."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "university-scholarships-for-international-students",
+    "generatedAt": "2026-04-25T13:25:41.345Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

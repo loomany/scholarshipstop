@@ -1,0 +1,43 @@
+{
+  "seo_title": "Research Grants for International Students in the USA",
+  "seo_description": "Explore 196 research grants available for international students in the USA. Find funding opportunities tailored to your needs.",
+  "h1": "Research Grants for International Students in the USA",
+  "intro": "Navigating the landscape of research grants can be challenging for international students in the USA. With 196 scholarships available, you have numerous opportunities to fund your academic pursuits. These grants cater to various fields of study and can significantly ease the financial burden of tuition and living expenses. Whether you are pursuing undergraduate or graduate studies, understanding the eligibility criteria and application processes is crucial. This guide will help you identify suitable grants, understand their requirements, and enhance your chances of securing funding.",
+  "supporting": "Eligibility for research grants varies by scholarship but generally includes being an enrolled international student at a recognized institution in the USA. Many grants, such as the Paul and Daisy Soros Fellowships for New Americans, focus on specific demographics or fields of study. Deadlines can range from early fall to late spring, so it’s essential to plan ahead. When applying, ensure you have a strong personal statement, letters of recommendation, and any required documentation ready. Tailor your application to highlight your research interests and how they align with the grant’s objectives. Check each scholarship's official website for detailed application instructions and deadlines.",
+  "related_intro": "In addition to research grants, international students can explore various scholarships and funding options to support their studies in the USA.",
+  "how_to_use": [
+    "Identify grants that match your field of study.",
+    "Review eligibility requirements carefully.",
+    "Prepare necessary documents, including transcripts and recommendations.",
+    "Submit applications before the deadlines.",
+    "Follow up with the scholarship providers for updates."
+  ],
+  "who_for": [
+    "International students enrolled in US institutions.",
+    "Graduate students seeking funding for research.",
+    "Undergraduate students looking for financial assistance."
+  ],
+  "faq": [
+    {
+      "question": "What types of research grants are available for international students?",
+      "answer": "There are various types of research grants, including those for specific fields, demographic groups, and general academic support."
+    },
+    {
+      "question": "How can I find research grants suited to my needs?",
+      "answer": "Use scholarship search engines, university resources, and official grant websites to find suitable opportunities."
+    },
+    {
+      "question": "What is the typical application process for research grants?",
+      "answer": "The application process usually involves submitting an application form, personal statement, and supporting documents by a specified deadline."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "research-grants-international-students-usa",
+    "generatedAt": "2026-04-25T13:25:20.146Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

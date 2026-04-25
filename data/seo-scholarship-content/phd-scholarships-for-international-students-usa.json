@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 PhD Scholarships for International Students in the USA",
+  "seo_description": "Discover 196 PhD scholarships available for international students in the USA. Find funding opportunities tailored for your academic journey.",
+  "h1": "PhD Scholarships for International Students in the USA",
+  "intro": "Pursuing a PhD in the USA can be a transformative experience, but it often comes with significant financial challenges. Fortunately, there are numerous scholarships specifically designed for international students. With 196 scholarships currently available, you have a wealth of opportunities to help fund your education. These scholarships range from merit-based awards to need-based grants, catering to various fields of study and backgrounds. Whether you're interested in engineering, humanities, or sciences, there’s likely a scholarship that fits your profile. Explore your options and take the first step towards your academic goals today.",
+  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited PhD programs across the USA. Some scholarships may require a specific GPA, while others might focus on research proposals or community involvement. Deadlines also vary, so it's crucial to check each scholarship's specific requirements. To apply, gather necessary documents such as transcripts, recommendation letters, and personal statements. Tailor your application to highlight your unique experiences and aspirations. Don't forget to check for any additional funding opportunities that may complement your scholarship.",
+  "related_intro": "In addition to PhD scholarships, there are various funding options available for international students, including grants, assistantships, and fellowships. Exploring these can enhance your financial support.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare necessary application materials.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status."
+  ],
+  "who_for": [
+    "International students seeking a PhD in the USA.",
+    "Students from diverse academic backgrounds.",
+    "Those looking for financial assistance for their studies."
+  ],
+  "faq": [
+    {
+      "question": "What types of PhD scholarships are available?",
+      "answer": "There are merit-based, need-based, and field-specific scholarships available for international students."
+    },
+    {
+      "question": "How can I find the right scholarship for me?",
+      "answer": "Review eligibility criteria, application requirements, and deadlines to find a suitable scholarship."
+    },
+    {
+      "question": "Can I apply for multiple scholarships?",
+      "answer": "Yes, you can apply for multiple scholarships to increase your chances of funding."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "phd-scholarships-for-international-students-usa",
+    "generatedAt": "2026-04-25T13:22:33.105Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

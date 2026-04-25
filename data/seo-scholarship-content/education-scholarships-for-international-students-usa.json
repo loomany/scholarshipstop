@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Education Scholarships for International Students in the USA",
+  "seo_description": "Discover 196 scholarships available for international students in the USA. Find funding for your education today!",
+  "h1": "Education Scholarships for International Students in the USA",
+  "intro": "Navigating the financial landscape of studying in the USA can be challenging for international students. Fortunately, there are 196 scholarships specifically designed to help ease this burden. These scholarships cater to a variety of academic fields and backgrounds, offering opportunities for students from all over the globe. Whether you are pursuing undergraduate or graduate studies, you can find funding that aligns with your educational goals. From merit-based awards to need-based grants, the options are diverse and plentiful, making it easier than ever to pursue your dreams in the United States.",
+  "supporting": "Eligibility for these scholarships varies, but many require proof of academic excellence, community involvement, or specific demographic criteria. For instance, the Paul and Daisy Soros Fellowships for New Americans targets immigrants and children of immigrants, while the Razor's Edge Global Scholarship focuses on leadership potential. Deadlines also vary, so it’s crucial to check each scholarship's specific requirements and timelines. To apply, gather your academic transcripts, letters of recommendation, and personal statements that reflect your aspirations and achievements. Tailoring your application to highlight your unique experiences can significantly enhance your chances of receiving funding.",
+  "related_intro": "In addition to the scholarships listed, there are numerous resources available to help international students find financial aid and scholarships tailored to their needs.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships available.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary documents like transcripts and recommendations.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "International students seeking higher education in the USA.",
+    "Students from diverse academic backgrounds.",
+    "Individuals looking for financial support for tuition and living expenses."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available?",
+      "answer": "There are merit-based, need-based, and demographic-specific scholarships available for international students."
+    },
+    {
+      "question": "How can I find more scholarships?",
+      "answer": "You can explore university websites, scholarship databases, and educational organizations dedicated to international students."
+    },
+    {
+      "question": "What documents do I need to apply?",
+      "answer": "Typically, you will need academic transcripts, letters of recommendation, and a personal statement."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "education-scholarships-for-international-students-usa",
+    "generatedAt": "2026-04-25T13:23:27.942Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

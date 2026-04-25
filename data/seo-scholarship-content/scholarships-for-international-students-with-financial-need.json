@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore Scholarships for International Students with Financial Need",
+  "seo_description": "Discover 196 scholarships for international students facing financial challenges. Apply now to secure your education funding.",
+  "h1": "Scholarships for International Students with Financial Need",
+  "intro": "Finding financial support as an international student can be challenging, but numerous scholarships are available to help ease the burden. With 196 scholarships specifically designed for students demonstrating financial need, you can explore various opportunities that cater to different fields of study and backgrounds. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship provide essential funding to help cover tuition and living expenses. Whether you are pursuing undergraduate or graduate studies, these scholarships can make a significant difference in your educational journey. Start your search today and take a step closer to achieving your academic goals.",
+  "supporting": "Eligibility for these scholarships often varies, but many require proof of financial need, academic excellence, and enrollment in an accredited institution. Deadlines can range from early spring to late summer, so it's crucial to check each scholarship's specific requirements. For instance, the Paul and Daisy Soros Fellowships for New Americans and the Razor's Edge Global Scholarship have unique criteria that applicants must meet. To increase your chances of success, ensure your application is complete and submitted on time. Additionally, consider seeking recommendations and crafting a compelling personal statement that highlights your achievements and aspirations.",
+  "related_intro": "In addition to scholarships, there are various financial aid options available for international students, including grants, loans, and work-study programs.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships available.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary documents, such as transcripts and financial statements.",
+    "Submit applications before the deadlines.",
+    "Follow up on your applications and prepare for interviews if required."
+  ],
+  "who_for": [
+    "International students seeking financial assistance.",
+    "Students enrolled in undergraduate or graduate programs.",
+    "Individuals demonstrating financial need and academic potential."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available?",
+      "answer": "There are various scholarships, including merit-based, need-based, and specific awards for certain fields of study."
+    },
+    {
+      "question": "How do I apply for these scholarships?",
+      "answer": "Each scholarship has its own application process, typically requiring forms, essays, and supporting documents."
+    },
+    {
+      "question": "Are there scholarships specifically for certain countries?",
+      "answer": "Yes, some scholarships are targeted towards students from specific countries or regions."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-international-students-with-financial-need",
+    "generatedAt": "2026-04-25T13:31:17.892Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

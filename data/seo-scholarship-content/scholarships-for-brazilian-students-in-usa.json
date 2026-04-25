@@ -1,0 +1,43 @@
+{
+  "seo_title": "Top Scholarships for Brazilian Students in the USA",
+  "seo_description": "Explore 196 scholarships available for Brazilian students in the USA. Find funding opportunities to support your education.",
+  "h1": "Scholarships for Brazilian Students in the USA",
+  "intro": "Are you a Brazilian student looking to study in the USA? You’re in luck! There are currently 196 scholarships specifically designed to support international students like you. These scholarships can significantly reduce your financial burden and help you achieve your academic goals. From merit-based awards to need-based grants, the options are diverse. Popular scholarships include the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship, among others. Whether you’re pursuing undergraduate or graduate studies, there’s likely a scholarship that fits your needs. Start your journey towards studying in the USA by exploring these funding opportunities today!",
+  "supporting": "Eligibility criteria for scholarships vary, but many require proof of enrollment in a U.S. institution and a strong academic record. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, may also consider your personal background and achievements. Be mindful of application deadlines, which can range from early summer to late fall, depending on the scholarship. To apply, gather necessary documents such as transcripts, recommendation letters, and personal statements. Tailoring your application to reflect your unique experiences can enhance your chances of success. Don’t forget to check for any specific requirements for each scholarship you’re interested in.",
+  "related_intro": "In addition to scholarships, there are various financial aid options and resources available for Brazilian students studying in the USA. Explore grants, assistantships, and work-study programs that can further support your education.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships available.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary application documents.",
+    "Submit applications before deadlines.",
+    "Follow up on your application status."
+  ],
+  "who_for": [
+    "Brazilian students pursuing undergraduate or graduate studies.",
+    "International students looking for financial assistance.",
+    "Students with diverse academic backgrounds and achievements."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Brazilian students?",
+      "answer": "There are merit-based, need-based, and specific scholarships for various fields of study."
+    },
+    {
+      "question": "How can I find the right scholarship for me?",
+      "answer": "Review eligibility criteria, application requirements, and deadlines for each scholarship."
+    },
+    {
+      "question": "Are there scholarships that cover living expenses?",
+      "answer": "Some scholarships may provide stipends for living expenses in addition to tuition coverage."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-brazilian-students-in-usa",
+    "generatedAt": "2026-04-25T13:19:43.275Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

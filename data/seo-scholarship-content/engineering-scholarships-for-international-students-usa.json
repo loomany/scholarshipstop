@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 68 Engineering Scholarships for International Students in the USA",
+  "seo_description": "Discover 68 engineering scholarships available for international students in the USA. Apply now to secure your future in engineering!",
+  "h1": "Engineering Scholarships for International Students in the USA",
+  "intro": "If you're an international student aspiring to study engineering in the USA, you're in luck! There are currently 68 scholarships specifically designed to support your educational journey. These scholarships can significantly alleviate the financial burden of tuition and living expenses, allowing you to focus on your studies and career aspirations. From the Vanna Christian Sun Legacy Scholarship to the TOMORROW X TOGETHER (TXT) MOA Scholarship, a variety of options are available to suit your needs. Each scholarship has its unique criteria, application process, and deadlines, so it's essential to explore all your options thoroughly.",
+  "supporting": "Eligibility for these scholarships often includes being a full-time international student enrolled in an accredited engineering program. Some scholarships may require specific academic achievements, while others may focus on community involvement or personal essays. Deadlines vary, so be sure to check each scholarship's specific timeline. When applying, pay close attention to the required documents, such as transcripts, recommendation letters, and personal statements. Tailoring your application to highlight your strengths and experiences can significantly enhance your chances of success. Remember to apply early and keep track of all submission requirements to ensure a smooth application process.",
+  "related_intro": "In addition to engineering scholarships, there are numerous financial aid opportunities available for international students in various fields. Exploring these options can further support your education in the USA.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare required documents and personal statements.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status as needed."
+  ],
+  "who_for": [
+    "International students pursuing engineering degrees.",
+    "Students seeking financial assistance for tuition.",
+    "Individuals looking to enhance their academic profile."
+  ],
+  "faq": [
+    {
+      "question": "What types of engineering scholarships are available?",
+      "answer": "There are various scholarships including merit-based, need-based, and those focused on specific engineering disciplines."
+    },
+    {
+      "question": "How do I apply for these scholarships?",
+      "answer": "Applications typically require personal statements, recommendation letters, and academic transcripts. Check individual scholarship guidelines."
+    },
+    {
+      "question": "Are there scholarships for graduate engineering students?",
+      "answer": "Yes, many scholarships cater to both undergraduate and graduate international engineering students."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "engineering-scholarships-for-international-students-usa",
+    "generatedAt": "2026-04-25T13:20:57.720Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 68,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

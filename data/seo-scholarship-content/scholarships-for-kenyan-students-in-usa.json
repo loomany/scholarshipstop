@@ -1,0 +1,43 @@
+{
+  "seo_title": "Top Scholarships for Kenyan Students in the USA - 196 Opportunities",
+  "seo_description": "Explore 196 scholarships for Kenyan students in the USA. Find funding opportunities to support your education and achieve your dreams.",
+  "h1": "Scholarships for Kenyan Students in the USA",
+  "intro": "Are you a Kenyan student aspiring to study in the USA? You're in luck! There are currently 196 scholarships available specifically for international students from Kenya. These scholarships can help cover tuition fees, living expenses, and other educational costs, making your dream of studying abroad more attainable. From merit-based awards to need-based grants, there are various options tailored to different fields of study and personal circumstances. Whether you are pursuing undergraduate or graduate studies, this comprehensive guide will help you navigate the scholarship landscape and find the best opportunities suited to your needs.",
+  "supporting": "Eligibility for these scholarships varies, but many require a strong academic record, letters of recommendation, and a personal statement. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, focus on specific criteria such as citizenship status or field of study. Deadlines also differ, so it’s crucial to keep track of application dates. To maximize your chances, tailor your application to each scholarship’s requirements and highlight your unique experiences. Additionally, consider reaching out to previous recipients for insights and tips on crafting a compelling application.",
+  "related_intro": "In addition to scholarships, there are other financial aid options available for Kenyan students, including grants and assistantships. Exploring these avenues can further enhance your funding opportunities.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare necessary documents, including transcripts and essays.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "Kenyan students seeking undergraduate or graduate education in the USA.",
+    "Students with strong academic records and extracurricular involvement.",
+    "Individuals looking for financial support to study abroad."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Kenyan students?",
+      "answer": "There are various scholarships including merit-based, need-based, and field-specific awards."
+    },
+    {
+      "question": "How can I find the right scholarship for me?",
+      "answer": "Review eligibility criteria and tailor your applications to match each scholarship's requirements."
+    },
+    {
+      "question": "Are there scholarships that cover living expenses?",
+      "answer": "Yes, many scholarships provide funding for both tuition and living expenses."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-kenyan-students-in-usa",
+    "generatedAt": "2026-04-25T13:18:33.351Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

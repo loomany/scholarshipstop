@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Fellowships for International Students in the USA",
+  "seo_description": "Discover 196 fellowships for international students in the USA. Find funding opportunities tailored for your academic journey.",
+  "h1": "Fellowships for International Students in the USA",
+  "intro": "Navigating the landscape of higher education as an international student can be challenging, especially when it comes to funding your studies. Fortunately, there are numerous fellowships available in the USA designed specifically for international students. With 196 fellowships currently open for application, ranging from merit-based awards to need-based grants, students can find financial support that aligns with their academic goals. These fellowships not only provide financial assistance but also enhance your educational experience through networking and professional development opportunities. Whether you're pursuing undergraduate or graduate studies, there is likely a fellowship that fits your needs.",
+  "supporting": "Eligibility for these fellowships varies, with some targeting specific fields of study, while others are open to all international students. Deadlines can range from rolling admissions to fixed dates, so it's crucial to check each fellowship's requirements early. To maximize your chances of success, tailor your application to highlight your unique background and aspirations. Many fellowships require essays, letters of recommendation, and proof of academic achievement, so prepare these materials in advance. Additionally, consider reaching out to previous recipients for insights on their application experiences.",
+  "related_intro": "In addition to fellowships, there are various scholarships and grants available for international students in the USA. These funding options can significantly ease the financial burden of studying abroad.",
+  "how_to_use": [
+    "Browse the list of 196 fellowships available.",
+    "Check eligibility criteria for each fellowship.",
+    "Prepare required documents and application materials.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if necessary."
+  ],
+  "who_for": [
+    "International students pursuing undergraduate or graduate studies.",
+    "Students from diverse academic backgrounds.",
+    "Individuals seeking financial support and professional development."
+  ],
+  "faq": [
+    {
+      "question": "What types of fellowships are available for international students?",
+      "answer": "Fellowships vary widely, including merit-based, need-based, and field-specific awards."
+    },
+    {
+      "question": "How can I find the right fellowship for my studies?",
+      "answer": "Review eligibility criteria and application requirements for each fellowship to find the best fit."
+    },
+    {
+      "question": "Are there deadlines for fellowship applications?",
+      "answer": "Yes, deadlines vary by fellowship; it's important to check each one carefully."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "fellowships-for-international-students-usa",
+    "generatedAt": "2026-04-25T13:25:30.383Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

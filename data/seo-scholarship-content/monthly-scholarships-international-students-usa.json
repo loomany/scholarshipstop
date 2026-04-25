@@ -1,0 +1,43 @@
+{
+  "seo_title": "Monthly Scholarships for International Students in the USA",
+  "seo_description": "Explore 196 monthly scholarships available for international students in the USA. Apply today for financial support and educational opportunities.",
+  "h1": "Monthly Scholarships for International Students in the USA",
+  "intro": "International students seeking financial assistance in the USA can benefit from a variety of monthly scholarships. With a total of 196 scholarships currently available, opportunities range from merit-based awards to need-based grants. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship provide essential funding to help cover tuition and living expenses. These scholarships not only alleviate financial burdens but also enhance your educational experience in the United States. Whether you're pursuing undergraduate or graduate studies, there's likely a scholarship that fits your profile and needs.",
+  "supporting": "Eligibility for these scholarships varies, with some targeting specific fields of study, while others are open to all international students. For example, the Razor's Edge Global Scholarship may focus on leadership qualities, while the DC Tuition Assistance Grant (DCTAG) is aimed at students residing in Washington, D.C. Most scholarships require an application that includes personal statements, recommendation letters, and proof of academic achievements. Be mindful of deadlines, as they can vary significantly. To maximize your chances, tailor your application to highlight your unique experiences and aspirations. Regularly check scholarship databases and university websites for updates on new opportunities.",
+  "related_intro": "In addition to monthly scholarships, international students can explore various funding options, including grants, fellowships, and assistantships.",
+  "how_to_use": [
+    "Visit scholarship websites regularly for updates.",
+    "Prepare necessary documents like transcripts and letters of recommendation.",
+    "Tailor your application to each scholarship's requirements.",
+    "Keep track of deadlines to ensure timely submissions.",
+    "Utilize scholarship search engines for personalized matches."
+  ],
+  "who_for": [
+    "International students pursuing degrees in the USA.",
+    "Students seeking financial assistance for tuition and living costs.",
+    "Individuals looking for merit-based or need-based funding."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students?",
+      "answer": "There are various types of scholarships, including merit-based, need-based, and field-specific awards."
+    },
+    {
+      "question": "How do I apply for these scholarships?",
+      "answer": "Applications typically require personal statements, recommendation letters, and proof of academic achievements."
+    },
+    {
+      "question": "Are there scholarships specifically for graduate students?",
+      "answer": "Yes, many scholarships cater specifically to graduate students, including fellowships and research grants."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "monthly-scholarships-international-students-usa",
+    "generatedAt": "2026-04-25T13:24:36.944Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

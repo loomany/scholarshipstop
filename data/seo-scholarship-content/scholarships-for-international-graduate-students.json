@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Scholarships for International Graduate Students",
+  "seo_description": "Discover 196 scholarships available for international graduate students. Find funding opportunities tailored to your needs.",
+  "h1": "Scholarships for International Graduate Students",
+  "intro": "Navigating the financial landscape as an international graduate student can be challenging. Fortunately, there are 196 scholarships specifically designed to support your academic journey. These scholarships vary in eligibility criteria, award amounts, and application processes, providing a range of options for students from different backgrounds and fields of study. From the International Student Scholarship to the Paul and Daisy Soros Fellowships for New Americans, opportunities abound to help alleviate the financial burden of graduate education. Whether you are pursuing engineering, arts, or any other discipline, you can find scholarships that align with your academic goals and personal circumstances.",
+  "supporting": "Eligibility for these scholarships often includes factors such as your country of origin, field of study, and academic performance. Many scholarships require applicants to submit essays, letters of recommendation, and proof of enrollment in a graduate program. Deadlines vary, so it's crucial to keep track of each scholarship's specific timeline. For instance, the Vanna Christian Sun Legacy Scholarship and the Razor's Edge Global Scholarship may have different application windows. To maximize your chances of securing funding, tailor your application materials to highlight your unique experiences and aspirations. Additionally, consider reaching out to the scholarship providers for any clarifications or tips on the application process.",
+  "related_intro": "In addition to the scholarships listed, there are numerous resources available to help international graduate students find funding. Networking with alumni and utilizing university resources can further enhance your search.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare necessary documents like essays and recommendations.",
+    "Submit applications before the deadlines.",
+    "Follow up with scholarship providers if needed."
+  ],
+  "who_for": [
+    "International graduate students seeking financial aid.",
+    "Students from diverse academic backgrounds.",
+    "Those looking for specific scholarships based on their field of study."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available?",
+      "answer": "There are various types of scholarships including merit-based, need-based, and specific awards for certain fields of study."
+    },
+    {
+      "question": "How can I find the right scholarship for me?",
+      "answer": "Review eligibility requirements and consider your academic background and interests to find suitable scholarships."
+    },
+    {
+      "question": "Are there scholarships that do not require essays?",
+      "answer": "Yes, some scholarships like the $25,000 'Be Bold' No-Essay Scholarship do not require essays, but check individual requirements."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-international-graduate-students",
+    "generatedAt": "2026-04-25T13:17:47.397Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

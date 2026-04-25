@@ -281,7 +281,7 @@ function deterministicSeoBundle(
   const title = sentenceCase(human);
   const count = matches.length;
   const examples = firstTitles(matches, 4);
-  return {
+  const out: SeoBundle = {
     seo_title: `${title} | Updated Scholarship List`,
     seo_description: `Explore ${count} USA scholarship opportunities for ${human.toLowerCase()}. Compare award amounts, deadlines, and eligibility before applying.`,
     h1: title,
@@ -326,6 +326,8 @@ function deterministicSeoBundle(
       generationMode: 'rewrite'
     }
   };
+  sealListingSeoMeta(out);
+  return out;
 }
 
 function deterministicResourcePayload(
@@ -350,7 +352,7 @@ function deterministicResourcePayload(
       : '<h2>Prioritize the applications with the best fit</h2><p>Strong fit usually matters more than applying everywhere. Focus first on scholarships where your background, field, school level, and story match the stated purpose of the award.</p>',
     '<h2>Next steps</h2><ul><li>Save promising scholarships in your account.</li><li>Check official eligibility before drafting essays.</li><li>Prepare reusable documents early.</li><li>Review deadlines every week until you submit.</li></ul>'
   ].join('\n');
-  return {
+  const out: ResourcePayload = {
     title,
     meta_title: `${title} | ScholarshipTop Guide`,
     meta_description: `A practical guide for international students: ${human.toLowerCase()}. Learn what to check, how to compare options, and how to avoid weak leads.`,
@@ -373,6 +375,8 @@ function deterministicResourcePayload(
       }
     ]
   };
+  sealResourceMetaDescription(out);
+  return out;
 }
 
 async function openAiClient(): Promise<OpenAI | null> {
@@ -407,6 +411,69 @@ function faqArray(value: unknown): { question: string; answer: string }[] {
     })
     .filter((x): x is { question: string; answer: string } => Boolean(x))
     .slice(0, 5);
+}
+
+/** Must match `validateSeoBundle` and the user prompt below. */
+const SEO_TITLE_MIN = 30;
+const SEO_TITLE_MAX = 90;
+const SEO_DESC_MIN = 110;
+const SEO_DESC_MAX = 180;
+
+/**
+ * Strips/truncates/pads so listing meta always passes the quality gate. Deterministic copy in
+ * particular can exceed 180 chars when the live match count is large.
+ */
+function fitSeoTitle(input: string): string {
+  let s = input.trim().replace(/\s+/g, ' ');
+  if (s.length > SEO_TITLE_MAX) {
+    s = s.slice(0, SEO_TITLE_MAX);
+    const sp = s.lastIndexOf(' ', SEO_TITLE_MAX - 4);
+    if (sp > SEO_TITLE_MIN) s = s.slice(0, sp);
+  }
+  if (s.length < SEO_TITLE_MIN) {
+    s = (s + ' | USA scholarships · ScholarshipTop').replace(/\s+/g, ' ').trim();
+    if (s.length > SEO_TITLE_MAX) s = s.slice(0, SEO_TITLE_MAX);
+  }
+  if (s.length < SEO_TITLE_MIN) s = 'Scholarship search for USA international students';
+  return s.length > SEO_TITLE_MAX ? s.slice(0, SEO_TITLE_MAX) : s;
+}
+
+function fitSeoDescription(input: string): string {
+  let s = input.trim().replace(/\s+/g, ' ');
+  if (s.length > SEO_DESC_MAX) {
+    let t = s.slice(0, SEO_DESC_MAX);
+    const sp = t.lastIndexOf(' ', 165);
+    if (sp > SEO_DESC_MIN) t = t.slice(0, sp);
+    s = t.replace(/[,\s;]+$/g, '');
+    if (!/[.!?]$/.test(s)) s += '.';
+  }
+  const addenda = [
+    ' Compare live deadlines, award amounts, and official eligibility on ScholarshipTop.',
+    ' Use filters to match USA scholarships to your school, degree level, and goals.',
+    ' See official links, requirements, and current deadlines in one catalog.'
+  ];
+  let n = 0;
+  while (s.length < SEO_DESC_MIN && n < 8) {
+    s = (s + addenda[n % addenda.length]).replace(/\s+/g, ' ').trim();
+    n += 1;
+    if (s.length > SEO_DESC_MAX) {
+      s = s.slice(0, SEO_DESC_MAX);
+      const sp2 = s.lastIndexOf(' ', SEO_DESC_MAX - 1);
+      if (sp2 > SEO_DESC_MIN) s = s.slice(0, sp2) + '…';
+      break;
+    }
+  }
+  if (s.length > SEO_DESC_MAX) s = s.slice(0, SEO_DESC_MAX);
+  return s;
+}
+
+function sealListingSeoMeta(bundle: SeoBundle): void {
+  bundle.seo_title = fitSeoTitle(bundle.seo_title);
+  bundle.seo_description = fitSeoDescription(bundle.seo_description);
+}
+
+function sealResourceMetaDescription(p: ResourcePayload): void {
+  p.meta_description = fitSeoDescription(p.meta_description);
 }
 
 function validateSeoBundle(bundle: SeoBundle): void {
@@ -502,8 +569,8 @@ Example scholarship titles: ${examples.join('; ')}
 
 Return JSON with:
 {
-  "seo_title": "45-75 chars",
-  "seo_description": "120-160 chars",
+  "seo_title": "30-90 characters inclusive (hard limit)",
+  "seo_description": "110-180 characters inclusive (hard limit — count characters)",
   "h1": "clear H1",
   "intro": "120-180 words, practical and specific",
   "supporting": "120-220 words, includes eligibility/deadline/application advice",
@@ -535,10 +602,12 @@ Return JSON with:
         generatedAt: new Date().toISOString()
       }
     };
+    sealListingSeoMeta(generated);
     validateSeoBundle(generated);
     return generated;
   } catch (error) {
     console.warn('[keyword-seo] AI listing copy failed; using deterministic fallback', error);
+    sealListingSeoMeta(fallback);
     validateSeoBundle(fallback);
     return fallback;
   }
@@ -577,7 +646,7 @@ Return JSON with:
 {
   "title": "45-85 chars",
   "meta_title": "45-75 chars",
-  "meta_description": "120-160 chars",
+  "meta_description": "110-180 characters inclusive (hard limit)",
   "body_html": "900-1400 words, semantic HTML with 5-8 h2 sections, practical checklist, internal ScholarshipTop framing",
   "faq": [{"question":"...","answer":"..."}]
 }`
@@ -594,10 +663,12 @@ Return JSON with:
       body_html: String(j.body_html ?? fallback.body_html).trim(),
       faq: faqArray(j.faq)
     };
+    sealResourceMetaDescription(generated);
     validateResourcePayload(generated);
     return generated;
   } catch (error) {
     console.warn('[keyword-seo] AI resource copy failed; using deterministic fallback', error);
+    sealResourceMetaDescription(fallback);
     validateResourcePayload(fallback);
     return fallback;
   }

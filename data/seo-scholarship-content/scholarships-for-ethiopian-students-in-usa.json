@@ -1,0 +1,43 @@
+{
+  "seo_title": "Top Scholarships for Ethiopian Students in the USA",
+  "seo_description": "Explore 196 scholarships available for Ethiopian students pursuing education in the USA. Find the right opportunity for you.",
+  "h1": "Scholarships for Ethiopian Students in the USA",
+  "intro": "Ethiopian students seeking educational opportunities in the United States can take advantage of a diverse array of scholarships designed to support their academic journeys. With 196 scholarships currently available, students can find funding options that cater to various fields of study and personal circumstances. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship provide financial assistance to help cover tuition and living expenses. Whether you are an undergraduate or graduate student, these scholarships can significantly reduce the financial burden of studying abroad.",
+  "supporting": "Eligibility criteria for these scholarships vary, but many are open to international students, including those from Ethiopia. Some scholarships may require a specific GPA, while others focus on community service or leadership qualities. Deadlines also differ, so it's essential to check each scholarship's requirements carefully. For example, the Paul and Daisy Soros Fellowships for New Americans is a prestigious award that supports graduate students, while the Razor's Edge Global Scholarship is aimed at undergraduates. To apply, gather necessary documents such as transcripts, letters of recommendation, and personal statements, and ensure you submit your applications before the deadlines.",
+  "related_intro": "In addition to scholarships, Ethiopian students can explore various financial aid options, grants, and work-study programs to support their education in the USA.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare required application materials.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status."
+  ],
+  "who_for": [
+    "Ethiopian undergraduate students.",
+    "Ethiopian graduate students.",
+    "Students pursuing specific fields of study."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Ethiopian students?",
+      "answer": "There are various scholarships, including merit-based, need-based, and field-specific awards."
+    },
+    {
+      "question": "How can I find scholarships that suit my needs?",
+      "answer": "Utilize scholarship search engines and university resources to find scholarships tailored to your profile."
+    },
+    {
+      "question": "What documents do I need to apply for scholarships?",
+      "answer": "Commonly required documents include transcripts, letters of recommendation, and personal statements."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-ethiopian-students-in-usa",
+    "generatedAt": "2026-04-25T13:19:11.038Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

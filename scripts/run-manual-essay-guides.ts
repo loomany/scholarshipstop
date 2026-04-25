@@ -43,6 +43,10 @@ function optionalIntArg(name: string, fallback: number): number {
   return Number.isFinite(value) && value > 0 ? Math.floor(value) : fallback;
 }
 
+function hasFlag(name: string): boolean {
+  return process.argv.includes(`--${name}`);
+}
+
 function slugifyTopic(value: string): string {
   return value
     .toLowerCase()
@@ -299,12 +303,22 @@ async function main() {
     requiredEnv('SUPABASE_SERVICE_ROLE_KEY'),
     { auth: { persistSession: false } }
   );
-  const limit = optionalIntArg('limit', 1);
+  /** Process the whole pending queue in one run (e.g. Railway cron). */
+  const untilEmpty = hasFlag('until-empty');
   let published = 0;
-  for (let i = 0; i < limit; i += 1) {
-    const result = await processOne(supabase);
-    if (result === 'empty') break;
-    published += 1;
+  if (untilEmpty) {
+    for (;;) {
+      const result = await processOne(supabase);
+      if (result === 'empty') break;
+      published += 1;
+    }
+  } else {
+    const limit = optionalIntArg('limit', 1);
+    for (let i = 0; i < limit; i += 1) {
+      const result = await processOne(supabase);
+      if (result === 'empty') break;
+      published += 1;
+    }
   }
   console.log(JSON.stringify({ processed: published }, null, 2));
 }

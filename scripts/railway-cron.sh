@@ -9,6 +9,7 @@
 #   bash scripts/railway-cron.sh enrich-providers
 #   bash scripts/railway-cron.sh essay-pipeline
 #   bash scripts/railway-cron.sh manual-essay-guides
+#   Optional: MANUAL_ESSAY_GUIDES_LIMIT=5 caps how many queue items to process; unset = drain all pending
 #   bash scripts/railway-cron.sh seo-daily-telegram   # daily digest of new SEO hub pages (Telegram)
 #
 # Default task "all" = SEO + indexing flush + grants + enrich + essay (same as your checklist).
@@ -196,9 +197,12 @@ task_manual_essay_guides() {
   require_env SUPABASE_SERVICE_ROLE_KEY
   require_env OPENAI_API_KEY
   require_npm_or_exit || return 0
-  export MANUAL_ESSAY_GUIDES_LIMIT="${MANUAL_ESSAY_GUIDES_LIMIT:-5}"
   (cd "$PROJECT_ROOT" && npx tsx scripts/enqueue-manual-essay-guides.ts)
-  (cd "$PROJECT_ROOT" && npx tsx scripts/run-manual-essay-guides.ts --limit="${MANUAL_ESSAY_GUIDES_LIMIT}")
+  if [ -n "${MANUAL_ESSAY_GUIDES_LIMIT:-}" ] && [ "${MANUAL_ESSAY_GUIDES_LIMIT}" -gt 0 ] 2>/dev/null; then
+    (cd "$PROJECT_ROOT" && npx tsx scripts/run-manual-essay-guides.ts --limit="${MANUAL_ESSAY_GUIDES_LIMIT}")
+  else
+    (cd "$PROJECT_ROOT" && npx tsx scripts/run-manual-essay-guides.ts --until-empty)
+  fi
   (cd "$PROJECT_ROOT" && npx tsx scripts/audit-manual-essay-guides.ts)
   echo "[railway-cron] OK: manual-essay-guides"
 }

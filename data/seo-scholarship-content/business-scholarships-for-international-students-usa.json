@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Business Scholarships for International Students in the USA",
+  "seo_description": "Discover 196 business scholarships available for international students in the USA. Find funding opportunities tailored for you.",
+  "h1": "Business Scholarships for International Students in the USA",
+  "intro": "Navigating the financial landscape of studying in the USA can be challenging, especially for international students. However, numerous business scholarships are available to help alleviate the financial burden. With a total of 196 scholarships currently open, students can find various funding opportunities tailored to their academic and professional aspirations. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship provide essential financial support, allowing students to focus on their studies and career development. Whether you're pursuing an undergraduate or graduate degree, these scholarships can significantly impact your educational journey.",
+  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited business programs. Some scholarships may require specific academic achievements, while others may consider financial need or community involvement. Application deadlines also vary, so it’s crucial to check each scholarship's requirements. For instance, the Paul and Daisy Soros Fellowships for New Americans is an excellent opportunity for graduate students, while the Razor's Edge Global Scholarship supports undergraduate students. When applying, ensure you have all necessary documents, such as transcripts, recommendation letters, and a personal statement. Start your application early to meet deadlines and increase your chances of securing funding.",
+  "related_intro": "In addition to business scholarships, international students can explore various funding options, including grants, fellowships, and assistantships to support their education.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary documents and application materials.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "International students pursuing business degrees.",
+    "Undergraduate and graduate students seeking financial aid.",
+    "Students looking for merit-based or need-based scholarships."
+  ],
+  "faq": [
+    {
+      "question": "What types of business scholarships are available for international students?",
+      "answer": "There are various types of scholarships, including merit-based, need-based, and those targeting specific demographics or fields of study."
+    },
+    {
+      "question": "How can I find the right scholarship for me?",
+      "answer": "Start by researching scholarships that align with your academic goals and personal background. Utilize scholarship search engines and university resources."
+    },
+    {
+      "question": "Are there scholarships specifically for graduate business students?",
+      "answer": "Yes, many scholarships are tailored for graduate students, such as the Paul and Daisy Soros Fellowships for New Americans."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "business-scholarships-for-international-students-usa",
+    "generatedAt": "2026-04-25T13:21:07.244Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

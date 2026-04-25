@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore Data Science Scholarships for International Students",
+  "seo_description": "Discover 5 data science scholarships available for international students. Apply now to advance your education and career!",
+  "h1": "Data Science Scholarships for International Students",
+  "intro": "Are you an international student aspiring to pursue a career in data science? You’re in luck! There are currently five scholarships designed specifically for students like you. These scholarships not only provide financial assistance but also open doors to networking opportunities and professional growth. Whether you’re interested in coding, computer science education, or innovative data solutions, there’s a scholarship that aligns with your goals. Explore these options to help fund your education and take a significant step towards your future in data science.",
+  "supporting": "To be eligible for these scholarships, applicants typically need to demonstrate academic excellence, a passion for data science, and sometimes, a commitment to community service or leadership. Deadlines vary, so it’s crucial to check each scholarship’s specific requirements and timelines. When applying, ensure your application stands out by highlighting relevant experiences, skills, and your vision for your future in data science. Tailor your essays to reflect your personal journey and how the scholarship will impact your educational path. Don’t forget to gather all necessary documents, including transcripts and letters of recommendation, to strengthen your application.",
+  "related_intro": "In addition to the scholarships listed, there are numerous other funding opportunities available for international students in various fields. Exploring these options can significantly enhance your educational experience.",
+  "how_to_use": [
+    "Review the list of available scholarships.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare your application materials carefully.",
+    "Submit your applications before the deadlines.",
+    "Follow up on your application status if possible."
+  ],
+  "who_for": [
+    "International students pursuing data science degrees.",
+    "Students with a strong academic record.",
+    "Individuals passionate about technology and data analysis."
+  ],
+  "faq": [
+    {
+      "question": "What is the application process for these scholarships?",
+      "answer": "Each scholarship has its own application process, typically involving submission of an application form, essays, and supporting documents."
+    },
+    {
+      "question": "Are there scholarships specifically for undergraduate or graduate students?",
+      "answer": "Yes, some scholarships may be targeted towards undergraduate students, while others are available for graduate students."
+    },
+    {
+      "question": "Can I apply for multiple scholarships at once?",
+      "answer": "Yes, you can apply for multiple scholarships, but ensure you meet the eligibility criteria for each."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "data-science-scholarships-for-international-students",
+    "generatedAt": "2026-04-25T13:22:43.766Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 5,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

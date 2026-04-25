@@ -1,0 +1,43 @@
+{
+  "seo_title": "Top Scholarships for Latin American Students in the USA",
+  "seo_description": "Explore 196 scholarships available for Latin American students pursuing education in the USA. Find opportunities tailored for you.",
+  "h1": "Scholarships for Latin American Students in the USA",
+  "intro": "If you're a Latin American student seeking educational opportunities in the United States, you're in luck. There are currently 196 scholarships designed specifically for students like you. These scholarships can help alleviate the financial burden of tuition and living expenses, allowing you to focus on your studies. From merit-based awards to need-based grants, there are options available for various fields of study and academic levels. Whether you're an undergraduate or graduate student, it's essential to explore these opportunities to maximize your chances of receiving financial support.",
+  "supporting": "Eligibility for these scholarships varies, but many are open to international students from Latin America. Common requirements include a strong academic record, letters of recommendation, and a personal statement. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, are highly competitive and may require additional documentation. Deadlines also vary, so it's crucial to check each scholarship's specific timeline and apply early. To enhance your application, tailor your personal statement to reflect your unique experiences and aspirations. Consider reaching out to previous recipients for insights and tips on crafting a successful application.",
+  "related_intro": "In addition to scholarships, there are various grants and financial aid options available for Latin American students in the USA. Exploring these resources can further support your educational journey.",
+  "how_to_use": [
+    "Research available scholarships tailored for Latin American students.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary documents, including transcripts and recommendation letters.",
+    "Craft a compelling personal statement highlighting your achievements.",
+    "Submit applications before the deadlines."
+  ],
+  "who_for": [
+    "Latin American undergraduate students.",
+    "Latin American graduate students.",
+    "International students seeking financial aid."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available?",
+      "answer": "There are merit-based, need-based, and specific scholarships for various fields of study."
+    },
+    {
+      "question": "How can I find the right scholarships for me?",
+      "answer": "Utilize scholarship search engines and university resources to find scholarships that match your profile."
+    },
+    {
+      "question": "Are there scholarships for specific countries in Latin America?",
+      "answer": "Yes, many scholarships target students from specific Latin American countries."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-latin-american-students-in-usa",
+    "generatedAt": "2026-04-25T13:20:30.250Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

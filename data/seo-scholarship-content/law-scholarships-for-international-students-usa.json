@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Law Scholarships for International Students in the USA",
+  "seo_description": "Discover 196 law scholarships available for international students in the USA. Find funding opportunities to support your legal education.",
+  "h1": "Law Scholarships for International Students in the USA",
+  "intro": "Navigating the financial landscape of higher education can be challenging, especially for international students pursuing law degrees in the USA. Fortunately, there are currently 196 scholarships specifically designed to support international students in their legal studies. These scholarships vary in eligibility criteria, award amounts, and application processes, providing a range of options for students from diverse backgrounds. Whether you are looking for merit-based awards, need-based assistance, or specialized scholarships for specific fields within law, this comprehensive list will help you find the right funding opportunity to achieve your academic goals.",
+  "supporting": "Eligibility for these law scholarships often includes being an international student enrolled in a law program at an accredited institution in the USA. Some scholarships may require specific academic achievements, while others might focus on financial need or community involvement. Deadlines vary, so it’s crucial to check each scholarship’s requirements and apply early. Application tips include preparing a strong personal statement, gathering letters of recommendation, and ensuring all documents are submitted on time. Notable scholarships include the Paul and Daisy Soros Fellowships for New Americans and the DC Tuition Assistance Grant (DCTAG), which can significantly ease the financial burden of law school.",
+  "related_intro": "In addition to law scholarships, international students can explore other funding opportunities such as grants, assistantships, and fellowships that may further support their education.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare required documents and application materials.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "International students pursuing law degrees in the USA.",
+    "Students seeking financial assistance for legal education.",
+    "Individuals looking for merit-based or need-based scholarships."
+  ],
+  "faq": [
+    {
+      "question": "What types of law scholarships are available for international students?",
+      "answer": "There are various types of law scholarships, including merit-based, need-based, and those aimed at specific demographics or fields of law."
+    },
+    {
+      "question": "How can I find more information about each scholarship?",
+      "answer": "You can find detailed information about each scholarship, including eligibility, deadlines, and application procedures, on the respective scholarship websites."
+    },
+    {
+      "question": "Are there scholarships specifically for certain countries?",
+      "answer": "Yes, some scholarships are targeted at students from specific countries or regions, so it's beneficial to research scholarships that cater to your background."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "law-scholarships-for-international-students-usa",
+    "generatedAt": "2026-04-25T13:22:23.290Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

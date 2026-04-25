@@ -1,0 +1,43 @@
+{
+  "seo_title": "Top Scholarships for International PhD Students in STEM Fields",
+  "seo_description": "Explore 196 scholarships specifically for international PhD students in STEM. Find funding opportunities to support your academic journey.",
+  "h1": "Scholarships for International PhD Students in STEM",
+  "intro": "Pursuing a PhD as an international student in STEM can be financially challenging. Fortunately, there are numerous scholarships available specifically designed to support your academic journey. With 196 scholarships listed, ranging from the International Student Scholarship to the Paul and Daisy Soros Fellowships for New Americans, you have a wealth of opportunities at your fingertips. These scholarships not only alleviate financial burdens but also enhance your academic profile and networking opportunities. Whether you are focusing on engineering, biology, or computer science, there are options tailored to your needs. Start exploring today to find the right funding for your PhD studies.",
+  "supporting": "Eligibility for these scholarships varies, but many require you to be an international student enrolled in a STEM program. Some scholarships, like the Vanna Christian Sun Legacy Scholarship, may have specific criteria such as academic excellence or financial need. Deadlines also differ; ensure you check each scholarship's timeline to submit your application on time. When applying, pay close attention to the required documents, which often include transcripts, letters of recommendation, and personal statements. Tailoring your application to highlight your unique experiences and aspirations can significantly enhance your chances of securing funding.",
+  "related_intro": "In addition to scholarships, there are various grants and fellowships available for international PhD students in STEM. Exploring these options can further support your educational goals.",
+  "how_to_use": [
+    "Browse the list of scholarships available.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare required documents like transcripts and essays.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "International students pursuing a PhD in STEM.",
+    "Students seeking financial assistance for their studies.",
+    "Individuals looking to enhance their academic and professional profiles."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international PhD students?",
+      "answer": "There are various scholarships, including merit-based, need-based, and those targeting specific fields within STEM."
+    },
+    {
+      "question": "How can I find the right scholarship for my needs?",
+      "answer": "Review the eligibility criteria, funding amounts, and application requirements to identify scholarships that align with your academic goals."
+    },
+    {
+      "question": "When are the deadlines for these scholarships?",
+      "answer": "Deadlines vary by scholarship; always check the specific scholarship's website for the most accurate information."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-international-phd-students-stem",
+    "generatedAt": "2026-04-25T13:31:55.224Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

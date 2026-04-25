@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Scholarships for International Students at Ivy League Schools",
+  "seo_description": "Discover 196 scholarships available for international students at Ivy League institutions. Find your funding opportunity today!",
+  "h1": "Scholarships for International Students at Ivy League Schools",
+  "intro": "Ivy League schools offer a wealth of opportunities for international students, including 196 scholarships designed to help alleviate the financial burden of higher education. These prestigious institutions recognize the diverse perspectives and talents that international students bring to their campuses. Scholarships such as the International Student Scholarship and the Paul and Daisy Soros Fellowships for New Americans provide significant financial support, making it possible for students from around the globe to pursue their academic dreams. Whether you are looking for merit-based awards or need-based assistance, there are numerous options available to help you succeed at an Ivy League school.",
+  "supporting": "Eligibility for these scholarships varies by program, with some requiring proof of academic excellence, while others may focus on financial need or specific talents. Deadlines also differ, so it’s essential to check each scholarship's requirements carefully. For instance, the Vanna Christian Sun Legacy Scholarship and the Razor's Edge Global Scholarship have specific application periods that you must adhere to. When applying, ensure that you provide all necessary documentation, including transcripts, letters of recommendation, and personal statements that reflect your unique experiences and aspirations. Start your application process early to maximize your chances of securing funding.",
+  "related_intro": "In addition to Ivy League scholarships, there are numerous funding opportunities available through private organizations and government programs that support international students.",
+  "how_to_use": [
+    "Research available scholarships thoroughly.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare your application materials in advance.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "International students seeking financial assistance.",
+    "Students with exceptional academic or extracurricular achievements.",
+    "Individuals looking to study at prestigious Ivy League institutions."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for international students?",
+      "answer": "There are merit-based, need-based, and talent-specific scholarships available for international students at Ivy League schools."
+    },
+    {
+      "question": "How do I apply for these scholarships?",
+      "answer": "Applications typically require academic transcripts, letters of recommendation, and personal statements. Check each scholarship's website for specific instructions."
+    },
+    {
+      "question": "Are there scholarships specifically for graduate students?",
+      "answer": "Yes, many Ivy League schools offer scholarships specifically designed for graduate international students, such as the Paul and Daisy Soros Fellowships."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-international-students-at-ivy-league",
+    "generatedAt": "2026-04-25T13:31:29.190Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

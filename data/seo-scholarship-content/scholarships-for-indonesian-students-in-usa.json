@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Scholarships for Indonesian Students in the USA",
+  "seo_description": "Discover 196 scholarships available for Indonesian students pursuing education in the USA. Find your funding opportunity today!",
+  "h1": "Scholarships for Indonesian Students in the USA",
+  "intro": "Studying in the USA can be a transformative experience for Indonesian students, but financial barriers can often seem daunting. Fortunately, there are 196 scholarships specifically designed to support international students from Indonesia. These scholarships vary in amount, eligibility criteria, and application processes, providing a range of opportunities for students at different educational levels. Whether you are looking for funding for undergraduate, graduate, or specialized programs, this guide will help you navigate the options available to you. From merit-based awards to need-based assistance, the right scholarship can significantly ease the financial burden of studying abroad.",
+  "supporting": "Eligibility for these scholarships typically includes being a citizen of Indonesia, acceptance or enrollment in an accredited U.S. institution, and meeting specific academic or extracurricular criteria. Deadlines vary by scholarship, so it's crucial to check individual requirements. For instance, the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship are popular options, each with unique application processes. To maximize your chances of receiving a scholarship, ensure that you submit a well-crafted application, including personal statements and recommendation letters, by the specified deadlines. Researching each scholarship's requirements thoroughly can help you tailor your application effectively.",
+  "related_intro": "In addition to scholarships, Indonesian students may explore other forms of financial aid, such as grants and assistantships, to further support their studies in the USA.",
+  "how_to_use": [
+    "Browse the list of 196 scholarships available.",
+    "Check eligibility criteria for each scholarship.",
+    "Prepare necessary documents like transcripts and recommendation letters.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status as needed."
+  ],
+  "who_for": [
+    "Indonesian students seeking undergraduate or graduate education in the USA.",
+    "Students looking for financial assistance to study abroad.",
+    "Individuals interested in specific fields of study supported by scholarships."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Indonesian students?",
+      "answer": "There are various types of scholarships, including merit-based, need-based, and program-specific awards."
+    },
+    {
+      "question": "How can I find the right scholarship for my needs?",
+      "answer": "Review eligibility requirements, funding amounts, and application processes for each scholarship to find the best fit."
+    },
+    {
+      "question": "What documents do I need to apply for scholarships?",
+      "answer": "Common documents include academic transcripts, personal statements, and letters of recommendation."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-indonesian-students-in-usa",
+    "generatedAt": "2026-04-25T13:20:21.473Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

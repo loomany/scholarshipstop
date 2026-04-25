@@ -1,0 +1,43 @@
+{
+  "seo_title": "Top Scholarships for Ghanaian Students in the USA",
+  "seo_description": "Explore 196 scholarships available for Ghanaian students pursuing education in the USA. Apply now to secure your future!",
+  "h1": "Scholarships for Ghanaian Students in the USA",
+  "intro": "Studying in the USA can be an enriching experience for Ghanaian students, but the financial burden can be daunting. Fortunately, there are 196 scholarships specifically designed to support international students from Ghana. These scholarships can significantly reduce tuition fees and living costs, making it easier to focus on your studies. From merit-based awards to need-based grants, a variety of options are available to help you achieve your academic goals. Whether you are pursuing undergraduate or graduate studies, there are scholarships tailored to your needs and aspirations.",
+  "supporting": "Eligibility for these scholarships varies, but many are open to Ghanaian students enrolled in accredited institutions in the USA. Common criteria include academic excellence, community involvement, and specific fields of study. Deadlines also vary, so it's crucial to check each scholarship's website for the most accurate information. When applying, ensure that you have all required documents, including transcripts, letters of recommendation, and personal statements. Tailoring your application to highlight your unique experiences and goals can enhance your chances of success. Remember to apply early and keep track of all deadlines to maximize your opportunities.",
+  "related_intro": "In addition to the scholarships listed, there are numerous financial aid options available for international students. Exploring these can further alleviate the cost of studying abroad.",
+  "how_to_use": [
+    "Browse the list of scholarships available for Ghanaian students.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary documents like transcripts and recommendations.",
+    "Submit applications before the deadlines.",
+    "Follow up on your application status if needed."
+  ],
+  "who_for": [
+    "Ghanaian students seeking undergraduate or graduate education in the USA.",
+    "Students with strong academic records and community involvement.",
+    "Individuals looking for financial assistance to study abroad."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available?",
+      "answer": "There are merit-based, need-based, and field-specific scholarships available for Ghanaian students."
+    },
+    {
+      "question": "How do I find the right scholarship for me?",
+      "answer": "Review eligibility criteria, application requirements, and deadlines for each scholarship to find the best fit."
+    },
+    {
+      "question": "Can I apply for multiple scholarships?",
+      "answer": "Yes, you can apply for multiple scholarships to increase your chances of receiving financial aid."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-ghanaian-students-in-usa",
+    "generatedAt": "2026-04-25T13:19:21.030Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}

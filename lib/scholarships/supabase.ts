@@ -27,6 +27,13 @@ export { sanitizeRequirementLines };
  */
 const SCHOLARSHIPS_DB_PAGE_SIZE = 1000;
 
+/**
+ * Smaller page for `fetchActiveScholarshipsForScript` — very large per-row
+ * `description` / JSON fields can produce multi‑MB single responses; a 1000-row page
+ * may be truncated by proxies and fail JSON parse ("Unterminated string...").
+ */
+const SCRIPT_CATALOG_PAGE_SIZE = 300;
+
 const UUID_PARAM_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -190,6 +197,30 @@ export const LIST_CARD_SELECT = LISTING_CARD_SELECT_COLUMNS.join(', ');
  */
 export const ACTIVE_CATALOG_SELECT = [
   ...LISTING_CARD_SELECT_COLUMNS,
+  'provider_mission',
+  'payment_details',
+  'description',
+  'status_text',
+  'institutions_text',
+  'state_territory_text',
+  'ai_match_score',
+  'ai_match_band',
+  'ai_urgency_level',
+  'ai_difficulty_level'
+].join(', ');
+
+const LISTING_CARD_COLUMNS_NO_RAW = LISTING_CARD_SELECT_COLUMNS.filter(
+  (col) => col !== 'raw_data'
+);
+
+/**
+ * Same as {@link ACTIVE_CATALOG_SELECT} but omits `raw_data`. CLI scripts
+ * (keyword SEO, batch generators) only need `catalogUi` to be empty without raw;
+ * including `raw_data` for tens of thousands of rows inflates the HTTP body and
+ * can break JSON parsing or hit proxy limits.
+ */
+export const ACTIVE_CATALOG_SELECT_NO_RAW = [
+  ...LISTING_CARD_COLUMNS_NO_RAW,
   'provider_mission',
   'payment_details',
   'description',
@@ -550,26 +581,34 @@ export async function fetchScholarshipsByCategorySlug(
   return rows.map((row) => mapScholarshipRow(row));
 }
 
+type LoadActiveCatalogOptions = {
+  select?: string;
+  pageSize?: number;
+};
+
 /** Same query as GET /api/scholarships (no category). Shared by Next server client and Node scripts. */
 async function loadPagedActiveScholarships(
-  supabase: SupabaseClient<Database>
+  supabase: SupabaseClient<Database>,
+  options?: LoadActiveCatalogOptions
 ): Promise<Scholarship[]> {
+  const select = options?.select ?? ACTIVE_CATALOG_SELECT;
+  const pageSize = options?.pageSize ?? SCHOLARSHIPS_DB_PAGE_SIZE;
   const rows: ScholarshipRow[] = [];
   let offset = 0;
   for (;;) {
     const { data, error } = await supabase
       .from('scholarships')
-      .select(ACTIVE_CATALOG_SELECT)
+      .select(select)
       .eq('is_active', true)
       .order('ranking_score', { ascending: false, nullsFirst: false })
       .order('updated_at', { ascending: false })
-      .range(offset, offset + SCHOLARSHIPS_DB_PAGE_SIZE - 1);
+      .range(offset, offset + pageSize - 1);
 
     if (error) throw new Error(error.message);
     const batch = (data ?? []) as unknown as ScholarshipRow[];
     rows.push(...batch);
-    if (batch.length < SCHOLARSHIPS_DB_PAGE_SIZE) break;
-    offset += SCHOLARSHIPS_DB_PAGE_SIZE;
+    if (batch.length < pageSize) break;
+    offset += pageSize;
   }
 
   return rows.map((row) => mapScholarshipRow(row));
@@ -597,7 +636,10 @@ export async function fetchActiveScholarshipsForScript(): Promise<Scholarship[]>
   }
   const { createClient } = await import('@supabase/supabase-js');
   const supabase = createClient<Database>(url, key);
-  return loadPagedActiveScholarships(supabase);
+  return loadPagedActiveScholarships(supabase, {
+    select: ACTIVE_CATALOG_SELECT_NO_RAW,
+    pageSize: SCRIPT_CATALOG_PAGE_SIZE
+  });
 }
 
 /**

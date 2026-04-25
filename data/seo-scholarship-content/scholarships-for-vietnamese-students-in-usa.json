@@ -1,0 +1,43 @@
+{
+  "seo_title": "Explore 196 Scholarships for Vietnamese Students in the USA",
+  "seo_description": "Discover 196 scholarships available for Vietnamese students pursuing education in the USA. Apply today for financial support!",
+  "h1": "Scholarships for Vietnamese Students in the USA",
+  "intro": "If you're a Vietnamese student looking to study in the USA, you're in luck! There are currently 196 scholarships specifically designed to support your educational journey. These scholarships range from merit-based awards to need-based assistance, catering to various fields of study and academic levels. Whether you're an undergraduate or a graduate student, opportunities like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship can help alleviate the financial burden of studying abroad. Take the first step towards your American dream by exploring these options and applying for the scholarships that best fit your profile.",
+  "supporting": "Eligibility for these scholarships varies, but many are open to both undergraduate and graduate students from Vietnam. Some scholarships, like the Razor's Edge Global Scholarship and the Paul and Daisy Soros Fellowships for New Americans, may require specific academic achievements or community involvement. Deadlines for applications can range throughout the year, so it’s crucial to check individual scholarship requirements. To increase your chances of success, tailor your application materials to highlight your unique experiences and aspirations. Be sure to gather all necessary documents, such as transcripts and letters of recommendation, well in advance of the deadlines.",
+  "related_intro": "In addition to scholarships, there are various grants and financial aid options available for Vietnamese students in the USA. Exploring these resources can further enhance your educational experience.",
+  "how_to_use": [
+    "Browse the list of available scholarships.",
+    "Check eligibility requirements for each scholarship.",
+    "Prepare necessary documents like transcripts and essays.",
+    "Submit applications before the deadlines.",
+    "Follow up with scholarship organizations for updates."
+  ],
+  "who_for": [
+    "Vietnamese students pursuing higher education in the USA.",
+    "Undergraduate and graduate students seeking financial support.",
+    "Students with diverse academic interests and backgrounds."
+  ],
+  "faq": [
+    {
+      "question": "What types of scholarships are available for Vietnamese students?",
+      "answer": "There are merit-based, need-based, and specific scholarships for various fields of study."
+    },
+    {
+      "question": "How can I find scholarships that I am eligible for?",
+      "answer": "Use scholarship search engines and check university websites for specific opportunities."
+    },
+    {
+      "question": "What documents do I need to apply for scholarships?",
+      "answer": "Typically, you'll need transcripts, recommendation letters, and personal statements."
+    }
+  ],
+  "_meta": {
+    "canonicalPath": "scholarships-for-vietnamese-students-in-usa",
+    "generatedAt": "2026-04-25T13:20:04.121Z",
+    "promptVersion": "keyword-seo-v1",
+    "scholarshipsCount": 196,
+    "bodySource": "ai",
+    "generationMode": "rewrite",
+    "model": "gpt-4o-mini"
+  }
+}
