@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-25T13:31:55.228Z",
+  "generatedAt": "2026-04-25T13:36:46.549Z",
   "promptVersion": "v1",
   "routes": [
     {
@@ -21821,6 +21821,32 @@
       "metaTitleFallback": "Scholarships for international PhD students stem | ScholarshipTop",
       "metaDescriptionFallback": "Browse scholarships for international phd students stem in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
       "notes": "Generated from keyword topic line 225."
+    },
+    {
+      "canonicalPath": "ai-scholarship-matching-for-international-students",
+      "seoId": "keyword:ai-scholarship-matching-for-international-students",
+      "pageKind": "manifest",
+      "pageType": "single",
+      "legacyBaseSlugs": [
+        "international-students"
+      ],
+      "minCountSnapshot": 196,
+      "scholarshipsCount": 196,
+      "score": 100,
+      "indexable": true,
+      "source": "manual",
+      "priorityBucket": "high",
+      "manualLockedCopy": true,
+      "manualLockedIndexable": true,
+      "lastEvaluatedAt": "2026-04-25T13:15:37.798Z",
+      "qualityBucket": "GOOD",
+      "reasonCodes": [
+        "good_route"
+      ],
+      "h1Fallback": "AI scholarship matching for international students",
+      "metaTitleFallback": "AI scholarship matching for international students | ScholarshipTop",
+      "metaDescriptionFallback": "Browse ai scholarship matching for international students in the USA. Compare deadlines, award amounts, eligibility, and official application links.",
+      "notes": "Generated from keyword topic line 239."
     }
   ]
 }
