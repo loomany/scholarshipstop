@@ -208,8 +208,8 @@ task_manual_essay_guides() {
 }
 
 task_all() {
-  task_seo_url_inspection
-  task_google_indexing_flush
+  # Google indexing/inspection moved to a dedicated worker container.
+  # Keep `all` focused on non-indexing workloads for this service.
   task_enrich_providers
   task_essay_pipeline
   task_manual_essay_guides

@@ -59,6 +59,7 @@ import {
   ADMIN_NOTIFY_KEYS,
   type AdminNotifyCategory
 } from '@/lib/telegram/adminNotificationRouting';
+import { getGoogleIndexingQueueSummary } from '@/lib/seo/googleIndexingQueue';
 import { fetchSearchAppearancePageCount } from '@/lib/seo/googleSearchConsole';
 import { getSeoDripFeedSnapshot } from '@/lib/seo/seoDripFeed';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
@@ -2852,7 +2853,10 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         );
         return;
       }
-      const result = await fetchSearchAppearancePageCount({ days: 30 });
+      const [result, queue] = await Promise.all([
+        fetchSearchAppearancePageCount({ days: 30 }),
+        getGoogleIndexingQueueSummary()
+      ]);
       if (!result.ok) {
         await sendTelegramMessage(
           user.telegram_chat_id,
@@ -2861,9 +2865,20 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         );
         return;
       }
+      const lines = [
+        '📊 Статистика SEO',
+        `Страниц в поиске за 30 дней: ${result.count}`,
+        `Период Search Console: ${result.startDate} → ${result.endDate}`,
+        '',
+        'Очередь Google Indexing API:',
+        `• pending: ${queue.pending}`,
+        `• processed: ${queue.processed}`,
+        `• failed: ${queue.failed}`,
+        `• total: ${queue.total}`
+      ];
       await sendTelegramMessage(
         user.telegram_chat_id,
-        `📊 Статистика SEO: Всего страниц в поиске за последние 30 дней: ${result.count}`,
+        lines.join('\n'),
         buildMainKeyboard()
       );
       return;
