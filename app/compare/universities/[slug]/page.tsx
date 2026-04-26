@@ -10,6 +10,7 @@ import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { fetchCompareRelatedContent } from '@/lib/seo/compareRelatedContent';
 import { parseCompareSources } from '@/lib/seo/compareSources';
+import { resolveAiMetaDescription } from '@/lib/seo/aiMetaDescriptionService';
 import { fetchPublishedStateCompareSlugByCodes } from '@/lib/seo/stateCompareServer';
 import { fetchActiveScholarshipsByInstitutionIdForListing } from '@/lib/scholarships/supabase';
 import {
@@ -71,9 +72,22 @@ export async function generateMetadata({
   const title =
     row.page.meta_title?.trim() ||
     `${row.instA.name} vs ${row.instB.name}: Scholarship Comparison ${COMPARE_YEAR}`;
-  const description =
+  const fallbackDescription =
     row.page.meta_description?.trim() ||
     `Compare scholarships and aid signals for ${row.instA.name} and ${row.instB.name}.`;
+  const description =
+    (await resolveAiMetaDescription({
+      canonicalPath: path,
+      routeKind: 'compare_university',
+      title,
+      fallbackDescription,
+      context: {
+        slug: slug.trim().toLowerCase(),
+        institutionA: row.instA.name,
+        institutionB: row.instB.name
+      },
+      priority: 6
+    })) ?? fallbackDescription;
   return {
     title,
     description,

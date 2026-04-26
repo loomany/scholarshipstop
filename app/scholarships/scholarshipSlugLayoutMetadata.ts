@@ -7,6 +7,7 @@ import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import { readScholarshipSeoContent } from '@/lib/scholarships/scholarshipSeoContentStore';
 import { fetchSeoHubContentMeta } from '@/lib/seo/seoHubPublicRead';
 import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
+import { resolveAiMetaDescription } from '@/lib/seo/aiMetaDescriptionService';
 import {
   getSeoListingEntry,
   resolveScholarshipSlugPath
@@ -81,8 +82,17 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       const path = `/scholarships/${resolved.canonicalPath}`;
       const seo = readScholarshipSeoContent(resolved.canonicalPath);
       const title = seo?.seo_title ?? entry.h1Fallback;
-      const description =
+      const fallbackDescription =
         seo?.seo_description ?? entry.metaDescriptionFallback;
+      const description =
+        (await resolveAiMetaDescription({
+          canonicalPath: path,
+          routeKind: 'scholarship_listing',
+          title,
+          fallbackDescription,
+          context: { canonicalPath: resolved.canonicalPath, source: 'redirect_canonical' },
+          priority: 4
+        })) ?? fallbackDescription;
       const meta: Metadata = {
         title,
         description,
@@ -125,7 +135,16 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     const path = `/scholarships/${longTail.slug}`;
     const seo = readLongTailSeoBundle(longTail.slug);
     const title = seo?.seo_title ?? longTail.metaTitle;
-    const description = seo?.seo_description ?? longTail.metaDescription;
+    const fallbackDescription = seo?.seo_description ?? longTail.metaDescription;
+    const description =
+      (await resolveAiMetaDescription({
+        canonicalPath: path,
+        routeKind: 'scholarship_listing',
+        title,
+        fallbackDescription,
+        context: { canonicalPath: longTail.slug, source: 'legacy_long_tail' },
+        priority: 3
+      })) ?? fallbackDescription;
     const meta: Metadata = {
       title,
       description,
@@ -161,10 +180,19 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       seo?.seo_title?.trim() ||
       hubMeta?.title?.trim() ||
       resolved.entry.h1Fallback;
-    const description =
+    const fallbackDescription =
       seo?.seo_description?.trim() ||
       hubMeta?.meta_description?.trim() ||
       resolved.entry.metaDescriptionFallback;
+    const description =
+      (await resolveAiMetaDescription({
+        canonicalPath: path,
+        routeKind: 'scholarship_listing',
+        title,
+        fallbackDescription,
+        context: { canonicalPath: resolved.canonicalPath, source: 'manifest_seo' },
+        priority: 5
+      })) ?? fallbackDescription;
     const meta: Metadata = {
       title,
       description,
@@ -201,8 +229,21 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
   }
 
   const title = `${record.title} 2026: Eligibility, Deadline, Award Amount`;
-  const description = metaDescription(record);
+  const fallbackDescription = metaDescription(record);
   const path = scholarshipPublicPath(record);
+  const description =
+    (await resolveAiMetaDescription({
+      canonicalPath: path,
+      routeKind: 'scholarship_detail',
+      title,
+      fallbackDescription,
+      context: {
+        scholarshipId: record.id,
+        scholarshipTitle: record.title,
+        country: record.country ?? null
+      },
+      priority: 7
+    })) ?? fallbackDescription;
 
   const meta: Metadata = {
     title,

@@ -9,6 +9,7 @@
 #   bash scripts/railway-cron.sh enrich-providers
 #   bash scripts/railway-cron.sh essay-pipeline
 #   bash scripts/railway-cron.sh manual-essay-guides
+#   bash scripts/railway-cron.sh seo-meta-generate
 #   Optional: MANUAL_ESSAY_GUIDES_LIMIT=5 caps how many queue items to process; unset = drain all pending
 #   bash scripts/railway-cron.sh seo-daily-telegram   # daily digest of new SEO hub pages (Telegram)
 #
@@ -207,6 +208,16 @@ task_manual_essay_guides() {
   echo "[railway-cron] OK: manual-essay-guides"
 }
 
+task_seo_meta_generate() {
+  echo "[railway-cron] Starting task: seo-meta-generate (local tsx)"
+  export NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-$BASE_URL}"
+  require_env NEXT_PUBLIC_SUPABASE_URL
+  require_env SUPABASE_SERVICE_ROLE_KEY
+  require_env OPENAI_API_KEY
+  require_npm_or_exit || return 0
+  run_tsx_cron "cron-seo-meta-generate" "scripts/cron-seo-meta-generate.ts"
+}
+
 task_all() {
   # Google indexing/inspection moved to a dedicated worker container.
   # Keep `all` focused on non-indexing workloads for this service.
@@ -217,7 +228,7 @@ task_all() {
 
 usage() {
   echo "Usage: $0 <task>"
-  echo "Tasks: all | seo-url-inspection | google-indexing-flush | grant-notifications | seo-daily-telegram | weekly-free-digest | enrich-providers | essay-pipeline | manual-essay-guides"
+  echo "Tasks: all | seo-url-inspection | google-indexing-flush | grant-notifications | seo-daily-telegram | weekly-free-digest | enrich-providers | essay-pipeline | manual-essay-guides | seo-meta-generate"
 }
 
 main() {
@@ -233,6 +244,7 @@ main() {
     enrich-providers) task_enrich_providers ;;
     essay-pipeline) task_essay_pipeline ;;
     manual-essay-guides) task_manual_essay_guides ;;
+    seo-meta-generate) task_seo_meta_generate ;;
     -h|--help|help) usage; exit 0 ;;
     *)
       echo "[railway-cron] Unknown task: $cmd" >&2

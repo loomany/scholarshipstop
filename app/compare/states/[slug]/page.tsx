@@ -10,6 +10,7 @@ import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { fetchCompareRelatedContent } from '@/lib/seo/compareRelatedContent';
 import { parseCompareSources } from '@/lib/seo/compareSources';
+import { resolveAiMetaDescription } from '@/lib/seo/aiMetaDescriptionService';
 import {
   fetchPublishedStateComparePageBySlug,
   fetchStateComparisonDataRpc,
@@ -154,9 +155,22 @@ export async function generateMetadata({
   const title =
     row.page.meta_title?.trim() ||
     `${row.stateA.name} vs ${row.stateB.name}: Scholarship Climate ${COMPARE_YEAR}`;
-  const description =
+  const fallbackDescription =
     row.page.meta_description?.trim() ||
     `Compare scholarship climate, grant volume, and top universities in ${row.stateA.name} and ${row.stateB.name}.`;
+  const description =
+    (await resolveAiMetaDescription({
+      canonicalPath: path,
+      routeKind: 'compare_state',
+      title,
+      fallbackDescription,
+      context: {
+        slug: slug.trim().toLowerCase(),
+        stateA: row.stateA.name,
+        stateB: row.stateB.name
+      },
+      priority: 6
+    })) ?? fallbackDescription;
   return {
     title,
     description,
