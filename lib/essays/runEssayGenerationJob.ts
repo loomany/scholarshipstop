@@ -5,8 +5,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { Database, Json } from '@/types_db';
 import {
-  essayIndexingUrl,
-  pingGoogleIndexingDirect
+  enqueueGoogleIndexingUrls,
+  essayIndexingUrl
 } from '@/lib/seo/googleIndexingQueue';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import {
@@ -32,6 +32,27 @@ import { runSeoPublishGuardWarnOnly } from '@/lib/seo/publishGuardRunner';
 const FIRST_THREE_ESSAYS_PAGES_WINDOW = 36;
 const SHORTAGE_ALERT_COOLDOWN_MINUTES = 180;
 let lastReusableHeroShortageAlertAt = 0;
+
+function enqueuePublishedEssayIndexingUrl(slug: string, source: string): void {
+  const url = essayIndexingUrl(slug);
+  void enqueueGoogleIndexingUrls({
+    urls: [url],
+    kind: 'essay',
+    source
+  })
+    .then((r) => {
+      if (r.enqueued > 0) {
+        console.log(`[google-indexing-queue] enqueued url=${url}`);
+      }
+    })
+    .catch((e) => {
+      console.warn(
+        '[google-indexing-queue] enqueue failed',
+        url,
+        e instanceof Error ? e.message : String(e)
+      );
+    });
+}
 
 export function buildGrantCategoryHaystack(input: {
   category: string | null;
@@ -765,9 +786,7 @@ async function processResumeAwaitingHeroJob(
         updated_at: new Date().toISOString()
       })
       .eq('id', queueId);
-    void pingGoogleIndexingDirect(essayIndexingUrl(essay.slug)).catch(() => {
-      /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
-    });
+    enqueuePublishedEssayIndexingUrl(essay.slug, 'essay-hub:reuse-hero-published');
     return { outcome: 'published', essaySlug: essay.slug, queueId };
   }
 
@@ -818,9 +837,7 @@ async function processResumeAwaitingHeroJob(
       })
       .eq('id', queueId);
 
-    void pingGoogleIndexingDirect(essayIndexingUrl(essay.slug)).catch(() => {
-      /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
-    });
+    enqueuePublishedEssayIndexingUrl(essay.slug, 'essay-hub:fal-hero-published');
 
     return { outcome: 'published', essaySlug: essay.slug, queueId };
   } catch (e) {
@@ -1094,9 +1111,7 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
         })
         .eq('id', queueId);
       if (quErr) throw new Error(quErr.message);
-      void pingGoogleIndexingDirect(essayIndexingUrl(slug)).catch(() => {
-        /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
-      });
+      enqueuePublishedEssayIndexingUrl(slug, 'essay-hub:reuse-body-published');
       return { ok: true, essaySlug: slug, queueId, phase: 'published' };
     }
 
@@ -1184,9 +1199,7 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
       .eq('id', queueId);
     if (quErr) throw new Error(quErr.message);
 
-    void pingGoogleIndexingDirect(essayIndexingUrl(slug)).catch(() => {
-      /* pingGoogleIndexingDirect logs errors; swallow rejection defensively */
-    });
+    enqueuePublishedEssayIndexingUrl(slug, 'essay-hub:fal-body-published');
 
     return { ok: true, essaySlug: slug, queueId, phase: 'published' };
   } catch (e) {

@@ -4,8 +4,8 @@ import OpenAI from 'openai';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 import {
-  essayIndexingUrl,
-  pingGoogleIndexingDirect
+  enqueueGoogleIndexingUrls,
+  essayIndexingUrl
 } from '@/lib/seo/googleIndexingQueue';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { runSeoPublishGuardWarnOnly } from '@/lib/seo/publishGuardRunner';
@@ -353,9 +353,24 @@ async function processOne(supabase: SupabaseClient<Database>): Promise<'publishe
       .eq('id', row.id);
     if (error) throw new Error(error.message);
 
-    void pingGoogleIndexingDirect(essayIndexingUrl(slug)).catch(() => {
-      /* Google Indexing logs errors internally; keep worker moving. */
-    });
+    const essayUrl = essayIndexingUrl(slug);
+    void enqueueGoogleIndexingUrls({
+      urls: [essayUrl],
+      kind: 'essay',
+      source: 'manual-essay-guides:published'
+    })
+      .then((r) => {
+        if (r.enqueued > 0) {
+          console.log(`[google-indexing-queue] enqueued url=${essayUrl}`);
+        }
+      })
+      .catch((e) => {
+        console.warn(
+          '[google-indexing-queue] enqueue failed',
+          essayUrl,
+          e instanceof Error ? e.message : String(e)
+        );
+      });
     console.log(`published manual essay: ${slug}`);
     return 'published';
   } catch (error) {
