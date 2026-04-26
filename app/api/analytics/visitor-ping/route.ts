@@ -17,6 +17,14 @@ const UUID_V4_RE =
 const VIEW_DEDUP_MS = 30_000;
 const LEAVE_DEDUP_MS = 5_000;
 
+function isMissingVisitorPageViewsColumnError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const e = error as { code?: string; message?: string };
+  if (e.code === '42703') return true;
+  const msg = (e.message ?? '').toLowerCase();
+  return msg.includes('full_url') || msg.includes('event_source') || msg.includes('column');
+}
+
 type Body = {
   visitor_id?: unknown;
   landing_url?: unknown;
@@ -156,13 +164,25 @@ export async function POST(request: Request) {
       }
     }
 
-    const { error: insErr } = await db.from('visitor_page_views').insert({
+    let { error: insErr } = await db.from('visitor_page_views').insert({
       visitor_id: visitorId,
       path: landingPath || '/',
       full_url,
       event_source: 'leave',
       kind: 'leave'
     });
+    // Backward-compat: DB may still be on legacy schema without full_url/event_source.
+    if (insErr && isMissingVisitorPageViewsColumnError(insErr)) {
+      console.warn(
+        '[analytics/visitor-ping] legacy visitor_page_views schema detected for leave insert; retrying without full_url/event_source'
+      );
+      const retry = await db.from('visitor_page_views').insert({
+        visitor_id: visitorId,
+        path: landingPath || '/',
+        kind: 'leave'
+      });
+      insErr = retry.error;
+    }
     if (insErr) {
       console.error('[analytics/visitor-ping] leave insert error', insErr);
       return NextResponse.json({ error: 'Insert failed' }, { status: 500 });
@@ -186,13 +206,25 @@ export async function POST(request: Request) {
     }
   }
 
-  const { error: viewErr } = await db.from('visitor_page_views').insert({
+  let { error: viewErr } = await db.from('visitor_page_views').insert({
     visitor_id: visitorId,
     path: landingPath || '/',
     full_url,
     event_source: eventSource,
     kind: 'view'
   });
+  // Backward-compat: DB may still be on legacy schema without full_url/event_source.
+  if (viewErr && isMissingVisitorPageViewsColumnError(viewErr)) {
+    console.warn(
+      '[analytics/visitor-ping] legacy visitor_page_views schema detected for view insert; retrying without full_url/event_source'
+    );
+    const retry = await db.from('visitor_page_views').insert({
+      visitor_id: visitorId,
+      path: landingPath || '/',
+      kind: 'view'
+    });
+    viewErr = retry.error;
+  }
   if (viewErr) {
     console.error('[analytics/visitor-ping] view insert error', viewErr);
     return NextResponse.json({ error: 'Insert failed' }, { status: 500 });

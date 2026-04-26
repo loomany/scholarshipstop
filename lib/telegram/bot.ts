@@ -186,6 +186,14 @@ const MAIN_MENU_REPLY = 'Main menu — pick your next step.';
 const VISITOR_ID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+function isMissingVisitorPageViewsColumnError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const e = error as { code?: string; message?: string };
+  if (e.code === '42703') return true;
+  const msg = (e.message ?? '').toLowerCase();
+  return msg.includes('full_url') || msg.includes('event_source') || msg.includes('column');
+}
+
 function getTelegramBotToken() {
   return process.env.TELEGRAM_BOT_TOKEN?.trim() || '';
 }
@@ -1929,10 +1937,35 @@ async function sendAdminUserAudit(
     .order('seen_at', { ascending: false })
     .limit(80);
 
+  let pageViews = (pageViewsRaw ?? []) as VisitorPageViewRow[];
   if (pvErr) {
-    console.error('[telegram] visitor_page_views select', pvErr);
+    if (isMissingVisitorPageViewsColumnError(pvErr)) {
+      console.warn(
+        '[telegram] visitor_page_views legacy schema detected; retrying select without full_url/event_source'
+      );
+      const { data: legacyPageViewsRaw, error: legacyErr } = await (admin as any)
+        .from('visitor_page_views')
+        .select('path, kind, seen_at')
+        .eq('visitor_id', visitorId)
+        .order('seen_at', { ascending: false })
+        .limit(80);
+      if (legacyErr) {
+        console.error('[telegram] visitor_page_views legacy select failed', legacyErr);
+      } else {
+        pageViews = ((legacyPageViewsRaw ?? []) as Array<{
+          path: string;
+          kind: string;
+          seen_at: string;
+        }>).map((row) => ({
+          ...row,
+          event_source: null,
+          full_url: null
+        }));
+      }
+    } else {
+      console.error('[telegram] visitor_page_views select', pvErr);
+    }
   }
-  const pageViews = (pageViewsRaw ?? []) as VisitorPageViewRow[];
 
   const registeredUserId =
     attribution && typeof attribution.user_id === 'string' ? attribution.user_id : null;
