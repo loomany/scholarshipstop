@@ -27,6 +27,7 @@ import {
 import type { FalImageAttemptResult } from '@/lib/fal/falAttemptTypes';
 import { postFluxDevImageOnce } from '@/lib/fal/postFluxDevImageOnce';
 import { notifyEnvTelegramAdminsPlainText } from '@/lib/telegram/bot';
+import { runSeoPublishGuardWarnOnly } from '@/lib/seo/publishGuardRunner';
 
 const FIRST_THREE_ESSAYS_PAGES_WINDOW = 36;
 const SHORTAGE_ALERT_COOLDOWN_MINUTES = 180;
@@ -967,9 +968,21 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
     );
     /** If none pass HEAD/GET checks, publish with `sources: []` — do not block the essay. */
 
-    const normalizedTitle = enforceEssayTitle(parsed.title ?? '', scholarshipTitle);
-    const normalizedMeta = enforceEssayMeta(parsed.meta_description ?? '', scholarshipTitle);
+    let normalizedTitle = enforceEssayTitle(parsed.title ?? '', scholarshipTitle);
+    let normalizedMeta = enforceEssayMeta(parsed.meta_description ?? '', scholarshipTitle);
     const faqJson = enforceEssayFaq(parsed.faq);
+
+    const essayGuard = await runSeoPublishGuardWarnOnly({
+      source: 'runEssayGenerationJob',
+      payload: {
+        type: 'essay',
+        url: essayHubArticlePath(baseSlug),
+        title: normalizedTitle,
+        metaDescription: normalizedMeta
+      }
+    });
+    normalizedTitle = essayGuard.normalized.title;
+    normalizedMeta = essayGuard.normalized.metaDescription;
 
     const { count: publishedBefore, error: cntErr } = await supabase
       .from('essays')

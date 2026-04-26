@@ -37,6 +37,7 @@ import {
 import type { AnchorSuggestion } from "../lib/types.js";
 import type { TopicFailureClass, UploadedImageResult } from "../lib/supabase.js";
 import { countWords } from "../lib/markdown.js";
+import { runSeoPublishGuardWarnOnlyLocal } from "../seo/prePublishSeoGuard.js";
 
 type JobStage =
   | "picking_topic"
@@ -1130,6 +1131,26 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
         metricsDebug
       });
     }
+
+    const hadMetaTitle = Boolean((article.meta_title ?? "").trim());
+    const seoDisplayTitle =
+      (article.meta_title ?? "").trim() || (article.title ?? "").trim() || "";
+    const seoMetaDescription = (article.meta_description ?? "").trim() || "";
+    const seoGuard = await runSeoPublishGuardWarnOnlyLocal({
+      source: "runContentJob",
+      payload: {
+        type: "article",
+        url: `/resources/${encodeURIComponent(article.slug)}`,
+        title: seoDisplayTitle,
+        metaDescription: seoMetaDescription
+      }
+    });
+    if (hadMetaTitle) {
+      article.meta_title = seoGuard.normalized.title;
+    } else {
+      article.title = seoGuard.normalized.title;
+    }
+    article.meta_description = seoGuard.normalized.metaDescription;
 
     const schemaJson = {
       "@context": "https://schema.org",

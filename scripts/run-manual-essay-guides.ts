@@ -7,6 +7,8 @@ import {
   essayIndexingUrl,
   pingGoogleIndexingDirect
 } from '@/lib/seo/googleIndexingQueue';
+import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
+import { runSeoPublishGuardWarnOnly } from '@/lib/seo/publishGuardRunner';
 import {
   filterReachableHighAuthoritySources,
   type EssaySourceItem
@@ -303,10 +305,21 @@ async function processOne(supabase: SupabaseClient<Database>): Promise<'publishe
       { max: 6 }
     );
     const heroUrl = await pickReusableHeroUrl(supabase, row.hub_distribution_rank);
-    const normalizedTitle = enforceTitle(parsed.title ?? '', row.topic);
-    const normalizedMeta = enforceMeta(parsed.meta_description ?? '', row.topic);
+    let normalizedTitle = enforceTitle(parsed.title ?? '', row.topic);
+    let normalizedMeta = enforceMeta(parsed.meta_description ?? '', row.topic);
     const normalizedFaq = enforceFaq(parsed.faq);
     const baseSlug = row.slug?.trim() || parsed.title || row.topic;
+    const manualGuard = await runSeoPublishGuardWarnOnly({
+      source: 'run-manual-essay-guides',
+      payload: {
+        type: 'essay',
+        url: essayHubArticlePath(String(baseSlug)),
+        title: normalizedTitle,
+        metaDescription: normalizedMeta
+      }
+    });
+    normalizedTitle = manualGuard.normalized.title;
+    normalizedMeta = manualGuard.normalized.metaDescription;
     const { id: essayId, slug } = await insertEssayRowWithSlugRetry(
       supabase,
       baseSlug,
