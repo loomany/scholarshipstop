@@ -121,6 +121,88 @@ type GeneratedPayload = {
   candidate_sources: EssaySourceItem[];
 };
 
+function normalizeText(v: string): string {
+  return v.replace(/\s+/g, ' ').trim();
+}
+
+function fitLen(v: string, min: number, max: number, tail: string): string {
+  let out = normalizeText(v);
+  if (out.length > max) out = `${out.slice(0, max - 1).trimEnd()}…`;
+  if (out.length < min) {
+    out = normalizeText(`${out} ${tail}`);
+    if (out.length > max) out = `${out.slice(0, max - 1).trimEnd()}…`;
+  }
+  return out;
+}
+
+function enforceEssayTitle(
+  rawTitle: string,
+  scholarshipTitle: string
+): string {
+  const base =
+    normalizeText(rawTitle) ||
+    `How to Write a Winning Essay for ${scholarshipTitle} USA 2026`;
+  return fitLen(
+    base,
+    30,
+    65,
+    'Apply in USA 2026 with a focused plan.'
+  );
+}
+
+function enforceEssayMeta(
+  rawMeta: string,
+  scholarshipTitle: string
+): string {
+  const base =
+    normalizeText(rawMeta) ||
+    `${scholarshipTitle} essay guide for USA 2026 with structure tips, strong examples, and a clear checklist. Start your application draft today.`;
+  return fitLen(base, 120, 160, 'Use this guide to draft, revise, and apply with confidence.');
+}
+
+function enforceEssayFaq(
+  rawFaq: unknown
+): { question: string; answer: string }[] {
+  const base = Array.isArray(rawFaq)
+    ? rawFaq
+        .map((item) => {
+          if (!item || typeof item !== 'object') return null;
+          const rec = item as Record<string, unknown>;
+          const question = typeof rec.question === 'string' ? normalizeText(rec.question) : '';
+          const answer = typeof rec.answer === 'string' ? normalizeText(rec.answer) : '';
+          if (!question || !answer) return null;
+          return { question, answer };
+        })
+        .filter((x): x is { question: string; answer: string } => Boolean(x))
+    : [];
+  const defaults = [
+    {
+      question: 'Who is eligible to apply for this scholarship essay?',
+      answer:
+        'Eligibility is defined by the scholarship requirements. Review academic, residency, and document criteria before drafting your essay.'
+    },
+    {
+      question: 'When should I start before the scholarship deadline?',
+      answer:
+        'Start early and plan at least two revision rounds before the deadline. This gives time to improve structure, clarity, and personal impact.'
+    },
+    {
+      question: 'What is the best application process for essay submission?',
+      answer:
+        'Match your essay to prompt requirements, follow formatting rules, and submit through official channels with all required materials.'
+    }
+  ];
+  return [...base, ...defaults].slice(0, 3);
+}
+
+function requireGpt54EssayModel(model: string): void {
+  if (model !== 'gpt-5.4') {
+    throw new Error(
+      `ESSAY_HUB_OPENAI_MODEL must be gpt-5.4, received "${model || 'unset'}"`
+    );
+  }
+}
+
 type FalHeroAttemptResult = FalImageAttemptResult;
 
 /**
@@ -853,8 +935,10 @@ Return **only** a JSON object with exactly these keys:
 
 Do not promise admission, awards, or outcomes. No placeholder brackets like [insert name].`;
 
+    const essayModel = process.env.ESSAY_HUB_OPENAI_MODEL?.trim() || '';
+    requireGpt54EssayModel(essayModel);
     const completion = await openai.chat.completions.create({
-      model: process.env.ESSAY_HUB_OPENAI_MODEL?.trim() || 'gpt-4o-mini',
+      model: essayModel,
       temperature: 0.45,
       response_format: { type: 'json_object' },
       messages: [
@@ -883,7 +967,9 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
     );
     /** If none pass HEAD/GET checks, publish with `sources: []` — do not block the essay. */
 
-    const faqJson = Array.isArray(parsed.faq) ? parsed.faq : [];
+    const normalizedTitle = enforceEssayTitle(parsed.title ?? '', scholarshipTitle);
+    const normalizedMeta = enforceEssayMeta(parsed.meta_description ?? '', scholarshipTitle);
+    const faqJson = enforceEssayFaq(parsed.faq);
 
     const { count: publishedBefore, error: cntErr } = await supabase
       .from('essays')
@@ -917,8 +1003,8 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
         baseSlug,
         (s) => ({
           slug: s,
-          title: parsed.title.trim(),
-          meta_description: parsed.meta_description?.trim() || null,
+          title: normalizedTitle,
+          meta_description: normalizedMeta,
           content_html: parsed.content_html.trim(),
           hero_image_url: null,
           hero_is_real: false,
@@ -969,8 +1055,8 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
         baseSlug,
         (s) => ({
           slug: s,
-          title: parsed.title.trim(),
-          meta_description: parsed.meta_description?.trim() || null,
+          title: normalizedTitle,
+          meta_description: normalizedMeta,
           content_html: parsed.content_html.trim(),
           hero_image_url: reuseHeroUrl,
           hero_is_real: true,
@@ -1043,8 +1129,8 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
         .from('essays')
         .insert({
           slug: candidateSlug,
-          title: parsed.title.trim(),
-          meta_description: parsed.meta_description?.trim() || null,
+          title: normalizedTitle,
+          meta_description: normalizedMeta,
           content_html: parsed.content_html.trim(),
           hero_image_url: publicHeroUrl,
           hero_is_real: true,

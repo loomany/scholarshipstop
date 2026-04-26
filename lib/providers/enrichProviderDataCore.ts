@@ -14,6 +14,8 @@ export type ProviderEnrichmentResult = {
 };
 
 const VALID_US_STATE_CODES = new Set(Object.keys(US_STATE_CODE_TO_NAME));
+const PROVIDER_META_MIN = 120;
+const PROVIDER_META_MAX = 160;
 
 function normalizeEnrichedState(raw: unknown): string | null {
   if (raw === null || raw === undefined) return null;
@@ -94,7 +96,58 @@ function parseEnrichmentJson(text: string): ProviderEnrichmentResult | null {
 
   const state = normalizeEnrichedState(o.state);
 
-  return { description, faq: faqOut, sources: sourcesOut, state };
+  return {
+    description: normalizeProviderDescriptionForSeo(description),
+    faq: ensureProviderFaqMinimum(faqOut),
+    sources: sourcesOut,
+    state
+  };
+}
+
+function normalizeProviderDescriptionForSeo(input: string | null): string | null {
+  if (!input) return null;
+  let out = input.replace(/\s+/g, ' ').trim();
+  if (out.length > PROVIDER_META_MAX) {
+    out = out.slice(0, PROVIDER_META_MAX - 1).trimEnd() + '…';
+  }
+  if (out.length < PROVIDER_META_MIN) {
+    out = `${out} Review active scholarships, eligibility details, and official application routes before applying.`;
+    out = out.replace(/\s+/g, ' ').trim();
+    if (out.length > PROVIDER_META_MAX) {
+      out = out.slice(0, PROVIDER_META_MAX - 1).trimEnd() + '…';
+    }
+  }
+  return out;
+}
+
+function ensureProviderFaqMinimum(
+  faq: ProviderEnrichmentFaqItem[]
+): ProviderEnrichmentFaqItem[] {
+  const cleaned = faq
+    .map((f) => ({
+      question: f.question.replace(/\s+/g, ' ').trim(),
+      answer: f.answer.replace(/\s+/g, ' ').trim()
+    }))
+    .filter((f) => f.question.length >= 8 && f.answer.length >= 20);
+  if (cleaned.length >= 3) return cleaned.slice(0, 5);
+  const defaults: ProviderEnrichmentFaqItem[] = [
+    {
+      question: 'Who is eligible for scholarships from this provider?',
+      answer:
+        'Eligibility depends on each scholarship. Check official criteria, residency rules, and required documents before applying.'
+    },
+    {
+      question: 'When are application deadlines for this provider?',
+      answer:
+        'Deadlines vary by program and cycle. Verify each date on the official provider site before final submission.'
+    },
+    {
+      question: 'How should I apply for provider scholarships?',
+      answer:
+        'Shortlist relevant opportunities, prepare required materials early, and submit through official provider application pages.'
+    }
+  ];
+  return [...cleaned, ...defaults].slice(0, 3);
 }
 
 function decodeHtmlEntities(text: string): string {
@@ -180,7 +233,10 @@ export async function enrichProviderData(
   if (!apiKey) return empty;
 
   const model =
-    process.env.OPENAI_PROVIDER_ENRICH_MODEL?.trim() || 'gpt-4o-mini';
+    process.env.OPENAI_PROVIDER_ENRICH_MODEL?.trim() || '';
+  if (model !== 'gpt-5.4') {
+    return empty;
+  }
 
   const nameInPrompt = JSON.stringify(providerName);
   const sourceUrls = Array.from(

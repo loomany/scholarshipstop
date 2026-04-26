@@ -26,6 +26,66 @@ type GeneratedPayload = {
   candidate_sources: EssaySourceItem[];
 };
 
+function normalizeText(v: string): string {
+  return v.replace(/\s+/g, ' ').trim();
+}
+
+function fitLen(v: string, min: number, max: number, tail: string): string {
+  let out = normalizeText(v);
+  if (out.length > max) out = `${out.slice(0, max - 1).trimEnd()}…`;
+  if (out.length < min) {
+    out = normalizeText(`${out} ${tail}`);
+    if (out.length > max) out = `${out.slice(0, max - 1).trimEnd()}…`;
+  }
+  return out;
+}
+
+function enforceTitle(raw: string, topic: string): string {
+  const base =
+    normalizeText(raw) || `How to Write Scholarship Essays for ${topic} USA 2026`;
+  return fitLen(base, 30, 65, 'Apply in USA 2026 with a clear essay plan.');
+}
+
+function enforceMeta(raw: string, topic: string): string {
+  const base =
+    normalizeText(raw) ||
+    `${topic} scholarship essay guide for USA 2026 with structure, examples, and revision steps. Build a stronger application and apply today.`;
+  return fitLen(base, 120, 160, 'Use this framework to draft and revise before deadline.');
+}
+
+function enforceFaq(raw: unknown): { question: string; answer: string }[] {
+  const input = Array.isArray(raw)
+    ? raw
+        .map((item) => {
+          if (!item || typeof item !== 'object') return null;
+          const rec = item as Record<string, unknown>;
+          const question = typeof rec.question === 'string' ? normalizeText(rec.question) : '';
+          const answer = typeof rec.answer === 'string' ? normalizeText(rec.answer) : '';
+          if (!question || !answer) return null;
+          return { question, answer };
+        })
+        .filter((x): x is { question: string; answer: string } => Boolean(x))
+    : [];
+  const defaults = [
+    {
+      question: 'Who is eligible for this scholarship essay topic?',
+      answer:
+        'Eligibility depends on each scholarship and program rules. Confirm official criteria and required documents before writing.'
+    },
+    {
+      question: 'When should I finish my essay before the deadline?',
+      answer:
+        'Plan your draft early and leave time for at least two revisions before submission to improve clarity and impact.'
+    },
+    {
+      question: 'How do I complete the scholarship application process?',
+      answer:
+        'Follow official instructions, align essay content with prompt requirements, and submit all required materials before cutoff.'
+    }
+  ];
+  return [...input, ...defaults].slice(0, 3);
+}
+
 function requiredEnv(name: string): string {
   const primary = process.env[name]?.trim();
   const value =
@@ -205,10 +265,10 @@ Content requirements:
 
 async function generateManualGuide(topic: string): Promise<GeneratedPayload> {
   const apiKey = requiredEnv('OPENAI_API_KEY');
-  const model =
-    process.env.OPENAI_MODEL_SMART?.trim() ||
-    process.env.OPENAI_MODEL_STANDARD?.trim() ||
-    'gpt-4.1';
+  const model = process.env.OPENAI_SEO_MODEL?.trim() || '';
+  if (model !== 'gpt-5.4') {
+    throw new Error(`OPENAI_SEO_MODEL must be gpt-5.4, received "${model || 'unset'}"`);
+  }
   const openai = new OpenAI({ apiKey });
   const completion = await openai.chat.completions.create(
     {
@@ -243,20 +303,23 @@ async function processOne(supabase: SupabaseClient<Database>): Promise<'publishe
       { max: 6 }
     );
     const heroUrl = await pickReusableHeroUrl(supabase, row.hub_distribution_rank);
+    const normalizedTitle = enforceTitle(parsed.title ?? '', row.topic);
+    const normalizedMeta = enforceMeta(parsed.meta_description ?? '', row.topic);
+    const normalizedFaq = enforceFaq(parsed.faq);
     const baseSlug = row.slug?.trim() || parsed.title || row.topic;
     const { id: essayId, slug } = await insertEssayRowWithSlugRetry(
       supabase,
       baseSlug,
       (candidateSlug) => ({
         slug: candidateSlug,
-        title: parsed.title.trim(),
-        meta_description: parsed.meta_description?.trim() || null,
+        title: normalizedTitle,
+        meta_description: normalizedMeta,
         content_html: parsed.content_html.trim(),
         hero_image_url: heroUrl,
         hero_is_real: Boolean(heroUrl),
         hero_variant_index: row.hub_distribution_rank,
         sources: verifiedSources as unknown as Json,
-        faq: (Array.isArray(parsed.faq) ? parsed.faq : []) as unknown as Json,
+        faq: normalizedFaq as unknown as Json,
         is_published: true,
         hub_category_slug: row.hub_category_slug,
         hub_category_label: row.hub_category_label,
