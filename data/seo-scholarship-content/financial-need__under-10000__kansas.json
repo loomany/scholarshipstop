@@ -1,0 +1,120 @@
+{
+  "seo_title": "Find Kansas Financial Need Scholarships | USA",
+  "seo_description": "Kansas financial need scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Kansas scholarships in the USA that consider financial need and stay on the lower award side? This filtered slice is a practical place to compare programs without wading through unrelated results. The rows below bring together listings tied to Kansas, with awards that vary by program and requirements that are not identical from one listing to the next. Some may be relatively lighter-touch, while others can ask for more documentation or an essay, so it helps to read each row closely before you apply. Deadlines also differ across these listings, and some appear soon, which makes it smart to check timing early as you browse and shortlist options.",
+  "h1": "Kansas Financial Need Scholarships USA Apply",
+  "supporting": "A useful way to read this set is to compare more than the title. Look at the requirement line, the location fit, and any category clues such as education, community, law, safety, or STEM to decide which listings match your background. If you are weighing similar options, compare award text and deadline wording side by side, then open the official page to verify current details before you apply. This Kansas-focused view is worth scanning because it narrows the field while still covering different interests and study paths.",
+  "related_intro": "If you want to widen or refine your search, related pages can help you compare nearby scholarship slices by topic, eligibility, or location. That is useful when a Kansas listing is close to your profile but not quite the right fit, or when you want to find similar USA opportunities with different award ranges or requirement patterns.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your Kansas connection",
+    "Verify award details and essay expectations on sponsor sites"
+  ],
+  "who_for": [
+    "Kansas applicants with financial need",
+    "High school seniors comparing local scholarship options",
+    "Students interested in education, law, safety, or community topics",
+    "USA applicants who need smaller award scholarships they can stack"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, you can explore and apply to multiple programs if you meet each listing’s requirements. Check every row individually, since eligibility details, required materials, and deadlines differ by program."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on the amount, deadline, study level, residency or citizenship notes, and any field-of-study fit shown in the catalog. In this Kansas slice, topics can differ across rows, including education, community, STEM, law, and safety, so verify the official criteria before applying."
+    },
+    {
+      "question": "Are these USA scholarships only for Kansas residents?",
+      "answer": "This filtered set is tied to Kansas, but residency and citizenship rules can vary by listing. Some rows may reference USA eligibility signals such as U.S. citizenship, while others may focus more on Kansas location, so always verify on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 15,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 15,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 13,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-04-29"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "legal_professions_and_law_studies",
+        "engineering",
+        "security_and_protective_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kansas Livestock Association",
+        "count": 5
+      },
+      {
+        "name": "Greater Kansas City Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Royal Association",
+        "count": 1
+      },
+      {
+        "name": "International Society of Automation-Kansas City Section",
+        "count": 1
+      },
+      {
+        "name": "Kansas Association for the Blind and Visually Impaired",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "law",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/kansas",
+    "generatedAt": "2026-04-26T14:16:27.620Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 15,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

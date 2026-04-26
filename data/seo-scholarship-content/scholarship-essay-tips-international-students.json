@@ -1,42 +1,132 @@
 {
-  "seo_title": "Scholarship essay tips international students | Updated Scholarship List",
-  "seo_description": "Explore 196 USA scholarship opportunities for scholarship essay tips international students. Compare award amounts, deadlines, and eligibility before applying.",
-  "h1": "Scholarship essay tips international students",
-  "intro": "This page brings together scholarship opportunities related to scholarship essay tips international students and keeps the live list tied to ScholarshipTop's current catalog. Use it to compare award amounts, deadlines, eligibility details, and official application links without jumping between generic search results.",
-  "supporting": "Start with the strongest fit, then verify the final rules on the official scholarship page. International applicants should pay close attention to citizenship language, visa wording, school location, award payout rules, and document requirements. Examples currently surfaced in this topic include International Student Scholarship, Vanna Christian Sun Legacy Scholarship, Anderson Engineering Scholarship, The Jorge and Darlene Pérez Excellence Award.",
-  "related_intro": "If this page is too narrow, widen your search to international student scholarships or combine the filters with deadline and award amount pages.",
+  "seo_title": "Find Scholarship Essay Tips for International Students USA",
+  "seo_description": "Scholarship essay tips for international students in the USA: compare listings, check varying deadlines, and explore official application details.",
+  "intro": "Trying to find USA scholarships while also improving your essay strategy as an international student usually means sorting through mixed requirements, mixed study levels, and very different program themes. This filtered slice brings those threads together so you can compare listings that connect with international student searches across education, STEM, community, medicine, arts, and other areas. Some rows may ask for essays, while others appear lighter on application materials, so it is worth reading each requirement line closely before you apply. Award amounts vary by listing, deadlines differ by program, and eligibility details can change from one opportunity to the next, which makes careful comparison especially important in this set.",
+  "h1": "Explore Scholarship Essay Tips for International Students USA …",
+  "supporting": "Use the rows below to compare more than just the title. Check the study level, field of study, citizenship or residency wording, and any essay signal shown in the listing before you spend time drafting materials. In this USA catalog view, some opportunities are broadly education-focused while others lean toward engineering, business, English, health professions, or related subjects. Open the official page for any scholarship that looks promising, verify current terms, and shortlist the options that best match your academic background and application effort.",
+  "related_intro": "If you want to widen your search after reviewing this set, related pages can help you explore nearby scholarship themes such as study level, subject area, or international student eligibility. That is useful when you want to compare similar USA opportunities without starting over from a broad catalog search.",
   "how_to_use": [
-    "Sort the live scholarship list by deadline or match strength",
-    "Open each official listing before preparing documents",
-    "Check citizenship, visa, GPA, and school-level requirements",
-    "Save strong matches so you can return before the deadline",
-    "Use the related scholarship guides for application strategy"
+    "Compare deadline text across listings",
+    "Read each requirement line carefully",
+    "Check study level and field tags",
+    "Open the official page to verify details",
+    "Shortlist programs that match your profile"
   ],
   "who_for": [
     "International students comparing USA scholarship options",
-    "Applicants who want a filtered list instead of generic search results",
-    "Students checking deadlines, award amounts, and eligibility before applying"
+    "Applicants drafting or revising scholarship essays",
+    "Graduate and undergraduate students checking eligibility fit",
+    "Students in education, engineering, business, English, or health fields"
   ],
   "faq": [
     {
-      "question": "Who should use this scholarship essay tips international students page?",
-      "answer": "Use it if the topic matches your status, degree level, field, or application constraint. The list is built from current ScholarshipTop catalog data, but final eligibility always comes from the official provider."
+      "question": "How can I find scholarship essay tips for international students in the USA on this page?",
+      "answer": "Use this filtered view to explore listings connected to international-student eligibility, then open each row to confirm whether an essay is required. In this catalog, essay requirements are mixed, so the official scholarship page is the place to verify prompts, format, and submission rules."
     },
     {
-      "question": "Do international students qualify for every scholarship listed here?",
-      "answer": "No. Some scholarships are international-friendly while others have narrower school, visa, location, or citizenship rules. Open the official page and confirm before applying."
+      "question": "Can I compare scholarships for international students by amount, deadline, and study level?",
+      "answer": "Yes—compare the rows by listed award amount, deadline text, and study level such as graduate student, high school senior, or college year. Amounts and deadlines vary by program, so check each official source before you apply."
     },
     {
-      "question": "How often should I check this list?",
-      "answer": "Check weekly during application season. New scholarships, changed deadlines, and updated award details can affect which opportunities are worth prioritizing."
+      "question": "Do all scholarships here require an essay?",
+      "answer": "No, this slice shows a mix of essay and non-essay listings. If you want to browse faster, use the catalog details as a starting point and confirm the current requirement on the provider's official page."
+    },
+    {
+      "question": "What kinds of scholarships can international students explore here?",
+      "answer": "The programs below span categories like Education, STEM, Community, Medicine, Arts, and Miscellaneous, with sample fields including engineering, business, education, English, and health professions. That makes it useful for comparing options across different academic interests in the USA, not just one subject area."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarship-essay-tips-international-students",
-    "generatedAt": "2026-04-25T13:27:33.884Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
-    "bodySource": "deterministic",
+    "generatedAt": "2026-04-26T13:03:03.031Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
     "generationMode": "rewrite"
   }
 }

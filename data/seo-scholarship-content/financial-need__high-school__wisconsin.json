@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Wisconsin High School Need-Based Scholarships USA",
+  "seo_description": "Wisconsin high school need-based scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Wisconsin scholarships for high school students with financial need usually means balancing fit, timing, and effort at the same time. This filtered slice brings together USA listings that match that combination, so you can compare options without mixing in unrelated awards. The programs below span areas such as community, education, STEM, medicine, humanities, and miscellaneous topics, which means the right match may come from more than one category. Awards, deadlines, and application requirements vary by listing, and some opportunities appear lighter touch while others may ask for more materials. If you plan to apply in the current cycle, it is smart to check the rows promptly and verify every detail on the official source before moving forward.",
+  "h1": "Explore Wisconsin High School Need-Based Scholarships USA",
+  "supporting": "Use this view to compare more than just the title. Scan each row for category clues, study level language, and any requirement notes that affect how quickly you can apply. It can also help to compare award text alongside deadline wording, then open the official page to confirm eligibility, documents, and location details. Because this Wisconsin set includes different subject areas, it is worth browsing beyond your first assumption about what counts as a fit.",
+  "related_intro": "If these Wisconsin financial need listings feel too narrow or too broad, related pages can help you explore nearby options by topic, education stage, or location. That is useful when you want to compare similar USA scholarship filters without starting your search over.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist the listings that match your situation",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "Wisconsin high school students with financial need",
+    "High school seniors comparing local scholarship options",
+    "Applicants interested in education, STEM, or community awards",
+    "Students seeking Wisconsin-based funding before college"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Wisconsin scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore USA scholarship listings that match financial need, High School, and Wisconsin. Then open each row and verify eligibility, award details, and application steps on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts can range widely by listing, and deadlines differ by row, so check dates promptly and confirm everything on the official page."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Wisconsin?",
+      "answer": "Not always. High school is part of this filter slice, and some listings may fit high school seniors, but study level details can vary across programs, so compare each listing carefully before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Wisconsin filter?",
+      "answer": "This focused set of listings includes categories such as Community, Education, STEM, Medicine, Humanities, and Miscellaneous. You can browse to compare programs tied to interests like education, engineering, mathematics and statistics, physical sciences, and health professions."
+    },
+    {
+      "question": "Do all of these Wisconsin scholarships require an essay?",
+      "answer": "No single requirement applies to every listing here. Some programs may ask for an essay and others may be lighter-touch, so review each scholarship's requirements on the catalog row and confirm on the official source before applying."
+    }
+  ],
+  "page_data": {
+    "exactCount": 26,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 26,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 21,
+      "within60Days": 24,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-04-08"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 22,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "college_4",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "architecture_and_related_services",
+        "computer_and_information_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "CollegeReady",
+        "count": 16
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Brewers Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Cooperative Institute for Meteorological Satellite Studies",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/wisconsin",
+    "generatedAt": "2026-04-26T14:01:49.400Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 26,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

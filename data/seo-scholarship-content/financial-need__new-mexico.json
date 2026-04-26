@@ -1,48 +1,127 @@
 {
-  "seo_title": "Financial Need Scholarships in New Mexico",
-  "seo_description": "Explore 6 scholarships for financial need in New Mexico. Award sizes range from $1,000 to $5,500. Check deadlines and requirements.",
-  "intro": "Finding financial support can be a crucial step for students in New Mexico. This catalog features 6 scholarships specifically aimed at those demonstrating financial need. Award sizes vary, with opportunities ranging from community-focused programs to those in STEM and education. As deadlines differ across listings, it's important to check each one promptly to ensure you don't miss out.",
-  "h1": "Explore Financial Need Scholarships in New Mexico",
-  "supporting": "When reviewing the scholarships, pay attention to the varying award amounts and requirements. Some listings may require essays, while others do not, so be sure to read the details carefully. Comparing deadlines will help you prioritize which applications to tackle first. Always verify the information on the official sponsor sites for the most accurate details.",
-  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that focus on specific categories or other eligibility criteria.",
+  "seo_title": "Find Financial Need Scholarships in New Mexico, USA",
+  "seo_description": "Financial need scholarships in New Mexico, USA with award ranges, varied deadlines, and requirements. Compare listings and apply on official pages.",
+  "intro": "Trying to find USA scholarships tied to financial need in New Mexico usually means balancing urgency with fit. In this filtered slice, the programs below span areas such as STEM, education, community, disability, and biology, with options that can suit both high school seniors and early college students. Awards vary by listing, and deadlines differ across rows, so it helps to compare details instead of assuming every program works the same way. Requirements also change from one scholarship to the next: some may look lighter-touch, while others may ask for more supporting material. If you want to apply in this category for the current cycle or plan ahead for twenty twenty-six opportunities, use this view to quickly find and compare New Mexico scholarships that reflect financial need.",
+  "h1": "Find Financial Need Scholarships in New Mexico USA",
+  "supporting": "A smart way to use these rows is to compare more than the title. Check the award text, read the requirement lines closely, and note how the category tags connect to your background or intended field. This New Mexico set is worth a careful scan because it mixes broader community-focused programs with scholarships linked to education, engineering, biology, and related subjects. Before you apply, open the official page for each listing to verify eligibility, materials, and the latest deadline language.",
+  "related_intro": "If you do not find the right match here, compare nearby scholarship pages by topic, study level, or other eligibility filters. That can help you spot New Mexico programs with a different emphasis, or find USA scholarships where financial need overlaps with subjects like STEM, education, disability, or community service.",
   "how_to_use": [
-    "Sort scholarships by award amount",
-    "Read the requirement lines carefully",
-    "Open official pages for details",
-    "Shortlist your preferred scholarships",
-    "Compare deadlines to prioritize applications"
+    "Compare deadline wording across each row",
+    "Read the requirement line before shortlisting",
+    "Open the official page to verify details",
+    "Check award text and category tags together",
+    "Shortlist the best-fit New Mexico programs first"
   ],
   "who_for": [
-    "Students demonstrating financial need",
-    "Residents of New Mexico",
-    "Individuals pursuing STEM degrees",
-    "Community-focused scholarship applicants",
-    "Students interested in education funding"
+    "New Mexico applicants with financial need",
+    "High school seniors comparing local scholarship options",
+    "Early college students seeking need-based support",
+    "Students interested in STEM or education programs",
+    "Applicants reviewing community or disability-related listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in New Mexico?",
-      "answer": "The current listings include a variety of scholarships categorized under community, STEM, education, and disability. With six scholarships available, you can find options that align with different interests and backgrounds."
+      "question": "How can I find financial need scholarships in New Mexico that fit my situation?",
+      "answer": "Use this filtered view to compare New Mexico scholarship rows that already match financial need, then narrow by study level or topic such as STEM, Education, Community, Disability, or Biology. Always open the official source for each listing to confirm current eligibility, required materials, and location details."
     },
     {
-      "question": "How much can I expect to receive from these scholarships?",
-      "answer": "Award sizes vary among the scholarships, with amounts ranging approximately from $1,000 to $5,500. It's important to check each listing for specific details on the award amount."
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, you can explore multiple programs and apply to any that match your profile, because each row is a separate scholarship. Check every official page first, since application rules and required documents vary by listing."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements differ across the scholarships; some may require essays while others do not. Be sure to review each scholarship's details to understand what is needed."
+      "question": "Do all New Mexico financial need scholarships here have the same deadline?",
+      "answer": "No—deadlines differ by program in this USA scholarship catalog, and the rows in this slice do not share one universal date. Since some listings appear to close relatively soon, it is smart to compare dates early and verify them on the official pages."
     },
     {
-      "question": "When should I apply for these scholarships?",
-      "answer": "All six scholarships listed have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+      "question": "What kinds of students should browse this list?",
+      "answer": "This set of listings may be useful for New Mexico applicants with financial need who are high school seniors or early college students, especially those exploring education, engineering, construction trades, biological and biomedical sciences, or transportation-related study paths. Individual scholarships may also connect to themes like community or disability, depending on the row."
+    },
+    {
+      "question": "How do I compare award amounts and requirements on this page?",
+      "answer": "Amounts and requirements vary row to row, so use the catalog to spot differences and then confirm everything with the scholarship's official source. In this filtered set, listed awards span a range, but you should verify the exact amount, essay expectations, and submission steps for each program before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1000,
+      "maxUsd": 5500,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-02",
+        "2026-04-22",
+        "2026-05-02"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "construction_trades",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Albuquerque Hispano Chamber of Commerce",
+        "count": 2
+      },
+      {
+        "name": "New Mexico Engineering Foundation",
+        "count": 2
+      },
+      {
+        "name": "Albuquerque Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Arapahoe Community College Foundation",
+        "count": 1
+      },
+      {
+        "name": "Institute of Transportation Engineers-New Mexico Section",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "community",
+      "miscellaneous",
+      "biology",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/new-mexico",
-    "generatedAt": "2026-04-02T11:15:11.147Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 6,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:08:19.622Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 9,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

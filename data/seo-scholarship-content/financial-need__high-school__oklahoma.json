@@ -1,0 +1,112 @@
+{
+  "seo_title": "Find Oklahoma High School Need Scholarships | USA",
+  "seo_description": "Oklahoma high school financial need scholarships in the USA—compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find USA scholarships for Oklahoma high school students with financial need usually means balancing fit, timing, and effort at the same time. This filtered slice brings together a focused set of listings tied to that combination, so you can compare options without jumping across unrelated results. The programs below span areas such as education and STEM, and some rows may suit students planning different college paths after high school. Awards vary by listing, deadlines differ by program, and eligibility details should be checked line by line on the official source. Many listings in this view appear to have lighter application signals, and some may often be no essay, but requirements can still change from one scholarship to the next.",
+  "h1": "Find Financial Need Scholarships for Oklahoma High School Studen…",
+  "supporting": "Use these rows to compare more than just the scholarship title. Read the requirement summary closely, note any residency or citizenship language, and check whether the opportunity is aimed at seniors or a broader high school audience. It is also worth comparing category clues like education or engineering if you already know your likely direction of study. If you plan to apply soon, review deadline text promptly because timing varies across listings, then open the official page to verify award details, materials, and current rules.",
+  "related_intro": "If this Oklahoma and financial need combination feels too narrow, related pages can help you explore nearby options by changing one filter at a time. You might compare other Oklahoma scholarship views, broader high school results, or other need-based pages to find programs that match your background and plans.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read the requirement line before shortlisting",
+    "Open the official page to verify details",
+    "Check award wording and eligibility notes carefully",
+    "Save the best-fit listings and apply early"
+  ],
+  "who_for": [
+    "Oklahoma high school seniors with financial need",
+    "USA applicants comparing local scholarship options",
+    "Students interested in education or engineering paths",
+    "Applicants looking for scholarships that may often skip essays"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Oklahoma scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school status, and Oklahoma. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts on this Oklahoma scholarship list?",
+      "answer": "Yes—this catalog slice shows listed award amounts, but they vary by program. Use the rows to compare options side by side, then confirm the current amount and terms with the official source before you apply."
+    },
+    {
+      "question": "Are these Oklahoma high school scholarships only for certain majors or topics?",
+      "answer": "Not necessarily. In this filtered set, you may see categories such as Education, Miscellaneous, and STEM, with some listings connected to fields like education or engineering. Compare each row carefully because topic, study focus, and eligibility can vary."
+    },
+    {
+      "question": "Are the applications usually simple, or do they require essays?",
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and many sampled rows flag no essay. Still, requirements can change row to row, so review the catalog details and verify the full application steps on the official scholarship website."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 3500,
+      "minUsd": 2000,
+      "maxUsd": 6000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Association of Drilling Engineers-Mid-Continent Chapter",
+        "count": 2
+      },
+      {
+        "name": "Oklahoma City Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Wyandotte Nation of Oklahoma",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/oklahoma",
+    "generatedAt": "2026-04-26T13:58:19.364Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

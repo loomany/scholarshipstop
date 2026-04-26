@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Maryland Financial Need Scholarships | USA",
+  "seo_description": "Maryland financial need scholarships in the USA: compare awards under ten thousand, review varying deadlines, and apply on official pages.",
+  "intro": "Trying to find Maryland scholarships in the USA that take financial need into account and stay under a lower award range usually means sorting through very different kinds of programs. This filtered slice brings together a focused set of listings tied to Maryland, with options that touch areas like education, community, disability, medicine, and STEM. Some are aimed at high school seniors, while others fit graduate or professional study. Awards, deadlines, residency details, and application steps vary from row to row, and requirements are not identical across the list. A few programs may be comparatively lighter touch, while others can ask for more documentation or written materials. If you want to apply in this category for the current cycle, it is worth comparing the rows carefully and checking official pages promptly.",
+  "h1": "Maryland Financial Need Scholarships to Explore USA",
+  "supporting": "Use the rows below to compare more than the headline award. Look at the study level, Maryland location fit, citizenship or residency wording, field of study notes, and any requirement lines before you decide which programs to pursue. This is also a useful slice to browse if you want smaller scholarship opportunities that may stack with other aid rather than relying on one large award. Because deadlines differ by program and listing details can change, open the official source for every scholarship you shortlist and verify the latest terms before you apply.",
+  "related_intro": "If these Maryland financial need listings feel too narrow, related pages can help you compare nearby filter combinations, such as broader Maryland scholarship results, other financial need categories, or additional lower-amount scholarship pages in the USA catalog.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before shortlisting",
+    "Open the official page to verify details",
+    "Check study level and Maryland eligibility fit",
+    "Save a shortlist and apply early"
+  ],
+  "who_for": [
+    "Maryland applicants with demonstrated financial need",
+    "High school seniors seeking smaller scholarship awards",
+    "Graduate or professional students comparing Maryland options",
+    "Applicants in education, health, engineering, or trades fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines on this USA scholarship list?",
+      "answer": "Yes—these rows include posted award amounts and deadline text, but there is no single deadline for the whole page. In this slice, listed awards range from smaller amounts up to several thousand dollars, and dates differ by program, so check each listing promptly."
+    },
+    {
+      "question": "Who should explore these Maryland scholarship listings?",
+      "answer": "This set may fit applicants in the USA who need Maryland-based options tied to financial need, including some high school seniors and graduate students. You may also find listings connected to areas like education, community, disability, medicine, and STEM."
+    },
+    {
+      "question": "Do all of these scholarships require the same materials or essays?",
+      "answer": "No—requirements are mixed across the catalog, and essay expectations can differ from one listing to another. Before you apply, open the official page for the scholarship you want and confirm the current materials, eligibility details, and instructions."
+    }
+  ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 3250,
+      "minUsd": 500,
+      "maxUsd": 7500,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 12,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Cumberland Valley Volunteer Firemen's Association",
+        "count": 2
+      },
+      {
+        "name": "Alfred Street Baptist Church",
+        "count": 1
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "CollegeBound Foundation",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "disability",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/maryland",
+    "generatedAt": "2026-04-26T14:17:57.575Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

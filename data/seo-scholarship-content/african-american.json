@@ -1,46 +1,129 @@
 {
-  "seo_title": "African American Scholarships - 61 Opportunities",
-  "seo_description": "Explore 61 scholarships for African American students with awards from $250 to $15,000. Check deadlines and requirements carefully.",
-  "intro": "Finding financial support as an African American student can be pivotal to achieving your educational goals. With 61 scholarships available in this category, you have a range of opportunities to explore, from awards in education and STEM to arts and community initiatives. Award sizes vary significantly, with amounts generally ranging from $250 to $15,000. Be mindful that deadlines differ across listings, so it's essential to check them promptly to ensure you don’t miss out.",
-  "h1": "Scholarships for African American Students",
-  "supporting": "This collection of scholarships is not only diverse in funding amounts but also in requirements. While most listings have lighter application processes, some may require essays. Take the time to compare the details of each scholarship, focusing on what aligns best with your academic pursuits and personal circumstances. This approach will help you identify the most suitable opportunities for your needs.",
-  "related_intro": "If you're interested in exploring more funding options, check out related pages that focus on scholarships for specific fields or demographics.",
+  "seo_title": "Find African American Scholarships in the USA",
+  "seo_description": "African American scholarships in the USA: compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find USA scholarships for African American applicants usually means sorting through programs with very different eligibility details, study levels, and subject focus. This filtered slice brings those listings into one place so you can compare options tied to education, community, STEM, medicine, arts, and related areas without jumping between unrelated results. The rows below include opportunities for students at different points in school, from earlier college stages through graduate study, and some listings note USA citizenship or permanent residency requirements. Awards, deadlines, essays, and application steps vary by program, so it is worth reading each requirement line closely and checking official pages promptly when a listing looks like a fit.",
+  "h1": "Explore African American Scholarships in the USA",
+  "supporting": "A smart way to use this list is to compare more than the title. Look at the study level, field tags, deadline text, and any eligibility wording that narrows who can apply. Some listings may be broader, while others are tied to areas like health professions, business, journalism, computer science, or education. If you are deciding where to spend time, compare award text alongside the effort required, then open the official source to verify current rules, materials, and submission details before you apply.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by study level, subject area, or other eligibility traits. That is useful when you want to compare this African American scholarship slice with more specific USA scholarship filters.",
   "how_to_use": [
-    "Review the list for scholarships that match your field of study",
-    "Compare award amounts to prioritize your applications",
-    "Check individual deadlines and plan your submissions accordingly",
-    "Read through the requirements to see if essays are needed",
-    "Visit official scholarship pages for the most accurate information"
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify current details",
+    "Shortlist listings that match your study level and field",
+    "Compare award wording with the application effort required"
   ],
   "who_for": [
-    "African American students pursuing higher education",
-    "Undergraduate and graduate students seeking financial aid",
-    "Students interested in STEM, arts, or community-focused scholarships"
+    "African American high school seniors planning for college in the USA",
+    "African American college students comparing scholarships by major or study level",
+    "Graduate students seeking USA funding in education, medicine, or STEM",
+    "Applicants who need to check citizenship or permanent residency wording carefully"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for African American students?",
-      "answer": "The current catalog features 61 scholarships specifically for African American students, covering a range of categories including education, STEM, arts, medicine, and community initiatives. This diversity allows applicants to find opportunities that align with their academic and career goals."
+      "question": "How can I find African American scholarships in the USA that match my study level or major?",
+      "answer": "Use this filtered view to compare rows by study level, field, and eligibility details on each listing. In this USA-focused set, you’ll see examples tied to areas like education, STEM, medicine, arts, business, and communication, but you should verify the final requirements on the official scholarship page."
     },
     {
-      "question": "Do all scholarships require essays?",
-      "answer": "Requirements vary among the scholarships listed. While about 58 of the 61 scholarships do not require an essay, there are a few that do. It's important to check the specific details for each scholarship to understand the application requirements."
+      "question": "Can I apply if I’m a high school senior, current college student, or graduate student?",
+      "answer": "Some listings in this catalog slice are aimed at high school seniors, college students, or graduate students, so eligibility varies by program. Open each row and confirm the exact study-level rules before you apply."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All 61 scholarships have specific deadlines, which vary from one listing to another. Some deadlines are approaching within the next 45 days, so it's advisable to review the listings promptly to ensure you don't miss any opportunities."
+      "question": "Do these scholarships require U.S. citizenship or permanent residency?",
+      "answer": "Some programs in these rows reference USA eligibility such as U.S. citizen or U.S. permanent resident status. Because that is not universal across every listing, check the official source for the scholarship you want to apply to."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this category range significantly, with amounts typically between $250 and $15,000. Each scholarship has its own specific award amount, so be sure to check the details for the scholarships you are interested in."
+      "question": "How do I compare award amounts and deadlines on this page?",
+      "answer": "You can compare the rows directly, but amounts and deadlines differ by program. Award values vary by listing, and deadline text is shown row by row, so check dates promptly and confirm both details on the official page before applying."
     }
   ],
+  "page_data": {
+    "exactCount": 66,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 250,
+      "maxUsd": 15000,
+      "statedAmountCount": 66,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 33,
+      "within60Days": 62,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-23",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 63,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "essay",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "health_professions_and_clinical_sciences",
+        "computer_and_information_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "POISE Foundation",
+        "count": 6
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Alpha Nu Omega Chapter",
+        "count": 3
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 3
+      },
+      {
+        "name": "Worcester State University",
+        "count": 3
+      },
+      {
+        "name": "African American Club of Hernando County",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "medical",
+      "arts"
+    ]
+  },
   "_meta": {
     "canonicalPath": "african-american",
-    "generatedAt": "2026-04-02T10:35:39.388Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 61,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:14:29.246Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 66,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

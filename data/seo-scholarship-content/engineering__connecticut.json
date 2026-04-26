@@ -1,48 +1,115 @@
 {
-  "seo_title": "Connecticut Engineering Scholarships – Up to $10,000",
-  "seo_description": "Explore 11 engineering scholarships in Connecticut with awards from $500 to $10,000. Check deadlines and requirements for each listing.",
-  "intro": "Finding financial support for engineering studies in Connecticut can be pivotal for your academic journey. With 11 scholarships available in this area, award sizes typically range from $500 to $10,000, offering a variety of options to suit different needs. Many of these scholarships have deadlines approaching soon, so it’s essential to check the specific dates and requirements for each opportunity.",
-  "h1": "Engineering Scholarships in Connecticut",
-  "supporting": "This collection of scholarships is tailored for students pursuing engineering in Connecticut. As you explore the listings, pay attention to the award amounts and the nature of the application process—many scholarships do not require essays, which may simplify your application efforts. Comparing the deadlines and eligibility criteria will help you identify the best matches for your situation.",
-  "related_intro": "If you're interested in more funding opportunities, consider checking out scholarships in related fields or other states.",
+  "seo_title": "Find Engineering Scholarships in Connecticut, USA",
+  "seo_description": "Engineering scholarships in Connecticut, USA: compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find engineering scholarships in Connecticut usually means narrowing a broad USA search down to programs that actually match your location and subject. This filtered slice brings together Connecticut listings tied to engineering, with rows that can differ in award size, deadline timing, study level, and requirement details. Many of the programs shown here appear to have lighter application signals, and many listings often indicate no essay, but you should still read each row carefully before you apply. If you are comparing options for the upcoming cycle, this is a practical place to browse, find local-fit opportunities, and spot programs worth opening first while deadlines are still active.",
+  "h1": "Apply for Engineering Scholarships in Connecticut USA",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Check how each listing describes eligibility, look at the study level, and note whether the category mix includes STEM or related areas that may overlap with your background. Award amounts vary by listing and should be verified on the official page, and deadlines differ by program, so it helps to shortlist a few strong matches instead of treating this as one uniform group. If a Connecticut listing looks relevant, open it and confirm the latest terms before you apply.",
+  "related_intro": "If you want to widen or refine your search, related pages can help you compare this Connecticut engineering set against other engineering filters or nearby topic and location combinations in the USA catalog. That is useful when your major, school level, or category fit crosses into broader STEM results.",
   "how_to_use": [
-    "Review each listing for specific award amounts",
-    "Check deadlines closely, especially for upcoming opportunities",
-    "Note any application requirements, such as essays",
-    "Visit the official scholarship pages for complete details",
-    "Shortlist the scholarships that best fit your profile"
+    "Compare deadline wording across each row",
+    "Read the requirement line before you shortlist",
+    "Open the official page to verify award details",
+    "Check study level and category fit carefully",
+    "Save the strongest Connecticut matches and apply early"
   ],
   "who_for": [
-    "Engineering students in Connecticut",
-    "Undergraduates seeking financial aid",
-    "Students interested in STEM fields",
-    "Applicants looking for lighter essay requirements",
-    "Those needing support for specific engineering programs"
+    "Connecticut students pursuing engineering studies",
+    "High school seniors planning engineering programs",
+    "College and graduate applicants comparing local STEM funding",
+    "Applicants who prefer scholarships that often show no essay"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Connecticut?",
-      "answer": "There are currently 11 scholarships listed specifically for engineering students in Connecticut. These scholarships cover a range of categories, including STEM, arts, and medical fields, providing diverse opportunities for applicants."
+      "question": "How can I find engineering scholarships in Connecticut that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, field, amount, and deadline. In this USA catalog slice, details can differ a lot by listing, so open the official source for any program you plan to apply to."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes for the scholarships available in this category vary, with amounts generally ranging from approximately $500 to $10,000. It's important to check each listing for specific award details."
+      "question": "Can I compare award amounts on this Connecticut engineering scholarship page?",
+      "answer": "Yes—these listings include award amounts, but the value varies by program. Treat the catalog as a starting point and verify the current USD amount on the official scholarship page before you apply."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially easier for many applicants. However, it's advisable to verify the requirements for each scholarship individually."
+      "question": "Are these scholarships only for engineering majors in college?",
+      "answer": "Not always. This filtered set is centered on engineering in Connecticut, but the rows can span different study levels, including examples like high school senior, college, and graduate student, so compare eligibility on each official listing."
     },
     {
-      "question": "When should I apply for these scholarships?",
-      "answer": "All 11 scholarships currently listed have varying deadlines, with some due within the next 45 days. Be sure to check the specific deadlines for each scholarship to ensure timely submission."
+      "question": "Will I usually need an essay to apply for these scholarships?",
+      "answer": "Many listings in this slice appear to have no essay flagged in the catalog, but requirements still vary row to row. Before you apply, review the official page to confirm essays, documents, and any other submission steps."
     }
   ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 11,
+      "within60Days": 11,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "April 15, 2026 4:00 PM ET",
+        "2026-04-22",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "business_management_and_marketing",
+        "education",
+        "engineering",
+        "construction_trades",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 8
+      },
+      {
+        "name": "American Public Works Association-New England Chapter",
+        "count": 1
+      },
+      {
+        "name": "Lumber Dealers Association of Connecticut",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "biology",
+      "medical",
+      "community",
+      "education"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/connecticut",
-    "generatedAt": "2026-04-02T10:40:51.813Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:34:42.822Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 11,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

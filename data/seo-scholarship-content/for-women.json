@@ -1,48 +1,130 @@
 {
-  "seo_title": "Top Scholarships for Women in the USA",
-  "seo_description": "Explore 199 scholarships for women, with awards from $400 to $40,000. Check varying deadlines and requirements.",
-  "intro": "Finding financial support tailored for women can significantly ease the path to achieving your educational goals. With 199 scholarships available, this collection offers a diverse range of opportunities across various fields, including education, STEM, arts, and more. Award sizes vary widely, with amounts ranging from approximately $400 to $40,000. Be mindful that deadlines differ, and at least one opportunity is approaching soon, so it’s wise to check the specific dates promptly.",
-  "h1": "199 Scholarships Available for Women",
-  "supporting": "As you explore this list, consider comparing the award amounts and requirements for each scholarship. Some may require essays while others do not, and many have lighter application processes. This variety allows you to find options that align with your strengths and availability. Pay attention to the categories that interest you, whether it's community service, technology, or the arts, to maximize your chances of securing funding.",
-  "related_intro": "For more tailored options, check out related pages that focus on specific fields or requirements to further narrow down your search.",
+  "seo_title": "Find Scholarships for Women in the USA",
+  "seo_description": "Scholarships for women in the USA with deadlines, amounts, and requirements that vary by listing. Compare options and apply on official pages.",
+  "intro": "Trying to find USA scholarships for women usually means sorting through very different rules, study levels, and subject areas at once. This filtered slice brings those listings into one place so you can compare options across education, STEM, arts, law, community, and other categories without jumping between unrelated results. The rows below include opportunities for profiles such as high school seniors, college students, graduate students, and adult non traditional learners, with some listings tied to fields like education, business, engineering, computer and information sciences, or legal studies. Awards vary by listing, deadlines differ by program, and requirement details are not uniform, so it is worth reading each row closely before you apply.",
+  "h1": "Compare Scholarships for Women in the USA",
+  "supporting": "Use this list to compare more than just the title. Scan the category tags, study level, citizenship or residency language, and field of study notes to see which programs actually match your situation in the USA. Some listings may look broader, while others are clearly aimed at women in leadership, media, law, education, or technical fields. As you browse, compare award text and deadline wording side by side, then open the official page for any scholarship you want to pursue so you can verify current requirements, materials, and submission details.",
+  "related_intro": "If these results feel close but not quite right, check related scholarship pages by subject, study level, or other eligibility filters. That can help you find programs for women that also match a specific major, academic stage, or application preference.",
   "how_to_use": [
-    "Compare deadlines listed for each scholarship",
-    "Scan the award amounts to find suitable options",
-    "Read the requirement details for essay and application specifics",
-    "Open official scholarship pages for complete information",
-    "Shortlist the scholarships that best match your profile"
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Check study level and field tags",
+    "Open the official page to verify details",
+    "Shortlist the programs that fit best"
   ],
   "who_for": [
-    "Women pursuing education in STEM fields",
-    "Women interested in arts and community projects",
-    "Women seeking scholarships with lighter application requirements",
-    "Women from diverse backgrounds looking for targeted funding",
-    "Women planning to apply for scholarships with upcoming deadlines"
+    "Women seeking USA scholarship options across multiple majors",
+    "High school seniors looking for women focused funding",
+    "College and graduate students comparing category specific awards",
+    "Adult non traditional learners returning to school",
+    "Applicants in education, law, arts, business, or STEM"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for women?",
-      "answer": "The current catalog features a diverse range of 199 scholarships for women across various categories, including Education, STEM, Community, Medicine, and Arts. This variety allows applicants to find opportunities that align with their specific interests and career goals."
+      "question": "How can I find scholarships for women in the USA that fit my background or major?",
+      "answer": "Use this filtered view to compare rows by category, study level, and any citizenship or residency notes shown in each listing. In this USA-focused set, details can differ a lot by program, so confirm eligibility on the official scholarship page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. While approximately 13 of the 199 scholarships require essays, the majority do not. It's important to check the specific requirements for each scholarship to understand what is needed."
+      "question": "Are these scholarships only for college students, or can I explore options at other study levels?",
+      "answer": "You can explore listings across multiple study levels in this filtered set, including examples tied to high school seniors, graduate students, adult non-traditional students, and college students. Always read the individual listing carefully, because the level and eligibility rules are set by each program."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 199 scholarships have deadlines, but these vary widely. Some deadlines are approaching within the next 45 days, so it's advisable to review the listings promptly to ensure you don’t miss any opportunities."
+      "question": "Do all scholarships for women here require an essay?",
+      "answer": "No single requirement applies to every listing on this page. Some programs may ask for an essay and others may not, so compare the rows and verify the application requirements on the official scholarship page before you apply."
     },
     {
-      "question": "What are the typical award amounts for scholarships in this category?",
-      "answer": "Award sizes for the scholarships available to women can vary significantly, with amounts ranging from approximately $400 to $40,000 USD. Each scholarship listing will provide specific details on the award amount, so be sure to check individual entries."
+      "question": "What kinds of subjects can I browse in these scholarships for women?",
+      "answer": "This filtered page includes a focused set of listings across themes such as Education, STEM, Arts, Law, Community, and Miscellaneous. You can also find examples connected to fields like education, business, engineering, law, and computer and information sciences, depending on the individual program."
     }
   ],
+  "page_data": {
+    "exactCount": 79,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 40000,
+      "statedAmountCount": 79,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 59,
+      "within60Days": 74,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 8,
+      "noCount": 71,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript",
+        "personal_statement",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "adult_non_traditional",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "computer_and_information_sciences",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Worcester State University",
+        "count": 8
+      },
+      {
+        "name": "Society of Women Engineers",
+        "count": 7
+      },
+      {
+        "name": "Washington State Business and Professional Women's Foundation",
+        "count": 5
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 3
+      },
+      {
+        "name": "Calgary Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "arts",
+      "law",
+      "community"
+    ]
+  },
   "_meta": {
     "canonicalPath": "for-women",
-    "generatedAt": "2026-04-02T10:29:51.070Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 199,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:19:22.825Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 79,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

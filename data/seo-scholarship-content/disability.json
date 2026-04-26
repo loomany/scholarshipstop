@@ -1,48 +1,133 @@
 {
-  "seo_title": "Find Disability Scholarships in the USA",
-  "seo_description": "Explore 59 disability scholarships with varying awards and deadlines. Check listings for details.",
-  "intro": "Finding financial support as a student with a disability can be challenging, but this selection of 59 scholarships offers a range of opportunities tailored to your needs. Award sizes vary significantly, with amounts typically between $250 and $12,000, allowing you to find options that fit your financial goals. Be mindful that deadlines differ across listings, so checking dates promptly is essential to ensure you don’t miss out on potential funding.",
-  "h1": "Explore 59 Disability Scholarships Available Now",
-  "supporting": "This list includes scholarships from diverse categories such as education, law, and community service, reflecting a wide array of interests and academic pursuits. Some programs may have lighter requirements, while others might ask for essays, so it’s wise to review each listing carefully. Comparing the specifics of each scholarship can help you identify the best fits for your situation, making the application process more efficient.",
-  "related_intro": "For additional funding options, consider exploring scholarships focused on education or community service, which may complement your search for disability-related support.",
+  "seo_title": "Find Disability Scholarships to Apply for in USA",
+  "seo_description": "Disability scholarships in the USA: compare award ranges, deadlines, and requirements, then explore listings and verify details on official pages.",
+  "intro": "Trying to find USA scholarships tied to disability status usually means sorting through very different eligibility rules, study levels, and application asks. This filtered slice brings those listings into one place so you can compare options more efficiently and decide which programs are worth an application now. The rows below span areas such as education, law, community, safety, and medicine, with examples that also touch business and transportation fields. Some awards may be open to high school seniors, undergraduates, or graduate students, while citizenship or residency language can differ by listing. Award amounts, deadline timing, and essay expectations are not the same across these programs, so it is smart to read each row closely and verify details on the official scholarship page before you apply.",
+  "h1": "Find Disability Scholarships in the USA",
+  "supporting": "A useful way to browse this set is to compare the requirement line first, then look at study level, field tags, and residency wording. Some listings appear more straightforward, while others may ask for more supporting material or have narrower eligibility. Because deadline text varies across the rows and some opportunities may be coming up soon, it helps to shortlist promising matches early. When you compare programs, focus on fit before award size, then open the official source to confirm current rules, documents, and submission steps.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship categories that overlap with your academic path or career interests. Related pages can be useful when a disability scholarship also connects to education, law, community, safety, medicine, or another field named in the listing.",
   "how_to_use": [
-    "Compare deadlines across listings to prioritize applications",
-    "Scan award amounts to find scholarships that meet your needs",
-    "Read requirement lines to understand what each scholarship entails",
-    "Open official pages for detailed information and updates",
-    "Shortlist scholarships that align with your goals and eligibility"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and documents on the sponsor site"
   ],
   "who_for": [
-    "Students with documented disabilities",
-    "Individuals pursuing education in law or community service",
-    "Applicants interested in STEM fields",
-    "High school seniors and college students",
-    "Those seeking scholarships with varying requirements"
+    "USA applicants with a documented disability",
+    "High school seniors seeking disability scholarships",
+    "Undergraduate or graduate students comparing eligibility wording",
+    "Applicants looking at disability awards tied to education, law, safety, or medicine"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with disabilities?",
-      "answer": "There are 59 scholarships specifically for students with disabilities, covering various categories such as education, community, law, and STEM. Award sizes vary widely, with amounts ranging from approximately $250 to $12,000."
+      "question": "How do I find disability scholarships in the USA that match my profile?",
+      "answer": "Use this filtered view to compare eligibility details row by row, especially study level, field of study, and USA residency or citizenship labels such as U.S. citizen or U.S. permanent resident. Then verify the final requirements on each scholarship’s official page before you apply."
     },
     {
-      "question": "How can I find out about deadlines for these scholarships?",
-      "answer": "All 59 scholarships listed have deadlines, but they differ from one another. It's important to check each listing for specific dates, as some deadlines may be approaching within the next 45 days."
+      "question": "Can I apply if I’m in high school, college, or graduate school?",
+      "answer": "Some listings in this disability scholarship catalog are open to high school seniors, undergraduates, or graduate students, but not every program fits every level. Check the study-level label on each row and confirm the official eligibility rules before applying."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships; some may require essays while others do not. Out of the listings, approximately 11 have an essay requirement, so be sure to review the details for each scholarship."
+      "question": "Do all disability scholarships here require the same documents or essays?",
+      "answer": "No—requirements vary across these rows, and essay expectations are mixed in this filtered set. When you explore options, open the official source for each listing to confirm what documents, essays, or other materials are required."
     },
     {
-      "question": "How do I verify the details of a specific scholarship?",
-      "answer": "To verify details, click on the individual scholarship listings. Each entry provides specific information about award amounts, deadlines, and requirements, ensuring you have the most accurate and up-to-date information."
+      "question": "How can I compare award amounts and deadlines on this page?",
+      "answer": "You can compare the rows directly, but amounts and deadlines differ by program. Award values in this USA-focused catalog vary by listing, and deadline text is not universal, so check dates promptly and confirm both details on the official scholarship page."
+    },
+    {
+      "question": "Are these scholarships only for one major or career path?",
+      "answer": "No, this filtered set includes listings connected to multiple areas, with examples tied to education, law, security and protective services, business, and transportation. If you want to browse more efficiently, compare both the disability eligibility tag and the field-of-study details on each listing."
     }
   ],
+  "page_data": {
+    "exactCount": 40,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 250,
+      "maxUsd": 12000,
+      "statedAmountCount": 40,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 28,
+      "within60Days": 40,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-17",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 9,
+      "noCount": 31,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript",
+        "link",
+        "personal_statement",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "Undergraduate"
+      ],
+      "commonFields": [
+        "education",
+        "legal_professions_and_law_studies",
+        "security_and_protective_services",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 4
+      },
+      {
+        "name": "Waubonsee Community College",
+        "count": 3
+      },
+      {
+        "name": "Lime Connect",
+        "count": 2
+      },
+      {
+        "name": "National Center for Learning Disabilities",
+        "count": 2
+      },
+      {
+        "name": "Worcester State University",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "disability",
+      "education",
+      "law",
+      "community",
+      "medical",
+      "safety"
+    ]
+  },
   "_meta": {
     "canonicalPath": "disability",
-    "generatedAt": "2026-04-02T10:35:54.791Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 59,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:15:41.247Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 40,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

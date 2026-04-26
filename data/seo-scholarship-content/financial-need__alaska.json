@@ -1,48 +1,124 @@
 {
-  "seo_title": "Alaska Scholarships for Financial Need | Up to $25,000",
-  "seo_description": "Explore 11 financial need scholarships in Alaska with awards from $1,000 to $25,000. Check individual deadlines and requirements.",
-  "intro": "Finding financial support can be a crucial step for students in Alaska, and this selection of 11 scholarships specifically addresses financial need. Award sizes vary significantly, with amounts ranging from approximately $1,000 to $25,000. Each scholarship has its own unique requirements and deadlines, so it's essential to review the details closely to identify the best fit for your situation.",
-  "h1": "Financial Need Scholarships in Alaska",
-  "supporting": "This list includes a diverse range of scholarships across categories like arts, community, education, and STEM, many of which do not require essays. As you explore, compare the award amounts, review the specific eligibility criteria, and take note of the varying deadlines—some are approaching soon. This careful assessment will help you prioritize which opportunities to pursue.",
-  "related_intro": "For more options, check out related scholarship pages that cater to different needs and categories.",
+  "seo_title": "Find Financial Need Scholarships in Alaska, USA",
+  "seo_description": "Financial need scholarships in Alaska, USA: compare awards, review varying deadlines, and apply to a focused set of programs.",
+  "intro": "Trying to find USA scholarships that match both financial need and Alaska ties usually means sorting through very different programs with different rules, study levels, and subject areas. This filtered slice brings those rows together so you can compare options without losing the Alaska focus. You will see listings connected to areas such as education, community, arts, STEM, and disability, with examples that reach from high school seniors to graduate students. Award amounts vary by listing, deadlines differ by program, and eligibility details can change from one row to the next. Many listings in this slice appear to have lighter application signals and often no essay flag, but you should still read each requirement line carefully before you apply.",
+  "h1": "Find Financial Need Scholarships in Alaska USA",
+  "supporting": "Use the rows below to compare more than the scholarship title alone. Check how each listing describes residency or citizenship, study level, and field of study, then weigh that against the award text and deadline shown in the row. This Alaska and financial need combination is worth a close scan because the programs are not all aimed at the same applicant type. Some lean toward education or community themes, while others connect to arts, engineering, construction trades, business, or broader undergraduate study. Open the official page for any strong match and verify current terms before you apply.",
+  "related_intro": "If these Alaska financial need listings feel too narrow or too broad, related pages can help you compare nearby paths. You may want to explore other Alaska scholarship filters, or look at financial need pages that emphasize a study level, category, or field of study that fits your plans more closely.",
   "how_to_use": [
-    "Compare deadlines across listings to prioritize applications",
-    "Scan award amounts to identify the best financial fit",
-    "Read eligibility requirements carefully for each scholarship",
-    "Open official scholarship pages for detailed information",
-    "Shortlist opportunities that align with your goals"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages to verify eligibility",
+    "Shortlist listings that match your study level and field",
+    "Check award details and application steps before you apply"
   ],
   "who_for": [
-    "Students with financial need in Alaska",
-    "Applicants pursuing arts or STEM fields",
-    "Community-focused learners seeking support",
-    "Undergraduates looking for financial assistance",
-    "Students interested in scholarships with lighter requirements"
+    "Alaska residents comparing need-based scholarship options",
+    "High school seniors in Alaska planning college costs",
+    "College and graduate students with financial need",
+    "Applicants seeking Alaska listings with arts, education, community, or STEM themes"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Alaska?",
-      "answer": "The list includes a variety of scholarships across multiple categories such as community, education, arts, STEM, and disability. Currently, there are 11 scholarships available that cater to different interests and fields of study."
+      "question": "How can I find financial need scholarships in Alaska that fit my background?",
+      "answer": "Use this filtered view to compare Alaska listings by study level, category, and eligibility details shown in each row. In this USA catalog, requirements can differ by program, so confirm residency, citizenship, and need-based criteria on the official scholarship page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this category do not require essays, making the application process potentially easier for applicants. However, it's essential to verify the specific requirements for each scholarship, as they can vary."
+      "question": "What kinds of scholarships appear in this Alaska financial-need list?",
+      "answer": "The programs below span topics such as education, community, arts, STEM, and disability, with examples tied to fields like education, business, visual and performing arts, construction trades, and engineering. That makes it useful to explore more than one category if your interests overlap."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes vary among the scholarships listed, with amounts ranging approximately from $1,000 to $25,000. Be sure to check the details of each scholarship for the exact funding available."
+      "question": "Are these Alaska scholarships only for college students?",
+      "answer": "Not always. This filtered set includes sample study levels such as high school senior, college, and graduate student, so browse the row details to find the level that matches where you are now."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All 11 scholarships have deadlines, but they differ from one another. Some deadlines may be approaching within the next 45 days, so it's advisable to review each listing promptly to ensure you don't miss any opportunities."
+      "question": "Do financial need scholarships in Alaska usually require an essay?",
+      "answer": "Many listings in this slice appear to have lighter application requirements, and many are marked with no essay in the catalog metadata. Still, requirements can change row to row, so verify the application steps on the official scholarship page before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 500,
+      "maxUsd": 25000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 11,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 14,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "architecture_and_related_services",
+        "computer_and_information_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Native Forward Scholars Fund",
+        "count": 3
+      },
+      {
+        "name": "Alaska Commission on Postsecondary Education",
+        "count": 1
+      },
+      {
+        "name": "Alaska Housing Finance Corporation",
+        "count": 1
+      },
+      {
+        "name": "Arizona Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Bering Straits Native Corporation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "arts",
+      "stem",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/alaska",
-    "generatedAt": "2026-04-02T11:14:09.875Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 11,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:43:33.434Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

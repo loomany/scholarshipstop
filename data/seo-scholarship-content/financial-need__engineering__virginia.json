@@ -1,0 +1,108 @@
+{
+  "seo_title": "Find Virginia Engineering Need Scholarships | USA",
+  "seo_description": "Financial need engineering scholarships in Virginia, USA. Compare deadlines, award details, and requirements, then apply on official program pages.",
+  "intro": "Trying to find engineering scholarships in Virginia that also reflect financial need usually means cutting past broad results and comparing a focused set of listings. This filtered slice is useful for applicants who want USA opportunities tied to engineering while keeping an eye on need-based eligibility. The programs below can differ in award size, deadline timing, study level, residency language, and field fit, so it helps to read each row closely instead of assuming the same rules apply across the list. Many listings in this slice appear to have lighter application signals, and some may not require an essay, but requirements still need to be verified on the official scholarship pages before you apply.",
+  "h1": "Find Financial Need Engineering Scholarships in Virginia USA",
+  "supporting": "Use these rows to compare more than the title alone. Check how each listing describes engineering or related technical study, note any Virginia or USA residency wording, and read the requirement line for details on level of study and eligibility. Award amounts vary by listing and should be confirmed on the sponsor page. Deadlines also differ by program, and some appear close enough that it is smart to review dates promptly. If a listing looks relevant, open the official source, compare the fit, and shortlist the options that match your background best.",
+  "related_intro": "If this Virginia engineering and financial-need mix feels too narrow, related pages can help you compare nearby paths, such as broader engineering results, other Virginia scholarship filters, or need-based listings in adjacent study areas. That is often the fastest way to find a better fit without starting your search over.",
+  "how_to_use": [
+    "Compare each row for deadline wording and eligibility details",
+    "Read the requirement line before assuming no essay or simple steps",
+    "Open the official scholarship page to verify award and rules",
+    "Shortlist the listings that match your engineering focus and location"
+  ],
+  "who_for": [
+    "Virginia applicants pursuing engineering study with financial need",
+    "USA residents comparing engineering and technical scholarship options",
+    "Graduate students checking engineering-related funding in Virginia",
+    "Applicants interested in STEM or trade-connected engineering pathways"
+  ],
+  "faq": [
+    {
+      "question": "How can I find engineering scholarships in Virginia for students with financial need?",
+      "answer": "Use this filtered view to compare Virginia listings that match both engineering and financial-need criteria. Then open each row and verify eligibility, required documents, and residency details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this page?",
+      "answer": "Not automatically—each program has its own rules, and some USA-based listings may also specify study level or citizenship requirements. Check the official source for each row before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on eligibility, deadline wording, award details, and any application requirements shown in the catalog and confirmed on official pages. Amounts vary by listing, and deadlines differ by program, so compare row by row."
+    },
+    {
+      "question": "Are these scholarships only for undergraduate engineering students?",
+      "answer": "Not necessarily. In this slice, graduate student appears among the sample study levels, so it is best to explore each listing individually rather than assume one academic level fits all."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "business_management_and_marketing",
+        "construction_trades",
+        "education",
+        "engineering",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Society of American Military Engineers-Hampton Roads Post",
+        "count": 1
+      },
+      {
+        "name": "Society of American Military Engineers-Virginia Peninsula Post",
+        "count": 1
+      },
+      {
+        "name": "Virginia Transportation Construction Alliance",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "biology"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/engineering/virginia",
+    "generatedAt": "2026-04-26T13:48:00.565Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -54,6 +54,20 @@ function metaDescription(s: Scholarship): string {
   );
 }
 
+function buildScholarshipDetailSeoTitle(baseTitle: string): string {
+  const normalizedBase = baseTitle.replace(/\s+/g, ' ').trim() || 'Scholarship';
+  let title = `${normalizedBase} in USA 2026 - Apply Guide`;
+  if (title.length < 30) {
+    title = `${normalizedBase} Scholarship USA 2026 Apply`;
+  }
+  if (title.length > 65) {
+    const suffix = ' USA 2026 Apply';
+    const keep = Math.max(10, 65 - suffix.length);
+    title = `${normalizedBase.slice(0, keep).trimEnd()}${suffix}`;
+  }
+  return title;
+}
+
 /**
  * Shared metadata for `/scholarships/...` slug paths (listing + detail). Used by
  * `[[...slugPath]]/layout.tsx` and `/scholarships/[state]/[university]` when delegating to legacy SEO routes.
@@ -228,7 +242,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     return { title: 'Scholarship' };
   }
 
-  const title = `${record.title} 2026: Eligibility, Deadline, Award Amount`;
+  const title = buildScholarshipDetailSeoTitle(record.title);
   const fallbackDescription = metaDescription(record);
   const path = scholarshipPublicPath(record);
   const description =

@@ -1,48 +1,113 @@
 {
-  "seo_title": "Engineering Scholarships in Delaware | 8 Opportunities",
-  "seo_description": "Explore 8 engineering scholarships in Delaware with awards from $2,000 to $5,000. Check individual deadlines and requirements.",
-  "intro": "Finding financial support for engineering studies in Delaware can be crucial for aspiring students. This filter showcases 8 scholarships specifically tailored for engineering students, with award amounts generally ranging from $2,000 to $5,000. Keep in mind that requirements and deadlines vary across these opportunities, so it’s important to review each listing carefully to find the best fit for your situation.",
-  "h1": "Find 8 Engineering Scholarships in Delaware",
-  "supporting": "As you explore this list, consider comparing the award amounts and the specific requirements for each scholarship. Some may require essays while others do not, and deadlines differ significantly. This variety means you can find options that align with your strengths and timeline. Be proactive in checking the details, especially if you see deadlines approaching within the next month.",
-  "related_intro": "If you're interested in more scholarships, check out related pages for additional opportunities in engineering or other fields.",
+  "seo_title": "Find Engineering Scholarships in Delaware, USA",
+  "seo_description": "Engineering scholarships in Delaware, USA with awards and deadline details. Compare listings and apply after checking each program’s requirements.",
+  "intro": "Trying to find engineering scholarships connected to Delaware usually means sorting through programs that differ a lot in scope, eligibility, and timing. This filtered USA view brings those listings into one place so you can compare options without jumping between unrelated results. The rows below lean toward STEM and include opportunities that may fit engineering and nearby technical areas, with some overlap into transportation, architecture, and related study paths. Awards are listed on each row, but amounts vary by program and should be verified on the official page. Deadlines also differ across listings, and at least some appear to be coming up soon, so it makes sense to check details promptly. Requirements are mixed as well, with some programs looking comparatively lighter-touch than others.",
+  "h1": "Compare Engineering Scholarships in Delaware USA",
+  "supporting": "Use this slice to compare more than just the scholarship title. Scan the award text, deadline field, study level notes, and any citizenship or residency language before you apply. If a listing looks close to your background, open the full record and read the requirement lines carefully, especially for essay expectations and field-of-study wording. Because these Delaware engineering results can include adjacent technical themes, it is worth comparing how narrowly each program defines eligible majors. Shortlist the strongest matches, then verify every detail on the sponsor or official source page before you submit anything.",
+  "related_intro": "If you do not find enough matches here, check nearby scholarship pages that widen the search by topic or location. Related views can help you explore broader STEM options, compare Delaware results with other places in the USA, or find programs tied to education, architecture, transportation, and other connected fields.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Scan award amounts to find suitable options",
-    "Read the requirement lines for specifics",
-    "Open official pages for detailed information",
-    "Shortlist scholarships that match your profile"
+    "Compare deadline lines across the rows",
+    "Read each requirement summary carefully",
+    "Open official pages before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
   ],
   "who_for": [
-    "Engineering students in Delaware",
-    "Students seeking STEM-related funding",
-    "Applicants who may have lighter essay requirements",
-    "Individuals looking for scholarships with varying deadlines",
-    "Students pursuing education in related fields"
+    "Delaware students seeking engineering funding",
+    "Graduate students in engineering or related technical fields",
+    "USA applicants comparing STEM scholarships with Delaware relevance",
+    "Students in transportation, architecture, or mechanic related programs"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Delaware?",
-      "answer": "There are currently 8 scholarships listed for engineering students in Delaware, with award amounts generally ranging from $2,000 to $5,000. These opportunities may cater to various aspects of engineering and related fields."
+      "question": "How do I find engineering scholarships in Delaware that I can actually apply for?",
+      "answer": "Use this filtered view to compare the Delaware engineering rows first, then open the official source for each program before you apply. Eligibility, required materials, and deadline details vary by listing, even within the same USA filter slice."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships. While some may require essays, others do not, so it's important to check the specific details for each listing to understand what is needed."
+      "question": "Are these only for Delaware residents, or can other USA applicants explore them too?",
+      "answer": "Not every row uses the same residency language. Some listings in this catalog slice show labels such as U.S. citizen or U.S. permanent resident, so check each scholarship's official page to confirm who can apply."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All 8 scholarships have deadlines, but they differ from one another. Some deadlines are approaching quickly, so it's advisable to verify the dates for each scholarship as soon as possible."
+      "question": "How can I compare award amounts on this Delaware engineering scholarship page?",
+      "answer": "You can compare the amounts shown row by row in the catalog, but treat them as listing-level details, not a promise for every program. In this slice, posted awards vary, and you should verify the current amount on the official scholarship page before applying."
     },
     {
-      "question": "What should I do if I need more information about a specific scholarship?",
-      "answer": "For more details about a specific scholarship, including eligibility criteria and application instructions, refer directly to the listing. Each entry provides essential information to help you determine if it's a good fit for you."
+      "question": "Do all engineering scholarships in Delaware have the same deadline?",
+      "answer": "No—deadlines differ by program on this page. Since every row shows deadline text and some appear to be coming up soon, it's smart to check dates promptly on both the listing and the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 2000,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-04-24",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "transportation_and_materials_moving",
+        "architecture_and_related_services",
+        "mechanic_and_repair_tech_technicians"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Philadelphia Chapter",
+        "count": 6
+      },
+      {
+        "name": "Illuminating Engineering Society-Philadelphia Section",
+        "count": 1
+      },
+      {
+        "name": "Ports of Philadelphia Maritime Society",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "education"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/delaware",
-    "generatedAt": "2026-04-02T10:44:47.910Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:35:02.196Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 8,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

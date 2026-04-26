@@ -1,46 +1,107 @@
 {
-  "seo_title": "Disability Scholarships in Washington | 4 Listings",
-  "seo_description": "Explore 4 disability scholarships in Washington. Award sizes vary, and deadlines differ—check details for each listing.",
-  "intro": "Finding financial support can be a crucial step for students with disabilities in Washington. This catalog features 4 scholarships specifically aimed at helping individuals in this community. Award sizes vary, with some listings indicating amounts between $1,500 and $2,500. Keep in mind that deadlines for these opportunities differ, so it's wise to check each listing promptly to ensure you don't miss out.",
-  "h1": "Washington Disability Scholarships: 4 Opportunities",
-  "supporting": "This selection of scholarships offers a mix of requirements, with many listings not requiring essays, making them potentially easier to apply for. As you review the options, consider comparing the award amounts, eligibility criteria, and deadlines. Each scholarship has unique features that could align with your educational goals or community involvement.",
-  "related_intro": "If you're interested in broader opportunities, consider exploring scholarships in related categories like education and community support.",
+  "seo_title": "Find Disability Scholarships in Washington, USA",
+  "seo_description": "Disability scholarships in Washington, USA with deadlines that vary by listing. Compare options and apply early as dates can come up soon.",
+  "intro": "Trying to find disability scholarships in Washington usually means narrowing past broad USA results and getting to listings that actually match your location and eligibility. This filtered slice brings together programs tied to disability with Washington in view, so you can compare options without jumping between unrelated pages. The rows below span themes such as community, disability, and education, and they may fit different study stages, including graduate study and the high school senior stage. Award amounts, deadlines, and requirement details can vary from listing to listing, so it is worth reading each row closely. Many listings in this slice appear to have lighter application signals and often no essay, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Find Washington Disability Scholarships USA",
+  "supporting": "Use this set to compare more than the title alone. Check how each listing describes eligibility, location fit, study level, and category focus, then note whether the opportunity leans more toward education or broader community support. Deadlines differ across these rows, and some may be coming up soon, so it makes sense to review timing early. If an award amount is shown, treat it as listing-specific and confirm the current terms on the sponsor or official page before you apply.",
+  "related_intro": "If these Washington disability scholarships feel too narrow or you want more ways to compare, related pages can help you pivot by location, disability-focused funding, community scholarships, or education-themed listings across the USA catalog.",
   "how_to_use": [
-    "Check individual deadlines for each scholarship",
-    "Compare award amounts listed in the entries",
-    "Read the eligibility requirements carefully",
-    "Visit the official pages for detailed application instructions",
-    "Shortlist the scholarships that best fit your profile"
+    "Compare each row for eligibility details and Washington relevance",
+    "Read the requirement line carefully before you shortlist any program",
+    "Check deadline text early because timing can differ across listings",
+    "Open the official page to verify award terms and application steps",
+    "Shortlist the best matches, then apply after confirming current details"
   ],
   "who_for": [
-    "Students with disabilities in Washington",
-    "Individuals seeking community-focused scholarships",
-    "Applicants looking for lighter application requirements"
+    "Washington residents with a disability searching for local scholarship options",
+    "High school seniors in Washington comparing disability-related funding",
+    "Graduate students looking for Washington scholarships tied to disability eligibility",
+    "Applicants interested in community or education themed awards in Washington"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with disabilities in Washington?",
-      "answer": "There are currently four scholarships listed for students with disabilities in Washington. These opportunities span various categories, including education, community, and music, providing a range of options to consider."
+      "question": "How can I find disability scholarships in Washington that fit my situation?",
+      "answer": "Use this filtered view to compare Washington-based disability scholarship rows by category, study level, and any requirement notes shown in the catalog. Then open the official source for each program to confirm current eligibility, application steps, and location details."
     },
     {
-      "question": "How can I find out about the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all four listings include this information. It's advisable to check the specific dates promptly, as at least one scholarship has a deadline approaching within the next 45 days."
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Often, yes—these are separate USA scholarship listings, so you can explore each row on its own terms. Before you apply, verify on the official page that you meet that program’s disability and Washington requirements."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, although it's important to verify each individual listing for specific requirements. Many programs tend to have lighter application processes, making them more accessible."
+      "question": "Do all Washington disability scholarships on this page have the same deadline or award amount?",
+      "answer": "No. Deadlines differ by program, and award amounts vary by listing, so compare each row carefully and confirm details on the official source. In this slice, some dates appear relatively soon, so it’s smart to check deadlines promptly."
     },
     {
-      "question": "What are the typical award amounts for scholarships in this category?",
-      "answer": "While award sizes can vary, three of the listings provide numeric amounts ranging from approximately $1,500 to $2,500. Always check the details of each scholarship for the most accurate information."
+      "question": "Are essays usually required for these scholarships?",
+      "answer": "Many listings in this filtered set appear to have no essay flag in the catalog, but requirements can still vary row to row. Always review the official scholarship page before you apply in case forms, documents, or short responses have changed."
+    },
+    {
+      "question": "What kinds of scholarships might I see when I browse this Washington disability list?",
+      "answer": "The programs below commonly touch categories like disability, community, and education, with sample study levels including graduate student and high school senior. Titles in this slice include listings such as Incight Scholarship, High Bridge Foundation Scholarship, and Patricia Schroder Memorial Scholarship, but you should compare each one individually."
     }
   ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1500,
+      "maxUsd": 2500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-15",
+        "2026-05-07",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation for Southwest Washington",
+        "count": 1
+      },
+      {
+        "name": "High Bridge Foundation",
+        "count": 1
+      },
+      {
+        "name": "Incight",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "disability",
+      "education"
+    ]
+  },
   "_meta": {
     "canonicalPath": "disability/washington",
-    "generatedAt": "2026-04-02T11:09:36.814Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:33:10.660Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

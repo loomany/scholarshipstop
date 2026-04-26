@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find Closing Soon Scholarships in California, USA",
+  "seo_description": "Closing soon California scholarships in the USA: compare deadlines, award amounts, and requirements, then apply fast from official program pages.",
+  "intro": "Trying to apply before deadlines pass in California usually means moving fast and comparing details carefully. This filtered USA scholarship slice pulls together programs with closing dates coming up, so you can find options that may still fit your timeline without digging through broader results first. The rows below span areas such as community, education, arts, STEM, and biology, with examples that also touch agriculture, architecture, and physical sciences. Awards vary by listing, and so do eligibility rules, study levels, and application materials. Some programs may look lighter-touch, while others can ask for more documentation or an essay, so it is worth reading each requirement line closely before you decide where to apply.",
+  "h1": "Apply Soon: California Scholarships Closing Soon USA",
+  "supporting": "A smart way to use this list is to compare the deadline text first, then scan award wording, study level, and category fit. If you are deciding between several California scholarships, open the official pages and verify the current requirements, because deadlines differ by program and details can change. This slice is especially useful when you want to find near-term opportunities across mixed subjects instead of staying inside one major only. Shortlisting a few strong matches can make it easier to act quickly without missing better-fit options.",
+  "related_intro": "If you do not find enough matches here, compare nearby California scholarship filters and related topic pages to widen the search. That can help you spot programs in similar categories, different timelines, or broader USA listings that still match your study level or subject area.",
+  "how_to_use": [
+    "Sort or scan by deadline first",
+    "Compare award text across similar listings",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the best-fit programs and apply promptly"
+  ],
+  "who_for": [
+    "California applicants facing near-term scholarship deadlines",
+    "High school seniors seeking local or state-based funding",
+    "Graduate students comparing education, STEM, or biology options",
+    "Students interested in community, arts, or agriculture-related awards"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts on these California listings?",
+      "answer": "Yes—these rows include listed award amounts, but amounts vary by listing and should be verified on the official page before you apply. In this slice, awards shown range from smaller and mid-sized scholarships rather than one standard amount."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this closing-soon California list?",
+      "answer": "The programs below span categories such as Community, Education, Arts, STEM, Biology, and Miscellaneous. You can also browse examples tied to fields like education, agriculture and related sciences, architecture and related services, biological and biomedical sciences, and physical sciences."
+    },
+    {
+      "question": "Are these scholarships only for one study level?",
+      "answer": "No—this filtered set includes mixed study levels, with examples such as high school senior and graduate student. Check each row and the official source to confirm who can apply, since eligibility varies."
+    },
+    {
+      "question": "Do all of these California scholarships require an essay?",
+      "answer": "No single requirement applies to the whole page. Some listings may have lighter application requirements and some may ask for an essay, so compare the rows and verify the final application instructions on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 12,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 12,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 12,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-04-06",
+        "2026-04-06",
+        "2026-04-08"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "architecture_and_related_services",
+        "biological_and_biomedical_sciences",
+        "physical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "The Links, -Stockton Chapter",
+        "count": 2
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Eta Gamma Omega Chapter",
+        "count": 1
+      },
+      {
+        "name": "California Interscholastic Federation-Los Angeles City Section",
+        "count": 1
+      },
+      {
+        "name": "California Women for Agriculture-Ventura County Chapter",
+        "count": 1
+      },
+      {
+        "name": "Central California Asian Pacific Women",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "arts",
+      "stem",
+      "biology"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "california/closing-soon",
+    "generatedAt": "2026-04-26T13:29:26.976Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 12,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

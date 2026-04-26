@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore 196 Scholarships for International Graduate Students",
-  "seo_description": "Discover 196 scholarships available for international graduate students. Find funding opportunities tailored to your needs.",
-  "h1": "Scholarships for International Graduate Students",
-  "intro": "Navigating the financial landscape as an international graduate student can be challenging. Fortunately, there are 196 scholarships specifically designed to support your academic journey. These scholarships vary in eligibility criteria, award amounts, and application processes, providing a range of options for students from different backgrounds and fields of study. From the International Student Scholarship to the Paul and Daisy Soros Fellowships for New Americans, opportunities abound to help alleviate the financial burden of graduate education. Whether you are pursuing engineering, arts, or any other discipline, you can find scholarships that align with your academic goals and personal circumstances.",
-  "supporting": "Eligibility for these scholarships often includes factors such as your country of origin, field of study, and academic performance. Many scholarships require applicants to submit essays, letters of recommendation, and proof of enrollment in a graduate program. Deadlines vary, so it's crucial to keep track of each scholarship's specific timeline. For instance, the Vanna Christian Sun Legacy Scholarship and the Razor's Edge Global Scholarship may have different application windows. To maximize your chances of securing funding, tailor your application materials to highlight your unique experiences and aspirations. Additionally, consider reaching out to the scholarship providers for any clarifications or tips on the application process.",
-  "related_intro": "In addition to the scholarships listed, there are numerous resources available to help international graduate students find funding. Networking with alumni and utilizing university resources can further enhance your search.",
+  "seo_title": "Find USA Scholarships for International Graduate Students",
+  "seo_description": "Scholarships for international graduate students in the USA: compare awards, deadlines, and eligibility, then apply on official program pages.",
+  "intro": "Trying to find USA scholarships for international graduate students usually means sorting through mixed eligibility rules, study areas, and application steps. This filtered slice narrows the search to programs connected to graduate study while still covering a wide range of subjects, including education, STEM, medicine, arts, community, and other miscellaneous categories. As you compare the rows below, expect real variation: some listings may ask for essays, some may look lighter on requirements, and award amounts can differ widely by program. Deadlines also vary across listings, so it is smart to check timing early if you plan to apply in the current cycle or for upcoming USA opportunities in twenty twenty six.",
+  "h1": "Find Scholarships for International Graduate Students USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read each row for study level fit, citizenship or residency wording, field of study clues, and any requirement notes before you decide a program matches your profile. Because this slice can include broad education awards alongside subject-specific options such as engineering, business, English, or health fields, it is worth scanning beyond your exact major. Open the official page for any strong match, confirm the latest rules, and verify amounts, deadlines, and document requests before you apply.",
+  "related_intro": "If these results feel close but not exact, related pages can help you refine the search by topic, study level, or applicant type. That is useful when you want to compare broader international student options against graduate-only listings in the USA catalog.",
   "how_to_use": [
-    "Browse the list of 196 scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary documents like essays and recommendations.",
-    "Submit applications before the deadlines.",
-    "Follow up with scholarship providers if needed."
+    "Compare deadline wording across the rows first",
+    "Read the requirement line for essay and eligibility details",
+    "Check field of study labels before opening a listing",
+    "Open the official page to verify current rules",
+    "Shortlist strong matches and compare award text carefully"
   ],
   "who_for": [
-    "International graduate students seeking financial aid.",
-    "Students from diverse academic backgrounds.",
-    "Those looking for specific scholarships based on their field of study."
+    "International applicants pursuing graduate study in the USA",
+    "Master's or doctoral students comparing funding across subjects",
+    "Graduate candidates in education, STEM, medicine, arts, or community-focused programs",
+    "Applicants who want to find both broad and major-specific scholarship options"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available?",
-      "answer": "There are various types of scholarships including merit-based, need-based, and specific awards for certain fields of study."
+      "question": "How can I find scholarships for international graduate students in the USA on this page?",
+      "answer": "Use this filtered view to explore listings tagged for international students and graduate study. Then open each row and verify eligibility, study level, and USA-specific details on the official scholarship page."
     },
     {
-      "question": "How can I find the right scholarship for me?",
-      "answer": "Review eligibility requirements and consider your academic background and interests to find suitable scholarships."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—this catalog lets you compare rows side by side, but amounts and deadlines vary by program. Some listings show clear USD amounts, while others may differ in format, so confirm the latest details with the source."
     },
     {
-      "question": "Are there scholarships that do not require essays?",
-      "answer": "Yes, some scholarships like the $25,000 'Be Bold' No-Essay Scholarship do not require essays, but check individual requirements."
+      "question": "Do all scholarships here require an essay?",
+      "answer": "No single rule applies across this page. Requirements are mixed in the catalog, so if you want to apply quickly, check each listing for essay expectations and other application steps before you start."
+    },
+    {
+      "question": "Are these scholarships only for one subject area?",
+      "answer": "No—this filtered set includes multiple categories and fields, including Education, STEM, Medicine, Arts, Community, and Miscellaneous. If you want to browse by fit, compare the subject tags on each row with your graduate program."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-international-graduate-students",
-    "generatedAt": "2026-04-25T13:17:47.397Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:07:25.446Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

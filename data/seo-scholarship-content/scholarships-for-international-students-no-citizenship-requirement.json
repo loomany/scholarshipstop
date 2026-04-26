@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore 196 Scholarships for International Students Without Citizenship Requirements",
-  "seo_description": "Discover 196 scholarships available for international students with no citizenship requirements. Find funding opportunities today!",
-  "h1": "Scholarships for International Students with No Citizenship Requirement",
-  "intro": "Navigating the world of scholarships can be challenging, especially for international students who may not hold citizenship. Fortunately, there are numerous funding opportunities available that do not require citizenship status. With 196 scholarships currently open to international students, you can find financial support tailored to your unique situation. These scholarships can help cover tuition fees, living expenses, and other educational costs, allowing you to focus on your studies and achieve your academic goals. From merit-based awards to need-based grants, the options are diverse and accessible. Start your search today to secure the funding you need to succeed!",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited institutions in the U.S. or other countries. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, cater specifically to those who may have recently immigrated. Deadlines also vary, so it's crucial to check each scholarship's requirements and apply early. When applying, ensure you have all necessary documents, including transcripts, letters of recommendation, and personal statements. Tailor your application to highlight your unique experiences and aspirations as an international student. Many scholarships also offer online applications, making it easier to submit your materials from anywhere in the world.",
-  "related_intro": "In addition to scholarships, international students may explore grants, fellowships, and assistantships that also provide financial support without citizenship requirements.",
+  "seo_title": "Find USA Scholarships for International Students",
+  "seo_description": "Scholarships for international students in the USA with no citizenship requirement. Compare deadlines, amounts, and eligibility, then apply.",
+  "intro": "Trying to find USA scholarships you can actually apply for without a citizenship requirement usually means cutting through a lot of mixed eligibility language. This filtered slice brings together programs that are relevant to international students, so you can compare options without starting from a broad catalog. The rows below span areas such as education, STEM, community, medicine, arts, and other miscellaneous topics, with examples tied to study paths from high school through graduate school. Awards, deadlines, essay expectations, and requirement details vary by listing, so it is worth reading each row closely rather than assuming the same rules apply across the set. If you want to browse and compare opportunities for the current cycle, this is a practical place to start.",
+  "h1": "Apply for USA Scholarships Without Citizenship",
+  "supporting": "A smart way to use this list is to compare the requirement line, study level, field tags, and deadline text side by side before you open every result. Some listings may be lighter touch, while others ask for more materials, and essay expectations are mixed in this slice. Award amounts also vary by listing and should be verified on the official page. Because deadline timing differs across these rows and some opportunities may be approaching soon, it makes sense to shortlist strong matches first, then confirm eligibility, application steps, and any residency or enrollment details directly with the sponsor.",
+  "related_intro": "If these results feel close but not quite right, use related pages to narrow by study level, subject area, or other eligibility details. That can make it easier to find scholarships in the USA that better match your academic path, application preferences, or program type.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary documents for application.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status as needed."
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist listings by study level and subject tags",
+    "Check award wording and essay expectations carefully"
   ],
   "who_for": [
-    "International students seeking financial aid.",
-    "Students without U.S. citizenship or permanent residency.",
-    "Those pursuing higher education in various fields."
+    "International students seeking USA scholarships without a citizenship requirement",
+    "Graduate applicants comparing education or STEM funding options",
+    "High school seniors looking for scholarships open beyond citizen-only rules",
+    "College students reviewing community, arts, medicine, or miscellaneous listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are merit-based, need-based, and program-specific scholarships available for international students."
+      "question": "How can I find scholarships in the USA for international students without a citizenship requirement?",
+      "answer": "Use this filtered view to compare rows that are tagged for international students and then verify eligibility on each official scholarship page. In this USA-focused catalog slice, citizenship and residency rules can still vary by listing."
     },
     {
-      "question": "Do I need to be enrolled in a specific program to apply?",
-      "answer": "Eligibility varies; some scholarships are open to all fields of study, while others may be program-specific."
+      "question": "Can I apply if I am not a U.S. citizen or permanent resident?",
+      "answer": "Some programs in these rows are surfaced because they do not center a citizenship requirement, but you should still check the official source before you apply. A listing may also mention residency, school, or study-level details that matter."
     },
     {
-      "question": "How can I find more scholarships?",
-      "answer": "Utilize scholarship search engines, university financial aid offices, and international student organizations for more opportunities."
+      "question": "What should I compare before I apply?",
+      "answer": "Compare eligibility, study level, field of study, essay requirements, award amount, and deadline row by row. Amounts vary by listing, and deadlines differ by program, so confirm both on the official page."
+    },
+    {
+      "question": "Are these scholarships only for one major or degree level?",
+      "answer": "No—this filtered set includes a mix of topics such as education, STEM, medicine, arts, community, and miscellaneous areas, plus multiple study levels. You can browse and explore the rows to find options that match your academic stage and subject."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-international-students-no-citizenship-requirement",
-    "generatedAt": "2026-04-25T13:29:22.877Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:08:59.437Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

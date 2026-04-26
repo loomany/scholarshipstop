@@ -1,48 +1,121 @@
 {
-  "seo_title": "Virginia Engineering Scholarships | 8 Opportunities",
-  "seo_description": "Explore 8 engineering scholarships in Virginia with awards from $1,000 to $5,000. Check deadlines and requirements for each listing.",
-  "intro": "Finding financial support for engineering studies in Virginia is crucial for many students. This catalog features 8 scholarships specifically tailored for aspiring engineers, with award amounts typically ranging from $1,000 to $5,000. Each listing has its own unique requirements and deadlines, so it’s important to review them closely. Many of these opportunities do not require essays, making them more accessible for applicants who may prefer a streamlined application process.",
-  "h1": "Find 8 Engineering Scholarships in Virginia",
-  "supporting": "When exploring these scholarships, take note of the varying award sizes and deadlines. Some scholarships have upcoming deadlines within the next 45 days, so prompt action is advisable. Compare the specific eligibility criteria and required materials for each listing to identify the ones that best match your profile. This focused selection can help you maximize your chances of securing funding for your education.",
-  "related_intro": "For more options, consider checking out related scholarships in other STEM fields or nearby states to broaden your opportunities.",
+  "seo_title": "Find Engineering Scholarships in Virginia, USA",
+  "seo_description": "Engineering scholarships in Virginia, USA with award ranges, deadlines, and requirements that vary by listing. Compare options and apply early.",
+  "intro": "Trying to find engineering scholarships in Virginia usually means narrowing a broad USA search into programs that actually match your location and field. This filtered slice brings together Virginia-focused listings tied to engineering and related STEM study, with examples that range from freshman-oriented options to undergraduate, graduate, and trade or technical training opportunities. Awards vary by listing, and so do deadlines, essay expectations, and eligibility details such as study level or residency language. Some rows may be lighter-touch than others, but every program should be checked individually. If you want to apply in this category for the current cycle, it is worth scanning these rows promptly and comparing the official requirements before you commit time to any one application.",
+  "h1": "Compare Engineering Scholarships in Virginia USA",
+  "supporting": "Use this list to compare more than the title alone. Read each row for study level, category overlap, and any requirement cues, then open the official source to verify award details, deadline wording, and submission steps. Because this Virginia engineering slice includes programs with slightly different audiences and related fields, it can also help you spot scholarships you might miss in a broader USA search. Shortlisting a few strong matches is usually more useful than applying blindly across every listing.",
+  "related_intro": "If you are close to qualifying for this set but not seeing enough matches, check related pages that widen the field, location, or study level. That can help you compare Virginia options against broader engineering or STEM scholarship listings in the USA.",
   "how_to_use": [
-    "Review each scholarship's award amount and eligibility criteria",
-    "Compare deadlines to prioritize applications",
-    "Check for essay requirements and prepare accordingly",
-    "Open official scholarship pages for detailed information",
-    "Shortlist your top choices and verify details on sponsor sites"
+    "Compare deadline text across the rows first",
+    "Read the requirement line for essay and eligibility details",
+    "Open each official page to verify award terms",
+    "Shortlist the listings that best match your study level",
+    "Apply only after confirming current rules on the sponsor site"
   ],
   "who_for": [
-    "Engineering students in Virginia",
-    "Undergraduates seeking financial aid",
-    "Applicants looking for non-essay scholarships",
-    "Students interested in community-focused funding",
-    "Individuals pursuing technical training scholarships"
+    "Virginia students pursuing engineering or closely related STEM study",
+    "High school seniors looking for freshman-entry engineering funding",
+    "Undergraduate or graduate applicants comparing Virginia-based opportunities",
+    "Trade and technical training applicants with engineering-adjacent goals"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Virginia?",
-      "answer": "There are currently 8 scholarships listed specifically for engineering students in Virginia. These scholarships cover various categories, including STEM, community, and law, providing a range of options for applicants."
+      "question": "How can I find engineering scholarships in Virginia that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, category, and any citizenship or residency notes shown in the catalog. Then open the official source for each program to verify current eligibility before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this listing do not require an essay, making the application process potentially simpler. However, it's important to verify the specific requirements for each scholarship, as details can vary."
+      "question": "Can I apply to these Virginia engineering scholarships if I’m in high school or graduate school?",
+      "answer": "Some listings in this USA filter include study levels such as high school senior and graduate student, but eligibility varies by program. Check each row and confirm details on the official scholarship page before you apply."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships range from approximately $1,000 to $5,000. Each scholarship has its own specific amount, so be sure to check the details for each listing."
+      "question": "How do I compare award amounts on this engineering scholarships page?",
+      "answer": "The programs below list award amounts, but the value differs by listing and should be verified on the official source. In this slice, listed amounts vary across rows, so compare each one individually instead of assuming a standard award."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 8 scholarships listed have deadlines, but they vary from one scholarship to another. Some deadlines are approaching within the next 45 days, so it's advisable to review the listings promptly to ensure you don’t miss any opportunities."
+      "question": "Are these only for engineering majors, or should I browse related categories too?",
+      "answer": "Engineering is the main topic in this filtered set, but some listings also show categories like STEM, Community, Arts, or Biology. It can be worth browsing and comparing those labels in the catalog if your coursework or interests overlap, then confirming fit on the official page."
     }
   ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-22",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "construction_trades",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Virginia Water Environment Association",
+        "count": 3
+      },
+      {
+        "name": "American Water Works Association-West Virginia Section",
+        "count": 1
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association-Belvoir Chapter",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southeast Chapter",
+        "count": 1
+      },
+      {
+        "name": "Society of American Military Engineers-Hampton Roads Post",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "biology",
+      "community",
+      "law"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/virginia",
-    "generatedAt": "2026-04-02T10:44:59.480Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 8,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:42:05.682Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

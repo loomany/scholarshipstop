@@ -28,6 +28,7 @@ type CacheRow = {
   status: 'pending' | 'ready' | 'failed';
 };
 
+const META_MIN_LEN = 120;
 const META_MAX_LEN = 160;
 
 function isAiMetaEnabled(): boolean {
@@ -54,10 +55,19 @@ function stripUnsafeChars(v: string): string {
 }
 
 export function sanitizeMetaDescription(raw: string): string {
-  const cleaned = stripUnsafeChars(raw);
+  let cleaned = stripUnsafeChars(raw);
   if (!cleaned) return '';
-  if (cleaned.length <= META_MAX_LEN) return cleaned;
-  return `${cleaned.slice(0, META_MAX_LEN - 1).trimEnd()}…`;
+  if (!/\b(compare|find|explore|apply|review)\b/i.test(cleaned)) {
+    cleaned = `${cleaned} Compare options and apply.`;
+  }
+  if (cleaned.length < META_MIN_LEN) {
+    cleaned = `${cleaned} Review eligibility, compare deadlines, and apply through official sources.`;
+  }
+  cleaned = stripUnsafeChars(cleaned);
+  if (cleaned.length > META_MAX_LEN) {
+    cleaned = `${cleaned.slice(0, META_MAX_LEN - 1).trimEnd()}…`;
+  }
+  return cleaned;
 }
 
 export function buildAiMetaPrompt(input: AiMetaRequest): string {
@@ -97,6 +107,11 @@ export async function generateAiMetaDescription(
   const key = process.env.OPENAI_API_KEY?.trim();
   if (!key) return null;
   const model = openAiSeoHubModel();
+  if (model !== 'gpt-5.4') {
+    throw new Error(
+      `OPENAI_SEO_MODEL must be exactly gpt-5.4 for AI meta generation. Current model: ${model}`
+    );
+  }
   const client = new OpenAI({ apiKey: key });
   const res = await client.chat.completions.create({
     model,
@@ -113,7 +128,7 @@ export async function generateAiMetaDescription(
   const raw = safeString(res.choices[0]?.message?.content);
   if (!raw) return null;
   const description = sanitizeMetaDescription(raw);
-  if (!description) return null;
+  if (!description || description.length < META_MIN_LEN) return null;
   return { description, model };
 }
 

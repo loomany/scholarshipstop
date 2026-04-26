@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in New York, USA…",
+  "seo_description": "Financial need undergraduate scholarships in New York, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in New York that take financial need into account usually means sorting through programs with very different rules, categories, and timelines. This filtered USA view brings those rows into one place so you can compare options tied to New York while staying focused on undergraduate study. You will see listings connected to areas like education, arts, community, disability, and STEM, with requirement lines that can differ from one program to the next. Award amounts vary by listing and should be verified on the official pages, and deadlines also vary by program, so it is smart to check details promptly if you plan to apply in the current cycle or look ahead to scholarships for twenty twenty six.",
+  "h1": "Find New York Undergraduate Scholarships for Financial Need USA…",
+  "supporting": "Use the list as a comparison tool, not just a set of names. Scan each row for category fit, study level language, residency or citizenship wording, and any signs that the application may be lighter touch or ask for more materials. Some titles are broad, while others may connect more closely to community, arts, education, or disability themes. When you compare scholarships side by side, it becomes easier to decide which ones are worth opening first and which official pages you should read closely before you apply.",
+  "related_intro": "If these New York undergraduate scholarships feel close but not quite right, related pages can help you widen or narrow the search. You may want to compare other undergraduate filters, look at different locations in the USA, or check nearby categories if your interests overlap with education, arts, community, disability, or STEM.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
+  ],
+  "who_for": [
+    "Undergraduates in New York seeking need-based aid",
+    "Applicants comparing New York programs by category",
+    "Students with interests in education, arts, or STEM",
+    "Residents reviewing scholarships with community or disability themes"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in New York for students with financial need?",
+      "answer": "Use this filtered view to compare New York listings that match financial need and undergraduate study. Then open each row and verify eligibility, residency or citizenship details, and application steps on the official source before you apply."
+    },
+    {
+      "question": "Are these only for current college students, or can other undergraduate-level applicants explore them too?",
+      "answer": "The filtered set is centered on undergraduate scholarships, but individual listings may use different study-level labels such as high school senior or college student. Review each scholarship page carefully to confirm where you fit before applying."
+    },
+    {
+      "question": "What kinds of scholarships appear in this New York filter?",
+      "answer": "You can browse a focused set of USA scholarships tied to New York with themes that include education, arts, disability, community, STEM, and miscellaneous topics. Sample listings in these rows show that categories and fields of study can differ from one program to the next."
+    },
+    {
+      "question": "Do these scholarships usually require essays or a long application?",
+      "answer": "Requirements are mixed across the catalog, so do not assume every program has the same application length. Some listings in this slice may be comparatively lighter-touch, but you should always confirm essay and document requirements on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 12,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 1000,
+      "maxUsd": 7500,
+      "statedAmountCount": 12,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-06-15",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services",
+        "communication_and_journalism",
+        "visual_and_performing_arts",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 2
+      },
+      {
+        "name": "Support Creativity",
+        "count": 2
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Kaplan Educational Foundation",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "arts",
+      "miscellaneous",
+      "disability",
+      "community",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/new-york",
+    "generatedAt": "2026-04-26T14:52:51.103Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 12,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

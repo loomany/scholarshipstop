@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find Vermont High School Need-Based Scholarships USA",
+  "seo_description": "Financial need high school scholarships in Vermont, USA. Compare award ranges, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find USA scholarships for Vermont high school students with financial need usually means balancing urgency with fit. In this filtered slice, the programs below give you a focused set of listings to compare without wading through unrelated awards. You can apply more efficiently by checking how each row handles eligibility, residency, school stage, and category themes such as community or education. Award amounts vary by listing, deadlines differ by program, and requirements are not identical, so it helps to read each entry closely before you decide where to spend time. Many listings in this view appear to have lighter application signals, and no essay is often indicated, but you should still verify every detail on the official scholarship page.",
+  "h1": "Find Financial Need High School Scholarships in Vermont USA",
+  "supporting": "A smart way to use this Vermont scholarship list is to compare the requirement line first, then scan award text and deadline wording side by side. Some rows may suit high school seniors best, while others can overlap with broader education paths or community-focused opportunities. If you want to explore options quickly for the current cycle, open the official source for any strong match, confirm residency and study level details, and shortlist the programs that still fit after verification.",
+  "related_intro": "If this set feels close but not quite right, use related pages to compare nearby scholarship filters by topic, eligibility, or location. That can help you find Vermont options beyond this exact combination or spot other USA listings for high school applicants with different requirement profiles.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match Vermont residency",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Vermont high school students showing financial need",
+    "High school seniors comparing Vermont scholarship options",
+    "USA applicants seeking many no essay listings",
+    "Families reviewing community or education themed awards"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Vermont scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore USA scholarship listings tagged for financial need, high school, and Vermont. Then open each row and verify eligibility, residency, and application details on the official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this Vermont scholarship list?",
+      "answer": "Yes—these rows include award amounts and deadline text, but both vary by listing. Amounts can range widely, and deadlines differ by program, so compare the catalog entries and confirm the latest details on the official pages."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Vermont?",
+      "answer": "Not always. While this filter is centered on high school, some listings in the broader catalog may show different study levels, so check each scholarship row carefully before you apply."
+    },
+    {
+      "question": "Do these Vermont financial need scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag in the catalog metadata, but requirements can still differ row to row. Before you apply, review the official scholarship page for essays, documents, and any extra steps."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 17000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "graduate_student",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "history"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Vermont Principals' Association",
+        "count": 2
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Sons of the American Legion",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/vermont",
+    "generatedAt": "2026-04-26T14:00:32.850Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,43 +1,133 @@
 {
-  "seo_title": "Explore 196 STEM Scholarships for International Students in the USA",
-  "seo_description": "Discover 196 STEM scholarships available for international students in the USA. Find funding opportunities to support your education.",
-  "h1": "STEM Scholarships for International Students in the USA",
-  "intro": "Studying in the USA can be a transformative experience, especially for international students pursuing STEM fields. With 196 scholarships available, you can find financial support tailored to your academic goals. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship offer valuable funding to help cover tuition and living expenses. Whether you are interested in engineering, technology, or the sciences, there are numerous opportunities to ease the financial burden of your education. This guide will help you navigate the various scholarships available and assist you in securing the funding you need to succeed.",
-  "supporting": "Eligibility for these scholarships often varies, but many are open to international students enrolled in accredited STEM programs in the USA. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, may have specific criteria regarding residency or citizenship status. Deadlines can range from early fall to late spring, so it's crucial to check individual scholarship requirements. When applying, ensure you have a strong personal statement, letters of recommendation, and any required documentation ready. Tailoring your application to highlight your unique experiences and aspirations in STEM can significantly enhance your chances of receiving funding.",
-  "related_intro": "In addition to the scholarships listed, many universities offer their own funding opportunities for international students. Exploring these options can further increase your chances of securing financial aid.",
+  "seo_title": "Find STEM Scholarships for International Students USA",
+  "seo_description": "STEM scholarships for international students in the USA: compare deadlines, award ranges, and eligibility, then apply on official program pages.",
+  "intro": "Trying to find STEM scholarships in the USA that international students can actually apply for usually means sorting through mixed eligibility rules, study levels, and subject tags. This filtered slice brings those programs into one place so you can compare options tied to engineering, health professions, education, and other related fields without losing the international student focus. The rows below are not all the same: award amounts vary by listing, deadlines differ by program, and requirements can range from lighter-touch applications to entries that may ask for more supporting material. If you are planning your scholarship search for the upcoming cycle, it is worth checking these listings promptly and reading each requirement line closely before you apply.",
+  "h1": "Find STEM Scholarships for International Students in USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Look at the field labels, study level, citizenship or residency wording, and any requirement notes shown in each row. Some listings may fit broad STEM interests, while others are narrower or sit alongside education, medicine, community, or miscellaneous categories. Open the official page for any strong match, confirm current terms, and verify award details and deadline language before you spend time on an application.",
+  "related_intro": "If these results feel too broad or too narrow, related pages can help you refine the search by topic, study level, or applicant type. That is often the fastest way to find USA scholarships that better match your course of study and eligibility profile.",
   "how_to_use": [
-    "Browse through the list of 196 scholarships.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents like transcripts and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline wording across listings",
+    "Read each requirement line carefully",
+    "Check study level and field tags",
+    "Open official pages to verify details",
+    "Shortlist strong matches before applying"
   ],
   "who_for": [
-    "International students pursuing STEM degrees.",
-    "Undergraduate and graduate students looking for funding.",
-    "Students from diverse backgrounds seeking educational opportunities."
+    "International students seeking USA STEM funding",
+    "Engineering or health professions applicants",
+    "Graduate students comparing scholarship options",
+    "High school seniors planning USA study",
+    "Applicants reviewing mixed essay requirements"
   ],
   "faq": [
     {
-      "question": "What types of STEM scholarships are available?",
-      "answer": "There are various scholarships, including merit-based, need-based, and specific awards for certain fields like engineering or computer science."
+      "question": "How can I find STEM scholarships in the USA for international students on this page?",
+      "answer": "Use this filtered view to compare rows tagged to STEM and international-student eligibility in the USA context. Then open each listing and verify the official eligibility, study level, field of study, and application steps on the source page."
     },
     {
-      "question": "How can I find more information about specific scholarships?",
-      "answer": "Visit the scholarship provider's website or your university's financial aid office for detailed information on eligibility and application processes."
+      "question": "Can I apply to every scholarship listed here as an international student?",
+      "answer": "Not automatically. These programs below are relevant to your search, but eligibility still varies by listing, including citizenship or residency labels, study level, and field such as engineering, education, or health professions."
     },
     {
-      "question": "Are there scholarships specifically for graduate international students?",
-      "answer": "Yes, many scholarships cater specifically to graduate students, including the Paul and Daisy Soros Fellowships for New Americans."
+      "question": "How do I compare award amounts and deadlines across these listings?",
+      "answer": "Amounts and deadlines differ by program, so compare each row individually before you apply. Some listings show dollar values, but not every row does, and all final details should be confirmed on the official scholarship page."
+    },
+    {
+      "question": "Do these USA STEM scholarships all require essays?",
+      "answer": "No single rule applies across this catalog slice. Some listings appear to have essay requirements and some may be lighter-touch, so check each scholarship's requirements before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "stem-scholarships-for-international-students-usa",
-    "generatedAt": "2026-04-25T13:20:38.076Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:12:55.575Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

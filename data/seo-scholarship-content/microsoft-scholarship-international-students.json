@@ -1,43 +1,131 @@
 {
-  "seo_title": "Microsoft Scholarship Opportunities for International Students",
-  "seo_description": "Explore 196 Microsoft scholarships available for international students. Apply now for financial support in your educational journey.",
-  "h1": "Microsoft Scholarships for International Students",
-  "intro": "Are you an international student seeking financial assistance for your education? Microsoft offers a range of scholarships designed to support students from diverse backgrounds. With 196 scholarships currently available, including options like the International Student Scholarship and the Razor's Edge Global Scholarship, there are numerous opportunities to help you achieve your academic goals. These scholarships not only provide financial aid but also connect you with a network of professionals and resources that can enhance your educational experience. Whether you're pursuing engineering, arts, or any other field, there's likely a scholarship that fits your needs.",
-  "supporting": "Eligibility for Microsoft scholarships varies by program, but generally, applicants must be enrolled or planning to enroll in an accredited institution. Many scholarships require a demonstrated financial need, academic excellence, or a commitment to community service. Be sure to check individual scholarship deadlines, as they can vary significantly. For application advice, focus on crafting a compelling personal statement and securing strong letters of recommendation. Highlight your unique experiences and aspirations to stand out in the competitive selection process. Don’t miss out on the chance to secure funding for your studies!",
-  "related_intro": "In addition to Microsoft scholarships, there are numerous other funding opportunities available for international students. These scholarships can help alleviate the financial burden of tuition and living expenses.",
+  "seo_title": "Find Microsoft Scholarships for International Students USA",
+  "seo_description": "Microsoft scholarships for international students in the USA: compare awards, deadlines, and eligibility, then apply on official program pages.",
+  "intro": "Trying to find USA scholarship options connected to Microsoft scholarship searches and international student eligibility usually means sorting through listings that do not all follow the same rules. In this filtered view, you can compare a focused set of programs that may overlap with international student interests across education, STEM, community, medicine, arts, and other academic paths. Awards vary widely by listing, and the same is true for deadlines, essay expectations, and eligibility details such as study level or residency language. Some rows may be relatively straightforward to apply for, while others ask for more materials. Because every listing here includes deadline text and some opportunities appear to close soon, it is smart to check each row promptly and verify the official requirements before you apply.",
+  "h1": "Compare Microsoft Scholarships for International Students USA …",
+  "supporting": "Use these rows to look past the title and read the requirement lines closely. International student searches in the USA often surface a mix of broad education awards, subject-specific funding, and scholarships tied to levels such as high school senior, college, or graduate study. When you compare options, focus on who can apply, whether an essay is mentioned, how the field of study is labeled, and whether the award text shows a fixed amount or a range. Amounts differ by listing and should always be confirmed on the official page.",
+  "related_intro": "If the programs below feel too broad or too mixed, related pages can help you narrow by study level, subject area, or eligibility wording. That is often the fastest way to find scholarship listings in the USA that better match your academic path and application profile.",
   "how_to_use": [
-    "Research available scholarships on the Microsoft website.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare your application materials, including essays and recommendations.",
-    "Submit your application before the deadline.",
-    "Follow up on your application status if necessary."
+    "Compare deadline text across the rows first, since closing dates differ by program and some may be coming up soon",
+    "Scan each listing for study level, citizenship or residency wording, and field-of-study labels before you shortlist it",
+    "Read the requirement and essay details closely instead of relying on the title alone",
+    "Open the official scholarship page for every program you keep and verify award amount, eligibility, and application instructions"
   ],
   "who_for": [
-    "International students pursuing higher education.",
-    "Students in STEM and other fields.",
-    "Those seeking financial assistance for tuition costs."
+    "International students looking for USA scholarship listings with mixed eligibility language to compare carefully",
+    "Applicants interested in education or STEM scholarships, but open to community, medicine, arts, or broader academic categories",
+    "High school seniors, college students, and graduate students checking which study levels appear in the current rows",
+    "Students who want to compare essay and non-essay scholarship options before deciding where to apply"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various scholarships, including merit-based, need-based, and those focused on specific fields of study."
+      "question": "How can I find and compare scholarships for international students in the USA on this filtered page?",
+      "answer": "Use the rows below to compare study level, field of study, citizenship or residency labels, award details, and deadline text side by side. Amounts, eligibility, and application steps vary by listing, so confirm each program on its official source before you apply."
     },
     {
-      "question": "How do I apply for a Microsoft scholarship?",
-      "answer": "Visit the Microsoft scholarship page, review the requirements, and submit your application online."
+      "question": "Can I apply to every scholarship listed here as an international student?",
+      "answer": "Not automatically. This filtered view includes listings tied to international-student intent, but some rows may also reference other statuses such as U.S. citizen or U.S. permanent resident, so check each scholarship’s official eligibility rules carefully."
     },
     {
-      "question": "Are there any specific eligibility requirements?",
-      "answer": "Eligibility varies by scholarship, but typically includes enrollment in an accredited institution and a strong academic record."
+      "question": "What kinds of scholarships can I explore in this results set?",
+      "answer": "These listings span multiple categories and majors, including Education, STEM, Community, Medicine, Arts, engineering, business, health professions, and English language and literature. Study levels also differ by row, with examples ranging from high school senior through college and graduate study."
+    },
+    {
+      "question": "Are essay requirements the same for all of these scholarships?",
+      "answer": "No, requirements are mixed across the catalog. Some scholarships may ask for an essay and some may be lighter-touch, so review each listing and then confirm the full application requirements with the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "microsoft-scholarship-international-students",
-    "generatedAt": "2026-04-25T13:23:58.137Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:00:51.036Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

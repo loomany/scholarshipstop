@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Financial Need High School Scholarships in Massachusetts, U…",
+  "seo_description": "Financial need high school scholarships in Massachusetts, USA—compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Massachusetts scholarships for high school applicants with financial need usually means sorting through mixed eligibility rules, study interests, and deadline timing all at once. This filtered slice narrows that search to a focused set of USA listings so you can compare options that match this combination more quickly. The rows below span areas such as education, community, STEM, biology, disability, and miscellaneous topics, so it is worth checking more than one category even if you started with a single interest. Awards vary by listing, deadlines differ by program, and requirement details are not identical across the set. Many listings appear to have lighter application signals and often no essay, but you should still read each scholarship carefully before you apply.",
+  "h1": "Find Massachusetts High School Need-Based Scholarships USA",
+  "supporting": "Use this view to compare more than the scholarship title. Scan the category tags, study level language, residency or citizenship notes, and any field of study references to see which programs are broad and which are more targeted. Because some deadlines appear to be coming up soon, it makes sense to shortlist strong matches early and open the official pages right away. Award amounts are listed row by row, but they should always be verified on the sponsor or program page before you apply.",
+  "related_intro": "If this Massachusetts and financial need combination feels too narrow, related pages can help you explore nearby options by changing one filter at a time. You may want to compare other Massachusetts scholarship views, broader high school listings, or other USA financial need pages to find programs you might have missed.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you shortlist anything",
+    "Open the official scholarship page to verify award details",
+    "Check category tags and field notes for broader fit",
+    "Shortlist strong matches and apply early where timing looks tight"
+  ],
+  "who_for": [
+    "Massachusetts high school students seeking need-based aid",
+    "High school seniors in the USA comparing local and regional scholarships",
+    "Applicants with financial need looking across education, community, and STEM categories",
+    "Students who prefer listings that often show lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Massachusetts scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school status, and Massachusetts. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts can range widely, and deadlines differ by listing, so compare the catalog rows first and confirm the latest details with the official source."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Massachusetts?",
+      "answer": "Not always. While this filter is centered on high school scholarships in Massachusetts, the listings can span different study levels such as high school senior or sophomore, so check each program's eligibility before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Massachusetts filter?",
+      "answer": "The programs below include themes such as education, STEM, community, biology, disability, and miscellaneous categories. If you want to compare options, scan category labels and fields of study in each listing, then verify fit on the official page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 15,
+    "award": {
+      "medianUsd": 4000,
+      "minUsd": 250,
+      "maxUsd": 40000,
+      "statedAmountCount": 15,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 12,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-04-11"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 15,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "physical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Worcester State University",
+        "count": 4
+      },
+      {
+        "name": "Massachusetts Broadcasters Association",
+        "count": 2
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "Cell Signaling Technology",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "biology",
+      "community",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/massachusetts",
+    "generatedAt": "2026-04-26T13:54:38.006Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 15,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

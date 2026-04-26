@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Pennsylvania Financial Need Scholarships | USA",
+  "seo_description": "Pennsylvania financial need scholarships under ten thousand dollars: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Pennsylvania scholarships tied to financial need without wading into the highest award tiers? This filtered slice brings together USA listings capped under a lower award range, so you can compare programs that may be more realistic to apply for alongside other aid. The rows below span different subjects and study stages, with examples touching education, medicine, STEM, arts, and community-focused options. Requirements are not identical from one listing to the next: some may ask for more documentation, some may be lighter-touch, and essay expectations can vary. Award amounts differ by listing, and deadlines differ by program, so it is worth checking each row closely and verifying details on the official source before you apply.",
+  "h1": "Apply for Pennsylvania Financial Need Scholarships USA",
+  "supporting": "A useful way to browse this set is to compare more than the title. Look at the requirement line, study level, residency or citizenship wording, and category tags to see which scholarships actually fit your situation in Pennsylvania. If you are applying in the USA for the upcoming cycle, scan deadline text early because some programs may be closing sooner than others. It also helps to compare award descriptions side by side, then open the official page to confirm current terms, needed materials, and any field-of-study limits before you shortlist a program.",
+  "related_intro": "If this Pennsylvania and financial-need combination feels too narrow, related pages can help you explore nearby options by changing the award range, location, or eligibility focus. That is a practical way to find similar USA scholarships you might have missed in this filtered view.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page for verification",
+    "Shortlist listings that match your study level",
+    "Check award details and category tags together"
+  ],
+  "who_for": [
+    "Pennsylvania applicants with financial need",
+    "Undergraduate or graduate students comparing smaller award programs",
+    "High school seniors planning to apply in Pennsylvania",
+    "Students in education, health, arts, or STEM fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—these rows are useful for a quick side-by-side check of listed amounts and deadline text. In this USA-focused slice, amounts vary by listing and deadlines differ by program, so check dates promptly and confirm details on the official page."
+    },
+    {
+      "question": "What kinds of students and majors appear in this Pennsylvania scholarship filter?",
+      "answer": "This focused set of listings includes examples tied to education, medicine, STEM, arts, community, and other miscellaneous categories. You can also explore rows that may fit high school seniors, undergraduates, graduate students, and some USA applicants labeled as U.S. citizens."
+    },
+    {
+      "question": "Are these Pennsylvania scholarships easy to apply for?",
+      "answer": "Requirements are mixed, and some listings in the catalog show lighter requirement signals than others. That can make this a practical place to browse and compare options, but you should always confirm essays, documents, and eligibility rules on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 30,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 30,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 11,
+      "within60Days": 30,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-13",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 28,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student",
+        "Undergraduate"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "communication_and_journalism",
+        "visual_and_performing_arts",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 10
+      },
+      {
+        "name": "Community Foundation of Fayette County",
+        "count": 3
+      },
+      {
+        "name": "Cumberland Valley Volunteer Firemen's Association",
+        "count": 2
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      },
+      {
+        "name": "Pennsylvania Rural Electric Association",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical",
+      "stem",
+      "arts",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/pennsylvania",
+    "generatedAt": "2026-04-26T14:23:47.665Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 30,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

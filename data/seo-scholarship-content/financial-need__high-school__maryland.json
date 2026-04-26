@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Maryland High School Need Scholarships | USA",
+  "seo_description": "Maryland high school financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Maryland scholarships for high school students with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view narrows the search to a focused set of listings tied to Maryland and a high school audience, so you can compare options without mixing in unrelated results. The rows below span themes such as education, community, disability, and miscellaneous awards, and some may fit students planning paths in areas like business, engineering, communication, construction trades, or education. Awards, deadlines, essay expectations, and eligibility rules vary by listing, so it is worth checking each requirement line carefully before you apply.",
+  "h1": "Maryland High School Financial Need Scholarships USA Apply",
+  "supporting": "Use this slice to compare more than just the scholarship title. Look at how each listing describes residency or citizenship, study level, category, and any requirement notes that could affect fit. Some programs may be lighter touch, while others ask for more supporting material, so read closely before you shortlist anything. It also helps to open the official page for every promising row, verify current details, and compare award wording side by side because amounts and deadline timing differ across programs.",
+  "related_intro": "If these Maryland high school scholarships are close but not quite right, related pages can help you widen or refine the search. You may want to compare other Maryland scholarship filters, look at broader financial need results, or check nearby high school categories to find programs with a different mix of requirements.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your residency and study level",
+    "Verify award details and essay expectations on sponsor sites"
+  ],
+  "who_for": [
+    "Maryland high school seniors with financial need",
+    "USA applicants comparing Maryland-based scholarship options",
+    "Students seeking education or community focused awards",
+    "Applicants reviewing disability related scholarship listings"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Maryland scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare the rows that match financial need, high school level, and Maryland in the USA. Then open each listing and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Maryland high school senior?",
+      "answer": "Not automatically. These programs below share the main filter, but row-to-row requirements can still differ, including citizenship or residency labels such as U.S. citizen or U.S. permanent resident, so check each official page carefully."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on the deadline shown in each row, the listed award amount, and any requirement notes such as essay expectations. Amounts vary by listing, and deadlines differ by program, so confirm the latest details on the official scholarship page."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or interests?",
+      "answer": "Some listings in this Maryland slice connect to areas like education, business management and marketing, construction trades, engineering, or communication and journalism, while others may be broader. If you want to explore fit, compare the category and field details on each row before applying."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 3500,
+      "minUsd": 500,
+      "maxUsd": 7500,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alfred Street Baptist Church",
+        "count": 1
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "CollegeBound Foundation",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "High Bridge Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/maryland",
+    "generatedAt": "2026-04-26T13:54:19.631Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

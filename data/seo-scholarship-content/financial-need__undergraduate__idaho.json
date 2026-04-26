@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find Idaho Undergraduate Need-Based Scholarships | USA",
+  "seo_description": "Idaho undergraduate financial need scholarships in the USA—compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Idaho that take financial need into account usually means balancing fit, timing, and effort at the same time. This filtered slice brings together a focused set of USA listings tied to Idaho and undergraduate study, with programs that touch areas such as community, education, medicine, disability, and other miscellaneous themes. Awards vary by listing, and deadlines differ across the rows below, so it helps to compare each option rather than assume one pattern applies to all. Many listings in this slice appear to have lighter application signals, and many often show no essay in the metadata, but requirements still need to be verified on the official scholarship pages before you apply.",
+  "h1": "Find Financial Need Undergraduate Scholarships in Idaho USA",
+  "supporting": "Use this list to compare more than the title alone. Read the requirement lines closely, note whether a scholarship is aimed at transfer students, non traditional learners, or applicants connected to a specific community, and check how the field of study aligns with your plans. Because some deadlines may be coming up soon, it is smart to review the rows promptly, shortlist the best matches, and then confirm award details, eligibility language, and application steps on the sponsor site before you submit anything.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship pages by changing one filter at a time. Looking at other Idaho pages, broader undergraduate results, or other financial need combinations can uncover programs with different subject areas, community ties, or applicant profiles.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the listings that best match your background",
+    "Check award wording and application steps before you apply"
+  ],
+  "who_for": [
+    "Idaho undergraduates with financial need",
+    "Community college transfer applicants in Idaho",
+    "Non traditional nursing students in Idaho",
+    "Undergraduates connected to community or disability focused opportunities"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Idaho undergraduate scholarships for students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, undergraduate study, and Idaho. Open each row to verify eligibility, award details, and application steps on the official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows let you compare listed amounts and deadline text side by side, but both can vary by program. Award amounts in this slice range across listings, and deadlines differ by row, so check each official page before you apply."
+    },
+    {
+      "question": "Are these Idaho scholarships only for traditional four-year undergraduates?",
+      "answer": "Not always. In this filtered set, you may find listings connected to community, education, medicine, disability, and non-traditional pathways, so it helps to browse each scholarship's exact level and eligibility notes."
+    },
+    {
+      "question": "Do these financial-need scholarships usually require an essay?",
+      "answer": "Many listings in this catalog slice appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements can change row to row, so confirm what you need on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 1000,
+      "maxUsd": 12000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "construction_trades",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 2
+      },
+      {
+        "name": "American Legion Auxiliary",
+        "count": 1
+      },
+      {
+        "name": "Community Council of Idaho",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Pacific Northwest Vegetable Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "medical",
+      "education",
+      "miscellaneous",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/idaho",
+    "generatedAt": "2026-04-26T14:47:11.077Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

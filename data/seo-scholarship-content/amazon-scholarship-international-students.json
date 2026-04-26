@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore Amazon Scholarships for International Students",
-  "seo_description": "Discover 196 scholarships for international students, including the Amazon Scholarship. Apply today to fund your education!",
-  "h1": "Amazon Scholarships for International Students",
-  "intro": "Navigating the world of scholarships can be overwhelming, especially for international students seeking financial assistance. Amazon offers a variety of scholarships aimed at supporting students from diverse backgrounds. With 196 scholarships currently available, students can find opportunities tailored to their fields of study, interests, and unique circumstances. From the International Student Scholarship to the Paul and Daisy Soros Fellowships for New Americans, these scholarships can significantly ease the financial burden of higher education. This guide will help you explore your options and provide essential information on how to apply effectively.",
-  "supporting": "Eligibility requirements for Amazon scholarships vary by program, but generally, applicants must be enrolled or planning to enroll in an accredited institution. Many scholarships require a demonstrated commitment to community service or academic excellence. Deadlines also vary, so it's crucial to check each scholarship's specific timeline. For example, the Razor's Edge Global Scholarship may have different application dates compared to the DC Tuition Assistance Grant (DCTAG). To improve your chances, ensure your application is complete, including all required documents and essays. Tailoring your application to highlight your unique experiences and aspirations can also make a significant difference.",
-  "related_intro": "In addition to Amazon scholarships, there are numerous other funding opportunities available for international students. Exploring these options can provide additional financial support.",
+  "seo_title": "Find Amazon Scholarships for International Students USA",
+  "seo_description": "Amazon scholarships for international students in the USA: compare awards, deadlines, and requirements, then explore official listings to apply.",
+  "intro": "Trying to find USA scholarships that may fit international students often means sorting through mixed eligibility, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings tied to that search, so you can compare options across education, STEM, community, medicine, arts, and other categories in one place. The rows below can include opportunities for graduate students, high school seniors, and college applicants, with examples connected to fields such as engineering, business, education, English, and health professions. Awards, essay expectations, and requirement details vary by listing, and deadlines differ across programs, so it is smart to apply early and verify each scholarship on the official source page.",
+  "h1": "Explore Amazon Scholarships for International Students USA",
+  "supporting": "Use this list to compare more than just the title. Scan each row for who the scholarship is for, which study level it mentions, whether the subject area matches your plans, and how quickly the deadline may be approaching. Some listings may look broader, while others are tightly tied to a field or applicant type. If you want to browse efficiently, open the most relevant options in new tabs, read the requirement lines closely, and confirm award details, eligibility, and submission steps on the sponsor or official program page before you apply.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by study level, subject area, or eligibility labels such as citizenship and residency. That is often the fastest way to find similar USA scholarship listings worth comparing side by side.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and eligibility on sponsor sites"
   ],
   "who_for": [
-    "International students seeking financial support.",
-    "Students pursuing degrees in various fields.",
-    "Those committed to community service and academic excellence."
+    "International students seeking USA scholarship options",
+    "Graduate applicants comparing eligibility and deadlines",
+    "High school seniors planning future study in the USA",
+    "Students targeting engineering, education, business, English, or health fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various scholarships, including merit-based, need-based, and those for specific fields of study."
+      "question": "How can I find scholarships for international students in the USA on this page?",
+      "answer": "Use this filtered view to compare rows tagged for international students, then open each listing to confirm eligibility on the official source. Some programs in these results may also mention other residency labels, so verify the exact USA eligibility rules before you apply."
     },
     {
-      "question": "How can I find more scholarships like Amazon's?",
-      "answer": "You can search scholarship databases, university websites, and community organizations for additional opportunities."
+      "question": "Do all scholarships in this list require an essay?",
+      "answer": "No single requirement applies to every listing in this filtered set. Some rows may require essays and others may be lighter-touch, so review each scholarship's requirements before you apply."
     },
     {
-      "question": "What are common eligibility requirements?",
-      "answer": "Most scholarships require enrollment in an accredited institution, a strong academic record, and sometimes community involvement."
+      "question": "What kinds of students and subjects appear in these listings?",
+      "answer": "The programs below span multiple study levels and topics, with examples in education, STEM, medicine, arts, community, and miscellaneous categories. You can explore options tied to fields such as engineering, business and marketing, English language and literature, health professions, and education."
+    },
+    {
+      "question": "Are these only Amazon-sponsored scholarships?",
+      "answer": "Treat this page as a catalog filter, not a guarantee that every row shares the same sponsor. Use the list to browse and compare relevant scholarships for international students, then verify the provider and full terms on the official listing page."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "amazon-scholarship-international-students",
-    "generatedAt": "2026-04-25T13:24:16.440Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:55:09.754Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

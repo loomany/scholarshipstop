@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find Kentucky Financial Need Scholarships | USA",
+  "seo_description": "Kentucky financial need scholarships in the USA: compare awards under five thousand, review varying deadlines and requirements, and apply on official pages.",
+  "intro": "Trying to find Kentucky scholarships in the USA that consider financial need and stay under the five-thousand-dollar range usually means sorting through a mix of smaller awards, local programs, and targeted opportunities. This filtered view brings those listings together so you can compare options without losing time on awards outside your budget range. The programs below span areas such as education, community, STEM, medicine, law, and other miscellaneous categories, with examples tied to high school seniors, college students, and graduate students. Award amounts vary by listing, and deadlines differ by program, so it is worth checking each row closely. Some applications may be lighter-touch while others ask for more materials, including essays, so read the requirement details before you apply.",
+  "h1": "Kentucky Financial Need Scholarships Under Five Thousand USA …",
+  "supporting": "A focused set of Kentucky listings like this is useful when you want to compare practical details side by side: who the scholarship is for, which study level it fits, whether the field of study matters, and how soon you need to act. You can also scan for programs connected to education, agriculture, theology, English, business, or broader community interests. Because some rows show nearer-term deadlines, it makes sense to shortlist promising options early and verify the latest amount, eligibility language, and submission instructions on the official scholarship page before applying.",
+  "related_intro": "If you do not find the right fit here, check nearby scholarship pages that widen one part of the search, such as other Kentucky filters, other financial-need listings, or different award ranges. That makes it easier to explore similar USA opportunities without starting over.",
+  "how_to_use": [
+    "Compare each row for award amount, study level, and Kentucky eligibility details",
+    "Scan requirement lines to see whether essays or extra materials may be needed",
+    "Check deadline text on every listing because timing varies by program and some dates may be close",
+    "Open the official scholarship page for any strong match and verify current rules, amounts, and submission steps",
+    "Shortlist the best-fit programs first, then apply in order of deadline and eligibility fit"
+  ],
+  "who_for": [
+    "Kentucky residents looking for USA scholarships that take financial need into account",
+    "High school seniors in Kentucky comparing smaller awards before graduation",
+    "College and graduate students who want to find sub-five-thousand-dollar scholarships by study level",
+    "Applicants in education, STEM, community-focused, or related academic areas who want Kentucky-specific options"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Kentucky scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Kentucky scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Kentucky scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 18,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 18,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 16,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 14,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kentucky 4-H Foundation",
+        "count": 3
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Kentucky Higher Education Assistance Authority",
+        "count": 2
+      },
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 2
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "miscellaneous",
+      "law",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/kentucky",
+    "generatedAt": "2026-04-26T14:32:44.076Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 18,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

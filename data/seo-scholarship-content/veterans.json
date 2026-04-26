@@ -1,48 +1,130 @@
 {
-  "seo_title": "Veterans Scholarships | Find Your Funding",
-  "seo_description": "Explore 107 scholarships for veterans with awards from $250 to $25,000. Check deadlines and requirements for each opportunity.",
-  "intro": "Navigating the landscape of financial support can be challenging, especially for veterans seeking educational opportunities. With 107 scholarships available specifically for veterans, you have a range of options to explore. Award sizes vary significantly, with amounts typically ranging from $250 to $25,000. Keep in mind that deadlines and requirements differ across listings, so it's important to check each one carefully to find the best fit for your needs.",
-  "h1": "Explore 107 Scholarships for Veterans",
-  "supporting": "This collection of scholarships is diverse, covering various categories such as education, community, and law. Some opportunities may require essays, while others have lighter requirements, making it easier for you to apply. Take the time to compare the details of each listing, including award amounts and deadlines, to identify the scholarships that align with your goals and timeline.",
-  "related_intro": "If you're interested in exploring more options, consider checking out related pages that focus on specific fields or additional support for veterans.",
+  "seo_title": "Find Veterans Scholarships to Apply for in USA",
+  "seo_description": "Veterans scholarships in USA: compare awards, deadlines, and requirements, then explore listings and verify details on official pages.",
+  "intro": "Trying to find USA scholarships for veterans usually means sorting through programs with very different rules, study targets, and application steps. This filtered slice brings those listings into one place so you can compare options tied to veteran eligibility without mixing in unrelated awards. The rows below span areas such as education, STEM, medicine, community, and disability, with examples that reach from educator-focused funding to cyber security and health-related study. Awards vary by listing, and deadlines differ by program, so it helps to apply early and verify each detail on the official source. Requirements also change from row to row, including whether an essay is requested, which makes careful comparison worth the time.",
+  "h1": "Apply for Veterans Scholarships in USA",
+  "supporting": "A useful way to read this set is to compare more than the title alone. Check the study level, field of study, citizenship or residency line, and any requirement notes before you decide a scholarship fits. Some listings may be relatively straightforward, while others ask for more supporting material. If you are trying to find the best match, compare award wording, look closely at deadline text, and open the official page for final eligibility details, document needs, and submission instructions.",
+  "related_intro": "If these veteran-focused scholarships feel close but not quite right, related pages can help you narrow by study level, subject area, or other eligibility details. That is often the fastest way to explore nearby options without losing the USA context of your search.",
   "how_to_use": [
-    "Review the list for scholarship titles that catch your interest",
-    "Compare award amounts and categories to find suitable matches",
-    "Check individual deadlines to ensure timely applications",
-    "Read through requirement details for each scholarship",
-    "Visit official pages for more information and application instructions"
+    "Compare deadline text across the rows first",
+    "Read each requirement line before starting an application",
+    "Open the official page to verify eligibility and documents",
+    "Shortlist programs by study level and field of study",
+    "Check award wording carefully because amounts vary by listing"
   ],
   "who_for": [
-    "Veterans seeking funding for education",
-    "Individuals interested in community service scholarships",
-    "Those pursuing careers in law or medicine",
-    "Applicants looking for scholarships with varying requirements",
-    "Veterans aiming for scholarships with substantial awards"
+    "Veterans planning college or graduate study in the USA",
+    "Adult non traditional learners returning to school after service",
+    "Veterans pursuing education, engineering, health, journalism, or law related paths",
+    "Applicants who want to compare veteran eligibility across different scholarship types"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for veterans?",
-      "answer": "The current catalog features a diverse range of scholarships specifically for veterans, with 107 listings across categories such as education, community, STEM, medicine, and law. This variety allows veterans to find funding opportunities that align with their specific educational and career goals."
+      "question": "How can I find veterans scholarships in the USA that fit my background and study plans?",
+      "answer": "Use this filtered view to compare rows by study level, field of study, and eligibility details shown in each listing. In this USA-focused set, some programs also note citizenship or residency such as U.S. citizen or U.S. permanent resident, so verify the official page before you apply."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship listing has its own deadline, and it's important to check these dates promptly, as some deadlines are approaching within the next 45 days. You can view the specific deadlines for each scholarship directly in the listings."
+      "question": "What should I compare before I apply for a veterans scholarship?",
+      "answer": "Check the eligibility notes, study level, field of study, award amount, and deadline on each row. Amounts and requirements vary by listing, and final details should always be confirmed on the official scholarship source."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships, with some requiring essays while many do not. It's advisable to review each listing carefully to understand the specific application requirements, including any essay components."
+      "question": "Are all veterans scholarships here only for one major or degree level?",
+      "answer": "No—these listings span multiple study levels and topics, including education, STEM, medicine, community, and disability-related categories. You can explore options for high school seniors, college students, graduate students, and adult non-traditional students, depending on each program’s rules."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships available to veterans vary significantly, with amounts ranging from approximately $250 to $25,000. Be sure to check the details of each scholarship to find the funding that best suits your needs."
+      "question": "Do all veterans scholarships on this page have the same deadline or application requirements?",
+      "answer": "No, deadlines differ by program, and the rows in this catalog show different deadline text. Requirements also vary—some listings may be lighter-touch while others may ask for more materials, so check dates promptly and confirm what each application requires."
     }
   ],
+  "page_data": {
+    "exactCount": 101,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 250,
+      "maxUsd": 10000,
+      "statedAmountCount": 101,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 60,
+      "within60Days": 95,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 8,
+      "noCount": 93,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "transcript",
+        "document",
+        "personal_statement",
+        "question",
+        "resume"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "engineering",
+        "communication_and_journalism",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Legion Auxiliary",
+        "count": 14
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 11
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 7
+      },
+      {
+        "name": "Waubonsee Community College",
+        "count": 4
+      },
+      {
+        "name": "AMVETS",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "community",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "veterans",
-    "generatedAt": "2026-04-02T10:33:45.775Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 107,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:16:33.790Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 101,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

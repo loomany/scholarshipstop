@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find Oklahoma Undergraduate Need Scholarships | USA",
+  "seo_description": "Oklahoma undergraduate financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find undergraduate scholarships in Oklahoma that take financial need into account usually means sorting through programs with very different rules, timelines, and award details. This filtered USA view brings those listings into one place so you can compare options more quickly and decide where to apply first. In these rows, award amounts vary by listing and should be verified on the official page, and deadlines differ by program rather than following one shared date. Many listings in this slice also appear to have no essay in the available metadata, and some may be comparatively lighter-touch on requirements, though you should still read each listing carefully. If you want a focused set of Oklahoma opportunities for undergraduates with need-based eligibility in mind, this is a practical place to start.",
+  "h1": "Oklahoma Undergraduate Financial Need Scholarships USA Apply",
+  "supporting": "Use this list to compare more than just the title. Check how each program describes eligibility, look at the requirement lines, and note whether the scholarship leans toward areas such as education or STEM. Some examples in this slice point to education and engineering-related interests, while others may be broader. Because at least one listing shows a deadline coming up relatively soon, it makes sense to review dates promptly, shortlist the best matches, and open the official source before you apply.",
+  "related_intro": "If these Oklahoma undergraduate need-based listings feel too narrow, related pages can help you explore nearby options by study level, location, or broader scholarship themes. That can be useful if you want to compare Oklahoma results with other USA filters or find programs that overlap with education, STEM, or general undergraduate funding.",
+  "how_to_use": [
+    "Compare the deadline text across the rows first, since dates vary by program and some may be approaching soon",
+    "Scan each award listing for amount details, but verify the current value on the official scholarship page before you apply",
+    "Read the eligibility and requirement lines closely to confirm financial need, undergraduate status, and any Oklahoma connection",
+    "Open the official source for every scholarship you shortlist and check the latest instructions, documents, and submission rules"
+  ],
+  "who_for": [
+    "Oklahoma undergraduates looking for scholarships that consider financial need",
+    "High school seniors in the USA planning to start undergraduate study and comparing Oklahoma options",
+    "Applicants interested in education or engineering-related scholarship listings in Oklahoma",
+    "US citizens who want to find potentially lower-friction scholarships, including many listings that may not require an essay"
+  ],
+  "faq": [
+    {
+      "question": "How do I find undergraduate scholarships in Oklahoma for students with financial need?",
+      "answer": "Use this filtered view to compare Oklahoma listings that match undergraduate study and financial-need criteria. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate in the USA?",
+      "answer": "Not automatically—each program can set its own rules beyond the shared filters shown here. Check the official source for requirements such as Oklahoma or U.S. residency, study level, and any field-specific conditions before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline text, category, and any requirement notes row by row. Amounts vary by listing, and deadlines differ by program, so confirm both on the official page before submitting."
+    },
+    {
+      "question": "Are these Oklahoma undergraduate scholarships usually essay-heavy?",
+      "answer": "Many listings in this slice appear to have lighter requirements, and many sampled rows show no essay flag. Still, requirements can vary, so review each scholarship’s official application instructions carefully."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 3500,
+      "minUsd": 2000,
+      "maxUsd": 6000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Association of Drilling Engineers-Mid-Continent Chapter",
+        "count": 2
+      },
+      {
+        "name": "Oklahoma City Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Wyandotte Nation of Oklahoma",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/oklahoma",
+    "generatedAt": "2026-04-26T14:53:40.111Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

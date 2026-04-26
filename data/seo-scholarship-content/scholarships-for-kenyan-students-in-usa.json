@@ -1,43 +1,135 @@
 {
-  "seo_title": "Top Scholarships for Kenyan Students in the USA - 196 Opportunities",
-  "seo_description": "Explore 196 scholarships for Kenyan students in the USA. Find funding opportunities to support your education and achieve your dreams.",
-  "h1": "Scholarships for Kenyan Students in the USA",
-  "intro": "Are you a Kenyan student aspiring to study in the USA? You're in luck! There are currently 196 scholarships available specifically for international students from Kenya. These scholarships can help cover tuition fees, living expenses, and other educational costs, making your dream of studying abroad more attainable. From merit-based awards to need-based grants, there are various options tailored to different fields of study and personal circumstances. Whether you are pursuing undergraduate or graduate studies, this comprehensive guide will help you navigate the scholarship landscape and find the best opportunities suited to your needs.",
-  "supporting": "Eligibility for these scholarships varies, but many require a strong academic record, letters of recommendation, and a personal statement. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, focus on specific criteria such as citizenship status or field of study. Deadlines also differ, so it’s crucial to keep track of application dates. To maximize your chances, tailor your application to each scholarship’s requirements and highlight your unique experiences. Additionally, consider reaching out to previous recipients for insights and tips on crafting a compelling application.",
-  "related_intro": "In addition to scholarships, there are other financial aid options available for Kenyan students, including grants and assistantships. Exploring these avenues can further enhance your funding opportunities.",
+  "seo_title": "Find Scholarships for Kenyan Students in USA",
+  "seo_description": "Scholarships for Kenyan students in USA with deadlines, award details, and eligibility notes. Compare options and apply on official pages.",
+  "intro": "Trying to find scholarships for Kenyan students in the USA usually means sorting through mixed eligibility rules, study levels, and application asks. This filtered slice brings those listings into one place so you can compare options that may fit international applicants across education, STEM, community, medicine, arts, and other subjects. The rows below are not all the same: award amounts vary by listing, deadlines differ by program, and some applications appear lighter while others may ask for essays or more supporting details. If you want to apply in the USA with a clearer shortlist, use this view to scan titles, check requirement lines, and focus first on the programs that match your level, field, and residency or citizenship wording.",
+  "h1": "Find Scholarships for Kenyan Students in USA",
+  "supporting": "A smart way to use this list is to compare each row for fit before spending time on a full application. Look at the study level, field tags, and any citizenship or residency language, then note whether the listing seems broad or tied to a narrower academic path such as engineering, education, business, English, or health fields. Because deadlines vary and some opportunities may close sooner than expected, it is worth opening the official page early, confirming current details, and shortlisting the programs that best match your profile.",
+  "related_intro": "If this set feels too broad or too narrow, move into related scholarship pages by study level, subject area, or applicant type. That can make it easier to compare USA opportunities for international students against more specific categories before you apply.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary documents, including transcripts and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Sort and compare listings by relevance and deadline urgency",
+    "Read each requirement line for study level and eligibility wording",
+    "Open the official source page to verify award details and application steps",
+    "Shortlist the programs that match your field, profile, and timeline"
   ],
   "who_for": [
-    "Kenyan students seeking undergraduate or graduate education in the USA.",
-    "Students with strong academic records and extracurricular involvement.",
-    "Individuals looking for financial support to study abroad."
+    "Kenyan students seeking USA scholarships with international student eligibility",
+    "Applicants comparing undergraduate and graduate study level options",
+    "Students targeting education, engineering, business, English, or health related fields",
+    "International applicants who want to compare essay and requirement differences"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Kenyan students?",
-      "answer": "There are various scholarships including merit-based, need-based, and field-specific awards."
+      "question": "How can I find scholarships for Kenyan students in the USA on this filtered page?",
+      "answer": "Use this filtered view to compare the rows by study level, category, field of study, and eligibility wording shown in each listing. Then open the official source for any program you want to apply to, because requirements and award details vary by listing."
     },
     {
-      "question": "How can I find the right scholarship for me?",
-      "answer": "Review eligibility criteria and tailor your applications to match each scholarship's requirements."
+      "question": "Can I compare award amounts and deadlines across these scholarships?",
+      "answer": "Yes—these rows include award and deadline information, but both can differ a lot from one program to another. Amounts vary by listing, and deadlines are not the same across the page, so verify each one on the official scholarship page before you apply."
     },
     {
-      "question": "Are there scholarships that cover living expenses?",
-      "answer": "Yes, many scholarships provide funding for both tuition and living expenses."
+      "question": "Are these scholarships only for international students from Kenya?",
+      "answer": "Not always. This USA-focused list may include programs tagged for international students, but some listings can also mention other citizenship or residency labels, so read each eligibility section carefully before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this list?",
+      "answer": "You can explore a focused set of listings across themes such as Education, STEM, Miscellaneous, Community, Medicine, and Arts. The programs below also span different study levels and fields, including education, business, engineering, English, and health-related subjects."
+    },
+    {
+      "question": "Do all of these scholarships require essays or have the same application steps?",
+      "answer": "No—requirements are mixed across this catalog slice. Some listings may be lighter-touch while others may ask for essays or additional materials, so compare the listing details first and confirm the full application steps on the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-kenyan-students-in-usa",
-    "generatedAt": "2026-04-25T13:18:33.351Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:10:09.300Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

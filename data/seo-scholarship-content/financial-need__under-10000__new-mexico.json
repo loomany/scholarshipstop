@@ -1,0 +1,120 @@
+{
+  "seo_title": "Find New Mexico Need-Based Scholarships | USA",
+  "seo_description": "New Mexico need-based scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official listing.",
+  "intro": "Trying to find New Mexico scholarships in the USA that consider financial need and stay on the lower-award side? This filtered slice brings together a focused set of listings so you can apply with more direction instead of sorting through unrelated programs. The rows below span areas such as STEM, education, community, disability, and biology, with examples that can fit both high school seniors and early college students. Awards, deadlines, essay expectations, and eligibility details vary by listing, so it is worth reading each row closely rather than assuming the same rules apply across the page. Some programs may be comparatively lighter-touch, but you should still verify every requirement on the official source before you apply.",
+  "h1": "Explore Need-Based Scholarships in New Mexico USA",
+  "supporting": "Use this view to compare more than just the scholarship title. Check how each listing describes financial need, look at the study level and field tags, and note whether the opportunity appears tied to community service, disability, education, or technical subjects. Because deadlines differ across these rows and some may be coming up soon, it makes sense to shortlist promising options early. Award amounts vary by listing and should be confirmed on the official page before you make plans around them.",
+  "related_intro": "If these New Mexico results feel close but not quite right, related pages can help you compare nearby filter combinations. You may want to explore other financial-need scholarship views, broader New Mexico scholarship pages, or adjacent award ranges to find programs that better match your major, study level, or application preferences.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your level and field",
+    "Verify award details and essay expectations"
+  ],
+  "who_for": [
+    "New Mexico applicants with financial need",
+    "High school seniors planning for college costs",
+    "Early college students comparing smaller scholarship awards",
+    "Students interested in STEM, education, or biology programs",
+    "Applicants looking for New Mexico community or disability-related opportunities"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines on this USA scholarship list?",
+      "answer": "Yes—these New Mexico scholarship rows include listed award amounts and deadline text, but they are not the same across every program. In this slice, amounts shown range from smaller awards to several thousand dollars, and deadlines differ by row, so check dates promptly and verify on official sources."
+    },
+    {
+      "question": "Who should explore these scholarships?",
+      "answer": "This set is most relevant if you are studying in the USA and want New Mexico-focused scholarships tied to financial need, especially at levels like high school senior or early college. You may also find options connected to areas such as education, engineering, construction trades, biological and biomedical sciences, and transportation and materials moving."
+    },
+    {
+      "question": "Are the application requirements the same for every scholarship here?",
+      "answer": "No—requirements can change from one listing to the next. Some programs in this catalog slice may be lighter-touch, while others can ask for more materials, so review each row and the official application page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1000,
+      "maxUsd": 5500,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-02",
+        "2026-04-22",
+        "2026-05-02"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "construction_trades",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Albuquerque Hispano Chamber of Commerce",
+        "count": 2
+      },
+      {
+        "name": "New Mexico Engineering Foundation",
+        "count": 2
+      },
+      {
+        "name": "Albuquerque Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Arapahoe Community College Foundation",
+        "count": 1
+      },
+      {
+        "name": "Institute of Transportation Engineers-New Mexico Section",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "community",
+      "miscellaneous",
+      "biology",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/new-mexico",
+    "generatedAt": "2026-04-26T14:21:34.336Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 9,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

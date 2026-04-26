@@ -1,0 +1,107 @@
+{
+  "seo_title": "Find Engineering Scholarships in Arizona, USA",
+  "seo_description": "Engineering scholarships in Arizona, USA: compare deadlines, award details, and requirements in this filtered view, then apply on official pages.",
+  "intro": "Trying to find engineering scholarships in Arizona usually means narrowing a broad USA search down to programs that actually match your location and subject. This filtered view brings together a focused set of listings tied to engineering and Arizona so you can compare options without sorting through unrelated awards. The programs below do not all work the same way: award amounts vary by listing, deadlines differ by program, and eligibility details can change from one row to the next. Many listings in this slice appear to have no essay in the catalog data, and some may be lighter-touch on requirements, but you should still read each scholarship carefully and verify details on the official page before you apply.",
+  "h1": "Compare Arizona Engineering Scholarships USA",
+  "supporting": "Use this list to compare the practical details that matter most for an Arizona engineering search: location fit, study level, category tags such as STEM or disability, and how clearly each listing states its requirements. Since the visible deadlines are not identical and at least one appears relatively soon, it is worth checking dates promptly. If an award amount is shown, treat it as listing-specific rather than typical for every program in this slice. A quick scan across these rows can help you shortlist the scholarships most worth opening and reviewing in full.",
+  "related_intro": "If you want to widen or refine your search after reviewing these Arizona engineering listings, related pages can help you compare nearby topic or location combinations. That is useful when you want to find similar STEM-focused options, check other Arizona scholarship categories, or explore engineering pages with a different geographic filter.",
+  "how_to_use": [
+    "Compare each row for location, engineering relevance, and any category tags before you shortlist it",
+    "Check deadline text on every listing because dates vary by program and some may be coming up soon",
+    "Read the requirement lines closely to confirm study level, eligibility details, and any materials needed",
+    "Open the official scholarship page for every promising match and verify the current amount, rules, and application steps",
+    "Shortlist the best-fit programs first, then apply in order of the nearest deadlines"
+  ],
+  "who_for": [
+    "Arizona-based applicants looking for scholarships connected to engineering study",
+    "High school seniors in the USA starting an engineering scholarship search with Arizona in mind",
+    "Students comparing STEM-tagged scholarships that may overlap with engineering interests",
+    "Applicants who prefer many no-essay listings when they browse and compare options",
+    "Students reviewing Arizona opportunities that may include disability-related category tags"
+  ],
+  "faq": [
+    {
+      "question": "How can I find engineering scholarships in Arizona that fit my situation?",
+      "answer": "Use this filtered view to compare the Arizona engineering listings row by row, then open the official source for each program. In this USA slice, details like eligibility, study level, and category tags can vary across listings."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here with one application?",
+      "answer": "No—each listing should be treated as its own program with its own official application process. Use the catalog to find options, then verify requirements and apply on the scholarship's official page."
+    },
+    {
+      "question": "Do deadlines and award amounts stay the same across these Arizona engineering scholarships?",
+      "answer": "No, deadlines differ by program, and the rows in this filtered set do not share one universal date. Award amounts also vary by listing, so confirm the current amount and deadline on the official source before you apply."
+    },
+    {
+      "question": "Are these engineering scholarships only for college students in Arizona?",
+      "answer": "Not necessarily. The listings in this slice can reflect different study levels and related fields, so it's worth exploring each row instead of assuming one audience for the whole page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1500,
+      "maxUsd": 3000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 2,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-06-05"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "mechanic_and_repair_tech_technicians",
+        "natural_resources_and_conservation"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Association for Iron and Steel Technology-Southern California Chapter",
+        "count": 1
+      },
+      {
+        "name": "Pacific Forest Foundation",
+        "count": 1
+      },
+      {
+        "name": "Solid Waste Association of North America-Arizona Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "engineering/arizona",
+    "generatedAt": "2026-04-26T13:33:50.417Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

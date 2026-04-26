@@ -1,43 +1,132 @@
 {
-  "seo_title": "Easy Scholarships for International Students - 196 Opportunities",
-  "seo_description": "Discover 196 easy scholarships for international students, including no-essay options and funding for various fields of study.",
-  "h1": "Easy Scholarships for International Students",
-  "intro": "Finding scholarships as an international student can be a daunting task, but there are numerous easy options available to help fund your education. With 196 scholarships currently open, students from around the globe can access financial support tailored to their unique needs. From merit-based awards to those requiring no essays, these scholarships can significantly reduce the financial burden of studying abroad. Explore opportunities like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship, among others, to kickstart your journey toward higher education.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to undergraduate and graduate international students studying in the U.S. or other countries. Some scholarships, like the Razor's Edge Global Scholarship, may focus on specific fields or demographics, while others, such as the $25,000 'Be Bold' No-Essay Scholarship, provide straightforward application processes. Deadlines also differ, so it's crucial to check each scholarship's requirements and submit your applications on time. To increase your chances of success, tailor your application to highlight your unique experiences and aspirations.",
-  "related_intro": "In addition to the scholarships listed, there are numerous resources available to help international students navigate funding options and application processes.",
+  "seo_title": "Find Easy Scholarships for International Students USA",
+  "seo_description": "Easy scholarships for international students in the USA. Compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to find easy scholarships for international students in the USA usually means looking for programs with simpler applications, fewer moving parts, or lighter requirement signals than a typical scholarship search. This filtered view brings together a focused set of listings where international-student eligibility appears in the mix, across areas like education, STEM, community, medicine, arts, and more. Awards vary widely by listing, and not every row shows the same type of amount, so compare each program carefully and verify details on the official page. Deadlines also differ across these rows, with some coming up relatively soon, so it makes sense to apply early and keep a shortlist as you browse. Requirements are mixed too: some listings may be more straightforward, while others still ask for essays or additional materials.",
+  "h1": "Find Easy Scholarships for International Students USA",
+  "supporting": "Use this USA scholarship slice to compare more than just the title. Check who the program is open to, how international-student status is described, what study levels appear, and whether the field of study matches your plans. You can also scan for clues about application effort, since some listings look lighter-touch while others may need more documentation. Amounts vary by listing and should always be confirmed on the sponsor or official program page before you apply. If you are deciding where to focus first, start with rows whose deadline text is sooner and then compare the requirement lines side by side.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by study level, subject area, or other scholarship traits. That is often the fastest way to find USA listings that better match your course, application effort, or eligibility details.",
   "how_to_use": [
-    "Browse the list of 196 scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary documents for application.",
-    "Submit applications before the deadlines.",
-    "Follow up on your applications for updates."
+    "Compare deadline text across the rows first, since timing varies and some programs may close sooner than others",
+    "Read the eligibility and requirement lines carefully to confirm international-student fit, study level, and field of study",
+    "Scan award text without assuming the highest amount is the best fit, because terms and coverage can differ by listing",
+    "Open the official page for each shortlist item to verify current amounts, required materials, and application instructions",
+    "Keep a short compare list as you browse so you can prioritize the most relevant programs before you apply"
   ],
   "who_for": [
-    "International students seeking financial aid.",
-    "Undergraduate and graduate students.",
-    "Students looking for no-essay scholarship options."
+    "International students comparing USA scholarships that may have simpler application requirements",
+    "Graduate or undergraduate applicants checking education, STEM, business, engineering, English, or health-related options",
+    "Students who want to find scholarships with mixed essay expectations instead of assuming every program works the same way",
+    "Applicants reviewing both broad education listings and more specific category matches before they apply"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various types, including merit-based, need-based, and no-essay scholarships."
+      "question": "How can I find easy scholarships for international students in the USA on this page?",
+      "answer": "Use this filtered view to compare rows by study level, category, field of study, and citizenship or residency labels. In this catalog, some listings are tagged for international students, while others may also include USA-specific labels like U.S. citizen or U.S. permanent resident, so verify eligibility on the official scholarship page before you apply."
     },
     {
-      "question": "How can I find scholarships that suit my needs?",
-      "answer": "Utilize scholarship search engines and databases, and check university websites for specific opportunities."
+      "question": "Are all of these scholarships no-essay or simple to apply for?",
+      "answer": "Not necessarily—requirements vary by listing. Some programs in these rows appear lighter-touch, and some may not require an essay, but you should open each listing and confirm the current application steps on the official source."
     },
     {
-      "question": "What documents do I need to apply for scholarships?",
-      "answer": "Typically, you will need transcripts, letters of recommendation, and sometimes personal statements."
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—this page is useful for a quick compare, but amounts and deadlines differ by program. Award values shown in the catalog vary widely, and every row has its own deadline text, so check dates promptly and confirm details on the official page."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filtered list?",
+      "answer": "The programs below span categories such as Education, STEM, Miscellaneous, Community, Medicine, and Arts. You can also browse by common study levels like high school senior, college, and graduate student, plus fields such as education, business, engineering, English, and health professions."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "easy-scholarships-for-international-students",
-    "generatedAt": "2026-04-25T13:17:08.659Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:57:36.208Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

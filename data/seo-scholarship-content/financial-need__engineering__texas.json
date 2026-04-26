@@ -1,0 +1,117 @@
+{
+  "seo_title": "Find Texas Engineering Need-Based Scholarships | USA",
+  "seo_description": "Texas engineering scholarships for students with financial need in the USA. Compare deadlines, amounts vary by listing, and apply on official pages.",
+  "intro": "Trying to find USA engineering scholarships in Texas that also consider financial need usually means narrowing past broad STEM results and getting to a more relevant set of listings fast. This filtered slice brings together programs tied to engineering study and Texas, with deadlines that vary by listing and award amounts that should be checked on each official page. Many rows in this view appear to have lighter application signals, and no-essay options may show up often, but requirements still differ from program to program. If you want to apply in the current cycle or compare options for the coming year, use these rows to spot fit, confirm residency or citizenship language, and focus on scholarships that match both need-based and engineering-related criteria.",
+  "h1": "Find Financial Need Engineering Scholarships in Texas USA",
+  "supporting": "A useful way to read this list is to compare the requirement lines first, then scan award text, deadline wording, and any category clues such as STEM or community. Some listings may be more local or branch-based, while others can be broader across Texas. Before you apply, open the official source for each scholarship to verify eligibility details, what counts as engineering study, and whether financial need must be documented in a specific way. This slice is worth a close look because it cuts down unrelated results and makes side-by-side comparison easier.",
+  "related_intro": "If these Texas engineering scholarships feel too narrow, related pages can help you compare nearby options by topic, location, or need-based filters. That is useful when you want to find similar USA scholarships with different residency rules, broader STEM coverage, or adjacent fields of study.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your Texas and engineering profile",
+    "Verify award details and need criteria on sponsor sites"
+  ],
+  "who_for": [
+    "Texas residents studying engineering with financial need",
+    "College applicants comparing Texas-based engineering awards",
+    "USA students seeking need-aware STEM scholarships in Texas",
+    "Applicants who prefer listings with simpler application signals"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Texas engineering scholarships that also consider financial need?",
+      "answer": "Use this filtered view to compare the programs below, then open each row to confirm the official eligibility details. In this USA slice, financial-need, engineering, and Texas are already combined, but exact requirements can still vary by listing."
+    },
+    {
+      "question": "Can I apply if I’m studying engineering in Texas but the scholarship also mentions other fields or categories?",
+      "answer": "Possibly. Some rows in this catalog also carry labels like STEM, community, law, or biology, so the best move is to check the official page for the exact field-of-study rules. If you’re trying to compare options, don’t assume every listing is limited to only one category."
+    },
+    {
+      "question": "Are these scholarships only for certain USA residency statuses or study levels?",
+      "answer": "Some listings in this slice show sample labels such as U.S. citizen, U.S. permanent resident, and college-level study, but those labels are not universal rules for every row. Compare the listings, then verify residency and study-level details on the official scholarship pages."
+    },
+    {
+      "question": "Are the applications on this page usually essay-heavy?",
+      "answer": "Many listings in this filtered view appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements can change row to row, so explore each listing and confirm the current application steps on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 12000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 21,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-06",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "architecture_and_related_services",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Public Works Association-Texas Chapter",
+        "count": 1
+      },
+      {
+        "name": "American Society of Civil Engineers-Houston Branch",
+        "count": 1
+      },
+      {
+        "name": "Society of American Military Engineers-Dallas Post",
+        "count": 1
+      },
+      {
+        "name": "Thurgood Marshall College Fund",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "community",
+      "biology",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/engineering/texas",
+    "generatedAt": "2026-04-26T13:47:43.175Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

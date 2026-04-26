@@ -1,46 +1,112 @@
 {
-  "seo_title": "Michigan Engineering Scholarships for Students",
-  "seo_description": "Explore 4 Michigan engineering scholarships with awards up to $5,000. Check deadlines and requirements for each listing.",
-  "intro": "Finding financial support for engineering studies in Michigan can be crucial for many students. This filter showcases 4 scholarships specifically tailored for aspiring engineers in the state. Award sizes vary, with some listings indicating amounts around $1,500 to $5,000. Keep in mind that deadlines and requirements differ across these opportunities, so it's important to review each listing closely.",
-  "h1": "Find Engineering Scholarships in Michigan",
-  "supporting": "As you explore these scholarships, pay attention to the specific award amounts, deadlines, and eligibility criteria. Many of these listings may not require essays, making them more accessible. Comparing the details will help you identify which scholarships align best with your academic goals and financial needs. Always verify the information on the official sponsor pages for the most accurate updates.",
-  "related_intro": "If you're interested in more opportunities, check out related pages for additional scholarships in engineering or other fields available in Michigan.",
+  "seo_title": "Find Engineering Scholarships in Michigan, USA",
+  "seo_description": "Engineering scholarships in Michigan, USA with deadlines and requirement details. Compare listings and apply through official program pages.",
+  "intro": "Trying to find engineering scholarships in Michigan usually means narrowing a broad USA search into a smaller set you can actually compare and apply to. In this filtered slice, the programs below center on engineering with Michigan as the location focus, so it is easier to spot listings that match your study plans without wading through unrelated results. Awards, deadlines, and eligibility details can vary from row to row, and official pages are the place to confirm the latest terms. Many listings in this view appear to have no essay noted in the catalog, and some may be comparatively lighter-touch on requirements, but you should still read each listing carefully before you apply.",
+  "h1": "Explore Engineering Scholarships in Michigan USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check how each row describes the field, location fit, study level, and any citizenship or residency language, then open the official source to verify what is required. Because deadline text differs across these Michigan engineering listings, it is smart to review dates promptly and shortlist the programs you want to pursue first. If award information appears, treat it as a starting point and confirm current details on the sponsor page before you apply.",
+  "related_intro": "If these Michigan engineering results feel close but not quite right, related pages can help you compare nearby paths, such as broader engineering scholarship views or other location-based USA filters. That is useful when you want to explore similar programs without starting your search over.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Review award amounts listed in each row",
-    "Check eligibility requirements carefully",
-    "Open official pages for detailed information",
-    "Shortlist scholarships that fit your profile"
+    "Compare deadline text across each row",
+    "Read the requirement line before shortlisting",
+    "Open the official page to verify details",
+    "Check award information and confirm current terms",
+    "Browse related filters if Michigan engineering feels too narrow"
   ],
   "who_for": [
-    "Engineering students in Michigan",
-    "Undergraduate students seeking financial aid",
-    "Students with a focus on STEM disciplines"
+    "Michigan students pursuing engineering studies",
+    "USA applicants comparing Michigan-based engineering funding",
+    "High school seniors planning an engineering path",
+    "Applicants looking for engineering listings that often note no essay"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Michigan?",
-      "answer": "There are currently 4 scholarships listed specifically for engineering students in Michigan. These scholarships cover a range of categories including STEM, arts, and disability, providing various funding opportunities tailored to different needs."
+      "question": "How can I find engineering scholarships in Michigan that fit my situation?",
+      "answer": "Use this filtered view to explore Michigan listings tied to engineering, then open each row to compare eligibility, study level, and residency details. In the USA, requirements can differ a lot by program, so confirm everything on the official scholarship page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this listing do not require an essay, although it's important to check each individual listing for specific requirements. While many entries indicate a lighter touch in terms of application materials, verifying details for each scholarship is recommended."
+      "question": "Can I compare award amounts and deadlines on this Michigan engineering scholarship page?",
+      "answer": "Yes—these rows let you compare basic details side by side, but amounts and deadlines vary by listing. The current set shows award figures in a modest range, and every row has deadline text, so check dates promptly and verify the latest information with the official source."
     },
     {
-      "question": "What is the typical award size for these scholarships?",
-      "answer": "The award sizes for the scholarships in this category generally range from approximately $1,500 to $5,000. However, since each scholarship may vary, it's best to review the specific amounts listed for each opportunity."
+      "question": "Are these scholarships only for college engineering students in Michigan?",
+      "answer": "Not necessarily. Some listings in this filtered set may include different study levels, and sample metadata on the catalog includes high school senior as a possible level, so read each row carefully before you apply."
     },
     {
-      "question": "When should I check for scholarship deadlines?",
-      "answer": "All scholarships listed have deadlines, with at least one approaching within the next 45 days. It's advisable to check the deadlines promptly to ensure you don’t miss any application opportunities."
+      "question": "Do Michigan engineering scholarships on this page usually require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flag in the catalog, but that is not a guarantee for every program. Always compare the row details with the official application page to confirm what materials are required."
     }
   ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 3750,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-29",
+        "2026-05-29"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "architecture_and_related_services",
+        "health_professions_and_clinical_sciences",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Society of Civil Engineers-Michigan Section",
+        "count": 2
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Detroit Chapter",
+        "count": 1
+      },
+      {
+        "name": "Friends of Polish Art",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "disability",
+      "law",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/michigan",
-    "generatedAt": "2026-04-02T10:54:49.707Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:38:00.347Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,0 +1,117 @@
+{
+  "seo_title": "Find Kansas Undergraduate Need Scholarships | USA",
+  "seo_description": "Kansas undergraduate financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Kansas that take financial need into account usually means narrowing a broad search fast and focusing on programs you can actually apply to. This filtered USA view brings together a focused set of listings tied to Kansas and undergraduate study, with examples touching areas like education, law, community, safety, and STEM. The rows below are worth comparing closely because award amounts, deadline timing, essay expectations, and other requirement details can differ from one program to the next. Some listings may be relatively lighter-touch, while others ask for more documentation or a written response. If you are searching for Kansas scholarship options for the current cycle, it makes sense to check each row promptly and verify details on the official source before you apply.",
+  "h1": "Find Kansas Undergraduate Financial Need Scholarships USA",
+  "supporting": "Use this slice to compare more than just the title. Read the requirement lines, note whether the scholarship appears connected to a subject area that fits your plans, and compare how each listing describes need, eligibility, and submission steps. Because deadlines differ by program and award amounts vary by listing, the smartest approach is to open the official page for every option you want to pursue. That makes it easier to confirm current rules, spot any essay or document requests, and decide which programs belong on your shortlist.",
+  "related_intro": "If these Kansas undergraduate scholarships feel too narrow or too broad, related pages can help you compare nearby options by changing one filter at a time. You may want to explore other Kansas scholarship categories, broader undergraduate listings, or other USA financial need pages to find a better fit.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study plans",
+    "Verify award details and submission steps"
+  ],
+  "who_for": [
+    "Kansas undergraduates with financial need",
+    "High school seniors planning Kansas college study",
+    "Applicants comparing education or law related scholarships",
+    "Students seeking Kansas STEM or safety focused awards"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Kansas for students with financial need?",
+      "answer": "Use this filtered view to explore Kansas scholarship rows that match undergraduate study and financial-need eligibility. Then open each listing and verify the full rules, required documents, and application steps on the official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this Kansas scholarship list?",
+      "answer": "Yes—these rows make it easier to compare basic details side by side, but amounts and deadlines vary by program. In this USA filter slice, listed awards range across the rows, and every deadline should be checked promptly on the official page."
+    },
+    {
+      "question": "What kinds of scholarships appear in this filtered set?",
+      "answer": "The programs below include a mix of categories such as law, education, STEM, community, and safety. Sample listings also point to fields like education, legal studies, agriculture, protective services, and engineering, so it helps to browse each row rather than assume one theme fits all."
+    },
+    {
+      "question": "Are these Kansas scholarships only for current college students?",
+      "answer": "Not always. While this filter is for undergraduate scholarships in Kansas, some listings in the catalog may also align with applicants at the high school senior stage, so check each row's eligibility details before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-04-29"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "legal_professions_and_law_studies",
+        "agriculture_and_related_sciences",
+        "engineering",
+        "security_and_protective_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Greater Kansas City Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Royal Association",
+        "count": 1
+      },
+      {
+        "name": "International Society of Automation-Kansas City Section",
+        "count": 1
+      },
+      {
+        "name": "O'Brate Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "law",
+      "education",
+      "stem",
+      "community",
+      "miscellaneous",
+      "music"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/kansas",
+    "generatedAt": "2026-04-26T14:48:22.571Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

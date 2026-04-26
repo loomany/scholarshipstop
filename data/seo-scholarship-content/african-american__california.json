@@ -1,46 +1,119 @@
 {
-  "seo_title": "California Scholarships for African American Students",
-  "seo_description": "Explore 10 scholarships for African American students in California. Award sizes range from $500 to $5,000. Check deadlines promptly.",
-  "intro": "Finding financial support as an African American student in California can be crucial for your educational journey. This collection features 10 scholarships specifically designed for African American students in the state, with award amounts ranging from $500 to $5,000. Each listing has its own unique requirements and deadlines, so it's essential to explore them thoroughly to find the best fit for your needs.",
-  "h1": "Scholarships for African Americans in California",
-  "supporting": "As you review these scholarships, pay attention to the specific categories they fall under, such as community, education, and arts. Many of these opportunities do not require essays, making them more accessible. Since deadlines vary, some approaching within the next 45 days, it’s wise to act promptly and verify details directly on the sponsor's website.",
-  "related_intro": "For additional opportunities, consider exploring scholarships that cater to different demographics or fields of study within California.",
+  "seo_title": "Find African American Scholarships in California, USA",
+  "seo_description": "African American scholarships in California, USA with award ranges and varying deadlines. Compare listings and apply on official pages.",
+  "intro": "Trying to find scholarships for African American students in California usually means sorting through programs that look similar at first glance but differ in who qualifies, what materials they ask for, and when you need to apply. This filtered USA view brings together a focused set of California listings tied to African American eligibility, with examples spanning community, education, arts, and miscellaneous categories. Awards shown in these rows vary by listing, and deadlines differ by program, so it helps to compare each entry instead of assuming one pattern fits all. Many listings in this slice appear to have lighter application requirements, and many are marked no essay, but you should still verify every detail on the official page before you apply for any scholarship.",
+  "h1": "Find African American Scholarships in California USA",
+  "supporting": "A smart way to use this list is to compare the requirement lines, award text, study level, and location fit side by side. You may spot options for high school seniors, college students, or graduate students, along with some listings connected to areas such as education or architecture and related services. Because some deadlines appear to be coming up soon, it is worth scanning the rows promptly and shortlisting the programs that match your profile. Award amounts vary, so confirm the current amount, eligibility wording, and submission instructions on the sponsor or official scholarship page before applying.",
+  "related_intro": "After you review this California-focused set, related pages can help you explore nearby angles, such as broader African American scholarship lists or other location-based USA filters that may surface additional matches with similar eligibility.",
   "how_to_use": [
-    "Compare deadlines for timely applications",
-    "Scan award amounts to find suitable options",
-    "Read requirement lines for eligibility details",
-    "Open official scholarship pages for complete information",
-    "Shortlist your favorites for easy reference"
+    "Compare each row for eligibility wording, California fit, and study level before you apply",
+    "Scan the award text and category labels to find programs that match your interests or background",
+    "Check every deadline individually, since dates vary by listing and some may be coming up soon",
+    "Open the official scholarship page for each shortlist item and verify requirements, amount, and submission steps",
+    "Keep a short list of your best matches and prioritize the programs with the clearest fit first"
   ],
   "who_for": [
-    "African American students in California",
-    "Students seeking community-focused scholarships",
-    "Individuals pursuing education or arts funding"
+    "African American students looking for scholarship options tied to California",
+    "California high school seniors comparing local awards before they apply",
+    "College and graduate students in the USA who want to find African American scholarships with California relevance",
+    "Applicants interested in community, education, arts, or miscellaneous scholarship categories",
+    "Students who prefer to compare listings that often show lighter requirements or no-essay signals"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for African American students in California?",
-      "answer": "The current listings include a variety of scholarships across different categories such as community, education, miscellaneous, and arts. With a total of 10 scholarships available, students can find opportunities that align with their interests and needs."
+      "question": "How can I find scholarships for African American students in California?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to African American eligibility and California. Open each row to verify the official requirements, residency details, and application steps before you apply."
     },
     {
-      "question": "Do I need to write an essay to apply for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially easier for many applicants. However, it's important to check the specific requirements for each scholarship, as details may vary."
+      "question": "Are these scholarships only for college students?",
+      "answer": "Not necessarily—these rows can include levels such as high school senior, college, and graduate student. Check each listing carefully so you can find programs that match your current level in California."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All 10 scholarships listed have deadlines, but they vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to review each listing promptly to ensure you don't miss any opportunities."
+      "question": "Do these scholarship listings usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many are marked as no-essay in the catalog metadata. Still, you should verify every application on the official source before you apply."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this category generally range from approximately $500 to $5,000. However, it's best to check each listing for specific amounts, as they can differ significantly."
+      "question": "Do all scholarships on this page have the same deadline?",
+      "answer": "No—deadlines differ by program, and these rows do not share one universal date. Some listed deadlines appear relatively soon, so it is smart to browse early and confirm each deadline on the official page."
     }
   ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 1250,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-24",
+        "2026-04-24",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alpha Kappa Alpha Sorority-Alpha Nu Omega Chapter",
+        "count": 3
+      },
+      {
+        "name": "The Links, -Stockton Chapter",
+        "count": 2
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Eta Gamma Omega Chapter",
+        "count": 1
+      },
+      {
+        "name": "Delta Sigma Theta Sorority-Contra Costa Alumnae Chapter",
+        "count": 1
+      },
+      {
+        "name": "Kappa Alpha Psi Fraternity-Berkeley Alumni Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "arts"
+    ]
+  },
   "_meta": {
     "canonicalPath": "african-american/california",
-    "generatedAt": "2026-04-02T10:41:52.236Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:22:24.325Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 10,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

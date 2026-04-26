@@ -1,48 +1,126 @@
 {
-  "seo_title": "Colorado Scholarships for Financial Need",
-  "seo_description": "Explore 21 scholarships for Colorado students with financial need. Award sizes range from $700 to $16,000. Check deadlines promptly.",
-  "intro": "Finding financial support for your education in Colorado can be challenging, but there are 21 scholarships available specifically for students with financial need. These opportunities range in award sizes from approximately $700 to $16,000, providing a variety of options to help ease the cost of tuition and related expenses. With deadlines that vary across listings, it's essential to check each scholarship's details promptly to ensure you don't miss out.",
-  "h1": "Financial Need Scholarships in Colorado",
-  "supporting": "This collection of scholarships covers diverse categories such as education, medicine, community service, and STEM fields, making it worthwhile to explore the specific criteria and award amounts for each listing. Many of these scholarships do not require essays, allowing for a more straightforward application process. Be sure to compare the requirements and deadlines to identify the best fits for your situation.",
-  "related_intro": "To further assist your search, consider exploring scholarships focused on specific fields or those that cater to different eligibility criteria.",
+  "seo_title": "Find Financial Need Scholarships in Colorado, USA",
+  "seo_description": "Financial need scholarships in Colorado, USA with deadlines, study levels, and award ranges. Compare listings and apply early as dates vary.",
+  "intro": "Trying to find Colorado scholarships that consider financial need usually means balancing cost, eligibility, and timing all at once. This filtered USA view brings together a focused set of listings tied to Colorado and need-based eligibility, so you can compare options without sorting through unrelated awards. The programs below span areas such as education, medicine, community, STEM, and disability, with study levels that can include high school seniors, college students, graduate students, and adult non-traditional learners. Award amounts vary by listing and should be verified on the official source, and deadlines differ by program rather than following one shared date. Many listings in this slice appear to have lighter application signals, and many may not require an essay, but you should still read each row carefully before you apply.",
+  "h1": "Find Financial Need Scholarships in Colorado USA",
+  "supporting": "A smart way to use this list is to compare more than the scholarship title. Check how each listing describes residency or citizenship, study level, and field of study, then look at the award text and deadline side by side. In this Colorado need-based slice, you may spot options connected to education, nursing and health professions, engineering, business, or community-focused themes. Because some deadlines appear to be coming up soon, it makes sense to shortlist strong matches early, open the official pages, and verify the current requirements before you spend time applying.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship pages by changing one filter at a time. Related views can help you explore other Colorado scholarships, broader USA financial-need listings, or pages narrowed by study level, category, or field of study.",
   "how_to_use": [
-    "Check individual deadlines for each scholarship",
-    "Review award amounts to prioritize applications",
-    "Read the eligibility requirements carefully",
-    "Open official scholarship pages for detailed information",
-    "Shortlist potential scholarships that align with your needs"
+    "Compare deadline text across the rows first, since timing varies by program and some listings may close soon",
+    "Read the eligibility and requirement lines closely to confirm financial need, Colorado relevance, study level, and any field-of-study fit",
+    "Scan award text to compare listed amounts, but verify the current value and terms on the official scholarship page",
+    "Open your best matches in new tabs and shortlist the programs that align with your background before you apply",
+    "Check the sponsor or official source directly for the latest rules, documents, and submission instructions"
   ],
   "who_for": [
-    "Students in Colorado with financial need",
-    "Undergraduates pursuing education or medical degrees",
-    "Community service-oriented individuals",
-    "STEM students seeking financial assistance",
-    "Students looking for scholarships with lighter application requirements"
+    "Colorado applicants who want to find scholarships that explicitly include financial need in the eligibility mix",
+    "High school seniors in Colorado comparing local awards before choosing where to apply",
+    "College and graduate students in Colorado looking for need-based support in education, health, STEM, or business-related paths",
+    "Adult non-traditional learners who want to browse Colorado scholarship listings without assuming every application requires an essay",
+    "US citizens or permanent residents checking Colorado-focused opportunities with residency or citizenship language in the listing"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Colorado?",
-      "answer": "This filter includes a diverse range of scholarships across 21 listings, covering categories such as education, medicine, community support, disability, and STEM fields. Each scholarship may have unique eligibility criteria and focus areas, so it's beneficial to explore the full list for options that align with your situation."
+      "question": "How can I find financial need scholarships in Colorado that fit my situation?",
+      "answer": "Use this filtered view to compare Colorado listings by study level, field, residency language, amount, and deadline. Then open the official source for each row to verify current eligibility and application steps."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this category do not require essays, but it's important to verify the specific requirements for each listing. While many scholarships may have lighter application processes, checking the details for each opportunity will ensure you meet all necessary criteria."
+      "question": "Who should apply from this Colorado scholarship list?",
+      "answer": "These rows can be relevant for people in the USA who are high school seniors, college students, graduate students, and adult non-traditional learners. Some listings also reference U.S. citizen or U.S. permanent resident status, so check each program page before you apply."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 21 scholarships listed have varying deadlines, so it's crucial to check each one individually for specific dates. Some deadlines are approaching within the next 45 days, so reviewing the listings promptly will help you stay on track."
+      "question": "What can I compare across the programs below?",
+      "answer": "You can compare award ranges, deadline timing, study levels, and topic areas such as Education, Medicine, Community, STEM, and Disability. Amounts and requirements vary by listing, so confirm details on the official scholarship page."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The scholarships in this category offer a wide range of award amounts, with some listings indicating funding from around $700 up to $16,000. Since award sizes can vary significantly, it's advisable to look at each scholarship's details to understand the financial support available."
+      "question": "Are deadlines and application requirements the same for every scholarship here?",
+      "answer": "No—deadlines differ by program, and some dates in this filtered set appear relatively soon, so it is smart to check rows promptly. Many listings appear to have lighter requirement signals and often no essay in the catalog metadata, but you should still verify each application on the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 24,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 700,
+      "maxUsd": 16000,
+      "statedAmountCount": 24,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 22,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-05-06",
+        "2026-05-07",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 24,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_1",
+        "high_school_senior",
+        "adult_non_traditional",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing",
+        "engineering",
+        "parks_recreation_and_fitness_studies"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Morgan Community College Foundation",
+        "count": 10
+      },
+      {
+        "name": "I Have a Dream Foundation",
+        "count": 3
+      },
+      {
+        "name": "Mountain Parks Electric",
+        "count": 2
+      },
+      {
+        "name": "Alexander Foundation",
+        "count": 1
+      },
+      {
+        "name": "Arapahoe Community College Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical",
+      "community",
+      "stem",
+      "biology"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/colorado",
-    "generatedAt": "2026-04-02T11:03:02.746Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 21,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:44:52.279Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 24,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

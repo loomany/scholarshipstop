@@ -1,48 +1,128 @@
 {
-  "seo_title": "Explore 72 Minority Scholarships for Diverse Students",
-  "seo_description": "Find 72 minority scholarships with awards from $500 to $16,000. Check varying deadlines and requirements for each opportunity.",
-  "intro": "Finding scholarships that support minority students can significantly ease the financial burden of education. This catalog features 72 opportunities tailored for individuals from diverse backgrounds, with award amounts ranging from approximately $500 to $16,000. With a variety of categories including STEM, education, and medicine, these scholarships cater to a wide array of academic pursuits. Keep in mind that deadlines and requirements vary, so it's important to check each listing for specific details.",
-  "h1": "72 Minority Scholarships with Varied Award Sizes",
-  "supporting": "As you explore these scholarships, consider comparing the award amounts and categories that align with your field of study. Some opportunities may have lighter application requirements, while others might include essay submissions. By reviewing the details carefully, you can identify which scholarships best fit your situation and maximize your chances of receiving funding.",
-  "related_intro": "For more tailored options, check out scholarships focused on specific fields or requirements that may suit your profile.",
+  "seo_title": "Find Minority Scholarships to Apply for in the USA",
+  "seo_description": "Minority scholarships in the USA with deadlines, award ranges, and requirement signals. Compare listings and apply after checking each official page.",
+  "intro": "Trying to find USA scholarships for minority applicants usually means sorting through very different eligibility rules, study levels, and subject areas at once. This filtered view brings those listings into one place so you can compare options across STEM, education, community, medicine, disability-related categories, and more. The programs below span common applicant stages such as high school and college, with some listings also appearing relevant to graduate study. Award amounts vary by listing, and deadlines differ by program, so it is worth checking each row closely. Many listings in this slice appear to have lighter application requirements, and many are marked as no-essay, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Find Minority Scholarships in the USA",
+  "supporting": "A good way to use this list is to compare more than just the scholarship title. Look at the requirement lines, study level, field of study, citizenship or residency notes, and deadline text side by side. In this minority-focused catalog slice, you can find programs tied to areas like engineering, education, business, computer and information sciences, transportation, and nursing-related paths. Amounts shown in the catalog range widely by listing, so shortlist the rows that match both your background and your academic direction, then confirm the current terms on the sponsor site. Because some deadlines appear soon, it makes sense to check dates promptly.",
+  "related_intro": "If you do not see enough matches here, compare nearby scholarship categories that overlap with your academic field, study level, or eligibility details. Related pages can help you find programs that fit the same goals from a different angle, especially if you want to widen your USA scholarship search beyond this minority filter.",
   "how_to_use": [
-    "Compare deadlines listed for each scholarship",
-    "Scan award amounts to identify the best fit for your needs",
-    "Read through requirement lines to understand what each scholarship entails",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that align with your academic and personal profile"
+    "Compare the deadline text across rows first, since dates vary by program and some may be coming up soon",
+    "Scan each listing for study level, field of study, and eligibility notes before adding it to your shortlist",
+    "Check the award text without assuming every program offers the same amount; amounts vary by listing",
+    "Use the requirement details to identify listings that may be lighter-touch or marked no-essay, then verify on the official page",
+    "Open the sponsor or official scholarship page for every program you plan to apply to and confirm current rules before submitting"
   ],
   "who_for": [
-    "Students from minority backgrounds",
-    "Individuals pursuing degrees in STEM fields",
-    "Applicants interested in education and community service",
-    "Students seeking medical scholarships",
-    "Those looking for opportunities with lighter application requirements"
+    "US-based minority applicants comparing scholarships across STEM, education, medicine, community, and related categories",
+    "High school juniors and seniors looking for minority scholarships before starting college applications",
+    "College students who want to find programs connected to engineering, business, computer science, transportation, or education",
+    "Graduate students checking whether minority-focused listings in this catalog match their level and field",
+    "US citizens or permanent residents reviewing eligibility-specific scholarship options in one place"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for minority students?",
-      "answer": "This collection includes 72 scholarships that cater to minority students across various fields such as STEM, education, medicine, and community service. Each listing may have different eligibility criteria and requirements, so it's important to review the details for each scholarship."
+      "question": "How can I find minority scholarships in the USA that fit my background and major?",
+      "answer": "Use this filtered view to compare eligibility, study level, field, amount, and deadline row by row. In this USA-focused set, you’ll see listings tied to areas like STEM, education, community, medicine, and more, but you should confirm final requirements on each official scholarship page."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. While some may require essays, approximately 65 of the listings do not have this requirement. Be sure to check the specific details for each scholarship to understand what is needed."
+      "question": "Can I apply for minority scholarships here if I’m in high school, college, or graduate school?",
+      "answer": "Many listings in this catalog slice appear to span levels such as high school junior, high school senior, early college, and graduate study. Before you apply, check the individual listing and the official source to verify the exact level and eligibility rules for that program."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes for the scholarships in this category range from approximately $500 to $16,000. Each scholarship has its own funding amount, so reviewing individual listings will provide the most accurate information."
+      "question": "What should I compare before I apply to multiple minority scholarships?",
+      "answer": "Compare the deadline text, award amount, study level, citizenship or residency notes, and field of study on each row. Amounts vary by listing, and deadlines differ by program, so use the catalog to narrow options and the official pages to verify details."
     },
     {
-      "question": "When should I apply for these scholarships?",
-      "answer": "All 72 scholarships listed have deadlines, which vary from one program to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+      "question": "Are these minority scholarship listings only for U.S. citizens?",
+      "answer": "Not always—this filtered set includes sample eligibility labels such as U.S. citizen and U.S. permanent resident. If you’re trying to find scholarships you can apply for in the USA, check each listing carefully because residency and citizenship requirements can differ."
     }
   ],
+  "page_data": {
+    "exactCount": 38,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 38,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 22,
+      "within60Days": 36,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-23",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 38,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "transportation_and_materials_moving",
+        "business_management_and_marketing",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Chicago Chapter",
+        "count": 4
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 2
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 2
+      },
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 2
+      },
+      {
+        "name": "Worcester State University",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "community",
+      "miscellaneous",
+      "medical",
+      "arts"
+    ]
+  },
   "_meta": {
     "canonicalPath": "minority",
-    "generatedAt": "2026-04-02T10:34:49.587Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 72,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:15:54.675Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 38,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

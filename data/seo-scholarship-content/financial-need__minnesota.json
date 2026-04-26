@@ -1,48 +1,130 @@
 {
-  "seo_title": "Financial Need Scholarships in Minnesota",
-  "seo_description": "Explore 10 scholarships for financial need in Minnesota. Award sizes vary from $750 to $8,000. Check deadlines and requirements.",
-  "intro": "For students in Minnesota facing financial challenges, there are 10 scholarships available that can help ease the burden of educational costs. These awards range from approximately $750 to $8,000, providing a variety of options tailored to different fields such as education, medicine, and STEM. With deadlines varying across the listings, it's essential to check the specific due dates promptly to maximize your chances of receiving support.",
-  "h1": "Scholarships for Financial Need in Minnesota",
-  "supporting": "This collection of scholarships features a mix of requirements, with some requiring essays and others offering lighter application processes. As you explore the options, consider comparing the award amounts and categories to find the best fit for your academic and career goals. Each listing provides unique opportunities, so take the time to review the details carefully.",
-  "related_intro": "If you're interested in exploring more funding opportunities, check out related pages that focus on specific fields or eligibility criteria.",
+  "seo_title": "Find Financial Need Scholarships in Minnesota, USA",
+  "seo_description": "Financial need scholarships in Minnesota, USA with deadlines, categories, and award ranges to compare. Explore listings and apply on official pages.",
+  "intro": "Trying to find Minnesota scholarships tied to financial need usually means balancing location, eligibility, and how much effort each application takes. This filtered USA view brings those factors together in one focused set of listings, with programs that span areas such as education, disability, medicine, law, and community-focused awards. The rows below are not all the same: award amounts vary by listing, deadlines differ by program, and requirements can range from lighter-touch applications to entries that may ask for more documentation or an essay. If you want to apply in this category without opening dozens of unrelated results, this is a practical place to compare options that match both financial-need criteria and Minnesota relevance.",
+  "h1": "Find Financial Need Scholarships in Minnesota USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check the requirement lines for study level, residency or citizenship wording, and any field-of-study fit before you spend time applying. It is also worth scanning deadline text early, since some programs may close sooner than others. As you browse, open the official page for each promising row to verify current award details, required materials, and any Minnesota-specific conditions before you submit.",
+  "related_intro": "If you are close to qualifying but want a wider set of options, related pages can help you explore nearby paths such as other Minnesota scholarship filters or broader financial-need categories across the USA. That is useful when you want to compare local relevance against a larger pool of programs.",
   "how_to_use": [
-    "Compare deadlines across different scholarships",
-    "Scan award amounts to find suitable options",
-    "Read through requirement lines for application insights",
-    "Open official pages for detailed eligibility criteria",
-    "Shortlist scholarships that align with your goals"
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official listing page to verify details",
+    "Shortlist programs that match your study level and location",
+    "Check whether essays or extra materials are requested"
   ],
   "who_for": [
-    "Minnesota residents in need of financial assistance",
-    "Students pursuing education or medical degrees",
-    "Individuals interested in STEM-related scholarships",
-    "Applicants looking for varying essay requirements",
-    "High school seniors and college students"
+    "Minnesota applicants with documented financial need",
+    "High school seniors seeking local scholarship options",
+    "Graduate students comparing need-based funding in Minnesota",
+    "Applicants in education, health, law, or community-focused fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Minnesota?",
-      "answer": "The listings include a variety of categories such as education, medicine, disability, law, and STEM. With 10 scholarships currently available, students can find options that align with their specific fields of study."
+      "question": "How can I find financial-need scholarships in Minnesota that fit my situation?",
+      "answer": "Use this filtered view to compare Minnesota listings row by row, then open the official source for the exact eligibility details. In this USA-focused set, factors like study level, residency or citizenship, field of study, and category can differ by program."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary across the scholarships; while some may require essays, others do not. It's important to check the details for each listing to understand what is needed for your application."
+      "question": "Can I apply if I’m not in the same major or school level as every listing on the page?",
+      "answer": "Yes—these rows are not all for one major or one academic stage. As you explore options, check each listing’s official page because some are tied to areas like education, medicine, law, community, or disability, and study levels shown in the catalog can vary."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes range significantly, with amounts noted between approximately $750 and $8,000. Each scholarship has its own specific funding level, so reviewing individual listings is essential."
+      "question": "Do all Minnesota financial-need scholarships here have the same deadline or award amount?",
+      "answer": "No. Deadlines differ by program, and award amounts vary by listing, so compare each row carefully and verify on the official page before you apply. Some dates in this filtered set appear relatively soon, so it’s smart to check current details promptly."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All scholarships in this listing have deadlines, but they vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to verify the specific dates for each scholarship promptly."
+      "question": "Are these scholarships only for Minnesota residents?",
+      "answer": "Not always in the same way. Because this page combines financial need with Minnesota, some programs may focus on Minnesota location while others may also mention USA citizenship or permanent residency requirements, so confirm the exact wording on the official source."
+    },
+    {
+      "question": "How should I compare these scholarships before I apply?",
+      "answer": "Start with the catalog fields you can see—category, study level, field of study, deadline text, and listed amount—then narrow to the programs below that match you best. Requirements can vary, including whether an essay is needed, so use the listing to shortlist and the official page to verify final application steps."
     }
   ],
+  "page_data": {
+    "exactCount": 12,
+    "award": {
+      "medianUsd": 2750,
+      "minUsd": 750,
+      "maxUsd": 8000,
+      "statedAmountCount": 12,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-15",
+        "2026-05-31"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "survey"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "legal_professions_and_law_studies",
+        "natural_resources_and_conservation"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "AIA Minnesota",
+        "count": 1
+      },
+      {
+        "name": "Allina Health System",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "American Public Works Association-Minnesota Chapter",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "arts",
+      "community",
+      "disability",
+      "law"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/minnesota",
-    "generatedAt": "2026-04-02T11:14:31.691Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 10,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:05:49.844Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 12,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

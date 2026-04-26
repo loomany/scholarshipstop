@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Tennessee Undergraduate Need Scholarships | USA",
+  "seo_description": "Financial need undergraduate scholarships in Tennessee, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find USA scholarships that match financial need, undergraduate study, and Tennessee can narrow the search fast, but the details still vary a lot from row to row. In this filtered slice, you can compare programs tied to community, STEM, education, medicine, humanities, and other areas without wading through unrelated listings. Many of the programs below appear to have lighter application signals, and many listings often show no essay in the catalog data, though you should verify every requirement on the official page before you apply. Award amounts differ by listing, deadline timing is not the same across these rows, and eligibility language may reference residency, citizenship, school level, or field of study in different ways.",
+  "h1": "Find Financial Need Undergraduate Scholarships in Tennessee USA…",
+  "supporting": "Use this set to compare more than just the title. Read the requirement line closely, then check how each listing describes financial need, undergraduate status, Tennessee connection, and any field preferences such as education, agriculture, business, law, or health professions. Because deadline text differs across the rows and at least some opportunities may be coming up soon, it is smart to open the official source early, confirm current terms, and shortlist the programs that best fit before you move on to broader scholarship searches.",
+  "related_intro": "If these Tennessee need-based undergraduate listings feel close but not quite right, related pages can help you compare nearby options by topic, location, or eligibility. That is useful when you want to explore similar USA scholarships without starting your search over from scratch.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your Tennessee and undergraduate status",
+    "Verify award details and eligibility on the sponsor site"
+  ],
+  "who_for": [
+    "Tennessee undergraduates with financial need",
+    "Applicants comparing need-based awards in Tennessee",
+    "Students seeking community or STEM scholarship options",
+    "Undergraduate applicants reviewing education, law, or health-related listings"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Tennessee undergraduate scholarships based on financial need?",
+      "answer": "Use this filtered view to compare Tennessee listings that match financial-need and undergraduate criteria in the USA catalog. Then open each row’s official source to confirm eligibility, required documents, and current status before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts in this slice range across listings, and deadlines differ by row, so verify the latest details on the official scholarship page."
+    },
+    {
+      "question": "Are these scholarships only for Tennessee residents?",
+      "answer": "Not necessarily. This Tennessee filter helps you explore programs tied to Tennessee, but residency, school location, and citizenship rules can differ across listings in the USA. Check each official listing for the exact eligibility language before you apply."
+    },
+    {
+      "question": "What kinds of scholarships appear in this Tennessee undergraduate financial-need list?",
+      "answer": "You can expect a focused set of listings across categories such as Community, STEM, Education, Medicine, Humanities, and Miscellaneous. Some rows may also reference fields like education, agriculture, business, law, or health professions, so it’s worth browsing and comparing the details."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 2000,
+      "maxUsd": 10000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "college_3",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Thurgood Marshall College Fund",
+        "count": 2
+      },
+      {
+        "name": "Institute of Transportation Engineers-Tennessee Section",
+        "count": 1
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      },
+      {
+        "name": "The Community Foundation of Western North Carolina",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "stem",
+      "education",
+      "humanities",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/tennessee",
+    "generatedAt": "2026-04-26T14:55:27.419Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

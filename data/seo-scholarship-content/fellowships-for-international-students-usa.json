@@ -1,43 +1,136 @@
 {
-  "seo_title": "Explore 196 Fellowships for International Students in the USA",
-  "seo_description": "Discover 196 fellowships for international students in the USA. Find funding opportunities tailored for your academic journey.",
-  "h1": "Fellowships for International Students in the USA",
-  "intro": "Navigating the landscape of higher education as an international student can be challenging, especially when it comes to funding your studies. Fortunately, there are numerous fellowships available in the USA designed specifically for international students. With 196 fellowships currently open for application, ranging from merit-based awards to need-based grants, students can find financial support that aligns with their academic goals. These fellowships not only provide financial assistance but also enhance your educational experience through networking and professional development opportunities. Whether you're pursuing undergraduate or graduate studies, there is likely a fellowship that fits your needs.",
-  "supporting": "Eligibility for these fellowships varies, with some targeting specific fields of study, while others are open to all international students. Deadlines can range from rolling admissions to fixed dates, so it's crucial to check each fellowship's requirements early. To maximize your chances of success, tailor your application to highlight your unique background and aspirations. Many fellowships require essays, letters of recommendation, and proof of academic achievement, so prepare these materials in advance. Additionally, consider reaching out to previous recipients for insights on their application experiences.",
-  "related_intro": "In addition to fellowships, there are various scholarships and grants available for international students in the USA. These funding options can significantly ease the financial burden of studying abroad.",
+  "seo_title": "Find Fellowships for International Students in USA",
+  "seo_description": "Fellowships for international students in the USA with deadlines, award details, and eligibility to compare. Explore listings and apply on official pages.",
+  "intro": "Trying to find USA fellowships for international students usually means sorting through mixed eligibility rules, study levels, and application expectations before you can decide where to apply. This filtered slice narrows the search to programs connected with international student status and graduate study, with listings that touch areas such as education, STEM, medicine, arts, community, and other academic paths. As you compare the rows below, expect variation in award amounts, deadline timing, essay requirements, and supporting materials. Some opportunities may be relatively straightforward, while others ask for more documentation or a more detailed application. If you want to browse and compare options for graduate-level study in the USA, this is a practical place to start.",
+  "h1": "Compare USA Fellowships for International Students",
+  "supporting": "Use this list to compare more than just the title. Check how each fellowship describes eligibility, field of study, and study level, then read the requirement line closely to see whether essays or extra materials may be involved. Because deadlines differ by program and some dates may be approaching soon, it is smart to review timing early and open the official page before you shortlist anything. Awards also vary by listing, so confirm the current amount and terms directly with the provider.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you explore nearby scholarship categories by topic, study level, or applicant background. That is useful when you want to widen your USA search beyond this graduate international student fellowship slice without starting over.",
   "how_to_use": [
-    "Browse the list of 196 fellowships available.",
-    "Check eligibility criteria for each fellowship.",
-    "Prepare required documents and application materials.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if necessary."
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official source before applying",
+    "Shortlist programs that match your study level",
+    "Verify award details and eligibility on sponsor pages"
   ],
   "who_for": [
-    "International students pursuing undergraduate or graduate studies.",
-    "Students from diverse academic backgrounds.",
-    "Individuals seeking financial support and professional development."
+    "International graduate applicants targeting study in the USA",
+    "Students comparing fellowship options across education and STEM",
+    "Applicants seeking USA funding tied to international student status",
+    "Graduate learners reviewing medicine, arts, or community related listings"
   ],
   "faq": [
     {
-      "question": "What types of fellowships are available for international students?",
-      "answer": "Fellowships vary widely, including merit-based, need-based, and field-specific awards."
+      "question": "How can I find fellowships for international students in the USA on this page?",
+      "answer": "Use this filtered view to explore USA fellowship listings that align with international-student and graduate-level tags. Then compare each row’s eligibility, study area, amount, and deadline on the official source before you apply."
     },
     {
-      "question": "How can I find the right fellowship for my studies?",
-      "answer": "Review eligibility criteria and application requirements for each fellowship to find the best fit."
+      "question": "Can I compare award amounts and deadlines across these fellowship listings?",
+      "answer": "Yes—these rows include deadline text, but dates vary by program, so there is no single deadline for the whole page. Award amounts also vary by listing, and not every row shows the same level of detail, so verify the current amount and timing on the official page."
     },
     {
-      "question": "Are there deadlines for fellowship applications?",
-      "answer": "Yes, deadlines vary by fellowship; it's important to check each one carefully."
+      "question": "Are these USA fellowships only for graduate students?",
+      "answer": "This filter slice is centered on graduate-level opportunities for international students in the USA. Some listings may show other study-level labels in the catalog, so check each program’s official eligibility rules before you apply."
+    },
+    {
+      "question": "Do all fellowships here require an essay?",
+      "answer": "No—requirements vary across the programs below. Some listings appear to have essay requirements and some may be lighter-touch, but you should confirm the exact application steps on the official source."
+    },
+    {
+      "question": "What subjects can I explore in this fellowship list?",
+      "answer": "You can browse a focused set of USA listings connected to categories and fields such as Education, STEM, Medicine, Arts, Community, business, engineering, English, and health professions. Use the catalog labels to narrow what you want to compare, then confirm program fit on the official listing."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "fellowships-for-international-students-usa",
-    "generatedAt": "2026-04-25T13:25:30.383Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:58:39.839Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

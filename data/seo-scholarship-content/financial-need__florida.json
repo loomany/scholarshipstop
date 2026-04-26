@@ -1,48 +1,126 @@
 {
-  "seo_title": "Florida Scholarships for Financial Need Students",
-  "seo_description": "Explore 125 Florida scholarships for students with financial need. Check award sizes and deadlines for each opportunity.",
-  "intro": "Finding financial support for education in Florida can be a crucial step for many students. This catalog features 125 scholarships designed to assist those demonstrating financial need. Award sizes vary significantly, ranging from around $164 to $20,000, and deadlines for applications differ, so it’s important to check each listing for the most accurate information. Many scholarships in this collection may not require essays, making them more accessible for applicants.",
-  "h1": "125 Scholarships for Financial Need in Florida",
-  "supporting": "As you explore this list, consider comparing the award amounts and categories, which include education, STEM, community, and more. Each scholarship has unique eligibility criteria and varying deadlines, so take the time to read the details carefully. Shortlisting those that align with your profile can help streamline your application process.",
-  "related_intro": "If you're interested in scholarships based on other criteria, check out our related pages for more tailored opportunities.",
+  "seo_title": "Find Financial Need Scholarships in Florida, USA",
+  "seo_description": "Financial need scholarships in Florida, USA with awards and varying deadlines. Compare listings and apply early as dates differ by program.",
+  "intro": "Trying to find Florida scholarships tied to financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings those listings into one place so you can compare options without mixing in unrelated awards. Across the rows below, award amounts, deadlines, study levels, residency language, and field preferences can all vary, so it helps to read each listing closely before you apply. Many listings in this slice appear to have lighter application signals, and many often show no essay in the metadata, but requirements still need to be verified on the official source for every program.",
+  "h1": "Find Financial Need Scholarships in Florida USA",
+  "supporting": "Use this list to compare more than the title alone. Check which programs mention Florida directly, which are open to high school seniors versus college or graduate students, and whether a listing leans toward education, STEM, community, medicine, arts, or another area. Deadlines differ by program, and some opportunities may be coming up soon, so it is worth scanning the date field early. Award amounts are listed row by row and should be confirmed on the sponsor page before you apply.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing either the financial need filter or the Florida location filter. That is often the fastest way to explore similar USA opportunities with different eligibility rules, study levels, or subject focus.",
   "how_to_use": [
-    "Review the list for scholarship categories that match your interests",
-    "Compare award amounts to prioritize your applications",
-    "Check individual deadlines to ensure timely submissions",
-    "Read through eligibility requirements for each listing",
-    "Visit official scholarship pages for the most current details"
+    "Sort and compare deadline fields first",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Compare award text before you apply"
   ],
   "who_for": [
-    "Students in Florida with financial need",
-    "Undergraduates pursuing education or STEM fields",
-    "Community-focused applicants seeking support",
-    "High school seniors planning to attend college",
-    "Students looking for scholarships with fewer application requirements"
+    "Florida applicants with financial need",
+    "High school seniors planning college costs",
+    "College or graduate students comparing need-based aid",
+    "Applicants seeking Florida-focused education or STEM scholarships"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Florida?",
-      "answer": "The current listing includes 125 scholarships categorized under education, STEM, community, medicine, arts, and miscellaneous. This variety allows students to find opportunities that align with their specific interests and academic goals."
+      "question": "What varies from one Florida financial-need scholarship listing to another?",
+      "answer": "Eligibility can differ by study level, field of study, and USA residency or citizenship labels such as U.S. citizen or permanent resident. Award amounts also vary by listing, so check each official page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most scholarships in this list do not require an essay, making the application process potentially lighter for many applicants. However, it's important to verify the details of each listing, as requirements can vary."
+      "question": "Can I compare awards and deadlines across these scholarships?",
+      "answer": "Yes—this focused set of listings is useful for comparing amounts, categories, and deadline text row by row. There is no single deadline for the whole page, so confirm every date and application step on the scholarship's official page."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 125 scholarships have deadlines, but they vary from one listing to another. Be sure to check the specific dates for each scholarship promptly, as some deadlines may be approaching within the next 45 days."
+      "question": "Are these Florida financial-need scholarships only for one major or school level?",
+      "answer": "No, the programs below span multiple categories such as Education, STEM, Community, Medicine, and Arts, with examples of levels including high school senior, college, and graduate study. Explore each row closely because the exact major and level requirements are set by the individual scholarship."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes for these scholarships vary significantly, with amounts ranging from approximately $164.43 to $20,000. This diverse range allows students with different financial needs to find suitable funding options."
+      "question": "Do these listings usually require essays or a long application?",
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and many are marked as no-essay in the catalog metadata. Still, requirements can change, so always review the official scholarship page before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 131,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 164.43,
+      "maxUsd": 20000,
+      "statedAmountCount": 131,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 34,
+      "within60Days": 127,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-05-30",
+        "2026-06-05",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 131,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement",
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "engineering",
+        "business_management_and_marketing",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 64
+      },
+      {
+        "name": "University of South Florida",
+        "count": 9
+      },
+      {
+        "name": "University of North Florida",
+        "count": 8
+      },
+      {
+        "name": "The College of the Florida Keys",
+        "count": 7
+      },
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 4
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical",
+      "arts"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/florida",
-    "generatedAt": "2026-04-02T10:31:17.370Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 125,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:48:34.462Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 131,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

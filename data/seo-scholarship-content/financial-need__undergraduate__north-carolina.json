@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in North Carolina…",
+  "seo_description": "Financial need undergraduate scholarships in North Carolina, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find undergraduate scholarships in North Carolina that take financial need into account usually means narrowing fast and checking details carefully. This filtered USA view brings together a focused set of listings where need-based eligibility overlaps with undergraduate study, so you can compare options without wading through unrelated awards. The programs below span different themes, including community, education, medicine, and STEM, and some may also connect to fields such as engineering, mathematics, health professions, agriculture, or education. Award amounts vary by listing, deadlines differ by program, and requirement lines are not identical, so it is worth reading each row closely before you apply. Many listings in this slice appear to have lighter application signals, and many often show no essay, but you should still verify every rule on the official source.",
+  "h1": "Find North Carolina Undergraduate Need-Based Scholarships USA …",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan each row for study level fit, residency or citizenship language, field tags, and deadline wording, then open the official page to confirm what the sponsor currently requires. This slice is worth a close look if you want to find North Carolina opportunities that may align with financial need while still covering a mix of academic interests. If a deadline looks close, move that listing to the top of your shortlist and verify the latest details before submitting.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you compare nearby scholarship paths in the USA catalog. You may want to explore other undergraduate filters, broader North Carolina listings, or other need-based views to find a better match for your location, major, or eligibility profile.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line before you apply",
+    "Open the official page to verify current rules",
+    "Shortlist listings that match your study level and location",
+    "Check award details and field tags side by side"
+  ],
+  "who_for": [
+    "North Carolina undergraduates seeking need-based aid",
+    "College students comparing local USA scholarship options",
+    "Applicants with interests in education, medicine, or STEM",
+    "Students who prefer listings with often lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in North Carolina based on financial need?",
+      "answer": "Use this filtered view to compare North Carolina listings that match undergraduate study and financial-need criteria. Then open each row and verify eligibility, residency, and application details on the official scholarship page before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate in North Carolina?",
+      "answer": "Not automatically. These rows share the main filter theme, but each program may still have its own requirements such as study level, field of study, or USA citizenship or residency details that you need to confirm from the official source."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check award amount, deadline, study level, and any field-of-study notes row by row. Amounts vary by listing, and deadlines differ by program, so it’s smart to compare the catalog details and confirm them on the official pages."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or topics?",
+      "answer": "Not only one major. In this focused set of listings, you may see topics such as Community, Education, Medicine, STEM, and related fields like engineering, mathematics and statistics, agriculture, and health professions, so it helps to explore multiple rows."
+    }
+  ],
+  "page_data": {
+    "exactCount": 13,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 1000,
+      "maxUsd": 10000,
+      "statedAmountCount": 13,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 9,
+      "within60Days": 11,
+      "rollingOrUnknown": 0,
+      "nearestDays": 11,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "mathematics_and_statistics"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Chapel Hill Carrboro Public School Foundation",
+        "count": 5
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "The Renaissance Foundation",
+        "count": 2
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      },
+      {
+        "name": "The Community Foundation of Western North Carolina",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/north-carolina",
+    "generatedAt": "2026-04-26T14:53:10.621Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 13,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

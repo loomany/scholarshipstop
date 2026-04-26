@@ -1,0 +1,117 @@
+{
+  "seo_title": "Find Engineering Scholarships in Oregon, USA",
+  "seo_description": "Engineering scholarships in Oregon, USA with deadlines and award details to compare. Explore these listings and verify each program on official pages.",
+  "intro": "Trying to find engineering scholarships in Oregon usually means narrowing a broad USA search into a smaller set you can actually compare and apply to. This filtered slice brings together programs tied to engineering with an Oregon location focus, so you can scan options without mixing in unrelated awards. The rows below show that requirements, award amounts, and deadlines vary by listing, and many appear to have lighter application signals with no essay often indicated in the metadata. Because deadline text differs across these programs and at least one listing appears relatively soon, it makes sense to check timing early, read each requirement line closely, and verify details on the official scholarship page before you apply.",
+  "h1": "Apply for Engineering Scholarships in Oregon USA",
+  "supporting": "A useful way to browse this set is to compare each row side by side instead of assuming every engineering award in Oregon works the same way. Look at the title, category tags, study level clues, and any requirement notes to see which listings fit your background. Some rows connect engineering with STEM, education, biology, disability, or community themes, which can help you find scholarships that match more than one part of your profile. Before you apply, open the source page to confirm current eligibility, materials, and deadline wording.",
+  "related_intro": "If these Oregon engineering listings feel close but not quite right, related pages can help you compare nearby paths, such as broader engineering results or other Oregon scholarship filters. That is often the fastest way to find a better fit when your study level, topic overlap, or location preference is slightly different.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your study level",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Oregon students seeking engineering-focused funding",
+    "High school seniors planning engineering study",
+    "Graduate students comparing Oregon engineering awards",
+    "Applicants interested in STEM scholarships with Oregon relevance"
+  ],
+  "faq": [
+    {
+      "question": "How can I find engineering scholarships in Oregon that fit my situation?",
+      "answer": "Use this filtered view to compare the Oregon engineering listings row by row, then open the official source for each program. Study level, category, amount, and deadline can differ across these rows, so verify details on the provider page before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I study engineering in the USA?",
+      "answer": "Not automatically. These are USA-relevant Oregon listings, but each scholarship can set its own eligibility rules, so check the official page for location, study level, and field requirements before you apply."
+    },
+    {
+      "question": "What should I compare first on this Oregon engineering scholarship page?",
+      "answer": "Start with deadline, study level, and field fit, then compare award details and any application requirements. Amounts vary by listing, and deadlines differ by program, so use the catalog to narrow options and confirm everything on official sources."
+    },
+    {
+      "question": "Are these Oregon engineering scholarships likely to require essays?",
+      "answer": "Many listings in this filtered set appear to have no essay flag, but requirements can still vary by program. Before you apply, confirm the current materials needed on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 2750,
+      "minUsd": 1500,
+      "maxUsd": 4000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 23,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-24",
+        "2026-05-31"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "english_language_and_literature",
+        "natural_resources_and_conservation"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Institute of Transportation Engineers-Oregon Section",
+        "count": 1
+      },
+      {
+        "name": "International Titanium Association, a non-proﬁt trade association established in 1984 by the leading companies in the titanium industry,",
+        "count": 1
+      },
+      {
+        "name": "Pacific Forest Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Associates Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "biology",
+      "community",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "engineering/oregon",
+    "generatedAt": "2026-04-26T13:40:32.571Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

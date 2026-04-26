@@ -1,0 +1,108 @@
+{
+  "seo_title": "Find Mississippi High School Need Scholarships | USA",
+  "seo_description": "Mississippi high school financial need scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships for Mississippi high school students with financial need usually means narrowing a broad search into a smaller set you can actually compare. This filtered slice brings together programs tied to Mississippi and the high school level, with listings that may touch areas like education, STEM, and miscellaneous awards. As you browse, expect differences in award size, deadline timing, essay expectations, and eligibility details such as residency or study interests. Some rows may look lighter on requirements, while others ask for more supporting information. If you plan to apply soon, it is worth checking the programs below promptly because deadline text varies by listing.",
+  "h1": "Find Mississippi High School Need Scholarships USA",
+  "supporting": "Use these rows to compare the details that matter most before you apply: the requirement line, any essay signal, the listed deadline text, and the official source for final rules. This is a useful slice to scan if you want Mississippi-focused options rather than a national mix, especially for high school seniors reviewing financial need scholarships in the USA. Award amounts appear on the listings, but they can differ by program, so verify the latest terms on each official page before you decide where to spend time.",
+  "related_intro": "If this set feels close but not quite right, related pages can help you compare nearby paths, such as broader Mississippi scholarships, other high school scholarship filters, or financial need listings without the same location focus. That makes it easier to find adjacent options without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across each listing",
+    "Read the requirement line before you apply",
+    "Open the official page to verify eligibility",
+    "Shortlist programs that match your location and study interests",
+    "Check award details and essay expectations row by row"
+  ],
+  "who_for": [
+    "Mississippi high school seniors with financial need",
+    "USA applicants comparing Mississippi-based scholarship options",
+    "Students interested in education or engineering related awards",
+    "Families reviewing scholarships with mixed essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Mississippi scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare the rows that match financial need, high school level, and Mississippi in the USA catalog. Then open each listing and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Do all Mississippi financial-need scholarships here require an essay?",
+      "answer": "No single rule applies across this filtered set. Some listings may ask for an essay and some may not, so compare requirements row by row and confirm on the scholarship's official page."
+    },
+    {
+      "question": "Who is this scholarship filter most useful for?",
+      "answer": "- Mississippi high school seniors in the USA who want to explore scholarships tied to financial need - Applicants who want to compare a focused set of education and STEM-related listings before they apply - Families or counselors helping students find programs with potentially lighter application requirements, while still verifying each row"
+    },
+    {
+      "question": "How should I use this page to apply efficiently?",
+      "answer": "- Start by opening the most relevant rows and checking deadline text first, since dates vary by program - Compare award amount, category, and any requirement notes before spending time on an application - Use the catalog to shortlist options, then rely on the official scholarship pages for final rules and submission steps"
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 2000,
+      "maxUsd": 3500,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-05-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Mississippi Municipal League",
+        "count": 3
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Birmingham Chapter",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/mississippi",
+    "generatedAt": "2026-04-26T13:55:32.647Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

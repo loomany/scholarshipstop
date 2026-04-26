@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Montana, USA …",
+  "seo_description": "Financial need undergraduate scholarships in Montana, USA. Compare deadlines, award amounts, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships for undergraduates in Montana with a financial need focus usually means narrowing fast and checking fit carefully. This filtered slice brings together a focused set of listings where need-based eligibility is part of the picture, while topics across the rows can still vary, including community, education, disability, and medicine. Awards differ by program, and deadlines differ by row, so it helps to compare each listing rather than assume the same terms apply across the page. Many listings in this slice appear to have lighter application signals, and some may not require an essay, but requirements still need to be verified on the official scholarship pages before you apply.",
+  "h1": "Find Financial Need Scholarships for Undergraduates in Montana U…",
+  "supporting": "Use the rows below to compare more than the title alone. Look at the category tags, read the requirement lines closely, and note how each program frames eligibility for Montana applicants and undergraduate study. If you are building a shortlist for the current cycle, check deadline text promptly because timing is not uniform across these listings. Award amounts vary by listing and should be confirmed with the sponsor source before you apply.",
+  "related_intro": "If these Montana undergraduate need-based options feel too narrow, related pages can help you compare nearby slices by location, study level, or broader scholarship themes. That is often the quickest way to find similar USA programs with different category mixes or application requirements.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read every requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your profile",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Montana undergraduates with financial need",
+    "Applicants comparing education or community scholarships",
+    "Students checking disability-related scholarship options",
+    "Montana residents building a shorter application list"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Montana for students with financial need?",
+      "answer": "Use this filtered view to compare the Montana rows that match undergraduate study and financial-need eligibility, then open each listing for the official criteria. Categories and details vary by program, so confirm location, study level, and any extra requirements on the source page before you apply."
+    },
+    {
+      "question": "Are these Montana scholarships only for certain majors or topics?",
+      "answer": "Not necessarily; this filtered set includes listings tied to categories such as Community, Education, Disability, Medicine, and Miscellaneous. If you want to explore fit, check each row for its specific focus instead of assuming every program matches the same major or background."
+    },
+    {
+      "question": "Do these undergraduate financial-need scholarships usually require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flagged in the catalog, but that is not a guarantee for every program. Before you apply, review the official listing to confirm whether essays, documents, or other materials are required."
+    },
+    {
+      "question": "What is the best way to browse these Montana scholarship listings without missing a deadline?",
+      "answer": "Start by sorting through the rows that fit your situation, then compare deadline text and open the official sources for the programs you want to pursue. Because dates vary by row and at least one listing appears relatively soon, it is smart to check deadlines promptly."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 21,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-06-30",
+        "2026-05-31"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Montana Association for the Blind",
+        "count": 1
+      },
+      {
+        "name": "Rocky Mountain Hemophilia and Bleeding Disorder Association",
+        "count": 1
+      },
+      {
+        "name": "Western States Roofing Contractors Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "disability",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/montana",
+    "generatedAt": "2026-04-26T14:51:21.289Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

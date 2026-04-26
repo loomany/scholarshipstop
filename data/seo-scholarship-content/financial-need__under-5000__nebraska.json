@@ -1,0 +1,104 @@
+{
+  "seo_title": "Find Nebraska Financial Need Scholarships Under Five Thousand |…",
+  "seo_description": "Nebraska financial need scholarships under five thousand: compare awards, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Nebraska scholarships for applicants with financial need where the listed award is under five thousand dollars usually means sorting through smaller, more targeted programs and checking details closely. This filtered USA view brings together a focused set of listings tied to Nebraska and financial-need criteria, with examples connected to education and related categories. As you compare options, expect the fine print to vary by row: award amounts may differ across listings, deadlines are not the same, and requirement lines can include different application materials, including essays for some programs. Because deadline text in this slice is not uniform and some dates may be coming up soon, it makes sense to review each listing promptly before you apply.",
+  "h1": "Explore Nebraska Financial Need Scholarships Under Five Thousand…",
+  "supporting": "Use these rows to compare more than the headline amount. Look at who each scholarship is meant for, how Nebraska is reflected in the eligibility, and whether the listing leans toward high school, spouse, or memorial-style awards. The sample titles suggest a narrower set of opportunities rather than broad national programs, which can make this slice worth a careful scan if you want to find smaller USA scholarships that match your situation. Amounts shown in listings should always be verified on the official page before you apply.",
+  "related_intro": "If nothing here is quite right, check related scholarship pages by adjusting one filter at a time. You may find a better fit by keeping Nebraska and financial need while changing the award-size preset, or by keeping the under-five-thousand range and comparing other Nebraska scholarship categories.",
+  "how_to_use": [
+    "Compare each row’s eligibility wording to confirm the Nebraska and financial-need fit before you apply",
+    "Scan the requirement lines for essays, school level, and any category clues such as education",
+    "Check deadline text on every listing because dates vary by program and some may be approaching soon",
+    "Open the official scholarship page to verify the current award amount, instructions, and supporting documents",
+    "Shortlist the listings that match your profile best, then compare them side by side before submitting applications"
+  ],
+  "who_for": [
+    "Nebraska applicants who want to find scholarships that consider financial need and list awards under five thousand dollars",
+    "High school students in Nebraska comparing smaller scholarship programs with education-related listings",
+    "Spouses or family-connected applicants reviewing Nebraska scholarship rows with more specific eligibility language",
+    "Applicants who prefer to compare targeted local or state-relevant USA scholarships instead of only broad national searches"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here with one application?",
+      "answer": "No—these are separate USA scholarship listings, not one combined program. You’ll need to review each listing individually and apply through the official source for the scholarship you choose."
+    },
+    {
+      "question": "Do all of these Nebraska scholarships have the same deadline or award amount?",
+      "answer": "No, deadlines differ by program, and this slice shows different deadline text by row, so check dates promptly. Award amounts also vary by listing and should be confirmed on the official page before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare the location fit, financial-need requirement, award amount, deadline, and any essay or submission requirements shown in each row. In this filtered set, requirements appear mixed, so it’s worth checking every listing carefully."
+    },
+    {
+      "question": "What kinds of scholarships might appear in this Nebraska filter?",
+      "answer": "The programs below may include categories such as education and miscellaneous, with some listings tied to fields like education, business management and marketing, or security and protective services. Explore each row for the exact focus, since not every scholarship in this filter targets the same major or background."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 1000,
+      "maxUsd": 1000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-04-08",
+        "2026-06-01",
+        "2026-04-08"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 1,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "security_and_protective_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Offutt Enlisted Spouses Club",
+        "count": 2
+      },
+      {
+        "name": "International Association of Special Investigation Units-Iowa-Nebraska Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/nebraska",
+    "generatedAt": "2026-04-26T14:36:03.014Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

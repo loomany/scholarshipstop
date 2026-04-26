@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Arizona High School Need-Based Scholarships | USA",
+  "seo_description": "Arizona high school financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Arizona scholarships for high school students with financial need usually means sorting through mixed eligibility rules, different award ranges, and deadline timing that does not line up neatly. This filtered USA view narrows that search to a focused set of listings tied to Arizona and a high school preset, so you can compare options with less noise. The programs below span categories such as education, STEM, medicine, disability, law, and miscellaneous topics, which makes this slice useful even if your future major is still undecided. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it is smart to read each row closely before you apply.",
+  "h1": "Find Arizona Financial Need Scholarships for High School USA",
+  "supporting": "A good way to use these rows is to compare more than the title alone. Check the award text, scan the requirement line for residency, study level, or essay details, and note which listings look lighter touch versus more involved. Because some opportunities may close sooner than others, it is worth reviewing dates promptly and opening the official page for any scholarship that looks like a fit. If you are trying to build a balanced shortlist, compare category fit as well as application effort before you decide where to apply.",
+  "related_intro": "If this Arizona and financial need combination feels too narrow, related pages can help you explore nearby options by topic or location. That is useful when you want to compare similar high school scholarships in the USA, widen your search beyond one state, or look at other eligibility angles alongside financial need.",
+  "how_to_use": [
+    "Compare award text and deadline details across listings",
+    "Read each requirement line for location, level, and essay expectations",
+    "Open the official scholarship page before you apply",
+    "Shortlist the programs that match your background and application effort"
+  ],
+  "who_for": [
+    "Arizona high school students seeking need-based aid",
+    "High school seniors comparing Arizona scholarship options",
+    "Applicants with financial need exploring education or STEM paths",
+    "Students in Arizona reviewing medicine, disability, or law related scholarships"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Arizona scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore programs tagged for financial need, high school applicants, and Arizona. Then open each row and verify eligibility, residency, study level, and application details on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both can vary by program. In this USA scholarship catalog slice, amounts range across the listings and deadlines differ by row, so compare carefully and confirm on the official page."
+    },
+    {
+      "question": "Are these scholarships only for Arizona high school seniors?",
+      "answer": "Not always. This filter is centered on Arizona and high school applicants, but some listings may also include other study levels or more specific eligibility details, so check each scholarship before you apply."
+    },
+    {
+      "question": "What topics show up when I browse this scholarship filter?",
+      "answer": "A focused set of listings here touches areas like education, STEM, medicine, disability, and law. If you want to explore by interest, compare the category labels on each row and read the official listing for the exact fit."
+    },
+    {
+      "question": "Do all of these Arizona scholarships have the same application requirements?",
+      "answer": "No—requirements vary across the programs below. Some may be comparatively lighter-touch, while others can ask for more materials, so review each listing and the official application page before you start."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript",
+        "document",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arizona Community Foundation",
+        "count": 3
+      },
+      {
+        "name": "Arizona FFA Association",
+        "count": 2
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southern California Chapter",
+        "count": 1
+      },
+      {
+        "name": "Delta Sigma Theta Sorority-Tucson Alumnae Chapter",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "disability",
+      "law",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/arizona",
+    "generatedAt": "2026-04-26T13:49:54.753Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

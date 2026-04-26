@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find Idaho High School Need-Based Scholarships | USA",
+  "seo_description": "Idaho high school financial need scholarships in the USA: compare awards, review varying deadlines, and apply through each official program page.",
+  "intro": "Trying to find Idaho scholarships for high school applicants with financial need usually means sorting through programs that do not all ask for the same materials, use the same eligibility language, or close at the same time. This filtered slice brings together a focused set of USA listings tied to that combination, so you can compare options without jumping between unrelated results. The rows below span different themes, including education, community, medicine, and disability, and some may feel lighter touch than broader scholarship searches. Many listings in this view often show no essay in the metadata, but requirements still vary by program, so it is smart to read each row closely before you apply.",
+  "h1": "Find Financial Need Scholarships for Idaho High School Students…",
+  "supporting": "Use this list to compare more than the title alone. Check how each program describes financial need, who the award is meant to support, and whether the opportunity is aimed at seniors, transfer paths, or broader education goals. Award amounts vary by listing and should be verified on the official page, and deadlines differ by program, with at least some rows appearing fairly soon. If a scholarship looks relevant, open the source page, confirm the current rules, and compare it against similar Idaho and USA opportunities before you decide where to apply.",
+  "related_intro": "If these Idaho high school financial need listings feel close but not quite right, related pages can help you narrow by topic, education level, or location. That is useful when you want to compare nearby filter combinations instead of restarting your search from scratch.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist the listings that best match your background and goals"
+  ],
+  "who_for": [
+    "Idaho high school seniors seeking need-based aid",
+    "Applicants comparing Idaho and broader USA scholarship options",
+    "Students interested in education, community, medicine, or disability related awards",
+    "High school applicants looking for listings that may often skip essays"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Idaho scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings tied to financial need, high school status, and Idaho. Then open each row’s official source to confirm eligibility, required materials, and current status before you apply."
+    },
+    {
+      "question": "Can I apply if I’m in high school now but some listings mention college or transfer terms?",
+      "answer": "Possibly, but you need to verify each program carefully. In these rows, study-level language can vary, so compare the listing details with the official page to see whether Idaho high school students are eligible now or are being considered for a later stage."
+    },
+    {
+      "question": "What should I compare before I apply to these Idaho scholarship programs?",
+      "answer": "Check eligibility wording, location rules, study level, deadline text, and award details row by row. Amounts vary by listing, and while many rows in this slice appear lighter-touch and often show no essay in catalog metadata, you should still verify every requirement on the official source."
+    },
+    {
+      "question": "What kinds of scholarships might appear in this Idaho financial-need high school filter?",
+      "answer": "This slice can include different themes, not just one type of award. In the current catalog, examples touch areas like education, community, medicine, disability, and agriculture-related topics, so it helps to browse broadly and compare fit instead of assuming every row is the same."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 10000,
+      "minUsd": 1000,
+      "maxUsd": 12000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 2
+      },
+      {
+        "name": "Community Council of Idaho",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Pacific Northwest Vegetable Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/idaho",
+    "generatedAt": "2026-04-26T13:52:09.851Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

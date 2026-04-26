@@ -1,0 +1,112 @@
+{
+  "seo_title": "Find African American Florida Scholarships | USA",
+  "seo_description": "African American Florida scholarships under ten thousand dollars: compare award ranges, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Florida scholarships for African American applicants with awards under ten thousand dollars usually means balancing fit, timing, and effort. This filtered USA view brings together a focused set of listings where award amounts stay below that range, with programs tied to themes like education, community, and miscellaneous support. You can compare options for different study stages, including high school seniors, early college students, and graduate students, while checking whether citizenship or residency language applies on each row. Many listings in this slice appear to have lighter application requirements, and many often show no essay in the metadata, but you should still verify every detail before you apply. Deadlines differ by program, and some dates appear soon, so it makes sense to review these rows promptly.",
+  "h1": "African American Florida Scholarships Under Ten Thousand USA …",
+  "supporting": "Use this list to compare more than just the headline amount. Look at the requirement lines, study level, category, and any field-of-study notes to see which programs match your situation in Florida. Because the awards in these rows vary by listing and official criteria can change, it is worth opening each scholarship page to confirm eligibility, materials, and deadline wording before you apply. This slice is especially useful if you want to browse smaller-dollar opportunities that may be easier to stack with other aid in the USA.",
+  "related_intro": "If you do not find enough matches here, related pages can help you widen or narrow the search by location, eligibility, or award size. That is a practical next step when you want to compare nearby filter combinations without losing the Florida and African American focus.",
+  "how_to_use": [
+    "Compare each row for study level, category, and location fit before you shortlist anything",
+    "Scan the award text and remember that amounts vary by listing and must be verified on the official page",
+    "Read the requirement lines closely, especially any citizenship, residency, or field-of-study language",
+    "Check deadlines one listing at a time because dates differ and some programs may close soon",
+    "Open the sponsor or official scholarship page before you apply and confirm the current rules and materials"
+  ],
+  "who_for": [
+    "African American students looking for Florida-based scholarship options with awards under ten thousand dollars",
+    "High school seniors in Florida who want to find community or education scholarships with relatively lighter application signals",
+    "College and graduate students comparing smaller USA scholarship awards they may be able to stack with other aid",
+    "Applicants who prefer to browse listings that often show no essay in the available metadata"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, you can explore multiple listings and apply to any programs whose rules you meet, but each scholarship has its own terms on the official page. Compare requirements row by row instead of assuming the same rules apply across this Florida set."
+    },
+    {
+      "question": "Are these scholarships only for college students in Florida?",
+      "answer": "Not necessarily. The catalog sample for this slice includes study levels such as high school senior, college, and graduate student, so browse each row closely to see who can apply in the USA context."
+    },
+    {
+      "question": "Do these listings usually require an essay?",
+      "answer": "Many listings in this slice appear to have lighter requirements, and many sampled rows flag no essay in the catalog metadata. Still, verify every application on the official scholarship page, because requirements can vary from one program to another."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 750,
+      "maxUsd": 4000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 32,
+      "nearestLabels": [
+        "2026-05-08",
+        "2026-05-08",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_1",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "transportation_and_materials_moving",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 3
+      },
+      {
+        "name": "African American Club of Hernando County",
+        "count": 2
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 1
+      },
+      {
+        "name": "University of South Florida",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/under-10000/florida",
+    "generatedAt": "2026-04-26T13:24:56.522Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

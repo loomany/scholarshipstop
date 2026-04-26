@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find Washington High School Need-Based Scholarships USA",
+  "seo_description": "Washington high school financial need scholarships: compare award ranges, deadlines, and requirements in the USA, then apply on official pages.",
+  "intro": "Trying to find Washington scholarships for high school students with financial need usually means balancing fit, timing, and effort at the same time. This filtered USA view narrows the search to a focused set of listings where need-based eligibility is part of the picture and high school appears in the mix. Awards vary by program, and so do deadlines, residency details, study interests, and application steps. Some rows may be relatively straightforward, while others ask for more documentation or written responses. You can apply more confidently when you compare the requirement lines closely and verify every detail on the official scholarship page before moving forward.",
+  "h1": "Washington High School Financial Need Scholarships USA Apply",
+  "supporting": "Use these rows to compare more than the scholarship title. Check how each listing describes financial need, whether Washington residency is central to eligibility, and whether the opportunity is aimed at current high school students or seniors preparing for college. It is also worth scanning category clues such as education, community, STEM, medicine, or disability to spot programs that match your background. Deadlines differ by listing, so if you want to apply in the current cycle, open the official source early and confirm the latest terms there.",
+  "related_intro": "If this set feels close but not quite right, related pages can help you compare nearby options by changing one part of the filter, such as the education level, location, or need-based focus. That is often the fastest way to find a better match without starting your USA scholarship search over.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your residency and school level",
+    "Verify award details and application steps on the sponsor site"
+  ],
+  "who_for": [
+    "Washington high school students with financial need",
+    "High school seniors comparing USA scholarship options",
+    "Applicants who want need-based programs with Washington relevance",
+    "Students reviewing education, community, STEM, or medicine related listings"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Washington scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school, and Washington. Then open each row and verify eligibility, residency, and application details on the official source."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I live in Washington?",
+      "answer": "Not automatically. These rows share the Washington and financial-need filter context, but requirements still vary by program, so compare each listing’s official criteria before you apply."
+    },
+    {
+      "question": "How do I compare award amounts and deadlines on this page?",
+      "answer": "You can compare the programs below by checking each row’s listed amount and deadline text, then confirm both on the official page. Award amounts vary by listing, and deadlines differ by program rather than following one page-wide date."
+    },
+    {
+      "question": "Are these only for high school seniors, or should other students explore them too?",
+      "answer": "High school is the main filter here, and some listings in this catalog slice reference high school seniors. Still, study level labels can vary row to row, so review each scholarship carefully before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 32,
+    "award": {
+      "medianUsd": 4250,
+      "minUsd": 500,
+      "maxUsd": 25000,
+      "statedAmountCount": 32,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 23,
+      "within60Days": 30,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 29,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "essay",
+        "transcript",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of North Central Washington",
+        "count": 4
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Rho Mu Omega Chapter",
+        "count": 2
+      },
+      {
+        "name": "Hebrew Free Loan Association of Washington State",
+        "count": 2
+      },
+      {
+        "name": "Jewish Social Service Agency of Metropolitan Washington",
+        "count": 2
+      },
+      {
+        "name": "Abramson Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/washington",
+    "generatedAt": "2026-04-26T14:01:11.054Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 32,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

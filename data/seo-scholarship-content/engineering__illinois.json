@@ -1,48 +1,122 @@
 {
-  "seo_title": "Illinois Engineering Scholarships | Up to $10,000",
-  "seo_description": "Explore 14 engineering scholarships in Illinois with awards up to $10,000. Check individual deadlines and requirements.",
-  "intro": "Finding financial support for engineering studies in Illinois can be a pivotal step toward achieving your academic goals. With 14 scholarships available, ranging from $500 to $10,000, you have a variety of options to explore. These awards cater to different needs and backgrounds, with some requiring essays and others offering lighter application processes. Be sure to check the specific deadlines, as they vary across listings, and some may be approaching soon.",
-  "h1": "Find Engineering Scholarships in Illinois",
-  "supporting": "This collection of scholarships is an excellent resource for engineering students in Illinois. When reviewing the listings, pay attention to the award amounts and eligibility criteria, as they can significantly differ. Some scholarships may focus on community involvement or specific engineering disciplines, while others could prioritize academic excellence. Take the time to compare the requirements and deadlines to find the best fit for your situation.",
-  "related_intro": "For more tailored opportunities, consider exploring scholarships focused on specific engineering disciplines or those available to students from particular communities in Illinois.",
+  "seo_title": "Find Engineering Scholarships in Illinois, USA",
+  "seo_description": "Engineering scholarships in Illinois, USA with deadlines and award details. Compare listings and apply after checking each program’s requirements.",
+  "intro": "Trying to find engineering scholarships in Illinois usually means narrowing a broad USA search into programs that actually match your location and field. This filtered slice brings together Illinois-focused listings tied to engineering, with examples that touch STEM, education, and community themes. As you compare the rows below, expect variation in award size, deadline timing, study level, and requirement details. Some listings may be relatively lighter-touch, while others can ask for more supporting information, so it is worth reading each entry closely before you apply. If you want to browse options for high school seniors, current college students, or graduate students connected to engineering in Illinois, this is a practical place to start.",
+  "h1": "Compare Engineering Scholarships in Illinois USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check how each program describes eligibility, look at the study level labels, and note whether the opportunity leans purely engineering or overlaps with STEM, education, or community interests. Deadline text appears across these rows and can differ, so it makes sense to review dates promptly and shortlist the programs you want to pursue first. Award amounts vary by listing and should be verified on the official page before you apply.",
+  "related_intro": "If these Illinois engineering listings feel close but not quite right, related pages can help you compare nearby scholarship paths by topic or location. That is useful when you want to explore broader engineering options, scan other Illinois-focused funding, or find programs with a different mix of STEM and community emphasis.",
   "how_to_use": [
-    "Compare deadlines across listings to prioritize applications",
-    "Scan award amounts to identify scholarships that meet your needs",
-    "Read the requirement lines for specific eligibility criteria",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that align with your background and goals"
+    "Compare deadline text across listings",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist programs that match your study level",
+    "Check award descriptions before you apply"
   ],
   "who_for": [
-    "Engineering students in Illinois",
-    "Students seeking STEM-related funding",
-    "Applicants looking for community-focused scholarships",
-    "Students with varying essay requirements",
-    "Undergraduates pursuing engineering degrees"
+    "Illinois students pursuing engineering study",
+    "High school seniors planning an engineering degree",
+    "College students comparing Illinois STEM funding",
+    "Graduate students seeking engineering-related support"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Illinois?",
-      "answer": "There are 14 scholarships listed specifically for engineering students in Illinois, covering a range of categories including STEM, education, and community. Award sizes vary, with amounts generally ranging from approximately $500 to $10,000."
+      "question": "How can I find engineering scholarships in Illinois that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, category, and any citizenship or residency notes shown in each listing. In this USA-focused slice, details can differ row to row, so confirm eligibility on the official scholarship page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships; while some may require essays, the majority do not. It's important to check the details for each individual scholarship to understand the specific requirements."
+      "question": "Can I compare award amounts and deadlines on this Illinois engineering scholarship page?",
+      "answer": "Yes—these listings include award and deadline information, but both vary by program. Amounts in this slice range from smaller awards to larger scholarships, and deadlines differ by row, so check dates promptly and verify the latest terms on official sources."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All 14 scholarships listed have deadlines, but they differ from one to another. Be sure to verify the specific deadline for each scholarship, as at least one has a deadline approaching within the next 45 days."
+      "question": "Who should explore these engineering scholarships in Illinois?",
+      "answer": "This set of listings may be useful for Illinois applicants interested in engineering, including examples tied to high school senior, college, and graduate study levels. Some rows also show USA eligibility signals such as U.S. citizen or permanent resident, but requirements are program-specific."
     },
     {
-      "question": "What should I do if I need more information about a specific scholarship?",
-      "answer": "For detailed information on each scholarship, including eligibility criteria and application processes, refer to the individual listings. Each entry provides essential information that can help you determine if it's a good fit for your needs."
+      "question": "Are all Illinois engineering scholarships here only for engineering majors?",
+      "answer": "Not always—engineering is the main filter, but some listings may also connect with broader STEM or related categories shown in the catalog. When you browse, read each row carefully to see how the official sponsor defines eligible majors or fields of study."
     }
   ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 11,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "social_sciences",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Chicago Chapter",
+        "count": 4
+      },
+      {
+        "name": "Kankakee Community College Foundation",
+        "count": 3
+      },
+      {
+        "name": "Waubonsee Community College",
+        "count": 3
+      },
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Institute of Steel Construction",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "community"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/illinois",
-    "generatedAt": "2026-04-02T10:39:03.284Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:36:37.639Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 14,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

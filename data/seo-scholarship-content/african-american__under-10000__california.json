@@ -1,0 +1,116 @@
+{
+  "seo_title": "Find African American Scholarships Under Ten Thousand in Califor…",
+  "seo_description": "African American scholarships under ten thousand in California, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find California scholarships for African American applicants with awards under a higher-cost threshold usually means sorting through very different local and community-based programs. This filtered slice brings those listings into one place so you can compare options that may fit high school seniors, college students, or graduate students in the USA. The rows below span areas such as community, education, arts, and miscellaneous topics, and some may connect to fields like education or architecture and related services. Award amounts vary by listing, deadlines differ by program, and eligibility details can change from one scholarship to the next. Many listings here appear to have lighter application requirements, but you should still read each requirement line closely before you apply.",
+  "h1": "Compare African American California Scholarships Under Ten Thous…",
+  "supporting": "Use this view to compare more than just the scholarship title. Check the award text, scan the category, and note whether the listing looks community-focused or tied to education or arts. Because deadlines in these rows are not all the same, it is smart to review timing early and shortlist the programs you want to pursue first. Many entries in this slice may be no-essay or relatively lighter-touch, but that should always be verified on the official scholarship page before you apply. If you are trying to find practical USA opportunities in California, this is a useful set of listings to compare side by side.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby filter combinations. You may want to explore other California scholarship pages, other African American scholarship views, or broader under-threshold scholarship lists to find programs with a different subject focus or eligibility mix.",
+  "how_to_use": [
+    "Compare award text across the rows",
+    "Read each requirement line carefully",
+    "Check deadline details as soon as possible",
+    "Open the official page before you apply",
+    "Shortlist the best-fit California programs"
+  ],
+  "who_for": [
+    "African American students in California",
+    "California high school seniors planning to apply",
+    "College or graduate students comparing local awards",
+    "Applicants seeking community or education scholarships",
+    "USA residents looking for lower-amount scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "Are these scholarships only for college students in California?",
+      "answer": "Not always. In this filtered set, sample study levels include high school senior, college, and graduate student, so it helps to browse each listing for its exact eligibility rules in the USA context."
+    },
+    {
+      "question": "Do many of these California scholarship listings require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flag in the catalog metadata, but requirements can still differ by program. Before you apply, verify the current application steps and materials on the official page for that scholarship."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filtered list?",
+      "answer": "The programs below include categories such as Community, Education, Miscellaneous, and Arts, with examples like LMJ Scholarship, Ida Louise Jackson Scholarship, and PlaceWorks Scholarship Program. Use the list to explore fit by category, location, and award size, then verify final details with the provider."
+    }
+  ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 1250,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-24",
+        "2026-04-24",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alpha Kappa Alpha Sorority-Alpha Nu Omega Chapter",
+        "count": 3
+      },
+      {
+        "name": "The Links, -Stockton Chapter",
+        "count": 2
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Eta Gamma Omega Chapter",
+        "count": 1
+      },
+      {
+        "name": "Delta Sigma Theta Sorority-Contra Costa Alumnae Chapter",
+        "count": 1
+      },
+      {
+        "name": "Kappa Alpha Psi Fraternity-Berkeley Alumni Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/under-10000/california",
+    "generatedAt": "2026-04-26T13:24:45.329Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

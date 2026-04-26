@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find Engineering Scholarships in Georgia, USA",
+  "seo_description": "Engineering scholarships in Georgia, USA: compare deadlines, award details, and requirements in this focused set of listings. Explore and apply.",
+  "intro": "Trying to find engineering scholarships in Georgia usually means narrowing a broad USA search down to programs that actually match your location and field. This filtered slice brings together a focused set of listings tied to engineering and Georgia, so you can compare options without wading through unrelated results. The programs below sit within a STEM-heavy mix, and sample study levels suggest the list may include opportunities relevant to high school seniors, current college students, and graduate students. Awards, deadlines, and eligibility details are not uniform across these rows, so it is worth reading each listing closely. Many entries in this slice appear to have no essay and may be comparatively lighter-touch, but requirements still need to be verified on the official scholarship pages.",
+  "h1": "Find Engineering Scholarships in Georgia USA",
+  "supporting": "Use this view to compare the practical details that matter most before you apply: deadline wording, field tags, study level fit, residency language, and how specifically each award connects to engineering in Georgia. If you are building a shortlist for the current cycle, check dates promptly because deadlines differ by program and some listings may be coming up soon. Award amounts vary by listing and should be confirmed on the sponsor or official page before you rely on them. It is also smart to compare how narrowly each scholarship is targeted, since some rows may lean toward broader STEM or related technical paths.",
+  "related_intro": "If these Georgia engineering listings feel too narrow, related pages can help you compare nearby options by topic, location, or broader STEM categories across the USA. That is useful when you want to keep your field focus but widen where you look, or stay in Georgia and explore adjacent scholarship tags.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the listings that match your level",
+    "Check whether the award fits engineering specifically"
+  ],
+  "who_for": [
+    "Georgia students pursuing engineering studies",
+    "High school seniors planning an engineering path",
+    "College students comparing Georgia-based STEM awards",
+    "Graduate students seeking engineering funding in Georgia"
+  ],
+  "faq": [
+    {
+      "question": "How can I find engineering scholarships in Georgia, USA that fit my level of study?",
+      "answer": "Use this filtered view to compare the rows by study level, location, and any eligibility labels shown in the catalog. Then open the official source for each program to confirm who can apply and whether the listing matches your situation."
+    },
+    {
+      "question": "Can I apply to every scholarship listed under Engineering and Georgia?",
+      "answer": "Not necessarily. These programs share the engineering + Georgia filter, but eligibility can still vary by listing, including study level and residency or citizenship details shown in the catalog and on official pages."
+    },
+    {
+      "question": "How should I compare award amounts and deadlines on this page?",
+      "answer": "Compare each row individually, because amounts and deadlines differ by program. In this slice, listed awards vary, and deadline text is present on the rows, so check each official page promptly before you apply."
+    },
+    {
+      "question": "Are these Georgia engineering scholarships usually essay-heavy?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and several sampled rows show no essay flag in the catalog. Still, requirements can change, so verify the application steps on the official scholarship page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 3000,
+      "maxUsd": 3500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 2,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "survey"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Institute of Steel Construction",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southeast Chapter",
+        "count": 1
+      },
+      {
+        "name": "Surveying and Mapping Society of Georgia",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "engineering/georgia",
+    "generatedAt": "2026-04-26T13:35:40.583Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

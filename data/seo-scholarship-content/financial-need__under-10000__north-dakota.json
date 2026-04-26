@@ -1,0 +1,101 @@
+{
+  "seo_title": "Find Need-Based Scholarships Under Ten Thousand in North Dakota,…",
+  "seo_description": "Need-based scholarships under ten thousand in North Dakota, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find North Dakota scholarships tied to financial need without wading through higher-award searches? This filtered slice narrows the catalog to programs in the USA that match that budget range and location focus, so you can compare a smaller set of rows with less noise. Awards, deadlines, and eligibility details still vary by listing, and the official pages are the place to confirm what counts as need, who can apply, and what materials are required. Many listings in this slice appear to have lighter application signals, and some may not ask for an essay, but requirements can change from one program to the next. If you want to apply in the current cycle, it is smart to check dates promptly because deadline timing differs across these programs.",
+  "h1": "Compare Need-Based Scholarships Under Ten Thousand in North Dako…",
+  "supporting": "A useful way to read this list is to compare the requirement line, study level, category tags, and location fit before you open every result. In this North Dakota view, you may notice overlap with education, community, and related themes, which can help you decide which rows deserve a closer look first. Use the listing details to compare award language, then verify the exact terms on the sponsor site, since amounts vary by program and deadline wording is not the same across all rows.",
+  "related_intro": "If these North Dakota financial-need listings feel close but not quite right, related pages can help you explore nearby options by topic, location, or broader scholarship themes. That is useful when you want to compare similar USA opportunities without starting your search over from scratch.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify need criteria",
+    "Shortlist the listings that match your study level",
+    "Check award details and materials on the sponsor site"
+  ],
+  "who_for": [
+    "North Dakota applicants with documented financial need",
+    "Graduate students reviewing education or community related scholarships",
+    "Students who want lower award-range programs to compare",
+    "Applicants looking for listings that may have lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed on this North Dakota page?",
+      "answer": "Not automatically—each program has its own rules, even within the same USA filter slice. Check the official page for residency, study level, field, and any application steps before you apply."
+    },
+    {
+      "question": "Do all of these scholarships have the same deadline or award amount?",
+      "answer": "No. Deadlines differ by program, and award amounts vary by listing, so verify both on the official source for each row. In this filtered set, dates are not all the same, so it’s smart to check soon."
+    },
+    {
+      "question": "Are these North Dakota scholarships usually simple to apply for?",
+      "answer": "Many listings in this slice appear to have lighter requirements, and sampled rows often show no essay flag, but that is not a guarantee for every program. Before you apply, compare the catalog details with the official scholarship page to see what documents are actually required."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 2000,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 1,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-30",
+        "2026-06-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Boy Scouts of America-Northern Lights Council",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Bennett Clayton Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/north-dakota",
+    "generatedAt": "2026-04-26T14:22:31.543Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

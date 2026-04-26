@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Indiana Financial Need Scholarships | USA",
+  "seo_description": "Indiana financial need scholarships under ten thousand dollars: compare award ranges, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Indiana scholarships tied to financial need without sorting through higher-dollar awards first? This filtered USA view narrows the search to programs with listed amounts under ten thousand dollars, so you can compare a focused set of listings more quickly. The rows below span areas such as education, community, STEM, law, disability, and other miscellaneous topics, with study levels that can include high school seniors, college students, and graduate students. Awards vary by listing, and so do deadlines, residency or citizenship details, essay expectations, and other requirement lines. Some options may be lighter-touch than others, but every program should be verified on its official page before you apply.",
+  "h1": "Indiana Financial Need Scholarships Under Ten Thousand USA …",
+  "supporting": "Use this slice to compare more than just the award text. Check which listings match your study level, field of study, and Indiana connection, then read the eligibility notes closely for financial-need language and any citizenship or residency terms. Because deadline text differs across these rows—and some dates may be coming up soon—it is worth scanning the list promptly and shortlisting the programs that fit before you start applications. Amounts in this view are below ten thousand dollars, but the exact value and rules must be confirmed on the source page for each scholarship.",
+  "related_intro": "If this set feels close but not quite right, related pages can help you explore nearby options by changing one filter at a time—such as location, award range, or another eligibility angle—while keeping your USA scholarship search focused.",
+  "how_to_use": [
+    "Compare the award line, deadline text, and category tags across these rows before opening individual listings",
+    "Read each requirement summary for financial-need language, study level, location details, and any essay expectation",
+    "Open the official page for every scholarship you shortlist and verify amount, eligibility, and deadline information",
+    "Prioritize listings with the closest deadlines first, then return to broader-fit options after you apply"
+  ],
+  "who_for": [
+    "Indiana applicants who want to find scholarships that consider financial need and list awards below ten thousand dollars",
+    "High school seniors, college students, and graduate students comparing Indiana-relevant funding in one place",
+    "Applicants in education, business, engineering, construction trades, law, or related fields looking for matching rows",
+    "US citizens or permanent residents who need to check which Indiana listings fit their status before they apply"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here if I live in Indiana?",
+      "answer": "Not automatically. This catalog slice is Indiana-focused, but each program may also set its own rules for study level, residency or citizenship in the USA, field of study, or other requirements listed on the official source."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check the award amount, deadline, study level, category, and any essay or document requirements for each listing. Deadlines differ by program, and some rows may be lighter-touch than others, so it helps to compare a few options side by side before applying."
+    },
+    {
+      "question": "Are these only for one major or type of student?",
+      "answer": "No. In this focused set of listings, you can explore scholarships tied to areas like education, community, STEM, law, disability, and more, with sample study levels including high school seniors, college students, and graduate students."
+    }
+  ],
+  "page_data": {
+    "exactCount": 25,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 750,
+      "maxUsd": 6000,
+      "statedAmountCount": 25,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 9,
+      "within60Days": 18,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-05-01",
+        "April 30, 2026 3:00 PM CT",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 7,
+      "noCount": 18,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "construction_trades",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 2
+      },
+      {
+        "name": "Western Indiana Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "miscellaneous",
+      "law",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/indiana",
+    "generatedAt": "2026-04-26T14:15:47.939Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 25,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

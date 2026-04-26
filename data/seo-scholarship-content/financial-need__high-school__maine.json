@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find Maine High School Financial Need Scholarships | USA",
+  "seo_description": "Maine high school financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Maine scholarships for high school applicants with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view pulls together a focused set of listings tied to Maine and the high school preset, so you can compare options without jumping between unrelated results. Awards vary by listing, deadlines differ by program, and requirement lines are not identical, including whether extra materials may be needed. Some rows may be relatively lighter touch, while others ask for closer review. If you plan to apply in the current cycle or are checking ahead for twenty twenty six opportunities, use these rows to quickly spot programs worth a deeper look.",
+  "h1": "Find Maine High School Need-Based Scholarships USA",
+  "supporting": "A smart way to use this list is to compare the award text, deadline wording, category labels, and eligibility notes side by side before you open official pages. You may notice listings connected to education, community, law, safety, and broader miscellaneous topics, which makes this slice worth scanning even if your plans are still broad. Read each requirement line carefully, then verify residency, school level, and any essay or document expectations on the sponsor site before you apply.",
+  "related_intro": "If these Maine financial need scholarships feel too narrow or too broad, related pages can help you compare nearby filter combinations, such as other education levels, different locations in the USA, or scholarship lists without the same need-based focus.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line before applying",
+    "Open the official page to verify details",
+    "Shortlist programs that match your Maine eligibility",
+    "Check award text and essay expectations carefully"
+  ],
+  "who_for": [
+    "Maine high school students seeking need-based aid",
+    "High school seniors comparing Maine scholarship options",
+    "Families in Maine reviewing college funding sources",
+    "Applicants who want USA scholarships with Maine relevance"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Maine scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school status, and Maine. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts can differ widely, and deadlines are not the same across the list, so compare the catalog rows first and confirm on official sources before you apply."
+    },
+    {
+      "question": "Are these only for high school seniors in Maine?",
+      "answer": "Not always. While this filter is centered on high school scholarships in Maine, some listings may use different study-level wording such as high school senior or high school sophomore, so check each program's eligibility carefully."
+    },
+    {
+      "question": "Do all of these scholarships require an essay?",
+      "answer": "No single requirement applies to every listing here. Some programs may ask for an essay and others may be lighter-touch, so review each scholarship's requirements on the official page before you start an application."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 20000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "security_and_protective_services",
+        "social_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Finance Authority of Maine",
+        "count": 2
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Lamey-Wellehan Shoes",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "law",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/maine",
+    "generatedAt": "2026-04-26T13:54:00.038Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

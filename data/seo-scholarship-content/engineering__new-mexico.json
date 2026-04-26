@@ -1,46 +1,111 @@
 {
-  "seo_title": "Find Engineering Scholarships in New Mexico",
-  "seo_description": "Explore 4 engineering scholarships in New Mexico. Award sizes vary, and deadlines differ—check details for each opportunity.",
-  "intro": "Finding financial support for engineering studies in New Mexico can be crucial for students aiming to advance in this field. With 4 scholarships available, you have a variety of options that cater to different needs and backgrounds. Award sizes vary, with some offering amounts between $1,000 and $2,000. Keep in mind that requirements and deadlines differ across listings, so it’s important to review each one carefully.",
-  "h1": "Engineering Scholarships Available in New Mexico",
-  "supporting": "This list includes scholarships that may require essays or have lighter application processes, giving you flexibility in how you apply. As you explore these opportunities, consider comparing the award amounts and deadlines to identify which scholarships align best with your situation. Be sure to check the specifics for each listing, as some may have upcoming deadlines that require prompt attention.",
-  "related_intro": "If you're interested in other funding opportunities, consider checking out our pages on related fields or regional scholarships to broaden your search.",
+  "seo_title": "Find Engineering Scholarships in New Mexico, USA",
+  "seo_description": "Engineering scholarships in New Mexico, USA with award and deadline details. Compare current listings and apply through official program pages.",
+  "intro": "Trying to find engineering scholarships in New Mexico usually means narrowing past broad USA results and getting to listings that actually match your location and field. This filtered slice brings together engineering-focused options tied to New Mexico, with rows that can differ in award size, deadline timing, eligibility language, and application steps. Some listings may be relatively straightforward, while others can ask for more supporting material, so it helps to compare each one closely before you apply. If you want to browse efficiently for the current cycle and spot programs with nearer deadlines, this is a practical place to start.",
+  "h1": "Find Engineering Scholarships in New Mexico USA",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Check how each listing describes the field of study, look at the requirement line for signs of essays or other materials, and note that award amounts vary by listing and should be confirmed on the official page. Because deadlines differ across programs, it is smart to review date details early, open the source page, and verify residency, citizenship, or school-level expectations before you spend time applying.",
+  "related_intro": "If you do not see enough matches here, compare nearby scholarship pages by changing either the subject or the location filter. That can help you find related STEM or education listings in the USA catalog that still overlap with engineering interests.",
   "how_to_use": [
-    "Review the award amounts and deadlines for each scholarship",
-    "Check for essay requirements and application details",
-    "Shortlist scholarships that fit your profile",
-    "Visit official scholarship pages for the most accurate information"
+    "Compare deadline text across listings",
+    "Read each requirement line carefully",
+    "Open the official source page",
+    "Shortlist programs that fit your profile",
+    "Verify award details before you apply"
   ],
   "who_for": [
-    "Engineering students in New Mexico",
-    "High school seniors pursuing engineering",
-    "Students seeking STEM-related scholarships",
-    "Applicants looking for lighter essay requirements"
+    "New Mexico students seeking engineering funding",
+    "USA applicants comparing local engineering scholarship options",
+    "High school seniors in New Mexico planning engineering study",
+    "Engineering majors checking scholarships with varied requirements"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in New Mexico?",
-      "answer": "There are currently 4 scholarships listed specifically for engineering students in New Mexico. These scholarships cover various categories, including STEM, education, and humanities, providing a range of opportunities for eligible applicants."
+      "question": "Can I apply to every scholarship listed on this New Mexico engineering page?",
+      "answer": "Not automatically—each listing can have its own rules, and some may include citizenship or residency conditions such as U.S. citizen requirements. Check the official source for each program before you apply."
     },
     {
-      "question": "How can I find specific details about each scholarship?",
-      "answer": "Each scholarship listing includes important details such as award amounts and deadlines. Be sure to check each entry for specific requirements, as some may require essays while others do not."
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on the basics that vary row to row: award amount, deadline, field fit, and application requirements such as whether an essay is requested. Amounts in this slice vary by listing, so confirm the latest terms on the official page."
     },
     {
-      "question": "Are there any upcoming deadlines I should be aware of?",
-      "answer": "All scholarships in this category have deadlines, with at least one approaching within the next 45 days. It's advisable to review the listings promptly to ensure you don’t miss any important dates."
+      "question": "Are the deadlines the same for all engineering scholarships in New Mexico?",
+      "answer": "No. The rows in this filtered set show different deadline text, and at least one listing appears to be coming up relatively soon, so it is smart to check dates promptly."
     },
     {
-      "question": "What is the typical award size for these scholarships?",
-      "answer": "The scholarships available in this filter have award amounts ranging from approximately $1,000 to $2,000. However, it's important to verify the exact amounts listed for each scholarship, as they can vary."
+      "question": "Can I explore related scholarships if I study engineering but my program overlaps with STEM or math?",
+      "answer": "Yes. Some listings in this catalog also connect with broader categories like STEM, and sample fields in the catalog include mathematics and statistics alongside engineering. If your major is interdisciplinary, compare the row details and confirm eligibility on the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1000,
+      "maxUsd": 2500,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 43,
+      "nearestLabels": [
+        "2026-06-15",
+        "2026-05-27",
+        "2026-05-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "engineering",
+        "mathematics_and_statistics",
+        "biological_and_biomedical_sciences",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "New Mexico Engineering Foundation",
+        "count": 3
+      },
+      {
+        "name": "Institute of Transportation Engineers-New Mexico Section",
+        "count": 1
+      },
+      {
+        "name": "Rocky Mountain Water Environment Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "biology",
+      "humanities"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/new-mexico",
-    "generatedAt": "2026-04-02T10:55:19.367Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:39:26.637Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

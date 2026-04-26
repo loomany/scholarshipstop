@@ -1,43 +1,132 @@
 {
-  "seo_title": "Top Scholarships for Nigerian Students in the USA - 196 Opportunities",
-  "seo_description": "Explore 196 scholarships for Nigerian students in the USA, including eligibility criteria and application tips.",
-  "h1": "Scholarships for Nigerian Students in the USA",
-  "intro": "Nigerian students seeking higher education in the USA have access to a wealth of scholarship opportunities. With 196 scholarships available, students can find financial support tailored to their needs. From merit-based awards to need-based grants, these scholarships can significantly reduce the financial burden of studying abroad. Notable scholarships include the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship, among others. Whether you're pursuing undergraduate or graduate studies, understanding the application process and eligibility requirements is crucial for success. This guide will help you navigate your options and secure funding for your education in the United States.",
-  "supporting": "To qualify for many scholarships, Nigerian students typically need to demonstrate academic excellence, leadership skills, and community involvement. Deadlines vary, so it’s essential to check each scholarship’s specific timeline. For instance, the Paul and Daisy Soros Fellowships for New Americans has unique eligibility requirements focused on immigrant backgrounds. When applying, ensure you have a strong personal statement, letters of recommendation, and any required documentation ready. Researching and applying early can increase your chances of securing funding. Additionally, consider scholarships like the Razor's Edge Global Scholarship, which offers substantial financial aid for international students.",
-  "related_intro": "In addition to the scholarships listed, there are numerous other funding opportunities available for Nigerian students in the USA. Exploring various options can enhance your chances of receiving financial support.",
+  "seo_title": "Find Scholarships for Nigerian Students in USA",
+  "seo_description": "Scholarships for Nigerian students in USA with deadlines, award details, and eligibility info. Compare listings and apply on official pages.",
+  "intro": "Trying to find scholarships for Nigerian students in the USA usually means sorting through mixed eligibility rules, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings connected to that search, including opportunities that may overlap with international student criteria and programs across education, STEM, community, medicine, arts, and other areas. The rows below can help you compare options for graduate study, undergraduate years, and even earlier college planning. Awards vary by listing, deadlines differ across programs, and requirements are not uniform, so it is worth checking each row closely. Some listings may be lighter on requirements, while others may ask for essays or more detailed application materials.",
+  "h1": "Apply for Scholarships for Nigerian Students in USA",
+  "supporting": "Use this list to compare more than just the title. Look at the study level, category, field of study, deadline text, and any requirement signals before you apply. A scholarship with a broad education label may still have narrow eligibility on the official page, while a STEM or community listing could be more flexible than it first appears. Because deadlines in these rows are not all the same and some may be approaching soon, it makes sense to shortlist strong matches early, then verify award details, citizenship language, and submission instructions on the sponsor site.",
+  "related_intro": "If you are narrowing your search further, related pages can help you compare nearby scholarship groups by topic, study level, or broader international student eligibility in the USA. That is useful when this set feels close to your needs but not specific enough.",
   "how_to_use": [
-    "Review the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary documents and personal statements.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline text across rows first",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your study level",
+    "Verify award details and eligibility on sponsor sites"
   ],
   "who_for": [
-    "Nigerian students pursuing undergraduate or graduate degrees.",
-    "Students with strong academic and extracurricular backgrounds.",
-    "Individuals seeking financial assistance for studying in the USA."
+    "Nigerian applicants seeking USA scholarships with international student eligibility",
+    "Graduate students comparing education, STEM, and professional study funding",
+    "Undergraduate applicants checking scholarships across multiple college years",
+    "Students who want to compare essay and non essay application paths"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Nigerian students?",
-      "answer": "There are merit-based, need-based, and specific scholarships for various fields of study."
+      "question": "How can I find scholarships for Nigerian students in the USA on this page?",
+      "answer": "Use this filtered view to compare the rows that match Nigerian students looking to study in the USA, then open each listing for the official eligibility details. Citizenship, residency, study level, field, amount, and deadline can differ by program."
     },
     {
-      "question": "How can I find more scholarships?",
-      "answer": "Utilize scholarship search engines, university websites, and educational organizations to discover more options."
+      "question": "Can I apply to every scholarship listed here as a Nigerian student?",
+      "answer": "Not automatically. This catalog helps you explore relevant listings, but you still need to verify each program’s official rules because some rows may be for international students broadly while others may include different citizenship or residency conditions."
     },
     {
-      "question": "Are there scholarships specifically for Nigerian students?",
-      "answer": "Yes, many scholarships cater specifically to international students, including those from Nigeria."
+      "question": "What should I compare before I apply?",
+      "answer": "Check study level, field of study, category, deadline, and any application requirements shown in the listing. Award amounts vary by row and should always be confirmed on the official scholarship page before you apply."
+    },
+    {
+      "question": "Are the deadlines the same for all scholarships on this USA page?",
+      "answer": "No—deadlines differ by program across these rows. Since some listings show dates coming up soon, it’s smart to check the deadline text on each row and confirm the latest date on the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-nigerian-students-in-usa",
-    "generatedAt": "2026-04-25T13:17:36.470Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:11:11.645Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

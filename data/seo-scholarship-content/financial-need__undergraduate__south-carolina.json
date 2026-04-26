@@ -1,0 +1,113 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in South Carolina…",
+  "seo_description": "Financial need undergraduate scholarships in South Carolina, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in South Carolina that take financial need into account usually means sorting through programs with very different rules, award sizes, and timelines. This filtered USA view brings those listings into one place so you can compare options more quickly and decide where to apply first. The programs below span categories such as community, humanities, education, and miscellaneous, and some may fit students in education or history-related paths. Award amounts vary by listing and should be verified on each official page. Deadlines also differ by program, and with some dates appearing relatively soon in the current set, it is smart to check the rows promptly. Many listings here appear to have lighter application requirements, and many may not require an essay, but you should still confirm every detail before applying.",
+  "h1": "Find South Carolina Undergraduate Need-Based Scholarships USA …",
+  "supporting": "Use this slice to compare more than just the scholarship title. Look at the requirement lines, study-level cues, residency or citizenship notes, category tags, and the posted deadline text for each row. Because this South Carolina undergraduate set mixes community-focused and subject-linked opportunities, it is worth scanning even if your major is not named directly in the title. Open the official source for any listing you shortlist, confirm current eligibility, and verify the award amount, since catalog summaries are best used as a starting point rather than the final word.",
+  "related_intro": "If you do not find enough matches here, related pages can help you widen or narrow the search by changing one part of the filter, such as the undergraduate preset, the financial need eligibility tag, or the South Carolina location. That makes it easier to explore nearby scholarship categories without starting over.",
+  "how_to_use": [
+    "Compare the deadline text across these rows first, since timing varies by program and some listings may close soon",
+    "Scan each listing for requirement lines, study-level notes, and any South Carolina or USA residency details",
+    "Compare award descriptions carefully, because amounts vary by listing and should be confirmed on the official page",
+    "Open the sponsor or official source for every scholarship you plan to apply to and verify current rules before submitting",
+    "Shortlist the best-fit options by category, major relevance, and application effort before you start forms"
+  ],
+  "who_for": [
+    "Undergraduates in South Carolina who want to find scholarships that consider financial need",
+    "Applicants comparing community, education, humanities, or miscellaneous scholarship options in the USA",
+    "Students who prefer to apply to listings that often appear to have lighter requirements",
+    "South Carolina applicants looking for scholarships that may not require an essay and want to verify that quickly"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in South Carolina for students with financial need?",
+      "answer": "Use this filtered view to compare South Carolina listings that match undergraduate study and financial-need eligibility. Then open each row and verify the current requirements, residency details, and application steps on the official source."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this South Carolina page?",
+      "answer": "Not automatically—each program has its own rules, even within this focused set of USA listings. Check the official page for study level, residency or citizenship language, and any other eligibility details before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline, category, and any requirement notes row by row. Amounts vary by listing, and deadlines differ by program, so confirm both on the official scholarship page before submitting."
+    },
+    {
+      "question": "Are these South Carolina undergraduate scholarships usually essay-heavy?",
+      "answer": "Many listings in this slice appear to have lighter requirements, and many are marked as no-essay in the catalog metadata. Still, requirements can change, so review the official application page for the exact materials needed."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 2500,
+      "maxUsd": 18000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 11,
+      "nearestLabels": [
+        "2026-04-12",
+        "2026-04-12",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "history"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "The Dr. Doretha Pressey Southern Scholars Initiative",
+        "count": 2
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "humanities",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/south-carolina",
+    "generatedAt": "2026-04-26T14:54:39.751Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

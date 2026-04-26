@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Hawaii USA",
+  "seo_description": "Financial need undergraduate scholarships in Hawaii, USA: compare award ranges, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find USA scholarships that match financial need, undergraduate study, and Hawaii usually means narrowing past broad national results and checking which programs actually fit your situation. This filtered slice brings together a focused set of listings tied to that combination, with examples touching areas like education, disability, community, medicine, STEM, and other miscellaneous themes. If you want to apply soon, pay attention to timing because deadlines differ by program and some rows may be approaching faster than others. Award amounts also vary by listing, and requirements are not identical across the set. Some opportunities may be comparatively lighter touch, while others can ask for more documentation or written materials, so it helps to compare each row carefully before you decide where to apply.",
+  "h1": "Find Hawaii Undergraduate Scholarships for Financial Need USA …",
+  "supporting": "Use the rows below to compare more than just the title. Scan the award text, read the requirement lines, and note how each listing frames eligibility around financial need, undergraduate status, and Hawaii. If a scholarship connects to education, engineering, disability, or community-focused work, that can help you decide which options deserve a closer look first. Before you apply, open the official page for every program you shortlist and verify current details, since amounts, materials, and deadline wording can change.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you compare nearby scholarship paths. You may want to explore other Hawaii filters, broader undergraduate results, or financial need scholarship pages in the USA catalog to find a better fit for your background and study plans.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before you apply",
+    "Open official pages to verify current details",
+    "Shortlist the listings that best match your background",
+    "Check award text and supporting materials carefully"
+  ],
+  "who_for": [
+    "Hawaii undergraduates with financial need",
+    "Students comparing education and student teaching scholarships in Hawaii",
+    "Applicants interested in disability or community related funding",
+    "Undergraduates exploring STEM, engineering, or medicine linked listings"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Hawaii for students with financial need?",
+      "answer": "Use this filtered view to compare Hawaii-focused listings that match undergraduate study and financial-need criteria in the USA catalog. Then open each row’s official source to confirm eligibility, required materials, and current status."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this Hawaii financial-need page?",
+      "answer": "Not automatically—each program has its own rules, and details can differ row by row. Before you apply, verify the official page for location fit, study level, and any extra requirements such as essays or supporting documents."
+    },
+    {
+      "question": "How do I compare award amounts and deadlines on these listings?",
+      "answer": "Amounts and deadlines vary by program, so compare each row individually rather than assuming one standard for the whole page. In this slice, listed awards vary, and deadline text appears on every row, so it is smart to check dates promptly on official sources."
+    },
+    {
+      "question": "What kinds of scholarships might appear when I browse this filtered set?",
+      "answer": "These rows can include categories such as education, disability, community, medicine, STEM, and miscellaneous topics. Sample listings also show that fields may differ, so explore each scholarship page to see whether your background or major is a match."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 19,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-06-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript",
+        "document",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering",
+        "public_administration_and_social_service"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Hawaii Education Association",
+        "count": 2
+      },
+      {
+        "name": "American Association of Airport Executives-Southwest Chapter",
+        "count": 1
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southern California Chapter",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "disability",
+      "community",
+      "medical",
+      "stem",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/hawaii",
+    "generatedAt": "2026-04-26T14:46:49.427Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

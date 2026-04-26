@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore 196 Google Scholarships for International Students",
-  "seo_description": "Discover 196 scholarships for international students, including the Vanna Christian Sun Legacy Scholarship and more. Apply today!",
-  "h1": "Google Scholarships for International Students",
-  "intro": "Are you an international student seeking financial assistance for your education? Google offers a variety of scholarships designed specifically for students like you. With 196 scholarships available, you can find opportunities that cater to different fields of study and personal circumstances. Scholarships such as the International Student Scholarship and the Razor's Edge Global Scholarship provide essential funding to help you achieve your academic goals. Whether you're pursuing undergraduate or graduate studies, these scholarships can significantly ease your financial burden and allow you to focus on your education.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited institutions. It's crucial to check each scholarship's specific requirements, including academic performance, field of study, and residency status. Deadlines also differ, so be sure to mark your calendar and prepare your application materials in advance. When applying, pay attention to the required documents, which often include transcripts, letters of recommendation, and personal essays. Tailoring your application to highlight your unique experiences and aspirations can increase your chances of receiving funding.",
-  "related_intro": "In addition to Google scholarships, there are numerous other funding opportunities available for international students. Explore various options to maximize your chances of financial support.",
+  "seo_title": "Find Google Scholarships for International Students USA",
+  "seo_description": "Google scholarships for international students in the USA: compare listings, deadlines, and award details, then apply on official pages.",
+  "intro": "Trying to find Google scholarship options for international students in the USA usually means sorting through programs that do not all define eligibility the same way. In this filtered view, you can compare a focused set of listings that may overlap with international student status across education, STEM, community, medicine, arts, and other categories. Awards vary widely by listing, and not every row presents information in the same format, so it is worth reading each summary closely before you apply. Deadlines also differ across programs, with some dates coming up soon, so timely checking matters. Requirements are mixed as well: some listings may ask for essays or more documentation, while others appear lighter-touch. Use these rows to quickly find options, compare fit, and verify final details on the official scholarship page.",
+  "h1": "Find Google Scholarships for International Students USA",
+  "supporting": "A useful way to read this USA scholarship slice is to compare more than the title alone. Look at study level, citizenship or residency wording, field of study, category tags, and any requirement notes shown in the listing. You may see programs tied to education, engineering, business, English, health professions, and broader academic paths, so this is a worthwhile set to scan even if your major is not identical to a sample title. Award amounts vary by listing and should always be confirmed on the official source before you apply.",
+  "related_intro": "If these results feel close but not exact, check related scholarship pages by study level, subject area, or citizenship label. That can help you find adjacent USA opportunities for international students, or compare this Google-focused slice with broader international-student listings.",
   "how_to_use": [
-    "Browse the list of 196 scholarships available.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required documents and application materials.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if necessary."
+    "Scan each row for citizenship or residency wording first, then check whether international student status is actually accepted",
+    "Compare award text, study level, field of study, and category labels to decide which listings are worth opening",
+    "Read the requirement lines carefully because essay expectations and supporting materials vary across programs",
+    "Check deadline text on every listing promptly, since dates differ by program and some may be approaching soon",
+    "Open the official scholarship page before you apply and verify eligibility, award details, and submission instructions"
   ],
   "who_for": [
-    "International students pursuing higher education.",
-    "Students in need of financial assistance.",
-    "Those looking for scholarships in various fields of study."
+    "International students looking for USA scholarship listings that may align with education, STEM, community, medicine, or arts interests",
+    "Applicants comparing opportunities across study levels such as high school senior, early college, later college, or graduate study",
+    "Students who want to find scholarships with mixed requirement styles, including listings that may be lighter-touch and others that may ask for essays",
+    "Applicants in fields like engineering, business and marketing, education, English, or health professions who want to compare category overlap before they apply"
   ],
   "faq": [
     {
-      "question": "What are Google scholarships for international students?",
-      "answer": "These are financial awards offered by Google to support international students in their educational pursuits."
+      "question": "How can I find and compare scholarships for international students in this filtered view?",
+      "answer": "Use these rows to compare study level, category, field of study, deadline text, and any listed award amount side by side. Amounts and requirements vary by listing, so confirm the final details on each program’s official page before you apply."
     },
     {
-      "question": "How can I apply for a Google scholarship?",
-      "answer": "Visit the scholarship's official website, review eligibility requirements, and submit your application before the deadline."
+      "question": "Are all of these scholarships only for international students in the USA?",
+      "answer": "Not necessarily. This filter is centered on international-student search intent, but eligibility labels in the catalog can differ by row and may also mention USA statuses like U.S. citizen or U.S. permanent resident, so always verify the official eligibility rules."
     },
     {
-      "question": "What types of scholarships are available?",
-      "answer": "Scholarships range from need-based awards to merit-based scholarships across various fields of study."
+      "question": "Can I apply to programs here if I am in a specific study level or major?",
+      "answer": "Possibly—this slice includes listings tied to different study levels such as graduate student, high school senior, and college years, plus fields like education, engineering, business, English, and health professions. Check each listing carefully to see whether your level and subject match before you apply."
+    },
+    {
+      "question": "Do these scholarships all require essays or have the same application steps?",
+      "answer": "No. In this catalog, essay expectations and other requirements vary across listings, and some programs may be lighter-touch than others. Open the official source for any scholarship you want to explore so you can verify what documents are actually required."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "google-scholarship-international-students",
-    "generatedAt": "2026-04-25T13:23:49.814Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:59:02.270Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

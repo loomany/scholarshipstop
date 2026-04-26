@@ -1,48 +1,135 @@
 {
   "seo_title": "Find Computer Science Scholarships in the USA",
-  "seo_description": "Explore 44 computer science scholarships with varying awards and deadlines. Check details to secure funding for your studies.",
-  "intro": "Finding financial support for your computer science education can be challenging, but there are 44 scholarships available that cater specifically to this field. Award sizes vary significantly, ranging from approximately $500 to $40,000, allowing you to explore options that best fit your needs. Be mindful that deadlines and requirements differ across listings, so it's essential to check each opportunity closely.",
-  "h1": "Computer Science Scholarships Available Now",
-  "supporting": "This collection of scholarships is particularly valuable for those pursuing studies in computer science, as it includes a mix of awards with varying levels of requirements. Some scholarships may ask for essays, while many do not, making it easier to find opportunities that suit your application style. Take the time to compare award amounts and deadlines to identify the best matches for your educational goals.",
-  "related_intro": "If you're interested in exploring other funding options, check out our pages on scholarships related to STEM, education, and technology.",
+  "seo_description": "Computer Science scholarships in the USA: compare deadlines, award ranges, and requirements, then apply through each official program page.",
+  "intro": "Trying to find USA scholarships for computer science can get messy fast, especially when programs sit under related labels like STEM, education, disability, medicine, or community. This filtered slice brings those rows into one place so you can apply with more focus, compare options that match your studies, and spot programs tied to computer and information sciences as well as nearby fields such as engineering, mathematics, or business. Awards, deadlines, and eligibility details vary across the listings below, and some opportunities appear to have lighter requirements than others. Because deadline text differs by row and some dates may be coming up soon, it is worth checking each listing promptly and verifying the official terms before you move forward.",
+  "h1": "Compare Computer Science Scholarships in the USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read the requirement lines closely, note the study level, and check whether a program is aimed at high school seniors, current college students, or graduate students. It also helps to compare category tags and residency labels so you can quickly separate broad STEM options from more specific computer science fits. Open the official page for any strong match, confirm the current award details, and keep a shortlist of the programs that best match your background.",
+  "related_intro": "If you do not find enough strong matches here, related pages can help you widen the search by category, study level, or adjacent academic areas. That is useful when a computer science applicant also qualifies for broader STEM, engineering, education, disability, or community scholarships in the USA.",
   "how_to_use": [
-    "Compare deadlines to prioritize your applications",
-    "Scan award amounts to find the best fit for your financial needs",
-    "Read the requirements for each scholarship carefully",
-    "Open official pages for detailed information and updates",
-    "Shortlist your top choices for easier tracking"
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Check study level and residency labels carefully",
+    "Open the official page to verify current details",
+    "Shortlist the best matches and track your applications"
   ],
   "who_for": [
-    "Undergraduate students in computer science",
-    "Graduate students pursuing advanced degrees in technology",
-    "Students seeking funding with minimal application requirements",
-    "Women and minorities in STEM fields",
-    "Applicants looking for scholarships with upcoming deadlines"
+    "USA computer science majors comparing scholarship options",
+    "High school seniors planning a computer and information sciences path",
+    "Current college students in computing or related STEM fields",
+    "Graduate students seeking computer science funding in the USA",
+    "US citizens or permanent residents checking eligibility labels"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Computer Science students?",
-      "answer": "The current listing includes 44 scholarships tailored for Computer Science students, with a variety of categories such as STEM, Arts, Education, Disability, and Medicine. Award sizes vary significantly, with amounts ranging from approximately $500 to $40,000 USD."
+      "question": "How can I find Computer Science scholarships in the USA that fit my profile?",
+      "answer": "Use this filtered view to compare the rows by study level, field labels, and USA eligibility details such as U.S. citizen or U.S. permanent resident status. Then open the official source for each listing to verify current requirements, award details, and how to apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements differ across the listings; while most scholarships do not require essays, there are some that do. It's important to review each scholarship's details to understand the specific requirements."
+      "question": "Can I compare award amounts and deadlines on this Computer Science scholarships page?",
+      "answer": "Yes—these listings include award amounts and deadline text, but both vary by program. Amounts can range widely across the catalog, and deadlines differ by row, so check dates promptly and confirm everything on the official scholarship page."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All 44 scholarships listed have deadlines, but they vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+      "question": "Are these only for current college students, or can I explore options at other study levels?",
+      "answer": "This filtered set includes programs tied to multiple study levels, with examples such as high school senior, college, and graduate student. Review each row carefully before you apply, since eligibility is set by the individual scholarship, not by the page as a whole."
     },
     {
-      "question": "How do I verify the details of a specific scholarship?",
-      "answer": "To verify details such as award amounts, deadlines, and requirements, click on the individual scholarship listings. Each entry provides comprehensive information to help you assess eligibility and application processes."
+      "question": "Do all Computer Science scholarships here require an essay?",
+      "answer": "No single requirement applies to every listing on this page. Some programs may have lighter application requirements while others may ask for essays or additional materials, so compare the rows and verify the application steps on official sources."
+    },
+    {
+      "question": "What kinds of Computer Science scholarship themes show up in these listings?",
+      "answer": "Within this focused set, you may see Computer Science scholarships connected to broader categories like STEM, Education, Arts, Disability, Medicine, and Community. That makes it useful to browse and compare programs that match both your subject area and any category-specific fit."
     }
   ],
+  "page_data": {
+    "exactCount": 53,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 40000,
+      "statedAmountCount": 53,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 35,
+      "within60Days": 49,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-24",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 49,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "recommendation",
+        "transcript",
+        "link",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "computer_and_information_sciences",
+        "engineering",
+        "business_management_and_marketing",
+        "mathematics_and_statistics"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Society of Women Engineers",
+        "count": 5
+      },
+      {
+        "name": "Thurgood Marshall College Fund",
+        "count": 3
+      },
+      {
+        "name": "University Interscholastic League",
+        "count": 3
+      },
+      {
+        "name": "BC Scholarship Society",
+        "count": 2
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "arts",
+      "disability",
+      "medical",
+      "community"
+    ]
+  },
   "_meta": {
     "canonicalPath": "computer-science",
-    "generatedAt": "2026-04-02T10:33:24.842Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 44,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:14:09.688Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 53,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

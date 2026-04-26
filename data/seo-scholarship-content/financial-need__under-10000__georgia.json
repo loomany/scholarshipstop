@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Georgia Financial Need Scholarships | USA",
+  "seo_description": "Georgia financial need scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Georgia scholarships that consider financial need and stay under the ten-thousand-dollar range usually means sorting through very different program types, not just one kind of award. This filtered USA catalog view brings together a focused set of listings tied to Georgia, with examples spanning education, community, STEM, arts, law, and miscellaneous categories. You can apply more strategically here by comparing who each program is meant for, how financial need is described, and whether the listing fits your study level or field. Award amounts vary by listing, though the programs below sit in a lower award band, and deadlines differ by row. Some opportunities may be lighter-touch on requirements, while others may ask for more documentation or an essay, so it is worth checking each official page closely.",
+  "h1": "Georgia Financial Need Scholarships USA Apply",
+  "supporting": "Use these rows to compare more than the headline amount. Look at residency or citizenship language, study level, category, and any field-of-study cues before you decide which scholarships to pursue first. In this Georgia slice, you may spot options connected to education, business, law, communication, or broader community-focused themes, so it is useful to browse beyond your exact major title. Because deadline text varies and at least some listings may be approaching soon, it makes sense to shortlist strong matches early, then verify current requirements and award details on the sponsor or official program page before you apply.",
+  "related_intro": "If you do not find enough matches in this Georgia financial-need slice, compare nearby scholarship pages by changing one filter at a time. Related views can help you explore other Georgia options, different award ranges, or broader USA scholarship listings that still fit your budget and application priorities.",
+  "how_to_use": [
+    "Compare each row for deadline text, award amount, and requirement notes before building your shortlist",
+    "Read the eligibility lines closely to confirm Georgia fit, study level, and any citizenship or residency conditions",
+    "Scan for essay expectations and supporting materials, since requirements vary across listings",
+    "Open the official scholarship page for every strong match and verify current details before you apply"
+  ],
+  "who_for": [
+    "Georgia applicants looking for scholarships that consider financial need without focusing on higher-dollar awards",
+    "High school seniors, college students, and graduate students comparing Georgia-based funding options",
+    "US citizens or permanent residents checking listings with residency or eligibility language tied to Georgia",
+    "Students in education, business, law, communication, or related fields who want to find relevant Georgia scholarships"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to these scholarships if I live in the USA but not in Georgia?",
+      "answer": "Some listings in this Georgia scholarship slice may focus on Georgia residency, while others may use broader USA eligibility such as U.S. citizen or permanent resident status. Check each listing carefully, because location and residency rules are set by the individual program."
+    },
+    {
+      "question": "What should I compare before I apply to a scholarship from this list?",
+      "answer": "Compare the amount, deadline, study level, and any requirement notes shown in the catalog row, then verify the full rules on the official source. In this filtered set, amounts vary by listing and deadlines differ by program."
+    },
+    {
+      "question": "What kinds of students can browse this scholarship filter?",
+      "answer": "This set includes listings tied to study levels such as high school senior, college, and graduate student, with common categories like education, community, STEM, arts, and law. The best way to find a fit is to compare the rows against your level, field of study, and residency details in the USA."
+    }
+  ],
+  "page_data": {
+    "exactCount": 25,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 25,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 15,
+      "within60Days": 24,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 5,
+      "noCount": 20,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3",
+        "graduate_student",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "personal_and_culinary_services",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Georgia Transplant Foundation",
+        "count": 8
+      },
+      {
+        "name": "PGA of America - Georgia Section",
+        "count": 4
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Les Dames d'Escoffier International-Atlanta Chapter",
+        "count": 2
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "arts",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/georgia",
+    "generatedAt": "2026-04-26T14:14:31.669Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 25,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

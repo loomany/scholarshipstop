@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore 196 Law Scholarships for International Students in the USA",
-  "seo_description": "Discover 196 law scholarships available for international students in the USA. Find funding opportunities to support your legal education.",
-  "h1": "Law Scholarships for International Students in the USA",
-  "intro": "Navigating the financial landscape of higher education can be challenging, especially for international students pursuing law degrees in the USA. Fortunately, there are currently 196 scholarships specifically designed to support international students in their legal studies. These scholarships vary in eligibility criteria, award amounts, and application processes, providing a range of options for students from diverse backgrounds. Whether you are looking for merit-based awards, need-based assistance, or specialized scholarships for specific fields within law, this comprehensive list will help you find the right funding opportunity to achieve your academic goals.",
-  "supporting": "Eligibility for these law scholarships often includes being an international student enrolled in a law program at an accredited institution in the USA. Some scholarships may require specific academic achievements, while others might focus on financial need or community involvement. Deadlines vary, so it’s crucial to check each scholarship’s requirements and apply early. Application tips include preparing a strong personal statement, gathering letters of recommendation, and ensuring all documents are submitted on time. Notable scholarships include the Paul and Daisy Soros Fellowships for New Americans and the DC Tuition Assistance Grant (DCTAG), which can significantly ease the financial burden of law school.",
-  "related_intro": "In addition to law scholarships, international students can explore other funding opportunities such as grants, assistantships, and fellowships that may further support their education.",
+  "seo_title": "Find Law Scholarships for International Students USA",
+  "seo_description": "Law scholarships for international students in the USA: compare awards, deadlines, and eligibility, then apply through official program pages.",
+  "intro": "Trying to find law scholarships in the USA as an international student usually means sorting through mixed eligibility rules, study levels, and application requirements fast. This filtered slice brings together a focused set of listings so you can compare options that may fit law-related study plans while keeping the USA context clear. The rows below show that awards can range from modest support to much larger funding, but amounts vary by listing and should always be confirmed on the official page. Deadlines also differ across programs, and some appear to be coming up soon, so it makes sense to check dates promptly. You will also see variation in essay expectations and other requirement signals, which is useful if you want to apply broadly or prioritize lighter-touch applications first.",
+  "h1": "Compare Law Scholarships for International Students USA",
+  "supporting": "A smart way to use this list is to compare each row for eligibility language, study level, category tags, deadline wording, and any clue about application effort. Some titles are broadly framed around international students, while others sit in wider education or community categories, so it is worth opening the details instead of judging by the name alone. If you are building a shortlist for law funding in the USA, scan for fit first, then verify the official criteria, required materials, and current award details before you apply.",
+  "related_intro": "If these results feel too broad or too narrow, related pages can help you refine the search by adjacent themes such as education, community, study level, or requirement style. That is often the quickest way to find comparable USA scholarship options without restarting your search.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required documents and application materials.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the listings that match your profile",
+    "Check award text and application materials"
   ],
   "who_for": [
-    "International students pursuing law degrees in the USA.",
-    "Students seeking financial assistance for legal education.",
-    "Individuals looking for merit-based or need-based scholarships."
+    "International students seeking USA law funding",
+    "Graduate applicants comparing law related awards",
+    "Students checking essay and requirement differences",
+    "Applicants reviewing broader education category scholarships"
   ],
   "faq": [
     {
-      "question": "What types of law scholarships are available for international students?",
-      "answer": "There are various types of law scholarships, including merit-based, need-based, and those aimed at specific demographics or fields of law."
+      "question": "How can I find law scholarships in the USA for international students on this page?",
+      "answer": "Use this filtered view to compare the rows that match law-related study and international-student intent in the USA. Then open each listing and verify eligibility, study level, and application details on the official source before you apply."
     },
     {
-      "question": "How can I find more information about each scholarship?",
-      "answer": "You can find detailed information about each scholarship, including eligibility, deadlines, and application procedures, on the respective scholarship websites."
+      "question": "Do all law scholarships for international students require an essay?",
+      "answer": "No single requirement applies to every listing in this filtered set. Some programs may ask for essays and others may not, so review each row carefully and confirm the current requirements on the official scholarship page."
     },
     {
-      "question": "Are there scholarships specifically for certain countries?",
-      "answer": "Yes, some scholarships are targeted at students from specific countries or regions, so it's beneficial to research scholarships that cater to your background."
+      "question": "Who should use this USA law scholarship filter page?",
+      "answer": "It fits international students who want to explore U.S. scholarship options related to law, especially if they need to compare multiple programs in one place. It can also help applicants browse across different study levels before narrowing down where to apply."
+    },
+    {
+      "question": "What is the best way to use these listings before I apply?",
+      "answer": "Start by shortlisting rows that match your status, study level, and any amount or deadline preferences. After that, use the catalog to compare options, but rely on the official source for the final eligibility rules, required materials, and deadline details."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "law-scholarships-for-international-students-usa",
-    "generatedAt": "2026-04-25T13:22:23.290Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:59:41.154Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

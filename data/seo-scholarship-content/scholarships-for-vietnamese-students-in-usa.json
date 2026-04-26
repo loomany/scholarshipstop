@@ -1,43 +1,136 @@
 {
-  "seo_title": "Explore 196 Scholarships for Vietnamese Students in the USA",
-  "seo_description": "Discover 196 scholarships available for Vietnamese students pursuing education in the USA. Apply today for financial support!",
-  "h1": "Scholarships for Vietnamese Students in the USA",
-  "intro": "If you're a Vietnamese student looking to study in the USA, you're in luck! There are currently 196 scholarships specifically designed to support your educational journey. These scholarships range from merit-based awards to need-based assistance, catering to various fields of study and academic levels. Whether you're an undergraduate or a graduate student, opportunities like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship can help alleviate the financial burden of studying abroad. Take the first step towards your American dream by exploring these options and applying for the scholarships that best fit your profile.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to both undergraduate and graduate students from Vietnam. Some scholarships, like the Razor's Edge Global Scholarship and the Paul and Daisy Soros Fellowships for New Americans, may require specific academic achievements or community involvement. Deadlines for applications can range throughout the year, so it’s crucial to check individual scholarship requirements. To increase your chances of success, tailor your application materials to highlight your unique experiences and aspirations. Be sure to gather all necessary documents, such as transcripts and letters of recommendation, well in advance of the deadlines.",
-  "related_intro": "In addition to scholarships, there are various grants and financial aid options available for Vietnamese students in the USA. Exploring these resources can further enhance your educational experience.",
+  "seo_title": "Find Scholarships for Vietnamese Students in USA",
+  "seo_description": "Scholarships for Vietnamese students in USA with deadlines, award ranges, and eligibility details. Compare listings and apply on official pages.",
+  "intro": "Trying to find scholarships for Vietnamese students in the USA usually means sorting through mixed eligibility rules, study levels, and subject areas before you can decide where to apply. This filtered slice brings together a focused set of listings that may be relevant if you are comparing options tied to international student status, education pathways, or fields such as engineering, business, health professions, English, and related areas. As you browse, expect real variation across the rows below: some awards list larger funding than others, some may ask for essays while others appear lighter touch, and deadlines differ by program. If you are searching for scholarship options for the upcoming cycle, it is worth checking details promptly and verifying every requirement on the official source.",
+  "h1": "Compare Scholarships for Vietnamese Students in USA",
+  "supporting": "Use this list to compare more than just the title. Read the requirement lines closely, note the study level attached to each listing, and check whether the opportunity leans toward education, STEM, community, medicine, arts, or broader miscellaneous categories. Some rows may fit Vietnamese students in the USA through international student eligibility rather than a nationality-only rule, so it helps to open each official page and confirm the exact wording. A quick shortlist based on fit, deadline timing, essay expectations, and field of study will make the catalog much easier to work through.",
+  "related_intro": "If these results feel close but not exact, related pages can help you narrow by study level, subject area, or broader international student eligibility. That is often the fastest way to compare nearby scholarship groups without losing relevant USA options.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents like transcripts and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up with scholarship organizations for updates."
+    "Compare deadline wording across the rows",
+    "Read each requirement line before you apply",
+    "Open the official source to verify eligibility",
+    "Shortlist listings by study level and subject",
+    "Check whether essay expectations differ by program"
   ],
   "who_for": [
-    "Vietnamese students pursuing higher education in the USA.",
-    "Undergraduate and graduate students seeking financial support.",
-    "Students with diverse academic interests and backgrounds."
+    "Vietnamese students planning to study in the USA",
+    "International applicants comparing USA scholarship options",
+    "Graduate or undergraduate applicants checking mixed eligibility rules",
+    "Students in education, engineering, business, health, or English fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Vietnamese students?",
-      "answer": "There are merit-based, need-based, and specific scholarships for various fields of study."
+      "question": "How can I find scholarships for Vietnamese students in the USA on this page?",
+      "answer": "Use this filtered view to explore a focused set of listings tied to Vietnamese students in the USA, then compare each row’s eligibility, study level, field, amount, and deadline. Final requirements should always be verified on the official scholarship page."
     },
     {
-      "question": "How can I find scholarships that I am eligible for?",
-      "answer": "Use scholarship search engines and check university websites for specific opportunities."
+      "question": "Can I apply if I am an international student studying in the USA?",
+      "answer": "Some listings in this catalog include international student eligibility, but rules vary by program. Check the citizenship or residency details on each listing and confirm them with the official source before you apply."
     },
     {
-      "question": "What documents do I need to apply for scholarships?",
-      "answer": "Typically, you'll need transcripts, recommendation letters, and personal statements."
+      "question": "What kinds of scholarships can I browse here?",
+      "answer": "These rows span multiple topics and majors, including education, STEM, community, medicine, arts, business, engineering, English, and health professions. Study levels also vary, so you can compare options for high school seniors, college students, and graduate students."
+    },
+    {
+      "question": "Do all scholarships on this page have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and this filtered set includes a mix of date formats and timelines, so check each row promptly. Award amounts also vary by listing, and any amount should be confirmed on the official page."
+    },
+    {
+      "question": "Are essays required for every scholarship listed here?",
+      "answer": "Not always—requirements vary across the programs below, and some listings may be lighter-touch than others. Before you apply, open the individual listing and verify the essay and document requirements with the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-vietnamese-students-in-usa",
-    "generatedAt": "2026-04-25T13:20:04.121Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:12:25.134Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

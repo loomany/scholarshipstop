@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find New Hampshire High School Need Scholarships USA",
+  "seo_description": "New Hampshire high school financial need scholarships in the USA—compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships for New Hampshire high school students with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered view brings together a focused set of listings tied to that combination, so you can compare options without jumping between unrelated results. Awards vary by listing, and official pages should be checked to confirm current amounts, eligibility, and application steps. Deadlines also differ by program, with some rows showing relatively near-term dates, so it makes sense to apply early and verify each timeline promptly. As you browse, expect a mix of categories such as education, community, STEM, and humanities, along with requirement lines that may be lighter for some programs than others.",
+  "h1": "Find Financial Need High School Scholarships in NH USA",
+  "supporting": "Use these rows to compare more than the scholarship title alone. Look at the location fit, the study level language, category tags, and any requirement notes before you decide which programs to open first. In this New Hampshire slice, you may see listings connected to education, mathematics, engineering, community-focused awards, and broader merit or need-based opportunities. That makes the page useful both for students with a clear academic direction and for applicants who want to keep their options broad while still staying within a financial-need filter.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship paths by topic, education level, or location within the USA catalog. That is useful when a program here is close to your profile but not an exact match.",
+  "how_to_use": [
+    "Compare each row for award wording, category tags, and New Hampshire relevance before you shortlist anything",
+    "Check deadline text on every listing because timing varies by program and some dates may be coming up soon",
+    "Read the requirement and essay details carefully rather than assuming the same application format across the page",
+    "Open the official scholarship page for your top choices to verify eligibility, amounts, and application instructions before you apply"
+  ],
+  "who_for": [
+    "New Hampshire high school students looking for scholarships that consider financial need",
+    "High school seniors in the USA comparing local and regional awards before they apply",
+    "Students interested in education, STEM, community, or humanities-related scholarship options",
+    "Applicants who want to find programs that may have lighter requirement lines but still need to verify each listing"
+  ],
+  "faq": [
+    {
+      "question": "How can I find New Hampshire scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school level, and New Hampshire. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include award amounts and deadline text, but both vary by program. Amounts in this slice range from smaller awards to larger ones, and deadlines differ by listing, so compare rows first and confirm on official sources before you apply."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in New Hampshire?",
+      "answer": "Not always. While this filter is centered on high school opportunities in New Hampshire, some listings may use different study-level labels such as high school senior or high school sophomore, so check each program's eligibility carefully."
+    },
+    {
+      "question": "Do all of these financial-need scholarships require an essay?",
+      "answer": "No single requirement applies to every listing here. Requirements appear to vary row to row, and some programs may be lighter-touch, so review the catalog entry and the official application page before you start."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 17000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "graduate_student",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "area_ethnic_cultural_and_gender_studies",
+        "business_management_and_marketing",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Hillsborough County Youth Center Foundation",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "New Hampshire Road Agents Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/new-hampshire",
+    "generatedAt": "2026-04-26T13:56:37.303Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

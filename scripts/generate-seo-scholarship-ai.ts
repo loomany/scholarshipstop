@@ -135,6 +135,80 @@ function parseJsonObject(raw: string): Record<string, unknown> {
   return j as Record<string, unknown>;
 }
 
+function normalizeSpaces(v: string): string {
+  return v.replace(/\s+/g, ' ').trim();
+}
+
+function clampWithEllipsis(v: string, max: number): string {
+  if (v.length <= max) return v;
+  return `${v.slice(0, Math.max(1, max - 1)).trimEnd()}…`;
+}
+
+function ensureSeoTitleLength(raw: string, fallback: string): string {
+  const base = normalizeSpaces(raw || fallback || 'Scholarships in USA 2026');
+  let v = base;
+  if (!/\b(usa|u\.s\.)\b/i.test(v)) v = `${v} USA`;
+  if (!/\b2026\b/.test(v)) v = `${v} 2026`;
+  if (!/\b(apply|find|browse|explore|compare)\b/i.test(v)) v = `${v} Apply`;
+  v = normalizeSpaces(v);
+  if (v.length < 30) v = normalizeSpaces(`${v} Scholarships`);
+  return clampWithEllipsis(v, 65);
+}
+
+function ensureSeoDescriptionLength(raw: string, fallback: string): string {
+  let v = normalizeSpaces(raw || fallback || 'Find USA scholarships, compare requirements and deadlines, and apply with confidence using verified listings.');
+  const hasCta = /\b(apply|start|explore|find|browse|compare)\b/i.test(v);
+  if (!hasCta) v = `${v} Apply now.`;
+  if (!/\b(usa|u\.s\.)\b/i.test(v)) v = `USA scholarships: ${v}`;
+  v = normalizeSpaces(v);
+  if (v.length < 120) {
+    v = normalizeSpaces(
+      `${v} Review eligibility details, compare deadlines, and open official pages before you submit.`
+    );
+  }
+  if (v.length < 120) {
+    v = normalizeSpaces(`${v} Find the right scholarship and apply today.`);
+  }
+  if (v.length > 160) v = clampWithEllipsis(v, 160);
+  return v;
+}
+
+function normalizeFaqItems(
+  input: Array<{ question: string; answer: string }> | undefined
+): Array<{ question: string; answer: string }> | undefined {
+  if (!input || input.length === 0) return undefined;
+  const cleaned = input
+    .map((x) => ({
+      question: normalizeSpaces(x.question),
+      answer: normalizeSpaces(x.answer)
+    }))
+    .filter((x) => x.question.length > 10 && x.answer.length > 15)
+    .slice(0, 5);
+  if (cleaned.length >= 3) return cleaned;
+  return undefined;
+}
+
+function defaultListingFaq(entry: SeoScholarshipRouteManifestEntry): Array<{ question: string; answer: string }> {
+  const label = entry.h1Fallback || 'this scholarship page';
+  return [
+    {
+      question: `Who should apply for ${label}?`,
+      answer:
+        'Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page.'
+    },
+    {
+      question: `How do I check deadlines for ${label}?`,
+      answer:
+        'Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page.'
+    },
+    {
+      question: `What is the best application process for ${label}?`,
+      answer:
+        'Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms.'
+    }
+  ];
+}
+
 const STALE_DAYS = 30;
 const COUNT_DRIFT_RATIO = 0.15;
 
@@ -322,7 +396,7 @@ async function main() {
 
   const enabled = process.env.OPENAI_SEO_ENABLED !== '0';
   const key = process.env.OPENAI_API_KEY;
-  const model = process.env.OPENAI_SEO_MODEL || 'gpt-4o-mini';
+  const model = process.env.OPENAI_SEO_MODEL?.trim() || '';
   const promptVersion = process.env.OPENAI_SEO_PROMPT_VERSION || 'v4';
 
   if (!enabled) {
@@ -331,6 +405,12 @@ async function main() {
   }
   if (!key && !dryRun) {
     console.error('OPENAI_API_KEY required (or use --dry-run)');
+    process.exit(1);
+  }
+  if (!dryRun && model !== 'gpt-5.4') {
+    console.error(
+      `OPENAI_SEO_MODEL must be exactly gpt-5.4 for SEO generation. Current value: ${model || '(empty)'}`
+    );
     process.exit(1);
   }
 
@@ -629,17 +709,26 @@ All string fields non-empty except related_intro may be null. who_for and how_to
       }
 
       const bundle: LongTailSeoBundle = {
-        seo_title: String(meta.seo_title ?? entry.metaTitleFallback).slice(0, 70),
-        seo_description: String(
-          meta.seo_description ?? entry.metaDescriptionFallback
-        ).slice(0, 165),
+        seo_title: ensureSeoTitleLength(
+          String(meta.seo_title ?? entry.metaTitleFallback),
+          entry.metaTitleFallback
+        ),
+        seo_description: ensureSeoDescriptionLength(
+          String(meta.seo_description ?? entry.metaDescriptionFallback),
+          entry.metaDescriptionFallback
+        ),
         intro: bodyFields.intro,
-        h1: typeof meta.h1 === 'string' ? meta.h1.trim() : undefined,
+        h1:
+          typeof meta.h1 === 'string'
+            ? ensureSeoTitleLength(meta.h1.trim(), entry.h1Fallback)
+            : undefined,
         supporting: bodyFields.supporting,
         related_intro: bodyFields.related_intro ?? undefined,
         how_to_use: bodyFields.how_to_use,
         who_for: bodyFields.who_for,
-        faq: faqFiltered && faqFiltered.length > 0 ? faqFiltered : undefined,
+        faq:
+          normalizeFaqItems(faqFiltered && faqFiltered.length > 0 ? faqFiltered : undefined) ??
+          defaultListingFaq(entry),
         page_data: buildSeoListingPageData(list, entry),
         _meta: {
           canonicalPath: entry.canonicalPath,

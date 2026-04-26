@@ -1,42 +1,136 @@
 {
-  "seo_title": "Boeing scholarship international students | Updated Scholarship List",
-  "seo_description": "Explore 196 USA scholarship opportunities for boeing scholarship international students. Compare award amounts, deadlines, and eligibility before applying.",
-  "h1": "Boeing scholarship international students",
-  "intro": "This page brings together scholarship opportunities related to boeing scholarship international students and keeps the live list tied to ScholarshipTop's current catalog. Use it to compare award amounts, deadlines, eligibility details, and official application links without jumping between generic search results.",
-  "supporting": "Start with the strongest fit, then verify the final rules on the official scholarship page. International applicants should pay close attention to citizenship language, visa wording, school location, award payout rules, and document requirements. Examples currently surfaced in this topic include International Student Scholarship, Vanna Christian Sun Legacy Scholarship, Anderson Engineering Scholarship, The Jorge and Darlene Pérez Excellence Award.",
-  "related_intro": "If this page is too narrow, widen your search to international student scholarships or combine the filters with deadline and award amount pages.",
+  "seo_title": "Find Boeing Scholarships for International Students USA",
+  "seo_description": "Boeing scholarships for international students in the USA: compare awards, deadlines, and eligibility, then explore official listings to apply.",
+  "intro": "Trying to find USA scholarships that may fit international students under a Boeing-focused search can get messy fast, because the rows in this filtered slice do not all follow the same pattern. Some listings lean toward education or STEM, while others touch community, medicine, arts, or broader academic paths. Study level labels also vary, so you may see options that make more sense for high school seniors, current college students, or graduate applicants. Awards differ by listing, deadlines differ by program, and requirements are mixed, including essay expectations and lighter-touch applications in some cases. If you want to apply in a practical way for the current cycle, use these rows to compare fit first and verify every detail on the official source before moving forward.",
+  "h1": "Apply for Boeing Scholarships for International Students USA",
+  "supporting": "A smart way to use this catalog view is to compare the requirement line, study level, citizenship wording, and subject tags before you spend time on a full application. In this USA list, some rows may connect more clearly to engineering, education, business, English, or health fields, while others are broader. Open the official page for any listing that looks promising, confirm eligibility for international students, and check how the award is described there, since amounts and application steps can vary. Shortlisting a few strong matches is usually more useful than applying blindly across the whole set.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by study level, subject area, or requirement style. That is often the fastest way to compare nearby scholarship options in the USA without rereading rows that are clearly outside your fit.",
   "how_to_use": [
-    "Sort the live scholarship list by deadline or match strength",
-    "Open each official listing before preparing documents",
-    "Check citizenship, visa, GPA, and school-level requirements",
-    "Save strong matches so you can return before the deadline",
-    "Use the related scholarship guides for application strategy"
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify eligibility",
+    "Shortlist listings that match your study level",
+    "Check award details and essay expectations"
   ],
   "who_for": [
     "International students comparing USA scholarship options",
-    "Applicants who want a filtered list instead of generic search results",
-    "Students checking deadlines, award amounts, and eligibility before applying"
+    "Engineering or STEM applicants checking related listings",
+    "Graduate seekers reviewing mixed eligibility language",
+    "High school seniors looking for international-friendly awards"
   ],
   "faq": [
     {
-      "question": "Who should use this boeing scholarship international students page?",
-      "answer": "Use it if the topic matches your status, degree level, field, or application constraint. The list is built from current ScholarshipTop catalog data, but final eligibility always comes from the official provider."
+      "question": "How can I find and compare scholarships for international students in this filtered view?",
+      "answer": "Use the rows here as a starting catalog, then compare each listing by study level, field, eligibility labels, amount, and deadline. In the USA context, details can differ a lot by program, so confirm the final rules on the official scholarship page before you apply."
     },
     {
-      "question": "Do international students qualify for every scholarship listed here?",
-      "answer": "No. Some scholarships are international-friendly while others have narrower school, visa, location, or citizenship rules. Open the official page and confirm before applying."
+      "question": "Can I apply to every scholarship listed here as an international student?",
+      "answer": "Not automatically. This filtered set includes listings tagged for international students, but some rows may also include other citizenship or residency labels such as US citizen or US permanent resident, so check each program’s official eligibility wording carefully."
     },
     {
-      "question": "How often should I check this list?",
-      "answer": "Check weekly during application season. New scholarships, changed deadlines, and updated award details can affect which opportunities are worth prioritizing."
+      "question": "What kinds of scholarships can I explore on this page?",
+      "answer": "These listings span multiple topics and backgrounds, with common categories including Education, STEM, Community, Medicine, Arts, and Miscellaneous. You can also find programs tied to study levels from high school senior through college and graduate study, plus fields like engineering, education, business, English, and health professions."
+    },
+    {
+      "question": "Do deadlines and award amounts stay the same across all listings?",
+      "answer": "No—deadlines differ by program, and the deadline text varies row by row, so check dates promptly when you browse. Award amounts also vary by listing, and any amount shown in the catalog should be verified on the official source before you apply."
+    },
+    {
+      "question": "Will these scholarships require an essay or a long application?",
+      "answer": "Requirements vary across the programs below. Some listings may be lighter-touch, while others may ask for essays or additional materials, so compare the row details and verify the full application steps on the official page."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "boeing-scholarship-international-students",
-    "generatedAt": "2026-04-25T13:23:59.985Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
-    "bodySource": "deterministic",
+    "generatedAt": "2026-04-26T12:55:48.595Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
     "generationMode": "rewrite"
   }
 }

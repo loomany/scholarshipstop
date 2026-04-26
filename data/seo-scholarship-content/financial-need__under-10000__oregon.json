@@ -1,0 +1,130 @@
+{
+  "seo_title": "Find Oregon Financial Need Scholarships | USA",
+  "seo_description": "Oregon financial need scholarships under ten thousand in the USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Oregon scholarships tied to financial need without drifting into the highest award tiers? This filtered slice brings together USA listings where the posted award amounts stay under the selected cap, so you can compare options that may fit a more realistic application plan. The programs below span areas such as education, community, medicine, disability, miscellaneous topics, and STEM, with examples that touch nursing, agriculture, actuarial study, and broader academic support. Requirements are not identical across these rows: some may ask for essays, some appear lighter-touch, and eligibility can differ by study level, residency, or field. If you want to apply in Oregon and narrow your search quickly, this is a practical set to browse and compare.",
+  "h1": "Oregon Financial Need Scholarships Under Ten Thousand USA A…",
+  "supporting": "Use this list to read past the headline title and compare the details that actually affect fit: award wording, deadline text, study level, location rules, and any requirement notes shown in each row. Because deadlines differ by program and some may be coming up soon, it is worth checking the official page early before you build a shortlist. This slice is especially useful if you want to explore need-based options in Oregon while keeping award size expectations within a defined range rather than mixing them with every scholarship in the wider catalog.",
+  "related_intro": "If these Oregon need-based listings feel too narrow, related pages can help you compare nearby filter combinations, such as broader Oregon scholarship results, other financial-need views, or different award ranges. That makes it easier to find similar programs without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist programs that match your study level",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "Oregon applicants seeking need-based scholarships",
+    "High school seniors planning in-state study",
+    "Undergraduate or graduate students comparing smaller award ranges",
+    "Students in education, health, business, trades, or related fields",
+    "USA residents checking Oregon-specific eligibility details"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines across these USA scholarship listings?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, which makes it easier to compare options side by side. Deadlines are not the same across the page, and at least some listings appear to be approaching soon, so check dates promptly on official sources."
+    },
+    {
+      "question": "What kinds of students or majors should explore this Oregon scholarship list?",
+      "answer": "This slice includes a mix of categories such as Education, Community, Medicine, Disability, Miscellaneous, and STEM. Sample listings also point to fields like education, business, health professions, construction trades, and English, but each scholarship has its own rules."
+    },
+    {
+      "question": "Do all of these scholarships require an essay or the same application materials?",
+      "answer": "No—requirements vary across the catalog, and essay expectations are mixed in this filtered set. Before you apply, open the official listing to confirm what documents, prompts, or proof of eligibility are required."
+    },
+    {
+      "question": "Are these scholarships only for Oregon residents, or can other USA applicants browse them too?",
+      "answer": "Oregon is part of this filter, but residency and citizenship rules still differ by program. Some listings may reference USA applicant types such as U.S. citizens or permanent residents, so compare each row carefully and confirm eligibility on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 17,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 2000,
+      "maxUsd": 10000,
+      "statedAmountCount": 17,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 13,
+      "within60Days": 15,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 14,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "Undergraduate"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "construction_trades",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Oregon Nurses Association",
+        "count": 3
+      },
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      },
+      {
+        "name": "Incight",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Oregon Chinese Consolidated Benevolent Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "medical",
+      "disability",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/oregon",
+    "generatedAt": "2026-04-26T14:23:29.171Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 17,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

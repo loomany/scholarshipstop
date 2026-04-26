@@ -1,48 +1,122 @@
 {
-  "seo_title": "Explore 80 Engineering Scholarships in Florida",
-  "seo_description": "Find diverse engineering scholarships in Florida with awards from $500 to $10,000. Check deadlines and requirements for each listing.",
-  "intro": "Finding financial support for engineering studies in Florida can significantly ease the burden of tuition and related expenses. With 80 scholarships available in this category, students have a variety of options to explore. Award sizes typically range from around $500 to $10,000, and while many listings do not require essays, it's important to review each scholarship's details. Deadlines vary, with several approaching in the near future, so checking these dates promptly is essential.",
-  "h1": "Florida Engineering Scholarships: 80 Opportunities Available",
-  "supporting": "This collection of scholarships is tailored for engineering students in Florida, making it a valuable resource for those seeking funding. As you review the listings, consider comparing the award amounts and any specific eligibility criteria. Pay attention to the deadlines, as they can differ widely across scholarships. This slice offers a mix of opportunities, some with lighter requirements, which can be beneficial for applicants looking for a smoother application process.",
-  "related_intro": "For additional funding opportunities, you might want to check out related pages focusing on STEM scholarships or other specific categories.",
+  "seo_title": "Find Engineering Scholarships in Florida, USA",
+  "seo_description": "Engineering scholarships in Florida, USA with deadlines and award details by listing. Compare options and apply early as dates can vary.",
+  "intro": "Trying to find Florida engineering scholarships in the USA usually means sorting through programs that look similar at first glance but differ in study level, residency language, field fit, and application steps. This filtered slice brings those engineering-focused listings into one place so you can compare options tied to Florida without jumping between unrelated results. Some rows lean broadly toward STEM, while others connect more closely to areas like construction trades, medicine, or community-focused work. Award amounts vary by listing, deadlines differ by program, and requirements should always be checked on the official page. Many of the listings here appear to have lighter application signals, and many often show no essay in the catalog metadata, which can make this a practical set to review early for your scholarship search.",
+  "h1": "Find Florida Engineering Scholarships USA",
+  "supporting": "Use the rows below to compare more than just the title. Look at the study level, location fit, field labels, and any requirement notes to see which programs match your situation before you apply. It is also worth scanning deadline text promptly, since some listings may close sooner than expected. If you are building a shortlist for Florida or broader USA engineering funding, compare award wording carefully and then open the official source to verify eligibility, materials, and current terms.",
+  "related_intro": "If you do not find the right match in this Florida engineering set, related pages can help you compare nearby paths, such as broader engineering listings, other Florida scholarship categories, or adjacent STEM options that may still fit your coursework and residency profile.",
   "how_to_use": [
-    "Compare deadlines across different listings",
-    "Scan award amounts to find suitable options",
-    "Read the requirements for each scholarship carefully",
-    "Open official pages for detailed information",
-    "Shortlist scholarships that match your profile"
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify current details",
+    "Shortlist listings that match your study level and field",
+    "Check award wording carefully because amounts vary by program"
   ],
   "who_for": [
-    "Engineering students in Florida",
-    "Undergraduate and graduate applicants",
-    "Students seeking scholarships without essay requirements",
-    "Individuals interested in STEM funding",
-    "Residents of Florida pursuing higher education"
+    "Florida-based engineering majors comparing local scholarship options",
+    "USA applicants seeking engineering funding with Florida location relevance",
+    "High school seniors planning to study engineering in Florida",
+    "College and graduate students reviewing STEM and engineering awards"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Florida?",
-      "answer": "The current listing includes 80 scholarships specifically for engineering students in Florida, with a focus on STEM fields. Categories range from community and humanities to education and medicine, providing a variety of options based on your interests and background."
+      "question": "How can I find engineering scholarships in Florida that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, category, and any residency or citizenship notes shown in the catalog. Then open the official source for each listing to verify eligibility, required materials, and current status for USA applicants."
     },
     {
-      "question": "How can I find deadlines for these scholarships?",
-      "answer": "All 80 scholarships listed have deadlines, but they vary by program. It's important to check each listing for specific dates, as some deadlines are approaching within the next 45 days."
+      "question": "Can I apply to more than one Florida engineering scholarship from this list?",
+      "answer": "Usually, you can explore multiple listings and apply to any programs whose official rules allow it. Each scholarship has its own requirements, so compare the rows first and confirm limits or exclusions on the official page before applying."
     },
     {
-      "question": "Are essays required for these scholarships?",
-      "answer": "Most of the scholarships in this category do not require essays, making the application process potentially easier. However, it's advisable to verify each listing for specific requirements, as some may have different expectations."
+      "question": "Do all listings here have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and award amounts vary by listing. This catalog shows that amounts are listed for these rows, but you should verify the current amount and deadline on the official source because details can change."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this listing generally range from approximately $500 to $10,000. Since each scholarship has its own criteria and funding, be sure to review the details for each opportunity."
+      "question": "Are these Florida engineering scholarships only for college students?",
+      "answer": "Not necessarily—this filtered set includes sample study levels such as high school senior, college students, and graduate students. Check each row carefully to find programs that match your level before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 81,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 81,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 63,
+      "within60Days": 80,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-05-29",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 81,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "college_3",
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "construction_trades",
+        "business_management_and_marketing",
+        "mechanic_and_repair_tech_technicians"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "University of North Florida",
+        "count": 56
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 10
+      },
+      {
+        "name": "WTS International-Central Florida Chapter",
+        "count": 3
+      },
+      {
+        "name": "Florida Engineering Society",
+        "count": 2
+      },
+      {
+        "name": "Florida Space Grant Consortium",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "community",
+      "education",
+      "humanities",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/florida",
-    "generatedAt": "2026-04-02T10:32:18.712Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 80,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:35:24.041Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 81,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

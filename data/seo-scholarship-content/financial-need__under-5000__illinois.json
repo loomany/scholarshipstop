@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Illinois Financial Need Scholarships Under Five Thousand |…",
+  "seo_description": "Illinois financial need scholarships under five thousand: compare award ranges, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Illinois scholarships for financial need without sorting through larger national awards first? This filtered USA view narrows the search to programs with listed awards under five thousand dollars, making it easier to compare smaller grants, community-focused scholarships, and subject-based options in one place. The rows here span areas such as education, STEM, medicine, disability, and broader miscellaneous or community categories, with examples that reach from high school seniors to college and graduate students. Award amounts vary by listing, and requirements, essay expectations, residency details, and deadline timing can differ from one program to the next. Because date text appears across these listings and some deadlines may be coming up soon, it is smart to check each row promptly before you apply.",
+  "h1": "Explore Illinois Financial Need Scholarships Under Five Thousand…",
+  "supporting": "A useful way to browse this slice is to compare more than the dollar figure. Look at who the scholarship is meant for, the study level, any field-of-study language, and whether the listing points to lighter or more involved application requirements. In this Illinois set, you may find opportunities tied to community impact, cultural diversity, education, engineering, health professions, and other paths. If you are deciding where to spend your time, open the official page for the programs that match your background most closely and verify award details, eligibility, and submission instructions there.",
+  "related_intro": "If this set feels too narrow or too local, related pages can help you compare nearby filter combinations, such as broader financial-need scholarships, other Illinois scholarship categories, or additional under-five-thousand listings across the USA. That can be useful when you want to widen your options without losing the same general budget range.",
+  "how_to_use": [
+    "Compare award ranges, study levels, and category tags to find the listings that fit your profile first",
+    "Read each requirement line closely for financial-need language, residency details, field-of-study limits, and essay expectations",
+    "Open the official scholarship page for every strong match and verify the current amount, deadline, and application steps",
+    "Shortlist the best-fit programs, then apply early because deadlines differ by listing and some may be approaching soon"
+  ],
+  "who_for": [
+    "Illinois applicants looking for scholarships that consider financial need and list smaller award amounts",
+    "High school seniors, college students, and graduate students comparing local or regional USA opportunities",
+    "Students in education, business, engineering, construction trades, health professions, or community-focused programs",
+    "US citizens or permanent residents who want to find Illinois-relevant scholarships before deadlines pass"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Illinois scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Illinois scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Illinois scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 50,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 250,
+      "maxUsd": 5000,
+      "statedAmountCount": 50,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 23,
+      "within60Days": 48,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 48,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Waubonsee Community College",
+        "count": 22
+      },
+      {
+        "name": "Kankakee Community College Foundation",
+        "count": 8
+      },
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 3
+      },
+      {
+        "name": "Illinois CPA Society",
+        "count": 2
+      },
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/illinois",
+    "generatedAt": "2026-04-26T14:31:23.001Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 50,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

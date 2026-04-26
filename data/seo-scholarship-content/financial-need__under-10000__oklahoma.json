@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Oklahoma Financial Need Scholarships | USA",
+  "seo_description": "Oklahoma financial need scholarships under ten thousand dollars: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Oklahoma scholarships tied to financial need without wading through very large award listings? This filtered USA view narrows the search to programs with listed awards under the stated cap, so you can compare options that may fit smaller funding gaps, books, fees, or other education costs. The rows below span several academic areas, including education, STEM, arts, medicine, law, and miscellaneous topics, with examples that also touch fields like engineering, business, journalism, and performing arts. Requirements are not identical across these listings: some may be relatively lighter touch, some may ask for more documentation, and essay expectations can differ by program. Deadlines also vary by row, so it is smart to check timing early if you plan to apply in the current cycle.",
+  "h1": "Explore Oklahoma Financial Need Scholarships USA",
+  "supporting": "Use this slice to compare more than just the award line. Read each listing for location fit, financial need language, study level, field tags, and any residency or citizenship notes shown in the row before you open the official source. Because award amounts vary by listing and deadlines differ across programs, the most useful approach is to shortlist the rows that match your profile, then verify full eligibility, required materials, and current terms on the sponsor page. That makes it easier to find Oklahoma opportunities worth pursuing instead of treating every result as interchangeable.",
+  "related_intro": "If these Oklahoma financial need listings feel too narrow, related pages can help you explore nearby options by changing one filter at a time, such as location, award range, or broader scholarship themes. That is often the fastest way to compare similar USA opportunities without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across rows first",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award wording and eligibility before you apply"
+  ],
+  "who_for": [
+    "Oklahoma applicants with demonstrated financial need",
+    "High school seniors comparing local scholarship options",
+    "US citizens reviewing Oklahoma-based aid opportunities",
+    "Students in education, STEM, arts, medicine, or law fields"
+  ],
+  "faq": [
+    {
+      "question": "Who is this scholarship list most useful for?",
+      "answer": "These rows are most relevant for applicants looking for USA scholarships tied to Oklahoma and financial need, including some listings aimed at high school seniors. You may also see programs connected to areas like education, STEM, arts, medicine, and law."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—this catalog slice lets you compare the basic details side by side before you explore a program further. Award amounts vary by listing, and deadlines differ by program, so check each official page carefully and act promptly if a date is coming up soon."
+    },
+    {
+      "question": "Are all of these Oklahoma scholarships open to the same major or study level?",
+      "answer": "No. This focused set of listings includes different study interests and backgrounds, with sample fields such as education, engineering, business, communication, and visual and performing arts, plus some listings for high school seniors. Always read the individual requirements before you apply."
+    },
+    {
+      "question": "Do these scholarships all have the same application requirements?",
+      "answer": "No—requirements can differ across the programs below. Some may be comparatively lighter-touch, while others may ask for more materials, so use the catalog to browse and compare, then confirm the full application steps on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 20,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 20,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 20,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 19,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "agriculture_and_related_sciences",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Muscogee (Creek) Nation of Oklahoma",
+        "count": 13
+      },
+      {
+        "name": "American Association of Drilling Engineers-Mid-Continent Chapter",
+        "count": 2
+      },
+      {
+        "name": "National Kidney Foundation Serving Western Missouri, Kansas and Oklahoma",
+        "count": 1
+      },
+      {
+        "name": "Oklahoma CareerTech Foundation",
+        "count": 1
+      },
+      {
+        "name": "Oklahoma City Community Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "arts",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "biology"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/oklahoma",
+    "generatedAt": "2026-04-26T14:23:08.891Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 20,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

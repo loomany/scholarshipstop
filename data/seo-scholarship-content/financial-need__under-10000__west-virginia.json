@@ -1,0 +1,115 @@
+{
+  "seo_title": "Find Financial Need Scholarships in West Virginia, USA",
+  "seo_description": "Financial need scholarships in West Virginia, USA: compare smaller-award programs, review varying deadlines, and apply on official pages.",
+  "intro": "Trying to find West Virginia scholarships tied to financial need without wading through higher-price awards? This filtered slice narrows the search to USA listings with smaller award ranges, so you can compare options that may still help cover books, fees, supplies, or other education costs. The programs below are not all the same: award amounts vary by listing, deadlines differ by row, and eligibility details can change from one scholarship to the next. Many entries in this view appear to have lighter application signals, and many listings often show no essay in the available metadata, but you should still read each requirement line carefully before you apply. If you are building a practical shortlist for the current cycle, it is worth checking these rows promptly.",
+  "h1": "Explore Financial Need Scholarships in West Virginia USA",
+  "supporting": "Use this list to compare more than the scholarship title alone. Look at the requirement summary, the deadline text, the study level, and any field or category tags such as education, STEM, community, arts, or medicine. Some West Virginia opportunities in this slice may fit broad academic paths, while others are more specific. Open the official page for every program you plan to pursue, verify the latest rules, and compare what each award actually asks for before you submit anything.",
+  "related_intro": "If these West Virginia financial-need listings feel too narrow, related pages can help you compare nearby scholarship slices by location, award range, or broader need-based options across the USA catalog. That is a useful next step when you want to find similar programs with different requirement mixes.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
+  ],
+  "who_for": [
+    "West Virginia applicants with financial need",
+    "High school seniors starting a scholarship shortlist",
+    "US citizens comparing smaller award programs",
+    "Students interested in education, STEM, community, arts, or medicine listings"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship from this list?",
+      "answer": "Usually, you can explore multiple listings and apply to any programs you independently qualify for, but each scholarship sets its own rules. Check the official source for residency, study level, and any field-of-study requirements before submitting applications."
+    },
+    {
+      "question": "What should I compare when I browse these USA scholarship listings?",
+      "answer": "Focus on the amount listed, the deadline shown in each row, and whether the scholarship is tied to categories like education, STEM, community, arts, or medicine. In this West Virginia slice, amounts vary by listing and should always be verified on the official page."
+    },
+    {
+      "question": "Do these scholarships usually require essays?",
+      "answer": "Many listings in this catalog slice appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements can change row to row, so verify the application steps on the official scholarship source before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 3500,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-04-10"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "personal_and_culinary_services",
+        "security_and_protective_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Cumberland Valley Volunteer Firemen's Association",
+        "count": 2
+      },
+      {
+        "name": "Eastern West Virginia Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "College Foundation of West Virginia",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Fayette County",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "community",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/west-virginia",
+    "generatedAt": "2026-04-26T14:26:57.337Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

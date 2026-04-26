@@ -1,0 +1,115 @@
+{
+  "seo_title": "Find Engineering Need-Based Scholarships in Massachusetts, USA …",
+  "seo_description": "USA scholarships: Engineering scholarships in Massachusetts for students with financial need. Compare deadlines, award details, and requirements, then apply on…",
+  "intro": "Trying to find engineering scholarships in Massachusetts that also consider financial need usually means balancing fit, timing, and effort. This filtered USA view narrows the search to a focused set of listings so you can compare programs that sit at the intersection of need-based eligibility, engineering-related study, and Massachusetts location. The rows here are not all identical: award amounts vary by listing, deadlines differ by program, and eligibility details can shift around study level, residency, or field wording. Many entries in this slice appear to have lighter application signals, and some may not require an essay, but every requirement still needs a careful read on the official source before you apply.",
+  "h1": "Find Need-Based Engineering Scholarships in Massachusetts USA …",
+  "supporting": "Use this list to compare more than the scholarship title alone. Check how each row describes engineering or broader STEM fit, then read the requirement lines for financial need language, Massachusetts ties, and any study-level or residency details. Because deadline text varies across these programs and some dates may be coming up soon, it is worth opening the official pages promptly. If award information matters to your shortlist, compare the listing details side by side and verify current terms directly with the sponsor before you submit anything.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you widen or tighten the search. You may want to explore other engineering scholarship filters, Massachusetts-focused options, or broader financial need listings in the USA catalog to compare nearby matches.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line for financial need wording",
+    "Open the official page to verify eligibility details",
+    "Shortlist listings by engineering fit, location, and effort",
+    "Check award terms carefully because amounts vary by program"
+  ],
+  "who_for": [
+    "Massachusetts students seeking engineering funding with financial need considerations",
+    "High school seniors planning an engineering or STEM path",
+    "Applicants comparing need-based scholarships with Massachusetts location relevance",
+    "Students who want engineering-related listings that may have lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find engineering scholarships in Massachusetts for students with financial need?",
+      "answer": "Use this filtered view to compare the programs below, then open each listing and verify eligibility on the official source. In this USA-focused slice, details like study level, residency, and field fit can vary row to row."
+    },
+    {
+      "question": "Can I apply if I am not a Massachusetts resident or not a U.S. citizen?",
+      "answer": "Possibly—requirements differ by listing. Some rows in this catalog include labels such as U.S. citizen, U.S. permanent resident, or international student, so check each official page before you apply."
+    },
+    {
+      "question": "What should I compare before I apply to these scholarships?",
+      "answer": "Compare eligibility, field of study, study level, award amount, and deadline for each row. Amounts vary by listing, and official pages are the place to confirm current rules and application steps."
+    },
+    {
+      "question": "Are these listings mostly essay-based, or can I explore lighter-touch applications?",
+      "answer": "Many listings in this slice appear to have no essay flag in the catalog, and some may be comparatively lighter-touch. Still, always verify requirements on the official scholarship page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 7500,
+      "minUsd": 1000,
+      "maxUsd": 40000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-11",
+        "2026-04-10",
+        "2026-05-08"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "physical_sciences",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Cell Signaling Technology",
+        "count": 1
+      },
+      {
+        "name": "Licensed Site Professional Association",
+        "count": 1
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 1
+      },
+      {
+        "name": "The Philanthropic Initiative",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/engineering/massachusetts",
+    "generatedAt": "2026-04-26T13:46:56.592Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

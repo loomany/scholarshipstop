@@ -1,48 +1,111 @@
 {
-  "seo_title": "Pennsylvania Scholarships for African American Students",
-  "seo_description": "Explore 6 scholarships for African American students in Pennsylvania with awards up to $5,000. Check deadlines and requirements.",
-  "intro": "Finding financial support tailored for African American students in Pennsylvania can significantly ease the burden of educational costs. This catalog features 6 scholarships specifically aimed at this demographic, with award amounts ranging from approximately $250 to $5,000. Each scholarship has varying requirements and deadlines, so it’s important to review them closely to identify the best fit for your situation.",
-  "h1": "African American Scholarships in Pennsylvania",
-  "supporting": "As you explore this list, consider comparing the award sizes and categories, which include STEM, education, and community-focused opportunities. Many of these scholarships do not require essays, making them more accessible. Keep an eye on the deadlines, as they vary and some are approaching quickly, ensuring you don’t miss out on potential funding.",
-  "related_intro": "If you're interested in similar opportunities, check out our listings for scholarships that cater to different backgrounds or fields of study.",
+  "seo_title": "Find African American Scholarships in Pennsylvania, USA",
+  "seo_description": "African American scholarships in Pennsylvania, USA with a focused set of listings to compare. Explore awards, check varying deadlines, and apply.",
+  "intro": "Trying to find African American scholarships in Pennsylvania usually means sorting through programs that mix local eligibility with very different academic interests. This filtered USA view brings those Pennsylvania-focused listings together so you can compare options tied to education, STEM, community, medicine, and related paths without jumping between unrelated results. Awards in these rows vary by listing, and deadlines differ as well, with some opportunities appearing fairly soon, so it makes sense to check dates promptly. Many listings in this slice also appear to have lighter application requirements, and several may not require an essay, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Apply for African American Scholarships in Pennsylvania USA",
+  "supporting": "A smart way to use this set is to compare more than the title alone. Look at study level, field of study, residency or citizenship language, and the exact requirement lines for each program. In this Pennsylvania slice, you can find listings that lean toward education as well as options connected to engineering, health professions, and broader community or STEM themes. Award amounts are listed row by row and can differ noticeably, so it is worth opening several programs side by side before you decide which ones to prioritize.",
+  "related_intro": "If you do not find enough matches here, check nearby related pages by changing one filter at a time. You may want to explore other Pennsylvania scholarship categories or compare this African American filter with broader USA eligibility and subject-based listings to find additional fits.",
   "how_to_use": [
-    "Compare deadlines to prioritize applications",
-    "Scan award amounts to identify suitable funding",
-    "Read the requirements carefully for each listing",
-    "Open official pages for detailed scholarship information",
-    "Shortlist scholarships that align with your goals"
+    "Compare deadline text across the rows first, since some programs may close soon",
+    "Scan each listing for study level, field of study, and Pennsylvania eligibility details",
+    "Check the award amount on every row, then compare value against the effort required to apply",
+    "Open the official scholarship page to verify requirements, essay expectations, and current terms",
+    "Shortlist the best-fit programs and apply to the strongest matches before dates pass"
   ],
   "who_for": [
-    "African American students in Pennsylvania",
-    "Students pursuing STEM or medical fields",
-    "Undergraduates seeking community-focused scholarships",
-    "Individuals looking for lighter application requirements",
-    "Those needing financial support for education"
+    "African American applicants looking for scholarship options connected to Pennsylvania",
+    "Pennsylvania students comparing education, STEM, medicine, and community-focused awards",
+    "High school seniors, college students, and graduate students checking study-level fit",
+    "US citizen applicants who want to find listings with potentially lighter application requirements"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for African American students in Pennsylvania?",
-      "answer": "This collection features six scholarships specifically for African American students in Pennsylvania, covering various categories such as STEM, education, community, and medicine. Each listing may have different eligibility criteria and award amounts, so it's important to review each one closely."
+      "question": "How can I find African American scholarships in Pennsylvania that fit my background or major?",
+      "answer": "Use this filtered view to compare the rows by category, study level, location, and any listed field of study. In this Pennsylvania set, you may see themes like education, STEM, community, and medicine, but always confirm eligibility on the official scholarship page before you apply."
     },
     {
-      "question": "How can I find specific details about each scholarship?",
-      "answer": "You can click on each scholarship listing to view detailed information, including award amounts and deadlines. Note that while many of these scholarships do not require essays, it's best to verify the specifics for each program as requirements can vary."
+      "question": "Can I apply if I’m in high school, college, or graduate school?",
+      "answer": "Possibly—these listings span multiple study levels, including high school senior, college, and graduate student examples. Check each row carefully, since eligibility differs by program and the official source is the final word."
     },
     {
-      "question": "Are there upcoming deadlines I should be aware of?",
-      "answer": "Yes, all six scholarships listed have deadlines, with at least one approaching within the next 45 days. Be sure to check the deadline for each scholarship individually to ensure you submit your application on time."
+      "question": "Do these Pennsylvania scholarships have the same deadline or award amount?",
+      "answer": "No—deadlines and award amounts vary by listing, so compare each row instead of assuming one rule for the whole page. Amounts in this slice range across the listings, and dates differ, with some deadlines appearing soon, so verify details promptly on official pages."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The award amounts for the scholarships in this category vary, with some offering as little as $250 and others up to $5,000. It's advisable to look at each listing for the specific amount and any additional details."
+      "question": "Are essay requirements common on this scholarship list?",
+      "answer": "Many listings in this filtered set appear to have no essay flagged in the catalog, which may make them quicker to explore. Still, requirements can change row to row, so review the official application instructions before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 5000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 16,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-18",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "POISE Foundation",
+        "count": 5
+      },
+      {
+        "name": "Pennsylvania Black Conference on Higher Education",
+        "count": 1
+      },
+      {
+        "name": "Philadelphia Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "african-american/pennsylvania",
-    "generatedAt": "2026-04-02T11:06:34.245Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 6,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:24:09.662Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

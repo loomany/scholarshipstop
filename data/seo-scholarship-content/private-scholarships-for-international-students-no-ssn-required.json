@@ -1,43 +1,136 @@
 {
-  "seo_title": "Explore 196 Private Scholarships for International Students Without SSN",
-  "seo_description": "Discover 196 private scholarships available for international students that do not require a Social Security Number.",
-  "h1": "Private Scholarships for International Students No SSN Required",
-  "intro": "Navigating the world of scholarships can be particularly challenging for international students, especially when many require a Social Security Number (SSN). Fortunately, there are 196 private scholarships specifically designed for international students that do not have this requirement. These scholarships can help alleviate the financial burden of tuition and living expenses while studying abroad. Whether you are pursuing undergraduate or graduate studies, you can find opportunities that align with your academic goals and personal background. From merit-based awards to need-based grants, there are various options available to support your educational journey.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited institutions. Some scholarships may focus on specific fields of study, while others may prioritize students from certain countries or backgrounds. Be sure to check the application deadlines, which can range from early spring to late summer, depending on the scholarship. When applying, pay close attention to the required documents, such as transcripts, letters of recommendation, and personal statements. Tailoring your application to highlight your unique experiences and aspirations can significantly enhance your chances of securing funding.",
-  "related_intro": "In addition to private scholarships, international students can explore various funding options, including government grants, university-specific awards, and external fellowships.",
+  "seo_title": "Find Private Scholarships for International Students | USA",
+  "seo_description": "Private scholarships for international students with no SSN required in the USA. Compare deadlines, award details, and apply from official listings.",
+  "intro": "Trying to find private scholarships in the USA that international students can apply for without an SSN usually means sorting through mixed eligibility language fast. This filtered slice narrows that search to a focused set of listings where you can compare private programs tied to international student access and review requirement details row by row. Awards vary widely across the listings, and deadlines differ by program, so it is worth checking each entry closely rather than assuming one pattern fits all. You will also see a mix of subject areas, including education, STEM, community, medicine, arts, and other categories, plus different study levels from high school through graduate options.",
+  "h1": "Apply for Private Scholarships Without an SSN USA",
+  "supporting": "Use the rows below to compare more than just the title. Scan the requirement line for citizenship or residency wording, note whether essay expectations appear to be lighter or more involved, and read category tags to spot programs connected to your academic path. Some listings may look broad, while others are clearly tied to education, engineering, health fields, business, or language studies. Before you apply, open the official page for every scholarship you shortlist and verify eligibility, award details, and deadline language directly with the provider.",
+  "related_intro": "If this set feels close but not exact, related pages can help you refine the search by topic, study level, or other eligibility signals. That is useful when you want to compare broader international student options in the USA against this more specific no SSN required filter.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary documents for your application.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline wording across the rows",
+    "Read each requirement line closely",
+    "Open official pages before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
   ],
   "who_for": [
-    "International students seeking financial assistance.",
-    "Students without a Social Security Number.",
-    "Those pursuing undergraduate or graduate studies."
+    "International students seeking USA private scholarships without SSN barriers",
+    "Applicants comparing private funding across education and STEM categories",
+    "Graduate or college applicants reviewing mixed eligibility language carefully",
+    "Students looking for scholarship options across arts, community, or medicine"
   ],
   "faq": [
     {
-      "question": "Do I need an SSN to apply for these scholarships?",
-      "answer": "No, these scholarships are specifically for international students who do not have a Social Security Number."
+      "question": "Can I apply for scholarships here if I’m an international student in the USA and don’t have an SSN?",
+      "answer": "That’s the point of this filtered view: it surfaces private scholarship listings tied to international-student eligibility and a no-SSN-required search intent. Always open each row and verify the exact eligibility rules on the official scholarship page before you apply."
     },
     {
-      "question": "What types of scholarships are available?",
-      "answer": "There are various types, including merit-based, need-based, and field-specific scholarships."
+      "question": "How do I find and compare the best options on this page?",
+      "answer": "Use the rows to compare study level, category, field of study, deadline text, and any listed award details. Amounts and requirements vary by listing, so confirm the latest terms on official sources before you choose where to apply."
     },
     {
-      "question": "How do I find the right scholarship for me?",
-      "answer": "Review the eligibility criteria and application requirements to find scholarships that match your background and goals."
+      "question": "Do all scholarships on this page have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and this filtered set includes a wide range of listed award amounts. Check dates promptly, because some rows appear to close relatively soon, and verify every amount on the official page."
+    },
+    {
+      "question": "Will I need to write an essay for every scholarship in this list?",
+      "answer": "Not necessarily; essay requirements appear mixed across these listings. When you browse and compare options, review each scholarship’s requirements carefully because some may be lighter-touch while others ask for more materials."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filter?",
+      "answer": "The programs below span categories such as Education, STEM, Miscellaneous, Community, Medicine, and Arts, with sample fields including education, business, engineering, English, and health professions. Study levels also vary, so check each listing to find matches for your current level and plans in the USA."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "private-scholarships-for-international-students-no-ssn-required",
-    "generatedAt": "2026-04-25T13:29:41.927Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:02:01.556Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

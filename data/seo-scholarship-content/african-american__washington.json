@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find African American Scholarships in Washington, USA",
+  "seo_description": "African American scholarships in Washington, USA—compare deadlines, award details, and requirements, then apply on the official program pages.",
+  "intro": "Trying to find African American scholarships in Washington usually means narrowing past broad national results and getting to programs that match both identity and place. This filtered USA view brings together a focused set of listings tied to Washington, with themes that show up around education, community, and broader miscellaneous support. As you compare the rows below, expect award amounts, deadlines, and eligibility details to vary by program rather than follow one pattern. Many listings in this slice appear to have lighter application signals, and some may often be no essay, but you should still read each requirement line carefully before you apply. If you are searching for opportunities for high school seniors or early college study, this is a practical place to start.",
+  "h1": "Compare African American Washington Scholarships USA",
+  "supporting": "Use this list to compare more than the title alone. Check how each scholarship describes eligibility, location fit, study level, and any field cues such as education or communication and journalism. Because deadlines differ across these listings, it is smart to review date text early and open the official page for the most current rules. Award amounts also vary by listing and should be verified on sponsor pages before you apply. A short, focused slice like this can be worth scanning closely because small differences in wording often decide whether a program is a strong match.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing either the Washington location filter or the African American eligibility filter. That can help you find related USA listings with different study levels, category themes, or requirement styles.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read the requirement line before applying",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award wording and location fit carefully"
+  ],
+  "who_for": [
+    "African American students in Washington",
+    "Washington high school seniors planning college",
+    "Early college students comparing local eligibility",
+    "Applicants interested in education or community themes"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply if I’m a high school senior or already in college?",
+      "answer": "Some listings in this catalog slice show study levels such as high school senior and college. Always verify the exact level, residency, and any other requirements on the official scholarship page before you apply."
+    },
+    {
+      "question": "What should I compare before I apply to these Washington scholarships?",
+      "answer": "Compare eligibility, study level, category, deadline, and any application requirements row by row. Award amounts vary by listing, and while some rows in this slice show smaller to moderate awards, you should confirm the current amount on the official source."
+    },
+    {
+      "question": "Are there scholarships here for specific majors or interests?",
+      "answer": "Yes—this filtered set includes themes like education, community, and miscellaneous, and sample fields shown in the catalog include education and communication and journalism. Use those clues to explore relevant rows, then confirm the exact major or field rules on the provider’s page."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this slice appear to have lighter application signals, and several sampled rows flag no essay. Still, requirements can change, so check each official listing before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 4500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-31",
+        "2026-04-10",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_1",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Delta Sigma Theta Sorority-Seattle Alumnae Chapter",
+        "count": 1
+      },
+      {
+        "name": "POISE Foundation",
+        "count": 1
+      },
+      {
+        "name": "Public Relations Society of America-Puget Sound Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/washington",
+    "generatedAt": "2026-04-26T13:29:09.321Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

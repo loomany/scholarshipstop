@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find Financial Need Scholarships Under Ten Thousand in South Dak…",
+  "seo_description": "Financial need scholarships under ten thousand in South Dakota, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to apply for South Dakota scholarships tied to financial need without wading through high-dollar national awards? This filtered USA view narrows the search to programs listed under ten thousand dollars, so you can find options that may be more realistic to compare side by side. In these rows, award amounts vary by listing and should always be verified on the official page, and deadlines differ by program rather than following one shared date. Many listings in this slice appear to have no essay in the catalog data, and some may have lighter requirement signals, but you should still read each requirement line carefully before you apply. Categories represented here include community, education, miscellaneous, and disability, with some examples connected to graduate study and fields such as education or construction trades.",
+  "h1": "Compare Financial Need Scholarships in South Dakota USA",
+  "supporting": "A focused set of listings like this is useful when you want to compare smaller scholarship programs by fit instead of chasing one broad search term. As you browse, look at how each row combines financial-need eligibility with South Dakota relevance, then compare category tags, study level clues, and field-of-study mentions. Because the deadline text in this slice varies and at least one listing appears to be coming up soon, it is smart to check dates promptly and open the official source before you rely on any summary details.",
+  "related_intro": "If these South Dakota financial-need scholarships under ten thousand dollars feel too narrow, related pages can help you widen the search by changing one filter at a time—such as location, award band, or eligibility theme—while keeping the same general intent.",
+  "how_to_use": [
+    "Compare each row for award wording, category tags, and South Dakota relevance before you shortlist anything",
+    "Read the requirement lines closely to confirm how financial need is defined for that specific program",
+    "Check deadline text row by row and act quickly on listings that appear to be approaching soon",
+    "Open the official scholarship page to verify amount, eligibility details, and application instructions before you apply"
+  ],
+  "who_for": [
+    "South Dakota applicants who want to find need-based scholarships with listed awards under ten thousand dollars",
+    "Graduate students checking smaller USA scholarship programs that may align with education or construction trades",
+    "Applicants comparing community, education, disability, or miscellaneous scholarship categories in one filtered view",
+    "Students who prefer to start with listings that often appear to have no essay, while still verifying each requirement"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines across these listings?",
+      "answer": "Yes—this slice lets you compare the rows side by side, but amounts and deadlines vary by program. In this catalog snapshot, listed awards in this set are in the low-thousands, and deadline text differs by row, so check each official page carefully."
+    },
+    {
+      "question": "Are these USA scholarships only for South Dakota students?",
+      "answer": "They are filtered to South Dakota in the USA catalog context, but the exact location rule can differ by listing. Some programs may focus on residents, while others may use South Dakota in another eligibility way, so confirm the official criteria before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filtered set?",
+      "answer": "The programs below include themes such as community, education, miscellaneous, and disability, with sample study-level and field signals like graduate student, education, and construction trades. Treat those as catalog clues for browsing, not universal rules for every row."
+    },
+    {
+      "question": "Are these scholarships usually quick to apply for?",
+      "answer": "Many listings in this slice appear to have no essay flagged in the catalog, and some show lighter requirement signals, but that is not a guarantee. Always review the official application page because required documents and steps can still vary from one program to another."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 4000,
+      "minUsd": 2000,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 2,
+      "rollingOrUnknown": 0,
+      "nearestDays": 21,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Boy Scouts of America-Northern Lights Council",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Bennett Clayton Foundation",
+        "count": 1
+      },
+      {
+        "name": "Western States Roofing Contractors Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/south-dakota",
+    "generatedAt": "2026-04-26T14:24:41.228Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

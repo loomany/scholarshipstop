@@ -41,9 +41,11 @@ export type SeoEnhancePriorFaq = {
 };
 
 const SHARED_RULES = `Hard rules:
-- **No digits anywhere** in your output fields (no 0–9, no $123, no “28 scholarships”, no years, no percentages). Scholarship counts, award amounts, and ranges are rendered live from the database in the page shell—your job is qualitative copy only.
+- Include intent phrasing naturally (apply, find, compare, browse, explore) where relevant.
+- Mention USA context where relevant for clarity.
+- It is allowed to mention the year 2026 when it helps search intent.
 - Facts: use ONLY what appears in the CONTEXT block for themes (filters, topics, sample titles). Never invent GPA rules, sponsor names, approval odds, or calendar dates not present in context.
-- Dollar amounts: never write $ or numeric award figures. Say that amounts and payout wording vary by listing and must be confirmed on the official program page.
+- Dollar amounts: do not invent award numbers. If needed, say amounts vary by listing and must be verified on official pages.
 - Deadlines: never fabricate a single deadline for the whole page; speak in generalities (“deadlines differ by program”) unless CONTEXT explicitly includes a dated fact you are quoting verbatim (still without adding new digits—prefer “vary by row”).
 - Tone: clear, practical, human, confident but not salesy. No keyword stuffing. Not robotic.
 - Avoid generic landing-page filler and “AI obvious” transitions.
@@ -62,9 +64,9 @@ export function buildSeoMetaPrompt(input: SeoPagePromptInput): string {
 
 ${SHARED_RULES}
 
-seo_title: compelling, under ~60 chars when possible, not identical to H1; **no digits**.
-seo_description: max ~155 chars; include utility + honest scope; **no digits** (no counts or dollar amounts).
-h1: short, intent-forward headline (often 42–62 chars); specific to THIS filter; **no digits** (no “N scholarships” in the headline).
+seo_title: 30–65 chars, compelling, not identical to H1; include keyword + intent + USA and/or 2026 when natural.
+seo_description: 120–160 chars; use structure: keyword + benefit + CTA; avoid fabricated stats.
+h1: short, intent-forward headline (30–65 chars); specific to THIS filter.
 
 --- CONTEXT ---
 ${input.contextBlock}
@@ -98,7 +100,8 @@ Goals:
 
 Hard rules:
 - Facts only from CONTEXT. No fake GPA, sponsors, odds, or calendar dates.
-- No dollar figures or digits in meta fields.
+- seo_title and h1 must be 30–65 chars.
+- seo_description must be 120–160 chars and include keyword + benefit + CTA.
 
 --- CONTEXT ---
 ${input.contextBlock}
@@ -284,11 +287,11 @@ Return JSON only:
 }
 
 export function buildSeoFaqPrompt(input: SeoPagePromptInput): string {
-  return `Write 2–4 FAQ items for this scholarship FILTER page (not a single program).
+  return `Write 3–5 FAQ items for this scholarship FILTER page (not a single program).
 
 ${SHARED_RULES}
 
-Each answer: 2–4 sentences, practical, grounded in “catalog + official sources” framing. **No digits** (no counts, $, years, or GPA numbers). Prefer guidance on how to use the list, what varies row-to-row, and how to verify details.
+Each answer: 1–3 short sentences, practical, grounded in “catalog + official sources” framing. Prefer guidance on how to use the list, what varies row-to-row, and how to verify details.
 
 --- CONTEXT ---
 ${input.contextBlock}
@@ -314,9 +317,8 @@ export function buildSeoEnhanceFaqPrompt(
 ${priorBlock}
 
 Rules:
-- **No digits** in questions or answers.
 - Keep practical “how to use this list” framing.
-- 2–4 items; each answer 2–4 sentences.
+- 3–5 items; each answer 1–3 short sentences.
 
 ${SHARED_RULES}
 

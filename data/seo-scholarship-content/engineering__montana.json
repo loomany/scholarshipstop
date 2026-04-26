@@ -1,48 +1,103 @@
 {
-  "seo_title": "Montana Engineering Scholarships | Find Your Funding",
-  "seo_description": "Explore 4 engineering scholarships in Montana with awards from $1,000 to $5,000. Check varying deadlines and requirements.",
-  "intro": "Finding financial support for engineering studies in Montana can be a key step toward achieving your academic goals. This selection features 4 scholarships specifically aimed at students pursuing engineering, with award sizes generally ranging from $1,000 to $5,000. Keep in mind that deadlines and requirements vary, so it's important to review each opportunity carefully to see which ones align with your situation.",
-  "h1": "Engineering Scholarships in Montana",
-  "supporting": "As you explore these listings, consider comparing the award amounts and the specific eligibility criteria. Some scholarships may require essays, while others might have lighter requirements. This diversity means you can find options that best fit your strengths and application style. Make sure to verify details directly on the sponsor's site to ensure you have the most accurate information.",
-  "related_intro": "If you're interested in more opportunities, check out related pages that focus on STEM scholarships or other funding options in Montana.",
+  "seo_title": "Find Engineering Scholarships in Montana, USA",
+  "seo_description": "Engineering scholarships in Montana, USA: compare programs, review varying requirements and deadlines, and apply through official listings.",
+  "intro": "Trying to find engineering scholarships in Montana usually means narrowing a broad USA search into a smaller set you can actually compare. This filtered slice brings together Montana-focused listings tied to engineering, with some overlap in STEM and related categories. The programs below do not follow one pattern: award amounts vary by listing, deadlines differ by row, and requirements can be lighter for some options while others may ask for more materials, including essays. Because at least some deadlines appear relatively soon, it makes sense to review this set promptly, then apply based on fit rather than assuming every scholarship here works the same way.",
+  "h1": "Find Engineering Scholarships in Montana USA",
+  "supporting": "Use these rows to compare the details that matter most before you apply. Look at the title, category tags, study level cues, and any requirement notes to see which listings match your situation in Montana. This slice is worth scanning closely because it mixes college and high school pathways and may include programs with different application effort levels. When you find a strong match, open the official page to verify current eligibility, award information, and deadline wording before you shortlist it.",
+  "related_intro": "If this Montana engineering set feels too narrow, related pages can help you compare nearby angles, such as broader engineering results or other scholarship categories that appear alongside these listings. That is useful when you want more options without losing the USA context of your search.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Scan award amounts to prioritize applications",
-    "Read through eligibility requirements carefully",
-    "Open official pages for complete details",
-    "Shortlist scholarships that match your profile"
+    "Compare each row for deadline wording and requirement differences",
+    "Read the eligibility and essay details carefully",
+    "Open the official scholarship page to verify current information",
+    "Shortlist the listings that best match your study level and location"
   ],
   "who_for": [
-    "Engineering students in Montana",
-    "Students seeking STEM-related funding",
-    "High school seniors planning to study engineering",
-    "Undergraduate engineering majors",
-    "Students with disabilities pursuing engineering"
+    "Montana students planning to study engineering",
+    "High school seniors in Montana reviewing engineering funding options",
+    "Applicants comparing STEM-tagged scholarships with engineering relevance",
+    "Students who want Montana-based listings before applying nationally"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Montana?",
-      "answer": "There are currently 4 scholarships listed specifically for engineering students in Montana. These scholarships cover various categories, including STEM, disability, and biology, providing a range of opportunities tailored to different needs."
+      "question": "How can I find engineering scholarships in Montana that fit my situation?",
+      "answer": "Use this filtered view to compare the Montana rows first, then open the official scholarship pages to confirm eligibility, study level, and required materials. In this USA catalog slice, details vary by listing, so it helps to check each row rather than assume the same rules apply across all programs."
     },
     {
-      "question": "How can I find out the specific deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, so it's important to check the details for each listing. At least one of the scholarships has a deadline approaching within the next 45 days, so reviewing the dates promptly is advisable."
+      "question": "Can I apply to more than one engineering scholarship listed here?",
+      "answer": "You may be able to apply to multiple programs if you meet each listing’s requirements, but you need to verify that on the official source for every scholarship. This catalog is best used to find and compare options; application rules are set by the individual programs."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. Some may require essays while others do not, so be sure to verify the specific requirements for each scholarship you are interested in."
-    },
-    {
-      "question": "What is the typical award size for these engineering scholarships?",
-      "answer": "The award sizes for the scholarships in this category generally range from approximately $1,000 to $5,000. However, it's best to check each scholarship's details for the exact amounts."
+      "question": "Are these scholarships only for college engineering students in Montana?",
+      "answer": "Not necessarily. The programs below can differ by study level, and this slice includes examples tied to both college and high school senior audiences, so it’s important to compare each row carefully."
     }
   ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-10",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "business_management_and_marketing",
+        "mathematics_and_statistics"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Society of Petroleum Engineers-Billings Section",
+        "count": 2
+      },
+      {
+        "name": "Pacific Forest Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Mikkelson Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/montana",
-    "generatedAt": "2026-04-02T10:54:55.134Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:38:39.241Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

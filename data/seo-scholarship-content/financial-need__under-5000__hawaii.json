@@ -1,0 +1,121 @@
+{
+  "seo_title": "Find Hawaii Financial Need Scholarships | USA",
+  "seo_description": "Hawaii financial need scholarships under five thousand in the USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Hawaii scholarships for applicants with financial need often means sorting through smaller awards that can still make a real difference. This filtered USA view pulls together a focused set of listings tied to Hawaii and capped under five thousand dollars, so you can compare options without mixing in larger national awards that may not fit what you want to apply for right now. Across these rows, award amounts, deadlines, and requirements vary by program, and the official listing details matter. You’ll see a mix of categories such as education, disability, community, medicine, and STEM, with examples that reach high school seniors and graduate students. Some listings may be lighter-touch to apply for, while others may ask for more documentation or an essay, so it’s worth checking each row closely.",
+  "h1": "Explore Hawaii Financial Need Scholarships USA",
+  "supporting": "Use this slice to compare more than just the award line. Look at who the scholarship is meant for, how Hawaii is used in the eligibility rules, and whether the subject area matches your plans in education, engineering, business, construction trades, or visual and performing arts. Because deadlines differ across the programs below and at least some appear to be coming up soon, it makes sense to review date fields early. Amounts vary by listing and should always be verified on the official page before you apply.",
+  "related_intro": "If you do not find enough matches here, related pages can help you widen or narrow the search by changing the Hawaii location filter, keeping financial need while adjusting the award range, or comparing this under-five-thousand slice with nearby scholarship categories.",
+  "how_to_use": [
+    "Compare the deadline field on each row first, since dates vary and some programs may close soon",
+    "Scan the award text and requirement lines to see which listings fit your financial need, study level, and field",
+    "Open the official scholarship page for every program you shortlist and verify eligibility, materials, and award details",
+    "Browse across categories in this filtered view to catch relevant options outside your main major or expected scholarship type"
+  ],
+  "who_for": [
+    "Hawaii applicants who want to find smaller scholarship awards tied to financial need",
+    "High school seniors in the USA comparing local or Hawaii-linked scholarship options before they apply",
+    "Graduate students looking for Hawaii scholarship listings with manageable award ranges and varied subject areas",
+    "Students interested in education, engineering, medicine, community, or arts-related opportunities connected to Hawaii"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Hawaii scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Hawaii scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Hawaii scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 12,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 12,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 19,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-04-29",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Hawaii Education Association",
+        "count": 3
+      },
+      {
+        "name": "Hawai'i Lodging and Tourism Association",
+        "count": 2
+      },
+      {
+        "name": "American Association of Airport Executives-Southwest Chapter",
+        "count": 1
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southern California Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "disability",
+      "community",
+      "miscellaneous",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/hawaii",
+    "generatedAt": "2026-04-26T14:30:48.826Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 12,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

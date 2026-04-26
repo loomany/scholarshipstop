@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find Oregon High School Need-Based Scholarships | USA",
+  "seo_description": "Oregon high school financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find USA scholarships for Oregon high school students with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered slice brings those factors together so you can apply with more focus, compare options faster, and spot programs that match your situation. The rows below include a mix of education, community, medicine, disability, miscellaneous, and STEM themes, with examples that range from local Oregon community listings to broader regional opportunities. Awards vary by listing, deadlines differ by program, and requirements are not identical across the set. Some entries may be lighter-touch, while others ask for more documentation or written materials, so it is worth checking each row carefully before you move ahead.",
+  "h1": "Find Oregon High School Need-Based Scholarships USA",
+  "supporting": "Use this list to compare more than the title alone. Read the requirement lines for residency, study level, and any essay or supporting material notes, then open the official page to verify the current rules. It is also smart to scan deadline text early, since some programs in this Oregon-focused set may close sooner than expected. If you are deciding where to spend your time, compare award wording, topic fit, and how closely each listing matches your background before you shortlist and apply.",
+  "related_intro": "If these Oregon financial need scholarships for high school applicants feel too narrow or too broad, related pages can help you compare nearby filter combinations. You may want to explore other Oregon scholarship categories, more high school listings across the USA, or financial need pages that surface different topic mixes.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line for residency and study level",
+    "Check whether essays or extra materials are mentioned",
+    "Open the official page to verify award details and rules",
+    "Shortlist the listings that best match your background"
+  ],
+  "who_for": [
+    "Oregon high school students seeking need-based scholarship options",
+    "High school seniors in the USA comparing Oregon-focused aid listings",
+    "Applicants with financial need looking at community or education scholarships",
+    "Students reviewing Oregon opportunities tied to STEM, medicine, or disability themes"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Oregon scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare programs that match all three signals: Oregon, high school, and financial need. Then open each row and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here?",
+      "answer": "Not automatically—requirements vary by listing, even within this Oregon-focused set. Check each program’s official page for grade level, residency or citizenship language, and any extra conditions before you apply."
+    },
+    {
+      "question": "Do all of these scholarships have the same deadline or essay requirement?",
+      "answer": "No. Deadlines differ by program, and at least some listings may have lighter requirements while others may ask for more, including possible essays—verify row by row on the official source."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filtered set?",
+      "answer": "These rows span multiple themes seen in the catalog, including education, community, medicine, disability, miscellaneous, and STEM. If you want to browse more selectively, compare category labels and study-level cues in each listing before applying."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 2000,
+      "maxUsd": 10000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-05-01",
+        "April 30, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Oregon Chinese Consolidated Benevolent Association",
+        "count": 1
+      },
+      {
+        "name": "Oregon Sports Hall of Fame and Museum",
+        "count": 1
+      },
+      {
+        "name": "Pacific Northwest Vegetable Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "disability",
+      "medical",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/oregon",
+    "generatedAt": "2026-04-26T13:58:38.114Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

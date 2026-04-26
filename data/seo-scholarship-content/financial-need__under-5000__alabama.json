@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Alabama Financial Need Scholarships Under Five Thousand | U…",
+  "seo_description": "Alabama financial need scholarships under five thousand in the USA. Compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Alabama scholarships that consider financial need without wading through higher award tiers? This filtered USA view narrows the search to programs with listed awards under the stated cap, so you can compare a focused set of options more quickly. The rows below span areas such as STEM, education, community, and miscellaneous topics, with examples tied to college, graduate, and high school senior study levels. Requirements are not identical across listings: some may ask for more documentation, some appear lighter-touch, and essay expectations can differ by program. Award amounts, eligibility details, residency language, and deadlines vary by listing, so it makes sense to apply selectively and verify each scholarship on its official page.",
+  "h1": "Explore Alabama Financial Need Scholarships Under Five Thousand…",
+  "supporting": "A useful way to read this list is to compare more than the award line. Check how each Alabama scholarship frames financial need, who the intended applicants are, and whether the field of study matches your background in areas like education, business, communication, engineering, or law. Because deadline text appears across these rows and some dates may be approaching, it is smart to review timing early. Use this slice to find options worth shortlisting, then confirm the latest rules, materials, and award details directly with the sponsor before you apply.",
+  "related_intro": "If this Alabama set feels too narrow, related pages can help you compare nearby scholarship paths by changing one filter at a time, such as location, award range, or financial-need focus. That makes it easier to find similar USA listings without starting your search over.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and materials with the sponsor"
+  ],
+  "who_for": [
+    "Alabama applicants with documented financial need",
+    "High school seniors seeking smaller USA scholarship awards",
+    "College or graduate students comparing lower-amount Alabama programs",
+    "Students in STEM, education, business, communication, engineering, or law"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Alabama scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Alabama scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Alabama scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 2750,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 9,
+      "within60Days": 13,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "college_3",
+        "graduate_student",
+        "college_2",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "engineering",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alabama Dietetic Association",
+        "count": 3
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 2
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Alabama Library Association",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Birmingham Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/alabama",
+    "generatedAt": "2026-04-26T14:28:01.481Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,43 +1,127 @@
 {
-  "seo_title": "Explore Data Science Scholarships for International Students",
-  "seo_description": "Discover 5 data science scholarships available for international students. Apply now to advance your education and career!",
-  "h1": "Data Science Scholarships for International Students",
-  "intro": "Are you an international student aspiring to pursue a career in data science? You’re in luck! There are currently five scholarships designed specifically for students like you. These scholarships not only provide financial assistance but also open doors to networking opportunities and professional growth. Whether you’re interested in coding, computer science education, or innovative data solutions, there’s a scholarship that aligns with your goals. Explore these options to help fund your education and take a significant step towards your future in data science.",
-  "supporting": "To be eligible for these scholarships, applicants typically need to demonstrate academic excellence, a passion for data science, and sometimes, a commitment to community service or leadership. Deadlines vary, so it’s crucial to check each scholarship’s specific requirements and timelines. When applying, ensure your application stands out by highlighting relevant experiences, skills, and your vision for your future in data science. Tailor your essays to reflect your personal journey and how the scholarship will impact your educational path. Don’t forget to gather all necessary documents, including transcripts and letters of recommendation, to strengthen your application.",
-  "related_intro": "In addition to the scholarships listed, there are numerous other funding opportunities available for international students in various fields. Exploring these options can significantly enhance your educational experience.",
+  "seo_title": "Explore Data Science Scholarships for International Students USA…",
+  "seo_description": "Browse data science scholarships for international students in the USA. Compare deadlines, eligibility, and apply with official links today.",
+  "intro": "Trying to find data science scholarships for international students in the USA usually means comparing a focused set of listings with different rules, award ranges, and deadlines. This filtered view brings those options together so you can explore programs tied to data science and related STEM interests, review what each row asks for, and apply with more confidence. Award amounts vary by listing and should be verified on official pages, and deadlines differ across programs, so it helps to check dates promptly as some opportunities may close soon.",
+  "h1": "Data Science Scholarships for International Students USA Ap…",
+  "supporting": "Eligibility and application details vary across these scholarships. Some listings may emphasize academic achievement, leadership, community involvement, or broader STEM interests, while essay expectations can be mixed from one program to the next. As you compare options, focus on the exact criteria in each listing, tailor your materials to your background and goals, and confirm any required documents on the official scholarship page before you apply.",
+  "related_intro": "You can also explore related USA scholarship options for international students in adjacent fields if you want to widen your search.",
   "how_to_use": [
-    "Review the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare your application materials carefully.",
-    "Submit your applications before the deadlines.",
-    "Follow up on your application status if possible."
+    "Browse the filtered listings to find scholarships that match your study plans.",
+    "Compare eligibility, award details, and deadline language for each program.",
+    "Check whether essays or other supporting materials are required before you apply.",
+    "Prepare tailored application materials that reflect your experience and goals in data science.",
+    "Verify final requirements and submit through the official scholarship source before each deadline."
   ],
   "who_for": [
-    "International students pursuing data science degrees.",
-    "Students with a strong academic record.",
-    "Individuals passionate about technology and data analysis."
+    "International students planning to study data science or closely related STEM subjects in the USA.",
+    "Students with a strong academic background and relevant coursework or project experience.",
+    "Applicants interested in technology, analytics, coding, or data-driven problem solving."
   ],
   "faq": [
     {
-      "question": "What is the application process for these scholarships?",
-      "answer": "Each scholarship has its own application process, typically involving submission of an application form, essays, and supporting documents."
+      "question": "Who should apply for Data science scholarships for international students?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
     },
     {
-      "question": "Are there scholarships specifically for undergraduate or graduate students?",
-      "answer": "Yes, some scholarships may be targeted towards undergraduate students, while others are available for graduate students."
+      "question": "How do I check deadlines for Data science scholarships for international students?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
     },
     {
-      "question": "Can I apply for multiple scholarships at once?",
-      "answer": "Yes, you can apply for multiple scholarships, but ensure you meet the eligibility criteria for each."
+      "question": "What is the best application process for Data science scholarships for international students?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "data-science-scholarships-for-international-students",
-    "generatedAt": "2026-04-25T13:22:43.766Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 5,
+    "generatedAt": "2026-04-26T13:21:42.869Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "enhance"
   }
 }

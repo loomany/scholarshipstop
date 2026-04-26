@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Washington, US…",
+  "seo_description": "Financial need undergraduate scholarships in Washington, USA—compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find undergraduate scholarships in Washington that take financial need into account usually means balancing fit, timing, and effort at the same time. This filtered USA view brings together a focused set of listings tied to Washington and undergraduate study, with programs that span areas such as education, community, STEM, medicine, law, and other miscellaneous interests. As you compare options, expect the details to vary from row to row: award amounts differ, deadlines are not the same, and requirement lines may be lighter for some programs than others. Some listings may mention essays while others may not, so it is worth reading each entry closely before you apply.",
+  "h1": "Compare Financial Need Scholarships for Washington Undergrads US…",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Check how each listing describes eligibility, residency or citizenship language, study level, and any field of study notes that could affect your fit in Washington or the broader USA context. Because deadlines differ by program and some may be coming up soon, it helps to shortlist strong matches early, then open the official page to verify current requirements, award details, and application steps before you submit anything.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by a different location, broaden beyond Washington, or compare other undergraduate scholarship filters connected to financial need. That is often the fastest way to find adjacent programs worth applying to.",
+  "how_to_use": [
+    "Compare deadline text across listings",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the strongest matches before you apply"
+  ],
+  "who_for": [
+    "Washington undergraduates with financial need",
+    "College students comparing need-based options",
+    "Applicants seeking Washington-specific scholarship listings",
+    "Students in education, STEM, law, or community-focused paths"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Washington scholarships for undergraduates with financial need?",
+      "answer": "Use this filtered view to explore USA scholarship listings tagged for financial need, undergraduate study, and Washington. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts can range widely across listings, and deadlines differ by row, so compare carefully and check official sources before you apply."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or categories?",
+      "answer": "Not necessarily; this filtered set includes a mix of categories such as Education, Community, STEM, Medicine, Law, and Miscellaneous. You can browse and compare listings by topic, then confirm any field-of-study requirements on the sponsor's official page."
+    },
+    {
+      "question": "Do all Washington undergraduate financial-need scholarships require an essay?",
+      "answer": "No single rule applies across this page—requirements vary by listing. Some programs may be lighter-touch, while others may ask for essays or additional materials, so review each scholarship's official requirements before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 34,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 500,
+      "maxUsd": 25000,
+      "statedAmountCount": 34,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 27,
+      "within60Days": 32,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-05-01",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 30,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement",
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "legal_professions_and_law_studies",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of North Central Washington",
+        "count": 3
+      },
+      {
+        "name": "Jewish Social Service Agency of Metropolitan Washington",
+        "count": 3
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Rho Mu Omega Chapter",
+        "count": 2
+      },
+      {
+        "name": "Hebrew Free Loan Association of Washington State",
+        "count": 2
+      },
+      {
+        "name": "Washington Association of Wine Grape Growers",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/washington",
+    "generatedAt": "2026-04-26T14:57:03.161Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 34,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

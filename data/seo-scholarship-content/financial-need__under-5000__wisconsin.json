@@ -1,0 +1,120 @@
+{
+  "seo_title": "Find Wisconsin Financial Need Scholarships Under Five Thousand |…",
+  "seo_description": "Wisconsin financial need scholarships under five thousand: compare award ranges, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Wisconsin scholarships tied to financial need without wading through higher-award programs first? This filtered slice narrows the search to USA listings with smaller award ranges, which can be useful when you want to apply broadly, compare realistic options, and spot programs that may fit a gap in tuition, books, fees, or other school costs. The rows below span different categories, including community, education, STEM, medicine, and law, and they also vary by study level and field of study. Requirements are not identical across these listings, and some may be lighter-touch than others, so it is worth reading each row closely. Deadlines also differ by program, with some coming up sooner than you might expect.",
+  "h1": "Wisconsin Financial Need Scholarships Under Five Thousand USA …",
+  "supporting": "Use this view to compare more than just the award text. Check how each listing describes eligibility, location fit, study level, and subject area, then open the official page to verify the current rules before you apply. Because this Wisconsin set mixes broad community scholarships with more targeted education, health, engineering, mathematics, and physical sciences options, it is worth scanning beyond your exact major title. If you are building a shortlist for the USA scholarship cycle, pay attention to deadline wording, essay expectations, and any requirement lines that could quickly rule a program in or out.",
+  "related_intro": "If these Wisconsin financial-need scholarships feel too narrow or the award range is not the right fit, related pages can help you compare nearby filter combinations. You may want to explore other Wisconsin scholarship views, broader financial-need listings, or different award bands to find more programs that match your profile.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you shortlist",
+    "Open the official page to verify current details",
+    "Check award text and category labels together",
+    "Save a focused list of programs to apply for"
+  ],
+  "who_for": [
+    "Wisconsin applicants with documented financial need",
+    "High school seniors planning for college costs",
+    "College and graduate students comparing smaller scholarship awards",
+    "Students in education, health, engineering, mathematics, or physical sciences"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Wisconsin scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Wisconsin scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Wisconsin scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 29,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 29,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 22,
+      "within60Days": 26,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 25,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_4",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "architecture_and_related_services",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "CollegeReady",
+        "count": 16
+      },
+      {
+        "name": "Brewers Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Cooperative Institute for Meteorological Satellite Studies",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/wisconsin",
+    "generatedAt": "2026-04-26T14:43:03.659Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 29,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

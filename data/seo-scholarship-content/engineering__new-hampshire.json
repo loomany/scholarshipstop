@@ -1,48 +1,111 @@
 {
-  "seo_title": "Engineering Scholarships in New Hampshire",
-  "seo_description": "Explore 4 engineering scholarships in New Hampshire with varied requirements and award sizes. Check deadlines for each opportunity.",
-  "intro": "For engineering students in New Hampshire, there are four scholarships available that can help ease the financial burden of your education. These opportunities vary in award size, with amounts generally ranging from $1,000 to $2,500. As deadlines differ among the listings, it's important to check each one carefully, especially since some deadlines are approaching in the next few weeks. This collection of scholarships is tailored specifically for aspiring engineers, providing a valuable resource for funding your studies.",
-  "h1": "Find Engineering Scholarships in New Hampshire",
-  "supporting": "When reviewing these scholarships, pay attention to the specific requirements and essay prompts, as they can vary significantly. Some scholarships may require essays, while others do not, allowing for a more straightforward application process. This slice of scholarships is worth exploring not only for the potential financial support but also for the chance to connect with organizations invested in the engineering field in New Hampshire.",
-  "related_intro": "If you're interested in more opportunities, consider checking out related pages that focus on other STEM scholarships or additional funding options in New Hampshire.",
+  "seo_title": "Find Engineering Scholarships in New Hampshire, USA",
+  "seo_description": "Engineering scholarships in New Hampshire, USA with varied requirements and deadlines. Compare options and apply through the official program pages.",
+  "intro": "Trying to find engineering scholarships in New Hampshire usually means narrowing a broad USA search down to programs that match both your field and your location. This filtered view pulls together a focused set of engineering listings tied to New Hampshire, including options that sit within the wider STEM category. You can browse the rows to compare who each program appears to target, from high school seniors to graduate students, and check how closely each listing fits your academic path. Awards in this slice vary by listing, and the amounts shown here should always be verified on the official pages. Deadlines also differ by program, with at least some dates coming up relatively soon, so it makes sense to apply early where you qualify. Requirements are mixed as well, including essay expectations on some listings but not others.",
+  "h1": "Find Engineering Scholarships in New Hampshire USA",
+  "supporting": "A useful way to read this list is to compare more than the title alone. Look at the requirement lines, study level fit, and any field details that may point to engineering, mechanic and repair technologies, or adjacent areas. Because this New Hampshire engineering slice is compact, it is practical to open each row and quickly compare deadline text, award wording, and application steps side by side. Some listings may be lighter-touch than others, but you should still verify every detail on the sponsor or official scholarship page before you apply.",
+  "related_intro": "If you do not find enough matches in this New Hampshire engineering set, check nearby scholarship pages that widen one part of the search, such as broader engineering results or other New Hampshire scholarship categories. That makes it easier to compare local options against wider USA opportunities without losing your main focus.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Scan the award amounts for potential funding",
-    "Read through the requirement details carefully",
-    "Visit official scholarship pages for the most accurate information",
-    "Shortlist scholarships that align with your profile"
+    "Compare each row for study level, field wording, and New Hampshire relevance before you shortlist it",
+    "Read the requirement and essay details carefully, since expectations vary across these listings",
+    "Check deadline text on every listing and prioritize the programs with nearer closing dates",
+    "Open the official scholarship page for each option to verify award amounts, eligibility, and application instructions"
   ],
   "who_for": [
-    "Engineering students in New Hampshire",
-    "High school seniors pursuing engineering degrees",
-    "Undergraduate engineering majors",
-    "Students interested in STEM fields",
-    "Applicants looking for lighter essay requirements"
+    "New Hampshire students planning to study engineering and looking for USA scholarships with a local connection",
+    "High school seniors who want to find engineering-focused awards before choosing a college path",
+    "Graduate students comparing New Hampshire engineering funding options alongside broader STEM listings",
+    "Applicants in related technical areas who want to check whether a listing includes engineering-adjacent fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in New Hampshire?",
-      "answer": "There are currently 4 scholarships listed specifically for engineering students in New Hampshire. These opportunities generally fall under the STEM category and vary in terms of award amounts and requirements."
+      "question": "How can I find engineering scholarships in New Hampshire that fit my level of study?",
+      "answer": "Use this filtered view to compare the rows by study level, since examples in this slice include both high school senior and graduate student audiences. Always open the official scholarship page to confirm current eligibility details for USA applicants."
     },
     {
-      "question": "How can I find out more about the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and it's important to check these dates promptly. Currently, all 4 scholarships listed have deadlines, with at least one approaching within the next 45 days."
+      "question": "Can I apply to every engineering scholarship listed here with one application?",
+      "answer": "No—each listing is a separate program, so you apply through the official source for that row. Requirements can differ, and this catalog is best used to find and compare options before you submit anything."
     },
     {
-      "question": "Do these scholarships require essays or other application materials?",
-      "answer": "Requirements for these scholarships vary; some may require essays while others do not. It's advisable to review each listing carefully to understand what is needed for your application."
+      "question": "Do all New Hampshire engineering scholarships here have the same deadline or award amount?",
+      "answer": "No, deadlines differ by program and should be checked row by row, especially since some dates appear relatively soon in this slice. Award amounts also vary by listing, and any amount should be verified on the official page before you apply."
     },
     {
-      "question": "What are the typical award amounts for engineering scholarships in New Hampshire?",
-      "answer": "The award sizes for the scholarships listed range approximately from $1,000 to $2,500. However, it's best to verify the specific amounts directly in each scholarship listing."
+      "question": "Are these only for engineering majors, or should I explore related STEM options too?",
+      "answer": "This page is focused on engineering in New Hampshire, and the visible listings are tagged under STEM. If you want to broaden your search, you can explore related STEM scholarships in the USA catalog and compare them against this more focused set of listings."
+    },
+    {
+      "question": "Will I need an essay for these engineering scholarships in New Hampshire?",
+      "answer": "Some may ask for an essay and some may not, so it is best to check each row individually. Use the catalog to browse the shortlist, then verify application steps and required materials on the official scholarship source."
     }
   ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 1000,
+      "maxUsd": 2500,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "mechanic_and_repair_tech_technicians",
+        "public_administration_and_social_service"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "American Society of Civil Engineers-New Hampshire Section",
+        "count": 2
+      },
+      {
+        "name": "American Public Works Association-New England Chapter",
+        "count": 1
+      },
+      {
+        "name": "New Hampshire Society of Professional Engineers",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/new-hampshire",
-    "generatedAt": "2026-04-02T10:55:05.532Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:38:52.071Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

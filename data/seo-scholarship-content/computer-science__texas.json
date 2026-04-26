@@ -1,47 +1,112 @@
 {
-  "seo_title": "Texas Computer Science Scholarships | Find Funding",
-  "seo_description": "Explore 4 scholarships for Computer Science in Texas. Check award sizes and deadlines to secure your funding.",
-  "intro": "Finding financial support for your computer science studies in Texas can significantly ease the burden of tuition and related costs. This collection features 4 scholarships specifically aimed at students pursuing a career in this dynamic field. Award sizes vary, with some opportunities offering amounts between $1,000 and $12,000. With deadlines approaching in the near future, it's essential to review these options promptly to ensure you don't miss out.",
-  "h1": "Computer Science Scholarships in Texas",
-  "supporting": "As you explore these scholarships, pay attention to the varying requirements and deadlines associated with each listing. Many of these opportunities do not require essays, which can simplify your application process. It’s beneficial to compare the award amounts and specific eligibility criteria to identify the best fit for your educational goals.",
-  "related_intro": "For additional options, consider checking out scholarships in related fields such as STEM or those available to students across Texas.",
+  "seo_title": "Find Computer Science Scholarships in Texas, USA",
+  "seo_description": "Computer science scholarships in Texas, USA with award ranges and varying deadlines. Compare listings and apply early on official pages.",
+  "intro": "Trying to find computer science scholarships in Texas usually means narrowing a broad USA search into a shorter list you can actually compare. This filtered slice brings together Texas-focused options tied to computer science and related technical study, with rows that may also touch STEM, community, law, or music themes. Awards, deadlines, and eligibility details vary by listing, so it helps to read each row closely instead of assuming one program works like the next. Many listings in this set appear to have lighter application signals, and no-essay options are often present, but requirements still need to be verified on the official source. If you want to apply in the current cycle or plan ahead for future terms, this is a practical place to browse and build a shortlist.",
+  "h1": "Compare Computer Science Scholarships in Texas USA",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Check how each listing describes study level, residency or citizenship language, field fit, and any category tags that may hint at the sponsor’s focus. Deadlines differ across programs, and at least some opportunities may be coming up soon, so it is smart to review timing early. Award amounts also vary by listing and should be confirmed on the official page before you apply. A quick scan across this Texas set can help you spot programs worth opening in separate tabs for closer review.",
+  "related_intro": "If you do not find enough matches in this Texas computer science view, related pages can help you widen or refine the search. You may want to compare broader computer science results, look at other Texas scholarship categories, or check nearby topic combinations that still fit your academic plans in the USA.",
   "how_to_use": [
-    "Review the deadlines for each scholarship to prioritize applications",
-    "Compare award amounts to identify the most beneficial options",
-    "Check eligibility requirements for each listing carefully",
-    "Open the official scholarship pages for detailed application instructions",
-    "Shortlist scholarships that align with your academic and career plans"
+    "Compare deadline wording across each row first",
+    "Read the requirement line before opening applications",
+    "Open official pages to verify award details",
+    "Shortlist listings that match your study level",
+    "Check category tags for community or STEM fit"
   ],
   "who_for": [
-    "Computer science majors in Texas",
-    "Students seeking scholarships with no essay requirements",
-    "Undergraduate and graduate students in STEM fields",
-    "Applicants looking for financial aid with varying award sizes"
+    "Texas students studying computer science or closely related technical fields",
+    "College applicants comparing Texas-based STEM scholarship options",
+    "US citizens or permanent residents checking eligibility language carefully",
+    "Applicants looking for many no-essay or lighter-touch scholarship listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for computer science students in Texas?",
-      "answer": "There are currently 4 scholarships listed specifically for computer science students in Texas. These scholarships cover various categories, including STEM and law, and award sizes can range from approximately $1,000 to $12,000."
+      "question": "How can I find and compare computer science scholarships in Texas?",
+      "answer": "Use this filtered view to compare the rows by award amount, deadline text, study level, and any citizenship or residency labels shown. Then open the official scholarship page for each program to confirm current eligibility, application steps, and what documents are required."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 4 listings include this information. It's advisable to check the specific dates promptly, as at least one scholarship has a deadline within the next 45 days."
+      "question": "Can I apply to these Texas computer science scholarships if I study a related field?",
+      "answer": "Some listings in this USA filter mention fields such as computer and information sciences, mathematics and statistics, engineering, education, or business-related areas. Check each row carefully, because eligibility can differ by program and the official source is the final word."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, although this can vary by program. It's best to review each listing for specific requirements to ensure you meet all criteria."
+      "question": "Do all listings here have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and this filtered set shows different deadline strings across the rows, so it is smart to check dates promptly. Award amounts also vary by listing, and you should verify the current amount on the official page before you apply."
     },
     {
-      "question": "How should I use this scholarship list effectively?",
-      "answer": "You can filter through the 4 available scholarships based on your qualifications and interests. Pay close attention to the award amounts and deadlines, and verify details directly from the scholarship listings to ensure you have the most accurate information."
+      "question": "Are these scholarships only for Texas residents?",
+      "answer": "Not necessarily. This page filters scholarships tied to Texas, but residency, citizenship, or location rules can vary, and some rows may show labels like U.S. citizen or U.S. permanent resident. Review each listing and the official source to see who can apply."
     }
   ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 1000,
+      "maxUsd": 12000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-15",
+        "2026-05-27"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "college_3"
+      ],
+      "commonFields": [
+        "computer_and_information_sciences",
+        "education",
+        "business_management_and_marketing",
+        "mathematics_and_statistics",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "University Interscholastic League",
+        "count": 3
+      },
+      {
+        "name": "Information Systems Security Association-Alamo Chapter",
+        "count": 1
+      },
+      {
+        "name": "Thurgood Marshall College Fund",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "community",
+      "law",
+      "music"
+    ]
+  },
   "_meta": {
     "canonicalPath": "computer-science/texas",
-    "generatedAt": "2026-04-02T10:54:11.614Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:30:35.825Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,48 +1,126 @@
 {
-  "seo_title": "Michigan Scholarships for Financial Need Students",
-  "seo_description": "Explore 11 scholarships in Michigan for students with financial need. Check varying deadlines and award amounts up to $10,000.",
-  "intro": "For students in Michigan facing financial challenges, there are 11 scholarships available that can help alleviate educational costs. These awards vary significantly in size, ranging from approximately $750 to $10,000, and cover a range of fields including STEM, education, arts, and community service. As deadlines differ among listings, it's important to check them promptly to ensure you don’t miss out on potential funding.",
-  "h1": "Financial Need Scholarships in Michigan",
-  "supporting": "When reviewing this list, pay attention to the specific requirements for each scholarship, as they can include essay submissions or be lighter on documentation. Comparing the award amounts and deadlines will help you prioritize which opportunities align best with your situation. This diverse selection is worth exploring, especially if you are committed to furthering your education despite financial constraints.",
-  "related_intro": "If you’re interested in exploring more options, consider checking out scholarships specifically for STEM fields or community service initiatives in Michigan.",
+  "seo_title": "Find Financial Need Scholarships in Michigan, USA",
+  "seo_description": "Financial need scholarships in Michigan, USA with varying award amounts and deadlines. Compare listings and apply on official program pages.",
+  "intro": "Trying to find USA scholarships that match both financial need and Michigan ties usually means sorting through very different rules, study levels, and subject areas. This filtered slice brings those factors together so you can compare programs with a clearer starting point. The rows below include opportunities connected to community, STEM, education, arts, and law, with examples that reach from high school seniors to undergraduate and graduate applicants. Awards vary by listing, deadlines differ by program, and requirement details are not identical across the set. Some listings may be comparatively lighter touch, while others can ask for more supporting material. If you plan to apply soon, it is worth checking each row promptly and verifying the latest terms on the official scholarship page.",
+  "h1": "Find Financial Need Scholarships in Michigan USA",
+  "supporting": "A smart way to use this list is to compare more than the title alone. Read the requirement line for residency or citizenship cues, note the study level, and check whether the subject area fits your background or plans. Then compare award text and deadline wording side by side, because stronger matches are not always the largest awards. Since details can change, open the official source before you apply, confirm eligibility, and keep a shortlist of Michigan scholarships that best fit your financial need profile.",
+  "related_intro": "If these Michigan financial need scholarships feel too narrow or too broad, related pages can help you compare nearby options by topic, study level, or other eligibility angles. That is useful when you want to find similar USA programs without starting your search over.",
   "how_to_use": [
-    "Check individual deadlines to avoid missing out",
-    "Compare award sizes to find the best fit for your needs",
-    "Review requirement details for each scholarship",
-    "Open official scholarship pages for the most accurate information",
-    "Shortlist your top choices for easy tracking"
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on sponsor sites"
   ],
   "who_for": [
-    "Students demonstrating financial need in Michigan",
-    "Individuals pursuing education in STEM or arts",
-    "Community-focused applicants seeking support",
-    "Seminary students looking for leadership funding",
-    "High school or college students needing scholarship assistance"
+    "Michigan residents seeking need-based scholarship options",
+    "High school seniors comparing local aid opportunities",
+    "Undergraduate or graduate applicants with financial need",
+    "Students interested in community, STEM, education, arts, or law listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Michigan?",
-      "answer": "The current listing features 11 scholarships that cater to various fields, including STEM, education, community service, arts, and law. This diversity allows students to find opportunities that align with their academic and career interests."
+      "question": "How can I find financial need scholarships in Michigan that fit my situation?",
+      "answer": "Use this filtered view to compare Michigan listings by study level, category, and any residency or citizenship details shown in each row. In this USA-focused catalog slice, requirements vary by program, so confirm eligibility on the official scholarship page before you apply."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes for the scholarships in this category vary, with amounts ranging approximately from $750 to $10,000. It's important to review each listing for specific details on the funding offered."
+      "question": "Are these scholarships only for college students in Michigan?",
+      "answer": "No. This filtered set includes multiple study levels, with examples such as high school seniors, undergraduates, graduate students, and college students. Always open the individual listing to verify who can apply, since eligibility is set by each program."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements differ among the scholarships, with some requiring essays while others do not. Be sure to check the individual listings for the specific application requirements associated with each scholarship."
+      "question": "What kinds of scholarships can I explore in this Michigan financial-need filter?",
+      "answer": "You can browse a focused set of listings across categories such as Community, STEM, Education, Arts, Law, and other miscellaneous areas. Some listings also show fields of study like education, engineering, law, theology, and architecture, which can help you narrow what to explore first."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All 11 scholarships listed have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to verify the specific dates for each scholarship promptly."
+      "question": "Do all of these Michigan scholarships have the same application requirements?",
+      "answer": "No—requirements differ by listing. Some programs may be lighter-touch, while others may ask for more materials, so compare the rows here and verify the full application steps on the official page before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 13,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-17",
+        "2026-04-29"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 12,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_2",
+        "Undergraduate"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "legal_professions_and_law_studies",
+        "architecture_and_related_services",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Society of Civil Engineers-Michigan Section",
+        "count": 2
+      },
+      {
+        "name": "Friends of Polish Art",
+        "count": 2
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Fayette County",
+        "count": 1
+      },
+      {
+        "name": "International Association of Arson Investigators-Michigan Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "stem",
+      "education",
+      "arts",
+      "miscellaneous",
+      "law"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/michigan",
-    "generatedAt": "2026-04-02T11:12:15.609Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 11,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:05:32.876Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

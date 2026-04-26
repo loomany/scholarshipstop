@@ -1,48 +1,125 @@
 {
-  "seo_title": "Rhode Island Scholarships for Financial Need",
-  "seo_description": "Explore 8 scholarships in Rhode Island for students with financial need. Check deadlines and award amounts up to $17,000.",
-  "intro": "Finding financial support can be crucial for students in Rhode Island, especially those facing economic challenges. This selection features 8 scholarships specifically aimed at individuals with financial need. Award sizes vary significantly, with opportunities available across diverse fields such as education, medicine, and the arts. With deadlines approaching for all listings, it's essential to act promptly to secure funding for your educational journey.",
-  "h1": "Scholarships for Financial Need in Rhode Island",
-  "supporting": "As you explore these scholarships, pay attention to the specific requirements and award amounts associated with each listing. Many of these opportunities do not require essays, making them more accessible. Compare deadlines carefully, as they can differ significantly, and ensure you verify all details on the official sponsor sites to maximize your chances of success.",
-  "related_intro": "If you're interested in more tailored options, check out related pages that focus on specific fields or types of scholarships available in Rhode Island.",
+  "seo_title": "Find Financial Need Scholarships in Rhode Island, USA",
+  "seo_description": "Financial need scholarships in Rhode Island, USA with deadlines and award details. Compare listings and apply early since dates vary by program.",
+  "intro": "Trying to find Rhode Island scholarships tied to financial need usually means balancing urgency with fit: which programs you can apply for now, which ones match your study level, and which are worth a closer look. This filtered USA view brings together a focused set of listings connected to need-based eligibility in Rhode Island, with examples spanning medicine, education, community, arts, and STEM. Awards vary widely by listing, and deadlines differ across the rows, so it helps to compare each option rather than assume one pattern applies to all. Many listings in this slice appear to have lighter application signals and often note no essay, but requirements still need to be verified on the official scholarship pages before you apply.",
+  "h1": "Find Rhode Island Financial Need Scholarships USA",
+  "supporting": "Use these rows to compare more than just the award text. Check who the scholarship is meant for, look at study level labels such as high school senior, graduate student, adult non-traditional, or college-level applicants, and note any citizenship or residency wording like U.S. citizen or permanent resident. This Rhode Island need-based slice is also worth scanning because the subjects are mixed rather than narrow, so you may find options outside your first search term. Since some deadlines appear relatively soon, it is smart to shortlist promising listings and confirm details promptly.",
+  "related_intro": "If you do not find enough matches here, related pages can help you narrow by subject area, education level, or other eligibility traits while staying close to your Rhode Island or financial-need search. That makes it easier to explore adjacent scholarship options without starting over.",
   "how_to_use": [
-    "Review each scholarship listing carefully",
-    "Compare award amounts and deadlines",
-    "Check for essay requirements or other criteria",
-    "Open official pages for detailed information",
-    "Shortlist scholarships that match your profile"
+    "Compare each listing’s deadline text first, because timing varies by program and some opportunities may close soon",
+    "Scan the award field and category labels to find options that fit your subject area, then compare details side by side",
+    "Read the eligibility and requirement lines carefully, including study level and any residency or citizenship wording",
+    "Open the official scholarship page for every shortlist item to verify current amounts, application steps, and supporting materials",
+    "Keep a short list of your best matches and apply to the strongest fits before moving on to broader related filters"
   ],
   "who_for": [
-    "Students with financial need",
-    "Rhode Island residents pursuing higher education",
-    "Individuals interested in community service scholarships",
-    "Students in medical or nursing programs",
-    "First-generation college students"
+    "Rhode Island applicants who need to find scholarships that include financial need in the eligibility",
+    "Students comparing need-based options across medicine, education, community, arts, or STEM topics",
+    "High school seniors, graduate students, adult non-traditional learners, and college students checking Rhode Island-relevant listings",
+    "U.S. citizens or permanent residents who want to compare requirement lines before they apply"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Rhode Island?",
-      "answer": "There are currently 8 scholarships listed that cater to financial need in Rhode Island. These opportunities span various categories, including medicine, education, arts, community, and STEM."
+      "question": "How can I find Rhode Island scholarships based on financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need and Rhode Island. Open each row to compare eligibility, study level, residency or citizenship details, and then verify the final requirements on the official source."
     },
     {
-      "question": "How can I find specific details about each scholarship?",
-      "answer": "Each scholarship listing includes important details such as award amounts and deadlines. It's advisable to check each listing individually, as deadlines vary and some may be approaching soon."
+      "question": "Can I apply if I live in Rhode Island but study different subjects?",
+      "answer": "Possibly—these listings span multiple categories, including medicine, education, community, arts, STEM, and miscellaneous topics. Check each program page carefully, because field of study, study level, and residency rules vary by listing."
     },
     {
-      "question": "Are essays required for these scholarships?",
-      "answer": "Most of the scholarships in this category do not require essays, but it's important to verify the specific requirements for each listing, as they can differ."
+      "question": "What should I compare before I apply to these scholarships?",
+      "answer": "Compare award amount, deadline, study level, and any citizenship or residency labels shown in the catalog. Amounts vary by listing, and deadlines differ by program, so confirm both on the official scholarship page before you apply."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The award sizes for the scholarships listed can vary significantly, with amounts ranging from around $500 to $17,000. Review each scholarship for its specific award details."
+      "question": "Are these Rhode Island financial-need scholarships only for traditional college students?",
+      "answer": "Not always. In this filtered set, sample study levels include high school students, graduate students, adult non-traditional students, and college students, so it is worth browsing beyond one school stage."
     }
   ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 500,
+      "maxUsd": 17000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 12,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-05-08"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Rhode Island Foundation",
+        "count": 4
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 2
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Horticultural Research Institute",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "medical",
+      "education",
+      "miscellaneous",
+      "arts",
+      "community",
+      "stem"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/rhode-island",
-    "generatedAt": "2026-04-02T11:14:44.519Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 8,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:10:30.138Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

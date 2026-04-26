@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore 196 PhD Scholarships for International Students in the USA",
-  "seo_description": "Discover 196 PhD scholarships available for international students in the USA. Find funding opportunities tailored for your academic journey.",
-  "h1": "PhD Scholarships for International Students in the USA",
-  "intro": "Pursuing a PhD in the USA can be a transformative experience, but it often comes with significant financial challenges. Fortunately, there are numerous scholarships specifically designed for international students. With 196 scholarships currently available, you have a wealth of opportunities to help fund your education. These scholarships range from merit-based awards to need-based grants, catering to various fields of study and backgrounds. Whether you're interested in engineering, humanities, or sciences, there’s likely a scholarship that fits your profile. Explore your options and take the first step towards your academic goals today.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited PhD programs across the USA. Some scholarships may require a specific GPA, while others might focus on research proposals or community involvement. Deadlines also vary, so it's crucial to check each scholarship's specific requirements. To apply, gather necessary documents such as transcripts, recommendation letters, and personal statements. Tailor your application to highlight your unique experiences and aspirations. Don't forget to check for any additional funding opportunities that may complement your scholarship.",
-  "related_intro": "In addition to PhD scholarships, there are various funding options available for international students, including grants, assistantships, and fellowships. Exploring these can enhance your financial support.",
+  "seo_title": "Find PhD Scholarships for International Students USA",
+  "seo_description": "PhD scholarships for international students in the USA. Compare awards, deadlines, and requirements, then apply through official program pages.",
+  "intro": "Trying to find PhD scholarships in the USA that may be open to international students usually means sorting through mixed eligibility rules, study fields, and deadline formats all at once. This filtered view brings that search into one place so you can compare programs below without losing sight of the details that matter. You’ll see listings connected to areas such as education, STEM, medicine, arts, community, and miscellaneous funding, with examples that range from broad international student awards to field-linked options like engineering. Award amounts vary by listing and should be verified on each official page, and deadlines differ by program, with some dates close enough that it’s smart to check rows promptly. Requirements also vary, including essay expectations, so read each listing carefully before you apply.",
+  "h1": "Compare PhD Scholarships for International Students USA",
+  "supporting": "A useful way to browse this USA PhD scholarship list is to compare each row on three points: who can apply, what level or field the funding targets, and how the deadline is presented. Some listings look broadly academic, while others may connect more closely to subjects like engineering, health professions, business, English, or education. As you explore, pay attention to whether a scholarship appears tailored to international students specifically or includes mixed eligibility language that needs confirmation on the sponsor’s site. That extra check can save time before you build a shortlist.",
+  "related_intro": "If these results feel close but not exact, use related pages to narrow by subject area, requirement style, or other student profiles. That can make it easier to compare similar USA scholarship options without scanning unrelated listings.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary application materials.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status."
+    "Compare eligibility wording first and confirm that international students at the PhD level are included",
+    "Scan category and field cues to separate broad awards from listings tied to subjects like education, STEM, business, English, or health professions",
+    "Check each deadline line individually because dates vary by program and some listings may be closing soon",
+    "Open the official scholarship page to verify award amounts, required materials, and any essay expectations before you apply",
+    "Shortlist the strongest matches, then compare requirement details side by side before submitting applications"
   ],
   "who_for": [
-    "International students seeking a PhD in the USA.",
-    "Students from diverse academic backgrounds.",
-    "Those looking for financial assistance for their studies."
+    "International applicants seeking PhD funding options in the USA across multiple academic categories",
+    "Doctoral students comparing broad education awards with subject-linked listings such as engineering or health-related study",
+    "Applicants who want to check both essay and potentially lighter-requirement scholarship listings before applying",
+    "Students building a shortlist of USA scholarships with varying award amounts and different deadline formats"
   ],
   "faq": [
     {
-      "question": "What types of PhD scholarships are available?",
-      "answer": "There are merit-based, need-based, and field-specific scholarships available for international students."
+      "question": "How can I find PhD scholarships for international students in the USA on this page?",
+      "answer": "Use this filtered view to explore listings tagged for PhD study and international students in the USA. Then open each row and verify eligibility, study level, and residency details on the official scholarship page."
     },
     {
-      "question": "How can I find the right scholarship for me?",
-      "answer": "Review eligibility criteria, application requirements, and deadlines to find a suitable scholarship."
+      "question": "Can I compare award amounts for these USA PhD scholarship listings?",
+      "answer": "Yes—this catalog slice includes listings with different award formats, and amounts vary by program. Use the rows to compare options side by side, then confirm the current amount and what it covers on the official source."
     },
     {
-      "question": "Can I apply for multiple scholarships?",
-      "answer": "Yes, you can apply for multiple scholarships to increase your chances of funding."
+      "question": "Do all scholarships here have the same deadline or application requirements?",
+      "answer": "No. Deadlines differ by program, and requirements such as essays can also vary row to row, so check dates promptly and read each official listing before you apply."
+    },
+    {
+      "question": "Are these only for one subject area, or can I browse different PhD fields?",
+      "answer": "You can browse a mix of categories and fields in this focused set of listings, including areas like Education, STEM, Medicine, Arts, business, engineering, English, and health professions. Always confirm the exact field restrictions on the scholarship's official page."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "phd-scholarships-for-international-students-usa",
-    "generatedAt": "2026-04-25T13:22:33.105Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:01:42.348Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

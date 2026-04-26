@@ -1,48 +1,127 @@
 {
-  "seo_title": "Tennessee Scholarships for Financial Need Students",
-  "seo_description": "Explore 6 scholarships for Tennessee students with financial need. Award sizes range from $1,500 to $5,000. Check deadlines promptly.",
-  "intro": "If you're in Tennessee and facing financial challenges, there are six scholarships available that could provide valuable support for your education. Award sizes for these opportunities range from approximately $1,500 to $5,000, and each has its own unique requirements and deadlines. It's essential to act promptly, as some deadlines are approaching within the next 45 days, making this a timely opportunity for eligible students.",
-  "h1": "Tennessee Financial Need Scholarships",
-  "supporting": "This list features a diverse array of scholarships, including those focused on education, community service, and STEM fields. As you review the options, pay attention to the specific requirements for each scholarship, as they vary in terms of essay submissions and other criteria. Comparing the award amounts and deadlines can help you identify which scholarships align best with your needs and timeline.",
-  "related_intro": "For more tailored opportunities, check out our pages on scholarships based on specific majors or community involvement in Tennessee.",
+  "seo_title": "Find Financial Need Scholarships in Tennessee, USA",
+  "seo_description": "Financial need scholarships in Tennessee, USA with award ranges and varying deadlines. Compare listings and apply on official program pages.",
+  "intro": "Trying to find Tennessee scholarships tied to financial need in the USA usually means narrowing a broad search into a list you can actually compare. This filtered slice brings together programs where need-based eligibility overlaps with Tennessee, so you can apply with more focus instead of sorting through unrelated awards. The rows below span different categories, including community, education, STEM, medicine, humanities, and miscellaneous topics, and they may fit applicants from high school through graduate study. Award amounts, deadlines, residency details, and requirement lines vary by listing, and some opportunities may be lighter-touch than others. Because deadline text differs across these programs and some dates may be coming up soon, it is smart to check each row promptly and verify details on the official source before you apply.",
+  "h1": "Find Tennessee Financial Need Scholarships USA",
+  "supporting": "Use this view to compare more than just the title. Read the eligibility notes for Tennessee and financial-need fit, then scan study level, field of study, citizenship or residency language, and any essay or document expectations. Some listings connect to areas like education, engineering, agriculture, business, transportation, or medicine, while others are broader. If a program looks promising, open the official page to confirm the current award details, deadline wording, and application steps before you shortlist it.",
+  "related_intro": "If these Tennessee need-based listings feel close but not quite right, related pages can help you compare nearby angles, such as other locations, broader financial-need results, or category-led scholarship views in the USA. That is often the fastest way to find a better match without starting your search over.",
   "how_to_use": [
-    "Compare deadlines to prioritize your applications",
-    "Scan award amounts to find the best fit for your needs",
-    "Read through requirement lines for each scholarship",
-    "Open official scholarship pages for detailed information",
-    "Shortlist your top choices and verify details on sponsor sites"
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award text and application materials before you apply"
   ],
   "who_for": [
-    "Tennessee residents with financial need",
-    "Students pursuing education in STEM fields",
-    "Community-oriented individuals seeking support",
-    "Undergraduate students looking for scholarship options",
-    "Students interested in scholarships with varying requirements"
+    "Tennessee residents seeking need-based scholarship options",
+    "High school seniors comparing USA scholarship listings",
+    "College or graduate students with financial need",
+    "Applicants interested in education, STEM, medicine, or community topics"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Tennessee?",
-      "answer": "There are currently six scholarships listed under the financial need category in Tennessee. These scholarships cover a range of fields, including education, community service, humanities, and STEM."
+      "question": "How do I find financial need scholarships in Tennessee that fit my situation?",
+      "answer": "Use this filtered view to compare Tennessee listings by study level, field, and eligibility details shown in each row. Then open the official scholarship page to verify financial-need criteria, residency rules, and any required documents before you apply."
     },
     {
-      "question": "How much can I expect to receive from these scholarships?",
-      "answer": "Award sizes for the scholarships in this category generally range from approximately $1,500 to $5,000. However, specific amounts can vary by program, so it's important to check each listing for detailed information."
+      "question": "Can I apply if I’m in high school, college, or graduate school?",
+      "answer": "Possibly—these Tennessee scholarship rows include examples across high school senior, college, and graduate student levels. Check each listing carefully, because eligibility varies by program and not every award is open to every study level."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, and a few may have lighter requirements. Be sure to review each scholarship's details for specific application requirements."
+      "question": "What should I compare before I apply to these USA scholarships?",
+      "answer": "Focus on award amount, deadline, study level, field of study, and citizenship or residency notes such as U.S. citizen or U.S. permanent resident. Amounts and requirements vary by listing, so confirm the latest details on the official source for each program."
     },
     {
-      "question": "What should I know about deadlines for these scholarships?",
-      "answer": "All six scholarships have deadlines, which differ from one program to another. It's advisable to check the deadlines promptly, as at least one scholarship has a deadline approaching within the next 45 days."
+      "question": "Do all Tennessee financial need scholarships have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, and this filtered set shows varying deadline text across rows, so it’s smart to check dates promptly. Essay requirements also vary, which means you should review each listing and the official page before applying."
     }
   ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 1500,
+      "maxUsd": 10000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript",
+        "document",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_3",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "transportation_and_materials_moving",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Thurgood Marshall College Fund",
+        "count": 2
+      },
+      {
+        "name": "Institute of Transportation Engineers-Tennessee Section",
+        "count": 1
+      },
+      {
+        "name": "Ninety-Nines-Spaceport Chapter",
+        "count": 1
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem",
+      "humanities",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/tennessee",
-    "generatedAt": "2026-04-02T11:15:25.300Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 6,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:11:18.273Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

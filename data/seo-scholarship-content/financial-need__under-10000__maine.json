@@ -1,0 +1,121 @@
+{
+  "seo_title": "Find Maine Financial Need Scholarships Under Ten Thousand | USA…",
+  "seo_description": "Maine financial need scholarships under ten thousand in the USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Maine scholarships tied to financial need without wading through higher-dollar national results? This filtered USA view narrows the search to programs with listed awards under ten thousand, so you can compare a focused set of options that may fit a smaller funding gap. The rows below span different study levels and subjects, with examples touching education, law, safety, and broader miscellaneous awards. Requirements are not identical across this slice: some listings may ask for more documentation, some may be lighter-touch, and essay expectations can vary by program. Deadlines also differ across the listings, so it is worth checking each row promptly if you plan to apply in the current cycle or for twenty twenty-six opportunities.",
+  "h1": "Compare Maine Financial Need Scholarships Under Ten Thousand USA…",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan the requirement lines for residency, study level, and field cues, then read the award text carefully because amounts vary by listing and should be verified on the official page. It also helps to compare deadline wording side by side, since some programs may close sooner than others. If a row looks relevant, open the source page, confirm current details, and shortlist the options that best match your Maine location, financial need status, and academic path.",
+  "related_intro": "If these Maine financial need scholarships under ten thousand feel too narrow, related pages can help you compare nearby slices by location, award range, or broader financial need filters. That is a practical next step when you want to find similar programs without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages to verify details",
+    "Shortlist programs that match your study level",
+    "Check award wording before you apply"
+  ],
+  "who_for": [
+    "Maine residents seeking need-based aid",
+    "High school students planning college costs",
+    "College and graduate students comparing smaller awards",
+    "Applicants in education, law, or safety fields",
+    "Students who want Maine-focused scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines on this page before I apply?",
+      "answer": "Yes—these rows let you compare listed amounts and deadline text side by side, but details vary by program. Award amounts in this slice fall within smaller-dollar listings, and deadlines differ by row, so check each official page promptly."
+    },
+    {
+      "question": "Are these Maine scholarship listings only for one study level or major?",
+      "answer": "No. This filtered set includes a mix of study levels, such as high school and college or graduate options, and sample topics include education, law, safety, and other miscellaneous areas. Review each row carefully to see who can apply."
+    },
+    {
+      "question": "Do all scholarships here require an essay or a long application?",
+      "answer": "Requirements are mixed across the listings. Some programs may be lighter-touch, while others may ask for essays or additional materials, so compare the catalog details and confirm on the official source before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 13,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 6000,
+      "statedAmountCount": 13,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_2",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "security_and_protective_services",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Finance Authority of Maine",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      },
+      {
+        "name": "Appraisal Institute-Maine Chapter",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "law",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/maine",
+    "generatedAt": "2026-04-26T14:17:33.758Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 13,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

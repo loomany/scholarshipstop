@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find California Financial Need Scholarships | USA",
+  "seo_description": "California financial need scholarships under five thousand dollars: compare award ranges, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find California scholarships tied to financial need without sorting through large national award listings first? This filtered USA view narrows the search to programs with listed awards under five thousand dollars, making it easier to compare smaller grants, local scholarships, and targeted support options in one place. The rows below span areas such as education, STEM, community, medicine, and disability, with study levels ranging from high school through graduate and adult non-traditional paths. Award amounts vary by listing, and deadlines differ by program, so it is worth checking dates promptly. Requirements also vary: some opportunities may be relatively lighter-touch, while others can ask for more materials, including essays, so read each listing carefully before you apply.",
+  "h1": "California Financial Need Scholarships Under Five Thousand USA …",
+  "supporting": "A useful way to browse this slice is to compare more than the dollar figure. Look at who each scholarship is meant for, how California residency or USA citizenship status is described, and whether the field of study matches your plans. You can also scan for patterns in categories like education, community, or engineering to find listings that fit your background. Because these awards sit under the same amount cap, this is a practical set of programs to compare side by side and shortlist before opening the official pages to verify current terms.",
+  "related_intro": "If you do not find the right fit here, related pages can help you widen the search by changing one filter at a time, such as the award range, location, or eligibility focus. That makes it easier to compare nearby California options against broader USA scholarship results.",
+  "how_to_use": [
+    "Compare award text, eligibility notes, and deadline lines across these rows before you shortlist anything",
+    "Read the requirement details closely because essay expectations and supporting materials can differ by program",
+    "Check residency, citizenship, and study-level labels to confirm the listing matches your situation in California or the USA",
+    "Open the official scholarship page for each option you like and verify the current amount, deadline, and application steps"
+  ],
+  "who_for": [
+    "California applicants who want to find need-based scholarships with listed awards below five thousand dollars",
+    "High school, college, graduate, and adult non-traditional students comparing smaller California funding options",
+    "Applicants in education, engineering, business, agriculture, medicine, or related fields looking for USA-based scholarship listings",
+    "California residents who want to compare community-focused or disability-related scholarships alongside broader academic awards"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines across these scholarships?",
+      "answer": "Yes—these rows let you quickly compare listed amounts and deadline text side by side. In this USA-focused slice, awards vary by listing and deadlines differ by program, so check dates promptly and verify final details on the official page."
+    },
+    {
+      "question": "What kinds of scholarships appear in this California filter?",
+      "answer": "This focused set of listings includes categories such as Education, Miscellaneous, STEM, Community, Medicine, and Disability. You may also see different study levels and fields like education, engineering, business, agriculture, and security-related programs."
+    },
+    {
+      "question": "Do all of these California scholarships require an essay?",
+      "answer": "No single requirement applies to every listing here. Some programs may ask for an essay and others may not, so review each scholarship's requirements on the catalog row and then verify them with the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 160,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 150,
+      "maxUsd": 5000,
+      "statedAmountCount": 160,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 112,
+      "within60Days": 154,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 26,
+      "noCount": 134,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "transcript",
+        "document",
+        "personal_statement",
+        "survey"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "high_school_freshman",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "engineering",
+        "security_and_protective_services"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Sonora Area Foundation",
+        "count": 57
+      },
+      {
+        "name": "American Planning Association-California Chapter",
+        "count": 16
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 8
+      },
+      {
+        "name": "Orange County Community Foundation",
+        "count": 6
+      },
+      {
+        "name": "Sacramento City Unified School District",
+        "count": 6
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/california",
+    "generatedAt": "2026-04-26T14:29:05.174Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 160,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

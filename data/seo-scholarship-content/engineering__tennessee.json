@@ -1,0 +1,112 @@
+{
+  "seo_title": "Find Engineering Scholarships in Tennessee, USA",
+  "seo_description": "Engineering scholarships in Tennessee, USA: compare deadlines, award details, and requirements, then apply through each official program page.",
+  "intro": "Trying to find engineering scholarships in Tennessee usually means narrowing past broad USA results and getting to a focused set of listings you can actually compare. This filtered view brings together programs tied to engineering and Tennessee so you can apply with less guesswork. The rows below are not identical: award amounts vary by listing, deadlines differ by program, and eligibility details can shift based on study level, residency, or field emphasis. Many listings in this slice appear to have lighter application requirements, and some may not ask for an essay, but you should still read each requirement line closely before you apply. If you are searching for engineering funding in Tennessee for the upcoming cycle, it is worth checking these options promptly because timing can matter.",
+  "h1": "Find Tennessee Engineering Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Look at how each program describes its engineering connection, whether Tennessee is treated as a location requirement or a local affiliation, and which study levels appear to fit. Because deadlines in these rows are not the same, it helps to scan date fields early, then open the official pages to verify current terms, award details, and submission steps. This slice is especially useful when you want a smaller set of USA scholarships to review carefully instead of sorting through broader STEM results.",
+  "related_intro": "If these Tennessee engineering listings feel too narrow, related pages can help you explore nearby options by topic or by location. That is useful when you want to compare engineering scholarships against broader STEM results, or find Tennessee awards that may welcome adjacent fields connected to construction, transportation, or other technical study areas.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check whether essay or residency terms apply"
+  ],
+  "who_for": [
+    "Tennessee students pursuing engineering study",
+    "USA applicants comparing local engineering funding",
+    "High school seniors planning engineering programs",
+    "College or graduate students in technical fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare Tennessee engineering scholarships by amount and deadline?",
+      "answer": "Yes—compare the rows side by side, but treat amounts and dates as listing-specific, not page-wide rules. In this USA catalog slice, award amounts vary by listing and should always be confirmed on the official source before you apply."
+    },
+    {
+      "question": "Who should use this Tennessee engineering scholarship list?",
+      "answer": "- High school seniors in Tennessee or targeting Tennessee-based opportunities in engineering - College and graduate students comparing engineering-related funding in the USA - Applicants who want to explore programs that may include STEM or transportation-related categories"
+    },
+    {
+      "question": "How should I use these listings before I apply?",
+      "answer": "- Open each scholarship row and verify eligibility, residency or citizenship notes, and study-level fit on the official page - Compare deadline text row by row instead of assuming one deadline for the whole filter - Check requirements carefully; many listings here may be lighter-touch and often show no essay flag, but each program can differ"
+    },
+    {
+      "question": "Are all scholarships on this page only for engineering majors in Tennessee?",
+      "answer": "Not necessarily in exactly the same way—this is a focused set of listings filtered around engineering and Tennessee, but individual programs can vary in field wording, level, and location details. Review each official listing to confirm whether you can apply based on your major, school stage, and USA residency or citizenship status."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 2000,
+      "maxUsd": 3500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "college_3",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "construction_trades",
+        "history",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Institute of Steel Construction",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southeast Chapter",
+        "count": 1
+      },
+      {
+        "name": "Institute of Transportation Engineers-Tennessee Section",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "engineering/tennessee",
+    "generatedAt": "2026-04-26T13:41:08.493Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

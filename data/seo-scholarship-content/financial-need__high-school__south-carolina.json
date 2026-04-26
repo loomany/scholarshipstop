@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find South Carolina High School Need Scholarships | USA",
+  "seo_description": "South Carolina high school financial need scholarships in the USA—compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships for South Carolina high school students with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered slice brings those priorities together so you can apply with more focus, compare options faster, and spot listings that match your situation. The rows below include programs tied to education, humanities, and other miscellaneous themes, with examples that may connect to technical training, academic achievement, golf, water environment interests, or broader scholarship support. Awards vary by listing, deadlines differ by program, and requirement lines are not identical, so it is worth checking each row closely before you decide where to spend time.",
+  "h1": "Find South Carolina High School Need Scholarships USA",
+  "supporting": "Use this view to compare more than just the title. Read the requirement text for residency, study level, and any field cues, then check whether the listing looks lighter touch or asks for more materials. Because some deadlines appear close, it makes sense to review the official page promptly, confirm current terms, and verify award details there. If you are building a shortlist for South Carolina opportunities, this is a practical place to browse and compare before moving on to broader USA scholarship results.",
+  "related_intro": "If these South Carolina results feel close but not quite right, related pages can help you widen or narrow the search. You may want to explore other financial need scholarships, look at high school scholarship pages without the state filter, or compare nearby topic and location combinations to find a better fit.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the programs that best match your profile",
+    "Check award text and application materials before you apply"
+  ],
+  "who_for": [
+    "South Carolina high school seniors with financial need",
+    "USA applicants comparing state-based scholarship options",
+    "Students interested in education or humanities related awards",
+    "High school applicants considering technical or career-focused paths"
+  ],
+  "faq": [
+    {
+      "question": "How can I find South Carolina scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school status, and South Carolina. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts on this page before I apply?",
+      "answer": "Yes—these rows include listed award amounts, but amounts vary by program and should be confirmed with the official source before you apply. In this slice, awards range from smaller local scholarships to larger opportunities, so compare each listing individually."
+    },
+    {
+      "question": "Are the requirements the same for every scholarship in this filter?",
+      "answer": "No—requirements vary row to row. Some listings in this filtered set may be lighter-touch, while others can ask for more materials, so compare the application steps and verify them on the official page before you apply."
+    },
+    {
+      "question": "What kinds of scholarships might appear when I browse this South Carolina filter?",
+      "answer": "The programs below can span categories such as education, miscellaneous, and humanities, with examples connected to areas like education, history, business, construction trades, and engineering. That makes this a useful place to explore different scholarship types without assuming every row fits the same academic path."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 4250,
+      "minUsd": 500,
+      "maxUsd": 18000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 11,
+      "nearestLabels": [
+        "2026-04-12",
+        "2026-04-12",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering",
+        "history"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "The Dr. Doretha Pressey Southern Scholars Initiative",
+        "count": 2
+      },
+      {
+        "name": "Midlands Technical College",
+        "count": 1
+      },
+      {
+        "name": "Water Environment Association of South Carolina-Capital District",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/south-carolina",
+    "generatedAt": "2026-04-26T13:59:37.564Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

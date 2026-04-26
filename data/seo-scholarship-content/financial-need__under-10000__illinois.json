@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Illinois Financial Need Scholarships | USA",
+  "seo_description": "Illinois financial need scholarships in the USA: compare awards under ten thousand, review varying deadlines, and apply on official pages.",
+  "intro": "Trying to find Illinois scholarships tied to financial need without wading into the highest award tiers? This filtered slice brings together USA listings with posted awards under the stated cap, so you can compare options that may feel more realistic to apply for alongside other aid. The rows below span areas such as education, STEM, community, medicine, disability, and miscellaneous topics, with examples that reach from nursing and cultural diversity to sustainable communities. Requirements are not identical across these programs: some may be lighter touch, some may ask for more documentation, and essay expectations can differ by listing. Deadlines also vary by row, so it is smart to check timing early if you are building a shortlist for the current cycle.",
+  "h1": "Explore Illinois Financial Need Scholarships USA",
+  "supporting": "A useful way to read this list is to compare more than the headline award. Look at the requirement line, study level, residency or citizenship wording, and any field of study notes before you decide which programs fit. In this Illinois set, you can find opportunities that may suit high school seniors, current college students, and graduate students, but each listing sets its own rules. Open the official page for any scholarship you plan to apply to, verify the latest terms, and compare deadline language carefully because timing and eligibility details can change.",
+  "related_intro": "If these Illinois financial need listings feel close but not quite right, related pages can help you narrow by topic, study level, or other scholarship traits. That is often the fastest way to find nearby options worth comparing before you apply.",
+  "how_to_use": [
+    "Compare deadline wording across rows",
+    "Read the requirement line carefully",
+    "Check study level and residency details",
+    "Open the official page to verify terms",
+    "Shortlist the best-fit programs before you apply"
+  ],
+  "who_for": [
+    "Illinois residents with financial need",
+    "High school seniors planning college costs",
+    "Current college students comparing smaller award programs",
+    "Graduate students seeking Illinois funding options",
+    "Applicants in education, health, engineering, or community-focused fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to these scholarships if I live in the USA but not in Illinois?",
+      "answer": "Some listings in this Illinois scholarship set may be tied to Illinois location, while others may also include broader USA eligibility details such as U.S. citizen or permanent resident status. Check the residency and location rules on each listing and verify them with the official source."
+    },
+    {
+      "question": "What should I compare before I apply to programs in this list?",
+      "answer": "Compare award amount, deadline, study level, field of study, and any requirement notes shown in the catalog. Deadlines differ by program, and requirements can be lighter for some rows but still need to be verified on the official scholarship page."
+    },
+    {
+      "question": "What kinds of students and majors appear in these Illinois scholarship listings?",
+      "answer": "This focused set of listings includes examples across study levels like high school senior, college students, and graduate students. Common topics in the rows include education, STEM, medicine, community, disability, business, engineering, construction trades, and health professions."
+    }
+  ],
+  "page_data": {
+    "exactCount": 53,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 250,
+      "maxUsd": 10000,
+      "statedAmountCount": 53,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 26,
+      "within60Days": 51,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 51,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Waubonsee Community College",
+        "count": 22
+      },
+      {
+        "name": "Kankakee Community College Foundation",
+        "count": 8
+      },
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 4
+      },
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 3
+      },
+      {
+        "name": "Illinois CPA Society",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/illinois",
+    "generatedAt": "2026-04-26T14:15:36.776Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 53,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

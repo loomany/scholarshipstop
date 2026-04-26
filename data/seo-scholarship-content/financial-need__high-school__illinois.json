@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Illinois High School Need-Based Scholarships | USA",
+  "seo_description": "Illinois high school need-based scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Illinois scholarships you can actually apply for while still in high school often means narrowing the list to programs that mention financial need up front. This filtered USA view brings together a focused set of listings for high school applicants in Illinois, so you can compare options without mixing in unrelated results. The rows below span areas such as education, community, STEM, medicine, and disability, and some may also connect to later study paths like business, engineering, health professions, or construction trades. Awards, deadlines, and requirement details vary by listing, so it is worth reading each row closely. Because deadline text differs across these programs and some opportunities may be coming up soon, it makes sense to check dates promptly.",
+  "h1": "Find Need-Based High School Scholarships in Illinois USA",
+  "supporting": "Use this slice to compare more than just the scholarship title. Scan the award text, category labels, study level cues, and any requirement notes to see which programs fit your situation best. Some listings may look comparatively lighter touch, while others can ask for more documentation or an essay, so do not assume the process is the same across the board. If a row looks promising, open the official page and verify eligibility, residency wording, and application instructions before you apply. That extra check helps when you are deciding which Illinois opportunities to shortlist first.",
+  "related_intro": "If these Illinois financial need scholarships for high school students are close but not quite right, related pages can help you compare nearby options by topic, study level, or location. That is useful when you want to find similar USA programs with different category mixes or broader eligibility.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your Illinois eligibility",
+    "Check award details and category labels together"
+  ],
+  "who_for": [
+    "Illinois high school students with financial need",
+    "High school seniors comparing local scholarship options",
+    "Applicants seeking Illinois programs in education or STEM",
+    "Students interested in community or health related awards"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Illinois scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings that match financial need, high school level, and Illinois. Then open each row and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts can differ widely by listing, and deadlines are not universal, so compare row by row and confirm on the official page before applying."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Illinois?",
+      "answer": "Not always. High school is the main filter here, but individual listings may use different study-level wording, so check each scholarship's official criteria to see who can apply in Illinois and the broader USA context."
+    },
+    {
+      "question": "Do all programs here require essays or a long application?",
+      "answer": "No single requirement applies to every listing. Some programs in this filtered set may be lighter-touch, while others can ask for more materials, so review each row carefully before you start an application."
+    }
+  ],
+  "page_data": {
+    "exactCount": 43,
+    "award": {
+      "medianUsd": 1100,
+      "minUsd": 250,
+      "maxUsd": 12000,
+      "statedAmountCount": 43,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 24,
+      "within60Days": 42,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 41,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "construction_trades",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Waubonsee Community College",
+        "count": 15
+      },
+      {
+        "name": "Kankakee Community College Foundation",
+        "count": 7
+      },
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 7
+      },
+      {
+        "name": "American Federation of State, County and Municipal Employees-Illinois Council 31",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/illinois",
+    "generatedAt": "2026-04-26T13:52:28.100Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 43,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

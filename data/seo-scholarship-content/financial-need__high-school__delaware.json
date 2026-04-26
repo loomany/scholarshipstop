@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find Delaware High School Need-Based Scholarships USA",
+  "seo_description": "Delaware high school financial need scholarships in the USA—compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Delaware scholarships for high school students with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings together a focused set of listings so you can compare options without jumping between unrelated results. The programs below span areas such as medicine, education, community, law, and STEM, with many aimed at high school seniors. Awards vary by listing, deadlines differ by program, and requirements are mixed, so it is worth checking each row closely before you apply. Some entries may be lighter-touch than others, but eligibility language, essay expectations, and official terms should always be verified on the sponsor page.",
+  "h1": "Delaware High School Financial Need Scholarships USA Apply",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan the award text, read the requirement lines, and note how each program frames financial need, school level, and any field-of-study preference. Because deadline text appears across these rows and some dates may be coming up soon, it makes sense to review the most time-sensitive options first. If a listing looks promising, open the official source to confirm current rules, materials, and award details before you submit anything.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you explore nearby combinations such as other Delaware scholarship filters, more high school options, or broader financial need listings across the USA. That is useful when you want to compare this slice against adjacent categories without starting over.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist promising programs and track materials needed"
+  ],
+  "who_for": [
+    "Delaware high school seniors seeking need-based aid",
+    "Students comparing local and regional scholarship options",
+    "Applicants interested in education, medicine, law, or STEM",
+    "Families looking for Delaware-focused funding sources"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Delaware scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore programs tagged for financial need, high school, and Delaware in the USA. Then open each row and verify eligibility, award details, and application steps on the official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page before I apply?",
+      "answer": "Yes—these rows let you compare listed amounts and deadline text side by side, but both can vary by program. Award amounts differ by listing, and deadlines are not universal, so confirm the latest details on the official page before you apply."
+    },
+    {
+      "question": "Are these scholarships only for one major or career path?",
+      "answer": "No. In this filtered set, you can find opportunities connected to areas like medicine, education, community, law, and STEM, with sample fields including education, health professions, business, foreign languages, and English."
+    },
+    {
+      "question": "Do all Delaware high school financial-need scholarships require an essay?",
+      "answer": "Not necessarily. Requirements vary across listings in this catalog, so some may ask for an essay while others may be lighter-touch; check each scholarship's official requirements before applying."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 11,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-13",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 5
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      },
+      {
+        "name": "Delaware School Nutrition Association",
+        "count": 1
+      },
+      {
+        "name": "Delaware Student Success",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "medical",
+      "community",
+      "education",
+      "miscellaneous",
+      "law",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/delaware",
+    "generatedAt": "2026-04-26T13:51:12.713Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

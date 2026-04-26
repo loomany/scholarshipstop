@@ -1,43 +1,132 @@
 {
-  "seo_title": "Monthly Scholarships for International Students in the USA",
-  "seo_description": "Explore 196 monthly scholarships available for international students in the USA. Apply today for financial support and educational opportunities.",
-  "h1": "Monthly Scholarships for International Students in the USA",
-  "intro": "International students seeking financial assistance in the USA can benefit from a variety of monthly scholarships. With a total of 196 scholarships currently available, opportunities range from merit-based awards to need-based grants. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship provide essential funding to help cover tuition and living expenses. These scholarships not only alleviate financial burdens but also enhance your educational experience in the United States. Whether you're pursuing undergraduate or graduate studies, there's likely a scholarship that fits your profile and needs.",
-  "supporting": "Eligibility for these scholarships varies, with some targeting specific fields of study, while others are open to all international students. For example, the Razor's Edge Global Scholarship may focus on leadership qualities, while the DC Tuition Assistance Grant (DCTAG) is aimed at students residing in Washington, D.C. Most scholarships require an application that includes personal statements, recommendation letters, and proof of academic achievements. Be mindful of deadlines, as they can vary significantly. To maximize your chances, tailor your application to highlight your unique experiences and aspirations. Regularly check scholarship databases and university websites for updates on new opportunities.",
-  "related_intro": "In addition to monthly scholarships, international students can explore various funding options, including grants, fellowships, and assistantships.",
+  "seo_title": "Find Monthly Scholarships for International Students USA",
+  "seo_description": "Monthly scholarships for international students in the USA with deadlines, award ranges, and eligibility details. Compare listings and apply on official pages.",
+  "intro": "Trying to find USA scholarships for international students that come up on a monthly cycle usually means balancing speed with fit. This filtered slice brings together a focused set of listings where timing matters, but the details still vary from row to row. Some programs sit in broad education categories, while others connect to STEM, medicine, arts, community, or related academic interests. You can apply more efficiently when you compare requirement lines closely, because essay expectations, study levels, and eligibility signals are not the same across these listings. Award amounts also differ by program and should be verified on the official source. Since deadline text appears across the rows and some opportunities may be coming up soon, it makes sense to browse promptly and keep a shortlist as you go.",
+  "h1": "Find Monthly Scholarships for International Students USA",
+  "supporting": "A useful way to read this list is to compare more than the title. Check how each listing describes citizenship or residency, then look at study level and subject tags to see whether a program matches your situation in the USA. It is also worth noting which rows appear lighter touch versus those that may ask for more materials. If you want to find options faster, open the official page for your best matches, confirm the current deadline, and compare award wording carefully because amounts and terms can change by listing.",
+  "related_intro": "If you do not find enough matches here, related pages can help you narrow by subject area, education level, or requirement style. That is often the easiest next step when you want to compare international student options in the USA without mixing very different eligibility rules.",
   "how_to_use": [
-    "Visit scholarship websites regularly for updates.",
-    "Prepare necessary documents like transcripts and letters of recommendation.",
-    "Tailor your application to each scholarship's requirements.",
-    "Keep track of deadlines to ensure timely submissions.",
-    "Utilize scholarship search engines for personalized matches."
+    "Sort or scan for the closest deadline text first",
+    "Read each requirement line before you compare awards",
+    "Open the official page to verify eligibility and current terms",
+    "Shortlist the rows that match your study level and subject",
+    "Compare essay expectations so you can plan your applications"
   ],
   "who_for": [
-    "International students pursuing degrees in the USA.",
-    "Students seeking financial assistance for tuition and living costs.",
-    "Individuals looking for merit-based or need-based funding."
+    "International students seeking USA scholarship options with recurring monthly timing",
+    "Graduate or college applicants comparing education and STEM related listings",
+    "High school seniors planning ahead for USA study funding",
+    "Applicants who want to compare essay and requirement differences before they apply"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various types of scholarships, including merit-based, need-based, and field-specific awards."
+      "question": "How can I find monthly scholarships for international students in the USA on this page?",
+      "answer": "Use this filtered view to explore programs tagged for international students and compare each row’s deadline, study level, field, and eligibility notes. Because deadlines differ by program and some are coming up soon, open the official source for any listing you plan to apply to."
     },
     {
-      "question": "How do I apply for these scholarships?",
-      "answer": "Applications typically require personal statements, recommendation letters, and proof of academic achievements."
+      "question": "Can I compare award amounts for these USA scholarship listings?",
+      "answer": "Yes—many rows show a listed amount, but not every listing includes one, and amounts vary by program. Treat the catalog as a starting point and verify the current award details on the official scholarship page before you apply."
     },
     {
-      "question": "Are there scholarships specifically for graduate students?",
-      "answer": "Yes, many scholarships cater specifically to graduate students, including fellowships and research grants."
+      "question": "Do all monthly scholarships here require an essay?",
+      "answer": "No, requirements are mixed across these listings. Some programs may be lighter-touch, while others ask for essays or additional materials, so check each official listing before you apply."
+    },
+    {
+      "question": "Who is this scholarship filter most useful for?",
+      "answer": "It fits applicants trying to browse and compare USA scholarship options for international students across different study levels, including examples like graduate students and college students. It is also useful if you want to explore categories such as Education, STEM, Community, Medicine, Arts, or Miscellaneous."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "monthly-scholarships-international-students-usa",
-    "generatedAt": "2026-04-25T13:24:36.944Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:01:10.678Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

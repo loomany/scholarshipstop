@@ -1,0 +1,121 @@
+{
+  "seo_title": "Find Minnesota Financial Need Scholarships | USA",
+  "seo_description": "Minnesota financial need scholarships under five thousand dollars: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Minnesota scholarships that consider financial need and stay under the five-thousand-dollar range usually means sorting through a mix of smaller, more targeted awards. This filtered USA view brings those rows together so you can compare programs without losing time on listings outside your budget range or location focus. The set below spans categories such as education, community, disability, STEM, arts, and miscellaneous topics, with examples tied to study paths from education and business to natural resources, law, and philosophy. Award amounts vary by listing, and deadlines differ by program, so it is worth checking each row closely—especially since some dates appear to be coming up soon. Requirements also vary, with some scholarships looking lighter-touch than others and some asking for essays while others may not.",
+  "h1": "Minnesota Financial Need Scholarships Under Five Thousand USA …",
+  "supporting": "Use this slice to compare more than just the award line. Look at who the scholarship is meant for, how Minnesota eligibility is framed, and whether the listing fits your study level, such as high school senior or graduate student. You can also scan category signals to find programs connected to education, community involvement, disability, or technical and STEM interests. Because these are smaller awards, combining a few strong-fit applications can make this view especially useful. Always open the official page before you apply to verify current amounts, deadline wording, residency details, and any essay or document requirements.",
+  "related_intro": "If these Minnesota financial-need scholarships under this award range feel too narrow, related pages can help you explore nearby options by changing the amount filter, broadening the location, or comparing other eligibility themes that still match your application plan in the USA catalog.",
+  "how_to_use": [
+    "Compare each row for award range, Minnesota fit, and financial-need language before you shortlist anything",
+    "Scan requirement lines for study level, citizenship or residency details, and whether an essay may be part of the application",
+    "Check deadline text on every listing promptly because dates vary by program and some appear to be approaching soon",
+    "Open the official scholarship page to verify current amounts, documents, and final eligibility rules before you apply"
+  ],
+  "who_for": [
+    "Minnesota applicants who want to find need-based scholarships with awards below the five-thousand-dollar range",
+    "High school seniors and graduate students comparing smaller USA scholarship programs by location and eligibility",
+    "Students interested in education, community, disability, arts, or STEM-related listings in Minnesota",
+    "Applicants who want to compare lighter-touch opportunities with listings that may include essay requirements"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship in this Minnesota list?",
+      "answer": "Usually, you can explore multiple programs and apply to any that fit your profile, but each listing has its own rules. Check the official source for overlap limits, required materials, and who qualifies in the USA context."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare eligibility, study level, category fit, and any required materials such as essays or other application items. These rows span topics like education, disability, community, STEM, arts, and more, so the best match depends on the specific listing."
+    },
+    {
+      "question": "Are these only for one type of student in Minnesota?",
+      "answer": "No—this focused set includes different applicant profiles, with examples tied to study levels like high school senior and graduate student. Some listings may also mention USA citizenship or residency requirements, so review each scholarship's official criteria carefully."
+    }
+  ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 750,
+      "maxUsd": 5000,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "survey"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "natural_resources_and_conservation",
+        "agriculture_and_related_sciences",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Allina Health System",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "American Public Works Association-Minnesota Chapter",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Boy Scouts of America-Northern Lights Council",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "arts",
+      "community",
+      "disability",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/minnesota",
+    "generatedAt": "2026-04-26T14:34:49.158Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 9,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

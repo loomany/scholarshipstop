@@ -1,48 +1,131 @@
 {
-  "seo_title": "Scholarships for Single Parents in the USA",
-  "seo_description": "Explore 16 scholarships for single parents with awards from $500 to $44,000. Check deadlines and requirements for each opportunity.",
-  "intro": "Finding financial support as a single parent can be challenging, but there are 16 scholarships specifically designed to help. These awards, which range from around $500 to $44,000, cater to various fields including education, medicine, and law. Since deadlines vary, it's essential to check them promptly, especially with some approaching within the next 45 days. This selection offers a mix of requirements, with many options that may not require extensive essays.",
-  "h1": "Single Parent Scholarships: 16 Opportunities Available",
-  "supporting": "As you explore these scholarships, consider comparing the award amounts and the specific fields they support. Some listings may have lighter requirements, making them more accessible. Pay attention to the deadlines and ensure you verify each scholarship's details on the official site to maximize your chances of securing funding.",
-  "related_intro": "If you're interested in more tailored opportunities, check out our listings for scholarships focused on education, healthcare, or other specific areas.",
+  "seo_title": "Find Single Parent Scholarships in the USA",
+  "seo_description": "Single parent scholarships in the USA: compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find USA scholarships for single parents usually means balancing fit, timing, and effort at the same time. This filtered slice brings together programs tied to single-parent eligibility so you can apply with more focus instead of sorting through unrelated awards. The rows below span a mix of study levels, from high school seniors to adult non-traditional, college, and graduate paths, and they also touch several academic areas such as education, medicine, law, STEM, and related fields. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it helps to compare each row closely. Some listings may be relatively lighter-touch, but you should still verify details on the official scholarship page before you move forward.",
+  "h1": "Compare Single Parent Scholarships in the USA",
+  "supporting": "Use this list to compare more than the title alone. Check the eligibility wording, study level, field tags, residency or citizenship notes, and any requirement lines before you decide which programs deserve a full application. If you are applying for scholarships in the USA for the upcoming cycle, it is smart to review dates promptly because timing can differ across these rows. Award amounts also vary by listing and should be confirmed on the sponsor or official page.",
+  "related_intro": "If this single-parent filter feels close but not quite narrow enough, related scholarship pages can help you compare by study level, subject area, or other eligibility traits. That is often the fastest way to find programs that match both your family situation and your academic path in the USA.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Scan the award amounts listed",
-    "Read through the requirement lines carefully",
-    "Open the official scholarship pages for more details",
-    "Shortlist the scholarships that best fit your profile"
+    "Compare deadline text across rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award wording and eligibility notes"
   ],
   "who_for": [
-    "Single parents pursuing higher education",
-    "Applicants interested in STEM fields",
-    "Individuals seeking funding for medical studies",
-    "Those looking for scholarships with lighter requirements",
-    "Students in need of financial assistance for law programs"
+    "Single parents returning to school",
+    "High school seniors with dependent children",
+    "College or graduate students raising children",
+    "USA applicants comparing education, medicine, law, or STEM options"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for single parents?",
-      "answer": "There are 16 scholarships listed specifically for single parents, covering a range of categories including education, medicine, STEM, and law. Each scholarship may have different eligibility requirements and focuses, so it's beneficial to review each listing carefully."
+      "question": "How can I find single parent scholarships in the USA that fit my situation?",
+      "answer": "Use this filtered view to compare the eligibility notes on each row, then narrow by study level, field, and any USA residency wording shown in the listing. Many programs here reference common profiles like adult non-traditional, college, graduate, U.S. citizen, or U.S. permanent resident, but you should verify the exact rules on the official source."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes for the scholarships vary significantly, with amounts ranging from approximately $500 to $44,000. Be sure to check the specific details for each scholarship to understand the funding available."
+      "question": "Can I apply to more than one single parent scholarship from this list?",
+      "answer": "Usually, you can explore multiple listings and apply to any program where you meet the stated requirements. Check each official page for limits, required documents, and whether the award is meant for a specific major, level, or residency group."
     },
     {
-      "question": "Are there deadlines I need to be aware of?",
-      "answer": "Yes, all 16 scholarships have specific deadlines, which vary by program. It's important to check the individual listings for the most accurate deadline information, as some may be approaching soon."
+      "question": "How do I compare award amounts and deadlines on this page?",
+      "answer": "Compare the rows directly, since amounts and deadlines vary by program. This filtered set includes listings with posted award amounts and deadline text, and some dates appear soon, so it is smart to check the official page promptly before you apply."
     },
     {
-      "question": "Do I need to submit an essay for these scholarships?",
-      "answer": "Requirements for essays differ among the scholarships. While some may not require an essay, others do, so it’s essential to verify the requirements for each scholarship you are interested in."
+      "question": "Are these scholarships only for certain majors or school levels?",
+      "answer": "No single rule applies across the whole page. In these listings, you can find and compare programs tied to areas like education, medicine, law, STEM, business, and public service, along with levels such as high school senior, adult non-traditional, college, and graduate study."
+    },
+    {
+      "question": "Do single parent scholarships here usually require an essay?",
+      "answer": "Requirements differ by listing, so do not assume every program has the same application format. Some may be lighter-touch than others, but you should always confirm essay, transcript, and other submission details on the official scholarship page before applying."
     }
   ],
+  "page_data": {
+    "exactCount": 30,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 44000,
+      "statedAmountCount": 30,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 12,
+      "within60Days": 29,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 29,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "link"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "public_administration_and_social_service"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Waubonsee Community College",
+        "count": 8
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 5
+      },
+      {
+        "name": "Tarrant County College Foundation",
+        "count": 5
+      },
+      {
+        "name": "Alamo Colleges Foundation",
+        "count": 1
+      },
+      {
+        "name": "Beedie Luminaries",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical",
+      "disability",
+      "law",
+      "stem"
+    ]
+  },
   "_meta": {
     "canonicalPath": "single-parent",
-    "generatedAt": "2026-04-02T10:58:39.578Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 16,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:17:22.703Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 30,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

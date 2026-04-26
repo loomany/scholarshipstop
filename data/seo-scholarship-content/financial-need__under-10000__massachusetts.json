@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find Financial Need Scholarships Under Ten Thousand in Massachus…",
+  "seo_description": "Financial need scholarships under ten thousand in Massachusetts, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Massachusetts scholarships tied to financial need without wading through very large award listings? This filtered USA view narrows the search to programs with listed awards under ten thousand dollars, so you can compare options that may fit smaller but still meaningful funding gaps. The rows below span areas such as education, STEM, medicine, biology, disability, and miscellaneous topics, with examples ranging from community science awards to region-specific and Massachusetts-focused scholarships. Requirements, residency rules, study level fit, and deadline timing vary by program, and award amounts should always be verified on the official source. Many listings in this slice appear to have lighter application signals and often no essay flag, but you should still read each scholarship carefully before you apply.",
+  "h1": "Find Financial Need Scholarships Under Ten Thousand in Massachus…",
+  "supporting": "A focused set of listings like this is useful when you want to compare practical details instead of sorting through broad national results. As you browse, look at the requirement lines, eligible study levels, and any citizenship or residency wording alongside the award text. Some programs may suit high school students, while others fit current college or graduate applicants. Because deadline text differs by row and some dates may be coming up soon, it is smart to open strong matches early, shortlist them, and confirm every detail on the sponsor or official scholarship page before applying.",
+  "related_intro": "If these Massachusetts financial-need scholarships feel close but not quite right, related pages can help you widen or tighten the search by location, award size, or other eligibility themes. That is often the fastest way to find comparable USA listings with a better fit for your background, study level, or subject area.",
+  "how_to_use": [
+    "Compare each row for award text, study level, and Massachusetts or residency wording before you shortlist anything",
+    "Read the requirement lines closely to see whether the scholarship is tied to financial need, a field of study, or a specific background",
+    "Check deadline text row by row and prioritize listings with sooner dates so you do not miss a chance to apply",
+    "Open the official scholarship page for every match and verify amount, eligibility, and application instructions before submitting"
+  ],
+  "who_for": [
+    "Massachusetts applicants who want to find need-based scholarships with listed awards below ten thousand dollars",
+    "High school, college, and graduate students comparing smaller USA scholarship programs by requirement and deadline text",
+    "Students interested in education, STEM, medicine, biology, disability, or miscellaneous categories within Massachusetts-focused results",
+    "Applicants who prefer many listings that often appear to have no essay flag and comparatively lighter application signals"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship from this list?",
+      "answer": "Usually, yes—these are separate USA scholarship listings, not one combined program. Apply to any that fit your profile, but check each official source for its own rules, required materials, and deadline."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on award amount, deadline, study level, location fit, and any field tags such as education, STEM, medicine, or biology. Amounts and requirements vary by listing, so compare row by row instead of assuming the same criteria across the page."
+    },
+    {
+      "question": "Are these scholarships only for Massachusetts residents?",
+      "answer": "Not always—Massachusetts is part of this filter slice, but eligibility can still differ by program. Some listings may also show different citizenship or residency labels, so verify the official criteria before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 37,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 10000,
+      "statedAmountCount": 37,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 29,
+      "within60Days": 33,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-04-10",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 37,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_3",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Worcester State University",
+        "count": 13
+      },
+      {
+        "name": "University of Massachusetts Amherst",
+        "count": 7
+      },
+      {
+        "name": "Massachusetts Broadcasters Association",
+        "count": 2
+      },
+      {
+        "name": "Massachusetts Department of Higher Education",
+        "count": 2
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "biology",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/massachusetts",
+    "generatedAt": "2026-04-26T14:18:11.044Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 37,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

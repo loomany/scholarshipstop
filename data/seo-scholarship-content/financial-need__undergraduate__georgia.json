@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Georgia Undergraduate Need Scholarships | USA",
+  "seo_description": "Financial need undergraduate scholarships in Georgia, USA—compare awards, review varying deadlines, and explore listings to apply on official pages.",
+  "intro": "Trying to find undergraduate scholarships in Georgia that take financial need into account usually means balancing fit, timing, and effort all at once. This filtered USA view narrows the search to a focused set of listings tied to Georgia and undergraduate study, so you can compare options without wading through unrelated programs. The rows below span themes such as education, community, miscellaneous topics, and STEM, and they may speak to different study levels, residency labels, or fields of study. Award amounts vary by listing, deadlines differ by program, and requirement details are not identical across the set. Many listings appear to have lighter application requirements and often no essay, but you should still verify every rule on the official page before you apply.",
+  "h1": "Find Financial Need Undergraduate Scholarships in Georgia USA …",
+  "supporting": "A smart way to use this list is to compare the requirement line, award text, and deadline wording side by side before opening the programs that look strongest. Some scholarships in this Georgia slice may be broad, while others are tied to a category, community connection, or academic area such as education, business, law, communication, or STEM. If a row looks promising, open the official source to confirm current eligibility, residency expectations, and what materials are actually required. Because some deadlines may be coming up soon, it is worth shortlisting likely matches early and checking details promptly.",
+  "related_intro": "If this Georgia undergraduate financial need set feels close but not quite right, related pages can help you compare nearby options by location, study level, or broader undergraduate scholarship themes in the USA catalog. That is useful when you want to widen the pool without losing the same general intent.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify eligibility",
+    "Shortlist the listings that match your study level",
+    "Check award details and application materials before you apply"
+  ],
+  "who_for": [
+    "Georgia undergraduates with financial need",
+    "Students comparing Georgia and USA scholarship options",
+    "Applicants seeking undergraduate awards with lighter requirements",
+    "Residents looking at education, community, or STEM listings"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Georgia for students with financial need?",
+      "answer": "Use this filtered view to explore Georgia listings that match undergraduate study and financial-need criteria in the USA catalog. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these Georgia scholarship listings?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts differ by listing, and deadlines are not the same across the page, so compare the catalog details and confirm everything with the official source before you apply."
+    },
+    {
+      "question": "Are these scholarships only for current college students, or can other undergraduate-level applicants apply?",
+      "answer": "Not every listing appears to target the exact same student stage. In this filtered set, some programs may align with profiles like high school seniors or different college years, so check each listing carefully before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I browse in this Georgia financial-need section?",
+      "answer": "The programs below span multiple themes rather than one single subject area. You may find and compare listings connected to categories such as Education, Community, STEM, and Miscellaneous, with some examples tied to fields like education, business, law, and communication."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 2500,
+      "maxUsd": 5000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3",
+        "graduate_student",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "PGA of America - Georgia Section",
+        "count": 4
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 1
+      },
+      {
+        "name": "Kids' Chance of Georgia",
+        "count": 1
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/georgia",
+    "generatedAt": "2026-04-26T14:46:29.416Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

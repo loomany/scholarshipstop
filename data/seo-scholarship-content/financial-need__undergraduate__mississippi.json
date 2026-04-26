@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Mississippi, U…",
+  "seo_description": "Financial need undergraduate scholarships in Mississippi, USA—compare award ranges, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Mississippi that take financial need into account usually means balancing fit, timing, and effort at the same time. This filtered USA view narrows the search to programs tied to Mississippi and undergraduate study, so you can compare a focused set of listings instead of sorting through unrelated awards. The rows here span themes such as STEM, community, education, and miscellaneous opportunities, with requirement details that can differ from one listing to the next. Award amounts vary by listing and should be confirmed on the official pages. Deadlines also differ by program, and some appear to be coming up soon, so it makes sense to check dates promptly. Many listings in this slice appear to have lighter application signals, but you should still verify every requirement before you apply.",
+  "h1": "Find Mississippi Undergraduate Need-Based Scholarships USA",
+  "supporting": "A useful way to read this list is to compare the requirement line, study level cues, location fit, and category labels before opening each scholarship. Some listings may connect more closely to fields like education, communication and journalism, business, law, or engineering, while others are broader. If you want to compare options quickly, scan for deadline text first, then review award wording and residency or citizenship language. Official sponsor pages are the place to confirm current terms, because details can change and not every row will work the same way.",
+  "related_intro": "If these Mississippi undergraduate scholarships are close but not quite right, related pages can help you widen or tighten the search by need, study level, or location. That is often the fastest way to find nearby matches worth comparing before you apply.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify current terms",
+    "Shortlist listings that match your study level and location",
+    "Check award wording and category labels side by side"
+  ],
+  "who_for": [
+    "Mississippi undergraduates seeking need-based aid",
+    "Applicants comparing Mississippi and USA eligibility details",
+    "Students interested in STEM or community-focused scholarships",
+    "Undergraduates who prefer listings with lighter application signals"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Mississippi based on financial need?",
+      "answer": "Use this filtered view to compare Mississippi scholarship rows that match undergraduate study and financial-need criteria. Then open each official listing to confirm eligibility, residency, and application details before you apply."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or categories?",
+      "answer": "Not necessarily—the programs below span categories such as STEM, Community, Education, and Miscellaneous. If you want to explore fit, compare the listing details with your major, study level, and any field-specific requirements shown on the official source."
+    },
+    {
+      "question": "Do these undergraduate financial-need scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many are marked with no essay in the catalog data. Still, requirements can change, so verify the current application steps on the scholarship's official page before you apply."
+    },
+    {
+      "question": "Who should browse this Mississippi financial-need scholarship filter?",
+      "answer": "- Undergraduate applicants looking for Mississippi-based scholarship options tied to financial need - High school seniors and current college students comparing next-step funding opportunities in the USA - Students who want to explore programs across STEM, community, education, or related fields while checking official eligibility details"
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 3250,
+      "minUsd": 2000,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "college_2",
+        "college_3",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "business_management_and_marketing",
+        "engineering",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 2
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Birmingham Chapter",
+        "count": 1
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      },
+      {
+        "name": "Thurgood Marshall College Fund",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/mississippi",
+    "generatedAt": "2026-04-26T14:50:47.764Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

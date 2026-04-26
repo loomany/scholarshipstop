@@ -1,46 +1,129 @@
 {
-  "seo_title": "Connecticut Scholarships for Financial Need | 47 Options",
-  "seo_description": "Explore 47 scholarships for financial need in Connecticut. Award sizes vary; check deadlines and requirements for each listing.",
-  "intro": "For students in Connecticut facing financial challenges, there are 47 scholarships available that can help ease the burden of educational expenses. Award sizes vary significantly, with amounts ranging from approximately $150 to $17,000, making it essential to explore options that fit your needs. Keep in mind that application requirements and deadlines differ, so reviewing each listing carefully is crucial to finding the best fit for your situation.",
-  "h1": "Financial Need Scholarships in Connecticut",
-  "supporting": "This collection of scholarships covers a range of categories, including education, arts, STEM, and community service. As you navigate the listings, pay attention to the specific eligibility requirements and whether essays are needed, as these can vary widely. With deadlines approaching for many opportunities, it’s a good idea to prioritize your applications based on upcoming due dates and award amounts that align with your financial needs.",
-  "related_intro": "You might also find it helpful to check out related pages that focus on scholarships by category or other financial aid options available in Connecticut.",
+  "seo_title": "Find Financial Need Scholarships in Connecticut, USA",
+  "seo_description": "Financial need scholarships in Connecticut, USA with award ranges, study levels, and varying deadlines. Compare listings and apply on official pages.",
+  "intro": "Trying to find Connecticut scholarships tied to financial need usually means balancing urgency with fit: you want options you can actually apply for, not a generic national list. This filtered USA view pulls together a focused set of listings connected to Connecticut and need-based eligibility, with programs spanning areas like education, arts, STEM, community, and medicine. The rows below include opportunities for different study stages, from high school through graduate and adult non-traditional paths. Awards, deadlines, residency details, and application steps vary by listing, so it helps to compare each row closely rather than assume the same rules apply across the board. Because deadline text differs across these programs, it is smart to check the official page promptly as you browse.",
+  "h1": "Find Financial Need Scholarships in Connecticut USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan the award text, study level, category tags, and requirement lines to see which Connecticut opportunities match your situation fastest. Some listings may be lighter-touch, while others can ask for more supporting material, so read each summary carefully before you apply. It is also worth opening the official source for any program you shortlist, since amounts vary by listing and final eligibility details, residency language, and submission instructions must be verified there.",
+  "related_intro": "If these Connecticut financial need scholarships feel close but not quite right, related pages can help you compare nearby angles such as broader Connecticut awards, topic-based options like education or STEM, or other eligibility filters that may fit your profile better.",
   "how_to_use": [
-    "Compare deadlines to prioritize your applications",
-    "Scan award amounts to find scholarships that meet your needs",
-    "Read requirement lines to understand what each scholarship entails",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that align with your qualifications"
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist programs by study level and category tags",
+    "Check award text carefully since amounts vary by listing"
   ],
   "who_for": [
-    "Students in Connecticut with financial need",
-    "Undergraduates pursuing education or STEM fields",
-    "High school seniors applying for community scholarships"
+    "Connecticut residents seeking need-based scholarship options",
+    "High school seniors comparing local and statewide awards",
+    "Graduate students with financial need reviewing Connecticut programs",
+    "Adult non-traditional learners returning to school in Connecticut",
+    "Applicants interested in education, arts, STEM, community, or medicine"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Connecticut?",
-      "answer": "There are 47 scholarships listed that cater to students demonstrating financial need in Connecticut. These scholarships span various categories, including education, arts, STEM, community, and medicine, providing a diverse range of options."
+      "question": "How do I find financial need scholarships in Connecticut that I can actually apply for?",
+      "answer": "Use this filtered view to compare the Connecticut rows first by deadline, study level, and any residency or citizenship notes shown in each listing. Then verify the final eligibility details on the official scholarship page before you apply, since requirements differ by program."
     },
     {
-      "question": "How do I find specific details about each scholarship?",
-      "answer": "Each scholarship listing includes essential details such as award amounts, deadlines, and eligibility criteria. Be sure to check each entry for specific requirements, as some may require essays while others do not."
+      "question": "Can I compare award amounts on these Connecticut financial need scholarships?",
+      "answer": "Yes—these listings include award information, but amounts vary by row and should be confirmed on the official source. Some awards are smaller and some are much larger, so compare the individual listing details instead of assuming one typical amount for the whole page."
     },
     {
-      "question": "Are there upcoming deadlines I should be aware of?",
-      "answer": "All 47 scholarships have deadlines, with some approaching within the next 45 days. It's important to review the deadlines for each scholarship promptly to ensure you don't miss any opportunities."
+      "question": "Who should explore this scholarship list?",
+      "answer": "This Connecticut filter is most relevant for people looking for USA scholarships tied to financial need, especially applicants at levels such as high school senior, college, graduate student, or adult/non-traditional study. You may also find listings connected to areas like education, arts, STEM, community, or medicine."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships vary significantly, with amounts ranging approximately from $150 to $17,000. Each listing provides specific details on the award amount, so check individual entries for precise figures."
+      "question": "How should I browse this list if I want the best-fit options first?",
+      "answer": "Start by narrowing to the rows that match your study level, field of study, and any residency or citizenship details shown, then compare deadlines and award ranges. After that, open the official sources for your top matches to confirm current rules before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 54,
+    "award": {
+      "medianUsd": 1550,
+      "minUsd": 150,
+      "maxUsd": 17000,
+      "statedAmountCount": 54,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 47,
+      "within60Days": 50,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 51,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "architecture_and_related_services",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 37
+      },
+      {
+        "name": "Support Creativity",
+        "count": 2
+      },
+      {
+        "name": "American Society of Landscape Architects-Connecticut Chapter",
+        "count": 1
+      },
+      {
+        "name": "Association of Connecticut Fairs",
+        "count": 1
+      },
+      {
+        "name": "Connecticut Association of Latinos in Higher Education",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "arts",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/connecticut",
-    "generatedAt": "2026-04-02T10:49:34.385Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 47,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:45:09.501Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 54,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,48 +1,115 @@
 {
-  "seo_title": "Florida Scholarships for African American Students",
-  "seo_description": "Explore 7 scholarships for African American students in Florida. Award sizes range from $750 to $4,000. Check deadlines and details.",
-  "intro": "For African American students in Florida, there are currently 7 scholarship opportunities available that can help ease the financial burden of education. Award sizes vary, with amounts ranging from approximately $750 to $4,000. Each scholarship has its own unique requirements and deadlines, so it's important to check the details closely to find the best fit for your situation. Many listings do not require essays, making them more accessible for applicants.",
-  "h1": "Scholarships for African American Students in Florida",
-  "supporting": "This selection of scholarships covers various educational categories and community initiatives, providing a range of options for students at different levels. As you review the listings, pay attention to the specific award amounts and deadlines, which differ from one scholarship to another. This variability allows you to prioritize opportunities that align with your timeline and financial needs.",
-  "related_intro": "If you're interested in more funding options, consider exploring scholarships specifically for other demographics or those available in different states.",
+  "seo_title": "Find African American Scholarships in Florida, USA",
+  "seo_description": "African American scholarships in Florida, USA with award ranges and varying deadlines. Compare current listings and apply on official pages.",
+  "intro": "Trying to find scholarships for African American students in Florida usually means narrowing a broad USA search into programs that actually match your location and eligibility. This filtered slice brings together listings tied to Florida with an African American eligibility focus, so you can compare options without jumping between unrelated results. The rows below span community and education themes, with examples that reach from high school seniors to college and graduate study. Awards, deadlines, residency details, and other requirements vary by listing, so it is worth reading each row closely. Many entries in this slice appear to have lighter application requirements, and many often show no essay in the metadata, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Find Scholarships for African American Students in Florida USA …",
+  "supporting": "A useful way to browse this set is to compare the requirement line, study level, category, and deadline text side by side before opening individual listings. Some programs may fit education interests, while others lean more community based or connect to specific training paths. If you are trying to apply soon, check date language promptly because deadlines differ across the rows. Award amounts also vary by listing and should be confirmed on the official source. Use this view to find realistic matches, compare effort against fit, and build a shortlist you can act on.",
+  "related_intro": "If you do not see the right fit here, related pages can help you explore nearby scholarship paths by changing one part of the filter, such as location, study level, or another eligibility angle. That makes it easier to compare similar USA opportunities without starting your search over.",
   "how_to_use": [
-    "Compare deadlines to prioritize your applications",
-    "Scan award amounts to find suitable funding",
-    "Read requirement lines for eligibility details",
-    "Open official pages for the most accurate information",
-    "Shortlist scholarships that match your profile"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
   ],
   "who_for": [
-    "African American students in Florida",
-    "High school seniors seeking post-secondary funding",
-    "Students pursuing vocational education",
-    "Community-focused scholarship applicants",
-    "Those looking for lighter application requirements"
+    "African American students living in Florida",
+    "Florida high school seniors planning next steps",
+    "College or graduate applicants comparing local eligibility matches",
+    "Students seeking community or education related scholarship options"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for African American students in Florida?",
-      "answer": "The current listings include a variety of scholarships categorized under education, community, and miscellaneous. With 7 scholarships available, students can find options that suit their academic and personal goals."
+      "question": "How can I find scholarships for African American students in Florida that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, category, and any citizenship or residency notes shown in each listing. In this USA-focused slice, details can differ row to row, so confirm eligibility on the official scholarship page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this selection do not require an essay, making the application process potentially easier for many applicants. However, it's important to verify the specific requirements for each scholarship as they can vary."
+      "question": "Can I apply if I’m in high school, college, or graduate school?",
+      "answer": "This set includes listings that may match high school seniors, college students, and graduate students. Check each program’s official requirements carefully, because the eligible study level is not the same across every listing."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships listed generally range from approximately $750 to $4,000. Be sure to check each listing for exact amounts and details."
+      "question": "Are these scholarships only for certain majors or topics?",
+      "answer": "Not all of them point to the same academic area. In these rows, you may find education, visual and performing arts, transportation and materials moving, plus broader community or miscellaneous listings, so it helps to explore more than one match."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All scholarships in this list have deadlines, but they vary by program. It's advisable to check each scholarship listing promptly to ensure you don't miss any upcoming deadlines, especially since some may be within the next 45 days."
+      "question": "Do these listings usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag in the catalog metadata, but you should not assume that applies to every program. Always review the official application page for the exact requirements before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 750,
+      "maxUsd": 4000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 32,
+      "nearestLabels": [
+        "2026-05-08",
+        "2026-05-08",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_1",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "transportation_and_materials_moving",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 3
+      },
+      {
+        "name": "African American Club of Hernando County",
+        "count": 2
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 1
+      },
+      {
+        "name": "University of South Florida",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community"
+    ]
+  },
   "_meta": {
     "canonicalPath": "african-american/florida",
-    "generatedAt": "2026-04-02T10:45:57.087Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:22:50.178Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 7,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

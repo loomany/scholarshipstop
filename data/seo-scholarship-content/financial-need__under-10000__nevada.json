@@ -1,0 +1,121 @@
+{
+  "seo_title": "Find Nevada Financial Need Scholarships | USA",
+  "seo_description": "Nevada financial need scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Nevada scholarships in the USA that consider financial need and stay on the lower award side usually means comparing a focused set of listings rather than chasing broad national results. This filtered slice brings together programs tied to Nevada with award amounts that fall under this preset, so you can apply more selectively and avoid mismatched options. The rows below span themes such as disability, education, community, and medicine, with examples that may fit high school seniors or graduate students depending on the listing. Awards, deadlines, and requirement details vary across programs, and some entries may be lighter-touch than others, so it is worth reading each row closely before you decide where to apply.",
+  "h1": "Nevada Financial Need Scholarships USA Apply",
+  "supporting": "Use this view to compare more than the title alone. Check the award text, location fit, study level, and category tags to see which listings match your situation in Nevada. Deadline wording differs by program, and at least some opportunities appear to be coming up soon, so timely review matters. Requirements are not identical across these rows, and essay expectations can differ, so open the official page for any scholarship you shortlist and verify the latest rules before you submit.",
+  "related_intro": "If these Nevada financial-need listings feel close but not quite right, related pages can help you compare nearby filter combinations. You may want to explore other Nevada scholarship slices, broader financial-need results, or other under-ten-thousand views in the USA to find a better fit by topic, study level, or requirement style.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your Nevada eligibility",
+    "Verify award details and submission rules on the sponsor site"
+  ],
+  "who_for": [
+    "Nevada applicants with financial need",
+    "High school seniors comparing smaller USA scholarship awards",
+    "Graduate students checking Nevada-based funding options",
+    "Students interested in disability, education, community, or medicine categories"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines on this page before I apply?",
+      "answer": "Yes—these rows let you quickly compare listed award ranges and deadline text side by side. Deadlines differ by program, and some dates may be coming up soon, so verify the latest timing on the official source before submitting an application."
+    },
+    {
+      "question": "What kinds of scholarships appear in this Nevada filter?",
+      "answer": "This focused set of listings includes themes such as disability, education, community, and medicine. You may also see different study levels and fields, including high school senior and graduate student options, so it helps to open each listing and check the exact fit."
+    },
+    {
+      "question": "Are these Nevada scholarships only for certain majors or study levels?",
+      "answer": "Not necessarily—this filter can include multiple study levels and fields of study rather than one single major track. If you want to explore options in education, construction trades, business, public administration, or transportation-related fields, compare the rows and then verify eligibility on the official pages."
+    },
+    {
+      "question": "Are the application requirements the same for every scholarship in this list?",
+      "answer": "No, requirements vary across these programs below. Some listings may be comparatively lighter-touch, while others can ask for more materials, so review each catalog entry and the official source carefully before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 16,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-06-30",
+        "2026-04-20"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript",
+        "document",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "communication_and_journalism",
+        "engineering"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      },
+      {
+        "name": "American Association of Airport Executives-Southwest Chapter",
+        "count": 1
+      },
+      {
+        "name": "Japan Exchange and Teaching Program Alumni Association of Northern California",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Western States Roofing Contractors Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "disability",
+      "education",
+      "community",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/nevada",
+    "generatedAt": "2026-04-26T14:20:31.401Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

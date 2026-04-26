@@ -1,0 +1,113 @@
+{
+  "seo_title": "Find Engineering Scholarships in New York, USA",
+  "seo_description": "Engineering scholarships in New York, USA: compare deadlines, requirements, and award ranges, then apply through each official program page.",
+  "intro": "Trying to find engineering scholarships in New York usually means narrowing past broad USA results to a smaller set you can actually compare. This filtered slice brings together New York listings tied to engineering and related STEM themes, with some overlap into education, community, and humanities categories. As you browse, expect the details to differ by row: award amounts vary by listing, deadlines are not identical across every program, and requirement lines may be lighter for some options than others. A few listings may ask for more written material while others appear more straightforward, so it makes sense to read each entry closely before you apply.",
+  "h1": "Find New York Engineering Scholarships USA",
+  "supporting": "Use these rows as a comparison view rather than assuming every New York engineering award works the same way. Look at the title, category tags, study level cues, and any residency or citizenship wording to see which programs fit your situation. Then compare how each listing describes the award, what materials may be needed, and how soon you may need to act. Because deadlines can be close and details can change, open the official source for any scholarship you plan to pursue and verify the current terms before submitting an application.",
+  "related_intro": "If this New York engineering set feels too narrow, related pages can help you compare nearby angles such as broader engineering results, other New York scholarship categories, or adjacent STEM listings in the USA catalog. That is often the fastest way to spot programs with similar themes but different eligibility wording.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read requirement lines for essay expectations",
+    "Open the official page before you apply",
+    "Shortlist listings that match your level and location",
+    "Verify award details on the sponsor site"
+  ],
+  "who_for": [
+    "New York students seeking engineering scholarships",
+    "High school seniors planning engineering study",
+    "USA applicants comparing New York STEM awards",
+    "Permanent residents checking state-focused eligibility"
+  ],
+  "faq": [
+    {
+      "question": "How do I find engineering scholarships in New York that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by title, study level, and any citizenship or residency notes shown in the catalog. Then open the official source for each program to verify eligibility, since requirements can differ from listing to listing in the USA."
+    },
+    {
+      "question": "Can I apply if I’m a high school senior or a U.S. permanent resident?",
+      "answer": "Some listings in this New York engineering slice show labels such as high_school_senior and us_permanent_resident. Check each scholarship’s official page before you apply, because those details are not guaranteed across every row."
+    },
+    {
+      "question": "How should I compare award amounts on these New York engineering scholarships?",
+      "answer": "Amounts vary by listing, so compare each row individually instead of assuming one standard award for the whole page. In this focused set of listings, the visible awards differ, and you should confirm the current amount on the official scholarship page."
+    },
+    {
+      "question": "Do these scholarships all have the same deadline or essay requirement?",
+      "answer": "No—deadlines and application requirements can vary by program, even within the same filtered list. The catalog shows deadline text on these rows, and at least one appears relatively soon, so it’s smart to check dates promptly and confirm whether an essay is required before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "construction_trades",
+        "history"
+      ],
+      "commonResidency": [
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Associated General Contractors of New York State",
+        "count": 1
+      },
+      {
+        "name": "Society of American Military Engineers-Buffalo Post",
+        "count": 1
+      },
+      {
+        "name": "Solid Waste Association of North America-New York State Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "humanities",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "engineering/new-york",
+    "generatedAt": "2026-04-26T13:39:42.874Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

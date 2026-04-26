@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in New Jersey, US…",
+  "seo_description": "Financial need undergraduate scholarships in New Jersey, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in New Jersey that take financial need into account usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings together a focused set of listings tied to need-based eligibility, with rows that span areas such as education, arts, medicine, disability, community, and related subjects. Some opportunities may fit current college students, while others can also overlap with earlier academic stages shown in the catalog. Awards, deadlines, residency language, citizenship terms, and application requirements vary across the programs below, so it is worth comparing each row carefully before you apply. A few listings may be relatively lighter-touch, but you should still verify every requirement on the official source.",
+  "h1": "Find New Jersey Undergraduate Need-Based Scholarships USA",
+  "supporting": "Use this list to compare more than the title alone. Scan the award text, read the requirement line, and note how each program defines eligibility for New Jersey applicants and undergraduate study. Because deadlines differ by listing, it helps to check date fields early and shortlist the rows that match your situation first. You can also compare category clues such as education, arts, medicine, community, or disability to find scholarships that line up with your academic path or background. Before you apply, open the official page for each option and confirm current terms, materials, and award details.",
+  "related_intro": "If these rows are close but not quite right, related pages can help you compare nearby scholarship sets by study level, topic, or location. That is useful when you want to widen your search beyond this New Jersey need-based undergraduate slice without losing the same general intent.",
+  "how_to_use": [
+    "Compare deadline fields across listings",
+    "Read each requirement line carefully",
+    "Open official pages before you apply",
+    "Shortlist rows that match your profile",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "New Jersey undergraduates with financial need",
+    "College applicants comparing need-based aid options",
+    "Students in education, arts, or health-related fields",
+    "USA residents checking state-linked scholarship opportunities"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in New Jersey based on financial need?",
+      "answer": "Use this filtered view to compare New Jersey scholarship rows that match undergraduate study and financial need. Then open each listing’s official source to verify eligibility, residency, study level, and application steps."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate in the USA?",
+      "answer": "Not necessarily—requirements vary by program, even within this New Jersey-focused set of listings. Check each row for details like residency or citizenship labels, study level, field of study, and any financial-need criteria on the official page before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline, category, and any requirement notes row by row. Amounts vary by listing, and deadlines differ by program, so confirm both on the official scholarship source before submitting."
+    },
+    {
+      "question": "Are these New Jersey scholarships only for certain majors or topics?",
+      "answer": "This slice includes a mix of topics, with examples tied to education, arts, medicine, disability, and community. If you want to explore relevant options faster, scan the titles and categories first, then verify field-of-study rules on the official listing."
+    }
+  ],
+  "page_data": {
+    "exactCount": 16,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 16,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 15,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-13"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 15,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "visual_and_performing_arts",
+        "architecture_and_related_services",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 5
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 2
+      },
+      {
+        "name": "Support Creativity",
+        "count": 2
+      },
+      {
+        "name": "American Water Works Association-New Jersey Section",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of New Jersey",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "arts",
+      "medical",
+      "miscellaneous",
+      "disability",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/new-jersey",
+    "generatedAt": "2026-04-26T14:52:20.707Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 16,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

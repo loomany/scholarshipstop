@@ -1,43 +1,132 @@
 {
-  "seo_title": "Top Scholarships for Indian Students in the USA - 196 Opportunities",
-  "seo_description": "Explore 196 scholarships for Indian students in the USA. Discover various funding options to support your education journey.",
-  "h1": "Scholarships for Indian Students in the USA",
-  "intro": "Navigating the financial landscape of studying in the USA can be daunting, especially for Indian students. Fortunately, there are numerous scholarships available specifically designed to support international students. With 196 scholarships currently listed, you have a wealth of opportunities to explore. These scholarships vary in eligibility criteria, award amounts, and application processes, making it essential to find the right fit for your academic goals. From merit-based awards to need-based grants, understanding your options can significantly ease the financial burden of your education in the United States.",
-  "supporting": "Eligibility for scholarships can vary widely, but many are open to undergraduate and graduate students from India. Some scholarships, like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship, may require specific academic achievements or community involvement. Deadlines also differ, so it’s crucial to check each scholarship's timeline. To apply, gather necessary documents such as transcripts, letters of recommendation, and personal statements. Tailor your applications to highlight your unique experiences and aspirations, as this can set you apart from other candidates. Don’t forget to explore local organizations and universities, as they often offer additional funding opportunities.",
-  "related_intro": "In addition to scholarships, Indian students can explore various financial aid options, including grants and assistantships, to further support their studies in the USA.",
+  "seo_title": "Find Scholarships for Indian Students in USA",
+  "seo_description": "Scholarships for Indian students in USA with deadlines, award details, and eligibility to compare. Explore listings and apply on official pages.",
+  "intro": "Trying to find scholarships for Indian students in the USA usually means sorting through a mix of international-student awards, campus-based funding, and broader education programs that may also include STEM, community, medicine, arts, or other academic interests. This filtered view brings those rows into one place so you can compare options more quickly for study in the United States. Awards vary widely by listing, and amounts shown in the catalog should always be verified on the official page. Deadlines also differ by program, with some opportunities closing relatively soon, so it makes sense to check dates promptly. Requirements are not uniform either: some listings may ask for essays or more supporting material, while others appear lighter-touch, so read each row carefully before you apply.",
+  "h1": "Find Scholarships for Indian Students in USA",
+  "supporting": "A useful way to browse this set is to compare more than just the title. Look at the study level, citizenship or residency wording, field of study, category tags, and the requirement lines together before you shortlist anything. You may find listings tied to education, engineering, business, English, health professions, or broader international-student eligibility, so this slice is worth scanning even if your major is not obvious from the page name alone. If a program looks promising, open the official source and confirm eligibility, award details, and submission instructions before you move forward.",
+  "related_intro": "If you do not see enough matches here, related scholarship pages can help you narrow by study level, subject area, or broader international-student criteria in the USA. That is often the fastest way to compare nearby options without restarting your search.",
   "how_to_use": [
-    "Browse the list of scholarships available.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required documents for application.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Scan each row for study level, category tags, and citizenship or residency wording before adding it to your shortlist",
+    "Compare award text across listings, but verify exact amounts and renewal details on the official scholarship page",
+    "Check deadline information row by row and prioritize any program that appears to close soon",
+    "Read requirement lines carefully to see whether essays or extra materials may be needed before you apply",
+    "Open the sponsor or official program page for every serious option and confirm eligibility for Indian students in the USA"
   ],
   "who_for": [
-    "Indian undergraduate and graduate students.",
-    "Students seeking financial assistance for education.",
-    "Individuals with strong academic or extracurricular backgrounds."
+    "Indian students planning to study in the USA and looking for scholarship listings that may include international-student eligibility",
+    "Applicants comparing funding across education, STEM, medicine, arts, community, or miscellaneous scholarship categories",
+    "Graduate, college, or high school senior applicants who want to find programs aligned with their current study level",
+    "Students in fields such as engineering, business, English, education, or health professions who want to compare relevant USA scholarship options"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Indian students?",
-      "answer": "There are merit-based, need-based, and specific scholarships for various fields of study."
+      "question": "How can I find scholarships for Indian students in the USA on this filtered view?",
+      "answer": "Use the rows below to compare eligibility labels, study level, field of study, award details, and deadline text. This USA-focused slice includes international-student opportunities, but you should still open each listing and verify the official source before you apply."
     },
     {
-      "question": "How can I find scholarships that suit my profile?",
-      "answer": "Utilize scholarship search engines and university resources to match your qualifications."
+      "question": "Are these scholarships only for graduate students?",
+      "answer": "No. The listings in this catalog slice span multiple study levels, with examples including graduate students, high school seniors, and college students. Check each row carefully to find programs that match your current level in the USA application process."
     },
     {
-      "question": "Are there scholarships that cover full tuition?",
-      "answer": "Yes, several scholarships offer full tuition coverage, along with living expenses."
+      "question": "Do all scholarships here require an essay?",
+      "answer": "No—requirements appear mixed across these listings. Some may ask for essays and some may be lighter-touch, so compare the individual rows and confirm the exact application requirements on the official source."
+    },
+    {
+      "question": "What subjects can I explore on this page?",
+      "answer": "This filtered page includes scholarships connected to areas such as education, business, engineering, English language and literature, health professions, STEM, arts, medicine, community, and miscellaneous topics. If you want to browse by fit, start with your field of study and then compare eligibility and deadline details row by row."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-indian-students-in-usa",
-    "generatedAt": "2026-04-25T13:17:26.790Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:06:06.937Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

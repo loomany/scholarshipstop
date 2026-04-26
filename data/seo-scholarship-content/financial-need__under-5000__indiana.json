@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Indiana Financial Need Scholarships | USA",
+  "seo_description": "Indiana financial need scholarships under five thousand dollars: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Indiana scholarships tied to financial need without wading through higher award tiers? This filtered USA view narrows the search to programs with listed awards under the stated cap, so you can compare options that may fit smaller funding gaps, books, fees, or part of tuition. The rows below span a mix of topics such as education, community, STEM, law, disability, and miscellaneous areas, with listings that can suit different study levels. Requirements are not identical across this slice: some programs may ask for essays, some appear lighter touch, and eligibility details can vary by residency, citizenship, field of study, or class standing. Deadlines also differ by listing, so it is smart to check timing early if you plan to apply in the current cycle.",
+  "h1": "Explore Indiana Financial Need Scholarships USA",
+  "supporting": "A useful way to browse this set is to read each row as a quick screening tool, then open the official source for anything that looks promising. Compare the award text, deadline wording, study level, and category labels first, then look closely at requirement lines for financial need language, residency expectations, and any field restrictions such as education, business, engineering, construction trades, or legal studies. Because this Indiana slice includes mixed topics and mixed application effort, it is worth shortlisting a few options rather than assuming similar titles have similar rules.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing one filter at a time, such as location, award range, or eligibility theme. That makes it easier to spot Indiana options with different funding levels or broader USA scholarship matches connected to financial need.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist programs that match your study level and location",
+    "Verify award details and eligibility on the sponsor site"
+  ],
+  "who_for": [
+    "Indiana applicants with financial need",
+    "High school seniors comparing smaller award programs",
+    "College and graduate students checking Indiana-based options",
+    "Applicants in education, engineering, business, construction trades, or law"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Indiana scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Indiana scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Indiana scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 24,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 750,
+      "maxUsd": 5000,
+      "statedAmountCount": 24,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 17,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-05-01",
+        "April 30, 2026 3:00 PM CT",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 7,
+      "noCount": 17,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "construction_trades",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 2
+      },
+      {
+        "name": "Western Indiana Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "miscellaneous",
+      "law",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/indiana",
+    "generatedAt": "2026-04-26T14:31:43.838Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 24,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

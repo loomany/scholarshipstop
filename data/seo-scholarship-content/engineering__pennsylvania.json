@@ -1,48 +1,123 @@
 {
-  "seo_title": "Engineering Scholarships in Pennsylvania",
-  "seo_description": "Explore 12 engineering scholarships in Pennsylvania with awards from $1,000 to $8,000. Check varied deadlines and requirements.",
-  "intro": "For aspiring engineers in Pennsylvania, there are 12 scholarship opportunities available that can help alleviate the financial burden of your education. Award sizes range from approximately $1,000 to $8,000, giving you a variety of options to consider. Keep in mind that deadlines vary across these listings, with some approaching within the next 45 days, so it’s important to act promptly and review each opportunity carefully.",
-  "h1": "Pennsylvania Engineering Scholarships Available Now",
-  "supporting": "This collection of scholarships features a mix of requirements, including both essay and no-essay options, allowing you to find opportunities that best match your strengths. As you explore the listings, compare the award amounts and specific eligibility criteria to identify which scholarships align with your academic and personal profile. This targeted approach will help you maximize your chances of securing funding.",
-  "related_intro": "If you're interested in scholarships beyond engineering, consider checking out our listings for related fields like Arts and Law, which may also offer valuable funding opportunities.",
+  "seo_title": "Find Engineering Scholarships in Pennsylvania, USA",
+  "seo_description": "Engineering scholarships in Pennsylvania, USA with varied awards and deadlines. Compare requirements and apply through official program pages.",
+  "intro": "Trying to find engineering scholarships in Pennsylvania usually means narrowing a broad USA search to programs that actually match your location and field. This filtered slice brings together Pennsylvania-focused engineering listings so you can compare options without jumping between unrelated results. The rows below include a mix of scholarship types, and the details are not identical from one listing to the next. Award amounts vary by program, deadlines differ by listing, and requirements can range from lighter-touch applications to entries that ask for more supporting material. If you plan to apply for engineering funding soon, it is worth checking these programs promptly and reading each listing closely before you decide which ones belong on your shortlist.",
+  "h1": "Find Pennsylvania Engineering Scholarships USA",
+  "supporting": "A useful way to browse this set is to compare the requirement line, deadline text, study level, and any location or residency wording side by side. Some listings may connect engineering with related areas such as transportation, architecture, or broader STEM categories, so do not skip a row just because the title is not identical to your major. Open the official page for any scholarship that looks promising, verify the current terms, and compare award details carefully before you apply.",
+  "related_intro": "If you do not find enough matches in this Pennsylvania engineering view, related pages can help you compare nearby paths, such as broader engineering results or other scholarship categories that overlap with STEM and technical study in the USA.",
   "how_to_use": [
-    "Compare deadlines to prioritize your applications",
-    "Scan award amounts to find the best fit for your needs",
-    "Read through the requirement details for each scholarship",
-    "Open official scholarship pages for the most accurate information",
-    "Shortlist opportunities that align with your profile and goals"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official source page",
+    "Shortlist programs that match your study level",
+    "Verify award details before you apply"
   ],
   "who_for": [
-    "Engineering students in Pennsylvania",
-    "Undergraduate and graduate engineering majors",
-    "Students seeking scholarships with varying requirements",
-    "Applicants looking for substantial financial support",
-    "Individuals interested in STEM-related funding"
+    "Pennsylvania engineering majors comparing local scholarship options",
+    "USA applicants seeking engineering funding tied to Pennsylvania",
+    "High school seniors planning for engineering study",
+    "Graduate students looking for engineering or STEM support"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Pennsylvania?",
-      "answer": "There are currently 12 scholarships listed for engineering students in Pennsylvania. These opportunities cover a range of categories, including STEM, arts, education, and law, providing diverse options for applicants."
+      "question": "How can I find engineering scholarships in Pennsylvania that fit my situation?",
+      "answer": "Use this filtered view to compare Pennsylvania engineering listings by study level, category, deadline, and any citizenship or residency notes shown in each row. Then open the official source for every program you plan to apply to, since eligibility details can differ across listings in the USA."
     },
     {
-      "question": "How much can I expect to receive from these scholarships?",
-      "answer": "Award sizes for the scholarships in this category generally range from approximately $1,000 to $8,000. However, specific amounts can vary by scholarship, so it's important to check the details of each listing."
+      "question": "Can I compare award amounts and deadlines on this Pennsylvania engineering scholarship page?",
+      "answer": "Yes—these rows include award amounts and deadline text, but both vary by program. Amounts in this slice range across listings, and deadlines differ by row, so verify the latest details on the official scholarship page before you apply."
     },
     {
-      "question": "Are there deadlines I need to be aware of?",
-      "answer": "Yes, all 12 scholarships have varying deadlines. At least one scholarship has a deadline within the next 45 days, so it's advisable to review the listings promptly to ensure you don't miss any opportunities."
+      "question": "Are these scholarships only for engineering majors in Pennsylvania?",
+      "answer": "The filter is focused on engineering and Pennsylvania, but some listings may also connect to related areas shown in the catalog, such as transportation and materials moving, architecture and related services, or mechanic and repair technologies. Check each listing carefully to see how narrowly it defines eligible fields of study."
     },
     {
-      "question": "Do I need to write essays to apply for these scholarships?",
-      "answer": "Requirements vary among the scholarships, with some requiring essays and others not. Out of the 12 listings, approximately 10 do not have essay requirements, but it's essential to verify the specifics for each scholarship."
+      "question": "Who is this Pennsylvania engineering scholarship list most useful for?",
+      "answer": "It is especially useful if you want to explore a focused set of USA scholarship listings tied to engineering in Pennsylvania without sorting through unrelated programs. It can also help high school seniors and graduate students quickly find programs to compare before deciding where to apply."
     }
   ],
+  "page_data": {
+    "exactCount": 12,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 8000,
+      "statedAmountCount": 12,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-04-15",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "recommendation",
+        "document"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "transportation_and_materials_moving",
+        "architecture_and_related_services",
+        "mechanic_and_repair_tech_technicians"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Philadelphia Chapter",
+        "count": 6
+      },
+      {
+        "name": "Illuminating Engineering Society-Philadelphia Section",
+        "count": 1
+      },
+      {
+        "name": "International Facility Management Association-Central Pennsylvania Chapter",
+        "count": 1
+      },
+      {
+        "name": "National Utility Contractors Association-Pennsylvania Chapter",
+        "count": 1
+      },
+      {
+        "name": "Pennsylvania Society of Professional Engineers",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "education",
+      "law"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/pennsylvania",
-    "generatedAt": "2026-04-02T10:40:59.397Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:40:51.928Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 12,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Missouri Undergraduate Need Scholarships | USA",
+  "seo_description": "Financial need undergraduate scholarships in Missouri, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Missouri that take financial need into account usually means balancing fit, timing, and effort at the same time. This filtered slice brings together USA listings tied to Missouri and undergraduate study so you can compare options without jumping between unrelated programs. The rows below span different subject areas, including education, STEM, law, medicine, community, and broader miscellaneous awards, so the best match may depend on your major, transfer plans, or campus path. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it is worth reading each row closely before you apply. Some listings may be lighter touch than others, but you should always verify details on the official scholarship page.",
+  "h1": "Find Financial Need Undergraduate Scholarships in Missouri USA …",
+  "supporting": "Use this list to compare more than just the scholarship title. Check how each program describes financial need, scan the requirement line for study level or field cues, and note whether the opportunity appears aimed at a specific path such as education, nursing, engineering, or transfer study. If you are applying for Missouri undergraduate funding in the USA for the upcoming cycle, review deadline text early because timing varies across these listings. Award amounts are shown on individual rows, but they should still be confirmed on the sponsor or official program page before you rely on them.",
+  "related_intro": "If these Missouri undergraduate scholarships feel too narrow or too broad, related pages can help you compare nearby options by changing one filter at a time. You may want to explore other Missouri scholarship categories, broader undergraduate results, or other financial need pages to find a better fit.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your major and study path",
+    "Verify award details on the sponsor site"
+  ],
+  "who_for": [
+    "Missouri undergraduates with financial need",
+    "Community college transfer students in Missouri",
+    "Education, nursing, engineering, or law focused applicants",
+    "Students comparing Missouri based aid with broader undergraduate scholarships"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Missouri undergraduate scholarships based on financial need?",
+      "answer": "Use this filtered view to explore USA scholarships that match all three signals: financial need, undergraduate study, and Missouri. Then open each row and verify the official eligibility details, because requirements can differ by program."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, so you can compare options quickly before you apply. Amounts and deadlines vary by listing, and official program pages are the place to confirm the latest details."
+    },
+    {
+      "question": "Are these scholarships only for current college students?",
+      "answer": "Not always. While this filter is centered on undergraduate scholarships, related study levels shown in the catalog can include high school seniors and college students, so check each listing carefully before you apply."
+    },
+    {
+      "question": "What kinds of majors or topics appear in these Missouri scholarship listings?",
+      "answer": "This slice includes a mix of categories such as Education, STEM, Community, Law, and Medicine, with sample fields like education, engineering, legal studies, health professions, and visual and performing arts. If you want to browse by fit, compare both the category label and the official eligibility notes on each program."
+    }
+  ],
+  "page_data": {
+    "exactCount": 22,
+    "award": {
+      "medianUsd": 6500,
+      "minUsd": 1000,
+      "maxUsd": 12000,
+      "statedAmountCount": 22,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 20,
+      "within60Days": 21,
+      "rollingOrUnknown": 0,
+      "nearestDays": 13,
+      "nearestLabels": [
+        "2026-04-15",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 21,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "legal_professions_and_law_studies",
+        "visual_and_performing_arts",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 15
+      },
+      {
+        "name": "Greater Kansas City Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Philadelphia Chapter",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of the Ozarks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "law",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/missouri",
+    "generatedAt": "2026-04-26T14:51:04.427Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 22,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

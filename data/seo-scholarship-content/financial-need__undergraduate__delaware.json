@@ -1,0 +1,108 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Delaware, USA…",
+  "seo_description": "Financial need undergraduate scholarships in Delaware, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Delaware that take financial need into account usually means narrowing fast and checking details carefully. This filtered USA view brings together a focused set of listings tied to that mix, with visible overlap in areas like medicine, education, STEM, and other miscellaneous programs. Awards vary by listing, and deadlines differ across the rows, so it helps to compare each option instead of assuming one pattern fits all. Many listings here appear to have lighter application requirements, and many are marked as no essay, but you should still verify every rule on the official scholarship page before you apply.",
+  "h1": "Find Delaware Financial Need Undergraduate Scholarships USA",
+  "supporting": "Use these rows to compare more than just the scholarship title. Scan the award text, read the requirement lines, and note whether the opportunity fits your undergraduate plans, location, and need-based eligibility. Because some deadlines appear to be coming up soon, it is smart to check timing promptly and shortlist the programs that match your background first. If you are deciding between options, compare subject area clues like nursing, education, or STEM, then open the official source to confirm current terms before you apply.",
+  "related_intro": "If this Delaware need-based undergraduate slice feels close but not quite right, related pages can help you compare nearby options by topic, study level, or location. That is useful when you want to find similar USA scholarships with a broader or narrower fit.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study plans and need status",
+    "Verify award details and current rules on the sponsor site"
+  ],
+  "who_for": [
+    "Delaware undergraduates with financial need",
+    "High school seniors planning undergraduate study",
+    "Applicants comparing nursing, education, or STEM options",
+    "Students looking for scholarships that often skip essays"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Delaware for students with financial need?",
+      "answer": "Use this filtered view to compare Delaware listings that match undergraduate study and financial-need criteria in the USA catalog. Then open each row’s official source to confirm eligibility, required materials, and current status."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this Delaware page?",
+      "answer": "Not automatically—each program has its own rules, even within this focused set of listings. Before you apply, verify the official page for residency details, study level, field fit, and any financial-need documentation."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amounts, deadline text, subject area, and any listed requirements row by row. Amounts vary by listing, and deadlines differ by program, so check the official source before you submit."
+    },
+    {
+      "question": "Are these Delaware undergraduate scholarships mostly essay-free?",
+      "answer": "Many listings in this slice appear to have lighter requirements, and many sampled rows show no essay flag. Still, you should verify each official listing because requirements can change or be described differently by the provider."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 41,
+      "nearestLabels": [
+        "2026-05-13",
+        "2026-05-13",
+        "2026-05-13"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 5
+      },
+      {
+        "name": "Delaware Department of Education",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "medical",
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/delaware",
+    "generatedAt": "2026-04-26T14:45:52.439Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

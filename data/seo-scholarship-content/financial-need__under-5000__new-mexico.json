@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find New Mexico Financial Need Scholarships | USA",
+  "seo_description": "New Mexico financial need scholarships with awards under five thousand in the USA. Compare deadlines and requirements, then apply on official pages.",
+  "intro": "Trying to find New Mexico scholarships in the USA that match financial need and stay on the lower award side can narrow the search fast. This filtered slice brings together programs with listed awards under this preset, so you can compare options without mixing in larger scholarships that may follow very different rules. The rows below span topics such as STEM, education, community, disability, and biology, with examples that fit high school seniors and early college students. Awards vary by listing, deadlines differ by program, and requirement details are not identical across the set. Some entries may be relatively lighter touch, while others can ask for more materials, so it makes sense to read each row closely before you apply.",
+  "h1": "New Mexico Financial Need Scholarships USA Apply",
+  "supporting": "Use this view to compare more than just the scholarship title. Check the award text, location fit, study level, and category labels to see which listings line up with your background in New Mexico. It is also smart to compare deadline wording side by side, since some programs may be coming up soon. Before you apply, open the official page for every scholarship you shortlist and verify current eligibility, required documents, essay expectations, and any updates that may not appear in the catalog summary.",
+  "related_intro": "If these New Mexico financial need listings feel close but not quite right, related pages can help you explore nearby options by changing one filter at a time. Compare other New Mexico scholarship views, broader financial need pages, or other under award ranges to find a better fit.",
+  "how_to_use": [
+    "Compare award text across the rows",
+    "Read each requirement line carefully",
+    "Check deadline wording and apply early",
+    "Open the official page to verify details",
+    "Shortlist the best matches before submitting"
+  ],
+  "who_for": [
+    "New Mexico students with financial need",
+    "High school seniors comparing local scholarship options",
+    "Early college students seeking smaller USA awards",
+    "Applicants interested in STEM, education, community, or biology topics"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · New Mexico scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · New Mexico scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · New Mexico scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-05-02",
+        "2026-06-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "construction_trades",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "New Mexico Engineering Foundation",
+        "count": 2
+      },
+      {
+        "name": "Albuquerque Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Albuquerque Hispano Chamber of Commerce",
+        "count": 1
+      },
+      {
+        "name": "Arapahoe Community College Foundation",
+        "count": 1
+      },
+      {
+        "name": "Institute of Transportation Engineers-New Mexico Section",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "miscellaneous",
+      "community",
+      "biology",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/new-mexico",
+    "generatedAt": "2026-04-26T14:37:10.506Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

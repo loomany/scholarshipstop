@@ -1,0 +1,112 @@
+{
+  "seo_title": "Find Connecticut Engineering Need Scholarships | USA",
+  "seo_description": "Connecticut engineering scholarships for students with financial need in the USA. Compare awards, deadlines, and requirements, then apply.",
+  "intro": "Trying to find Connecticut engineering scholarships in the USA that also consider financial need usually means balancing fit, timing, and effort at the same time. This filtered slice brings together programs tied to engineering with a Connecticut location signal and a financial-need focus, so you can compare relevant options without wading through unrelated rows. Awards vary by listing, and deadlines differ across programs, so it is worth checking each row closely rather than assuming one pattern applies to all. Many listings here appear to have lighter application signals, and many often show no essay in the available metadata, but requirements still need to be verified on the official scholarship pages before you apply.",
+  "h1": "Connecticut Engineering Scholarships for Financial Need USA …",
+  "supporting": "A smart way to use these rows is to compare more than the title. Look at the requirement line, study level, category tags, and deadline text together to see which scholarships are actually realistic for your situation. Some listings may connect to broader STEM themes while still fitting engineering applicants, and award amounts can differ widely by program. Open the official source for any scholarship you want to pursue, confirm eligibility details for Connecticut applicants, and keep a shortlist of the options that best match your academic path and financial need profile.",
+  "related_intro": "If you do not find enough strong matches here, compare nearby scholarship pages that keep engineering in focus but change the location or eligibility angle. That can help you spot USA programs with similar themes, different requirement patterns, or a wider set of Connecticut-adjacent options.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Compare award wording and shortlist your best matches",
+    "Check study level and category tags for fit"
+  ],
+  "who_for": [
+    "Connecticut students seeking engineering scholarships with financial need considerations",
+    "High school seniors planning to study engineering in the USA",
+    "College or graduate engineering students comparing Connecticut-based aid options",
+    "Applicants who prefer scholarships that often show no essay signals"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Connecticut engineering scholarships that consider financial need?",
+      "answer": "Use this filtered view to compare Connecticut listings tagged for engineering and financial need, then open each row to confirm the official eligibility details. In the USA, rules can differ by program, so verify residency, school level, and field requirements on the provider’s page before you apply."
+    },
+    {
+      "question": "Can I compare award amounts on this page before I apply?",
+      "answer": "Yes—these rows include listed award amounts, but amounts vary by listing and should be confirmed on the official source. In this Connecticut slice, awards range across smaller and larger scholarships, so compare each row individually rather than assuming one standard amount."
+    },
+    {
+      "question": "Are these scholarships only for one study level?",
+      "answer": "Not necessarily. This catalog slice can include different study levels, so browse each listing to see whether it fits a high school senior, college student, or graduate student. Always confirm the exact applicant level on the scholarship’s official source."
+    },
+    {
+      "question": "Will I need to write an essay for these Connecticut engineering scholarships?",
+      "answer": "Many listings in this filtered set appear to have no essay flagged in the catalog, but requirements can still vary row to row. Before you apply, compare the application steps on each official scholarship page to confirm whether essays or other materials are required."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 15,
+      "nearestLabels": [
+        "April 15, 2026 4:00 PM ET",
+        "2026-04-22",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "business_management_and_marketing",
+        "education",
+        "engineering",
+        "construction_trades",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 5
+      },
+      {
+        "name": "Lumber Dealers Association of Connecticut",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "biology",
+      "medical",
+      "education",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/engineering/connecticut",
+    "generatedAt": "2026-04-26T13:46:01.609Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

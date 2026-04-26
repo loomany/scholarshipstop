@@ -1,0 +1,121 @@
+{
+  "seo_title": "Find Oklahoma Financial Need Scholarships | USA",
+  "seo_description": "Oklahoma financial need scholarships under five thousand dollars: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Oklahoma scholarships tied to financial need without wading through higher award tiers? This filtered slice narrows the search to USA programs in Oklahoma with listed awards under this threshold, so you can compare smaller scholarships that may still help cover books, fees, supplies, or part of tuition. The rows below span different subjects and applicant profiles, with examples touching education, arts, medicine, and other areas. Some listings may be open to high school seniors, and some may note residency or citizenship details such as US citizen status. Requirements, essay expectations, and deadlines vary by program, so it is worth checking each listing closely before you apply.",
+  "h1": "Explore Oklahoma Financial Need Scholarships USA",
+  "supporting": "A smart way to use this list is to compare more than the headline award. Read the requirement lines for location fit, study level, and field of study, then check how specific each program is about financial need. Because deadlines differ across these rows and some opportunities may close relatively soon, it helps to shortlist promising options early. You can also compare category signals like education, arts, STEM, law, or medicine to decide which listings deserve a closer look. Before you apply, open the official page to verify current terms, award details, and submission instructions.",
+  "related_intro": "If these Oklahoma financial need scholarships feel too narrow, related pages can help you compare nearby filter combinations. You might want to explore other Oklahoma scholarship views, broader financial need listings across the USA, or other award ranges to find programs that match your budget target and eligibility more closely.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official source before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and eligibility on sponsor pages"
+  ],
+  "who_for": [
+    "Oklahoma applicants with financial need",
+    "High school seniors comparing smaller awards",
+    "US citizens checking state-based scholarship options",
+    "Students in education, arts, business, or health-related fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship from this list?",
+      "answer": "Usually, you can explore multiple listings and apply to any programs you qualify for, but each scholarship has its own rules. Check every official source before you apply, since requirements and deadlines differ by program."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline, study level, location fit, and any requirement notes shown in the catalog. In this Oklahoma slice, listed awards vary by row, so confirm the current amount and terms on the official page."
+    },
+    {
+      "question": "Are these USA scholarships only for Oklahoma residents?",
+      "answer": "This is a USA-focused filtered set tied to Oklahoma, but residency and citizenship details can vary across listings. Some rows may mention labels like U.S. citizen or high school senior, so review each scholarship's official criteria carefully."
+    }
+  ],
+  "page_data": {
+    "exactCount": 18,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 3500,
+      "statedAmountCount": 18,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 18,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 17,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "architecture_and_related_services",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Muscogee (Creek) Nation of Oklahoma",
+        "count": 13
+      },
+      {
+        "name": "American Association of Drilling Engineers-Mid-Continent Chapter",
+        "count": 1
+      },
+      {
+        "name": "National Kidney Foundation Serving Western Missouri, Kansas and Oklahoma",
+        "count": 1
+      },
+      {
+        "name": "Oklahoma CareerTech Foundation",
+        "count": 1
+      },
+      {
+        "name": "Oklahoma City Community Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "arts",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "biology"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/oklahoma",
+    "generatedAt": "2026-04-26T14:38:40.853Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 18,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

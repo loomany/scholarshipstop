@@ -51,6 +51,91 @@ const UNIVERSITY_NAME_RE =
 const NON_UNIVERSITY_NAME_RE =
   /\b(foundation|association|society|coalition|fellowship|ministry|church|club|network|center|centre|llc|inc|corp|company|initiative|program|organisation|organization|fund|alumni|trust|council|board|committee|league|athletic|athletics|conference|interscholastic|press|extension)\b/i;
 
+function normalizeWhitespace(value: string): string {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function cutToMax(value: string, max: number): string {
+  const normalized = normalizeWhitespace(value);
+  if (normalized.length <= max) return normalized;
+  const cut = normalized.slice(0, max);
+  const lastSpace = cut.lastIndexOf(' ');
+  if (lastSpace >= 20) return cut.slice(0, lastSpace).trimEnd();
+  return cut.trimEnd();
+}
+
+function ensureLengthRange(input: {
+  value: string;
+  min: number;
+  max: number;
+  padSuffix: string;
+}): string {
+  let out = cutToMax(input.value, input.max);
+  while (out.length < input.min) {
+    const candidate = normalizeWhitespace(`${out} ${input.padSuffix}`);
+    if (candidate.length === out.length) break;
+    out = candidate.length <= input.max ? candidate : cutToMax(candidate, input.max);
+    if (out.length >= input.min) break;
+  }
+  return out;
+}
+
+function enforceSeoTitle(base: string, fallback: string): string {
+  const seeded = normalizeWhitespace(base || fallback || 'Scholarships in USA 2026');
+  const withIntent = /\b(compare|apply|find|explore|guide)\b/i.test(seeded)
+    ? seeded
+    : `${seeded} Compare Guide`;
+  return ensureLengthRange({
+    value: withIntent,
+    min: 30,
+    max: 65,
+    padSuffix: 'USA scholarships'
+  });
+}
+
+function enforceSeoMeta(base: string, fallback: string): string {
+  let seeded = normalizeWhitespace(
+    base ||
+      fallback ||
+      'Compare scholarship opportunities, understand eligibility and deadlines, and apply through official sources.'
+  );
+  if (!/\b(compare|find|explore|apply|review)\b/i.test(seeded)) {
+    seeded = `${seeded} Compare options and apply.`;
+  }
+  return ensureLengthRange({
+    value: seeded,
+    min: 120,
+    max: 160,
+    padSuffix: 'Review eligibility, compare deadlines, and apply through official pages.'
+  });
+}
+
+function ensureFaqAtLeastThree(
+  faq: Array<{ q: string; a: string }> | undefined,
+  defaults: Array<{ q: string; a: string }>
+): Array<{ q: string; a: string }> {
+  const cleaned = (faq ?? [])
+    .map((x) => ({ q: normalizeWhitespace(x.q), a: normalizeWhitespace(x.a) }))
+    .filter((x) => x.q.length >= 8 && x.a.length >= 20);
+  if (cleaned.length >= 3) return cleaned.slice(0, 5);
+  const combined = [...cleaned];
+  for (const d of defaults) {
+    if (combined.length >= 3) break;
+    combined.push({ q: normalizeWhitespace(d.q), a: normalizeWhitespace(d.a) });
+  }
+  return combined.slice(0, 5);
+}
+
+function requireGpt54ForSeoGeneration(dryRun: boolean): void {
+  if (dryRun) return;
+  const model = process.env.OPENAI_SEO_MODEL?.trim() || '';
+  if (model !== 'gpt-5.4') {
+    throw new Error(
+      `OPENAI_SEO_MODEL must be exactly gpt-5.4 for seo-generation-http. Current value: ${model || '(empty)'}`
+    );
+  }
+}
+
 function loadAdmin() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
@@ -351,15 +436,62 @@ async function runUniversityCompareFlow(args: {
   }
 
   if (!generated) {
-    await admin
-      .from('seo_generation_queue')
-      .update({
-        status: 'failed',
-        error_message: lastErr ?? 'compare_generation_failed'
-      })
-      .eq('id', row.id);
-    console.error(`[fail] compare ${canon}: ${lastErr}`);
-    return;
+    // Deterministic fallback: do not leave queue item broken.
+    generated = {
+      ai_verdict: `${left.name} and ${right.name} fit different applicant profiles. Compare scholarship volume, award patterns, and deadlines before deciding where to apply.`,
+      meta_title: `${left.name} vs ${right.name} Scholarships 2026`,
+      meta_description:
+        `Compare ${left.name} and ${right.name} scholarships, review funding context, and choose the campus that fits your academic and financial goals.`,
+      content_json: {
+        body_html: `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare ${left.name} and ${right.name} by scholarship volume, award patterns, and eligibility expectations. Use official pages to verify deadlines and final requirements before applying.</p></article>`,
+        essay_insights: {
+          inst_a: `For ${left.name}, review prompt expectations and align your essay with academic fit and funding goals.`,
+          inst_b: `For ${right.name}, focus your essay on program fit, impact, and readiness for the application process.`
+        },
+        faq: [
+          {
+            q: `Who should apply to ${left.name} vs ${right.name}?`,
+            a: 'Applicants should compare program fit, scholarship volume, and eligibility rules at both institutions before submitting applications.'
+          },
+          {
+            q: `How do I compare scholarship deadlines between these universities?`,
+            a: 'Use each official scholarship page to verify deadlines and required materials, then build a shared checklist for both schools.'
+          },
+          {
+            q: 'What is the best application process for this comparison?',
+            a: 'Shortlist your best-fit programs, prepare required documents early, and apply through official university scholarship channels.'
+          }
+        ],
+        sources: sourceCandidates.slice(0, 5)
+      }
+    };
+    console.warn(`[fallback] compare ${canon}: ${lastErr ?? 'generation_failed'}`);
+  }
+
+  generated.meta_title = enforceSeoTitle(
+    generated.meta_title,
+    `${left.name} vs ${right.name} Scholarships 2026`
+  );
+  generated.meta_description = enforceSeoMeta(
+    generated.meta_description,
+    `Compare ${left.name} and ${right.name} scholarships, review funding context, and apply with confidence.`
+  );
+  generated.content_json.faq = ensureFaqAtLeastThree(generated.content_json.faq, [
+    {
+      q: `Who is eligible for scholarships at ${left.name} and ${right.name}?`,
+      a: 'Eligibility differs by scholarship. Check each official listing for academic, residency, and program requirements.'
+    },
+    {
+      q: `When are scholarship deadlines for ${left.name} and ${right.name}?`,
+      a: 'Deadlines vary by scholarship and term. Confirm exact dates on each official scholarship page before applying.'
+    },
+    {
+      q: 'How should I apply after comparing these universities?',
+      a: 'Choose your top programs, gather required materials, and submit applications through official admissions and scholarship portals.'
+    }
+  ]);
+  if (!generated.content_json.body_html?.trim()) {
+    generated.content_json.body_html = `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare ${left.name} and ${right.name} using scholarship volume, eligibility fit, and official deadline requirements before you apply.</p></article>`;
   }
 
   const { error: upErr } = await admin.from('compare_pages').upsert(
@@ -594,14 +726,61 @@ async function runStateCompareFlow(args: {
   }
 
   if (!generated) {
-    await admin
-      .from('seo_generation_queue')
-      .update({
-        status: 'failed',
-        error_message: lastErr ?? 'state_compare_generation_failed'
-      })
-      .eq('id', row.id);
-    return;
+    generated = {
+      ai_verdict: `${left.name} and ${right.name} serve different applicant goals. Compare scholarship volume, award profiles, and official criteria before applying.`,
+      meta_title: `${left.name} vs ${right.name} Scholarships 2026`,
+      meta_description:
+        `Compare ${left.name} and ${right.name} scholarship climate, review opportunity volume, and plan applications using verified state-level sources.`,
+      content_json: {
+        body_html: `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare scholarship climate in ${left.name} and ${right.name} by opportunity volume, funding context, and eligibility patterns from official sources.</p></article>`,
+        climate_summary: {
+          state_a: `${left.name} offers its own scholarship climate with varying opportunity depth and eligibility criteria by program.`,
+          state_b: `${right.name} has a different scholarship climate, so applicants should compare funding context and deadlines before applying.`
+        },
+        faq: [
+          {
+            q: `Who should apply in ${left.name} vs ${right.name}?`,
+            a: 'Applicants should compare scholarship availability, eligibility fit, and institutional options across both states before deciding.'
+          },
+          {
+            q: `How do I check scholarship deadlines in ${left.name} and ${right.name}?`,
+            a: 'Deadlines vary by scholarship provider. Verify each date on official scholarship pages for both states before submission.'
+          },
+          {
+            q: 'What is the best application process after state comparison?',
+            a: 'Build a shortlist, prepare required documents early, and submit applications through official channels for your selected state programs.'
+          }
+        ],
+        sources: sourceCandidates.slice(0, 5)
+      }
+    };
+    console.warn(`[fallback] state compare ${canon}: ${lastErr ?? 'generation_failed'}`);
+  }
+
+  generated.meta_title = enforceSeoTitle(
+    generated.meta_title,
+    `${left.name} vs ${right.name} Scholarships 2026`
+  );
+  generated.meta_description = enforceSeoMeta(
+    generated.meta_description,
+    `Compare ${left.name} and ${right.name} scholarship climate, evaluate opportunities, and apply through official sources.`
+  );
+  generated.content_json.faq = ensureFaqAtLeastThree(generated.content_json.faq, [
+    {
+      q: `Who is eligible for scholarships in ${left.name} and ${right.name}?`,
+      a: 'Eligibility varies by program and provider. Review each official listing to confirm academic and residency requirements.'
+    },
+    {
+      q: `When are scholarship deadlines in ${left.name} and ${right.name}?`,
+      a: 'Deadlines depend on each scholarship. Confirm final dates and terms on official pages before you apply.'
+    },
+    {
+      q: 'How should I apply after comparing both states?',
+      a: 'Choose programs that match your profile, prepare documents in advance, and apply through official scholarship portals.'
+    }
+  ]);
+  if (!generated.content_json.body_html?.trim()) {
+    generated.content_json.body_html = `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare ${left.name} and ${right.name} by scholarship volume, fit, and application requirements using verified sources.</p></article>`;
   }
 
   const { error: upErr } = await admin.from('state_compare_pages').upsert(
@@ -667,6 +846,7 @@ export async function runSeoWorkerGenerate(
     Number.isFinite(options.limit) && (options.limit ?? 0) > 0
       ? Math.floor(options.limit as number)
       : DEFAULT_BATCH;
+  requireGpt54ForSeoGeneration(dryRun);
   const admin = loadAdmin();
 
   let pendingQuery = admin
@@ -776,15 +956,36 @@ export async function runSeoWorkerGenerate(
     }
 
     if (!generated) {
-      await admin
-        .from('seo_generation_queue')
-        .update({
-          status: 'failed',
-          error_message: lastErr ?? 'generation_failed'
-        })
-        .eq('id', row.id);
-      console.error(`[fail] ${pathKey}: ${lastErr}`);
-      continue;
+      generated = {
+        title: `${ctx.stateLabel} Scholarships`,
+        h1: `${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} Scholarships`,
+        meta_description:
+          `Explore ${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} scholarships, compare eligibility and deadlines, and apply through official listings.`,
+        content_html: `<article><h2>Scholarship Guide</h2><p>Use this page to compare scholarship opportunities${ctx.topicLabel ? ` in ${ctx.topicLabel}` : ''} for ${ctx.stateLabel}. Check eligibility, verify deadlines, and apply through official provider pages.</p></article>`,
+        cost_of_living: {
+          average_room_rent_usd_monthly: null,
+          typical_lunch_usd: null,
+          monthly_transport_usd: null,
+          notes: 'No reliable cost-of-living numeric data available for deterministic fallback.'
+        }
+      };
+      console.warn(`[fallback] ${pathKey}: ${lastErr ?? 'generation_failed'}`);
+    }
+
+    generated.title = enforceSeoTitle(
+      generated.title,
+      `${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} Scholarships 2026`
+    );
+    generated.meta_description = enforceSeoMeta(
+      generated.meta_description ?? '',
+      `Find ${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} scholarships, compare eligibility and deadlines, and apply through official pages.`
+    );
+    generated.h1 = enforceSeoTitle(
+      generated.h1 ?? generated.title,
+      `${ctx.stateLabel} Scholarships`
+    );
+    if (!generated.content_html?.trim()) {
+      generated.content_html = `<article><h2>Scholarship Guide</h2><p>Find scholarships for ${ctx.stateLabel}${ctx.topicLabel ? ` in ${ctx.topicLabel}` : ''}, review eligibility, and apply through official sources.</p></article>`;
     }
 
     const { error: upErr } = await admin.from('seo_hub_content').upsert(

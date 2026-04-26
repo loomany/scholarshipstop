@@ -1,0 +1,102 @@
+{
+  "seo_title": "Find Engineering Scholarships in Oklahoma, USA",
+  "seo_description": "Engineering scholarships in Oklahoma, USA: compare awards, deadlines, and requirements in one filtered view, then apply on official pages.",
+  "intro": "Trying to find engineering scholarships in Oklahoma usually means narrowing a broad USA search to programs that actually match your field and location. This filtered view brings together a focused set of listings tied to engineering and Oklahoma so you can compare options without jumping between unrelated results. Awards in this slice can vary by listing, and any amount should be verified on the official scholarship page before you apply. Deadlines also differ by program, even when rows look similar at a glance, so it is worth checking each listing carefully. You may also notice that many listings here appear to have lighter application requirements, with no-essay signals showing up often in the sample data, though every program should still be reviewed individually.",
+  "h1": "Compare Oklahoma Engineering Scholarships USA",
+  "supporting": "Use these rows to compare the details that matter most before you apply: award text, deadline wording, category labels, and any requirement notes attached to each listing. Because this is a tighter engineering-and-Oklahoma slice, it is useful for spotting scholarships you might miss in a broader STEM search. Open the official pages to confirm eligibility, required materials, and whether the program is aimed at a specific school, study path, or applicant profile within the USA.",
+  "related_intro": "If you do not find enough matches here, check related scholarship pages that widen one side of the filter. You can explore broader engineering listings beyond Oklahoma, or compare Oklahoma scholarship pages across nearby categories such as STEM, education, or arts when a program accepts more than one academic focus.",
+  "how_to_use": [
+    "Compare each row for award wording, deadline text, and category labels before you shortlist anything",
+    "Read the requirement lines closely to see whether the listing looks no-essay or otherwise lighter-touch",
+    "Open the official scholarship page for every program to verify eligibility, materials, and current details",
+    "Keep a shortlist of the best-fit engineering options in Oklahoma and recheck each one before you apply"
+  ],
+  "who_for": [
+    "Engineering students looking for Oklahoma-based scholarship options in the USA",
+    "Applicants who want to compare engineering listings without sorting through broader STEM results",
+    "Students hoping to find scholarships that may have lighter application requirements",
+    "Oklahoma residents or school-based applicants checking local or state-relevant funding options"
+  ],
+  "faq": [
+    {
+      "question": "How can I find engineering scholarships in Oklahoma that fit my situation?",
+      "answer": "Use this filtered view to compare the Oklahoma engineering listings row by row, then open the official source for each program. Eligibility, award amounts, and required materials can differ across these rows."
+    },
+    {
+      "question": "Can I apply to these USA scholarships directly from this page?",
+      "answer": "Treat the catalog as a starting point to explore options and identify matches in the USA, then verify how to apply on each scholarship’s official page. Application steps are set by the individual program, not by the filter page."
+    },
+    {
+      "question": "How should I compare award amounts and deadlines on this Oklahoma engineering list?",
+      "answer": "Compare the rows side by side, but confirm every detail with the official listing before you apply. Amounts vary by program, and deadlines differ by row even when sample entries may look similar."
+    },
+    {
+      "question": "Are engineering scholarships in Oklahoma likely to require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag in the catalog metadata, but you should still verify requirements on the official source. Some programs may be lighter-touch, while others can ask for additional materials."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1000,
+      "maxUsd": 6000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 60,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-06-01",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "engineering",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "American Association of Drilling Engineers-Mid-Continent Chapter",
+        "count": 1
+      },
+      {
+        "name": "Muscogee (Creek) Nation of Oklahoma",
+        "count": 1
+      },
+      {
+        "name": "Tulsa Engineering Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "education"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "engineering/oklahoma",
+    "generatedAt": "2026-04-26T13:40:13.480Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

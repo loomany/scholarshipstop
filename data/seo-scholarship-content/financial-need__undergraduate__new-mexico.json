@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in New Mexico, US…",
+  "seo_description": "Financial need undergraduate scholarships in New Mexico, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in New Mexico for applicants with financial need usually means sorting through programs that mix local eligibility, study level, and different application asks. This filtered USA view pulls those factors together so you can compare a focused set of listings without losing time on less relevant options. The programs below span areas such as education, STEM, community, disability, and biology, with examples tied to both high school seniors and early college students. Award amounts vary by listing, though many rows show clearly stated funding, and deadlines differ by program rather than following one shared cutoff. Some applications may be lighter-touch while others ask for more materials, so it is worth checking each requirement line closely before you apply.",
+  "h1": "Find New Mexico Undergraduate Need-Based Scholarships USA",
+  "supporting": "A good way to use this list is to compare the details row by row instead of assuming every New Mexico financial-need scholarship works the same way. Look at the study level, location fit, category tags, and any field-of-study clues such as education, engineering, construction trades, biological and biomedical sciences, or transportation and materials moving. Because deadline text appears across these listings and at least some dates are coming up soon in the current sample, it makes sense to review timing early. If a title looks promising, open the official source and verify the latest amount, eligibility wording, and submission steps before you shortlist it.",
+  "related_intro": "If you want to widen the search, related pages can help you compare this New Mexico undergraduate financial-need slice against nearby categories, broader undergraduate results, or other location-based scholarship views in the USA catalog.",
+  "how_to_use": [
+    "Compare each row for location fit, undergraduate level, and financial-need relevance",
+    "Scan award text and remember amounts vary by listing and should be verified on the official page",
+    "Check every deadline individually because timing differs by program and some listings may close soon",
+    "Read requirement lines for essays or other materials instead of assuming the same application format across all rows",
+    "Open promising listings, confirm details on the sponsor site, and build a shortlist before you apply"
+  ],
+  "who_for": [
+    "New Mexico undergraduates looking for scholarships that consider financial need",
+    "High school seniors in New Mexico planning to start undergraduate study soon",
+    "Early college students comparing local and state-relevant funding options",
+    "Applicants interested in categories like education, STEM, community, disability, or biology"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in New Mexico for students with financial need?",
+      "answer": "Use this filtered view to compare New Mexico listings that match undergraduate study and financial-need criteria. Then open each row and verify eligibility, required materials, and deadline details on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this USA scholarship list?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both can vary by program. Amounts in this slice range across the listings, and deadlines differ by row, so check dates promptly and confirm everything on the official page."
+    },
+    {
+      "question": "Who should explore this filtered scholarship page?",
+      "answer": "It fits students in the USA who want to explore New Mexico scholarships tied to financial need and undergraduate study. Some listings also connect to areas like education, STEM, community, disability, and biology, so it helps to compare category tags before you apply."
+    },
+    {
+      "question": "Are the requirements the same for every scholarship here?",
+      "answer": "No—requirements vary across the programs below. Some may be lighter-touch, while others may ask for more materials, so review each listing carefully and use the official scholarship page as the final source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 1000,
+      "maxUsd": 5500,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-02",
+        "2026-04-22",
+        "2026-05-02"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "construction_trades",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Albuquerque Hispano Chamber of Commerce",
+        "count": 2
+      },
+      {
+        "name": "Albuquerque Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Arapahoe Community College Foundation",
+        "count": 1
+      },
+      {
+        "name": "Institute of Transportation Engineers-New Mexico Section",
+        "count": 1
+      },
+      {
+        "name": "New Mexico Engineering Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous",
+      "biology",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/new-mexico",
+    "generatedAt": "2026-04-26T14:52:29.595Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

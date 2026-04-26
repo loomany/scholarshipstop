@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Utah Financial Need Scholarships Under Ten Thousand | USA …",
+  "seo_description": "Utah financial need scholarships under ten thousand: compare awards, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Utah scholarships tied to financial need without wading through higher-value awards that may not match your search? This filtered slice brings together USA scholarship listings in a lower award range so you can compare options that may feel more realistic to apply for alongside other aid. The rows below span different themes, including education, STEM, community, disability, medicine, and miscellaneous programs, so eligibility can vary quite a bit from one listing to the next. Many listings in this set appear to have lighter application signals, and some may not require an essay, but requirements still differ by program. Award amounts and deadlines vary by row, and some deadlines may be coming up soon, so it is worth checking details promptly.",
+  "h1": "Compare Utah Financial Need Scholarships Under Ten Thousand USA…",
+  "supporting": "Use this list to compare more than the headline amount. Read the requirement lines closely, note any Utah or residency expectations, and look at study level or field tags such as education or construction trades when they appear. Sample titles in this slice show that the mix can include community-focused, disability-related, medical, and STEM opportunities, so it pays to scan broadly before ruling a listing out. If a program looks promising, open the official page to verify current terms, required materials, and deadline wording before you apply.",
+  "related_intro": "If these Utah financial-need listings feel too narrow, related pages can help you compare nearby filter combinations, such as broader Utah scholarship results or other financial-need categories in the USA catalog. That is often the fastest way to find similar programs with different topic or eligibility mixes.",
+  "how_to_use": [
+    "Compare each row for deadline wording and award range",
+    "Read the requirement line before you shortlist anything",
+    "Open the official scholarship page to verify current details",
+    "Check study level, residency, and field tags for fit",
+    "Shortlist promising programs and apply early where possible"
+  ],
+  "who_for": [
+    "Utah applicants with financial need",
+    "High school seniors comparing smaller award programs",
+    "Graduate students checking Utah-based aid options",
+    "Applicants interested in education or construction trades",
+    "USA residents reviewing community, disability, or STEM scholarships"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Often yes, if you meet each program’s rules, but every listing has its own eligibility terms. Compare the rows, open the official sources, and verify residency, study level, and any citizenship requirements before applying."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on award amount, deadline, study level, and category fit such as education, STEM, community, disability, or medicine. In this USA-focused Utah slice, some listings also show citizenship or residency labels like U.S. citizen or U.S. permanent resident, which you should verify on the official page."
+    },
+    {
+      "question": "Do these Utah scholarships all have the same deadline or requirements?",
+      "answer": "No—deadlines differ by program, and some dates in these rows appear relatively soon, so it is smart to check them promptly. Many listings in this slice appear to have lighter requirements and often no essay, but you should still verify the current application steps on the official source."
+    },
+    {
+      "question": "Who is this filtered list most useful for?",
+      "answer": "It is useful if you want to explore smaller-dollar Utah scholarships tied to financial need without sorting through broader USA scholarship results. The programs below may fit applicants such as high school seniors or graduate students, but eligibility still needs to be checked row by row."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 2500,
+      "maxUsd": 5500,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-04-15",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arapahoe Community College Foundation",
+        "count": 1
+      },
+      {
+        "name": "Edwards Lifesciences Corporation",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Utah Division of Child and Family Services",
+        "count": 1
+      },
+      {
+        "name": "Western States Roofing Contractors Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "disability",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/utah",
+    "generatedAt": "2026-04-26T14:25:45.207Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

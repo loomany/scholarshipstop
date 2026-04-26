@@ -1,43 +1,136 @@
 {
-  "seo_title": "Scholarships for International Women in STEM in the USA",
-  "seo_description": "Explore 196 scholarships for international women pursuing STEM degrees in the USA. Find funding opportunities that support your academic journey.",
-  "h1": "Scholarships for International Women in STEM in the USA",
-  "intro": "Navigating the world of higher education as an international woman in STEM can be challenging, but numerous scholarships are available to support your academic journey in the USA. With 196 scholarships specifically aimed at empowering women in science, technology, engineering, and mathematics, you can find financial assistance tailored to your needs. These scholarships not only help alleviate the financial burden but also provide valuable networking opportunities and resources to enhance your educational experience. From merit-based awards to need-based grants, there are options for every aspiring STEM professional. Start your scholarship search today to unlock your potential and achieve your academic goals.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international women enrolled in STEM programs at accredited institutions in the USA. Common requirements include a strong academic record, letters of recommendation, and personal essays detailing your passion for STEM. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, focus on specific demographics, while others, such as the Vanna Christian Sun Legacy Scholarship, may prioritize financial need. Deadlines for applications can range from early spring to late summer, so it’s crucial to stay organized and apply early. Be sure to check each scholarship’s website for specific details and application procedures to maximize your chances of success.",
-  "related_intro": "In addition to scholarships, there are various grants and fellowships available for international women in STEM. These opportunities can further enhance your educational experience and career prospects.",
+  "seo_title": "Find STEM Scholarships for International Women in USA",
+  "seo_description": "STEM scholarships for international women in the USA. Compare eligibility, deadlines, and award ranges, then apply on official program pages.",
+  "intro": "Trying to find USA scholarships that fit an international woman pursuing STEM usually means sorting through overlapping rules on citizenship, study level, field, and application materials. This filtered view brings those themes together so you can compare a focused set of listings in one place. The programs below span categories such as education, STEM, community, medicine, arts, and miscellaneous, and they can apply to different stages from high school senior through college and graduate study. Award amounts vary widely by listing, and deadlines differ by program, so it is worth checking rows promptly and opening official pages to verify current details. Requirements are mixed here too: some listings may ask for essays or more documentation, while others appear lighter-touch, but each scholarship should be confirmed individually before you apply.",
+  "h1": "Explore STEM Scholarships for International Women in USA",
+  "supporting": "Use this list to compare more than just the title. Look at the eligibility wording, study level, field tags, deadline text, and any requirement notes side by side before you shortlist options. In this USA slice, you may see listings tied closely to engineering or broader STEM themes, alongside programs filed under education or community. That mix makes the page useful if your profile crosses categories or if you want to explore adjacent opportunities that still match your goals. Amounts shown in listings can differ a lot, and not every row presents information the same way, so read the requirement lines carefully and verify final terms on the sponsor or official scholarship page.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship groups, such as broader international student options or other women-focused and STEM-focused USA listings. That is useful when a program here is close to your profile but not an exact fit.",
   "how_to_use": [
-    "Research the available scholarships thoroughly.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required documents, such as transcripts and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up on your applications and seek additional funding if needed."
+    "Compare eligibility wording first, especially citizenship or residency labels, gender criteria, and study level",
+    "Scan field and category tags to find direct STEM matches as well as related education, medicine, or community listings",
+    "Check each row’s deadline text early because dates vary by program and some opportunities may be closing soon",
+    "Read requirement lines for essays or other materials, then shortlist the best fits before you apply",
+    "Open the official page for every scholarship you choose and verify award details, rules, and current application instructions"
   ],
   "who_for": [
-    "International women pursuing STEM degrees in the USA.",
-    "Students seeking financial assistance for their education.",
-    "Individuals looking to enhance their academic and professional opportunities."
+    "International women looking for USA scholarship options connected to STEM or adjacent academic categories",
+    "Applicants comparing opportunities across study levels, from high school senior through college and graduate programs",
+    "Students in engineering, health professions, education, or other fields that may appear within this STEM-focused filter",
+    "People who want to find scholarships with mixed requirement styles, including some listings that may be lighter-touch"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available?",
-      "answer": "There are merit-based, need-based, and demographic-specific scholarships available for international women in STEM."
+      "question": "How can I find scholarships for international women in STEM in the USA on this page?",
+      "answer": "Use this filtered view to compare the rows that match international-student, women, and STEM-related themes. Then open each listing and verify eligibility, study level, field, and USA-specific rules on the official source before you apply."
     },
     {
-      "question": "How can I find and apply for these scholarships?",
-      "answer": "You can find scholarships through university websites, scholarship databases, and organizations dedicated to supporting women in STEM."
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—this catalog is useful for a quick compare, but amounts and deadlines vary by listing. Some awards in this slice show a wide range, and every row has deadline text, so check dates promptly and confirm the latest details on the official page."
     },
     {
-      "question": "Are there scholarships specifically for graduate students?",
-      "answer": "Yes, many scholarships, like the Paul and Daisy Soros Fellowships, are specifically designed for graduate students in STEM fields."
+      "question": "Do all scholarships here require an essay?",
+      "answer": "No single rule applies across this page. Essay requirements appear mixed in these listings, so review each row carefully and confirm the application requirements on the scholarship's official website."
+    },
+    {
+      "question": "Who should explore this scholarship list?",
+      "answer": "It's relevant if you're trying to find USA scholarship options connected to STEM and you identify with the women eligibility filter while applying as an international student. You may also see different study levels and fields represented, so compare rows instead of assuming every program fits the same profile."
+    },
+    {
+      "question": "Are these all only for STEM majors?",
+      "answer": "STEM is part of this filter slice, but individual listings can also carry other category labels such as Education, Community, Medicine, Arts, or Miscellaneous. Browse the titles and categories row by row to see how each program defines its focus before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-international-women-in-stem-usa",
-    "generatedAt": "2026-04-25T13:31:06.594Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:09:49.081Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

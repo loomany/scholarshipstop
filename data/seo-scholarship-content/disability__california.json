@@ -1,48 +1,108 @@
 {
-  "seo_title": "California Scholarships for Students with Disabilities",
-  "seo_description": "Explore 4 scholarships for California students with disabilities. Check varying deadlines and award amounts up to $12,000.",
-  "intro": "Finding financial support as a student with a disability in California can be crucial for your educational journey. This catalog features 4 scholarships specifically tailored for individuals facing these challenges. Award sizes vary, ranging from approximately $500 to $12,000, and deadlines differ among the listings, so it’s essential to check each one promptly to ensure you don’t miss out on any opportunities.",
-  "h1": "California Disability Scholarships: 4 Opportunities Available",
-  "supporting": "As you explore this list, pay attention to the specific requirements and award amounts associated with each scholarship. Some may require essays, while others might have lighter documentation needs. Comparing these factors can help you identify which scholarships align best with your situation and strengths, making your application process more efficient.",
-  "related_intro": "For more options, consider checking out related scholarships that cater to various needs and backgrounds in California.",
+  "seo_title": "Find Disability Scholarships in California, USA",
+  "seo_description": "California disability scholarships in the USA: compare listings, check varying deadlines and award details, and apply through official pages.",
+  "intro": "Trying to find disability scholarships in California usually means narrowing a broad USA search down to programs that actually match your location and eligibility. This filtered slice brings together a focused set of listings tied to disability and California, so you can compare options without wading through unrelated results. The programs below span themes such as education, law, community, and safety, and they may differ in award size, deadline timing, essay expectations, and other requirement details. Some listings appear comparatively lighter touch, while others may ask for more documentation. If you plan to apply soon, it is worth checking each row promptly because deadline text is present and timing can matter.",
+  "h1": "Find California Disability Scholarships USA",
+  "supporting": "Use these rows to compare more than just the title. Read the category tags, study level cues, and requirement lines to see which scholarships fit your background before you open the official source. In this California disability set, awards and application steps are not identical, so it helps to scan for essay notes, confirm who qualifies, and verify final details on the sponsor page. If a listing looks close but not perfect, keep it on a shortlist and compare it against related disability or California pages.",
+  "related_intro": "If these California disability listings feel too narrow or too broad, related pages can help you refine the search. You may want to explore nearby topic combinations such as disability scholarships with education, law, community, or safety tags, or compare this California slice with broader USA disability results.",
   "how_to_use": [
-    "Check each listing for specific deadlines",
-    "Compare award amounts and categories",
-    "Review the requirements for essays and documentation",
-    "Visit official scholarship pages for the latest updates",
-    "Shortlist scholarships that best fit your profile"
+    "Compare category tags across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Check deadline wording and apply early",
+    "Shortlist the listings that best match your profile"
   ],
   "who_for": [
-    "Students with disabilities in California",
-    "Applicants seeking community-focused funding",
-    "Individuals pursuing education in the arts or law",
-    "High school seniors and college students",
-    "Those looking for scholarships with varying requirements"
+    "California residents with a disability seeking USA scholarship options",
+    "Graduate students reviewing disability-related funding in California",
+    "Applicants interested in education, law, community, or safety categories",
+    "Students who want to compare California-based eligibility before they apply"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with disabilities in California?",
-      "answer": "There are currently four scholarships listed that cater specifically to students with disabilities in California. These scholarships span various categories, including law, community, arts, and education, providing a range of opportunities tailored to different interests and needs."
+      "question": "How can I find disability scholarships in California that fit my situation?",
+      "answer": "Use this filtered view to compare the California rows first, then open the official scholarship pages to confirm eligibility, study level, and required materials. In this USA slice, details can differ by listing even when they share the disability filter."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, so it's important to check the specific details for each listing. Currently, all four scholarships include deadlines within the next few months, so reviewing them promptly will ensure you don't miss any opportunities."
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, you can explore and apply to multiple programs if you meet each listing’s rules, but you should verify that on the official source for every row. Requirements vary, and some listings may ask for different documents or essays."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "The scholarship listings show a mix of essay requirements; some may require essays while others do not. It's advisable to review each scholarship's details to understand the specific requirements and prepare accordingly."
+      "question": "What should I compare before I apply?",
+      "answer": "Compare location fit, eligibility, field of study, study level, deadline text, and any application requirements shown in the catalog. Award amounts vary by listing, so confirm the current amount and terms on the official page before you apply."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "The award sizes for the scholarships in this category vary, with amounts ranging approximately from $500 to $12,000 based on the current listings. Be sure to check each scholarship for its specific award details."
+      "question": "What kinds of scholarships appear in this California disability filter?",
+      "answer": "This focused set of listings includes programs connected to topics like disability, education, law, community, and safety. You can browse the rows to explore options tied to graduate study and fields such as education, legal professions and law studies, or security and protective services."
     }
   ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 12000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-15",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "legal_professions_and_law_studies",
+        "security_and_protective_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "California Alarm Association",
+        "count": 1
+      },
+      {
+        "name": "Incight",
+        "count": 1
+      },
+      {
+        "name": "Sonora Area Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "disability",
+      "education",
+      "law",
+      "community",
+      "safety"
+    ]
+  },
   "_meta": {
     "canonicalPath": "disability/california",
-    "generatedAt": "2026-04-02T10:54:17.703Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:30:53.990Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Indiana Undergraduate Need Scholarships | USA",
+  "seo_description": "Indiana undergraduate financial need scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Indiana undergraduate scholarships that take financial need into account usually means sorting through programs with very different rules, award sizes, and timelines. This filtered USA view narrows that search to a focused set of listings tied to financial need, undergraduate study, and Indiana. You can compare options across areas such as community, education, law, STEM, medicine, and other miscellaneous categories, while keeping an eye on who each award is really meant for. Amounts vary by listing and should be verified on the official pages, and deadlines differ by program rather than following one shared cutoff. Because some rows show deadlines coming up relatively soon in the current catalog snapshot, it makes sense to apply early and check requirement details promptly.",
+  "h1": "Find Indiana Undergraduate Need Scholarships USA",
+  "supporting": "A useful way to browse these rows is to look past the title and compare the full listing details side by side: category, study level signals, residency or citizenship wording, and any requirement notes. Some programs may look lighter-touch in the catalog metadata, while others can ask for more supporting material, so it is worth opening each listing before you decide where to apply. This slice is also worth scanning if you want to compare broad Indiana aid options with more targeted awards connected to education, law, community, or STEM themes.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship pages that keep Indiana or undergraduate filters but change the eligibility angle, or keep financial need and switch to a different study level or location in the USA catalog. That can surface adjacent programs with different fit rules.",
+  "how_to_use": [
+    "Compare award text, category labels, and requirement notes across the listings before you shortlist anything",
+    "Check each row's deadline individually, since timing varies by program and some dates may be approaching soon",
+    "Open the official page for every scholarship you plan to apply for and verify eligibility, amount, and needed documents",
+    "Use the titles and categories to spot both broad Indiana grants and more specialized scholarships that match your background or field"
+  ],
+  "who_for": [
+    "Indiana undergraduates looking for scholarships that consider financial need",
+    "Applicants comparing state-connected aid with more targeted community, law, education, medical, or STEM listings",
+    "US citizen students who want to find Indiana-relevant awards and verify residency wording on each program",
+    "College students and incoming undergraduates who need to compare programs with different requirement levels"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Indiana undergraduate scholarships based on financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tagged for financial need, undergraduate study, and Indiana. Then open each row and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this Indiana scholarship list?",
+      "answer": "Yes—these rows include award amounts and deadline text, but both vary by program. Amounts differ by listing, and deadlines are not the same across the page, so compare row by row and check dates promptly on the official page."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or categories?",
+      "answer": "Not necessarily—the listings in this slice span categories such as Community, Education, Law, STEM, Medicine, and Miscellaneous. If you want to browse by fit, compare the category and field details in each row with the official eligibility rules."
+    },
+    {
+      "question": "Do all financial-need undergraduate scholarships in Indiana have the same application requirements?",
+      "answer": "No, requirements vary across the catalog. Some listings may be comparatively lighter-touch, while others can ask for more materials, so review each scholarship page carefully before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 900,
+      "maxUsd": 10600,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-04-15",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Indiana Commission for Higher Education",
+        "count": 2
+      },
+      {
+        "name": "Western Indiana Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Epilepsy Foundation of Kentuckiana",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "law",
+      "medical",
+      "stem",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/indiana",
+    "generatedAt": "2026-04-26T14:47:41.194Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

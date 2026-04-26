@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find Engineering Scholarships in Wisconsin, USA",
+  "seo_description": "Engineering scholarships in Wisconsin, USA: compare deadlines, award details, and requirements, then apply through each official program page.",
+  "intro": "Trying to find engineering scholarships in Wisconsin usually means narrowing a broad USA search down to programs that actually match your location and subject. This filtered slice brings together Wisconsin listings connected to engineering, with some overlap into STEM and education themes. As you compare the rows below, expect the details to vary by program: award amounts are not uniform, deadlines differ, and requirement lines may include different application materials, including possible essay expectations. If you plan to apply for scholarships in Wisconsin for the upcoming cycle, it is worth checking these listings promptly and reading each official page closely before you decide which options belong on your shortlist.",
+  "h1": "Compare Engineering Scholarships in Wisconsin USA",
+  "supporting": "Use this view to compare more than just the title. Look at how each listing describes its subject fit, study level, and category tags, then read the requirement text carefully to see whether the opportunity feels directly relevant to your engineering path. Because deadlines and award details can differ across these rows, it helps to open the official source for every scholarship you are considering, verify the current terms, and note any materials you may need before you apply.",
+  "related_intro": "If these Wisconsin engineering listings feel too narrow or too broad, related pages can help you compare nearby paths. You may want to explore other engineering scholarship filters, or browse Wisconsin scholarship pages with overlapping STEM or education tags to find programs that fit your coursework and application plans.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before you apply",
+    "Open the official page to verify current details",
+    "Shortlist the listings that best match your engineering focus",
+    "Check whether essay expectations differ by program"
+  ],
+  "who_for": [
+    "Engineering majors studying in Wisconsin",
+    "Wisconsin applicants comparing STEM focused awards",
+    "College level students seeking local scholarship options",
+    "Applicants reviewing engineering related programs with education overlap"
+  ],
+  "faq": [
+    {
+      "question": "How can I find engineering scholarships in Wisconsin that fit my situation?",
+      "answer": "Use this filtered view to compare the Wisconsin engineering rows first, then open the official source for each program to confirm eligibility, study level, and required materials. Some listings also carry STEM or Education labels, so check the row details rather than assuming every requirement is the same."
+    },
+    {
+      "question": "Can I apply to every scholarship listed under Engineering and Wisconsin?",
+      "answer": "Not automatically. This catalog groups programs tied to engineering and Wisconsin, but eligibility can differ by listing, so verify the official page before you apply."
+    },
+    {
+      "question": "Do all Wisconsin engineering scholarships here have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and the dates shown in these rows are not one universal cutoff. Award amounts also vary by listing, so use the catalog to compare options and confirm the latest details on the official source."
+    },
+    {
+      "question": "What kinds of programs might appear when I explore this Wisconsin engineering scholarship filter?",
+      "answer": "You may see a focused set of USA listings connected to engineering, with some rows also tagged under STEM or Education. Sample titles in this slice include the Oneida Total Integrated Enterprises College Scholarship, the Verner E. Suomi Scholarship Award for Outstanding Achievement in the Physical Sciences, and the PHCC-WI Auxiliary Scholarship."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 750,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 2,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-15",
+        "2026-05-27"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "college_4"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "construction_trades",
+        "mathematics_and_statistics"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Cooperative Institute for Meteorological Satellite Studies",
+        "count": 1
+      },
+      {
+        "name": "Oneida Tribe of Indians of Wisconsin",
+        "count": 1
+      },
+      {
+        "name": "PHCC/MPHCA of Wisconsin",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "engineering/wisconsin",
+    "generatedAt": "2026-04-26T13:42:40.087Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

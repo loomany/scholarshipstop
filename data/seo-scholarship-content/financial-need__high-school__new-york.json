@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find Financial Need High School Scholarships in New York, USA …",
+  "seo_description": "Financial need high school scholarships in New York, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find USA scholarships for New York high school students with financial need usually means sorting through mixed eligibility rules, changing deadlines, and very different application asks. This filtered slice narrows that search to programs tied to New York and a high school focus, so you can compare options without losing time on unrelated listings. The rows below span themes such as education, disability, arts, community, and STEM, which makes this a useful set to scan even if your interests cross categories. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it is smart to read each row closely before you apply. Some listings may be lighter touch than others, but every detail should still be verified on the official source.",
+  "h1": "Find New York Financial Need High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check how each program describes financial need, note whether the study level language matches your current stage in high school, and look at category tags for clues about fit. Because deadline text appears across these rows and at least some opportunities may be approaching soon, it is worth reviewing dates promptly. If an award catches your eye, open the official page to confirm eligibility, required materials, and any residency or citizenship language before you shortlist it.",
+  "related_intro": "If these New York results feel too narrow, related pages can help you explore nearby options by changing one filter at a time. You might compare other high school scholarship pages, broader financial need listings, or location pages beyond New York to find a better match.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line for fit",
+    "Open the official page before you apply",
+    "Shortlist programs that match your location and study level",
+    "Verify award details and materials on the sponsor site"
+  ],
+  "who_for": [
+    "New York high school students showing financial need",
+    "High school seniors comparing local and regional scholarship options",
+    "Applicants interested in education, community, arts, disability, or STEM categories",
+    "Students who want to find New York based scholarships before broader USA searches"
+  ],
+  "faq": [
+    {
+      "question": "How can I find New York scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare a focused set of USA listings that match financial need, high school, and New York. Then open each scholarship row and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Can I apply if I’m in high school but not a senior yet?",
+      "answer": "Possibly—this catalog slice is centered on high school opportunities, and sample study levels include high school sophomore and high school senior. Check each listing carefully, because grade-level rules vary by program."
+    },
+    {
+      "question": "What should I compare before I apply to these scholarships?",
+      "answer": "Compare the amount listed, deadline text, category fit, and any requirement notes shown in each row. Award amounts and application requirements vary by listing, so confirm the latest details on the official scholarship page."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this New York filter?",
+      "answer": "The programs below span categories such as education, disability, arts, community, and STEM. If you want to browse more precisely, compare those labels row by row and open the official pages for full eligibility details."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 1000,
+      "maxUsd": 7500,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-15",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "psychology"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 2
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Kiwanis International-New York District",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Lep Foundation for Youth Education",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "disability",
+      "miscellaneous",
+      "arts",
+      "community",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/new-york",
+    "generatedAt": "2026-04-26T13:57:22.478Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,48 +1,132 @@
 {
-  "seo_title": "North Carolina Scholarships for Financial Need",
-  "seo_description": "Explore 17 scholarships for financial need in North Carolina. Award sizes vary and deadlines differ—check details for each program.",
-  "intro": "Finding financial support as a student in North Carolina can be challenging, but this collection of 17 scholarships specifically designed for those with financial need offers a solid starting point. Award sizes vary, with opportunities ranging from $500 to $10,000. Keep in mind that application requirements and deadlines differ across listings, so it's essential to review each one carefully to identify the best fit for your situation.",
-  "h1": "Financial Need Scholarships in North Carolina",
-  "supporting": "As you explore these scholarships, consider comparing the award amounts and application requirements. Some scholarships may require essays, while others may have lighter requirements, making them easier to apply for. Pay attention to the deadlines, especially since some opportunities may be approaching quickly—it's advisable to check the dates and ensure your applications are submitted on time.",
-  "related_intro": "For more tailored options, you might find it helpful to check out scholarships based on specific categories or other eligibility criteria.",
+  "seo_title": "Find Financial Need Scholarships in North Carolina, USA",
+  "seo_description": "Financial need scholarships in North Carolina, USA—compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find financial need scholarships in North Carolina usually means balancing location rules, eligibility details, and how quickly you need to apply. This filtered USA view brings together a focused set of listings tied to North Carolina and need-based eligibility, so you can compare options without jumping between unrelated results. The programs below span different categories, study levels, and academic interests, with examples touching areas like education, community, medicine, humanities, and STEM. Awards vary by listing, deadlines differ across rows, and requirements are not identical, so it is worth reading each entry closely. Some listings may be comparatively lighter-touch, while others can ask for more documentation or written materials, which makes careful comparison especially useful.",
+  "h1": "Find Financial Need Scholarships in North Carolina USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan each row for study level, residency or citizenship language, field of study fit, award wording, and deadline timing, then open the official page to verify the current terms before you apply. This slice is worth a close look if you want North Carolina options connected to financial need but still want variety across majors and program types. If a deadline feels close, shortlist that listing first and confirm the latest details on the sponsor site.",
+  "related_intro": "If these North Carolina need-based listings are close but not quite right, related pages can help you explore nearby angles, such as broader financial need scholarships in the USA or other North Carolina scholarship categories that match your major, level, or background.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Scan the award amounts to prioritize applications",
-    "Read through requirement lines for each opportunity",
-    "Open official scholarship pages for more details",
-    "Shortlist scholarships that align with your profile and needs"
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your level and location",
+    "Verify award details and eligibility on the sponsor site"
   ],
   "who_for": [
-    "Students with demonstrated financial need",
-    "North Carolina residents",
-    "High school seniors and current college students",
-    "Applicants interested in community service or education",
-    "Those seeking scholarships with varying application requirements"
+    "North Carolina residents seeking need-based aid",
+    "High school seniors planning to apply in the USA",
+    "College and graduate students comparing local scholarship options",
+    "Applicants with interests in education, business, engineering, agriculture, or health fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in North Carolina?",
-      "answer": "There are currently 17 scholarships listed that cater to students demonstrating financial need in North Carolina. These scholarships cover a variety of categories, including community, education, humanities, and STEM."
+      "question": "How do I find financial need scholarships in North Carolina that fit my situation?",
+      "answer": "Use this filtered view to compare North Carolina listings by study level, field, and eligibility details shown in each row. Then open the official source for any program you want to apply to and verify the current rules, documents, and deadline."
     },
     {
-      "question": "Do all scholarships require essays?",
-      "answer": "Requirements vary across the scholarships; while some may require essays, others do not. It's important to check the specific details for each scholarship to understand what is needed."
+      "question": "Can I apply if I’m in high school, college, or graduate school?",
+      "answer": "Possibly—these rows include a mix of study levels such as high school senior, college, and graduate student. Check each listing carefully, because eligibility varies by program even within this North Carolina scholarship set."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 17 scholarships listed have deadlines, but they differ from one another. Be sure to review each listing carefully to note the specific deadline, especially as some may be approaching soon."
+      "question": "Are these scholarships only for U.S. students?",
+      "answer": "Many listings in this USA-focused slice show citizenship or residency labels such as U.S. citizen and U.S. permanent resident. That said, requirements differ row to row, so confirm your status on the official scholarship page before you apply."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The award sizes for the scholarships in this category vary, with amounts ranging approximately from $500 to $10,000. Each listing will provide the specific amount associated with that scholarship."
+      "question": "How can I compare award amounts and deadlines on this page?",
+      "answer": "Compare the rows first, then verify details on official pages because amounts and deadlines vary by listing. In this filtered set, listed awards range from smaller amounts to larger awards, and some deadlines appear relatively soon, so it’s smart to check dates promptly."
+    },
+    {
+      "question": "What kinds of majors or categories show up when I explore these North Carolina financial need scholarships?",
+      "answer": "You’ll see a mix of categories like Community, Education, Medicine, Humanities, Miscellaneous, and STEM, along with fields such as education, business, engineering, agriculture, and health professions. Use those themes to narrow what to browse, but rely on each official listing for the exact academic requirements."
     }
   ],
+  "page_data": {
+    "exactCount": 20,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 20,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 14,
+      "within60Days": 18,
+      "rollingOrUnknown": 0,
+      "nearestDays": 11,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 19,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "agriculture_and_related_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Chapel Hill Carrboro Public School Foundation",
+        "count": 6
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "The Renaissance Foundation",
+        "count": 2
+      },
+      {
+        "name": "Hemophilia of North Carolina",
+        "count": 1
+      },
+      {
+        "name": "Military Officers Association of America-Coastal Carolina Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "humanities",
+      "medical",
+      "stem"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/north-carolina",
-    "generatedAt": "2026-04-02T11:05:22.033Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 17,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:08:56.425Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 20,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

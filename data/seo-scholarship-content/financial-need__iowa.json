@@ -1,48 +1,127 @@
 {
-  "seo_title": "Iowa Scholarships for Financial Need | 11 Options",
-  "seo_description": "Explore 11 Iowa scholarships for financial need, with awards from $500 to $6,000. Check deadlines and requirements for each.",
-  "intro": "Finding financial support can be a crucial step in pursuing your education in Iowa. With 11 scholarships available specifically for students demonstrating financial need, this selection offers a range of award sizes from approximately $500 to $6,000. Each scholarship has unique eligibility criteria and deadlines, so it's important to review them closely to identify the best fit for your situation.",
-  "h1": "Iowa Scholarships for Financial Need",
-  "supporting": "This list features scholarships across various categories, including education, community, and medical fields. Pay attention to the differing requirements, as some may require essays while others do not. Given the variability in deadlines—some approaching quickly—it's wise to check each listing for the most accurate information and ensure you don’t miss out on potential funding.",
-  "related_intro": "If you're interested in scholarships that cater to specific fields or have lighter application requirements, consider exploring related pages focused on those themes.",
+  "seo_title": "Find Iowa Financial Need Scholarships in the USA",
+  "seo_description": "Iowa financial need scholarships in the USA: compare awards, review varying deadlines and requirements, and apply through official listings.",
+  "intro": "Trying to find Iowa scholarships tied to financial need usually means balancing fit, timing, and effort at the same time. This filtered USA view brings together a focused set of listings where need-based eligibility is part of the picture, so you can compare options without jumping between unrelated results. The programs below span different categories, including education, community, medicine, and music, and they reach more than one study level. Some listings may be relatively lighter-touch, while others can ask for more documentation or written responses. Award amounts vary by listing, deadlines differ by program, and exact requirements should always be verified on the official scholarship page before you apply.",
+  "h1": "Find Iowa Scholarships for Financial Need USA",
+  "supporting": "A smart way to use these rows is to compare more than the title. Check the requirement line for residency or citizenship details, note the study level, and look at the category or field of study to see where you have the strongest match. Because deadlines in this Iowa financial need slice are not all the same, it is worth scanning date information early and shortlisting the programs you may want to pursue first. If an award catches your eye, open the official source and confirm the current amount, materials, and submission steps before you apply.",
+  "related_intro": "If you do not find enough matches here, related pages can help you explore nearby options by topic, study level, or other eligibility filters. That is useful when you want to compare Iowa-focused results with broader USA scholarship listings that still align with financial need.",
   "how_to_use": [
-    "Compare deadlines to prioritize applications",
-    "Scan award amounts to find suitable funding",
-    "Read through requirement lines for each scholarship",
-    "Open official pages for detailed eligibility criteria",
-    "Shortlist scholarships that align with your goals"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and materials on sponsor sites"
   ],
   "who_for": [
-    "Students in Iowa demonstrating financial need",
-    "Future nursing students seeking support",
-    "Individuals pursuing education in the arts or music",
-    "Community-focused applicants looking for local opportunities",
-    "Students with varied essay requirement preferences"
+    "Iowa applicants with financial need",
+    "High school seniors planning college costs",
+    "Graduate students comparing need-based aid",
+    "Students in education, nursing, music, or business fields",
+    "US citizens checking Iowa-specific scholarship options"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Iowa?",
-      "answer": "The current listing includes 11 scholarships that cover a variety of categories such as education, community, medicine, and music. This diversity allows applicants to find opportunities that align with their specific interests and needs."
+      "question": "How can I find Iowa scholarships for financial need that fit my situation?",
+      "answer": "Use this filtered view to compare Iowa listings row by row, then open the official source for each program before you apply. Eligibility can differ by study level, field, residency, and other requirements, so verify the details on the scholarship’s own page."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 11 scholarships listed have specific deadlines, which vary from one program to another. It's important to check each listing promptly to ensure you don't miss any upcoming deadlines, as some may be as soon as 45 days away."
+      "question": "Can I apply to more than one financial-need scholarship in Iowa?",
+      "answer": "Usually, you can explore multiple listings and apply to any programs whose rules you meet, but each scholarship has its own requirements. Check every official listing for application steps, required materials, and any limits."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements for essays vary among the scholarships in this list. While some may require an essay, others do not, so be sure to review the details of each scholarship to understand what is needed."
+      "question": "What should I compare before I apply?",
+      "answer": "Compare deadline text, award amount, study level, and category first, then review the official source for the full criteria. In this USA filter slice, amounts vary by listing and deadlines differ by program, so don’t assume one row works like another."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this category range from approximately $500 to $6,000. Each listing provides specific amounts, so check the details for the scholarships you are interested in."
+      "question": "Are these Iowa financial-need scholarships only for certain majors or school levels?",
+      "answer": "Not always—this focused set includes different categories such as education, community, medicine, and music, with sample study levels including high school senior, college, and graduate student. Browse the rows that match your level and intended field, then confirm eligibility on the official page."
     }
   ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 1250,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 11,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-08",
+        "2026-06-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript",
+        "personal_statement",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "security_and_protective_services",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Offutt Enlisted Spouses Club",
+        "count": 2
+      },
+      {
+        "name": "Alpha Gamma Rho Fraternity",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "medical",
+      "music"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/iowa",
-    "generatedAt": "2026-04-02T11:12:42.003Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 11,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:03:34.723Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

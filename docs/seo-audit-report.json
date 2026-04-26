@@ -1,0 +1,5724 @@
+{
+  "summary": {
+    "pagesChecked": 82,
+    "averageScore": 76.71,
+    "good": 33,
+    "medium": 39,
+    "bad": 10,
+    "duplicateTitles": 0,
+    "duplicateMetaDescriptions": 0,
+    "zeroResultPages": 0,
+    "missingMetaDescriptions": 0,
+    "pageTypes": {
+      "listing": 1,
+      "scholarship": 20,
+      "article": 1,
+      "essay": 20,
+      "compare": 20,
+      "provider": 20
+    },
+    "reportWarnings": [],
+    "generatedAt": "2026-04-26T14:47:43.299Z"
+  },
+  "pages": [
+    {
+      "type": "listing",
+      "sourceType": "internal",
+      "url": "/scholarships/for-women",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 38,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 142,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 79
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/out-of-state-tuition-award-3ssjelptojsq",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 160,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/kia-america-hacu-steam-scholarship-8005q41eyewu",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 64,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 160,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/stephen-phillips-memorial-scholarship-8qgrmeqhcacw",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 154,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/international-student-scholarship-hreyyf4gt3tu",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 154,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/herbert-lehman-education-fund-scholarship-for-graduates-hxwyylta6kk2",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 158,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/provost-award-md4hn1cfxte7",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 153,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/coco-gauff-tennis-scholarship-oxpljf22s4th",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 62,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 153,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/hope-scholarship-pgwpjkkya1q7",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 154,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/nike-hbcu-scholarship-qvyi3vk0ewwt",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 57,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 147,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/all-star-college-scholarship-xk33znoi7win",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 61,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 142,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/cheniere-hbcu-scholarship-program-xueyywtld0gl",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 144,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/gigi-and-louise-gartner-scholarship-y4tgxt88f56k",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 64,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 160,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/nrg-hbcu-excellence-in-education-scholarship-program-ype0jvcaw1x2",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 64,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 160,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/rgi-scholarship-for-geospatial-and-engineering-agmszzyhpy7t",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 64,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 136,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/anne-maureen-whitney-barrow-memorial-scholarship-coc4lpopvpam",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 152,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/gabriel-a-hartl-scholarship-ioiorv9lp9bb",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 61,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 160,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/robert-b-mcmillen-foundation-art-scholarship-luf8bsuya2zw",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 156,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/paul-tsongas-scholarship-mxzdsqh3ohkk",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 57,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 160,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/motorola-solutions-foundation-engineering-pathways-scholarship-noppoccrwsid",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 159,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "scholarship",
+      "sourceType": "internal",
+      "url": "/scholarships/west-virginia-national-guard-educational-encouragement-scholarship-pucxg8b68tzs",
+      "score": 100,
+      "status": "good",
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required.",
+      "issues": [],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 64,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 160,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 1
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "article",
+      "sourceType": "internal",
+      "url": "/resources",
+      "score": 55,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 37,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 102,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays",
+      "score": 40,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 24,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 82,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-lee-a-christy-endowed-scholarship-scholarship-essay",
+      "score": 50,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 66,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 99,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-david-e-mrizek-scholarship-scholarship-essay",
+      "score": 50,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 67,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 98,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-san-antonio-light-endowed-scholarship-scholarship-essay",
+      "score": 50,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 69,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 97,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-juan-ortiz-mariachi-academy-scholarship-scholarship-essay",
+      "score": 50,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 67,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 116,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-new-jersey-state-elks-vocational-scholarship-scholarship-essay",
+      "score": 50,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 70,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 106,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-general-foundation-scholarship-fund-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 62,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 107,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-woman-s-club-of-aurora-nursing-scholarship-scholarship-essay",
+      "score": 50,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 74,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 117,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-tourism-hospitality-culinary-arts-thca-scholarship-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 40,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 107,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-harold-d-carpenter-scholarship-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 61,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 97,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-the-dennis-b-and-susan-lamb-cook-endowed-scholarship-in-the-school-of-la-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 56,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 113,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-dr-thomas-soltz-scholarship-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 60,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 103,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-delphine-rutkowski-memorial-scholarship-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 58,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 114,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-michigan-nutrition-and-dietetics-institute-scholarship-scholarship-essay",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 58,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 129,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-mary-e-kreppel-scholarship-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 55,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 104,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-kao-kalia-yang-scholarship-deadline-2026-usa-scholarship-essay",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 66,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 138,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-trellis-company-nursing-scholarship-scholarship-essay",
+      "score": 50,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 67,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 95,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-cabela-s-stars-scholarship-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 62,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 113,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-dorothy-zietz-scholarship-in-the-school-of-social-work-scholarship-essay",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 128,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "essay",
+      "sourceType": "internal",
+      "url": "/essays/how-to-write-randolph-brooks-founder-s-endowed-scholarship-scholarship-essay",
+      "score": 65,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "meta_description_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 59,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 110,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare",
+      "score": 75,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 51,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 132,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities",
+      "score": 75,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 33,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 144,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/states",
+      "score": 60,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 28,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 135,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/austin-community-college-vs-cuyahoga-community-college",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 59,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 142,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/midlands-technical-college-vs-university-of-north-florida",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 62,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 146,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/austin-community-college-vs-midlands-technical-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 72,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 152,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/florida-gateway-college-vs-university-of-north-florida",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 59,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 135,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/cuyahoga-community-college-vs-waubonsee-community-college",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 57,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 128,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/austin-community-college-vs-florida-gateway-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 69,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 147,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/midlands-technical-college-vs-waubonsee-community-college",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 62,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 134,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/massasoit-community-college-vs-worcester-state-university",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 62,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 139,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/eastern-florida-state-college-vs-massasoit-community-college",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 145,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/massachusetts-bay-community-college-massbay-vs-worcester-state-university",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 70,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 142,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/eastern-florida-state-college-vs-massachusetts-bay-community-college-massbay",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 46,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 136,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/florida-gateway-college-vs-waubonsee-community-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 72,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 146,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/university-of-south-florida-vs-worcester-state-university",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 62,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 140,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/austin-community-college-vs-university-of-north-florida",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 73,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 145,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/eastern-florida-state-college-vs-university-of-south-florida",
+      "score": 85,
+      "status": "good",
+      "issueCodes": [
+        "result_count_unavailable_internal_context"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 65,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 150,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/the-college-of-the-florida-keys-vs-worcester-state-university",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 66,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 145,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "compare",
+      "sourceType": "internal",
+      "url": "/compare/universities/massachusetts-bay-community-college-massbay-vs-massasoit-community-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 71,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": true,
+          "pointsAwarded": 20,
+          "maxPoints": 20,
+          "value": 145,
+          "min": 120,
+          "max": 160
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers",
+      "score": 40,
+      "status": "bad",
+      "issueCodes": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "high",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "result_count_unavailable_internal_context",
+        "title_length_out_of_range",
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "value": 21,
+          "min": 30,
+          "max": 65,
+          "reason": "title_length_out_of_range"
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 86,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 15,
+          "reason": "result_count_unavailable_internal_context",
+          "unavailable": true,
+          "partial": true
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/loyola-university-chicago",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 48,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 663,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 612
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/tarleton-state-university",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 48,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 520,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 541
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/stetson-university",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 41,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 566,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 358
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/alamo-colleges-foundation",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 48,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 1023,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 326
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/johnson-county-community-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 55,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 551,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 300
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/pensacola-state-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 46,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 508,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 269
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/broward-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 38,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 463,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 262
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/eastern-florida-state-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 52,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 601,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 236
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/worcester-state-university",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 49,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 667,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 233
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/university-of-west-florida",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 49,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 994,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 231
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/tallahassee-state-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 48,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 435,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 220
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/san-jacinto-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 42,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 470,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 185
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/southwestern-illinois-college-foundation",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 63,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 576,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 170
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/waubonsee-community-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 50,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 558,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 156
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/chipola-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 38,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 488,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 147
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/austin-community-college",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 47,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 586,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 138
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/university-of-north-florida",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 50,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 991,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 125
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/kankakee-community-college-foundation",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 60,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 1051,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 122
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    },
+    {
+      "type": "provider",
+      "sourceType": "internal",
+      "url": "/providers/university-of-massachusetts-amherst",
+      "score": 70,
+      "status": "medium",
+      "issueCodes": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "fixPriority": "medium",
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A.",
+      "issues": [
+        "meta_description_length_out_of_range",
+        "faq_missing"
+      ],
+      "checks": {
+        "title": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 58,
+          "min": 30,
+          "max": 65
+        },
+        "metaDescription": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 20,
+          "value": 644,
+          "min": 120,
+          "max": 160,
+          "reason": "meta_description_length_out_of_range"
+        },
+        "h1": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10
+        },
+        "contentBlocks": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": true
+        },
+        "faq": {
+          "ok": false,
+          "pointsAwarded": 0,
+          "maxPoints": 10,
+          "reason": "faq_missing",
+          "value": false
+        },
+        "scholarshipResults": {
+          "ok": true,
+          "pointsAwarded": 15,
+          "maxPoints": 15,
+          "value": 120
+        },
+        "canonicalRobots": {
+          "ok": true,
+          "pointsAwarded": 10,
+          "maxPoints": 10,
+          "value": true
+        },
+        "duplicateSafety": {
+          "ok": true,
+          "pointsAwarded": 5,
+          "maxPoints": 5
+        }
+      }
+    }
+  ]
+}

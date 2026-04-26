@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Pennsylvania High School Need Scholarships | USA",
+  "seo_description": "Pennsylvania high school financial need scholarships in the USA—compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Pennsylvania scholarships for high school students with financial need usually means sorting through very different rules, award ranges, and deadline timing. This filtered USA view narrows that search to a focused set of listings tied to Pennsylvania and the high school level, so you can apply with more direction and less guesswork. The programs below span themes such as education, community, medicine, arts, and STEM, and many rows appear to have comparatively lighter application signals, though every listing should still be checked carefully. Award amounts vary by listing and official terms matter most. Deadlines also differ across rows, with some opportunities appearing sooner than others, so it is smart to compare options promptly and verify details before you submit anything.",
+  "h1": "Find Pennsylvania High School Need Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan each row for location fit, study level, category, deadline wording, and any requirement notes that affect how easy or realistic an application may be. Many listings in this slice appear to be no essay or lighter touch, but that is still something to confirm on the official page before you apply. It is also worth comparing broad education awards against more specific options tied to medicine, arts, communication, psychology, or community-focused interests, especially if you want a shortlist that matches both need and future plans.",
+  "related_intro": "If these Pennsylvania high school financial need listings feel close but not quite right, related pages can help you compare nearby slices by topic, education level, or location. That is useful when you want to find similar USA scholarships with a different emphasis before deciding where to apply.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist listings that match your location and study plans",
+    "Check whether the application appears to require an essay"
+  ],
+  "who_for": [
+    "Pennsylvania high school seniors seeking need-based aid",
+    "USA applicants comparing Pennsylvania-focused scholarship options",
+    "Students with financial need exploring education or community awards",
+    "High school applicants interested in medicine, arts, STEM, or journalism"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Pennsylvania scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings that match financial need, high school level, and Pennsylvania. Then open each row and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Can I apply to all of these scholarships with one application?",
+      "answer": "Usually no—these are separate listings, not one combined Pennsylvania application. Each program has its own rules, required materials, and official process, so check every listing individually before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Look at who the scholarship is for, the study level shown in the row, category fit, and the deadline listed for that program. Award amounts vary by listing, so confirm the current amount and terms on the official page rather than assuming one standard award across this filter."
+    },
+    {
+      "question": "Do these Pennsylvania high school scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many are marked as no-essay in catalog metadata. Still, requirements can change row to row, so verify the current application checklist on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 23,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 40000,
+      "statedAmountCount": 23,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 23,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-13",
+        "2026-06-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 23,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "visual_and_performing_arts",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 9
+      },
+      {
+        "name": "Community Foundation of Fayette County",
+        "count": 3
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      },
+      {
+        "name": "College Foundation of West Virginia",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical",
+      "stem",
+      "community",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/pennsylvania",
+    "generatedAt": "2026-04-26T13:58:58.407Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 23,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

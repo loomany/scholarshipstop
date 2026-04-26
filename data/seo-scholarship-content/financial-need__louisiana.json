@@ -1,0 +1,113 @@
+{
+  "seo_title": "Find Financial Need Scholarships in Louisiana, USA",
+  "seo_description": "Financial need scholarships in Louisiana, USA—compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find Louisiana scholarships tied to financial need in the USA usually means sorting through programs that do not all ask for the same proof, residency details, or study plans. This filtered view narrows that search to a focused set of listings connected to Louisiana and need-based eligibility, so you can compare options without mixing in unrelated awards. The programs below span categories such as education, miscellaneous, and STEM, with sample study levels that include high school seniors, college students, and adult non-traditional learners. Award amounts vary by listing, and deadlines differ by program, so it is worth checking each row closely. Many listings in this slice appear to have lighter application requirements, and some may not require an essay, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Find Louisiana Financial Need Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Look at the requirement lines, study level fit, Louisiana location relevance, and any citizenship or residency notes such as U.S. citizen or permanent resident labels. Because some deadlines in these rows may be coming up soon, it makes sense to review the date shown on each listing promptly and shortlist the programs that match your situation first. If you are weighing several options, compare the stated award text, category tags, and official-page instructions side by side before you apply.",
+  "related_intro": "If these Louisiana financial-need scholarships are close but not quite right, related pages can help you widen the search by location, topic, or study level. That is useful when you want to compare nearby filter combinations without losing the need-based focus.",
+  "how_to_use": [
+    "Compare each row for deadline wording first, since dates vary by program and some may be approaching soon",
+    "Read the eligibility and requirement lines carefully to confirm the financial-need and Louisiana fit before you apply",
+    "Check award text side by side, keeping in mind that amounts vary by listing and should be verified on the official page",
+    "Open the sponsor or official program page for every scholarship you shortlist to confirm current rules, documents, and submission steps"
+  ],
+  "who_for": [
+    "Louisiana applicants looking for scholarships that include financial need in the eligibility criteria",
+    "High school seniors in the USA who want to find Louisiana-based aid before choosing where to apply",
+    "College students comparing need-based Louisiana awards across education, STEM, and broader categories",
+    "Adult non-traditional learners checking whether Louisiana scholarship listings match their current study path"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Louisiana scholarships for financial need in this filtered view?",
+      "answer": "Use these rows to compare Louisiana-focused listings that match the financial need filter, then open each scholarship to confirm the official eligibility details. In this USA catalog slice, requirements can still vary by program, including study level, residency, and field of study."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I live in Louisiana?",
+      "answer": "Not automatically. This list is a starting point to explore options tied to Louisiana and financial need, but you should verify each program’s official page for exact eligibility such as study level, citizenship or permanent residency, and any other row-specific rules."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline, study level, and category labels like Education, STEM, or Miscellaneous. Amounts vary by listing, and deadlines differ by program, so check each row carefully before you apply."
+    },
+    {
+      "question": "Are these Louisiana financial need scholarships mostly simple to apply for?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, always confirm the current application steps on the official scholarship page before you start."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "adult_non_traditional",
+        "college_2",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Louisiana Office of Student Financial Assistance",
+        "count": 2
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 1
+      },
+      {
+        "name": "Ninety-Nines-Spaceport Chapter",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/louisiana",
+    "generatedAt": "2026-04-26T14:04:26.456Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,48 +1,127 @@
 {
-  "seo_title": "California Engineering Scholarships | Up to $16,000",
-  "seo_description": "Explore 18 engineering scholarships in California with awards ranging from $500 to $16,000. Check deadlines and requirements carefully.",
-  "intro": "Finding financial support for engineering studies in California can be crucial for many students. With 18 scholarships available in this category, award sizes vary significantly, offering opportunities for a range of applicants. Keep in mind that requirements and deadlines differ across listings, so it's important to review each option carefully to identify the best fit for your needs.",
-  "h1": "Find Engineering Scholarships in California",
-  "supporting": "As you explore these scholarships, pay attention to the specific award amounts and any essay requirements. Some programs may have lighter application processes, while others could require more detailed submissions. Check the deadlines closely, as they can vary, and always verify details on the official sponsor sites to ensure you have the most accurate information.",
-  "related_intro": "If you're interested in other funding options, consider checking out scholarships in related fields or locations. This could broaden your search and increase your chances of finding the right opportunity.",
+  "seo_title": "Find Engineering Scholarships in California, USA",
+  "seo_description": "Engineering scholarships in California, USA with deadlines and requirements that vary by listing. Compare options and apply on official pages.",
+  "intro": "Trying to find engineering scholarships in California usually means narrowing a broad USA search into programs that actually match your location and field. This filtered slice brings together California-focused listings tied to engineering, with some rows also touching STEM, education, medicine, disability, arts, or community themes. As you compare options, expect the details to vary from listing to listing: award amounts differ, deadlines differ, and requirement lines are not identical. Some programs may look lighter-touch, while others may ask for more materials or an essay. If you plan to apply in the current cycle, it is smart to check the rows below promptly and verify every detail on the official scholarship page before you decide which opportunities to pursue.",
+  "h1": "Find Engineering Scholarships in California USA",
+  "supporting": "A useful way to read this set is to compare more than the title alone. Look at the location fit, the field wording, the study level notes, and any citizenship or residency language shown in each row. Then compare award text and deadline text side by side, because those can shape which applications you prioritize first. Sample listings in this slice range from broad STEM options to chapter-based and design-related programs, so it is worth opening the official pages to confirm eligibility, required materials, and how closely each scholarship matches your engineering path in California.",
+  "related_intro": "If you do not find the right fit here, related pages can help you compare nearby paths, such as broader engineering results or other California scholarship categories that overlap with STEM, education, community, or disability themes. That can surface programs with a similar focus but different eligibility details.",
   "how_to_use": [
-    "Sort scholarships by award amount",
-    "Read the requirement lines carefully",
-    "Open the official pages for details",
-    "Shortlist scholarships that match your profile",
-    "Verify deadlines and eligibility criteria"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist programs that match your study level",
+    "Verify award details and eligibility on sponsor sites"
   ],
   "who_for": [
-    "California residents pursuing engineering",
-    "Students interested in STEM fields",
-    "Undergraduates seeking financial aid",
-    "Applicants looking for community-focused scholarships",
-    "Individuals with diverse backgrounds in engineering"
+    "California students seeking engineering funding",
+    "Engineering majors comparing California-based options",
+    "High school seniors planning engineering study",
+    "College and graduate applicants reviewing STEM-related awards"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in California?",
-      "answer": "There are 18 scholarships listed for engineering students in California, covering a range of categories including STEM, medical, community, and education. Award sizes vary significantly, with amounts ranging from approximately $500 to $16,000."
+      "question": "How can I find engineering scholarships in California that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, category, and any citizenship or residency details shown in each listing. In this USA-focused slice, eligibility and requirements vary by program, so confirm the final rules on the official scholarship page before you apply."
     },
     {
-      "question": "How can I find out about deadlines for these scholarships?",
-      "answer": "All 18 scholarships have specific deadlines, which vary from one listing to another. It's advisable to check the individual listings promptly, as some deadlines may be approaching within the next 45 days."
+      "question": "Can I compare award amounts and deadlines on this California engineering scholarship page?",
+      "answer": "Yes—these listings include award amounts and deadline text row by row, which makes it easier to compare options quickly. Amounts vary by listing, and deadlines differ by program, so verify both on the official source before applying."
     },
     {
-      "question": "Do these scholarships require essays or other application materials?",
-      "answer": "Requirements differ across the scholarships, with some requiring essays while others do not. Review each listing carefully to understand the specific application requirements and any additional materials needed."
+      "question": "Are these only for current college engineering students in California?",
+      "answer": "Not necessarily. The rows in this filtered set can include different study levels, such as high school seniors, early college students, and graduate students, so it helps to explore each listing instead of assuming the same audience across the page."
     },
     {
-      "question": "Who can apply for these scholarships?",
-      "answer": "These scholarships are primarily aimed at students pursuing engineering degrees in California. Make sure to check the eligibility criteria for each scholarship to ensure you meet the necessary qualifications."
+      "question": "Do all engineering scholarships here require an essay?",
+      "answer": "No single requirement applies to every listing on this page. Some programs may ask for an essay and others may be lighter-touch, so check each row and then confirm the application steps on the official scholarship site."
     }
   ],
+  "page_data": {
+    "exactCount": 19,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 16000,
+      "statedAmountCount": 19,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 13,
+      "within60Days": 19,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "May 7, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 15,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "mechanic_and_repair_tech_technicians"
+      ],
+      "commonResidency": [
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Sonora Area Foundation",
+        "count": 3
+      },
+      {
+        "name": "Flight Path Learning Center and Museum",
+        "count": 2
+      },
+      {
+        "name": "Armenian International Women's Association",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southern California Chapter",
+        "count": 1
+      },
+      {
+        "name": "Association of Environmental and Engineering Geologists-Sacramento Section",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "medical",
+      "education",
+      "disability",
+      "biology"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/california",
-    "generatedAt": "2026-04-02T10:38:27.426Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 18,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:34:10.182Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 19,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

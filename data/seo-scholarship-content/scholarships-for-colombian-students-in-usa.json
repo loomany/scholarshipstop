@@ -1,43 +1,131 @@
 {
-  "seo_title": "Scholarships for Colombian Students in the USA - 196 Opportunities",
-  "seo_description": "Explore 196 scholarships for Colombian students in the USA. Find funding options tailored for your educational journey.",
-  "h1": "Scholarships for Colombian Students in the USA",
-  "intro": "Colombian students seeking to study in the USA have access to a variety of scholarships designed to support their educational aspirations. With 196 scholarships currently available, these opportunities cater to diverse fields of study and academic levels. From merit-based awards to need-based grants, students can find financial assistance that aligns with their goals. Notable scholarships include the International Student Scholarship, the Vanna Christian Sun Legacy Scholarship, and the Jorge and Darlene Pérez Excellence Award. Whether you are pursuing undergraduate or graduate studies, these scholarships can significantly ease the financial burden of studying abroad.",
-  "supporting": "Eligibility criteria for these scholarships vary, with some targeting specific academic disciplines, while others are open to all fields of study. For example, the Razor's Edge Global Scholarship is aimed at students demonstrating leadership potential, while the DC Tuition Assistance Grant (DCTAG) supports residents of Washington, D.C. Application deadlines also differ, so it’s crucial to check each scholarship's requirements. Prepare your application materials early, including transcripts, letters of recommendation, and personal statements. Many scholarships require proof of Colombian citizenship or residency, so ensure you have the necessary documentation ready.",
-  "related_intro": "In addition to scholarships, Colombian students can explore grants and fellowships that may offer further financial support for their studies in the USA.",
+  "seo_title": "Find Scholarships for Colombian Students in USA",
+  "seo_description": "Scholarships for Colombian students in USA with deadlines, award details, and eligibility. Compare listings and apply on official pages.",
+  "intro": "Trying to find scholarships for Colombian students in the USA usually means sorting through mixed eligibility rules, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings connected to that search, including opportunities tied to education, STEM, community, medicine, arts, and other academic paths. You can apply more efficiently by comparing the rows for citizenship or residency language, level of study, and field tags before opening each listing. Awards vary widely by program, deadlines differ by row, and requirements are not uniform. Some listings may ask for essays while others appear lighter touch, so it is worth reading each requirement line closely and checking official pages promptly.",
+  "h1": "Compare Scholarships for Colombian Students in USA",
+  "supporting": "Use the list to compare more than just the scholarship title. Scan each row for who the program is really aimed at, then look at study level, subject fit, and any wording around international student status in the USA. If you want to browse broadly, start with the most relevant category labels and shortlist the strongest matches. If you want to move faster, open the official source for the programs that fit your profile and verify award details, document requests, and deadline timing there before you apply.",
+  "related_intro": "If these listings are close but not quite right, related pages can help you explore nearby options such as broader international student scholarships, subject-based awards, or opportunities tied to your current study level in the USA. That is often the easiest way to compare adjacent filters without restarting your search.",
   "how_to_use": [
-    "Browse the list of scholarships available.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required application materials.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare eligibility wording across each row",
+    "Read study level and field tags carefully",
+    "Open official pages to verify current details",
+    "Shortlist strong matches and check deadlines promptly"
   ],
   "who_for": [
-    "Colombian students pursuing undergraduate studies.",
-    "Graduate students from Colombia seeking advanced degrees.",
-    "Students looking for financial support to study in the USA."
+    "Colombian students seeking USA scholarship options",
+    "International applicants comparing undergraduate and graduate funding",
+    "Students in education, engineering, business, or health fields",
+    "Applicants looking for scholarships with mixed essay requirements"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Colombian students?",
-      "answer": "There are merit-based, need-based, and field-specific scholarships available for Colombian students."
+      "question": "How can I find scholarships for Colombian students in the USA on this page?",
+      "answer": "Use this filtered view to explore listings that match Colombian students studying in the USA, then compare each row’s eligibility, study level, and subject area. Official scholarship pages are the place to confirm citizenship or residency details before you apply."
     },
     {
-      "question": "How can I find the right scholarship for me?",
-      "answer": "Review eligibility criteria and application requirements to find scholarships that match your profile."
+      "question": "Can I compare award amounts and deadlines across these scholarships?",
+      "answer": "Yes—these rows include deadline text, but deadlines differ by program, so check dates promptly on each listing and verify on the official source. Award amounts also vary by listing, and some rows may show a range or require you to confirm the current amount directly with the provider."
     },
     {
-      "question": "Are there scholarships specifically for graduate students?",
-      "answer": "Yes, several scholarships cater specifically to graduate students, including the Paul and Daisy Soros Fellowships."
+      "question": "Are these scholarships only for one major or study level?",
+      "answer": "No—this filtered set includes a mix of topics such as Education, STEM, Medicine, Arts, Community, and Miscellaneous, with study levels ranging from high school senior to graduate student. If you want to browse efficiently, compare the category and level shown on each row before you apply."
+    },
+    {
+      "question": "Do all scholarships here require an essay?",
+      "answer": "No single rule applies across this page. Requirements vary row to row, so review each listing carefully and use the official scholarship page to verify whether an essay or other materials are needed."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-colombian-students-in-usa",
-    "generatedAt": "2026-04-25T13:19:33.222Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:04:33.824Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

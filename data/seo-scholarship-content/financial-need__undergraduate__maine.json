@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find Maine Undergraduate Need Scholarships | USA",
+  "seo_description": "Financial need undergraduate scholarships in Maine, USA—compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Maine that take financial need into account usually means sorting through programs with very different rules, award ranges, and application steps. This filtered USA view narrows that search to a focused set of listings tied to Maine and undergraduate study, so you can compare options without jumping between unrelated results. The rows below include programs connected with education, community, law, and safety, with some listings pointing to broader academic interests such as business, agriculture, natural resources, and legal studies. Awards vary by listing, deadlines differ by program, and requirement details are not identical across the set, so it is worth reading each row closely before you apply.",
+  "h1": "Find Financial Need Scholarships for Maine Undergrads USA",
+  "supporting": "Use this slice to compare more than just the scholarship title. Check how each listing describes eligibility, residency or citizenship language, study level, and any requirement notes before you decide which programs to pursue first. Some rows may look lighter touch than others, but you should still verify every detail on the official page. It is also smart to review deadline text promptly, since timing is not the same across these Maine scholarship listings. If you want to browse efficiently, shortlist the strongest matches, then compare award wording and application expectations side by side.",
+  "related_intro": "After you scan these Maine undergraduate scholarships tied to financial need, related pages can help you widen or narrow the search. You may want to compare other Maine filters, look at undergraduate-only results without this eligibility focus, or explore financial-need scholarship pages in other USA locations.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist the listings that best match your profile",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "Maine undergraduates seeking need-based aid",
+    "Applicants comparing Maine scholarship options by category",
+    "Students with interests in education or community programs",
+    "Undergraduates reviewing law or safety related listings"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Maine based on financial need?",
+      "answer": "Use this filtered view to explore Maine scholarship rows that match undergraduate study and financial-need criteria. Then open each listing and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Are these scholarships only for current college students in the USA?",
+      "answer": "Not always. While this filter is focused on undergraduate scholarships in Maine, some listings may also show different study-level labels such as high school senior, adult non-traditional, or college-level categories, so review each row carefully in the USA context."
+    },
+    {
+      "question": "What should I check before I apply from this list?",
+      "answer": "Compare the row details for location, study level, and any citizenship or residency notes such as U.S. citizen or U.S. permanent resident where shown. Requirements can differ, and some programs may ask for more materials than others, so confirm everything on the official scholarship page."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Maine undergraduate financial-need filter?",
+      "answer": "These rows span a focused set of listings tied to Maine and financial need, with examples connected to categories like education, community, law, and safety. You may also see different fields of study represented, so it is worth browsing beyond one major if you want to find more possible matches."
+    }
+  ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 4250,
+      "minUsd": 1000,
+      "maxUsd": 20000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "legal_professions_and_law_studies",
+        "natural_resources_and_conservation"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Finance Authority of Maine",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Horticultural Research Institute",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "law",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/maine",
+    "generatedAt": "2026-04-26T14:49:18.422Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

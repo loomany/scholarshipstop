@@ -1,43 +1,133 @@
 {
-  "seo_title": "Find AI Scholarships for International Students - 196 Opportunities",
-  "seo_description": "Explore 196 AI scholarship matching opportunities for international students. Apply today for your chance to secure funding!",
-  "h1": "AI Scholarship Matching for International Students",
-  "intro": "Navigating the world of scholarships can be overwhelming, especially for international students seeking financial aid. Our AI scholarship matching tool simplifies this process by connecting you with 196 scholarships tailored to your unique profile. From the International Student Scholarship to the Paul and Daisy Soros Fellowships for New Americans, our platform helps you find the right funding opportunities. Whether you're pursuing undergraduate or graduate studies, we ensure you have access to the resources you need to succeed. Start your scholarship journey today and unlock the potential of your education!",
-  "supporting": "Eligibility for these scholarships varies widely, but many are open to international students enrolled in accredited institutions. Deadlines also differ, so it's crucial to check each scholarship's specific requirements. For example, the Vanna Christian Sun Legacy Scholarship may have a different application timeline than the Razor's Edge Global Scholarship. To enhance your chances, tailor your application to highlight your achievements and aspirations. Consider gathering recommendation letters and preparing a compelling personal statement. Make sure to apply well before the deadlines to avoid last-minute issues and to give yourself ample time for revisions.",
-  "related_intro": "In addition to AI scholarship matching, there are numerous resources available to help international students secure funding for their studies. Explore various platforms and networks that specialize in scholarship opportunities.",
+  "seo_title": "Find AI Scholarships for International Students in USA",
+  "seo_description": "AI scholarships for international students in the USA: compare awards, deadlines, and eligibility, then apply through official program pages.",
+  "intro": "Trying to find USA scholarships that may fit international students can get messy fast, especially when eligibility, study level, and subject area shift from one listing to the next. This filtered slice brings together a focused set of programs tied to AI scholarship matching for international students, so you can apply with more direction instead of guessing where you qualify. The rows below span themes such as education, STEM, community, medicine, arts, and miscellaneous topics, with examples that touch graduate and undergraduate paths. Awards vary by listing, deadlines differ by program, and requirements are mixed, including both essay and lighter touch options, so it is worth reading each row closely before you compare and move forward.",
+  "h1": "Find AI Scholarships for International Students USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check the study level, field tags, citizenship or residency wording, and any requirement notes before you decide a program belongs on your shortlist. Some listings may look broad at first glance but have narrower rules on the official page. Others may be worth a closer look because the award text is strong or the application appears simpler. Since every row includes deadline information and timing can be close for some programs, it makes sense to review dates early, open the source page, and verify the latest details before you apply.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship themes such as education, STEM, community, medicine, or arts, as well as other USA filters connected to international student eligibility.",
   "how_to_use": [
-    "Visit our scholarship matching tool.",
-    "Input your academic and personal details.",
-    "Browse the list of matched scholarships.",
-    "Review eligibility criteria and deadlines.",
-    "Submit your applications directly through the links provided."
+    "Compare deadline text across the rows",
+    "Read the requirement line carefully",
+    "Check study level and subject tags",
+    "Open the official source page",
+    "Shortlist strong matches and verify details"
   ],
   "who_for": [
-    "International students seeking financial aid.",
-    "Undergraduate and graduate applicants.",
-    "Students from diverse backgrounds and fields of study."
+    "International students comparing USA scholarship options",
+    "Graduate applicants checking education or STEM funding",
+    "Undergraduate students reviewing mixed requirement listings",
+    "Applicants who want essay and no essay possibilities",
+    "Students exploring broad subject categories before applying"
   ],
   "faq": [
     {
-      "question": "How do I know if I'm eligible for a scholarship?",
-      "answer": "Eligibility criteria vary by scholarship; always check the specific requirements listed."
+      "question": "How can I use this filtered view to find scholarships for international students in the USA?",
+      "answer": "Start by comparing each row’s eligibility labels, study level, field of study, and category before you apply. This catalog groups a focused set of listings, but final rules for international students in the USA should always be verified on the official scholarship page."
     },
     {
-      "question": "What documents do I need to apply?",
-      "answer": "Common documents include transcripts, recommendation letters, and personal statements."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—amounts and deadlines differ by program, so compare them row by row instead of assuming one standard for the whole list. Some listings show dollar amounts, but amounts vary and should be confirmed with the official source before you apply."
     },
     {
-      "question": "When are scholarship deadlines?",
-      "answer": "Deadlines differ for each scholarship; ensure you check them individually."
+      "question": "Do all scholarships here require an essay or the same application materials?",
+      "answer": "No. Requirements vary across these rows, and essay expectations are mixed, so check each listing carefully before you apply."
+    },
+    {
+      "question": "What kinds of students and subjects appear in this scholarship list?",
+      "answer": "This filtered set includes multiple study levels and subjects, with examples in education, business, engineering, English, and health professions. You can explore categories such as Education, STEM, Community, Medicine, Arts, and Miscellaneous to narrow what fits you."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "ai-scholarship-matching-for-international-students",
-    "generatedAt": "2026-04-25T13:36:46.545Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:54:50.966Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

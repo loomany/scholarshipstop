@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Florida Undergraduate Need Scholarships | USA",
+  "seo_description": "Florida undergraduate financial need scholarships in the USA—compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Florida undergraduate scholarships that take financial need into account usually means sorting through mixed eligibility rules, study levels, and sponsor preferences. This filtered slice narrows that search to a focused set of USA listings tied to Florida and undergraduate study, so you can compare options with less noise. The programs below span categories such as education, community, STEM, medicine, arts, and miscellaneous topics, with some listings connected to fields like engineering, business, health professions, and visual or performing arts. Award amounts vary by listing, deadlines differ by program, and eligibility details can include residency or citizenship language. Many rows appear to have lighter application signals and often no essay, but you should still verify every requirement on the official page before you apply.",
+  "h1": "Find Florida Undergraduate Need Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check how each row describes financial need, confirm whether the opportunity is truly aimed at undergraduate applicants, and note any Florida-specific residency language. It is also worth comparing category labels and field-of-study cues, since some programs may fit education, community, STEM, or arts interests more closely than others. Because deadline text appears across these listings and some opportunities may be coming up soon, it makes sense to scan dates early, open the official source, and shortlist the programs that best match your profile before requirements change.",
+  "related_intro": "If these Florida financial-need listings feel close but not quite right, related pages can help you compare nearby paths, such as broader undergraduate results or other need-based scholarship filters in the USA catalog. That is often the fastest way to find a better fit by location, study level, or topic.",
+  "how_to_use": [
+    "Sort rows by deadline first",
+    "Read each requirement line carefully",
+    "Compare award wording across listings",
+    "Open the official page to verify details",
+    "Shortlist the best matches before you apply"
+  ],
+  "who_for": [
+    "Florida undergraduates seeking need-based aid",
+    "Applicants comparing Florida and USA residency wording",
+    "Students in education, STEM, health, business, or arts fields",
+    "College students looking for many no-essay scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Florida undergraduate scholarships based on financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, undergraduate study, and Florida. Then open each row and verify eligibility, residency, and application details on the official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by listing. Amounts can differ widely, and deadlines are not the same across the page, so compare rows first and confirm the current details on official pages before you apply."
+    },
+    {
+      "question": "Who should browse this scholarship list?",
+      "answer": "This page is useful for students trying to apply for undergraduate scholarships in Florida where financial need is part of the eligibility picture. Some listings may also include other conditions such as study level, field of study, or USA citizenship or residency requirements."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Florida filter?",
+      "answer": "The programs below span multiple categories, including Education, Community, STEM, Medicine, Arts, and Miscellaneous. You may also find listings connected to fields like education, health professions, engineering, business, and visual or performing arts."
+    }
+  ],
+  "page_data": {
+    "exactCount": 115,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 164.43,
+      "maxUsd": 20000,
+      "statedAmountCount": 115,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 32,
+      "within60Days": 111,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-05-30",
+        "2026-06-05",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 115,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement",
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 51
+      },
+      {
+        "name": "University of North Florida",
+        "count": 8
+      },
+      {
+        "name": "University of South Florida",
+        "count": 8
+      },
+      {
+        "name": "The College of the Florida Keys",
+        "count": 6
+      },
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 4
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "medical",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/florida",
+    "generatedAt": "2026-04-26T14:46:10.622Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 115,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

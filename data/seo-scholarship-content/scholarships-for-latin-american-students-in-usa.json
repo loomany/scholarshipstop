@@ -1,43 +1,136 @@
 {
-  "seo_title": "Top Scholarships for Latin American Students in the USA",
-  "seo_description": "Explore 196 scholarships available for Latin American students pursuing education in the USA. Find opportunities tailored for you.",
-  "h1": "Scholarships for Latin American Students in the USA",
-  "intro": "If you're a Latin American student seeking educational opportunities in the United States, you're in luck. There are currently 196 scholarships designed specifically for students like you. These scholarships can help alleviate the financial burden of tuition and living expenses, allowing you to focus on your studies. From merit-based awards to need-based grants, there are options available for various fields of study and academic levels. Whether you're an undergraduate or graduate student, it's essential to explore these opportunities to maximize your chances of receiving financial support.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international students from Latin America. Common requirements include a strong academic record, letters of recommendation, and a personal statement. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, are highly competitive and may require additional documentation. Deadlines also vary, so it's crucial to check each scholarship's specific timeline and apply early. To enhance your application, tailor your personal statement to reflect your unique experiences and aspirations. Consider reaching out to previous recipients for insights and tips on crafting a successful application.",
-  "related_intro": "In addition to scholarships, there are various grants and financial aid options available for Latin American students in the USA. Exploring these resources can further support your educational journey.",
+  "seo_title": "Find Scholarships for Latin American Students in USA",
+  "seo_description": "Scholarships for Latin American students in USA: compare deadlines, award ranges, and eligibility, then apply through official program pages.",
+  "intro": "Trying to find USA scholarships that may fit Latin American students usually means sorting through mixed eligibility, study levels, and subject areas all at once. This filtered view brings together a focused set of listings connected to that search, including options tied to education, STEM, community, medicine, arts, and other categories. You can compare programs for graduate study, college years, and high school seniors, then check how each listing handles citizenship or residency language such as international student, US citizen, or permanent resident. Award amounts vary widely by listing, and deadlines differ across rows, so it is worth reviewing each one closely. Some programs may ask for essays while others appear lighter-touch, but requirements should always be verified on the official scholarship page before you apply.",
+  "h1": "Find USA Scholarships for Latin American Students",
+  "supporting": "A smart way to use this list is to compare the requirement lines, study level tags, and field-of-study labels side by side before opening every result. If you are targeting engineering, business, education, English, or health professions in the USA, this slice is worth scanning because relevant options can sit next to broader awards for international or community-focused applicants. Check deadline text promptly, since the rows do not share one timeline and some opportunities may be coming up soon. If an amount is shown, treat it as listing-specific and confirm the current details with the sponsor.",
+  "related_intro": "After you review these results, related scholarship pages can help you narrow by study level, subject area, or broader international-student themes. That is useful if you want to compare this Latin American student slice with adjacent USA funding categories before making a shortlist.",
   "how_to_use": [
-    "Research available scholarships tailored for Latin American students.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents, including transcripts and recommendation letters.",
-    "Craft a compelling personal statement highlighting your achievements.",
-    "Submit applications before the deadlines."
+    "Compare study level, category, and field-of-study tags first to find the closest matches",
+    "Read each eligibility line carefully, especially citizenship, residency, and international-student wording",
+    "Check deadline text row by row and prioritize listings with the nearest closing dates",
+    "Open the official scholarship page to verify award details, essay expectations, and current requirements",
+    "Shortlist the strongest fits, then compare them by subject relevance, application effort, and deadline timing"
   ],
   "who_for": [
-    "Latin American undergraduate students.",
-    "Latin American graduate students.",
-    "International students seeking financial aid."
+    "Latin American students looking for scholarship options in the USA with international-student eligibility language",
+    "Applicants comparing awards across graduate, college, and high school senior study levels",
+    "Students focused on subjects such as education, engineering, business, English, or health professions",
+    "Readers who want to separate broader community or miscellaneous awards from more academic or STEM-focused listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available?",
-      "answer": "There are merit-based, need-based, and specific scholarships for various fields of study."
+      "question": "How can I find scholarships for Latin American students in the USA on this page?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to Latin American students, then compare each row’s eligibility, study level, and field. Official requirements can differ a lot, so confirm details on the provider’s page before you apply."
     },
     {
-      "question": "How can I find the right scholarships for me?",
-      "answer": "Utilize scholarship search engines and university resources to find scholarships that match your profile."
+      "question": "Can I compare award amounts and deadlines across these scholarships?",
+      "answer": "Yes—these rows include deadline text, and many listings show award amounts, but both vary by program. Amounts can range widely by listing, and deadlines differ by row, so check dates promptly and verify everything on the official source."
     },
     {
-      "question": "Are there scholarships for specific countries in Latin America?",
-      "answer": "Yes, many scholarships target students from specific Latin American countries."
+      "question": "Are these scholarships only for international students?",
+      "answer": "Not always. In this filtered catalog, some listings reference international students, while sample eligibility labels also include USA citizens and permanent residents, so read each scholarship carefully before you apply."
+    },
+    {
+      "question": "What kinds of students and majors appear in these listings?",
+      "answer": "You can browse scholarships across multiple study levels, including graduate students, high school seniors, and college students, with common fields such as education, business, engineering, English, and health professions. Categories in this slice also span education, STEM, community, medicine, arts, and miscellaneous topics."
+    },
+    {
+      "question": "Do all of these scholarships require an essay?",
+      "answer": "No—requirements are mixed across the programs below. Some listings may ask for an essay and others may be lighter-touch, so compare the application steps in the catalog and verify the final requirements on the official scholarship page."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-latin-american-students-in-usa",
-    "generatedAt": "2026-04-25T13:20:30.250Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:10:19.240Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

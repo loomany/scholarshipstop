@@ -1,43 +1,132 @@
 {
-  "seo_title": "Top Scholarships for Nepali Students in the USA - 196 Opportunities",
-  "seo_description": "Explore 196 scholarships for Nepali students in the USA. Find funding opportunities and enhance your educational journey.",
-  "h1": "Scholarships for Nepali Students in the USA",
-  "intro": "Navigating the scholarship landscape can be challenging, especially for Nepali students aspiring to study in the USA. With 196 scholarships available, there are numerous opportunities to help fund your education. From merit-based awards to need-based grants, these scholarships cater to various academic disciplines and personal backgrounds. Notable scholarships include the International Student Scholarship and the Paul and Daisy Soros Fellowships for New Americans. This guide will help you understand the options available and how to apply effectively.",
-  "supporting": "Eligibility for these scholarships varies, with some requiring specific academic achievements, while others focus on financial need or community service. Be sure to check the deadlines, as they can range from early application dates to rolling admissions. For instance, the Razor's Edge Global Scholarship may have different criteria than the DC Tuition Assistance Grant (DCTAG). When applying, tailor your application to highlight your strengths and experiences. Gather all necessary documents, such as transcripts and recommendation letters, to ensure a complete submission.",
-  "related_intro": "In addition to scholarships, Nepali students can explore various financial aid options, including grants and work-study programs, to support their studies in the USA.",
+  "seo_title": "Find Scholarships for Nepali Students in USA",
+  "seo_description": "Scholarships for Nepali students in USA with deadlines, award ranges, and eligibility details. Compare listings and apply on official pages.",
+  "intro": "Trying to find scholarships for Nepali students in the USA usually means sorting through mixed eligibility rules, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings connected to that search, including opportunities that may overlap with international student eligibility and programs across education, STEM, community, medicine, arts, and other areas. As you compare the rows below, expect award amounts to vary by listing, deadlines to differ by program, and requirements to range from lighter-touch applications to options that may ask for essays or added documentation. If you plan to apply in the USA, it is worth checking the details promptly because some listings can close sooner than others.",
+  "h1": "Apply for Scholarships for Nepali Students in USA",
+  "supporting": "Use this list to compare more than just the title. Look at the study level, field of study, citizenship or residency wording, and any requirement notes before you decide a scholarship is a fit. Some rows may be broad enough for international applicants, while others can be narrower once you open the full listing. It also helps to compare award text side by side, then verify the latest terms, materials, and deadline language on the official page before you apply.",
+  "related_intro": "If these results feel close but not exact, related pages can help you narrow by study level, subject area, or broader international student options in the USA. That is often the fastest way to find programs that better match your course of study and application profile.",
   "how_to_use": [
-    "Browse the list of scholarships available.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare your application materials in advance.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your study level",
+    "Verify award details on sponsor sites"
   ],
   "who_for": [
-    "Nepali students pursuing undergraduate or graduate studies.",
-    "Students with strong academic records or unique backgrounds.",
-    "Individuals seeking financial assistance for their education."
+    "Nepali students seeking USA scholarship options",
+    "International applicants comparing broad and niche programs",
+    "Graduate or undergraduate students checking eligibility details",
+    "Applicants in education, engineering, business, or health fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Nepali students?",
-      "answer": "There are merit-based, need-based, and community service scholarships available for Nepali students in the USA."
+      "question": "How can I find scholarships for Nepali students in the USA on this filtered page?",
+      "answer": "Use this filtered view to compare rows that mention eligibility, study level, field, and deadline text. Because this catalog also includes broader international-student listings, always open the official source to confirm a program accepts Nepali applicants in the USA."
     },
     {
-      "question": "How can I find more information about each scholarship?",
-      "answer": "Visit the scholarship's official website for detailed information on eligibility, deadlines, and application procedures."
+      "question": "Can I apply to every scholarship listed here if I am a Nepali student?",
+      "answer": "Not automatically. Some listings may be open to international students broadly, while others can have different citizenship, residency, or campus-specific rules, so verify eligibility on each official scholarship page before you apply."
     },
     {
-      "question": "Are there scholarships specifically for graduate students?",
-      "answer": "Yes, several scholarships, like the Paul and Daisy Soros Fellowships, are specifically designed for graduate students."
+      "question": "What should I compare before I apply for a scholarship from these listings?",
+      "answer": "Compare study level, field of study, category, deadline text, and any application requirements shown in the row. Award amounts and essay expectations vary by listing, so confirm the latest details on the official source before applying."
+    },
+    {
+      "question": "Can I browse by major or topic when I explore these scholarship options?",
+      "answer": "Yes. The programs below span topics such as Education, STEM, Medicine, Arts, Community, and Miscellaneous, with sample fields including engineering, education, business management and marketing, English language and literature, and health professions and clinical sciences."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-nepali-students-in-usa",
-    "generatedAt": "2026-04-25T13:19:03.332Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:10:51.827Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

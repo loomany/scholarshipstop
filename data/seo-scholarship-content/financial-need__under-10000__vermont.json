@@ -1,0 +1,115 @@
+{
+  "seo_title": "Find Vermont Financial Need Scholarships | USA",
+  "seo_description": "Financial need scholarships in Vermont under ten thousand dollars. Compare USA listings, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Vermont scholarships tied to financial need without wading through high-dollar national awards? This filtered slice brings together USA listings with listed awards under the stated cap, so you can compare smaller programs that may still help cover tuition, books, fees, or other school costs. The rows here span areas like education, community, and miscellaneous topics, and they are not all aimed at the same stage of study. Some fit high school students, while others may suit college or graduate applicants. Requirements, essay expectations, and deadlines vary by listing, so it makes sense to read each row closely before you apply and verify details on the official source.",
+  "h1": "Compare Vermont Financial Need Scholarships USA",
+  "supporting": "A smart way to use this view is to compare more than the award line. Check who each program is for, how Vermont is used in eligibility, and whether the listing leans toward education, community, or another category. Because these are lower-amount scholarships, it can be worth shortlisting several and applying across a mix rather than relying on one result. Deadline text appears across the rows, and at least some programs may be coming up soon, so open the official pages early and confirm current terms before you submit anything.",
+  "related_intro": "If this Vermont and financial-need combination feels too narrow, related pages can help you compare nearby filter paths, such as broader Vermont scholarship lists, other financial-need views, or additional award ranges. That is useful when you want to find more options with similar eligibility but different budget levels or topic mixes.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page for verification",
+    "Shortlist several programs before you apply",
+    "Check how Vermont eligibility is defined"
+  ],
+  "who_for": [
+    "Vermont applicants with financial need",
+    "High school students planning ahead",
+    "College or graduate students seeking smaller awards",
+    "Applicants comparing education and community scholarships"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines on this USA scholarship list?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, which makes it easier to compare options side by side. Deadlines differ by program, and some appear relatively soon, so check the official source promptly before applying."
+    },
+    {
+      "question": "What kinds of scholarships appear in this Vermont filter?",
+      "answer": "This focused set of listings includes themes such as education, miscellaneous, and community, with examples tied to study levels from high school senior through graduate student. Some rows also reference fields like education, business management and marketing, agriculture and related sciences, or history."
+    },
+    {
+      "question": "Are these Vermont scholarships easy to apply for?",
+      "answer": "Requirements are mixed across the catalog, and some listings may be comparatively lighter-touch than others. Essay expectations and supporting materials can vary, so review each official listing carefully before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-06-30",
+        "2026-05-31"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_2",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Vermont Principals' Association",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Horticultural Research Institute",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/vermont",
+    "generatedAt": "2026-04-26T14:26:06.676Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

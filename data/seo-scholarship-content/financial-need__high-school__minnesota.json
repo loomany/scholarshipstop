@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find Minnesota High School Need Scholarships | USA",
+  "seo_description": "Minnesota high school financial need scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships for Minnesota high school students with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered slice brings those priorities together so you can apply with more focus, compare options faster, and spot listings that fit your situation. The rows below include programs tied to education, disability, medicine, and broader miscellaneous categories, with many aimed at high school seniors and some showing relatively lighter requirement signals. Awards vary by listing, deadlines differ by program, and essay expectations are mixed, so it is worth checking each row closely rather than assuming the same rules apply across the list.",
+  "h1": "Find Minnesota Financial Need Scholarships for High School USA …",
+  "supporting": "Use this set of Minnesota listings to compare more than just the scholarship title. Read the requirement lines, note whether the opportunity appears connected to education or health-related interests, and check residency or citizenship wording on the official page before you apply. Because deadline text appears across these rows and at least some programs may be coming up soon, it makes sense to review dates promptly. If award amounts matter to your shortlist, compare the listed figures here and then verify every detail on the sponsor site.",
+  "related_intro": "If these Minnesota financial need scholarships for high school applicants feel too narrow or too broad, related pages can help you explore nearby options by changing one filter at a time, such as location, study level, or another scholarship theme.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your background",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Minnesota high school seniors with financial need",
+    "USA applicants looking for Minnesota-based scholarship options",
+    "Students interested in education or health-related paths",
+    "Applicants comparing disability and general education scholarships"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Minnesota scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare the rows that match financial need, high school, and Minnesota in the USA catalog. Then open each listing and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here?",
+      "answer": "Not automatically—requirements vary by program, even within this focused set of Minnesota listings. Check each row for details like study level, citizenship or residency language, and any category-specific criteria before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amounts, deadline timing, and application requirements row by row. Amounts vary by listing, deadlines differ by program, and essay requirements are mixed, so confirm the current terms on official sources."
+    },
+    {
+      "question": "Are these only for Minnesota residents, or can other USA students explore them too?",
+      "answer": "This filter is tied to Minnesota, but each scholarship may define location eligibility differently. If you're in the USA and exploring options, read the official listing carefully to confirm whether Minnesota residency, school attendance, or another connection is required."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 750,
+      "maxUsd": 8000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-15",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Allina Health System",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Boy Scouts of America-Northern Lights Council",
+        "count": 1
+      },
+      {
+        "name": "Minnesota Association of Townships",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/minnesota",
+    "generatedAt": "2026-04-26T13:55:14.500Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,43 +1,132 @@
 {
-  "seo_title": "Research Grants for International Students in the USA",
-  "seo_description": "Explore 196 research grants available for international students in the USA. Find funding opportunities tailored to your needs.",
-  "h1": "Research Grants for International Students in the USA",
-  "intro": "Navigating the landscape of research grants can be challenging for international students in the USA. With 196 scholarships available, you have numerous opportunities to fund your academic pursuits. These grants cater to various fields of study and can significantly ease the financial burden of tuition and living expenses. Whether you are pursuing undergraduate or graduate studies, understanding the eligibility criteria and application processes is crucial. This guide will help you identify suitable grants, understand their requirements, and enhance your chances of securing funding.",
-  "supporting": "Eligibility for research grants varies by scholarship but generally includes being an enrolled international student at a recognized institution in the USA. Many grants, such as the Paul and Daisy Soros Fellowships for New Americans, focus on specific demographics or fields of study. Deadlines can range from early fall to late spring, so it’s essential to plan ahead. When applying, ensure you have a strong personal statement, letters of recommendation, and any required documentation ready. Tailor your application to highlight your research interests and how they align with the grant’s objectives. Check each scholarship's official website for detailed application instructions and deadlines.",
-  "related_intro": "In addition to research grants, international students can explore various scholarships and funding options to support their studies in the USA.",
+  "seo_title": "Find Research Grants for International Students in USA",
+  "seo_description": "Research grants for international students in the USA: compare graduate-focused listings, deadlines, and award ranges, then apply on official pages.",
+  "intro": "Trying to find research grants in the USA for international students usually means sorting through mixed eligibility rules, study levels, and application steps. This filtered slice narrows that search to graduate-focused listings tied to international student status, so you can compare options that may fit academic research plans, professional goals, or subject areas such as education, engineering, health, arts, and other fields. The rows below are not all built the same: award amounts vary by listing, deadlines differ by program, and requirements can range from lighter-touch applications to entries that ask for more materials, including essays. If you want to apply in the USA and avoid wasting time on poor matches, this is a practical place to start, browse, and compare.",
+  "h1": "Compare USA Research Grants for International Students",
+  "supporting": "Use this list as a comparison view rather than assuming every grant works the same way. Scan each row for study level, citizenship or residency wording, field tags, and any requirement notes before you click through. Some listings may be broad enough for multiple disciplines, while others are clearly tied to areas like STEM, medicine, education, or community-focused work. Because deadline text appears across these rows and some opportunities may close relatively soon, it is smart to check timing early, open the official page, and verify the current rules before you shortlist anything for a USA application plan.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you widen or tighten the search by topic, study level, or applicant type. That is useful when you want to compare broader international student funding in the USA against more specific graduate, STEM, education, or medicine-focused options.",
   "how_to_use": [
-    "Identify grants that match your field of study.",
-    "Review eligibility requirements carefully.",
-    "Prepare necessary documents, including transcripts and recommendations.",
-    "Submit applications before the deadlines.",
-    "Follow up with the scholarship providers for updates."
+    "Compare deadline wording across rows first",
+    "Read the requirement line before applying",
+    "Open the official page to verify eligibility",
+    "Shortlist listings by field and study level",
+    "Check whether essay materials are requested"
   ],
   "who_for": [
-    "International students enrolled in US institutions.",
-    "Graduate students seeking funding for research.",
-    "Undergraduate students looking for financial assistance."
+    "Graduate international students seeking USA research funding",
+    "Applicants comparing education and STEM grant options",
+    "International students reviewing mixed essay requirements",
+    "Graduate researchers checking USA opportunities across disciplines"
   ],
   "faq": [
     {
-      "question": "What types of research grants are available for international students?",
-      "answer": "There are various types of research grants, including those for specific fields, demographic groups, and general academic support."
+      "question": "How can I find research grants in the USA for international graduate students?",
+      "answer": "Use this filtered view to compare rows marked for international students and graduate-level study in the USA. Then open the official source for each listing to confirm eligibility, funding details, and application steps."
     },
     {
-      "question": "How can I find research grants suited to my needs?",
-      "answer": "Use scholarship search engines, university resources, and official grant websites to find suitable opportunities."
+      "question": "Can I apply to every program listed here as an international student?",
+      "answer": "Not necessarily. These listings are relevant to the search, but eligibility can still vary by program, field, residency status, and other requirements shown on the official page."
     },
     {
-      "question": "What is the typical application process for research grants?",
-      "answer": "The application process usually involves submitting an application form, personal statement, and supporting documents by a specified deadline."
+      "question": "Do all USA research grants on this page have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and award amounts vary by listing. Check each row carefully and verify the current amount and deadline on the official source before you apply."
+    },
+    {
+      "question": "What kinds of topics can I explore in these listings?",
+      "answer": "This focused set of listings includes programs connected with areas such as Education, STEM, Medicine, Arts, Community, and Miscellaneous topics. If you are trying to find a closer match, compare category labels and fields of study before applying."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "research-grants-international-students-usa",
-    "generatedAt": "2026-04-25T13:25:20.146Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:02:42.296Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

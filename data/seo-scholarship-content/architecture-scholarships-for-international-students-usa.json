@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore 196 Architecture Scholarships for International Students in the USA",
-  "seo_description": "Discover 196 architecture scholarships for international students in the USA. Find funding opportunities to support your education today!",
-  "h1": "Architecture Scholarships for International Students in the USA",
-  "intro": "Are you an international student aspiring to study architecture in the USA? You're in luck! There are currently 196 scholarships available specifically for students like you. These scholarships can significantly alleviate the financial burden of tuition and living expenses, allowing you to focus on your studies and creative pursuits. From the International Student Scholarship to the Vanna Christian Sun Legacy Scholarship, there are numerous options tailored to various needs and qualifications. Whether you are looking for merit-based awards or need-based assistance, this comprehensive list will help you navigate the opportunities available to you.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited architecture programs in the USA. Some scholarships may require a specific GPA, while others focus on financial need or community involvement. Be sure to check the application deadlines, which can range from early spring to late summer, depending on the scholarship. When applying, pay close attention to the required documents, which may include transcripts, letters of recommendation, and personal statements. Tailor your application to highlight your passion for architecture and your unique background as an international student to stand out in the selection process.",
-  "related_intro": "In addition to architecture scholarships, there are various financial aid options and grants available for international students pursuing higher education in the USA. Exploring these resources can further enhance your funding prospects.",
+  "seo_title": "Find Architecture Scholarships for International Students USA …",
+  "seo_description": "Architecture scholarships for international students in the USA. Compare awards, check varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find architecture scholarships in the USA that international students can actually apply for usually means sorting through mixed eligibility, study levels, and requirement styles. This filtered slice brings those listings into one place so you can compare options without losing the USA context. The programs below span more than one category, and the details are not uniform: award amounts vary by listing, deadlines differ by program, and some applications appear lighter than others while some may ask for essays or added materials. If you are planning your scholarship search for the coming cycle, this is a practical place to browse, compare, and narrow a shortlist before you move to the official source for final rules.",
+  "h1": "Find USA Architecture Scholarships for International Students …",
+  "supporting": "Use the rows as a screening tool rather than assuming every listing fits an architecture applicant in the same way. Compare the requirement line, study level, citizenship wording, category tags, and deadline text side by side. Some titles may be broadly open to international students, while others may need closer reading to confirm fit for your academic path in the USA. It is also worth checking award wording carefully, since amounts can vary and should always be verified on the official page before you apply.",
+  "related_intro": "After reviewing this architecture and international student slice, it can help to explore nearby scholarship pages by study level, broader STEM or arts categories, or other international student filters in the USA catalog. That is often the quickest way to find programs that overlap with your profile but are not labeled the same way.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Gather necessary application materials.",
-    "Submit applications before the deadlines.",
-    "Follow up on your applications and prepare for interviews if required."
+    "Compare deadline text across the rows first",
+    "Read each requirement line before shortlisting a program",
+    "Open the official page to verify eligibility and award details",
+    "Check study level and citizenship wording for fit",
+    "Save a shortlist of listings that match your application plan"
   ],
   "who_for": [
-    "International students pursuing architecture degrees.",
-    "Students seeking financial assistance for tuition.",
-    "Individuals looking for merit-based or need-based scholarships."
+    "International students seeking architecture funding in the USA",
+    "Applicants comparing undergraduate and graduate study options",
+    "Students open to education, STEM, arts, or community tagged listings",
+    "Architecture learners who want to compare essay and non essay applications"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international architecture students?",
-      "answer": "There are merit-based, need-based, and community service scholarships available for international students in architecture programs."
+      "question": "How can I find architecture scholarships in the USA for international students on this page?",
+      "answer": "Use this filtered view to compare rows that match architecture plus international-student intent in the USA context. Then open each listing and verify eligibility, study level, and residency details on the official scholarship page."
     },
     {
-      "question": "How can I find more information about specific scholarships?",
-      "answer": "Visit the scholarship provider's website or contact your school's financial aid office for detailed information."
+      "question": "Can I apply to every scholarship listed here as an international architecture student?",
+      "answer": "Not automatically—requirements vary by program. Some rows may be open to international students, while others can include different citizenship, residency, or study-level conditions, so check the official source before you apply."
     },
     {
-      "question": "Are there scholarships specifically for graduate architecture students?",
-      "answer": "Yes, many scholarships cater specifically to graduate students in architecture, including fellowships and grants."
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on eligibility, deadline text, award details, and any application requirements such as essays. Amounts and requirements differ by listing, and award figures should always be confirmed on the official page."
+    },
+    {
+      "question": "Do all of these USA architecture scholarships have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, and this slice includes mixed requirement signals for essays. Since some dates may be coming up soon, it is smart to review the rows promptly and confirm each deadline on the provider's site."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "architecture-scholarships-for-international-students-usa",
-    "generatedAt": "2026-04-25T13:23:15.909Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:55:28.919Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

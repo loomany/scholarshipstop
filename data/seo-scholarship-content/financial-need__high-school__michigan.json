@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find Michigan High School Need Scholarships | USA",
+  "seo_description": "Michigan high school financial need scholarships in the USA—compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Michigan scholarships for high school applicants with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings together a focused set of listings tied to that combination, so you can compare options without jumping between unrelated results. In these rows, award amounts vary by listing, deadlines differ by program, and requirements are not identical. Some entries may be comparatively lighter-touch, while others can ask for more supporting information. Because at least some deadlines appear to be coming up soon, it makes sense to scan the list early, shortlist strong matches, and verify every rule on the official scholarship page before you apply.",
+  "h1": "Find Michigan Financial Need Scholarships for High School USA …",
+  "supporting": "A useful way to browse this slice is to compare more than the title. Check the requirement line, note whether an essay may be involved, and look at the category clues attached to each listing, including community, education, STEM, law, and safety. That can help you find programs that fit both your current school level and your interests. Before you apply, open the official source for each scholarship to confirm eligibility, deadline wording, and award details, since those can change and may not be the same across the rows below.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship paths in the USA catalog. You might explore other Michigan filters, more high school scholarship pages, or broader financial need listings to spot programs that overlap with your goals.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your location and school level",
+    "Verify award details and essay expectations on sponsor sites"
+  ],
+  "who_for": [
+    "Michigan high school students with financial need",
+    "High school seniors comparing Michigan scholarship options",
+    "Applicants interested in community or education scholarships",
+    "Students also scanning STEM, law, or safety categories"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Michigan scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school, and Michigan. Then open each row and verify eligibility, required materials, and application steps on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page before I apply?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, so you can compare options quickly. Amounts vary by listing, and deadlines differ by program, so confirm both on the official source before you apply."
+    },
+    {
+      "question": "Are these scholarships only for current high school students in Michigan?",
+      "answer": "This slice is centered on high school-related scholarships in Michigan, but exact eligibility can vary row to row. Check each listing carefully for level details such as high school senior or other study-level wording before you apply."
+    },
+    {
+      "question": "Do all of these Michigan financial need scholarships require an essay?",
+      "answer": "No single requirement applies to every listing in this catalog slice. Some programs may ask for an essay and others may not, so compare the rows and verify the current requirements on the official application page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-04-08",
+        "2026-05-01",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "college_2",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "legal_professions_and_law_studies",
+        "security_and_protective_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Fayette County",
+        "count": 1
+      },
+      {
+        "name": "International Association of Arson Investigators-Michigan Chapter",
+        "count": 1
+      },
+      {
+        "name": "Michigan Association for College Admission Counseling",
+        "count": 1
+      },
+      {
+        "name": "PNC Bank",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem",
+      "law",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/michigan",
+    "generatedAt": "2026-04-26T13:54:55.525Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

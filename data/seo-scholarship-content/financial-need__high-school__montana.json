@@ -1,0 +1,118 @@
+{
+  "seo_title": "Find Montana High School Need Scholarships | USA",
+  "seo_description": "Montana high school financial need scholarships in the USA: compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships that match financial need, high school status, and Montana can narrow the search fast, but the details still change from row to row. In this filtered slice, you can compare programs that may connect with education, STEM, medicine, disability, community, and other themes while staying focused on Montana-relevant options for high school applicants. Awards vary by listing and should be confirmed on the official pages. Deadlines also differ across these rows, and at least some appear close enough that it makes sense to check dates promptly. Requirements are mixed as well, with some listings looking lighter-touch than others, so it helps to read each summary carefully before you apply or shortlist anything.",
+  "h1": "Find Montana High School Need Scholarships USA",
+  "supporting": "Use the rows below to compare more than just the title. Scan the requirement lines, note whether an essay may be involved, and look at category clues like education, community, medicine, disability, or STEM to decide which programs fit your background. If you are trying to apply efficiently, open the official source for any listing that looks promising and verify eligibility, award details, and submission instructions there before you move forward.",
+  "related_intro": "If these Montana financial need scholarships for high school applicants feel too narrow or too broad, related pages can help you compare nearby filter combinations. You may want to explore other Montana scholarship views, more high school scholarship pages, or other USA financial need categories to find a better fit.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read the requirement line before shortlisting",
+    "Open official pages to verify details",
+    "Note whether essay expectations may vary",
+    "Shortlist the best matches and apply early"
+  ],
+  "who_for": [
+    "Montana high school students with financial need",
+    "High school seniors comparing Montana scholarship options",
+    "Applicants interested in education or community themed awards",
+    "Students exploring STEM, medicine, or disability related listings"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Montana scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare the programs below by title, category, amount, and deadline. In this USA slice, details vary by row, so confirm eligibility and application steps on each scholarship’s official page before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a high school student in Montana?",
+      "answer": "Not automatically. These rows are filtered around financial need, high school, and Montana, but each listing can still have its own requirements, so check the official source for residency, grade level, and any extra criteria."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on deadline, award amount, category, and application requirements for each listing. Amounts and requirements vary by program, and official pages are the right place to verify essays, documents, and final instructions."
+    },
+    {
+      "question": "Are the deadlines the same for all scholarships on this page?",
+      "answer": "No—deadlines differ by program in this filtered set. Since the dates shown in the catalog are not all the same and at least one listing appears relatively soon, it’s smart to check the rows promptly and verify the latest deadline on the official source."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Montana high school financial-need list?",
+      "answer": "This focused set of USA listings includes examples tied to education, STEM, medicine, disability, community, and miscellaneous topics. If you want to browse efficiently, open the rows that match your interests first, then compare the official eligibility details before applying."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 21,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-30",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Boy Scouts of America-Northern Lights Council",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Rocky Mountain Hemophilia and Bleeding Disorder Association",
+        "count": 1
+      },
+      {
+        "name": "Society of Petroleum Engineers-Billings Section",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "medical",
+      "stem",
+      "community",
+      "disability",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/montana",
+    "generatedAt": "2026-04-26T13:56:09.611Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

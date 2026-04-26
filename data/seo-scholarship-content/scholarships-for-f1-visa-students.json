@@ -1,43 +1,128 @@
 {
-  "seo_title": "Explore Scholarships for F-1 Visa Students",
-  "seo_description": "Discover 196 scholarships available for F-1 visa students to support your education. Apply today to secure funding for your studies.",
-  "h1": "Scholarships for F-1 Visa Students",
-  "intro": "As an F-1 visa student, funding your education can be challenging, but numerous scholarships are available to help you achieve your academic goals. With 196 scholarships specifically designed for international students, you can find financial support tailored to your unique situation. These scholarships range from merit-based awards to need-based grants, covering various fields of study and academic levels. Whether you are pursuing undergraduate or graduate studies, there are opportunities waiting for you. Explore the options below to find the right fit for your educational journey.",
-  "supporting": "Eligibility for scholarships for F-1 visa students can vary significantly. Many scholarships require applicants to demonstrate academic excellence, while others may consider financial need or specific fields of study. Common deadlines for applications range from early spring to late summer, so it’s crucial to plan ahead. When applying, ensure you have all necessary documents, including transcripts and letters of recommendation, ready. Tailor your application essays to highlight your unique experiences as an international student and your aspirations in your chosen field. Research each scholarship thoroughly to understand its requirements and maximize your chances of success.",
-  "related_intro": "In addition to scholarships, F-1 visa students can explore various funding options, including grants, assistantships, and on-campus employment opportunities.",
+  "seo_title": "Find F- Visa Student Scholarships in the USA",
+  "seo_description": "F- visa student scholarships in the USA with deadlines, award details, and eligibility notes. Compare listings and apply on official pages.",
+  "intro": "Trying to find USA scholarships that may fit F-one visa students usually means sorting through mixed eligibility language, study levels, and category tags at the same time. This filtered slice brings those listings into one place so you can compare options tied to education, STEM, community, medicine, arts, and other common themes without jumping between unrelated results. The rows below span different academic stages, from earlier college years through graduate study, and some listings may also show broader residency labels that need a closer read. Awards, essay expectations, and requirement details vary by program, and deadline wording differs across listings, so it is smart to apply selectively and verify each scholarship on the official source before you move forward.",
+  "h1": "Find Scholarships for F- Visa Students USA",
+  "supporting": "A useful way to browse this set is to read each row as a quick screening tool, then open the strongest matches for a deeper check. Compare the requirement line, study level, field of study, category labels, and deadline text rather than assuming every international student listing works the same way. Some programs appear lighter touch, while others may ask for essays or more documentation. If you want to find scholarships worth pursuing in the USA for the current cycle, scan promptly, shortlist realistic matches, and confirm the final rules on the sponsor page before you apply.",
+  "related_intro": "If these results feel close but not exact, related pages can help you narrow by broader international student eligibility, study level, or subject area such as engineering, education, business, English, or health fields. That is often the fastest way to compare nearby scholarship groups without losing the USA focus.",
   "how_to_use": [
-    "Browse the list of scholarships available for F-1 visa students.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents and application materials.",
-    "Submit applications before the specified deadlines.",
-    "Follow up on your applications and be ready for interviews if required."
+    "Sort and compare deadline text first",
+    "Read each requirement line carefully",
+    "Open official pages before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and eligibility on sponsor sites"
   ],
   "who_for": [
-    "International students on an F-1 visa.",
-    "Undergraduate and graduate students seeking financial aid.",
-    "Students pursuing various fields of study."
+    "International students studying in the USA on F-one status",
+    "Graduate applicants comparing scholarship options by subject",
+    "College students checking education or STEM tagged listings",
+    "Applicants who want to find mixed essay and non essay opportunities"
   ],
   "faq": [
     {
-      "question": "Can F-1 visa students apply for scholarships?",
-      "answer": "Yes, F-1 visa students can apply for various scholarships specifically designed for international students."
+      "question": "Can I apply to every scholarship listed here as an international student?",
+      "answer": "Not automatically. This catalog helps you find options to review, but eligibility can differ by program, and some rows may also reference citizenship or residency labels that need a closer check on the official page."
     },
     {
-      "question": "What types of scholarships are available?",
-      "answer": "Scholarships include merit-based, need-based, and field-specific awards, among others."
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on eligibility, study level, field of study, deadline text, and any essay or application requirements shown in the listing. Award amounts vary by listing, so verify the current amount and terms on the official scholarship page before you apply."
     },
     {
-      "question": "How can I find scholarships for F-1 visa students?",
-      "answer": "You can find scholarships by searching online databases, university websites, and scholarship portals."
+      "question": "Are the deadlines and requirements the same across these scholarships?",
+      "answer": "No—deadlines differ by program, and every row in this slice has its own deadline text. Requirements also vary: some scholarships may ask for an essay while others appear lighter-touch, so check each listing promptly and confirm details with the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-f1-visa-students",
-    "generatedAt": "2026-04-25T13:30:41.628Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:05:09.334Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

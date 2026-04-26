@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find African American Undergraduate Scholarships in California,…",
+  "seo_description": "African American undergraduate scholarships in California, USA—compare awards, review deadlines, and apply using the programs below.",
+  "intro": "Trying to find California scholarships for African American undergraduate applicants usually means narrowing a broad search into listings that actually match your situation. This filtered USA view brings together a focused set of programs tied to that combination, so you can apply with more confidence and compare options without jumping across unrelated results. The rows here lean toward community, education, arts, and miscellaneous categories, and some listings may suit students connected to fields such as education or architecture and related services. Awards vary by listing, deadlines differ by program, and eligibility details can change from one sponsor to the next. Many entries appear to have lighter application requirements and often no essay, but you should still read each listing carefully before you apply.",
+  "h1": "Apply for African American Undergraduate Scholarships in Califor…",
+  "supporting": "Use this slice to compare more than just the scholarship title. Check the award text, read the requirement line, and note whether the listing is centered on community involvement, education, or another category. Because deadline text appears across these rows and some programs may close soon, it is worth reviewing dates promptly. If a scholarship looks promising, open the official page to verify current rules, residency or citizenship language, study level fit, and any materials the sponsor expects before you shortlist it.",
+  "related_intro": "If these California undergraduate listings are close but not quite right, related pages can help you widen or refine the search. You might compare nearby eligibility combinations, look at other undergraduate scholarship filters, or explore California-focused pages with different audience criteria to find a better fit.",
+  "how_to_use": [
+    "Compare award text across the rows",
+    "Read each requirement line carefully",
+    "Check deadline wording and act promptly",
+    "Open the official page to verify details",
+    "Shortlist the programs that best match your profile"
+  ],
+  "who_for": [
+    "African American undergraduate applicants in California",
+    "California students comparing community and education scholarships",
+    "Applicants seeking undergraduate awards with often lighter requirements",
+    "Students who want USA listings with visible deadline text"
+  ],
+  "faq": [
+    {
+      "question": "How can I find African American undergraduate scholarships in California that fit me?",
+      "answer": "Use this filtered view to compare the rows by location, study level, category, and any eligibility notes shown in the catalog. Then open the official source for each program to verify current rules, residency details, and how to apply in the USA."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these listings include award and deadline text, but both vary by program. Amounts in this slice range across the rows, and deadlines differ by listing, so confirm the latest details on the official scholarship page before you apply."
+    },
+    {
+      "question": "Are these California scholarships only for current college students?",
+      "answer": "Not always. This filtered set centers on undergraduate scholarships, but study-level labels in the catalog can vary, so check each row carefully if you are a high school senior, college student, or exploring options for later study."
+    },
+    {
+      "question": "Do many of these scholarships require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flag in the catalog, which may make them quicker to explore. Still, requirements can change row to row, so review the official application instructions before you start."
+    }
+  ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 1250,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-24",
+        "2026-04-24",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alpha Kappa Alpha Sorority-Alpha Nu Omega Chapter",
+        "count": 3
+      },
+      {
+        "name": "The Links, -Stockton Chapter",
+        "count": 2
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Eta Gamma Omega Chapter",
+        "count": 1
+      },
+      {
+        "name": "Delta Sigma Theta Sorority-Contra Costa Alumnae Chapter",
+        "count": 1
+      },
+      {
+        "name": "Kappa Alpha Psi Fraternity-Berkeley Alumni Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/undergraduate/california",
+    "generatedAt": "2026-04-26T13:28:19.440Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

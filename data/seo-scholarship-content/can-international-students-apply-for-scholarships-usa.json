@@ -1,43 +1,132 @@
 {
-  "seo_title": "Can International Students Apply for Scholarships in the USA?",
-  "seo_description": "Explore 196 scholarships available for international students in the USA. Learn how to apply and enhance your chances of funding your education.",
-  "h1": "Scholarships for International Students in the USA",
-  "intro": "International students seeking to study in the USA often face significant financial challenges. Fortunately, there are numerous scholarships available specifically for non-U.S. citizens. With 196 scholarships currently listed, students can find funding opportunities that cater to various fields of study and backgrounds. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship are just a few examples of the financial support available. This guide will help you navigate the scholarship landscape, understand eligibility requirements, and provide tips for a successful application process.",
-  "supporting": "Eligibility for scholarships varies widely, but many require international students to demonstrate academic excellence, financial need, or specific talents. Deadlines can range from early application submissions to those that align with academic semesters. For example, the Paul and Daisy Soros Fellowships for New Americans and the Razor's Edge Global Scholarship have specific criteria that applicants must meet. To improve your chances, focus on tailoring your application to highlight your unique experiences and aspirations. Additionally, ensure you meet all deadlines and provide all required documentation, including transcripts and letters of recommendation.",
-  "related_intro": "In addition to scholarships, international students can explore various financial aid options, including grants and assistantships, to support their studies in the USA.",
+  "seo_title": "Find USA Scholarships for International Students",
+  "seo_description": "USA scholarships for international students with deadlines, award details, and eligibility notes. Compare listings and apply on official pages.",
+  "intro": "Trying to find out whether international students can apply for scholarships in the USA usually leads to mixed answers, because eligibility changes from one program to the next. This filtered slice gives you a focused set of listings where international student access appears in the data, so you can compare options without guessing from broad advice articles. The programs below span common areas like education, STEM, community, medicine, arts, and other miscellaneous topics, with study levels that range from high school senior through college and graduate paths. Awards, deadlines, essay expectations, and requirement details vary by listing, and some rows may be lighter-touch than others. If you want to apply in the USA during the current cycle, it is worth checking these rows promptly and verifying each official page before you decide where to apply.",
+  "h1": "Explore USA Scholarships for International Students",
+  "supporting": "A useful way to read this list is to compare the requirement line first, then scan the category, study level, and any award text shown in each row. Some listings are broad education scholarships, while others lean toward engineering, health professions, business, English, or related subjects. Because deadline wording differs across the rows, compare timing carefully instead of assuming one shared cutoff. You should also check whether an essay is mentioned, open the official source, and confirm that international student eligibility applies to your exact situation before you shortlist anything.",
+  "related_intro": "If you do not find the right fit here, related pages can help you narrow by study level, subject area, or requirement style. That is often the fastest way to explore nearby USA scholarship options that may match your academic path or application preferences more closely.",
   "how_to_use": [
-    "Research available scholarships specific to your field.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents like transcripts and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up to confirm receipt of your application."
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify eligibility",
+    "Shortlist listings that match your study level",
+    "Check award details and essay expectations"
   ],
   "who_for": [
-    "International students from various countries.",
-    "Students pursuing undergraduate or graduate degrees.",
-    "Individuals seeking financial assistance for education in the USA."
+    "International students seeking USA scholarship options",
+    "Graduate applicants comparing education and STEM funding",
+    "High school seniors planning to study in the USA",
+    "College students checking subject-specific eligibility rules"
   ],
   "faq": [
     {
-      "question": "Can international students apply for all scholarships in the USA?",
-      "answer": "Not all scholarships are open to international students. It's essential to check the eligibility criteria for each scholarship."
+      "question": "Can international students apply for scholarships in the USA from this filtered view?",
+      "answer": "Yes—these rows are centered on USA scholarship searches related to international students, but eligibility still varies by listing. Before you apply, open each scholarship and confirm the citizenship or residency terms on the official source."
     },
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "Scholarships vary widely, including merit-based, need-based, and those targeting specific fields or demographics."
+      "question": "How can I find scholarships for international students in the USA that match my study level or subject?",
+      "answer": "Use the catalog details to compare study levels and topics shown across the listings, such as graduate student, high school senior, engineering, education, business, English, or health fields. Then verify on the official page that the program accepts your level, major, and international student status."
     },
     {
-      "question": "How can I find scholarships for international students?",
-      "answer": "You can search online databases, university websites, and scholarship portals dedicated to international students."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—this filtered set includes listings with posted amounts and deadline text, but both can differ row to row. Amounts vary by listing and should be confirmed on the official scholarship page, and deadlines should be checked promptly because some dates may be coming up soon."
+    },
+    {
+      "question": "Do all USA scholarships for international students here require an essay?",
+      "answer": "No, requirements appear mixed across the catalog. Some listings may ask for essays and others may not, so check each scholarship's official requirements before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "can-international-students-apply-for-scholarships-usa",
-    "generatedAt": "2026-04-25T13:26:50.140Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:56:26.747Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

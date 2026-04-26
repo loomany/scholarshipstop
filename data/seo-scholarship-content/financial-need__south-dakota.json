@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find Financial Need Scholarships in South Dakota, USA",
+  "seo_description": "Financial need scholarships in South Dakota, USA. Compare deadlines, award amounts, and requirements, then apply on official program pages.",
+  "intro": "Trying to find USA scholarships that match both financial need and South Dakota ties usually means narrowing past broad national results and checking the details row by row. This filtered slice brings together a focused set of listings where need-based eligibility intersects with South Dakota, with examples touching areas like community, education, miscellaneous topics, and disability. If you want to apply in the current cycle, it is worth checking these programs promptly because deadlines differ across listings and some may be coming up soon. Award amounts also vary by listing, and requirement lines can differ, though many entries in this slice appear to have lighter application signals and often no essay flag. Use the rows below to compare fit before you move to the official source.",
+  "h1": "Compare South Dakota Financial Need Scholarships USA",
+  "supporting": "A smart way to use this list is to compare more than the title. Read the category tags, study level notes, and any field references to see whether a program leans toward education, construction trades, community-focused support, or disability-related eligibility. Then open each listing to verify the latest rules on the sponsor page, since award details, required materials, and deadline wording can change. If you are deciding where to apply first, prioritize the rows that match your location connection, need status, and academic path most closely.",
+  "related_intro": "If these South Dakota need-based listings feel too narrow, related pages can help you compare nearby angles, such as broader financial need scholarships across the USA or South Dakota scholarship pages with different eligibility filters. That is often the fastest way to find overlapping options without restarting your search.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your South Dakota connection",
+    "Check award text and application materials before you apply"
+  ],
+  "who_for": [
+    "South Dakota residents seeking need-based aid",
+    "Applicants comparing community and education scholarships",
+    "Graduate students reviewing South Dakota funding options",
+    "Students with disability-related eligibility looking for added support"
+  ],
+  "faq": [
+    {
+      "question": "How can I find South Dakota scholarships for students with financial need?",
+      "answer": "Use this filtered view to compare South Dakota scholarship rows that match a financial-need focus, then open each listing for full eligibility details. Final requirements, award amounts, and application steps should always be verified on the official source."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this South Dakota financial-need page?",
+      "answer": "Not automatically—financial need is only one shared filter in this catalog slice. Each program may also have its own location, study level, field, or category requirements, so check the official listing before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare deadlines, eligibility details, study level, and category labels across the rows before choosing where to apply. Award amounts vary by listing, and this slice shows different deadline text, so review each row carefully on the official page."
+    },
+    {
+      "question": "Are these USA scholarships only for South Dakota students?",
+      "answer": "This is a USA-focused filter for scholarships tied to South Dakota plus financial need, but the exact residency or school-location rules can differ by program. Some listings may also connect to categories like community, education, or disability, so read the source criteria closely."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 4000,
+      "minUsd": 2000,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 2,
+      "rollingOrUnknown": 0,
+      "nearestDays": 21,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Boy Scouts of America-Northern Lights Council",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Bennett Clayton Foundation",
+        "count": 1
+      },
+      {
+        "name": "Western States Roofing Contractors Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/south-dakota",
+    "generatedAt": "2026-04-26T14:11:00.419Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

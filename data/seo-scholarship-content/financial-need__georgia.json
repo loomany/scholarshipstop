@@ -1,48 +1,127 @@
 {
-  "seo_title": "Georgia Scholarships for Financial Need Students",
-  "seo_description": "Explore 23 scholarships in Georgia for students with financial need. Check varying deadlines and award amounts up to $5,000.",
-  "intro": "For students in Georgia facing financial challenges, this collection of 23 scholarships offers a range of opportunities to help alleviate educational costs. Award sizes vary, typically ranging from $1,000 to $5,000, making it essential to explore each option carefully. With deadlines spread across various dates, including some approaching in the next 45 days, timely action is key to securing funding.",
-  "h1": "Scholarships for Financial Need in Georgia",
-  "supporting": "As you navigate this list, pay attention to the specific requirements and award amounts for each scholarship. Some may have lighter application processes, while others could require essays. Comparing deadlines and eligibility criteria will help you prioritize which scholarships to pursue based on your situation and needs.",
-  "related_intro": "If you're interested in exploring more funding options, check out related categories like Community, Arts, and STEM scholarships available in Georgia.",
+  "seo_title": "Find Financial Need Scholarships in Georgia, USA",
+  "seo_description": "Financial need scholarships in Georgia, USA with varying award amounts and deadlines. Compare listings and apply on official program pages.",
+  "intro": "Trying to find Georgia scholarships tied to financial need usually means sorting through programs that also layer in study level, residency, field of study, or community connections. This USA filtered view brings those listings into one place so you can compare options without jumping between unrelated results. Across these rows, award amounts vary by listing, and requirements do too: some may ask for essays or added materials, while others appear lighter-touch based on the listing metadata. Deadlines are not the same across the page, and at least some opportunities are coming up soon, so it makes sense to check dates promptly. You can use this set to apply more strategically if you are a Georgia-based applicant or looking for scholarships connected to studying in Georgia.",
+  "h1": "Find Georgia Scholarships for Financial Need USA",
+  "supporting": "A close scan is worthwhile because this slice mixes categories such as education, community, STEM, arts, law, and miscellaneous awards rather than focusing on only one type of program. You may also see differences in who can qualify, including common study levels from high school senior through graduate student and sample residency labels like U.S. citizen or U.S. permanent resident. When you compare listings, look past the title and read the requirement lines, field-of-study notes, and official source details. Amounts shown in the catalog can help you prioritize, but final terms should always be verified on the sponsor page before you apply.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing either the financial-need filter or the Georgia location filter. That can uncover programs with similar eligibility themes, different state coverage, or broader category mixes.",
   "how_to_use": [
-    "Compare deadlines to prioritize applications",
-    "Scan award amounts to find suitable funding",
-    "Read requirement lines for eligibility details",
-    "Open official pages for full application instructions",
-    "Shortlist scholarships that align with your profile"
+    "Compare each row for award amount, deadline text, study level, and category before you shortlist programs",
+    "Read the requirement and essay details carefully, since some listings may ask for more materials than others",
+    "Open the official page for every scholarship you plan to apply to and verify current eligibility, documents, and terms",
+    "Check deadlines early and often, because dates differ across listings and some opportunities may close soon"
   ],
   "who_for": [
-    "Georgia residents with financial need",
-    "Students pursuing education in STEM fields",
-    "Applicants interested in community service scholarships",
-    "Individuals seeking funding for arts education",
-    "Students with specific scholarship essay requirements"
+    "Georgia applicants who need to compare scholarships where financial need is part of eligibility",
+    "High school seniors, college students, and graduate students looking for Georgia-based funding options",
+    "U.S. citizens or permanent residents checking need-based scholarships with residency or enrollment conditions",
+    "Applicants in fields such as education, business, law, journalism, or related majors who want to find relevant Georgia listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Georgia?",
-      "answer": "The current listing includes 23 scholarships that cater to various fields such as education, community service, arts, STEM, and law. This range allows students to find opportunities that align with their specific interests and career goals."
+      "question": "How can I find financial-need scholarships in Georgia that fit my situation?",
+      "answer": "Use this filtered view to compare the Georgia rows by study level, category, and any citizenship or residency details shown in each listing. Then open the official source for each program to verify current eligibility before you apply."
     },
     {
-      "question": "How do I find the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 23 listings include this information. It's advisable to check the specific dates for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+      "question": "Are these scholarships only for college students in the USA?",
+      "answer": "Not always. In this Georgia set, you may find opportunities for high school seniors, college students, and graduate students, and some listings may note USA-specific statuses such as U.S. citizen or U.S. permanent resident."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary across the scholarships; some may require essays while others do not. It's important to review each scholarship listing for detailed application requirements to understand what is needed."
+      "question": "What can I compare across these Georgia scholarship listings?",
+      "answer": "You can compare award amounts, deadline text, study level, and category themes such as Education, Community, STEM, Arts, Law, and Miscellaneous. Amounts and requirements vary by listing, so confirm the latest details on the official program page."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships listed typically range from approximately $1,000 to $5,000. However, each scholarship may have different amounts, so be sure to check the details for each one."
+      "question": "What kinds of programs can I explore in this filtered list?",
+      "answer": "This focused set of Georgia listings includes a mix of topics and fields, with examples tied to education, business management and marketing, legal professions and law studies, personal and culinary services, and communication and journalism. The programs below are not all the same type, so browse row by row to find the best match."
     }
   ],
+  "page_data": {
+    "exactCount": 25,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 25,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 15,
+      "within60Days": 24,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 5,
+      "noCount": 20,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3",
+        "graduate_student",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "personal_and_culinary_services",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Georgia Transplant Foundation",
+        "count": 8
+      },
+      {
+        "name": "PGA of America - Georgia Section",
+        "count": 4
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Les Dames d'Escoffier International-Atlanta Chapter",
+        "count": 2
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "arts",
+      "law"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/georgia",
-    "generatedAt": "2026-04-02T11:01:56.252Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 23,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:48:53.139Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 25,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

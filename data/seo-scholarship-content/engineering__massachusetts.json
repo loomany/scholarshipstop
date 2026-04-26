@@ -1,48 +1,120 @@
 {
-  "seo_title": "Top Engineering Scholarships in Massachusetts",
-  "seo_description": "Explore 10 engineering scholarships in Massachusetts with awards up to $40,000. Check deadlines and requirements for each listing.",
-  "intro": "Navigating the landscape of scholarships for engineering students in Massachusetts reveals a robust selection of 10 opportunities. These awards cater to a diverse range of applicants, with amounts varying significantly from $500 to $40,000. Many listings feature lighter requirements, often without the need for essays, making them accessible to a broader audience. It's essential to check the individual deadlines, as they differ across listings, with some approaching quickly.",
-  "h1": "Engineering Scholarships Available in Massachusetts",
-  "supporting": "This collection of scholarships is particularly valuable for those pursuing engineering, as it encompasses various funding sources aimed at supporting students in STEM fields. When reviewing the options, consider comparing the award amounts and specific eligibility criteria to find the best fit for your situation. Pay attention to the varying deadlines to ensure you don't miss out on any opportunities.",
-  "related_intro": "If you're interested in exploring more scholarships tailored to specific criteria or broader categories, check out our related pages for additional funding opportunities.",
+  "seo_title": "Find Engineering Scholarships in Massachusetts, USA",
+  "seo_description": "Engineering scholarships in Massachusetts, USA: compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find engineering scholarships in Massachusetts usually means narrowing a broad USA search into programs that actually match your location and academic direction. This filtered slice brings together Massachusetts-linked listings connected to engineering, with several rows also touching STEM, biology, or medicine themes. As you compare options, expect the details to vary by listing: award amounts differ, deadlines are not the same across the rows, and eligibility can shift based on study level, residency, or field wording. Many entries in this set appear to have lighter application signals and often no essay flag, but you should still read each requirement line closely before you apply. If you want a practical shortlist for Massachusetts engineering funding, this is a strong place to start.",
+  "h1": "Find Engineering Scholarships in Massachusetts USA",
+  "supporting": "Use the rows below to compare more than just the title. Check how each listing describes engineering fit, then look at study level, citizenship or residency language, and any category overlap with STEM or related science areas. Because deadlines differ and some may be coming up soon, it is smart to review timing early. Award amounts vary by listing and should be verified on the official page, along with any application steps, document requests, and final eligibility details.",
+  "related_intro": "If these Massachusetts engineering listings feel close but not quite right, related pages can help you widen or refine the search. You may want to compare broader engineering results, look at other Massachusetts scholarship categories, or check nearby topic pages that overlap with STEM, biology, or medicine.",
   "how_to_use": [
-    "Compare deadlines to prioritize applications",
-    "Scan award amounts to identify potential funding",
-    "Read requirement lines for eligibility details",
-    "Open official pages for the most accurate information",
-    "Shortlist your favorites and verify details on sponsor sites"
+    "Compare deadline wording across each row",
+    "Read the requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist listings that match your study level",
+    "Check category overlap with STEM or science topics"
   ],
   "who_for": [
-    "Engineering students in Massachusetts",
-    "Undergraduate students seeking STEM funding",
-    "Women pursuing careers in science and technology",
-    "Students with a focus on biology or medical fields",
-    "Applicants looking for scholarships with lighter requirements"
+    "Massachusetts students pursuing engineering studies",
+    "High school seniors planning an engineering path",
+    "Graduate students seeking Massachusetts funding options",
+    "Applicants comparing USA scholarships by residency status",
+    "International or permanent resident students checking engineering-related listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Massachusetts?",
-      "answer": "There are currently 10 scholarships listed for engineering students in Massachusetts, covering various fields within STEM, including biology and medicine. Award sizes vary significantly, with amounts ranging from approximately $500 to $40,000."
+      "question": "How can I find engineering scholarships in Massachusetts that actually fit my profile?",
+      "answer": "Use this filtered view to compare the rows by study level, field, and eligibility labels such as international student, U.S. citizen, or U.S. permanent resident. Then verify the final requirements on each scholarship’s official page before you apply."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 10 listings include specific dates. It's advisable to check the details of each scholarship promptly, as some deadlines are within the next 45 days."
+      "question": "Can I apply if I’m studying engineering in Massachusetts but the listing is also tagged STEM or biology?",
+      "answer": "Often, yes—some programs in this Massachusetts set carry overlapping tags like STEM, biology, or medicine alongside engineering-related study paths. Check the official listing details to confirm the scholarship supports your major or intended course of study."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially lighter for applicants. However, it's important to verify the requirements for each individual listing to ensure you have the most accurate information."
+      "question": "What should I compare before I apply to these USA engineering scholarships?",
+      "answer": "Compare eligibility, study level, deadline text, and award details row by row, since those points vary across the catalog. Award amounts are listed on many entries, but you should confirm the current amount and terms on the official source."
     },
     {
-      "question": "How can I use this list to find the right scholarship for me?",
-      "answer": "You can filter through the scholarships based on your specific needs and interests in engineering. Review the details for each listing, including award amounts and deadlines, to determine which opportunities align best with your goals."
+      "question": "Do all scholarships on this page have the same deadline or application requirements?",
+      "answer": "No—deadlines differ by program, and these rows should be checked individually. Many listings in this slice appear to have lighter requirements and often no essay flag, but you should still review each official page carefully before applying."
     }
   ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 3250,
+      "minUsd": 500,
+      "maxUsd": 40000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 9,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-11",
+        "2026-04-30",
+        "2026-04-10"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "mathematics_and_statistics",
+        "biological_and_biomedical_sciences",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 4
+      },
+      {
+        "name": "Cell Signaling Technology",
+        "count": 2
+      },
+      {
+        "name": "American Public Works Association-New England Chapter",
+        "count": 1
+      },
+      {
+        "name": "Licensed Site Professional Association",
+        "count": 1
+      },
+      {
+        "name": "The Philanthropic Initiative",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/massachusetts",
-    "generatedAt": "2026-04-02T10:41:58.029Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:37:43.499Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 10,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

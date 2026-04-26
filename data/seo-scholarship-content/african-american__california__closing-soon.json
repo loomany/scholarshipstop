@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find Closing Soon African American Scholarships in California, U…",
+  "seo_description": "Closing soon African American scholarships in California, USA. Compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to apply before deadlines pass narrows the search fast, and this California-focused set is built for African American students who want to find scholarships with near-term timelines in the USA. The programs below span themes such as community, arts, education, and other miscellaneous categories, so it is worth comparing more than just the title. Award amounts vary by listing, and requirements do too; many rows in this slice appear to have lighter application signals and often no essay, but you should still verify every detail on the official page. Because deadline text differs across these listings and some dates are coming up soon, it makes sense to browse promptly, shortlist realistic options, and check each row carefully before you apply.",
+  "h1": "Find Closing Soon African American Scholarships in California US…",
+  "supporting": "A focused view like this is useful when you do not want to sort through broader USA scholarship results. As you compare listings, look at eligibility wording, California ties, study level, category fit, and any field-of-study cues such as education or architecture and related services. Some titles are community-oriented, while others may connect more directly to academic plans or service background. Open each listing to confirm the current deadline, review the requirement lines, and verify award details on the sponsor or official source before submitting anything.",
+  "related_intro": "If these deadlines are too close or the California filter feels too narrow, related pages can help you explore adjacent options. You may want to compare other African American scholarship filters, broader California scholarship views, or additional closing-soon pages to find a better match.",
+  "how_to_use": [
+    "Compare the deadline text on each row first and prioritize the listings closing soonest",
+    "Read the eligibility and requirement lines carefully to confirm African American and California fit",
+    "Scan category, study level, and field-of-study cues to find the strongest matches for your background",
+    "Open the official page for every scholarship to verify award amount, materials, and current deadline",
+    "Shortlist the best-fit programs and apply in order of urgency rather than by title alone"
+  ],
+  "who_for": [
+    "African American students looking for California scholarships with deadlines coming up soon",
+    "Applicants who want to compare community, arts, and education-focused opportunities in one filtered view",
+    "High school seniors or graduate students checking for near-term USA scholarship options",
+    "Students with California ties who want to find listings that may have lighter application requirements",
+    "Applicants scanning for scholarships that often appear to require no essay, while still verifying each row"
+  ],
+  "faq": [
+    {
+      "question": "How do I find African American scholarships in California that are closing soon?",
+      "answer": "Use this filtered view to compare the programs below, then open each listing’s official source to confirm eligibility, deadline wording, and application steps. In this USA slice, deadlines differ by row, so it’s smart to check dates promptly."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here?",
+      "answer": "Not automatically—each row can have its own rules beyond the African American + California + closing-soon filters. Before you apply, verify the official page for location details, study level, and any program-specific requirements."
+    },
+    {
+      "question": "What should I compare first on this page?",
+      "answer": "Start with deadline, study level, category, and field of study so you can quickly narrow the best-fit options. In these listings, you may see categories like Community, Arts, Education, and Miscellaneous, with sample study levels such as high school senior and graduate student."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to be marked no-essay, but you should still verify each scholarship’s official requirements before applying. Requirement details can change row to row even when the catalog metadata looks lighter-touch."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-06",
+        "2026-04-05",
+        "2026-04-05"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "The Links, -Stockton Chapter",
+        "count": 2
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Eta Gamma Omega Chapter",
+        "count": 1
+      },
+      {
+        "name": "PlaceWorks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "arts",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/california/closing-soon",
+    "generatedAt": "2026-04-26T13:22:33.756Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

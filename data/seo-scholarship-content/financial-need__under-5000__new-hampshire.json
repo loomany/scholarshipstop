@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find New Hampshire Need-Based Scholarships | USA",
+  "seo_description": "Need-based New Hampshire scholarships under five thousand in the USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find New Hampshire scholarships for applicants with financial need often means sorting through smaller awards that can still make a real difference. This filtered USA view narrows the search to programs under five thousand dollars, with listings connected to New Hampshire and a mix of categories such as education, STEM, community, humanities, and law. You can apply more efficiently here by focusing on awards that match your location and budget expectations, then comparing the details row by row. Amounts vary by listing, and deadlines differ by program, with some dates appearing relatively soon, so it is smart to check timing early. Requirements also vary: some opportunities may be lighter-touch, while others may ask for more documentation or an essay.",
+  "h1": "Compare Need-Based New Hampshire Scholarships USA",
+  "supporting": "A focused set of listings like this is useful when you want to compare practical options instead of chasing one large award. As you browse, look at the study level, field of study, award text, and requirement lines together rather than relying on the title alone. In this New Hampshire slice, you may spot programs tied to education, mathematics, engineering, broadcasting, public service, and related community interests. Open the official page for any scholarship that looks promising, verify the current rules, and shortlist the ones that fit your background before you apply.",
+  "related_intro": "If you do not find enough matches in this New Hampshire set, compare nearby scholarship paths by changing one filter at a time. Related pages can help you explore other financial-need listings, different award ranges, or broader USA scholarship results without starting your search over.",
+  "how_to_use": [
+    "Compare each row for award amount, deadline text, study level, and field of study before you shortlist anything",
+    "Read the requirement lines carefully to see whether the program looks lighter-touch or asks for extra materials such as an essay",
+    "Open the official scholarship page for every strong match and verify eligibility, location rules, and current application instructions",
+    "Apply first to listings with the nearest deadlines, then return to the rest of your New Hampshire shortlist"
+  ],
+  "who_for": [
+    "New Hampshire applicants who want to find smaller scholarship awards tied to financial need",
+    "Students comparing local or state-connected programs in education, STEM, community, humanities, or law",
+    "High school and college applicants who want to apply for awards that may be more manageable to stack",
+    "Graduate or undergraduate students checking New Hampshire opportunities with varied requirement levels"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship on this New Hampshire list?",
+      "answer": "Usually, yes—these are separate USA scholarship listings, not one combined application. Apply to each program individually and check every official source for its own rules, materials, and submission process."
+    },
+    {
+      "question": "Do all scholarships here have the same deadline or requirements?",
+      "answer": "No. Deadlines differ by program, and this filtered set includes rows with varying requirement details, so compare each listing before you apply. Since some deadlines appear relatively soon, it is smart to check the official pages promptly."
+    },
+    {
+      "question": "What kinds of students and majors show up when I browse this filter?",
+      "answer": "This slice includes a mix of study levels, such as high school seniors, sophomores, college students, and graduate students. You can also explore listings tied to areas like education, STEM, community, humanities, and law, with sample fields including mathematics, engineering, agriculture, and mechanic and repair technologies."
+    },
+    {
+      "question": "Are these all low-effort or no-essay scholarships?",
+      "answer": "Not necessarily. Some rows appear lighter-touch, but requirements vary across the catalog, and essay expectations are mixed in this New Hampshire set. Before you apply, compare the listing details and confirm the current requirements on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-05-31",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "college_2",
+        "college_3",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "area_ethnic_cultural_and_gender_studies",
+        "business_management_and_marketing",
+        "communication_and_journalism"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Hillsborough County Youth Center Foundation",
+        "count": 1
+      },
+      {
+        "name": "Horticultural Research Institute",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "humanities",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/new-hampshire",
+    "generatedAt": "2026-04-26T14:36:34.338Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

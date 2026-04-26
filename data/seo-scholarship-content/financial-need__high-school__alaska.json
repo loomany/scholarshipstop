@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find Alaska High School Need-Based Scholarships | USA",
+  "seo_description": "Alaska high school financial need scholarships in the USA: compare award ranges, review varying deadlines, and apply on official program pages.",
+  "intro": "Trying to find USA scholarships that match financial need, high school status, and Alaska residency usually means cutting past broad results and checking which programs actually fit your situation. This filtered slice brings together a focused set of listings tied to those signals, so you can compare options without mixing in unrelated awards. As you browse, expect the details to vary by row: award amounts differ, deadlines differ, and eligibility language can be narrow or broad depending on the program. Many listings in this set appear to have lighter application requirements, and no-essay options are common, but you should still read each requirement line carefully before you apply. If you want to explore Alaska scholarships for high school applicants with need-based criteria, these rows are a practical place to start.",
+  "h1": "Find Alaska High School Need-Based Scholarships USA",
+  "supporting": "Use this list to compare more than the title alone. Check how each listing describes residency, school level, and any category clues such as education, community, medicine, miscellaneous, or disability. Then look at the award text and deadline field side by side, since timing and value can change from program to program. Some deadlines may be coming up soon, so it is smart to open the official page early, confirm current rules, and verify any documents or eligibility details before you rely on a listing.",
+  "related_intro": "If you do not find enough matches in this Alaska need-based high school slice, related pages can help you widen or narrow the search. Compare nearby filter views by topic, location, or eligibility so you can find similar USA scholarships with a different mix of requirements.",
+  "how_to_use": [
+    "Compare deadline fields across the rows",
+    "Read each requirement line before applying",
+    "Open the official page to verify details",
+    "Shortlist listings by award text and fit"
+  ],
+  "who_for": [
+    "Alaska high school students with financial need",
+    "High school seniors comparing Alaska scholarship options",
+    "Families looking for need-based USA aid in Alaska",
+    "Applicants who prefer many no-essay scholarship listings"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Alaska scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare Alaska listings that match high school and financial-need criteria in the USA catalog. Then open each row’s official source to confirm eligibility, residency, and application steps."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m in high school?",
+      "answer": "Not always. These rows are filtered for high school and Alaska relevance, but each program can still have its own rules around residency, citizenship, study plans, or other requirements, so verify details on the official page before you apply."
+    },
+    {
+      "question": "How should I compare these scholarship listings?",
+      "answer": "Compare the rows by award amount, deadline text, category, and any requirement notes shown in the catalog. Amounts vary by listing, and deadlines differ by program, so use the official source to verify the latest details before applying."
+    },
+    {
+      "question": "Are these Alaska scholarships usually essay-heavy?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many are marked with no essay in the catalog metadata. Still, requirements can change row to row, so check the official application page for the current instructions."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-15",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alaska Commission on Postsecondary Education",
+        "count": 1
+      },
+      {
+        "name": "Alaska Housing Finance Corporation",
+        "count": 1
+      },
+      {
+        "name": "Arizona Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Bering Straits Native Corporation",
+        "count": 1
+      },
+      {
+        "name": "Illinois CPA Society",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/alaska",
+    "generatedAt": "2026-04-26T13:49:37.560Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,46 +1,132 @@
 {
-  "seo_title": "Find Payout Student Scholarships in the USA",
-  "seo_description": "Explore 227 student scholarships with varying awards and deadlines. Check details for each opportunity to maximize your funding.",
-  "intro": "With 227 scholarships available specifically for students, this selection offers a diverse range of funding opportunities across various fields, including education, STEM, and community service. Award amounts vary significantly, with some scholarships providing funding as low as $250 and others reaching up to $44,000. Given the variability in requirements and deadlines—some approaching within the next 45 days—it’s essential to explore these options promptly.",
-  "h1": "Payout Student Scholarships: 227 Opportunities Available",
-  "supporting": "As you navigate this list, consider comparing the award amounts and requirements to find the best fit for your needs. While many scholarships have lighter application processes, some may require essays or additional documentation. Take note of the categories that resonate with your academic or career goals, as this can help streamline your search for the most relevant opportunities.",
-  "related_intro": "If you're interested in exploring more specific categories or types of scholarships, check out related pages that focus on particular fields or requirements.",
+  "seo_title": "Find Student Payout Scholarships in the USA",
+  "seo_description": "Student payout scholarships in the USA: compare award ranges, deadlines, and requirements, then apply after verifying each listing.",
+  "intro": "Trying to find USA scholarships with student-focused payout details usually means narrowing past broad results and getting to listings you can actually compare. In this filtered slice, the programs below span areas like education, community, STEM, medicine, disability, and miscellaneous topics, with options that may fit high school seniors, college students, graduate students, adult learners, and some international applicants. Award amounts, deadlines, eligibility rules, and application steps vary by listing, so it is worth reading each row closely instead of assuming the same pattern across the page. Some entries may be relatively straightforward to apply for, while others can ask for more documentation or written materials, so use this view to quickly find, compare, and shortlist scholarships that match your situation.",
+  "h1": "Compare Student Payout Scholarships in the USA",
+  "supporting": "A useful way to browse this set is to compare the award text, study level, category tags, and requirement lines side by side before opening the official source. You may spot scholarships tied to education, health professions, engineering, business, or visual and performing arts, along with broader community-focused options. Because deadlines differ across rows and some may be coming up soon, check timing early, then verify final details on the sponsor page before you apply.",
+  "related_intro": "If these listings feel close but not quite right, use related pages to compare nearby scholarship categories, study levels, and topic filters. That can help you find USA opportunities with a better fit for your field, education stage, residency status, or application preferences.",
   "how_to_use": [
-    "Check the deadlines listed for each scholarship to ensure timely applications",
-    "Compare the award amounts to prioritize higher-value opportunities",
-    "Review the requirements for each scholarship, noting any essay prompts",
-    "Visit the official pages linked for detailed application instructions",
-    "Shortlist scholarships that align with your goals and verify eligibility"
+    "Compare award text across several rows",
+    "Read each requirement line carefully",
+    "Check deadline wording before you shortlist",
+    "Open the official page to verify details",
+    "Save the best fit listings to apply"
   ],
   "who_for": [
-    "Students pursuing degrees in education, STEM, or medical fields",
-    "Applicants seeking community-focused scholarship opportunities",
-    "Individuals with disabilities looking for targeted funding"
+    "USA high school seniors comparing scholarship options",
+    "College and graduate students seeking education or STEM funding",
+    "Adult non traditional learners returning to school",
+    "Applicants in health, engineering, business, or arts fields",
+    "US citizens, permanent residents, and some international students"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available in this category?",
-      "answer": "This category includes a diverse range of scholarships, with 227 listings spanning fields such as education, STEM, medicine, community service, and more. Each scholarship may have different eligibility criteria and focus areas, so be sure to explore the specific details of each listing."
+      "question": "How do I find scholarships here that pay the student directly?",
+      "answer": "Use this filtered view to explore listings tagged with student payout, then open each row to confirm how funds are handled on the official source. In this USA-focused catalog slice, payment details can still vary by program."
     },
     {
-      "question": "How can I find out the award amounts for these scholarships?",
-      "answer": "Award sizes vary widely among the scholarships in this category, with amounts ranging from approximately $250 to $44,000 USD. For specific figures, check the individual scholarship listings, as most provide detailed award information."
+      "question": "Can I compare award amounts on this page before I apply?",
+      "answer": "Yes—these rows include listed award amounts, so you can compare options quickly before applying. Amounts vary by listing, and you should verify the current figure on the official scholarship page."
     },
     {
-      "question": "Are there deadlines I need to be aware of?",
-      "answer": "Yes, all 227 scholarships in this category have deadlines, but they vary significantly. It's important to check the deadline for each scholarship as some may be approaching quickly—at least one listing has a deadline within the next 45 days."
+      "question": "What kinds of applicants can browse this scholarship filter?",
+      "answer": "The listings span multiple study levels and backgrounds, including high school seniors, college students, graduate students, adult non-traditional students, and some international students. Eligibility still varies row to row, so compare requirements on each official listing before you apply."
     },
     {
-      "question": "Do I need to write an essay to apply for these scholarships?",
-      "answer": "Essay requirements differ across the scholarships; while some may require essays, many do not. Out of the 227 listings, approximately 16 have an essay requirement, so review each scholarship's details to understand what is needed."
+      "question": "Are these mostly no-essay scholarships?",
+      "answer": "Requirements are mixed in this catalog slice, and essay expectations can change from one listing to another. Some programs may be lighter-touch, but you should always verify the application steps on the official source before applying."
     }
   ],
+  "page_data": {
+    "exactCount": 255,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 44000,
+      "statedAmountCount": 254,
+      "unstatedAmountCount": 1
+    },
+    "deadline": {
+      "within30Days": 142,
+      "within60Days": 227,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 17,
+      "noCount": 238,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement",
+        "recommendation",
+        "link"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "visual_and_performing_arts",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident",
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 27
+      },
+      {
+        "name": "Austin Community College",
+        "count": 15
+      },
+      {
+        "name": "Tarrant County College Foundation",
+        "count": 13
+      },
+      {
+        "name": "Communities Foundation of Texas",
+        "count": 4
+      },
+      {
+        "name": "Indiana Commission for Higher Education",
+        "count": 4
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "medical",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "payout-student",
-    "generatedAt": "2026-04-02T10:32:58.151Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 227,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:20:18.368Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 255,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

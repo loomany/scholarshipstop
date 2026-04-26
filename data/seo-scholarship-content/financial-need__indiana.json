@@ -1,46 +1,129 @@
 {
-  "seo_title": "Financial Need Scholarships in Indiana",
-  "seo_description": "Explore 7 scholarships for financial need in Indiana. Check award sizes and deadlines to find the right fit for you.",
-  "intro": "Finding financial support for your education in Indiana can feel overwhelming, but there are options available specifically for students demonstrating financial need. This catalog features 7 scholarships, with award amounts ranging from approximately $750 to $10,600. Each listing varies in its requirements and deadlines, so it's essential to review them closely to find the best fit for your situation.",
-  "h1": "Indiana Scholarships for Financial Need",
-  "supporting": "As you explore these scholarships, pay attention to the diverse categories they cover, including education and community initiatives. Some may require essays, while others might have lighter requirements, making it easier to apply. Given the varying deadlines, it's wise to check the dates promptly to ensure you don’t miss out on any opportunities.",
-  "related_intro": "If you're interested in other funding options, consider checking out related pages that focus on scholarships for different needs or locations.",
+  "seo_title": "Find Financial Need Scholarships in Indiana, USA",
+  "seo_description": "Financial need scholarships in Indiana, USA: compare awards, review varying deadlines, and apply to programs that match your needs.",
+  "intro": "Trying to find Indiana scholarships for financial need usually means sorting through programs that look similar at first glance but differ in who qualifies, what they ask for, and how quickly you need to apply. This filtered USA view brings together a focused set of listings tied to Indiana and need-based eligibility, with options that touch areas like education, community, STEM, law, disability, and other subjects. You can compare rows for study level, residency or citizenship language, field of study, and requirement details before deciding which official pages to open. Award amounts vary by listing, and deadlines differ by program, so it is worth checking each row closely. Some listings may be lighter-touch than others, while essay expectations are mixed, so read the requirement lines before you start an application.",
+  "h1": "Find Indiana Scholarships for Financial Need USA",
+  "supporting": "A smart way to use this list is to compare more than the title. Look at how each program frames financial need, whether it points to Indiana residency or other USA eligibility details, and whether the opportunity is aimed at high school seniors, early college students, or graduate students. You can also scan for subject fit, including education, business, engineering, construction trades, and legal studies. Because some deadlines appear soon, it makes sense to shortlist strong matches first and verify the latest terms, award details, and submission instructions on the official scholarship page.",
+  "related_intro": "If you do not find enough matches here, check related scholarship pages that narrow by study level, subject area, or other eligibility traits alongside Indiana or financial need. That makes it easier to explore nearby options without starting your search over.",
   "how_to_use": [
-    "Review the list for award amounts and categories",
-    "Check each scholarship's specific requirements",
-    "Compare deadlines to prioritize applications",
-    "Shortlist scholarships that align with your goals",
-    "Visit official sponsor pages for the most accurate details"
+    "Compare each row for study level, field of study, and Indiana eligibility details before you apply",
+    "Scan award text and requirement lines closely, since amounts, essays, and supporting materials vary by listing",
+    "Check deadline information row by row and prioritize programs with the nearest dates",
+    "Open the official scholarship page for every shortlist item and verify current rules, documents, and submission steps",
+    "Keep a short list of your best matches so you can compare fit, effort, and timing side by side"
   ],
   "who_for": [
-    "Indiana residents demonstrating financial need",
-    "Students pursuing education or community-focused programs",
-    "Applicants looking for scholarships with varying requirements"
+    "Indiana applicants who need to compare need-based scholarships with different eligibility rules",
+    "High school seniors in the USA looking for Indiana funding before starting college",
+    "College and graduate students checking whether financial-need listings match their study level",
+    "Applicants in education, business, engineering, construction trades, or law seeking Indiana-focused aid",
+    "US citizens or permanent residents reviewing Indiana opportunities with residency-related language"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Indiana?",
-      "answer": "The current listings include a variety of scholarships categorized under education, community, miscellaneous, and medicine. This diverse range allows applicants to find opportunities that align with their specific interests and backgrounds."
+      "question": "How can I find Indiana scholarships for financial need that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, category, and any citizenship or residency notes shown in each listing. In this USA-focused slice, details can differ a lot by program, so confirm eligibility on the official scholarship page before you apply."
     },
     {
-      "question": "How much can I expect to receive from these scholarships?",
-      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts ranging from approximately $750 to $10,600. Be sure to check individual listings for specific award details."
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these listings include award amounts and deadline text, but both vary by row. Amounts in this slice range from smaller awards to larger ones, and deadlines are not shared across the whole page, so check each listing promptly and verify on the official source."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed; some may require essays while others do not. It's important to review each scholarship's details to understand what is needed for your application."
+      "question": "Are these Indiana financial-need scholarships only for college students?",
+      "answer": "No. The programs below can include different study levels, with examples such as high school seniors, college students, and graduate students, so it helps to browse row by row rather than assume one audience for all listings."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All scholarships in this category have deadlines, but they differ from one listing to another. At least one scholarship has a deadline within the next 45 days, so it's advisable to check the specific dates for each opportunity promptly."
+      "question": "Do all scholarships here require the same application materials or essays?",
+      "answer": "No—requirements vary across the catalog. Some listings may be lighter-touch, while others may ask for an essay or additional materials, so review each row carefully before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 26,
+    "award": {
+      "medianUsd": 2750,
+      "minUsd": 750,
+      "maxUsd": 10600,
+      "statedAmountCount": 26,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 19,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-04-15",
+        "2026-05-01",
+        "April 30, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 7,
+      "noCount": 19,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "construction_trades",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Indiana Commission for Higher Education",
+        "count": 2
+      },
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 2
+      },
+      {
+        "name": "Western Indiana Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "miscellaneous",
+      "law",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/indiana",
-    "generatedAt": "2026-04-02T11:15:59.282Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 7,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:03:01.846Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 26,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

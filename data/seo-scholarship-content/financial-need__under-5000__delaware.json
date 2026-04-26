@@ -1,0 +1,115 @@
+{
+  "seo_title": "Find Delaware Financial Need Scholarships | USA",
+  "seo_description": "Delaware financial need scholarships in the USA: compare smaller award listings, review varying deadlines and requirements, and apply on official pages.",
+  "intro": "Trying to find Delaware scholarships that consider financial need and stay under the five-thousand-dollar range usually means sorting through smaller, more targeted programs rather than one-size-fits-all awards. This filtered USA view brings together a focused set of listings tied to Delaware, with examples spanning medicine, education, community, STEM, law, and other miscellaneous categories. You can apply more efficiently when you compare each row closely, because award amounts, deadlines, essay expectations, and eligibility details vary by program. Some listings appear to have lighter requirement signals, while others may ask for more supporting information. Since deadline text differs across these rows and at least some opportunities are coming up soon, it makes sense to check dates promptly and verify every detail on the official scholarship page before you apply.",
+  "h1": "Delaware Financial Need Scholarships to Explore USA",
+  "supporting": "A useful way to browse this slice is to compare more than just the dollar figure. Look at the category, study level cues such as high school senior, and any field-of-study fit, including education, health professions and clinical sciences, business, foreign languages, or English. The list is worth scanning even if your major is not an exact match, because some programs are community-based or broader in scope. As you explore, note which listings appear simpler to complete, which ones may involve essays, and which deadlines line up with your application timeline.",
+  "related_intro": "If you do not find the right fit in Delaware alone, related scholarship pages can help you compare nearby themes, broader financial-need options, or other under-five-thousand listings in the USA. That is often the fastest way to spot programs with a better category match or a different requirement mix.",
+  "how_to_use": [
+    "Compare each listing’s amount, category, and deadline text instead of assuming the rows follow one pattern",
+    "Read the requirement lines carefully to see whether essays or extra materials are needed for that specific program",
+    "Open the official scholarship page for every option you shortlist and verify eligibility, location rules, and current details",
+    "Shortlist the Delaware programs that match your study level, field of study, and timeline, then apply in deadline order"
+  ],
+  "who_for": [
+    "Delaware applicants who want need-based scholarships with smaller award sizes they can compare quickly",
+    "High school seniors in Delaware looking for USA scholarship options before broader college costs stack up",
+    "Students interested in education, nursing, health professions, business, English, or foreign languages",
+    "Applicants open to community, STEM, law, medical, or miscellaneous scholarship categories tied to this filter"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship from this list?",
+      "answer": "Usually, you can explore multiple listings and apply to any programs you independently qualify for, but each scholarship sets its own rules. Check the official source for eligibility, required materials, and whether an essay is needed."
+    },
+    {
+      "question": "What kinds of scholarships appear in this Delaware filter?",
+      "answer": "These rows include a mix of topics and categories such as Medicine, Education, Community, STEM, Law, and Miscellaneous in the USA context. Sample listings also suggest common study interests like education, health professions, business, foreign languages, and English."
+    },
+    {
+      "question": "What is the best way to compare these scholarship listings before I apply?",
+      "answer": "Compare each row by award amount, deadline, study level, field of study, and any requirement notes shown in the catalog. Some listings may be lighter-touch than others, but always use the official source to confirm final details before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-13",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 5
+      },
+      {
+        "name": "Cumberland Valley Volunteer Firemen's Association",
+        "count": 2
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      },
+      {
+        "name": "Delaware Department of Education",
+        "count": 1
+      },
+      {
+        "name": "Delaware School Nutrition Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "medical",
+      "community",
+      "education",
+      "miscellaneous",
+      "stem",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/delaware",
+    "generatedAt": "2026-04-26T14:30:02.894Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

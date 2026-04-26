@@ -1,43 +1,133 @@
 {
-  "seo_title": "Explore 196 College Scholarships for International Students",
-  "seo_description": "Discover 196 scholarships available for international students. Find funding opportunities to support your education abroad.",
-  "h1": "College Scholarships for International Students",
-  "intro": "Navigating the world of college scholarships can be challenging, especially for international students. With 196 scholarships available, there are numerous opportunities to help fund your education. Scholarships such as the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship cater specifically to students from abroad. Whether you’re pursuing undergraduate or graduate studies, these scholarships can significantly reduce your financial burden and enhance your academic experience. This guide will help you identify suitable scholarships and provide essential tips for a successful application process.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to full-time international students enrolled in accredited institutions. Deadlines can range throughout the academic year, so it’s crucial to check individual scholarship requirements. For instance, the Paul and Daisy Soros Fellowships for New Americans requires applicants to demonstrate exceptional leadership potential and commitment to the U.S. Additionally, scholarships like the Razor's Edge Global Scholarship may focus on specific fields of study. When applying, ensure that your application is complete, including transcripts, letters of recommendation, and personal statements that reflect your unique experiences and aspirations.",
-  "related_intro": "In addition to the scholarships listed, there are many other funding options available for international students. Exploring various sources can increase your chances of securing financial support.",
+  "seo_title": "Find College Scholarships for International Students USA",
+  "seo_description": "College scholarships for international students in the USA. Compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find college scholarships in the USA for international students usually means sorting through very different rules, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings tied to that search, with programs that can touch areas such as education, STEM, community, medicine, arts, and more. As you compare the rows below, expect variation in award amounts, deadline timing, essay expectations, and eligibility details. Some listings may fit graduate study, while others may be better for high school seniors or current college students. If you plan to apply in the USA, it is worth checking the dates promptly because deadlines differ by program and some opportunities can close sooner than expected.",
+  "h1": "Find College Scholarships for International Students USA",
+  "supporting": "A smart way to use this list is to compare each row on a few practical points before you apply: study level, citizenship or residency wording, field of study, requirement notes, and the official source. Some awards in this slice show broad academic categories, while others are easier to match if you already know your major or intended program. Browse for likely fits first, then open the official pages to verify current amounts, required materials, and deadline language. That extra check matters because listings can look similar at a glance but differ in important eligibility details.",
+  "related_intro": "If these results feel close but not quite right, use related pages to narrow by study level, subject area, essay preference, or other eligibility signals. That can make it easier to find USA scholarships that better match your academic path and application timeline.",
   "how_to_use": [
-    "Browse the list of 196 scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Note application deadlines and required documents.",
-    "Prepare your application materials carefully.",
-    "Submit your applications on time."
+    "Sort and compare deadline text first",
+    "Read each requirement line carefully",
+    "Check study level and field labels",
+    "Open the official page to verify details",
+    "Shortlist strong matches before you apply"
   ],
   "who_for": [
-    "International students seeking financial aid.",
-    "Undergraduate and graduate students.",
-    "Students from diverse academic backgrounds."
+    "International students seeking USA college funding",
+    "Graduate applicants comparing scholarship options",
+    "High school seniors planning US study",
+    "Current college students reviewing eligibility details",
+    "Applicants in education, engineering, business, or health fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various scholarships, including merit-based, need-based, and field-specific scholarships."
+      "question": "How can I find college scholarships for international students in the USA on this filtered page?",
+      "answer": "Use this filtered view to compare rows that match international-student search intent, then open each listing for the official eligibility details. In the USA context, some programs may also show other citizenship or residency labels, so verify the exact applicant rules on the source page."
     },
     {
-      "question": "How can I find scholarships that suit my needs?",
-      "answer": "Utilize scholarship search engines, university financial aid offices, and international student organizations."
+      "question": "Can I compare award amounts here before I apply?",
+      "answer": "Yes—this catalog lets you compare listed amounts across programs, but amounts vary by listing and should be confirmed on the official scholarship page. Some rows show a fixed award, while others show a range."
     },
     {
-      "question": "Are there scholarships that do not require essays?",
-      "answer": "Yes, some scholarships, like the $25,000 'Be Bold' No-Essay Scholarship, do not require essays."
+      "question": "Will every scholarship here require an essay or a long application?",
+      "answer": "Not necessarily. Requirements vary row to row in this catalog, and some listings may be lighter-touch than others, but you should always verify the application steps on the official page."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this international student college list?",
+      "answer": "You can explore a focused set of listings across categories such as Education, STEM, Community, Medicine, Arts, and Miscellaneous. Study level and field of study also vary, so it helps to compare rows based on your academic stage and subject area."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "college-scholarships-for-international-students",
-    "generatedAt": "2026-04-25T13:16:39.382Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:56:45.868Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

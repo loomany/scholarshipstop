@@ -1,47 +1,129 @@
 {
-  "seo_title": "Scholarships Closing Soon | 108 Opportunities",
-  "seo_description": "Explore 108 scholarships with varying deadlines and award amounts up to $10,000. Act quickly to secure funding.",
-  "intro": "If you’re hunting awards that fit “Closing Soon scholarships,” this view keeps the signal high. About 108 listings match these filters right now, so you can compare options without wading through the full catalog. Where we have numeric award data in this slice, amounts in the sample run from about $203 to $10,000; always confirm on the sponsor site. Deadlines and dollar lines differ row to row—use them to shortlist, then verify every rule on the sponsor’s site.",
-  "h1": "108 Scholarships with Upcoming Deadlines",
-  "supporting": "Start with sort (deadline or amount) to surface what matters today, then read the requirement snippet under each title before you click through. When two listings look alike, compare their deadline and award rows side by side. Nothing here replaces the official program page: use this list to narrow, then re-read eligibility and dates at the source before you apply.",
-  "related_intro": "Below are related filter pages—different state, topic, or requirement angle—if you want to widen the net without losing this starting point.",
+  "seo_title": "Find Closing Soon Scholarships in the USA",
+  "seo_description": "Closing Soon scholarships in the USA: compare deadlines, award ranges, and requirements, then apply fast after verifying each listing.",
+  "intro": "Trying to apply before opportunities close is the whole point of this USA scholarship filter: it pulls together a focused set of listings with deadline text already in view, so you can find options that may need attention soon. The programs below span areas such as education, community, STEM, arts, medicine, and other miscellaneous categories, with examples that reach from high school seniors to graduate students and adult non-traditional applicants. Award amounts vary by listing and should be verified on each official page, and deadlines differ by program rather than following one shared cutoff. Requirements also vary, including whether an essay is needed, so it makes sense to compare each row carefully instead of assuming the same application workload across the list.",
+  "h1": "Apply for Closing Soon USA Scholarships",
+  "supporting": "Use this filtered view to compare urgency first, then fit. Scan the deadline text, open the listings that match your study level or field, and read the requirement lines before you start an application. You can also compare category mix and audience labels, including common USA eligibility signals such as U.S. citizen or permanent resident. Because some rows may be lighter-touch while others ask for more materials, this slice is worth checking when you want to act quickly without skipping scholarships that still match your background.",
+  "related_intro": "After you review the most time-sensitive rows here, related scholarship pages can help you widen the search by category, study level, or field of study. That is useful if you want to compare fast-moving options with broader USA scholarship matches in education, STEM, community, arts, medicine, or other topics.",
   "how_to_use": [
-    "Pick a sort order so urgent deadlines or larger award text float to the top",
-    "Skim the requirement line on each card for a quick fit check",
-    "Open the official listing from the card and re-confirm dates, amounts, and eligibility",
-    "Keep a short shortlist instead of spreading thin across weak matches",
-    "Assume catalog fields can lag—treat sponsor pages as the final word"
+    "Compare the deadline text across rows first and shortlist the programs that need action soonest",
+    "Scan award text, category labels, study level, and field of study to find the closest matches",
+    "Read each requirement line carefully, including whether an essay or other materials may be needed",
+    "Open the official scholarship page for every shortlist item and verify amount, eligibility, and deadline details before you apply"
   ],
   "who_for": [
-    "Anyone who wants a tighter set of options for Closing Soon scholarships than the full open catalog",
-    "Students stacking several applications and needing a fast way to compare effort versus payoff",
-    "Applicants who like scanning structured rows before opening long sponsor pages"
+    "High school seniors who want to find USA scholarships with approaching deadlines",
+    "College and graduate applicants comparing near-term opportunities across education, STEM, community, arts, and medicine topics",
+    "Adult non-traditional students looking for scholarships they can still apply for soon",
+    "U.S. citizens or permanent residents checking listings that may match common residency labels"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are included in the 'Closing Soon' filter?",
-      "answer": "This filter includes a diverse range of scholarships across categories such as Education, Community, STEM, Arts, and Medicine. With 108 listings currently available, you can find opportunities that align with various interests and fields of study."
+      "question": "How do I find scholarships in the USA that are closing soon?",
+      "answer": "Use this filtered view to compare the deadline text on each row first, then open the official source for any program you want to apply to. Deadlines differ by listing, and some dates are close enough that it makes sense to verify them promptly."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 108 scholarships in this category have deadlines listed, but they vary from row to row. It's important to check each listing promptly, as at least one scholarship has a deadline within the next 45 days."
+      "question": "Can I compare award amounts on these closing-soon scholarship listings?",
+      "answer": "Yes—many rows show an amount, but awards vary by listing and should be confirmed on the official page before you apply. If you are comparing options, check both the posted amount and the eligibility details side by side."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements for essays vary among the scholarships. While the majority of listings do not require essays, approximately seven scholarships do have this requirement, so be sure to review the details for each opportunity."
+      "question": "Who should explore these closing-soon scholarships?",
+      "answer": "This focused set of listings can be useful for applicants in the USA across categories like Education, Community, STEM, Arts, Medicine, and Miscellaneous. You may also find options tied to study levels such as high school senior, adult non-traditional, graduate student, and college students."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this filter range widely, with amounts reported from approximately $203 to $10,000. However, not every scholarship will fall within this range, so check individual listings for specific award details."
+      "question": "Do all of these scholarships have the same requirements or essay rules?",
+      "answer": "No—requirements vary row to row. Some programs may be lighter-touch, while others can ask for more materials, so review each catalog entry and verify the full application checklist on the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 108,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 203,
+      "maxUsd": 10000,
+      "statedAmountCount": 105,
+      "unstatedAmountCount": 3
+    },
+    "deadline": {
+      "within30Days": 108,
+      "within60Days": 108,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-04-08",
+        "2026-04-08",
+        "2026-04-07"
+      ]
+    },
+    "essays": {
+      "yesCount": 7,
+      "noCount": 101,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Wenatchee Valley College Foundation",
+        "count": 27
+      },
+      {
+        "name": "CollegeReady",
+        "count": 18
+      },
+      {
+        "name": "Bunker Hill Community College",
+        "count": 8
+      },
+      {
+        "name": "The College of the Florida Keys",
+        "count": 3
+      },
+      {
+        "name": "Women Leading Kentucky",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "closing-soon",
-    "generatedAt": "2026-04-02T10:31:05.300Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:16:45.411Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 108,
-    "model": "gpt-4o-mini",
-    "bodySource": "deterministic",
+    "model": "gpt-5.4",
+    "bodySource": "ai",
     "generationMode": "rewrite"
   }
 }

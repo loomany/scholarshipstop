@@ -1,48 +1,120 @@
 {
-  "seo_title": "Montana Scholarships for Financial Need",
-  "seo_description": "Explore 7 scholarships in Montana for students with financial need. Check varying deadlines and award amounts from $1,000 to $5,000.",
-  "intro": "Finding financial support for your education in Montana can be challenging, but there are 7 scholarships available specifically for students demonstrating financial need. These opportunities range in award sizes from approximately $1,000 to $5,000, providing a valuable resource for those looking to alleviate the costs of their studies. With varying deadlines and application requirements, it's essential to review each listing carefully to identify the best fit for your situation.",
-  "h1": "Financial Need Scholarships in Montana",
-  "supporting": "This collection of scholarships includes options across different categories such as education, STEM, and community service, allowing you to find funding that aligns with your interests and goals. Be sure to compare the award amounts and read through the requirements, as some may require essays while others do not. Given the presence of deadlines within the next few months, checking these listings promptly can help ensure you don’t miss out on potential funding.",
-  "related_intro": "If you're interested in exploring more options, consider checking related pages for scholarships based on other eligibility criteria or locations.",
+  "seo_title": "Find Financial Need Scholarships in Montana, USA",
+  "seo_description": "Financial need scholarships in Montana, USA with award ranges and varying deadlines. Compare listings and apply through official program pages.",
+  "intro": "Trying to find USA scholarships that match both financial need and Montana ties usually means sorting through very different programs with different rules, study levels, and subject areas. This filtered slice brings those Montana-focused options into one place so you can apply with more direction and compare what matters most. The rows below span areas such as education, STEM, community, disability, and medicine, with examples that fit high school seniors as well as graduate students. Award amounts vary by listing, deadlines differ by program, and requirements are not identical across the set. Some listings may be lighter-touch than others, but you should still read each requirement line carefully and verify details on the official scholarship page before applying.",
+  "h1": "Compare Financial Need Scholarships in Montana USA",
+  "supporting": "A smart way to use this list is to compare each row side by side instead of assuming the scholarships work the same way. Check the award text, scan the eligibility notes, and look at how Montana, financial need, study level, and field of study are described in each listing. Because deadline wording varies across these programs, it is worth reviewing dates promptly and opening the official source for the latest terms. If you are deciding where to spend your time, shortlist the rows that best match your background first, then compare requirement details before you apply.",
+  "related_intro": "If you do not find the right fit in this Montana and financial need slice, related pages can help you narrow by subject area, study level, or other eligibility themes. That is useful when you want to compare nearby options without losing the USA scholarship context.",
   "how_to_use": [
-    "Compare deadlines for each scholarship listing",
-    "Scan award amounts to identify suitable options",
-    "Read through the requirements for each scholarship",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that best match your profile"
+    "Compare award text across the rows",
+    "Read each requirement line carefully",
+    "Check deadline wording for every listing",
+    "Open the official page to verify details",
+    "Shortlist the best matches before you apply"
   ],
   "who_for": [
-    "Students in Montana demonstrating financial need",
-    "Individuals pursuing education in STEM fields",
-    "Community-oriented applicants seeking funding",
-    "High school and college students",
-    "Those looking for scholarships with varying application requirements"
+    "Montana students with financial need",
+    "High school seniors seeking local scholarship options",
+    "Graduate students comparing Montana-based aid opportunities",
+    "Applicants in education, STEM, medicine, or community-focused fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Montana?",
-      "answer": "This category includes a variety of scholarships focused on education, STEM fields, community service, and more. Currently, there are 7 scholarships listed, each with unique eligibility criteria and award amounts."
+      "question": "How can I find financial need scholarships in Montana that fit my situation?",
+      "answer": "Use this filtered view to explore Montana listings tied to financial need, then compare each row for study level, field, amount, and deadline. In this USA catalog, details vary by program, so confirm eligibility and application steps on the official source before you apply."
     },
     {
-      "question": "How do I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, so it's important to check the details for each listing. All 7 scholarships currently available have deadlines, with at least one approaching within the next 45 days."
+      "question": "Can I compare award amounts and deadlines on this Montana scholarship list?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both can differ from one program to the next. Amounts vary by listing, and deadlines are not shared across the whole page, so check dates promptly and verify the latest information on the official page."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships; some may require essays while others do not. It's best to review each scholarship listing to understand the specific requirements."
+      "question": "What kinds of students and majors appear in these Montana financial need scholarships?",
+      "answer": "This focused set of listings includes examples tied to high school seniors and graduate students, with sample fields such as education, engineering, construction trades, agriculture and related sciences, and business, management, and marketing. You can browse category signals like Education, STEM, Community, Disability, and Medicine to find options that match your background."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this category generally range from $1,000 to $5,000. However, it's advisable to check individual listings for exact amounts and details."
+      "question": "Do all Montana financial need scholarships here require an essay?",
+      "answer": "No single requirement applies to every listing on this page. Some programs may ask for an essay and others may not, so compare the rows and then review the official scholarship page before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 1250,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 21,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Society of Petroleum Engineers-Billings Section",
+        "count": 2
+      },
+      {
+        "name": "Boy Scouts of America-Northern Lights Council",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Montana Association for the Blind",
+        "count": 1
+      },
+      {
+        "name": "Montana Federation of Garden Clubs",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous",
+      "disability",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/montana",
-    "generatedAt": "2026-04-02T11:15:19.238Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 7,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:06:43.339Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

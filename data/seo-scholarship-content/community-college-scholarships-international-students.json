@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore Community College Scholarships for International Students",
-  "seo_description": "Discover 196 scholarships available for international students at community colleges. Find funding opportunities tailored for you.",
-  "h1": "Community College Scholarships for International Students",
-  "intro": "International students seeking to further their education at community colleges can access a wealth of scholarship opportunities. With 196 scholarships currently available, students can find financial support tailored to their unique circumstances. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship offer significant funding to help cover tuition and living expenses. Whether you are pursuing an associate degree or vocational training, these scholarships can ease the financial burden and allow you to focus on your studies. Explore the options available to you and take the first step towards achieving your academic goals.",
-  "supporting": "Eligibility for community college scholarships varies, but many are open to international students regardless of their country of origin. Common requirements include maintaining a certain GPA, demonstrating financial need, or submitting essays and recommendations. Deadlines also vary, so it's crucial to check individual scholarship listings for specific dates. To apply, gather necessary documents such as transcripts, proof of enrollment, and personal statements. Start early to ensure you have ample time to complete applications and secure funding. Resources such as your college's financial aid office can provide additional guidance and support during the application process.",
-  "related_intro": "In addition to scholarships, international students may also explore grants, assistantships, and work-study programs to help finance their education.",
+  "seo_title": "Find Community College Scholarships for International Students U…",
+  "seo_description": "Community college scholarships for international students in the USA. Compare deadlines, award details, and eligibility, then apply on official pages.",
+  "intro": "Trying to find community college scholarships in the USA as an international student usually means sorting through mixed eligibility rules, study levels, and application steps. This filtered slice brings together a focused set of listings so you can compare options that may fit transfer plans, first-year community college enrollment, or broader college study. The rows below span themes such as education, STEM, community, medicine, arts, and more, so it is worth checking beyond your exact major. Awards vary by listing, deadlines differ across programs, and requirements are not uniform. Some opportunities may ask for essays or added materials, while others appear lighter-touch, so it makes sense to apply selectively and verify every detail on the official source before you move forward.",
+  "h1": "Find Community College Scholarships for International Students U…",
+  "supporting": "Use this list to compare more than just the scholarship title. Read the requirement lines closely for citizenship or residency wording, study level fit, and any field-of-study preference. Then scan award text and deadline text side by side, because stronger matches are not always the largest awards. If you are building a shortlist for the USA application cycle, open each official page to confirm current terms, required documents, and how the sponsor defines international student eligibility before you submit.",
+  "related_intro": "If these results feel close but not exact, check related scholarship pages by study level, subject area, or eligibility wording. That can help you find adjacent USA opportunities for education, engineering, health fields, arts, business, or broader international student funding.",
   "how_to_use": [
-    "Search for scholarships specific to your field of study.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents in advance.",
-    "Apply before the specified deadlines.",
-    "Follow up with scholarship providers for updates."
+    "Compare deadline text across the rows first",
+    "Read each requirement line for eligibility details",
+    "Scan award wording and note that amounts vary",
+    "Open the official page before you apply",
+    "Shortlist the strongest matches and verify every detail"
   ],
   "who_for": [
-    "International students enrolled in community colleges.",
-    "Students seeking financial assistance for tuition and fees.",
-    "Individuals pursuing vocational training or associate degrees."
+    "International students planning community college study in the USA",
+    "Applicants comparing community college and broader college scholarship options",
+    "Students in education, engineering, business, English, or health fields",
+    "High school seniors or current college students checking study level fit"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various scholarships including merit-based, need-based, and program-specific awards."
+      "question": "How can I find community college scholarships for international students in the USA on this page?",
+      "answer": "Use this filtered view to compare rows tagged for international students and scan the listing details for study level, field, and eligibility notes. Then verify the final requirements on the official scholarship page before you apply."
     },
     {
-      "question": "How can I find community college scholarships?",
-      "answer": "You can search through your college's financial aid office, scholarship databases, and online resources."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—this catalog lets you compare rows side by side, but amounts and deadlines vary by program. Some listings show dollar amounts, while others may need confirmation on the official source, and deadline dates differ by row, so check them promptly."
     },
     {
-      "question": "What documents do I need to apply for scholarships?",
-      "answer": "Typically, you will need transcripts, proof of enrollment, essays, and letters of recommendation."
+      "question": "Are these scholarships only for one major or subject area?",
+      "answer": "No. In this filtered set, you can explore scholarships connected to areas such as education, business, engineering, English, and health-related fields, along with broader categories like STEM, arts, medicine, community, and miscellaneous."
+    },
+    {
+      "question": "Do all community college scholarships for international students require an essay?",
+      "answer": "No single rule applies across this page. Essay requirements vary by listing, so review each row carefully and confirm the current application steps on the official program website before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "community-college-scholarships-international-students",
-    "generatedAt": "2026-04-25T13:25:49.741Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:57:04.084Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

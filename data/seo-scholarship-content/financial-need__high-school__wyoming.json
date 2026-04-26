@@ -1,0 +1,102 @@
+{
+  "seo_title": "Find Financial Need High School Scholarships in Wyoming, USA",
+  "seo_description": "Financial need high school scholarships in Wyoming, USA—compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships for Wyoming high school students with financial need usually means narrowing past broad national results and checking a smaller, more relevant set of listings. This filtered slice brings together programs tied to Wyoming and the high school stage, with financial need as part of the eligibility focus. As you compare the rows below, expect award details, deadlines, and requirement language to vary by listing. Many entries in this slice appear to have lighter application signals, and some may often be no-essay, but you should still verify every requirement on the official page before you apply. If you want a practical place to start your search for Wyoming-based options, this is a focused set to review promptly because deadline timing is not the same across programs.",
+  "h1": "Find Wyoming Financial Need High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the title. Read the requirement lines closely, note whether the scholarship leans toward community, education, or humanities themes, and check how each program describes financial need and student eligibility. It is also worth opening the official source for every row to confirm current award information, application steps, and deadline wording. For a small Wyoming-focused set like this, careful comparison is usually faster than broad browsing.",
+  "related_intro": "If these Wyoming high school financial need listings feel too narrow, related pages can help you explore nearby options by changing one filter at a time, such as location, school level, or the financial need focus. That makes it easier to compare similar USA scholarships without starting your search over.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist the Wyoming listings that match your situation",
+    "Check whether essay expectations are stated clearly"
+  ],
+  "who_for": [
+    "Wyoming high school students seeking need-based scholarship options",
+    "Families comparing local USA scholarships before applying",
+    "Applicants interested in community, education, or humanities themes",
+    "Students looking for listings that may have lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Wyoming scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare the Wyoming rows that match both high school and financial-need criteria. Then open each listing and verify eligibility, required materials, and deadline details on the official source before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this page?",
+      "answer": "Not automatically—each program below can set its own rules even within this USA filter slice. Check the official listing page for grade level, Wyoming connection, financial-need language, and any application steps before submitting."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on the basics that vary row to row: deadline, award amount, category or study area, and application requirements. Amounts and dates are listing-specific, so confirm them on the official page rather than assuming one standard for the whole page."
+    },
+    {
+      "question": "Are these Wyoming high school scholarships usually essay-heavy?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and several sampled rows show no essay flag. Still, requirements can differ by program, so review each scholarship's official details before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 1000,
+      "maxUsd": 1000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Wyoming Telecommunications Association",
+        "count": 2
+      },
+      {
+        "name": "Rocky Mountain Hemophilia and Bleeding Disorder Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/wyoming",
+    "generatedAt": "2026-04-26T14:02:08.528Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

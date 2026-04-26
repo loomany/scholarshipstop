@@ -1,48 +1,130 @@
 {
-  "seo_title": "Find PhD Scholarships in the USA",
-  "seo_description": "Explore 58 PhD scholarships with varying awards and deadlines. Check requirements and apply promptly for funding.",
-  "intro": "Finding funding for your PhD can be challenging, but there are 58 scholarships available that cater to a variety of fields and needs. Award sizes range from approximately $400 to $35,000, providing a spectrum of financial support. Keep in mind that application requirements and deadlines vary, so it's essential to review each opportunity closely to identify the best fit for your academic journey.",
-  "h1": "Explore 58 PhD Scholarships Available Now",
-  "supporting": "This list includes scholarships across diverse categories such as education, STEM, medicine, and community service. As you explore these options, compare the award amounts and note the specific requirements, which can vary significantly—some may require essays while others do not. Be sure to check the deadlines, as some scholarships may be approaching soon.",
-  "related_intro": "If you're interested in exploring more specific funding options, consider checking related pages that focus on scholarships by category or field of study.",
+  "seo_title": "Find PhD Scholarships to Apply for in the USA",
+  "seo_description": "PhD scholarships in the USA with deadlines, award ranges, and requirement details. Compare listings and apply after checking each official page.",
+  "intro": "Trying to find PhD scholarships in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what field they support, and how much documentation they ask for. This filtered slice brings together doctoral-focused listings across themes such as education, STEM, medicine, community, disability, and other areas, so you can compare options without jumping between unrelated study levels. Some rows may fit broader graduate study, while others connect more closely to teaching, health professions, engineering, business, or communication. Awards, deadlines, citizenship or residency rules, and essay expectations vary by listing, so it is worth reading each row closely before you apply.",
+  "h1": "Compare PhD Scholarships in the USA",
+  "supporting": "Use the rows below to compare more than just the title. Check the requirement line for study level fit, look at category labels for subject relevance, and note whether a listing appears to have a lighter application setup or asks for more materials. Because deadline text differs across programs and some opportunities may close soon, it makes sense to shortlist strong matches early, then open the official pages to verify eligibility, award details, and submission instructions before you apply.",
+  "related_intro": "If these doctoral listings feel too narrow or too broad, related pages can help you explore nearby options by category, subject area, or other education levels. That is useful when you want to compare PhD-focused funding with scholarships tied more directly to STEM, medicine, education, or community-based criteria in the USA.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Scan award amounts to find suitable options",
-    "Read through requirement lines for clarity",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that align with your goals"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages to verify details",
+    "Shortlist listings that match your field",
+    "Check award text and application materials"
   ],
   "who_for": [
-    "PhD candidates in STEM fields",
-    "Students pursuing advanced degrees in medicine",
-    "Applicants seeking community-focused scholarships",
-    "Individuals with disabilities looking for funding",
-    "Those interested in education-related scholarships"
+    "Doctoral applicants comparing USA scholarship options by subject",
+    "PhD students in education, STEM, or health-related fields",
+    "US citizens or permanent residents checking eligibility labels",
+    "Applicants seeking doctoral funding with varied requirement levels"
   ],
   "faq": [
     {
-      "question": "What types of PhD scholarships are available?",
-      "answer": "The current listing includes a diverse range of 58 scholarships categorized under education, STEM, medicine, community, and disability. Each scholarship may have unique eligibility criteria and focus areas, so it's beneficial to explore the details of each listing."
+      "question": "How can I find PhD scholarships in the USA that fit my background?",
+      "answer": "Use this filtered view to compare the rows by category, field of study, and any citizenship or residency notes shown in each listing. In this USA-focused catalog slice, details like eligibility and required materials can differ by program, so confirm them on the official source before you apply."
     },
     {
-      "question": "How can I find out about the deadlines for these scholarships?",
-      "answer": "All 58 scholarships listed have deadlines, but they vary significantly from one program to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+      "question": "Can I compare award amounts for these PhD scholarship listings?",
+      "answer": "Yes—this catalog includes listed award amounts for the programs below, but amounts vary by listing. Treat the catalog as a starting point and verify the current USD amount on the official scholarship page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements for essays differ among the scholarships; while some may not require an essay, others do. Out of the 58 listings, approximately 6 indicate an essay requirement, so be sure to read the details for each scholarship to understand what is needed."
+      "question": "Are these PhD scholarships only for one subject area?",
+      "answer": "No—this set spans multiple themes, including education, STEM, medicine, community, disability, and miscellaneous listings. If you want to explore options, compare category labels and field-of-study notes on each row rather than assuming every program targets the same academic path."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "The scholarship amounts vary widely, with awards ranging from approximately $400 to $35,000 USD. Each listing provides specific details about the award size, so reviewing individual entries will give you a clearer picture of what to expect."
+      "question": "Will every listing have the same application requirements or essay rules?",
+      "answer": "No—requirements vary across these PhD scholarship rows, and essay expectations are mixed. When you find a program you want to apply for, use the catalog to shortlist it, then verify the exact requirements on the official page."
     }
   ],
+  "page_data": {
+    "exactCount": 91,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 400,
+      "maxUsd": 35000,
+      "statedAmountCount": 91,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 43,
+      "within60Days": 75,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 7,
+      "noCount": 84,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "recommendation",
+        "transcript",
+        "link"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_3",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "communication_and_journalism",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "University of South Florida",
+        "count": 9
+      },
+      {
+        "name": "AFCEA Hawaii",
+        "count": 8
+      },
+      {
+        "name": "Outdoor Advertising Association of America",
+        "count": 5
+      },
+      {
+        "name": "Calgary Foundation",
+        "count": 3
+      },
+      {
+        "name": "Project Management Institute",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "medical",
+      "miscellaneous",
+      "community",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "phd",
-    "generatedAt": "2026-04-02T10:36:30.584Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 58,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:16:13.957Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 91,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

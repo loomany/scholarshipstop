@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find New York Need-Based Scholarships | USA",
+  "seo_description": "Need-based New York scholarships under five thousand in the USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find New York scholarships in the USA that consider financial need and stay on the lower-award side usually means sorting through very different programs fast. This filtered slice brings those rows together so you can compare options without mixing in larger awards that do not fit this range. The listings below span areas such as education, disability, arts, community, miscellaneous topics, and STEM, with examples tied to study paths like education, architecture, journalism, visual and performing arts, and psychology. Awards vary by listing, deadlines differ by program, and requirement details are not identical, so it is worth reading each row closely before you apply. Some entries may be lighter-touch than others, but official pages are the place to confirm eligibility, residency, essay expectations, and current terms.",
+  "h1": "Compare Need-Based New York Scholarships USA",
+  "supporting": "A useful way to browse this set is to compare the award text, deadline line, location fit, and category labels side by side before opening individual listings. You may spot programs connected to New York community ties, disability-related eligibility, arts interests, or technical study. Because deadline wording varies across the rows and some dates may be coming up soon, it helps to shortlist promising options early. When you compare scholarships here, treat the catalog as a starting point and verify final requirements, award details, and application instructions on the official source before you apply.",
+  "related_intro": "If these New York financial-need listings feel close but not quite right, related pages can help you widen or narrow the search. Compare nearby scholarship filters by location, award range, or eligibility theme to find programs that better match your study level, subject area, or application preferences in the USA.",
+  "how_to_use": [
+    "Compare award text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages to verify eligibility",
+    "Shortlist options with deadlines approaching soon",
+    "Check residency, study level, and essay details"
+  ],
+  "who_for": [
+    "New York applicants with financial need",
+    "High school students planning local scholarship applications",
+    "College or graduate students comparing smaller USA awards",
+    "Applicants interested in education, arts, community, or STEM categories"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship from this list?",
+      "answer": "Usually, you can explore multiple programs and apply to any that fit your profile, but each scholarship sets its own rules. Check the official page for residency, citizenship, study level, and field-of-study requirements before submitting."
+    },
+    {
+      "question": "What should I compare when I browse these USA scholarship listings?",
+      "answer": "Focus on award amount, deadline, study level, location fit, and any requirement notes such as essays. In this New York slice, deadlines differ by row, so it is smart to review dates promptly and verify details on the official listing page."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or student types?",
+      "answer": "Not all of them target the same group. In these rows, you may find programs tied to areas like education, arts, STEM, disability, community, and miscellaneous topics, with sample study levels ranging from high school to graduate study."
+    }
+  ],
+  "page_data": {
+    "exactCount": 15,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 15,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 11,
+      "within60Days": 13,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services",
+        "communication_and_journalism",
+        "visual_and_performing_arts",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 2
+      },
+      {
+        "name": "New York State Grange",
+        "count": 2
+      },
+      {
+        "name": "Support Creativity",
+        "count": 2
+      },
+      {
+        "name": "Associated General Contractors of New York State",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "disability",
+      "miscellaneous",
+      "arts",
+      "community",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/new-york",
+    "generatedAt": "2026-04-26T14:37:32.059Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 15,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

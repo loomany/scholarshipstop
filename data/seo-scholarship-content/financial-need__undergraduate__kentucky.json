@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Kentucky Undergraduate Need Scholarships | USA",
+  "seo_description": "Financial need undergraduate scholarships in Kentucky, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Kentucky that take financial need into account usually means narrowing past broad national results and comparing a more relevant set of USA listings. In this filtered slice, the programs below center on Kentucky and show a mix of education, community, STEM, medicine, and miscellaneous themes. Awards vary by listing, and deadlines differ across rows, so it is worth checking details promptly if you plan to apply for the current cycle. Many entries in this view appear to have lighter application signals and often no essay flag in the catalog data, but requirements still need to be verified on each official page. Use this list to compare options that fit undergraduate study while keeping financial need in focus.",
+  "h1": "Find Financial Need Undergraduate Scholarships in Kentucky USA …",
+  "supporting": "A smart way to use these rows is to compare more than the title. Look at the requirement line, study level cues, residency or citizenship notes, and category tags to see which programs match your situation in Kentucky. Some listings lean toward education or community themes, while others touch STEM or related interests. Before you apply, open the official source to confirm award details, deadline wording, and any documents the sponsor expects, since catalog summaries are only a starting point.",
+  "related_intro": "If this Kentucky undergraduate need-based set feels close but not quite right, related pages can help you compare nearby paths, such as broader undergraduate results, other Kentucky scholarship filters, or different eligibility themes that may overlap with your profile.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read the requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and residency rules"
+  ],
+  "who_for": [
+    "Kentucky undergraduates with financial need",
+    "High school seniors planning Kentucky college study",
+    "Current college students comparing Kentucky aid options",
+    "Applicants interested in education or community themed awards",
+    "USA residents checking Kentucky based scholarship programs"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Kentucky undergraduate scholarships for financial need in this filtered view?",
+      "answer": "Use these rows to compare Kentucky listings that match undergraduate study and financial-need criteria in the USA catalog. Then open each scholarship’s official page to confirm current eligibility, residency wording, and application steps."
+    },
+    {
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, yes—if you meet each program’s rules. Apply row by row, because requirements, award amounts, and deadlines vary by listing and should be verified on the official source."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on the basics that change across listings: deadline, award amount, study level wording, and any Kentucky or U.S. residency details shown on the official page. Amounts in this slice vary by listing, so don’t assume one award level applies to all programs below."
+    },
+    {
+      "question": "Are these Kentucky scholarships only for current college students?",
+      "answer": "Not always. While this filter is centered on undergraduate opportunities, some rows may reference stages like high school senior or early college levels, so compare each listing carefully before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 3500,
+      "minUsd": 1000,
+      "maxUsd": 5300,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "theology_and_religious_vocations"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kentucky Higher Education Assistance Authority",
+        "count": 3
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Epilepsy Foundation of Kentuckiana",
+        "count": 1
+      },
+      {
+        "name": "Kentucky Broadcasters Association",
+        "count": 1
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/kentucky",
+    "generatedAt": "2026-04-26T14:48:40.993Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,43 +1,132 @@
 {
-  "seo_title": "Top Scholarships for Indian Students in the USA 2026",
-  "seo_description": "Explore 196 scholarships for Indian students studying in the USA in 2026. Find financial aid opportunities tailored for you.",
-  "h1": "Scholarships for Indian Students Studying in the USA 2026",
-  "intro": "As an Indian student aspiring to study in the USA in 2026, securing financial aid can significantly ease your educational journey. With a total of 196 scholarships available, you have a plethora of options to explore. These scholarships cater to various fields of study and offer different amounts, making it essential to find the ones that align with your academic goals and financial needs. From merit-based awards to need-based grants, the opportunities are diverse. This guide will help you navigate through the available scholarships, providing insights into eligibility criteria, application processes, and tips for success.",
-  "supporting": "Eligibility for scholarships can vary widely. Most scholarships require applicants to be enrolled or accepted at a U.S. institution, maintain a certain GPA, and demonstrate financial need or academic merit. Deadlines also differ, so it’s crucial to keep track of each scholarship's timeline. For example, the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship have specific application periods that you must adhere to. When applying, ensure you have all necessary documents, including transcripts, recommendation letters, and personal statements. Tailoring your application to highlight your unique experiences and aspirations can greatly enhance your chances of success.",
-  "related_intro": "In addition to the scholarships mentioned, there are numerous other funding opportunities available for international students. Exploring various options can lead to significant financial support.",
+  "seo_title": "Find Scholarships for Indian Students in USA",
+  "seo_description": "Scholarships for Indian students in USA with deadlines, award details, and eligibility notes. Compare listings and apply on official pages.",
+  "intro": "Trying to find scholarships for Indian students studying in the USA in twenty twenty six usually means sorting through mixed eligibility rules, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings connected to international students, with rows spanning areas such as education, STEM, medicine, arts, and community. You can apply more selectively by checking how each program describes citizenship or residency, level of study, and field of study. Awards vary by listing, deadlines differ by program, and requirements are not uniform across these rows, so it is worth comparing each option carefully before you move forward.",
+  "h1": "Apply for Scholarships for Indian Students in USA",
+  "supporting": "A smart way to use this list is to compare the requirement line, deadline text, and award description side by side instead of assuming similar titles mean similar rules. Some listings may be broader international student opportunities, while others may fit a narrower academic path such as engineering, health professions, business, or English language and literature. Browse the rows for fit first, then open the official page to verify current terms, required materials, and any essay expectations before you apply.",
+  "related_intro": "If you want to widen or narrow your search after reviewing these listings, related pages can help you compare nearby scholarship themes such as international student options, subject-based awards, or study-level matches in the USA.",
   "how_to_use": [
-    "Research scholarship options thoroughly.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents in advance.",
-    "Tailor your application to each scholarship's criteria.",
-    "Submit applications before the deadlines."
+    "Compare deadline text across the rows",
+    "Read the requirement line carefully",
+    "Scan award details and study level labels",
+    "Open the official source before you apply",
+    "Shortlist the programs that best match your profile"
   ],
   "who_for": [
-    "Indian students planning to study in the USA in 2026.",
-    "Students seeking financial assistance for higher education.",
-    "Individuals looking for merit-based or need-based scholarships."
+    "Indian students planning to study in the USA",
+    "International applicants comparing USA scholarship options",
+    "Graduate or college applicants checking subject-specific funding",
+    "Students in education, engineering, business, or health fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Indian students?",
-      "answer": "There are merit-based, need-based, and field-specific scholarships available for Indian students."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—this catalog lets you compare programs side by side, but amounts and deadlines differ by listing. Some rows show dollar figures, while others may need extra verification on the official scholarship page."
     },
     {
-      "question": "How can I find scholarships that match my profile?",
-      "answer": "Use scholarship search engines and consult your prospective universities for tailored options."
+      "question": "Do all scholarships here require an essay?",
+      "answer": "No, requirements are mixed across these rows. Some listings may ask for essays and some may be lighter-touch, so review each scholarship's official requirements before you apply."
     },
     {
-      "question": "What documents are typically required for scholarship applications?",
-      "answer": "Common documents include transcripts, recommendation letters, and personal statements."
+      "question": "What kinds of scholarships can I explore in this USA-focused list?",
+      "answer": "You can explore a focused set of listings across themes such as Education, STEM, Medicine, Arts, Community, and Miscellaneous. The programs below also span different study levels and fields like engineering, business, education, English, and health professions."
+    },
+    {
+      "question": "Should I apply right away or keep browsing first?",
+      "answer": "Start by comparing fit, award details, and requirement notes, then apply through the official source once a listing matches your profile. Since deadline text appears on these rows and timing varies by program, it is smart to check dates promptly while you browse."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-indian-students-studying-in-usa-2026",
-    "generatedAt": "2026-04-25T13:18:13.625Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:06:27.628Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

@@ -1,0 +1,119 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Minnesota, USA…",
+  "seo_description": "Financial need undergraduate scholarships in Minnesota, USA. Compare awards, deadlines, and requirements, then apply through official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Minnesota that take financial need into account usually means narrowing past broad national results and comparing a smaller, more relevant set of USA listings. This filtered slice brings together programs tied to Minnesota with an undergraduate focus, while still showing a mix of categories such as education, disability, community, and related academic interests. Awards vary by listing, and deadlines differ across the rows, so it is worth checking details promptly rather than assuming one timeline fits all. Many listings in this set appear to have lighter application signals, and some may not require an essay, but requirements can still change from program to program. Use this view to apply more selectively, compare fit, and spot options that match both need-based eligibility and location.",
+  "h1": "Find Financial Need Undergraduate Scholarships in Minnesota USA…",
+  "supporting": "A useful way to read these rows is to compare more than the scholarship title. Look at the requirement line, the category, any study-area clues, and the official source before you decide where to apply. In this Minnesota undergraduate slice, you may see programs connected to education, architecture, disability, or community backgrounds, so the best match is not always the one with the most obvious title. Browse the details side by side, note which listings seem lighter-touch, and verify award terms, residency language, and deadline wording on the sponsor page.",
+  "related_intro": "If this Minnesota need-based undergraduate view feels too narrow, related pages can help you compare nearby paths, such as broader undergraduate results, other Minnesota scholarship filters, or different eligibility themes. That is often the fastest way to find overlapping USA opportunities without starting your search over.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your location and study level",
+    "Verify award details and eligibility on the sponsor site"
+  ],
+  "who_for": [
+    "Minnesota undergraduates with financial need",
+    "Applicants comparing need-based USA scholarships by state",
+    "Students interested in education or architecture related awards",
+    "Minnesota residents reviewing community or disability scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Minnesota based on financial need?",
+      "answer": "Use this filtered view to compare Minnesota listings that match undergraduate study and financial need. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply for every scholarship listed on this Minnesota page?",
+      "answer": "Not necessarily. These rows share the main filters, but requirements still vary by program, so check each official source before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on eligibility, deadline, award amount, and any required materials listed for each program. Amounts vary by listing, and deadlines differ by row, so it is worth reviewing each one carefully."
+    },
+    {
+      "question": "Are these USA scholarships only for Minnesota residents?",
+      "answer": "Some listings in this USA filter may involve Minnesota location criteria, but residency and citizenship rules can differ across programs. Review the official listing details for terms such as U.S. citizen, permanent resident, or other location-specific requirements."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 1000,
+      "maxUsd": 6000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-31",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "AIA Minnesota",
+        "count": 1
+      },
+      {
+        "name": "Allina Health System",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Bennett Clayton Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/minnesota",
+    "generatedAt": "2026-04-26T14:50:28.890Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

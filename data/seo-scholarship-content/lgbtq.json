@@ -1,48 +1,129 @@
 {
-  "seo_title": "LGBTQ Scholarships for Diverse Fields",
-  "seo_description": "Explore 16 LGBTQ scholarships with awards from $1,000 to $60,000. Check deadlines and requirements for each opportunity.",
-  "intro": "Finding financial support tailored for LGBTQ+ individuals can significantly ease the burden of education and related expenses. This catalog features 16 scholarships specifically for the LGBTQ+ community, with award sizes ranging from $1,000 to $60,000. The opportunities span various fields, including education, medicine, arts, and law, making it easier to find a match for your academic and professional goals. Keep in mind that deadlines and requirements vary, so it's important to review each listing carefully.",
-  "h1": "Find LGBTQ Scholarships with Varied Award Amounts",
-  "supporting": "As you explore these scholarships, pay attention to the specific fields and award amounts that resonate with your aspirations. Some scholarships may have lighter requirements, while others could necessitate essays or additional documentation. Given the diversity in deadlines, including some approaching in the next month, make sure to verify the details directly on the sponsor's site to ensure you don't miss out on any opportunities.",
-  "related_intro": "If you're interested in more funding options, consider checking out scholarships focused on specific fields or requirements that align with your interests.",
+  "seo_title": "Find LGBTQ Scholarships to Apply for in USA",
+  "seo_description": "LGBTQ scholarships in the USA: compare awards, deadlines, and requirements, then explore listings and verify details on official pages.",
+  "intro": "Trying to find USA scholarships that specifically recognize LGBTQ eligibility usually means sorting through very different program types, and this filtered slice makes that comparison easier. The rows below bring together opportunities tied to community, education, medicine, humanities, law, and other areas, with options that can fit applicants from high school through graduate study. You can browse for broad support or apply to listings that line up with a particular field such as education, health professions, psychology, public administration, or transportation. Awards, deadlines, residency rules, and other requirements vary from listing to listing, so it is worth reading each row closely. Many programs in this set appear to have lighter application signals, and many listings often show no essay in the metadata, but you should still verify every detail on the official source before you apply.",
+  "h1": "Explore LGBTQ Scholarships in the USA",
+  "supporting": "A useful way to compare these scholarships is to read past the title and check the eligibility line, study level, field tags, and deadline text together. Some listings are broad, while others point to a narrower academic path or community focus. If you want to apply efficiently, shortlist the rows that match your residency status, current level in school, and intended subject, then open the official pages to confirm what documents are required. Because deadlines differ across the list and some may be coming up soon, it helps to review timing early rather than waiting until you are ready to submit.",
+  "related_intro": "If you are not finding the right fit in this LGBTQ-focused set, compare nearby scholarship pages by study level, subject, or residency status. That can surface programs that are not tagged the same way but may still match your background and application plans in the USA.",
   "how_to_use": [
-    "Compare deadlines across different listings",
-    "Scan award amounts to find suitable options",
-    "Read through requirement lines for each scholarship",
-    "Open official pages for the most accurate information",
-    "Shortlist scholarships that fit your profile and verify details"
+    "Compare the eligibility line with your residency and school level",
+    "Read each row for field tags, deadline text, and requirement notes",
+    "Open the official page before you apply and verify current details",
+    "Shortlist the best matches, then compare award wording and application effort"
   ],
   "who_for": [
-    "LGBTQ+ students pursuing education",
-    "Individuals seeking community support scholarships",
-    "Applicants interested in arts or law funding",
-    "Students in medical programs",
-    "Youth looking for leadership scholarships"
+    "LGBTQ applicants in the USA comparing identity-based scholarship options",
+    "High school seniors looking for LGBTQ scholarships before starting college",
+    "College and graduate students seeking support tied to education, medicine, law, or humanities",
+    "International students and permanent residents checking whether LGBTQ listings match their status"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for LGBTQ individuals?",
-      "answer": "The current listing includes 16 scholarships across various categories, including community, education, medicine, law, arts, and miscellaneous fields. This diversity allows applicants to find opportunities that align with their specific interests and career paths."
+      "question": "How can I find LGBTQ scholarships in the USA that fit my situation?",
+      "answer": "Use this filtered view to compare eligibility, study level, field, amount, and deadline row by row. In this USA-focused catalog slice, some listings mention U.S. citizens or permanent residents, while others also include international students—always verify the official page before you apply."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's important to review the details of each scholarship to understand what is needed for your application."
+      "question": "Can I apply if I’m in high school, college, or graduate school?",
+      "answer": "Possibly—these rows include a mix of study levels such as high school senior, college, and graduate student. Check each listing carefully, because eligibility is set by the individual program, not by the filter page as a whole."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes for the scholarships range significantly, with amounts from approximately $1,000 to $60,000 across the listings. Be sure to check individual scholarship details for specific funding amounts."
+      "question": "What should I compare before I apply to an LGBTQ scholarship?",
+      "answer": "Focus on the basics that vary by listing: who can apply, field of study, residency or citizenship rules, award amount, and deadline. Amounts vary across these programs, and deadlines differ by row, so confirm details on the official source before applying."
     },
     {
-      "question": "When should I apply for these scholarships?",
-      "answer": "All 16 scholarships have varying deadlines, with some approaching in the near term. It's advisable to check the specific deadlines for each scholarship promptly to ensure you don’t miss any opportunities."
+      "question": "Are these LGBTQ scholarships only for certain majors or career paths?",
+      "answer": "No single major defines this set—you can explore listings tied to areas like education, medicine, humanities, law, community, and miscellaneous topics. Some rows also point to fields such as psychology, health professions, public administration, and transportation."
+    },
+    {
+      "question": "Are the application requirements usually heavy on essays or extra materials?",
+      "answer": "Many listings in this filtered view appear to have lighter requirement signals, and many are marked as no-essay in the catalog metadata. Still, requirements can change by program, so review the official scholarship page for the exact application steps."
     }
   ],
+  "page_data": {
+    "exactCount": 26,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 60000,
+      "statedAmountCount": 26,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 17,
+      "within60Days": 24,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-06-02"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 26,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "psychology",
+        "public_administration_and_social_service",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident",
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "LEAGUE at AT&T",
+        "count": 2
+      },
+      {
+        "name": "Alabama Dietetic Association",
+        "count": 1
+      },
+      {
+        "name": "Alexander Foundation",
+        "count": 1
+      },
+      {
+        "name": "American Bus Association",
+        "count": 1
+      },
+      {
+        "name": "American Osteopathic Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "medical",
+      "humanities",
+      "law"
+    ]
+  },
   "_meta": {
     "canonicalPath": "lgbtq",
-    "generatedAt": "2026-04-02T10:45:45.685Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 16,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:19:02.960Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 26,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

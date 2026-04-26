@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Tennessee Financial Need Scholarships | USA",
+  "seo_description": "Tennessee financial need scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official listing.",
+  "intro": "Trying to find Tennessee scholarships tied to financial need without sorting through higher-dollar awards first? This filtered USA view narrows the list to programs with listed amounts under ten thousand dollars, so you can compare options that may fit a more targeted search. The rows here span areas such as community, education, STEM, medicine, and humanities, with examples that can apply to different study levels, including high school seniors, college students, and graduate students. Award amounts vary by listing, and the posted deadlines do not line up to one single date, so it is worth checking each row closely. Some programs may have lighter requirements than others, while essay expectations can differ, so always verify details on the official scholarship page before you apply.",
+  "h1": "Explore Tennessee Financial Need Scholarships USA",
+  "supporting": "A focused set of Tennessee listings like this is useful when you want to compare smaller scholarship awards that can still help cover tuition, books, fees, or other education costs. As you browse, look at the requirement lines, residency or citizenship notes, study level, and field-of-study fit. You may also notice that some opportunities appear more general while others connect to specific communities or academic interests. Because at least some deadlines are coming up relatively soon, it makes sense to shortlist strong matches early and confirm the latest terms directly with the provider.",
+  "related_intro": "If these Tennessee financial-need scholarships under ten thousand dollars feel too narrow, related pages can help you explore nearby options by changing one filter at a time. Try comparing other Tennessee scholarship slices, broader financial-need results, or other award ranges to find programs that better match your background and application plans.",
+  "how_to_use": [
+    "Compare each row for award amount, deadline wording, study level, and Tennessee relevance",
+    "Scan requirement and essay details carefully, since expectations vary across programs",
+    "Open the official scholarship page for every strong match and verify eligibility, materials, and current terms",
+    "Shortlist the best-fit listings first, especially any with deadlines that appear to be approaching soon"
+  ],
+  "who_for": [
+    "Tennessee applicants who want to find need-based scholarships with listed awards under ten thousand dollars",
+    "High school seniors, college students, and graduate students comparing Tennessee-focused funding options",
+    "US citizens or permanent residents checking scholarship rows that may match their residency status",
+    "Applicants in fields such as education, business, engineering, agriculture, medicine, or related areas who want to browse relevant listings"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to these scholarships if I’m in high school, college, or graduate school in the USA?",
+      "answer": "Possibly—study level differs across these rows, with examples including high school seniors, college students, and graduate students. Check each listing’s eligibility section and official source to verify who can apply in the USA context."
+    },
+    {
+      "question": "What should I compare before I apply to a scholarship from this list?",
+      "answer": "Compare the listed amount, deadline, study level, location fit, and any requirement details shown for each row. Deadlines differ by program, and requirements can vary, so use the catalog to narrow options and the official page to verify final rules."
+    },
+    {
+      "question": "Are these Tennessee scholarships only for certain majors or categories?",
+      "answer": "Not necessarily—this filtered set includes categories such as Community, Education, STEM, Medicine, Humanities, and Miscellaneous. You can explore rows tied to fields like education, business, engineering, agriculture, and transportation, then confirm any major-specific rules on the official listing."
+    }
+  ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 1500,
+      "maxUsd": 10000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript",
+        "document",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_3",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "transportation_and_materials_moving",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Thurgood Marshall College Fund",
+        "count": 2
+      },
+      {
+        "name": "Institute of Transportation Engineers-Tennessee Section",
+        "count": 1
+      },
+      {
+        "name": "Ninety-Nines-Spaceport Chapter",
+        "count": 1
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem",
+      "humanities",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/tennessee",
+    "generatedAt": "2026-04-26T14:24:54.073Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

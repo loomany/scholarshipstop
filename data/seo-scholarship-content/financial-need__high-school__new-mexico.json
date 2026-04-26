@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find New Mexico High School Need Scholarships | USA",
+  "seo_description": "New Mexico high school financial need scholarships in the USA—compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships for New Mexico high school students with financial need usually means balancing fit, timing, and effort at the same time. This filtered slice brings together programs tied to that combination, so you can compare options without mixing in unrelated listings. The rows below lean toward high school senior opportunities and may touch areas like education, engineering, history, mathematics and statistics, along with broader community and STEM themes. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it is worth reading each row closely. Many listings in this slice appear to have no essay or a lighter application setup, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Find Financial Need Scholarships for New Mexico High School Stud…",
+  "supporting": "Use this view to compare more than just the scholarship title. Check the requirement line for location, study level, and any field cues, then look at deadline text because timing is not the same across these programs and some dates may be coming up soon. Award amounts vary by listing and should be confirmed on the official source. It is also useful to scan category labels such as education, community, humanities, or STEM to decide which rows deserve a closer look. If a program seems relevant, open the source page and verify eligibility before you apply.",
+  "related_intro": "If you are close to qualifying but want a wider set of options, related pages can help you compare nearby scholarship filters such as other New Mexico listings, more high school scholarships, or broader financial need results across the USA catalog.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line for location and study level",
+    "Scan category labels to find education, community, humanities, or STEM matches",
+    "Open the official scholarship page and verify current details",
+    "Shortlist the best fits before you apply"
+  ],
+  "who_for": [
+    "New Mexico high school seniors with financial need",
+    "Applicants comparing local education or STEM scholarship options",
+    "Students seeking scholarships that may have no essay",
+    "Families helping a New Mexico teen shortlist relevant aid programs"
+  ],
+  "faq": [
+    {
+      "question": "How can I find New Mexico scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare the programs below by title, category, amount, and deadline. Then open the official source for each listing to confirm current eligibility, required documents, and how to apply."
+    },
+    {
+      "question": "Can I compare award amounts on this USA scholarship page?",
+      "answer": "Yes, but amounts vary by listing, so compare each row individually rather than assuming one standard award. Verify the latest amount on the official scholarship page before you apply."
+    },
+    {
+      "question": "Do all listings here have the same deadline?",
+      "answer": "No—deadlines differ by program in this New Mexico high school financial-need set. Since these rows show different deadline text and at least one appears relatively soon, check dates promptly on the official source."
+    },
+    {
+      "question": "Are essays usually required for these scholarships?",
+      "answer": "Many listings in this filtered set appear to have no essay flag, but requirements can still vary row to row. Before you apply, review the official page for essays, transcripts, recommendations, or other materials."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filter slice?",
+      "answer": "This focused set of USA listings includes examples tied to community, education, humanities, and STEM themes for high school seniors in New Mexico. Use the catalog to browse options that fit your interests, then verify field-of-study and eligibility details on the official pages."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5500,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 30,
+      "nearestLabels": [
+        "2026-05-02",
+        "2026-05-02",
+        "2026-05-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "history",
+        "mathematics_and_statistics"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Albuquerque Hispano Chamber of Commerce",
+        "count": 2
+      },
+      {
+        "name": "New Mexico Engineering Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "humanities",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/new-mexico",
+    "generatedAt": "2026-04-26T13:57:05.063Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

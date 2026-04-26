@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find African American Scholarships Under Ten Thousand in Pennsyl…",
+  "seo_description": "African American scholarships under ten thousand in Pennsylvania, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Pennsylvania scholarships for African American applicants with awards under a higher-cost threshold usually means balancing fit, effort, and timing. This filtered slice brings together a focused set of USA listings where award amounts stay below that cap, with options touching areas like education, STEM, community, medicine, and other miscellaneous themes. As you compare the rows below, expect requirements, study levels, and residency details to vary by program. Many listings in this view appear to have lighter application signals and often no essay flag, but each scholarship still needs a careful read on its official page. Deadlines differ across listings, and some appear soon, so it makes sense to apply early where you qualify.",
+  "h1": "Compare African American Scholarships Under Ten Thousand in Penn…",
+  "supporting": "Use this list to compare more than the headline amount. Check the requirement line for study level, field of study, citizenship or residency wording, and any Pennsylvania-specific details before you spend time on an application. It is also worth scanning category labels to spot scholarships tied to education, engineering, health professions, community leadership, or broader academic interests. Because deadlines vary and award amounts differ by listing, open the official source for every program you shortlist and verify the latest terms before you apply.",
+  "related_intro": "If these Pennsylvania results feel too narrow, related pages can help you compare nearby filter combinations. You may want to explore broader African American scholarship listings, other Pennsylvania scholarship pages, or additional under-threshold views to find more matches with similar award ranges or subject areas.",
+  "how_to_use": [
+    "Compare deadline wording across rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your level and field",
+    "Apply early when a program fits"
+  ],
+  "who_for": [
+    "African American students in Pennsylvania",
+    "Pennsylvania applicants seeking smaller award scholarships",
+    "Education or STEM focused applicants",
+    "High school seniors and college students",
+    "Graduate students checking targeted USA listings"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for African American · Under · Pennsylvania scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for African American · Under · Pennsylvania scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for African American · Under · Pennsylvania scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 5000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 16,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-18",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "POISE Foundation",
+        "count": 5
+      },
+      {
+        "name": "Pennsylvania Black Conference on Higher Education",
+        "count": 1
+      },
+      {
+        "name": "Philadelphia Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/under-10000/pennsylvania",
+    "generatedAt": "2026-04-26T13:25:31.388Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

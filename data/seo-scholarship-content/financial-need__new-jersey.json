@@ -1,46 +1,127 @@
 {
-  "seo_title": "New Jersey Scholarships for Financial Need",
-  "seo_description": "Explore 24 scholarships in New Jersey for students with financial need. Check varying deadlines and award amounts up to $10,000.",
-  "intro": "Finding financial support for education in New Jersey can be challenging, but there are 24 scholarships available specifically for students demonstrating financial need. These awards range from approximately $500 to $10,000, providing a variety of options to help cover tuition and other educational expenses. With deadlines varying across listings, it's essential to review each opportunity carefully and act promptly, especially since some deadlines are approaching within the next 45 days.",
-  "h1": "Financial Need Scholarships in New Jersey",
-  "supporting": "This collection of scholarships includes opportunities across diverse categories such as education, community, and medicine, among others. Some listings may require essays, while many have lighter application requirements, making it easier to apply. As you explore these options, consider comparing award amounts and eligibility criteria to find the best fit for your situation.",
-  "related_intro": "For more tailored opportunities, check out related pages that focus on scholarships by category or other eligibility criteria.",
+  "seo_title": "Find Financial Need Scholarships in New Jersey, USA",
+  "seo_description": "Financial need scholarships in New Jersey, USA with varying award amounts and deadlines. Compare current listings and apply on official pages.",
+  "intro": "Trying to find and apply for scholarships tied to financial need in New Jersey usually means balancing location rules, eligibility details, and how much effort each application may take. This filtered USA view brings together a focused set of listings connected to New Jersey and need-based eligibility, with programs spanning areas such as education, arts, medicine, disability, community, and other miscellaneous topics. The rows below can include options for high school and college applicants as well as graduate study, and some listings reference citizenship or residency status like U.S. citizen or permanent resident. Awards, deadlines, essay expectations, and requirement details vary by program, so it is worth reading each row closely and checking official pages promptly when a listing looks like a fit.",
+  "h1": "Find Financial Need Scholarships in New Jersey USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan the category tags, study level, and field of study to see whether a program leans toward education, visual and performing arts, health professions, history, security and protective services, or a broader community focus. Then compare deadline wording, award text, and requirement lines side by side before you apply. Some listings may look lighter-touch than others, but every scholarship has its own rules, so open the official source to verify eligibility, documents, and any essay instructions.",
+  "related_intro": "If you are narrowing your search, related pages can help you compare this New Jersey need-based slice with other scholarship filters by topic, study level, or location in the USA. That is useful when you want to find nearby options, broader financial need listings, or programs tied to a specific subject area.",
   "how_to_use": [
-    "Review each listing for specific award amounts and categories",
-    "Check individual deadlines and prioritize those approaching soon",
-    "Compare the requirements, noting which scholarships require essays",
-    "Shortlist your top choices and verify details on the sponsor's official site",
-    "Gather necessary documents before starting your applications"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level and location"
   ],
   "who_for": [
-    "New Jersey residents demonstrating financial need",
-    "Students pursuing education in community service or healthcare fields",
-    "Applicants interested in scholarships with varying requirements"
+    "New Jersey applicants with financial need",
+    "High school students planning ahead",
+    "Undergraduate or graduate students comparing local options",
+    "Applicants seeking education, arts, medical, or community scholarships"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in New Jersey?",
-      "answer": "There are 24 scholarships listed for students with financial need in New Jersey, covering a range of categories including education, community, and medicine. Award sizes vary, with amounts typically ranging from approximately $500 to $10,000."
+      "question": "How can I find financial need scholarships in New Jersey that fit my situation?",
+      "answer": "Use this filtered view to compare New Jersey listings by study level, category, and any citizenship or residency notes shown in each row. Then verify eligibility on the official scholarship page before you apply, since requirements differ by program."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 24 scholarships have specific deadlines, which vary by program. It's important to check each listing for the exact dates, as some deadlines may be approaching within the next 45 days."
+      "question": "Can I apply if I live in the USA but I’m not sure whether a scholarship is only for New Jersey students?",
+      "answer": "Check each listing carefully, because this catalog slice is filtered to New Jersey but individual programs may define location, residency, or school ties in different ways. Official sources are the best place to confirm whether USA applicants, New Jersey residents, or specific student groups qualify."
     },
     {
-      "question": "Do these scholarships require essays or other application materials?",
-      "answer": "Requirements vary among the scholarships; while many do not require essays, there are some that do. Review each scholarship listing carefully to understand the specific application requirements."
+      "question": "What should I compare before I apply to these New Jersey financial need scholarships?",
+      "answer": "Compare award amount, deadline, study level, and category first, then look for any essay or extra requirement notes in the listing. Amounts and deadlines vary by row, so confirm the latest details on the official page for each program you want to apply to."
     },
     {
-      "question": "How can I verify the details of each scholarship?",
-      "answer": "You can click on each scholarship listing to access detailed information, including eligibility criteria, award amounts, and application requirements. This ensures you have the most accurate and up-to-date information."
+      "question": "Are there different types of scholarships to explore in this New Jersey financial need list?",
+      "answer": "Yes—these rows span multiple themes, including education, disability, arts, medicine, community, and miscellaneous areas. You can also find listings tied to levels from high school through undergraduate and graduate study, so it helps to browse by the labels that match your profile."
     }
   ],
+  "page_data": {
+    "exactCount": 29,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 29,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 14,
+      "within60Days": 27,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 25,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "visual_and_performing_arts",
+        "health_professions_and_clinical_sciences",
+        "architecture_and_related_services",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 5
+      },
+      {
+        "name": "American Water Works Association-New Jersey Section",
+        "count": 3
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 2
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      },
+      {
+        "name": "New Jersey Utilities Association",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability",
+      "arts",
+      "medical",
+      "community"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/new-jersey",
-    "generatedAt": "2026-04-02T11:02:02.637Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 24,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:07:58.860Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 29,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

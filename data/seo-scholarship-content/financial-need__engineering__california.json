@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Financial Need Engineering Scholarships in California, USA…",
+  "seo_description": "Financial need engineering scholarships in California, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find engineering scholarships in California that also consider financial need usually means balancing fit, timing, and effort at the same time. This filtered USA view narrows the search to a focused set of listings where those priorities overlap, so you can compare options without wading through unrelated awards. The programs below do not all work the same way: award amounts vary by listing, deadlines differ by program, and requirement details can range from lighter application steps to materials that need more preparation. You may also see overlap with broader STEM, community, education, transportation, or health-related themes, which makes this slice useful if your engineering path crosses into adjacent fields.",
+  "h1": "Find California Engineering Scholarships for Financial Need USA…",
+  "supporting": "Use these rows to compare more than the title alone. Check the requirement line, study level, residency wording, and field labels to see which scholarships are worth opening first. Some listings may be faster to apply for, while others may ask for more supporting materials, so it helps to browse with a shortlist in mind. Because deadline text appears across this slice and some opportunities may be coming up soon, it is smart to verify details promptly on the official scholarship page before you apply.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship pages by changing one filter at a time. Looking at other engineering results, other California-focused listings, or broader financial-need scholarships can reveal programs with similar themes but different eligibility details.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open official pages to verify details",
+    "Shortlist listings that match your study level",
+    "Check award text and field labels together"
+  ],
+  "who_for": [
+    "California students pursuing engineering studies",
+    "Applicants seeking need-based scholarship options",
+    "High school seniors planning engineering programs",
+    "College or graduate students in engineering-related fields"
+  ],
+  "faq": [
+    {
+      "question": "How do I find California engineering scholarships for students with financial need?",
+      "answer": "Use this filtered view to compare the programs below, then open each row to verify eligibility on the official scholarship page. In this USA-focused slice, details like study level, residency wording, and field fit can differ by listing."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here?",
+      "answer": "Not automatically. Before you apply, check each listing’s official source for its exact rules, because requirements vary row to row even within financial-need engineering scholarships in California."
+    },
+    {
+      "question": "How should I compare award amounts and deadlines on this page?",
+      "answer": "Compare the rows side by side, then confirm the latest amount and deadline on the sponsor or official application page. Award amounts are listed in this catalog, but amounts and deadlines differ by program rather than following one page-wide rule."
+    },
+    {
+      "question": "Are these scholarships only for college engineering students in California?",
+      "answer": "Not necessarily. This filtered set includes mixed study levels in the catalog, so it’s smart to explore each row for the exact level and eligibility language before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 2125,
+      "minUsd": 1000,
+      "maxUsd": 16000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "college_1",
+        "college_2",
+        "graduate_student",
+        "high_school_freshman"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "transportation_and_materials_moving",
+        "architecture_and_related_services",
+        "computer_and_information_sciences"
+      ],
+      "commonResidency": [
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Sonora Area Foundation",
+        "count": 3
+      },
+      {
+        "name": "Flight Path Learning Center and Museum",
+        "count": 2
+      },
+      {
+        "name": "Armenian International Women's Association",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southern California Chapter",
+        "count": 1
+      },
+      {
+        "name": "California Department of Transportation-District 1",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "medical",
+      "community",
+      "hobbies"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/engineering/california",
+    "generatedAt": "2026-04-26T13:45:44.111Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

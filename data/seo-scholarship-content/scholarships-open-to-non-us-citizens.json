@@ -1,43 +1,131 @@
 {
-  "seo_title": "Explore Scholarships Open to Non-US Citizens",
-  "seo_description": "Discover 196 scholarships available for non-US citizens. Find funding opportunities tailored to international students today.",
-  "h1": "Scholarships Open to Non-US Citizens",
-  "intro": "Navigating funding opportunities as a non-US citizen can be challenging, but there are numerous scholarships available specifically for international students. With 196 scholarships currently open, you can find financial support tailored to your unique situation. From merit-based awards to need-based assistance, these scholarships can help you pursue your educational goals in the United States. This guide will help you explore various options and provide insights into the application process, eligibility criteria, and deadlines, ensuring you have the best chance of securing funding.",
-  "supporting": "Eligibility for these scholarships varies widely, with some open to undergraduate and graduate students, while others may focus on specific fields of study or demographic groups. For instance, the Paul and Daisy Soros Fellowships for New Americans supports immigrants and children of immigrants pursuing graduate education. Deadlines also vary, so it’s essential to check each scholarship's specific requirements. When applying, ensure you have all necessary documents, such as transcripts, letters of recommendation, and personal statements, ready to submit. Tailoring your application to highlight your unique background and aspirations can significantly enhance your chances of receiving an award.",
-  "related_intro": "In addition to scholarships, non-US citizens may also explore grants, fellowships, and assistantships that can provide financial support for their studies.",
+  "seo_title": "Find USA Scholarships Open to Non US Citizens",
+  "seo_description": "Scholarships open to non US citizens in the USA with deadlines, award details, and eligibility notes. Compare listings and apply on official pages.",
+  "intro": "Trying to find USA scholarships you can actually apply for as a non-US citizen usually means sorting past listings with mixed eligibility language. This filtered view brings together a focused set of programs tied to that need, including opportunities connected to education, STEM, community, medicine, arts, and other areas. You can compare options for different study levels, from high school seniors through college and graduate students, while checking how each listing handles citizenship or residency details. Awards vary widely by program, and deadlines differ by row, so it is worth reviewing each entry closely rather than assuming one pattern fits all. Some listings may have lighter application requirements, while others ask for essays or more documentation, so use the details in each row before you apply.",
+  "h1": "Find Scholarships Open to Non US Citizens USA",
+  "supporting": "A useful way to browse this list is to compare three things side by side: eligibility wording, study level, and field of study. In this USA scholarship slice, you may see listings tied to education, engineering, business, English, health professions, and broader miscellaneous categories. Some titles are clearly aimed at international students, while others may include non-US citizens alongside other residency groups, so read the requirement lines carefully. If an amount is shown, treat it as listing-specific and verify it on the official page before making decisions. Because some deadlines appear relatively soon, it makes sense to shortlist promising rows early and check dates promptly.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by study level, subject area, or requirement type. That can help you separate broad international-student options from programs that are more specific to majors, essay expectations, or academic stage in the USA.",
   "how_to_use": [
-    "Browse the list of 196 scholarships available.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required documents like transcripts and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up on your applications and seek additional funding if needed."
+    "Read the eligibility line on each row to confirm that non-US citizens can apply and to check any residency wording",
+    "Compare study level and subject tags so you can focus on listings that match your academic stage and field",
+    "Check award text and deadline text row by row, since amounts and timing vary across programs",
+    "Open the official source for every scholarship you shortlist and verify current requirements before you apply"
   ],
   "who_for": [
-    "International students seeking financial assistance.",
-    "Non-US citizens pursuing undergraduate or graduate studies.",
-    "Students from diverse backgrounds looking for merit-based awards."
+    "International applicants looking for USA scholarships that may be open to non-US citizens",
+    "Graduate, college, or high school senior applicants comparing eligibility across different study levels",
+    "Students in education, engineering, business, English, health professions, or related subjects checking for matching listings",
+    "Applicants who need to compare essay expectations and lighter-touch application requirements before they apply"
   ],
   "faq": [
     {
-      "question": "Are these scholarships only for specific fields of study?",
-      "answer": "No, many scholarships are available across various fields, while some may focus on specific disciplines."
+      "question": "How can I find scholarships in the USA that are open to non-US citizens?",
+      "answer": "Use this filtered view to explore listings tagged for non-US citizens, then compare each row’s eligibility details on the official source. In this USA-focused catalog, citizenship, residency, study level, and field can vary by program."
     },
     {
-      "question": "Can I apply for multiple scholarships?",
-      "answer": "Yes, you can apply for multiple scholarships as long as you meet their individual eligibility requirements."
+      "question": "Can I apply to every scholarship listed here if I am an international student?",
+      "answer": "Not automatically. This page helps you find programs that may be open to non-US citizens, but you should verify the exact eligibility rules on each official scholarship page before you apply."
     },
     {
-      "question": "What documents do I need to apply?",
-      "answer": "Typically, you will need transcripts, letters of recommendation, and personal statements, but requirements may vary by scholarship."
+      "question": "What should I compare before I apply?",
+      "answer": "Compare eligibility, study level, field of study, deadline text, and application requirements row by row. Award amounts also vary by listing, so confirm the current amount and terms on the official page."
+    },
+    {
+      "question": "Do all of these scholarships have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, and some dates may be coming up soon, so check each listing promptly. Essay requirements are mixed across these rows, so review the requirements on the official source before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-open-to-non-us-citizens",
-    "generatedAt": "2026-04-25T13:30:52.180Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:12:37.071Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

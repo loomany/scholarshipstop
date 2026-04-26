@@ -1,48 +1,133 @@
 {
-  "seo_title": "Financial Need Scholarships in New Hampshire",
-  "seo_description": "Explore 11 scholarships for financial need in New Hampshire with awards up to $17,000. Check deadlines and requirements.",
-  "intro": "Finding financial support can be challenging, especially for students in New Hampshire. This catalog features 11 scholarships specifically aimed at individuals demonstrating financial need. Award sizes vary significantly, with some opportunities reaching up to $17,000. With a range of deadlines and requirements, it’s essential to explore these options thoroughly to identify the best fit for your educational goals.",
-  "h1": "Financial Need Scholarships in New Hampshire",
-  "supporting": "As you review the listings, pay attention to the varying award amounts and the specific eligibility criteria for each scholarship. Some may require essays while others do not, so be sure to check the details carefully. Comparing deadlines is crucial, especially since some opportunities may have approaching due dates. Always verify information on the official sponsor sites for the most accurate details.",
-  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that focus on specific fields of study or other eligibility criteria.",
+  "seo_title": "Find Financial Need Scholarships in New Hampshire, USA",
+  "seo_description": "Financial need scholarships in New Hampshire, USA: compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find need-based scholarships tied to New Hampshire can get messy fast, especially when programs differ on residency language, study level, field of study, and what counts as financial need. This filtered USA view narrows the search to a focused set of listings connected to New Hampshire and financial need, so you can compare options without wading through unrelated awards. The rows below span areas such as education, community, STEM, humanities, law, and miscellaneous topics, with examples that reach from high school through graduate and adult non-traditional study. Award amounts, deadlines, and application requirements vary by listing, and some opportunities may be lighter-touch than others, so it is worth reading each row closely before you apply.",
+  "h1": "Find Financial Need Scholarships in New Hampshire USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check the requirement lines for study level, residency or citizenship wording, and any field-specific fit such as education, engineering, mathematics, business, or agriculture. Then compare award text and deadline timing side by side, since dates differ across programs and some may be coming up soon. If a listing looks promising, open the official page to verify current rules, confirm what documents are needed, and make sure the New Hampshire connection matches your situation before you apply.",
+  "related_intro": "If these New Hampshire financial need listings feel close but not quite right, related pages can help you compare nearby slices by topic, study level, or other eligibility tags. That is often the fastest way to find similar USA scholarships with a better fit on major, residency, or application effort.",
   "how_to_use": [
-    "Sort listings by award amount or deadline",
-    "Read the requirement lines carefully",
-    "Open the official scholarship pages for details",
-    "Shortlist scholarships that match your profile",
-    "Verify eligibility criteria on sponsor websites"
+    "Compare deadline wording across the rows first",
+    "Read each requirement line for residency and study level",
+    "Scan award text, then shortlist the strongest matches",
+    "Open the official scholarship page to verify current details",
+    "Apply early when a listing appears to close soon"
   ],
   "who_for": [
-    "Students pursuing education in New Hampshire",
-    "Individuals demonstrating financial need",
-    "Community-focused scholarship applicants",
-    "STEM major candidates seeking funding",
-    "Students interested in law and safety programs"
+    "New Hampshire students with demonstrated financial need",
+    "High school seniors comparing local and regional aid",
+    "Graduate or adult non-traditional learners seeking need-based support",
+    "Applicants in education, STEM, business, or agriculture fields",
+    "US citizens or permanent residents checking New Hampshire-linked options"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in New Hampshire?",
-      "answer": "There are currently 11 scholarships listed that cater to students demonstrating financial need in New Hampshire. These scholarships span various categories, including education, community, STEM, humanities, and law."
+      "question": "How can I find financial need scholarships in New Hampshire that fit my situation?",
+      "answer": "Use this filtered view to compare New Hampshire listings by study level, category, and any residency or citizenship notes shown in each row. Then open the official source for each program to verify eligibility, required materials, and how to apply."
     },
     {
-      "question": "How can I find out the specific deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 11 listings include this information. It's important to check the specific dates for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+      "question": "Can I apply to more than one financial need scholarship in this New Hampshire list?",
+      "answer": "Usually, you can explore and apply to multiple programs if you meet each listing’s rules. Treat every row as a separate scholarship with its own official application process and requirements."
     },
     {
-      "question": "Do I need to write an essay to apply for these scholarships?",
-      "answer": "The scholarship requirements vary, with some programs requiring essays while others do not. Be sure to review the details for each scholarship to understand the specific application requirements."
+      "question": "Do all scholarships here have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and this filtered set shows varying award amounts. Listings in this New Hampshire, USA slice include posted amounts, but you should confirm the current amount and deadline on the official page before applying."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes for these scholarships vary, with amounts ranging approximately from $1,000 to $17,000. Each scholarship listing will provide the exact award amount, so check the details for the specific scholarships you are interested in."
+      "question": "What should I compare before I apply?",
+      "answer": "Compare eligibility details, study level, category, and field of study first, since these rows span areas like education, community, STEM, humanities, and law. It also helps to check whether a program appears lighter-touch or asks for extra materials, because requirements can vary by listing."
+    },
+    {
+      "question": "Are these only for traditional college students in the USA?",
+      "answer": "Not necessarily. In this New Hampshire set, you can find programs tied to different study levels, including high school seniors, graduate students, adult non-traditional students, and college students, with some listings also showing USA citizenship or permanent residency labels."
     }
   ],
+  "page_data": {
+    "exactCount": 13,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1000,
+      "maxUsd": 17000,
+      "statedAmountCount": 13,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 12,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "area_ethnic_cultural_and_gender_studies",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Hillsborough County Youth Center Foundation",
+        "count": 1
+      },
+      {
+        "name": "Horticultural Research Institute",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "humanities",
+      "law"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/new-hampshire",
-    "generatedAt": "2026-04-02T11:13:08.851Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 11,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:07:40.290Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 13,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

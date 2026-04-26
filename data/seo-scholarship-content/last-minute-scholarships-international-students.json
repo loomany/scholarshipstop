@@ -1,43 +1,132 @@
 {
-  "seo_title": "Last Minute Scholarships for International Students - 31 Opportunities",
-  "seo_description": "Discover 31 last minute scholarships for international students. Apply today and secure funding for your education!",
-  "h1": "Last Minute Scholarships for International Students",
-  "intro": "Are you an international student seeking financial assistance at the last minute? You're in luck! We have compiled a list of 31 scholarships that are still open for applications. These opportunities range from merit-based awards to those aimed at specific fields such as engineering, public service, and STEM. Whether you need funding for tuition, books, or living expenses, these scholarships can provide the financial support you need to continue your education. Don’t miss your chance to apply; deadlines are approaching fast!",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited institutions. Some scholarships, like the Vanna Christian Sun Legacy Scholarship and the Anderson Engineering Scholarship, may require specific academic achievements or fields of study. Be sure to check each scholarship's requirements carefully. Application deadlines are imminent, so act quickly! Prepare your documents, including transcripts and letters of recommendation, to streamline the application process. Many scholarships also offer online applications, making it easier to submit your materials.",
-  "related_intro": "In addition to last minute scholarships, consider exploring other funding sources such as grants, fellowships, and work-study programs that may also be available to international students.",
+  "seo_title": "Find Last-Minute Scholarships for International Students USA",
+  "seo_description": "Last-minute scholarships for international students in the USA. Compare deadlines, award details, and eligibility, then apply on official pages.",
+  "intro": "Trying to apply before a near-term cutoff changes how you search. This USA scholarship view pulls together a focused set of listings that match international student intent and last-minute timing, so you can find options that may still be open soon and compare them quickly. The programs below span areas such as Education, STEM, Medicine, Humanities, Community, and more, with examples touching engineering, medical mission work, public service, and coding. Award amounts vary by listing and should be verified on the official page, and deadlines differ by program rather than following one shared date. Requirements also vary: some listings may ask for essays, while others appear lighter-touch, so it is worth reading each row closely before you apply.",
+  "h1": "Apply for Last-Minute Scholarships in the USA",
+  "supporting": "Use this filtered list to separate urgent opportunities from ones that only look relevant at first glance. Compare the deadline text first, then check who the scholarship is open to, the study level, and any field tags that match your plans in the USA. If you are deciding between several rows, look at the requirement lines and award details side by side instead of assuming similar titles mean similar rules. This slice is especially useful when you need to move fast but still want to browse across different subjects and applicant profiles.",
+  "related_intro": "If these listings are close but not quite right, related pages can help you narrow by study level, subject area, or other international-student scholarship filters in the USA catalog. That is often the fastest way to find alternatives with a better fit before deadlines pass.",
   "how_to_use": [
-    "Review the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary documents for application.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Sort your attention by the deadline text first, since cutoff dates vary by row",
+    "Compare eligibility details such as citizenship or residency labels, study level, and field tags before you apply",
+    "Scan each listing for essay expectations, requirement lines, and award wording rather than assuming the same rules across this slice",
+    "Open the official scholarship page for every shortlist item to confirm amount, deadline, and submission instructions",
+    "Keep a short list of the best-fit programs and submit the fastest viable applications first"
   ],
   "who_for": [
-    "International students in need of financial aid.",
-    "Students pursuing degrees in various fields.",
-    "Those looking for quick funding solutions."
+    "International students looking for USA scholarships with nearer-term deadlines",
+    "Applicants comparing late-cycle options across Education, STEM, Medicine, Humanities, or Community categories",
+    "Graduate students, high school seniors, juniors, sophomores, and adult non-traditional learners checking current fits",
+    "Students who want to find scholarships that may still be open soon and verify requirements case by case"
   ],
   "faq": [
     {
-      "question": "How do I find last minute scholarships?",
-      "answer": "You can find last minute scholarships by searching online databases, visiting university financial aid offices, and checking scholarship websites."
+      "question": "How can I find last-minute scholarships for international students in the USA?",
+      "answer": "Use this filtered view to compare rows that match international-student eligibility and near-term deadlines. Then open the official source for each listing to confirm current rules, required documents, and whether the program is open to applicants studying in the USA."
     },
     {
-      "question": "What documents do I need to apply?",
-      "answer": "Typically, you'll need transcripts, letters of recommendation, and a personal statement or essay, but requirements vary by scholarship."
+      "question": "Can I apply if I’m an international student but not a U.S. citizen?",
+      "answer": "Possibly—this slice includes listings tied to international_student, while some rows may also mention us_citizen or us_permanent_resident. Check each scholarship’s official page before you apply, because eligibility varies by program."
     },
     {
-      "question": "Are there scholarships specifically for certain majors?",
-      "answer": "Yes, many scholarships target specific fields such as engineering, public service, and STEM, so be sure to check the eligibility criteria."
+      "question": "What should I compare before I apply to these scholarships?",
+      "answer": "Focus on deadline text, study level, field of study, and any essay or requirement details shown in the catalog. Amounts vary by listing, so verify the award and application steps on the official scholarship page."
+    },
+    {
+      "question": "Can I browse these listings by major or study level?",
+      "answer": "Yes—this focused set includes mixed study levels and topics such as education, STEM, medicine, humanities, business, engineering, and communication. Explore the rows that match your background, then verify fit directly with the scholarship provider’s official details."
     }
   ],
+  "page_data": {
+    "exactCount": 35,
+    "award": {
+      "medianUsd": 1575,
+      "minUsd": 500,
+      "maxUsd": 143000,
+      "statedAmountCount": 31,
+      "unstatedAmountCount": 4
+    },
+    "deadline": {
+      "within30Days": 31,
+      "within60Days": 31,
+      "rollingOrUnknown": 4,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z",
+        "2026-04-30T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 26,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "document",
+        "personal_statement",
+        "photo",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "adult_non_traditional",
+        "high_school_senior",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Worcester State University",
+        "count": 2
+      },
+      {
+        "name": "Andrea Beck",
+        "count": 1
+      },
+      {
+        "name": "Ashley Bowman",
+        "count": 1
+      },
+      {
+        "name": "Aura Matilde Memorial Scholarship Fund",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "community",
+      "humanities"
+    ]
+  },
   "_meta": {
     "canonicalPath": "last-minute-scholarships-international-students",
-    "generatedAt": "2026-04-25T13:24:26.796Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 31,
+    "generatedAt": "2026-04-26T13:17:31.658Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 35,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

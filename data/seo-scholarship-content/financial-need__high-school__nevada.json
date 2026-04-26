@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find Nevada High School Need-Based Scholarships | USA",
+  "seo_description": "Nevada high school financial need scholarships in the USA: compare awards, review varying deadlines, and apply through each official listing.",
+  "intro": "Trying to find Nevada scholarships for high school applicants with financial need usually means sorting through mixed eligibility rules, uneven award details, and deadlines that do not line up. This filtered USA view narrows that search to a focused set of listings tied to financial need, high school status, and Nevada, so you can compare options with less noise. The programs below may differ in award size, category focus, and application requirements, and many listings in this slice appear to have lighter-touch requirements with no essay often shown in the metadata. Even so, you should still read each row closely, because eligibility language, required materials, and deadline timing can vary from program to program.",
+  "h1": "Find Financial Need Scholarships for Nevada High School Students…",
+  "supporting": "Use this list to compare more than just the title. Scan the requirement line, note any category cues such as disability, education, or medicine, and check whether a listing connects with your intended field of study. If you plan to apply in the USA for the upcoming cycle, it is smart to review these rows promptly because deadlines differ by program and some may be approaching sooner than others. Award amounts vary by listing and should be verified on the official page before you decide where to focus.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing one filter at a time, such as location, study level, or eligibility theme. That makes it easier to spot programs that are close to your profile without losing the Nevada and high school focus too quickly.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your profile",
+    "Check award text and category labels"
+  ],
+  "who_for": [
+    "Nevada high school students with financial need",
+    "High school seniors comparing Nevada scholarship options",
+    "Applicants seeking no essay scholarships in the USA",
+    "Students interested in education, medicine, or disability related listings"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Nevada scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings tied to financial need, high school status, and Nevada. Then open each row and verify eligibility, required materials, and location details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Nevada high school student?",
+      "answer": "Not automatically—each program can set its own rules beyond these catalog filters. Before you apply, check the official source for grade level wording, residency details, and any extra requirements listed on that specific scholarship."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amounts, deadlines, category fit, and application requirements row by row. Amounts vary by listing, and deadlines differ by program, so confirm both on the official pages before you submit."
+    },
+    {
+      "question": "Are these scholarships usually quick to apply for?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many sampled rows show no essay flag in the catalog. Still, requirements can change, so review the official application instructions for each scholarship before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 16,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-20",
+        "2026-04-20"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "construction_trades",
+        "engineering"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      },
+      {
+        "name": "Japan Exchange and Teaching Program Alumni Association of Northern California",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "disability",
+      "education",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/nevada",
+    "generatedAt": "2026-04-26T13:56:27.079Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

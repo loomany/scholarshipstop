@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find New Jersey Financial Need Scholarships | USA",
+  "seo_description": "New Jersey financial need scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on each official program page.",
+  "intro": "Trying to find New Jersey scholarships in the USA that consider financial need and stay under a lower award ceiling usually means sorting through very different programs at once. This filtered slice brings those listings together so you can compare options without losing the New Jersey focus. The rows below span areas such as education, arts, medicine, disability, community, and other miscellaneous categories, with study levels ranging from high school through undergraduate and graduate paths. Some listings may be open to US citizens or permanent residents, and requirements can differ from one program to the next. Award amounts, essay expectations, and deadlines vary by listing, so it is smart to apply early and verify each detail on the official source.",
+  "h1": "Explore New Jersey Financial Need Scholarships USA",
+  "supporting": "A useful way to read this set is to compare the requirement line first, then check the award text, location fit, and study level before you open the full listing. You may find programs tied to education, visual and performing arts, health professions, history, or security and protective services, alongside broader community-focused options. Because some deadlines appear sooner than others, it is worth scanning promptly, shortlisting strong matches, and confirming final eligibility, residency language, and submission instructions on the sponsor page before you apply.",
+  "related_intro": "If this New Jersey and financial-need combination feels too narrow, related pages can help you compare nearby filter paths. You might want to explore other New Jersey scholarship views, broader financial need listings, or other award ranges to find programs that fit your course of study, residency status, or application workload.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages to verify details",
+    "Shortlist listings that match your study level",
+    "Check award wording before you apply"
+  ],
+  "who_for": [
+    "New Jersey residents with financial need",
+    "High school students planning college costs",
+    "Undergraduate or graduate applicants comparing smaller awards",
+    "Applicants in education, arts, medicine, or community-focused fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here if I live in New Jersey?",
+      "answer": "Not automatically. Some rows may also require a specific study level, field, or USA citizenship or residency status such as U.S. citizen or permanent resident, so check each listing carefully before you apply."
+    },
+    {
+      "question": "What should I compare first when I explore these scholarship listings?",
+      "answer": "Start with the award amount, deadline text, study level, and any field or category match such as education, arts, medicine, disability, or community. This makes it easier to compare the programs below and focus on the best-fit options."
+    },
+    {
+      "question": "Do all of these scholarships have the same application requirements?",
+      "answer": "No—requirements vary across this catalog slice. Some listings may be lighter-touch, while others can ask for more materials such as an essay, so review each scholarship's official application instructions before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 29,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 29,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 14,
+      "within60Days": 27,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 25,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "visual_and_performing_arts",
+        "health_professions_and_clinical_sciences",
+        "architecture_and_related_services",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 5
+      },
+      {
+        "name": "American Water Works Association-New Jersey Section",
+        "count": 3
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 2
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      },
+      {
+        "name": "New Jersey Utilities Association",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability",
+      "arts",
+      "medical",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/new-jersey",
+    "generatedAt": "2026-04-26T14:21:11.842Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 29,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

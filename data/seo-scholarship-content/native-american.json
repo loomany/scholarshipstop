@@ -1,48 +1,126 @@
 {
-  "seo_title": "Explore 34 Native American Scholarships Available",
-  "seo_description": "Find Native American scholarships with awards from $500 to $10,000. Check deadlines and requirements for each opportunity.",
-  "intro": "Finding financial support tailored for Native American students can be a crucial step in pursuing higher education. This selection features 34 scholarships specifically designed for Native American applicants, with award amounts generally ranging from $500 to $10,000. With a variety of categories including education, STEM, and medicine, these opportunities can help ease the financial burden of college. Be mindful that deadlines vary, and some scholarships may require essays, so it's important to review each listing carefully.",
-  "h1": "Native American Scholarships: 34 Opportunities Available",
-  "supporting": "As you explore this list, consider comparing the award amounts and categories that align with your academic interests. Some scholarships may have lighter requirements, making them more accessible. Pay attention to the varying deadlines, especially since some opportunities may close soon. This slice is worth scanning for its diverse options and potential for significant financial aid.",
-  "related_intro": "If you're interested in exploring more scholarship opportunities, consider checking out related categories focused on education, STEM, or community support.",
+  "seo_title": "Find Native American Scholarships in the USA",
+  "seo_description": "Native American scholarships in the USA: compare awards, deadlines, and requirements, then explore listings and apply on official pages.",
+  "intro": "Trying to find USA scholarships for Native American students usually means sorting through very different eligibility rules, study levels, and subject areas at once. This filtered view brings those listings into one place so you can compare options across education, STEM, community, medicine, arts, and other categories without losing sight of the eligibility focus. The programs below span multiple stages, from high school applicants to graduate study, and some listings may fit fields such as education, business, engineering, journalism, or computer science. Award amounts vary by listing and should be confirmed on the official page, and deadlines differ by program, with some dates coming up soon. Requirements also vary, so it is worth checking each row closely before you apply.",
+  "h1": "Compare Native American Scholarships in the USA",
+  "supporting": "A useful way to browse this set is to compare more than the scholarship title alone. Look at the study level, category, award text, deadline line, and any requirement notes together to see which programs are actually a match. You may notice a mix of broader education funding and more targeted opportunities tied to community, medical, or STEM interests. Because some listings appear lighter-touch while others may ask for more documentation or written materials, this slice is worth scanning carefully if you want to find options you can realistically complete and submit in time.",
+  "related_intro": "After you review these Native American scholarship listings, it can help to explore nearby categories such as education, STEM, community, medicine, or arts if you want a narrower set of USA opportunities tied to your academic path or interests.",
   "how_to_use": [
-    "Compare deadlines to prioritize applications",
-    "Scan award amounts to find suitable funding",
-    "Read the requirements for each scholarship carefully",
-    "Open official pages for detailed information",
-    "Shortlist scholarships that match your profile"
+    "Compare the eligibility line, study level, and category on each row before you shortlist anything",
+    "Check award text and deadline details side by side, since amounts and due dates vary by program",
+    "Read requirement notes carefully to see whether a listing looks lighter-touch or asks for more materials",
+    "Open the official scholarship page for every program you plan to apply to and verify current rules before submitting"
   ],
   "who_for": [
-    "Native American undergraduate students",
-    "Students pursuing degrees in STEM fields",
-    "Applicants interested in medical or health-related studies",
-    "Individuals seeking scholarships with lighter requirements",
-    "Students looking for opportunities in the arts"
+    "Native American applicants in the USA comparing scholarships across high school, college, and graduate study",
+    "Students seeking funding connected to education, STEM, medicine, arts, or community-focused programs",
+    "US citizens or permanent residents checking eligibility-specific scholarship options",
+    "Applicants in fields such as education, business, engineering, journalism, or computer and information sciences"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Native American students?",
-      "answer": "There are 34 scholarships listed specifically for Native American students, covering a range of categories including education, STEM, medicine, arts, and community initiatives. Each scholarship may have unique eligibility criteria and focus areas, so it's beneficial to review the details of each listing."
+      "question": "How can I find Native American scholarships in the USA that match my study level or major?",
+      "answer": "Use this filtered view to compare rows by study level, field, and category, then open the official source for the exact eligibility details. In this USA-focused set, examples span high school seniors, college students, and graduate students across areas like education, business, engineering, journalism, and computer science."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships; while some may require essays, others do not. It's important to check the specific details for each scholarship to understand what is needed for your application."
+      "question": "Can I apply to more than one scholarship from this Native American list?",
+      "answer": "You can explore multiple listings here, but each program has its own rules on the official page. Before you apply, verify eligibility, required materials, and whether the program allows separate or repeat applications."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 34 scholarships have deadlines, but they differ from one listing to another. Be sure to verify the deadlines for each scholarship promptly, as some may be approaching within the next 45 days."
+      "question": "Are these scholarships only for one subject area, or can I browse different categories?",
+      "answer": "You can browse a focused set of listings across multiple categories, not just one subject. This slice includes examples in education, STEM, community, medicine, arts, and miscellaneous topics, so it helps to compare both eligibility and academic fit row by row."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships available range from approximately $500 to $10,000, though specific amounts can vary by program. Check each listing for exact award details to see what fits your needs."
+      "question": "Do these Native American scholarships always require an essay?",
+      "answer": "Requirements differ across programs, and essay expectations are mixed in the catalog data. Some listings may be lighter-touch than others, but you should always check the official page before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 48,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 20000,
+      "statedAmountCount": 48,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 16,
+      "within60Days": 37,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-23",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 45,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement",
+        "document",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_3",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "communication_and_journalism",
+        "computer_and_information_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Native Forward Scholars Fund",
+        "count": 5
+      },
+      {
+        "name": "The CIRI Foundation",
+        "count": 4
+      },
+      {
+        "name": "AISES",
+        "count": 3
+      },
+      {
+        "name": "Koniag Education Foundation",
+        "count": 2
+      },
+      {
+        "name": "Public Relations Student Society of America",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous",
+      "medical",
+      "arts"
+    ]
+  },
   "_meta": {
     "canonicalPath": "native-american",
-    "generatedAt": "2026-04-02T10:49:57.209Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 34,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:15:22.500Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 48,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,48 +1,128 @@
 {
-  "seo_title": "Missouri Scholarships for Financial Need Students",
-  "seo_description": "Explore 25 scholarships in Missouri for students with financial need. Check varying deadlines and award amounts up to $12,000.",
-  "intro": "Finding scholarships based on financial need can significantly ease the burden of education costs, especially in Missouri. This catalog features 25 scholarships that cater specifically to students demonstrating financial need, with award sizes typically ranging from $750 to $12,000. While many of these opportunities require essays, others may have lighter requirements, making it easier for applicants to apply. Be sure to check individual deadlines, as they vary across listings and some may be approaching soon.",
-  "h1": "Scholarships for Financial Need in Missouri",
-  "supporting": "As you explore these scholarships, pay attention to the varying award amounts and eligibility criteria. Some scholarships focus on specific fields such as education, medicine, and community service, while others may be more general. Comparing the requirements and deadlines will help you prioritize which scholarships to apply for first. This slice of opportunities is particularly valuable for students in Missouri looking to maximize their financial aid options.",
-  "related_intro": "For more tailored options, consider exploring scholarships based on specific fields of study or those available to students in different states.",
+  "seo_title": "Find Financial Need Scholarships in Missouri, USA",
+  "seo_description": "Financial need scholarships in Missouri, USA with varying award amounts and deadlines. Compare listings and apply through official program pages.",
+  "intro": "Trying to find Missouri scholarships tied to financial need usually means balancing location rules, study level, and how much paperwork each application asks for. This filtered USA view brings those factors together so you can compare a focused set of listings without jumping between unrelated programs. The rows here span areas such as education, STEM, community, law, and medicine, with examples that reach from high school seniors to graduate students. Awards are not all the same, deadlines differ by program, and requirement details can change from one listing to the next. Some entries may be lighter touch than others, but you should still read each requirement line carefully before you apply.",
+  "h1": "Find Financial Need Scholarships in Missouri USA",
+  "supporting": "Use this list to compare more than the title alone. Check who the scholarship is for, note whether Missouri residency or USA citizenship status appears in the eligibility details, and look at the study level and field tags to see where a listing fits. It is also worth scanning award text and deadline wording side by side, since values vary by listing and some dates may be coming up soon. Before you apply, open the official page for every scholarship you shortlist and verify the latest rules there.",
+  "related_intro": "If these Missouri financial need scholarships feel close but not quite right, related pages can help you narrow by study level, field, or other eligibility details. That is useful when you want to compare nearby options in the USA catalog without losing the Missouri focus.",
   "how_to_use": [
-    "Review the list for scholarships that match your financial situation",
-    "Compare award amounts and eligibility criteria",
-    "Check individual deadlines to ensure timely applications",
-    "Look for scholarships with lighter requirements to increase your chances",
-    "Visit official scholarship pages for detailed information and application instructions"
+    "Sort rows by deadline first",
+    "Read each requirement line closely",
+    "Compare award wording across listings",
+    "Open the official page to verify details",
+    "Shortlist programs that match your level and field"
   ],
   "who_for": [
-    "Students in Missouri demonstrating financial need",
-    "Undergraduate and graduate students seeking funding",
-    "Applicants interested in education, medicine, or community service",
-    "Students looking for scholarships with varying requirements",
-    "Individuals planning to apply for multiple scholarships"
+    "Missouri residents with financial need",
+    "High school seniors planning college",
+    "Community college students preparing to transfer",
+    "Graduate students seeking Missouri aid",
+    "Applicants in education, law, STEM, or health fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Missouri?",
-      "answer": "The current listing includes 25 scholarships categorized under education, miscellaneous, STEM, community, law, and medicine. This variety allows applicants to find opportunities that align with their academic and career goals."
+      "question": "How can I find Missouri scholarships based on financial need in this filtered view?",
+      "answer": "Use these rows to compare Missouri-focused listings that include financial need in their eligibility. Then open each scholarship and verify the official requirements, residency details, and deadline on the source page."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes for these scholarships vary, with amounts ranging approximately from $750 to $12,000. Each scholarship has its own funding level, so be sure to check the specific details for each opportunity."
+      "question": "Can I apply if I’m in high school, college, or graduate school in the USA?",
+      "answer": "Possibly—this filtered set includes programs across levels such as high school senior, college, and graduate study. Check each listing carefully, because eligibility varies by row and some scholarships may also require U.S. citizenship or permanent residency."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. While some may require essays, many do not, so it's important to review each scholarship's details to understand what is needed for your application."
+      "question": "Are these only for certain majors or can I explore different fields?",
+      "answer": "You can explore a mix of categories and majors in this Missouri financial-need slice, including education, STEM, law, medicine, arts, engineering, and health-related fields. Don’t assume every row fits every major—use the listing details to narrow your options."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 25 scholarships listed have deadlines, but they differ from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+      "question": "Do all of these scholarships have the same deadline or application requirements?",
+      "answer": "No—deadlines differ by program, and some dates appear to be coming up soon, so it’s smart to check promptly. Requirements also vary, including whether an essay is needed, so confirm every detail on the official scholarship page before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 27,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 750,
+      "maxUsd": 12000,
+      "statedAmountCount": 27,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 24,
+      "within60Days": 26,
+      "rollingOrUnknown": 0,
+      "nearestDays": 13,
+      "nearestLabels": [
+        "2026-04-15",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 24,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student",
+        "high_school_freshman"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "legal_professions_and_law_studies",
+        "visual_and_performing_arts",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 15
+      },
+      {
+        "name": "Greater Kansas City Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "Missouri Scholarship and Loan Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "law",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/missouri",
-    "generatedAt": "2026-04-02T11:00:19.033Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 25,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:06:26.136Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 27,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,43 +1,136 @@
 {
-  "seo_title": "Top Scholarships for Ghanaian Students in the USA",
-  "seo_description": "Explore 196 scholarships available for Ghanaian students pursuing education in the USA. Apply now to secure your future!",
-  "h1": "Scholarships for Ghanaian Students in the USA",
-  "intro": "Studying in the USA can be an enriching experience for Ghanaian students, but the financial burden can be daunting. Fortunately, there are 196 scholarships specifically designed to support international students from Ghana. These scholarships can significantly reduce tuition fees and living costs, making it easier to focus on your studies. From merit-based awards to need-based grants, a variety of options are available to help you achieve your academic goals. Whether you are pursuing undergraduate or graduate studies, there are scholarships tailored to your needs and aspirations.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to Ghanaian students enrolled in accredited institutions in the USA. Common criteria include academic excellence, community involvement, and specific fields of study. Deadlines also vary, so it's crucial to check each scholarship's website for the most accurate information. When applying, ensure that you have all required documents, including transcripts, letters of recommendation, and personal statements. Tailoring your application to highlight your unique experiences and goals can enhance your chances of success. Remember to apply early and keep track of all deadlines to maximize your opportunities.",
-  "related_intro": "In addition to the scholarships listed, there are numerous financial aid options available for international students. Exploring these can further alleviate the cost of studying abroad.",
+  "seo_title": "Find Scholarships for Ghanaian Students in USA",
+  "seo_description": "Scholarships for Ghanaian students in USA with deadlines, award details, and eligibility. Compare listings and apply on official pages.",
+  "intro": "Trying to find scholarships for Ghanaian students in the USA usually means sorting through mixed eligibility rules, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings connected to that search, including options that may overlap with education, STEM, medicine, arts, community, and other academic paths. As you compare the rows below, expect variation in award wording, essay expectations, and requirement details. Some listings appear broader for international students, while others may fit a narrower profile based on level of study or field. Deadlines also differ by program, so it is smart to check timing early and apply promptly where the fit looks strong.",
+  "h1": "Apply for Scholarships for Ghanaian Students in USA",
+  "supporting": "Use this list to compare more than just the title. Read each row for study level, citizenship or residency language, field tags, and any requirement notes that affect fit for a Ghanaian applicant studying in the USA. Awards vary by listing and should be verified on the official page, and requirement lines may be lighter for some programs than others. It is also worth checking whether an essay is expected before you shortlist options. If a listing looks relevant, open the source page and confirm the latest rules before you apply.",
+  "related_intro": "If these results feel too broad or too narrow, related pages can help you refine the search by topic, study level, or wider international student eligibility. That is often the fastest way to find nearby matches worth comparing alongside this Ghanaian student filter.",
   "how_to_use": [
-    "Browse the list of scholarships available for Ghanaian students.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents like transcripts and recommendations.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline wording across the rows",
+    "Read the requirement line before shortlisting",
+    "Check study level and field tags carefully",
+    "Open the official page to verify current rules",
+    "Shortlist strong matches and apply early"
   ],
   "who_for": [
-    "Ghanaian students seeking undergraduate or graduate education in the USA.",
-    "Students with strong academic records and community involvement.",
-    "Individuals looking for financial assistance to study abroad."
+    "Ghanaian students planning to study in the USA",
+    "International applicants comparing USA scholarship options by subject",
+    "Graduate or undergraduate candidates checking eligibility details",
+    "Students in education, engineering, business, health, or arts fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available?",
-      "answer": "There are merit-based, need-based, and field-specific scholarships available for Ghanaian students."
+      "question": "How can I find scholarships for Ghanaian students in the USA on this page?",
+      "answer": "Use this filtered view to compare rows that match Ghanaian students looking for study support in the USA. Then open each listing and verify eligibility, award details, and application steps on the official source before you apply."
     },
     {
-      "question": "How do I find the right scholarship for me?",
-      "answer": "Review eligibility criteria, application requirements, and deadlines for each scholarship to find the best fit."
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—this catalog lets you compare listings side by side, but amounts and deadlines vary by program. Some rows show award figures, while others require you to confirm the current amount and deadline on the official page."
     },
     {
-      "question": "Can I apply for multiple scholarships?",
-      "answer": "Yes, you can apply for multiple scholarships to increase your chances of receiving financial aid."
+      "question": "Are these scholarships only for one study level or major?",
+      "answer": "No. The programs below span multiple study levels and topics, with examples in education, STEM, medicine, arts, community, and miscellaneous areas. If you want to explore options, check each row for the level, field of study, and eligibility details listed there."
+    },
+    {
+      "question": "Do all scholarships for Ghanaian students in the USA require an essay?",
+      "answer": "No—requirements vary across these listings. Some programs may ask for essays and others may be lighter-touch, so review each scholarship's requirements carefully on the catalog row and official source before you apply."
+    },
+    {
+      "question": "What should I verify before applying to a scholarship from this list?",
+      "answer": "Confirm citizenship or residency wording, study level, field of study, deadline, and the current award amount on the official scholarship page. Since these rows cover a focused set of USA-relevant listings and deadlines differ by program, it is smart to check dates promptly."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-ghanaian-students-in-usa",
-    "generatedAt": "2026-04-25T13:19:21.030Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:05:54.818Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

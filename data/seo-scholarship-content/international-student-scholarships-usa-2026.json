@@ -1,43 +1,128 @@
 {
-  "seo_title": "Explore 196 International Student Scholarships in the USA for 2026",
-  "seo_description": "Discover 196 international student scholarships in the USA for 2026. Find funding opportunities to support your education journey.",
-  "h1": "International Student Scholarships in the USA for 2026",
-  "intro": "If you're an international student looking to study in the USA in 2026, you're in luck! There are currently 196 scholarships available specifically designed to support your educational journey. These scholarships vary in eligibility criteria, award amounts, and application processes, providing a diverse range of options for students from around the globe. From merit-based awards like the Vanna Christian Sun Legacy Scholarship to need-based options like the DC Tuition Assistance Grant, there are funding opportunities that cater to various academic backgrounds and financial situations. Start your scholarship search today to make your dream of studying in the USA a reality!",
-  "supporting": "Eligibility for these scholarships typically includes being an international student enrolled or planning to enroll in a U.S. institution. Many scholarships require a minimum GPA, while others may focus on specific fields of study or extracurricular involvement. Deadlines vary, so it’s crucial to check individual scholarship requirements. For application advice, ensure you prepare strong personal statements, gather recommendation letters, and submit all required documents on time. Scholarships like the Paul and Daisy Soros Fellowships for New Americans and the Razor's Edge Global Scholarship offer substantial financial support, so don’t miss out on these opportunities!",
-  "related_intro": "In addition to the scholarships listed, numerous resources can help you find additional funding and support for your studies in the USA.",
+  "seo_title": "Find International Student Scholarships in USA",
+  "seo_description": "International student scholarships in the USA with deadlines, award details, and eligibility to compare. Explore listings and apply on official pages.",
+  "intro": "Trying to find USA scholarships for international students in the current cycle usually means sorting through mixed eligibility rules, study levels, and subject areas fast. This filtered slice brings together a focused set of listings tied to that search, so you can compare options for education, STEM, arts, community, medicine, and other academic paths without jumping between unrelated results. The rows below include programs that may fit graduate students, college students, and some earlier study stages, but requirements are not uniform. Award amounts vary by listing, deadlines differ by program, and essay expectations are mixed, so it is worth reading each row closely before you apply.",
+  "h1": "Compare International Student Scholarships in USA",
+  "supporting": "A smart way to use this list is to compare the requirement line, study level, category tags, and deadline text side by side before opening individual listings. Some programs may look broader, while others are clearly tied to a field such as engineering, education, business, English, or health professions. If you want to find scholarships worth pursuing first, scan for matches on citizenship or residency wording, then verify the full rules on the official page. That extra check matters because award details, application materials, and timing can change from one program to the next.",
+  "related_intro": "If you do not find the right fit here, related scholarship pages can help you narrow by study level, subject area, or requirement style. That is useful when you want to compare international student options in the USA against broader education or STEM listings.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare necessary documents and personal statements.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline text across the rows",
+    "Read the requirement line before you apply",
+    "Open official pages to verify eligibility details",
+    "Shortlist listings that match your study level",
+    "Check award wording because amounts vary"
   ],
   "who_for": [
-    "International students planning to study in the USA.",
-    "Students seeking financial assistance for tuition and fees.",
-    "Individuals looking for merit-based or need-based scholarships."
+    "International students seeking USA scholarship options",
+    "Graduate applicants comparing funding by subject area",
+    "College students checking mixed essay requirements",
+    "Applicants in engineering, education, business, or health fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various types of scholarships including merit-based, need-based, and field-specific awards."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—these rows include deadline text, and many listings show award amounts, but both can vary a lot by program. Treat the catalog as a starting point and verify the latest amount, deadline, and renewal terms on the official scholarship page before you apply."
     },
     {
-      "question": "How can I find more scholarships?",
-      "answer": "You can search online databases, university websites, and scholarship search engines for more opportunities."
+      "question": "What kinds of scholarships can I explore in this filtered list?",
+      "answer": "The programs below span categories such as Education, STEM, Miscellaneous, Community, Medicine, and Arts, with sample fields including education, business, engineering, English, and health professions. Study levels also vary, so you can browse for options that better match your academic stage."
     },
     {
-      "question": "What is the typical application process for scholarships?",
-      "answer": "The application process usually involves submitting an application form, personal statements, and recommendation letters."
+      "question": "Do these USA scholarship listings all require essays?",
+      "answer": "No single rule applies across this page—some listings may ask for essays, while others may be lighter-touch. Review each scholarship's official requirements before you start an application, especially since deadlines differ by program and some dates may be coming up soon."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "international-student-scholarships-usa-2026",
-    "generatedAt": "2026-04-25T13:30:31.239Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:59:21.951Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

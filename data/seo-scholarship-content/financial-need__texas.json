@@ -1,48 +1,130 @@
 {
-  "seo_title": "Texas Scholarships for Financial Need | 48 Options",
-  "seo_description": "Explore 48 Texas scholarships based on financial need. Award sizes vary, and deadlines differ—check details for each listing.",
-  "intro": "Finding financial support can be a critical step for students in Texas, especially those facing economic challenges. This collection features 48 scholarships specifically aimed at addressing financial need, with award sizes ranging from approximately $400 to $12,000. Each listing has varying requirements and deadlines, making it essential to review them closely to identify the best opportunities for your situation.",
-  "h1": "Find Financial Need Scholarships in Texas",
-  "supporting": "As you explore these scholarships, pay attention to the specific eligibility criteria and award amounts, which reflect a diverse range of fields including education, STEM, and community service. With all listings including deadlines, some of which are approaching, it’s advisable to act quickly and verify details directly on the sponsors' websites to ensure you meet all necessary requirements.",
-  "related_intro": "If you're interested in similar funding opportunities, consider checking out related pages focusing on scholarships by category or location.",
+  "seo_title": "Find Financial Need Scholarships in Texas, USA",
+  "seo_description": "Financial need scholarships in Texas, USA with deadlines that vary by program. Compare listings, explore categories, and apply on official pages.",
+  "intro": "Trying to find Texas scholarships that take financial need into account usually means sorting through programs with very different rules, study levels, and subject areas. This filtered USA view gives you a focused set of listings tied to Texas and the financial-need eligibility bucket, so you can compare options without mixing in unrelated awards. You’ll see programs connected to areas like Education, Community, STEM, Disability, Arts, and other miscellaneous topics, with examples spanning high school seniors through graduate students. Award amounts vary by listing and should be verified on the official pages, and deadlines differ by program, with some dates close enough that it makes sense to check rows promptly. Requirements also vary, so use this list to apply more strategically rather than assuming every scholarship asks for the same materials.",
+  "h1": "Find Financial Need Scholarships in Texas USA",
+  "supporting": "A smart way to use these rows is to compare more than the title. Look at the study level, residency or citizenship wording, field-of-study fit, and any requirement notes before you decide which scholarships to open first. In this Texas slice, you may spot listings tied to education, engineering, business, agriculture, construction trades, and community-focused themes, so it is worth scanning beyond your exact major. Some programs may be lighter-touch than others, but you should still read each listing carefully and verify details on the sponsor or official application page before you apply.",
+  "related_intro": "If you do not find enough strong matches here, check related scholarship pages that narrow by study level, subject area, or other eligibility details alongside Texas. That makes it easier to compare nearby options and spot programs you might miss in a broader search.",
   "how_to_use": [
-    "Compare deadlines for each scholarship to prioritize your applications",
-    "Scan award amounts to identify the best fit for your financial needs",
-    "Read through the requirement lines to understand what each scholarship entails",
-    "Open official pages for more details and updates from scholarship sponsors",
-    "Shortlist potential scholarships that align with your background and goals"
+    "Compare each row for study level, category, and Texas location fit before you shortlist anything",
+    "Read the requirement lines closely because essays, eligibility details, and supporting materials can vary by program",
+    "Check deadline text row by row and prioritize listings with nearer dates so you do not miss a chance to apply",
+    "Open the official scholarship page for every finalist to verify award amount, current rules, and application instructions",
+    "Keep a shortlist of the best matches and compare them by subject fit, residency wording, and overall application effort"
   ],
   "who_for": [
-    "Texas residents with financial need",
-    "Students pursuing education in STEM fields",
-    "Community service-oriented applicants",
-    "Undergraduates and graduates seeking financial assistance",
-    "Students applying to HBCUs in Texas"
+    "Texas applicants who need to find scholarships that consider financial need",
+    "High school seniors in the USA comparing Texas-based aid options before applying",
+    "College and graduate students looking for Texas scholarships across Education, STEM, Community, Disability, or Arts categories",
+    "Applicants with majors such as education, engineering, business, agriculture, or construction trades who want to compare need-based listings",
+    "US citizens or permanent residents checking Texas opportunities with eligibility details that may match their status"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Texas?",
-      "answer": "There are currently 48 scholarships listed that cater to students with financial need in Texas. These scholarships cover a range of categories including education, community, STEM, and arts, providing diverse opportunities for applicants."
+      "question": "How can I find financial need scholarships in Texas that fit my situation?",
+      "answer": "Use this filtered view to explore Texas listings tagged for financial need, then compare each row for study level, category, and residency details. In this USA catalog, eligibility can differ by program, so confirm the final rules on the official scholarship page before you apply."
     },
     {
-      "question": "How can I find specific details about each scholarship?",
-      "answer": "Each scholarship listing includes important details such as award amounts, deadlines, and category classifications. It's essential to review each entry carefully, as requirements and deadlines vary significantly across the scholarships."
+      "question": "Are these scholarships only for certain majors or academic levels?",
+      "answer": "This filtered set includes a mix of categories and backgrounds, with examples tied to education, community, STEM, disability, arts, and miscellaneous topics. You can also find listings connected to levels such as high school senior, college, and graduate student, but each program sets its own eligibility details."
     },
     {
-      "question": "Are there any scholarships that do not require essays?",
-      "answer": "Yes, among the 48 scholarships, some do not require essays, while others do. It's advisable to check the specific requirements for each scholarship to understand what is needed for your application."
+      "question": "Do all Texas financial need scholarships here have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, so check dates promptly on each row and verify on the official source before applying. Essay requirements also vary, and some listings may be lighter-touch than others."
     },
     {
-      "question": "When should I check the deadlines for these scholarships?",
-      "answer": "All 48 scholarships have deadlines, and it's important to check them promptly as some deadlines may be approaching within the next 45 days. Make sure to verify the exact date listed for each scholarship to ensure timely applications."
+      "question": "What kinds of award amounts appear in these Texas scholarship listings?",
+      "answer": "The programs below show listed award amounts, but they are not all the same. In this catalog slice, amounts range across the listings, so use the rows to compare options and confirm the exact award on the official page."
     }
   ],
+  "page_data": {
+    "exactCount": 51,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 400,
+      "maxUsd": 12000,
+      "statedAmountCount": 51,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 41,
+      "within60Days": 49,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 48,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "engineering",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Communities Foundation of Texas",
+        "count": 8
+      },
+      {
+        "name": "Austin Community College",
+        "count": 5
+      },
+      {
+        "name": "Tarrant County College Foundation",
+        "count": 4
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      },
+      {
+        "name": "Hispanic Scholarship Consortium",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "miscellaneous",
+      "disability",
+      "arts"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/texas",
-    "generatedAt": "2026-04-02T10:34:19.037Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 48,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:11:31.614Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 51,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

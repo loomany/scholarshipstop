@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Texas, USA",
+  "seo_description": "Financial need undergraduate scholarships in Texas, USA. Compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find USA scholarships that match financial need, undergraduate study, and Texas can narrow the search fast, but the details still vary a lot from row to row. In this filtered slice, you can compare programs aimed at undergraduates while keeping an eye on Texas location fit and need-based eligibility. Awards differ by listing, deadlines differ by program, and requirement language should be read carefully before you apply. Many listings here appear to have lighter application signals, and many may not require an essay, though you should verify each one on the official source. The mix also touches areas like community, education, STEM, disability, and law, so it is worth scanning beyond your exact major if you want more options.",
+  "h1": "Compare Financial Need Undergraduate Scholarships in Texas USA …",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Check how each listing describes eligibility, residency or citizenship language, study level, and any field tags such as education, business, engineering, agriculture, or law. Because deadlines vary and some opportunities may be coming up soon, it makes sense to shortlist strong matches early, then open the official pages to confirm current terms, award details, and submission steps before you apply.",
+  "related_intro": "If you do not find enough matches in this Texas need-based undergraduate view, related pages can help you compare nearby filter combinations. Looking at broader undergraduate results, other Texas scholarship pages, or adjacent topic pages may uncover programs with similar eligibility but different category or field emphasis.",
+  "how_to_use": [
+    "Compare deadline text across listings",
+    "Read each requirement line carefully",
+    "Open the official source page",
+    "Shortlist strong matches before applying",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Texas undergraduates with financial need",
+    "College applicants comparing need-based options in Texas",
+    "Students seeking undergraduate awards in education or STEM",
+    "Applicants checking Texas listings with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Texas based on financial need?",
+      "answer": "Use this filtered view to compare Texas listings that match financial need and undergraduate study, then open each row to confirm the official eligibility details. In the USA context, residency or citizenship terms can differ by program, so verify them on the scholarship’s official page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here?",
+      "answer": "Not automatically—this catalog groups programs that fit the filter, but each listing can still have its own rules, study-level details, and location requirements. Before you apply, check the official source for the exact criteria and application steps."
+    },
+    {
+      "question": "How do I compare award amounts and deadlines on this page?",
+      "answer": "Amounts and deadlines vary by listing, so compare row by row instead of assuming one standard for the whole page. The programs below include posted award values, but you should verify the current amount and deadline on the official scholarship page before applying."
+    },
+    {
+      "question": "Are these Texas scholarships only for certain majors or topics?",
+      "answer": "This filtered set includes a mix of topics such as Community, Education, STEM, Disability, Miscellaneous, and Law, with sample fields like education, business, engineering, agriculture, and legal studies. If you want to explore fit, check both the category labels and the official program description for any field-of-study limits."
+    }
+  ],
+  "page_data": {
+    "exactCount": 28,
+    "award": {
+      "medianUsd": 2750,
+      "minUsd": 400,
+      "maxUsd": 12000,
+      "statedAmountCount": 28,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 21,
+      "within60Days": 27,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 28,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "agriculture_and_related_sciences",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Communities Foundation of Texas",
+        "count": 7
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      },
+      {
+        "name": "Thurgood Marshall College Fund",
+        "count": 3
+      },
+      {
+        "name": "Alamo Colleges Foundation",
+        "count": 2
+      },
+      {
+        "name": "Texas Tech Alumni Association",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "stem",
+      "disability",
+      "miscellaneous",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/texas",
+    "generatedAt": "2026-04-26T14:55:52.297Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 28,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

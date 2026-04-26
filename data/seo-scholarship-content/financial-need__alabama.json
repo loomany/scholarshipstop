@@ -1,46 +1,126 @@
 {
-  "seo_title": "Alabama Scholarships for Financial Need Students",
-  "seo_description": "Explore 12 Alabama scholarships for students in financial need. Award amounts range from $500 to $5,000. Check deadlines and requirements.",
-  "intro": "Finding financial support can be a crucial step for students in Alabama seeking to further their education. With 12 scholarships specifically aimed at those demonstrating financial need, there are various opportunities available to help ease the burden of tuition and other expenses. Award sizes generally range from $500 to $5,000, and while many listings have upcoming deadlines, it's important to check each one for specific dates and requirements as they vary.",
-  "h1": "Alabama Scholarships for Students with Financial Need",
-  "supporting": "This collection of scholarships includes a mix of opportunities across different fields, such as education, STEM, and community-focused initiatives. Some programs may have lighter application requirements, while others could involve essays. Reviewing the details for each scholarship will help you identify which ones align best with your goals and circumstances, making it easier to prioritize your applications.",
-  "related_intro": "If you're exploring more options, consider checking out related pages for scholarships based on different criteria or specific fields of study.",
+  "seo_title": "Find Financial Need Scholarships in Alabama, USA",
+  "seo_description": "Financial need scholarships in Alabama, USA: compare awards, review varying deadlines and requirements, and apply through official program pages.",
+  "intro": "Trying to find Alabama scholarships tied to financial need usually means balancing location rules, study level, and how much effort each application takes. This filtered USA view narrows the search to programs connected to Alabama and need-based eligibility, so you can compare a focused set of listings instead of jumping between unrelated awards. The rows below span areas such as STEM, education, community, and miscellaneous topics, with examples that reach from high school seniors to college and graduate students. Award amounts, deadlines, residency details, and application requirements vary by listing, and some opportunities may be lighter-touch than others. If you plan to apply in the current cycle, it is smart to check the official pages promptly because timing differs across programs.",
+  "h1": "Find Alabama Scholarships for Financial Need USA",
+  "supporting": "A useful way to read this list is to compare more than the title. Look at the requirement lines for study level, Alabama connection, citizenship or residency wording, and any field-of-study cues such as education, business, communication, engineering, or law. Then compare award text and deadline language side by side, since amounts vary by listing and closing dates are not the same across this slice. Before you apply, open the official source for each scholarship to verify eligibility details, required materials, and whether an essay or other supporting items are expected.",
+  "related_intro": "If these Alabama financial-need scholarships feel close but not quite right, related pages can help you widen or tighten the search. You may want to compare nearby need-based filters, Alabama-only scholarship pages, or topic-led views such as STEM or education to find a better fit.",
   "how_to_use": [
-    "Compare deadlines for timely applications",
-    "Scan award amounts to identify suitable options",
-    "Read requirement lines to understand application expectations",
-    "Open official pages for detailed scholarship information",
-    "Shortlist scholarships that match your profile and needs"
+    "Compare deadline wording across the rows first",
+    "Read each requirement line for Alabama and need-based eligibility",
+    "Open the official page before you apply",
+    "Shortlist listings by study level and field of study",
+    "Verify award details and required materials on the sponsor site"
   ],
   "who_for": [
-    "Students in Alabama demonstrating financial need",
-    "Undergraduates pursuing education or STEM fields",
-    "Community-focused applicants seeking local opportunities"
+    "Alabama residents seeking need-based scholarship options",
+    "High school seniors planning for college costs in Alabama",
+    "College or graduate students comparing Alabama aid opportunities",
+    "Applicants in STEM, education, business, communication, engineering, or law"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students in Alabama with financial need?",
-      "answer": "There are currently 12 scholarships listed that cater to students in Alabama, focusing on various categories such as education, STEM, and community support. Award sizes vary, with amounts ranging from approximately $500 to $5,000."
+      "question": "How can I find Alabama scholarships for students with financial need?",
+      "answer": "Use this filtered view to explore Alabama-focused listings that include financial need in the eligibility mix. Then open each row and verify the full rules, residency details, and application steps on the official scholarship page."
     },
     {
-      "question": "How can I find specific deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 12 listings include this information. It's important to check the individual listings promptly, as some deadlines are approaching within the next 45 days."
+      "question": "Can I compare award amounts and deadlines on this page before I apply?",
+      "answer": "Yes—these rows let you compare basic details side by side, but amounts and deadlines vary by program. Award sizes differ by listing, and deadline text is not the same across the page, so confirm both on the official source before you apply."
     },
     {
-      "question": "Do these scholarships require essays or other application materials?",
-      "answer": "Requirements vary among the scholarships; while some may require essays, many do not. It's advisable to review the details for each scholarship to understand what is needed for your application."
+      "question": "Who should browse this Alabama financial-need scholarship list?",
+      "answer": "This slice is most relevant for students looking for USA scholarships tied to Alabama and financial need, including some listings for high school seniors, college students, and graduate students. You may also see programs connected to areas like STEM, education, community, business, communication, engineering, and law-related study."
     },
     {
-      "question": "Who is eligible to apply for these scholarships?",
-      "answer": "These scholarships are specifically for students who demonstrate financial need and are located in Alabama. Be sure to review the eligibility criteria for each scholarship to confirm your qualifications."
+      "question": "Are the requirements the same for every scholarship in this filtered list?",
+      "answer": "No. Requirements vary row to row, including study level, citizenship or residency labels such as U.S. citizen or permanent resident, and possible essay expectations. Use the catalog to compare options, then check the official page for the exact documents and eligibility details."
     }
   ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 2750,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 9,
+      "within60Days": 13,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "college_3",
+        "graduate_student",
+        "college_2",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "engineering",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alabama Dietetic Association",
+        "count": 3
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 2
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Alabama Library Association",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Birmingham Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/alabama",
-    "generatedAt": "2026-04-02T11:11:57.935Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 12,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:43:17.639Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,42 +1,132 @@
 {
-  "seo_title": "Scholarships for philippine students in USA | Updated Scholarship List",
-  "seo_description": "Explore 196 USA scholarship opportunities for scholarships for philippine students in usa. Compare award amounts, deadlines, and eligibility before applying.",
-  "h1": "Scholarships for philippine students in USA",
-  "intro": "This page brings together scholarship opportunities related to scholarships for philippine students in usa and keeps the live list tied to ScholarshipTop's current catalog. Use it to compare award amounts, deadlines, eligibility details, and official application links without jumping between generic search results.",
-  "supporting": "Start with the strongest fit, then verify the final rules on the official scholarship page. International applicants should pay close attention to citizenship language, visa wording, school location, award payout rules, and document requirements. Examples currently surfaced in this topic include International Student Scholarship, Vanna Christian Sun Legacy Scholarship, Anderson Engineering Scholarship, The Jorge and Darlene Pérez Excellence Award.",
-  "related_intro": "If this page is too narrow, widen your search to international student scholarships or combine the filters with deadline and award amount pages.",
+  "seo_title": "Find Scholarships for Philippine Students in USA",
+  "seo_description": "Scholarships for Philippine students in USA with deadlines, award details, and eligibility to compare. Explore listings and apply on official pages.",
+  "intro": "Trying to find scholarships for Philippine students in the USA usually means sorting through mixed eligibility rules, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings connected to that search, including options that may overlap with international student eligibility and programs across education, STEM, medicine, arts, community, and other areas. As you compare the rows below, expect variation in award amounts, deadline timing, essay expectations, and requirement details. Some listings may be broader international opportunities, while others can be more specific by level of study or field, so it is worth reading each entry closely before you apply.",
+  "h1": "Apply for Scholarships for Philippine Students in USA",
+  "supporting": "Use this list to compare more than the title alone. Check the requirement lines for citizenship or residency language, study level, and field of study, then scan the award text and deadline wording side by side. Because deadlines differ by program and requirements are not uniform, the smartest approach is to shortlist strong matches and verify every detail on the official source before you apply. This USA-focused view is especially useful if you want to browse a narrower set of options without losing sight of cross-category opportunities.",
+  "related_intro": "If these results feel close but not exact, related pages can help you compare nearby scholarship groups, such as broader international student listings or pages tied to study level and subject area. That is often the fastest way to find additional USA opportunities with similar eligibility patterns.",
   "how_to_use": [
-    "Sort the live scholarship list by deadline or match strength",
-    "Open each official listing before preparing documents",
-    "Check citizenship, visa, GPA, and school-level requirements",
-    "Save strong matches so you can return before the deadline",
-    "Use the related scholarship guides for application strategy"
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your study level",
+    "Verify award details on sponsor sites"
   ],
   "who_for": [
-    "International students comparing USA scholarship options",
-    "Applicants who want a filtered list instead of generic search results",
-    "Students checking deadlines, award amounts, and eligibility before applying"
+    "Philippine students seeking USA scholarship options",
+    "International applicants comparing education and STEM funding",
+    "Graduate or college applicants checking mixed eligibility language",
+    "Students reviewing essay and non essay scholarship listings"
   ],
   "faq": [
     {
-      "question": "Who should use this scholarships for philippine students in usa page?",
-      "answer": "Use it if the topic matches your status, degree level, field, or application constraint. The list is built from current ScholarshipTop catalog data, but final eligibility always comes from the official provider."
+      "question": "How can I find scholarships for Philippine students in the USA on this page?",
+      "answer": "Use this filtered view to compare the rows that match Philippine-student and USA-related search intent, then open each listing for full eligibility details. Citizenship, residency, study level, field, amount, and deadline can vary by program, so confirm everything on the official source before you apply."
     },
     {
-      "question": "Do international students qualify for every scholarship listed here?",
-      "answer": "No. Some scholarships are international-friendly while others have narrower school, visa, location, or citizenship rules. Open the official page and confirm before applying."
+      "question": "Can I apply if I’m an international student from the Philippines studying in the USA?",
+      "answer": "Some listings in this catalog include international_student among the eligibility labels, but not every row will mean the same thing in practice. Check each scholarship’s official page to verify how it defines eligible applicants, especially for USA-based study and residency status."
     },
     {
-      "question": "How often should I check this list?",
-      "answer": "Check weekly during application season. New scholarships, changed deadlines, and updated award details can affect which opportunities are worth prioritizing."
+      "question": "What kinds of scholarships can I explore in this filtered list?",
+      "answer": "The programs below span categories such as Education, STEM, Miscellaneous, Community, Medicine, and Arts, with sample fields including education, business, engineering, English, and health professions. Study levels also differ by row, so you can browse and compare options that fit where you are academically."
+    },
+    {
+      "question": "Will I need an essay for these scholarships?",
+      "answer": "Requirements are mixed in this catalog: some listings appear to include essays, while others may be lighter-touch. The fastest way to compare is to shortlist a few rows, then verify the application requirements on each official source before you start."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-philippine-students-in-usa",
-    "generatedAt": "2026-04-25T13:20:05.958Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
-    "bodySource": "deterministic",
+    "generatedAt": "2026-04-26T13:12:05.709Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
     "generationMode": "rewrite"
   }
 }

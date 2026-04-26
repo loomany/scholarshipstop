@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Ohio Financial Need Scholarships Under Ten Thousand | USA …",
+  "seo_description": "Ohio financial need scholarships under ten thousand: compare award ranges, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Ohio scholarships tied to financial need without wading through high-dollar national awards? This filtered USA view narrows the search to programs in Ohio with listed awards under ten thousand dollars, making it easier to compare options that may fit more immediate tuition, fees, books, or program costs. The rows here span areas such as community, education, law, medicine, miscellaneous, and STEM, with examples that reach from high school seniors to college and graduate students, including some adult non-traditional applicants. Awards, deadlines, residency details, and application requirements vary by listing, and some programs may be lighter-touch than others, so it is worth checking each row closely. Because deadline text differs across these listings and some opportunities may be coming up soon, apply early and verify details on the official source.",
+  "h1": "Explore Ohio Financial Need Scholarships Under Ten Thousand USA…",
+  "supporting": "A focused set of Ohio listings like this is useful when you want to compare smaller scholarship amounts that can still make a real difference. As you browse, look at the study level, field of study, and citizenship or residency labels alongside the award text. You may see programs connected to education, health professions, legal studies, engineering, or physical sciences, as well as broader community-based awards. Compare requirement lines carefully, since essay expectations and other application steps are not identical across the list, and confirm that the official page still matches the catalog entry before you apply.",
+  "related_intro": "If you do not find the right fit here, check nearby scholarship pages by adjusting one filter at a time. Comparing other Ohio categories, broader financial-need results, or different award ranges can uncover programs with different eligibility rules, subject areas, or application formats.",
+  "how_to_use": [
+    "Compare each row for award amount, deadline text, and Ohio eligibility before you shortlist anything",
+    "Scan the study level and field of study labels to find listings that match your current program or planned major",
+    "Read requirement and essay details carefully, since application steps vary across these scholarships",
+    "Open the official scholarship page for every promising listing and verify current rules, documents, and deadlines before you apply"
+  ],
+  "who_for": [
+    "Ohio applicants seeking scholarships that consider financial need and list awards below ten thousand dollars",
+    "High school seniors, college students, graduate students, and adult non-traditional learners comparing Ohio-based options",
+    "Students in education, health professions, law, engineering, physical sciences, or community-focused programs",
+    "US citizens and permanent residents looking for Ohio scholarship listings with varied requirement levels"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts on this USA scholarship list?",
+      "answer": "Yes—these Ohio, USA listings show award amounts row by row, and the amounts in this slice vary by program. Use the catalog to compare options, then verify the current amount on the official scholarship page."
+    },
+    {
+      "question": "Do all scholarships here have the same deadline or application requirements?",
+      "answer": "No. Deadlines differ by program, and requirements can vary too, including whether an essay is needed, so check each row carefully and review official instructions before you apply."
+    },
+    {
+      "question": "Who should explore this Ohio scholarship filter?",
+      "answer": "This focused set of listings may be useful for high school seniors, college students, graduate students, and adult non-traditional students in Ohio. Some rows also align with areas like community, education, medicine, law, and STEM, so you can browse and compare by fit."
+    }
+  ],
+  "page_data": {
+    "exactCount": 24,
+    "award": {
+      "medianUsd": 1288,
+      "minUsd": 750,
+      "maxUsd": 5000,
+      "statedAmountCount": 24,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 23,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-15",
+        "2026-05-14"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 21,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_2",
+        "college_1",
+        "graduate_student",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "legal_professions_and_law_studies",
+        "engineering",
+        "history"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "The Community Foundation of Shelby County",
+        "count": 13
+      },
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 2
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Cuyahoga Community College",
+        "count": 1
+      },
+      {
+        "name": "Fraternal Order of Police Associates of Ohio",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "medical",
+      "law",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/ohio",
+    "generatedAt": "2026-04-26T14:22:46.239Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 24,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

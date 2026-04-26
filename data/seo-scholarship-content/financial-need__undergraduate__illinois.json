@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Illinois Undergraduate Need Scholarships | USA",
+  "seo_description": "Illinois undergraduate financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Illinois undergraduate scholarships tied to financial need usually means balancing fit, timing, and effort at the same time. This filtered slice brings together USA listings that match that combination, so you can compare options without wading through unrelated awards. The programs below span areas such as education, community, STEM, medicine, disability, and miscellaneous topics, with some listings connected to fields like business, health professions, law, and visual or performing arts. Awards, deadlines, residency language, and eligibility details vary by listing, so it is worth reading each row closely before you apply. Many entries in this slice appear to have lighter application signals, and many often show no essay in the catalog data, but you should still verify every requirement on the official scholarship page.",
+  "h1": "Find Illinois Undergraduate Need Scholarships USA",
+  "supporting": "A smart way to use this list is to compare the requirement line, award text, deadline wording, and any citizenship or residency notes side by side. Some rows may suit current undergraduates directly, while others can overlap with students moving from high school into college or continuing through later college years. If you want to find practical matches fast, open the most relevant listings in new tabs, check the official source, and compare how closely each program fits your academic path, location, and financial need situation in Illinois.",
+  "related_intro": "If this Illinois need-based undergraduate view feels too narrow or too broad, related pages can help you compare nearby paths. You may want to explore other Illinois scholarship filters, broader undergraduate results, or other financial need scholarship pages in the USA catalog to spot programs you might miss here.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open official pages before you apply",
+    "Shortlist listings that match your major and residency",
+    "Verify award details and application steps on the sponsor site"
+  ],
+  "who_for": [
+    "Illinois undergraduates seeking need-based aid",
+    "College students comparing Illinois scholarship options",
+    "Applicants with financial need reviewing undergraduate awards",
+    "Students in education, health, business, law, or arts fields",
+    "USA residents checking citizenship or residency-based eligibility"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Illinois undergraduate scholarships based on financial need?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings that match financial need, undergraduate study, and Illinois. Open each row to verify current eligibility, residency details, award amount, and application steps on the official source."
+    },
+    {
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, you can explore and apply to multiple programs if you meet each listing’s rules. Check every official page separately, since eligibility, required documents, and deadlines differ by program."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare the basics row by row: who the scholarship is for, study level, Illinois or residency language, field of study, and the listed award. Amounts vary by listing, and deadlines also vary, so confirm both on the official scholarship page before applying."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or categories?",
+      "answer": "Not always—this filtered set includes a mix of categories such as education, community, STEM, medicine, and disability. If you want to browse more precisely, compare category labels and field-of-study notes in each listing before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 24,
+    "award": {
+      "medianUsd": 4500,
+      "minUsd": 500,
+      "maxUsd": 18574,
+      "statedAmountCount": 24,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 17,
+      "within60Days": 22,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 24,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "computer_and_information_sciences",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 7
+      },
+      {
+        "name": "Waubonsee Community College",
+        "count": 3
+      },
+      {
+        "name": "Illinois CPA Society",
+        "count": 2
+      },
+      {
+        "name": "American Federation of State, County and Municipal Employees-Illinois Council 31",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/illinois",
+    "generatedAt": "2026-04-26T14:47:30.380Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 24,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

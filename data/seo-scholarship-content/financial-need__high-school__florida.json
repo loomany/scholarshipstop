@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Florida High School Need Scholarships | USA",
+  "seo_description": "Florida high school financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Florida scholarships for high school students with financial need usually means sorting through programs that look similar at first glance but differ in who qualifies, what they ask for, and when you need to apply. This filtered USA view brings together a focused set of listings tied to that combination, including options connected to community, education, STEM, arts, medicine, and other areas. Awards vary by listing and should be verified on each official page, and deadlines differ across the rows rather than following one shared date. Many listings in this slice appear to have lighter application requirements, and no-essay options are often present, but you should still read every requirement line carefully before you compare programs or start an application.",
+  "h1": "Find Florida High School Financial Need Scholarships USA",
+  "supporting": "Use these rows to compare more than just the scholarship title. Check the location fit, confirm the financial-need language, and note whether a listing is aimed at high school seniors or includes broader study levels. It is also worth scanning category and field clues such as education, health professions, agriculture, architecture, or natural resources to spot programs that match your plans. Because every listing here includes deadline text and some opportunities may be coming up soon, it makes sense to review dates promptly and shortlist the ones you want to pursue first.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship paths in the USA catalog—such as keeping Florida and changing the student profile, or keeping high school and financial need while checking other locations or topic mixes.",
+  "how_to_use": [
+    "Compare deadline text across the rows first, since dates vary by program and some may be approaching soon",
+    "Scan each listing for financial-need wording, Florida fit, and the study level details before you apply",
+    "Check award information carefully and confirm the current amount on the official scholarship page",
+    "Read requirement lines closely, especially if a listing appears to be no-essay or lighter-touch in the catalog",
+    "Open your best matches in new tabs, shortlist them, and verify final eligibility on the sponsor site"
+  ],
+  "who_for": [
+    "Florida high school students looking for scholarships that mention financial need",
+    "High school seniors in the USA comparing local and statewide funding options before applying",
+    "Applicants who want to find many no-essay or lighter-touch scholarship listings and verify the details",
+    "Students exploring scholarships connected to community, education, STEM, arts, or medicine themes"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Florida scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tagged for financial need, high school, and Florida. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Compare the catalog entries side by side, then confirm the current amount and deadline on the official source before you apply."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Florida?",
+      "answer": "Not always. High school senior appears in sample study levels, but each listing can define grade level, Florida connection, and USA residency or citizenship requirements differently, so check the row and official page carefully."
+    },
+    {
+      "question": "Do these Florida financial-need scholarships usually require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flag in the catalog metadata, which may make them quicker to browse and compare. Still, requirements can change row to row, so verify the application checklist on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 36,
+    "award": {
+      "medianUsd": 1125,
+      "minUsd": 331,
+      "maxUsd": 20000,
+      "statedAmountCount": 36,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 14,
+      "within60Days": 34,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-30",
+        "2026-05-25",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 36,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "architecture_and_related_services",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 11
+      },
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 4
+      },
+      {
+        "name": "Education Foundation of Sarasota County",
+        "count": 2
+      },
+      {
+        "name": "Kiwanis International-Florida District",
+        "count": 2
+      },
+      {
+        "name": "AJ Patel Scholarship Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "stem",
+      "miscellaneous",
+      "arts",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/florida",
+    "generatedAt": "2026-04-26T13:51:22.067Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 36,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Washington Financial Need Scholarships | USA",
+  "seo_description": "Washington financial need scholarships in the USA: compare awards under ten thousand, review varying deadlines, and apply on official pages.",
+  "intro": "Trying to find Washington scholarships that consider financial need without wading into the highest award tiers? This filtered USA view narrows the search to programs with listed awards under the upper cap shown in the filter, so you can compare more realistic options side by side. The rows below span areas such as education, community, STEM, medicine, disability, and other miscellaneous topics, with examples that touch education, nonprofit ties, agriculture, engineering, and health-related study. Requirements are not identical across listings: some may ask for more materials, some appear lighter-touch, and essay expectations can differ. Deadlines also vary by program, so it makes sense to check timing early if you plan to apply in this cycle.",
+  "h1": "Washington Financial Need Scholarships Under Ten Thousand USA …",
+  "supporting": "Use this slice to compare more than just the headline award. Read the requirement line, study level, and residency details closely, especially if you are a high school senior, graduate student, adult learner, or community college applicant in Washington. It is also worth scanning category labels and field tags to spot scholarships that match your background more closely. Before you apply, open the official source for each listing to verify current eligibility, deadline wording, and any documents or essays the sponsor expects.",
+  "related_intro": "If these Washington financial-need listings feel close but not quite right, related pages can help you compare nearby filter combinations, such as broader Washington results, other financial-need views, or different award ranges. That is often the fastest way to find programs with a better fit on topic, study level, or residency rules.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line before shortlisting",
+    "Open the official page to verify details",
+    "Check study level and residency labels carefully",
+    "Save a shortlist and apply early where possible"
+  ],
+  "who_for": [
+    "Washington applicants with financial need",
+    "High school seniors planning college costs",
+    "Graduate students comparing smaller award programs",
+    "Adult and non traditional learners returning to school",
+    "Students in education, business, health, agriculture, or engineering"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Washington scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Washington scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Washington scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 45,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 45,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 34,
+      "within60Days": 44,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 6,
+      "noCount": 39,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement",
+        "document",
+        "transcript",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "agriculture_and_related_sciences",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of North Central Washington",
+        "count": 5
+      },
+      {
+        "name": "Washington State Business and Professional Women's Foundation",
+        "count": 5
+      },
+      {
+        "name": "Jewish Social Service Agency of Metropolitan Washington",
+        "count": 3
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Rho Mu Omega Chapter",
+        "count": 2
+      },
+      {
+        "name": "Hebrew Free Loan Association of Washington State",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/washington",
+    "generatedAt": "2026-04-26T14:26:37.603Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 45,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

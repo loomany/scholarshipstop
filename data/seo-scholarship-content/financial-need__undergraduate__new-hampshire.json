@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in New Hampshire,…",
+  "seo_description": "Financial need undergraduate scholarships in New Hampshire, USA. Compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find undergraduate scholarships in New Hampshire that take financial need into account usually means balancing fit, timing, and effort at the same time. This filtered USA view narrows the search to a focused set of listings tied to need-based eligibility and undergraduate study, with examples spanning education, community, STEM, and humanities. Awards vary by listing, and deadlines differ across the rows, so it is worth checking details promptly if you plan to apply for the current cycle or compare options for the coming year. Many listings in this slice appear to have lighter application signals, and several may not require an essay, but requirements still need to be verified on each official scholarship page before you rely on them.",
+  "h1": "Find New Hampshire Financial Need Undergraduate Scholarships USA…",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Read the requirement lines closely for residency or citizenship language, study level fit, and any field-of-study preference such as education, engineering, business, agriculture, or technical programs. Then compare award text and deadline wording side by side, because amounts vary and timing is not the same across programs. If a listing looks promising, open the official source to confirm current rules before you shortlist it.",
+  "related_intro": "If this New Hampshire need-based undergraduate slice feels close but not quite right, related pages can help you widen or narrow the search. You may want to compare other undergraduate filters, look at broader New Hampshire scholarship categories, or check nearby topic pages if your major or background matters more than financial need alone.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award text before you apply"
+  ],
+  "who_for": [
+    "New Hampshire undergraduates seeking need-based aid",
+    "College applicants comparing education or humanities scholarships",
+    "STEM or engineering students checking New Hampshire options",
+    "Residents who want lighter-touch scholarship applications"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in New Hampshire for students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, undergraduate study, and New Hampshire. Open each row to confirm eligibility, residency, study level, and any program-specific requirements on the official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this New Hampshire scholarship list?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts differ by listing, and deadlines are not the same across the page, so compare row by row and verify details on the official scholarship page."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or categories?",
+      "answer": "Not necessarily; this filtered set includes categories such as Education, Community, STEM, Humanities, and Miscellaneous. If you want to compare options by subject, check each listing’s category and field details before you apply."
+    },
+    {
+      "question": "Do many of these undergraduate scholarships require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flagged in the catalog, but you should still verify each program’s application instructions. Requirements can differ from row to row even within the same New Hampshire filter."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 2750,
+      "minUsd": 1000,
+      "maxUsd": 17000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "area_ethnic_cultural_and_gender_studies",
+        "business_management_and_marketing",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "Hillsborough County Youth Center Foundation",
+        "count": 1
+      },
+      {
+        "name": "Horticultural Research Institute",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "humanities",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/new-hampshire",
+    "generatedAt": "2026-04-26T14:52:00.499Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

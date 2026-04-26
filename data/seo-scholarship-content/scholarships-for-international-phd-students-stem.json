@@ -1,43 +1,132 @@
 {
-  "seo_title": "Top Scholarships for International PhD Students in STEM Fields",
-  "seo_description": "Explore 196 scholarships specifically for international PhD students in STEM. Find funding opportunities to support your academic journey.",
-  "h1": "Scholarships for International PhD Students in STEM",
-  "intro": "Pursuing a PhD as an international student in STEM can be financially challenging. Fortunately, there are numerous scholarships available specifically designed to support your academic journey. With 196 scholarships listed, ranging from the International Student Scholarship to the Paul and Daisy Soros Fellowships for New Americans, you have a wealth of opportunities at your fingertips. These scholarships not only alleviate financial burdens but also enhance your academic profile and networking opportunities. Whether you are focusing on engineering, biology, or computer science, there are options tailored to your needs. Start exploring today to find the right funding for your PhD studies.",
-  "supporting": "Eligibility for these scholarships varies, but many require you to be an international student enrolled in a STEM program. Some scholarships, like the Vanna Christian Sun Legacy Scholarship, may have specific criteria such as academic excellence or financial need. Deadlines also differ; ensure you check each scholarship's timeline to submit your application on time. When applying, pay close attention to the required documents, which often include transcripts, letters of recommendation, and personal statements. Tailoring your application to highlight your unique experiences and aspirations can significantly enhance your chances of securing funding.",
-  "related_intro": "In addition to scholarships, there are various grants and fellowships available for international PhD students in STEM. Exploring these options can further support your educational goals.",
+  "seo_title": "Find STEM PhD Scholarships for International Students USA",
+  "seo_description": "STEM PhD scholarships for international students in the USA. Compare awards, check varying deadlines, and explore official listings to apply.",
+  "intro": "Trying to find USA scholarships you can actually apply for as an international PhD student in STEM usually means sorting through mixed eligibility rules, different fields, and deadline wording that changes from listing to listing. This filtered slice narrows that search to programs connected to doctoral study and STEM themes, so you can compare options without wading through unrelated awards. The rows below still vary in award size, essay expectations, and requirement details, and some may be broader education scholarships that can overlap with STEM doctoral paths. Because deadline text appears across these listings and timing is not uniform, it is worth checking promising programs promptly and verifying every condition on the official source before you apply.",
+  "h1": "Find USA STEM PhD Scholarships for International Students",
+  "supporting": "Use this list to compare more than just the title. Read the requirement lines closely for citizenship or residency language, field of study fit, and any signs that a program is open to international applicants in the USA context. Some listings may look broad at first glance, while others are clearly tied to engineering, medicine, or related STEM areas. Compare award wording, note whether essays are mentioned, and open the official page for any scholarship you plan to pursue so you can confirm current terms before you shortlist it.",
+  "related_intro": "If these results feel too narrow or too broad, related pages can help you explore nearby options by changing one factor at a time, such as education level, international student focus, or a wider scholarship category. That makes it easier to compare adjacent USA scholarship paths without restarting your search.",
   "how_to_use": [
-    "Browse the list of scholarships available.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required documents like transcripts and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline wording across the rows",
+    "Read each requirement line before applying",
+    "Open the official page to verify eligibility",
+    "Shortlist listings that match your STEM discipline",
+    "Check award details and essay expectations carefully"
   ],
   "who_for": [
-    "International students pursuing a PhD in STEM.",
-    "Students seeking financial assistance for their studies.",
-    "Individuals looking to enhance their academic and professional profiles."
+    "International PhD applicants targeting STEM study in the USA",
+    "Doctoral researchers comparing education and STEM scholarship listings",
+    "Engineering or health related PhD candidates seeking funding options",
+    "Applicants who need to check mixed essay and eligibility requirements"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international PhD students?",
-      "answer": "There are various scholarships, including merit-based, need-based, and those targeting specific fields within STEM."
+      "question": "How can I find STEM scholarships in the USA for international PhD students on this page?",
+      "answer": "Use this filtered view to compare rows that match international student, PhD, and STEM-related tags. Then open each listing and verify eligibility, field fit, and USA-specific terms on the official source before you apply."
     },
     {
-      "question": "How can I find the right scholarship for my needs?",
-      "answer": "Review the eligibility criteria, funding amounts, and application requirements to identify scholarships that align with your academic goals."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—this catalog lets you compare programs side by side, but amounts and deadlines vary by listing. Some rows show award figures, and deadline text appears row by row, so check each official page promptly before applying."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "Deadlines vary by scholarship; always check the specific scholarship's website for the most accurate information."
+      "question": "Do all scholarships here require an essay or the same application materials?",
+      "answer": "No, requirements are mixed across these listings. Some may be lighter-touch while others may ask for essays or additional materials, so review each row and confirm the full application checklist on the official scholarship page."
+    },
+    {
+      "question": "Are all programs on this page only for STEM PhD students studying in the USA?",
+      "answer": "They are grouped around international students, PhD level, and STEM-related filtering, but individual listings can still differ in category labels, study fields, and residency details. It’s best to explore the rows that match your subject area and confirm the exact USA eligibility rules on the source site."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-international-phd-students-stem",
-    "generatedAt": "2026-04-25T13:31:55.224Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:07:44.554Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

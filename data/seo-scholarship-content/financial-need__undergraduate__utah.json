@@ -1,0 +1,116 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Utah, USA",
+  "seo_description": "Financial need undergraduate scholarships in Utah, USA. Compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to find undergraduate scholarships in Utah that take financial need into account usually means narrowing past broad national results and checking the details row by row. This filtered USA view brings together a focused set of listings tied to Utah and undergraduate intent, with programs that touch areas such as community, disability, medicine, STEM, education, and other miscellaneous categories. Awards, deadlines, and eligibility language are not the same across these rows, so it makes sense to compare each listing instead of assuming one standard. Many entries in this slice appear to have lighter application signals, and no essay is often indicated, but requirements still need to be verified on the official scholarship pages before you apply.",
+  "h1": "Find Utah Undergraduate Scholarships for Financial Need USA",
+  "supporting": "Use this list to compare more than just the title. Scan the category tags, read the requirement lines closely, and note how each program frames need, residency, study level, or field of study. Because deadlines differ by program and some dates may be coming up soon, it is smart to check timing early. Award amounts vary by listing and should be confirmed on the sponsor or official page. If you are trying to find a manageable set of Utah options to compare, this slice is worth reviewing carefully before you shortlist anything.",
+  "related_intro": "If these Utah undergraduate need-based listings feel too narrow, related pages can help you explore nearby options by changing one filter at a time, such as location, study level, or broader scholarship topics. That makes it easier to compare similar USA opportunities without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read requirement lines before you apply",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study plans",
+    "Check award wording and residency language carefully"
+  ],
+  "who_for": [
+    "Utah undergraduates with financial need",
+    "Applicants comparing Utah and USA scholarship options",
+    "Students seeking community, STEM, medicine, or education scholarships",
+    "Residents checking listings with lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Utah for students with financial need?",
+      "answer": "Use this filtered view to compare Utah listings that match both undergraduate study and financial-need eligibility. Then open each row and verify the current rules, documents, and application steps on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate in Utah?",
+      "answer": "Not automatically. These rows share the main filter themes, but each program can still have its own residency, study level, field, or background requirements, so check the official source before you apply."
+    },
+    {
+      "question": "Are the applications on this page usually simple, or do they require essays?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many sampled rows show no essay flag. Still, requirements can differ row to row, so review the catalog entry and confirm on the official page before applying."
+    },
+    {
+      "question": "How quickly should I apply after I browse this page?",
+      "answer": "Check dates promptly, because deadlines differ by program and some listings in this slice appear to be coming up soon. If you want to compare options first, save the rows that fit and verify each deadline on the official source before submitting."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 3750,
+      "minUsd": 2500,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-06-30",
+        "2026-04-17"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arapahoe Community College Foundation",
+        "count": 1
+      },
+      {
+        "name": "Edwards Lifesciences Corporation",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Western States Roofing Contractors Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "disability",
+      "medical",
+      "stem",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/utah",
+    "generatedAt": "2026-04-26T14:56:10.384Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,48 +1,122 @@
 {
-  "seo_title": "Financial Need Scholarships in Utah",
-  "seo_description": "Explore 4 scholarships for financial need in Utah. Check award amounts and deadlines to find your fit.",
-  "intro": "Finding financial support can be challenging, especially for students in Utah. This selection of four scholarships specifically targets those demonstrating financial need, offering awards that generally range from $2,500 to $5,500. Each scholarship has its own unique focus, including community service, education, and STEM fields. Be sure to check the specific deadlines, as they vary across listings and some may be approaching soon.",
-  "h1": "Scholarships for Financial Need in Utah",
-  "supporting": "As you review these scholarships, consider the different categories they represent, such as education and community service. Many of these listings do not require essays, making them more accessible for applicants. Take note of the award amounts and deadlines to prioritize which opportunities align best with your needs and timeline. Each scholarship has distinct eligibility criteria, so be sure to read the details carefully.",
-  "related_intro": "If you're interested in more options, check out related pages that focus on scholarships by category or location to broaden your search.",
+  "seo_title": "Find Financial Need Scholarships in Utah, USA",
+  "seo_description": "Financial need scholarships in Utah, USA with award ranges and varying deadlines. Compare listings and apply through official program pages.",
+  "intro": "Trying to find Utah scholarships that take financial need into account usually means balancing fit, timing, and effort at the same time. This filtered USA view narrows the search to a focused set of listings tied to Utah and need-based eligibility, so you can compare options without wading through unrelated awards. The programs below span themes such as education, STEM, community, disability, medicine, and other miscellaneous areas, with study levels that can include high school seniors and graduate students. Award amounts vary by listing, deadlines differ by program, and eligibility details can change from one row to the next. Many listings in this slice appear to have lighter application requirements, and some may not ask for an essay, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Find Financial Need Scholarships in Utah USA",
+  "supporting": "Use these rows to compare more than the title alone. Check how each scholarship describes financial need, look at any Utah residency or citizenship language, and note whether the opportunity seems tied to a field such as education, construction trades, medicine, or STEM. Because deadlines in this slice are not all the same and some appear relatively soon, it is smart to review date text early, shortlist the strongest matches, and then confirm award terms, required materials, and final instructions on the sponsor site before you apply.",
+  "related_intro": "If you are close to qualifying but want a wider set of options, related pages can help you compare nearby filter combinations, such as other Utah scholarship categories or broader USA financial need listings. That is often the quickest way to find similar programs with different subject, level, or residency emphasis.",
   "how_to_use": [
-    "Compare deadlines across listings to prioritize applications",
-    "Scan award amounts to identify potential funding",
-    "Read requirement lines for eligibility criteria",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that best fit your profile"
+    "Compare deadline text across each row",
+    "Read the requirement line carefully",
+    "Open official pages to verify details",
+    "Shortlist listings that match your level",
+    "Check award terms before you apply"
   ],
   "who_for": [
-    "Students in Utah demonstrating financial need",
-    "Applicants interested in education or community service",
-    "Individuals pursuing STEM fields",
-    "High school graduates transitioning to adult living",
-    "Students seeking lighter application requirements"
+    "Utah applicants with financial need",
+    "High school seniors comparing Utah aid options",
+    "Graduate students seeking need-based support",
+    "Students interested in education or STEM scholarships",
+    "Applicants checking community or disability-related awards"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Utah?",
-      "answer": "The current listings include scholarships across various categories such as education, STEM, community, disability, and miscellaneous. With 4 options available, students can find opportunities that align with their specific needs and interests."
+      "question": "How can I find and compare Utah scholarships for financial need on this page?",
+      "answer": "Use this filtered view to compare the rows by award amount, deadline, study level, and any residency or citizenship notes shown in each listing. In this Utah, USA slice, details vary by program, so confirm final eligibility and application steps on the official source before you apply."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, but it's important to verify each individual listing for specific requirements. While many programs may have lighter application processes, checking the details will ensure you meet all necessary criteria."
+      "question": "Can I apply to more than one financial-need scholarship in Utah?",
+      "answer": "Usually, you can explore multiple listings and apply to any program where you meet the stated requirements. Check each official page carefully, since deadlines, documents, and location or residency rules can differ row to row."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all current listings include this information. Be sure to check the dates promptly, as at least one scholarship has a deadline within the next 45 days."
+      "question": "What kinds of students should browse these Utah financial-need listings?",
+      "answer": "This focused set includes programs tied to themes like education, STEM, community, disability, medicine, and other miscellaneous categories. The rows also show different study levels, including examples such as high school senior and graduate student, so compare each listing to your situation."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "The award sizes for the scholarships in this category generally range from approximately $2,500 to $5,500, although this can vary by listing. Review each scholarship for the specific amount offered."
+      "question": "Are these scholarships usually quick to apply for?",
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and many sampled rows show no essay flag, but you should still verify every requirement on the official source. When you compare options, look for the exact materials, eligibility notes, and submission method listed for each program."
     }
   ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 2500,
+      "maxUsd": 5500,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-04-15",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arapahoe Community College Foundation",
+        "count": 1
+      },
+      {
+        "name": "Edwards Lifesciences Corporation",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Utah Division of Child and Family Services",
+        "count": 1
+      },
+      {
+        "name": "Western States Roofing Contractors Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "disability",
+      "medical",
+      "miscellaneous"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/utah",
-    "generatedAt": "2026-04-02T11:16:07.714Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:58:22.485Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore 31 Scholarships for International Students with December Deadlines",
-  "seo_description": "Discover 31 scholarships for international students with deadlines in December. Apply now for funding opportunities!",
-  "h1": "Scholarships for International Students with December Deadlines",
-  "intro": "Are you an international student seeking financial assistance for your studies? December is a crucial month for scholarship applications, with 31 opportunities available to help fund your education. From merit-based awards to scholarships aimed at specific fields like STEM or public service, this is your chance to secure financial support. Notable scholarships include the Vanna Christian Sun Legacy Scholarship and the $25,000 'Be Bold' No-Essay Scholarship. Whether you're pursuing undergraduate or graduate studies, these scholarships can significantly ease your financial burden. Start your application process today to ensure you meet the upcoming deadlines!",
-  "supporting": "Eligibility for these scholarships varies, but many are open to international students enrolled in accredited institutions. Common requirements include a completed application form, academic transcripts, letters of recommendation, and personal statements. Specific scholarships may target particular demographics, such as women in public service or students in STEM fields. Be sure to check each scholarship's website for detailed eligibility criteria and application requirements. Most deadlines fall in December, so prepare your materials in advance to increase your chances of success. Don't miss out on these valuable funding opportunities!",
-  "related_intro": "In addition to December deadlines, numerous scholarships are available throughout the year for international students. Explore these options to maximize your funding potential.",
+  "seo_title": "Find USA Scholarships for International Students by December Dea…",
+  "seo_description": "USA scholarships for international students with December deadlines. Compare listings, check varying requirements, and apply on official pages.",
+  "intro": "Trying to find USA scholarships for international students with a December deadline usually means balancing urgency with fit. This filtered slice brings together a focused set of listings so you can apply sooner, compare options, and avoid mixing late-cycle programs with opportunities that may need attention earlier. The rows here span subjects such as education, STEM, medicine, humanities, and community-focused awards, with examples that also touch engineering, communication, and business-related study. Awards vary by listing, requirements are mixed, and some programs may ask for essays while others appear lighter-touch. Because deadline wording and eligibility details differ across these entries, it is worth reading each row carefully and verifying the official terms before you move forward.",
+  "h1": "Find International Student Scholarships with December Deadlines…",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan each row for study level, category, citizenship wording, and field of study so you can quickly separate broad USA opportunities from programs aimed at a narrower academic path. If an award amount is shown, treat it as listing-specific and confirm the latest details on the sponsor page. Since deadlines differ by program and some listings may be coming up soon, open strong matches early, read the requirement lines closely, and shortlist the options that fit your profile before you apply.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by subject area, study level, or other eligibility signals. That is useful when you want to compare international-student options against broader USA scholarship filters without losing sight of deadline timing.",
   "how_to_use": [
-    "Review the list of scholarships carefully.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required documents like transcripts and essays.",
-    "Submit your applications before the December deadlines.",
-    "Follow up with scholarship providers for any updates."
+    "Compare deadline text across rows first",
+    "Read each requirement line carefully",
+    "Open the official page to verify eligibility",
+    "Shortlist listings that match your study level",
+    "Check award details and application materials before applying"
   ],
   "who_for": [
-    "International students pursuing undergraduate or graduate degrees.",
-    "Students in specific fields such as STEM or public service.",
-    "Those seeking financial assistance to study abroad."
+    "International students targeting USA scholarships with December timing",
+    "Graduate applicants comparing deadline-based funding options",
+    "Students in education, STEM, medicine, or humanities fields",
+    "Applicants who want to find mixed essay and lighter-requirement listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available?",
-      "answer": "There are various scholarships including merit-based, need-based, and those targeting specific demographics or fields of study."
+      "question": "How can I find scholarships for international students with a December deadline in the USA?",
+      "answer": "Use this filtered view to compare the rows marked for international students and check each listing’s deadline text individually. Deadlines differ by program, so verify the current date and eligibility on the official source before you apply."
     },
     {
-      "question": "How can I find more scholarships?",
-      "answer": "You can search online scholarship databases, university financial aid offices, and specific organizations related to your field of study."
+      "question": "Do all scholarships here require an essay?",
+      "answer": "No single rule applies across this filtered set. Some programs appear to have essay requirements and some may be lighter-touch, so review each listing carefully before you apply."
     },
     {
-      "question": "What is the typical application process?",
-      "answer": "The application process usually involves submitting an application form, academic records, letters of recommendation, and a personal statement."
+      "question": "What kinds of scholarships can I explore in this filtered set?",
+      "answer": "The programs below span themes such as Education, STEM, Medicine, Humanities, Community, and Miscellaneous. You can also browse examples tied to fields like engineering, biological and biomedical sciences, business management and marketing, communication and journalism, and education."
+    },
+    {
+      "question": "Who should use this page to browse and apply?",
+      "answer": "This page is useful for international students comparing USA scholarship options across different study levels, including graduate students, high school seniors, sophomores, juniors, and adult non-traditional learners. Because eligibility labels can vary row to row, always confirm citizenship or residency wording on the official listing before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 35,
+    "award": {
+      "medianUsd": 1575,
+      "minUsd": 500,
+      "maxUsd": 143000,
+      "statedAmountCount": 31,
+      "unstatedAmountCount": 4
+    },
+    "deadline": {
+      "within30Days": 31,
+      "within60Days": 31,
+      "rollingOrUnknown": 4,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z",
+        "2026-04-30T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 26,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "document",
+        "personal_statement",
+        "photo",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "adult_non_traditional",
+        "high_school_senior",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Worcester State University",
+        "count": 2
+      },
+      {
+        "name": "Andrea Beck",
+        "count": 1
+      },
+      {
+        "name": "Ashley Bowman",
+        "count": 1
+      },
+      {
+        "name": "Aura Matilde Memorial Scholarship Fund",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "community",
+      "humanities"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-international-students-december-deadline",
-    "generatedAt": "2026-04-25T13:30:38.000Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 31,
+    "generatedAt": "2026-04-26T13:17:57.064Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 35,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

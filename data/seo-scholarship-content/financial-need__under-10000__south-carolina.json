@@ -1,0 +1,120 @@
+{
+  "seo_title": "Find South Carolina Need-Based Scholarships | USA",
+  "seo_description": "South Carolina need-based scholarships under ten thousand dollars in the USA. Compare awards, deadlines, and requirements, then apply.",
+  "intro": "Trying to find South Carolina scholarships in the USA that consider financial need and stay under a lower award range usually means sorting through very different programs fast. This filtered slice brings those listings into one place so you can apply with a clearer shortlist, compare options that may fit smaller funding gaps, and spot opportunities tied to education, community, and other common themes. The rows below are not identical: award amounts vary by listing, deadlines differ by program, and requirement details can be lighter for some entries than others. You may also see a mix of study levels and fields, from education and business to construction trades and engineering, so it is worth reading each listing closely before you decide where to focus.",
+  "h1": "Compare Need-Based Scholarships in South Carolina USA",
+  "supporting": "Use this view to compare more than the headline title. Check how each scholarship describes eligibility, residency or citizenship language, study level, and field of study, then open the official page to verify the current rules. Because deadline text appears across these rows and some programs may close relatively soon, it makes sense to review dates promptly. If you are weighing several options, compare the listed award text, note any essay or document expectations, and keep a shortlist of the South Carolina programs that best match your situation.",
+  "related_intro": "If these South Carolina financial-need listings feel close but not quite right, related pages can help you narrow by location, award range, or other scholarship themes. That is useful when you want to compare nearby filter combinations without starting your USA search from scratch.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line for need, residency, and study level details",
+    "Open the official scholarship page to verify award amounts and rules",
+    "Shortlist the South Carolina programs that best match your background",
+    "Check for essay or document expectations before you apply"
+  ],
+  "who_for": [
+    "South Carolina residents seeking need-based scholarship options",
+    "High school seniors planning to apply for USA college funding",
+    "Current college or graduate students comparing smaller award programs",
+    "Applicants in education, business, construction trades, or engineering"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines on this page before I apply?",
+      "answer": "Yes—these rows are useful for a quick compare, and the listed awards in this slice range from smaller scholarships to several thousand dollars. Deadlines differ by program, and some appear soon, so check each listing promptly and confirm details with the official source."
+    },
+    {
+      "question": "Who should explore these scholarship listings?",
+      "answer": "This set may fit USA applicants tied to South Carolina who want to explore scholarships connected to financial need, including common study levels such as high school senior, college, and graduate student. Some listings also show categories like education, miscellaneous, and community, so browse closely for the best match."
+    },
+    {
+      "question": "Do all South Carolina financial-need scholarships here require the same materials?",
+      "answer": "No. Requirements vary across the catalog, and essay expectations are mixed in this filtered set, so review each row carefully before you apply. Always use the official scholarship page to confirm what documents, residency details, or study-area information are required."
+    }
+  ],
+  "page_data": {
+    "exactCount": 12,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 12,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 11,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-01",
+        "2026-06-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "college_1",
+        "college_3",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Midlands Technical College",
+        "count": 6
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Southeastern Association of Area Agencies on Aging",
+        "count": 1
+      },
+      {
+        "name": "Water Environment Association of South Carolina-Capital District",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/south-carolina",
+    "generatedAt": "2026-04-26T14:24:30.001Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 12,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

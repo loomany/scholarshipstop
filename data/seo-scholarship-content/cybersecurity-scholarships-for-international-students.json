@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore Cybersecurity Scholarships for International Students",
-  "seo_description": "Discover 5 cybersecurity scholarships available for international students. Apply now to secure your future in tech!",
-  "h1": "Cybersecurity Scholarships for International Students",
-  "intro": "Navigating the world of cybersecurity can be challenging, especially for international students seeking financial support. Fortunately, there are scholarships specifically designed to help you pursue your education in this vital field. With a total of 5 scholarships currently available, including opportunities like the Vanna Christian Sun Legacy Scholarship and the Lyndsey Scott Coding+ Scholarship, you can find the right fit for your academic goals. These scholarships not only alleviate financial burdens but also enhance your resume, making you a more competitive candidate in the job market. Whether you're interested in coding, computer science education, or innovative technology solutions, these scholarships can help pave your way to success.",
-  "supporting": "To be eligible for these cybersecurity scholarships, international students typically need to demonstrate academic excellence, a passion for technology, and a commitment to the field of cybersecurity. Each scholarship has its own specific requirements, so it’s essential to review the details carefully. For example, the S3G Advisors NextGen Scholarship may focus on students pursuing degrees in computer science or related fields, while the Chris Jackson Computer Science Education Scholarship emphasizes teaching and educational outreach. Deadlines for applications vary, so make sure to check each scholarship’s timeline. When applying, prepare a compelling personal statement, gather letters of recommendation, and ensure your academic transcripts are up to date. Taking these steps can significantly enhance your chances of securing funding.",
-  "related_intro": "In addition to cybersecurity scholarships, there are numerous financial aid options available for international students in various fields. Exploring these can broaden your opportunities.",
+  "seo_title": "Find Cybersecurity Scholarships for International Students USA …",
+  "seo_description": "Cybersecurity scholarships for international students in the USA. Compare awards, review varying deadlines, and apply through official listings.",
+  "intro": "Trying to find USA scholarships that fit both cybersecurity interests and international student eligibility usually means sorting through mixed rules, mixed study levels, and very different application asks. This filtered slice brings those rows into one place so you can apply with more focus, compare options faster, and spot programs that may overlap with computer science or broader STEM categories. Some listings are tightly tied to education or engineering themes, while others are wider in scope and still worth a look if you plan to study cybersecurity in the USA. Awards vary by listing, deadlines differ by program, and requirements are not uniform, so it is smart to read each row closely and verify details on the official source before you move forward.",
+  "h1": "Apply for Cybersecurity Scholarships in the USA",
+  "supporting": "Use the list as a comparison view rather than assuming every result works the same way. Check the title, category tags, study level, and citizenship or residency wording to see how closely each scholarship matches your situation. It is also worth scanning requirement lines for essay expectations and other application details, since some programs appear lighter-touch while others may ask for more. If a row looks promising, open the official page, confirm current terms, and compare deadline timing before you shortlist where to apply.",
+  "related_intro": "If these results feel too broad or too narrow, related pages can help you compare nearby scholarship groups, such as international student options in adjacent STEM areas or broader computer science funding in the USA. That is often the quickest way to find better-fit programs without starting your search over.",
   "how_to_use": [
-    "Research each scholarship thoroughly.",
-    "Prepare your application materials in advance.",
-    "Check eligibility requirements carefully.",
-    "Submit your applications before the deadlines.",
-    "Follow up on your application status if needed."
+    "Sort and compare rows by deadline urgency",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist programs that match your study level and status",
+    "Compare award wording and essay expectations across listings"
   ],
   "who_for": [
-    "International students pursuing degrees in cybersecurity.",
-    "Students with a strong interest in technology and computer science.",
-    "Individuals seeking financial assistance for their education."
+    "International applicants planning cybersecurity study in the USA",
+    "Students comparing cybersecurity and computer science scholarship options",
+    "Graduate or college applicants with cross listed STEM interests",
+    "Applicants who need to check international student eligibility carefully"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various scholarships available, including merit-based, need-based, and specific program scholarships like those in cybersecurity."
+      "question": "How can I find cybersecurity scholarships for international students in the USA on this filtered page?",
+      "answer": "Use this focused set of listings to compare each row’s eligibility, study level, field tags, amount, and deadline text. Because some rows also show labels like U.S. citizen or U.S. permanent resident, verify on the official scholarship page that international students are eligible before you apply."
     },
     {
-      "question": "How do I apply for these scholarships?",
-      "answer": "Applications typically require a personal statement, letters of recommendation, and academic transcripts. Check each scholarship for specific instructions."
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—this filtered view is useful for a quick comparison, but amounts and deadlines vary by listing. Some rows show dollar amounts, while others may need confirmation on the official source, and deadline timing differs row to row, so check dates promptly."
     },
     {
-      "question": "Are there scholarships specifically for cybersecurity?",
-      "answer": "Yes, there are several scholarships dedicated to students pursuing cybersecurity, including the ones listed on this page."
+      "question": "Are these scholarships only for cybersecurity majors?",
+      "answer": "Not always. While this page is aimed at cybersecurity scholarship searches for international students, the rows can include broader STEM, education, engineering, or computer-science-related opportunities, so explore each listing’s field and eligibility details carefully."
+    },
+    {
+      "question": "Do all programs on this page require an essay?",
+      "answer": "No single requirement applies to every listing on this page. Some programs may ask for an essay and others may be lighter-touch, so review each scholarship’s requirements on the catalog row and confirm them on the official page before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "cybersecurity-scholarships-for-international-students",
-    "generatedAt": "2026-04-25T13:22:55.881Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 5,
+    "generatedAt": "2026-04-26T13:21:35.834Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

@@ -1,0 +1,120 @@
+{
+  "seo_title": "Find Mississippi Financial Need Scholarships | USA",
+  "seo_description": "Mississippi financial need scholarships under five thousand dollars in the USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Mississippi scholarships in the USA that consider financial need and stay on the lower award side can be more useful than scanning broad national lists. This filtered slice brings together programs with smaller award ranges, but the details still vary from row to row. Some listings may be open to high school seniors, others to college or graduate applicants, and fields like STEM, education, business, law, and communication appear in the mix. Requirements are not identical either: some programs may ask for more materials, while others look comparatively lighter-touch. Deadlines also differ across these rows, and at least some appear soon, so it makes sense to compare options promptly before you apply.",
+  "h1": "Mississippi Financial Need Scholarships USA Apply",
+  "supporting": "Use the list as a comparison tool, not just a directory. Read each row for award wording, study level, Mississippi fit, and any citizenship or residency language, then open the official page to verify the current rules. This is also a practical slice to scan if you want to compare smaller scholarships that may stack with other aid. Because essay expectations and requirement lines can differ, it helps to shortlist the programs that match your profile first and then check which ones are fastest to complete.",
+  "related_intro": "If these Mississippi financial need listings feel too narrow, related pages can help you compare nearby options by award size, location, or broader scholarship themes. That is useful when you want to find similar USA programs without losing the focus on practical, application-ready results.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "Mississippi residents seeking need-based scholarship options",
+    "High school seniors comparing smaller USA awards",
+    "College or graduate students with financial need",
+    "Applicants in STEM, education, business, law, or communication"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply if I’m in high school, college, or graduate school in the USA?",
+      "answer": "This set includes programs tied to multiple study levels, with examples such as high school senior, college, and graduate student. Check each listing carefully, because the exact level and USA residency or citizenship requirements can differ."
+    },
+    {
+      "question": "Do all of these Mississippi scholarships have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, and some rows may be more time-sensitive, so it’s smart to check dates promptly. Essay requirements also vary across listings, so review each row before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filtered list?",
+      "answer": "You can browse a focused set of Mississippi scholarships connected to financial need across topics like STEM, Education, Miscellaneous, and Community. Sample listings show that fields and program themes vary, so compare the rows to find the best fit."
+    }
+  ],
+  "page_data": {
+    "exactCount": 13,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 13,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "college_2",
+        "college_3",
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Mississippi Municipal League",
+        "count": 3
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 2
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Birmingham Chapter",
+        "count": 1
+      },
+      {
+        "name": "Mississippi Farm Bureau Federation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/mississippi",
+    "generatedAt": "2026-04-26T14:35:11.857Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 13,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

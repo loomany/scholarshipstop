@@ -1,48 +1,124 @@
 {
-  "seo_title": "Alaska Scholarships for African American Students",
-  "seo_description": "Explore 9 scholarships for African American students in Alaska. Award sizes vary; check deadlines and requirements for each.",
-  "intro": "Finding financial support tailored for African American students in Alaska can be challenging, but there are currently 9 scholarships available that cater specifically to this demographic. Award sizes vary, with amounts ranging from approximately $500 to $10,000. Each scholarship has unique eligibility requirements and deadlines, so it’s important to review the details carefully to identify the best fit for your needs.",
-  "h1": "Scholarships for African American Students in Alaska",
-  "supporting": "As you explore this list, take note of the diverse categories these scholarships cover, including education, community, and arts. Some scholarships may require essays, while others have lighter requirements, making it easier to apply. With deadlines approaching in the near future, be sure to check each listing for specific dates and details to maximize your chances of securing funding.",
-  "related_intro": "For additional opportunities, consider checking out related scholarships that focus on different demographics or locations, which may also align with your educational goals.",
+  "seo_title": "Find African American Scholarships in Alaska, USA",
+  "seo_description": "African American scholarships in Alaska, USA: compare programs, review varying award amounts and deadlines, and apply through official listings.",
+  "intro": "Trying to find scholarships for African American students in Alaska usually means narrowing a broad USA search into a list you can actually compare. This filtered slice brings together programs tied to that eligibility and location mix, with listings that touch areas like education, community, arts, and medicine. Some rows may fit high school students, while others lean toward graduate applicants or specific academic interests such as education, business, public administration, architecture, or transportation. Awards, deadlines, residency details, and essay expectations vary across the programs below, so it is worth reading each row closely instead of assuming the same rules apply throughout. If you want to apply in the current cycle, check date details promptly because timing differs by listing.",
+  "h1": "Find African American Scholarships in Alaska USA",
+  "supporting": "A useful way to browse this set is to compare the requirement line, study level, and category before you focus on award text. Some listings appear lighter touch, while others may ask for more supporting material, so read carefully and verify every detail on the official page. It also helps to compare citizenship or residency labels, since some rows mention USA status such as citizen or permanent resident. If a title looks broad, open it anyway; the best fit may come from a program outside your expected major.",
+  "related_intro": "If you do not find the right match here, compare nearby scholarship pages by changing either the eligibility focus or the Alaska location filter. Related views can surface programs with similar categories, study levels, or requirement patterns that are still worth a closer look.",
   "how_to_use": [
-    "Review each scholarship's award amount and category",
-    "Check deadlines and prioritize those coming up soon",
-    "Compare essay requirements to identify less intensive options",
-    "Open official scholarship pages for the most accurate information",
-    "Shortlist scholarships that align with your profile and goals"
+    "Compare deadline text across rows first",
+    "Read the requirement line before judging fit",
+    "Open official pages to verify eligibility details",
+    "Shortlist programs by study level and category",
+    "Check award wording and essay expectations carefully"
   ],
   "who_for": [
-    "African American students in Alaska",
-    "Students pursuing education-related fields",
-    "Applicants interested in community service scholarships",
-    "Individuals seeking arts funding",
-    "High school seniors and college undergraduates"
+    "African American students in Alaska comparing USA scholarship options",
+    "High school juniors and seniors looking for education or community awards",
+    "Graduate students checking scholarships tied to medicine, arts, or public service",
+    "Applicants with interests in education, business, architecture, or transportation"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for African American students in Alaska?",
-      "answer": "There are currently 9 scholarships listed that cater to African American students in Alaska, covering various categories such as education, community, and arts. Each scholarship may have different focuses and eligibility criteria, so it's important to review the details for each one."
+      "question": "How can I find and compare scholarships for African American students in Alaska?",
+      "answer": "Use this filtered view to compare the rows by eligibility, Alaska location fit, study level, field of study, award amount, and deadline. Then verify the final details on each program’s official page before you apply."
     },
     {
-      "question": "Do these scholarships require essays?",
-      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, and a few have lighter application requirements. Be sure to check the specific details of each scholarship for accurate information."
+      "question": "Can I apply if I’m in Alaska but my major or study level is different?",
+      "answer": "Possibly—these listings span different study levels and subjects, including education, business, public administration, architecture, and transportation-related fields. Check each listing carefully, because eligibility rules vary by program."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The award sizes for the scholarships in this category vary significantly, with amounts ranging approximately from $500 to $10,000. Each scholarship will specify its own award amount, so reviewing individual listings is essential."
+      "question": "Do all of these USA scholarships have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and some rows appear to be coming up soon, so it’s smart to check dates promptly. Award amounts also vary by listing, so confirm the current amount on the official source before you apply."
     },
     {
-      "question": "Are there upcoming deadlines for these scholarships?",
-      "answer": "Yes, all 9 scholarships listed have deadlines, which vary from one to another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+      "question": "Are essay requirements the same across these Alaska scholarship listings?",
+      "answer": "No, requirements vary across the catalog, and essay expectations are mixed in this filtered set. When you explore a listing, review the application steps on the official page to confirm what documents are needed."
     }
   ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "architecture_and_related_services",
+        "public_administration_and_social_service",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Water Works Association-Intermountain Section",
+        "count": 1
+      },
+      {
+        "name": "Arizona Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Association of International Certified Public Accountants",
+        "count": 1
+      },
+      {
+        "name": "Black Man, M.D.",
+        "count": 1
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "african-american/alaska",
-    "generatedAt": "2026-04-02T11:02:09.666Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 9,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:22:16.026Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

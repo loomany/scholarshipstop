@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Texas Need-Based Scholarships Under Ten Thousand | USA",
+  "seo_description": "Texas need-based scholarships under ten thousand in the USA. Compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Texas scholarships tied to financial need without wading into the highest award tiers? This filtered slice brings together USA listings capped under a lower award ceiling, so you can compare options that may be more realistic to apply for alongside other aid. The rows below span areas like education, community, STEM, disability, arts, and miscellaneous topics, with study levels ranging from high school seniors to graduate students. Requirements are not identical from one listing to the next: some may ask for essays, some appear lighter-touch, and residency or citizenship details can differ. Deadlines also vary by program, so it is worth checking dates promptly as you browse and shortlist matches.",
+  "h1": "Compare Texas Need-Based Scholarships Under Ten Thousand USA",
+  "supporting": "A smart way to use this list is to compare more than the headline award. Read each row for subject fit, study level, Texas relevance, and any financial-need language before you apply. Then open the official page to verify current terms, because award amounts, deadline wording, and required materials can change. This slice is especially useful if you want to find scholarships that sit below the top-dollar range while still covering a mix of academic and community-focused interests in the USA.",
+  "related_intro": "If these Texas financial-need listings feel close but not quite right, related pages can help you compare nearby options by location, award range, or broader scholarship themes. That is often the fastest way to find a better fit before you start applications.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official scholarship page",
+    "Shortlist listings that match your study level",
+    "Verify award details before you apply"
+  ],
+  "who_for": [
+    "Texas applicants with demonstrated financial need",
+    "High school seniors planning for college costs",
+    "College and graduate students comparing smaller award ranges",
+    "Students interested in education, STEM, community, arts, or disability topics"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Texas scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Texas scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Texas scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 50,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 400,
+      "maxUsd": 10000,
+      "statedAmountCount": 50,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 40,
+      "within60Days": 48,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 47,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "engineering",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Communities Foundation of Texas",
+        "count": 8
+      },
+      {
+        "name": "Austin Community College",
+        "count": 5
+      },
+      {
+        "name": "Tarrant County College Foundation",
+        "count": 4
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      },
+      {
+        "name": "Hispanic Scholarship Consortium",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "miscellaneous",
+      "disability",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/texas",
+    "generatedAt": "2026-04-26T14:25:14.589Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 50,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

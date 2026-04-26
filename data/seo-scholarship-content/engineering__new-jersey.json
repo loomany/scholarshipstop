@@ -1,46 +1,116 @@
 {
-  "seo_title": "New Jersey Engineering Scholarships Available Now",
-  "seo_description": "Explore 4 engineering scholarships in New Jersey with varying award amounts and deadlines. Check details for each opportunity.",
-  "intro": "Finding financial support for engineering studies in New Jersey can be a crucial step for aspiring students. This collection features 4 scholarships specifically aimed at engineering students in the state, with award sizes generally ranging from $2,000 to $5,000. Since deadlines vary across listings, it's important to check the specific dates to ensure you don’t miss out on opportunities that could help fund your education.",
-  "h1": "Engineering Scholarships in New Jersey",
-  "supporting": "As you explore these scholarships, pay attention to the varying requirements and essay expectations. Some scholarships may have lighter application processes, making them more accessible. Comparing the award amounts and deadlines will help you prioritize which opportunities to pursue first. Each listing provides unique benefits, so take the time to review them closely.",
-  "related_intro": "If you're interested in other funding options, consider checking out scholarships in related fields or different locations to broaden your search.",
+  "seo_title": "Find Engineering Scholarships in New Jersey, USA",
+  "seo_description": "Engineering scholarships in New Jersey, USA with deadlines that vary by listing. Compare awards and requirements, then apply on official pages.",
+  "intro": "Trying to find engineering scholarships in New Jersey usually means narrowing past broad USA results and focusing on programs that actually match your field and location. This filtered slice brings together a focused set of listings tied to engineering, with some overlap into areas like architecture, transportation, materials, and other STEM-adjacent study paths. As you compare the rows below, expect the details to vary by program: award amounts differ, deadlines are not the same, and requirement lines may be lighter for some listings than others. Some opportunities may ask for more supporting material while others appear more straightforward, so it is worth reading each entry closely before you apply.",
+  "h1": "Compare Engineering Scholarships in New Jersey USA",
+  "supporting": "Use this view to compare more than just the scholarship title. Check how each listing describes the eligible field, note whether the program seems aimed at graduate study, and look for citizenship or residency language such as USA citizen or permanent resident requirements where shown. Because deadlines in this slice differ and at least some opportunities may be coming up soon, it makes sense to review date text promptly, open the official source, and verify the latest rules, documents, and award details before you shortlist anything.",
+  "related_intro": "If these New Jersey engineering listings feel too narrow, related pages can help you compare nearby options by topic or location. That is useful when you want to keep an engineering focus but also check broader STEM results or other USA scholarship filters that may surface similar programs.",
   "how_to_use": [
-    "Compare deadlines for timely applications",
-    "Scan award amounts to find suitable options",
-    "Read requirement details to understand application needs",
-    "Open official pages for the most current information",
-    "Shortlist scholarships that align with your profile"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist programs that match your field and location",
+    "Check whether essay or document requests vary"
   ],
   "who_for": [
-    "Engineering students in New Jersey",
-    "Applicants seeking STEM funding",
-    "Students looking for scholarships with varying requirements"
+    "Engineering majors studying in New Jersey",
+    "Graduate students seeking USA STEM funding",
+    "Applicants comparing civil engineering related scholarships",
+    "USA citizens or permanent residents checking eligibility language"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in New Jersey?",
-      "answer": "There are currently 4 scholarships listed for engineering students in New Jersey. These opportunities span various categories, primarily focusing on STEM fields, and may include additional considerations like arts and education."
+      "question": "How can I find engineering scholarships in New Jersey that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, category, and any citizenship or residency labels shown. Then open the official source for each program to verify eligibility, required materials, and current terms before you apply."
     },
     {
-      "question": "How do I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 4 listings currently include deadline information. It's advisable to check the specific dates for each scholarship promptly, as at least one has a deadline within the next 45 days."
+      "question": "Can I compare award amounts and deadlines on this New Jersey engineering scholarship page?",
+      "answer": "Yes—this catalog slice lets you compare the basics side by side, but amounts and deadlines vary by listing. In this USA-focused set, some awards shown fall in the low-thousands, and every row has deadline text, so check dates promptly on the official page."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "The scholarship listings show a mix of essay requirements. While some may not require an essay, others do, so it's important to verify the specifics for each scholarship you are interested in."
+      "question": "Are these scholarships only for engineering majors in New Jersey?",
+      "answer": "The filter is focused on engineering and New Jersey, but individual listings may also connect to related areas shown in the catalog, such as architecture or transportation and materials moving. Always read each official listing carefully to confirm the exact field-of-study rules."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "The award sizes for the scholarships in this category vary, with a rough range of approximately $2,000 to $5,000 based on the available data. However, it's best to check each listing for the exact amount."
+      "question": "Do these New Jersey engineering scholarships require essays?",
+      "answer": "Requirements are mixed across these rows, so do not assume every program has the same application steps. Some may be comparatively lighter-touch, while others may ask for an essay or additional materials—verify each one before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 2000,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-04-29",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "architecture_and_related_services",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Society of Civil Engineers-New Jersey Section",
+        "count": 1
+      },
+      {
+        "name": "Illuminating Engineering Society-Philadelphia Section",
+        "count": 1
+      },
+      {
+        "name": "Ports of Philadelphia Maritime Society",
+        "count": 1
+      },
+      {
+        "name": "Society of Women Engineers",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "education"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/new-jersey",
-    "generatedAt": "2026-04-02T10:55:13.150Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:39:09.345Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

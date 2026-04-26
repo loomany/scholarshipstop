@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Arizona Financial Need Scholarships Under Five Thousand | U…",
+  "seo_description": "Arizona financial need scholarships under five thousand: compare award ranges, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Arizona scholarships tied to financial need without wading into higher-award listings? This filtered slice brings together USA scholarship programs in the lower award range so you can compare options that may be more realistic to apply for alongside other aid. The rows below span areas such as education, disability, STEM, medicine, community, and miscellaneous topics, with examples that reach from high school seniors to college and graduate study. Awards, deadlines, residency details, and requirement lines vary by listing, and some programs may be lighter-touch than others, so it is worth reading each row closely before you decide where to apply.",
+  "h1": "Compare Arizona Financial Need Scholarships Under Five Thousand…",
+  "supporting": "A useful way to browse this set is to compare more than the headline amount. Look at the category tags, study level, Arizona fit, and any citizenship or field-of-study language first, then check the deadline text because timing differs across these programs and some opportunities may be coming up soon. If a listing seems close to your background, open the official page to verify current requirements, essay expectations, and award details before you shortlist it.",
+  "related_intro": "If you do not find enough matches in this Arizona and financial-need slice, related pages can help you compare nearby options by award range, topic, or location. That is often the fastest way to spot programs with similar requirements but a better fit for your major, study level, or application timing.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level and field",
+    "Check award wording and essay expectations before you apply"
+  ],
+  "who_for": [
+    "Arizona applicants with financial need",
+    "High school seniors planning college costs",
+    "College or graduate students comparing smaller awards",
+    "Students in education, engineering, business, or health-related paths"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Arizona scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Arizona scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Arizona scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 18,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 18,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 13,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 16,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript",
+        "essay",
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "construction_trades",
+        "social_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arizona Community Foundation",
+        "count": 4
+      },
+      {
+        "name": "American Legion Auxiliary",
+        "count": 2
+      },
+      {
+        "name": "Arizona FFA Association",
+        "count": 2
+      },
+      {
+        "name": "American Association of Airport Executives-Southwest Chapter",
+        "count": 1
+      },
+      {
+        "name": "American Society for Industrial Security-Phoenix Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability",
+      "stem",
+      "medical",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/arizona",
+    "generatedAt": "2026-04-26T14:28:41.945Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 18,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

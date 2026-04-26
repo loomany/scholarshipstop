@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find Oregon Financial Need Scholarships Under Five Thousand | US…",
+  "seo_description": "Oregon financial need scholarships under five thousand in the USA. Compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Oregon scholarships tied to financial need without wading into higher award tiers? This filtered USA view narrows the search to programs with listed awards under this range, so you can compare options that may be more realistic to apply for alongside other aid. The rows here span themes such as education, community, medicine, disability, and STEM, with examples that reach from high school seniors to graduate students and early college applicants. Awards, deadlines, residency details, and requirement lines vary by listing, and some programs appear lighter-touch than others, so it is worth reading each row closely before you apply.",
+  "h1": "Apply for Oregon Financial Need Scholarships Under Five Thousand…",
+  "supporting": "Use this slice to compare more than the headline amount. Look at the requirement summary, study level, Oregon location fit, and any citizenship or residency language before you spend time on an application. Because deadline text differs across the rows and at least some listings may be approaching soon, it makes sense to shortlist strong matches early. If a title aligns with your background or field, open the official page to verify current terms, essay expectations, and any documents you need to submit.",
+  "related_intro": "If these Oregon financial-need listings feel close but not quite right, related pages can help you compare nearby scholarship paths by topic, award band, or location. That is useful when you want to widen the search without losing the same practical focus.",
+  "how_to_use": [
+    "Compare deadline text across rows first",
+    "Read each requirement line carefully",
+    "Check study level and Oregon fit",
+    "Open the official page to verify details",
+    "Shortlist strong matches before applying"
+  ],
+  "who_for": [
+    "Oregon applicants with financial need",
+    "High school seniors planning college costs",
+    "Graduate students comparing smaller award programs",
+    "Students in education, health, or community-focused fields",
+    "Applicants who want Oregon-based scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare deadlines for these Oregon scholarship listings in one place?",
+      "answer": "Yes—this catalog slice shows deadline text row by row, but there is no single deadline for the whole page. Because dates differ and at least some listings are coming up soon, check each official source promptly before you apply."
+    },
+    {
+      "question": "What kinds of scholarships appear in this USA filter page?",
+      "answer": "These rows include a mix of topics such as education, community, medicine, disability, and STEM within the USA context of Oregon listings. Study level, residency, and field-of-study details can vary by program, so open each listing to confirm fit."
+    },
+    {
+      "question": "Are all of these scholarships only for college students in Oregon?",
+      "answer": "Not necessarily—this filtered set includes sample study levels like high school senior, college, and graduate student. The best way to explore eligibility is to compare each row’s level, residency, and field details against the official requirements."
+    },
+    {
+      "question": "Do these Oregon scholarships require essays?",
+      "answer": "Requirements vary by listing, and this page includes a mix of essay and non-essay signals. Before you apply, review the individual scholarship page to confirm essays, documents, and any other submission steps."
+    }
+  ],
+  "page_data": {
+    "exactCount": 15,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 2000,
+      "maxUsd": 5000,
+      "statedAmountCount": 15,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 11,
+      "within60Days": 13,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "construction_trades",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Oregon Nurses Association",
+        "count": 3
+      },
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      },
+      {
+        "name": "Incight",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Oregon Chinese Consolidated Benevolent Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "medical",
+      "disability",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/oregon",
+    "generatedAt": "2026-04-26T14:39:03.577Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 15,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

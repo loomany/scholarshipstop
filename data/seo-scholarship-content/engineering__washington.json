@@ -1,46 +1,125 @@
 {
-  "seo_title": "Engineering Scholarships in Washington | $1,000–$10,000",
-  "seo_description": "Explore 7 engineering scholarships in Washington with varied deadlines and award sizes. Check details to apply on time.",
-  "intro": "For students pursuing engineering in Washington, this collection of scholarships offers a valuable opportunity to secure funding for your education. With 7 listings available, awards range from approximately $1,000 to $10,000, providing various options to support your academic journey. Keep in mind that deadlines and requirements vary across these scholarships, so it’s important to review each listing carefully to find the best fit for your needs.",
-  "h1": "Find Engineering Scholarships in Washington",
-  "supporting": "As you explore these scholarships, consider comparing the award amounts and specific eligibility criteria. Many listings do not require essays, making them more accessible for applicants. Be sure to check the deadlines, as some may be approaching soon. This slice is particularly worth scanning for those looking to minimize application effort while maximizing potential financial support.",
-  "related_intro": "If you're interested in more opportunities, check out related pages that focus on other fields or locations.",
+  "seo_title": "Find Engineering Scholarships in Washington, USA",
+  "seo_description": "Engineering scholarships in Washington, USA with varied award amounts and deadlines. Compare listings and check official pages to apply on time.",
+  "intro": "Trying to find engineering scholarships in Washington usually means narrowing a broad USA search into a list you can actually compare and apply to. This filtered slice brings together programs tied to engineering with Washington as the location focus, so you can scan a focused set of listings instead of jumping between unrelated results. Awards, deadlines, and eligibility details vary by program, and the rows below may span different study levels and category overlaps such as STEM, education, community, disability, or law. Many listings in this slice appear to have lighter application signals and often no essay flag, but requirements still need to be checked on each official scholarship page before you apply.",
+  "h1": "Compare Engineering Scholarships in Washington USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read the requirement lines closely, note who the program is meant for, and check how engineering is defined in each listing. Some rows may fit high school seniors, current college students, or graduate applicants, while residency or citizenship labels can also matter. Because deadlines differ by program and some may be coming up soon, it is worth opening the official source early, confirming the current terms, and shortlisting the Washington options that best match your profile before you apply.",
+  "related_intro": "If these Washington engineering listings feel close but not quite right, related pages can help you compare nearby paths. You may want to explore broader engineering results, other Washington scholarship filters, or adjacent STEM categories to find programs with a better fit for your study level or background.",
   "how_to_use": [
-    "Compare the award amounts listed for each scholarship",
-    "Review the specific eligibility requirements for each opportunity",
-    "Check the deadlines carefully, as they vary by listing",
-    "Open the official pages for detailed information",
-    "Shortlist the scholarships that best match your profile"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your study level",
+    "Verify award details on sponsor sites"
   ],
   "who_for": [
-    "Engineering students in Washington",
-    "Applicants seeking scholarships with minimal requirements",
-    "Students interested in STEM funding options"
+    "Washington students seeking engineering funding",
+    "High school seniors planning engineering study",
+    "College applicants comparing Washington STEM options",
+    "Graduate students looking for engineering support",
+    "USA residents checking eligibility-based scholarship matches"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Washington?",
-      "answer": "There are currently 7 scholarships listed specifically for engineering students in Washington. These opportunities cover a range of categories including STEM, education, community, and disability, providing diverse options for applicants."
+      "question": "How can I find engineering scholarships in Washington that fit my situation?",
+      "answer": "Use this filtered view to compare the Washington engineering rows by study level, category, and any citizenship or residency notes shown in each listing. Then open the official source for the programs you want to apply to and verify eligibility details before you start."
     },
     {
-      "question": "Do these scholarships require essays?",
-      "answer": "Most of the scholarships in this listing do not require essays, making the application process potentially easier. However, it's important to verify the specific requirements for each scholarship, as they can vary."
+      "question": "Can I compare award amounts and deadlines on this Washington engineering page?",
+      "answer": "Yes—these rows include award amounts and deadline text, but both vary by listing. Amounts in this slice range from smaller awards to larger ones, and deadlines differ by program, so check each official page before you apply."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The award amounts for the scholarships available in this category generally range from approximately $1,000 to $10,000. Each listing will provide specific details about the award size, so be sure to check those for exact figures."
+      "question": "Are these scholarships only for college engineering students in the USA?",
+      "answer": "Not always. In this filtered set, sample study levels include high school senior, graduate student, and college listings, and some rows also show USA-specific citizenship or residency labels such as U.S. citizen or U.S. permanent resident."
     },
     {
-      "question": "When should I apply for these scholarships?",
-      "answer": "All scholarships listed have deadlines, with at least one approaching within the next 45 days. It's advisable to review the deadlines for each scholarship promptly to ensure timely applications."
+      "question": "Do many of these Washington engineering scholarships require an essay?",
+      "answer": "Many listings in this slice appear to be marked as no-essay, but requirements can still vary and should be confirmed on the official scholarship page. When you compare options, review the application steps in each row instead of assuming the whole page works the same way."
     }
   ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 2750,
+      "minUsd": 1000,
+      "maxUsd": 12000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "natural_resources_and_conservation",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Armed Forces Communications and Electronics Association-Belvoir Chapter",
+        "count": 1
+      },
+      {
+        "name": "Illuminating Engineering Society-District of Columbia Section",
+        "count": 1
+      },
+      {
+        "name": "Native Forward Scholars Fund",
+        "count": 1
+      },
+      {
+        "name": "Pacific Forest Foundation",
+        "count": 1
+      },
+      {
+        "name": "Society of Women Engineers",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "arts",
+      "biology",
+      "community",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/washington",
-    "generatedAt": "2026-04-02T10:47:57.759Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 7,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:42:23.344Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,43 +1,136 @@
 {
-  "seo_title": "Explore 68 Engineering Scholarships for International Students in the USA",
-  "seo_description": "Discover 68 engineering scholarships available for international students in the USA. Apply now to secure your future in engineering!",
-  "h1": "Engineering Scholarships for International Students in the USA",
-  "intro": "If you're an international student aspiring to study engineering in the USA, you're in luck! There are currently 68 scholarships specifically designed to support your educational journey. These scholarships can significantly alleviate the financial burden of tuition and living expenses, allowing you to focus on your studies and career aspirations. From the Vanna Christian Sun Legacy Scholarship to the TOMORROW X TOGETHER (TXT) MOA Scholarship, a variety of options are available to suit your needs. Each scholarship has its unique criteria, application process, and deadlines, so it's essential to explore all your options thoroughly.",
-  "supporting": "Eligibility for these scholarships often includes being a full-time international student enrolled in an accredited engineering program. Some scholarships may require specific academic achievements, while others may focus on community involvement or personal essays. Deadlines vary, so be sure to check each scholarship's specific timeline. When applying, pay close attention to the required documents, such as transcripts, recommendation letters, and personal statements. Tailoring your application to highlight your strengths and experiences can significantly enhance your chances of success. Remember to apply early and keep track of all submission requirements to ensure a smooth application process.",
-  "related_intro": "In addition to engineering scholarships, there are numerous financial aid opportunities available for international students in various fields. Exploring these options can further support your education in the USA.",
+  "seo_title": "Find Engineering Scholarships for International Students USA",
+  "seo_description": "Engineering scholarships for international students in the USA. Compare awards, check varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find engineering scholarships in the USA that international students can actually apply for usually means sorting through mixed eligibility rules, study levels, and category labels. This filtered slice narrows that search to programs tied to engineering while still reflecting how varied the listings can be. Some rows lean toward broader education or STEM funding, while others are more directly connected to engineering study. Award amounts vary by listing, deadlines differ by program, and requirements are not uniform across these rows. You may see options for graduate study alongside undergraduate entries, and some programs appear lighter on requirements than others. If you want to compare opportunities for the current cycle and into twenty twenty six, this is a practical place to start.",
+  "h1": "Compare Engineering Scholarships for International Students USA…",
+  "supporting": "Use the rows below to compare more than the title alone. Check the study level, citizenship or residency wording, category tags, and any requirement notes before you decide which programs are worth a closer look. It is also smart to scan deadline text early, since timing differs across listings and some opportunities may close sooner than expected. When a scholarship looks promising, open the official page to verify eligibility, required materials, and the latest award details before you apply.",
+  "related_intro": "If this set feels too narrow or too broad, related pages can help you refine the search by topic, study level, or applicant background. That is useful when you want to compare engineering-focused options with broader STEM or education scholarships in the USA.",
   "how_to_use": [
-    "Browse the list of available scholarships.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required documents and personal statements.",
-    "Submit applications before the deadlines.",
-    "Follow up on your application status as needed."
+    "Compare deadline text across listings first",
+    "Read the requirement line before shortlisting any program",
+    "Check study level and eligibility wording carefully",
+    "Open the official source to verify award details",
+    "Save promising rows and compare them side by side"
   ],
   "who_for": [
-    "International students pursuing engineering degrees.",
-    "Students seeking financial assistance for tuition.",
-    "Individuals looking to enhance their academic profile."
+    "International students seeking engineering funding in the USA",
+    "Graduate applicants comparing engineering and broader STEM awards",
+    "Undergraduate engineering students reviewing mixed eligibility listings",
+    "Applicants who want USA scholarships with varied requirement types"
   ],
   "faq": [
     {
-      "question": "What types of engineering scholarships are available?",
-      "answer": "There are various scholarships including merit-based, need-based, and those focused on specific engineering disciplines."
+      "question": "How can I find engineering scholarships in the USA for international students on this filtered page?",
+      "answer": "Use this focused set of listings to compare row-by-row details like study level, field tags, eligibility labels, award information, and deadline text. Because this is a catalog view, always open the official source for each program before you apply."
     },
     {
-      "question": "How do I apply for these scholarships?",
-      "answer": "Applications typically require personal statements, recommendation letters, and academic transcripts. Check individual scholarship guidelines."
+      "question": "Can I compare award amounts for these USA engineering scholarships?",
+      "answer": "Yes—many rows show an amount, but not every listing does, and amounts vary by program. Treat the catalog as a starting point and verify the current USD amount on the official scholarship page."
     },
     {
-      "question": "Are there scholarships for graduate engineering students?",
-      "answer": "Yes, many scholarships cater to both undergraduate and graduate international engineering students."
+      "question": "Do all engineering scholarships for international students require an essay?",
+      "answer": "No single rule applies across this page. Some listings may ask for essays and some may not, so check each row and confirm requirements on the official source before you apply."
+    },
+    {
+      "question": "Are the deadlines the same for every scholarship listed here?",
+      "answer": "No, deadlines differ by program across these rows. Since some listings show relatively near-term dates, it is smart to explore and verify deadline details promptly on the official pages."
+    },
+    {
+      "question": "Who should use this page to browse or apply for scholarships?",
+      "answer": "It fits international students looking for engineering-related funding in the USA, especially those who want to compare options across different study levels. It is also useful if you want to explore adjacent category tags like STEM or Education while checking whether a listing actually matches your profile."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering-scholarships-for-international-students-usa",
-    "generatedAt": "2026-04-25T13:20:57.720Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 68,
+    "generatedAt": "2026-04-26T13:13:49.111Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

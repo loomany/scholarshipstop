@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Financial Need Undergraduate Scholarships in Virginia, USA…",
+  "seo_description": "Financial need undergraduate scholarships in Virginia, USA—compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find undergraduate scholarships in Virginia that take financial need into account usually means balancing fit, timing, and effort at the same time. This filtered USA view narrows the search to programs tied to Virginia and undergraduate study, so you can compare a focused set of listings instead of jumping between unrelated awards. The rows below span different categories, including education, community, STEM, medicine, arts, and other miscellaneous areas, and some may also reflect residency or citizenship details on the listing. Awards, deadlines, and application requirements vary by program, and while some listings appear lighter touch, others may ask for more documentation or an essay. If you plan to apply soon, it is worth checking each row promptly because deadline timing is not the same across the list.",
+  "h1": "Find Virginia Undergraduate Need-Based Scholarships USA",
+  "supporting": "A useful way to read this slice is to compare the requirement line, study level cues, and category tags before you open every listing. Some scholarships here may connect more closely to fields such as education, business, health professions, engineering, or law, while others are broader. Use the list to find options that match your situation, then compare award wording and deadline text side by side. Before you apply, verify every detail on the official page, especially residency language, eligibility terms, and any materials the sponsor asks you to submit.",
+  "related_intro": "If these Virginia undergraduate scholarships feel too narrow or too broad, related pages can help you compare nearby paths. You may want to look at other Virginia scholarship filters, more undergraduate-focused pages, or broader financial need listings across the USA to find additional matches.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages before you apply",
+    "Shortlist listings that match your field",
+    "Verify residency and citizenship terms"
+  ],
+  "who_for": [
+    "Virginia undergraduates seeking need-based aid",
+    "Applicants comparing Virginia and USA eligibility details",
+    "Students in education, engineering, health, business, or law",
+    "Undergraduates who want lighter-requirement scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Virginia for students with financial need?",
+      "answer": "Use this filtered view to compare Virginia scholarship rows that match undergraduate study and financial-need criteria. Then open each listing’s official source to confirm eligibility, residency or citizenship details, and how to apply in the USA context."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this Virginia page?",
+      "answer": "Not automatically—requirements vary by program. Some rows may also limit eligibility by study level, field, or residency status such as U.S. citizen or permanent resident, so verify each listing before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check the amount, deadline text, study level, category, and any application requirements row by row. Award amounts vary by listing, and deadlines differ by program, so use the catalog to shortlist options and confirm details on official pages."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or topics?",
+      "answer": "This filtered set includes a mix of categories and fields, with examples tied to education, community, STEM, medicine, arts, business, engineering, health professions, and law-related study. If you want to explore fit, compare the category labels and field-of-study notes on each row rather than assuming the whole page is for one major."
+    }
+  ],
+  "page_data": {
+    "exactCount": 31,
+    "award": {
+      "medianUsd": 3500,
+      "minUsd": 500,
+      "maxUsd": 20000,
+      "statedAmountCount": 31,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 19,
+      "within60Days": 29,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-25",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 29,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "engineering",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "UVA Alumni Association",
+        "count": 5
+      },
+      {
+        "name": "Southeast Virginia Community Foundation",
+        "count": 4
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "The Community Foundation for Northern Virginia",
+        "count": 2
+      },
+      {
+        "name": "Alfred Street Baptist Church",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "medical",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/virginia",
+    "generatedAt": "2026-04-26T14:56:45.979Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 31,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

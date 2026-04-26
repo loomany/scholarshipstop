@@ -1,43 +1,132 @@
 {
-  "seo_title": "Transfer Scholarships for International Students - 196 Opportunities",
-  "seo_description": "Explore 196 transfer scholarships for international students. Find funding options to support your education abroad.",
-  "h1": "Transfer Scholarships for International Students",
-  "intro": "Navigating the world of transfer scholarships can be challenging for international students. With 196 scholarships available, there are numerous opportunities to help fund your education. These scholarships are designed to support students who are transferring from one institution to another, providing financial assistance that can alleviate the burden of tuition fees. Whether you are pursuing undergraduate or graduate studies, understanding the eligibility criteria and application processes for these scholarships is crucial. This guide will help you identify the best options available to you and provide insights on how to successfully apply.",
-  "supporting": "Eligibility for transfer scholarships varies by program, but many require international students to have a minimum GPA, demonstrate financial need, or be enrolled in specific fields of study. Deadlines also differ, so it’s important to check each scholarship’s requirements carefully. For instance, scholarships like the Paul and Daisy Soros Fellowships for New Americans focus on supporting immigrant students, while the Razor's Edge Global Scholarship targets those with leadership potential. When applying, ensure that you prepare a strong personal statement, gather recommendation letters, and meet all submission deadlines. Researching each scholarship thoroughly will increase your chances of success.",
-  "related_intro": "In addition to transfer scholarships, there are various funding options available for international students, including grants, fellowships, and assistantships. Exploring these alternatives can further enhance your financial support.",
+  "seo_title": "Find Transfer Scholarships for International Students USA",
+  "seo_description": "Transfer scholarships for international students in the USA. Compare awards, review varying deadlines, and explore official listings to apply.",
+  "intro": "Trying to find USA scholarships that fit both transfer plans and international student status usually means sorting through mixed eligibility rules, study levels, and subject areas. This filtered slice brings those listings into one place so you can compare options more quickly and apply with better context. The programs below span themes such as education, STEM, community, medicine, arts, and other miscellaneous categories, with examples tied to fields like engineering, business, English, and health professions. Awards vary by listing, deadlines differ across rows, and requirements are not uniform: some opportunities may ask for essays while others appear lighter-touch. Because some deadlines are relatively soon, it is smart to check each row promptly and verify details on the official scholarship page before you move forward.",
+  "h1": "Find USA Transfer Scholarships for International Students",
+  "supporting": "Use this list to compare more than just the scholarship title. Read the requirement lines closely for transfer eligibility, international student wording, study level fit, and any field-of-study preference. It also helps to compare award text and deadline language side by side, since amounts vary and timing is not the same across programs. If a listing looks promising, open the official source to confirm current rules, required materials, and how the sponsor defines eligible applicants in the USA context.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by study level, subject area, or other international-student scholarship themes. That is often the fastest way to find a better match before you start applying.",
   "how_to_use": [
-    "Browse the list of 196 scholarships available.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents like transcripts and essays.",
-    "Submit applications before the deadlines.",
-    "Follow up on your applications to ensure they are received."
+    "Compare deadline text across rows first",
+    "Read each requirement line carefully",
+    "Open the official page to verify eligibility",
+    "Shortlist listings that match your study level and field",
+    "Check award details and application materials before you apply"
   ],
   "who_for": [
-    "International students transferring from one institution to another.",
-    "Students seeking financial assistance for their education.",
-    "Individuals pursuing undergraduate or graduate degrees."
+    "International students planning to transfer into a USA college or university",
+    "Current college students comparing transfer-friendly scholarship options",
+    "Applicants seeking scholarships across education, STEM, arts, medicine, or community categories",
+    "Students who want to compare essay and requirement differences before applying"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various types of scholarships, including merit-based, need-based, and those specifically for certain fields of study."
+      "question": "How can I find transfer scholarships for international students in the USA on this page?",
+      "answer": "Use this filtered view to explore programs tagged for international students and compare each row’s study level, category, and field of study. Then open the official source for any scholarship you want to apply to, since eligibility details can differ a lot by listing."
     },
     {
-      "question": "How can I find transfer scholarships?",
-      "answer": "You can find transfer scholarships through university financial aid offices, scholarship search engines, and dedicated scholarship websites."
+      "question": "Can I compare award amounts and deadlines across these transfer scholarship listings?",
+      "answer": "Yes—these rows include deadline text, and many listings show award amounts, but both vary by program. Amounts can range widely, so compare the catalog rows first and verify the current amount and deadline on the official scholarship page before you apply."
     },
     {
-      "question": "What documents do I need to apply for scholarships?",
-      "answer": "Typically, you will need transcripts, letters of recommendation, a personal statement, and proof of financial need."
+      "question": "Are these scholarships only for one major or academic area?",
+      "answer": "No. This filtered set includes multiple topic areas such as Education, STEM, Community, Medicine, Arts, and Miscellaneous, with sample fields including engineering, business, English, health professions, and education. If you want to browse more efficiently, use the row details to compare subject fit before clicking through."
+    },
+    {
+      "question": "Do all transfer scholarships for international students require an essay?",
+      "answer": "Not necessarily—requirements vary across the listings on this page. Some programs may have lighter application requirements, but you should always check the official source to confirm whether an essay or other materials are needed."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "transfer-scholarships-international-students",
-    "generatedAt": "2026-04-25T13:25:59.586Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:13:13.049Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

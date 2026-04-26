@@ -1,48 +1,123 @@
 {
-  "seo_title": "Idaho Scholarships for Financial Need Students",
-  "seo_description": "Explore 7 Idaho scholarships for financial need, with awards up to $12,000. Check deadlines and requirements for each listing.",
-  "intro": "If you're seeking financial assistance for your education in Idaho, this selection of scholarships could be a valuable resource. With 7 listings available, these opportunities cater to various fields and community needs, with award sizes ranging from approximately $1,000 to $12,000. Each scholarship has unique requirements and deadlines, so it's essential to review them closely to find the best fit for your situation.",
-  "h1": "Financial Need Scholarships in Idaho",
-  "supporting": "This list includes scholarships from diverse categories such as education, community support, and medical fields, many of which do not require essays. Be sure to compare the award amounts and eligibility criteria to identify which scholarships align with your goals. Given that all listings have deadlines, checking those dates promptly will help ensure you don’t miss out on potential funding.",
-  "related_intro": "For more tailored options, consider exploring scholarships focused on specific majors or community service initiatives.",
+  "seo_title": "Find Financial Need Scholarships in Idaho, USA",
+  "seo_description": "Financial need scholarships in Idaho, USA with deadlines, award ranges, and requirements to compare. Explore these listings and apply on official pages.",
+  "intro": "Trying to find USA scholarships that consider financial need in Idaho usually means balancing fit, timing, and effort at the same time. This filtered slice brings together Idaho-focused listings where need-based eligibility is part of the picture, with programs that touch areas like education, community, medicine, disability, and related paths. The rows below are not all built the same: award amounts vary by listing, deadlines differ by program, and requirement details can change from one scholarship to the next. Many entries in this set appear to have lighter application signals, and many listings often show no essay in the metadata, but you should still verify every detail on the official page before you apply.",
+  "h1": "Find Financial Need Scholarships in Idaho USA",
+  "supporting": "Use this view to compare more than just the title. Scan each row for study level, field of study, location fit, and any requirement notes that affect eligibility. Because deadlines in this Idaho need-based slice do not line up, it is smart to check date text early and shortlist the programs that are closing soonest. Award amounts are listed on individual rows, but they should always be confirmed with the sponsor. If you want to find practical options quickly, open the most relevant listings first and compare the official criteria side by side.",
+  "related_intro": "If you do not find enough matches here, check related USA scholarship pages that narrow by Idaho, financial need, study level, or topic areas such as education, community, medicine, and disability. That can help you compare nearby filters without starting your search over.",
   "how_to_use": [
-    "Review the scholarship titles for relevance to your studies",
-    "Compare the award amounts listed for each opportunity",
-    "Check the specific eligibility requirements for each scholarship",
-    "Note the deadlines to ensure timely applications",
-    "Visit the official scholarship pages for additional details"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
   ],
   "who_for": [
-    "Idaho residents with financial need",
-    "Students pursuing education in medical fields",
-    "Community college students transferring to four-year institutions",
-    "Hispanic students seeking community support",
-    "Non-traditional students returning to education"
+    "Idaho applicants with financial need",
+    "High school seniors planning college in Idaho",
+    "Community college transfer students comparing aid options",
+    "Graduate or adult non traditional learners in Idaho",
+    "Students interested in education, health, agriculture, or trades"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Idaho?",
-      "answer": "There are currently 7 scholarships listed that cater to financial need in Idaho. These include opportunities in various categories such as education, community, medicine, and disability."
+      "question": "How can I find financial need scholarships in Idaho that fit my situation?",
+      "answer": "Use this filtered view to compare Idaho listings by study level, field, category, amount, and deadline. Then open the official source for each row to verify current eligibility and application steps."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 7 listings in this category include specific dates. It's important to check these deadlines promptly, as some may be approaching within the next 45 days."
+      "question": "Can I apply if I’m not a traditional four-year student?",
+      "answer": "Possibly. These Idaho scholarship rows include examples tied to high school seniors, community college students, graduate students, and adult non-traditional applicants, but requirements vary by program."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships listed range from approximately $1,000 to $12,000. However, the exact amount can vary by scholarship, so be sure to review each listing for specific details."
+      "question": "What kinds of majors or topics show up in this Idaho financial need list?",
+      "answer": "You can explore a mix of themes in this USA filter slice, including education, community, medicine, disability, agriculture and related sciences, construction trades, and health professions. Not every listing matches every topic, so compare each row before you apply."
     },
     {
-      "question": "Do I need to write an essay to apply for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially lighter for many applicants. However, it's advisable to verify the requirements for each individual scholarship."
+      "question": "Do the scholarships on this page all have the same amount or deadline?",
+      "answer": "No. Award amounts and deadlines differ by listing, and both should be checked on the official scholarship page before you apply. In this catalog slice, listed amounts vary, and the deadline text is not the same across rows."
+    },
+    {
+      "question": "Are these Idaho financial need scholarships usually quick to apply for?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and many are marked with no essay in the catalog metadata. Still, you should confirm the full application requirements on the official source because details can change row to row."
     }
   ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 1000,
+      "maxUsd": 12000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "construction_trades",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 2
+      },
+      {
+        "name": "American Legion Auxiliary",
+        "count": 1
+      },
+      {
+        "name": "Community Council of Idaho",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Pacific Northwest Vegetable Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "medical",
+      "miscellaneous",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/idaho",
-    "generatedAt": "2026-04-02T11:14:25.825Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 7,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:02:27.773Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Texas High School Financial Need Scholarships | USA",
+  "seo_description": "Texas high school financial need scholarships in the USA—compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Texas scholarships for high school applicants with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings those listings into one place so you can compare options tied to Texas while staying focused on need-based eligibility and high school status. The rows below span areas such as education, community, STEM, disability, arts, and other miscellaneous categories, so it is worth scanning beyond your first assumption about fit. Awards vary by listing, deadlines differ by program, and requirements are not identical, with some entries appearing lighter-touch than others. If you plan to apply soon, check each row promptly because some deadlines may be closer than they seem.",
+  "h1": "Find Texas High School Need-Based Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read the requirement line, note any residency or citizenship wording, and check whether the program leans toward a category like community, education, or STEM. Some listings may suit high school seniors best, while others can include broader study levels, so confirm that your profile matches before you apply. Award amounts vary by listing and should be verified on the official page, and deadline text should always be checked row by row. Opening a few strong matches side by side makes it easier to judge effort, fit, and timing.",
+  "related_intro": "If these Texas financial need listings feel close but not quite right, related pages can help you compare nearby options by topic, location, or eligibility. That is useful when you want to widen your search without losing the high school focus or the USA context.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages to verify award details",
+    "Shortlist the listings that match your profile",
+    "Check residency and citizenship wording before you apply"
+  ],
+  "who_for": [
+    "Texas high school students with financial need",
+    "High school seniors comparing Texas-based scholarship options",
+    "Applicants seeking community, education, or STEM scholarships in Texas",
+    "Students who want USA scholarships with Texas location relevance"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Texas scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school, and Texas. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Texas high school student?",
+      "answer": "Not automatically. These rows share the Texas, high school, and financial-need filters, but requirements still vary by program, so compare each listing’s official criteria before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check award amount, deadline, study level, residency or citizenship labels, and any extra requirements such as essays. Amounts and deadlines differ by listing, so confirm the current details on the official source for each program."
+    },
+    {
+      "question": "Are these only for high school seniors in Texas?",
+      "answer": "Not always. High school is the main preset for this filtered page, but individual listings can use different study-level labels, so read each row carefully before you apply in the USA context."
+    }
+  ],
+  "page_data": {
+    "exactCount": 37,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 400,
+      "maxUsd": 10000,
+      "statedAmountCount": 37,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 29,
+      "within60Days": 35,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 34,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "agriculture_and_related_sciences",
+        "biological_and_biomedical_sciences",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Austin Community College",
+        "count": 4
+      },
+      {
+        "name": "Communities Foundation of Texas",
+        "count": 4
+      },
+      {
+        "name": "Tarrant County College Foundation",
+        "count": 4
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      },
+      {
+        "name": "Hispanic Scholarship Consortium",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "disability",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/texas",
+    "generatedAt": "2026-04-26T14:00:13.925Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 37,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

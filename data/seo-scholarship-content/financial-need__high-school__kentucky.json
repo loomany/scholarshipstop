@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Kentucky High School Need-Based Scholarships | USA",
+  "seo_description": "Kentucky high school need-based scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Kentucky scholarships for high school students with financial need usually means sorting through programs that do not all ask for the same materials, timelines, or background details. This filtered USA view narrows that search to a focused set of listings so you can compare options that match this combination more quickly. The rows below include opportunities connected to education, STEM, community, humanities, law, and other areas, with some aimed at high school seniors and others showing broader study-level language that you should read carefully. Award amounts are listed on individual rows, deadlines differ by program, and requirements can range from lighter-touch applications to listings that may ask for more supporting information or an essay.",
+  "h1": "Find Financial Need High School Scholarships in Kentucky USA",
+  "supporting": "Use this slice to compare more than just the scholarship title. Check how each listing describes eligibility, residency or citizenship language, study interests, and any requirement notes before you apply. Some programs in this Kentucky set may feel straightforward to pursue, while others need closer review on the official page. It is also smart to scan deadline text early, since timing varies across these rows and some opportunities may be coming up soon. If you are building a shortlist for the USA scholarship search cycle, compare fit first, then verify every detail with the sponsor.",
+  "related_intro": "If these Kentucky financial need scholarships feel close but not quite right, related pages can help you widen or tighten the search by location, school stage, or other scholarship themes. That is useful when you want to compare nearby filter combinations without starting over.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist the listings that match your background and interests",
+    "Check essay expectations and supporting materials for each program"
+  ],
+  "who_for": [
+    "Kentucky high school students with financial need",
+    "High school seniors in Kentucky comparing local scholarship options",
+    "USA applicants who want Kentucky-based listings with need-focused eligibility",
+    "Students interested in education, STEM, community, humanities, or law related awards"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Kentucky scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare Kentucky-focused listings that match financial need and high school intent in the USA catalog. Then open each row and verify eligibility, residency, study level, and application steps on the official source."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Kentucky high school student?",
+      "answer": "Not automatically. These rows share the Kentucky + high school + financial need theme, but requirements still vary by program, so check each official page before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amounts, deadline text, study level, category, and any essay or document requirements shown in the listing. Amounts and deadlines differ by row, so confirm the latest details on the official scholarship page."
+    },
+    {
+      "question": "Are these only for one major or career path?",
+      "answer": "No. This filtered set includes a mix of topics such as education, STEM, community, law, humanities, and miscellaneous listings, so it’s worth exploring beyond one subject area."
+    }
+  ],
+  "page_data": {
+    "exactCount": 12,
+    "award": {
+      "medianUsd": 1250,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 12,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kentucky 4-H Foundation",
+        "count": 3
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Epilepsy Foundation of Kentuckiana",
+        "count": 1
+      },
+      {
+        "name": "Kentucky Broadcasters Association",
+        "count": 1
+      },
+      {
+        "name": "Kentucky Electronic Security Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "law",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/kentucky",
+    "generatedAt": "2026-04-26T13:53:42.091Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 12,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

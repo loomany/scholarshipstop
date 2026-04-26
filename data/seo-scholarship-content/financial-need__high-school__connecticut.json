@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Connecticut High School Need Scholarships | USA",
+  "seo_description": "Connecticut high school financial need scholarships in the USA—compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Connecticut scholarships for high school students with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings together a focused set of listings tied to that combination, so you can compare options without jumping between unrelated results. The programs below span areas such as education, arts, STEM, community, and medicine, and some may also mention residency or citizenship terms on the official page. Awards, deadlines, and application requirements vary by listing, and some opportunities appear lighter touch than others, so it is worth checking each row closely before you apply.",
+  "h1": "Find Connecticut High School Need Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan the award text, read the requirement lines, and note how each program frames financial need, location, and study level. Some listings may fit Connecticut high school applicants directly, while others can include broader eligibility language that still needs verification. If a deadline feels close, open the official source right away and confirm the current terms before you spend time preparing materials.",
+  "related_intro": "If you are narrowing your search further, related pages can help you compare nearby filter combinations, such as other Connecticut scholarship themes or financial need listings for different study levels. That is often the fastest way to find programs that match your profile more closely.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your location and study level",
+    "Verify award details and eligibility on the sponsor site"
+  ],
+  "who_for": [
+    "Connecticut high school students with financial need",
+    "High school seniors comparing local and broader USA scholarship options",
+    "Applicants seeking education, arts, STEM, community, or medicine related listings",
+    "Students who want to find scholarships with potentially lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Connecticut scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings tied to financial need, high school status, and Connecticut. Then open each row and verify eligibility, residency, and application details on the official source before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I live in Connecticut?",
+      "answer": "Not automatically. These rows share the Connecticut and financial-need filter, but each program can still set its own rules for grade level, residency, citizenship, or other requirements, so check the official listing carefully."
+    },
+    {
+      "question": "How do I compare award amounts and deadlines on this page?",
+      "answer": "Amounts and deadlines vary by listing, so compare row by row instead of assuming one standard for the whole page. Award values in this slice range widely, and deadline text differs across programs, so it is smart to check dates promptly and confirm them on official pages."
+    },
+    {
+      "question": "Are these only for one subject, or can I explore different categories?",
+      "answer": "You can explore a mix of categories in this Connecticut filter, including education, arts, STEM, community, and medicine-related listings. Some scholarships may also mention fields such as business, engineering, natural resources, or architecture, depending on the row."
+    }
+  ],
+  "page_data": {
+    "exactCount": 46,
+    "award": {
+      "medianUsd": 1550,
+      "minUsd": 150,
+      "maxUsd": 17000,
+      "statedAmountCount": 46,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 41,
+      "within60Days": 43,
+      "rollingOrUnknown": 0,
+      "nearestDays": 15,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 44,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "natural_resources_and_conservation",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 34
+      },
+      {
+        "name": "American Society of Landscape Architects-Connecticut Chapter",
+        "count": 1
+      },
+      {
+        "name": "Association of Connecticut Fairs",
+        "count": 1
+      },
+      {
+        "name": "Connecticut Association of Latinos in Higher Education",
+        "count": 1
+      },
+      {
+        "name": "Connecticut Parks Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "arts",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/connecticut",
+    "generatedAt": "2026-04-26T13:50:55.540Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 46,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

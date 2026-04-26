@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find African American High School Scholarships in Alaska, USA …",
+  "seo_description": "African American high school scholarships in Alaska, USA—compare deadlines, award details, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Alaska scholarships for African American high school students in the USA usually means sorting through small differences that matter: grade level, residency wording, category focus, and how much paperwork each program asks for. This filtered view brings those listings into one place so you can compare options without losing the Alaska and high school focus. In these rows, award amounts vary by listing and should be verified on the official pages, and deadlines differ by program rather than following one shared date. Many listings in this slice appear to have no essay requirement, and some may be lighter-touch on requirements overall, but you should still read each eligibility line carefully before you apply.",
+  "h1": "Compare African American High School Scholarships in Alaska USA…",
+  "supporting": "A smart way to use this set is to compare the requirement text side by side, then look at category clues such as education, miscellaneous, or medicine to see which awards fit your plans best. If you are a high school junior or senior, check how each listing describes study level and residency details before you spend time on an application. Because at least some deadlines appear to be coming up soon, it makes sense to shortlist promising programs now, open the official source for each one, and verify the latest amount, deadline, and submission steps.",
+  "related_intro": "If you do not find enough matches in this Alaska-focused set, compare nearby scholarship pages by changing one filter at a time, such as the location, the high school preset, or the African American eligibility tag. That makes it easier to spot programs with similar themes but different requirements.",
+  "how_to_use": [
+    "Compare each row for eligibility wording, study level, and Alaska location details",
+    "Scan award text and category labels, then verify amounts on the official scholarship page",
+    "Read the requirement lines closely, especially residency and application instructions",
+    "Check deadlines promptly because timing varies by program and some listings may close soon",
+    "Open the sponsor or official source for every scholarship you shortlist before you apply"
+  ],
+  "who_for": [
+    "African American high school students in Alaska who want USA scholarship options gathered into one focused view",
+    "High school juniors and seniors checking listings that may match their current study level",
+    "Applicants who prefer scholarships that often appear to have no essay requirement",
+    "Students comparing education, miscellaneous, or medicine-related scholarship categories before they apply"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Alaska scholarships for African American high school students?",
+      "answer": "Use this filtered view to compare the programs below, then open each listing’s official source to confirm eligibility, residency, and grade-level details. In this USA-focused slice, some rows reference high school juniors or seniors, so requirements can differ by program."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this page?",
+      "answer": "Not automatically. Apply only after you verify each row’s rules on the official page, since eligibility, study interests, and residency details may vary across these Alaska scholarship listings."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare deadline timing, award details, and any requirement notes row by row. Amounts vary by listing and should be verified on official pages, and deadlines differ by program rather than following one page-wide date."
+    },
+    {
+      "question": "Are these scholarships only for one major or career path?",
+      "answer": "No—this filtered set includes different themes, with examples tied to education, medicine, and broader miscellaneous categories. If you want to explore fit, check both the category label and the official scholarship description before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 1000,
+      "maxUsd": 2500,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-19",
+        "2026-05-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arizona Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Black Man, M.D.",
+        "count": 1
+      },
+      {
+        "name": "Illinois CPA Society",
+        "count": 1
+      },
+      {
+        "name": "New Jersey Utilities Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/high-school/alaska",
+    "generatedAt": "2026-04-26T13:22:58.213Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

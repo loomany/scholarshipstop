@@ -1,43 +1,132 @@
 {
-  "seo_title": "Top Scholarships for Brazilian Students in the USA",
-  "seo_description": "Explore 196 scholarships available for Brazilian students in the USA. Find funding opportunities to support your education.",
-  "h1": "Scholarships for Brazilian Students in the USA",
-  "intro": "Are you a Brazilian student looking to study in the USA? You’re in luck! There are currently 196 scholarships specifically designed to support international students like you. These scholarships can significantly reduce your financial burden and help you achieve your academic goals. From merit-based awards to need-based grants, the options are diverse. Popular scholarships include the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship, among others. Whether you’re pursuing undergraduate or graduate studies, there’s likely a scholarship that fits your needs. Start your journey towards studying in the USA by exploring these funding opportunities today!",
-  "supporting": "Eligibility criteria for scholarships vary, but many require proof of enrollment in a U.S. institution and a strong academic record. Some scholarships, like the Paul and Daisy Soros Fellowships for New Americans, may also consider your personal background and achievements. Be mindful of application deadlines, which can range from early summer to late fall, depending on the scholarship. To apply, gather necessary documents such as transcripts, recommendation letters, and personal statements. Tailoring your application to reflect your unique experiences can enhance your chances of success. Don’t forget to check for any specific requirements for each scholarship you’re interested in.",
-  "related_intro": "In addition to scholarships, there are various financial aid options and resources available for Brazilian students studying in the USA. Explore grants, assistantships, and work-study programs that can further support your education.",
+  "seo_title": "Find Scholarships for Brazilian Students in USA",
+  "seo_description": "Scholarships for Brazilian students in USA with deadlines, eligibility, and award details. Compare listings and apply on official program pages.",
+  "intro": "Trying to find scholarships for Brazilian students in the USA usually means sorting through mixed eligibility rules, study levels, and subject areas without wasting time on listings that do not fit. This filtered view brings together a focused set of programs connected to that search, including options that touch education, STEM, community, medicine, arts, and other academic paths. As you compare the rows below, expect variation in award amounts, deadline timing, essay expectations, and residency or citizenship language. Some listings may be open to broader international student groups, while others can be narrower. If you plan to apply in the USA, it is worth checking details promptly because deadlines differ by program and some opportunities may close sooner than expected.",
+  "h1": "Apply for Scholarships for Brazilian Students in USA",
+  "supporting": "Use this list to compare more than just the title. Scan each row for study level, field of study, and requirement cues, then open the official page to verify who can apply and what documents are needed. You may notice a mix of broader international awards and more specific programs tied to certain backgrounds, campuses, or academic interests. This slice is especially useful if you want to browse several paths at once and quickly separate scholarships worth a closer look from those that are not a match.",
+  "related_intro": "If these listings feel close but not exact, related pages can help you narrow by study level, subject area, or broader international student categories in the USA. That is often the fastest way to find adjacent options with different requirement patterns or application formats.",
   "how_to_use": [
-    "Browse the list of 196 scholarships available.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary application documents.",
-    "Submit applications before deadlines.",
-    "Follow up on your application status."
+    "Compare deadline wording across the rows",
+    "Read the requirement line for essay and eligibility details",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level and field",
+    "Verify award terms and documents on the sponsor site"
   ],
   "who_for": [
-    "Brazilian students pursuing undergraduate or graduate studies.",
-    "International students looking for financial assistance.",
-    "Students with diverse academic backgrounds and achievements."
+    "Brazilian students planning to study in the USA",
+    "International applicants comparing USA scholarship options",
+    "Graduate or undergraduate applicants checking mixed eligibility rules",
+    "Students in education, engineering, business, health, or arts fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Brazilian students?",
-      "answer": "There are merit-based, need-based, and specific scholarships for various fields of study."
+      "question": "How can I find scholarships for Brazilian students in the USA on this page?",
+      "answer": "Use this filtered view to explore programs tagged for Brazilian students in the USA, then compare each row’s eligibility, study level, field, and deadline text. Final rules and application steps should always be verified on the official scholarship page."
     },
     {
-      "question": "How can I find the right scholarship for me?",
-      "answer": "Review eligibility criteria, application requirements, and deadlines for each scholarship."
+      "question": "Can I apply to every scholarship listed here if I’m a Brazilian student?",
+      "answer": "Not automatically. These rows may also differ by study level, field of study, residency or citizenship wording, and other program-specific requirements, so check each listing before you apply."
     },
     {
-      "question": "Are there scholarships that cover living expenses?",
-      "answer": "Some scholarships may provide stipends for living expenses in addition to tuition coverage."
+      "question": "How do I compare scholarship amounts and deadlines in this list?",
+      "answer": "Amounts and deadlines vary by listing, so compare them row by row rather than assuming one rule for the whole page. Some awards in this USA catalog show listed amounts, but you should confirm the current amount and deadline on the official source before applying."
+    },
+    {
+      "question": "Are there scholarships here for different majors and study levels?",
+      "answer": "Yes—this filtered set includes a mix of categories such as Education, STEM, Medicine, Arts, Community, and Miscellaneous, with sample study levels ranging from high school senior to graduate student. If you want to find a closer match, compare the field and level shown on each listing."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-brazilian-students-in-usa",
-    "generatedAt": "2026-04-25T13:19:43.275Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:04:08.498Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

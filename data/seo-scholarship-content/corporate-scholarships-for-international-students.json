@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore 196 Corporate Scholarships for International Students",
-  "seo_description": "Discover 196 corporate scholarships for international students, including eligibility criteria and application tips.",
-  "h1": "Corporate Scholarships for International Students",
-  "intro": "Navigating the world of scholarships can be challenging, especially for international students seeking financial aid. With 196 corporate scholarships available, there are numerous opportunities to help fund your education. These scholarships are offered by various organizations and companies, aiming to support talented students from around the globe. From the International Student Scholarship to the Razor's Edge Global Scholarship, these awards can significantly ease the financial burden of studying abroad. Understanding the eligibility criteria and application processes for each scholarship is crucial to maximizing your chances of success. This guide will provide you with essential information to help you secure funding for your academic journey.",
-  "supporting": "Eligibility for corporate scholarships for international students varies widely, but common requirements include being enrolled or accepted at an accredited institution, maintaining a certain GPA, and demonstrating financial need or academic excellence. Some scholarships may also require specific essays or letters of recommendation. Deadlines can range from early spring to late summer, so it’s important to keep track of each scholarship’s timeline. When applying, tailor your application to highlight your unique experiences and aspirations. Utilize resources such as your school’s financial aid office or scholarship databases to find additional opportunities. Remember to follow application instructions carefully to ensure your submission is complete.",
-  "related_intro": "In addition to corporate scholarships, there are various other funding options available for international students, including government grants and private foundations. Exploring these avenues can further enhance your financial support.",
+  "seo_title": "Find Corporate Scholarships for International Students USA",
+  "seo_description": "Corporate scholarships for international students in the USA: compare award ranges, review varying deadlines, and apply through official listings.",
+  "intro": "Trying to find corporate scholarships for international students in the USA usually means sorting through very different rules, study levels, and subject areas without wasting time on poor matches. This filtered slice brings together a focused set of listings tied to that search, with programs connected to areas like education, STEM, community, medicine, arts, and other miscellaneous categories. The rows below can help you compare options for graduate study, college years, and even some senior-level applicants, but requirements are not uniform. Award amounts vary by listing, deadlines differ by program, and essay expectations are mixed, so it is worth checking each row closely before you apply.",
+  "h1": "Compare Corporate Scholarships for International Students USA …",
+  "supporting": "A smart way to use this list is to compare more than the title. Read the category tags, study level, citizenship or residency labels, and any requirement notes to see which programs actually fit your situation in the USA. Some listings may look broad at first glance, while others are clearly tied to a field such as engineering, business, education, English, or health professions. Open the official page for any strong match, verify current terms there, and build a shortlist based on fit, deadline timing, and the effort each application will take.",
+  "related_intro": "If these listings feel close but not quite right, related pages can help you narrow by study level, subject area, or applicant background. That is often the fastest way to find scholarships in the USA that better match your academic path and eligibility details.",
   "how_to_use": [
-    "Research available scholarships thoroughly.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare application materials in advance.",
-    "Submit applications before deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
   ],
   "who_for": [
-    "International students pursuing higher education.",
-    "Students seeking financial assistance for tuition.",
-    "Individuals with diverse backgrounds and experiences."
+    "International students comparing USA scholarship options",
+    "Graduate applicants seeking corporate-backed funding",
+    "College students in engineering, business, education, or health fields",
+    "Applicants who want to compare essay and non-essay opportunities"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for international students?",
-      "answer": "There are various types of scholarships, including merit-based, need-based, and those targeting specific fields of study or demographics."
+      "question": "How can I find corporate scholarships for international students in the USA on this page?",
+      "answer": "Use this filtered view to compare rows by study level, field of study, and eligibility labels such as international student. Then open the official source for each listing to confirm current rules, award details, and how to apply."
     },
     {
-      "question": "How can I find corporate scholarships?",
-      "answer": "You can find corporate scholarships through scholarship databases, university financial aid offices, and company websites."
+      "question": "Can I compare award amounts for these corporate scholarships?",
+      "answer": "Yes—many rows show a listed amount, but not every listing includes one, and amounts vary by program. Treat the catalog as a starting point and verify the latest USD amount on the official scholarship page before you apply."
     },
     {
-      "question": "What documents are typically required for scholarship applications?",
-      "answer": "Commonly required documents include transcripts, letters of recommendation, personal statements, and proof of enrollment."
+      "question": "Will these scholarships all require an essay or a long application?",
+      "answer": "Requirements vary across the listings. Some may be lighter-touch while others may ask for essays or additional materials, so compare the row details and confirm the full application steps on the official page."
+    },
+    {
+      "question": "Who should explore this scholarship list?",
+      "answer": "This page is useful for international students looking for USA scholarship options across areas like education, STEM, medicine, arts, and community-related categories. It also helps applicants compare opportunities across levels such as high school senior, college, and graduate study."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "corporate-scholarships-for-international-students",
-    "generatedAt": "2026-04-25T13:23:39.348Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:57:21.521Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

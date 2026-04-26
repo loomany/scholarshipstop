@@ -1,43 +1,137 @@
 {
-  "seo_title": "Merit Scholarships for International Students - Explore 196 Opportunities",
-  "seo_description": "Discover 196 merit scholarships for international students. Find funding options to support your education abroad.",
-  "h1": "Merit Scholarships for International Students",
-  "intro": "Navigating the world of scholarships can be daunting, especially for international students seeking financial assistance. Merit scholarships provide a valuable opportunity for students to fund their education based on academic achievements, talents, or other criteria. With 196 merit scholarships available, including prestigious awards like the Paul and Daisy Soros Fellowships and the Vanna Christian Sun Legacy Scholarship, students can significantly reduce their tuition costs. This guide will help you understand the types of merit scholarships available, how to apply, and tips for maximizing your chances of success.",
-  "supporting": "Eligibility for merit scholarships varies by institution and program, but generally, they are awarded based on academic performance, leadership skills, or unique talents. Deadlines can differ widely, so it’s crucial to check individual scholarship requirements. For instance, the Razor's Edge Global Scholarship may have specific criteria for international applicants. When applying, ensure you have all necessary documents ready, including transcripts, recommendation letters, and personal statements. Tailoring your application to highlight your strengths and achievements can enhance your chances of receiving funding. Remember to keep track of deadlines and submit your applications early to avoid last-minute issues.",
-  "related_intro": "In addition to merit scholarships, international students can explore various funding options, including need-based scholarships, grants, and assistantships.",
+  "seo_title": "Find Merit Scholarships for International Students USA",
+  "seo_description": "Merit scholarships for international students in the USA—compare awards, requirements, and varying deadlines, then apply on official pages.",
+  "intro": "Trying to find merit-based funding in the USA as an international student usually means sorting through programs that look similar at first glance but differ in who they support, what they ask for, and how competitive they may be. This filtered slice brings together a focused set of listings tied to merit scholarships for international students, so you can apply with more direction instead of guessing where you fit. As you compare the rows below, expect variation in award wording, study level, subject focus, essay expectations, and eligibility details. Some listings may be broader across education or community themes, while others lean toward areas like STEM, medicine, arts, or business. Deadlines also vary by program, so it is worth checking the official page promptly when a listing looks relevant.",
+  "h1": "Compare Merit Scholarships for International Students USA",
+  "supporting": "Use this view to compare more than just the title. Read each row for study level, category labels, field of study, citizenship or residency language, and any requirement cues before you decide to apply. In this USA scholarship catalog, some programs appear relatively straightforward while others may ask for more materials, so it helps to shortlist a few strong matches and verify the full rules on the sponsor or school page. If you are weighing options, compare deadline timing, award descriptions, and how closely each listing matches your academic background.",
+  "related_intro": "If these listings feel close but not quite right, related pages can help you narrow by study level, subject area, or requirement style. That is often the fastest way to explore adjacent USA scholarship options for international students without rereading the same kinds of programs.",
   "how_to_use": [
-    "Browse the list of 196 scholarships available.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents like transcripts and essays.",
-    "Submit applications before deadlines.",
-    "Follow up on your application status if needed."
+    "Compare deadline text across the rows",
+    "Read the requirement line before applying",
+    "Open the official page to verify eligibility",
+    "Shortlist listings that match your study level",
+    "Check award details and essay expectations carefully"
   ],
   "who_for": [
-    "International students pursuing undergraduate or graduate degrees.",
-    "Students with exceptional academic or extracurricular achievements.",
-    "Individuals seeking financial assistance to study abroad."
+    "International students seeking merit-based USA scholarships",
+    "Graduate applicants comparing merit awards across subjects",
+    "High school seniors planning USA study options",
+    "Students in STEM, education, business, arts, or health fields",
+    "Applicants deciding between broader and more specialized listings"
   ],
   "faq": [
     {
-      "question": "What are merit scholarships?",
-      "answer": "Merit scholarships are financial awards given to students based on their academic achievements, talents, or other criteria, rather than financial need."
+      "question": "How can I find merit scholarships for international students in the USA on this filtered page?",
+      "answer": "Use this filtered view to compare rows marked for international students, then open each listing to confirm eligibility on the official source. In this USA-focused catalog slice, study level, field, and requirements can differ from one program to the next."
     },
     {
-      "question": "How do I apply for merit scholarships?",
-      "answer": "To apply, review the eligibility criteria, gather required documents, and submit your application by the specified deadlines."
+      "question": "Can I apply to every scholarship listed here as an international student?",
+      "answer": "Not automatically. This page helps you explore relevant listings, but each program has its own rules, and some rows in the broader catalog may also reference other citizenship or residency labels, so verify details on the official page before you apply."
     },
     {
-      "question": "Can international students apply for these scholarships?",
-      "answer": "Yes, many merit scholarships are specifically designed for international students, providing opportunities for funding their education."
+      "question": "How do I compare merit-based awards on this page?",
+      "answer": "Check each row for award details, study level, and subject area, then confirm the current terms with the provider. Amounts vary by listing, and while many rows show USD values, you should verify the exact award on the official source."
+    },
+    {
+      "question": "Do these scholarships all have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, and some dates may be coming up soon, so it is smart to check rows promptly. Essay requirements also vary, so review each listing carefully before you apply."
+    },
+    {
+      "question": "What kinds of students and subjects appear in these listings?",
+      "answer": "This focused set of listings includes a mix of study levels such as graduate student, high school senior, and college years, with common subjects including education, business, engineering, English, and health professions. You can browse across categories like Education, STEM, Community, Medicine, Arts, and Miscellaneous to find options that fit your profile."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "merit-scholarships-for-international-students",
-    "generatedAt": "2026-04-25T13:18:04.265Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:00:40.017Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

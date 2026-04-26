@@ -1,48 +1,127 @@
 {
-  "seo_title": "Maine Scholarships for Financial Need | Up to $20,000",
-  "seo_description": "Explore 13 Maine scholarships for financial need, with awards from $1,000 to $20,000. Check varied deadlines and requirements.",
-  "intro": "Finding financial support for education in Maine can be challenging, especially for those facing financial need. This catalog features 13 scholarships specifically designed to assist students in Maine, with award sizes ranging from approximately $1,000 to $20,000. Each scholarship has unique requirements and deadlines, so it’s essential to review them closely to identify the best fit for your situation.",
-  "h1": "Maine Financial Need Scholarships: 13 Opportunities",
-  "supporting": "As you explore this list, pay attention to the diverse categories, including education, community, and law. Some scholarships may require essays, while others have lighter requirements, making it easier to apply. With deadlines varying across the listings, it's wise to check them promptly to ensure you don’t miss any opportunities.",
-  "related_intro": "If you're interested in similar funding options, consider checking out our other scholarship categories focused on specific fields or criteria.",
+  "seo_title": "Find Maine Financial Need Scholarships in the USA",
+  "seo_description": "Maine financial need scholarships in the USA: compare awards, review varied deadlines, and apply through official program pages.",
+  "intro": "Trying to find Maine scholarships tied to financial need in the USA usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered slice brings together a focused set of listings connected to Maine and need-based eligibility, with options that touch areas like education, community, law, and safety. You can browse these rows to compare who each program is meant for, which study levels appear most often, and whether residency or citizenship language matters for your application. Awards, deadlines, and requirement lines vary across listings, and some may be lighter-touch than others, so it is worth checking each entry closely before you apply.",
+  "h1": "Find Maine Scholarships for Financial Need USA",
+  "supporting": "A smart way to use this list is to compare the practical details row by row instead of assuming every Maine financial need scholarship works the same way. Look at the award text, scan the requirement summary, and note whether the listing seems aimed at high school students, graduate students, adult learners, or college applicants. Then open the official page to verify current rules, required materials, and deadline timing, since those details can change and differ across programs. If you want to find strong matches quickly, shortlist the rows that fit your level, location, and field first.",
+  "related_intro": "If these Maine need-based listings are close to what you want but not quite the right fit, related pages can help you compare nearby options by topic, study level, or other eligibility filters. That is often the fastest way to find scholarships with similar requirements but a different focus.",
   "how_to_use": [
-    "Compare deadlines for each scholarship to prioritize applications",
-    "Scan award amounts to find scholarships that meet your financial needs",
-    "Read requirement lines carefully to understand what is expected",
-    "Open official scholarship pages for detailed information",
-    "Shortlist scholarships that align with your qualifications and goals"
+    "Compare deadline wording across rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award text and application materials before you apply"
   ],
   "who_for": [
-    "Students in Maine with demonstrated financial need",
-    "High school seniors and current college students",
-    "Applicants pursuing education in law or community service",
-    "Individuals looking for scholarships with varying requirements",
-    "Students interested in awards with significant funding potential"
+    "Maine residents with financial need",
+    "High school students planning college costs",
+    "Graduate or adult learners returning to school",
+    "Applicants comparing education, law, or community-focused programs"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for financial need in Maine?",
-      "answer": "This collection includes 13 scholarships that cater to various categories such as education, community, law, and safety. Each scholarship has different eligibility criteria and focuses, so it's important to review the details of each listing to find the best fit for your situation."
+      "question": "How can I find Maine scholarships based on financial need?",
+      "answer": "Use this filtered view to explore programs that match financial need and Maine in the USA catalog. Then open each row to verify residency, study level, and any citizenship details on the official source."
     },
     {
-      "question": "How much can I expect to receive from these scholarships?",
-      "answer": "Award sizes for these scholarships vary, with amounts ranging approximately from $1,000 to $20,000. However, specific award amounts depend on the individual scholarship, so be sure to check each listing for precise figures."
+      "question": "Can I compare award amounts and deadlines on this Maine financial need list?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts can range widely, and deadlines differ by listing, so compare the catalog side by side and confirm the latest details on the official page."
     },
     {
-      "question": "Are there deadlines I need to be aware of?",
-      "answer": "Yes, all 13 scholarships listed have specific deadlines, which vary from one program to another. It's advisable to check the deadlines promptly, as at least one scholarship has a deadline within the next 45 days."
+      "question": "Who should apply from this filtered set?",
+      "answer": "This set may fit Maine-based applicants looking for need-based scholarships in the USA, including some high school, college, graduate, and adult/non-traditional students. Eligibility still varies row to row, so check each listing for the exact level, residency, and other requirements."
     },
     {
-      "question": "Do these scholarships require essays?",
-      "answer": "Requirements differ among the scholarships; while some may require essays, others do not. Out of the 13 listings, approximately three have essay requirements, so it's essential to review each scholarship's details for specific application instructions."
+      "question": "Are these scholarships only for certain majors or topics?",
+      "answer": "Not only—this filtered set includes a mix of categories and fields such as education, law, community, safety, business, and transportation-related studies. If you want to compare options by subject, use the listing details and verify program-specific focus areas before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 15,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 20000,
+      "statedAmountCount": 15,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 12,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "security_and_protective_services",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Finance Authority of Maine",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      },
+      {
+        "name": "Appraisal Institute-Maine Chapter",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Eastern Connecticut",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "law",
+      "community",
+      "safety"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/maine",
-    "generatedAt": "2026-04-02T11:09:14.556Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 13,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:04:44.831Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 15,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

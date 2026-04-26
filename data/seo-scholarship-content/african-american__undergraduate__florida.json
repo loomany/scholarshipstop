@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find African American Undergraduate Scholarships in Florida, USA…",
+  "seo_description": "African American undergraduate scholarships in Florida, USA—compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find undergraduate scholarships for African American students in Florida usually means narrowing past broad national results and focusing on programs that fit your location and study stage. This filtered USA view brings together a focused set of listings tied to that combination, so you can compare options without jumping between unrelated pages. The programs below vary in award size, deadline timing, category focus, and eligibility details, with community and education themes appearing often in this slice. Many listings also appear to have lighter application requirements, and no-essay options are common in the metadata, though every scholarship should still be checked carefully on its official page before you apply.",
+  "h1": "Find Florida Scholarships for African American Undergrads USA …",
+  "supporting": "Use these rows to compare more than just the title. Look at the requirement lines, location fit, study level wording, and category labels to see which scholarships are actually relevant to your plans in Florida. Award amounts vary by listing and should be verified on the official source, and deadlines differ across programs, so it is smart to check dates promptly. If a scholarship seems close to your profile, open the full listing, confirm the current rules, and shortlist the ones that match before you apply.",
+  "related_intro": "If you want to widen or refine your search, related pages can help you compare nearby scholarship paths, such as broader African American funding, other undergraduate scholarship filters, or Florida-focused listings with different eligibility combinations. That makes it easier to explore adjacent options without starting over.",
+  "how_to_use": [
+    "Compare deadline wording across each listing",
+    "Read the requirement line before applying",
+    "Open the official page to verify details",
+    "Shortlist the scholarships that match your profile",
+    "Check award text and category labels carefully"
+  ],
+  "who_for": [
+    "African American undergraduates studying in Florida",
+    "Florida applicants comparing community and education scholarships",
+    "Students seeking undergraduate awards with lighter application requirements",
+    "Applicants looking for many no-essay scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "What should I compare before I apply to these scholarships?",
+      "answer": "Compare each row for location fit, study level, category, and any citizenship or residency notes shown in the catalog. Award amounts vary by listing, so verify the current amount and application steps on the official page before you apply."
+    },
+    {
+      "question": "Are these only for current undergraduate students in Florida?",
+      "answer": "Not necessarily every row in the catalog works the same way, so review the listing details carefully before you apply. This filtered set is centered on African American and undergraduate-related Florida scholarships, but exact eligibility can vary by program."
+    },
+    {
+      "question": "Do these Florida scholarship listings usually require an essay?",
+      "answer": "Many listings in this slice appear to have lighter requirements, and many sampled rows show no essay flag in the catalog. Still, requirements can change row to row, so check the official source for the final application checklist."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filtered list?",
+      "answer": "The programs below include themes such as community, education, and miscellaneous awards, with some sample fields tied to education and visual and performing arts. If you want to browse efficiently, start with the rows that match your location and study plans, then verify details on the official scholarship pages."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 800,
+      "maxUsd": 4000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 36,
+      "nearestLabels": [
+        "2026-05-08",
+        "2026-05-08",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "African American Club of Hernando County",
+        "count": 2
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 2
+      },
+      {
+        "name": "University of South Florida",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/undergraduate/florida",
+    "generatedAt": "2026-04-26T13:28:36.254Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

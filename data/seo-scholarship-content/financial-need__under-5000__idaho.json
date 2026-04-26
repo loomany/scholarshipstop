@@ -1,0 +1,114 @@
+{
+  "seo_title": "Find Idaho Financial Need Scholarships Under Five Thousand | USA…",
+  "seo_description": "Idaho financial need scholarships under five thousand in the USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Idaho scholarships tied to financial need without wading through higher-award programs first usually means narrowing the list fast. This filtered USA view brings together a focused set of lower-amount listings connected to Idaho, so you can compare options that may be more realistic to stack with other aid. The rows in this slice span different categories, including community, medicine, disability, education, and miscellaneous topics, and they can point to different study levels such as high school senior, graduate student, and adult non-traditional applicants. Awards, deadlines, and eligibility details vary by listing, and many entries appear to have lighter application requirements, but you should still read each requirement line carefully before you apply.",
+  "h1": "Find Idaho Financial Need Scholarships Under Five Thousand USA …",
+  "supporting": "Use this list to compare more than the headline award. Check how each program defines Idaho eligibility, who it is meant for, and whether the subject area or background focus matches your situation. Because deadline text differs across these rows and some opportunities may be closing soon, it is worth scanning dates early, shortlisting strong matches, and opening the official pages to verify current rules, required materials, and any updates for the latest cycle.",
+  "related_intro": "If these Idaho financial-need listings feel too narrow, related pages can help you explore nearby options by changing one filter at a time. Compare other Idaho scholarship slices, broader financial-need results, or other lower-amount scholarship views in the USA catalog to find programs that fit your background more closely.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist listings that match your study level and background",
+    "Check award descriptions and confirm current terms on sponsor sites"
+  ],
+  "who_for": [
+    "Idaho applicants with demonstrated financial need",
+    "High school seniors comparing smaller scholarship awards",
+    "Graduate students seeking Idaho-based aid options",
+    "Adult non-traditional learners returning to school",
+    "Students interested in community, education, disability, or medical topics"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines across these Idaho scholarship listings?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but there is no single deadline for the whole page. In this USA filter slice, dates differ by program, so check the listings promptly and verify the latest deadline on the official source."
+    },
+    {
+      "question": "What kinds of applicants should explore this scholarship filter?",
+      "answer": "This focused set of Idaho scholarships may be useful for applicants connected to categories and study paths that appear in the catalog, such as community, medicine, disability, education, and some non-traditional or graduate routes. Review each listing closely because eligibility is set by the individual program, not by the filter alone."
+    },
+    {
+      "question": "Are these scholarships usually quick to apply for?",
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements can differ row to row, so read the official application instructions before you start."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-06-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "American Legion Auxiliary",
+        "count": 1
+      },
+      {
+        "name": "Community Council of Idaho",
+        "count": 1
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "United Methodist Church-Pacific Northwest Conference",
+        "count": 1
+      },
+      {
+        "name": "Western States Roofing Contractors Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "medical",
+      "disability",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/idaho",
+    "generatedAt": "2026-04-26T14:31:08.639Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

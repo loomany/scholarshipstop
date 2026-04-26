@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find North Carolina High School Need Scholarships USA",
+  "seo_description": "North Carolina high school financial need scholarships in the USA—compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships that match financial need, high school status, and North Carolina can narrow the search fast, but the details still vary a lot from row to row. In this filtered slice, you can compare programs that may fit students planning ahead for college while checking how each listing handles eligibility, residency, study level, and any extra requirements. Some opportunities look broader, while others connect to categories such as community, education, medicine, or STEM. Award amounts are listed on these rows, but the value and terms are not the same across every program. Deadlines also differ, and some appear soon, so it makes sense to apply early and verify each scholarship on the official source before relying on any single summary.",
+  "h1": "Find North Carolina High School Need Scholarships USA",
+  "supporting": "Use the list as a comparison view rather than assuming every North Carolina result works the same way. Read the requirement line closely, then compare award text, deadline wording, category fit, and any notes about citizenship or residency. Because this slice includes mixed requirement signals, it is worth opening the official page for any scholarship you may want to pursue. That extra check can help you confirm who can apply, what materials are needed, and whether a listing aimed at high school students also connects to later study levels.",
+  "related_intro": "If these North Carolina financial need listings feel close but not quite right, related pages can help you compare nearby filter combinations. You may want to explore other high school scholarship views, broader financial need results, or different USA location pages to find a better fit.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line before shortlisting",
+    "Open the official page to verify eligibility",
+    "Check award text and category fit together",
+    "Save promising listings and apply early"
+  ],
+  "who_for": [
+    "North Carolina high school students with financial need",
+    "Families comparing local and USA scholarship options",
+    "Applicants interested in community, education, medicine, or STEM categories",
+    "Students checking residency or citizenship-based eligibility details"
+  ],
+  "faq": [
+    {
+      "question": "How do I find North Carolina scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school status, and North Carolina. Then open each row and verify the official eligibility details, because residency, school level, and other requirements can differ by program."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, so you can compare options quickly before you apply. Amounts vary by listing, and deadlines differ by program, so confirm both on the official source before submitting anything."
+    },
+    {
+      "question": "Are these scholarships only for North Carolina high school seniors?",
+      "answer": "Not always. This slice is centered on North Carolina and high school-related listings, but study levels shown in the catalog can vary by row, so check each scholarship page to see whether it fits your exact grade or senior status."
+    },
+    {
+      "question": "What kinds of scholarships can I browse in this filtered list?",
+      "answer": "You can browse listings across themes that appear in this catalog slice, including Community, Education, Medicine, STEM, and Miscellaneous. Some rows also show fields such as education, business, engineering, agriculture, and health professions, which can help you compare fit."
+    }
+  ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 4250,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 12,
+      "within60Days": 13,
+      "rollingOrUnknown": 0,
+      "nearestDays": 11,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "agriculture_and_related_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Chapel Hill Carrboro Public School Foundation",
+        "count": 6
+      },
+      {
+        "name": "The Renaissance Foundation",
+        "count": 2
+      },
+      {
+        "name": "Military Officers Association of America-Coastal Carolina Chapter",
+        "count": 1
+      },
+      {
+        "name": "North Carolina Angus Association",
+        "count": 1
+      },
+      {
+        "name": "The Community Foundation of Western North Carolina",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/north-carolina",
+    "generatedAt": "2026-04-26T13:57:41.582Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

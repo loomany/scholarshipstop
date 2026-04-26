@@ -1,48 +1,117 @@
 {
-  "seo_title": "Idaho Engineering Scholarships | Find Your Funding",
-  "seo_description": "Explore 4 engineering scholarships in Idaho with awards from $1,000 to $5,000. Check deadlines and requirements for each opportunity.",
-  "intro": "Finding financial support for engineering studies in Idaho can be crucial for many students. This catalog features 4 scholarships specifically tailored for aspiring engineers in the state. Award sizes vary, and while some listings include essay requirements, others may not. It's important to check each scholarship's details to understand the specific criteria and deadlines, which can differ significantly.",
-  "h1": "Engineering Scholarships in Idaho",
-  "supporting": "As you explore these scholarships, pay attention to the varying award amounts and deadlines. Each listing provides essential information about eligibility requirements and application processes. Comparing these factors can help you identify the best opportunities for your situation. Make sure to verify details on the official sponsor sites for the most accurate and up-to-date information.",
-  "related_intro": "If you're interested in other funding options, consider looking at scholarships in related fields or nearby states. This can broaden your search and increase your chances of finding the right fit.",
+  "seo_title": "Find Engineering Scholarships in Idaho, USA",
+  "seo_description": "Engineering scholarships in Idaho, USA with deadlines and requirements that vary by listing. Compare options and apply on official pages.",
+  "intro": "Trying to find engineering scholarships in Idaho usually means narrowing past broad USA results to a smaller set you can actually compare and apply to. This filtered slice brings together Idaho-linked programs tied to engineering, with some overlap into STEM and related science themes. The rows below do not follow one pattern: award amounts vary by listing, deadlines differ by program, and requirement details can be lighter in some cases than others. You may also see differences in study level fit, with examples in this slice touching both high school senior and graduate student audiences. If you want a practical place to browse and compare Idaho engineering options for the current cycle, this is a focused set of listings worth checking promptly.",
+  "h1": "Apply for Engineering Scholarships in Idaho USA",
+  "supporting": "Use this view to compare the details that matter before you commit time to an application. Read each title and requirement line closely, then check how the program is categorized, which study level it appears to fit, and whether the official page asks for an essay or other materials. Because deadlines in these rows are not all the same, it helps to open the most relevant listings first and verify every detail on the sponsor site. Amounts also vary, so treat the catalog as a starting point for shortlisting rather than the final word.",
+  "related_intro": "If these Idaho engineering listings feel too narrow or too broad, related pages can help you pivot by topic or location. That makes it easier to explore nearby STEM categories, compare engineering options in other USA locations, or find adjacent scholarship pages that better match your study level.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Review award amounts listed in each row",
-    "Read the requirement lines carefully",
-    "Open official pages for more details",
-    "Shortlist scholarships that fit your profile"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check whether essay expectations vary by program"
   ],
   "who_for": [
-    "Engineering students in Idaho",
-    "Undergraduate students pursuing STEM",
-    "Students with disabilities seeking support",
-    "Biology majors interested in engineering",
-    "High school seniors planning to study engineering"
+    "Idaho students pursuing engineering studies",
+    "High school seniors planning an engineering path",
+    "Graduate students seeking Idaho funding options",
+    "Applicants comparing STEM and engineering scholarship overlap"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Idaho?",
-      "answer": "There are currently 4 scholarships listed specifically for engineering students in Idaho. These opportunities cover various categories, including STEM, biology, and disability."
+      "question": "How can I find engineering scholarships in Idaho that fit my situation?",
+      "answer": "Use this filtered view to compare the Idaho engineering rows first, then open the official scholarship pages to confirm eligibility, study level, and required materials. In this USA slice, details vary by listing, so treat the catalog as a starting point rather than the final authority."
     },
     {
-      "question": "Do the scholarships require essays?",
-      "answer": "Requirements for essays vary among the scholarships. While some may require an essay, others might not, so it's important to check the specific details for each scholarship listing."
+      "question": "Can I apply to every scholarship listed under Idaho engineering?",
+      "answer": "Not automatically. Each program below may have its own rules for location, field of study, and study level, so check the official source before you apply."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The award sizes for the scholarships in this category generally range from approximately $1,000 to $5,000. However, it's advisable to review each listing for the exact award amount."
+      "question": "Do all Idaho engineering scholarships here have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and award amounts vary by listing. Some rows in this filtered set show awards in roughly the low-thousands, but you should verify the current amount and date on the official page before applying."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All scholarships in this listing have deadlines, but they differ from one another. Be sure to check the specific deadline for each scholarship, as at least one is approaching within the next 45 days."
+      "question": "Are these only for college engineering majors in Idaho, or should high school seniors and graduate students explore them too?",
+      "answer": "Explore the rows individually, because this slice can include different study levels, including examples tied to high school seniors and graduate students. The best way to compare fit is to check each listing's level and field details against the official source."
+    },
+    {
+      "question": "Will I need an essay for these engineering scholarships in Idaho?",
+      "answer": "Requirements are mixed in this catalog slice, so don't assume every program has the same application format. Some may be lighter-touch than others, but you should review each official listing carefully before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-10",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "business_management_and_marketing",
+        "natural_resources_and_conservation"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "American Water Works Association-Intermountain Section",
+        "count": 1
+      },
+      {
+        "name": "Pacific Forest Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Associates Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Mikkelson Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/idaho",
-    "generatedAt": "2026-04-02T10:54:36.180Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:36:19.309Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

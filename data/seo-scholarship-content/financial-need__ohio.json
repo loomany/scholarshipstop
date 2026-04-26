@@ -1,48 +1,126 @@
 {
-  "seo_title": "Ohio Scholarships for Financial Need | 21 Opportunities",
-  "seo_description": "Explore 21 scholarships in Ohio for students with financial need. Award sizes vary from $750 to $5,000. Check deadlines promptly.",
-  "intro": "Finding financial support can be a crucial step for students in Ohio, especially when navigating the costs of education. This collection features 21 scholarships specifically aimed at those demonstrating financial need, with award amounts ranging from approximately $750 to $5,000. With a variety of categories including community, education, law, and STEM, there are opportunities tailored to diverse academic paths. Be mindful that deadlines vary, so it’s important to check each listing for specific dates.",
-  "h1": "Scholarships for Financial Need in Ohio",
-  "supporting": "As you explore these scholarships, consider comparing the award amounts and requirements to find the best fit for your situation. Some opportunities may require essays, while others might have lighter application processes. This slice of scholarships not only addresses financial need but also encompasses various fields of study, making it worthwhile to scan through the options available.",
-  "related_intro": "If you're interested in further opportunities, check out related pages that focus on specific fields or additional financial aid options tailored for Ohio students.",
+  "seo_title": "Find Financial Need Scholarships in Ohio, USA",
+  "seo_description": "Financial need scholarships in Ohio, USA with award ranges and varied deadlines. Compare listings and apply early on official pages.",
+  "intro": "Trying to find Ohio scholarships that take financial need into account usually means sorting through programs with very different rules, study levels, and subject areas. This filtered USA view pulls together a focused set of listings tied to Ohio and need-based eligibility, so you can compare options without jumping between unrelated awards. The rows below span areas such as community, education, medicine, law, miscellaneous, and STEM, with examples connected to education, health professions, legal studies, engineering, and physical sciences. Award amounts vary by listing, and deadlines differ by program, so it is worth checking dates promptly and reading each requirement line closely. Some listings may be comparatively lighter-touch, while others can ask for more documentation or written responses.",
+  "h1": "Find Financial Need Scholarships in Ohio USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Look at location fit, study level, citizenship or residency language, field of study, and any requirement notes before you apply. In this Ohio slice, you can find programs that may suit high school seniors, college students, graduate students, and adult non-traditional learners. It is also worth scanning category labels to spot relevant paths in community-focused, education, law, medicine, or STEM funding. Amounts shown in listings can range widely, so verify the current award details and full eligibility terms on the official page for each program.",
+  "related_intro": "If you are not seeing enough matches, compare nearby scholarship pages by changing either the Ohio location filter or the financial-need filter. Related pages can help you find broader Ohio funding, other need-based options in the USA, or listings tied more closely to your major or study level.",
   "how_to_use": [
-    "Compare deadlines for each scholarship to prioritize applications",
-    "Scan award amounts to gauge potential financial support",
-    "Read through requirement lines to understand what each scholarship entails",
-    "Open official pages for detailed information and application procedures",
-    "Shortlist scholarships that align with your educational goals and needs"
+    "Compare deadline text across the rows first, since dates vary by program and some may be coming up soon",
+    "Scan award amounts, category labels, and study level tags to find the listings that best match your profile",
+    "Read each requirement line carefully to check for financial-need language, residency details, and any essay or document requests",
+    "Open the official scholarship page for every program you shortlist and verify current rules, amounts, and application steps"
   ],
   "who_for": [
-    "Students in Ohio demonstrating financial need",
-    "Undergraduates pursuing degrees in education, law, or STEM",
-    "Community college students seeking financial support",
-    "Graduate students in need of assistance",
-    "Students looking for scholarships with varying application requirements"
+    "Ohio applicants who want scholarships that consider financial need as part of eligibility",
+    "High school seniors, college students, graduate students, and adult non-traditional learners comparing Ohio-based options",
+    "Students in education, health professions, law, engineering, or physical sciences looking for need-aware funding",
+    "US citizens and permanent residents checking Ohio listings with residency or citizenship language"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Ohio?",
-      "answer": "There are 21 scholarships listed for students with financial need in Ohio, covering a range of categories including community, education, medicine, law, and STEM. Each scholarship has unique eligibility criteria and focus areas, so it's beneficial to review the details of each listing."
+      "question": "Who should explore these Ohio scholarship listings?",
+      "answer": "These rows are most relevant for applicants looking for USA scholarships tied to financial need in Ohio. In this set, you may find options for high school seniors, college students, graduate students, and adult or non-traditional students, with examples across areas like education, law, medicine, community, and STEM."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 21 scholarships in this listing have specific deadlines, but they vary from one program to another. It's important to check the individual listings promptly, as some deadlines may be approaching within the next 45 days."
+      "question": "Can I apply if I am not studying the same subject as every scholarship on the page?",
+      "answer": "Yes—this is a mixed catalog slice, not a single program. Browse the categories and fields shown on each row, because some awards are broad community scholarships while others are tied to subjects such as education, health professions, law, engineering, or physical sciences."
     },
     {
-      "question": "Do these scholarships require essays?",
-      "answer": "Requirements for essays vary among the scholarships. While some may not require an essay, others do, so be sure to read the details of each scholarship carefully to understand what is needed."
+      "question": "Do all Ohio financial-need scholarships here have the same deadline or award amount?",
+      "answer": "No. Deadlines differ by program, and award amounts vary by listing, so check each official page carefully—especially if you are applying soon, since some rows show relatively near-term deadlines."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships listed range approximately from $750 to $5,000. However, the exact amount can differ for each scholarship, so it's advisable to check the specific details for each opportunity."
+      "question": "Are the application requirements the same for every scholarship in this filtered list?",
+      "answer": "No—requirements vary across these programs below. Some listings may be lighter-touch, while others may ask for more materials, so compare the row details and confirm the full application steps on the official source before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 24,
+    "award": {
+      "medianUsd": 1288,
+      "minUsd": 750,
+      "maxUsd": 5000,
+      "statedAmountCount": 24,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 23,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-15",
+        "2026-05-14"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 21,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_2",
+        "college_1",
+        "graduate_student",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "legal_professions_and_law_studies",
+        "engineering",
+        "history"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "The Community Foundation of Shelby County",
+        "count": 13
+      },
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 2
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Cuyahoga Community College",
+        "count": 1
+      },
+      {
+        "name": "Fraternal Order of Police Associates of Ohio",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "medical",
+      "law",
+      "miscellaneous",
+      "stem"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/ohio",
-    "generatedAt": "2026-04-02T11:04:06.073Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 21,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:09:27.266Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 24,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

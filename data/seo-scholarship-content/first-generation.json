@@ -1,48 +1,132 @@
 {
-  "seo_title": "First Generation Scholarships for USA Students",
-  "seo_description": "Explore 54 scholarships for first-generation students, with awards ranging from $250 to $10,000. Check deadlines and eligibility details.",
-  "intro": "Navigating the landscape of scholarships can be daunting, especially for first-generation college students seeking financial support. With 54 available scholarships in this category, you have a range of options to explore. Award sizes typically vary, with amounts generally falling between $250 and $10,000. As deadlines differ across listings, it’s essential to check these details promptly to maximize your chances of securing funding.",
-  "h1": "First Generation Scholarships: 54 Opportunities Await",
-  "supporting": "When reviewing this list, consider the specific requirements and categories that align with your educational goals. Many scholarships may not require essays, making them more accessible. Pay attention to the award amounts and deadlines to prioritize which opportunities to pursue. This focused selection is designed to support first-generation students, so take the time to find the best fit for your situation.",
-  "related_intro": "If you're interested in exploring more tailored options, check out our pages on scholarships for specific fields like STEM or community service, which may also align with your interests.",
+  "seo_title": "Find First Generation Scholarships in the USA",
+  "seo_description": "First generation scholarships in the USA with deadlines, award ranges, and requirement signals. Compare listings and apply on official pages.",
+  "intro": "Trying to find USA scholarships for first generation students usually means sorting through mixed eligibility rules, study levels, and subject areas before you can decide where to apply. This filtered slice brings those listings into one place so you can compare options that may fit high school seniors, current college students, graduate students, and some international or permanent resident applicants alongside US citizens. The programs below span themes like education, STEM, community, disability, arts, and other miscellaneous categories, so it is worth scanning beyond your major. Award amounts vary by listing, deadlines differ by program, and requirements are not identical. Many rows appear to have lighter application signals and often no essay, but you should still read each listing carefully and verify details on the official source before applying.",
+  "h1": "Compare First Generation Scholarships in the USA",
+  "supporting": "A smart way to use this list is to compare the requirement line, study level, residency wording, category tags, and deadline text side by side instead of judging a scholarship by title alone. Some first generation awards in this USA catalog may connect with education, business, arts, history, English, or science-related interests, while others are broader. If you want to apply in the current cycle, check dates promptly because some rows may close sooner than expected. Use the listing details to build a shortlist, then open the official page to confirm eligibility, materials, and the latest terms before you submit anything.",
+  "related_intro": "If these rows feel close but not quite right, related pages can help you narrow by study level, subject area, or another eligibility angle. That is useful when you want to compare first generation scholarships with broader education, STEM, community, disability, or arts listings in the USA catalog.",
   "how_to_use": [
-    "Compare deadlines across listings to find opportunities you can apply for soon",
-    "Scan award amounts to identify which scholarships meet your financial needs",
-    "Read through the requirement lines for each scholarship to ensure eligibility",
-    "Open official scholarship pages for the most accurate and detailed information",
-    "Shortlist your favorites and verify details on the sponsor's site"
+    "Compare deadline text across the rows first",
+    "Read the requirement line before shortlisting any program",
+    "Scan category tags and study levels for fit",
+    "Open the official page to verify eligibility and materials",
+    "Shortlist promising listings and apply to the best matches"
   ],
   "who_for": [
-    "First-generation college students",
-    "Students pursuing education in STEM fields",
-    "Individuals seeking community-focused scholarships",
-    "Applicants with disabilities",
-    "Those looking for scholarships with lighter requirements"
+    "First generation high school seniors planning for college",
+    "Current college students comparing USA scholarship options",
+    "Graduate students seeking first generation funding",
+    "Applicants balancing first generation status with STEM, arts, or education interests",
+    "US citizens, permanent residents, and some international students checking eligibility language"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for first-generation students?",
-      "answer": "There are currently 54 scholarships listed for first-generation students, covering a range of categories including education, STEM, community, disability, and arts. This variety allows students to find opportunities that align with their specific fields of interest."
+      "question": "How do I find first-generation scholarships in the USA that fit my situation?",
+      "answer": "Use this filtered view to compare eligibility, study level, field, amount, and deadline row by row. In this catalog slice, listings span levels from high school senior through graduate study, and official program pages are the place to confirm current rules."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this category do not require essays, though it's important to check each listing for specific requirements. Many programs tend to have lighter application processes, making it easier for applicants to apply."
+      "question": "Can I apply if I’m an international student or permanent resident, not just a U.S. citizen?",
+      "answer": "Some listings in this USA scholarship catalog show citizenship or residency labels such as U.S. citizen, U.S. permanent resident, and international student. Check each row and then verify on the official source, because eligibility differs by program."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All 54 scholarships listed have deadlines, but they vary from one program to another. It's advisable to review the details for each scholarship promptly, as some deadlines may be approaching within the next 45 days."
+      "question": "What should I compare before I apply to first-generation scholarships?",
+      "answer": "Focus on the basics that vary across these rows: who qualifies, study level, field of study, award amount, and deadline. Amounts vary by listing, and deadlines differ by program, so confirm both on the official scholarship page before you apply."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The award sizes for first-generation scholarships vary significantly, with amounts ranging from approximately $250 to $10,000. Each listing provides specific details, so be sure to check the individual scholarship for exact figures."
+      "question": "Are there first-generation scholarships here for specific majors or categories?",
+      "answer": "Yes—this filtered set includes listings tied to categories such as Education, STEM, Community, Disability, and Arts, with sample fields like education, English language and literature, visual and performing arts, business, and history. If you want to explore matches faster, compare the category and field labels on each row before opening the official listing."
+    },
+    {
+      "question": "Are these first-generation scholarships usually quick to apply for?",
+      "answer": "Many listings in this catalog slice show a lighter requirement signal, and many sampled rows flag no essay, but that is not a guarantee for every program. Deadlines also vary by row, with at least some listings closing soon, so check the official page promptly before you start an application."
     }
   ],
+  "page_data": {
+    "exactCount": 55,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 250,
+      "maxUsd": 10000,
+      "statedAmountCount": 55,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 46,
+      "within60Days": 55,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-24",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 55,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "english_language_and_literature",
+        "visual_and_performing_arts",
+        "history"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen",
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Worcester State University",
+        "count": 11
+      },
+      {
+        "name": "Cuyahoga Community College",
+        "count": 3
+      },
+      {
+        "name": "Tarrant County College Foundation",
+        "count": 3
+      },
+      {
+        "name": "University of South Florida",
+        "count": 3
+      },
+      {
+        "name": "Cell Signaling Technology",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "disability",
+      "arts"
+    ]
+  },
   "_meta": {
     "canonicalPath": "first-generation",
-    "generatedAt": "2026-04-02T10:31:45.877Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 54,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T13:15:09.236Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 55,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

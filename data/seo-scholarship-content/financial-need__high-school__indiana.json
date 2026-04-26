@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Indiana High School Need-Based Scholarships | USA",
+  "seo_description": "Indiana high school financial need scholarships in the USA. Compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find USA scholarships for Indiana high school applicants with financial need usually means sorting through programs that look similar at first glance but differ in who qualifies, what documents are asked for, and how awards are described. This filtered slice brings those listings into one place so you can compare options without losing the Indiana and high school focus. Some rows may be open to seniors specifically, while others can include broader education paths, and requirement lines may range from lighter-touch applications to programs that ask for more detail. Award amounts vary by listing, deadlines differ by program, and official eligibility terms should always be checked before you apply.",
+  "h1": "Indiana High School Financial Need Scholarships USA Apply",
+  "supporting": "Use the rows below to compare more than the title alone. Scan category labels such as education, community, STEM, disability, or law, then read the requirement summary for residency, study level, and any essay expectations. A few listings may have nearer deadlines, so it is smart to review timing early and shortlist the strongest matches. Before you apply, open the official page for each program to verify award details, current rules, and any Indiana-specific or financial-need documentation language.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by topic, broaden beyond Indiana, or compare other USA scholarship filters tied to high school applicants and financial need. That is often the fastest way to find a better fit when requirements or categories vary from row to row.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before shortlisting",
+    "Open the official page to verify details",
+    "Check whether an essay or extra materials are mentioned",
+    "Shortlist the best Indiana matches and apply early"
+  ],
+  "who_for": [
+    "Indiana high school students seeking need-based aid",
+    "High school seniors comparing Indiana scholarship options",
+    "Applicants who want USA scholarships with financial need filters",
+    "Students reviewing education, community, STEM, disability, or law listings"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Indiana scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tagged for financial need, High School, and Indiana. Then open each row and verify eligibility, residency, study level, and application details on the official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts differ by listing, and deadlines are not the same across the page, so compare row by row and confirm on the official page before you apply."
+    },
+    {
+      "question": "Are these only for Indiana high school seniors?",
+      "answer": "Not always. This slice is centered on Indiana and High School, but study levels shown in the catalog can vary, so check each listing carefully to see whether it fits your grade level or senior status in the USA context."
+    },
+    {
+      "question": "Do all of these scholarships require an essay?",
+      "answer": "No single rule applies across this filtered list. Some programs may ask for an essay and others may have lighter requirements, so review each listing and the official application page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 20,
+    "award": {
+      "medianUsd": 3500,
+      "minUsd": 750,
+      "maxUsd": 10600,
+      "statedAmountCount": 20,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 15,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-04-15",
+        "April 30, 2026 3:00 PM CT",
+        "April 16, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 6,
+      "noCount": 14,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "construction_trades",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Western Indiana Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      },
+      {
+        "name": "Connecticut Association of Latinos in Higher Education",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "disability",
+      "miscellaneous",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/indiana",
+    "generatedAt": "2026-04-26T13:52:45.639Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 20,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

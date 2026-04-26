@@ -1,0 +1,131 @@
+{
+  "seo_title": "Find Iowa High School Financial Need Scholarships | USA",
+  "seo_description": "Iowa high school financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Iowa scholarships for high school applicants with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings together a focused set of listings tied to that combination, so you can compare options without jumping between unrelated results. The programs below span themes such as education, community, medicine, music, and other miscellaneous areas, which makes this slice useful even if you are still narrowing your plans. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it is worth checking each row closely before you apply. Some listings may be lighter-touch, while others may ask for more supporting material.",
+  "h1": "Find Iowa High School Need-Based Scholarships USA",
+  "supporting": "Use this list to compare more than just the title. Scan the category labels, study-level cues, and any requirement notes to see which scholarships fit your situation now versus later stages of study. It also helps to compare award wording and deadline timing side by side, then open the official pages to verify eligibility, residency, essay expectations, and submission instructions. If you are building a shortlist for Iowa opportunities, this slice is a practical place to start because it keeps financial-need and high-school filters in view together.",
+  "related_intro": "If these rows feel close but not quite right, related pages can help you widen or narrow the search. You may want to explore other Iowa scholarship filters, compare high school options without the same eligibility focus, or find financial-need listings tied to different study paths and categories.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings by category and fit",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Iowa high school students with financial need",
+    "High school seniors comparing local USA scholarship options",
+    "Applicants interested in education, community, music, or medicine categories",
+    "Students who want to find Iowa listings before applying"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Iowa scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school status, and Iowa. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply if I’m a high school senior in Iowa?",
+      "answer": "Some listings in these rows include high school senior as a study level, but eligibility can differ by program. Compare each scholarship’s official criteria before you apply, especially for grade level and any residency or citizenship language."
+    },
+    {
+      "question": "Do all scholarships on this page have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and award amounts vary by listing. This catalog slice shows posted amounts across the rows, but you should confirm the current amount and deadline on the official source before applying."
+    },
+    {
+      "question": "Are essays required for these Iowa scholarship listings?",
+      "answer": "Requirements vary across the programs below, and essay expectations are mixed in this filter slice. Check each listing carefully so you can compare what materials are needed before you start an application."
+    },
+    {
+      "question": "What kinds of scholarships can I browse in this Iowa high school financial-need filter?",
+      "answer": "The listings here span several themes seen in the catalog, including education, community, medicine, music, and miscellaneous categories. If you want to explore fit, compare rows by category, amount, deadline timing, and official eligibility details."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-04-08",
+        "2026-06-24",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript",
+        "personal_statement",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "security_and_protective_services",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      },
+      {
+        "name": "International Association of Special Investigation Units-Iowa-Nebraska Chapter",
+        "count": 1
+      },
+      {
+        "name": "Iowa Girls' Coaches Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical",
+      "community",
+      "music"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/iowa",
+    "generatedAt": "2026-04-26T13:53:06.423Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

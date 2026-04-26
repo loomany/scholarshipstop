@@ -1,0 +1,100 @@
+{
+  "seo_title": "Find Disability Scholarships Under Ten Thousand in Washington US…",
+  "seo_description": "Disability scholarships under ten thousand in Washington, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find disability scholarships in Washington with awards under the higher-price ranges usually means narrowing fast and checking details carefully. This filtered USA view brings together a focused set of listings tied to disability eligibility and Washington, so you can compare options without wading through unrelated results. Awards in this slice stay on the lower-dollar side, but the exact amount, deadline, and requirement language can differ from row to row. Many listings here appear to have lighter application signals, and some may not ask for an essay, though every program should still be verified on its official page. If you want to apply in this category for the current cycle, it is smart to review dates promptly because timelines are not all the same.",
+  "h1": "Compare Disability Scholarships Under Ten Thousand in Washington…",
+  "supporting": "Use these rows as a shortlist, not a final answer. Compare the award text, category tags, study-level fit, and any requirement notes before you decide where to apply. In this Washington disability slice, it is worth checking community and education labels as well, since related themes can shape who a program is meant to support. Open each official source to confirm eligibility, application steps, and deadline wording, especially if you are trying to find options with a simpler application.",
+  "related_intro": "If these listings are close but not quite right, compare nearby scholarship pages by changing one filter at a time. You may want to explore other Washington results, broader disability scholarship views, or other award ranges to find a better match for your education plans in the USA.",
+  "how_to_use": [
+    "Compare each row for award wording and category tags",
+    "Read the requirement line before you shortlist anything",
+    "Open the official page to verify eligibility details",
+    "Check deadline text early because dates can differ",
+    "Save the best-fit listings and apply after confirming requirements"
+  ],
+  "who_for": [
+    "Washington applicants with a documented disability",
+    "High school seniors reviewing local scholarship options",
+    "Graduate students comparing smaller award programs",
+    "Education-focused applicants checking disability-related funding"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows let you compare basic details side by side, but amounts and deadlines vary by program. In this slice, listed awards are modest and deadline text differs by row, so verify both on the official page before you apply."
+    },
+    {
+      "question": "Are these disability scholarships only for college students in Washington?",
+      "answer": "Not necessarily. This filtered set includes mixed study levels in the catalog, with examples such as high school senior and graduate student, so check each listing’s eligibility carefully."
+    },
+    {
+      "question": "What should I check before I apply for a scholarship from this list?",
+      "answer": "Focus on the location, disability eligibility, study level, and any category clues like community or education. Many listings here appear to have lighter requirements and often no essay flag in the catalog, but you should still confirm the full application steps on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1500,
+      "maxUsd": 2500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-15",
+        "2026-05-07",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation for Southwest Washington",
+        "count": 1
+      },
+      {
+        "name": "High Bridge Foundation",
+        "count": 1
+      },
+      {
+        "name": "Incight",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "disability",
+      "education"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "disability/under-10000/washington",
+    "generatedAt": "2026-04-26T13:31:53.855Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

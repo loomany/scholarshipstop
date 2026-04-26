@@ -1,48 +1,110 @@
 {
-  "seo_title": "Maine Engineering Scholarships | Apply Now",
-  "seo_description": "Discover 5 scholarships for engineering students in Maine. Award sizes range from $500 to $2,500. Check deadlines and apply today!",
-  "intro": "Finding financial support for engineering studies in Maine can be crucial for aspiring students. This filter showcases 5 scholarships specifically tailored for engineering students in the state, with award sizes generally ranging from $500 to $2,500. Keep in mind that deadlines vary across listings, so it's important to check each one promptly to ensure you don’t miss out on these opportunities.",
-  "h1": "Explore Engineering Scholarships in Maine",
-  "supporting": "When reviewing the scholarships, consider the award amounts and specific eligibility criteria for each listing. Many of these scholarships do not require essays, which may simplify the application process. Take note of the different deadlines and be sure to verify the details on the official sponsor sites to ensure you have the most accurate information.",
-  "related_intro": "For more options, check out scholarships in related fields or broader categories that might align with your academic goals.",
+  "seo_title": "Find Engineering Scholarships in Maine, USA",
+  "seo_description": "Engineering scholarships in Maine, USA with deadlines and award details. Compare current listings and apply through official program pages.",
+  "intro": "Trying to find engineering scholarships in Maine usually means narrowing a broad USA search into programs that actually match your location and academic direction. This filtered slice brings together Maine-focused listings tied to engineering and nearby STEM themes, with some overlap into education, architecture, construction trades, and technology education. The rows below are worth a close look because award amounts, eligibility details, and deadline timing can differ from one listing to the next, and many appear to have comparatively lighter application requirements. Several listings also look like they may not require an essay, though you should still verify each official page before you apply. If you want to compare options quickly for the current cycle, this is a practical place to start.",
+  "h1": "Find Engineering Scholarships in Maine USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check how each program describes eligible study areas, who it is meant for, and how closely it fits your Maine connection and engineering plans. Because deadlines differ by listing and some may be coming up soon, it makes sense to review date text early, then open the official source to confirm requirements, award details, and application steps. A focused set like this can surface options you might miss in a broader USA scholarship search.",
+  "related_intro": "If these Maine engineering listings feel close but not quite right, related pages can help you widen the search by topic or location. That is useful when you want to explore nearby STEM categories, compare Maine options against broader engineering results, or find scholarships that match a different study level.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Scan award amounts to find suitable options",
-    "Read eligibility requirements carefully",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that match your profile"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
   ],
   "who_for": [
-    "Engineering students in Maine",
-    "Students pursuing STEM degrees",
-    "Female engineering students",
-    "High school seniors planning to study engineering",
-    "Undergraduate students in engineering programs"
+    "Maine students planning to study engineering",
+    "High school seniors seeking local STEM funding",
+    "Graduate students comparing Maine engineering awards",
+    "Applicants interested in architecture or construction related programs"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Maine?",
-      "answer": "There are currently five scholarships listed for engineering students in Maine, covering various categories including STEM and education. The award sizes range from approximately $500 to $2,500, providing a range of financial support options."
+      "question": "How can I find engineering scholarships in Maine that fit my situation?",
+      "answer": "Use this filtered view to compare Maine listings tied to engineering and related STEM paths, then open each row for the official details. Study level, eligibility, and field fit can vary by program, so verify everything on the provider page before you apply."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and it’s important to check these dates promptly as some deadlines are approaching within the next 45 days. You can find specific deadline information listed with each scholarship entry."
+      "question": "What should I compare before I apply to a Maine engineering scholarship?",
+      "answer": "Focus on the basics that change row to row: award amount, deadline, study level, and any field-specific wording. In this USA catalog slice, listed amounts vary by program, so confirm the current amount and requirements on the official source."
     },
     {
-      "question": "Do I need to write an essay to apply for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, though it's advisable to verify the details for each specific listing. Many of the scholarships have lighter application requirements, making them more accessible."
+      "question": "Are deadlines the same for all engineering scholarships in Maine?",
+      "answer": "No—deadlines differ by program in these rows. Since some listings show dates coming up soon, it is smart to check the latest deadline on each official page before you apply."
     },
     {
-      "question": "Who can apply for these scholarships?",
-      "answer": "These scholarships are primarily for students pursuing engineering degrees in Maine. Be sure to review the eligibility criteria for each scholarship to ensure you meet the requirements before applying."
+      "question": "Do these Maine engineering scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and several sample rows show no essay flag. Still, requirements can change, so review each scholarship's official application instructions carefully."
     }
   ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 2500,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "architecture_and_related_services",
+        "business_management_and_marketing",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Associated Builders and Contractors of Maine",
+        "count": 2
+      },
+      {
+        "name": "American Public Works Association-New England Chapter",
+        "count": 1
+      },
+      {
+        "name": "Maine State Grange",
+        "count": 1
+      },
+      {
+        "name": "WBRC Architects Engineers",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/maine",
-    "generatedAt": "2026-04-02T10:50:36.173Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:37:27.131Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 5,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

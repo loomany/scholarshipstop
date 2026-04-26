@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Florida Financial Need Scholarships | USA",
+  "seo_description": "Florida financial need scholarships in the USA: compare awards under ten thousand, review varying deadlines, and apply on official program pages.",
+  "intro": "Trying to find Florida scholarships for applicants with financial need where the listed award stays under ten thousand dollars usually means balancing urgency, fit, and effort at the same time. This filtered USA view brings together a focused set of listings that match that mix, with opportunities across areas like education, STEM, community, medicine, and arts. You can compare programs for high school seniors, college students, and graduate students, and you may also notice many listings appear to have lighter application requirements, often with no essay indicated in the catalog data. Award amounts vary by listing and should be verified on the official source, and deadlines differ by program, so it is smart to apply early and check date details promptly.",
+  "h1": "Florida Financial Need Scholarships Under Ten Thousand USA …",
+  "supporting": "Use these rows to compare more than the dollar figure. Look at the requirement lines, study level, Florida location fit, and any citizenship or residency notes such as U.S. citizen or permanent resident language. Because this slice stays below the ten-thousand-dollar mark, it is useful for applicants who want to stack smaller awards, find options that may be less time-intensive, or browse for programs tied to a specific field like education, health professions, engineering, visual and performing arts, or communication and journalism.",
+  "related_intro": "If you do not find the right match here, check nearby scholarship pages by changing one filter at a time—Florida-only results, broader financial-need listings, or other award ranges. That makes it easier to compare how eligibility, subject area, and award size shift across related USA scholarship results.",
+  "how_to_use": [
+    "Compare award text, study level, and category labels first to spot the listings that fit your background",
+    "Read each requirement line closely for Florida eligibility, financial-need language, and any citizenship or residency details",
+    "Check deadlines row by row and prioritize the programs with the nearest closing dates",
+    "Open the official scholarship page before you apply to verify amount, rules, and submission instructions",
+    "Shortlist a few strong matches instead of only one so you can compare options and keep backup choices"
+  ],
+  "who_for": [
+    "Florida applicants with financial need who want to compare scholarships with listed awards under ten thousand dollars",
+    "High school seniors, college students, and graduate students looking for Florida-based funding options in one place",
+    "Students targeting subjects such as education, engineering, health professions, arts, or journalism",
+    "Applicants who prefer to find many listings that may have lighter requirements and often show no essay in catalog metadata"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts in this slice range from smaller awards up to several thousand dollars, and deadlines differ by listing, so check dates promptly on the official page."
+    },
+    {
+      "question": "Who should explore this USA scholarship filter?",
+      "answer": "This set is most relevant for applicants looking for Florida-based opportunities in the USA tied to financial need, including common study levels such as high school senior, college, and graduate student. Some listings also show citizenship or residency labels like U.S. citizen or U.S. permanent resident, which should be confirmed row by row."
+    },
+    {
+      "question": "What kinds of scholarships appear in this filtered list?",
+      "answer": "The programs below span categories such as education, STEM, community, medicine, and arts. You may also find listings connected to fields like education, health professions and clinical sciences, engineering, visual and performing arts, and communication and journalism."
+    }
+  ],
+  "page_data": {
+    "exactCount": 128,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 164.43,
+      "maxUsd": 7000,
+      "statedAmountCount": 128,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 34,
+      "within60Days": 125,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-05-25",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 128,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement",
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "engineering",
+        "visual_and_performing_arts",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 64
+      },
+      {
+        "name": "University of South Florida",
+        "count": 9
+      },
+      {
+        "name": "University of North Florida",
+        "count": 8
+      },
+      {
+        "name": "The College of the Florida Keys",
+        "count": 7
+      },
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 4
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-10000/florida",
+    "generatedAt": "2026-04-26T14:14:19.900Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 128,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

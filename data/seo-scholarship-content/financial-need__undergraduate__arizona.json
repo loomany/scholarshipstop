@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Arizona Undergraduate Need Scholarships | USA",
+  "seo_description": "Arizona undergraduate financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Arizona scholarships for undergraduates with financial need usually means sorting through programs that mix location rules, study level language, and different requirement lines. This filtered USA view narrows that search to a focused set of listings so you can compare options that may fit college students and incoming undergraduates in Arizona. The rows below span themes such as education, STEM, medicine, disability, community, and miscellaneous awards, with some listings tied to specific fields of study. Awards vary by listing, deadlines differ by program, and application steps are not identical, so it is worth reading each row closely before you apply. Some opportunities may be lighter-touch than others, but you should still verify every detail on the official page.",
+  "h1": "Find Arizona Undergraduate Financial Need Scholarships USA",
+  "supporting": "Use this slice to compare more than just the scholarship title. Check how each listing describes eligibility, residency or citizenship language, study level, field of study, and any essay or document expectations. Because deadlines in these rows are not all the same, it makes sense to review date text early and shortlist the programs you want to pursue first. If an award catches your eye, open the official source to confirm current terms, amounts, and submission instructions before you apply.",
+  "related_intro": "If these Arizona undergraduate scholarships are close but not quite right, related pages can help you widen or tighten the search. You may want to compare other Arizona filters, look at broader undergraduate results, or explore other financial need scholarship pages in the USA catalog to find a better fit.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your study level",
+    "Verify award details and documents on sponsor sites"
+  ],
+  "who_for": [
+    "Arizona undergraduates with financial need",
+    "High school seniors planning Arizona college study",
+    "College students comparing education or STEM awards",
+    "Applicants seeking Arizona-based medical or community scholarships"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Arizona scholarships for undergraduates with financial need?",
+      "answer": "Use this filtered view to compare programs that match financial need, undergraduate study, and Arizona in the USA. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate in Arizona?",
+      "answer": "Not automatically—each listing can set its own rules beyond this catalog filter. Before you apply, check the official source for details like study level, residency or citizenship labels, field of study, and any required materials."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline, category, and any requirement notes shown in the rows. Amounts and deadlines vary by program, so confirm the current terms on the official page before submitting an application."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or topics?",
+      "answer": "This focused set of listings includes a mix of topics such as education, STEM, disability, medicine, and community, with some rows tied to fields like education, business, engineering, construction trades, or social sciences. If you want to explore fit, check both the category labels and the official eligibility language for each program."
+    }
+  ],
+  "page_data": {
+    "exactCount": 16,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 16,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 12,
+      "within60Days": 13,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 14,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "construction_trades",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arizona Community Foundation",
+        "count": 3
+      },
+      {
+        "name": "American Legion Auxiliary",
+        "count": 2
+      },
+      {
+        "name": "Arizona FFA Association",
+        "count": 2
+      },
+      {
+        "name": "American Association of Airport Executives-Southwest Chapter",
+        "count": 1
+      },
+      {
+        "name": "American Society for Industrial Security-Phoenix Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "disability",
+      "medical",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/arizona",
+    "generatedAt": "2026-04-26T14:44:14.142Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 16,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Ohio High School Financial Need Scholarships | USA",
+  "seo_description": "Ohio high school financial need scholarships in the USA: compare award ranges, review varying deadlines, and apply from a focused set of listings.",
+  "intro": "Trying to find Ohio scholarships you can actually apply for while still in high school often means narrowing the list to programs that mention financial need. This filtered USA view brings together a focused set of listings tied to Ohio and high school eligibility, with topics that can include community, education, law, medicine, disability, and more. The rows below are worth comparing closely because award amounts, deadline timing, residency details, and application requirements can differ from one listing to the next. Some programs may look lighter touch, while others may ask for more documentation or written responses. If you want to compare options for the current cycle and plan ahead for upcoming opportunities, this is a practical place to start.",
+  "h1": "Find Ohio High School Need-Based Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan each row for the requirement line, study level language, and any field of study cues that may affect fit. Because deadlines vary by program and some may be coming up soon, it makes sense to open the official page for any strong match right away. As you browse, note whether a listing appears broad or tied to a category such as education, law, community, or health, then shortlist the ones that best match your background in Ohio.",
+  "related_intro": "If you do not find enough matches in this Ohio high school and financial need slice, check nearby scholarship pages that widen one filter at a time. That can help you explore related USA listings by location, school stage, or need-based focus without losing the themes that matter most to your search.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your Ohio eligibility",
+    "Verify award details and documents on the sponsor site"
+  ],
+  "who_for": [
+    "Ohio high school students with financial need",
+    "High school seniors comparing Ohio scholarship options",
+    "Applicants seeking Ohio programs in education, law, or health",
+    "Students who want USA listings with clear requirement details"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Ohio scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare the Ohio rows that match financial need and high school criteria, then open each listing for the official eligibility details. In this USA-focused slice, deadlines and requirements differ by program, so verify each one before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page before I apply?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, which makes it easier to compare options quickly. Amounts vary by listing, and deadlines are not the same across the page, so confirm both on the official source before applying."
+    },
+    {
+      "question": "Are these scholarships only for current high school students in Ohio?",
+      "answer": "This filter is centered on high school and Ohio, but individual listings can use different study-level or residency wording. Check each scholarship page to confirm whether it fits your status, location, and any USA residency requirements shown in the listing."
+    },
+    {
+      "question": "Do all of these Ohio scholarships require an essay?",
+      "answer": "No single rule applies across this filtered set. Some listings may have lighter application requirements, while others may ask for more, so review each row and the official scholarship page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 13,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 750,
+      "maxUsd": 5000,
+      "statedAmountCount": 13,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 13,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-15",
+        "2026-05-14",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_1",
+        "college_2",
+        "adult_non_traditional",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "legal_professions_and_law_studies",
+        "health_professions_and_clinical_sciences",
+        "history"
+      ],
+      "commonResidency": [
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "The Community Foundation of Shelby County",
+        "count": 8
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Fraternal Order of Police Associates of Ohio",
+        "count": 1
+      },
+      {
+        "name": "Kit Faragher Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Allen Endowment",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "law",
+      "medical",
+      "miscellaneous",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/ohio",
+    "generatedAt": "2026-04-26T13:58:00.704Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 13,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

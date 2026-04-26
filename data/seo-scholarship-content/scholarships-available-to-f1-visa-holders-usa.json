@@ -1,43 +1,128 @@
 {
-  "seo_title": "Explore Scholarships Available to F-1 Visa Holders in the USA",
-  "seo_description": "Discover 196 scholarships available to F-1 visa holders in the USA. Find funding opportunities tailored for international students.",
-  "h1": "Scholarships for F-1 Visa Holders in the USA",
-  "intro": "If you're an F-1 visa holder studying in the USA, you're in luck! There are currently 196 scholarships specifically available to help international students finance their education. These scholarships cater to a variety of fields and interests, making it easier for you to find one that fits your academic goals. From merit-based awards like the International Student Scholarship to unique opportunities such as the Vanna Christian Sun Legacy Scholarship, the options are diverse. Whether you're pursuing engineering, arts, or social sciences, there's likely a scholarship that aligns with your aspirations. Take advantage of these funding opportunities to alleviate the financial burden of studying abroad.",
-  "supporting": "Eligibility criteria for these scholarships vary, but most require you to be enrolled as a full-time student on an F-1 visa. Some scholarships may also consider academic performance, financial need, or specific fields of study. Deadlines can range from early spring to late summer, so it's essential to check each scholarship's requirements carefully. When applying, ensure you have all necessary documents, including transcripts, recommendation letters, and personal statements. Tailor your application to highlight your unique experiences and goals. Keep track of deadlines and apply early to maximize your chances of receiving funding.",
-  "related_intro": "In addition to the scholarships listed, there are various financial aid options and grants available for international students. Exploring these can further enhance your funding opportunities.",
+  "seo_title": "Find Scholarships for F- Visa Holders in USA",
+  "seo_description": "Scholarships for F- visa holders in the USA. Compare eligibility, deadlines, and award details, then apply through official program pages.",
+  "intro": "Trying to find USA scholarships you can actually apply for as an F-one visa holder usually means sorting past broad advice and checking which listings may fit your status. This filtered slice brings together a focused set of programs connected to international student eligibility, with rows spanning areas like education, STEM, community, medicine, arts, and more. You can compare options across study levels, from earlier college stages through graduate study, and scan fields such as engineering, business, English, health professions, and education. Awards, essay expectations, and requirement details vary by listing, and deadlines differ across the rows below, so it is worth reviewing each entry closely and checking official pages promptly.",
+  "h1": "Explore Scholarships for F- Visa Holders USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read the eligibility and requirement lines carefully, note whether the opportunity appears broader for international students or tied to a subject area, and check how much detail the application may require. Some listings may be lighter-touch, while others ask for more materials. If you are applying in the USA for the upcoming cycle, this is a practical place to browse, shortlist, and verify current terms directly with the provider before you submit anything.",
+  "related_intro": "If these results feel too broad, related pages can help you narrow your search by study level, subject, essay preference, or other eligibility details. That makes it easier to compare similar USA scholarship options side by side instead of mixing very different programs in one shortlist.",
   "how_to_use": [
-    "Browse the list of 196 scholarships available.",
-    "Identify scholarships that match your field of study.",
-    "Check eligibility requirements and deadlines.",
-    "Prepare your application materials carefully.",
-    "Submit your applications on time to maximize chances."
+    "Sort and compare deadline wording across the rows",
+    "Read each requirement line before starting an application",
+    "Open the official page to verify eligibility and award details",
+    "Shortlist the programs that match your study level and subject",
+    "Check application materials early because requirements can differ"
   ],
   "who_for": [
-    "International students on F-1 visas.",
-    "Undergraduate and graduate students.",
-    "Students pursuing various fields of study."
+    "International students studying in the USA on F-one status",
+    "Graduate applicants comparing funding across education and STEM topics",
+    "College students seeking scholarships with mixed essay requirements",
+    "Applicants exploring awards in engineering, business, English, or health fields"
   ],
   "faq": [
     {
-      "question": "Can F-1 visa holders apply for scholarships?",
-      "answer": "Yes, F-1 visa holders can apply for scholarships specifically designated for international students."
+      "question": "What kinds of scholarships can I find in this filtered set?",
+      "answer": "These listings span areas such as Education, STEM, Miscellaneous, Community, Medicine, and Arts, with sample fields including education, business, engineering, English, and health professions. You can also explore options across levels like graduate student, high school senior, and college year listings."
     },
     {
-      "question": "What types of scholarships are available?",
-      "answer": "Scholarships range from merit-based to need-based and can be specific to various fields of study."
+      "question": "Do all of these scholarships have the same deadline or essay requirement?",
+      "answer": "No. Deadlines differ by program, and some rows may be coming up soon, so check dates promptly on the listing and official page. Essay requirements are mixed as well, which means you should review each scholarship before you apply."
     },
     {
-      "question": "How do I find scholarships for F-1 visa holders?",
-      "answer": "You can find scholarships by searching online databases, university websites, and scholarship portals."
+      "question": "Are scholarship amounts the same across this USA catalog slice?",
+      "answer": "No—amounts vary by listing, and not every row shows the same award format. Use the catalog to browse and compare options, then verify the exact amount, renewal terms, and any conditions on the official scholarship page."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-available-to-f1-visa-holders-usa",
-    "generatedAt": "2026-04-25T13:29:32.882Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:03:26.603Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

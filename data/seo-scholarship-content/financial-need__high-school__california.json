@@ -1,0 +1,130 @@
+{
+  "seo_title": "Find California High School Need-Based Scholarships USA",
+  "seo_description": "California high school need-based scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find California scholarships for high school applicants with financial need usually means sorting through very different rules, award sizes, and deadline windows. This filtered USA view brings those listings into one place so you can compare options that match this specific mix of need-based, high school, and California criteria. The programs below span themes like education, community, STEM, medicine, and disability, and some may fit high school seniors while others can include earlier high school stages or related applicant types. Awards vary by listing, deadlines differ by program, and requirement details are not identical across these rows, so it is worth reading each entry closely before you apply.",
+  "h1": "California High School Need-Based Scholarships USA Apply",
+  "supporting": "Use this slice to compare the parts that matter most before you commit time to an application. Scan the award text, check how the requirement line is phrased, and note whether the listing appears more straightforward or asks for more supporting material. Because deadline timing is not the same across these programs, it helps to review date details early and shortlist the rows you want to pursue first. Always open the official page to verify current eligibility, residency language, and any essay or document expectations.",
+  "related_intro": "If you do not find enough matches here, related pages can help you widen or narrow the search by location, study level, or other scholarship themes in the USA catalog. That is useful when you want to compare California-focused results against broader high school or financial need listings.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your situation",
+    "Verify award details and residency terms"
+  ],
+  "who_for": [
+    "California high school students with financial need",
+    "High school seniors comparing need-based scholarship options",
+    "Families looking for California-focused USA aid listings",
+    "Applicants interested in education, community, STEM, or medicine categories"
+  ],
+  "faq": [
+    {
+      "question": "How can I find California scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings that match financial need, high school, and California. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a California high school student?",
+      "answer": "Not automatically. These rows share the main filter, but requirements can still differ by program, including study level, citizenship or residency, and other eligibility details shown in the catalog and confirmed on official sources."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amounts, deadline text, category fit, and any application requirements listed in each row. Amounts vary by listing, and deadlines differ by program, so check the official page before you apply."
+    },
+    {
+      "question": "Are these only for high school seniors in California?",
+      "answer": "No. While this slice is centered on high school opportunities in California, the listings can include different high school stages, so it’s smart to explore each row closely before applying."
+    }
+  ],
+  "page_data": {
+    "exactCount": 127,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 150,
+      "maxUsd": 60000,
+      "statedAmountCount": 127,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 104,
+      "within60Days": 121,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 8,
+      "noCount": 119,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "transcript",
+        "document",
+        "personal_statement",
+        "survey"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "high_school_freshman",
+        "graduate_student",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Sonora Area Foundation",
+        "count": 59
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 9
+      },
+      {
+        "name": "Sacramento City Unified School District",
+        "count": 6
+      },
+      {
+        "name": "Orange County Community Foundation",
+        "count": 5
+      },
+      {
+        "name": "Kiwanis Club of Alameda",
+        "count": 4
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "medical",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/california",
+    "generatedAt": "2026-04-26T13:50:31.590Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 127,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore Computer Science Scholarships for International Students",
-  "seo_description": "Discover 5 computer science scholarships available for international students to support your education and career.",
-  "h1": "Computer Science Scholarships for International Students",
-  "intro": "Pursuing a degree in computer science can be a transformative journey, especially for international students seeking to study abroad. Scholarships specifically designed for international students can significantly alleviate the financial burden of tuition and living expenses. Currently, there are five notable scholarships available that cater to aspiring computer scientists from around the globe. These opportunities not only provide financial assistance but also enhance your academic profile and career prospects. Whether you are interested in coding, software development, or computer education, these scholarships can help you achieve your goals and make a meaningful impact in the tech industry.",
-  "supporting": "The five scholarships available for international students in computer science include the Vanna Christian Sun Legacy Scholarship, Lyndsey Scott Coding+ Scholarship, S3G Advisors NextGen Scholarship, Chris Jackson Computer Science Education Scholarship, and the Tinkerer’s Path Scholarship. Each scholarship has unique eligibility criteria, application processes, and deadlines. Generally, applicants should demonstrate academic excellence, a passion for computer science, and a commitment to contributing to the field. Be sure to check each scholarship's specific requirements and prepare your application well in advance to meet deadlines. Tailoring your application to highlight relevant experiences and aspirations can increase your chances of success.",
-  "related_intro": "In addition to the scholarships listed, there are numerous resources and organizations that support international students in computer science.",
+  "seo_title": "Find Computer Science Scholarships for International Students US…",
+  "seo_description": "Computer science scholarships for international students in the USA. Compare awards, review varying deadlines, and apply through official listings.",
+  "intro": "Trying to find USA computer science scholarships open to international students usually means sorting through mixed eligibility rules, study levels, and application asks. This filtered slice brings those listings into one place so you can compare options that may fit your academic path and residency status more quickly. The rows below span more than one category, with programs connected to education, STEM, community, and other themes, so it is worth checking beyond the title alone. Awards vary by listing, deadlines differ by program, and requirements are not uniform. Some applications may be lighter-touch, while others may ask for essays or more supporting details, so read each row carefully before you apply.",
+  "h1": "Apply for USA Computer Science Scholarships Internationally",
+  "supporting": "Use this list to compare the details that matter most before you commit time to an application. Scan the requirement line, note the study level, and check whether the scholarship language clearly includes international students in the USA context you need. Then compare award text, deadline wording, and category tags to decide which programs are worth a closer look. Because listings can differ a lot, open the official page for any scholarship you shortlist and verify current eligibility, materials, and submission instructions there.",
+  "related_intro": "If these results feel close but not exact, related pages can help you narrow by study level, broader STEM themes, or other scholarship categories that sometimes overlap with computer science. That is useful when you want to explore adjacent options without starting your search over.",
   "how_to_use": [
-    "Review the eligibility criteria for each scholarship.",
-    "Prepare your academic transcripts and recommendation letters.",
-    "Tailor your personal statement to reflect your passion for computer science.",
-    "Submit your application before the specified deadlines.",
-    "Follow up with the scholarship committees for any updates."
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open official scholarship pages to verify eligibility",
+    "Shortlist listings by study level and category tags",
+    "Check award text carefully because amounts vary"
   ],
   "who_for": [
-    "International students pursuing a degree in computer science.",
-    "Students with a strong academic record and passion for technology.",
-    "Individuals looking for financial support to study abroad."
+    "International students seeking computer science funding in the USA",
+    "Applicants comparing undergraduate and graduate scholarship options",
+    "Students open to STEM or education tagged programs",
+    "Computer science majors checking mixed essay requirements"
   ],
   "faq": [
     {
-      "question": "What are the eligibility requirements for these scholarships?",
-      "answer": "Eligibility varies by scholarship but generally includes being an international student enrolled in a computer science program."
+      "question": "How can I find computer science scholarships for international students in the USA?",
+      "answer": "Use this filtered view to compare the programs below, then open each row to confirm who can apply. Some listings are tagged for international students, while eligibility, study level, and field details still vary by program."
     },
     {
-      "question": "How do I apply for these scholarships?",
-      "answer": "Applications typically require academic transcripts, recommendation letters, and a personal statement."
+      "question": "Can I apply if I’m studying computer science but the listing is also tagged under other categories?",
+      "answer": "Often, yes—but verify the official scholarship page before you apply. In this catalog slice, some rows also appear under categories like Education, STEM, Community, Medicine, or Arts, so the title and tags alone are not enough to confirm fit."
     },
     {
-      "question": "What is the deadline for scholarship applications?",
-      "answer": "Deadlines differ for each scholarship; check the specific scholarship page for accurate dates."
+      "question": "What should I compare before I apply to these scholarships?",
+      "answer": "Compare eligibility, study level, deadline text, essay requirements, and award details row by row. Amounts vary widely across these listings, and official pages are the right source to verify current USD amounts and application rules."
+    },
+    {
+      "question": "Do all computer science scholarships for international students have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, and this filtered set shows mixed requirement patterns. Some scholarships may be lighter-touch, some may ask for an essay, and at least some deadlines are coming up soon, so check each row promptly."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "computer-science-scholarships-for-international-students",
-    "generatedAt": "2026-04-25T13:20:47.920Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 5,
+    "generatedAt": "2026-04-26T13:21:20.089Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

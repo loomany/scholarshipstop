@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Virginia High School Need Scholarships | USA",
+  "seo_description": "Virginia high school financial need scholarships in the USA: compare award ranges, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find USA scholarships for Virginia high school students with financial need usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered slice brings together a focused set of listings tied to that combination, so you can apply more selectively and compare options without jumping between unrelated results. The rows below span themes such as education, STEM, arts, community, and medicine, with some listings pointing to broader academic interests and others to more specific paths. Awards vary by listing, deadlines differ by program, and eligibility language can be narrower than the filter suggests, so it is worth checking each requirement line carefully. Many listings in this slice appear to have lighter application signals, but you should still verify every rule on the official page.",
+  "h1": "Find Virginia Financial Need Scholarships for High School USA …",
+  "supporting": "A smart way to use this view is to compare more than the title. Read the award text, scan the category labels, and note whether a listing seems tied to education, engineering, health professions, community involvement, or another area that matches your plans. Because deadline text appears across these rows and some opportunities may be approaching soon, it makes sense to review timing early. If a scholarship looks promising, open the official source before you apply, confirm residency or citizenship language, and check whether the program is meant for current high school seniors or another study level.",
+  "related_intro": "If you are close to qualifying but want a wider set of matches, related pages can help you compare nearby paths, such as other Virginia scholarship filters, other high school scholarship views, or broader financial need listings across the USA catalog.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you shortlist anything",
+    "Open the official page to verify eligibility details",
+    "Check award descriptions and category labels side by side",
+    "Save promising listings and apply in order of urgency"
+  ],
+  "who_for": [
+    "Virginia high school students seeking need-based scholarship options",
+    "High school seniors in Virginia comparing local and statewide awards",
+    "Applicants with financial need looking across education, STEM, arts, or community categories",
+    "Families in the USA reviewing scholarships with potentially lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Virginia scholarships for high school students with financial need?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to financial need, high school applicants, and Virginia. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts can range widely, and deadlines differ by listing, so compare the catalog first and confirm the latest details with the official source before you apply."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Virginia?",
+      "answer": "Many listings in this slice relate to high school applicants, and some sample study levels include high school senior, but requirements can differ row to row. Check each program’s official criteria to confirm grade level, Virginia connection, and any USA residency or citizenship rules."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filtered list?",
+      "answer": "The programs below span multiple categories, including education, STEM, arts, community, medicine, and miscellaneous topics. If you want to compare options, scan category labels and fields of study such as education, business, engineering, construction trades, and health professions."
+    }
+  ],
+  "page_data": {
+    "exactCount": 26,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 500,
+      "maxUsd": 20000,
+      "statedAmountCount": 26,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 18,
+      "within60Days": 23,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-25",
+        "2026-06-01",
+        "2026-06-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 26,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "construction_trades",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Southeast Virginia Community Foundation",
+        "count": 4
+      },
+      {
+        "name": "UVA Alumni Association",
+        "count": 4
+      },
+      {
+        "name": "Eastern West Virginia Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "The Community Foundation for Northern Virginia",
+        "count": 2
+      },
+      {
+        "name": "Alfred Street Baptist Church",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "community",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/high-school/virginia",
+    "generatedAt": "2026-04-26T14:00:51.775Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 26,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

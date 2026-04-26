@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find African American Scholarships Under Ten Thousand in Alaska,…",
+  "seo_description": "African American scholarships under ten thousand in Alaska, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Alaska scholarships for African American students without wading through high-dollar national results? This filtered USA view narrows the search to programs with listed awards under the upper range shown here, so you can compare options that may feel more attainable and easier to stack. The rows below span areas such as education, community, arts, and medicine, with examples that also touch business, public administration, architecture, and transportation-related study paths. Awards vary by listing, deadlines differ across programs, and requirements are not identical, so it is worth checking each row closely. Some listings may have lighter application demands, while others can ask for more materials, including essays, so read the details before you apply.",
+  "h1": "African American Scholarships Under Ten Thousand in Alaska USA …",
+  "supporting": "Use this slice to compare more than just the headline award. Look at the category, study level, residency wording, and field tags to see which scholarships actually fit your situation in Alaska and across the broader USA eligibility context. Because deadline text appears across these rows and at least some dates are coming up soon, it makes sense to review timing early. Open the official page for any listing you like, confirm the current rules, and build a shortlist based on fit, effort, and how well the scholarship matches your background.",
+  "related_intro": "If this set feels too narrow, related pages can help you compare nearby options by changing one filter at a time, such as the amount range, location, or African American eligibility focus. That is often the fastest way to find similar scholarships with different requirements or broader reach.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist listings that match your study level and field",
+    "Check whether an essay or extra materials are requested"
+  ],
+  "who_for": [
+    "African American students looking for Alaska scholarship options",
+    "High school juniors or seniors starting a focused scholarship search",
+    "Graduate students checking smaller award programs they can combine",
+    "Applicants in education, community, arts, or medicine related areas",
+    "US citizens or permanent residents verifying eligible USA listings"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines on this USA scholarship list?",
+      "answer": "Yes—these rows show listed award amounts, but amounts vary by program and should be confirmed on the official page. Deadlines also differ by listing, and some dates appear soon, so it’s smart to check each row promptly."
+    },
+    {
+      "question": "What kinds of scholarships appear in this Alaska filter?",
+      "answer": "This focused set of listings includes categories such as education, community, arts, and medicine. You may also see different study levels and fields of study, so it helps to browse a few rows instead of assuming every program fits the same profile."
+    },
+    {
+      "question": "Do all of these scholarships have the same requirements or essay rules?",
+      "answer": "No—requirements vary across the catalog, and essay expectations are mixed in this filter. Review each scholarship’s official page to confirm what documents, essays, or other materials you need before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "architecture_and_related_services",
+        "public_administration_and_social_service",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Water Works Association-Intermountain Section",
+        "count": 1
+      },
+      {
+        "name": "Arizona Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Association of International Certified Public Accountants",
+        "count": 1
+      },
+      {
+        "name": "Black Man, M.D.",
+        "count": 1
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/under-10000/alaska",
+    "generatedAt": "2026-04-26T13:24:28.094Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

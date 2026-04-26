@@ -1,43 +1,132 @@
 {
-  "seo_title": "Explore Scholarships for International Students with Financial Need",
-  "seo_description": "Discover 196 scholarships for international students facing financial challenges. Apply now to secure your education funding.",
-  "h1": "Scholarships for International Students with Financial Need",
-  "intro": "Finding financial support as an international student can be challenging, but numerous scholarships are available to help ease the burden. With 196 scholarships specifically designed for students demonstrating financial need, you can explore various opportunities that cater to different fields of study and backgrounds. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship provide essential funding to help cover tuition and living expenses. Whether you are pursuing undergraduate or graduate studies, these scholarships can make a significant difference in your educational journey. Start your search today and take a step closer to achieving your academic goals.",
-  "supporting": "Eligibility for these scholarships often varies, but many require proof of financial need, academic excellence, and enrollment in an accredited institution. Deadlines can range from early spring to late summer, so it's crucial to check each scholarship's specific requirements. For instance, the Paul and Daisy Soros Fellowships for New Americans and the Razor's Edge Global Scholarship have unique criteria that applicants must meet. To increase your chances of success, ensure your application is complete and submitted on time. Additionally, consider seeking recommendations and crafting a compelling personal statement that highlights your achievements and aspirations.",
-  "related_intro": "In addition to scholarships, there are various financial aid options available for international students, including grants, loans, and work-study programs.",
+  "seo_title": "Find USA Scholarships for International Students in Need",
+  "seo_description": "Scholarships for international students with financial need in the USA. Compare awards, deadlines, and eligibility, then apply on official pages.",
+  "intro": "Trying to find USA scholarships that consider both international student status and financial need usually means sorting through mixed eligibility rules, different study levels, and very different application asks. This filtered slice brings those programs into one place so you can compare options more quickly and decide which listings are worth opening first. The rows below span areas such as education, STEM, community, medicine, arts, and other subjects, with opportunities that may fit high school seniors, current college students, or graduate applicants. Awards, essays, and supporting documents vary by listing, and deadlines differ across programs, so it is smart to check each row closely and verify final details on the official source before you apply.",
+  "h1": "Find Scholarships for International Students in Need USA",
+  "supporting": "A useful way to read this list is to compare the requirement line before anything else: confirm that international students are eligible, then look at how financial need is handled, what study level is expected, and whether the subject area matches your plans. Some listings may be lighter-touch, while others can ask for essays or more documentation. If you want to find strong matches faster, open a few promising rows side by side, compare award wording and deadline text, and verify every detail on the sponsor or school page before you submit anything.",
+  "related_intro": "If these results feel close but not quite right, use related pages to narrow by study level, subject area, or other eligibility details. That can make it easier to compare similar USA scholarship options without losing time on programs that do not fit your profile.",
   "how_to_use": [
-    "Browse the list of 196 scholarships available.",
-    "Check eligibility requirements for each scholarship.",
-    "Prepare necessary documents, such as transcripts and financial statements.",
-    "Submit applications before the deadlines.",
-    "Follow up on your applications and prepare for interviews if required."
+    "Compare deadline text across the rows first",
+    "Read each requirement line for eligibility details",
+    "Open official pages to verify award and document rules",
+    "Shortlist the listings that match your study level and subject",
+    "Check whether an essay or extra materials are required"
   ],
   "who_for": [
-    "International students seeking financial assistance.",
-    "Students enrolled in undergraduate or graduate programs.",
-    "Individuals demonstrating financial need and academic potential."
+    "International applicants seeking need-based support in the USA",
+    "Graduate students comparing funding with financial need criteria",
+    "High school seniors planning USA study and reviewing scholarship options",
+    "College students in education, engineering, health, arts, or business fields"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available?",
-      "answer": "There are various scholarships, including merit-based, need-based, and specific awards for certain fields of study."
+      "question": "How can I find scholarships in the USA for international students with financial need?",
+      "answer": "Use this filtered view to compare the rows that match both international-student and financial-need criteria, then open each listing to confirm the official eligibility details. In this USA-focused catalog slice, study level, field, and residency wording can differ by program."
     },
     {
-      "question": "How do I apply for these scholarships?",
-      "answer": "Each scholarship has its own application process, typically requiring forms, essays, and supporting documents."
+      "question": "Can I apply to every scholarship listed here if I’m an international student with financial need?",
+      "answer": "Not automatically. This page is a starting point to explore relevant listings, but each program has its own official rules, and some rows may also mention specific study levels, fields, or residency conditions."
     },
     {
-      "question": "Are there scholarships specifically for certain countries?",
-      "answer": "Yes, some scholarships are targeted towards students from specific countries or regions."
+      "question": "How do I compare award amounts and deadlines on this page?",
+      "answer": "Compare them row by row, because amounts and deadlines vary by listing. Some awards in this filtered set range from smaller amounts to much larger funding, but you should verify the current amount, deadline text, and renewal terms on the official source before you apply."
+    },
+    {
+      "question": "Do these scholarships require an essay?",
+      "answer": "Requirements are mixed across these listings. Some programs may ask for an essay while others may be lighter-touch, so check each row and the official application page before you start."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-international-students-with-financial-need",
-    "generatedAt": "2026-04-25T13:31:17.892Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:09:18.788Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

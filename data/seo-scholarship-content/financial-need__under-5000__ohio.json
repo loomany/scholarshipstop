@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Ohio Financial Need Scholarships Under Five Thousand | USA…",
+  "seo_description": "Ohio financial need scholarships under five thousand: compare award ranges, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Ohio scholarships in the USA that consider financial need and stay on the lower award side can be more useful than scanning broad national lists. This filtered slice brings together programs with smaller listed awards, which can still help cover books, fees, supplies, or part of tuition when combined with other aid. The rows below span different subjects and applicant types, including community, education, law, medicine, and STEM related options. Requirements are not identical across these listings: some may ask for essays, some may be lighter to apply for, and eligibility details can change by program. Deadlines also vary by row, so it makes sense to compare them early and verify every detail on the official scholarship page before you apply.",
+  "h1": "Apply for Ohio Financial Need Scholarships Under Five Thousand U…",
+  "supporting": "A practical way to use this list is to compare more than the award text. Read the requirement lines closely, note whether the scholarship is tied to Ohio residency, a specific field such as education, law, health professions, engineering, or physical sciences, and check the study level that fits your situation. Because these are smaller award listings, they are often worth shortlisting alongside larger scholarships rather than instead of them. Open the official source for any program you like, confirm current rules, and keep an eye on deadline wording since some opportunities may be coming up soon.",
+  "related_intro": "If these Ohio financial need listings feel too narrow, related pages can help you compare nearby options by topic, award range, or other eligibility filters. That is useful when you want to widen your search without losing the same general USA scholarship focus.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility",
+    "Shortlist programs that match your study level",
+    "Check award details and essay expectations carefully"
+  ],
+  "who_for": [
+    "Ohio residents with financial need",
+    "High school seniors planning college",
+    "College and graduate students in Ohio",
+    "Adult non traditional learners returning to school",
+    "Applicants in education, law, health, or STEM"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Financial Need · Under · Ohio scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Financial Need · Under · Ohio scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Financial Need · Under · Ohio scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 24,
+    "award": {
+      "medianUsd": 1288,
+      "minUsd": 750,
+      "maxUsd": 5000,
+      "statedAmountCount": 24,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 23,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-15",
+        "2026-05-14"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 21,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_2",
+        "college_1",
+        "graduate_student",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "legal_professions_and_law_studies",
+        "engineering",
+        "history"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "The Community Foundation of Shelby County",
+        "count": 13
+      },
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 2
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Cuyahoga Community College",
+        "count": 1
+      },
+      {
+        "name": "Fraternal Order of Police Associates of Ohio",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "medical",
+      "law",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/ohio",
+    "generatedAt": "2026-04-26T14:38:20.719Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 24,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

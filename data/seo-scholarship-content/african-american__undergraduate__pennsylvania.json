@@ -1,0 +1,112 @@
+{
+  "seo_title": "Find African American Undergraduate Scholarships USA",
+  "seo_description": "African American undergraduate scholarships in Pennsylvania, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Pennsylvania for African American applicants usually means narrowing a broad USA search into a set you can actually compare and apply to. This filtered slice brings together programs tied to that combination, with rows that touch areas like education, STEM, community, and medicine. Awards, deadlines, and eligibility details are not all the same, so it helps to read each listing closely instead of assuming one rule fits every option. Many of the programs shown here appear to have lighter application signals, and no-essay listings are common in this slice, but you should still verify every requirement on the official page before you apply.",
+  "h1": "Find African American Undergraduate Scholarships USA",
+  "supporting": "Use these rows to compare more than the title alone. Check the award text, scan the requirement lines, and note how each program frames eligibility, study level, and field of study. Because deadline wording differs by listing and some opportunities may be coming up soon, it is smart to review dates promptly and shortlist the ones that match your situation. If you are applying in the USA for the upcoming cycle, this is a practical place to browse and compare options before opening each sponsor page to confirm the latest details.",
+  "related_intro": "If you do not find enough matches in this Pennsylvania undergraduate slice, related pages can help you widen or refine the search. You may want to compare nearby eligibility combinations, broader undergraduate results, or other Pennsylvania scholarship views to spot programs with similar themes and requirement patterns.",
+  "how_to_use": [
+    "Compare deadline text across listings",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the programs that fit your profile",
+    "Check award wording before you apply"
+  ],
+  "who_for": [
+    "African American undergraduate applicants in Pennsylvania",
+    "College students comparing Pennsylvania scholarship options",
+    "Applicants interested in education or STEM funding",
+    "Students seeking community or medicine related awards"
+  ],
+  "faq": [
+    {
+      "question": "How can I find African American undergraduate scholarships in Pennsylvania that fit my major?",
+      "answer": "Use this filtered view to compare the rows by category and field, then open the official source for any program that matches your situation. In this USA slice, you may see themes such as education, STEM, community, and medicine, but eligibility and details still vary by listing."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate student in Pennsylvania?",
+      "answer": "Not automatically. This catalog narrows the list to African American, undergraduate, and Pennsylvania-related opportunities, but each program can still have its own requirements, so verify the official page before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check the award amount, deadline text, study level, and any residency or citizenship notes shown in each row, then confirm everything on the provider’s official page. Amounts vary by listing, and deadlines differ by program rather than following one page-wide date."
+    },
+    {
+      "question": "Are these scholarships only for certain fields like education or STEM?",
+      "answer": "Not only one field. In these rows, common topics include education, STEM, community, and medicine, so it’s worth exploring multiple listings even if your major is outside the first title you notice."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 5000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 16,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-18",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "POISE Foundation",
+        "count": 5
+      },
+      {
+        "name": "Pennsylvania Black Conference on Higher Education",
+        "count": 1
+      },
+      {
+        "name": "Philadelphia Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/undergraduate/pennsylvania",
+    "generatedAt": "2026-04-26T13:28:53.398Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

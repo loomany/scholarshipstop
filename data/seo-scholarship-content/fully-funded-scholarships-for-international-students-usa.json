@@ -1,43 +1,131 @@
 {
-  "seo_title": "Explore 196 Fully Funded Scholarships for International Students in the USA",
-  "seo_description": "Discover 196 fully funded scholarships for international students in the USA. Find your opportunity to study abroad today!",
-  "h1": "Fully Funded Scholarships for International Students in the USA",
-  "intro": "Are you an international student seeking financial support to study in the USA? You're in luck! There are currently 196 fully funded scholarships available that can cover tuition, living expenses, and more. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship offer generous funding to help you achieve your academic dreams. Whether you're pursuing undergraduate or graduate studies, these scholarships provide a valuable opportunity to reduce financial burdens while gaining a world-class education in the United States.",
-  "supporting": "Eligibility for these scholarships varies, but many are open to students from diverse backgrounds and fields of study. Some scholarships may require specific academic achievements, while others focus on community service or leadership skills. Deadlines also vary, so it's crucial to check each scholarship's requirements carefully. To apply, gather necessary documents such as transcripts, letters of recommendation, and personal statements. Be sure to submit your applications well before the deadlines to increase your chances of success. Scholarships like the Paul and Daisy Soros Fellowships and the Razor's Edge Global Scholarship are highly competitive, so prepare thoroughly.",
-  "related_intro": "In addition to fully funded scholarships, there are numerous other funding options available for international students, including grants, assistantships, and work-study programs.",
+  "seo_title": "Find Fully Funded Scholarships for International Students USA …",
+  "seo_description": "Fully funded scholarships for international students in the USA. Compare deadlines, award details, and eligibility, then apply on official pages.",
+  "intro": "Trying to find fully funded scholarships for international students in the USA usually means sorting through programs that look similar at first glance but differ a lot once you open the details. This filtered view brings together a focused set of listings so you can compare options across education, STEM, medicine, arts, community, and other categories without jumping between unrelated results. Awards in these rows are not uniform, and the listed funding can range widely by program, so check each scholarship page carefully rather than assuming every listing covers the same costs. Deadlines also vary by row, and some appear relatively soon, which makes it smart to apply early where you can. Requirements are mixed as well: some listings may ask for essays or more documentation, while others may be lighter-touch.",
+  "h1": "Find Fully Funded Scholarships for International Students USA …",
+  "supporting": "Use this list to compare more than just the title. Look at the category, study level, citizenship wording, field of study, award text, and deadline line together before you decide which programs are worth pursuing. In this USA slice, you may see listings tied to graduate study, college years, or even high school seniors, so fit matters. It is also worth scanning beyond broad education labels, since relevant options can appear under STEM, health professions, engineering, English language and literature, business management and marketing, and related areas. Amounts and eligibility details should always be verified on the official source.",
+  "related_intro": "If these results feel close but not quite right, use related pages to narrow by study level, subject area, or requirement style. That can make it easier to find USA scholarships for international students that better match your course of study or application preferences.",
   "how_to_use": [
-    "Browse the list of 196 scholarships available.",
-    "Check eligibility criteria for each scholarship.",
-    "Prepare required application materials.",
-    "Submit applications before deadlines.",
-    "Follow up on your application status."
+    "Compare the deadline line on every row first, since dates differ and some programs may close sooner than expected",
+    "Read the eligibility and requirement text closely to confirm the listing is open to international students in the USA context you need",
+    "Check the award wording instead of assuming every fully funded listing covers the same expenses, because amounts and coverage vary by program",
+    "Open the official scholarship page for your top choices, verify current details, and shortlist the programs that best match your study level and field"
   ],
   "who_for": [
-    "International students seeking financial aid.",
-    "Students pursuing undergraduate or graduate degrees.",
-    "Individuals with diverse academic backgrounds and interests."
+    "International students comparing USA scholarship options that may offer full funding or high-value support",
+    "Applicants targeting education, STEM, medicine, arts, community, or mixed-category programs in the United States",
+    "Graduate, college, or high school senior applicants who need to check which study levels appear in each listing",
+    "Students who want to compare essay expectations, deadline timing, and award wording before they apply"
   ],
   "faq": [
     {
-      "question": "What are fully funded scholarships?",
-      "answer": "Fully funded scholarships cover tuition fees, living expenses, and sometimes additional costs like travel and health insurance."
+      "question": "How can I find fully funded scholarships for international students in the USA on this page?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tagged for international students. Then open each row and verify funding scope, eligibility, and application details on the official source."
     },
     {
-      "question": "How do I find these scholarships?",
-      "answer": "You can find fully funded scholarships through university websites, scholarship databases, and educational organizations."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—these rows are useful for comparing programs side by side, but amounts and deadlines vary by listing. Some awards show a dollar figure, while others may need confirmation on the official page before you apply."
     },
     {
-      "question": "What is the typical application process?",
-      "answer": "The application process usually involves submitting an application form, academic transcripts, letters of recommendation, and a personal statement."
+      "question": "Are all of these USA scholarships open to every international student?",
+      "answer": "Not necessarily. This catalog slice includes listings connected to international student eligibility, but each program can set its own citizenship, residency, study level, or field-of-study rules, so check the source before applying."
+    },
+    {
+      "question": "Do these scholarships all require essays or the same application materials?",
+      "answer": "No—requirements differ across the programs below. Some listings may be lighter-touch, while others may ask for essays or additional materials, so compare the rows and confirm on the official application page."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "fully-funded-scholarships-for-international-students-usa",
-    "generatedAt": "2026-04-25T13:16:58.345Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T12:58:50.972Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

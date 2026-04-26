@@ -1,48 +1,125 @@
 {
-  "seo_title": "Top Engineering Scholarships in Texas",
-  "seo_description": "Explore 9 engineering scholarships in Texas with awards up to $12,000. Check deadlines and requirements for each listing.",
-  "intro": "For engineering students in Texas, there are 9 scholarship opportunities available that can help ease the financial burden of your education. Award sizes vary significantly, ranging from approximately $500 to $12,000, making it important to explore each option thoroughly. With deadlines spread across the upcoming months, it’s wise to check these listings promptly to ensure you don’t miss out on potential funding.",
-  "h1": "Find Engineering Scholarships in Texas",
-  "supporting": "This collection of scholarships caters specifically to engineering majors and includes various funding amounts and requirements. Many of these listings do not require essays, which can simplify the application process. As you review your options, consider comparing award sizes, deadlines, and specific eligibility criteria to find the best fit for your needs.",
-  "related_intro": "If you're interested in scholarships beyond engineering, consider exploring related fields or categories that may also offer financial support tailored to your studies.",
+  "seo_title": "Find Engineering Scholarships in Texas, USA",
+  "seo_description": "Engineering scholarships in Texas, USA with award ranges, deadline details, and listing requirements. Compare options and apply on official pages.",
+  "intro": "Trying to find engineering scholarships in Texas usually means narrowing a broad USA search to programs that actually match your location and field. This filtered slice brings together Texas-focused listings tied to engineering, with examples that touch areas like petroleum engineering, civil engineering, design, and related STEM paths. Awards, deadlines, and eligibility details vary from row to row, so it helps to compare each listing rather than assume the same rules apply across the page. Many entries in this set appear to have lighter application signals, and no-essay options are common in the metadata, though you should still verify every requirement on the official source before you apply.",
+  "h1": "Explore Engineering Scholarships in Texas USA",
+  "supporting": "Use these rows to compare more than the title alone. Check how each program describes the field of study, study level, and any citizenship or residency language, then weigh the listed award against the effort required. Because deadline text differs across this Texas engineering set, it is smart to review timing early and open promising options right away. If you are trying to compare opportunities quickly, shortlist the listings that fit your engineering focus first, then confirm final details on the sponsor or official application page.",
+  "related_intro": "If this Texas engineering view feels close but not quite right, related pages can help you compare nearby scholarship paths by topic or location. That is useful when your program sits between engineering and another STEM area, or when you want to find similar USA listings beyond one state filter.",
   "how_to_use": [
-    "Check the deadlines for each scholarship listing",
-    "Compare the award amounts to prioritize applications",
-    "Review eligibility requirements carefully",
-    "Open official scholarship pages for detailed information",
-    "Shortlist scholarships that align with your profile"
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and eligibility on the sponsor site"
   ],
   "who_for": [
-    "Engineering students in Texas",
-    "Undergraduates pursuing STEM degrees",
-    "Students seeking funding without essay requirements",
-    "Applicants interested in community-focused scholarships",
-    "Those looking for diverse scholarship opportunities"
+    "Texas engineering majors comparing local scholarship options",
+    "College or graduate applicants in engineering-related STEM programs",
+    "USA students seeking Texas listings with potentially lighter application steps",
+    "Applicants interested in petroleum, civil, design, or broader engineering themes"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for engineering students in Texas?",
-      "answer": "There are currently 9 scholarships specifically for engineering students in Texas, with award amounts ranging from approximately $500 to $12,000. These scholarships cover various categories, including STEM, law, and community-focused initiatives."
+      "question": "How can I find engineering scholarships in Texas that fit my situation?",
+      "answer": "Use this filtered view to compare Texas engineering listings by study level, residency wording, amount, and deadline. Then open the official source for each row to verify current eligibility details for USA applicants."
     },
     {
-      "question": "Are there deadlines I should be aware of for these scholarships?",
-      "answer": "Yes, all 9 scholarships listed have specific deadlines, which vary from one program to another. It's advisable to check the individual listings promptly, as some deadlines are approaching within the next 45 days."
+      "question": "Can I apply if I’m a graduate student or only if I’m in college?",
+      "answer": "The programs below include listings tied to college and graduate_student study levels, but requirements vary by scholarship. Check each official page before you apply, since the catalog shows a mix rather than one universal rule."
     },
     {
-      "question": "Do I need to write an essay to apply for these scholarships?",
-      "answer": "Most of the scholarships in this list do not require an essay, making the application process potentially easier. However, it's important to review each listing for specific requirements, as details may vary."
+      "question": "Are these scholarships only for Texas residents?",
+      "answer": "Not always—this page is filtered to Texas, but residency and citizenship terms can differ by listing. Some rows may reference USA statuses such as us_citizen or us_permanent_resident, so compare the wording on each official scholarship page."
     },
     {
-      "question": "How can I find more information about each scholarship?",
-      "answer": "You can click on each scholarship listing to view detailed information, including eligibility criteria, application processes, and any specific requirements. This will help you determine which opportunities align best with your background and goals."
+      "question": "Do engineering scholarships in this Texas list usually require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flag in the catalog, but you should still verify requirements on the official page. Some programs may be lighter-touch than others, and application steps can change row to row."
     }
   ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 500,
+      "maxUsd": 12000,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "May 7, 2026 3:00 PM CT",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "college_3",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "architecture_and_related_services",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Air and Waste Management Association-Louisiana Section",
+        "count": 1
+      },
+      {
+        "name": "American Public Works Association-Texas Chapter",
+        "count": 1
+      },
+      {
+        "name": "American Society of Civil Engineers-Houston Branch",
+        "count": 1
+      },
+      {
+        "name": "Society of American Military Engineers-Dallas Post",
+        "count": 1
+      },
+      {
+        "name": "Society of Petroleum Engineers-Fort Worth Section",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "community",
+      "law",
+      "biology",
+      "education"
+    ]
+  },
   "_meta": {
     "canonicalPath": "engineering/texas",
-    "generatedAt": "2026-04-02T10:43:53.527Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T13:41:27.863Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 9,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Engineering Scholarships in Indiana, USA",
+  "seo_description": "Engineering scholarships in Indiana, USA: compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find engineering scholarships in Indiana usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings together a focused set of listings tied to engineering and Indiana, so you can compare options without jumping between unrelated results. The rows below include awards with posted amounts, but the value can vary by listing and should always be confirmed on the official page. Deadlines also differ across programs, and at least some appear to be coming up soon, so it makes sense to check dates early. Requirements are mixed as well: some listings may be lighter-touch, while others may ask for more materials or an essay.",
+  "h1": "Explore Engineering Scholarships in Indiana USA",
+  "supporting": "Use this slice to compare more than the scholarship title alone. Look at the requirement lines, study-level fit, and any residency or citizenship wording before you apply. Because these Indiana engineering listings span STEM, education, and community-adjacent categories, it is worth scanning every row even if the name does not perfectly match your major at first glance. Open the official source for any program you shortlist, verify the current award text and deadline, and note whether the application looks straightforward or asks for extra written materials.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing either the engineering topic or the Indiana location filter. That is often the fastest way to uncover related USA programs with different eligibility details, study-level emphasis, or application requirements.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open official pages before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on the sponsor site"
+  ],
+  "who_for": [
+    "Indiana students pursuing engineering study",
+    "High school seniors planning engineering programs",
+    "Graduate students seeking Indiana STEM funding",
+    "US citizens checking state-linked engineering awards"
+  ],
+  "faq": [
+    {
+      "question": "How can I find engineering scholarships in Indiana that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by study level, category, and any citizenship or residency notes shown in the catalog. Then open the official source for each program to verify current eligibility, required materials, and how to apply in the USA context."
+    },
+    {
+      "question": "Can I compare award amounts on this Indiana engineering scholarships page?",
+      "answer": "Yes—these listings show award amounts row by row, and amounts vary by program. Use the catalog to compare the posted figures, then confirm the latest amount on the official scholarship page before you apply."
+    },
+    {
+      "question": "Are essay requirements the same across these scholarships?",
+      "answer": "No—requirements vary across the listings, and essay expectations are mixed in this slice. Check each scholarship's official page for the exact application steps, documents, and any essay instructions."
+    },
+    {
+      "question": "Who should explore this filtered list?",
+      "answer": "- Indiana-focused applicants trying to find engineering scholarships without sorting through unrelated USA listings. - High school seniors and graduate students who want to compare programs in a focused set of rows. - US citizens who need to verify residency or citizenship details program by program before they apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 16,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "construction_trades",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Concrete Institute-Indiana Chapter",
+        "count": 1
+      },
+      {
+        "name": "American Institute of Steel Construction",
+        "count": 1
+      },
+      {
+        "name": "American Public Works Association-Indiana Chapter",
+        "count": 1
+      },
+      {
+        "name": "Florida Professional Engineers in Government",
+        "count": 1
+      },
+      {
+        "name": "Fort Wayne Rubber and Plastics Group",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "engineering/indiana",
+    "generatedAt": "2026-04-26T13:36:55.508Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

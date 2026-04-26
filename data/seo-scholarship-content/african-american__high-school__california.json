@@ -1,0 +1,116 @@
+{
+  "seo_title": "Find African American High School Scholarships USA",
+  "seo_description": "African American high school scholarships in California, USA—compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find California scholarships for African American high school students usually means narrowing a broad search into listings that actually match your background and stage in school. This filtered slice brings together USA opportunities tied to that combination, with a noticeable mix of community and education themes. As you compare the rows below, expect award amounts, deadline timing, and requirement details to vary by listing rather than follow one standard pattern. Many entries appear to be lighter-touch and often show no essay in the catalog data, but you should still read each requirement line carefully before you apply. If you are planning ahead for the coming cycle, this is a practical place to start and quickly spot programs worth a closer look.",
+  "h1": "Find African American High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the title. Check how each program describes eligibility, look at the category labels, and note whether the scholarship seems aimed at community service, education interests, or broader local support. Because deadlines differ across these rows, it is smart to review timing early and open the official page for any listing you may want to pursue. Award amounts are listed in the catalog, but details can change, so verify the current terms on the sponsor site before you rely on them.",
+  "related_intro": "If these California listings feel close but not quite right, related pages can help you widen or refine the search. You may want to explore other USA scholarship filters by location, education level, or eligibility focus to compare nearby options and find programs with a better fit.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your location and school level",
+    "Verify award details on the sponsor site"
+  ],
+  "who_for": [
+    "African American high school students in California",
+    "California high school seniors comparing local scholarship options",
+    "Students seeking community or education themed awards",
+    "Applicants looking for listings that often show no essay"
+  ],
+  "faq": [
+    {
+      "question": "How do I find African American scholarships for high school students in California?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to African American eligibility, high school level, and California. Then open each row and verify the current rules, residency details, and application steps on the official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include listed award amounts and deadline text, but both vary by program. Amounts in this slice range across the listings, and deadlines differ by row, so compare carefully and check official pages before you apply."
+    },
+    {
+      "question": "Are these scholarships only for current high school students?",
+      "answer": "Mostly, this filter is centered on high school opportunities, and sample study levels include high school senior. Some listings may also connect to the next study stage, so review each scholarship's official eligibility details before applying."
+    },
+    {
+      "question": "Do these California scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements can change, so confirm what each program asks for on the official application page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 1000,
+      "maxUsd": 2000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-24",
+        "2026-04-24",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alpha Kappa Alpha Sorority-Alpha Nu Omega Chapter",
+        "count": 2
+      },
+      {
+        "name": "The Links, -Stockton Chapter",
+        "count": 2
+      },
+      {
+        "name": "Delta Sigma Theta Sorority-Contra Costa Alumnae Chapter",
+        "count": 1
+      },
+      {
+        "name": "Kappa Alpha Psi Fraternity-Berkeley Alumni Chapter",
+        "count": 1
+      },
+      {
+        "name": "Omega Psi Phi Fraternity-Theta Pi Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/high-school/california",
+    "generatedAt": "2026-04-26T13:23:14.972Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

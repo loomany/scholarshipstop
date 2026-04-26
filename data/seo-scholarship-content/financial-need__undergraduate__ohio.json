@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find Ohio Undergraduate Need-Based Scholarships | USA",
+  "seo_description": "Ohio undergraduate financial need scholarships in the USA: compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Ohio undergraduate scholarships in the USA that take financial need into account usually means balancing fit, timing, and effort at the same time. This filtered slice brings together a focused set of listings tied to Ohio and undergraduate study, with programs that span community, medicine, education, and STEM themes. As you compare options, expect the details to vary from row to row: award amounts differ by listing, deadlines are not all the same, and eligibility language can be broader or more specific depending on the program. Many listings in this view appear to have lighter application signals, and no-essay options are common, but you should still read each requirement line carefully before you apply.",
+  "h1": "Find Ohio Undergraduate Financial Need Scholarships USA",
+  "supporting": "Use these rows to compare more than just the scholarship title. Check how each listing describes financial need, note whether the study level matches your current path, and scan category cues like community, medical, education, or STEM to find the closest fit. It is also smart to review deadline text early, since some programs may close sooner than others. Before you apply, open the official page to verify award details, required materials, and any Ohio or undergraduate conditions shown by the sponsor.",
+  "related_intro": "If this Ohio undergraduate need-based set feels close but not quite right, related pages can help you narrow by topic or widen your search across nearby scholarship themes. That is useful when you want to compare Ohio-focused options against other undergraduate or financial-need filters without starting over.",
+  "how_to_use": [
+    "Compare deadline text across rows first",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Ohio undergraduates seeking need-based aid",
+    "Students comparing community and STEM scholarships",
+    "Education or health-related majors in Ohio",
+    "Applicants looking for many no-essay listings"
+  ],
+  "faq": [
+    {
+      "question": "How do I find undergraduate scholarships in Ohio for students with financial need?",
+      "answer": "Use this filtered view to compare Ohio scholarship rows that match undergraduate study and financial-need criteria. Then open each listing and verify eligibility, required documents, award details, and application steps on the official source."
+    },
+    {
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, you can explore multiple listings and apply where you meet the stated rules, but each program sets its own terms. Check every official page to confirm whether applications can overlap and what materials are required."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on location fit, study level, field or category, deadline text, and the award amount shown in each row. Amounts vary by listing in this Ohio, USA slice, so confirm the current details on the official scholarship page before you apply."
+    },
+    {
+      "question": "Do these Ohio undergraduate scholarships all have the same deadline or requirements?",
+      "answer": "No—deadlines differ by program, and these rows do not share one universal closing date. Many listings in this filtered set appear to have lighter requirements and often no essay, but you should still verify each scholarship's official instructions promptly."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or topics?",
+      "answer": "Not only one major—this focused set of listings includes categories such as Community, Medicine, Education, and STEM. If you want to browse or compare options in Ohio, USA, check both the category labels and the full listing details for subject-specific rules."
+    }
+  ],
+  "page_data": {
+    "exactCount": 15,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 15,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 16,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-05-14",
+        "2026-05-14"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 15,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_2",
+        "college_1",
+        "graduate_student",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "history",
+        "engineering",
+        "physical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "The Community Foundation of Shelby County",
+        "count": 12
+      },
+      {
+        "name": "Korean American Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Society of Plastics Engineers-Akron Section",
+        "count": 1
+      },
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "medical",
+      "education",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/ohio",
+    "generatedAt": "2026-04-26T14:53:29.599Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 15,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "seo_title": "Find African American Scholarships in Illinois, USA",
+  "seo_description": "African American scholarships in Illinois, USA: compare awards, deadlines, and requirements in this focused set of listings, then apply on official pages.",
+  "intro": "Trying to find African American scholarships in Illinois usually means narrowing a broad USA search into a smaller set you can actually compare and apply to. This filtered slice brings together programs tied to both that eligibility focus and Illinois, with examples touching areas like STEM, medicine, education, and business-related study. The rows below may fit different stages of school, from students nearing college to those already enrolled or in graduate study. Awards, deadlines, residency or citizenship language, and other requirements can vary from listing to listing, so it is worth reading each row closely. Many listings in this slice appear to have lighter application signals, and some may often be no-essay options, but you should still verify every detail on the official source before you apply.",
+  "h1": "Apply for African American Scholarships in Illinois USA",
+  "supporting": "Use this view to compare the practical details that matter most before you spend time on an application. Check how each listing describes eligibility, school level, field of study, and any residency or citizenship wording, then compare award text and deadline language side by side. Because deadline timing differs across these rows and some opportunities may be coming up soon, it makes sense to review dates promptly. If a title looks relevant, open the official page to confirm current requirements, award information, and submission steps for that specific USA scholarship.",
+  "related_intro": "If these Illinois listings feel too narrow, related pages can help you compare nearby paths, such as broader African American scholarship results, other Illinois-focused scholarship filters, or category pages connected to education, STEM, medicine, and business study.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official source before applying",
+    "Shortlist listings that match your school level",
+    "Verify award details on sponsor pages"
+  ],
+  "who_for": [
+    "African American students in Illinois",
+    "Illinois high school seniors planning college",
+    "Current college students comparing education or business awards",
+    "Graduate students checking STEM or medicine related options"
+  ],
+  "faq": [
+    {
+      "question": "How can I find African American scholarships in Illinois that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by eligibility, study level, and subject area, then open the official source for the final rules. In this USA-focused slice, examples span areas like STEM, education, and medicine."
+    },
+    {
+      "question": "Can I apply if I’m in high school, college, or graduate school?",
+      "answer": "Possibly—these listings are not all for the same stage. The catalog sample in this Illinois set includes programs tied to high school seniors, college students, and graduate students, so check each row before you apply."
+    },
+    {
+      "question": "What should I compare before I apply to these Illinois scholarships?",
+      "answer": "Compare eligibility, location fit, study level, field of study, award details, and deadline text row by row. Amounts and requirements vary by listing, and the official page is the place to verify anything important."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay in the catalog metadata, but you should still verify each program’s application steps on the official source. Requirements can differ even within a small set of rows."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1500,
+      "maxUsd": 4000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-08",
+        "2026-05-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "business_management_and_marketing",
+        "education"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Illinois CPA Society",
+        "count": 2
+      },
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "african-american/illinois",
+    "generatedAt": "2026-04-26T13:24:01.828Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

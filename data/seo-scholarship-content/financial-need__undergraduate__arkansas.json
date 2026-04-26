@@ -1,0 +1,105 @@
+{
+  "seo_title": "Find Arkansas Undergraduate Need Scholarships | USA",
+  "seo_description": "Arkansas undergraduate financial need scholarships in the USA—compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to find Arkansas undergraduate scholarships that take financial need into account usually means narrowing past broad national results and checking which programs actually fit your situation. This filtered USA view brings together a focused set of listings tied to Arkansas and undergraduate study, with themes that lean toward education and community. As you compare options, expect the details to vary by row: award amounts differ, deadlines are not the same, and eligibility language can be more specific on the official pages. Many listings in this slice appear to have lighter application signals, and some may not require an essay, but you should still verify every requirement before you apply.",
+  "h1": "Find Financial Need Undergraduate Scholarships in Arkansas USA …",
+  "supporting": "Use the rows below to compare more than just the title. Read the requirement lines closely for residency, study level, and any category clues such as education or community focus. Because deadlines in this Arkansas set differ, it is worth checking date text early and opening each official source before you shortlist anything. Award amounts also vary by listing, so compare value alongside fit, not in isolation. If you want to find programs you can realistically pursue soon, this slice is a practical place to start.",
+  "related_intro": "If these Arkansas financial need listings feel too narrow, related pages can help you compare nearby paths, such as broader undergraduate results, other Arkansas scholarship filters, or need-based options in different categories. That is often the fastest way to find a better match without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read requirement lines before you apply",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award wording and category fit together"
+  ],
+  "who_for": [
+    "Arkansas undergraduates with financial need",
+    "High school seniors planning college in Arkansas",
+    "Education-focused applicants comparing local scholarship options",
+    "US citizens looking for Arkansas-based undergraduate aid"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Arkansas undergraduate scholarships based on financial need?",
+      "answer": "Use this filtered view to compare Arkansas listings that match undergraduate study and financial-need criteria. Then open each row and verify eligibility, residency, and application details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate in the USA?",
+      "answer": "Not automatically. These rows are filtered for Arkansas and undergraduate/financial-need relevance, but each program can still have its own requirements such as study level, residency, or other eligibility details that you should confirm from official sources."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare the deadline shown on each row, the listed award amount, and any requirement notes before you apply. Amounts and deadlines vary by program, and official pages are the right place to confirm the latest terms."
+    },
+    {
+      "question": "Are these Arkansas scholarships mostly quick to apply for?",
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and many sampled rows show no essay flag, but that can differ by program. Check each official listing carefully before you start an application."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 3500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-01",
+        "2026-04-04"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arkansas CattleWomen's Association",
+        "count": 1
+      },
+      {
+        "name": "Arkansas Rural Education Association",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/undergraduate/arkansas",
+    "generatedAt": "2026-04-26T14:44:32.541Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

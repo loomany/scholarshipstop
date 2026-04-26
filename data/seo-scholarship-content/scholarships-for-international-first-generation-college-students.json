@@ -1,43 +1,132 @@
 {
-  "seo_title": "Top Scholarships for International First Generation College Students",
-  "seo_description": "Explore 196 scholarships designed for international first generation college students to help fund your education.",
-  "h1": "Scholarships for International First Generation College Students",
-  "intro": "Navigating college as an international first generation student can be challenging, but numerous scholarships are available to ease the financial burden. With 196 scholarships specifically targeting your unique situation, you can find support tailored to your needs. Scholarships like the International Student Scholarship and the Vanna Christian Sun Legacy Scholarship offer significant financial assistance, while others like the Paul and Daisy Soros Fellowships for New Americans provide additional resources to help you succeed. Whether you need funds for tuition, living expenses, or educational materials, these scholarships can make a substantial difference in your academic journey.",
-  "supporting": "Eligibility for these scholarships varies, but many are designed for international students who are the first in their families to attend college. Common requirements include proof of enrollment in an accredited institution, a personal statement, and sometimes letters of recommendation. Deadlines can range from early spring to late summer, so it’s crucial to check each scholarship's specific timeline. To apply, gather necessary documents, craft a compelling personal narrative, and ensure your application is submitted on time. Resources like your school's financial aid office or online scholarship databases can also provide guidance and support throughout the application process.",
-  "related_intro": "In addition to scholarships, consider exploring grants and fellowships that cater to international first generation college students for further financial support.",
+  "seo_title": "Find USA Scholarships for International First-Gen Students",
+  "seo_description": "Scholarships for international first-generation college students in the USA. Compare deadlines, eligibility, and award details, then apply on official pages.",
+  "intro": "Trying to find USA scholarships that fit both international status and a first generation college background usually means sorting through mixed eligibility rules, study levels, and category labels. This filtered slice brings those themes together so you can apply with more focus and compare options that may connect to education, STEM, community, medicine, arts, and other academic paths. The rows below are not all the same: some listings may be open to high school seniors, some to current college students, and some to graduate study. Award amounts vary by listing, deadlines differ by program, and requirements can range from lighter application steps to essays or added documentation, so it is worth reading each row closely before you move forward.",
+  "h1": "Apply for USA Scholarships for International First-Gen Students…",
+  "supporting": "A smart way to use this set is to compare the requirement line, study level, field of study, and citizenship or residency wording side by side. Some listings in this USA catalog may mention international students directly, while others include broader labels that still need careful verification on the official source. As you browse, look for fit across your academic stage, intended major, and any essay expectations. If a program looks promising, open the official page, confirm current rules, and shortlist the options whose deadlines and application steps match your timeline.",
+  "related_intro": "If these listings feel close but not exact, related pages can help you narrow by study level, subject area, or broader international student scholarship themes in the USA. That is often the fastest way to find programs with requirement language that better matches your profile.",
   "how_to_use": [
-    "Research available scholarships that fit your profile.",
-    "Prepare required documents such as transcripts and personal statements.",
-    "Check eligibility criteria and deadlines for each scholarship.",
-    "Submit applications well before the deadline to avoid last-minute issues.",
-    "Follow up on your applications to ensure they were received."
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Check study level and field labels",
+    "Open the official page to verify eligibility",
+    "Shortlist the programs that best match your profile"
   ],
   "who_for": [
-    "International students pursuing undergraduate or graduate degrees.",
-    "First generation college students seeking financial assistance.",
-    "Students looking for scholarships with diverse eligibility criteria."
+    "International students who are also first generation college applicants",
+    "High school seniors comparing USA scholarship options before applying",
+    "Current college students looking for funding tied to education or STEM",
+    "Graduate applicants seeking scholarships with international student relevance"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available?",
-      "answer": "There are various scholarships, including merit-based, need-based, and those specifically for international first generation students."
+      "question": "How can I find scholarships for international first-generation college students in the USA on this page?",
+      "answer": "Use this filtered view to compare rows that match both international-student and first-generation search intent. Then open each listing and verify eligibility, award details, and application steps on the official source before you apply."
     },
     {
-      "question": "How do I find these scholarships?",
-      "answer": "You can find scholarships through your school's financial aid office, online scholarship databases, and community organizations."
+      "question": "Can I compare award amounts and deadlines across these scholarship listings?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts can differ widely, and deadlines are not universal, so check each row promptly and confirm the latest details on the official page."
     },
     {
-      "question": "What is the typical application process?",
-      "answer": "The application process usually involves completing an application form, submitting required documents, and sometimes attending an interview."
+      "question": "Are these scholarships only for one major or study level?",
+      "answer": "No. In this focused set of listings, you may find options tied to areas like Education, STEM, Community, Medicine, Arts, and more, with study levels that can include high school seniors, college students, and graduate students. Always read the individual listing to confirm who can apply."
+    },
+    {
+      "question": "Do all of these scholarships require an essay?",
+      "answer": "Not necessarily—requirements vary across the catalog. Some listings may have lighter application requirements, while others may ask for essays or additional materials, so review each scholarship's official instructions before applying."
     }
   ],
+  "page_data": {
+    "exactCount": 219,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 400,
+      "maxUsd": 143000,
+      "statedAmountCount": 161,
+      "unstatedAmountCount": 58
+    },
+    "deadline": {
+      "within30Days": 48,
+      "within60Days": 81,
+      "rollingOrUnknown": 5,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-10T23:59:59Z",
+        "2026-05-10T23:59:59Z"
+      ]
+    },
+    "essays": {
+      "yesCount": 121,
+      "noCount": 98,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "question",
+        "personal_statement",
+        "document",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "international_student",
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Broward College",
+        "count": 41
+      },
+      {
+        "name": "Bold.org",
+        "count": 5
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Society of Naval Architects and Marine Engineers",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "scholarships-for-international-first-generation-college-students",
-    "generatedAt": "2026-04-25T13:30:56.918Z",
-    "promptVersion": "keyword-seo-v1",
-    "scholarshipsCount": 196,
+    "generatedAt": "2026-04-26T13:07:05.809Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 219,
+    "model": "gpt-5.4",
     "bodySource": "ai",
-    "generationMode": "rewrite",
-    "model": "gpt-4o-mini"
+    "generationMode": "rewrite"
   }
 }

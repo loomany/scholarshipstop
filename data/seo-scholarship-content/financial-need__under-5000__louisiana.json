@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find Louisiana Financial Need Scholarships | USA",
+  "seo_description": "Louisiana financial need scholarships under five thousand dollars: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Louisiana scholarships in the USA that consider financial need and stay on the lower award side usually means sorting through mixed rules, changing deadlines, and very different applicant profiles. This filtered slice narrows that search to programs tied to Louisiana with awards under this preset, so you can compare options without wading through unrelated listings. The rows here span areas such as education, miscellaneous topics, and STEM, and they may fit applicants from stages like high school senior, college, or adult non traditional study. Many listings in this view appear to have lighter application signals, and some may not require an essay, but requirements still vary by program and should be checked on each official page before you apply.",
+  "h1": "Explore Louisiana Financial Need Scholarships USA",
+  "supporting": "Use these rows to compare more than the title alone. Look at the requirement lines, study level fit, residency or citizenship notes, and how closely each listing matches your background in Louisiana. Award amounts vary by listing and should be verified on the official source, and deadlines differ by program, so it is worth checking dates promptly when you shortlist options. If you are deciding between similar awards, compare how specific the eligibility language is and whether the program seems aimed at education, STEM, or a broader applicant pool.",
+  "related_intro": "If this Louisiana financial need slice feels too narrow, related pages can help you compare nearby options by location, award range, or broader need based filters. That is useful when you want to find similar USA scholarships with different requirement mixes or a wider set of subjects.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award text and residency notes before you apply"
+  ],
+  "who_for": [
+    "Louisiana residents with financial need",
+    "High school seniors planning to apply soon",
+    "College students comparing smaller award programs",
+    "Adult non traditional learners returning to school"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship from this list?",
+      "answer": "Often yes, if you meet each program’s rules, because these are separate scholarship listings rather than one combined application. Check every official page for residency, study level, and citizenship requirements before applying in the USA context."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare the listed award amount, deadline, study level, and any category or field notes shown in the catalog. In this slice, deadlines differ by program, and award amounts vary by listing, so confirm the latest details on the official scholarship page."
+    },
+    {
+      "question": "Are these Louisiana scholarships only for certain majors or education levels?",
+      "answer": "This focused set includes a mix of categories such as Education, Miscellaneous, and STEM, with sample study levels including high school senior, college, and adult/non-traditional. The best way to explore fit is to open each row and verify the exact eligibility on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "adult_non_traditional",
+        "college_2",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Louisiana Office of Student Financial Assistance",
+        "count": 2
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 1
+      },
+      {
+        "name": "Ninety-Nines-Spaceport Chapter",
+        "count": 1
+      },
+      {
+        "name": "Women's Southern Golf Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/under-5000/louisiana",
+    "generatedAt": "2026-04-26T14:33:05.242Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}
