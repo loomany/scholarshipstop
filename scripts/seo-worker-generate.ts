@@ -652,10 +652,21 @@ async function runStateCompareFlow(args: {
   console.log(`[ok] state compare ${canon} indexed=${ping.ok} skipped=${skipLabel}`);
 }
 
-async function main() {
-  const dryRun = argFlag('dry-run');
-  const compareOnly = argFlag('compare-only');
-  const limit = argNum('limit', DEFAULT_BATCH);
+export type SeoWorkerGenerateOptions = {
+  dryRun?: boolean;
+  compareOnly?: boolean;
+  limit?: number;
+};
+
+export async function runSeoWorkerGenerate(
+  options: SeoWorkerGenerateOptions = {}
+) {
+  const dryRun = Boolean(options.dryRun);
+  const compareOnly = Boolean(options.compareOnly);
+  const limit =
+    Number.isFinite(options.limit) && (options.limit ?? 0) > 0
+      ? Math.floor(options.limit as number)
+      : DEFAULT_BATCH;
   const admin = loadAdmin();
 
   let pendingQuery = admin
@@ -821,9 +832,25 @@ async function main() {
   if (dryRun) {
     console.log('\nDry run finished — no DB writes, no OpenAI calls.');
   }
+
+  return { fetched: batch.length, dryRun, compareOnly, limit };
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+async function main() {
+  const dryRun = argFlag('dry-run');
+  const compareOnly = argFlag('compare-only');
+  const limit = argNum('limit', DEFAULT_BATCH);
+  await runSeoWorkerGenerate({ dryRun, compareOnly, limit });
+}
+
+const isDirectRun = (() => {
+  const entry = process.argv[1] || '';
+  return entry.endsWith('seo-worker-generate.ts') || entry.endsWith('seo-worker-generate.js');
+})();
+
+if (isDirectRun) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

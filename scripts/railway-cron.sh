@@ -10,6 +10,7 @@
 #   bash scripts/railway-cron.sh essay-pipeline
 #   bash scripts/railway-cron.sh manual-essay-guides
 #   bash scripts/railway-cron.sh seo-meta-generate
+#   bash scripts/railway-cron.sh seo-generation-http
 #   Optional: MANUAL_ESSAY_GUIDES_LIMIT=5 caps how many queue items to process; unset = drain all pending
 #   bash scripts/railway-cron.sh seo-daily-telegram   # daily digest of new SEO hub pages (Telegram)
 #
@@ -218,6 +219,20 @@ task_seo_meta_generate() {
   run_tsx_cron "cron-seo-meta-generate" "scripts/cron-seo-meta-generate.ts"
 }
 
+task_seo_generation_http() {
+  local secret="${GOOGLE_INDEXING_SECRET:-}"
+  if [ -z "$secret" ]; then
+    echo "[railway-cron] ERROR: Set GOOGLE_INDEXING_SECRET for seo-generation-http" >&2
+    exit 1
+  fi
+  local gen_limit="${SEO_WORKER_GENERATE_LIMIT:-175}"
+  local meta_limit="${SEO_AI_META_BATCH:-20}"
+  http_post_json "SEO worker generate (HTTP)" \
+    "/api/internal/seo/worker-generate" "$secret" "{\"limit\":${gen_limit}}"
+  http_post_json "SEO AI meta generate (HTTP)" \
+    "/api/internal/seo/meta-generate" "$secret" "{\"limit\":${meta_limit}}"
+}
+
 task_all() {
   # Google indexing/inspection moved to a dedicated worker container.
   # Keep `all` focused on non-indexing workloads for this service.
@@ -228,7 +243,7 @@ task_all() {
 
 usage() {
   echo "Usage: $0 <task>"
-  echo "Tasks: all | seo-url-inspection | google-indexing-flush | grant-notifications | seo-daily-telegram | weekly-free-digest | enrich-providers | essay-pipeline | manual-essay-guides | seo-meta-generate"
+  echo "Tasks: all | seo-url-inspection | google-indexing-flush | grant-notifications | seo-daily-telegram | weekly-free-digest | enrich-providers | essay-pipeline | manual-essay-guides | seo-meta-generate | seo-generation-http"
 }
 
 main() {
@@ -245,6 +260,7 @@ main() {
     essay-pipeline) task_essay_pipeline ;;
     manual-essay-guides) task_manual_essay_guides ;;
     seo-meta-generate) task_seo_meta_generate ;;
+    seo-generation-http) task_seo_generation_http ;;
     -h|--help|help) usage; exit 0 ;;
     *)
       echo "[railway-cron] Unknown task: $cmd" >&2
