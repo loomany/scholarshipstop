@@ -11,25 +11,9 @@ import {
   getSeoListingEntry,
   resolveScholarshipSlugPath
 } from '@/lib/scholarships/seoScholarshipResolve';
-import {
-  evaluateLegacyPresetSeoListingThin,
-  evaluateManifestSeoListingThin,
-  seoThinCanonicalHref
-} from '@/lib/scholarships/seoListingMetadataPolicy';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
-
-function applySafeNoindexFallback(
-  meta: Metadata,
-  canonical?: string | null
-): Metadata {
-  meta.robots = { index: false, follow: true };
-  if (canonical) {
-    meta.alternates = { canonical };
-  }
-  return meta;
-}
 
 function withExplicitIndexFollowWhenUnset(meta: Metadata): Metadata {
   if (meta.robots !== undefined) return meta;
@@ -87,10 +71,10 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
 
   if (resolved.kind === 'redirect_canonical') {
     if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
-      return applySafeNoindexFallback(
-        { title: 'Find Scholarships' },
-        `/scholarships/${resolved.canonicalPath}`
-      );
+      return withExplicitIndexFollowWhenUnset({
+        title: 'Find Scholarships',
+        alternates: { canonical: `/scholarships/${resolved.canonicalPath}` }
+      });
     }
     const entry = getSeoListingEntry(resolved.canonicalPath);
     if (entry) {
@@ -117,52 +101,6 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
           canonical: path
         }
       };
-      if (
-        entry.indexable !== true ||
-        (entry.qualityBucket != null && entry.qualityBucket !== 'GOOD') ||
-        entry.noindexNow
-      ) {
-        meta.robots = { index: false, follow: true };
-        meta.alternates = {
-          canonical:
-            entry.canonicalTarget
-              ? `/scholarships/${entry.canonicalTarget}`
-              : seoThinCanonicalHref({
-                  kind: 'manifest',
-                  canonicalPath: resolved.canonicalPath
-                })
-        };
-      }
-      try {
-        const live = await evaluateManifestSeoListingThin(entry);
-        if (
-          live.thinListing ||
-          live.broadFallbackNoindex ||
-          live.fallbackUsed ||
-          live.exactCount <= 0
-        ) {
-          meta.robots = { index: false, follow: true };
-          meta.alternates = {
-            canonical:
-              live.widenTo
-                ? `/scholarships/${live.widenTo}`
-                : seoThinCanonicalHref({
-                    kind: 'manifest',
-                    canonicalPath: resolved.canonicalPath
-                  })
-          };
-        }
-      } catch {
-        return applySafeNoindexFallback(
-          meta,
-          entry.canonicalTarget
-            ? `/scholarships/${entry.canonicalTarget}`
-            : seoThinCanonicalHref({
-                kind: 'manifest',
-                canonicalPath: resolved.canonicalPath
-              })
-        );
-      }
       return withExplicitIndexFollowWhenUnset(
         applyScholarshipContentBundleIndexingPolicy(meta, resolved.canonicalPath)
       );
@@ -177,10 +115,10 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
 
   if (resolved.kind === 'legacy_long_tail') {
     if (shouldBlockScholarshipListingForDrip(resolved.slug)) {
-      return applySafeNoindexFallback(
-        { title: 'Find Scholarships' },
-        `/scholarships/${resolved.slug}`
-      );
+      return withExplicitIndexFollowWhenUnset({
+        title: 'Find Scholarships',
+        alternates: { canonical: `/scholarships/${resolved.slug}` }
+      });
     }
     const longTail = getLongTailPreset(resolved.slug);
     if (!longTail) return { title: 'Find Scholarships' };
@@ -206,35 +144,15 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         canonical: path
       }
     };
-    try {
-      const live = await evaluateLegacyPresetSeoListingThin(longTail.slug);
-      if (live.thinListing || live.broadFallbackNoindex) {
-        meta.robots = { index: false, follow: true };
-        meta.alternates = {
-          canonical: seoThinCanonicalHref({
-            kind: 'legacy',
-            canonicalPath: longTail.slug
-          })
-        };
-      }
-    } catch {
-      return applySafeNoindexFallback(
-        meta,
-        seoThinCanonicalHref({
-          kind: 'legacy',
-          canonicalPath: longTail.slug
-        })
-      );
-    }
     return withExplicitIndexFollowWhenUnset(meta);
   }
 
   if (resolved.kind === 'manifest_seo') {
     if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
-      return applySafeNoindexFallback(
-        { title: 'Find Scholarships' },
-        `/scholarships/${resolved.canonicalPath}`
-      );
+      return withExplicitIndexFollowWhenUnset({
+        title: 'Find Scholarships',
+        alternates: { canonical: `/scholarships/${resolved.canonicalPath}` }
+      });
     }
     const path = `/scholarships/${resolved.canonicalPath}`;
     const seo = readScholarshipSeoContent(resolved.canonicalPath);
@@ -265,53 +183,6 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         canonical: path
       }
     };
-    if (
-      resolved.entry.indexable !== true ||
-      (resolved.entry.qualityBucket != null &&
-        resolved.entry.qualityBucket !== 'GOOD') ||
-      resolved.entry.noindexNow
-    ) {
-      meta.robots = { index: false, follow: true };
-      meta.alternates = {
-        canonical:
-          resolved.entry.canonicalTarget
-            ? `/scholarships/${resolved.entry.canonicalTarget}`
-            : seoThinCanonicalHref({
-                kind: 'manifest',
-                canonicalPath: resolved.canonicalPath
-              })
-      };
-    }
-    try {
-      const live = await evaluateManifestSeoListingThin(resolved.entry);
-      if (
-        live.thinListing ||
-        live.broadFallbackNoindex ||
-        live.fallbackUsed ||
-        live.exactCount <= 0
-      ) {
-        meta.robots = { index: false, follow: true };
-        meta.alternates = {
-          canonical:
-            live.widenTo
-              ? `/scholarships/${live.widenTo}`
-              : seoThinCanonicalHref({
-                  kind: 'manifest',
-                  canonicalPath: resolved.canonicalPath
-                })
-        };
-      }
-    } catch {
-      return applySafeNoindexFallback(
-        meta,
-        resolved.entry.canonicalTarget
-          ? `/scholarships/${resolved.entry.canonicalTarget}`
-          : seoThinCanonicalHref({
-              kind: 'manifest',
-              canonicalPath: resolved.canonicalPath
-            })
-      );
-    }
     return withExplicitIndexFollowWhenUnset(
       applyScholarshipContentBundleIndexingPolicy(meta, resolved.canonicalPath)
     );

@@ -61,15 +61,13 @@ export function getSeoListingEntry(
 }
 
 /**
- * Sitemap: auto routes must be explicitly indexable; manual/legacy rows treat
- * omitted `indexable` as true (backward compatible).
+ * Sitemap inclusion is driven only by explicit route-level opt-out.
+ * Quality/runtime noindex heuristics are not used here.
  */
 export function routeIsSitemapIndexable(
   r: SeoScholarshipRouteManifestEntry
 ): boolean {
   if (r.indexable === false) return false;
-  if (r.qualityBucket) return r.qualityBucket === 'GOOD' && r.indexable === true;
-  if (r.source === 'auto') return r.indexable === true;
   return true;
 }
 
