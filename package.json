@@ -60,6 +60,7 @@
     "seo:audit": "tsx scripts/audit-seo-pages.ts",
     "seo:audit:full": "dotenv -e .env.local -- npm run seo:audit",
     "seo:verify:runtime-sync": "dotenv -e .env.local -- npx tsx scripts/seo-verify-runtime-sync.ts",
+    "seo:notify:test": "tsx scripts/test-seo-telegram-notify.ts",
     "seo:fix:targeted-from-audit": "dotenv -e .env.local -- npx tsx scripts/fix-seo-from-audit-targeted.ts",
     "seo:fix:bad": "dotenv -e .env.local -- npx tsx scripts/fix-seo-from-audit-targeted.ts",
     "seo:fix:essays": "dotenv -e .env.local -- npx tsx scripts/fix-seo-essays.ts",

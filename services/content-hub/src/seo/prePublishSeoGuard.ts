@@ -6,6 +6,13 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "node:url";
 
+import {
+  isSeoTelegramNotifyConfigured,
+  isSeoTelegramNotifyEnabled,
+  sendSeoTelegramNotification,
+  type SeoTelegramNotifyEntry
+} from "./seoTelegramNotify.js";
+
 const SEO_AUDIT_TITLE = { min: 25, max: 70 } as const;
 const SEO_AUDIT_META = { min: 120, max: 160 } as const;
 const SEO_IDEAL_TITLE = { min: 30, max: 65 } as const;
@@ -113,6 +120,58 @@ function repoRootFromHere(): string {
 const WARNINGS_RELATIVE = path.join("docs", "seo-new-content-warnings.json");
 const MAX_TAIL = 200;
 
+export type SeoTelegramNotificationReport = {
+  enabled: boolean;
+  sent: boolean;
+  reason?: string;
+  sentAt?: string;
+};
+
+async function buildTelegramReportForGuardLocal(params: {
+  counts: { ok: number; warnings: number; below90: number };
+  entry: SeoTelegramNotifyEntry;
+  dryRun?: boolean;
+  notifyInDryRun?: boolean;
+}): Promise<SeoTelegramNotificationReport> {
+  const flagOn = isSeoTelegramNotifyEnabled();
+  const credsOk = isSeoTelegramNotifyConfigured();
+  const enabled = flagOn && credsOk;
+
+  if (params.counts.warnings === 0 && params.counts.below90 === 0) {
+    return { enabled, sent: false, reason: "all_ok" };
+  }
+
+  const dryBlocked = Boolean(params.dryRun && !params.notifyInDryRun);
+  if (dryBlocked) {
+    return { enabled, sent: false, reason: "dry_run" };
+  }
+
+  if (!flagOn) {
+    return { enabled: false, sent: false, reason: "notify_disabled" };
+  }
+
+  if (!credsOk) {
+    return { enabled: false, sent: false, reason: "missing_credentials" };
+  }
+
+  const level = params.counts.below90 > 0 ? "critical" : "warning";
+  const title =
+    params.counts.below90 > 0 ? "🔴 SEO Guard Alert" : "⚠️ SEO Guard Alert";
+
+  const r = await sendSeoTelegramNotification({
+    title,
+    level,
+    counts: params.counts,
+    entries: [params.entry]
+  });
+  return {
+    enabled: true,
+    sent: r.sent,
+    reason: r.sent ? undefined : r.reason,
+    sentAt: r.sent ? new Date().toISOString() : undefined
+  };
+}
+
 async function appendRun(run: {
   generatedAt: string;
   source: string;
@@ -124,6 +183,7 @@ async function appendRun(run: {
     issues: string[];
     warnings: string[];
   }>;
+  telegramNotification: SeoTelegramNotificationReport;
 }): Promise<void> {
   const fromEnv = process.env.SEO_NEW_CONTENT_WARNINGS_PATH?.trim();
   const filePath = fromEnv
@@ -151,6 +211,8 @@ async function appendRun(run: {
 export async function runSeoPublishGuardWarnOnlyLocal(params: {
   source: string;
   payload: SeoPayload;
+  dryRun?: boolean;
+  notifyInDryRun?: boolean;
 }): Promise<{ normalized: SeoPayload; validation: ReturnType<typeof validateSeoBeforePublishLocal> }> {
   const normalized = normalizeSeoPayloadLocal(params.payload);
   const validation = validateSeoBeforePublishLocal(normalized);
@@ -160,19 +222,25 @@ export async function runSeoPublishGuardWarnOnlyLocal(params: {
   );
   const counts =
     b === "ok" ? { ok: 1, warnings: 0, below90: 0 } : b === "warnings" ? { ok: 0, warnings: 1, below90: 0 } : { ok: 0, warnings: 0, below90: 1 };
+  const entry = {
+    url: normalized.url,
+    type: normalized.type,
+    score: validation.score,
+    issues: validation.issues,
+    warnings: validation.warnings
+  };
+  const telegramNotification = await buildTelegramReportForGuardLocal({
+    counts,
+    entry,
+    dryRun: params.dryRun,
+    notifyInDryRun: params.notifyInDryRun
+  });
   await appendRun({
     generatedAt: new Date().toISOString(),
     source: params.source,
     counts,
-    entries: [
-      {
-        url: normalized.url,
-        type: normalized.type,
-        score: validation.score,
-        issues: validation.issues,
-        warnings: validation.warnings
-      }
-    ]
+    entries: [entry],
+    telegramNotification
   });
   return { normalized, validation };
 }

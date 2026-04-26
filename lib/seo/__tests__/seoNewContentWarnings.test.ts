@@ -15,7 +15,12 @@ test('appendSeoNewContentWarningRun writes JSON array tail', async () => {
       generatedAt: '2026-01-01T00:00:00.000Z',
       source: 'test',
       counts: { ok: 1, warnings: 0, below90: 0 },
-      entries: [{ url: '/x', type: 'essay', score: 95, issues: [], warnings: [] }]
+      entries: [{ url: '/x', type: 'essay', score: 95, issues: [], warnings: [] }],
+      telegramNotification: {
+        enabled: false,
+        sent: false,
+        reason: 'all_ok'
+      }
     });
     const raw = await fs.readFile(filePath, 'utf-8');
     const parsed = JSON.parse(raw) as unknown[];

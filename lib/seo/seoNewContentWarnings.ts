@@ -4,6 +4,14 @@ import path from 'path';
 const DEFAULT_RELATIVE = path.join('docs', 'seo-new-content-warnings.json');
 const MAX_TAIL_ENTRIES = 200;
 
+export type SeoTelegramNotificationReport = {
+  /** True when notify flag is on and bot token + chat id are set. */
+  enabled: boolean;
+  sent: boolean;
+  reason?: string;
+  sentAt?: string;
+};
+
 export type SeoNewContentWarningRun = {
   generatedAt: string;
   source: string;
@@ -15,6 +23,7 @@ export type SeoNewContentWarningRun = {
     issues: string[];
     warnings: string[];
   }>;
+  telegramNotification: SeoTelegramNotificationReport;
 };
 
 function resolveWarningsPath(): string {
