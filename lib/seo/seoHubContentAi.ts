@@ -13,7 +13,7 @@ export function openAiSeoHubModel(): string {
   return (
     process.env.OPENAI_SEO_MODEL?.trim() ||
     process.env.OPENAI_MODEL?.trim() ||
-    'gpt-4o-mini'
+    'gpt-5.4'
   );
 }
 
