@@ -1,0 +1,104 @@
+{
+  "seo_title": "Find Low Income High School Scholarships in Washington, USA",
+  "seo_description": "Low income high school scholarships in Washington, USA—compare deadlines, award details, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Washington scholarships for high school students from low income backgrounds usually means cutting past broad national results and getting to a tighter set of listings you can actually compare. This filtered view brings together programs tied to Washington and this student profile, with rows that may touch areas like education, miscellaneous topics, or disability. Awards, deadlines, and eligibility details can vary from listing to listing, so it helps to read each row closely instead of assuming the same rules apply across the board. Many listings in this slice appear to have lighter application signals, and some may often be no essay, but you should still verify every requirement on the official source before you apply.",
+  "h1": "Find Washington Scholarships for Low Income High School Students…",
+  "supporting": "Use these rows as a practical shortlist, not a final answer. Compare the requirement lines, look at how each program describes eligibility, and check whether the opportunity is aimed at current high school students or students nearing the next study level. Because deadline text differs across the listings below, it is smart to review dates promptly and compare award details side by side. Amounts vary by listing and should be confirmed on the official page before you spend time applying.",
+  "related_intro": "If this Washington and low income combination feels too narrow, related pages can help you compare nearby options by topic, study level, or location. That is useful when you want to find similar USA scholarships with different requirement mixes or broader eligibility.",
+  "how_to_use": [
+    "Compare deadline text across each listing",
+    "Read the requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist programs by topic, award text, and fit",
+    "Check whether the listing matches your current study level"
+  ],
+  "who_for": [
+    "Washington high school students from low income households",
+    "High school seniors comparing local and USA scholarship options",
+    "Applicants looking for education or disability related scholarship listings",
+    "Students hoping to find many no essay or lighter touch applications"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Washington scholarships for low-income high school students and compare the options quickly?",
+      "answer": "Use this filtered view to compare the rows by title, category, amount, and deadline, then open the official source for the final details. In this USA slice, deadlines differ by program, so check each listing promptly rather than assuming one timeline."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a high school student in Washington?",
+      "answer": "Not automatically. This catalog narrows the list to low-income, high school, and Washington-related listings, but each program can still have its own eligibility rules on the official page."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay in the catalog metadata, but you should verify requirements before you apply. Official program pages are the best source for essays, documents, and submission steps."
+    },
+    {
+      "question": "What award amounts should I expect when I explore these scholarships?",
+      "answer": "Amounts vary by listing and should be confirmed on the official scholarship page. In this focused set of USA listings, the sample rows show different award sizes, so it’s best to compare each row individually."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 250,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 19,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-20",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "CollegeReady",
+        "count": 1
+      },
+      {
+        "name": "POISE Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "disability",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "low-income/high-school/washington",
+    "generatedAt": "2026-04-26T15:51:26.905Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

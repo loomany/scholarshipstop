@@ -16,6 +16,7 @@ import { scholarshipPublicPath } from '../app/scholarships/scholarshipsData';
 import { RESOURCES_PAGE_TITLE, RESOURCES_SECTION_PATH } from '../lib/content-hub/resourcesSection';
 import { ESSAYS_PAGE_TITLE, ESSAYS_SECTION_PATH } from '../lib/essays/essayHubSection';
 import { fetchActiveScholarshipsForScript } from '../lib/scholarships/supabase';
+import { notifyEnvTelegramAdminsPlainText } from '../lib/telegram/bot';
 import {
   getAllIndexableSeoManifestPathsForSitemap,
   resolveScholarshipSlugPath
@@ -47,6 +48,12 @@ type PriorityStage =
   | 'essays'
   | 'compare'
   | 'other';
+
+type PriorityExecutionSummaryRow = {
+  stage: PriorityStage;
+  planned: number;
+  processed: number;
+};
 
 type CheckResult = {
   ok: boolean;
@@ -163,6 +170,7 @@ type FallbackExtract = {
 const REPORT_JSON_PATH = path.resolve('docs', 'seo-audit-report.json');
 const REPORT_CSV_PATH = path.resolve('docs', 'seo-audit-report.csv');
 const ACTION_PLAN_JSON_PATH = path.resolve('docs', 'seo-audit-action-plan.json');
+const SUPABASE_SCAN_BATCH = 1000;
 const TITLE_POINTS = 15;
 const META_POINTS = 20;
 const H1_POINTS = 10;
@@ -176,6 +184,7 @@ const GSC_SCOPE_WEBMASTERS_READONLY =
 const SEARCH_ANALYTICS_QUERY_PATH =
   'https://www.googleapis.com/webmasters/v3/sites';
 const SEARCH_ANALYTICS_ROW_LIMIT = 25_000;
+const GSC_FETCH_TIMEOUT_MS = 30_000;
 
 function envInt(name: string): number | null {
   const raw = process.env[name]?.trim();
@@ -188,6 +197,11 @@ function envInt(name: string): number | null {
 function envIntWithDefault(name: string, fallback: number): number {
   const value = envInt(name);
   return value == null ? fallback : value;
+}
+
+function envFlag(name: string): boolean {
+  const raw = process.env[name]?.trim().toLowerCase();
+  return raw === '1' || raw === 'true' || raw === 'yes';
 }
 
 function normalizeWhitespace(input: string | null | undefined): string {
@@ -230,6 +244,16 @@ function defaultPriorityStageForPageType(pageType: PageType): PriorityStage {
   return 'other';
 }
 
+function priorityStageLabel(stage: PriorityStage): string {
+  if (stage === 'gsc_impressions') return 'GSC impressions';
+  if (stage === 'seo_pages') return 'SEO pages';
+  if (stage === 'grants') return 'Grants';
+  if (stage === 'providers') return 'Providers';
+  if (stage === 'essays') return 'Essays';
+  if (stage === 'compare') return 'Compare';
+  return 'Other';
+}
+
 function normalizeUrlPathForMatching(input: string): string {
   const raw = normalizeWhitespace(input);
   if (!raw) return '/';
@@ -245,6 +269,27 @@ function normalizeUrlPathForMatching(input: string): string {
   pathname = pathname.replace(/\/{2,}/g, '/');
   if (pathname.length > 1) pathname = pathname.replace(/\/+$/, '');
   return pathname || '/';
+}
+
+async function loadUrlFilterSet(): Promise<Set<string> | null> {
+  const file = process.env.SEO_AUDIT_URLS_FILE?.trim();
+  if (!file) return null;
+  try {
+    const raw = await fs.readFile(path.resolve(file), 'utf-8');
+    const set = new Set(
+      raw
+        .split(/\r?\n/)
+        .map((line) => normalizeUrlPathForMatching(line))
+        .filter(Boolean)
+    );
+    return set.size > 0 ? set : null;
+  } catch (e) {
+    console.warn(
+      '[seo:audit] URL filter file unavailable:',
+      e instanceof Error ? e.message : String(e)
+    );
+    return null;
+  }
 }
 
 function getSearchConsoleSitePropertyUrlFromEnv(baseUrl: string): string {
@@ -289,6 +334,9 @@ async function fetchSearchAnalyticsImpressionPaths(params: {
   const startDate = start.toISOString().slice(0, 10);
 
   try {
+    console.log(
+      `[seo:audit] GSC priority fetch started (days=${gscDays}, maxPaths=${maxPaths})`
+    );
     const accessToken = await client.getAccessToken();
     const token =
       typeof accessToken === 'string' ? accessToken : accessToken?.token ?? null;
@@ -305,6 +353,7 @@ async function fetchSearchAnalyticsImpressionPaths(params: {
     for (;;) {
       const response = await fetch(endpoint, {
         method: 'POST',
+        signal: AbortSignal.timeout(GSC_FETCH_TIMEOUT_MS),
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -337,6 +386,7 @@ async function fetchSearchAnalyticsImpressionPaths(params: {
       if (rows.length < SEARCH_ANALYTICS_ROW_LIMIT) break;
       startRow += SEARCH_ANALYTICS_ROW_LIMIT;
     }
+    console.log(`[seo:audit] GSC priority fetch finished (paths=${out.size})`);
     return out;
   } catch (e) {
     params.reportWarnings.push(
@@ -389,6 +439,40 @@ function applyPriorityOrder(
     } as Record<PriorityStage, number>
   );
   return { ordered, priorityCounts };
+}
+
+function buildExecutionSummaryRows(pages: AuditInputPage[]): PriorityExecutionSummaryRow[] {
+  const order: PriorityStage[] = [
+    'gsc_impressions',
+    'seo_pages',
+    'grants',
+    'providers',
+    'essays',
+    'compare',
+    'other'
+  ];
+  const plannedCounts = order.reduce(
+    (acc, stage) => {
+      acc[stage] = 0;
+      return acc;
+    },
+    {} as Record<PriorityStage, number>
+  );
+  for (const page of pages) {
+    const stage = page.priorityStage ?? defaultPriorityStageForPageType(page.pageType);
+    plannedCounts[stage] += 1;
+  }
+  return order
+    .map((stage) => ({ stage, planned: plannedCounts[stage], processed: 0 }))
+    .filter((row) => row.planned > 0);
+}
+
+async function notifyAuditProgressTelegram(text: string): Promise<void> {
+  try {
+    await notifyEnvTelegramAdminsPlainText(text, 'seo');
+  } catch {
+    // Best-effort progress signal; audit must never fail because of notifications.
+  }
 }
 
 function normalizeIssueCode(issue: string): string {
@@ -1146,94 +1230,175 @@ async function listAuditPages(): Promise<{
   try {
     const supabase = createPublicClient();
     if (supabase) {
-      const { data } = await supabase
-        .from('content_posts')
-        .select('slug, published_at, title, meta_title, meta_description, body_html, faq')
-        .eq('status', 'published')
-        .not('slug', 'is', null)
-        .neq('slug', '')
-        .order('published_at', { ascending: false, nullsFirst: false });
-      contentRows = ((data ?? []) as Array<{
-        slug: string;
-        published_at: string | null;
-        title: string | null;
-        meta_title: string | null;
-        meta_description: string | null;
-        body_html: string | null;
-        faq: unknown;
-      }>);
+      {
+        const out: Array<{
+          slug: string;
+          published_at: string | null;
+          title: string | null;
+          meta_title: string | null;
+          meta_description: string | null;
+          body_html: string | null;
+          faq: unknown;
+        }> = [];
+        for (let from = 0; ; from += SUPABASE_SCAN_BATCH) {
+          const to = from + SUPABASE_SCAN_BATCH - 1;
+          const { data } = await supabase
+            .from('content_posts')
+            .select('slug, published_at, title, meta_title, meta_description, body_html, faq')
+            .eq('status', 'published')
+            .not('slug', 'is', null)
+            .neq('slug', '')
+            .order('published_at', { ascending: false, nullsFirst: false })
+            .range(from, to);
+          const batch = (data ?? []) as Array<{
+            slug: string;
+            published_at: string | null;
+            title: string | null;
+            meta_title: string | null;
+            meta_description: string | null;
+            body_html: string | null;
+            faq: unknown;
+          }>;
+          out.push(...batch);
+          if (batch.length < SUPABASE_SCAN_BATCH) break;
+        }
+        contentRows = out;
+      }
 
-      const { data: essaysData } = await supabase
-        .from('essays')
-        .select('slug, title, meta_description, content_html, faq')
-        .eq('is_published', true)
-        .not('slug', 'is', null)
-        .neq('slug', '')
-        .order('updated_at', { ascending: false, nullsFirst: false });
-      essayRows = ((essaysData ?? []) as Array<{
-        slug: string;
-        title: string | null;
-        meta_description: string | null;
-        content_html: string | null;
-        faq: unknown;
-      }>);
+      {
+        const out: Array<{
+          slug: string;
+          title: string | null;
+          meta_description: string | null;
+          content_html: string | null;
+          faq: unknown;
+        }> = [];
+        for (let from = 0; ; from += SUPABASE_SCAN_BATCH) {
+          const to = from + SUPABASE_SCAN_BATCH - 1;
+          const { data: essaysData } = await supabase
+            .from('essays')
+            .select('slug, title, meta_description, content_html, faq')
+            .eq('is_published', true)
+            .not('slug', 'is', null)
+            .neq('slug', '')
+            .order('updated_at', { ascending: false, nullsFirst: false })
+            .range(from, to);
+          const batch = (essaysData ?? []) as Array<{
+            slug: string;
+            title: string | null;
+            meta_description: string | null;
+            content_html: string | null;
+            faq: unknown;
+          }>;
+          out.push(...batch);
+          if (batch.length < SUPABASE_SCAN_BATCH) break;
+        }
+        essayRows = out;
+      }
 
-      const { data: compareData } = await supabase
-        .from('compare_pages')
-        .select('slug, meta_title, meta_description, content_json, ai_verdict')
-        .eq('status', 'published')
-        .not('slug', 'is', null)
-        .neq('slug', '')
-        .order('updated_at', { ascending: false, nullsFirst: false });
-      compareUniversityRows = ((compareData ?? []) as Array<{
-        slug: string;
-        meta_title: string | null;
-        meta_description: string | null;
-        content_json: unknown;
-        ai_verdict: string | null;
-      }>);
+      {
+        const out: Array<{
+          slug: string;
+          meta_title: string | null;
+          meta_description: string | null;
+          content_json: unknown;
+          ai_verdict: string | null;
+        }> = [];
+        for (let from = 0; ; from += SUPABASE_SCAN_BATCH) {
+          const to = from + SUPABASE_SCAN_BATCH - 1;
+          const { data: compareData } = await supabase
+            .from('compare_pages')
+            .select('slug, meta_title, meta_description, content_json, ai_verdict')
+            .eq('status', 'published')
+            .not('slug', 'is', null)
+            .neq('slug', '')
+            .order('updated_at', { ascending: false, nullsFirst: false })
+            .range(from, to);
+          const batch = (compareData ?? []) as Array<{
+            slug: string;
+            meta_title: string | null;
+            meta_description: string | null;
+            content_json: unknown;
+            ai_verdict: string | null;
+          }>;
+          out.push(...batch);
+          if (batch.length < SUPABASE_SCAN_BATCH) break;
+        }
+        compareUniversityRows = out;
+      }
 
-      const { data: compareStatesData } = await supabase
-        .from('state_compare_pages')
-        .select('slug, meta_title, meta_description, content_json, ai_verdict')
-        .eq('status', 'published')
-        .not('slug', 'is', null)
-        .neq('slug', '')
-        .order('updated_at', { ascending: false, nullsFirst: false });
-      compareStateRows = ((compareStatesData ?? []) as Array<{
-        slug: string;
-        meta_title: string | null;
-        meta_description: string | null;
-        content_json: unknown;
-        ai_verdict: string | null;
-      }>);
+      {
+        const out: Array<{
+          slug: string;
+          meta_title: string | null;
+          meta_description: string | null;
+          content_json: unknown;
+          ai_verdict: string | null;
+        }> = [];
+        for (let from = 0; ; from += SUPABASE_SCAN_BATCH) {
+          const to = from + SUPABASE_SCAN_BATCH - 1;
+          const { data: compareStatesData } = await supabase
+            .from('state_compare_pages')
+            .select('slug, meta_title, meta_description, content_json, ai_verdict')
+            .eq('status', 'published')
+            .not('slug', 'is', null)
+            .neq('slug', '')
+            .order('updated_at', { ascending: false, nullsFirst: false })
+            .range(from, to);
+          const batch = (compareStatesData ?? []) as Array<{
+            slug: string;
+            meta_title: string | null;
+            meta_description: string | null;
+            content_json: unknown;
+            ai_verdict: string | null;
+          }>;
+          out.push(...batch);
+          if (batch.length < SUPABASE_SCAN_BATCH) break;
+        }
+        compareStateRows = out;
+      }
 
-      const { data: providersData } = await supabase
-        .from('provider_hub_listing')
-        .select('slug, display_name, scholarship_count, ai_description')
-        .not('slug', 'is', null)
-        .neq('slug', '')
-        .order('scholarship_count', { ascending: false, nullsFirst: false });
-      const providerHubRows = ((providersData ?? []) as Array<{
+      const providerHubRows: Array<{
         slug: string;
         display_name: string | null;
         ai_description: string | null;
         scholarship_count: number | null;
-      }>);
+      }> = [];
+      for (let from = 0; ; from += SUPABASE_SCAN_BATCH) {
+        const to = from + SUPABASE_SCAN_BATCH - 1;
+        const { data: providersData } = await supabase
+          .from('provider_hub_listing')
+          .select('slug, display_name, scholarship_count, ai_description')
+          .not('slug', 'is', null)
+          .neq('slug', '')
+          .order('scholarship_count', { ascending: false, nullsFirst: false })
+          .range(from, to);
+        const batch = (providersData ?? []) as Array<{
+          slug: string;
+          display_name: string | null;
+          ai_description: string | null;
+          scholarship_count: number | null;
+        }>;
+        providerHubRows.push(...batch);
+        if (batch.length < SUPABASE_SCAN_BATCH) break;
+      }
       const providerSlugs = providerHubRows
         .map((row) => row.slug?.trim())
         .filter((v): v is string => Boolean(v));
       let providerFaqBySlug = new Map<string, unknown>();
       if (providerSlugs.length > 0) {
-        const { data: providersFaqData } = await supabase
-          .from('providers')
-          .select('slug, ai_faq')
-          .in('slug', providerSlugs);
+        const providersFaqRows: Array<{ slug: string; ai_faq: unknown }> = [];
+        const chunkSize = 400;
+        for (let i = 0; i < providerSlugs.length; i += chunkSize) {
+          const chunk = providerSlugs.slice(i, i + chunkSize);
+          const { data: providersFaqData } = await supabase
+            .from('providers')
+            .select('slug, ai_faq')
+            .in('slug', chunk);
+          providersFaqRows.push(...((providersFaqData ?? []) as Array<{ slug: string; ai_faq: unknown }>));
+        }
         providerFaqBySlug = new Map(
-          ((providersFaqData ?? []) as Array<{ slug: string; ai_faq: unknown }>).map((row) => [
-            row.slug,
-            row.ai_faq
-          ])
+          providersFaqRows.map((row) => [row.slug, row.ai_faq])
         );
       }
       providerRows = providerHubRows.map((row) => ({
@@ -1413,6 +1578,8 @@ function selectPagesForAudit(
 
 async function main() {
   const limit = envInt('SEO_AUDIT_LIMIT');
+  const progressEvery = Math.max(1, envIntWithDefault('SEO_AUDIT_PROGRESS_EVERY', 25));
+  const telegramProgress = envFlag('SEO_AUDIT_NOTIFY_TELEGRAM');
   const baseUrl =
     process.env.SEO_AUDIT_BASE_URL?.trim() ||
     process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
@@ -1427,13 +1594,66 @@ async function main() {
     pages,
     impressionPaths
   );
-  const targetPages = selectPagesForAudit(prioritizedPages, limit);
+  const urlFilterSet = await loadUrlFilterSet();
+  const filteredByUrl = urlFilterSet
+    ? prioritizedPages.filter((p) => urlFilterSet.has(normalizeUrlPathForMatching(p.urlPath)))
+    : prioritizedPages;
+  const targetPages = selectPagesForAudit(filteredByUrl, limit);
+  const executionSummaryRows = buildExecutionSummaryRows(targetPages);
+
+  console.log('[seo:audit] Starting prioritized full audit');
+  console.log(
+    `[seo:audit] Queue: ${executionSummaryRows
+      .map((r) => `${priorityStageLabel(r.stage)}=${r.planned}`)
+      .join(', ')}`
+  );
+  if (telegramProgress) {
+    await notifyAuditProgressTelegram(
+      [
+        '🧭 SEO audit started',
+        `Всего страниц в запуске: ${targetPages.length}`,
+        `Приоритеты: ${executionSummaryRows
+          .map((r) => `${priorityStageLabel(r.stage)}=${r.planned}`)
+          .join(', ')}`
+      ].join('\n')
+    );
+  }
 
   const provisional: PageAudit[] = [];
   const titleKeyToIdx = new Map<string, number[]>();
   const metaKeyToIdx = new Map<string, number[]>();
 
+  const startedAt = Date.now();
+  let currentStage: PriorityStage | null = null;
+  let currentStageProcessed = 0;
+  const executionSummaryByStage = new Map<PriorityStage, PriorityExecutionSummaryRow>(
+    executionSummaryRows.map((row) => [row.stage, row])
+  );
+
   for (const page of targetPages) {
+    const pageStage = page.priorityStage ?? defaultPriorityStageForPageType(page.pageType);
+    if (currentStage !== pageStage) {
+      if (currentStage) {
+        const finishedLabel = priorityStageLabel(currentStage);
+        console.log(`[seo:audit] Stage finished: ${finishedLabel} (${currentStageProcessed})`);
+        if (telegramProgress) {
+          await notifyAuditProgressTelegram(
+            `✅ SEO audit stage finished: ${finishedLabel} (${currentStageProcessed} pages)`
+          );
+        }
+      }
+      currentStage = pageStage;
+      currentStageProcessed = 0;
+      const startedLabel = priorityStageLabel(pageStage);
+      const plannedForStage = executionSummaryByStage.get(pageStage)?.planned ?? 0;
+      console.log(`[seo:audit] Stage started: ${startedLabel} (planned ${plannedForStage})`);
+      if (telegramProgress) {
+        await notifyAuditProgressTelegram(
+          `▶️ SEO audit stage started: ${startedLabel} (planned ${plannedForStage})`
+        );
+      }
+    }
+
     const issues: string[] = [];
     let extracted: InternalExtract | null = null;
     let fallback: FallbackExtract | null = null;
@@ -1587,6 +1807,27 @@ async function main() {
       metaKeyToIdx.set(dKey, list);
     }
     provisional.push(pageAudit);
+    currentStageProcessed += 1;
+    const stageSummary = executionSummaryByStage.get(pageStage);
+    if (stageSummary) stageSummary.processed += 1;
+
+    const processedTotal = provisional.length;
+    if (processedTotal % progressEvery === 0) {
+      const elapsedSec = Math.round((Date.now() - startedAt) / 1000);
+      console.log(
+        `[seo:audit] Progress ${processedTotal}/${targetPages.length} (stage ${priorityStageLabel(pageStage)} ${currentStageProcessed}) elapsed ${elapsedSec}s`
+      );
+    }
+  }
+
+  if (currentStage) {
+    const finishedLabel = priorityStageLabel(currentStage);
+    console.log(`[seo:audit] Stage finished: ${finishedLabel} (${currentStageProcessed})`);
+    if (telegramProgress) {
+      await notifyAuditProgressTelegram(
+        `✅ SEO audit stage finished: ${finishedLabel} (${currentStageProcessed} pages)`
+      );
+    }
   }
 
   let duplicateTitles = 0;
@@ -1688,6 +1929,11 @@ async function main() {
         'other'
       ],
       priorityCounts: stagePriorityCounts,
+      executionSummary: executionSummaryRows.map((row) => ({
+        stage: row.stage,
+        planned: row.planned,
+        processed: executionSummaryByStage.get(row.stage)?.processed ?? 0
+      })),
       reportWarnings,
       generatedAt: new Date().toISOString()
     },
@@ -1828,6 +2074,12 @@ async function main() {
   );
   console.log(`Warnings: ${reportWarnings.length > 0 ? reportWarnings.join(', ') : 'none'}`);
   console.log('');
+  console.log('Execution summary by stage:');
+  for (const row of executionSummaryRows) {
+    const processed = executionSummaryByStage.get(row.stage)?.processed ?? 0;
+    console.log(`- ${priorityStageLabel(row.stage)}: ${processed}/${row.planned}`);
+  }
+  console.log('');
   console.log('Main problems:');
   console.log(`- ${weakMetaDescriptions} weak meta descriptions`);
   console.log(`- ${duplicateTitles} duplicate titles`);
@@ -1847,9 +2099,26 @@ async function main() {
   console.log(`JSON report: ${REPORT_JSON_PATH}`);
   console.log(`CSV report: ${REPORT_CSV_PATH}`);
   console.log(`Action plan: ${ACTION_PLAN_JSON_PATH}`);
+
+  if (telegramProgress) {
+    await notifyAuditProgressTelegram(
+      [
+        '🏁 SEO audit finished',
+        `Score: ${Math.round(averageScore)}/100`,
+        `Pages checked: ${pagesChecked}`,
+        `Good/Medium/Bad: ${good}/${medium}/${bad}`,
+        `Warnings: ${reportWarnings.length > 0 ? reportWarnings.join(', ') : 'none'}`
+      ].join('\n')
+    );
+  }
 }
 
 main().catch((e) => {
   console.error('[seo:audit] fatal', e instanceof Error ? e.message : String(e));
+  if (envFlag('SEO_AUDIT_NOTIFY_TELEGRAM')) {
+    void notifyAuditProgressTelegram(
+      `❌ SEO audit failed: ${e instanceof Error ? e.message : String(e)}`
+    );
+  }
   process.exit(1);
 });

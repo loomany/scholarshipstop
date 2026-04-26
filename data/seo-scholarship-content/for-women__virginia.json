@@ -1,48 +1,114 @@
 {
-  "seo_title": "Virginia Scholarships for Women | Find Your Funding",
-  "seo_description": "Explore 8 scholarships for women in Virginia. Award sizes vary from $500 to $7,500. Check deadlines and requirements for each opportunity.",
-  "intro": "Finding financial support as a woman in Virginia can be crucial for your educational journey. This collection features 8 scholarships specifically aimed at women, with award amounts ranging from approximately $500 to $7,500. Each scholarship has its own unique requirements and deadlines, so it’s important to review each listing carefully to identify opportunities that align with your goals.",
-  "h1": "Scholarships for Women in Virginia",
-  "supporting": "As you explore these scholarships, pay attention to the variety of categories represented, such as education, law, and STEM. Some listings may require essays, while others have lighter requirements. With deadlines varying across the board, it's wise to check the specific dates and details for each scholarship to ensure you don’t miss out on potential funding.",
-  "related_intro": "If you're interested in exploring more opportunities, consider checking out scholarships for women in other states or in specific fields like STEM or law.",
+  "seo_title": "Find Scholarships for Women in Virginia, USA",
+  "seo_description": "Scholarships for women in Virginia, USA with deadlines and requirements that vary by listing. Compare options and apply on official pages.",
+  "intro": "Trying to find scholarships for women in Virginia usually means narrowing a broad USA search down to programs that actually match your location and eligibility. This filtered view brings together a focused set of listings tied to Virginia and women applicants, with examples touching areas like law, STEM, and education. Awards, deadlines, and application requirements vary by program, so it helps to compare each row rather than assume the same rules apply across the list. Some listings may be relatively straightforward to apply for, while others can ask for more supporting material. Because deadline text differs across these programs and at least one listing appears to be coming up soon in the current snapshot, it is smart to check dates promptly and verify every detail on the official source before you apply.",
+  "h1": "Find Virginia Scholarships for Women USA",
+  "supporting": "A quick scan of this slice can be useful if you want to compare scholarship fit by subject, study level, and basic eligibility before opening full application pages. The programs below show a mix of categories and may suit graduate students or adult non-traditional applicants, depending on the listing. Award amounts in this Virginia women-focused set vary by row and should always be confirmed on the official page. As you browse, pay close attention to requirement lines, essay expectations, residency or citizenship wording, and how closely each opportunity matches your academic path.",
+  "related_intro": "If you do not find the right fit here, related pages can help you explore nearby options by topic or adjacent eligibility filters. That is useful when you want to compare Virginia-focused listings against broader women scholarship results in the USA catalog or look for programs tied more directly to your field of study.",
   "how_to_use": [
-    "Review each scholarship's award amount and category",
-    "Compare deadlines to prioritize applications",
-    "Check for essay requirements and prepare accordingly",
-    "Visit official scholarship pages for the most accurate information",
-    "Shortlist your favorites to streamline your application process"
+    "Compare each row for subject fit, since this slice includes listings connected to law, STEM, education, and miscellaneous categories",
+    "Read the requirement and essay details carefully because application steps vary across programs",
+    "Check deadline text on every listing and act quickly on any opportunity that appears to be approaching soon",
+    "Open the official scholarship page to verify award amounts, eligibility wording, and submission instructions before you apply"
   ],
   "who_for": [
-    "Women pursuing higher education in Virginia",
-    "Students interested in law or STEM fields",
-    "Applicants looking for scholarships with varying requirements",
-    "Individuals seeking community-focused funding options",
-    "Women who may need lighter-touch application processes"
+    "Women in Virginia looking to apply for scholarships with local eligibility built into the listing",
+    "Graduate students comparing women-focused funding tied to law, STEM, education, or related subjects",
+    "Adult non-traditional students in Virginia who want to find programs that may fit a return-to-school path",
+    "US citizens reviewing Virginia scholarship options where residency or citizenship wording matters"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for women in Virginia?",
-      "answer": "There are currently 8 scholarships listed specifically for women in Virginia, covering various categories such as education, law, STEM, and community initiatives. Each scholarship may have different eligibility criteria and focus areas, so it's beneficial to review the details of each listing."
+      "question": "How can I find scholarships for women in Virginia that fit my background?",
+      "answer": "Use this filtered view to compare the rows by category, study level, and any residency or citizenship details shown in each listing. In this USA-focused slice, examples span law, STEM, and education, so check each row against the official source before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not, so it's important to check the specific details for each scholarship to understand what is needed."
+      "question": "Can I apply if I’m a graduate student or an adult non-traditional student?",
+      "answer": "Possibly—this set includes listings tied to study levels such as graduate student and adult non-traditional. Eligibility still varies by program, so open each scholarship and verify the current rules on the official page."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All 8 scholarships have deadlines, but they differ from one another. Some deadlines are approaching within the next 45 days, so it's advisable to verify the exact dates for each scholarship promptly."
+      "question": "Do all scholarships here have the same deadline or award amount?",
+      "answer": "No. Deadlines differ by program, and award amounts vary by listing, so compare each row carefully and confirm details with the official source before you apply. Some dates in this filtered set appear relatively soon, so it’s smart to check timing promptly."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships range from approximately $500 to $7,500. However, the exact amount can vary by scholarship, so be sure to check the specific listing for detailed information."
+      "question": "Are these scholarships only for certain majors or fields?",
+      "answer": "Not all of them target the same subject. In these rows, you can explore opportunities connected to fields like education, business, law, and engineering, but each listing has its own focus and requirements."
+    },
+    {
+      "question": "Do these Virginia scholarships for women require essays?",
+      "answer": "Requirements are mixed in this catalog slice, including essay expectations. Before you apply, review the listing details and the official scholarship page to see what documents, essays, or other materials are actually required."
     }
   ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1250,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "adult_non_traditional",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Harrisonburg Women's Service League",
+        "count": 1
+      },
+      {
+        "name": "Society of Women Engineers",
+        "count": 1
+      },
+      {
+        "name": "Women in Public Finance-Virginia Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "law",
+      "stem",
+      "education",
+      "miscellaneous"
+    ]
+  },
   "_meta": {
     "canonicalPath": "for-women/virginia",
-    "generatedAt": "2026-04-02T10:38:57.674Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 8,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:14:31.289Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

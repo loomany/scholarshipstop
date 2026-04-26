@@ -1,0 +1,96 @@
+{
+  "seo_title": "Find Massachusetts Scholarships for International Students USA …",
+  "seo_description": "Massachusetts scholarships for international students in the USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Massachusetts scholarships in the USA that international students can actually apply for usually means sorting past broad national results and checking eligibility line by line. This filtered view narrows the search to programs tied to Massachusetts with international-student eligibility, so you can compare options without losing time on mismatched listings. The programs below lean toward STEM, with examples connected to education, engineering, mathematics and statistics, and business, management, and marketing. Award amounts vary by listing and should be confirmed on the official pages. Deadlines also differ by program, and because some dates may be coming up soon, it makes sense to check timing promptly. Many listings in this slice appear to have lighter application requirements, and some may not ask for an essay, but you should still verify every requirement before you apply.",
+  "h1": "Explore Massachusetts Scholarships for International Students US…",
+  "supporting": "A focused set of listings like this is most useful when you compare the details side by side instead of assuming the same rules apply across every scholarship. Look at the requirement lines, field tags, and deadline text first, then open the official source to confirm current eligibility for international students in Massachusetts. If you are studying in a STEM-related area, this slice is especially worth a close scan, but it can also surface adjacent options in fields shown on the listings. Shortlist the rows that match your course of study, timeline, and application effort.",
+  "related_intro": "If these Massachusetts results feel too narrow, check related scholarship pages by changing one filter at a time—such as location, field of study, or other eligibility tags. That makes it easier to find nearby USA options for international students without starting your search over.",
+  "how_to_use": [
+    "Compare the deadline text across these rows first, since timing can differ and some programs may close soon",
+    "Scan each listing for field-of-study labels and eligibility wording to see whether it fits your academic path",
+    "Check the award text, but verify the current amount on the official scholarship page before you apply",
+    "Open the source page for every shortlist item and confirm requirements for international students in Massachusetts",
+    "Save the best matches and rank them by fit, deadline, and application effort before submitting"
+  ],
+  "who_for": [
+    "International students looking for scholarship options connected to Massachusetts colleges, study plans, or local eligibility in the USA",
+    "Applicants in STEM subjects who want to compare Massachusetts listings before applying",
+    "Students in education, engineering, mathematics and statistics, or business-related programs checking for matching scholarship rows",
+    "International applicants who prefer scholarships that may have lighter requirements or often do not require an essay"
+  ],
+  "faq": [
+    {
+      "question": "How can I find scholarships in Massachusetts for international students in the USA?",
+      "answer": "Use this filtered view to compare the Massachusetts rows marked for international students, then open each listing’s official source to confirm eligibility. In this slice, topics lean STEM, with sample fields including education, engineering, mathematics and statistics, and business management and marketing."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here as an international student?",
+      "answer": "Not automatically—this catalog filter helps you find programs that may fit, but each row can still have its own rules on the official page. Before you apply, verify the Massachusetts connection, international student eligibility wording, and any program-specific requirements."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline text, field of study, and any requirement notes row by row. Amounts vary by listing, and deadlines differ by program, so check the official source for the final details before applying."
+    },
+    {
+      "question": "Are these Massachusetts scholarships mostly STEM-focused?",
+      "answer": "Many listings in this filtered set are tagged STEM, but you should still explore each row individually rather than assume every program is identical. The sample titles and fields suggest STEM is common here, alongside areas like education and business-related study."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 400,
+      "maxUsd": 4000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "engineering",
+        "mathematics_and_statistics",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "international-students-eligibility/massachusetts",
+    "generatedAt": "2026-04-26T15:46:42.325Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

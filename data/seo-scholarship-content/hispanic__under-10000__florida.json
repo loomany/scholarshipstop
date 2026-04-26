@@ -1,0 +1,120 @@
+{
+  "seo_title": "Find Hispanic Florida Scholarships Under Ten Thousand | USA",
+  "seo_description": "Hispanic Florida scholarships under ten thousand: compare awards, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Hispanic scholarships in Florida with awards under a higher-cost threshold usually means balancing fit, timing, and effort. This filtered USA view brings together a focused set of listings tied to Hispanic eligibility, Florida, and awards below that cap, so you can compare options without wading through unrelated results. The programs below span areas such as STEM, medicine, education, arts, and community-focused work, with examples that touch engineering, health professions, psychology, construction trades, and education. Requirements, award amounts, and deadlines vary by listing, and many rows appear to have lighter application signals, often with no essay noted in the metadata. Even so, you should read each listing closely and verify details on the official source before you apply.",
+  "h1": "Compare Hispanic Florida Scholarships Under Ten Thousand USA",
+  "supporting": "A smart way to use this slice is to compare the requirement lines first, then scan study level, residency or citizenship language, and field tags to see where you match best. Because deadline text differs across these rows and some opportunities may be coming up soon, it is worth checking dates promptly. You can also compare how broad or narrow each program is: some listings lean toward engineering or health, while others are more community, education, or vocational in focus. Open the official pages to confirm current terms before you shortlist anything for a USA application plan.",
+  "related_intro": "If these Florida Hispanic listings feel close but not quite right, related pages can help you widen or narrow the search. You may want to explore nearby scholarship filters by topic, location, or eligibility to compare similar USA opportunities with different subject emphasis or requirement patterns.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist listings that match your study level and field",
+    "Check whether essay expectations are listed or omitted"
+  ],
+  "who_for": [
+    "Hispanic applicants in Florida comparing local scholarship options",
+    "Florida high school seniors looking for lighter-touch applications",
+    "Graduate students seeking Hispanic funding in STEM or health fields",
+    "Applicants interested in education, community, or vocational programs"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to these USA scholarships if I am in high school or graduate school?",
+      "answer": "Some listings in this Florida, USA slice appear to include study levels such as high school senior and graduate student. Eligibility still varies by program, so check each row’s official page before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Florida filter?",
+      "answer": "These rows span topics like STEM, Medicine, Education, Arts, Community, and Miscellaneous, with examples tied to engineering, health professions, psychology, education, and construction trades. If you want to compare options, sort through the titles and categories, then confirm fit on the provider’s page."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flagged in the catalog metadata, but requirements can still change. Before you apply, review the official application page for the exact materials each program asks for."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 1625,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-08",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "psychology"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "University of North Florida",
+        "count": 2
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 1
+      },
+      {
+        "name": "Florida State University",
+        "count": 1
+      },
+      {
+        "name": "Latinos Salud",
+        "count": 1
+      },
+      {
+        "name": "University of South Florida",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "community",
+      "education",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/under-10000/florida",
+    "generatedAt": "2026-04-26T15:41:37.661Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

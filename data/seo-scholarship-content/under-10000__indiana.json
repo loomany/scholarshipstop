@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Indiana Scholarships Under Ten Thousand | USA",
+  "seo_description": "Indiana scholarships under ten thousand in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Indiana scholarships with awards under the upper cap shown in this filter usually means balancing budget, fit, and timing rather than chasing one giant prize. This focused USA catalog view gathers programs tied to Indiana and keeps the award range in a smaller band, which can make it easier to compare realistic options across education, STEM, community, medicine, arts, and other categories. The rows below span different study levels, from high school through graduate and trade school paths, and eligibility can vary by residency, citizenship, field of study, essay expectations, and other requirement details. Awards, deadlines, and application steps are not uniform, so it makes sense to apply selectively and verify each listing on the official source.",
+  "h1": "Compare Indiana Scholarships Under Ten Thousand USA",
+  "supporting": "A useful way to browse this slice is to read each row as a quick screening tool, then open the strongest matches for a closer look. Compare the award text, deadline wording, category tags, study level, and requirement lines side by side so you can spot programs that fit your situation in Indiana without overcommitting time. Some listings may be lighter touch than others, but requirements still differ, and deadlines can arrive sooner than expected. If you want to find solid options for the current cycle, shortlist the best matches first and confirm every detail on the sponsor page before you apply.",
+  "related_intro": "If this Indiana set feels too narrow or too broad, related pages can help you compare nearby filter combinations. You may want to explore other award ranges, scan broader USA scholarship categories like education or STEM, or look at pages organized around study level or topic before deciding where to apply.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read the requirement line before shortlisting",
+    "Open official pages to verify eligibility details",
+    "Check award text and category tags together",
+    "Save your best matches and apply early"
+  ],
+  "who_for": [
+    "Indiana applicants comparing smaller award scholarships",
+    "High school and undergraduate students seeking local options",
+    "Graduate or trade school applicants checking category-specific programs",
+    "Students in education, STEM, arts, or health-related fields",
+    "USA residents or international applicants verifying Indiana eligibility"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Indiana scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Indiana scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Indiana scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 126,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 126,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 64,
+      "within60Days": 107,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "April 27, 2026 3:00 PM CT",
+        "2026-05-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 14,
+      "noCount": 112,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement",
+        "link",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "Undergraduate",
+        "Trade school"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident",
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Deb Tomaro Real Estate",
+        "count": 4
+      },
+      {
+        "name": "Indiana Commission for Higher Education",
+        "count": 3
+      },
+      {
+        "name": "Indiana Athletic Trainers' Association",
+        "count": 2
+      },
+      {
+        "name": "Kappa Delta Pi",
+        "count": 2
+      },
+      {
+        "name": "Tri-State Bleeding Disorder Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "medical",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/indiana",
+    "generatedAt": "2026-04-26T16:09:21.488Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 126,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

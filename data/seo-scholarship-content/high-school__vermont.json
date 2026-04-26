@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Vermont High School Scholarships in the USA",
+  "seo_description": "Vermont high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on the official program pages.",
+  "intro": "Trying to find Vermont scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what they ask for, and how quickly you need to act. This filtered slice brings together a focused set of listings tied to Vermont and the high school level, so you can compare options without jumping between unrelated results. You will see a mix of community, education, miscellaneous, and STEM themes, with some listings aimed at seniors while others may also connect to different study stages or residency labels. Many rows appear to have lighter application signals and often no essay flag, but requirements, award details, and deadlines still vary by listing and should be checked carefully on the official source.",
+  "h1": "Explore Vermont High School Scholarships USA",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Scan the requirement line for residency or citizenship language, note whether the program leans toward community service, education, or STEM, and read the award text closely because amounts vary by listing. Since deadline text differs across these Vermont scholarship listings and some opportunities may be coming up soon, it is smart to shortlist promising options early, then open each official page to verify eligibility, materials, and any updates before you apply.",
+  "related_intro": "If these Vermont high school scholarships feel too narrow or too broad, related pages can help you compare nearby paths. You may want to explore other USA high school scholarship filters, location-based pages, or topic groupings like community, education, and STEM to find programs that match your background more closely.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist listings that match your Vermont connection",
+    "Check citizenship or residency labels carefully"
+  ],
+  "who_for": [
+    "Vermont high school students comparing local and regional scholarship options",
+    "High school seniors in the USA looking for Vermont-linked funding",
+    "Applicants who want many no essay scholarship listings when available",
+    "Students interested in community, education, or STEM scholarship themes"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Vermont scholarships for high school students and compare them quickly?",
+      "answer": "Use this filtered view to compare the rows by amount, deadline, category, and eligibility details shown in the catalog. In this USA-focused slice, award amounts and requirements vary by listing, so confirm the final terms on each scholarship’s official page before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed under High School · Vermont?",
+      "answer": "Not automatically. Some listings in this set reference different study levels or residency/citizenship labels, so check each row carefully to see whether it fits your situation in Vermont or the broader USA eligibility described by the provider."
+    },
+    {
+      "question": "Are these scholarships mostly essay-based?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many are marked as not requiring an essay in the catalog metadata. Still, requirements can change row to row, so review the official application page for the exact materials needed."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Vermont high school list?",
+      "answer": "You can browse a focused set of listings tied to themes such as Community, Education, Miscellaneous, and STEM. Some rows also connect to fields like education, business, engineering, parks and recreation, or public administration, which can help you narrow what to apply for and compare."
+    }
+  ],
+  "page_data": {
+    "exactCount": 21,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 17000,
+      "statedAmountCount": 21,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 17,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 21,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "parks_recreation_and_fitness_studies",
+        "agriculture_and_related_sciences",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Association of Government Accountants-Boston Chapter",
+        "count": 2
+      },
+      {
+        "name": "Vermont Principals' Association",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      },
+      {
+        "name": "American Public Works Association-New England Chapter",
+        "count": 1
+      },
+      {
+        "name": "Arabian Horse Association-Region 16",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/vermont",
+    "generatedAt": "2026-04-26T15:35:07.411Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 21,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

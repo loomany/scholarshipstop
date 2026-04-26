@@ -1,0 +1,133 @@
+{
+  "seo_title": "Find New Jersey High School Scholarships | USA",
+  "seo_description": "New Jersey high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on each official program page.",
+  "intro": "Trying to find New Jersey scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what materials they ask for, and how quickly you need to act. This filtered slice brings together listings connected to high school and New Jersey, with options that touch areas like education, community, arts, medicine, and disability. Some rows may fit seniors best, while others can also match younger high school students or applicants with specific residency or citizenship labels. Award amounts vary by listing, deadlines differ by program, and requirement levels are not identical, so it is worth reading each row closely before you compare options or apply.",
+  "h1": "Explore New Jersey High School Scholarships USA",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Check the requirement line, look for any essay expectation, and note whether the listing points toward a subject area such as education, health professions, business, or visual and performing arts. A focused set of New Jersey results like this is useful because it can surface local-fit programs alongside broader opportunities that still connect to high school applicants. Since some deadlines appear sooner than others, open the official page for any strong match and verify the latest details before you shortlist or apply.",
+  "related_intro": "If you do not find enough matches in this New Jersey high school slice, related pages can help you widen the search by topic or location. That is a practical next step when you want to compare nearby options, scan different education levels, or find scholarships tied to a specific field of study.",
+  "how_to_use": [
+    "Compare deadline text across rows first",
+    "Read each requirement line carefully",
+    "Open the official page to verify eligibility",
+    "Shortlist strong matches by topic and location",
+    "Check award details and essay expectations before you apply"
+  ],
+  "who_for": [
+    "New Jersey high school students comparing local scholarship options",
+    "High school seniors in the USA looking for New Jersey focused awards",
+    "New Jersey applicants interested in education, arts, community, or health related scholarships",
+    "Students who want to find programs with lighter requirement signals before applying"
+  ],
+  "faq": [
+    {
+      "question": "How can I find New Jersey scholarships for high school students on this filtered page?",
+      "answer": "Use this filtered view to compare rows that match High School and New Jersey, then open the official source for any program you want to apply to. Some listings also show study level, category, residency, and field details that can help you narrow your options in the USA context."
+    },
+    {
+      "question": "Can I apply if I’m not a high school senior?",
+      "answer": "Possibly. In these rows, sample study levels include high school sophomore, junior, and senior, so eligibility is not limited to one grade across the whole page. Check each listing’s official requirements before you apply."
+    },
+    {
+      "question": "Do all New Jersey high school scholarships here have the same deadline?",
+      "answer": "No—deadlines differ by program, and every row should be checked individually. Since some listed dates appear relatively soon, it’s smart to review the programs below promptly and verify timing on the official page."
+    },
+    {
+      "question": "How do I compare award amounts and requirements across these scholarships?",
+      "answer": "Compare each row first, then confirm details with the scholarship’s official source before you apply. Amounts vary by listing, and requirements can differ too, including whether an essay is needed."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this New Jersey high school list?",
+      "answer": "This focused set of USA listings includes a mix of categories such as education, miscellaneous, medicine, community, disability, and arts. You may also see different fields of study and residency labels, so it helps to browse a few rows rather than assume every program fits the same profile."
+    }
+  ],
+  "page_data": {
+    "exactCount": 44,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 44,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 22,
+      "within60Days": 42,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 40,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "high_school_junior",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "visual_and_performing_arts",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 8
+      },
+      {
+        "name": "New Jersey Restaurant and Hospitality Association",
+        "count": 4
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      },
+      {
+        "name": "New Jersey State Elks Association",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical",
+      "community",
+      "disability",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/new-jersey",
+    "generatedAt": "2026-04-26T15:28:49.329Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 44,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

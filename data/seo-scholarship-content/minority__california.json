@@ -1,48 +1,107 @@
 {
-  "seo_title": "California Scholarships for Minority Students",
-  "seo_description": "Explore 4 scholarships for minority students in California. Check varying deadlines and award amounts up to $5,000.",
-  "intro": "Finding financial support as a minority student in California can be challenging, but there are opportunities available. Currently, there are 4 scholarships tailored for minority students in the state, with award sizes varying across programs. Each scholarship has its own unique requirements and deadlines, so it's important to review the details carefully to identify the best fit for your needs.",
-  "h1": "Minority Scholarships in California",
-  "supporting": "When exploring these scholarships, pay attention to the varying award amounts and the specific eligibility criteria for each listing. Some may require essays while others do not, and deadlines differ among programs. Make sure to verify all details on the official sponsor pages to ensure you meet the necessary requirements.",
-  "related_intro": "If you’re interested in more options, consider checking out related scholarships that cater to different fields or locations.",
+  "seo_title": "Find Minority Scholarships in California, USA",
+  "seo_description": "Minority scholarships in California, USA with varying awards and deadlines. Compare current listings and apply through official program pages.",
+  "intro": "Trying to find minority scholarships in California usually means narrowing a broad USA search down to programs that match both identity-based eligibility and location. This filtered slice gives you a focused set of listings to compare without wading through unrelated awards. The programs below touch areas such as arts, community, education, and STEM, with examples that may appeal to high school seniors and graduate students. Award amounts, deadlines, and requirement details vary by listing, so treat each row as its own opportunity rather than assuming one pattern fits all. Many entries in this slice appear to have lighter application signals and often no essay flag, but you should still open each official page and verify the current rules before you apply.",
+  "h1": "Compare Minority Scholarships in California USA",
+  "supporting": "Use this view to compare more than just the title. Read the category tags, study level cues, and field hints to see which California opportunities line up with your background and plans. Because deadline text differs across these rows, it is smart to check timing early and prioritize anything that looks close. You can also compare how specific or broad each listing feels, then shortlist the programs that best match your eligibility and intended field before applying through the official source.",
+  "related_intro": "If these California listings are close but not quite right, related pages can help you explore nearby angles, such as other minority scholarship filters, different USA locations, or category-led views tied to arts, community, education, or STEM.",
   "how_to_use": [
-    "Compare deadlines for each scholarship listing",
-    "Review award amounts and eligibility requirements",
-    "Check if essays are required for applications",
-    "Open official pages for detailed information",
-    "Shortlist scholarships that align with your goals"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your level and field",
+    "Verify award details on the sponsor site"
   ],
   "who_for": [
-    "California minority students seeking financial aid",
-    "Students interested in arts and education scholarships",
-    "Individuals pursuing community-focused funding opportunities",
-    "Candidates looking for STEM-related scholarships",
-    "Applicants needing support for safety in schools initiatives"
+    "California applicants seeking minority scholarships",
+    "High school seniors comparing local eligibility options",
+    "Graduate students looking for California-based support",
+    "Students interested in arts, community, education, or STEM"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for minority students in California?",
-      "answer": "This filter currently lists 4 scholarships that cater to minority students in California, covering various categories such as arts, education, community, and STEM. Each scholarship may have different eligibility criteria and focus areas, so it's important to review the details for each listing."
+      "question": "How can I find minority scholarships in California that fit my background?",
+      "answer": "Use this filtered view to compare California listings tagged for minority eligibility, then open each row to verify the official criteria. In this USA catalog slice, details like study level, field, and location fit can vary by program."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. While some may require essays, others do not. It's advisable to check the specific details of each scholarship to understand what is needed for your application."
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, yes—you can explore multiple rows and apply to any programs whose official requirements you meet. Just check each listing separately, because eligibility rules, required materials, and deadlines differ by program."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The scholarships in this selection offer awards that generally range from approximately $2,500 to $5,000. However, it's important to verify the exact amounts for each scholarship as they can differ significantly."
+      "question": "What should I compare before I apply?",
+      "answer": "Compare the official eligibility, study level, field of study, deadline, and award details row by row. Amounts in this California minority scholarship set vary by listing, and any dollar figure should be confirmed on the program's official page."
     },
     {
-      "question": "How should I approach the deadlines for these scholarships?",
-      "answer": "All scholarships in this list have deadlines, but they vary by program. At least one scholarship has a deadline approaching within the next 45 days, so it's recommended to check the specific dates for each listing promptly to ensure you don't miss any opportunities."
+      "question": "Do these scholarships usually require essays?",
+      "answer": "Many listings in this filtered set appear to have no essay flag in the catalog metadata, but you should still verify requirements on the official application page. Some programs may be lighter-touch, but documents and instructions can vary row to row."
     }
   ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 3000,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "May 7, 2026 3:00 PM CT",
+        "2026-04-30",
+        "2026-04-06"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services",
+        "business_management_and_marketing",
+        "engineering",
+        "mechanic_and_repair_tech_technicians"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Catalino Tapia Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "PlaceWorks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "arts",
+      "community",
+      "education",
+      "stem"
+    ]
+  },
   "_meta": {
     "canonicalPath": "minority/california",
-    "generatedAt": "2026-04-02T10:55:30.497Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:54:20.539Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,0 +1,120 @@
+{
+  "seo_title": "Find Low Income California Scholarships | USA",
+  "seo_description": "Low income California scholarships in the USA: compare awards, deadlines, and requirements, then apply after checking each official listing.",
+  "intro": "Trying to find California scholarships in the USA that match low-income eligibility usually means cutting past broad results and focusing on programs that may fit your situation faster. This filtered slice brings together listings tied to California and low-income criteria, with examples spanning education, community, disability, and miscellaneous categories. Awards vary by listing, and deadlines differ across the rows below, so it is worth checking details promptly rather than assuming the same timeline or payout applies to every option. Many listings in this set appear to have lighter application requirements, and no-essay options are common in the metadata, but you should still read each requirement line carefully before you apply.",
+  "h1": "Explore Low Income California Scholarships USA",
+  "supporting": "Use this list to compare more than just the title. Look at category labels, study level cues, residency or citizenship wording, and any field-of-study notes to see which programs are worth opening first. If you are building a shortlist for California funding, this slice is useful because it narrows the search to a specific eligibility need while still covering different academic stages. Before you apply, verify award details, deadline language, and full rules on each official scholarship page.",
+  "related_intro": "If these California low-income scholarships feel too narrow or too broad, related pages can help you compare nearby options by eligibility, location, study level, or category. That is a practical way to find similar USA scholarship listings without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "California residents with low-income eligibility",
+    "High school seniors seeking local scholarship options",
+    "College and graduate students comparing California aid",
+    "Applicants looking for education or community scholarships",
+    "USA residents checking citizenship or residency fit"
+  ],
+  "faq": [
+    {
+      "question": "How can I find low income scholarships in California that I can apply for now?",
+      "answer": "Use this filtered view to explore California listings tied to low income eligibility, then open each row to verify the official requirements. Deadlines differ by program, and some listed dates appear soon, so check the latest details promptly before you apply."
+    },
+    {
+      "question": "Can I compare award amounts on this California scholarship list?",
+      "answer": "Yes—these rows include listed award amounts, but amounts vary by listing and should be confirmed on the official scholarship page. In this slice, examples range from smaller awards to larger ones, so compare each row individually instead of assuming one standard amount."
+    },
+    {
+      "question": "Are these USA scholarships only for California residents?",
+      "answer": "This filter is specifically for California-related scholarships in the USA context, but residency and citizenship details can vary by program. Some listings may mention U.S. citizen or permanent resident status, so verify each official source before you apply."
+    },
+    {
+      "question": "What should I check before I apply from this filtered list?",
+      "answer": "Compare the eligibility details, study level, category, and deadline on each row, then confirm everything on the official page. This focused set of listings includes examples across education, community, disability, and miscellaneous topics, so the fit can differ row to row."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 1850,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-05-13"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "english_language_and_literature",
+        "foreign_languages_literature_and_linguistics"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 4
+      },
+      {
+        "name": "Bonta California Progress Foundation",
+        "count": 1
+      },
+      {
+        "name": "Catalino Tapia Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "POISE Foundation",
+        "count": 1
+      },
+      {
+        "name": "Taiwanese American Citizens League-Orange County Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "low-income/california",
+    "generatedAt": "2026-04-26T15:50:47.994Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

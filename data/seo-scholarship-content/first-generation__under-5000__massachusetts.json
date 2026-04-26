@@ -1,0 +1,105 @@
+{
+  "seo_title": "Find First Generation Scholarships Under Five Thousand in Massac…",
+  "seo_description": "First generation scholarships under five thousand in Massachusetts, USA. Compare awards, review varying deadlines, and apply on official pages.",
+  "intro": "Trying to find first-generation scholarships in Massachusetts with smaller award sizes usually means balancing fit, speed, and effort. This filtered USA view narrows the search to programs under the stated amount cap, so you can compare a focused set of listings without wading through unrelated awards. The rows here point to opportunities tied to first-generation status and Massachusetts, with examples touching areas like STEM, education, humanities, and miscellaneous subjects. Awards, deadlines, and eligibility details can vary from listing to listing, and many entries in this slice appear to have lighter application requirements, often with no essay noted in the metadata. Because deadline text differs across the programs below, it makes sense to check each row promptly and verify details on the official source before you apply.",
+  "h1": "Compare First Generation Scholarships Under Five Thousand in Mas…",
+  "supporting": "Use this list to compare more than just the headline award. Read the requirement lines closely, note whether a scholarship seems open to your study level or field, and check how Massachusetts is defined in the eligibility language. If you are deciding where to apply first, compare deadline wording, application effort, and subject fit side by side. This slice is especially worth a quick scan if you want smaller USA scholarships that may be easier to add to a broader application shortlist, but you should still confirm every rule, document request, and deadline on the sponsor or school page.",
+  "related_intro": "If these Massachusetts first-generation listings feel too narrow, related pages can help you explore nearby options by changing the award cap, broadening location, or looking at adjacent categories such as STEM, education, or humanities. That is often the fastest way to find more programs worth comparing.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read the requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your field",
+    "Apply first to the best-fit programs"
+  ],
+  "who_for": [
+    "First-generation students in Massachusetts",
+    "Massachusetts applicants seeking smaller scholarships",
+    "Students comparing STEM or education options",
+    "High school seniors and early college students",
+    "Applicants who prefer lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply for all of these scholarships with one application?",
+      "answer": "Usually no—each scholarship listing has its own process. Use the catalog to find options, then apply through the official page for each program you want to pursue."
+    },
+    {
+      "question": "Do deadlines stay the same across this Massachusetts scholarship list?",
+      "answer": "No, deadlines differ by program in these rows. Since the listed dates vary and at least one appears relatively soon, check each official page promptly before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare eligibility details, study level, location fit, field of study, and the listed award amount. Amounts vary by listing, and official pages are the place to confirm requirements and any supporting materials."
+    },
+    {
+      "question": "Are these USA scholarships only for certain majors or student types?",
+      "answer": "This filtered set is tied to Massachusetts and first-generation eligibility, but the rows can still differ by category and background details. In this slice, you may see topics like STEM, Education, Humanities, and some listings may also note study levels or residency labels such as international student."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 400,
+      "maxUsd": 1000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "college_1",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "history"
+      ],
+      "commonResidency": [
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Worcester State University",
+        "count": 2
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "first-generation/under-5000/massachusetts",
+    "generatedAt": "2026-04-26T15:05:45.237Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

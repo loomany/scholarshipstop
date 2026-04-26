@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Alabama Scholarships Under Ten Thousand | USA",
+  "seo_description": "Alabama scholarships under ten thousand with award and deadline details. Compare USA listings and apply after verifying each official page.",
+  "intro": "Trying to find Alabama scholarships with awards under the upper limit set by this filter usually means balancing budget, fit, and timing all at once. This focused USA view lets you compare a practical range of programs without wading through larger-award listings that may not match your search. The rows below span topics such as education, STEM, community, safety, and miscellaneous awards, with examples tied to fields like engineering, business, mathematics, communication, and education. Some listings may suit high school seniors, college students, or graduate students, and residency or citizenship language can differ by program. Award amounts, deadlines, essay expectations, and other requirements vary across these listings, so it makes sense to apply selectively and verify each detail on the official source before moving forward.",
+  "h1": "Compare Alabama Scholarships Under Ten Thousand USA",
+  "supporting": "A smart way to use this list is to compare each row for deadline wording, study level, location fit, and field-of-study relevance rather than focusing on title alone. Some Alabama scholarships in this slice may have lighter requirement signals, while others can ask for more documentation or an essay. Open the official page for any listing that looks promising, confirm current rules, and note how the award description matches your academic path. That makes it easier to find options worth shortlisting and avoid wasting time on programs that do not fit.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship filters by location, topic, or academic focus. That is useful when you want to explore beyond this Alabama under-limit slice without starting your USA scholarship search from scratch.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your level and field",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "Alabama students comparing smaller scholarship awards",
+    "High school seniors planning in-state applications",
+    "College or graduate students checking local-fit programs",
+    "Applicants in education, STEM, business, math, or communication"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Alabama scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Alabama scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Alabama scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 25,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 25,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 16,
+      "within60Days": 23,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-13",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 23,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "college_3",
+        "graduate_student",
+        "high_school_senior",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "mathematics_and_statistics"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alabama Dietetic Association",
+        "count": 3
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association",
+        "count": 2
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Alabama Library Association",
+        "count": 1
+      },
+      {
+        "name": "American Institute of Steel Construction",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/alabama",
+    "generatedAt": "2026-04-26T16:04:19.484Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 25,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

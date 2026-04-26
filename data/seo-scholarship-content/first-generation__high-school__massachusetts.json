@@ -1,0 +1,104 @@
+{
+  "seo_title": "Find First-Generation High School Scholarships in Massachusetts,…",
+  "seo_description": "First-generation high school scholarships in Massachusetts, USA—compare deadlines, award amounts, and requirements, then apply on official pages.",
+  "intro": "Trying to find first generation scholarships for high school students in Massachusetts usually means narrowing past broad national results and checking which programs actually fit your situation. This filtered slice brings together USA listings tied to that mix of eligibility, school level, and location, so you can compare options without jumping between unrelated pages. The programs below are not all the same: award amounts vary by listing, deadlines differ by program, and requirement details should be read row by row. Many listings in this slice appear to have lighter application signals, and some may often be no essay, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Compare First-Generation High School Scholarships in Massachuset…",
+  "supporting": "A smart way to use these rows is to compare the requirement line, category tags, and deadline text together instead of focusing on one detail alone. In this Massachusetts view, you may notice overlap with STEM, biology, and education topics, which can help if you want to browse by academic interest as well as eligibility. Open each listing to confirm who qualifies, what materials are needed, and whether the official page matches the catalog summary. Since some deadlines appear close, it is worth checking the date details promptly and shortlisting the best fits early.",
+  "related_intro": "If these Massachusetts first generation high school listings feel too narrow, related pages can help you compare nearby paths, such as broader high school scholarship results, other first generation filters, or Massachusetts scholarship pages with different topic tags. That makes it easier to find adjacent options without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist listings that match your interests and location",
+    "Check award wording carefully because amounts vary by listing"
+  ],
+  "who_for": [
+    "Massachusetts high school seniors who are first generation students",
+    "Applicants comparing local and USA scholarship options in science or education",
+    "Students who want first generation listings that may have lighter application requirements",
+    "Families helping a Massachusetts student find scholarships before graduation"
+  ],
+  "faq": [
+    {
+      "question": "How can I find first-generation scholarships for Massachusetts high school students?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to first-generation status, high school level, and Massachusetts. Open each row and verify eligibility, award details, and application steps on the official source before you apply."
+    },
+    {
+      "question": "What should I compare before I apply to these scholarships?",
+      "answer": "Compare the basics row by row: who the scholarship is for, the study interests it mentions, the deadline, and the award amount. Amounts vary by listing, and deadlines differ by program, so check each official page carefully."
+    },
+    {
+      "question": "Are these Massachusetts scholarships only for certain subjects?",
+      "answer": "Not always, but this slice includes themes such as STEM, Biology, Education, and Miscellaneous. If you want to browse by academic interest, look closely at each listing’s category and field details before applying."
+    },
+    {
+      "question": "Do these listings usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag, but requirements can still vary by scholarship. Always confirm the current application materials on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 10000,
+      "minUsd": 1000,
+      "maxUsd": 10000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-10",
+        "2026-04-10",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "biological_and_biomedical_sciences",
+        "engineering",
+        "english_language_and_literature",
+        "physical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Cell Signaling Technology",
+        "count": 2
+      },
+      {
+        "name": "Worcester State University",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "first-generation/high-school/massachusetts",
+    "generatedAt": "2026-04-26T15:03:15.498Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

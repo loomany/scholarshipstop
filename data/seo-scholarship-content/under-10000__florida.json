@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Florida Scholarships Under Ten Thousand | USA",
+  "seo_description": "Florida scholarships under ten thousand in the USA: compare award ranges, review varying deadlines, and apply through each official program page.",
+  "intro": "Trying to find Florida scholarships in the USA with awards under this cap usually means balancing budget, fit, and timing at the same time. This filtered slice brings together a focused set of listings tied to Florida, with options that touch areas like education, STEM, community, medicine, arts, and other miscellaneous themes. You can compare programs for high school seniors, college students, and graduate students without jumping between unrelated results. Award amounts vary by listing, deadlines differ by program, and eligibility details can change from row to row, so it helps to read each summary closely before you apply. Many listings in this slice appear to have lighter requirements and often no essay, but you should still verify every detail on the official scholarship page.",
+  "h1": "Explore Florida Scholarships Under Ten Thousand USA",
+  "supporting": "Use the rows below to compare more than just the headline award. Check the requirement line for study level, Florida or USA residency language, and any field of study notes such as education, engineering, business, health professions, or construction trades. Because deadlines vary and some opportunities may close soon, it is smart to review date text early, open the official source, and confirm what materials are actually required before you shortlist or apply.",
+  "related_intro": "If you do not find the right fit here, related pages can help you narrow by subject area, study level, or other scholarship filters connected to Florida. That is often the fastest way to compare nearby options without restarting your search.",
+  "how_to_use": [
+    "Compare award ranges across the rows",
+    "Read each requirement line carefully",
+    "Check deadline text before you shortlist",
+    "Open the official page to verify details",
+    "Save the best matches and apply early"
+  ],
+  "who_for": [
+    "Florida residents comparing smaller scholarship awards",
+    "High school seniors planning USA college costs",
+    "College or graduate students seeking Florida-based funding",
+    "Applicants in education, STEM, business, or health fields",
+    "Students looking for many no essay scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Florida scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Florida scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Florida scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 484,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 110,
+      "maxUsd": 10000,
+      "statedAmountCount": 484,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 169,
+      "within60Days": 467,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-29",
+        "2026-05-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 484,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "construction_trades",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 214
+      },
+      {
+        "name": "University of North Florida",
+        "count": 67
+      },
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 29
+      },
+      {
+        "name": "The College of the Florida Keys",
+        "count": 25
+      },
+      {
+        "name": "University of South Florida",
+        "count": 21
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "community",
+      "medical",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/florida",
+    "generatedAt": "2026-04-26T16:07:45.505Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 484,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Alaska High School Scholarships in the USA",
+  "seo_description": "Alaska high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Alaska scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what they ask for, and how quickly you need to act. This filtered slice brings together a focused set of listings tied to Alaska and the high school level, with examples touching areas like education, community, disability, STEM, and medicine. Some rows may suit juniors or seniors more closely, while others may also connect to broader residency or citizenship terms. Award amounts vary by listing, deadlines differ by program, and requirement details are not identical, so it is worth comparing each row carefully before you apply.",
+  "h1": "Compare Alaska High School Scholarships USA",
+  "supporting": "Use these rows to compare more than just the scholarship title. Check the requirement line for study level, residency wording, and any field-of-study cues, then scan the award text and deadline text side by side. Some listings may look comparatively lighter-touch, but requirements can still change on the official page. If you are building a shortlist for upcoming USA applications, open the sponsor source for every program you plan to pursue and verify eligibility, materials, and current status before submitting anything.",
+  "related_intro": "If you do not find the right fit in this Alaska high school set, compare nearby scholarship pages by changing either the education level or the location filter. That is often the fastest way to find related USA programs with different subject tags, residency language, or application expectations.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line for level and residency details",
+    "Open the official page to verify award terms and materials",
+    "Shortlist the listings that match your background and interests",
+    "Check field and category labels to find the closest fit"
+  ],
+  "who_for": [
+    "Alaska high school juniors comparing local and regional scholarship options",
+    "Alaska high school seniors preparing to apply for USA scholarships soon",
+    "Students looking at education, community, STEM, disability, or medicine themed listings",
+    "Applicants who want to compare residency wording before opening official pages"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Alaska scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to High School and Alaska. Open each row to verify eligibility, residency or citizenship details, award amount, and the official application steps."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these listings?",
+      "answer": "Yes—this catalog slice shows amounts and deadline text row by row, so you can compare options quickly. Award sizes vary by listing, and deadlines differ by program, so confirm both on the official source before you apply."
+    },
+    {
+      "question": "What kinds of scholarships appear in these Alaska high school results?",
+      "answer": "The programs below span multiple themes, including Education, Community, Disability, STEM, and Medicine. Some listings also reference study interests such as education, business, engineering, mechanic and repair technologies, or natural resources and conservation."
+    },
+    {
+      "question": "Are these only for current high school seniors in Alaska?",
+      "answer": "Not always. In this filtered set, you may find listings tagged for high school seniors, high school juniors, and even some other study levels, so compare each row carefully before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 24,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 12500,
+      "statedAmountCount": 24,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 18,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-06-12",
+        "2026-05-01",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 23,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "question",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "computer_and_information_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "Alaska Housing Finance Corporation",
+        "count": 2
+      },
+      {
+        "name": "Koniag Education Foundation",
+        "count": 2
+      },
+      {
+        "name": "AISES",
+        "count": 1
+      },
+      {
+        "name": "Alaska Baptist Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "disability",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/alaska",
+    "generatedAt": "2026-04-26T15:18:35.648Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 24,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

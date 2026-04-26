@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Ohio High School Scholarships | USA",
+  "seo_description": "Ohio high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Ohio scholarships for high school students usually means sorting through programs that do not all ask for the same things. In this filtered USA view, you can compare a focused set of listings tied to Ohio while checking how each opportunity handles eligibility, study interests, residency language, and application steps. Some rows point toward education, community, STEM, law, or medicine themes, while others connect with broader academic plans. Award amounts vary by listing, deadlines differ by program, and requirements are not identical across the rows below. If you want to apply in the current cycle or get ahead for upcoming opportunities, it is worth scanning this slice promptly and reading each official page closely before you decide which scholarships to pursue.",
+  "h1": "Apply for Ohio High School Scholarships USA",
+  "supporting": "A useful way to browse this list is to compare the details row by row instead of assuming every Ohio high school scholarship works the same way. Look at the award text, the deadline field, and the requirement notes together. Some listings may be lighter touch, while others can ask for more supporting material. It also helps to compare category signals and any study level or residency wording so you can quickly separate strong matches from maybes. Before you apply, open the official source to verify the latest terms, because amounts, deadlines, and instructions can change.",
+  "related_intro": "If you are narrowing options, related pages can help you compare nearby scholarship slices by education level, topic, or location. That is useful when your search overlaps with broader high school funding, Ohio-specific awards, or categories such as education, community, STEM, law, and medicine.",
+  "how_to_use": [
+    "Compare deadline fields across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist the listings that match your plans",
+    "Verify award details on the sponsor site"
+  ],
+  "who_for": [
+    "Ohio high school students building a local scholarship shortlist",
+    "High school seniors comparing Ohio awards before they apply",
+    "Students interested in education, community, STEM, law, or medicine topics",
+    "Applicants who want USA listings with Ohio location relevance"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Ohio scholarships for high school students and compare them quickly?",
+      "answer": "Use this filtered view to compare the rows by amount, deadline, category, and any eligibility notes shown in the catalog. Then open the official source for each program to confirm current rules, residency details, and how to apply in the USA."
+    },
+    {
+      "question": "Are all listings here only for current high school students in Ohio?",
+      "answer": "Not always. This slice is centered on High School and Ohio, but some listings may also mention levels like high school senior or additional study levels, so check each row carefully before you apply."
+    },
+    {
+      "question": "Do deadlines and award amounts stay the same across all programs on this page?",
+      "answer": "No—deadlines differ by program, and the rows do not share one universal date. Award amounts also vary by listing, so compare what is shown here and verify the latest details on the official scholarship page."
+    },
+    {
+      "question": "What kinds of scholarships appear in this Ohio high school filter?",
+      "answer": "The programs below span multiple themes rather than one single type, with examples tied to education, community, and STEM. If you want to browse and compare options in Ohio, scan category labels and titles first, then open the official pages for exact eligibility and application steps."
+    }
+  ],
+  "page_data": {
+    "exactCount": 43,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 9000,
+      "statedAmountCount": 43,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 16,
+      "within60Days": 42,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 40,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "college_1",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "legal_professions_and_law_studies",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Ohio Expositions Commission",
+        "count": 11
+      },
+      {
+        "name": "The Community Foundation of Shelby County",
+        "count": 9
+      },
+      {
+        "name": "The Columbus Foundation",
+        "count": 4
+      },
+      {
+        "name": "Ohio News Media Association",
+        "count": 2
+      },
+      {
+        "name": "American Angus Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "law",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/ohio",
+    "generatedAt": "2026-04-26T15:31:28.158Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 43,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

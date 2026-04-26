@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Native American Undergraduate Scholarships in Alaska, USA …",
+  "seo_description": "Native American undergraduate scholarships in Alaska, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Alaska for Native American students usually means sorting through programs that look similar at first glance but differ once you read the details. This filtered USA view brings together a focused set of listings tied to that combination, so you can compare options without jumping between unrelated results. The rows below span themes such as education, STEM, community, arts, medicine, and other miscellaneous areas, with examples that point to both broad academic support and more targeted opportunities. Awards, deadlines, residency or citizenship language, and application requirements vary by listing, and some programs may be lighter touch than others. If you plan to apply for scholarships in this slice, it is worth checking dates promptly and verifying every requirement on the official source.",
+  "h1": "Find Native American Undergraduate Scholarships in Alaska USA …",
+  "supporting": "A smart way to use this list is to compare each row on more than just the scholarship title. Look at the award text, the deadline field, the study level cues, and any eligibility wording tied to Alaska, Native American status, or undergraduate study. You may also notice different subject signals across education, engineering, computer and information sciences, agriculture, business, and health-related paths. Open the official page for any program that looks promising, then compare what documents are actually required before you shortlist it.",
+  "related_intro": "If this Alaska undergraduate set feels too narrow or too broad, related pages can help you compare nearby paths. You might want to explore other Native American scholarship filters, different study levels, or location-based views in the USA catalog to find programs that match your background more closely.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist programs by subject area and award wording",
+    "Check residency or citizenship language on every listing"
+  ],
+  "who_for": [
+    "Native American undergraduates studying in Alaska",
+    "Alaska-based applicants comparing education or STEM scholarships",
+    "Students seeking community, arts, or medicine related funding",
+    "Applicants who want USA listings with clear deadline and award fields"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Native American undergraduate scholarships in Alaska that fit my major?",
+      "answer": "Use this filtered view to compare rows by category and field, then open the official source for the exact eligibility details. In this USA-focused slice, you’ll see themes such as education, STEM, community, arts, and medicine, with sample fields including education, business, engineering, computer science, and agriculture."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate student in Alaska?",
+      "answer": "Not automatically—each listing has its own rules, and some rows may also reference residency, citizenship, or study-level details on the official page. Before you apply, verify the program’s requirements directly with the source listed in the catalog."
+    },
+    {
+      "question": "Are these scholarships only for certain subjects, or can I browse across different areas?",
+      "answer": "You can browse across multiple subject areas in this focused set of listings, not just one major. Common categories here include education, STEM, community, arts, and medicine, so it helps to explore more than one relevant track before you apply."
+    },
+    {
+      "question": "Do these scholarship listings usually require essays or a long application?",
+      "answer": "Requirements vary by program, and the catalog suggests a mix of application styles across these rows. Some may be comparatively lighter-touch, but you should always confirm essay and document requirements on the official scholarship page before applying."
+    }
+  ],
+  "page_data": {
+    "exactCount": 25,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 20000,
+      "statedAmountCount": 25,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 19,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-06-12"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 23,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "computer_and_information_sciences",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Native Forward Scholars Fund",
+        "count": 4
+      },
+      {
+        "name": "The CIRI Foundation",
+        "count": 4
+      },
+      {
+        "name": "AISES",
+        "count": 3
+      },
+      {
+        "name": "Koniag Education Foundation",
+        "count": 2
+      },
+      {
+        "name": "Alaska Native Tribal Health Consortium",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "community",
+      "miscellaneous",
+      "arts",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "native-american/undergraduate/alaska",
+    "generatedAt": "2026-04-26T16:02:26.724Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 25,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

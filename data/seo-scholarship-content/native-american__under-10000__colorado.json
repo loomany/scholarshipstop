@@ -1,0 +1,107 @@
+{
+  "seo_title": "Find Native American Scholarships Under Ten Thousand in Colorado…",
+  "seo_description": "Native American scholarships under ten thousand in Colorado, USA. Compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to find Colorado scholarships for Native American applicants with awards under ten thousand dollars usually means sorting through a small but mixed set of USA listings with different focus areas, study levels, and eligibility details. This filtered view brings those programs together so you can compare options without jumping between unrelated results. In these rows, award amounts stay below the selected cap, but exact amounts still vary by listing and should be verified on the official page. Deadlines also differ by program, and requirement details are not identical from one scholarship to the next. Many listings in this slice appear to have lighter application signals, and some may not require an essay, but it is still important to read each row closely before you apply.",
+  "h1": "Compare Native American Scholarships Under Ten Thousand in Color…",
+  "supporting": "A useful way to browse this set is to compare the requirement lines alongside category and study-level clues. You may see scholarships connected to education, community, or broader miscellaneous themes, with examples that can fit high school seniors or graduate students. If you are narrowing choices, look at residency or citizenship labels, check whether your field of study matches, and note how specific each listing is to Colorado or to Native American eligibility. That makes it easier to find the rows worth opening first and avoid wasting time on programs that do not fit your profile.",
+  "related_intro": "If these Colorado results feel too narrow, related pages can help you explore nearby options by changing one filter at a time. Compare other Native American scholarship views, scan more Colorado-specific listings, or look at broader award ranges to find programs that match your background and application plans.",
+  "how_to_use": [
+    "Compare each row for award text, deadline wording, and category before you shortlist anything",
+    "Read the eligibility and requirement lines closely to confirm the Native American and Colorado fit",
+    "Check study level, citizenship or residency labels, and field-of-study details against your profile",
+    "Open the official scholarship page for every promising listing and verify current amount, deadline, and application steps",
+    "Shortlist the best matches first, especially if a listing appears to have fewer requirements or no essay"
+  ],
+  "who_for": [
+    "Native American applicants looking for Colorado-based scholarship options with awards under ten thousand dollars",
+    "Colorado students comparing smaller awards in education, community, or miscellaneous categories",
+    "High school seniors who want to find potentially lighter-touch scholarship applications",
+    "Graduate students checking whether Colorado listings match their study level and eligibility details",
+    "US citizens or permanent residents reviewing scholarship rows with location and identity-based filters"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here if I’m in the USA?",
+      "answer": "Not automatically. In this USA-focused slice, requirements can still differ by program, including study level, Colorado ties, and citizenship or residency details such as U.S. citizen or U.S. permanent resident status, so check each official listing carefully."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline, study level, and category first, since those details vary row to row. In this catalog slice, amounts shown are in the lower-thousands range, but exact awards and terms must be confirmed on official pages."
+    },
+    {
+      "question": "Do these scholarships usually require essays?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and sampled rows often show no essay flag. Still, requirements can change, so review each scholarship's official application instructions before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 3000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 1,
+      "rollingOrUnknown": 0,
+      "nearestDays": 60,
+      "nearestLabels": [
+        "2026-06-17",
+        "2026-06-30",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Colorado Educational Services and Development Association",
+        "count": 1
+      },
+      {
+        "name": "Colorado Society of Certified Public Accountants",
+        "count": 1
+      },
+      {
+        "name": "Friends of Hubbell Trading Post National Historic Site",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "native-american/under-10000/colorado",
+    "generatedAt": "2026-04-26T16:00:52.129Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

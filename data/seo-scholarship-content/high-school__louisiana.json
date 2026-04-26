@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find High School Scholarships in Louisiana, USA",
+  "seo_description": "High school scholarships in Louisiana, USA: compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Louisiana scholarships for high school students usually means sorting through programs that look similar at first glance but differ in who can apply, what materials they ask for, and how quickly you need to act. This filtered USA view narrows the search to a focused set of listings tied to Louisiana and the high school level, with examples touching education, community, and related interests. Some opportunities may be comparatively lighter touch, while others can ask for more detail, including written responses. Award amounts vary by listing, and deadlines differ by program, so it makes sense to compare each row carefully and verify the latest terms on the official source before you apply.",
+  "h1": "Apply for Louisiana High School Scholarships USA",
+  "supporting": "Use the rows below to compare more than just the title. Check the requirement line for residency, school level, and any extra submission steps, then scan the category and subject cues to spot programs that match your background or activities. Because some deadlines appear to be coming up soon, this slice is worth reviewing promptly. Open the official page for any scholarship that looks promising, confirm current rules, and compare award details side by side before you shortlist where to apply.",
+  "related_intro": "If you do not find enough matches here, related pages can help you compare nearby paths such as other USA location filters, broader high school scholarship views, or topic-based lists connected to education, community, or agriculture-related interests.",
+  "how_to_use": [
+    "Compare deadline wording across each listing",
+    "Read every requirement line before you apply",
+    "Open the official page to verify current details",
+    "Shortlist the programs that best match your profile",
+    "Check award text and submission materials side by side"
+  ],
+  "who_for": [
+    "Louisiana high school seniors planning for college costs",
+    "USA applicants looking for Louisiana-based scholarship options",
+    "Students with interests in education or community-focused programs",
+    "Louisiana students involved in school, athletics, or agriculture activities"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Louisiana scholarships for high school students in this filtered view?",
+      "answer": "Use this focused set of USA listings to compare row-by-row details like eligibility, category, amount, and deadline. Then open the official source for each scholarship to verify current requirements before you apply."
+    },
+    {
+      "question": "Can I compare award amounts on these Louisiana high school scholarships?",
+      "answer": "Yes—amounts are shown in the catalog, but they vary by listing and should be confirmed on the official scholarship page. In this slice, listed awards range from smaller local amounts to higher awards, depending on the program."
+    },
+    {
+      "question": "Do all of these scholarships have the same deadline?",
+      "answer": "No. Deadlines differ by program, and the rows in this Louisiana high school set do not share one universal date. Since some listings appear to close soon, check each row promptly before you apply."
+    },
+    {
+      "question": "Are these scholarships only for Louisiana residents?",
+      "answer": "This filter is for Louisiana-related high school scholarships, but residency and citizenship details can vary by listing. Review each scholarship's official page to confirm whether it is limited to Louisiana students, USA residents, or other eligibility groups."
+    },
+    {
+      "question": "What should I look for before I apply or explore more options?",
+      "answer": "Compare the basics first: deadline, award amount, category, and any requirement notes shown in the catalog. Requirements appear mixed across these rows, so use the listing as a starting point and verify essays or other application steps on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Ark-La-Tex Agricultural Council",
+        "count": 1
+      },
+      {
+        "name": "Dudley DeBosier Injury Lawyers",
+        "count": 1
+      },
+      {
+        "name": "Girl Scouts of Louisiana-Pines to the Gulf",
+        "count": 1
+      },
+      {
+        "name": "Kelly C. O'Mahoney",
+        "count": 1
+      },
+      {
+        "name": "Louisiana Association of FFA",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/louisiana",
+    "generatedAt": "2026-04-26T15:24:15.189Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 9,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

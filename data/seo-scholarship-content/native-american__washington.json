@@ -1,0 +1,112 @@
+{
+  "seo_title": "Find Native American Scholarships in Washington, USA",
+  "seo_description": "Native American scholarships in Washington, USA: compare deadlines, award details, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Native American scholarships in Washington usually means narrowing a broad USA search down to programs that actually match both identity and location. This filtered view gives you a focused set of listings to compare, with examples touching areas like STEM, education, and biology and study paths that may include graduate-level applicants. Awards vary by listing, and while some rows in this slice show modest-to-midrange amounts, you should verify current details on each official page. Deadlines also differ across these programs, with at least some dates coming up relatively soon, so it makes sense to check timing promptly. Many listings here may also have lighter application requirements or no essay, but each row still needs a careful read before you apply.",
+  "h1": "Compare Native American Washington Scholarships USA",
+  "supporting": "A useful way to browse this set is to compare the requirement lines first, then look at field of study, study level, and residency or citizenship wording. In this Washington-focused Native American slice, the titles suggest a mix of academic interests rather than one narrow subject area, so it is worth scanning beyond your exact major if your background fits. When you compare options, pay attention to how sponsors describe eligibility, what documents are requested, and whether the award amount and deadline on the catalog match the official source before you move forward.",
+  "related_intro": "If these Washington listings feel too narrow, related pages can help you explore nearby angles such as broader Native American scholarship results, other Washington scholarship filters, or subject-based categories like STEM, education, and biology.",
+  "how_to_use": [
+    "Compare deadline text across the rows first, since dates differ and some may be approaching soon",
+    "Scan each listing for eligibility details tied to Native American status, Washington, study level, and major",
+    "Check the award description carefully because amounts vary by listing and should be confirmed on the official page",
+    "Open the sponsor source before you apply to verify current requirements, documents, and submission instructions",
+    "Shortlist the programs that best match your background, then compare them side by side before applying"
+  ],
+  "who_for": [
+    "Native American applicants looking for scholarship options tied to Washington",
+    "Graduate students in Washington reviewing funding leads alongside degree-specific aid",
+    "US citizen applicants comparing opportunities in STEM, education, biology, or related majors",
+    "Students who prefer listings that may have lighter application requirements or no essay"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Native American scholarships in Washington that fit my major?",
+      "answer": "Use this filtered view to compare the rows by category and field, then open the official source for each program. In this USA slice, you may see themes like STEM, Education, Biology, and fields such as engineering, education, communication and journalism, business, and biological sciences."
+    },
+    {
+      "question": "Can I apply directly from these scholarship listings?",
+      "answer": "Treat the catalog as a starting point to find and compare options, then verify how to apply on the official scholarship page. Requirements, documents, and submission steps can differ by listing."
+    },
+    {
+      "question": "Do all Washington Native American scholarships here have the same deadline or award amount?",
+      "answer": "No—deadlines and amounts vary by row, so check each listing carefully before you apply. Some listings in this filtered set show deadlines coming up relatively soon, and award amounts should always be confirmed on the official source."
+    },
+    {
+      "question": "Are these scholarships only for undergraduate students in the USA?",
+      "answer": "Not necessarily. Sample data in this filtered set includes graduate student study level and USA-related labels such as U.S. citizen, but eligibility can vary by program, so review each official listing before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 4500,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 23,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-05-31",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "business_management_and_marketing",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Native Forward Scholars Fund",
+        "count": 1
+      },
+      {
+        "name": "Public Relations Society of America-Puget Sound Chapter",
+        "count": 1
+      },
+      {
+        "name": "The Associates Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "native-american/washington",
+    "generatedAt": "2026-04-26T16:02:36.939Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

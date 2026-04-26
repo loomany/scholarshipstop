@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Under Ten Thousand Alaska Scholarships | USA",
+  "seo_description": "Under ten thousand Alaska scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official listing.",
+  "intro": "Trying to find Alaska scholarships in the USA with awards under a common upper range usually means balancing budget fit, eligibility, and timing all at once. This filtered slice brings together a focused set of listings tied to Alaska, with programs spanning areas such as education, community, STEM, medicine, disability, and broader miscellaneous topics. You can compare options for different study stages, from high school through college and graduate study, while keeping the award range consistent across the rows below. Amounts, deadlines, and requirements still vary by listing, and some opportunities may be lighter-touch than others, so it is worth reading each row closely before you apply. If you are searching for Alaska funding to add to a wider scholarship plan for the coming cycle, this is a practical place to start.",
+  "h1": "Compare Under Ten Thousand Alaska Scholarships USA",
+  "supporting": "Use this list to compare more than just the headline award. Check the requirement line for residency or citizenship details, note the study level each program seems to target, and watch how category labels can point you toward education, medical, community, disability, or technical interests. Deadlines differ across these Alaska scholarship listings, and some appear sooner than you might expect, so it makes sense to shortlist promising options early. Before you apply, open the official page for each program to verify current terms, award details, and any essay or document requests.",
+  "related_intro": "If you do not find the right fit in this Alaska set, related pages can help you compare nearby award ranges, other USA locations, or broader scholarship categories that overlap with your background, study level, or subject area.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official listing page to verify details",
+    "Shortlist programs that match your study level and location",
+    "Check award text and application materials before you apply"
+  ],
+  "who_for": [
+    "Alaska students comparing smaller award scholarships",
+    "High school juniors and seniors planning ahead",
+    "College and graduate applicants with Alaska ties",
+    "Applicants interested in education, STEM, medicine, or community topics"
+  ],
+  "faq": [
+    {
+      "question": "Who should browse these Alaska scholarship listings?",
+      "answer": "These rows may fit applicants in the USA looking at Alaska opportunities across areas like education, community, STEM, medicine, disability, and miscellaneous topics. You may also find options for different study levels, including high school juniors, high school seniors, college students, and graduate students."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—this is a practical place to compare the programs below by posted amount, category, and deadline text. Deadlines differ by program, and at least some listings appear to close relatively soon, so check each row promptly and confirm on the official source."
+    },
+    {
+      "question": "Do all Alaska scholarships in this list have the same requirements?",
+      "answer": "No. Requirements vary across these listings, including whether an essay may be needed, so review each scholarship individually before you apply. Some rows appear lighter-touch in the catalog, but official pages are the final source for documents, residency, and citizenship details."
+    }
+  ],
+  "page_data": {
+    "exactCount": 50,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 50,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 23,
+      "within60Days": 43,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 47,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "question",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "computer_and_information_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Native Forward Scholars Fund",
+        "count": 5
+      },
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 4
+      },
+      {
+        "name": "AISES",
+        "count": 3
+      },
+      {
+        "name": "Alaska Government Finance Officers Association",
+        "count": 3
+      },
+      {
+        "name": "The CIRI Foundation",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "disability",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/alaska",
+    "generatedAt": "2026-04-26T16:04:42.107Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 50,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

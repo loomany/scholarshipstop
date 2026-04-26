@@ -1,48 +1,107 @@
 {
-  "seo_title": "Illinois Scholarships for Minority Students",
-  "seo_description": "Explore 7 scholarships for minority students in Illinois, with awards from $1,000 to $5,000. Check deadlines and requirements carefully.",
-  "intro": "Illinois offers a variety of scholarship opportunities specifically for minority students, with 7 listings available in this category. Award sizes typically range from $1,000 to $5,000, making these scholarships a valuable resource for funding your education. Deadlines vary across the listings, so it's important to check each one promptly to ensure you don't miss out on potential funding.",
-  "h1": "Minority Scholarships in Illinois",
-  "supporting": "When reviewing these scholarships, consider the specific categories each award targets, such as STEM, community service, or medical fields. Many of these listings do not require essays, which can simplify the application process. Take note of the varying deadlines and award amounts to find the best fit for your needs and timeline.",
-  "related_intro": "For more tailored opportunities, check out related scholarship pages that focus on specific fields or broader eligibility criteria.",
+  "seo_title": "Find Minority Scholarships in Illinois, USA",
+  "seo_description": "Minority scholarships in Illinois, USA with deadlines, award ranges, and requirements. Compare listings and apply after checking each official page.",
+  "intro": "Trying to find minority scholarships in Illinois usually means narrowing a broad USA search into programs that match where you live and how you identify. The rows in this filtered slice give you a focused set of listings tied to Illinois, with themes that often touch STEM, community, and medicine. You can compare options for different study stages, including students moving from high school into college and those already in college. Awards vary by listing, requirement details are not identical, and deadlines differ across programs, so it is worth checking each row closely. Many listings here appear to have lighter application asks, and some may often be no essay, but you should still verify every requirement on the official page before you apply.",
+  "h1": "Compare Minority Scholarships in Illinois USA",
+  "supporting": "A smart way to use this list is to compare the requirement line, study level, and subject fit before you open every result. Some programs in this Illinois minority slice may line up better with education, engineering, business, transportation, or social sciences, while others may be broader. Read the title and category together, then check deadline wording promptly because timing is not the same across these rows. Award amounts are shown on individual listings, but details can change, so confirm the current terms, eligibility, and application steps on the sponsor or official scholarship page before you apply.",
+  "related_intro": "If you do not find the right fit in this Illinois set, compare nearby scholarship filters by topic, study level, or other eligibility tags. Related pages can help you explore broader minority funding in the USA or narrower options connected to STEM, community, or medicine.",
   "how_to_use": [
-    "Compare deadlines across listings to prioritize applications",
-    "Scan award amounts to find suitable funding options",
-    "Read requirement lines for eligibility details",
-    "Open official pages for complete application instructions",
-    "Shortlist scholarships that align with your goals"
+    "Compare deadline wording across the rows",
+    "Read each requirement line before shortlisting",
+    "Open the official page to verify eligibility",
+    "Check study level and subject fit carefully",
+    "Shortlist promising listings and apply early"
   ],
   "who_for": [
-    "Minority students in Illinois",
-    "Students pursuing STEM degrees",
-    "Community service-oriented applicants",
-    "Those seeking medical field scholarships",
-    "Undergraduate and junior college students"
+    "Illinois residents seeking minority scholarships",
+    "High school seniors planning for college costs",
+    "Current college students comparing local funding options",
+    "Applicants interested in STEM, community, or medicine themes",
+    "US citizens or permanent residents checking Illinois-based opportunities"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for minority students in Illinois?",
-      "answer": "This selection includes 7 scholarships specifically for minority students in Illinois, with categories spanning STEM, community involvement, and medicine. Each listing may have unique eligibility criteria and focus areas, so it's beneficial to review the details of each scholarship."
+      "question": "How can I find minority scholarships in Illinois that fit my background?",
+      "answer": "Use this filtered view to compare Illinois listings by eligibility, study level, field, and any USA residency labels shown in each row. Then verify the final requirements on the official scholarship page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this list do not require an essay, although it's important to check individual listings for specific requirements. Many programs tend to have lighter application processes, but confirming details for each scholarship is recommended."
+      "question": "Can I compare award amounts and deadlines across these Illinois scholarship listings?",
+      "answer": "Yes—these rows include award amounts and deadline text, but both vary by program. Amounts in this slice differ by listing, and deadlines are not the same across the page, so check each official source closely before applying."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes for these scholarships range from approximately $1,000 to $5,000. However, the exact amount can vary by scholarship, so reviewing each listing will provide the most accurate information."
+      "question": "Do these Illinois minority scholarships usually require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flag in the catalog metadata, but you should not assume that applies to every program. Always confirm the current application steps on the official scholarship page before you apply."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All 7 scholarships listed have deadlines, but they differ from one another. Some deadlines are approaching within the next 45 days, so it's advisable to check the specific dates for each scholarship promptly."
+      "question": "Who should browse this Illinois minority scholarships page?",
+      "answer": "It is useful for applicants looking for USA scholarship opportunities tied to minority eligibility and Illinois location. You can also use it to compare options for common study levels such as high school senior and college students, depending on each listing’s rules."
     }
   ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "transportation_and_materials_moving",
+        "social_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Chicago Chapter",
+        "count": 4
+      },
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "stem",
+      "community",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "minority/illinois",
-    "generatedAt": "2026-04-02T11:04:52.366Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 7,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:55:51.509Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

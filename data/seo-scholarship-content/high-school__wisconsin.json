@@ -1,0 +1,132 @@
+{
+  "seo_title": "Find Wisconsin High School Scholarships | USA",
+  "seo_description": "Wisconsin high school scholarships in the USA: compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Wisconsin scholarships for high school applicants in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what materials they ask for, and how quickly you need to act. This filtered slice brings together a focused set of listings tied to Wisconsin and the high school theme, with examples spanning community, education, medicine, disability, and STEM interests. Some opportunities appear to have lighter requirements, while others may ask for more detail, including essays in certain cases. Award amounts vary by listing and should be confirmed on the official page. Deadlines also differ across the rows below, and some are close enough that it is worth checking dates promptly before you compare options or start an application.",
+  "h1": "Explore Wisconsin High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read each row for location fit, study level language, category clues, and any requirement notes before you decide where to apply. A Wisconsin high school search can surface programs connected to education, health professions, business, engineering, protective services, and broader community support, so it helps to scan widely instead of assuming only one topic applies to you. When a listing looks promising, open the official source to verify eligibility, award details, and submission instructions.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare this Wisconsin high school slice with other location or topic combinations in the USA catalog. That is useful when you qualify for more than one residency, interest area, or study path.",
+  "how_to_use": [
+    "Sort and compare rows by deadline urgency",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist programs that match your Wisconsin and study interests",
+    "Check whether essays or extra materials are requested"
+  ],
+  "who_for": [
+    "Wisconsin high school seniors preparing scholarship applications",
+    "USA applicants seeking Wisconsin-based education or community awards",
+    "Students interested in medicine, STEM, or disability-related scholarship options",
+    "Families comparing local and statewide scholarship opportunities"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Wisconsin scholarships for high school students and compare the rows quickly?",
+      "answer": "Use this filtered view to compare award amounts, deadline text, category labels, and any requirement notes row by row. In this USA-focused catalog slice, details vary by listing, so confirm the final rules on each scholarship’s official page before you apply."
+    },
+    {
+      "question": "Can I apply if I’m in high school now, or are some listings for other study levels too?",
+      "answer": "Start by checking each row’s study-level wording carefully, because this set is filtered to High School and Wisconsin but some listings may show different level labels in the data. Always verify eligibility on the official source before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I explore on this Wisconsin high school page?",
+      "answer": "These rows include a mix of categories such as Community, Education, Medicine, STEM, Disability, and Miscellaneous. You can browse the list to find options that match your interests, location, and any field-of-study details shown in the listing."
+    },
+    {
+      "question": "Do all Wisconsin high school scholarships here have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and the amount listed can vary by row. Since some deadlines appear to be coming up soon in the current catalog snapshot, check dates promptly and verify the latest amount and deadline on the official page."
+    },
+    {
+      "question": "Are these easy-to-apply scholarships, or do some require essays?",
+      "answer": "Requirements are mixed across this filtered set: some listings may be lighter-touch, while others can ask for more materials, including essays. The best way to compare before you apply is to open the listing, review the catalog summary, and then confirm the full application requirements with the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 43,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 43,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 32,
+      "within60Days": 41,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-04-17"
+      ]
+    },
+    "essays": {
+      "yesCount": 8,
+      "noCount": 35,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "business_management_and_marketing",
+        "engineering",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "CollegeReady",
+        "count": 19
+      },
+      {
+        "name": "Arabian Horse Association-Region 10",
+        "count": 2
+      },
+      {
+        "name": "Northland Vietnam Veterans Memorial Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Federation of State, County and Municipal Employees-Minnesota Council 5",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "medical",
+      "stem",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/wisconsin",
+    "generatedAt": "2026-04-26T15:36:28.384Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 43,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

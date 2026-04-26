@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find Maine Scholarships Under Ten Thousand | USA",
+  "seo_description": "Maine scholarships under ten thousand in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Maine scholarships in the USA with awards under a higher-cost threshold usually means balancing budget, fit, and timing all at once. This filtered slice brings together programs where listed award amounts stay below that cap, with options tied to themes like education, community, STEM, music, law, and other miscellaneous interests. The rows below span different study levels, from high school applicants to college and graduate paths, and some listings connect to fields such as engineering, business, visual and performing arts, architecture, and education. Requirements are not identical across this set, and essay expectations can vary by listing. Deadlines also differ across programs, so it makes sense to compare details carefully and apply early when a Maine opportunity looks relevant.",
+  "h1": "Compare Maine Scholarships Under Ten Thousand USA",
+  "supporting": "Use this list to compare more than just the headline award. Read each row for location fit, study level, category, and any requirement notes, then open the official source to verify the current terms. In this Maine-focused set, some programs may be relatively straightforward to pursue, while others ask for more specific eligibility details. It is worth scanning across categories instead of sticking to one label, because relevant scholarships can appear under community, education, STEM, or arts-related headings. If you want to find strong matches for your profile, shortlist the rows that align with your level, field, and timeline, then compare them side by side before you apply.",
+  "related_intro": "If these Maine scholarships are close to what you need but not quite the right fit, related pages can help you compare nearby filter combinations. You may want to explore other Maine scholarship views, broader USA scholarship categories, or adjacent award ranges to find programs with similar themes but different eligibility details.",
+  "how_to_use": [
+    "Compare deadline text across rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist programs that match your level and field",
+    "Apply early when a listing fits"
+  ],
+  "who_for": [
+    "Maine residents comparing smaller award scholarships",
+    "High school students planning local applications",
+    "College and graduate applicants in Maine",
+    "Education, STEM, arts, or community focused applicants"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, you can explore and apply to multiple USA scholarship programs if you meet each listing’s requirements. Check every row separately, because eligibility, materials, and deadline timing differ by program."
+    },
+    {
+      "question": "What kinds of Maine scholarships are included in this filtered list?",
+      "answer": "These rows span several categories, including education, community, STEM, music, law, and miscellaneous topics. You may also find listings tied to study levels such as high school senior, graduate student, and college students, but each scholarship has its own rules."
+    },
+    {
+      "question": "Do all of these scholarships have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, and some dates appear to be coming up soon, so it’s smart to check listings promptly. Essay requirements also vary, so compare each row and verify the current application instructions on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 48,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 48,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 30,
+      "within60Days": 45,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-22",
+        "2026-06-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 44,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "architecture_and_related_services",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Portland Rossini Club",
+        "count": 3
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 2
+      },
+      {
+        "name": "Associated Builders and Contractors of Maine",
+        "count": 2
+      },
+      {
+        "name": "Association of Government Accountants-Boston Chapter",
+        "count": 2
+      },
+      {
+        "name": "Finance Authority of Maine",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "music",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/maine",
+    "generatedAt": "2026-04-26T16:10:54.883Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 48,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "seo_title": "Find Texas High School Scholarships in the USA",
+  "seo_description": "Texas high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Texas scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what they ask for, and how quickly deadlines arrive. This filtered slice brings together a focused set of listings tied to Texas, with categories that can include education, music, STEM, community, arts, and more. Some opportunities may fit current high school seniors most directly, while others connect to broader education paths or specific interests. Award amounts vary by listing, deadline timing is not the same across the rows, and requirement details can be lighter for some programs than others, so it is worth comparing each entry carefully before you apply.",
+  "h1": "Compare Texas High School Scholarships USA",
+  "supporting": "Use the list as a comparison tool, not just a scroll. Check the title, category, location fit, and requirement notes side by side, then open the official page for any scholarship that looks promising. Because deadlines differ across these Texas listings and some may be coming up soon, it helps to shortlist early. You can also compare how closely each program matches your background, intended field, or community connection instead of assuming every high school scholarship in this USA slice works the same way.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing the location or keeping the high school focus while exploring other topics. Related filters can surface programs with different category mixes, requirement styles, or audience details.",
+  "how_to_use": [
+    "Sort and compare listings by deadline urgency",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist the programs that match your Texas connection",
+    "Compare award wording and category labels across rows"
+  ],
+  "who_for": [
+    "Texas high school seniors comparing local scholarship options",
+    "USA applicants seeking Texas-based education or community awards",
+    "Students interested in STEM, music, arts, or education categories",
+    "Applicants who want to find scholarships with potentially lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Texas scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore listings tied to High School and Texas, then open each row to confirm who can apply. In the USA, eligibility can still vary by program, including study level, residency, and category."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these Texas scholarship listings?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by listing. Amounts can range widely, and deadlines differ by program, so compare the catalog side by side and verify details on the official source before you apply."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Texas?",
+      "answer": "Not always. While this filter is centered on High School and Texas, some listings may use more specific labels such as high school senior, so check each scholarship's official criteria before applying."
+    },
+    {
+      "question": "What kinds of scholarships can I browse in this Texas high school list?",
+      "answer": "You can explore a focused set of USA scholarship listings across themes that appear in this slice, including Education, Music, STEM, Community, Arts, and Miscellaneous. Individual rows may also point to fields like education, visual and performing arts, business, communication, or agriculture."
+    },
+    {
+      "question": "Do all Texas high school scholarships here require an essay?",
+      "answer": "No single requirement applies to every listing. Some programs may be lighter-touch, while others can ask for essays or other materials, so review each row and confirm requirements on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 119,
+    "award": {
+      "medianUsd": 1920,
+      "minUsd": 400,
+      "maxUsd": 15000,
+      "statedAmountCount": 119,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 50,
+      "within60Days": 115,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 5,
+      "noCount": 114,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "link",
+        "personal_statement",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "visual_and_performing_arts",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "University Interscholastic League",
+        "count": 50
+      },
+      {
+        "name": "Tarrant County College Foundation",
+        "count": 10
+      },
+      {
+        "name": "Communities Foundation of Texas",
+        "count": 7
+      },
+      {
+        "name": "Austin Community College",
+        "count": 4
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "music",
+      "miscellaneous",
+      "stem",
+      "community",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/texas",
+    "generatedAt": "2026-04-26T15:34:25.192Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 119,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

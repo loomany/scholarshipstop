@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Kansas Scholarships Under Ten Thousand | USA",
+  "seo_description": "Kansas scholarships under ten thousand with award ranges, deadlines, and requirements. Compare USA listings and apply on official program pages.",
+  "intro": "Trying to find Kansas scholarships with awards under a higher price threshold usually means balancing budget fit with realistic application effort. This filtered USA view brings together a focused set of listings tied to Kansas, so you can compare options without wading through larger awards that may not match your search. The programs below span themes such as education, community, disability, STEM, and medicine, with examples that also touch law, safety, and the arts. Awards vary by listing, and so do deadlines, eligibility details, and essay expectations. Some rows appear comparatively lighter touch, but every requirement still needs a careful read on the official source before you apply.",
+  "h1": "Compare Kansas Scholarships Under Ten Thousand USA",
+  "supporting": "Use this list to compare more than the headline award. Check the requirement line for study level, residency or citizenship wording, and field of study clues, then note how each program frames service, academic focus, or community ties. Because deadline text differs across these rows and some dates may be coming up soon, it is smart to shortlist early and verify each detail on the sponsor page. If you are applying in the USA for the coming cycle, this slice is worth scanning for practical, Kansas-linked options that may fit a narrower budget target.",
+  "related_intro": "If you want to widen the search after reviewing these Kansas listings, related pages can help you compare nearby filter combinations such as other award ranges, broader Kansas scholarship results, or topic-led categories like education, community, disability, STEM, and medicine.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before applying",
+    "Open the official page to verify details",
+    "Shortlist programs by study level and topic",
+    "Check whether an essay is mentioned"
+  ],
+  "who_for": [
+    "Kansas applicants comparing smaller award scholarships",
+    "High school seniors seeking Kansas-based funding",
+    "Graduate students reviewing state-linked opportunities",
+    "US citizens checking education, medicine, or STEM options",
+    "Applicants who want to find lighter-requirement listings"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Kansas scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Kansas scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Kansas scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 34,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 9000,
+      "statedAmountCount": 34,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 22,
+      "within60Days": 30,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 5,
+      "noCount": 29,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "question",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "Graduate",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "english_language_and_literature",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kansas Livestock Association",
+        "count": 5
+      },
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 4
+      },
+      {
+        "name": "Order of the Eastern Star-Grand Chapter of Kansas",
+        "count": 4
+      },
+      {
+        "name": "Kansas Board of Regents",
+        "count": 3
+      },
+      {
+        "name": "Greater Kansas City Community Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "disability",
+      "stem",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/kansas",
+    "generatedAt": "2026-04-26T16:10:00.175Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 34,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

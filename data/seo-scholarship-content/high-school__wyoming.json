@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find High School Scholarships in Wyoming, USA",
+  "seo_description": "High school scholarships in Wyoming, USA with deadlines, award ranges, and requirement details. Compare listings and apply on official pages.",
+  "intro": "Trying to find Wyoming scholarships for high school students in the USA usually means narrowing a broad search into a list you can actually compare. This filtered slice brings together programs tied to Wyoming and high school study level, with examples that touch education, community, disability, STEM, arts, and other miscellaneous interests. The rows below are not all built the same: award amounts vary by listing, deadlines differ by program, and requirement details can be lighter for some opportunities than others. Some listings may ask for more supporting material, while others appear more straightforward, so it is worth reading each row closely before you apply and verifying final details on the official scholarship page.",
+  "h1": "Compare Wyoming High School Scholarships USA",
+  "supporting": "Use this view to compare more than just the title. Scan the category labels, check whether the scholarship seems connected to your interests or background, and read the requirement line before you spend time on an application. Because deadlines in these Wyoming high school listings do not all match, it helps to shortlist promising options early and confirm the latest terms on the sponsor site. If you want to browse efficiently, compare award text, eligibility wording, and any essay or document expectations side by side.",
+  "related_intro": "If this Wyoming high school set feels too narrow or too broad, related pages can help you pivot by location or by student level. That is useful when you want to compare nearby scholarship categories, find other USA listings with similar themes, or explore adjacent options before you apply.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your background",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Wyoming high school seniors comparing local scholarship options",
+    "USA applicants seeking Wyoming-based education or community awards",
+    "Students interested in arts, STEM, or disability-related scholarship themes",
+    "Applicants looking for high school listings with potentially lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Wyoming scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore USA scholarship listings tied to both High School and Wyoming. Open each row to compare eligibility, award amount, and deadline details on the listing and then verify them on the official source."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Wyoming high school senior?",
+      "answer": "Not automatically—requirements vary by program, even within this Wyoming high school list. Check each listing for its specific eligibility, then confirm the final rules on the official scholarship page before you apply."
+    },
+    {
+      "question": "How should I compare these Wyoming high school scholarship listings?",
+      "answer": "Start by comparing category fit, deadline timing, and the amount shown in each row. Awards vary by listing, and details like essay requirements or other application steps should be verified on the official source before you apply."
+    },
+    {
+      "question": "Do all scholarships on this page have the same deadline or award amount?",
+      "answer": "No. In this focused set of Wyoming high school scholarships, deadlines differ by program and award amounts vary by listing, so review each row carefully and check official pages promptly."
+    }
+  ],
+  "page_data": {
+    "exactCount": 14,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 300,
+      "maxUsd": 25000,
+      "statedAmountCount": 14,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-04",
+        "2026-05-01",
+        "2026-04-10"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 12,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "engineering",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "General Federation of Women's Clubs of Wyoming",
+        "count": 2
+      },
+      {
+        "name": "Wyoming Telecommunications Association",
+        "count": 2
+      },
+      {
+        "name": "Brotherhood of Locomotive Engineers and Trainmen",
+        "count": 1
+      },
+      {
+        "name": "Girls Scouts of Montana and Wyoming",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "disability",
+      "miscellaneous",
+      "stem",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/wyoming",
+    "generatedAt": "2026-04-26T15:36:49.542Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 14,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

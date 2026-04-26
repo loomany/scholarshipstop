@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find Pennsylvania High School Scholarships | USA",
+  "seo_description": "Pennsylvania high school scholarships in the USA: compare deadlines, award ranges, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Pennsylvania scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who qualifies, what they support, and how quickly you need to apply. This filtered slice brings together a focused set of listings tied to Pennsylvania, with examples that touch education, community, STEM, law, arts, disability, and trade school paths. Some rows appear aimed at seniors, while others may also fit juniors or later study plans. Award amounts vary by listing, deadlines differ by program, and requirement details are not identical across the rows, so it is worth comparing each option carefully instead of assuming one Pennsylvania scholarship works like the next.",
+  "h1": "Explore Pennsylvania High School Scholarships USA",
+  "supporting": "Use the rows below to compare more than just the title. Check the location fit, study level language, category tags, and any requirement notes before you apply. If a listing looks broad, open the official page and verify residency, citizenship, school year, and field details there. This Pennsylvania high school view is especially useful when you want to browse local and state-connected opportunities side by side, then narrow your shortlist based on deadline timing, award wording, and how closely each program matches your plans.",
+  "related_intro": "After you scan this Pennsylvania set, related pages can help you compare nearby filter paths, such as other high school scholarship views or broader USA categories that overlap with education, community, STEM, medicine, or law. That is a practical way to find options you might miss if you stay in only one slice.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist listings that match your grade level and location",
+    "Compare award wording and category tags before deciding"
+  ],
+  "who_for": [
+    "Pennsylvania high school seniors comparing local scholarship options",
+    "Pennsylvania high school juniors starting early scholarship research",
+    "USA applicants seeking Pennsylvania-based education or community awards",
+    "Students interested in STEM, law, health, arts, or trade school pathways"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Pennsylvania scholarships for high school students in this filtered view?",
+      "answer": "Use these rows to compare Pennsylvania-focused listings tied to the High School filter, then open each scholarship to verify eligibility on the official source. Some listings may also mention specific study levels such as high school junior or high school senior, so check each row closely before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I live in Pennsylvania, USA?",
+      "answer": "Not automatically—eligibility varies by program. This catalog groups scholarships connected to Pennsylvania and high school search intent, but residency, citizenship, study level, and other requirements should always be confirmed on the official scholarship page before you apply."
+    },
+    {
+      "question": "Do all of these scholarships have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by program, and this filtered set shows deadline text on each row rather than one universal date. Requirements also vary, so if you want to find lighter-touch applications, browse the listing details and verify the full rules on the official source."
+    },
+    {
+      "question": "Are these scholarships only for one subject, or can I browse different topics?",
+      "answer": "You can explore a mix of topics in this Pennsylvania, USA slice, including examples tied to education, community, STEM, medicine, and law. Individual scholarships may also connect to fields like business, engineering, health professions, or transportation, so compare rows instead of assuming the whole page fits one major."
+    }
+  ],
+  "page_data": {
+    "exactCount": 74,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 40000,
+      "statedAmountCount": 64,
+      "unstatedAmountCount": 10
+    },
+    "deadline": {
+      "within30Days": 40,
+      "within60Days": 72,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-05-13",
+        "2026-06-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 73,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "transportation_and_materials_moving",
+        "health_professions_and_clinical_sciences",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Philadelphia Foundation",
+        "count": 14
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Philadelphia Chapter",
+        "count": 9
+      },
+      {
+        "name": "Community Foundation of Fayette County",
+        "count": 7
+      },
+      {
+        "name": "POISE Foundation",
+        "count": 7
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "community",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/pennsylvania",
+    "generatedAt": "2026-04-26T15:32:37.028Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 74,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

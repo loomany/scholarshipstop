@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Nebraska High School Scholarships in the USA",
+  "seo_description": "Nebraska high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Nebraska scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in useful ways. In this filtered slice, you can compare listings tied to education, community, disability, and other broad categories without losing the Nebraska focus. Some rows appear aimed at high school seniors, while others may also be relevant to adult non traditional applicants, so it is worth reading each requirement line closely before you apply. Award amounts vary by listing, deadlines differ by program, and essay expectations are mixed across the rows below. If you want to browse efficiently for the current cycle and into twenty twenty six planning, this is a practical place to start.",
+  "h1": "Explore Nebraska High School Scholarships USA",
+  "supporting": "Use these rows to compare more than just the scholarship title. Check the category tags, study level language, residency or citizenship wording, and any field of study references that appear in the listing. Some programs may have lighter requirement signals than others, but you should still open the official page to verify eligibility, materials, and deadline details before you apply. This Nebraska high school slice is worth scanning because it brings together a focused set of USA opportunities that may otherwise be scattered across education, community, and disability themes.",
+  "related_intro": "If you do not find the right fit here, related pages can help you narrow by another location or widen beyond this Nebraska and high school combination. That is useful when you want to compare nearby options, broader education listings, or other scholarship themes that overlap with your profile.",
+  "how_to_use": [
+    "Compare deadline wording across each listing",
+    "Read the requirement line before you apply",
+    "Open the official page to verify eligibility",
+    "Shortlist programs by category and study level",
+    "Check whether essay materials are requested"
+  ],
+  "who_for": [
+    "Nebraska high school seniors comparing local scholarship options",
+    "USA applicants seeking Nebraska based education or community awards",
+    "Students reviewing disability related scholarship listings in Nebraska",
+    "Adult non traditional applicants checking rows that may still fit"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Nebraska scholarships for high school students in this filtered view?",
+      "answer": "Use these rows to compare Nebraska-focused listings for high school applicants, then open each scholarship to confirm eligibility on the official source. Some listings also show categories like education, community, or disability, which can help you narrow your search."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a high school student in Nebraska, USA?",
+      "answer": "Not automatically—requirements vary by program, even within this Nebraska high school set. Check each listing’s official page for residency, study level, citizenship, and any other rules before you apply."
+    },
+    {
+      "question": "How should I compare award amounts and deadlines on this page?",
+      "answer": "Compare each row individually, because amounts and deadlines differ by program. Award values are listed in the catalog, but you should verify the current amount and deadline on the official scholarship page before applying."
+    },
+    {
+      "question": "Are these Nebraska high school scholarships all essay-based?",
+      "answer": "No single rule applies across this filtered set. Some programs may ask for an essay and others may have lighter requirements, so review each listing carefully before you start an application."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 11000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 8,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "security_and_protective_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "Arabian Horse Association-Region 8",
+        "count": 1
+      },
+      {
+        "name": "International Association of Special Investigation Units-Iowa-Nebraska Chapter",
+        "count": 1
+      },
+      {
+        "name": "Iowa Student Loan",
+        "count": 1
+      },
+      {
+        "name": "Nebraska Coaches Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/nebraska",
+    "generatedAt": "2026-04-26T15:27:38.380Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

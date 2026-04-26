@@ -1,21 +1,133 @@
 {
-  "seo_title": "Full ride scholarships 2026 | USA catalog",
-  "seo_description": "Browse full-ride and full-tuition scholarships: tuition coverage, cost of attendance, and other high-value awards. Compare deadlines and requirements—always confirm on the official program page.",
-  "intro": "This view lists opportunities tagged for <strong>high-value non-monetary</strong> awards—often described as full ride, full tuition, or similar coverage. Dollar amounts may not appear on every card; read each program’s wording and verify eligibility, stack rules, and renewal terms on the sponsor’s site.",
-  "h1": "Full ride & full tuition scholarships",
-  "supporting": "Sort by deadline or use filters to narrow the pool. When an award is non-monetary or described in words (not a single number), treat the card as a starting point and open the official listing before you invest time in an application.",
+  "seo_title": "Find Full Ride Scholarships in the USA",
+  "seo_description": "Full ride scholarships in the USA: compare listings, review varying deadlines and requirements, and apply through official program pages.",
+  "intro": "Trying to find full ride scholarships in the USA usually means narrowing a very broad search into a focused set of listings you can actually compare and apply to. In this filtered slice, the programs below span common areas like education, STEM, medicine, arts, community, and miscellaneous topics, with options that may fit college and graduate study. Eligibility can differ by row, including citizenship or residency labels such as US citizen, US permanent resident, international student, or broader US eligibility. Award details, deadline timing, and application requirements are not uniform here, so it is worth reading each listing closely. Some entries may be lighter touch than others, while some may ask for more materials, so use this view to browse carefully and identify the strongest matches.",
+  "h1": "Compare Full Ride Scholarships in the USA",
+  "supporting": "A smart way to use this list is to compare the requirement lines before you click away. Look at study level, field of study, residency wording, and any notes tied to the award text so you can quickly separate likely fits from long shots. Because deadlines differ across these rows and some appear sooner than expected, it helps to check timing promptly, then open the official page to verify current rules, materials, and whether the scholarship truly covers what you need. This makes the catalog more useful for shortlisting real USA options for the current cycle.",
+  "related_intro": "If this full ride view feels too broad, related pages can help you explore by study level, subject area, or eligibility wording. That is often the easiest way to compare similar USA scholarships side by side and find listings that match your background more closely.",
+  "how_to_use": [
+    "Compare deadline text across rows first",
+    "Read the requirement line before applying",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level and residency",
+    "Check award wording carefully because coverage can vary"
+  ],
+  "who_for": [
+    "US applicants comparing broad full ride options",
+    "International students checking USA eligibility labels",
+    "College and graduate applicants reviewing study level fit",
+    "Students in education, arts, STEM, or health related fields"
+  ],
   "faq": [
     {
-      "question": "What does “full ride” mean on this page?",
-      "answer": "We include programs our catalog tags as high-value, full-coverage style awards (for example full tuition or cost of attendance language). Wording varies by sponsor—use each official page for the exact benefit."
+      "question": "How can I find full ride scholarships in the USA that fit my background?",
+      "answer": "Use this filtered view to compare rows by study level, citizenship or residency, and field of study. In this USA catalog, eligibility can differ a lot between listings, so confirm the final rules on each program’s official page before you apply."
     },
     {
-      "question": "Why don’t all listings show a dollar amount?",
-      "answer": "Some sponsors describe benefits in text (tuition waiver, full COA, stipend rules) without a simple check amount. We still surface these so competitive opportunities aren’t hidden behind missing numeric fields."
+      "question": "What should I compare before I apply for a full ride scholarship?",
+      "answer": "Check the deadline, eligibility labels, study level, and any requirement notes shown in the listing. Award amounts and coverage can vary by program, so verify what each scholarship actually includes on the official source."
+    },
+    {
+      "question": "Are these full ride scholarships only for U.S. citizens?",
+      "answer": "No—this filtered set includes sample eligibility labels such as U.S. citizen, U.S. permanent resident, international student, and U.S. residency tags. The right way to explore options is to open the rows that match your status and verify details with the scholarship provider."
+    },
+    {
+      "question": "Do all full ride scholarships here require an essay?",
+      "answer": "No single rule applies across the page. Some listings may have lighter requirements and some may ask for more, so review each row carefully and confirm the application steps on the official scholarship page."
     }
   ],
+  "page_data": {
+    "exactCount": 4906,
+    "award": {
+      "medianUsd": null,
+      "minUsd": null,
+      "maxUsd": null,
+      "statedAmountCount": 0,
+      "unstatedAmountCount": 4906
+    },
+    "deadline": {
+      "within30Days": 1202,
+      "within60Days": 2207,
+      "rollingOrUnknown": 21,
+      "nearestDays": 0,
+      "nearestLabels": [
+        "5/15/2026",
+        "5/15/2026",
+        "5/15/2026"
+      ]
+    },
+    "essays": {
+      "yesCount": 46,
+      "noCount": 4860,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "essay",
+        "transcript",
+        "link",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "college_2",
+        "college_1",
+        "college_3",
+        "college_4"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "technology_education_industrial_arts",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident",
+        "international_student",
+        "us"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Loyola University Chicago",
+        "count": 609
+      },
+      {
+        "name": "Tarleton State University",
+        "count": 534
+      },
+      {
+        "name": "Stetson University",
+        "count": 340
+      },
+      {
+        "name": "Alamo Colleges Foundation",
+        "count": 307
+      },
+      {
+        "name": "Johnson County Community College",
+        "count": 291
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "arts",
+      "community"
+    ]
+  },
   "_meta": {
     "canonicalPath": "full-ride",
-    "curated": true
+    "generatedAt": "2026-04-26T15:16:51.124Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4906,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
   }
 }

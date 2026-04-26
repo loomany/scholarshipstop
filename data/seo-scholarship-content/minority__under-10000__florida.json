@@ -1,0 +1,112 @@
+{
+  "seo_title": "Find Minority Scholarships Under Ten Thousand in Florida USA",
+  "seo_description": "Minority scholarships under ten thousand in Florida: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Florida scholarships for minority applicants without sorting through high-dollar national awards first? This filtered USA view narrows the list to programs in Florida with listed awards under ten thousand dollars, making it easier to compare smaller scholarships you may be able to apply for sooner. In these rows, award amounts vary by listing and should be verified on the official pages, and deadlines differ by program rather than following one shared date. Many listings in this slice appear to have lighter application signals, and many are marked no essay, but requirements still need a careful read before you apply. You’ll also see a mix of themes, including education, STEM, and community-focused opportunities, with examples that touch graduate, trade, technical, and related study paths.",
+  "h1": "Compare Minority Scholarships Under Ten Thousand in Florida USA…",
+  "supporting": "Use this set to compare practical details, not just the scholarship title. Check how each listing describes eligibility, study level, and field of study, then compare the award text against the effort required to apply. Because some deadlines appear to be coming up relatively soon, it makes sense to scan the date column early, shortlist strong matches, and open the official source before spending time on forms. This Florida minority slice is especially worth a look if you want smaller USA scholarship options that may fit graduate, vocational, technical, education, business, construction, engineering, or transportation-related interests.",
+  "related_intro": "If you do not find enough matches in this Florida-focused set, related pages can help you widen the search by changing one filter at a time, such as location, award range, or minority-focused eligibility, so you can compare nearby scholarship categories without starting over.",
+  "how_to_use": [
+    "Scan the deadline column first, because dates vary by listing and some programs may be closing soon",
+    "Compare award text across rows, keeping in mind that amounts vary and should be confirmed on the official page",
+    "Read the eligibility and requirement lines closely to verify minority, Florida, study level, and field-of-study fit",
+    "Open the sponsor or official listing page before you apply, and verify current rules, documents, and submission steps",
+    "Shortlist the strongest matches, then compare effort, category, and study focus before submitting applications"
+  ],
+  "who_for": [
+    "Florida applicants looking for minority scholarships with listed awards under ten thousand dollars",
+    "Graduate students in the USA checking Florida scholarship options tied to education, STEM, or community categories",
+    "Trade, technical, or junior college students comparing smaller scholarship listings before they apply",
+    "US citizens or permanent residents who want to find Florida-based opportunities with many no-essay signals",
+    "Applicants in education, business, construction, engineering, or transportation-related fields who want a focused set of listings"
+  ],
+  "faq": [
+    {
+      "question": "What kinds of programs show up in these Florida scholarship listings?",
+      "answer": "The rows here include categories such as Education, STEM, Community, and Miscellaneous, with sample fields like education, engineering, business management and marketing, construction trades, and transportation-related study. Study level and eligibility can differ by listing, so check each program page carefully."
+    },
+    {
+      "question": "Are these scholarships only for Florida residents?",
+      "answer": "Not necessarily. This filter is tied to Florida, but residency, citizenship, or location rules can vary across listings, and some sample rows reference USA applicant statuses such as U.S. citizen or U.S. permanent resident. Always confirm the exact eligibility language before you apply."
+    },
+    {
+      "question": "Do these Florida minority scholarships usually require an essay?",
+      "answer": "Many listings in this slice appear to have lighter requirements, and many are marked as no-essay in the catalog metadata. Still, requirements can change, so review the official application instructions for each scholarship before you start."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 2500,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "transportation_and_materials_moving",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 2
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 2
+      },
+      {
+        "name": "WTS International-Central Florida Chapter",
+        "count": 2
+      },
+      {
+        "name": "University of Massachusetts Amherst",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "minority/under-10000/florida",
+    "generatedAt": "2026-04-26T15:56:47.578Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

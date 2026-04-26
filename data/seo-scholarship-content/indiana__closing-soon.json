@@ -1,0 +1,116 @@
+{
+  "seo_title": "Find Closing Soon Scholarships in Indiana, USA",
+  "seo_description": "Closing soon Indiana scholarships in the USA: compare deadlines, award details, and requirements, then apply fast after checking each listing.",
+  "intro": "Trying to apply before the window closes in Indiana means focusing on scholarships with deadlines coming up soon, not scrolling through every USA listing. This filtered view pulls together Indiana opportunities that are closer to cutoff, so you can quickly find options worth a same-week look and compare what each row actually asks for. The programs below span areas such as education, community, law, STEM, and medicine, with examples that reach high school seniors, college students, and graduate students. Award amounts vary by listing and should be verified on the official pages, and deadline wording differs from program to program. Many listings in this slice appear to have lighter requirements and often no essay flag, but you should still read each scholarship carefully before applying.",
+  "h1": "Apply for Closing Soon Indiana Scholarships USA",
+  "supporting": "A smart way to use this list is to compare the requirement lines first, then check award text, study level, and residency details. In this Indiana closing-soon slice, some scholarships may be faster to complete than others, which matters when deadlines are near. It is also worth scanning category cues and fields of study to spot relevant matches, from education and public service to law-related and community-focused awards. Open the official source for every scholarship you shortlist, because eligibility language, materials, and timing can vary even when listings look similar at a glance.",
+  "related_intro": "If you do not find enough fits here, check nearby Indiana scholarship pages with different themes or broader filters. That can help you compare urgent deadlines against less time-sensitive options without losing the Indiana focus.",
+  "how_to_use": [
+    "Sort through the Indiana rows first by deadline urgency and open the most immediate matches",
+    "Compare award wording carefully, since amounts vary by listing and some rows may show limited or TBD details",
+    "Read the eligibility and requirement lines for study level, residency, and field-of-study fit before you apply",
+    "Shortlist the best matches, then verify deadlines and application instructions on each official scholarship page"
+  ],
+  "who_for": [
+    "Indiana applicants who want to find scholarships with deadlines approaching soon",
+    "High school seniors, college students, and graduate students comparing near-term Indiana options",
+    "US citizen applicants checking Indiana listings in education, community, law, STEM, or medicine",
+    "Students looking for scholarships that may often have no essay or lighter requirement signals"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Indiana scholarships that are closing soon and still worth applying to?",
+      "answer": "Use this filtered view to compare the rows by deadline first, then open the official source for any program that fits your level, field, or residency. In this USA-focused Indiana slice, deadline text differs by listing, so check dates promptly before you apply."
+    },
+    {
+      "question": "Can I compare award amounts on these Indiana closing-soon scholarships?",
+      "answer": "Yes—many listings show an amount, but not every row does, and amounts vary by program. Treat the catalog as a starting point and verify the current award details on the official scholarship page before you apply."
+    },
+    {
+      "question": "What kinds of applicants should explore these Indiana scholarships?",
+      "answer": "These rows may fit applicants tied to Indiana in the USA, including examples at the graduate, high school senior, and college levels. You can also compare listings by common areas shown here, such as education, community, law, STEM, medicine, business, public administration, and parks and recreation."
+    },
+    {
+      "question": "Are requirements usually lighter on this closing-soon page?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements vary row to row, so read the official eligibility and application instructions for each program you want to apply to."
+    }
+  ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 1000,
+      "maxUsd": 6000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 3
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-04-08",
+        "2026-04-08",
+        "April 6, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "biological_and_biomedical_sciences",
+        "engineering",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Athene Charitable Foundation",
+        "count": 1
+      },
+      {
+        "name": "Indiana Women in Public Finance",
+        "count": 1
+      },
+      {
+        "name": "PNC Bank",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "law",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "indiana/closing-soon",
+    "generatedAt": "2026-04-26T15:46:06.730Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

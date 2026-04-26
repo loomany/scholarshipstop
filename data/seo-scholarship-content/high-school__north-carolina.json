@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find North Carolina High School Scholarships | USA",
+  "seo_description": "North Carolina high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on each official program page.",
+  "intro": "Trying to find North Carolina scholarships for high school applicants in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what they ask for, and how quickly you need to act. This filtered slice brings together a focused set of listings tied to high school and North Carolina, with topics that include education, community, STEM, arts, and disability. Some rows may fit seniors best, while others can overlap with later study levels, so it is worth reading each listing carefully before you apply. Award amounts vary by listing, deadlines differ by program, and requirements are not identical across the rows below, so compare details closely and verify everything on the official scholarship page.",
+  "h1": "Explore North Carolina High School Scholarships USA",
+  "supporting": "A smart way to use this list is to compare the requirement lines before you spend time on full applications. Look at category tags, study level wording, and any citizenship or residency notes to see which scholarships match your situation in North Carolina. Then open the official source for the listings that seem strongest, confirm the current deadline, and check whether the application looks lighter touch or asks for more supporting material. That approach makes it easier to browse broadly without missing programs that deserve a closer look.",
+  "related_intro": "If you do not find enough strong matches here, compare nearby scholarship pages by topic or location. Related views can help you explore similar USA opportunities with different state filters, broader high school results, or category mixes such as education, community, STEM, arts, and disability.",
+  "how_to_use": [
+    "Compare deadline wording across the rows and prioritize the soonest programs first",
+    "Read each requirement line carefully for study level, residency, and category fit",
+    "Open the official scholarship page to verify award details and application instructions",
+    "Shortlist the listings that best match your background, then apply in order of fit"
+  ],
+  "who_for": [
+    "North Carolina high school seniors comparing local and broader USA scholarship options",
+    "Students seeking education, community, STEM, arts, or disability related scholarships",
+    "Applicants who want to find scholarships with varying requirement levels before they apply",
+    "Families reviewing North Carolina focused listings and checking official eligibility details"
+  ],
+  "faq": [
+    {
+      "question": "How can I find North Carolina scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore programs tied to High School and North Carolina, then open each row to verify eligibility on the official source. Some listings also show categories like Education, Community, STEM, Arts, or Disability, which can help you narrow what to apply for."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these scholarships?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts in this slice range from smaller awards to larger ones, and deadlines differ by listing, so compare each row and confirm details on the official page before you apply."
+    },
+    {
+      "question": "Are these only for current high school students in North Carolina, or can other study levels appear too?",
+      "answer": "The filter is centered on High School and North Carolina, but individual listings may reference different study levels such as high school senior, college year one, or graduate student. Check each scholarship's eligibility language carefully before you apply."
+    },
+    {
+      "question": "Do these USA scholarships require essays or a long application?",
+      "answer": "Requirements vary across the catalog, and this filtered set appears mixed rather than one-size-fits-all. Some programs may be lighter-touch, while others may ask for more materials, so review the listing and official source before starting an application."
+    }
+  ],
+  "page_data": {
+    "exactCount": 32,
+    "award": {
+      "medianUsd": 2250,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 32,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 26,
+      "within60Days": 30,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 30,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "english_language_and_literature",
+        "business_management_and_marketing",
+        "engineering",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Chapel Hill Carrboro Public School Foundation",
+        "count": 12
+      },
+      {
+        "name": "The Renaissance Foundation",
+        "count": 2
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southeast Chapter",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Greater Greensboro",
+        "count": 1
+      },
+      {
+        "name": "Military Officers Association of America-Coastal Carolina Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "arts",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/north-carolina",
+    "generatedAt": "2026-04-26T15:31:07.139Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 32,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

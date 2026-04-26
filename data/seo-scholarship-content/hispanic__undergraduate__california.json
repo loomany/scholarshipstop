@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find Hispanic Undergraduate Scholarships in California, USA",
+  "seo_description": "Hispanic undergraduate scholarships in California, USA: compare deadlines, award details, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in California for Hispanic applicants usually means narrowing a broad search into a short list you can actually compare and apply to. This filtered USA view brings together a focused set of listings tied to that combination, with examples touching areas like humanities, arts, community, and education. The programs below are not all built the same: award amounts vary by listing, deadlines differ by program, and requirement details can be lighter in some rows than others. Some may ask for more written material while others appear more straightforward, so it is worth reading each entry closely before you decide where to apply.",
+  "h1": "Find Hispanic Undergraduate Scholarships in California USA",
+  "supporting": "Use this slice to compare the details that matter most before you spend time on an application. Scan each row for subject fit, location relevance, and any requirement notes, then open the official page to verify current terms. Because deadlines in these California scholarship listings do not line up, it makes sense to check dates promptly and shortlist the programs that match your background, major interests, and application effort.",
+  "related_intro": "If these California undergraduate options are close but not quite right, related pages can help you explore nearby combinations, such as broader Hispanic scholarship results, other undergraduate filters, or different USA location pages with overlapping themes.",
+  "how_to_use": [
+    "Compare each listing's deadline text first",
+    "Read the requirement line for essay or document expectations",
+    "Open the official scholarship page to verify eligibility and award details",
+    "Shortlist the California programs that best match your studies and background"
+  ],
+  "who_for": [
+    "Hispanic undergraduate applicants in California",
+    "California students comparing humanities or arts scholarships",
+    "Applicants interested in community or education focused awards",
+    "Students who want a short California list to compare before they apply"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here?",
+      "answer": "Not automatically. This catalog groups scholarships tied to Hispanic eligibility, undergraduate study, and California, but each program may define those terms differently on its official page."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on the basics that vary row to row: eligibility wording, deadline, required materials, and award amount. Amounts in this slice vary by listing and should be verified on the official scholarship page before you apply."
+    },
+    {
+      "question": "Do these California scholarships all require an essay?",
+      "answer": "No single rule applies across this filtered set. Requirements appear mixed, so review each row and confirm on the official source before you start an application."
+    },
+    {
+      "question": "Who is this filtered list most useful for?",
+      "answer": "- Undergraduate applicants who want to explore scholarships connected to Hispanic eligibility and California in the USA. - Students comparing a focused set of listings in areas that may include humanities, arts, community, or education. - Applicants who want to browse a short list first, then verify details directly with each scholarship provider."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-04-06",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "english_language_and_literature"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "California Latino Legislative Caucus Foundation",
+        "count": 1
+      },
+      {
+        "name": "Hispanic Public Relations Association-Los Angeles Chapter",
+        "count": 1
+      },
+      {
+        "name": "PlaceWorks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "arts",
+      "humanities",
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/undergraduate/california",
+    "generatedAt": "2026-04-26T15:45:20.522Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

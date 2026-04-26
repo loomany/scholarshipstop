@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Idaho Scholarships Under Ten Thousand in USA",
+  "seo_description": "Idaho scholarships under ten thousand in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Idaho scholarships with awards under a common upper range usually means balancing budget fit with realistic application effort. This filtered USA view brings together a focused set of listings tied to Idaho, so you can compare options without sorting through larger national results first. The programs below span themes such as community, education, disability, STEM, medicine, and miscellaneous interests, with examples that touch areas like education, engineering, business, health professions, and natural resources. Requirements are not identical across these rows: some may be lighter touch, some may ask for more documentation, and essay expectations can vary by listing. Deadlines also differ, so it makes sense to check active rows promptly if you plan to apply in the current cycle or into twenty twenty-six planning.",
+  "h1": "Explore Idaho Scholarships Under Ten Thousand USA",
+  "supporting": "A useful way to read this list is to compare more than the headline award. Look at the requirement line, study level fit, Idaho connection, and category tags before you decide which programs deserve a full application. If you are trying to browse efficiently, open the official page for any listing that looks close to your profile and verify award details, eligibility language, and deadline timing there. This slice is worth scanning because it mixes broad community opportunities with more targeted scholarships tied to education, disability, medical, and STEM-related interests.",
+  "related_intro": "If these Idaho listings feel too narrow or too broad, related pages can help you compare nearby filter combinations. You may want to explore other award ranges, different locations in the USA, or category-led views such as community, education, disability, STEM, or medicine to find a better match.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your study level",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "Idaho applicants comparing smaller scholarship awards",
+    "High school seniors seeking Idaho funding options",
+    "Adult non traditional learners returning to study",
+    "Graduate students checking Idaho specific opportunities",
+    "Students in education, engineering, business, health, or natural resources"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Idaho scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Idaho scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Idaho scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 28,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 28,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 20,
+      "within60Days": 25,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-05-01",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 25,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "link",
+        "personal_statement",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 4
+      },
+      {
+        "name": "American Legion Auxiliary",
+        "count": 4
+      },
+      {
+        "name": "American Water Works Association-Intermountain Section",
+        "count": 2
+      },
+      {
+        "name": "Arabian Horse Association-Region 4",
+        "count": 2
+      },
+      {
+        "name": "The Associates Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "disability",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/idaho",
+    "generatedAt": "2026-04-26T16:08:46.542Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 28,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

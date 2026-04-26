@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find High School Nevada Scholarships in the USA",
+  "seo_description": "High school Nevada scholarships in the USA: compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Nevada scholarships for high school students in the USA usually means narrowing a broad search to programs you can actually apply for soon. This filtered slice brings together a focused set of listings tied to Nevada and the high school level, with topics that include disability, education, community, STEM, medicine, and safety. As you compare options, expect the details to vary from row to row: award amounts differ, deadlines are not the same, and requirement lines may be lighter for some programs than others. A few listings may ask for more materials, while others look more straightforward. If you want to browse efficiently for the current cycle, it is smart to check the rows below promptly and verify each scholarship on its official page before applying.",
+  "h1": "Find High School Scholarships in Nevada USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read the category tags, study level cues, and requirement notes to see which programs fit your situation in Nevada. Some listings connect more closely to education or STEM interests, while others lean toward disability, community, medicine, or safety themes. When you find a possible match, open the official source to confirm eligibility, what the application asks for, and when materials are due. That extra check matters because deadlines and award details can differ across the rows.",
+  "related_intro": "If these Nevada high school scholarships feel too narrow or too broad, related pages can help you pivot by topic or location. You may want to compare nearby filter views, scan other high school scholarship categories, or look at pages that emphasize themes such as education, disability, STEM, or community support in the USA.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist the listings that best match your background",
+    "Check award wording carefully because amounts vary by program"
+  ],
+  "who_for": [
+    "Nevada high school students starting a local scholarship search",
+    "High school seniors comparing USA scholarship options tied to Nevada",
+    "Applicants interested in disability or community themed scholarships",
+    "Students exploring education, STEM, medicine, or safety related listings"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Nevada scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore listings tied to High School and Nevada in the USA catalog. Open each row to compare eligibility, award details, and application steps on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts for these Nevada high school scholarships?",
+      "answer": "Yes—these rows include listed award amounts, but they vary by program. Use the catalog to compare options side by side, then verify the current amount on the official scholarship page before applying."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Nevada high school list?",
+      "answer": "This focused set of listings includes themes that appear in the catalog such as Disability, Education, Community, STEM, Medicine, and Safety. You may also see different study-level or field tags on individual rows, so compare each listing carefully."
+    },
+    {
+      "question": "Should I rely on the catalog alone before I apply?",
+      "answer": "Use the catalog to browse and narrow your options, but treat the official scholarship page as the final source. Eligibility, required documents, award amounts, and deadline wording should always be verified there."
+    }
+  ],
+  "page_data": {
+    "exactCount": 17,
+    "award": {
+      "medianUsd": 1250,
+      "minUsd": 500,
+      "maxUsd": 9000,
+      "statedAmountCount": 17,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 9,
+      "within60Days": 14,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-01",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 16,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "english_language_and_literature",
+        "mechanic_and_repair_tech_technicians"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 4
+      },
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "American Iris Society-Region 14",
+        "count": 1
+      },
+      {
+        "name": "Brotherhood of Locomotive Engineers and Trainmen",
+        "count": 1
+      },
+      {
+        "name": "Japan Exchange and Teaching Program Alumni Association of Northern California",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "disability",
+      "education",
+      "community",
+      "medical",
+      "stem",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/nevada",
+    "generatedAt": "2026-04-26T15:28:02.732Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 17,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

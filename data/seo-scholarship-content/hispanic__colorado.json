@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find Hispanic Colorado Scholarships in the USA",
+  "seo_description": "Hispanic Colorado scholarships in the USA: compare deadlines, award ranges, and requirements, then explore listings and verify details.",
+  "intro": "Trying to find Hispanic scholarships in Colorado usually means narrowing fast and checking which programs are actually worth an application. This filtered USA view brings together a focused set of Colorado listings tied to Hispanic eligibility, so you can compare options without wading through unrelated results. The rows here lean toward education, community, and miscellaneous themes, with some listings connected to graduate study and fields such as education or business management and marketing. Awards, deadlines, residency details, and other requirements can vary from one listing to the next, so treat each row as a starting point rather than a guarantee. Many listings in this slice appear to have lighter application signals and often no essay, but you should still verify every detail on the official source before you apply.",
+  "h1": "Explore Hispanic Scholarships in Colorado USA",
+  "supporting": "Use this list to compare the practical differences between programs, not just the title. Read the requirement lines closely for citizenship or residency language, study level, and any field-of-study cues. Then check how each listing describes the award, because amounts vary by program and should be confirmed on the official page. Deadlines also differ by row, and at least some opportunities may be coming up soon, so it is worth opening promising matches right away. If you are building a shortlist for Colorado opportunities, this slice is a strong place to start and compare before you apply.",
+  "related_intro": "If these Colorado Hispanic scholarship listings feel too narrow or not quite right, related pages can help you explore nearby options by eligibility, location, or topic. That is useful when you want to compare Colorado-focused results with broader USA scholarship paths that may still fit your background or study plans.",
+  "how_to_use": [
+    "Compare each row before you apply",
+    "Read the requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist Colorado matches with suitable deadlines",
+    "Check award text and residency terms"
+  ],
+  "who_for": [
+    "Hispanic applicants studying in Colorado",
+    "Colorado graduate students seeking scholarship options",
+    "US citizens or permanent residents checking eligibility language",
+    "Students in education or business related fields"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Hispanic scholarships in Colorado that fit my situation?",
+      "answer": "Use this filtered view to compare the rows by eligibility, study level, category, and field of study, then open the official source for the final rules. In this USA slice, some listings also show citizenship or residency labels such as U.S. citizen or U.S. permanent resident, so verify those details row by row."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m Hispanic and live in Colorado?",
+      "answer": "Not automatically. This catalog narrows the list to a focused set of Colorado opportunities tied to Hispanic eligibility, but each program can still have its own requirements on the official page."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare eligibility details, study level, field of study, category, award amount, and deadline for each listing. Amounts and deadlines vary by program, so use the catalog to shortlist options and confirm everything with the scholarship provider."
+    },
+    {
+      "question": "Are these Colorado scholarships only for certain majors or graduate students?",
+      "answer": "Some rows in this filtered set point to graduate study and fields such as education or business, but that does not make those rules universal. Explore each listing individually because the allowed majors and levels can differ across programs."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1000,
+      "maxUsd": 4000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 2,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-30",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Colorado Educational Services and Development Association",
+        "count": 1
+      },
+      {
+        "name": "Colorado Society of Certified Public Accountants",
+        "count": 1
+      },
+      {
+        "name": "Colorado State Fair",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/colorado",
+    "generatedAt": "2026-04-26T15:37:56.624Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

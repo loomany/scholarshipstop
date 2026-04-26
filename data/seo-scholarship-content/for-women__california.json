@@ -1,46 +1,122 @@
 {
-  "seo_title": "California Scholarships for Women | Up to $10,000",
-  "seo_description": "Explore 23 scholarships for women in California. Award sizes vary, and deadlines differ—check listings for details.",
-  "intro": "Finding scholarships specifically for women in California can open doors to funding opportunities that support your educational goals. With 23 listings available, you'll discover a range of awards designed to empower women across various fields, including education, law, and community service. Award sizes vary significantly, with amounts generally ranging from $400 to $10,000, and deadlines differ among the listings, so it's wise to check them promptly.",
-  "h1": "23 Scholarships for Women in California",
-  "supporting": "This collection of scholarships offers a unique chance to compare options based on your interests and needs. Many listings do not require essays, making the application process potentially less daunting. Review the categories and amounts to identify which scholarships align with your goals, and ensure you take note of the specific requirements and deadlines for each opportunity.",
-  "related_intro": "For more tailored options, consider exploring scholarships focused on specific fields or broader categories that might also fit your profile.",
+  "seo_title": "Find Scholarships for Women in California, USA",
+  "seo_description": "Scholarships for women in California, USA with focused listings to compare and apply. Explore awards and check each program’s deadline.",
+  "intro": "Trying to find scholarships for women in California usually means narrowing a broad USA search into programs that actually match where you live and who you are. This filtered slice brings together California-focused listings for women across areas like education, law, medicine, STEM, arts, and other miscellaneous interests. The rows below are not all built the same: award amounts vary by listing, deadlines differ by program, and eligibility details can be more specific once you open each result. Many listings in this set appear to have lighter application signals, and many often show no essay in the metadata, but you should still verify every requirement on the official page before you apply.",
+  "h1": "Find California Scholarships for Women USA",
+  "supporting": "A smart way to use this list is to compare more than the title. Check the category, study level, location fit, and any field cues to see which programs deserve a closer look first. If you are applying in the USA for the upcoming cycle, it is worth scanning these rows promptly because deadline timing is not uniform and some opportunities may close sooner than others. Use the listing details to compare likely effort against potential value, then confirm the final rules, materials, and submission steps on the sponsor site.",
+  "related_intro": "If you do not find enough matches here, related pages can help you explore nearby options by topic, study level, or other women-focused scholarship filters. That is useful when your interests cross areas like education, law, health, STEM, or arts and you want to compare a wider set of USA listings without starting over.",
   "how_to_use": [
-    "Compare deadlines across listings to prioritize applications",
-    "Scan award amounts to find the best fit for your financial needs",
-    "Read requirement lines carefully to understand eligibility",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that align with your academic and career goals"
+    "Compare deadline text across listings",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist programs by field and study level",
+    "Verify award details on sponsor sites"
   ],
   "who_for": [
-    "Women pursuing higher education in California",
-    "Students interested in law or community service",
-    "Women seeking scholarships without essay requirements"
+    "Women living in California",
+    "California applicants interested in education programs",
+    "Women pursuing law or legal studies",
+    "Applicants considering medical or health fields",
+    "Adult non traditional and high school senior applicants"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for women in California?",
-      "answer": "The listings include a variety of scholarships across different categories such as education, community, STEM, medicine, and law. With 23 scholarships currently available, you can find options that align with your academic and career goals."
+      "question": "How can I find scholarships for women in California that fit my background?",
+      "answer": "Use this filtered view to compare California listings for women by category, study level, and field of study. In these rows, topics like education, medicine, law, STEM, and arts appear often, so check each listing against the official source before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, making the application process potentially simpler. However, it's important to verify the specific requirements for each scholarship as they may vary."
+      "question": "Can I compare award amounts and deadlines on this USA scholarship list?",
+      "answer": "Yes—amounts and deadlines are shown row by row, but they vary by program. Award amounts in this slice range from smaller to larger awards, and deadlines differ across listings, so verify both on the official page before applying."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 23 scholarships have listed deadlines, but they differ from one another. It's advisable to check the deadlines promptly, especially since some may be approaching within the next 45 days."
+      "question": "Are there scholarships here for high school seniors or adult non-traditional students?",
+      "answer": "Yes, this California filter includes examples tied to high school seniors and adult non-traditional applicants. Because eligibility can differ by listing, use the catalog to explore options and then confirm the exact rules on the scholarship's official page."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes vary significantly among the scholarships, with amounts ranging approximately from $400 to $10,000. Be sure to review each listing for the specific award amount associated with it."
+      "question": "What subjects can I browse in these California scholarships for women?",
+      "answer": "You can explore a focused set of USA listings connected to fields such as education, legal professions and law studies, history, and health professions and clinical sciences. Individual programs may be narrower than the filter, so compare the row details carefully before you apply."
+    },
+    {
+      "question": "Do many of these scholarships require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many are marked as not requiring an essay. Still, requirements can change row to row, so always confirm the current application steps on the official scholarship page."
     }
   ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-15",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "adult_non_traditional",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "history",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Sonora Area Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Association of University Women-Atascadero Branch",
+        "count": 1
+      },
+      {
+        "name": "Golden Gate Marin Artists Branch",
+        "count": 1
+      },
+      {
+        "name": "National Council of Jewish Women-Los Angeles Section",
+        "count": 1
+      },
+      {
+        "name": "Soroptimist International of Citrus Heights",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "medical",
+      "miscellaneous",
+      "arts",
+      "law",
+      "stem"
+    ]
+  },
   "_meta": {
     "canonicalPath": "for-women/california",
-    "generatedAt": "2026-04-02T10:34:03.162Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 23,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:07:29.192Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 9,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

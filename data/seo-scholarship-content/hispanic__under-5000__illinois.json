@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find Hispanic Scholarships Under Five Thousand in Illinois USA …",
+  "seo_description": "Hispanic scholarships under five thousand in Illinois, USA with deadlines, award details, and requirements. Compare listings and apply on official pages.",
+  "intro": "Trying to find Hispanic scholarships in Illinois with smaller award sizes usually means balancing fit, effort, and timing. This filtered slice brings together USA listings that match that mix, so you can compare options without wading through broader results. The programs below span themes such as education, STEM, law, medicine, community, and miscellaneous topics, and some appear geared toward early college or high school senior applicants. Awards in this view stay in the lower-dollar range, but requirements, eligibility details, and deadline timing still vary by listing. Many rows appear to have lighter application signals and often no essay, though you should verify every detail on the official scholarship page before you apply.",
+  "h1": "Compare Hispanic Scholarships Under Five Thousand in Illinois US…",
+  "supporting": "A smart way to use these rows is to compare the requirement line, category tags, and deadline text side by side before you open each listing. If you want to apply quickly, start with scholarships that look simpler, then read the official page for residency, school level, and any field-of-study details. Because deadlines differ across programs and some dates may be coming up soon, it is worth checking this Illinois-focused set promptly. You can also compare how closely each listing matches your background instead of judging by award size alone.",
+  "related_intro": "If these Illinois Hispanic scholarships do not fully match your plans, compare nearby filter combinations by changing the location, broadening the award range, or looking at related category pages such as education, law, medicine, or community-focused listings in the USA catalog.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before starting an application",
+    "Open the official page to verify eligibility details",
+    "Shortlist the listings that best match your background",
+    "Check award wording and category tags side by side"
+  ],
+  "who_for": [
+    "Hispanic students in Illinois comparing smaller scholarship awards",
+    "High school seniors looking for Illinois scholarship options",
+    "Applicants interested in education, law, medicine, or STEM topics",
+    "Students who prefer listings that often appear to need no essay"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Hispanic · Under · Illinois scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Hispanic · Under · Illinois scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Hispanic · Under · Illinois scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1250,
+      "minUsd": 500,
+      "maxUsd": 2000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-15",
+        "2026-05-04"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 1
+      },
+      {
+        "name": "Illinois CPA Society",
+        "count": 1
+      },
+      {
+        "name": "Illinois Latino Council on Higher Education",
+        "count": 1
+      },
+      {
+        "name": "Waubonsee Community College",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "law",
+      "stem",
+      "community",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/under-5000/illinois",
+    "generatedAt": "2026-04-26T15:44:17.627Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

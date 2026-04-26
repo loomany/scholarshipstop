@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Arizona Scholarships Under Ten Thousand | USA",
+  "seo_description": "Arizona scholarships under ten thousand in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Arizona scholarships with awards under a higher-price threshold usually means balancing fit, effort, and timing. This filtered slice brings together USA scholarship listings tied to Arizona where the listed awards stay below that cap, so you can compare options without sorting through larger national prizes first. The programs below span themes such as education, disability, community, STEM, and medicine, with study levels that can include high school and college applicants as well as graduate students. Award amounts vary by listing, deadlines differ across rows, and requirements are not identical, so it is worth reading each entry closely. Some listings may be relatively lighter-touch, but you should still verify every detail on the official source before you apply.",
+  "h1": "Compare Arizona Scholarships Under Ten Thousand USA",
+  "supporting": "Use this list to compare more than just the headline award. Check how each Arizona scholarship describes eligibility, residency or citizenship language, field of study, and study level, then note which ones match your profile most closely. Because deadline text varies and some opportunities may be approaching soon, it helps to shortlist promising rows early and open the official pages right away. If you are deciding between similar listings, compare the requirement lines and category tags to see which programs are the best fit before you apply.",
+  "related_intro": "If these Arizona results feel too narrow or too broad, related pages can help you refine the search by topic, study level, or other scholarship traits. That makes it easier to explore nearby filters and compare similar USA opportunities without starting over.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist the listings that match your study level",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "Arizona students comparing smaller scholarship awards",
+    "High school seniors planning local applications",
+    "College or graduate applicants in education or STEM",
+    "Applicants looking at disability or community themed funding"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Arizona scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Arizona scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Arizona scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 33,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 9000,
+      "statedAmountCount": 33,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 20,
+      "within60Days": 27,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 31,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "agriculture_and_related_sciences",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 4
+      },
+      {
+        "name": "Arizona Community Foundation",
+        "count": 4
+      },
+      {
+        "name": "American Legion Auxiliary",
+        "count": 2
+      },
+      {
+        "name": "Arizona FFA Association",
+        "count": 2
+      },
+      {
+        "name": "American Association of Airport Executives-Southwest Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "disability",
+      "community",
+      "miscellaneous",
+      "stem",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/arizona",
+    "generatedAt": "2026-04-26T16:05:03.712Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 33,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

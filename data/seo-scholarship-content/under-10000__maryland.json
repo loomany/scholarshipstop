@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Maryland Scholarships Under Ten Thousand | USA",
+  "seo_description": "Maryland scholarships under ten thousand in the USA. Compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Maryland scholarships in the USA with awards under a common upper range usually means balancing budget fit with realistic application effort. This filtered slice brings together programs tied to Maryland and keeps the focus on listings below that threshold, with examples spanning education, community, STEM, arts, disability, and miscellaneous topics. You can compare options for high school seniors and graduate students, and you may also notice different residency or citizenship language across rows, including programs that mention US citizens or permanent residents. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it is worth reading each row closely before you apply. Some listings may be lighter-touch than others, but you should always verify details on the official source.",
+  "h1": "Compare Maryland Scholarships Under Ten Thousand USA",
+  "supporting": "A useful way to read this set is to compare more than the headline amount. Check the category tags, study level, and any field of study notes to see whether a listing leans toward education, business and management, engineering, parks and recreation, personal and culinary services, or a broader community focus. Then compare deadline wording across the rows, since some opportunities may close sooner than expected. If a scholarship looks promising, open the official page to confirm eligibility, required materials, and whether an essay is needed before you shortlist it.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare this Maryland-focused view with other USA scholarship filters by location, topic, or category. That is often the fastest way to spot nearby alternatives, broader under-threshold options, or subject-specific listings that fit your profile better.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist listings that match your level and field",
+    "Check whether essays or extra materials are requested"
+  ],
+  "who_for": [
+    "Maryland residents comparing local scholarship options",
+    "High school seniors seeking smaller award programs",
+    "Graduate students checking Maryland-specific funding",
+    "Applicants interested in education, STEM, arts, or community categories",
+    "US citizens or permanent residents reviewing eligibility language"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Maryland scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Maryland scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Maryland scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 35,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 9000,
+      "statedAmountCount": 35,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 23,
+      "within60Days": 33,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 5,
+      "noCount": 30,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "personal_statement",
+        "video",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "parks_recreation_and_fitness_studies",
+        "personal_and_culinary_services"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Restaurant Association of Maryland Education Foundation",
+        "count": 4
+      },
+      {
+        "name": "Cumberland Valley Volunteer Firemen's Association",
+        "count": 2
+      },
+      {
+        "name": "Alfred Street Baptist Church",
+        "count": 1
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association-Belvoir Chapter",
+        "count": 1
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "arts",
+      "stem",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/maryland",
+    "generatedAt": "2026-04-26T16:11:15.451Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 35,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

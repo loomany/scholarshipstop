@@ -1,0 +1,95 @@
+{
+  "seo_title": "Find Florida Undergraduate Scholarships for Single Parents USA …",
+  "seo_description": "Florida undergraduate scholarships for single parents in the USA. Compare deadlines, requirements, and award details, then apply on official pages.",
+  "intro": "Trying to find Florida scholarships you can actually apply to as a single parent in undergraduate study usually means narrowing past broad national results. This filtered slice brings together USA listings tied to Florida and this eligibility focus, so you can compare options without wading through unrelated programs. The rows here lean toward undergraduate opportunities connected with areas like education, medicine, and personal services, but each listing can set its own rules. Award amounts vary by listing, deadlines differ by program, and requirement details should be checked line by line. Many listings in this slice appear to have lighter application signals, and some may not require an essay, though you should always verify that on the official scholarship page before applying.",
+  "h1": "Find Florida Scholarships for Single-Parent Undergrads USA",
+  "supporting": "Use this set to compare more than just the title. Read the requirement summary, note whether the subject area matches your plans, and check how Florida is used in the eligibility language. It is also worth comparing award text and deadline wording side by side, since those details can change from one program to the next. If a listing looks promising, open the official source to confirm current rules, required materials, and any updates before you shortlist it.",
+  "related_intro": "If these Florida single parent undergraduate listings feel too narrow, related pages can help you explore nearby options by changing one filter at a time. You may find a better fit by comparing broader undergraduate results, other Florida scholarship pages, or different eligibility groups within the USA catalog.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Check subject areas against your program",
+    "Open the official page to verify details",
+    "Shortlist the listings that fit best"
+  ],
+  "who_for": [
+    "Florida undergraduates raising children",
+    "Single parents comparing local scholarship options",
+    "Students in education or medicine tracks",
+    "Applicants seeking listings with lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Florida scholarships for single parents in undergraduate programs?",
+      "answer": "Use this filtered view to compare the rows that match single parent, undergraduate, and Florida criteria in the USA catalog. Then open each listing’s official source to confirm current eligibility, application steps, and deadline details."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a single parent in Florida?",
+      "answer": "Not automatically—each program can define eligibility a little differently, even within this focused set of listings. Check the official page for residency, enrollment, and any field-of-study requirements before you apply."
+    },
+    {
+      "question": "Are these Florida undergraduate scholarships mostly tied to certain majors?",
+      "answer": "Some listings in this slice connect to areas like education, medicine, and personal or culinary services, so it helps to explore category and field labels closely. Don’t assume every row fits every major—verify the academic focus on the official source."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and several sampled rows show no essay flag in the catalog. Still, requirements can differ by program, so review the official application page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 500,
+      "minUsd": 500,
+      "maxUsd": 2500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 46,
+      "nearestLabels": [
+        "2026-05-18",
+        "2026-05-18",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "personal_and_culinary_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "single-parent/undergraduate/florida",
+    "generatedAt": "2026-04-26T16:03:58.374Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

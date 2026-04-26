@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Louisiana Scholarships Under Ten Thousand | USA",
+  "seo_description": "Louisiana scholarships under ten thousand in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Louisiana scholarships in the USA with awards under ten thousand dollars usually means sorting through a mix of smaller, practical programs rather than chasing a single big prize. This filtered view brings together a focused set of listings tied to Louisiana, with examples spanning education, STEM, law, community, and miscellaneous categories. You can apply to options that fit different study stages, including high school seniors, graduate students, college students, and adult non-traditional learners. Award amounts vary by listing and should be verified on the official pages, and deadlines differ by program rather than following one shared cutoff. Because these rows show a range of requirement styles, it is worth checking each listing closely if you want to compare lighter-touch applications with programs that may ask for more materials.",
+  "h1": "Compare Louisiana Scholarships Under Ten Thousand USA",
+  "supporting": "A useful way to browse this slice is to compare more than the award line. Look at the category tags, study level, and any residency or citizenship language first, then read the requirement details before you apply. In this Louisiana set, you may spot programs connected to education, engineering, communication and journalism, legal professions, or agriculture, alongside broader community-focused awards. Since deadline text appears across the listings and at least some dates may be coming up soon, it makes sense to shortlist strong matches early and verify every detail on the sponsor's official page before submitting.",
+  "related_intro": "If you do not find enough matches in this Louisiana under-ten-thousand slice, related pages can help you compare nearby funding angles, such as broader Louisiana scholarship lists or other USA award ranges. That is often the fastest way to spot programs with a better fit on topic, study level, or application effort.",
+  "how_to_use": [
+    "Compare category tags first so you can focus on Louisiana listings tied to your academic interests or background",
+    "Read the study level, residency, and citizenship details on each row before spending time on an application",
+    "Check award text and deadline text side by side, then shortlist the programs that best match your priorities",
+    "Open the official page for every scholarship to verify current amounts, requirements, and submission instructions",
+    "Apply early to the strongest matches, especially when a listing appears to have a nearer-term deadline"
+  ],
+  "who_for": [
+    "Louisiana applicants who want to find smaller USA scholarship awards they can realistically stack with other aid",
+    "High school seniors, college students, graduate students, and adult non-traditional learners checking Louisiana-relevant options",
+    "Students comparing education, STEM, law, community, or miscellaneous scholarship categories in one place",
+    "Applicants who prefer to review requirement lines carefully and look for programs that may be lighter-touch before they apply"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Louisiana scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Louisiana scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Louisiana scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 23,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 23,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 14,
+      "within60Days": 20,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-22",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 22,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "engineering",
+        "agriculture_and_related_sciences",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Baton Rouge Area Foundation",
+        "count": 2
+      },
+      {
+        "name": "Louisiana Office of Student Financial Assistance",
+        "count": 2
+      },
+      {
+        "name": "Air and Waste Management Association-Louisiana Section",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 16",
+        "count": 1
+      },
+      {
+        "name": "American Institute of Steel Construction",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/louisiana",
+    "generatedAt": "2026-04-26T16:10:32.547Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 23,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "seo_title": "Find Single Parent Scholarships Under Ten Thousand in Florida, U…",
+  "seo_description": "Single parent scholarships under ten thousand in Florida, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Florida scholarships for single parents without wading through large national lists usually means narrowing fast by eligibility, location, and award size. This filtered USA view brings together a focused set of programs tied to Florida and capped in the under-ten-thousand range, so you can compare options that may fit a practical funding gap rather than a full cost-of-attendance search. The rows in this slice lean toward areas like education, nursing, and other health-related study, with some miscellaneous options as well. Awards, deadlines, and eligibility details still vary by listing, and many programs appear to have lighter application signals, often with no essay noted in the catalog, but you should always verify every requirement on the official scholarship page before you apply.",
+  "h1": "Explore Florida Scholarships for Single Parents Under Ten Thousa…",
+  "supporting": "A smart way to use this list is to compare the requirement lines first, then open the official pages for any scholarship that matches your program, school plans, or caregiving situation. In this Florida single-parent slice, it is worth scanning category labels and field cues closely, since some listings are clearly tied to nursing, education, or personal services. Award amounts vary by row and should be confirmed on the sponsor site, and deadline text can look similar across listings, so do not assume one program works the same as another. Shortlist the rows that fit, then compare before you apply.",
+  "related_intro": "If this set feels too narrow, related pages can help you explore nearby options by changing the Florida filter, keeping the single-parent focus, or comparing other under-ten-thousand scholarship views in the USA catalog.",
+  "how_to_use": [
+    "Compare deadline text across rows",
+    "Read each requirement line carefully",
+    "Open the official scholarship page",
+    "Shortlist listings that match your field",
+    "Verify award details before you apply"
+  ],
+  "who_for": [
+    "Florida single parents returning to college",
+    "Applicants comparing smaller scholarship awards",
+    "Nursing or health studies seekers in Florida",
+    "Education students looking for Florida aid"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply if I study different subjects, or is this list limited to one field?",
+      "answer": "These rows are not limited to one major. In this slice, examples include education, nursing and other health-related programs, plus some miscellaneous options, so it helps to explore each listing individually."
+    },
+    {
+      "question": "Do all scholarships on this page have the same deadline or award amount?",
+      "answer": "No—deadlines and award amounts can vary by listing, even within the same Florida filter page. The catalog shows amounts on these rows, but you should confirm the latest details on each official scholarship page before you apply."
+    },
+    {
+      "question": "Are these Florida scholarships usually simple to apply for?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and many sampled rows show no essay flag in the catalog. Still, requirements differ by program, so check the official page for documents, forms, and any extra steps."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 500,
+      "minUsd": 500,
+      "maxUsd": 2500,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 46,
+      "nearestLabels": [
+        "2026-05-18",
+        "2026-05-18",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "personal_and_culinary_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 5
+      }
+    ],
+    "topTags": [
+      "medical",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "single-parent/under-10000/florida",
+    "generatedAt": "2026-04-26T16:03:15.250Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

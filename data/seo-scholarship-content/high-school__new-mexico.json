@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find High School Scholarships in New Mexico, USA",
+  "seo_description": "High school scholarships in New Mexico, USA: compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find USA scholarships for high school students in New Mexico usually means sorting through programs that look similar at first glance but differ in award size, timing, and eligibility details. This filtered slice brings together a focused set of listings tied to New Mexico and the high school level, with examples spanning community, education, disability, humanities, and STEM themes. Many rows appear to have lighter application signals, and many listings often indicate no essay, but requirements still vary by program and should be checked carefully. If you want to apply in the current cycle or compare options for the coming year, use these rows to quickly spot scholarships that match your location, study interests, and stage in school.",
+  "h1": "Apply for High School Scholarships in New Mexico USA",
+  "supporting": "A smart way to use this list is to compare each row side by side instead of assuming similar titles mean similar rules. Look at the requirement line, award text, residency or citizenship notes, and deadline wording for each listing. Because deadlines differ by program and some may be coming up soon, it is worth opening promising options early. This New Mexico high school slice is especially useful if you want to find local or state-connected opportunities before widening your search across broader USA scholarship categories.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship views by changing either the school level or the location filter. Related pages can help you explore broader USA options while keeping your search close to New Mexico, high school eligibility, or common category themes such as education, community, disability, and STEM.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your location and school level",
+    "Verify award details and eligibility on the sponsor site"
+  ],
+  "who_for": [
+    "High school seniors in New Mexico",
+    "USA applicants seeking New Mexico based scholarships",
+    "Students interested in education or STEM topics",
+    "Applicants looking for community or disability related programs"
+  ],
+  "faq": [
+    {
+      "question": "How can I find New Mexico scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to High School and New Mexico. Open each row to compare eligibility, award details, and deadline text, then verify everything on the official scholarship page before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines here?",
+      "answer": "Yes—these rows include award amounts and deadline text, but both vary by listing. Amounts can differ widely, and deadlines are not the same across the page, so check each program carefully and confirm on the official source."
+    },
+    {
+      "question": "Are these scholarships only for New Mexico residents or also for U.S. students more broadly?",
+      "answer": "This filter slice is centered on New Mexico, and some sample listings also show USA-related labels such as U.S. citizen. Because residency and citizenship rules can differ row to row, review each listing's requirements before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I browse in this New Mexico high school list?",
+      "answer": "The programs below span themes such as Community, Education, STEM, Disability, Humanities, and Miscellaneous. You may also see listings connected to fields like education, engineering, mathematics and statistics, agriculture, and mechanic and repair technologies."
+    }
+  ],
+  "page_data": {
+    "exactCount": 13,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 5500,
+      "statedAmountCount": 13,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-02",
+        "2026-05-01",
+        "2026-04-29"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "mathematics_and_statistics",
+        "agriculture_and_related_sciences",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "New Mexico Engineering Foundation",
+        "count": 3
+      },
+      {
+        "name": "Albuquerque Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "Albuquerque Hispano Chamber of Commerce",
+        "count": 2
+      },
+      {
+        "name": "Arabian Horse Association-Region 8",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem",
+      "disability",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/new-mexico",
+    "generatedAt": "2026-04-26T15:29:10.997Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 13,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

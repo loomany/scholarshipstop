@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find Hispanic High School Scholarships in Alaska, USA",
+  "seo_description": "Hispanic high school scholarships in Alaska, USA—compare deadlines, award details, and requirements, then apply on the official program pages.",
+  "intro": "Trying to find Hispanic scholarships for high school students in Alaska usually means narrowing a broad USA search into something you can actually compare and apply to. This filtered slice brings together programs tied to Hispanic eligibility, Alaska location, and high school study level, so you can scan a focused set of listings instead of sorting through unrelated results. The rows below can differ in award size, deadline timing, residency language, and study interests, with examples in areas like education and medicine. Many listings in this slice appear to have lighter application signals, and some may not require an essay, but requirements still need to be checked on each official scholarship page before you apply.",
+  "h1": "Find Hispanic High School Scholarships in Alaska USA",
+  "supporting": "Use this list to compare the details that change most from row to row: who qualifies, how the sponsor describes high school status, whether Alaska ties are required, and what the official page asks you to submit. It is also worth checking deadlines promptly, since the listings in this USA filter do not all close at the same time. As you browse, compare award wording carefully because amounts vary by listing and should be verified on the sponsor site. A quick shortlist can help you focus on the programs that best match your grade level, residency status, and intended field.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing one filter at a time, such as the eligibility group, study level, or location. That makes it easier to spot similar USA programs with different requirement lines or subject emphasis.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read the requirement line before you apply",
+    "Open the official page to verify eligibility",
+    "Shortlist programs that match your grade level",
+    "Check award details and submission steps carefully"
+  ],
+  "who_for": [
+    "Hispanic high school students in Alaska",
+    "Alaska juniors and seniors comparing scholarship options",
+    "Applicants with interest in education or medicine",
+    "USA students seeking listings that may have lighter application steps"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Hispanic scholarships for high school students in Alaska?",
+      "answer": "Use this filtered view to explore Alaska-based listings tied to Hispanic eligibility and high school study level. Then open each row and verify the full rules, residency details, and application steps on the official scholarship page."
+    },
+    {
+      "question": "Can I apply if I’m a high school junior or senior in the USA?",
+      "answer": "Some listings in this slice show high school junior or high school senior as the study level, but eligibility can differ by program. Check each listing’s official source to confirm grade level, Alaska connection, and any USA residency or permanent resident requirements."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag, but that is not a guarantee for every program. Before you apply, confirm the current requirements on the official scholarship page for that specific listing."
+    },
+    {
+      "question": "Are the deadlines and award amounts the same for every scholarship on this page?",
+      "answer": "No—deadlines differ by program, and this slice includes rows with different deadline text, so check dates promptly. Award amounts also vary by listing; the catalog may show a figure, but you should verify the latest amount on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 1000,
+      "maxUsd": 2500,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-06-19",
+        "2026-05-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arizona Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Black Man, M.D.",
+        "count": 1
+      },
+      {
+        "name": "Illinois CPA Society",
+        "count": 1
+      },
+      {
+        "name": "New Jersey Utilities Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/high-school/alaska",
+    "generatedAt": "2026-04-26T15:38:37.205Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

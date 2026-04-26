@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find Georgia High School Scholarships in the USA",
+  "seo_description": "Georgia high school scholarships in the USA: compare awards, deadlines, and requirements, then apply after checking each official listing.",
+  "intro": "Trying to find Georgia scholarships for high school students in the USA usually means sorting through programs that do not all ask for the same things. In this filtered slice, you can compare a focused set of listings tied to Georgia while checking how awards, deadlines, and eligibility details change from row to row. Some opportunities appear to have lighter requirement signals, while others may ask for more supporting material, so it is worth reading each listing closely before you apply. You will also see a mix of themes across education, disability, STEM, community, and law, which makes this a useful place to browse if you want options beyond one narrow category. Because some deadlines are coming up soon, it makes sense to review the rows promptly and verify details on the official pages.",
+  "h1": "Compare Georgia High School Scholarships USA",
+  "supporting": "A smart way to use this list is to compare more than the title. Look at the requirement line, scan the category tags, and note whether a scholarship seems aimed at education, STEM, community, disability, or another area connected to your background. Award amounts vary by listing, and deadline timing is not the same across the rows, so shortlist the programs that fit you best and then open the official source to confirm current rules, residency language, and application steps before you submit anything.",
+  "related_intro": "If you want to widen or narrow your search after reviewing these Georgia high school listings, related pages can help you compare nearby filter combinations such as other study levels, broader Georgia scholarship pages, or other USA location and topic mixes that may match your profile.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist the listings that match your background and interests",
+    "Check award wording and category tags side by side"
+  ],
+  "who_for": [
+    "Georgia high school seniors comparing local scholarship options",
+    "USA applicants seeking Georgia based education or STEM funding",
+    "Students interested in disability, community, or law related listings",
+    "Families looking for scholarships with varied requirement levels"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Georgia scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to High School and Georgia. Open each row to compare eligibility, study level, and any residency or citizenship details on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these Georgia scholarship listings?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts differ by listing, and deadlines are not universal, so verify the current details on each official page before applying."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Georgia?",
+      "answer": "Not always. While this filter is centered on High School and Georgia, individual listings may show different study-level labels such as high school senior, so check each scholarship's requirements carefully when you browse and compare options."
+    },
+    {
+      "question": "Do all programs here require an essay or the same application materials?",
+      "answer": "No—requirements vary across the catalog. Some listings may be lighter-touch while others ask for more, so review each scholarship's official application page to confirm what you need before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 31,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 250,
+      "maxUsd": 9000,
+      "statedAmountCount": 31,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 22,
+      "within60Days": 28,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 5,
+      "noCount": 26,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement",
+        "survey",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "construction_trades",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Georgia Transplant Foundation",
+        "count": 8
+      },
+      {
+        "name": "Girl Scouts of Historic Georgia",
+        "count": 2
+      },
+      {
+        "name": "PGA of America - Georgia Section",
+        "count": 2
+      },
+      {
+        "name": "American Legion Auxiliary",
+        "count": 1
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southeast Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability",
+      "stem",
+      "community",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/georgia",
+    "generatedAt": "2026-04-26T15:21:47.804Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 31,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

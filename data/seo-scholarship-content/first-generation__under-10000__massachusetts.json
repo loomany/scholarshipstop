@@ -1,0 +1,108 @@
+{
+  "seo_title": "Find First Generation Scholarships Under Ten Thousand in Massach…",
+  "seo_description": "First generation scholarships under ten thousand in Massachusetts, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find first generation scholarships in Massachusetts with awards under the lower funding range usually means balancing fit, effort, and timing at the same time. This filtered USA view brings together a focused set of listings where award amounts, eligibility details, and deadline wording can differ from row to row. Many of the programs in this slice appear to have lighter application signals, and several listings may be no essay, but you should still read each requirement line carefully before you apply. The mix here leans toward STEM, biology, education, and humanities, so it is worth comparing both topic fit and location relevance instead of assuming every option works the same way.",
+  "h1": "Compare First Generation Scholarships Under Ten Thousand in Mass…",
+  "supporting": "Use these rows to compare more than the headline award. Look at the study level, field tags, residency or citizenship notes, and any wording tied to first generation status in Massachusetts. Because deadlines differ by program and some may be coming up soon, it makes sense to shortlist early and verify details on the official page before you apply. This slice is especially useful if you want to browse smaller award opportunities that may still stack with other aid.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship pages by changing one filter at a time, such as the award range, location, or first generation focus. That makes it easier to spot similar USA listings with different subject areas or requirement patterns.",
+  "how_to_use": [
+    "Compare deadline wording across rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award text and subject tags together"
+  ],
+  "who_for": [
+    "First generation applicants in Massachusetts",
+    "Students comparing smaller scholarship awards",
+    "STEM or biology focused applicants",
+    "Education or humanities majors seeking local options"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a first-generation student in Massachusetts?",
+      "answer": "Not automatically. This catalog slice helps you find relevant options, but each program can set its own rules for study level, field of study, residency, or other requirements on the official page."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check the award amount, deadline, study level, and subject area row by row. In this Massachusetts set, amounts vary by listing and deadlines differ by program, so verify both on the official source before you apply."
+    },
+    {
+      "question": "Are these mostly STEM scholarships, or can I explore other subjects too?",
+      "answer": "Many listings in this filtered set connect to STEM and biology, but you can also find education and humanities examples. If you want to explore beyond one subject, compare the category labels and fields of study shown on each listing."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 400,
+      "maxUsd": 10000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-10",
+        "2026-04-10",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "biological_and_biomedical_sciences",
+        "engineering",
+        "english_language_and_literature",
+        "physical_sciences"
+      ],
+      "commonResidency": [
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Cell Signaling Technology",
+        "count": 2
+      },
+      {
+        "name": "Worcester State University",
+        "count": 2
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "education",
+      "miscellaneous",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "first-generation/under-10000/massachusetts",
+    "generatedAt": "2026-04-26T15:04:37.486Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

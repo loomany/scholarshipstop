@@ -1,48 +1,130 @@
 {
-  "seo_title": "California High School Scholarships | Up to $15,000",
-  "seo_description": "Explore 19 California high school scholarships with awards from $400 to $15,000. Check deadlines and apply soon!",
-  "intro": "Finding financial support for high school students in California can be challenging, but there are currently 19 scholarships available that cater to various interests and needs. Award sizes range from approximately $400 to $15,000, providing a range of options for students. With deadlines that vary across listings, it's important to check each scholarship's specific requirements and due dates to ensure you don't miss out on opportunities.",
-  "h1": "High School Scholarships in California",
-  "supporting": "This collection of scholarships includes a mix of categories such as education, STEM, music, and community service, making it worthwhile to explore the diverse options available. Many of these listings do not require essays, which can simplify the application process. As you review the scholarships, consider comparing the award amounts and any specific eligibility criteria to find the best fit for your situation.",
-  "related_intro": "For more tailored opportunities, check out related pages that focus on specific categories like STEM or arts scholarships.",
+  "seo_title": "Find High School Scholarships in California, USA",
+  "seo_description": "High school scholarships in California, USA with deadlines, categories, and award ranges. Compare listings and apply early—dates vary by program.",
+  "intro": "Trying to find California scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what materials they ask for, and how awards are described. This filtered slice brings together a focused set of listings tied to California and the high school topic, with rows that touch areas like education, community, STEM, arts, medicine, and other miscellaneous interests. Some opportunities may fit seniors, while others can overlap with earlier high school stages or broader study levels, so it is worth reading each listing carefully. Award amounts vary by listing, deadlines differ by program, and requirement details can be lighter for some rows than others, so compare before you apply.",
+  "h1": "Find California High School Scholarships USA",
+  "supporting": "Use the list to compare more than just the scholarship title. Check the requirement line, look for residency or citizenship language, and note whether the listing points toward education, community, arts, engineering, business, agriculture, or related interests. Because deadline text appears across these rows and some programs may close soon, it makes sense to review timing early. If a listing looks promising, open the official page to verify current rules, materials, and award details before you submit anything.",
+  "related_intro": "If you do not find the right fit in this California high school set, related pages can help you explore nearby options by topic or location. That is useful when you want to compare similar USA scholarship listings with a different state focus or a broader academic category.",
   "how_to_use": [
-    "Compare deadlines to prioritize applications",
-    "Scan award amounts to find suitable options",
-    "Read through eligibility requirements carefully",
-    "Open official scholarship pages for detailed information",
-    "Shortlist scholarships that align with your goals"
+    "Compare deadline wording across rows and prioritize the soonest programs first",
+    "Read each requirement line carefully before you apply",
+    "Open the official scholarship page to verify eligibility, materials, and award details",
+    "Shortlist promising listings by topic, location, and study interest",
+    "Check whether essay expectations are mentioned before starting an application"
   ],
   "who_for": [
-    "High school students in California",
-    "Students interested in STEM fields",
-    "Applicants seeking community service scholarships",
-    "Musically inclined students",
-    "Those looking for larger award amounts"
+    "California high school students comparing local and statewide scholarship options",
+    "High school seniors in the USA looking for education or community focused awards",
+    "Applicants interested in California listings connected to STEM, arts, or medicine",
+    "Students who want to find scholarships with potentially lighter application requirements"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for high school students in California?",
-      "answer": "The current listings include a variety of scholarships categorized under education, community, STEM, music, and arts. With 19 scholarships available, students can find options that align with their interests and academic goals."
+      "question": "How can I find California scholarships I can apply for while still in high school?",
+      "answer": "Use this filtered view to explore programs tagged for high school and California, then open each row to confirm the official eligibility details. In this USA catalog, requirements can differ by listing, including grade level, residency, and other qualifiers."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require essays, making the application process potentially less daunting for students. However, it's advisable to verify the specific requirements for each scholarship, as details can vary."
+      "question": "What should I compare before I apply to these California high school scholarships?",
+      "answer": "Compare award amounts, deadline text, category fit, and any application requirements shown on each listing. Amounts and deadlines vary by program, so verify the final details on the official scholarship page before you apply."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 19 scholarships have deadlines, but they vary from listing to listing. It's important to check each scholarship's details promptly, especially since some deadlines may be approaching within the next 45 days."
+      "question": "Are all of these scholarships only for high school seniors in California?",
+      "answer": "No—this set includes mixed study-level signals, such as high school senior and high school freshman, so it is worth checking each listing closely. Some rows may also include other applicant types, which is why the official source matters before you apply."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The scholarships available range from approximately $400 to $15,000, providing a variety of funding options for students. Be sure to review each listing for specific award amounts."
+      "question": "Do these California scholarship listings all require an essay?",
+      "answer": "No single rule applies across the page. Some listings may ask for an essay and others may be lighter-touch, so browse the requirements on each row and confirm on the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 245,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 100,
+      "maxUsd": 60000,
+      "statedAmountCount": 245,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 185,
+      "within60Days": 229,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "April 28, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 26,
+      "noCount": 219,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript",
+        "personal_statement",
+        "recommendation",
+        "survey"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "high_school_freshman",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Sonora Area Foundation",
+        "count": 63
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 12
+      },
+      {
+        "name": "Orange County Community Foundation",
+        "count": 11
+      },
+      {
+        "name": "Sacramento City Unified School District",
+        "count": 7
+      },
+      {
+        "name": "Fresno County 4-H",
+        "count": 5
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "high-school/california",
-    "generatedAt": "2026-04-02T10:34:55.780Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 19,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:19:41.663Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 245,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

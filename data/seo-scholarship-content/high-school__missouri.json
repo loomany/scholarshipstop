@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Missouri High School Scholarships in the USA",
+  "seo_description": "Missouri high school scholarships in the USA: compare awards, deadlines, and requirements, then explore listings and apply on official pages.",
+  "intro": "Trying to find Missouri scholarships for high school students usually means sorting through programs that look similar until the details start to matter. This filtered USA view brings together a focused set of listings tied to Missouri and the high school level, so you can apply with more confidence and compare options without jumping between unrelated results. The rows here span themes such as education, community, STEM, disability, and law, with some listings pointing toward future study areas like business, languages, recreation, or legal studies. Awards, deadlines, residency terms, and application requirements vary by program, and some opportunities may be lighter-touch than others, so it is worth reading each listing closely before you move forward.",
+  "h1": "Missouri High School Scholarships USA Apply",
+  "supporting": "Use this slice to compare more than just the scholarship title. Scan the award text, deadline line, study level notes, and any citizenship or residency language to see which Missouri opportunities fit your situation now and which may fit your next step after high school. Some listings connect to education-focused paths, while others touch community, disability, law, or medical interests. If a program looks promising, open the official page, verify the current rules, and shortlist the options whose timing and requirements match your plans.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you explore nearby paths such as other locations, broader high school scholarship results, or topic-led categories that appear often in these Missouri listings.",
+  "how_to_use": [
+    "Compare deadline lines across the rows first",
+    "Read the requirement summary on each listing carefully",
+    "Open the official page to verify eligibility details",
+    "Shortlist programs that match your level and interests",
+    "Check award wording and application materials before applying"
+  ],
+  "who_for": [
+    "Missouri high school students comparing local scholarship options",
+    "High school seniors planning for college or transfer pathways",
+    "Applicants interested in education, community, STEM, disability, or law topics",
+    "Students checking USA residency or citizenship language before they apply"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Missouri scholarships for high school students in this filtered view?",
+      "answer": "Use these rows to explore Missouri-focused scholarships tied to the high school level, then open each listing to verify eligibility on the official source. Requirements can differ by row, including grade level, residency, and other program-specific details."
+    },
+    {
+      "question": "Can I apply to these scholarships if I’m a high school senior in Missouri, USA?",
+      "answer": "Some listings in this catalog slice appear relevant to Missouri high school students, including seniors, but eligibility is not identical across every program. Before you apply, compare the listing details with the official page for residency, study level, and any citizenship labels such as U.S. citizen or permanent resident."
+    },
+    {
+      "question": "How do I compare award amounts on these Missouri high school scholarships?",
+      "answer": "Award amounts vary by listing, and the programs below show a range of posted amounts rather than one standard award. Use the catalog to compare rows quickly, then confirm the current amount and terms on each official scholarship page."
+    },
+    {
+      "question": "What kinds of scholarships can I browse in this Missouri high school list?",
+      "answer": "This focused set of listings includes themes such as education, community, STEM, disability, law, and miscellaneous categories. You can browse by title and category to explore options that match your interests, then confirm fit directly with the provider."
+    }
+  ],
+  "page_data": {
+    "exactCount": 34,
+    "award": {
+      "medianUsd": 4000,
+      "minUsd": 500,
+      "maxUsd": 12000,
+      "statedAmountCount": 34,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 27,
+      "within60Days": 34,
+      "rollingOrUnknown": 0,
+      "nearestDays": 13,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-04-15",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 33,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "high_school_freshman"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "agriculture_and_related_sciences",
+        "biological_and_biomedical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 15
+      },
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "Community Foundation of the Ozarks",
+        "count": 3
+      },
+      {
+        "name": "Greater Kansas City Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "Missouri Scholarship and Loan Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "disability",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/missouri",
+    "generatedAt": "2026-04-26T15:26:51.961Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 34,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

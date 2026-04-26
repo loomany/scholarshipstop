@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Massachusetts High School Scholarships | USA",
+  "seo_description": "Massachusetts high school scholarships in the USA: compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find Massachusetts scholarships for high school applicants in the USA usually means sorting through programs that do not all follow the same rules. In this filtered slice, the rows below bring together listings connected to Massachusetts while still spanning different categories such as education, community, STEM, medicine, disability, and miscellaneous topics. Many listings appear to have lighter application signals, and many often show no essay in the available metadata, but requirements still vary by program. Award amounts differ by listing, deadline wording differs from row to row, and eligibility can depend on study level, residency, or field of study. If you want to apply in the current cycle or compare options for the coming year, this is a practical place to start and narrow your shortlist.",
+  "h1": "Find Massachusetts High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read each row for category fit, requirement cues, study level, and any citizenship or residency language that may affect eligibility in the USA. Some opportunities in this slice connect closely to education or community themes, while others may align with engineering, business, arts, fitness, or related interests. Deadlines differ across the rows, and some appear soon, so it is smart to check timing early. Before you apply, open the official page for every scholarship you keep, confirm the latest rules, and verify award details directly with the sponsor source.",
+  "related_intro": "If these Massachusetts high school scholarships feel too narrow or too broad, related pages can help you compare nearby paths. You may want to explore other high school scholarship filters, location-based views, or category pages that lean more toward education, community, STEM, medicine, or disability-focused listings in the USA.",
+  "how_to_use": [
+    "Compare deadline text across rows first",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your study level",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Massachusetts high school students comparing local and regional scholarship options",
+    "High school seniors looking for USA scholarships with potentially lighter application requirements",
+    "Applicants interested in education, community, STEM, medicine, or disability-related listings",
+    "Students checking scholarships that may mention residency or citizenship eligibility"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Massachusetts scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore listings tied to High School and Massachusetts, then open each row to verify eligibility on the official source. In the USA context, residency or citizenship details can differ by program, so compare those requirements one listing at a time."
+    },
+    {
+      "question": "Can I apply directly from these scholarship listings?",
+      "answer": "Treat the catalog as a starting point to find and compare opportunities, then confirm how to apply on the scholarship’s official page. Application steps, required documents, and deadlines vary by row."
+    },
+    {
+      "question": "Are these Massachusetts scholarships only for current high school seniors?",
+      "answer": "Not always—this filtered set is centered on High School, but individual listings can use different study-level labels such as high_school_senior. Open the program page and verify the exact applicant type before you apply."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements can change, so always verify the current application instructions on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 72,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 250,
+      "maxUsd": 40000,
+      "statedAmountCount": 71,
+      "unstatedAmountCount": 1
+    },
+    "deadline": {
+      "within30Days": 50,
+      "within60Days": 64,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 72,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "parks_recreation_and_fitness_studies",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Worcester State University",
+        "count": 14
+      },
+      {
+        "name": "Framingham State University",
+        "count": 3
+      },
+      {
+        "name": "Madison Park Development Corporation",
+        "count": 3
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      },
+      {
+        "name": "Worcester Public Schools",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "medical",
+      "biology"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/massachusetts",
+    "generatedAt": "2026-04-26T15:25:28.868Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 72,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

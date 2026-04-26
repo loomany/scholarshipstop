@@ -1,48 +1,115 @@
 {
-  "seo_title": "Alaska Scholarships for Minority Students",
-  "seo_description": "Explore 6 scholarships for minority students in Alaska. Award sizes vary; check deadlines and requirements for each opportunity.",
-  "intro": "Alaska's minority students have access to a variety of scholarships aimed at supporting their educational goals. With six distinct opportunities available, award sizes range from approximately $500 to $10,000. These scholarships cover diverse categories such as education, community, and the arts, providing options for students with different interests and needs. Keep in mind that application requirements and deadlines vary, so it's essential to review each listing carefully to find the best fit for you.",
-  "h1": "Minority Scholarships in Alaska",
-  "supporting": "As you explore these scholarships, pay attention to the specific details of each listing. Some may require essays while others do not, and the deadlines are not uniform across the board. By comparing the award amounts and requirements, you can identify which scholarships align best with your profile and timeline. This focused approach will help you maximize your chances of securing funding for your education.",
-  "related_intro": "For more tailored options, consider checking out scholarships specifically for other minority groups or different regions. These related pages can help broaden your search for financial support.",
+  "seo_title": "Find Minority Scholarships in Alaska, USA",
+  "seo_description": "Minority scholarships in Alaska, USA with deadlines, study areas, and listing details. Explore options and apply after comparing each program.",
+  "intro": "Trying to find minority scholarships in Alaska usually means narrowing a broad USA search into a smaller set you can actually compare. This filtered slice brings together programs tied to Alaska with minority eligibility, so you can apply with more focus instead of sorting through unrelated national results. The rows below span different themes, including education, arts, medicine, community, and technical training, and they may fit applicants at more than one study level. Awards, deadlines, residency details, and requirement lines vary by listing, so it is worth reading each row closely. Many listings in this slice appear to have lighter application signals, and some often show no essay, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Explore Minority Scholarships in Alaska USA",
+  "supporting": "Use this view to compare more than just the title. Check how each Alaska scholarship describes eligibility, study level, and field of study, then note which ones match your background before you spend time on an application. Because deadline text differs across these rows, it makes sense to review dates promptly and shortlist the programs that are closing sooner. Award amounts also vary by listing and should be confirmed on the sponsor or official page. If a program looks broad, open it and read the requirement language carefully rather than assuming it fits every minority applicant in the USA.",
+  "related_intro": "If you do not find enough matches here, related pages can help you compare nearby scholarship paths by eligibility, subject area, or other USA location filters. That is often the quickest way to spot programs that overlap with your major, residency status, or study level.",
   "how_to_use": [
-    "Review each listing for specific award amounts and categories",
-    "Compare deadlines to prioritize your applications",
-    "Check whether essays are required for each scholarship",
-    "Open the official pages for detailed application instructions",
-    "Shortlist the scholarships that best match your profile and needs"
+    "Compare deadline text across the rows first",
+    "Read each requirement line before starting an application",
+    "Open the official page to verify award details",
+    "Shortlist the listings that match your study level",
+    "Check citizenship or residency labels for fit"
   ],
   "who_for": [
-    "Minority students in Alaska",
-    "Students pursuing education in arts or community fields",
-    "Individuals seeking scholarships with varying requirements",
-    "Students interested in larger award amounts",
-    "Applicants looking for opportunities with upcoming deadlines"
+    "Alaska residents seeking minority scholarships",
+    "Minority applicants comparing education or community awards",
+    "Students interested in arts, medicine, or technical training",
+    "Applicants checking USA scholarship options with Alaska location filters"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for minorities in Alaska?",
-      "answer": "The current listings include a variety of scholarships categorized under education, community, and arts. With 6 scholarships available, you can find opportunities tailored to different interests and fields."
+      "question": "How can I find minority scholarships in Alaska that fit my background?",
+      "answer": "Use this filtered view to compare Alaska listings row by row, then open the official source for each program’s full eligibility details. In this USA slice, requirements can differ by residency, study level, and other program-specific rules."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships. While some listings may not require essays, others do, so it's important to check each scholarship's details for specific application requirements."
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, yes—if you meet each program’s rules on its official page. Treat every row as a separate opportunity with its own application steps, documents, and deadline."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this category range from approximately $500 to $10,000. Each listing provides specific amounts, so reviewing individual entries will give you the best understanding of what to expect."
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on eligibility, study level, field of study, deadline, and award details for each listing. Amounts vary by program, and any dollar figure shown in the catalog should be verified on the official scholarship page before you apply."
     },
     {
-      "question": "How should I check the deadlines for these scholarships?",
-      "answer": "All scholarships in this listing have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's advisable to verify the dates promptly by checking each scholarship's details."
+      "question": "Are these Alaska scholarships only for certain majors or education levels?",
+      "answer": "This focused set of listings includes a mix of categories and sample fields such as education, business, architecture, transportation, arts, community, and medicine. You can explore the rows to find options for different study levels, including examples like graduate students and high school juniors."
     }
   ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 3750,
+      "minUsd": 750,
+      "maxUsd": 10000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-06",
+        "2026-06-19"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services",
+        "business_management_and_marketing",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Association of International Certified Public Accountants",
+        "count": 1
+      },
+      {
+        "name": "Black Man, M.D.",
+        "count": 1
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 1
+      },
+      {
+        "name": "PlaceWorks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "arts",
+      "education",
+      "medical",
+      "miscellaneous",
+      "community"
+    ]
+  },
   "_meta": {
     "canonicalPath": "minority/alaska",
-    "generatedAt": "2026-04-02T11:07:03.753Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 6,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:53:59.600Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

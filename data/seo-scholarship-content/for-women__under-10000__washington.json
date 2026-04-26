@@ -1,0 +1,117 @@
+{
+  "seo_title": "Find Washington Scholarships for Women in the USA",
+  "seo_description": "Washington scholarships for women in the USA: compare awards under ten thousand, check varying deadlines, and apply on official program pages.",
+  "intro": "Trying to find Washington scholarships for women with awards under a higher-cost threshold usually means sorting through very different programs fast. This filtered USA view narrows that work to a focused set of listings tied to Washington, with examples spanning education, law, STEM, and other miscellaneous areas. As you compare options, expect the details to vary by row: award amounts are listed individually, deadlines are not all the same, and requirements can range from lighter-touch applications to programs that ask for more supporting material. Some listings may fit graduate study or specific academic paths, while others are broader. If you want to apply in this category for the current cycle, it is worth checking the rows promptly and reading each official source closely.",
+  "h1": "Washington Scholarships for Women Under Ten Thousand USA Ap…",
+  "supporting": "Use these rows to compare more than the headline award. Look at the requirement line, study level, field tags, and any residency or citizenship wording before you decide which programs to open first. This slice is especially useful if you want to browse Washington-based opportunities for women without wading through larger national results. Because deadlines differ and listing details can change, shortlist the strongest matches here, then verify eligibility, materials, and submission instructions on the sponsor or official scholarship page before you apply.",
+  "related_intro": "If these listings feel close but not quite right, related pages can help you widen or tighten the search. You may want to compare other Washington scholarship filters, look at women-focused pages without the same award cap, or review under-threshold results in broader USA categories.",
+  "how_to_use": [
+    "Compare deadline wording across rows",
+    "Read each requirement line carefully",
+    "Open official pages before applying",
+    "Shortlist listings that match your field",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Women seeking Washington scholarships",
+    "Graduate students reviewing local funding",
+    "Applicants in education or law",
+    "Women comparing smaller award programs",
+    "Washington-based students checking category-specific options"
+  ],
+  "faq": [
+    {
+      "question": "Who is this scholarship list most relevant for?",
+      "answer": "These listings are most relevant for women looking for scholarship options tied to Washington, especially where graduate student and U.S. citizen labels appear in the catalog. You can also explore categories such as education, law, miscellaneous, and STEM to narrow the fit."
+    },
+    {
+      "question": "Do all programs here have the same deadline or application requirements?",
+      "answer": "No—deadlines differ by program, and every row should be checked individually before you apply. Requirements also vary: some listings may ask for an essay while others appear lighter-touch, so confirm details with the official source."
+    },
+    {
+      "question": "What kinds of majors or fields show up in this filtered set?",
+      "answer": "The programs below include fields such as education, business management and marketing, legal professions and law studies, communication and journalism, and engineering. If you want to compare options by subject, open each listing and verify the official eligibility language."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "engineering",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Washington State Business and Professional Women's Foundation",
+        "count": 5
+      },
+      {
+        "name": "Society of Women Engineers",
+        "count": 1
+      },
+      {
+        "name": "Women in Public Finance-Virginia Chapter",
+        "count": 1
+      },
+      {
+        "name": "Women of Wisdom Tri-Cities",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "law",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/under-10000/washington",
+    "generatedAt": "2026-04-26T15:11:41.709Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

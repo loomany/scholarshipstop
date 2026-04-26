@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find Virginia Scholarships for Women Under Ten Thousand | USA …",
+  "seo_description": "Virginia scholarships for women under ten thousand: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Virginia scholarships for women with awards under a common lower-cost cap usually means narrowing fast without missing good-fit options. This filtered USA view brings together a focused set of listings tied to Virginia and the women eligibility bucket, with examples touching law, STEM, and education. As you compare the rows below, expect the details to vary by program: award amounts differ by listing, deadlines are not the same across every option, and requirement lines may be lighter for some programs than others. Some listings may ask for more supporting material while others look simpler to apply for, so it is worth reading each entry closely before you decide where to apply.",
+  "h1": "Compare Virginia Scholarships for Women Under Ten Thousand USA …",
+  "supporting": "A smart way to use this slice is to compare more than the title alone. Check the category, study level, residency or citizenship wording, and any notes about essays or other submission pieces. Because these Virginia scholarship listings sit under an under-threshold award filter, they can be useful for filling smaller funding gaps or stacking with other aid. Browse each row, open the official source, and verify the current amount, deadline, and eligibility language before you apply, since sponsor pages control the final terms.",
+  "related_intro": "If you do not find the right match here, compare nearby scholarship pages by changing the location, award band, or eligibility focus. That can help you spot similar USA programs for women, or find Virginia listings in adjacent categories such as law, STEM, education, or broader miscellaneous awards.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist listings that match your study area",
+    "Verify award details on sponsor sites"
+  ],
+  "who_for": [
+    "Women seeking Virginia-based scholarship options",
+    "Virginia applicants comparing smaller award programs",
+    "Graduate students reviewing women-focused funding",
+    "Adult non traditional learners returning to school",
+    "US citizen applicants checking category-specific awards"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for For Women · Under · Virginia scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for For Women · Under · Virginia scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for For Women · Under · Virginia scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1250,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 2,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "adult_non_traditional",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Harrisonburg Women's Service League",
+        "count": 1
+      },
+      {
+        "name": "Society of Women Engineers",
+        "count": 1
+      },
+      {
+        "name": "Women in Public Finance-Virginia Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "law",
+      "stem",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/under-10000/virginia",
+    "generatedAt": "2026-04-26T15:11:14.980Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

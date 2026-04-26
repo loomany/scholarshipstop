@@ -1,0 +1,115 @@
+{
+  "seo_title": "Find Washington Scholarships for Women Under Five Thousand | USA…",
+  "seo_description": "Washington scholarships for women under five thousand: compare award ranges, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Washington scholarships for women with smaller award sizes usually means sorting through programs that may be easier to stack, compare, and apply for alongside other aid. This filtered USA view narrows the list to awards under five thousand dollars tied to Washington, with examples touching areas like education, law, miscellaneous subjects, and STEM. The programs below do not all work the same way: award amounts vary by listing, deadlines differ by row, and eligibility details can change based on study level, residency, field of study, or personal background. Some listings may have lighter application requirements, while others may ask for more documentation or an essay, so it is worth checking each official page closely before you apply.",
+  "h1": "Compare Washington Scholarships for Women Under Five Thousand US…",
+  "supporting": "A focused set of listings like this is useful when you want to compare practical details instead of scanning broad national results. Look at the award text, category, study level, and any residency or citizenship language shown in each row, then open the official source to confirm the current rules. Because at least one deadline in this slice appears relatively soon, it makes sense to review dates promptly and shortlist the programs that fit first. If your interests span education, business, law, communication, journalism, or engineering, this is a strong place to start and compare options side by side.",
+  "related_intro": "If you do not find enough matches here, check related scholarship pages by changing one filter at a time—such as Washington-only results without the women filter, women-focused scholarships in other states, or other award ranges. That makes it easier to explore nearby options without losing the same general intent.",
+  "how_to_use": [
+    "Compare each row for award amount, category, and deadline before you decide where to apply first",
+    "Read the requirement lines closely to check study level, Washington relevance, and any essay or document expectations",
+    "Open the official scholarship page for every listing to verify current amounts, eligibility rules, and deadline details",
+    "Shortlist the programs that best match your background, then gather materials early because dates vary and some may be coming up soon"
+  ],
+  "who_for": [
+    "Women looking for Washington-based scholarships with awards under five thousand dollars",
+    "Graduate students comparing smaller USA scholarship programs they may be able to stack with other aid",
+    "Applicants in education, law, business, communication, journalism, or engineering scanning for relevant Washington opportunities",
+    "US citizens who want to find listings that may include residency or citizenship language before they apply"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a woman in Washington?",
+      "answer": "Not automatically. This catalog narrows the list to Washington scholarships for women, but each program can still have its own rules around study level, residency or citizenship, field of study, and other requirements shown in the listing and official source."
+    },
+    {
+      "question": "Do all of these scholarships have the same deadline or the same award amount?",
+      "answer": "No—deadlines differ by program, and award amounts vary by listing. Since these rows include deadline text and at least one listing appears to close relatively soon, it’s smart to check dates promptly and confirm details on the official pages."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this filtered set?",
+      "answer": "The programs below span categories such as education, law, miscellaneous, and STEM, with examples tied to graduate-level study and fields like education, business, law, journalism, and engineering. That makes it useful if you want to browse a focused set of Washington options instead of a broad national list."
+    }
+  ],
+  "page_data": {
+    "exactCount": 8,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 8,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "engineering",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Washington State Business and Professional Women's Foundation",
+        "count": 5
+      },
+      {
+        "name": "Society of Women Engineers",
+        "count": 1
+      },
+      {
+        "name": "Women in Public Finance-Virginia Chapter",
+        "count": 1
+      },
+      {
+        "name": "Women of Wisdom Tri-Cities",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "law",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/under-5000/washington",
+    "generatedAt": "2026-04-26T15:13:56.833Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 8,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

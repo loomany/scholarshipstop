@@ -1,0 +1,104 @@
+{
+  "seo_title": "Find Minority Scholarships Under Five Thousand in California USA…",
+  "seo_description": "Minority scholarships under five thousand in California, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find California scholarships for minority applicants with awards under five thousand dollars usually means sorting through very different programs fast. This filtered USA view gives you a focused set of listings to compare in one place, including options tied to areas like arts, community, education, and STEM. Awards in this slice are on the smaller side, but the exact amount, deadline, and eligibility details vary by listing and should be verified on each official page. Many of these rows appear to have lighter application signals, and some may not require an essay, though requirements can still differ. Because deadline text varies across the programs below and at least one listing appears relatively soon, it makes sense to apply early and check dates promptly.",
+  "h1": "Explore Minority Scholarships Under Five Thousand in California…",
+  "supporting": "Use this list to compare more than the headline amount. Look at the requirement lines, study level fit, and field connections if you are in areas such as education, architecture, business, engineering, or technician pathways. The sample titles suggest a mix of design, community, and place-based opportunities rather than one narrow scholarship type, which makes this slice worth a quick scan if you want to browse California-focused options for minority students in the USA. If a listing looks promising, open the official source to confirm current rules, materials, and award details before you apply.",
+  "related_intro": "If these California listings feel too narrow, related pages can help you widen the search by changing one filter at a time—such as keeping the minority focus while comparing other locations, or staying in California while reviewing different award bands.",
+  "how_to_use": [
+    "Compare each row for award wording, deadline text, and location fit before you shortlist anything",
+    "Scan the requirement lines for essay expectations, study level, and field-of-study details",
+    "Open the official scholarship page for every listing you plan to apply to and verify the current rules",
+    "Prioritize programs with nearer deadlines first, since dates differ across these California listings",
+    "Keep a short list of your best matches and compare them by category, eligibility, and application effort"
+  ],
+  "who_for": [
+    "California-based minority applicants who want smaller scholarship awards they can compare quickly",
+    "High school seniors looking for California opportunities with potentially lighter application requirements",
+    "Graduate students in the USA checking for minority scholarships connected to education, arts, community, or STEM",
+    "Students in design, architecture, engineering, business, or technician-related fields who want to find California listings that may fit their studies"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here with one application?",
+      "answer": "No. Each listing is a separate program, so you apply through the source linked in that row. Requirements, documents, and review steps vary by program and should be confirmed with the official provider."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check eligibility, California location fit, study level, field of study, award amount, and deadline row by row. In this slice, amounts shown are in the lower-thousands range, but exact awards vary by listing and must be verified on official pages."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag, and some may be comparatively lighter-touch to apply for. Still, always check the individual scholarship page because requirements can change or be listed in more detail there."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 3000,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "May 7, 2026 3:00 PM CT",
+        "2026-04-30",
+        "2026-04-06"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services",
+        "business_management_and_marketing",
+        "engineering",
+        "mechanic_and_repair_tech_technicians"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Catalino Tapia Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "PlaceWorks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "arts",
+      "community",
+      "education",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "minority/under-5000/california",
+    "generatedAt": "2026-04-26T15:57:40.825Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

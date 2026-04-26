@@ -1,0 +1,115 @@
+{
+  "seo_title": "Find South Dakota High School Scholarships | USA",
+  "seo_description": "South Dakota high school scholarships in the USA: compare award amounts, deadlines, and requirements, then apply on the official program pages.",
+  "intro": "Trying to find South Dakota scholarships for high school applicants in the USA usually means narrowing past broad national results and checking which programs actually fit your stage. This filtered slice brings together a focused set of listings tied to high school search intent, with many rows pointing toward education-related opportunities. Awards, deadlines, and eligibility details vary from listing to listing, so it makes sense to compare each row closely before you apply. Many entries in this set appear to have lighter requirement signals, and many listings often show no essay in the available metadata, but you should still verify every requirement on the official source. If you want to browse and compare options quickly, the programs below give you a practical starting point.",
+  "h1": "Find South Dakota High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check the requirement line, look for residency or citizenship wording, and note whether the opportunity is aimed at seniors or another study level. Award amounts are listed on the rows, but amounts vary by listing and should be confirmed on the official page. Deadlines also differ by program, and some appear to be coming up soon, so it is smart to open promising options early, read the full terms, and shortlist the ones that match your South Dakota and high school profile.",
+  "related_intro": "If these South Dakota high school listings feel close but not quite right, related pages can help you compare nearby filter combinations, such as broader high school scholarship results or other USA location-based views. That is useful when you want to find similar programs with slightly different eligibility rules.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your South Dakota profile",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "South Dakota high school seniors comparing local scholarship options",
+    "USA applicants looking for South Dakota-based education scholarships",
+    "Students who want many no essay scholarship listings",
+    "Families helping a high school applicant review lighter-touch opportunities"
+  ],
+  "faq": [
+    {
+      "question": "How can I find South Dakota scholarships for high school students in this filtered view?",
+      "answer": "Use these rows to compare South Dakota listings tied to the High School filter, then open the official source for each program. In this USA-focused slice, details like eligibility, residency wording, and study level can vary by listing."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a South Dakota high school student?",
+      "answer": "Not automatically—this catalog helps you find options, but each scholarship sets its own rules on the official page. Check the row details carefully, especially if a listing mentions terms like high school senior, education, or U.S. citizenship."
+    },
+    {
+      "question": "How do I compare award amounts and deadlines on these South Dakota scholarship listings?",
+      "answer": "Compare each row side by side, then verify the current amount and deadline on the provider’s official page before you apply. Amounts and due dates differ by program, and some deadlines in this set appear relatively soon, so it’s smart to check promptly."
+    },
+    {
+      "question": "Are these South Dakota high school scholarships usually essay-based?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many are marked as no-essay in the catalog data. Still, you should confirm application steps on the official source because requirements can change row to row."
+    }
+  ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 3500,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "South Dakota High School Rodeo Association",
+        "count": 5
+      },
+      {
+        "name": "Boy Scouts of America-Northern Lights Council",
+        "count": 1
+      },
+      {
+        "name": "Iowa Student Loan",
+        "count": 1
+      },
+      {
+        "name": "Street Masters Car Club",
+        "count": 1
+      },
+      {
+        "name": "The Bennett Clayton Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/south-dakota",
+    "generatedAt": "2026-04-26T15:33:39.413Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 9,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

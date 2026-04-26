@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find High School Scholarships in Michigan, USA",
+  "seo_description": "High school scholarships in Michigan, USA with deadlines, award ranges, and requirements to compare. Explore listings and verify details before you apply.",
+  "intro": "Trying to find Michigan scholarships for high school applicants in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what they ask for, and how quickly you need to act. This filtered slice brings together a focused set of listings tied to Michigan, with topics that include education, community, disability, medicine, STEM, and more. Some rows appear more straightforward, while others may ask for extra materials such as essays or more detailed eligibility information. Award amounts vary by listing, and deadlines differ across the rows, so it is worth comparing each program carefully and checking official pages promptly if you plan to apply for scholarships in this category.",
+  "h1": "Apply for Michigan High School Scholarships USA",
+  "supporting": "Use the list to compare more than just the title. Read the requirement lines closely, note any residency or study-level language, and check whether a scholarship leans toward education, community service, disability-related support, medicine, or another theme. If you are building a shortlist for Michigan opportunities, open the official source for every program you like, confirm the current rules, and compare award text alongside deadline wording before you decide where to apply.",
+  "related_intro": "If these Michigan high school scholarships feel close but not quite right, related pages can help you narrow by topic or widen beyond this location. That is useful when you want to compare nearby categories, look for different requirement styles, or find USA listings that match the same study stage with a different emphasis.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist programs by topic, study level, and fit",
+    "Check award text and confirm current terms"
+  ],
+  "who_for": [
+    "Michigan high school students comparing local scholarship options",
+    "High school seniors in the USA checking Michigan-specific programs",
+    "Applicants interested in education, community, disability, medicine, or STEM themes",
+    "Students who want to find scholarships with varying requirement levels"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Michigan scholarships for high school students in this filtered view?",
+      "answer": "Use these rows to compare Michigan-focused listings tied to the High School filter, then open each scholarship to confirm who can apply. Some listings also show categories like Education, Community, Disability, Medicine, and STEM, which can help you narrow your search."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a high school student in the USA?",
+      "answer": "Not automatically. This catalog slice is Michigan + High School, but eligibility still varies by program, so check each official scholarship page for residency, study level, and any other requirements before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on the basics that change row to row: award amount, deadline, category, and application requirements. Amounts vary by listing, and requirements are mixed, so verify details on the official source before submitting anything."
+    },
+    {
+      "question": "Are these only for one subject area, or can I explore different scholarship types?",
+      "answer": "You can explore a mix of scholarship themes here, not just one subject. The listings in this Michigan high school slice include examples connected to Education, Community, Disability, Medicine, and STEM, so compare each program’s focus before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 16,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 9000,
+      "statedAmountCount": 16,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 16,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "April 21, 2026 4:00 PM ET",
+        "2026-04-08"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 12,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "link",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "parks_recreation_and_fitness_studies",
+        "agriculture_and_related_sciences",
+        "english_language_and_literature"
+      ],
+      "commonResidency": [
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arabian Horse Association-Region 10",
+        "count": 2
+      },
+      {
+        "name": "American Association of Yemeni Students and Professionals-Michigan Chapter",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Arabian Horse Association-Region 13",
+        "count": 1
+      },
+      {
+        "name": "Community Foundation of Fayette County",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "disability",
+      "miscellaneous",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/michigan",
+    "generatedAt": "2026-04-26T15:25:51.394Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 16,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

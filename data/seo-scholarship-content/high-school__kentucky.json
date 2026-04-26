@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find High School Kentucky Scholarships in the USA",
+  "seo_description": "High school Kentucky scholarships in the USA: compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Kentucky scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who qualifies, what they ask for, and how much they award. This filtered view brings together a focused set of listings tied to Kentucky and the high school level, with examples touching education, STEM, community, law, humanities, and other miscellaneous interests. Some rows appear aimed at seniors, while others may include broader study-level pathways, so it pays to read each requirement line closely before you apply. Award amounts are listed across these programs, but values vary by listing and should be verified on the official page. Deadlines also differ by program, and some appear relatively soon, so it makes sense to compare dates early and shortlist the best fits.",
+  "h1": "Explore High School Kentucky Scholarships USA",
+  "supporting": "A quick scan can reveal useful differences beyond the title alone. Compare category tags, residency or citizenship wording, study-level notes, and any essay expectations before spending time on an application. In this Kentucky high school slice, you may notice both state-connected opportunities and broader scholarships that still surface for this audience. That makes the list worth reviewing even if your interests range from education or agriculture to business, arts, or theology. Open the official source for any program you like, confirm current terms, and keep a short list based on fit, effort, and timing rather than award text alone.",
+  "related_intro": "If you want to widen or narrow your search after reviewing these Kentucky high school listings, related pages can help you compare nearby scholarship paths by education level, topic, or location. That is useful when a program here is close to your profile but not quite the right match.",
+  "how_to_use": [
+    "Compare deadline text across the rows first, since timing differs and some programs may close sooner than expected",
+    "Read the requirement lines carefully to check study level, residency or citizenship wording, and any essay expectations",
+    "Use category labels to find scholarships that match your interests, then compare award text across similar listings",
+    "Open each official page before you apply to verify current amounts, eligibility rules, and submission instructions",
+    "Shortlist the best-fit programs based on eligibility, effort required, and timing rather than title alone"
+  ],
+  "who_for": [
+    "Kentucky high school students looking for USA scholarship options connected to state residency or local organizations",
+    "High school seniors comparing scholarships tied to education, STEM, community, law, or humanities interests",
+    "Applicants who want to find programs with varying requirement levels before deciding where to apply",
+    "Students and families who need to compare Kentucky-focused listings by deadline timing and award details"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Kentucky scholarships for high school students in this filtered view?",
+      "answer": "Use this list to explore programs tagged for High School and Kentucky, then open each row to confirm the official eligibility details. In the USA context, residency, school level, and other requirements can differ by listing."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these Kentucky high school scholarship listings?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts differ by listing, and deadlines are not the same across the page, so verify each one on the official source before you apply."
+    },
+    {
+      "question": "Are these only for Kentucky high school seniors?",
+      "answer": "Not always. This filtered set is centered on High School and Kentucky, but individual listings may use different study-level labels such as high school senior, so check each scholarship's official criteria before applying."
+    },
+    {
+      "question": "Do all of these scholarships require an essay?",
+      "answer": "No single requirement applies to every listing here. Some programs may ask for an essay and others may be lighter-touch, so compare the rows and confirm the application requirements on the official page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 23,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 23,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 14,
+      "within60Days": 22,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 5,
+      "noCount": 18,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "visual_and_performing_arts",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kentucky 4-H Foundation",
+        "count": 3
+      },
+      {
+        "name": "Kentucky Housing Association",
+        "count": 2
+      },
+      {
+        "name": "Women Leading Kentucky",
+        "count": 2
+      },
+      {
+        "name": "American Angus Association",
+        "count": 1
+      },
+      {
+        "name": "American Hereford Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "law",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/kentucky",
+    "generatedAt": "2026-04-26T15:23:53.467Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 23,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -502,7 +502,6 @@ export function shouldRenderUsefulFaq(
     deadlinePrimary: string;
   }
 ): boolean {
-  if (!hasTrustworthyAiConfidence(s)) return false;
   const items = s.seoFaq ?? [];
   const good = items.filter((it) => {
     const q = it.question?.trim() ?? '';

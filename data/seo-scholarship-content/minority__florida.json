@@ -1,48 +1,114 @@
 {
-  "seo_title": "Florida Minority Scholarships - Up to $16,000 Available",
-  "seo_description": "Explore 8 Florida scholarships for minority students. Award sizes vary; check individual listings for deadlines and requirements.",
-  "intro": "Finding financial support as a minority student in Florida can be crucial for your educational journey. This catalog features 8 scholarships specifically aimed at helping minority students pursue their academic goals. Award sizes vary significantly, with opportunities ranging from smaller amounts to substantial funding, making it worthwhile to explore each option carefully. Be mindful of the varying deadlines associated with these listings, as some may require prompt action.",
-  "h1": "Explore Minority Scholarships in Florida",
-  "supporting": "As you review the scholarships, pay attention to the specific requirements and categories associated with each listing. Many of these opportunities may not require essays, which can simplify the application process. Comparing the award amounts and deadlines will help you prioritize which scholarships to pursue. Always verify details on the official sponsor sites for the most accurate and up-to-date information.",
-  "related_intro": "If you're interested in exploring more options, consider checking out related scholarships that cater to different eligibility criteria or locations.",
+  "seo_title": "Find Minority Scholarships in Florida, USA",
+  "seo_description": "Minority scholarships in Florida, USA with focused listings to compare awards, requirements, and deadlines. Explore options and apply on official pages.",
+  "intro": "Trying to find minority scholarships in Florida usually means narrowing a broad USA search into programs that actually match your location and eligibility. This filtered slice brings together a focused set of listings tied to Florida, with examples spanning education, community, and STEM themes, plus options that touch graduate study, trade or technical training, and related career paths. Many rows appear to have relatively light application signals, and many listings often note no essay, but requirements still vary by program. Award amounts differ by listing, and deadlines are not the same across the rows, so it is worth checking each one promptly if you plan to apply in the current cycle or compare options for the upcoming year.",
+  "h1": "Explore Minority Scholarships in Florida USA",
+  "supporting": "Use these rows to compare more than the title alone. Look at the category labels, study level cues, and any citizenship or residency notes to see which Florida opportunities fit your situation in the USA. It also helps to scan the requirement lines for signs of graduate, vocational, education, business, engineering, or community relevance. Before you apply, open the official page for every scholarship you shortlist, verify the latest deadline, and confirm the award details, since listing information can change.",
+  "related_intro": "If this Florida minority filter feels close but not exact, related pages can help you explore nearby paths, such as broader minority scholarship views, other Florida-focused listings, or category pages connected to education, community, and STEM topics.",
   "how_to_use": [
-    "Sort scholarships by award amount",
-    "Read the requirement lines carefully",
-    "Open official pages for details",
-    "Shortlist your top choices",
-    "Verify deadlines and eligibility criteria"
+    "Compare deadline text across listings",
+    "Read each requirement line carefully",
+    "Open the official scholarship page",
+    "Shortlist programs that match your profile",
+    "Verify award details before you apply"
   ],
   "who_for": [
-    "Minority students in Florida",
-    "Undergraduate and graduate applicants",
-    "Students pursuing STEM fields",
-    "High school seniors seeking funding",
-    "Vocational and trade school candidates"
+    "Florida applicants seeking minority scholarships",
+    "Graduate students comparing Florida funding options",
+    "Trade or technical school students in Florida",
+    "USA residents checking education or STEM related awards"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for minority students in Florida?",
-      "answer": "This collection includes a variety of scholarships categorized under education, STEM, and community support. With 8 listings, you can find opportunities that cater to different academic levels and fields of study."
+      "question": "How can I find minority scholarships in Florida that match my background and study plans?",
+      "answer": "Use this filtered view to compare the rows by category, study level, and any citizenship or residency notes shown in the catalog. In this Florida, USA slice, details like eligibility wording and required documents can vary by program, so confirm each one on the official source before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this selection do not require essays, making the application process potentially easier. However, it's important to check each listing for specific requirements, as they can vary."
+      "question": "Can I apply to these Florida minority scholarships if I’m a graduate student?",
+      "answer": "Some listings in this set appear to include graduate-level opportunities, and graduate_student shows up in the catalog sample for this filter. Check each scholarship’s official page to verify level, Florida connection, and any USA residency or citizenship requirements before applying."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes vary significantly, with amounts ranging from approximately $500 to $16,000. Be sure to review the details of each scholarship to understand the financial support available."
+      "question": "What should I compare before I apply to a scholarship on this page?",
+      "answer": "Compare the award amount, deadline text, category, and any eligibility notes shown in each row. Amounts in these listings vary, and deadlines differ by program, so use the catalog to narrow options and the official page to verify final details."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All 8 scholarships listed have specific deadlines, which vary from one opportunity to another. It's advisable to check the dates promptly, as some deadlines are approaching within the next 45 days."
+      "question": "Are there minority scholarships here for education, STEM, community, or trade-related paths in Florida?",
+      "answer": "Yes—this focused set of Florida listings includes examples tied to education, STEM, community, and trade or technical routes. If you want to explore options in the USA by subject area, review the row labels and then open the official listing to confirm the exact field-of-study fit."
     }
   ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 2500,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "transportation_and_materials_moving",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 2
+      },
+      {
+        "name": "Eastern Florida State College",
+        "count": 2
+      },
+      {
+        "name": "WTS International-Central Florida Chapter",
+        "count": 2
+      },
+      {
+        "name": "University of Massachusetts Amherst",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
   "_meta": {
     "canonicalPath": "minority/florida",
-    "generatedAt": "2026-04-02T10:46:07.552Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 8,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:55:06.735Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

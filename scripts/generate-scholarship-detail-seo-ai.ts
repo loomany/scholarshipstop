@@ -150,7 +150,16 @@ function slugsFromAuditReport(pathArg: string | null): Set<string> | null {
   for (const page of parsed.pages ?? []) {
     if (page.type !== 'scholarship') continue;
     const issues = page.issueCodes ?? [];
-    if (!issues.some((x) => x === 'faq_missing' || x === 'title_length_out_of_range')) continue;
+    if (
+      !issues.some(
+        (x) =>
+          x === 'faq_missing' ||
+          x === 'title_length_out_of_range' ||
+          x === 'meta_description_length_out_of_range'
+      )
+    ) {
+      continue;
+    }
     const url = page.url ?? '';
     const slug = url.replace(/^\/scholarships\//, '').trim();
     if (slug) set.add(slug);

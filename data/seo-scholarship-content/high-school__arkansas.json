@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find Arkansas High School Scholarships | USA",
+  "seo_description": "Arkansas high school scholarships in the USA: compare award ranges, review varying deadlines, and apply through each official program page.",
+  "intro": "Trying to find Arkansas scholarships for high school students usually means sorting through local programs with very different focus areas, from education and community themes to STEM, arts, agriculture, and hospitality. This filtered USA view brings those rows together so you can compare options that may fit Arkansas applicants earlier in the search process. Many listings here appear to have lighter application setups, and many are flagged as no essay, but requirements still vary by program and should be checked carefully. Award amounts are listed on individual rows and can differ, and deadlines are not the same across the page. If you plan to apply for scholarships in Arkansas for the coming cycle, it is worth checking these programs promptly and reading each listing closely.",
+  "h1": "Explore Arkansas High School Scholarships USA",
+  "supporting": "A useful way to read this list is to compare the requirement line, category tags, and deadline text side by side before opening the official source. Some programs in this Arkansas high school slice connect to specific interests or communities, while others may be broader. As you browse, compare award wording, residency or citizenship notes, study level labels, and any field-of-study references. Then verify every detail on the sponsor page before you apply, since eligibility terms, documents, and timing can change.",
+  "related_intro": "If you do not find enough matches in this Arkansas high school set, check nearby scholarship pages by education level, topic, or other location filters. That can help you compare broader USA options against programs with a more local Arkansas focus.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before shortlisting a program",
+    "Open the official page to verify eligibility details",
+    "Scan category tags for education, STEM, arts, or community fit",
+    "Shortlist the best matches and apply early"
+  ],
+  "who_for": [
+    "Arkansas high school seniors comparing local scholarship options",
+    "Students seeking Arkansas awards with no essay on many listings",
+    "Applicants interested in education, STEM, arts, community, or agriculture themes",
+    "USA residents checking Arkansas-focused scholarships before deadlines get close"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Arkansas scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to High School and Arkansas. Open each row to compare eligibility, award details, and application steps on the catalog entry and the official source."
+    },
+    {
+      "question": "Can I apply directly from these Arkansas high school scholarship listings?",
+      "answer": "Usually, you should use the listing to identify programs and then verify how to apply on the official scholarship page. Requirements, documents, and submission steps can differ from one listing to the next."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare location fit, study level, category, field of study, award amount, and deadline row by row. Amounts vary by listing, and deadlines differ by program, so confirm both on the official source before you apply."
+    },
+    {
+      "question": "Are these Arkansas scholarships only for high school seniors?",
+      "answer": "Not always. Many listings in this slice relate to high school students, and some sample study-level labels include high school senior, so it is best to check each program's eligibility details before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 10,
+    "award": {
+      "medianUsd": 1625,
+      "minUsd": 1000,
+      "maxUsd": 3500,
+      "statedAmountCount": 10,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 10,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 10,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "family_and_consumer_sciences",
+        "agriculture_and_related_sciences",
+        "personal_and_culinary_services"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arkansas Extension Homemakers Council",
+        "count": 2
+      },
+      {
+        "name": "American Welding Society-Central Arkansas Section",
+        "count": 1
+      },
+      {
+        "name": "Arkansas Cattlemen's Association",
+        "count": 1
+      },
+      {
+        "name": "Arkansas CattleWomen's Association",
+        "count": 1
+      },
+      {
+        "name": "Arkansas Hospitality Association",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/arkansas",
+    "generatedAt": "2026-04-26T15:19:22.185Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 10,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

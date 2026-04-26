@@ -1,0 +1,128 @@
+{
+  "seo_title": "Find Maine High School Scholarships in the USA",
+  "seo_description": "Maine high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Maine scholarships for high school applicants in the USA usually means sorting through programs that look similar at first glance but differ in who qualifies, what they ask for, and how much support they offer. This filtered slice brings together a focused set of listings tied to Maine and the high school theme, with examples spanning education, community, STEM, arts, and law. Some rows may fit seniors best, while others can also be relevant to sophomores or applicants with broader study plans ahead. Awards vary by listing, deadlines differ by program, and requirement details are not identical across the rows below, so it is worth comparing each option carefully and checking official pages promptly.",
+  "h1": "Find Maine High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan the requirement line for residency, citizenship, study level, and field of study clues, then read the award and deadline text side by side to decide which programs deserve an application first. Some listings may be relatively lighter touch, while others can ask for more documentation or an essay. If you want to apply efficiently, open the official source for every scholarship you shortlist and verify the latest rules before you submit.",
+  "related_intro": "If these Maine high school scholarships are close but not quite right, related pages can help you explore nearby options by topic or location. That is useful when you want to compare Maine-focused listings against broader USA scholarship categories or find programs tied to a different education stage.",
+  "how_to_use": [
+    "Compare award text and deadline text across the rows",
+    "Read each requirement line for residency, citizenship, and study level details",
+    "Open the official page before you apply and verify current rules",
+    "Shortlist the programs that match your background and planned field of study"
+  ],
+  "who_for": [
+    "Maine high school students comparing local scholarship options",
+    "High school seniors in the USA looking for Maine-based funding",
+    "Maine applicants interested in education, community, STEM, arts, or law themes",
+    "Students who want to find scholarships with varying requirement levels"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Maine scholarships for high school students on this filtered page?",
+      "answer": "Use this filtered view to compare rows tagged for High School and Maine, then open each listing to confirm eligibility on the official source. In this USA-focused slice, details like residency, study level, and field can differ by program."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Maine high school student?",
+      "answer": "Not automatically—this catalog helps you find matches, but each scholarship sets its own rules. Check the official page for residency, citizenship, grade level, and any program-specific requirements before you apply."
+    },
+    {
+      "question": "Are these scholarships only for seniors, or can underclassmen explore them too?",
+      "answer": "Not all listings are limited to one grade level. While some rows may fit high school seniors, this filtered set can also include other study-level labels, so compare each listing carefully before you apply."
+    },
+    {
+      "question": "What should I compare first when browsing these Maine scholarship listings?",
+      "answer": "Start with eligibility, deadline, award amount, and any application requirements shown in the row. Categories and fields vary across these programs—examples in this slice include education, community, STEM, arts, law, and fields like engineering, business, architecture, and construction trades."
+    }
+  ],
+  "page_data": {
+    "exactCount": 36,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 20000,
+      "statedAmountCount": 36,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 24,
+      "within60Days": 33,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-15",
+        "2026-04-22"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 32,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "high_school_sophomore"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "architecture_and_related_services",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Associated Builders and Contractors of Maine",
+        "count": 2
+      },
+      {
+        "name": "Association of Government Accountants-Boston Chapter",
+        "count": 2
+      },
+      {
+        "name": "Finance Authority of Maine",
+        "count": 2
+      },
+      {
+        "name": "Maine Business and Professional Women",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 9",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "arts",
+      "law"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/maine",
+    "generatedAt": "2026-04-26T15:24:36.583Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 36,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

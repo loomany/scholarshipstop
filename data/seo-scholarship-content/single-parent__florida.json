@@ -1,46 +1,96 @@
 {
-  "seo_title": "Florida Scholarships for Single Parents",
-  "seo_description": "Explore 5 scholarships for single parents in Florida, with awards ranging from $500 to $2,500. Find the right opportunity today.",
-  "intro": "Finding financial support as a single parent in Florida can be challenging, but there are opportunities available to help ease the burden. This catalog features 5 scholarships specifically for single parents, with award amounts ranging from approximately $500 to $2,500. Each listing has its own unique focus, spanning fields like education and medicine, providing a range of options to suit different career paths and aspirations.",
-  "h1": "Scholarships for Single Parents in Florida",
-  "supporting": "As you explore these scholarships, take note of their varying award amounts and requirements. Many of the listings do not require essays, which can simplify the application process. Be sure to check the specific eligibility criteria and deadlines for each scholarship to ensure you meet all necessary conditions. This slice offers a valuable chance to secure funding tailored to your situation as a single parent.",
-  "related_intro": "If you're interested in more options, consider checking out related scholarships for single parents or those focused on specific fields like nursing or education.",
+  "seo_title": "Find Single Parent Scholarships in Florida, USA",
+  "seo_description": "Single parent scholarships in Florida, USA: compare focused listings, review award ranges and deadlines, and apply on the official program pages.",
+  "intro": "Trying to find scholarships for a single parent in Florida usually means narrowing fast to listings that match both family status and location. This filtered slice brings together USA scholarship options tied to Florida and single-parent eligibility, with visible overlap in areas like nursing, education, and other practical career paths. As you browse, expect the details to vary by listing: award amounts differ, deadlines differ, and requirement language can be lighter on some rows than others. Many listings in this set appear to have a simpler application profile, and some may not ask for an essay, but you should still read each row closely before you apply. If you want to compare relevant options without wading through unrelated results, this is a useful place to start.",
+  "h1": "Find Scholarships for Single Parents in Florida USA",
+  "supporting": "Use the rows below to compare more than just the title. Check how each scholarship describes eligibility, study area, and level, then look at the award text and deadline field side by side. In this Florida single-parent slice, it is worth scanning beyond one major because related opportunities can appear under medicine, education, or miscellaneous categories. Open the official page for any listing you shortlist, confirm current requirements, and verify that the program still matches your situation before you apply.",
+  "related_intro": "If these Florida single-parent scholarships feel too narrow, related pages can help you explore nearby options by eligibility, location, or subject area. That is useful when you want to compare similar USA listings without losing the focus on practical matches.",
   "how_to_use": [
-    "Compare award amounts across different listings",
-    "Review eligibility criteria for each scholarship",
-    "Check for specific deadlines and application requirements",
-    "Open official scholarship pages for more details",
-    "Shortlist the scholarships that best fit your needs"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Scan award details and study categories",
+    "Open the official page to verify eligibility",
+    "Shortlist the listings that best fit"
   ],
   "who_for": [
-    "Single parents residing in Florida",
-    "Individuals pursuing education or nursing careers",
-    "Applicants seeking scholarships with no essay requirements"
+    "Single parents living in Florida",
+    "Florida applicants pursuing nursing or health studies",
+    "Parents returning to college in education programs",
+    "Florida learners comparing practical career-focused scholarships"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for single parents in Florida?",
-      "answer": "The current listings include scholarships across various categories such as education and medicine. With a total of five scholarships available, you can find options that align with your field of study or career goals."
+      "question": "How can I find scholarships for single parents in Florida on this page?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to single-parent eligibility and Florida. Open each row to compare the official requirements, award details, and deadline text before you apply."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes vary among the listings, with amounts ranging approximately from $500 to $2,500. Each scholarship has its own specific funding, so be sure to check the details for each listing."
+      "question": "What kinds of scholarships appear in these Florida listings?",
+      "answer": "The programs below include categories such as medicine, education, and miscellaneous, with sample fields like education, health professions and clinical sciences, and personal and culinary services. Because each listing is different, compare the row details and confirm fit on the official source."
     },
     {
-      "question": "Do these scholarships require essays or additional documentation?",
-      "answer": "Many of the scholarships listed do not require essays, making them potentially easier to apply for. However, it's important to verify the requirements for each scholarship, as they can differ."
+      "question": "Can I compare award amounts and deadlines here?",
+      "answer": "Yes—these rows show award amounts and deadline text, but both vary by program. Amounts in this slice range from smaller awards to higher listed amounts, and you should verify the current USD amount and deadline on the official page before you apply."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All five scholarships listed have deadlines, but specific dates are not provided in the sample. It's advisable to check each scholarship's details for the most accurate deadline information."
+      "question": "Are these scholarships usually easy to apply for?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and the sample metadata often shows no essay. Still, application steps can differ row to row, so check each scholarship's official instructions carefully."
     }
   ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 500,
+      "minUsd": 500,
+      "maxUsd": 2500,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 46,
+      "nearestLabels": [
+        "2026-05-18",
+        "2026-05-18",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "personal_and_culinary_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 5
+      }
+    ],
+    "topTags": [
+      "medical",
+      "education",
+      "miscellaneous"
+    ]
+  },
   "_meta": {
     "canonicalPath": "single-parent/florida",
-    "generatedAt": "2026-04-02T10:51:07.820Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T16:02:53.534Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 5,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

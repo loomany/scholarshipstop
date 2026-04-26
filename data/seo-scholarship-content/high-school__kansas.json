@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find High School Scholarships in Kansas, USA",
+  "seo_description": "High school scholarships in Kansas, USA with deadlines, award ranges, and requirement details. Compare listings and apply on official pages.",
+  "intro": "Trying to find Kansas scholarships for high school students in the USA usually means narrowing a broad search to programs that actually match your stage and location. This filtered slice brings together listings tied to Kansas and high school eligibility, with topics that can include education, community, disability, law, music, and other miscellaneous interests. As you compare the rows below, expect award amounts, deadlines, and requirement details to vary by listing. Some opportunities may look lighter on requirements, while others can ask for more supporting information or an essay. Because deadline text appears across these programs and some dates may be coming up soon, it makes sense to apply early and verify every detail on the official scholarship page before you decide which options to pursue.",
+  "h1": "Compare Kansas High School Scholarships USA",
+  "supporting": "A useful way to read this set is to compare more than the title. Check the category tags, scan the requirement line, and note whether a scholarship appears aimed at a high school senior, a specific interest area, or a residency profile such as a USA applicant or citizen. Then open the official source to confirm current rules, award details, and submission steps. This is also a good slice to browse if you want to balance broader community scholarships with more topic-specific options in education, law, disability, or music.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship pages by changing either the study level or the location filter. That can help you find similar USA opportunities with different eligibility angles while keeping your search close to Kansas or to high school-focused awards.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist the listings that match your location and study level",
+    "Check whether an essay or extra materials are requested"
+  ],
+  "who_for": [
+    "Kansas high school seniors comparing local scholarship options",
+    "USA applicants looking for Kansas-based education or community awards",
+    "Students interested in law, music, disability, or related topic scholarships",
+    "Applicants who want to find programs with potentially lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Kansas scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore USA scholarship listings tied to High School and Kansas, then open each row to verify eligibility on the official source. The programs below span topics such as education, community, disability, law, music, and miscellaneous categories."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these Kansas scholarship listings?",
+      "answer": "Yes—this catalog lets you compare rows side by side, but amounts and deadlines vary by program. Award values are listed on each row, and deadline text differs across listings, so check each official page before you apply."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Kansas?",
+      "answer": "Some listings in this slice show high school senior as a common study level, but eligibility is not identical across every program. Review each listing carefully to confirm the exact Kansas or USA residency, school level, and any other requirements."
+    },
+    {
+      "question": "Do these Kansas high school scholarships require essays?",
+      "answer": "Requirements vary by listing, and essay expectations are mixed in this filtered set. Before you apply, compare the row details and confirm the full application checklist on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 16,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 9000,
+      "statedAmountCount": 16,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 11,
+      "within60Days": 15,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-01",
+        "2026-04-29"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 13,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "question",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "english_language_and_literature",
+        "foreign_languages_literature_and_linguistics",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "Greater Kansas City Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "Arabian Horse Association-Region 8",
+        "count": 1
+      },
+      {
+        "name": "Emporia Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Kansas Association of Broadcasters",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "disability",
+      "law",
+      "miscellaneous",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/kansas",
+    "generatedAt": "2026-04-26T15:23:39.778Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 16,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

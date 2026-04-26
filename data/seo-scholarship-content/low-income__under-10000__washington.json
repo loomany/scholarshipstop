@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find Low Income Under Ten Thousand Scholarships USA",
+  "seo_description": "Low income under ten thousand scholarships in Washington, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Washington scholarships for low income applicants with awards under ten thousand dollars usually means balancing fit, speed, and realistic requirements. This filtered USA view pulls together a focused set of listings where award amounts stay below that threshold, with programs touching areas like education, disability, and broader miscellaneous support. As you compare rows, expect the details to vary: eligibility language, study level, location rules, and required materials are not identical across listings. Many entries in this slice appear to have no essay, and some may be comparatively lighter-touch, but you should still verify every requirement on the official source before you apply. Deadlines also differ by program, and at least some dates are coming up soon, so it makes sense to check the timing promptly.",
+  "h1": "Explore Low Income Under Ten Thousand Scholarships USA",
+  "supporting": "A useful way to browse this set is to compare the requirement lines first, then look at award text and deadline wording side by side. The programs below may suit high school seniors, current college students, or graduate students, so pay attention to study level before you spend time on an application. Because amounts vary by listing and official pages control the final terms, use this page to shortlist options, then open each source to confirm eligibility, documents, and submission steps for Washington-based applicants in the USA.",
+  "related_intro": "If this filter feels too narrow, related pages can help you compare nearby options by changing the income focus, the Washington location filter, or the under-ten-thousand award preset. That is often the fastest way to find similar scholarships without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across the rows first, since dates vary by program and some opportunities may close soon",
+    "Scan the eligibility and study level details to match listings to your current status before you apply",
+    "Read the award wording carefully and treat listed amounts as row-specific, then verify final details on the official page",
+    "Open each scholarship source to confirm Washington rules, required materials, and submission instructions",
+    "Shortlist the best-fit programs and compare category cues such as education or disability before starting applications"
+  ],
+  "who_for": [
+    "Washington applicants in the USA who need low income scholarship options with awards under ten thousand dollars",
+    "High school seniors looking for education-related scholarships with potentially lighter application requirements",
+    "College or graduate students comparing Washington listings across education, disability, and miscellaneous categories",
+    "Applicants who prefer to find scholarships that often appear to have no essay, while still verifying each listing"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed on this page if I live in Washington?",
+      "answer": "Not automatically—this catalog page helps you find likely matches, but each program sets its own rules. Check the official listing page for location details, study level, and any other requirements before you apply."
+    },
+    {
+      "question": "Do all scholarships here have the same deadline or award amount?",
+      "answer": "No. Deadlines differ by program, and award amounts vary by listing, so compare each row carefully and confirm details on the official page. In this slice, dates are not all the same, so it is smart to check soon."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Washington filter?",
+      "answer": "The programs below include categories such as education, miscellaneous, and disability, with sample study levels like high school senior, college, and graduate student. That makes this a useful place to browse different fit options rather than assume every row targets the same applicant."
+    },
+    {
+      "question": "Are these Washington scholarships usually essay-heavy?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many sampled rows show no essay flag. Still, always verify the current application requirements on the official scholarship page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 19,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-20",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "CollegeReady",
+        "count": 1
+      },
+      {
+        "name": "POISE Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Associates Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "low-income/under-10000/washington",
+    "generatedAt": "2026-04-26T15:52:01.369Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

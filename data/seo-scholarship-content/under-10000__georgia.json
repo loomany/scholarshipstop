@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Georgia Scholarships Under Ten Thousand | USA",
+  "seo_description": "Georgia scholarships under ten thousand in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Georgia scholarships in the USA with awards under this cap usually means balancing budget, fit, and timing at the same time. This filtered slice brings together a focused set of listings tied to Georgia, with examples spanning education, STEM, community, disability, arts, and miscellaneous topics. You can compare options for high school seniors, current college students, and graduate students without wading through larger awards that may not match your search. Award sizes, deadlines, eligibility details, and essay expectations vary by listing, so it helps to read each row closely before you apply. Some programs appear relatively lighter-touch in their requirements, while others may ask for more documentation or a written response, so use this view to quickly narrow what is worth a closer look.",
+  "h1": "Compare Georgia Scholarships Under Ten Thousand USA",
+  "supporting": "A useful way to read these rows is to compare more than the headline amount. Check the requirement line, note the study level, and look for residency or citizenship language that affects eligibility in the USA. Titles in this slice point to different kinds of opportunities, from Georgia-specific programs to subject-linked awards in areas like education, engineering, business, communication, and law. Deadlines differ across listings, and some may be approaching soon, so open the official page for any strong match and verify the latest terms before you apply.",
+  "related_intro": "If this Georgia view feels too narrow or too broad, related pages can help you compare nearby filter combinations. You may want to explore other award ranges, scan broader Georgia scholarship results, or look at topic-led pages such as education or STEM to find a better fit.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open official pages to verify details",
+    "Shortlist the listings that match your level and location",
+    "Check whether an essay or extra materials are required"
+  ],
+  "who_for": [
+    "Georgia residents comparing smaller scholarship awards",
+    "High school seniors planning in-state applications",
+    "College or graduate students seeking Georgia-based funding",
+    "Applicants interested in education, STEM, arts, or community topics"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Georgia scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Georgia scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Georgia scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 49,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 250,
+      "maxUsd": 9000,
+      "statedAmountCount": 49,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 33,
+      "within60Days": 45,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-01",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 7,
+      "noCount": 42,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement",
+        "survey",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "engineering",
+        "construction_trades"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Georgia Transplant Foundation",
+        "count": 8
+      },
+      {
+        "name": "PGA of America - Georgia Section",
+        "count": 4
+      },
+      {
+        "name": "Professional Association of Georgia Educators",
+        "count": 4
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Georgia Guard Insurance Trust",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "arts",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/georgia",
+    "generatedAt": "2026-04-26T16:08:09.581Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 49,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

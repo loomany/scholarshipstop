@@ -1,0 +1,111 @@
+{
+  "seo_title": "Find First-Generation Florida Scholarships | USA",
+  "seo_description": "First-generation Florida scholarships under five thousand dollars: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "intro": "Trying to find Florida scholarships for first-generation students without wading through large national lists usually means narrowing fast by award size and eligibility. This filtered slice brings together USA listings tied to Florida and focused on awards under this threshold, so you can compare options that may fit smaller funding gaps, books, fees, or other college costs. The rows below are not all the same: deadlines differ by program, award amounts vary by listing, and requirement details should be checked on each official page. Many listings in this set appear to have lighter application signals, and many often show no essay in the catalog data, which can make this a practical place to apply early and keep a few realistic options in play for the current cycle.",
+  "h1": "Compare First-Generation Florida Scholarships USA",
+  "supporting": "Use this view to compare more than just the title. Scan the requirement line for first-generation wording, note whether the listing points toward high school senior, college, or graduate study, and check category cues such as STEM, Education, Community, or Miscellaneous. Because some rows may close soon, it is worth opening the official source promptly, confirming location rules for Florida, and verifying the current award text before you apply. A short list built from this slice can be easier to manage than a broader search.",
+  "related_intro": "If these Florida first-generation listings feel too narrow, related pages can help you explore nearby options by changing the location, keeping the under-threshold award focus, or comparing other first-generation scholarship filters across the USA catalog.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award text and Florida eligibility before you apply"
+  ],
+  "who_for": [
+    "Florida first-generation college applicants",
+    "High school seniors planning in-state study",
+    "Current college students seeking smaller awards",
+    "Graduate students checking Florida-specific funding",
+    "Applicants who prefer many no-essay listings"
+  ],
+  "faq": [
+    {
+      "question": "Can I compare award amounts and deadlines across these Florida listings?",
+      "answer": "Yes—these rows are useful for comparing smaller USA scholarship awards side by side, but amounts and deadlines vary by program. The listings in this slice show posted amounts, and official pages are the place to confirm the latest details before you apply."
+    },
+    {
+      "question": "What kinds of scholarships appear in this first-generation Florida filter?",
+      "answer": "This focused set of listings includes categories such as STEM, Education, Community, and Miscellaneous. You may also see different study levels and fields, so it helps to browse each listing for fit rather than assume every program targets the same students."
+    },
+    {
+      "question": "Are these scholarships usually quick to apply for?",
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and many sampled rows show no essay flag, but requirements still differ row to row. Check the official scholarship page before you start so you know exactly what that program asks for."
+    }
+  ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 3000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-26",
+        "2026-04-15",
+        "2026-04-14"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "english_language_and_literature",
+        "foreign_languages_literature_and_linguistics",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "University of South Florida",
+        "count": 3
+      },
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 2
+      },
+      {
+        "name": "Haitian American Chamber of Commerce of Florida",
+        "count": 1
+      },
+      {
+        "name": "The College of the Florida Keys",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "first-generation/under-5000/florida",
+    "generatedAt": "2026-04-26T15:05:23.225Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 7,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

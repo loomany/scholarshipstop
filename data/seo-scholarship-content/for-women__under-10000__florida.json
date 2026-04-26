@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find Florida Scholarships for Women in the USA",
+  "seo_description": "Florida scholarships for women in the USA: compare smaller award listings, review varying deadlines, and apply on official program pages.",
+  "intro": "Trying to find Florida scholarships for women without sorting through high-dollar national awards first? This filtered USA view narrows the list to programs in Florida with listed awards under ten thousand dollars, making it easier to compare smaller, often more targeted opportunities. The rows here touch areas such as community, education, STEM, law, medicine, and safety, with examples that may fit high school seniors and students considering paths like education, business, trades, engineering, or transportation. Many listings in this slice appear to have lighter application signals, and many may not require an essay, but requirements still vary by program. Award amounts differ by listing, and deadlines are not the same across the page, so it is smart to check each row promptly and verify details on the official source before you apply.",
+  "h1": "Explore Florida Scholarships for Women USA",
+  "supporting": "A focused set of Florida listings like this is useful when you want to compare practical options side by side instead of guessing which awards are still relevant to your profile. Read past the title and look closely at the category tags, study level cues, location fit, and any requirement notes. Smaller scholarships can still be worth pursuing, especially when the application looks straightforward or connects to a specific field such as education, medical interests, community service, or trade school plans. Use this view to shortlist realistic matches, then open the official pages to confirm eligibility language, materials, and current deadline text.",
+  "related_intro": "If you do not find the right fit here, check nearby scholarship pages that shift one filter at a time, such as other Florida scholarship groupings, other women-focused listings, or additional award ranges. That makes it easier to explore similar programs without losing the Florida context.",
+  "how_to_use": [
+    "Compare each row for award amount, category, and Florida relevance before you shortlist anything",
+    "Read the requirement lines carefully because eligibility details can differ even within the same filter view",
+    "Check deadline text on every listing promptly since dates vary by program and some may be coming up soon",
+    "Open the official scholarship page to verify current rules, materials, and any essay or document expectations before you apply"
+  ],
+  "who_for": [
+    "Women looking for Florida-based scholarships with listed awards under ten thousand dollars",
+    "High school seniors in the USA who want to compare Florida opportunities before they apply",
+    "Applicants interested in education, business, trades, engineering, transportation, or related paths shown in these listings",
+    "Students who prefer many listings that may have lighter requirements or often no essay"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here with one application?",
+      "answer": "No—each program has its own application process and official page. Use the catalog to find matches, then verify eligibility, required materials, and submission steps with the scholarship provider."
+    },
+    {
+      "question": "Do these Florida scholarships for women usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag in the catalog, but you should still check each official listing before you apply. Requirements can differ row to row even within the same Florida filter."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Florida women-focused list?",
+      "answer": "This focused set of USA listings includes categories such as Community, Education, STEM, Law, Medicine, and Safety. You can also compare examples tied to study paths like education, business management and marketing, construction trades, engineering, and transportation and materials moving."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 750,
+      "maxUsd": 1500,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-04",
+        "2026-05-11"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 3
+      },
+      {
+        "name": "National Conference of Puerto Rican Women-Miami Chapter",
+        "count": 1
+      },
+      {
+        "name": "United Methodist Church-Alabama-West Florida Conference",
+        "count": 1
+      },
+      {
+        "name": "WTS International-Central Florida Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "law",
+      "medical",
+      "stem",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/under-10000/florida",
+    "generatedAt": "2026-04-26T15:10:08.544Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

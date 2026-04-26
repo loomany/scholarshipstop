@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find High School Scholarships in Idaho, USA",
+  "seo_description": "High school scholarships in Idaho, USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Idaho scholarships you can apply for while still in high school usually means sorting through programs that mix local eligibility with very different academic, community, and subject-area priorities. This filtered USA view narrows the search to a focused set of listings connected to Idaho and the high school stage, so you can compare options without wading through unrelated results. You’ll see programs tied to areas such as education, community, disability, STEM, medicine, and the arts, with examples in this slice ranging from music-focused awards to broader scholarship opportunities. Award amounts vary by listing and should be verified on the official pages, and deadlines differ by program. Because some rows show dates coming up relatively soon, it makes sense to check current details promptly before you apply.",
+  "h1": "Explore Idaho High School Scholarships USA",
+  "supporting": "Use these rows to compare more than just the headline amount. Look at the requirement lines, category tags, study-level cues, and any field-of-study signals to judge fit. Some listings in this Idaho high school set may be comparatively lighter-touch, while others can ask for more supporting material, so it’s worth opening each record before you shortlist it. If you’re deciding where to focus first, compare deadline timing, subject relevance, and whether a program appears aimed at seniors, transfer pathways, community involvement, or a specific area like engineering, agriculture, business, or visual and performing arts.",
+  "related_intro": "If you do not find enough matches in this Idaho high school slice, check nearby scholarship pages that shift one filter at a time. Comparing related views can help you spot programs tied more strongly to education level, topic, or location across the broader USA catalog.",
+  "how_to_use": [
+    "Compare deadline text across the listings first, since timing varies by program and some dates may be coming up soon",
+    "Scan category labels and field-of-study cues to find the Idaho scholarships that best match your interests and background",
+    "Read each requirement section carefully instead of assuming the same essay or document rules apply across the whole list",
+    "Open the official scholarship page for every program you shortlist and verify eligibility, award details, and current application instructions"
+  ],
+  "who_for": [
+    "Idaho high school students looking for USA scholarships with local or regional relevance",
+    "High school seniors comparing awards connected to education, community, STEM, medicine, or the arts",
+    "Applicants who want to find Idaho listings before sorting by field of study such as engineering, agriculture, business, or performing arts",
+    "Students and families reviewing scholarship options that may include lighter-touch applications but still need row-by-row verification"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Idaho scholarships for high school students in this filtered view?",
+      "answer": "Use this Idaho + High School filter to explore a focused set of USA scholarship listings, then open each row to confirm eligibility on the official source. Categories and study interests vary across the list, including areas like education, community, STEM, medicine, and disability."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—these rows include award amounts and deadline text, so you can compare options quickly before deciding where to apply. Amounts and deadlines differ by program, so verify the latest details on the official scholarship page."
+    },
+    {
+      "question": "Are these Idaho scholarships only for current high school seniors?",
+      "answer": "Not always. While this filter is centered on high school, some listings may connect to levels such as high school senior, adult non-traditional, community college, or graduate pathways, so check each listing carefully before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I browse on this Idaho high school page?",
+      "answer": "You can browse programs tied to several themes and fields shown in the catalog, such as education, engineering, agriculture and related sciences, visual and performing arts, and business management and marketing. Sample titles in this filtered set also show that topics can range from community-focused awards to arts and STEM-related opportunities."
+    }
+  ],
+  "page_data": {
+    "exactCount": 21,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 25000,
+      "statedAmountCount": 21,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 13,
+      "within60Days": 18,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-05-01",
+        "2026-05-04"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 20,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "link",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "agriculture_and_related_sciences",
+        "biological_and_biomedical_sciences",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "American Legion Auxiliary",
+        "count": 2
+      },
+      {
+        "name": "Arabian Horse Association-Region 4",
+        "count": 2
+      },
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 2
+      },
+      {
+        "name": "Community Council of Idaho",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "disability",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/idaho",
+    "generatedAt": "2026-04-26T15:22:14.491Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 21,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

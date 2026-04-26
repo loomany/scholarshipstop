@@ -1,0 +1,114 @@
+{
+  "seo_title": "Find LGBTQ High School Scholarships in Florida, USA",
+  "seo_description": "LGBTQ high school scholarships in Florida, USA—compare awards, deadlines, and requirements in this focused set of listings, then apply on official pages.",
+  "intro": "Trying to find LGBTQ scholarships for high school students in Florida usually means sorting through a small but varied set of programs with different community ties, focus areas, and application expectations. This filtered USA view brings those rows together so you can compare options without mixing in unrelated awards. In this slice, you may see listings connected to community, education, and health-related themes, and many appear to have lighter application signals, often with no essay noted in the metadata. Award amounts vary by listing, and deadlines differ by program, so it is worth checking each row closely and applying early when a match looks strong.",
+  "h1": "Find Florida LGBTQ High School Scholarships USA",
+  "supporting": "Use the list to compare more than the title alone. Look at the requirement lines, location fit, study level wording, and any category clues that point to community, education, medicine, or broader support services. Because this Florida-focused LGBTQ high school slice is narrow, even similar-sounding listings can have different eligibility details or official instructions. Open the source page for any program you want to pursue, verify the latest terms, and compare deadline timing before you shortlist where to apply.",
+  "related_intro": "If these Florida LGBTQ high school scholarships feel close but not quite right, related pages can help you widen the search by topic, location, or eligibility. That is useful when you want to compare nearby scholarship categories, check broader high school options, or find other USA listings with similar community or education themes.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before you apply",
+    "Open the official page to verify current details",
+    "Shortlist the listings that best match your profile",
+    "Check award text and category clues side by side"
+  ],
+  "who_for": [
+    "Florida high school seniors seeking LGBTQ scholarships",
+    "LGBTQ students in Florida comparing community-based awards",
+    "Applicants interested in education or health-related scholarship themes",
+    "Students who prefer listings that often show no essay"
+  ],
+  "faq": [
+    {
+      "question": "How do I find LGBTQ scholarships for high school students in Florida?",
+      "answer": "Use this filtered view to compare a focused set of Florida listings tied to LGBTQ eligibility and high school applicants. Then open each row and verify the official requirements, location details, and application steps on the provider’s page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Florida high school student?",
+      "answer": "Not automatically. These rows share the LGBTQ + high school + Florida filter context, but eligibility can still vary by program, so check each official listing for residency, school level, and any other requirements before you apply."
+    },
+    {
+      "question": "Are these scholarships mostly essay-based?",
+      "answer": "Many listings in this filtered set appear to have lighter application requirements, and many sampled rows show no essay flag. Still, requirements can change, so confirm the current application materials on the official scholarship page before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I explore in this Florida LGBTQ high school list?",
+      "answer": "The programs below span themes seen in the catalog such as community, education, medicine, and miscellaneous opportunities. You can browse the rows to find options that match your interests, then use the official source to confirm fit and current details."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 1000,
+      "maxUsd": 6000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-08",
+        "2026-04-30",
+        "2026-06-13"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "psychology",
+        "public_administration_and_social_service"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Latinos Salud",
+        "count": 1
+      },
+      {
+        "name": "Parents, Families and Friends of Lesbians and Gays-Jacksonville Chapter",
+        "count": 1
+      },
+      {
+        "name": "PFLAG Jacksonville",
+        "count": 1
+      },
+      {
+        "name": "Tampa Pride Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "lgbtq/high-school/florida",
+    "generatedAt": "2026-04-26T15:49:13.161Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

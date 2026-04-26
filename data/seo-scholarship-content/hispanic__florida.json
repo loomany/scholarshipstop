@@ -1,48 +1,123 @@
 {
-  "seo_title": "Florida Scholarships for Hispanic Students",
-  "seo_description": "Explore 5 scholarships for Hispanic students in Florida. Award amounts range from $500 to $2,500. Check deadlines and requirements.",
-  "intro": "Finding financial support as a Hispanic student in Florida can be pivotal for your educational journey. This collection features 5 scholarships specifically tailored for Hispanic students in the state, with award amounts ranging from approximately $500 to $2,500. Since deadlines vary, it's essential to check each listing promptly to ensure you don’t miss out on potential funding opportunities.",
-  "h1": "Hispanic Scholarships in Florida",
-  "supporting": "These scholarships cover a range of categories, including education, STEM, arts, and community initiatives. Many listings do not require essays, making them more accessible for applicants. As you review the options, consider comparing the award sizes and requirements to find the best fit for your needs.",
-  "related_intro": "For more tailored options, explore related scholarships that might align with your specific interests or fields of study.",
+  "seo_title": "Find Hispanic Scholarships in Florida, USA",
+  "seo_description": "Hispanic scholarships in Florida, USA with deadlines, award details, and focused options to compare. Explore listings and apply on official pages.",
+  "intro": "Trying to find Hispanic scholarships in Florida usually means narrowing a broad search into programs that actually match your background and location. This filtered USA view brings together a focused set of listings tied to Hispanic eligibility and Florida, with options that touch areas like STEM, medicine, education, arts, and community-focused work. If you want to apply soon, it is worth checking these rows promptly because deadline timing differs by program and some opportunities may be coming up relatively soon. Award amounts vary by listing, and requirements can differ as well, but many entries in this slice appear to have lighter-touch applications and often no essay flag in the catalog data. Use this page to compare fit, then verify every detail on the official scholarship page before you apply.",
+  "h1": "Find Hispanic Scholarships in Florida USA",
+  "supporting": "A smart way to use this list is to compare more than the title. Read the requirement lines for study level, residency or citizenship language, and any field-of-study cues such as engineering, health professions, psychology, education, or construction trades. Then compare award text and deadline wording side by side so you can decide which programs deserve immediate attention. Because listings can differ in scope, open the official source for any scholarship you plan to pursue and confirm current rules, materials, and submission steps before you apply.",
+  "related_intro": "If you do not find enough matches in this Florida slice, related pages can help you explore nearby options by changing one part of the search at a time, such as the eligibility focus or the location filter. That makes it easier to compare similar USA scholarship paths without starting over.",
   "how_to_use": [
-    "Check each listing for specific deadlines",
-    "Compare award amounts to prioritize applications",
-    "Review eligibility requirements carefully",
-    "Open official scholarship pages for detailed information",
-    "Shortlist your top choices for easier tracking"
+    "Compare deadline wording across the rows first",
+    "Read each requirement line for location and eligibility details",
+    "Scan award text and field-of-study cues before shortlisting",
+    "Open the official scholarship page to verify current rules",
+    "Shortlist the best matches and apply in order of urgency"
   ],
   "who_for": [
-    "Hispanic students in Florida",
-    "Students pursuing education in STEM fields",
-    "Applicants interested in community-focused initiatives",
-    "Individuals seeking arts-related funding",
-    "Students looking for lighter application requirements"
+    "Hispanic students in Florida comparing local scholarship options",
+    "Florida applicants interested in STEM, medicine, education, arts, or community programs",
+    "High school seniors or graduate students checking eligibility-based funding",
+    "US citizens or permanent residents reviewing Florida scholarship matches"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for Hispanic students in Florida?",
-      "answer": "This filter showcases a total of 5 scholarships specifically for Hispanic students in Florida, covering various categories such as STEM, Education, Arts, and Community. Each listing may have different eligibility criteria and focus areas, so it's beneficial to review each one carefully."
+      "question": "How can I find Hispanic scholarships in Florida that fit my background?",
+      "answer": "Use this filtered view to compare Florida listings by category, study level, and any citizenship or residency notes shown in each row. In this USA slice, details can differ by program, so confirm eligibility on the official scholarship page before you apply."
     },
     {
-      "question": "How much funding can I expect from these scholarships?",
-      "answer": "Award sizes for the scholarships in this category generally range from approximately $500 to $2,500. However, specific amounts can vary by listing, so it's important to check the details of each scholarship for exact figures."
+      "question": "What kinds of scholarships appear in this Hispanic Florida list?",
+      "answer": "This focused set of listings includes themes such as STEM, medicine, education, arts, community, and miscellaneous programs. Sample fields shown in the catalog include education, engineering, construction trades, health professions and clinical sciences, and psychology."
     },
     {
-      "question": "Are there essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require essays, but it's wise to verify the specific requirements for each one. While many listings have lighter application processes, checking the details will ensure you meet all necessary criteria."
+      "question": "Who should explore these scholarships before applying?",
+      "answer": "Applicants looking for Hispanic scholarship options tied to Florida can use these listings to compare programs for high school seniors and graduate students. Some rows also show USA eligibility details such as U.S. citizen or U.S. permanent resident, which should be verified on the official page."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All 5 scholarships in this filter have deadlines, but they vary by listing. Some deadlines are approaching within the next 45 days, so it's advisable to check the individual listings promptly to ensure you don't miss any opportunities."
+      "question": "Do these scholarships usually require an essay or a long application?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and many sampled rows show no essay flag in the catalog. Still, requirements can change row to row, so review the official application instructions before you apply."
     }
   ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 1625,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-08",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "psychology"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "University of North Florida",
+        "count": 2
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 1
+      },
+      {
+        "name": "Florida State University",
+        "count": 1
+      },
+      {
+        "name": "Latinos Salud",
+        "count": 1
+      },
+      {
+        "name": "University of South Florida",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "arts",
+      "community",
+      "education",
+      "medical",
+      "miscellaneous"
+    ]
+  },
   "_meta": {
     "canonicalPath": "hispanic/florida",
-    "generatedAt": "2026-04-02T10:51:01.646Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 5,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:38:18.010Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

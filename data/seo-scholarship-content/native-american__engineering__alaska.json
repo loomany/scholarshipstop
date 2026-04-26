@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find Native American Engineering Scholarships in Alaska, USA",
+  "seo_description": "Native American engineering scholarships in Alaska, USA—compare award ranges, review varying deadlines, and explore listings to apply on official pages.",
+  "intro": "Trying to find Alaska scholarships for Native American students in engineering usually means narrowing a broad USA search into a smaller set you can actually compare. This filtered slice brings together programs that align with that mix of eligibility, location, and study focus, with examples tied to STEM and related academic paths. Awards, deadlines, and requirement details vary by listing, so it helps to read each row closely instead of assuming the same rules apply across the board. Many listings in this set appear to have lighter application signals, and some may often be no essay, but you should still verify every requirement on the official source before you apply.",
+  "h1": "Compare Native American Engineering Scholarships in Alaska USA …",
+  "supporting": "Use the rows below to compare more than just the scholarship title. Check how each listing describes eligibility, field of study fit, and any residency or citizenship language that may matter in the USA context. It is also worth scanning award text and deadline wording side by side, since timing differs by program and some opportunities may need attention soon. Open the official page for any strong match, confirm current terms, and shortlist the options that best fit your engineering plans in Alaska.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you explore nearby options by adjusting one part of the filter, such as the engineering topic, the Native American eligibility focus, or the Alaska location. That makes it easier to compare adjacent scholarship paths without starting your search over.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before you apply",
+    "Open the official page to verify details",
+    "Shortlist listings that match your engineering path",
+    "Check award text and eligibility language together"
+  ],
+  "who_for": [
+    "Native American students in Alaska pursuing engineering",
+    "Alaska applicants comparing STEM focused scholarship options",
+    "High school seniors planning for engineering study",
+    "Graduate students seeking USA funding with engineering relevance"
+  ],
+  "faq": [
+    {
+      "question": "How do I find Native American engineering scholarships in Alaska on this page?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings tied to Native American eligibility, engineering, and Alaska. Open each row to confirm the official eligibility details, study level, and residency or citizenship language before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts in this slice range across the listings, and deadlines differ by row, so verify the latest details on the official scholarship page before applying."
+    },
+    {
+      "question": "Are these scholarships only for engineering majors?",
+      "answer": "Engineering is the main topic filter here, but some listings may also connect to broader STEM or related categories shown in the catalog. Check each listing’s official criteria to see how closely your program, major, or academic plan matches before you apply."
+    },
+    {
+      "question": "What should I look at first when I browse these Alaska scholarship listings?",
+      "answer": "Start with eligibility, location fit, study level, and deadline, then compare award details and any application requirements. Many listings in this filtered set appear lighter-touch and often show no essay in catalog metadata, but you should still confirm requirements on the official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 2000,
+      "maxUsd": 20000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-06-30",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "computer_and_information_sciences",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "AISES",
+        "count": 3
+      },
+      {
+        "name": "Native Forward Scholars Fund",
+        "count": 1
+      },
+      {
+        "name": "The CIRI Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "education",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "native-american/engineering/alaska",
+    "generatedAt": "2026-04-26T15:59:52.823Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

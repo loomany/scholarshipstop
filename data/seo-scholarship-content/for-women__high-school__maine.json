@@ -1,0 +1,100 @@
+{
+  "seo_title": "Find Maine High School Scholarships for Women | USA",
+  "seo_description": "Maine high school scholarships for women in the USA: compare deadlines, award details, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Maine scholarships for women while still in high school usually means narrowing fast by location, education stage, and fit. This filtered USA view brings together a focused set of listings that match that combination, so you can compare options without wading through unrelated programs. The rows here lean toward education and STEM themes, with some overlap into areas like business, architecture, construction trades, and engineering. Awards, deadlines, and eligibility details can differ from one listing to the next, so it helps to read each row closely rather than assume the same rules apply across the set. Many listings in this slice appear to have lighter application signals, and some may not require an essay, but you should still verify every requirement on the official source before you apply.",
+  "h1": "Compare Maine High School Scholarships for Women USA",
+  "supporting": "A smart way to use this list is to compare the requirement lines first, then check deadline text and award details side by side. In this Maine high school women-focused slice, the strongest value is speed: you can quickly spot which programs seem most relevant, which ones may be simpler to pursue, and which deserve a closer look based on subject area. Amounts vary by listing and should be confirmed on the official page, and deadlines differ by program, so it is worth opening each source before you shortlist anything.",
+  "related_intro": "If you do not find enough matches in this Maine high school women filter, related pages can help you widen the search by topic, location, or eligibility. That is useful when you want to compare nearby options, scan broader high school listings, or find other USA scholarships connected to education or STEM interests.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist the listings that best match your interests and location"
+  ],
+  "who_for": [
+    "Maine high school girls comparing local scholarship options",
+    "Students interested in education or STEM related awards",
+    "Applicants who want women-focused USA scholarship listings",
+    "High school students seeking programs with potentially lighter application steps"
+  ],
+  "faq": [
+    {
+      "question": "How do I find scholarships for women in Maine while still in high school?",
+      "answer": "Use this filtered view to explore a focused set of USA listings tied to women, high school, and Maine. Then open each row and verify eligibility, deadline, and application steps on the official scholarship page."
+    },
+    {
+      "question": "Can I compare these Maine scholarships before I apply?",
+      "answer": "Yes—compare each listing by topic, stated amount, deadline text, and any requirement notes shown in the catalog. Amounts and deadlines vary by program, so confirm the latest details with the official source before you apply."
+    },
+    {
+      "question": "What kinds of scholarships appear in this filter?",
+      "answer": "These rows commonly connect to education, with some overlap in STEM and miscellaneous categories. Sample fields in this slice also touch areas like business, architecture, construction trades, and engineering, but each program has its own focus."
+    },
+    {
+      "question": "Are these high school scholarships in Maine usually quick to apply for?",
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements differ row to row, so check the official application page before assuming a program is simple."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 1500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-10",
+        "2026-04-10"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "architecture_and_related_services",
+        "communication_and_journalism",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Maine Business and Professional Women",
+        "count": 2
+      },
+      {
+        "name": "Associated Builders and Contractors of Maine",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/high-school/maine",
+    "generatedAt": "2026-04-26T15:08:34.806Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

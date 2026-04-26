@@ -1,0 +1,123 @@
+{
+  "seo_title": "Find Kentucky Scholarships Under Ten Thousand | USA",
+  "seo_description": "Kentucky scholarships under ten thousand in the USA: compare award ranges, deadlines, and requirements, then apply from official program pages.",
+  "intro": "Trying to find Kentucky scholarships with awards under a common upper range usually means balancing fit, effort, and timing rather than chasing one huge prize. This filtered USA view brings together a focused set of listings tied to Kentucky, with examples touching education, community, STEM, medicine, safety, and other areas. The rows below can help you compare programs for high school seniors, college students, and graduate students, but the details are not all the same. Award amounts vary by listing, deadlines differ by program, and requirement lines may be lighter for some opportunities than others. If you plan to apply in the current cycle or look ahead to scholarship options for a future year, it is worth checking dates promptly and reading each official listing closely.",
+  "h1": "Compare Kentucky Scholarships Under Ten Thousand USA",
+  "supporting": "Use this list to compare more than the headline award. Look at the category, study level, residency or citizenship notes, and any field of study language before you decide a scholarship is a match. Some rows may point to education or engineering interests, while others connect more with community or professional pathways. Open the official page for any listing you shortlist, verify the current amount and deadline, and check whether essays, enrollment status, or Kentucky-specific eligibility details apply before you submit an application.",
+  "related_intro": "If these Kentucky scholarships feel close but not quite right, related pages can help you narrow by topic, study level, or other requirement patterns. That is often the fastest way to find nearby options worth comparing before you apply.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the listings that match your level and field",
+    "Check award wording and essay expectations before you apply"
+  ],
+  "who_for": [
+    "Kentucky residents comparing smaller scholarship awards",
+    "High school seniors planning in-state funding options",
+    "College or graduate students reviewing Kentucky-specific listings",
+    "Applicants in education, engineering, business, journalism, or safety fields"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Kentucky scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Kentucky scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Kentucky scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 39,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 5300,
+      "statedAmountCount": 39,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 19,
+      "within60Days": 34,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 6,
+      "noCount": 33,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "security_and_protective_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kentucky 4-H Foundation",
+        "count": 3
+      },
+      {
+        "name": "Kentucky Higher Education Assistance Authority",
+        "count": 3
+      },
+      {
+        "name": "Women Leading Kentucky",
+        "count": 3
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Kentucky Housing Association",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/kentucky",
+    "generatedAt": "2026-04-26T16:10:20.468Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 39,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

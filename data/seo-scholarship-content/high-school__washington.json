@@ -1,0 +1,131 @@
+{
+  "seo_title": "Find Washington High School Scholarships | USA",
+  "seo_description": "Washington high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Washington scholarships for high school applicants in the USA usually means sorting through programs that look similar at first glance but differ in who qualifies, what they ask for, and how quickly you need to apply. This filtered slice brings together a focused set of listings tied to high school and Washington, so you can compare options without jumping between unrelated results. You will see a mix of education, community, STEM, arts, medicine, and miscellaneous categories, with some listings pointing to specific backgrounds, interests, or future study areas. Award amounts vary by listing, deadlines differ by program, and requirements are not identical, so it is worth reading each row closely and verifying details on the official source before you apply.",
+  "h1": "Explore Washington High School Scholarships USA",
+  "supporting": "A useful way to browse these rows is to compare the requirement language first, then look at award text and deadline wording. Some programs may be lighter-touch, while others can ask for more documentation or a more specific fit. You can also scan category labels and study-level cues to find scholarships that match your situation now or your next step after high school. Before you apply, open the official page for any listing you shortlist and confirm eligibility, residency or citizenship language, and the current deadline.",
+  "related_intro": "If these Washington high school scholarships feel close but not quite right, related pages can help you narrow by topic, education level, or another location in the USA. That is often the fastest way to compare nearby filter combinations and find programs that better match your background or plans.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you shortlist anything",
+    "Open the official page to verify eligibility details",
+    "Scan category and study-level labels for closer matches",
+    "Shortlist promising listings and compare award text carefully"
+  ],
+  "who_for": [
+    "Washington high school students comparing local and statewide scholarship options",
+    "High school seniors in the USA looking for Washington-linked funding",
+    "Applicants interested in education, community, STEM, arts, or medicine categories",
+    "Students who want to find scholarships tied to future study areas like business, engineering, health, or agriculture"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Washington scholarships for high school students in this filtered view?",
+      "answer": "Use this list to explore programs tagged for High School and Washington, then open each row to confirm who can apply. In the USA, eligibility can still differ by scholarship, including study level, residency, or other requirements shown on the listing and official source."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these Washington high school scholarships?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts can range widely, and deadlines differ by listing, so compare row by row and verify the latest details on the official scholarship page before you apply."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in Washington?",
+      "answer": "Not always. While this filter is centered on High School and Washington, some listings may use more specific labels such as high school senior, so check each scholarship's eligibility details before applying."
+    },
+    {
+      "question": "What kinds of scholarships can I browse here for Washington high school students?",
+      "answer": "This focused set of listings spans multiple themes, including Education, Community, STEM, Arts, Medicine, and Miscellaneous. You can also explore rows tied to fields such as education, business, engineering, health professions, and agriculture, depending on the individual program."
+    }
+  ],
+  "page_data": {
+    "exactCount": 86,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 25000,
+      "statedAmountCount": 86,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 59,
+      "within60Days": 82,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-29",
+        "April 28, 2026 3:00 PM CT",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 82,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "transcript",
+        "essay",
+        "link",
+        "photo"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "adult_non_traditional",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation for Southwest Washington",
+        "count": 15
+      },
+      {
+        "name": "Community Foundation of North Central Washington",
+        "count": 10
+      },
+      {
+        "name": "Wenatchee Valley College Foundation",
+        "count": 5
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Rho Mu Omega Chapter",
+        "count": 4
+      },
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/washington",
+    "generatedAt": "2026-04-26T15:35:55.502Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 86,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

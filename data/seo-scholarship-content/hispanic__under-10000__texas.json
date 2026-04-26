@@ -1,0 +1,87 @@
+{
+  "seo_title": "Find Hispanic Scholarships Under Ten Thousand in Texas USA",
+  "seo_description": "Hispanic scholarships under ten thousand in Texas: compare awards, deadlines, and requirements, then apply on each official USA program page.",
+  "intro": "Trying to find Hispanic scholarships in Texas with awards under the usual larger-dollar tiers often means sorting through mixed results that do not match your location or budget expectations. This filtered USA view narrows that search to a focused set of listings tied to Texas and Hispanic eligibility, with community and STEM themes appearing in the mix. Many rows in this slice also look relatively straightforward to review, and no-essay options may show up often, though every program should still be checked individually. Award amounts, deadlines, and requirement details can differ from one listing to the next, so use the rows below to compare fit before you apply.",
+  "h1": "Compare Hispanic Scholarships Under Ten Thousand in Texas USA …",
+  "supporting": "A smart way to use this list is to compare the requirement line, deadline text, and category tags side by side instead of assuming the programs work the same way. Some listings may lean toward community involvement, while others connect more clearly to STEM or education-related interests. Open each official page to verify current award details, confirm who qualifies in Texas, and check whether the application looks lighter-touch or asks for more supporting materials before you shortlist anything.",
+  "related_intro": "If these Texas listings feel close but not quite right, related pages can help you compare nearby filter combinations, such as broader Hispanic scholarship results, other Texas scholarship views, or additional lower-award slices in the USA catalog.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the listings that best match your profile"
+  ],
+  "who_for": [
+    "Hispanic applicants in Texas",
+    "Texas students comparing smaller-award scholarships",
+    "STEM or community-focused applicants",
+    "Applicants looking for no-essay possibilities"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here with one application?",
+      "answer": "No—each listing is a separate program, so you apply through the scholarship’s own official process. Requirements, documents, and deadlines differ by row, so check each program page before you submit."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare eligibility details, Texas location fit, field-of-study relevance, and deadline timing across the programs below. Award amounts vary by listing, and even when a row shows a number, you should confirm it on the official page."
+    },
+    {
+      "question": "Are these Texas scholarships mainly for certain subjects or communities?",
+      "answer": "In this filter slice, STEM and Community appear often, and education shows up among sample fields of study. That does not mean every row is the same, so explore each listing’s categories and official criteria carefully."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 5000,
+      "minUsd": 5000,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Hispanic Scholarship Consortium",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "community",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/under-10000/texas",
+    "generatedAt": "2026-04-26T15:42:22.358Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

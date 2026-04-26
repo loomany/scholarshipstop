@@ -1,0 +1,120 @@
+{
+  "seo_title": "Find Indiana Scholarships for Women | USA",
+  "seo_description": "Indiana scholarships for women: compare awards, deadlines, and requirements in this USA filter view, then apply on each official program page.",
+  "intro": "Trying to find Indiana scholarships for women usually means sorting through programs that look similar at first glance but differ in subject focus, eligibility details, and application steps. This filtered USA view narrows that search to a focused set of listings tied to Indiana and women-focused eligibility, with examples touching law, arts, education, STEM, safety, and public finance. If you want to apply soon, it is worth checking the rows promptly because deadlines differ by program and some may be coming up relatively soon. Award amounts also vary by listing, and requirement lines are mixed, so you may see lighter-touch options alongside programs that ask for more materials. Use this slice to compare fit before you commit time to full applications.",
+  "h1": "Compare Indiana Scholarships for Women USA",
+  "supporting": "A smart way to use these rows is to compare the title, category, study-level cues, and requirement text together rather than judging by award language alone. Some listings may connect more closely to graduate study or fields such as education, law, business, journalism, or public service, while others are broader. As you browse, note which programs appear Indiana-specific and which may simply include Indiana within eligibility. Then open the official page for any strong match to verify current rules, essay expectations, award details, and deadline wording before you apply.",
+  "related_intro": "If this Indiana women-focused set feels too narrow, related pages can help you explore nearby options by changing one filter at a time. You might compare other women scholarship pages, look at broader Indiana scholarship lists, or check category-led views such as law, education, arts, or STEM to find additional USA programs with overlapping fit.",
+  "how_to_use": [
+    "Compare deadline wording across each listing",
+    "Read the requirement line before shortlisting",
+    "Open official pages to verify eligibility",
+    "Check award details and essay expectations",
+    "Save the strongest matches to apply"
+  ],
+  "who_for": [
+    "Women seeking Indiana-based scholarship options",
+    "Graduate students comparing women-focused funding",
+    "Applicants in law, education, or public service",
+    "Indiana residents exploring arts or STEM support"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Indiana scholarships for women and compare the options on this page?",
+      "answer": "Use this filtered view to compare women-focused scholarship rows tied to Indiana, then open each listing for the official eligibility details. Awards, deadlines, study focus, and requirements vary by program, so verify every row on the source page before you apply."
+    },
+    {
+      "question": "Can I apply if I’m in a graduate program in the USA?",
+      "answer": "Possibly—graduate study appears in this set, but eligibility is not identical across all listings. Check each scholarship’s official page to confirm level, location, and any field-specific rules before you apply."
+    },
+    {
+      "question": "What kinds of subjects show up when I browse these Indiana scholarships for women?",
+      "answer": "This focused set includes themes such as law, arts, education, STEM, safety, and miscellaneous topics. Sample fields in the catalog include education, business management and marketing, legal professions and law studies, public administration and social service, and communication and journalism."
+    },
+    {
+      "question": "Do all of these scholarships have the same deadline or award amount?",
+      "answer": "No—deadlines differ by row, and at least one sampled listing is relatively soon, so it’s smart to check dates promptly. Award amounts also vary by listing, and the exact amount should always be confirmed on the official scholarship page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 3750,
+      "minUsd": 1000,
+      "maxUsd": 10000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-22",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "public_administration_and_social_service",
+        "communication_and_journalism"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Alliance for Women in Media",
+        "count": 1
+      },
+      {
+        "name": "Educational Foundation for Women in Accounting",
+        "count": 1
+      },
+      {
+        "name": "Indiana Women in Public Finance",
+        "count": 1
+      },
+      {
+        "name": "Women in Federal Law Enforcement",
+        "count": 1
+      },
+      {
+        "name": "Women in HVACR",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "law",
+      "arts",
+      "education",
+      "miscellaneous",
+      "safety",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/indiana",
+    "generatedAt": "2026-04-26T15:09:05.648Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

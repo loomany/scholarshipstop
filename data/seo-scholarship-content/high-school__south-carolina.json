@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find South Carolina High School Scholarships | USA",
+  "seo_description": "South Carolina high school scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on each official program page.",
+  "intro": "Trying to find South Carolina scholarships for high school students in the USA usually means sorting through programs that do not all ask for the same things. In this filtered slice, you can compare listings tied to South Carolina while keeping your search focused on high school applicants. The rows below span areas such as education, humanities, STEM, and miscellaneous topics, so it is worth scanning beyond one subject label. Awards vary by listing, deadlines differ by program, and requirements can be lighter for some opportunities than others. If you plan to apply for scholarships in South Carolina for the upcoming cycle, check each row closely and verify the latest details on the official page before you decide where to spend time.",
+  "h1": "Compare South Carolina High School Scholarships USA",
+  "supporting": "A smart way to use this list is to compare more than the scholarship title. Read the requirement line, note whether the opportunity appears aimed at seniors or other study levels, and check how closely the topic matches your interests, from education and history to engineering or language-related study. Because deadline text appears across these rows and some programs may be approaching soon, it makes sense to shortlist options early. Open the official source for any listing you like, confirm eligibility, and compare award details and application steps before you apply.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship paths by study level, topic, or other USA filters. That is useful when a South Carolina high school listing looks close to your profile but not quite exact.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before applying",
+    "Shortlist the listings that match your profile",
+    "Verify award details and eligibility on sponsor sites"
+  ],
+  "who_for": [
+    "South Carolina high school students comparing local scholarship options",
+    "High school seniors in the USA building a scholarship shortlist",
+    "Students interested in education, humanities, or STEM listings",
+    "Applicants who want South Carolina opportunities with varied requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find South Carolina scholarships for high school students in the USA on this filtered page?",
+      "answer": "Use this filtered view to explore a focused set of South Carolina listings tied to the High School preset. Then open each row and verify eligibility, residency, study level, and application steps on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines across these South Carolina high school scholarships?",
+      "answer": "Yes—these rows include award amounts and deadline text, but both vary by program. Amounts differ by listing, and deadlines are not universal, so compare row by row and confirm details on the official page."
+    },
+    {
+      "question": "Are these scholarships only for high school seniors in South Carolina?",
+      "answer": "Not always. While this filter is centered on High School and South Carolina, sample study levels in the catalog include high school senior and high school freshman, so check each listing carefully before you apply."
+    },
+    {
+      "question": "Do all programs here require an essay or a long application?",
+      "answer": "No single requirement applies to every listing. The catalog shows mixed essay requirements, and some programs may be lighter-touch, but you should verify what each scholarship asks for on its official application page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 13,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 400,
+      "maxUsd": 18000,
+      "statedAmountCount": 13,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 12,
+      "rollingOrUnknown": 0,
+      "nearestDays": 11,
+      "nearestLabels": [
+        "2026-04-12",
+        "2026-04-12",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "high_school_freshman"
+      ],
+      "commonFields": [
+        "education",
+        "construction_trades",
+        "engineering",
+        "history",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Midlands Technical College",
+        "count": 3
+      },
+      {
+        "name": "The Dr. Doretha Pressey Southern Scholars Initiative",
+        "count": 2
+      },
+      {
+        "name": "Association for Iron and Steel Technology-Southeast Chapter",
+        "count": 1
+      },
+      {
+        "name": "Recycled Materials Association-Southeast Chapter",
+        "count": 1
+      },
+      {
+        "name": "Society of Mayflower Descendants of South Carolina",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "humanities",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/south-carolina",
+    "generatedAt": "2026-04-26T15:33:05.897Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 13,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

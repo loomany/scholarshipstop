@@ -1,0 +1,116 @@
+{
+  "seo_title": "Find Indiana Scholarships for Women Under Ten Thousand | USA",
+  "seo_description": "Indiana scholarships for women under ten thousand: compare award ranges, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Indiana scholarships for women with awards under the stated cap usually means balancing fit, timing, and effort. This filtered USA view brings together a focused set of listings tied to Indiana and the women eligibility filter, with options that touch areas such as law, arts, education, STEM, safety, and related subjects. Awards in these rows vary by listing, and deadlines differ as well, so it helps to compare each program instead of assuming one pattern across the page. Requirements are mixed too: some opportunities may be lighter-touch, while others can ask for more materials. If you want to apply in this category for the current cycle, it is worth checking the rows promptly and verifying details on the official scholarship pages.",
+  "h1": "Indiana Scholarships for Women Under Ten Thousand USA Apply",
+  "supporting": "Use this list to compare more than the headline award. Read the requirement lines closely, note the study level and field cues, and watch for programs that match your background or intended coursework in Indiana. Because deadline text appears across these listings and timing is not uniform, it makes sense to shortlist strong matches early. Before you apply, open the official source for each scholarship to confirm eligibility, required materials, and any essay expectations.",
+  "related_intro": "If these Indiana results feel too narrow, related pages can help you explore nearby options by changing one filter at a time. You might compare other women-focused scholarship pages, look at broader Indiana listings, or review other award-range slices to find programs that fit your profile.",
+  "how_to_use": [
+    "Compare deadline text across rows",
+    "Read each requirement line carefully",
+    "Open the official scholarship page",
+    "Shortlist programs that match your field",
+    "Verify award details before you apply"
+  ],
+  "who_for": [
+    "Women studying in Indiana",
+    "Graduate students seeking smaller awards",
+    "Applicants in law or education fields",
+    "Women interested in public service or safety topics"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for For Women · Under · Indiana scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for For Women · Under · Indiana scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for For Women · Under · Indiana scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 3750,
+      "minUsd": 1000,
+      "maxUsd": 10000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-22",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies",
+        "public_administration_and_social_service",
+        "communication_and_journalism"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Alliance for Women in Media",
+        "count": 1
+      },
+      {
+        "name": "Educational Foundation for Women in Accounting",
+        "count": 1
+      },
+      {
+        "name": "Indiana Women in Public Finance",
+        "count": 1
+      },
+      {
+        "name": "Women in Federal Law Enforcement",
+        "count": 1
+      },
+      {
+        "name": "Women in HVACR",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "law",
+      "arts",
+      "education",
+      "miscellaneous",
+      "safety",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/under-10000/indiana",
+    "generatedAt": "2026-04-26T15:10:29.663Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

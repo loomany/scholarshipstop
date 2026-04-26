@@ -1,46 +1,107 @@
 {
-  "seo_title": "Massachusetts Scholarships for First Generation Students",
-  "seo_description": "Discover 5 scholarships for first generation students in Massachusetts with awards from $400 to $10,000. Check deadlines promptly.",
-  "intro": "Navigating funding opportunities as a first-generation student in Massachusetts can be challenging, but there are five scholarships available that cater specifically to your needs. These awards range from $400 to $10,000, offering a variety of options to support your educational journey. Be mindful that deadlines vary among listings, with some approaching in the next few weeks, so it's wise to check the details promptly.",
-  "h1": "First Generation Scholarships in Massachusetts",
-  "supporting": "This selection of scholarships includes options in STEM and education fields, with many listings requiring no essays, making them more accessible. As you review the opportunities, consider comparing the award amounts and specific eligibility criteria to find the best fit for your situation. Each scholarship has unique requirements, so take the time to read through the details carefully.",
-  "related_intro": "If you're interested in exploring more scholarships for first-generation students or related fields, check out our other pages tailored to your educational goals.",
+  "seo_title": "Find First Generation Scholarships in Massachusetts, USA",
+  "seo_description": "First generation scholarships in Massachusetts, USA: compare focused listings, review varying awards and deadlines, and apply on official pages.",
+  "intro": "Trying to find first generation scholarships in Massachusetts usually means sorting through programs that mix location rules, eligibility details, and very different academic themes. This filtered USA view narrows that search to a focused set of listings tied to first-generation status and Massachusetts, with examples touching STEM, biology, education, humanities, and other areas. Awards in these rows vary by listing, and deadlines do too, so it helps to compare each program one by one instead of assuming the same terms apply across the page. Many listings in this slice appear to have lighter application requirements, and no-essay options are common in the current data, but you should still read every requirement line carefully before you apply.",
+  "h1": "Find First Generation Scholarships in Massachusetts USA",
+  "supporting": "A useful way to browse this set is to compare more than the title. Check how each scholarship describes first-generation eligibility, look at whether the field of study matters, and note if the opportunity seems aimed at high school seniors or early college students. Because some deadlines appear to be coming up soon, it is smart to review date text promptly and open the official source before you shortlist anything. Amounts are listed on these rows, but exact terms and conditions should always be verified on the sponsor or school page.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship categories by topic or eligibility. Related pages can help you explore Massachusetts options in STEM, biology, education, or humanities, or widen your search to other first-generation scholarship filters in the USA catalog.",
   "how_to_use": [
-    "Compare deadlines across listings to prioritize applications",
-    "Scan award amounts to identify funding that meets your needs",
-    "Read through eligibility requirements for each scholarship",
-    "Open official pages for the most accurate and detailed information",
-    "Shortlist your favorites for easy tracking and follow-up"
+    "Compare the deadline shown on each row first, since dates differ by program and some may be approaching soon",
+    "Read the eligibility and requirement lines closely to confirm the scholarship is specifically open to first-generation applicants in Massachusetts",
+    "Scan award text and study-area labels to find the best fit for your major, especially if you are focused on STEM, biology, education, or humanities",
+    "Open the official scholarship page before you apply to verify the amount, required materials, and any residency or enrollment details",
+    "Shortlist the strongest matches, then compare them side by side before submitting applications"
   ],
   "who_for": [
-    "First-generation college students in Massachusetts",
-    "Students pursuing degrees in STEM or education",
-    "Applicants looking for scholarships with lighter requirements"
+    "First-generation students in Massachusetts who want to compare scholarship options without sorting through unrelated national results",
+    "Applicants interested in STEM or biology listings who also want to keep education and humanities scholarships in view",
+    "High school seniors and early college students looking for Massachusetts funding tied to first-generation eligibility",
+    "International students reviewing whether individual Massachusetts scholarships in this slice include them"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for first-generation students in Massachusetts?",
-      "answer": "There are currently five scholarships listed specifically for first-generation students in Massachusetts. These opportunities cover various fields, including STEM, Biology, and Education, providing a range of options depending on your area of interest."
+      "question": "How can I find first-generation scholarships in Massachusetts that fit my major or study area?",
+      "answer": "Use this filtered view to compare the rows by category and field, such as STEM, Biology, Education, Humanities, engineering, or English language and literature. Then open the official scholarship page for each listing to verify eligibility, award details, and any program-specific requirements."
     },
     {
-      "question": "How can I find out the specific deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, so it's important to check the details for each listing. At least one scholarship has a deadline approaching within the next 45 days, so reviewing the listings promptly is advisable."
+      "question": "Can I apply to these Massachusetts scholarships if I’m an international student?",
+      "answer": "Some listings in this USA filter slice show international student as a citizenship or residency label, but that does not mean every program does. Check each row and confirm the official source before you apply."
     },
     {
-      "question": "Do I need to write an essay to apply for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, but it's best to verify each individual listing for specific requirements. Generally, many of the scholarships in this category have lighter application requirements."
-    },
-    {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "The award sizes for these scholarships vary, with amounts ranging from approximately $400 to $10,000. Each listing will provide the specific award amount, so be sure to check those details as you explore your options."
+      "question": "Do all first-generation scholarships in Massachusetts have the same deadline or award amount?",
+      "answer": "No—deadlines differ by program, and the rows in this catalog show different deadline text. Award amounts also vary by listing, so compare the entries here and verify the current amount on the official scholarship page."
     }
   ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 400,
+      "maxUsd": 10000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-10",
+        "2026-04-10",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "biological_and_biomedical_sciences",
+        "engineering",
+        "english_language_and_literature",
+        "physical_sciences"
+      ],
+      "commonResidency": [
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Cell Signaling Technology",
+        "count": 2
+      },
+      {
+        "name": "Worcester State University",
+        "count": 2
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "education",
+      "miscellaneous",
+      "humanities"
+    ]
+  },
   "_meta": {
     "canonicalPath": "first-generation/massachusetts",
-    "generatedAt": "2026-04-02T10:50:54.465Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T15:03:28.739Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 5,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

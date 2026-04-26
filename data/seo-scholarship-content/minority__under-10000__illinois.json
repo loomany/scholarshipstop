@@ -1,0 +1,102 @@
+{
+  "seo_title": "Find Minority Scholarships Under Ten Thousand in Illinois USA …",
+  "seo_description": "Minority scholarships under ten thousand in Illinois, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Illinois scholarships for minority applicants without wading into very large award tiers? This filtered USA view pulls together a focused set of programs with listed awards under ten thousand dollars, including examples tied to STEM, community, and medicine-related interests. The rows below can be useful if you want to compare options that may feel more attainable to apply for, especially since many listings in this slice appear to have lighter requirement signals and often show no essay in the catalog data. Award amounts vary by listing, and deadlines differ by program, so it is worth checking each row closely. Because some dates appear soon in the current set, applicants should review details promptly and verify everything on the official scholarship pages.",
+  "h1": "Compare Minority Scholarships Under Ten Thousand in Illinois USA…",
+  "supporting": "A smart way to use this list is to compare more than the headline amount. Look at category fit, study level, residency language, and field tags such as education, engineering, business management and marketing, transportation and materials moving, or social sciences. You can also scan for titles that suggest leadership, mentorship, community impact, or technical focus, then open the official source to confirm current rules. For Illinois applicants in the USA, this slice is worth a close browse because it groups smaller-dollar opportunities that may stack well with other aid.",
+  "related_intro": "If you do not find the right match here, check nearby scholarship pages that keep Illinois or minority eligibility in view while changing the award range or topic. That can help you compare similar programs with different funding levels, subject emphasis, or applicant requirements.",
+  "how_to_use": [
+    "Compare each row for award text, category labels, study level, and location fit before you apply",
+    "Scan requirement lines for essay expectations and other application steps, then verify details on the official page",
+    "Check deadline text row by row because timing varies across these Illinois scholarship listings",
+    "Open your best matches in separate tabs and shortlist the programs that align with your field, background, and residency status"
+  ],
+  "who_for": [
+    "Illinois applicants seeking minority scholarships in the USA with listed awards under ten thousand dollars",
+    "High school seniors looking for smaller scholarships that may be quicker to compare and shortlist",
+    "College students in Illinois reviewing STEM, community, or medicine-related opportunities",
+    "US citizens or permanent residents who want to find listings with potentially lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to these Illinois scholarships if I’m in high school or already in college?",
+      "answer": "Some listings in this USA filter slice are aimed at study levels such as high school senior and college students. Check each row carefully, because eligibility varies by program and the official page is the final source."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on award amount, deadline, study level, location fit, and any field tags such as STEM, Community, or Medicine. Amounts in these rows vary by listing, so verify the exact scholarship details on the official page before you apply."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements can differ row to row, so review the catalog entry and confirm on the scholarship’s official source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 5000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 6,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 28,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-30",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "transportation_and_materials_moving",
+        "social_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Chicago Chapter",
+        "count": 4
+      },
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "stem",
+      "community",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "minority/under-10000/illinois",
+    "generatedAt": "2026-04-26T15:57:00.593Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

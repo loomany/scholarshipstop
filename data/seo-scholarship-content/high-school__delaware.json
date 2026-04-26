@@ -1,0 +1,126 @@
+{
+  "seo_title": "Find Delaware High School Scholarships | USA",
+  "seo_description": "Delaware high school scholarships in the USA: compare deadlines, award ranges, and requirements, then apply through each official listing.",
+  "intro": "Trying to find Delaware scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what fields they mention, and how much detail they ask for. This filtered slice brings together a focused set of listings tied to Delaware, with examples touching education, STEM, medicine, community, arts, and other miscellaneous categories. Awards vary by listing, and deadlines differ by program, so it helps to compare each row instead of assuming one pattern fits all. Some opportunities may be lighter touch, while others can ask for more materials or an essay. If you want to apply in this category for the current cycle or plan ahead for future rounds, the rows below give you a practical place to start.",
+  "h1": "Explore Delaware High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Check the category tags, study level language, residency or citizenship wording, and any requirement notes before you decide which programs deserve a closer look. In this Delaware high school slice, it is worth scanning broadly because relevant options can appear under education, engineering, nursing, community, or general scholarship labels rather than one obvious bucket. Open the official page for any listing that looks promising, confirm the latest rules, and verify award details and submission steps directly with the provider before you apply.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing either the school level or the location filter. That can help you uncover USA listings with similar themes but different eligibility wording, category tags, or application requirements.",
+  "how_to_use": [
+    "Compare deadline wording across rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study interests",
+    "Check residency, citizenship, and school level language before you apply"
+  ],
+  "who_for": [
+    "Delaware high school students comparing local and regional scholarship options",
+    "High school seniors in the USA looking for Delaware-linked funding",
+    "Applicants interested in education, STEM, medicine, community, or arts categories",
+    "Students who want to find scholarships with varying requirement levels"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Delaware scholarships for high school students on this page?",
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to High School and Delaware. Open each row to compare eligibility, deadline text, and application steps, then verify final details on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Delaware high school student?",
+      "answer": "Not automatically—requirements vary by listing. Some rows may target high school seniors, while others can include different study levels or residency and citizenship conditions, so check each program’s official source before you apply."
+    },
+    {
+      "question": "How do I compare award amounts and deadlines across these Delaware scholarships?",
+      "answer": "Compare the rows side by side, then confirm the latest terms on the sponsor or official application page. Award amounts and deadlines differ by program, and this slice includes listings with a range of amounts rather than one standard award."
+    },
+    {
+      "question": "Are these mostly no-essay scholarships for Delaware high school students?",
+      "answer": "Requirements are mixed across the catalog, so don’t assume every listing is essay-free. Some programs in this filtered set appear lighter-touch, but you should review each scholarship’s official instructions before applying."
+    }
+  ],
+  "page_data": {
+    "exactCount": 32,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 32,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 17,
+      "within60Days": 32,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-13",
+        "2026-05-13"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 29,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "transportation_and_materials_moving",
+        "business_management_and_marketing",
+        "engineering",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Philadelphia Chapter",
+        "count": 9
+      },
+      {
+        "name": "Philadelphia Foundation",
+        "count": 8
+      },
+      {
+        "name": "Delaware FFA Association",
+        "count": 3
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      },
+      {
+        "name": "Restaurant Association of Maryland Education Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "arts",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/delaware",
+    "generatedAt": "2026-04-26T15:20:51.668Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 32,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

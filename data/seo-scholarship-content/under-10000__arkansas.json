@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Under Ten Thousand Arkansas Scholarships | USA",
+  "seo_description": "Under ten thousand Arkansas scholarships in the USA: compare award ranges, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find Arkansas scholarships with awards under a higher price-point ceiling usually means balancing budget fit, eligibility, and timing all at once. This filtered slice brings together USA scholarship listings tied to Arkansas where the posted awards stay below that cap, making it easier to compare options without sorting through larger national awards first. The programs below span themes such as education, STEM, arts, community, and medicine, with examples that also touch agriculture, communication, and business-related study paths. Requirements are not identical across these rows, but many listings appear to have lighter application signals and often no essay flag in the catalog data. Award amounts, residency details, and deadlines vary by listing, so applicants should read each row closely and verify final terms on the official source before they apply.",
+  "h1": "Find Under Ten Thousand Arkansas Scholarships USA",
+  "supporting": "A useful way to read this list is to compare more than the award line. Check the requirement summary, look at the study level shown, and note any citizenship or residency language that affects Arkansas applicants in the USA. Because deadline text differs across the rows and some opportunities may be coming up soon, it is smart to review dates early rather than assume the whole set follows one schedule. This slice is also worth scanning if you want to find scholarships that may be simpler to pursue, then shortlist the strongest matches and confirm details on the sponsor or program page.",
+  "related_intro": "If you do not see the right fit here, related pages can help you compare nearby scholarship slices by topic, location, or academic focus. That is useful when you want to widen beyond Arkansas-only results, check other award ranges, or explore categories like education, STEM, arts, community, or medicine.",
+  "how_to_use": [
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist the listings that match your study level",
+    "Verify award details and residency terms on the sponsor site"
+  ],
+  "who_for": [
+    "Arkansas residents comparing smaller scholarship awards",
+    "High school seniors planning USA college costs",
+    "College and graduate students seeking Arkansas-based options",
+    "Applicants in education, STEM, arts, medicine, or agriculture-related fields"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Arkansas scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Arkansas scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Arkansas scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 19,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 19,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 12,
+      "within60Days": 19,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 19,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "communication_and_journalism",
+        "agriculture_and_related_sciences",
+        "business_management_and_marketing",
+        "family_and_consumer_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Arkansas Cattlemen's Association",
+        "count": 3
+      },
+      {
+        "name": "Arkansas Extension Homemakers Council",
+        "count": 2
+      },
+      {
+        "name": "Arkansas Rural Education Association",
+        "count": 2
+      },
+      {
+        "name": "American Angus Association",
+        "count": 1
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-District 16",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "community",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/arkansas",
+    "generatedAt": "2026-04-26T16:05:30.802Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 19,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "seo_title": "Find California Scholarships for Women Under Ten Thousand | USA…",
+  "seo_description": "California scholarships for women under ten thousand: compare award ranges, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find California scholarships for women with awards below a higher price tier usually means balancing fit, effort, and timing at the same time. This filtered slice brings together USA listings that match that budget range and location, so you can compare options without wading through unrelated programs. The rows below span areas such as education, law, medicine, STEM, arts, and other miscellaneous categories, with examples that can suit both high school seniors and adult non traditional applicants. Awards vary by listing, requirements are not identical, and deadlines differ across programs. Many entries in this slice appear to have lighter application signals and often no essay, but you should still read each requirement line carefully before you apply.",
+  "h1": "Explore California Scholarships for Women Under Ten Thousand USA…",
+  "supporting": "Use this view to compare more than just the title. Check the award text, scan the subject or category tags, and note whether a listing seems tied to education, legal studies, health professions, history, or another field. Because some deadlines may be coming up soon, it is smart to review date information promptly and open the official source for the latest rules. If you are deciding between several options, shortlist the programs that match your California connection, study level, and field before you spend time on full applications.",
+  "related_intro": "If these California listings feel close but not quite right, related pages can help you narrow by topic, eligibility, or location in a different way. That is useful when you want to compare women focused scholarships against broader California results or keep the award range while checking other filter combinations.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist listings that match your field and study level",
+    "Check whether the application looks lighter touch or no essay"
+  ],
+  "who_for": [
+    "California women comparing smaller award scholarships",
+    "High school seniors seeking local or state based options",
+    "Adult non traditional learners returning to school in California",
+    "Applicants in education, law, medicine, STEM, arts, or history"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for For Women · Under · California scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for For Women · Under · California scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for For Women · Under · California scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 10000,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 8,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-15",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 9,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "adult_non_traditional",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "history",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Sonora Area Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Association of University Women-Atascadero Branch",
+        "count": 1
+      },
+      {
+        "name": "Golden Gate Marin Artists Branch",
+        "count": 1
+      },
+      {
+        "name": "National Council of Jewish Women-Los Angeles Section",
+        "count": 1
+      },
+      {
+        "name": "Soroptimist International of Citrus Heights",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "medical",
+      "miscellaneous",
+      "arts",
+      "law",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/under-10000/california",
+    "generatedAt": "2026-04-26T15:09:52.815Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 9,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

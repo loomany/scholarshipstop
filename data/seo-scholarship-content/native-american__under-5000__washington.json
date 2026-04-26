@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find Native American Scholarships Under Five Thousand in Washing…",
+  "seo_description": "Native American scholarships under five thousand in Washington, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Native American scholarships in Washington with smaller award sizes usually means balancing fit, effort, and timing. This filtered USA view narrows the search to programs under the stated amount cap, so you can compare a focused set of listings without wading through unrelated results. The rows here span areas such as STEM, education, biology, and other subjects, with examples that may suit graduate study and U.S. citizen applicants depending on each listing. Awards, deadlines, and eligibility details are not identical across the programs below, and many listings in this slice appear to have lighter application requirements or no essay flag in the catalog data. Even so, every requirement should be checked on the official scholarship page before you apply.",
+  "h1": "Compare Native American Scholarships Under Five Thousand in Wash…",
+  "supporting": "Use this list to compare more than the headline title. Read the requirement lines closely, note which programs connect to your field of study, and watch how deadline wording differs from row to row. Because this Washington and Native American filter is already narrow, it is worth scanning every listing rather than assuming one obvious match. If an award amount, residency detail, or study level matters to your decision, open the official source and verify it there before you shortlist or apply.",
+  "related_intro": "If these listings are close but not quite right, related pages can help you compare nearby options by eligibility, award size, or location. That is useful when you want to stay focused on Washington, keep the Native American filter, or broaden into similar USA scholarship categories with different subject mixes.",
+  "how_to_use": [
+    "Compare deadline text across each row",
+    "Read the requirement line before shortlisting",
+    "Open the official page to verify details",
+    "Check whether your field of study matches",
+    "Shortlist the listings with the best fit"
+  ],
+  "who_for": [
+    "Native American applicants studying in Washington",
+    "Graduate students comparing smaller scholarship awards",
+    "STEM or biology majors seeking Washington funding",
+    "Education students looking for Native American scholarships",
+    "U.S. citizen applicants reviewing local scholarship options"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here if I live in Washington, USA?",
+      "answer": "Not automatically—this catalog groups programs by the Washington filter, but each listing can have its own rules for residency, citizenship, study level, and field of study. Check the official source for every row to verify that you qualify before applying."
+    },
+    {
+      "question": "What should I compare first when I browse these scholarship listings?",
+      "answer": "Start with eligibility, award amount, deadline, and field of study, since those details can differ across the programs below. In this slice, you may also notice topics like STEM, Education, and Biology, which can help you narrow what to explore."
+    },
+    {
+      "question": "Do these Washington scholarship listings usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag in the catalog metadata, but requirements can still vary by program. Always verify the application checklist on the official scholarship page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 4500,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 23,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-05-31",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "biological_and_biomedical_sciences",
+        "business_management_and_marketing",
+        "communication_and_journalism"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Native Forward Scholars Fund",
+        "count": 1
+      },
+      {
+        "name": "Public Relations Society of America-Puget Sound Chapter",
+        "count": 1
+      },
+      {
+        "name": "The Associates Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "biology",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "native-american/under-5000/washington",
+    "generatedAt": "2026-04-26T16:02:07.157Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Under Ten Thousand Scholarships in DC, USA",
+  "seo_description": "Under ten thousand scholarships in District of Columbia, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find USA scholarships in the District of Columbia with awards under this budget cap usually means balancing fit, timing, and effort. This filtered slice brings together programs tied to District of Columbia applicants or local relevance, with themes that include education, community, STEM, humanities, arts, and miscellaneous options. You can apply more efficiently here because the rows already narrow the price range, but the details still vary from listing to listing. Some opportunities may be lighter touch, others may ask for more materials, and deadlines differ across the programs below. Award amounts vary by listing and should be verified on each official page before you decide where to focus.",
+  "h1": "Compare Under Ten Thousand DC Scholarships USA",
+  "supporting": "Use this view to compare more than just the headline award. Read the requirement lines closely, check whether a scholarship leans toward community service, education, or STEM, and note who the listing appears to fit best, such as high school seniors or students already in college. If you are trying to browse quickly for District of Columbia options in the USA, start by opening the rows with the clearest match to your background, then confirm eligibility, deadline wording, and application steps on the sponsor site before you apply.",
+  "related_intro": "If this District of Columbia set feels too narrow, related pages can help you explore nearby angles, such as the same award range in other USA locations or other scholarship categories connected to education, community, arts, humanities, and STEM. That is often the fastest way to compare adjacent options without starting over.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before shortlisting a program",
+    "Open the official page to verify award details",
+    "Sort your list by fit, effort, and topic",
+    "Apply early when a listing appears time-sensitive"
+  ],
+  "who_for": [
+    "District of Columbia students seeking smaller scholarship awards",
+    "High school seniors comparing local and community-focused options",
+    "College students in education, business, communication, engineering, or mathematics",
+    "USA applicants checking listings for citizen or permanent resident eligibility"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · District Of Columbia scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · District Of Columbia scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · District Of Columbia scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 19,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1000,
+      "maxUsd": 7500,
+      "statedAmountCount": 19,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 14,
+      "within60Days": 19,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-04-15",
+        "April 30, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 17,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "essay",
+        "transcript",
+        "personal_statement",
+        "video"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_3"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "communication_and_journalism",
+        "engineering",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Alpha Kappa Alpha Sorority-Rho Mu Omega Chapter",
+        "count": 4
+      },
+      {
+        "name": "Abramson Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Accounting and Financial Women's Alliance-District of Columbia Area Chapter",
+        "count": 1
+      },
+      {
+        "name": "Alfred Street Baptist Church",
+        "count": 1
+      },
+      {
+        "name": "Armed Forces Communications and Electronics Association-Belvoir Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "humanities"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/district-of-columbia",
+    "generatedAt": "2026-04-26T16:07:25.632Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 19,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

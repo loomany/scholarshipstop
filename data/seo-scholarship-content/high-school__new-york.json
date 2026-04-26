@@ -1,0 +1,130 @@
+{
+  "seo_title": "Find High School Scholarships in New York, USA",
+  "seo_description": "High school scholarships in New York, USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find USA scholarships that fit high school applicants in New York usually means sorting through programs with very different rules, topics, and timelines. This filtered slice narrows that search to listings tied to New York while still covering a mix of education, disability, arts, community, and STEM themes. You can compare options for high school seniors, juniors, and sophomores, then check which rows also mention residency or citizenship details such as US citizen or permanent resident status. Awards vary by listing, requirements are not identical, and deadlines differ across the programs below, so it is worth reviewing each row closely and applying early when a match looks strong.",
+  "h1": "Find New York High School Scholarships USA",
+  "supporting": "Use this view to compare more than just the title. Scan the award text, read the requirement lines, and note whether a listing points toward education, engineering, business, physical sciences, visual and performing arts, or a broader community focus. Some rows may look lighter touch than others, but you should still verify eligibility, materials, and deadline details on the official scholarship page before you apply. A careful side by side review can help you find stronger fits faster.",
+  "related_intro": "If you want to widen or refine your search, related pages can help you compare this New York high school slice with other locations or with broader high school scholarship categories in the USA. That is useful when you want to find nearby alternatives, compare requirement patterns, or keep backup options in your shortlist.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist strong matches before you apply",
+    "Check award text and category labels together"
+  ],
+  "who_for": [
+    "New York high school seniors comparing scholarship options",
+    "New York juniors and sophomores starting early research",
+    "Applicants seeking USA scholarships with arts or STEM relevance",
+    "Students reviewing disability or community related scholarship listings",
+    "US citizens or permanent residents checking New York eligibility"
+  ],
+  "faq": [
+    {
+      "question": "How can I find New York scholarships for high school students in this filtered view?",
+      "answer": "Use this focused set of USA listings to compare row-by-row details like study level, category, amount, and deadline. Some rows also show residency or citizenship labels, so open the listing and verify the official eligibility rules before you apply."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a New York high school student?",
+      "answer": "Not automatically. This filter matches High School and New York, but each program can still have its own requirements, such as specific study levels, categories, or residency labels shown in the catalog and confirmed on the official source."
+    },
+    {
+      "question": "Are these New York high school scholarships only for one subject or type of student?",
+      "answer": "No. The programs below span categories such as Education, Miscellaneous, Disability, Arts, Community, and STEM, and sample fields include education, business, engineering, physical sciences, and visual and performing arts."
+    },
+    {
+      "question": "Can I explore options here if I want lighter-touch applications?",
+      "answer": "Possibly, but requirements vary across these rows. Some listings may be comparatively lighter-touch in the catalog metadata, while essay expectations are mixed, so review each scholarship’s official page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 33,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 20000,
+      "statedAmountCount": 33,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 16,
+      "within60Days": 28,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "May 31, 2026 3:00 PM CT",
+        "April 27, 2026 3:00 PM CT",
+        "2026-05-16"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 30,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "physical_sciences",
+        "visual_and_performing_arts"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 3
+      },
+      {
+        "name": "Enlisted Association of the New York National Guard",
+        "count": 2
+      },
+      {
+        "name": "Arabian Horse Association-Region 16",
+        "count": 1
+      },
+      {
+        "name": "Civil Service Employees Association",
+        "count": 1
+      },
+      {
+        "name": "Community Foundations of the Hudson Valley",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability",
+      "arts",
+      "community",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/new-york",
+    "generatedAt": "2026-04-26T15:29:34.904Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 33,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

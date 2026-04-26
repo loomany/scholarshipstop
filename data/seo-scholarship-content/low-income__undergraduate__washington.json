@@ -1,0 +1,104 @@
+{
+  "seo_title": "Find Low Income Undergraduate Scholarships in Washington, USA …",
+  "seo_description": "Low income undergraduate scholarships in Washington, USA. Compare deadlines, award details, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Washington for low-income applicants usually means sorting through mixed eligibility rules, different deadline formats, and listings that may or may not be worth the click. This filtered USA view narrows that search to a focused set of programs tied to Washington and the undergraduate preset, so you can compare options faster and decide which ones to apply for first. In these rows, award amounts vary by listing and should be verified on the official pages. Deadlines also differ by program, and at least some appear to be coming up soon, so it makes sense to check dates promptly. Many listings in this slice also appear to have lighter application signals, with no-essay options showing up often, though every requirement still needs a direct review.",
+  "h1": "Low Income Undergraduate Scholarships in Washington USA App…",
+  "supporting": "A useful way to browse this set is to compare the requirement lines, category tags, and award text side by side before opening each scholarship. You may notice overlap with areas like education or disability, which can help you spot programs that fit your background more closely. Because this is a smaller Washington-focused slice, it is worth scanning every row rather than assuming the first match is the best one. Use the list to find quick-apply possibilities, then confirm eligibility, materials, and deadline details on the sponsor or official scholarship page.",
+  "related_intro": "If these Washington undergraduate listings feel too narrow, related pages can help you compare nearby filter combinations, such as broader undergraduate results or other eligibility and location mixes in the USA catalog. That is often the fastest way to find similar scholarships without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across the rows first, since dates vary by program and some may be approaching soon",
+    "Scan award descriptions and category labels to find the listings most relevant to your background",
+    "Read each requirement line closely before you apply, especially for Washington and undergraduate fit",
+    "Open the official scholarship page for every shortlist item and verify amount, materials, and current rules"
+  ],
+  "who_for": [
+    "Washington-based applicants looking for undergraduate scholarships that consider low-income eligibility",
+    "College-bound or current early-college students comparing smaller USA scholarship programs with varied requirements",
+    "Applicants who want to find scholarships that may have no-essay or lighter-touch application steps",
+    "Students with overlap in education or disability-related categories who want to check matching listings carefully"
+  ],
+  "faq": [
+    {
+      "question": "How can I find low-income undergraduate scholarships in Washington, USA on this page?",
+      "answer": "Use this filtered view to explore programs tied to low-income eligibility, undergraduate study, and Washington. Then open each row and verify the current rules, location details, and application steps on the official source."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m an undergraduate in Washington?",
+      "answer": "Not automatically—each listing can set its own eligibility details beyond the shared filters. Compare the row summaries first, then confirm requirements on the provider’s official page before you apply."
+    },
+    {
+      "question": "Do these Washington scholarship listings usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag, but that is not a guarantee for every program. Check each scholarship’s official details before you apply."
+    },
+    {
+      "question": "Are the deadlines the same for all scholarships on this page?",
+      "answer": "No—deadlines differ by program in these rows. Since at least one listing appears relatively soon, it’s smart to browse and verify dates promptly on the official pages."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 250,
+      "maxUsd": 2500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 19,
+      "nearestLabels": [
+        "2026-04-20",
+        "2026-04-24",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "POISE Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Associates Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "disability",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "low-income/undergraduate/washington",
+    "generatedAt": "2026-04-26T15:53:11.654Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

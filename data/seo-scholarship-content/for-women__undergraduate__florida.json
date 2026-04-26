@@ -1,0 +1,109 @@
+{
+  "seo_title": "Find Florida Undergraduate Scholarships for Women | USA",
+  "seo_description": "Florida undergraduate scholarships for women in the USA: compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find undergraduate scholarships for women in Florida usually means narrowing a broad search into listings that actually match your location and study stage. This filtered slice brings together USA scholarship options tied to Florida with an undergraduate focus, so you can compare programs without jumping between unrelated results. The rows below span areas such as education, community, law, medicine, and safety, which makes this a useful place to apply selectively or spot categories you may have missed. Awards, deadlines, and eligibility details vary by listing, and while many entries appear to have lighter application requirements, you should still read each requirement line carefully before you apply.",
+  "h1": "Explore Florida Undergraduate Scholarships for Women USA",
+  "supporting": "A smart way to use this list is to compare the row details side by side instead of assuming the scholarships work the same way. Look at the category, scan the award text, and check how the requirement notes are phrased. Many listings in this slice may be relatively straightforward to enter, but official pages are still the place to verify who qualifies, what materials are needed, and when applications close. If you want to browse efficiently, shortlist the strongest matches first and then compare them again before you apply.",
+  "related_intro": "If you do not find enough strong matches here, related pages can help you explore nearby options by changing one filter at a time, such as keeping Florida and undergraduate while broadening eligibility, or keeping women and undergraduate while looking beyond one state in the USA.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line before applying",
+    "Open the official page to verify eligibility",
+    "Shortlist the listings that best match your field",
+    "Check award details and application materials carefully"
+  ],
+  "who_for": [
+    "Women seeking Florida undergraduate scholarships",
+    "Florida applicants comparing education or community awards",
+    "Undergraduate women interested in law, safety, or medical paths",
+    "Students who want lighter-touch scholarship applications"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships for women in Florida?",
+      "answer": "Use this filtered view to explore Florida listings that match women + undergraduate criteria, then open each row to verify eligibility on the official source. In this USA slice, details like award amount, deadline, and category can differ by program."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here with one application?",
+      "answer": "No—these are separate programs, not one combined application. Compare each listing and apply through the official page linked from the catalog row."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check the location fit, study level, category, deadline text, and any listed requirements row by row. Award amounts vary by listing, so confirm the current amount and rules on the official scholarship page before you apply."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this slice appear to have no essay flag, but you should not assume that applies to every program. Always verify the current application requirements on the official source before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 750,
+      "maxUsd": 1000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-11",
+        "2026-05-18"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "legal_professions_and_law_studies",
+        "security_and_protective_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 3
+      },
+      {
+        "name": "National Conference of Puerto Rican Women-Miami Chapter",
+        "count": 1
+      },
+      {
+        "name": "United Methodist Church-Alabama-West Florida Conference",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "law",
+      "medical",
+      "miscellaneous",
+      "safety"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/undergraduate/florida",
+    "generatedAt": "2026-04-26T15:14:16.812Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

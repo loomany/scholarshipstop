@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find LGBTQ Scholarships Under Ten Thousand in Florida, USA",
+  "seo_description": "LGBTQ scholarships under ten thousand in Florida, USA—compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find LGBTQ scholarships in Florida with awards under a higher-cost threshold usually means balancing fit, timing, and effort. This filtered USA view narrows the search to a focused set of listings tied to Florida and this award band, so you can compare options without wading through unrelated results. The programs below span themes such as community, education, medicine, and miscellaneous support, and they may suit applicants from levels including high school senior and graduate student. Awards vary by listing, deadlines differ by program, and eligibility details can change from row to row. Many listings in this slice appear to have lighter application signals and often no essay flag, but you should still read each requirement line carefully before you apply.",
+  "h1": "Compare LGBTQ Scholarships Under Ten Thousand in Florida USA",
+  "supporting": "Use these rows to compare more than the title alone. Check how each scholarship describes Florida ties, LGBTQ eligibility, study level, and any field cues such as education, health professions, psychology, or public administration and social service. Because deadline text is present across this slice and at least one listing may be coming up soon, it is smart to review dates promptly. Award amounts vary by listing and should be verified on the official page before you apply. If two programs look similar, compare requirement wording and sponsor details side by side before you shortlist them.",
+  "related_intro": "If this Florida LGBTQ slice feels too narrow, related pages can help you compare nearby options by changing the award cap, location, or eligibility focus. That is useful when you want to find similar USA scholarships with different requirement patterns or a broader mix of subjects.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist listings that match your study level and Florida connection",
+    "Check whether the essay and application steps look manageable"
+  ],
+  "who_for": [
+    "Florida LGBTQ applicants comparing smaller scholarship awards",
+    "High school seniors in Florida seeking community or education support",
+    "Graduate students looking for Florida LGBTQ funding options",
+    "Applicants interested in education, health professions, psychology, or public service"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Lgbtq · Under · Florida scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Lgbtq · Under · Florida scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Lgbtq · Under · Florida scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 1750,
+      "minUsd": 1000,
+      "maxUsd": 6000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-08",
+        "2026-04-30",
+        "2026-06-13"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "health_professions_and_clinical_sciences",
+        "psychology",
+        "public_administration_and_social_service"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Latinos Salud",
+        "count": 1
+      },
+      {
+        "name": "Parents, Families and Friends of Lesbians and Gays-Jacksonville Chapter",
+        "count": 1
+      },
+      {
+        "name": "PFLAG Jacksonville",
+        "count": 1
+      },
+      {
+        "name": "Tampa Pride Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "lgbtq/under-10000/florida",
+    "generatedAt": "2026-04-26T15:49:39.953Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

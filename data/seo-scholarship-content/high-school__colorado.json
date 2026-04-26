@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find High School Scholarships in Colorado, USA",
+  "seo_description": "High school scholarships in Colorado, USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Colorado scholarships for high school students in the USA usually means sorting through very different programs at once. This filtered slice brings together listings connected to Colorado and the high school stage, so you can apply with a clearer view of what is actually available. The rows include a mix of education, community, disability, STEM, medicine, and miscellaneous options, with some awards aimed at seniors and others that may continue into early college study. Award amounts, deadlines, eligibility details, and essay expectations vary by listing, so it is worth comparing each row closely instead of assuming the same rules apply across the set. If you are searching for opportunities for the current cycle or planning ahead for twenty twenty-six, check dates promptly because some programs close sooner than others.",
+  "h1": "Explore Colorado High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Read the requirement lines for residency or citizenship language, note whether the program leans toward education, engineering, health professions, business, or other fields, and check how the award is described on the official source. Some listings may look lighter-touch at first glance, but requirements can still differ once you open the sponsor page. A careful side-by-side review helps you find stronger matches, avoid wasted applications, and build a shortlist that fits your Colorado and high school profile.",
+  "related_intro": "If these results feel close but not quite right, related pages can help you narrow by topic, study level, or another location in the USA. That is useful when you want to compare Colorado-focused options with broader high school scholarship categories or adjacent themes like STEM, disability, or education.",
+  "how_to_use": [
+    "Compare deadline wording across the rows before you decide where to apply",
+    "Read each requirement line carefully for residency, citizenship, and study-level details",
+    "Open the official page for every shortlist pick and verify award and essay information",
+    "Shortlist the listings that best match your Colorado connection, interests, and eligibility"
+  ],
+  "who_for": [
+    "Colorado high school seniors comparing local and statewide scholarship options",
+    "USA applicants with Colorado ties reviewing education, STEM, or health-related listings",
+    "Students seeking Colorado scholarships that may connect high school study to early college plans",
+    "Families helping a high school applicant find and compare requirement details"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Colorado scholarships for high school students in this filtered view?",
+      "answer": "Use this focused set of rows to compare Colorado-based options for high school applicants in the USA, then open each listing for the official eligibility details. Categories and labels vary by row, so check residency, study level, and any field-of-study notes before you apply."
+    },
+    {
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—this catalog view lets you compare listed amounts and deadline text side by side, but both can differ a lot from program to program. Award amounts vary by listing, and deadlines are not the same across the page, so verify each one on the official source before applying."
+    },
+    {
+      "question": "Are these only for Colorado residents, or can other USA students explore them too?",
+      "answer": "Colorado is part of this filter, but eligibility can still differ by scholarship. Some rows may use USA citizenship or residency labels such as U.S. citizen or U.S. permanent resident, so read the official requirements on each listing before you apply."
+    },
+    {
+      "question": "What kinds of scholarships can I browse in this Colorado high school list?",
+      "answer": "The programs below span multiple themes, including education, community, disability, STEM, and medicine. You can also explore rows tied to sample fields like education, business, engineering, health professions, and parks, recreation, and fitness studies."
+    }
+  ],
+  "page_data": {
+    "exactCount": 31,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 64000,
+      "statedAmountCount": 31,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 17,
+      "within60Days": 31,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "April 28, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 30,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "parks_recreation_and_fitness_studies",
+        "agriculture_and_related_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Morgan Community College Foundation",
+        "count": 5
+      },
+      {
+        "name": "African Methodist Episcopal Church Fifth District Lay Organization",
+        "count": 3
+      },
+      {
+        "name": "Impact on Education: Foundation for Boulder Valley Schools",
+        "count": 3
+      },
+      {
+        "name": "Colorado School of Mines",
+        "count": 2
+      },
+      {
+        "name": "I Have a Dream Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "disability",
+      "stem",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/colorado",
+    "generatedAt": "2026-04-26T15:20:04.448Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 31,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

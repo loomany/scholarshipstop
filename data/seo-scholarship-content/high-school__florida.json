@@ -1,47 +1,127 @@
 {
-  "seo_title": "Florida High School Scholarships | Find Your Funding",
-  "seo_description": "Explore 4 Florida high school scholarships with varied awards and deadlines. Check details to secure your funding.",
-  "intro": "Finding financial support for high school students in Florida can be a crucial step toward achieving educational goals. This catalog features 4 scholarships specifically tailored for high school students in the state, with award sizes that vary. Many of these opportunities have different requirements and deadlines, so it’s important to explore each listing carefully to find the best fit for your needs.",
-  "h1": "High School Scholarships in Florida",
-  "supporting": "As you review the scholarships, pay attention to the specific details for each listing, including award amounts and any associated requirements. Some scholarships may not require essays, making them more accessible. Be sure to check the deadlines, as they can differ significantly, and verify all information on the official sponsor pages to ensure you have the most accurate details.",
-  "related_intro": "If you're interested in exploring more options, consider checking out related pages that focus on scholarships for different educational levels or specific fields of study.",
+  "seo_title": "Find High School Scholarships in Florida, USA",
+  "seo_description": "High school scholarships in Florida, USA with varied awards and deadlines. Compare options and apply early by checking each listing carefully.",
+  "intro": "Trying to find Florida scholarships for high school students usually means sorting through programs that do not all define eligibility the same way. This filtered USA view brings together a focused set of listings tied to Florida and the high school stage, so you can compare options without jumping between unrelated results. As you scan the rows below, expect variation in award size, residency wording, study interests, and class standing, with examples that touch education, community, STEM, arts, and medicine. Many listings in this slice appear to have lighter application signals and often note no essay, but requirements still differ by program. Deadlines also vary across the list, and some opportunities may be coming up soon, so it is smart to check details promptly before you apply.",
+  "h1": "Find Florida High School Scholarships USA",
+  "supporting": "Use this list to compare more than the title. Read the requirement line for clues about grade level, Florida ties, citizenship or residency language, and any field-of-study preference. Then compare award text carefully, since amounts vary by listing and should be verified on the official page. A quick scan can also surface different types of opportunities, from broad education-focused awards to more specific paths such as robotics, nursing, golf, or community-centered programs. If you want to apply efficiently, shortlist the rows that match your situation first and confirm every detail with the sponsor.",
+  "related_intro": "If this Florida high school slice feels too narrow or too broad, related pages can help you compare nearby options by topic or location. That is useful when you want to find similar USA scholarships with different residency rules, school levels, or subject emphasis before deciding where to apply.",
   "how_to_use": [
-    "Compare deadlines for each scholarship",
-    "Scan award amounts listed in rows",
-    "Read requirement lines for eligibility",
-    "Open official pages for more details",
-    "Shortlist scholarships that match your profile"
+    "Sort and compare deadline text first",
+    "Read each requirement line carefully",
+    "Check award wording on every row",
+    "Open the official page to verify details",
+    "Shortlist the best matches before you apply"
   ],
   "who_for": [
-    "High school students in Florida",
-    "Students seeking STEM funding",
-    "Applicants looking for no-essay scholarships",
-    "Individuals interested in education-related awards"
+    "Florida high school juniors planning ahead",
+    "Florida high school seniors preparing applications",
+    "Students seeking USA scholarships with Florida location relevance",
+    "Applicants interested in education, STEM, arts, community, or medicine listings"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for high school students in Florida?",
-      "answer": "In Florida, there are currently four scholarships listed that cater to high school students. These include opportunities in education and STEM fields, among others, providing a range of options based on your interests and academic focus."
+      "question": "How can I find Florida scholarships for high school students in this filtered view?",
+      "answer": "Use this Florida high school scholarship list to compare each row’s eligibility, study level, category, amount, and deadline text. Then verify the final requirements on the official scholarship page before you apply."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, making them potentially easier to apply for. However, it's important to verify the specific requirements for each scholarship, as they can vary."
+      "question": "Can I apply if I’m not a high school senior yet?",
+      "answer": "Possibly. In these listings, sample study levels include high school freshman, junior, and senior, along with some college and graduate pathways, so check each row closely before you apply."
     },
     {
-      "question": "What is the typical award size for these scholarships?",
-      "answer": "The award sizes for the scholarships in this category generally range from approximately $1,000 to $2,500. Keep in mind that specific amounts can vary by scholarship, so check each listing for precise details."
+      "question": "What kinds of scholarships can I explore on this Florida page?",
+      "answer": "This filtered set includes programs tied to categories such as Education, Community, STEM, Arts, Medicine, and Miscellaneous. You can also find listings connected to fields like engineering, education, visual and performing arts, construction trades, and business management and marketing."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "All four scholarships listed have deadlines, but they differ from one another. It's advisable to check the specific deadline for each scholarship promptly, as at least one has a deadline approaching within the next 45 days."
+      "question": "Are these USA scholarships only for U.S. students?",
+      "answer": "Some rows in this Florida catalog show citizenship or residency labels such as U.S. citizen and U.S. permanent resident. Because requirements differ by program, review the official listing details to confirm whether you can apply."
     }
   ],
+  "page_data": {
+    "exactCount": 148,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 331,
+      "maxUsd": 34345,
+      "statedAmountCount": 148,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 76,
+      "within60Days": 141,
+      "rollingOrUnknown": 0,
+      "nearestDays": 3,
+      "nearestLabels": [
+        "2026-05-01",
+        "April 28, 2026 3:00 PM CT",
+        "May 4, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 148,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "visual_and_performing_arts",
+        "construction_trades",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 33
+      },
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 29
+      },
+      {
+        "name": "University of North Florida",
+        "count": 11
+      },
+      {
+        "name": "Florida 4-H Foundation",
+        "count": 5
+      },
+      {
+        "name": "Florida Home Builders Foundation",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "high-school/florida",
-    "generatedAt": "2026-04-02T10:45:11.676Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 4,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:21:26.274Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 148,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

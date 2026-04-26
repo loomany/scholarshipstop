@@ -1,0 +1,127 @@
+{
+  "seo_title": "Find Under Ten Thousand Illinois Scholarships | USA",
+  "seo_description": "Under ten thousand Illinois scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Illinois scholarships in the USA with awards under ten thousand dollars usually means sorting through a wide mix of smaller and mid-range programs, not chasing one giant prize. This filtered view brings together a focused set of listings tied to Illinois, with options that touch areas like education, STEM, medicine, community, arts, and more. You can compare programs for high school seniors, early college students, graduate students, and adult non-traditional applicants, while keeping an eye on residency or citizenship language where it appears. Award amounts vary by listing, and deadlines differ by program, so it’s smart to check dates promptly and verify every requirement on the official page before you apply. Some listings may be lighter-touch, while others can ask for more materials.",
+  "h1": "Compare Under Ten Thousand Illinois Scholarships USA",
+  "supporting": "A useful way to browse this slice is to compare more than the award line. Look at the study level, field of study, Illinois connection, and any requirement notes before you decide which rows deserve a closer read. The programs below span themes such as engineering, education, law, nursing, and community-focused support, so this is a practical place to explore if you want several smaller scholarship options instead of relying on a single application. As you shortlist, confirm the current amount, deadline text, and eligibility details directly with the scholarship source.",
+  "related_intro": "If you do not find the right fit in this Illinois under-ten-thousand set, related pages can help you compare nearby scholarship slices by topic, study level, or other location filters. That is often the fastest way to find programs with a better match on major, residency language, or application effort.",
+  "how_to_use": [
+    "Compare the award text, study level, and category on each row before opening every listing",
+    "Scan requirement lines carefully to see whether a program looks lighter-touch or asks for more materials",
+    "Check deadline text early because dates vary by program and some listings may be coming up soon",
+    "Open the official scholarship page for every program you shortlist and verify eligibility, amount, and application steps",
+    "Keep a short list of the best-fit Illinois scholarships and apply first to the ones with the clearest match"
+  ],
+  "who_for": [
+    "Illinois applicants who want to find scholarships with listed awards below ten thousand dollars",
+    "High school seniors and early college students comparing local or Illinois-linked funding options",
+    "Graduate students and adult non-traditional learners looking for smaller scholarship programs they can stack",
+    "Applicants in education, business, health professions, engineering, or law who want to compare relevant rows",
+    "USA-based students checking residency or citizenship language before they apply"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Under · Illinois scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Under · Illinois scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Under · Illinois scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 230,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 200,
+      "maxUsd": 10000,
+      "statedAmountCount": 230,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 152,
+      "within60Days": 227,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 6,
+      "noCount": 224,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "recommendation",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "adult_non_traditional",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "engineering",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kankakee Community College Foundation",
+        "count": 110
+      },
+      {
+        "name": "Waubonsee Community College",
+        "count": 64
+      },
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 7
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Chicago Chapter",
+        "count": 5
+      },
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 4
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "community",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/illinois",
+    "generatedAt": "2026-04-26T16:08:59.645Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 230,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

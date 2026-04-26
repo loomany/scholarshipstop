@@ -1,0 +1,97 @@
+{
+  "seo_title": "Find Maine Scholarships for Women Under Ten Thousand | USA",
+  "seo_description": "Maine scholarships for women under ten thousand: compare awards, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "intro": "Trying to find Maine scholarships for women with awards under the higher-dollar ranges usually means narrowing fast and checking details carefully. This filtered slice brings together a focused set of USA listings tied to Maine and this award ceiling, so you can compare options without wading through unrelated results. The programs below lean toward areas such as education and STEM, with some overlap into business, architecture, construction trades, and engineering. Awards, deadlines, and eligibility rules are not identical from row to row, so it is worth reading each listing closely. Many entries in this slice appear to have lighter application signals and often no essay flag, but you should still verify every requirement on the official source before you apply.",
+  "h1": "Compare Maine Scholarships for Women Under Ten Thousand USA",
+  "supporting": "Use these rows to compare more than the title alone. Check how each listing describes who qualifies, which subject areas are mentioned, and how the award is framed, since amounts vary by listing and should be confirmed on the official page. Deadline text is available across this slice and does not match across programs, so compare timing early and act promptly. If you are building a shortlist for Maine opportunities, this is a practical place to browse, find likely fits, and rule out mismatches before opening full application pages.",
+  "related_intro": "If these Maine scholarships for women are too narrow or not the right academic fit, related pages can help you compare nearby options by topic, eligibility, or location. That is useful when you want to stay in the USA catalog but widen the pool beyond this exact filter combination.",
+  "how_to_use": [
+    "Compare the deadline text across rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the listings that match your profile",
+    "Check award wording before you apply"
+  ],
+  "who_for": [
+    "Women seeking Maine-based scholarship options",
+    "Applicants comparing smaller award programs",
+    "Education or STEM students in Maine",
+    "Maine students checking lighter-touch applications"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a woman in Maine?",
+      "answer": "Not automatically. This catalog narrows the list to women-focused scholarships tied to Maine, but each listing can still have its own rules, field-of-study focus, and application requirements on the official source."
+    },
+    {
+      "question": "What kinds of scholarships appear in this Maine filter?",
+      "answer": "The programs below commonly touch areas like education, miscellaneous topics, and STEM, with sample fields including education, business and marketing, architecture, construction trades, and engineering. Use the rows to explore fit, then verify the exact scope on the official listing."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flag, but requirements can differ row by row. Before you apply, check the official page for the current materials list and any supporting documents."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 1000,
+      "maxUsd": 1500,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-10",
+        "2026-04-10"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "architecture_and_related_services",
+        "communication_and_journalism",
+        "construction_trades"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Maine Business and Professional Women",
+        "count": 2
+      },
+      {
+        "name": "Associated Builders and Contractors of Maine",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "for-women/under-10000/maine",
+    "generatedAt": "2026-04-26T15:10:54.772Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

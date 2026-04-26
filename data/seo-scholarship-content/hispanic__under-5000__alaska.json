@@ -1,0 +1,121 @@
+{
+  "seo_title": "Find Hispanic Scholarships Under Five Thousand in Alaska, USA …",
+  "seo_description": "Hispanic scholarships under five thousand in Alaska, USA. Compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Hispanic scholarships in Alaska with awards under a smaller funding cap usually means sorting through mixed eligibility rules, study levels, and category tags fast. This filtered USA view narrows that search to a focused set of listings tied to Alaska and the Hispanic eligibility bucket, so you can compare options without wading through unrelated results. The programs below span areas such as education, community, arts, medicine, and miscellaneous topics, and they may fit applicants from high school through graduate study. Award amounts, deadlines, residency or citizenship language, and essay expectations vary by listing, so it makes sense to read each row closely before you apply and verify details on the official source.",
+  "h1": "Compare Hispanic Scholarships Under Five Thousand in Alaska USA…",
+  "supporting": "Use this slice to compare more than the headline title. Check how each listing describes eligibility, look at the study level shown, and note whether the field of study lines match your plans in Alaska or elsewhere in the USA. Some rows may be lighter on requirements, while others may ask for more documentation or written responses. Because deadline text differs across the listings and some opportunities can close relatively soon, it is smart to shortlist strong matches early, then open the official pages to confirm current terms, award details, and application steps.",
+  "related_intro": "If these Alaska results feel too narrow, related pages can help you explore nearby paths by changing one filter at a time. You might compare other Alaska scholarship categories, browse more Hispanic-focused listings, or look at additional under-five-thousand scholarship pages to find a better fit.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist listings that match your study level and field",
+    "Check essay expectations and supporting materials for each program"
+  ],
+  "who_for": [
+    "Hispanic applicants with Alaska ties",
+    "High school juniors and seniors comparing smaller award programs",
+    "Graduate students checking education, medicine, arts, or community listings",
+    "USA applicants who need to verify citizenship or residency wording"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Hispanic · Under · Alaska scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Hispanic · Under · Alaska scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Hispanic · Under · Alaska scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 9,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 9,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 8,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 2,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior",
+        "high_school_junior"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services",
+        "business_management_and_marketing",
+        "public_administration_and_social_service",
+        "transportation_and_materials_moving"
+      ],
+      "commonResidency": [
+        "us_permanent_resident",
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Water Works Association-Intermountain Section",
+        "count": 1
+      },
+      {
+        "name": "Arizona Community Foundation",
+        "count": 1
+      },
+      {
+        "name": "Black Man, M.D.",
+        "count": 1
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Fort Lauderdale Chapter",
+        "count": 1
+      },
+      {
+        "name": "Council on Social Work Education",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "arts",
+      "medical"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/under-5000/alaska",
+    "generatedAt": "2026-04-26T15:42:48.861Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 9,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

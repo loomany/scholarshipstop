@@ -1,0 +1,97 @@
+{
+  "seo_title": "Find Massachusetts Scholarships for International Students USA …",
+  "seo_description": "Massachusetts scholarships for international students in the USA: compare deadlines, award details, and requirements, then apply on official pages.",
+  "intro": "Trying to find Massachusetts scholarships in the USA that are open to international students usually means narrowing past broad national results and checking which listings actually match your eligibility. This filtered slice brings together a focused set of programs tied to Massachusetts with international student access, including examples connected to STEM and fields such as engineering, mathematics and statistics, education, and business management and marketing. As you compare the rows below, expect award amounts, deadline timing, and requirement details to vary by listing. Many entries in this slice appear to have lighter application signals, and some may often be no essay, but you should still verify every rule on the official scholarship page before you apply.",
+  "h1": "Find Massachusetts Scholarships for International Students USA …",
+  "supporting": "Use this view to compare more than just the scholarship title. Read the requirement lines closely, check how Massachusetts is referenced, and note whether a listing seems especially relevant to your subject area or background. Because deadline text appears across these rows and at least some programs may be approaching soon, it is smart to review dates promptly. Award amounts can differ by listing, so treat the catalog as a starting point, then open the official source to confirm current details, eligibility wording, and application steps before you shortlist anything.",
+  "related_intro": "If these Massachusetts options feel too narrow, related pages can help you explore nearby angles such as broader international student scholarship lists, other USA location filters, or pages that lean more heavily toward STEM topics. That is often the fastest way to find more programs worth comparing.",
+  "how_to_use": [
+    "Compare deadline wording across each row",
+    "Read the requirement line before you apply",
+    "Open the official scholarship page to verify details",
+    "Shortlist listings that match your field and location goals",
+    "Check whether award terms and eligibility language differ"
+  ],
+  "who_for": [
+    "International students targeting Massachusetts study options",
+    "Applicants in STEM subjects in the USA",
+    "Students comparing Massachusetts scholarships by eligibility",
+    "International applicants in engineering or mathematics and statistics",
+    "Learners seeking potentially lighter touch applications"
+  ],
+  "faq": [
+    {
+      "question": "How can I find scholarships in Massachusetts for international students?",
+      "answer": "Use this filtered view to compare Massachusetts scholarship rows tagged for international students, then open each listing to confirm eligibility on the official source. Requirements, award amounts, and deadlines can differ by program."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here as an international student in the USA?",
+      "answer": "Not automatically. This catalog slice is focused on Massachusetts listings associated with international-student eligibility, but you should verify each program’s official page before you apply because rules can vary row by row."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Check the location, eligibility label, field of study, deadline text, and any application requirements shown in the listing. Amounts vary by listing and should be confirmed on the official scholarship page."
+    },
+    {
+      "question": "Are these Massachusetts scholarships mostly for certain majors or topics?",
+      "answer": "In this filtered set, STEM appears often, and sample fields include education, engineering, mathematics and statistics, and business management and marketing. If you want to explore fit, compare the subject tags on each row instead of assuming every listing matches the same major."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 400,
+      "maxUsd": 4000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "engineering",
+        "mathematics_and_statistics",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "international-students-eligibility/international-students/massachusetts",
+    "generatedAt": "2026-04-26T15:46:29.017Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

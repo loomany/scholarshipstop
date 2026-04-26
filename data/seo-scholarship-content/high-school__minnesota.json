@@ -1,0 +1,125 @@
+{
+  "seo_title": "Find High School Scholarships in Minnesota, USA",
+  "seo_description": "High school scholarships in Minnesota, USA: compare award ranges, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Minnesota scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who qualifies, what materials are required, and how the award is described. This filtered slice brings together a focused set of listings tied to high school and Minnesota, with themes that include education, disability, medicine, STEM, community, and broader miscellaneous options. Some rows may be comparatively lighter touch, while others can ask for more detail, so it helps to compare each listing carefully before you apply. Award amounts vary by listing and should be verified on the official page, and deadlines differ across the rows below, with some opportunities appearing soon enough that it is smart to check dates promptly.",
+  "h1": "Explore Minnesota High School Scholarships USA",
+  "supporting": "Use this view to compare more than just the title. Read the requirement lines closely, note any residency or citizenship wording, and check whether the scholarship seems aimed at seniors or has a broader study-level range. It is also worth scanning category tags to spot overlap with education, health, disability, or STEM interests. Before you apply, open the official source for any program you shortlist so you can confirm current award details, deadline language, and submission steps.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare this Minnesota high school slice with other locations or with scholarship groups organized around topics like education, disability, medicine, STEM, or community.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line before you apply",
+    "Scan category tags for relevant topic matches",
+    "Open the official page to verify details",
+    "Shortlist programs and compare award descriptions"
+  ],
+  "who_for": [
+    "Minnesota high school students comparing local scholarship options",
+    "High school seniors in the USA looking for Minnesota-based funding",
+    "Applicants interested in education, medicine, disability, or STEM categories",
+    "Students who want to find scholarships with potentially lighter requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Minnesota scholarships for high school students in this filtered view?",
+      "answer": "Use this focused set of USA listings to compare row-by-row details like study level, category, amount, and deadline text. Then open the official source for each program to verify eligibility, residency, and application steps."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m a Minnesota high school student?",
+      "answer": "Not automatically—requirements vary by listing. Some rows may target high school seniors, specific interests like education, STEM, medicine, disability, or community-related themes, so check each official page before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare the amount listed, deadline text, study level, and category tags first. Award amounts vary by listing, and deadlines differ by program, so confirm the current details on the official scholarship page."
+    },
+    {
+      "question": "Do these Minnesota high school scholarships all require essays?",
+      "answer": "No single rule applies across this page. Requirements appear mixed in the catalog, so browse the individual listings and verify on the official application page whether an essay or other materials are needed."
+    }
+  ],
+  "page_data": {
+    "exactCount": 21,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 9000,
+      "statedAmountCount": 21,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 10,
+      "within60Days": 18,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-04-24",
+        "May 14, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 17,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "agriculture_and_related_sciences",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Federation of State, County and Municipal Employees-Minnesota Council 5",
+        "count": 2
+      },
+      {
+        "name": "Arabian Horse Association-Region 10",
+        "count": 2
+      },
+      {
+        "name": "Northland Vietnam Veterans Memorial Foundation",
+        "count": 2
+      },
+      {
+        "name": "Wallin Education Partners",
+        "count": 2
+      },
+      {
+        "name": "Allina Health System",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability",
+      "medical",
+      "community",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/minnesota",
+    "generatedAt": "2026-04-26T15:26:15.265Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 21,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

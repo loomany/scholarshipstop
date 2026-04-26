@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Under Ten Thousand Delaware Scholarships | USA",
+  "seo_description": "Under ten thousand Delaware scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Delaware scholarships with smaller award ranges usually means balancing effort, fit, and timing rather than chasing one huge prize. This filtered USA view gathers a focused set of listings tied to Delaware so you can compare options that may be more realistic to apply for alongside other aid. The rows below span areas such as education, STEM, medicine, arts, community, and miscellaneous topics, with examples that touch engineering, business, health professions, and transportation. Requirements are not identical across the list: some opportunities appear lighter touch, some may ask for more materials, and essay expectations can vary by listing. Deadlines also differ across programs, so it is smart to check the official page promptly as you browse.",
+  "h1": "Explore Under Ten Thousand Delaware Scholarships USA",
+  "supporting": "Use this slice to compare more than the headline award text. Look at the location fit, study level, field tags, citizenship or residency notes, and any requirement lines before you decide where to apply. Because the list mixes broad and specialized programs, it is worth scanning beyond your exact major if your background overlaps with education, engineering, health, or community-focused work. Open each official source to verify current terms, since award amounts, deadline wording, and eligibility details can change.",
+  "related_intro": "If you do not see enough matches here, check nearby scholarship pages that shift one filter at a time, such as broader Delaware results or other award-range views. That makes it easier to compare local fit against topic fit without starting your search over.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify current details",
+    "Shortlist listings that match your level and field",
+    "Browse beyond your exact major for related categories"
+  ],
+  "who_for": [
+    "Delaware applicants comparing smaller scholarship awards",
+    "High school seniors seeking local or nearby funding",
+    "Graduate students reviewing Delaware-relevant scholarship options",
+    "US citizens or permanent residents checking eligibility labels",
+    "Students in education, STEM, business, health, or arts fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to these Delaware scholarship listings if I’m in high school or graduate school?",
+      "answer": "Some programs in these rows are tagged for high school seniors, while others are for graduate students. Check each listing’s official page before you apply, since level, residency, and field requirements are not the same across every scholarship."
+    },
+    {
+      "question": "Do all Delaware scholarships here have the same deadline or essay requirement?",
+      "answer": "No—deadlines differ by row, and some dates appear to be coming up soon, so it’s smart to check the latest details promptly. Essay requirements are mixed as well, so compare each listing and confirm on the official scholarship page before you apply."
+    },
+    {
+      "question": "Are these only for Delaware residents, or can USA applicants from nearby areas also explore them?",
+      "answer": "The Delaware filter helps you find scholarships connected to Delaware, but eligibility can include different USA residency or citizenship labels depending on the listing. Review each row carefully for details such as U.S. citizen or permanent resident requirements and any location-specific rules."
+    }
+  ],
+  "page_data": {
+    "exactCount": 44,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 7500,
+      "statedAmountCount": 44,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 24,
+      "within60Days": 44,
+      "rollingOrUnknown": 0,
+      "nearestDays": 14,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-06-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 40,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "recommendation",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "transportation_and_materials_moving",
+        "engineering",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Conference of Minority Transportation Officials-Philadelphia Chapter",
+        "count": 13
+      },
+      {
+        "name": "Philadelphia Foundation",
+        "count": 8
+      },
+      {
+        "name": "Delaware FFA Association",
+        "count": 3
+      },
+      {
+        "name": "Cumberland Valley Volunteer Firemen's Association",
+        "count": 2
+      },
+      {
+        "name": "Gift of Life Donor Program",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "stem",
+      "miscellaneous",
+      "medical",
+      "arts",
+      "community"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/delaware",
+    "generatedAt": "2026-04-26T16:07:03.544Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 44,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "seo_title": "Find First-Generation Undergraduate Scholarships USA",
+  "seo_description": "First-generation undergraduate scholarships in California, USA. Compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find California scholarships for first generation undergraduate study usually means narrowing fast by eligibility, location, and how much effort each application may take. This filtered slice brings those factors together so you can compare a focused set of USA listings without wading through unrelated programs. The rows here point to opportunities connected with California and include options tied to areas like community, education, arts, and miscellaneous topics. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it helps to read each row closely. Many listings in this slice appear to have lighter application signals, and no essay is often indicated, but you should still verify every detail on the official scholarship page before you apply.",
+  "h1": "Find California First-Generation Undergrad Scholarships USA",
+  "supporting": "A smart way to use these results is to compare the requirement line, category tags, and award text side by side before opening each official source. Some programs may fit broad undergraduate needs, while others may lean toward community, education, or arts interests. Because deadline text appears across these rows and some opportunities may close soon, it is worth scanning promptly and shortlisting the best matches. If award amounts matter most, compare listings directly, then confirm current terms, location rules, and application steps on the sponsor page.",
+  "related_intro": "If you do not find the right fit in this California first generation undergraduate set, related pages can help you compare nearby options by eligibility, study level, or location. That is useful when you want to widen your USA scholarship search without losing the same general focus.",
+  "how_to_use": [
+    "Compare award text across the rows",
+    "Read each requirement line carefully",
+    "Check deadline wording and apply early",
+    "Open the official page to verify details",
+    "Shortlist the best matches before you apply"
+  ],
+  "who_for": [
+    "California undergraduates who are first generation students",
+    "Applicants comparing community and education focused scholarships",
+    "Students looking for California based undergraduate funding",
+    "First generation applicants who prefer lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find first-generation undergraduate scholarships in California that fit me?",
+      "answer": "Use this filtered view to compare the rows by location, study level, category, and any requirement details shown in the catalog. Then open the official scholarship page for each listing to confirm current eligibility, application steps, and deadlines in California or USA-wide terms."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this California page?",
+      "answer": "Not automatically—each program sets its own rules, even within a focused set of first-generation undergraduate listings. Check the official source for residency, enrollment, and any program-specific requirements before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amounts, deadline text, categories like Community, Education, Miscellaneous, or Arts, and any requirement signals shown on each row. Amounts and deadlines vary by listing, so verify the latest details on the official page before submitting anything."
+    },
+    {
+      "question": "Are these scholarships only for California students, or can USA applicants explore them too?",
+      "answer": "This filter slice is tied to California, but the exact location rule can differ by program. If you're searching from elsewhere in the USA, use the catalog to explore the listings and confirm on official pages whether California residency or study location is required."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-04-06"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Catalino Tapia Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Central California Asian Pacific Women",
+        "count": 1
+      },
+      {
+        "name": "Central Valley Scholars",
+        "count": 1
+      },
+      {
+        "name": "Hannah Project Partnership for Academic Achievement",
+        "count": 1
+      },
+      {
+        "name": "PlaceWorks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "arts",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "first-generation/undergraduate/california",
+    "generatedAt": "2026-04-26T15:06:06.875Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

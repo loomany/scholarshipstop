@@ -58,6 +58,7 @@
     "seo:measure-urls": "npx tsx scripts/seo-measure-urls.ts",
     "seo:audit": "tsx scripts/audit-seo-pages.ts",
     "seo:audit:full": "dotenv -e .env.local -- npm run seo:audit",
+    "seo:fix:targeted-from-audit": "dotenv -e .env.local -- npx tsx scripts/fix-seo-from-audit-targeted.ts",
     "gptzero:ping": "dotenv -e .env.local -- node scripts/gptzero-ping.mjs",
     "essay:queue-next": "npx dotenv-cli -e .env.local -- npx tsx scripts/queue-next-essay-and-run-once.ts",
     "essay:backfill-heroes": "npx dotenv-cli -e .env.local -- npx tsx scripts/backfill-essay-hero-images.ts",

@@ -1,0 +1,92 @@
+{
+  "seo_title": "Find Massachusetts Scholarships for International Students | USA…",
+  "seo_description": "Massachusetts scholarships for international students under ten thousand in the USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Massachusetts scholarships in the USA that international students can actually apply for without sorting through high award listings first? This filtered slice narrows the catalog to programs with listed awards under the upper cap in the filter, so you can compare smaller funding options that may still help with tuition, research, or study costs. The rows here lean toward STEM and may also touch areas such as education, engineering, mathematics and statistics, and business management and marketing. Awards, deadlines, and eligibility details vary by listing, and many entries in this slice appear to have lighter application signals, often with no essay noted, but you should still read each requirement line carefully before you apply.",
+  "h1": "Compare Massachusetts Scholarships for International Students US…",
+  "supporting": "Use these rows as a practical shortlist rather than assuming every Massachusetts opportunity for international students works the same way. Compare the award text, subject fit, and deadline wording side by side, then open the official source for the final rules. This slice is worth a close look if you want to browse lower-amount scholarships that may be easier to add to a broader funding plan. Because deadline text appears across the listings and at least some opportunities may be approaching soon, it makes sense to verify timing promptly before you move ahead.",
+  "related_intro": "If this Massachusetts set feels too narrow, related pages can help you explore nearby filter combinations, such as other USA locations, broader award ranges, or different eligibility mixes for international students. That is often the fastest way to compare where similar STEM-focused listings appear.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist the listings that match your field of study",
+    "Check sponsor sites promptly because timing can vary"
+  ],
+  "who_for": [
+    "International students targeting Massachusetts colleges or universities",
+    "STEM applicants looking for smaller USA scholarship options",
+    "Students in engineering, education, mathematics, or business fields",
+    "Applicants who prefer listings that often show no essay"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to every scholarship listed here as an international student in the USA?",
+      "answer": "Not automatically—this catalog slice is a starting point for finding likely matches in Massachusetts, USA. Eligibility can still vary by program, so verify citizenship, enrollment, and any school-specific rules on the official page before you apply."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Compare award amount, deadline text, field of study, and any requirement notes row by row. Amounts vary by listing, and deadlines differ by program, so check the official source for the final details."
+    },
+    {
+      "question": "Are these mostly STEM scholarships, or can I explore other fields too?",
+      "answer": "In this filtered set, STEM appears often, and sample fields include education, engineering, mathematics and statistics, and business, management, and marketing. Use the rows below to explore which subjects each program actually names before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 400,
+      "maxUsd": 4000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-04-30",
+        "2026-04-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education",
+        "engineering",
+        "mathematics_and_statistics",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": [
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "international-students-eligibility/under-10000/massachusetts",
+    "generatedAt": "2026-04-26T15:47:08.710Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

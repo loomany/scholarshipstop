@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Iowa Scholarships Under Ten Thousand | USA",
+  "seo_description": "Iowa scholarships under ten thousand with deadlines, award ranges, and requirement details. Compare USA listings and apply on official pages.",
+  "intro": "Trying to find Iowa scholarships in the USA with awards under a higher-cost threshold usually means balancing smaller, more realistic awards against fit and timing. This filtered slice brings together programs tied to Iowa and keeps the focus on listings where the posted award stays below that cap. As you compare the rows below, expect variety in category, study level, and field of study, with examples touching education, community, medicine, arts, and music. Some opportunities may be open to high school seniors, graduate students, or students in two-year college paths, and some may mention United States citizenship or residency. Requirements are not identical across the list, so it is smart to read each listing closely before you apply.",
+  "h1": "Compare Iowa Scholarships Under Ten Thousand USA",
+  "supporting": "Use this view to compare more than just the headline award. Check how each Iowa scholarship describes eligibility, field preferences, and any essay or document expectations, then weigh that against how quickly you can complete the application. Deadlines differ across these rows, and some appear soon, so prompt review matters. It is also worth scanning category labels and requirement lines side by side to spot listings that match your background before you open the official source and verify current details.",
+  "related_intro": "If this Iowa set feels too narrow or too broad, related pages can help you explore nearby options by changing the location or keeping the same award range while comparing other scholarship themes in the USA catalog.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award details",
+    "Shortlist the Iowa listings that best match your level and field",
+    "Check whether an essay or extra materials are mentioned"
+  ],
+  "who_for": [
+    "Iowa students comparing smaller scholarship awards",
+    "High school seniors seeking local funding options",
+    "Graduate or two-year college applicants in Iowa",
+    "Students in education, health, business, arts, or community-focused fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "Usually, you can explore and apply to multiple programs if you meet each listing’s requirements. Check every row separately, because eligibility, required materials, and official instructions are set by the scholarship provider."
+    },
+    {
+      "question": "Are these scholarships only for certain majors or study levels?",
+      "answer": "This filtered set includes a mix of topics such as education, medicine, community, arts, and music, with examples across levels like high school senior, college, and graduate study. Browse each row to compare who it is for, since not every Iowa scholarship targets the same major or academic stage."
+    },
+    {
+      "question": "Do these Iowa scholarship listings always require an essay?",
+      "answer": "Not always—requirements vary across the listings, and some may be lighter-touch than others. Before you apply, open the official scholarship page to verify whether an essay, transcript, or other materials are required for that specific program."
+    }
+  ],
+  "page_data": {
+    "exactCount": 27,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 7500,
+      "statedAmountCount": 27,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 12,
+      "within60Days": 24,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-04-30",
+        "2026-06-30"
+      ]
+    },
+    "essays": {
+      "yesCount": 7,
+      "noCount": 20,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "transcript",
+        "essay",
+        "document",
+        "personal_statement",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "computer_and_information_sciences",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "American Legion Auxiliary",
+        "count": 4
+      },
+      {
+        "name": "Iowa Girls' Coaches Association",
+        "count": 2
+      },
+      {
+        "name": "Mary Greeley Medical Center",
+        "count": 2
+      },
+      {
+        "name": "Offutt Enlisted Spouses Club",
+        "count": 2
+      },
+      {
+        "name": "Alpha Gamma Rho Fraternity",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "medical",
+      "community",
+      "arts",
+      "music"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/iowa",
+    "generatedAt": "2026-04-26T16:09:41.634Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 27,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

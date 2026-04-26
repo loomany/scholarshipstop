@@ -1,0 +1,110 @@
+{
+  "seo_title": "Find Hispanic High School Scholarships in Illinois, USA",
+  "seo_description": "Hispanic high school scholarships in Illinois, USA—compare deadlines, award amounts, and requirements, then apply on the official program pages.",
+  "intro": "Trying to find Hispanic scholarships for high school students in Illinois usually means narrowing a broad USA search into a smaller set you can actually compare and apply to. This filtered slice brings together programs tied to Hispanic eligibility, the high school level, and Illinois, so you can quickly scan what fits before opening official pages. The rows below suggest a mix of interests, including education, law, community, and STEM-related paths. Awards, deadlines, and requirement details can vary from listing to listing, and many entries in this slice appear to have lighter application signals, often with no essay noted, but you should still verify every rule directly with the provider.",
+  "h1": "Compare Hispanic High School Scholarships in Illinois USA",
+  "supporting": "Use this view to compare the practical details that matter most before you start an application. Read each row for deadline wording, award text, study-area cues, and any requirement notes, then open the official source to confirm eligibility and submission steps. Because deadline text differs across these Illinois listings, it is worth checking dates promptly. This slice is especially useful if you want to browse a focused set of USA opportunities without mixing in unrelated states or college-only programs.",
+  "related_intro": "If you do not find the right fit here, compare nearby scholarship pages by changing one filter at a time, such as the education level, location, or Hispanic eligibility focus. That makes it easier to spot similar USA programs with different subject areas or application requirements.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist listings by subject area and fit",
+    "Check award text carefully because amounts vary by listing"
+  ],
+  "who_for": [
+    "Hispanic high school seniors in Illinois",
+    "Illinois students comparing community or law related scholarships",
+    "High school applicants looking for education or STEM themed funding",
+    "Students who want Illinois listings that may have lighter application requirements"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Hispanic scholarships for high school students in Illinois?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings tied to Hispanic eligibility, high school level, and Illinois. Then open each row and verify the current rules, amount, and application steps on the official source."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here with one application?",
+      "answer": "No—each listing is its own program, so you apply separately through the provider named on the official page. Requirements, documents, and deadlines vary by row."
+    },
+    {
+      "question": "Are these Illinois high school scholarships mostly essay-based?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and several sampled rows show no essay flag. Still, compare each scholarship carefully because application materials can differ from one program to another."
+    },
+    {
+      "question": "How often should I check deadlines on this page?",
+      "answer": "Check promptly if you plan to explore or apply, since these rows do not share one universal deadline and at least some deadlines are relatively soon. Always confirm the latest date on the official scholarship page before submitting."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 1500,
+      "minUsd": 500,
+      "maxUsd": 2000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-15",
+        "2026-05-04"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Harper College Educational Foundation",
+        "count": 1
+      },
+      {
+        "name": "Illinois CPA Society",
+        "count": 1
+      },
+      {
+        "name": "Waubonsee Community College",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "law",
+      "stem",
+      "community",
+      "education",
+      "medical",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/high-school/illinois",
+    "generatedAt": "2026-04-26T15:39:22.662Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

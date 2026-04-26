@@ -1,0 +1,114 @@
+{
+  "seo_title": "Find First-Generation Undergraduate Scholarships in Florida USA…",
+  "seo_description": "First-generation undergraduate scholarships in Florida, USA: compare awards, review varying deadlines, and apply through official program pages.",
+  "intro": "Trying to find first generation undergraduate scholarships in Florida usually means narrowing a broad search into a set you can actually compare and apply to. This filtered slice brings together USA listings tied to Florida and undergraduate study, with first generation eligibility at the center. The programs below do not all look the same: award amounts vary by listing, deadlines differ by program, and requirement details can change from row to row. Many entries in this slice appear to have lighter application signals, and many listings often show no essay in the catalog data, but you should still verify every detail on the official page before you apply. If you want a practical place to browse and compare options without wading through unrelated results, this is a useful starting point.",
+  "h1": "Apply for First-Generation Florida Undergrad Scholarships USA …",
+  "supporting": "A smart way to use these rows is to compare the requirement line, deadline text, award wording, and category tags side by side before opening each listing. In this Florida-focused set, you may notice themes such as community, education, and STEM, which can help you decide where to look first. Because some deadlines appear close, it is worth checking dates promptly and shortlisting the programs that match your background. Always confirm eligibility, application steps, and award details on the sponsor or official scholarship page before you submit anything.",
+  "related_intro": "If you are close to applying but want a wider view, related pages can help you compare nearby scholarship paths, such as other Florida filters, broader undergraduate results, or first generation listings without the same location limit. That can surface programs you might miss in this narrower slice.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you shortlist",
+    "Open the official page to verify eligibility details",
+    "Check award wording carefully because amounts vary by listing",
+    "Save the best matches and apply early where possible"
+  ],
+  "who_for": [
+    "Florida undergraduates who are first generation college students",
+    "Applicants comparing Florida scholarships with community or STEM tags",
+    "Students seeking undergraduate awards that may have lighter application requirements",
+    "First generation students reviewing Florida options in education or related fields"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply if I’m an undergraduate in the USA but not studying a specific major?",
+      "answer": "Possibly—this slice includes listings across categories like STEM, Community, Education, and Miscellaneous, so requirements can vary row by row. Review each scholarship’s official page to confirm who can apply, including any Florida or study-area conditions."
+    },
+    {
+      "question": "What should I compare before I apply to these Florida scholarships?",
+      "answer": "Compare eligibility, deadline text, award amount, and category for each listing before you apply. Amounts vary by listing, and the official scholarship page is the best place to verify current rules and what materials are required."
+    },
+    {
+      "question": "Are these scholarships only for current college students, or can I explore options earlier?",
+      "answer": "Not every listing is limited to the same stage—sample study levels in this catalog include high school senior and college-level entries. If you want to explore options early, check each row’s official criteria to see when you can apply."
+    },
+    {
+      "question": "Do many of these first-generation scholarships require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and several are marked with no essay in the catalog metadata. Still, you should verify every application on the official source, because requirements can change by program."
+    }
+  ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 3000,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-26",
+        "2026-04-15",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "english_language_and_literature",
+        "foreign_languages_literature_and_linguistics",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 2
+      },
+      {
+        "name": "University of South Florida",
+        "count": 2
+      },
+      {
+        "name": "Haitian American Chamber of Commerce of Florida",
+        "count": 1
+      },
+      {
+        "name": "The College of the Florida Keys",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "stem",
+      "community",
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "first-generation/undergraduate/florida",
+    "generatedAt": "2026-04-26T15:06:27.293Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "seo_title": "Find Oklahoma Undergraduate Scholarships for Foster Youth | USA…",
+  "seo_description": "Oklahoma foster youth undergraduate scholarships in the USA—compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find undergraduate scholarships in Oklahoma for foster youth usually means narrowing past broad USA results and getting to listings that match both status and location. This filtered slice brings together programs tied to Oklahoma with an undergraduate focus, so you can compare options without wading through unrelated awards. The rows here lean toward education-related listings, and many appear to have lighter application signals, though requirements still vary by program. Award amounts, eligibility details, and deadline wording can differ from one listing to the next, so it makes sense to read each row closely before you apply. If you want a focused place to browse and compare foster youth scholarships in Oklahoma, this is a practical starting point.",
+  "h1": "Find Oklahoma Scholarships for Foster Youth Undergrads USA",
+  "supporting": "Use the list as a comparison view rather than assuming every scholarship works the same way. Check the title, category, and requirement lines first, then compare award text and deadline wording across the rows. Many listings in this slice may be relatively straightforward to review, but you should still open the official page for final rules, current availability, and any application materials. That extra step matters before you shortlist programs or submit an application.",
+  "related_intro": "If these Oklahoma undergraduate results feel too narrow, related pages can help you explore nearby paths, such as broader undergraduate scholarship views or other foster youth scholarship filters in the USA catalog. That can make it easier to compare similar programs with a different location or scope.",
+  "how_to_use": [
+    "Compare deadline wording across the rows",
+    "Read each requirement line carefully",
+    "Open the official page before you apply",
+    "Shortlist listings that match your Oklahoma and undergraduate profile",
+    "Verify award details and application materials on the sponsor site"
+  ],
+  "who_for": [
+    "Oklahoma undergraduates with foster youth background",
+    "Students comparing Oklahoma education scholarships",
+    "Applicants seeking foster youth aid with an undergraduate focus",
+    "College-bound readers narrowing USA scholarship options by state"
+  ],
+  "faq": [
+    {
+      "question": "How can I find undergraduate scholarships in Oklahoma for foster youth?",
+      "answer": "Use this filtered view to compare a focused set of USA scholarship listings tied to foster youth, undergraduate study, and Oklahoma. Then open each row and verify eligibility, amount, and deadline on the official source before you apply."
+    },
+    {
+      "question": "Are these scholarships mostly for a specific major or field?",
+      "answer": "Education appears in the sample categories and field-of-study data on this page, so that is one theme to explore. Still, use each listing’s details to confirm whether your undergraduate program in Oklahoma is eligible."
+    },
+    {
+      "question": "What should I look at before I apply from this list?",
+      "answer": "Compare the basic fit first: foster youth eligibility, undergraduate level, Oklahoma relevance, award amount, and deadline. Many listings in this slice appear to have lighter requirements and often no essay flag in the catalog, but you should verify every requirement on the official page."
+    }
+  ],
+  "page_data": {
+    "exactCount": 3,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 2000,
+      "maxUsd": 6000,
+      "statedAmountCount": 3,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 0,
+      "within60Days": 3,
+      "rollingOrUnknown": 0,
+      "nearestDays": 60,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-06-01",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 3,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document"
+      ],
+      "commonStudyLevels": [],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Oklahoma City Community Foundation",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "foster-youth/undergraduate/oklahoma",
+    "generatedAt": "2026-04-26T15:16:29.588Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 3,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

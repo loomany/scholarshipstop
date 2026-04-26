@@ -1,0 +1,117 @@
+{
+  "seo_title": "Find Hispanic Scholarships Under Five Thousand in California USA…",
+  "seo_description": "Hispanic scholarships under five thousand in California, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Hispanic scholarships in California with awards under five thousand dollars usually means balancing budget help against a shorter, more focused list. This filtered USA view brings together programs that match that slice, so you can compare options without sorting through unrelated awards. The listings here span areas such as humanities, arts, community, education, miscellaneous, and law, with examples tied to study interests like education, literature, languages, history, and architecture. Award amounts vary by listing and should be verified on the official pages, and deadlines differ by program rather than following one shared date. Requirements also vary: some rows may be lighter-touch, while others can ask for more materials, so it makes sense to read each listing closely before you apply.",
+  "h1": "Compare Hispanic Scholarships Under Five Thousand in California…",
+  "supporting": "A useful way to browse this set is to compare more than the dollar figure. Look at the category, study level, and field cues to see which scholarships fit your background, then check the requirement lines for essays or other application pieces. Because every row includes deadline text and at least one program appears to be coming up soon, it is smart to review dates promptly and shortlist the best matches first. This slice is worth scanning if you want California-based opportunities for Hispanic applicants that stay below the higher-award range but still cover a practical spread of academic and community-focused themes.",
+  "related_intro": "If you do not find the right fit in this California and under-five-thousand slice, compare nearby scholarship pages by changing one filter at a time. That can help you explore broader Hispanic scholarship options, different award ranges, or other USA location pages without losing the focus of your search.",
+  "how_to_use": [
+    "Compare award text, category labels, and study-level cues before deciding which listings to open",
+    "Read each requirement line closely to see whether an essay or other materials may be needed",
+    "Check deadline details row by row, since dates vary and some programs may be approaching soon",
+    "Open the official scholarship page for every shortlist item and verify eligibility, amount, and submission instructions",
+    "Apply first to the strongest-fit listings, then expand your search by adjusting award range or location filters"
+  ],
+  "who_for": [
+    "Hispanic applicants looking for California scholarship options with awards below five thousand dollars",
+    "High school seniors and graduate students comparing smaller USA scholarships with different requirement levels",
+    "Students interested in education, literature, languages, history, architecture, or related community-focused categories",
+    "Applicants who want to find California programs that may be lighter-touch but still need careful requirement checks"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Hispanic · Under · California scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Hispanic · Under · California scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Hispanic · Under · California scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 750,
+      "maxUsd": 5000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 2,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-06-01",
+        "2026-04-06",
+        "2026-06-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 1,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "graduate_student",
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "english_language_and_literature",
+        "foreign_languages_literature_and_linguistics",
+        "architecture_and_related_services",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "California Latino Legislative Caucus Foundation",
+        "count": 1
+      },
+      {
+        "name": "Comerciantes Unidos",
+        "count": 1
+      },
+      {
+        "name": "Hispanic Public Relations Association-Los Angeles Chapter",
+        "count": 1
+      },
+      {
+        "name": "National Latino Peace Officers Association-Ventura County Chapter",
+        "count": 1
+      },
+      {
+        "name": "PlaceWorks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "arts",
+      "community",
+      "education",
+      "humanities",
+      "law",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "hispanic/under-5000/california",
+    "generatedAt": "2026-04-26T15:43:04.654Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 5,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

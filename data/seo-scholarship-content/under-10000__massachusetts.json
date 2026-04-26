@@ -1,0 +1,124 @@
+{
+  "seo_title": "Find Under Ten Thousand Massachusetts Scholarships | USA",
+  "seo_description": "Under ten thousand Massachusetts scholarships in the USA: compare award ranges, deadlines, and requirements, then apply on official program pages.",
+  "intro": "Trying to find Massachusetts scholarships with awards under a common upper range usually means balancing budget fit with realistic application effort. This filtered USA view brings together a focused set of listings tied to Massachusetts, with programs spanning areas like education, STEM, community, medicine, disability, and miscellaneous topics. You can apply more selectively here because award amounts, eligibility details, and deadline wording vary from row to row, and many listings appear to have lighter requirement signals. Many also often show no essay in the metadata, though you should still verify every requirement on the official source. If you want to compare practical options without sorting through larger national catalogs first, this slice is a useful place to start.",
+  "h1": "Compare Under Ten Thousand Massachusetts Scholarships USA",
+  "supporting": "Use the rows below to compare more than just the headline award. Read the requirement line closely, note whether a listing points to Massachusetts residency or another connection, and check the study level and field tags for fit. Because deadlines differ by program and some appear to be coming up soon, it makes sense to open promising listings early and verify the latest details on the sponsor page. This is also a good slice to browse if you want to find options that may be simpler to complete than heavily document-based applications.",
+  "related_intro": "If this Massachusetts set feels too narrow or too broad, related pages can help you compare nearby filter combinations. You may want to explore the same award range in other USA locations, or stay with Massachusetts and look at different scholarship themes, study levels, or subject areas.",
+  "how_to_use": [
+    "Compare deadline wording across listings",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist programs that match your level and field",
+    "Check whether essay expectations are listed"
+  ],
+  "who_for": [
+    "Massachusetts residents comparing smaller scholarship awards",
+    "Students in education or STEM programs",
+    "High school seniors planning in-state applications",
+    "College and graduate applicants checking local opportunities",
+    "International students reviewing Massachusetts-tagged listings"
+  ],
+  "faq": [
+    {
+      "question": "Can I apply to more than one scholarship on this Massachusetts list?",
+      "answer": "Usually, you can explore multiple listings and apply to any programs whose rules you meet, but each scholarship has its own requirements. Check every official page separately because deadlines, documents, and eligibility differ by row."
+    },
+    {
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on award range, deadline timing, study level, and category fit such as Education, STEM, Community, Medicine, or Disability. Amounts vary by listing, and official pages are the right place to verify what each Massachusetts scholarship actually offers."
+    },
+    {
+      "question": "Are these scholarships only for U.S. students in Massachusetts?",
+      "answer": "Not always. Some rows in this catalog include labels such as US citizen or international student, so it is worth comparing residency and citizenship details before you apply in the USA context."
+    }
+  ],
+  "page_data": {
+    "exactCount": 143,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 175,
+      "maxUsd": 10000,
+      "statedAmountCount": 143,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 110,
+      "within60Days": 131,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "April 28, 2026 3:00 PM CT"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 143,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "communication_and_journalism",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "international_student"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Worcester State University",
+        "count": 36
+      },
+      {
+        "name": "Massachusetts Bay Community College (MassBay)",
+        "count": 22
+      },
+      {
+        "name": "University of Massachusetts Amherst",
+        "count": 18
+      },
+      {
+        "name": "Framingham State University",
+        "count": 4
+      },
+      {
+        "name": "Madison Park Development Corporation",
+        "count": 3
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community",
+      "medical",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "under-10000/massachusetts",
+    "generatedAt": "2026-04-26T16:11:38.403Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 143,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

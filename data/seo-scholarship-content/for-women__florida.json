@@ -1,48 +1,114 @@
 {
-  "seo_title": "Florida Scholarships for Women | $500 - $20,000 Awards",
-  "seo_description": "Explore 25 scholarships for women in Florida with varying award sizes and deadlines. Check listings for details.",
-  "intro": "Women in Florida have access to a diverse range of scholarship opportunities, with 25 listings available to support various educational pursuits. Award sizes vary significantly, with amounts ranging from approximately $500 to $20,000. Many of these scholarships have no essay requirements, making them more accessible. Be sure to check individual deadlines, as they can differ and some may be approaching soon.",
-  "h1": "Scholarships for Women in Florida",
-  "supporting": "This collection includes scholarships across multiple categories such as STEM, education, and community service. As you review the listings, consider comparing the award amounts and requirements to find the best fit for your needs. With many options available, you can shortlist the scholarships that align with your goals and verify details on the sponsor's official pages.",
-  "related_intro": "For more tailored options, check out related pages featuring scholarships specifically for STEM fields or community-focused initiatives.",
+  "seo_title": "Find Scholarships for Women in Florida, USA",
+  "seo_description": "Scholarships for women in Florida, USA with focused listings to compare awards and deadlines. Explore options and apply on official pages.",
+  "intro": "Trying to find scholarships for women in Florida usually means narrowing a broad USA search into programs that actually match your location and eligibility. This filtered slice brings together Florida-focused listings for women so you can compare options without wading through unrelated awards. The programs below span themes such as community, education, STEM, law, medicine, and safety, with some listings tied to high school senior pathways and others connected to fields like engineering, business, trades, transportation, or education. Award amounts vary by listing, deadlines differ by program, and requirements should always be checked on the official page. Many rows appear to have lighter application signals, and several may not require an essay, which can make this set worth a closer look if you want to apply soon.",
+  "h1": "Find Florida Scholarships for Women USA",
+  "supporting": "Use this list to compare more than the title alone. Scan each row for category fit, study level, field clues, award text, and deadline wording, then open the official source to verify current rules. In this Florida women scholarship view, it is useful to compare memorial awards, community-focused programs, and career-linked options side by side. If you are building a shortlist for the current cycle, pay attention to listings with nearer deadlines first, since timing and eligibility details can change.",
+  "related_intro": "If you do not find the right fit here, related pages can help you explore nearby angles, such as broader scholarships for women in the USA, Florida scholarships without the women filter, or category pages tied to education, STEM, medicine, law, community, or safety.",
   "how_to_use": [
-    "Compare deadlines for timely applications",
-    "Scan award amounts for financial fit",
-    "Read requirement lines for eligibility details",
-    "Open official pages for the latest information",
-    "Shortlist potential scholarships for easy tracking"
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist listings that match your field and study level",
+    "Check award text carefully because amounts vary by program"
   ],
   "who_for": [
-    "Women pursuing education in Florida",
-    "Students interested in STEM scholarships",
-    "Applicants seeking community service funding",
-    "Individuals looking for lighter application requirements",
-    "Women in arts and miscellaneous fields"
+    "Women in Florida seeking local scholarship options",
+    "Florida high school seniors comparing next-step funding",
+    "Applicants interested in education or teaching pathways",
+    "Women pursuing STEM, trades, engineering, or transportation studies",
+    "Florida students looking at community, law, medicine, or safety themes"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for women in Florida?",
-      "answer": "The current list includes 25 scholarships that cater specifically to women in Florida, covering a range of categories such as STEM, Education, Medicine, Arts, and Community. This variety allows applicants to find opportunities that align with their academic and career interests."
+      "question": "How can I find scholarships for women in Florida that fit my goals?",
+      "answer": "Use this filtered view to compare the rows by category, study focus, amount, and deadline. In this USA slice, you can explore listings tied to areas like community, education, STEM, law, medicine, and safety, then verify full eligibility on each official source."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require essays, making the application process potentially easier for applicants. However, it's important to check each individual listing for specific requirements, as some may have different criteria."
+      "question": "Can I apply to more than one scholarship listed here?",
+      "answer": "You can browse multiple programs below and apply to any that match your situation, as long as each listing’s official requirements allow it. Eligibility, required materials, and deadlines vary by program, so confirm details row by row."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All 25 scholarships listed have deadlines, but they vary significantly. Some deadlines are approaching within the next 45 days, so it's advisable to review each scholarship's details promptly to ensure you don't miss any opportunities."
+      "question": "What kinds of students are these Florida scholarships for?",
+      "answer": "This focused set of listings includes opportunities connected to women in Florida, with sample study levels showing high school senior and sample fields such as education, business management and marketing, construction trades, engineering, and transportation and materials moving. Always check the official page for the exact audience, since one listing should not be treated as the rule for all."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "The scholarships available for women in Florida have award amounts that generally range from $500 to $20,000. Each listing provides specific details about the award size, so be sure to check those for accurate information."
+      "question": "Are these scholarships likely to require essays or a long application?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many sampled rows show no essay flag. Still, before you apply, confirm the current application steps on the official scholarship page because requirements can change by program."
     }
   ],
+  "page_data": {
+    "exactCount": 6,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 750,
+      "maxUsd": 1500,
+      "statedAmountCount": 6,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 1,
+      "within60Days": 6,
+      "rollingOrUnknown": 0,
+      "nearestDays": 29,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-04",
+        "2026-05-11"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 6,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "construction_trades",
+        "engineering",
+        "health_professions_and_clinical_sciences"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Eastern Florida State College",
+        "count": 3
+      },
+      {
+        "name": "National Conference of Puerto Rican Women-Miami Chapter",
+        "count": 1
+      },
+      {
+        "name": "United Methodist Church-Alabama-West Florida Conference",
+        "count": 1
+      },
+      {
+        "name": "WTS International-Central Florida Chapter",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "law",
+      "medical",
+      "stem",
+      "miscellaneous"
+    ]
+  },
   "_meta": {
     "canonicalPath": "for-women/florida",
-    "generatedAt": "2026-04-02T10:34:25.449Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 25,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:07:51.825Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 6,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

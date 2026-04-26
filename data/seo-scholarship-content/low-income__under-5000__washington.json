@@ -1,0 +1,104 @@
+{
+  "seo_title": "Find Low Income Under Five Thousand Scholarships USA",
+  "seo_description": "Low income under five thousand scholarships in Washington, USA. Compare awards, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to find Washington scholarships for low income applicants with smaller award sizes usually means balancing speed, fit, and realistic requirements. This filtered slice brings together USA listings that match that mix, so you can compare programs without wading through unrelated results. The rows below lean toward awards under this preset, but amounts still vary by listing and should be confirmed on each official page. Deadlines are not all the same, and some appear close enough that it makes sense to apply promptly. Many listings in this view also look lighter on essay demands, which can make this a practical set to browse if you want options that may be quicker to complete.",
+  "h1": "Find Low Income Under Five Thousand Washington Scholarships USA…",
+  "supporting": "A useful way to read this list is to compare the requirement lines first, then check deadline text, category labels, and study level fit. In this Washington slice, you may notice overlap with education, miscellaneous, and disability themes, so it is worth opening each row instead of assuming they target the same applicant. Use the catalog to find likely matches, then verify eligibility details, award terms, and submission steps on the official scholarship page before you shortlist anything.",
+  "related_intro": "If you do not find enough matches here, compare nearby scholarship pages by changing one filter at a time, such as the award preset, Washington location, or low income eligibility. That makes it easier to spot related USA programs with a similar application effort.",
+  "how_to_use": [
+    "Compare deadline text across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist the listings that best match your study level"
+  ],
+  "who_for": [
+    "Washington residents with low income eligibility",
+    "High school seniors seeking smaller scholarships",
+    "College and graduate applicants comparing lighter-touch programs",
+    "Students interested in education or disability related listings"
+  ],
+  "faq": [
+    {
+      "question": "Who should apply for Low Income · Under · Washington scholarships?",
+      "answer": "Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page."
+    },
+    {
+      "question": "How do I check deadlines for Low Income · Under · Washington scholarships?",
+      "answer": "Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page."
+    },
+    {
+      "question": "What is the best application process for Low Income · Under · Washington scholarships?",
+      "answer": "Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 250,
+      "maxUsd": 5000,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 3,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 19,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-04-20",
+        "2026-04-24"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 1
+      },
+      {
+        "name": "CollegeReady",
+        "count": 1
+      },
+      {
+        "name": "POISE Foundation",
+        "count": 1
+      },
+      {
+        "name": "The Associates Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "disability"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "low-income/under-5000/washington",
+    "generatedAt": "2026-04-26T15:52:42.625Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

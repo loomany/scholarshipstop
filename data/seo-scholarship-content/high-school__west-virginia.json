@@ -1,0 +1,122 @@
+{
+  "seo_title": "Find High School Scholarships in West Virginia, USA",
+  "seo_description": "High school scholarships in West Virginia, USA—compare awards, deadlines, and requirements, then apply through each official program page.",
+  "intro": "Trying to find West Virginia scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what they ask for, and when materials are due. This filtered view brings together a focused set of listings tied to high school status and West Virginia, so you can compare options without jumping between unrelated results. Awards in these rows vary by listing, and official pages are the place to confirm current amounts, eligibility, and application details. Deadlines also differ across programs, with some dates coming up relatively soon, so it makes sense to check timing early. Many listings here appear to have lighter application requirements, and many are marked as no-essay, but you should still verify each requirement line before you apply.",
+  "h1": "West Virginia High School Scholarships USA Apply",
+  "supporting": "As you scan the programs below, compare more than the title. Look at study level cues such as high school senior, residency or citizenship labels like U.S. citizen or permanent resident, and any field tags that may connect to education, arts, STEM, business, trade-related study, or other paths. This slice is worth a close look because it mixes broad education funding with more specific opportunities, which can make it easier to build a shortlist of realistic matches. Open each listing to confirm the latest rules on the sponsor's official page before submitting anything.",
+  "related_intro": "If you do not find enough matches in this West Virginia high school set, related pages can help you widen the search by adjusting either the education level or the location filter. That is often the fastest way to explore nearby scholarship categories without losing the focus of your original search.",
+  "how_to_use": [
+    "Compare deadline text across the rows first, since timing varies and some programs may close soon",
+    "Scan each listing for study level, location, citizenship, and field-of-study cues before adding it to your shortlist",
+    "Read the requirement lines carefully, especially if a listing appears to be no-essay or lighter-touch",
+    "Open the official scholarship page to verify award amount, eligibility, and application instructions before you apply"
+  ],
+  "who_for": [
+    "High school seniors in West Virginia who want to compare scholarship options before they apply",
+    "West Virginia students looking for USA programs with education, arts, STEM, business, or trade-related relevance",
+    "Applicants who prefer to find listings that often appear to have no essay or lighter requirement signals",
+    "U.S. citizen or permanent resident students checking residency and eligibility details row by row"
+  ],
+  "faq": [
+    {
+      "question": "How do I find scholarships for high school students in West Virginia?",
+      "answer": "Use this filtered view to explore a focused set of West Virginia scholarship listings for high school applicants in the USA. Open each row to confirm residency, grade level, and any citizenship details on the official source before you apply."
+    },
+    {
+      "question": "Can I compare award amounts on this West Virginia high school scholarships page?",
+      "answer": "Yes—these rows list award amounts, but amounts vary by listing and should be verified on the official page. In this slice, listed awards range from smaller and mid-sized amounts up to higher amounts, depending on the program."
+    },
+    {
+      "question": "Are these West Virginia scholarships only for one type of student or interest?",
+      "answer": "No—while the filter is for high school students in West Virginia, the programs below span different themes such as Education, Arts, STEM, and Miscellaneous. You can browse and compare listings based on the study interests and eligibility details shown in each row."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have no essay flagged in the catalog, but requirements can change row to row. Always verify the application steps and required materials on the official scholarship page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 11,
+    "award": {
+      "medianUsd": 2000,
+      "minUsd": 500,
+      "maxUsd": 5000,
+      "statedAmountCount": 11,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 7,
+      "within60Days": 9,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 11,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "personal_statement",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "parks_recreation_and_fitness_studies",
+        "personal_and_culinary_services",
+        "precision_production"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of Fayette County",
+        "count": 2
+      },
+      {
+        "name": "Eastern West Virginia Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "College Foundation of West Virginia",
+        "count": 1
+      },
+      {
+        "name": "Eastern Amputee Golf Association",
+        "count": 1
+      },
+      {
+        "name": "James T. and Rose M. Perryman Family Foundation",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "arts",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/west-virginia",
+    "generatedAt": "2026-04-26T15:36:06.126Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 11,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "seo_title": "Find High School Scholarships in Illinois, USA",
+  "seo_description": "High school scholarships in Illinois, USA: compare deadlines, award ranges, and requirements, then apply through each official program page.",
+  "intro": "Trying to find Illinois scholarships for high school students in the USA usually means sorting through programs that look similar at first glance but differ in who can apply, what they ask for, and how much support they may offer. This filtered slice brings together a focused set of listings tied to Illinois and the high school level, with topics that can include education, community, arts, medicine, and STEM. Some rows appear lighter on requirements, while others may ask for more documentation or an essay, so it is worth reading each listing closely. Award amounts vary by program, and deadlines differ across the rows, with some opportunities closing relatively soon, so checking details promptly can help you compare options and apply on time.",
+  "h1": "Find Illinois High School Scholarships USA",
+  "supporting": "Use this list to compare more than just the scholarship title. Scan each row for location fit, study level clues, category tags, and any requirement notes before you decide where to apply. If a program connects to areas like education, health professions, engineering, business, or community-focused work, it may be worth a closer look. Open the official page for every scholarship you shortlist, because award details, residency language, and application steps can change and should always be verified at the source.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship paths by study level, topic, or other USA location filters. That is useful when you want to find similar Illinois options or explore adjacent categories that still match your background.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify award and eligibility details",
+    "Shortlist programs that match your level, location, and subject interests",
+    "Check whether the listing mentions essays or added documentation"
+  ],
+  "who_for": [
+    "Illinois high school seniors preparing scholarship applications",
+    "USA-based students seeking Illinois-focused education or community awards",
+    "Applicants interested in STEM, medicine, arts, or education categories",
+    "Students who want to compare lighter-touch listings with more detailed applications"
+  ],
+  "faq": [
+    {
+      "question": "How can I find Illinois scholarships for high school students in this filtered view?",
+      "answer": "Use these rows to compare Illinois-focused options tied to the high school preset, then open each listing for the official source. In the USA context, eligibility, residency language, and study-level labels can differ by program."
+    },
+    {
+      "question": "Can I apply to every scholarship listed here if I’m in high school?",
+      "answer": "Not automatically—this is a catalog filter, not a single scholarship program. Before you apply, verify each listing’s official requirements, since some rows also reference other study levels or specific categories such as education, STEM, medicine, community, or arts."
+    },
+    {
+      "question": "Are these Illinois high school scholarships only for certain majors or interests?",
+      "answer": "Not necessarily—this filtered set includes a mix of topics, with common categories such as education, miscellaneous, STEM, medicine, community, and arts. If you want to explore fit, check the category labels and fields of study shown on each listing."
+    },
+    {
+      "question": "Do these listings usually require essays or a long application?",
+      "answer": "Requirements vary across the catalog, and some programs may be lighter-touch than others. The fastest way to compare is to review each row and then verify the application steps on the official scholarship source."
+    }
+  ],
+  "page_data": {
+    "exactCount": 173,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 200,
+      "maxUsd": 15000,
+      "statedAmountCount": 171,
+      "unstatedAmountCount": 2
+    },
+    "deadline": {
+      "within30Days": 119,
+      "within60Days": 171,
+      "rollingOrUnknown": 0,
+      "nearestDays": 6,
+      "nearestLabels": [
+        "April 28, 2026 3:00 PM CT",
+        "2026-05-01",
+        "2026-04-15"
+      ]
+    },
+    "essays": {
+      "yesCount": 5,
+      "noCount": 168,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "document",
+        "transcript",
+        "essay",
+        "link"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_1",
+        "graduate_student",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "engineering",
+        "parks_recreation_and_fitness_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Kankakee Community College Foundation",
+        "count": 83
+      },
+      {
+        "name": "Waubonsee Community College",
+        "count": 43
+      },
+      {
+        "name": "The Scholarship Foundation of St. Louis",
+        "count": 7
+      },
+      {
+        "name": "Conference of Minority Transportation Officials-Chicago Chapter",
+        "count": 5
+      },
+      {
+        "name": "Asian Pacific Community Fund",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "community",
+      "arts"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "high-school/illinois",
+    "generatedAt": "2026-04-26T15:22:39.163Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 173,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}
