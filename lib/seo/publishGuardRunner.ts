@@ -2,7 +2,8 @@ import type { SeoPayload } from '@/lib/seo/seoPageContract';
 import { normalizeSeoPayload } from '@/lib/seo/normalizeSeoPayload';
 import {
   appendSeoNewContentWarningRun,
-  isSeoQualityWarnOnlyDefault
+  isSeoQualityWarnOnlyDefault,
+  type SeoTelegramNotificationReport
 } from '@/lib/seo/seoNewContentWarnings';
 import {
   isSeoTelegramNotifyConfigured,
