@@ -1096,13 +1096,23 @@ export default function ScholarshipDetailPageClient({
     awardLine: awardCatalogText,
     deadlinePrimary
   });
-  const faqItemsOnPage = showUsefulFaqPage
+  const strictFaqItems = showUsefulFaqPage
     ? filterFaqForOnPageDisplay(scholarship, {
         heroSummary: ui.heroSummary,
         awardLine: awardCatalogText,
         deadlinePrimary
       })
     : [];
+  const fallbackFaqItems = (scholarship.seoFaq ?? [])
+    .filter((it) => {
+      const q = it.question?.trim() ?? '';
+      const a = it.answer?.trim() ?? '';
+      return q.length >= 8 && a.length >= 28;
+    })
+    .slice(0, 5);
+  const faqItemsOnPage =
+    strictFaqItems.length >= 2 ? strictFaqItems : fallbackFaqItems;
+  const showFaqBlock = faqItemsOnPage.length >= 2;
 
   const similarOpenList = similarScholarshipsWithMatch.filter(
     (s) => !scholarshipDeadlineHasPassed(s)
@@ -2350,7 +2360,7 @@ export default function ScholarshipDetailPageClient({
           </div>
         ) : null}
 
-        {showUsefulFaqPage && faqItemsOnPage.length >= 2 ? (
+        {showFaqBlock ? (
           <div className="mt-3 border-t border-zinc-200 pt-4">
             <ScholarshipFaqAccordion items={faqItemsOnPage} />
           </div>
@@ -2360,7 +2370,7 @@ export default function ScholarshipDetailPageClient({
           <div
             id="similar-scholarships"
             className={`${
-              showUsefulFaqPage && faqItemsOnPage.length >= 2
+              showFaqBlock
                 ? 'mt-4'
                 : 'mt-3'
             } scroll-mt-24 border-t border-zinc-200 pt-4`}
