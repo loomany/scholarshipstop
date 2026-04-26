@@ -1,0 +1,115 @@
+{
+  "seo_title": "Find Closing Soon Financial Need Scholarships in Wisconsin, USA…",
+  "seo_description": "Closing soon financial need scholarships in Wisconsin, USA. Compare award ranges, deadlines, and requirements, then apply on official pages.",
+  "intro": "Trying to apply before deadlines pass? This Wisconsin scholarship filter narrows the search to programs tied to financial need and marked closing soon, so you can quickly find options that may deserve immediate attention. The rows in this filtered slice span community, STEM, law, humanities, medicine, and arts themes, with examples relevant to study paths such as education, computer and information sciences, legal studies, history, and health professions. Awards vary by listing, and requirement details can differ as well, so compare each row carefully instead of assuming the same rules across the page. Many listings here appear to have lighter application signals, and many often show no essay in catalog metadata, but you should still verify every requirement on the official scholarship page before you apply.",
+  "h1": "Closing Soon Financial Need Scholarships in Wisconsin USA A…",
+  "supporting": "Use this view to compare more than just the title. Scan the award text, read the requirement lines, and check how each program defines eligibility connected to financial need and Wisconsin. Because these listings are tagged closing soon, it is worth opening promising options right away and confirming the latest deadline wording on the sponsor site. If you are building a shortlist for the current cycle or planning ahead for USA scholarship applications in the coming year, this slice is a practical place to find programs that may be easier to review quickly.",
+  "related_intro": "If this set feels too narrow, related pages can help you compare nearby options by changing one filter at a time, such as keeping Wisconsin and financial need while removing the closing soon preset, or keeping closing soon and looking at broader USA locations or different scholarship topics.",
+  "how_to_use": [
+    "Compare deadline wording across rows first",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist the best matches before you apply"
+  ],
+  "who_for": [
+    "Wisconsin applicants with financial need",
+    "High school seniors seeking near-term scholarships",
+    "College and graduate students comparing urgent options",
+    "Students in community, STEM, law, humanities, medicine, or arts areas"
+  ],
+  "faq": [
+    {
+      "question": "How can I quickly find Wisconsin scholarships for financial need that are closing soon?",
+      "answer": "Use this filtered view to compare the rows first by deadline, then open the official source for any listing you want to apply to. In this USA-focused slice, deadlines differ by program, so it’s smart to check the latest date on each scholarship page right away."
+    },
+    {
+      "question": "Can I compare award amounts on this page before I apply?",
+      "answer": "Yes—these rows include listed award amounts, so you can compare options before deciding where to apply. Amounts vary by listing, and you should verify the current amount on the official scholarship page."
+    },
+    {
+      "question": "What kinds of scholarships appear in this Wisconsin financial-need list?",
+      "answer": "This focused set of listings includes categories such as Community, STEM, Law, Humanities, Medicine, and Arts. You can explore the rows to find programs that match your study level or field, then confirm full eligibility on the official source."
+    },
+    {
+      "question": "Are these scholarships only for one type of student in Wisconsin?",
+      "answer": "No—the programs below can span different study levels, including high school seniors, college students, and graduate students. The best way to find a fit is to browse the listing details and compare eligibility row by row."
+    },
+    {
+      "question": "Do many of these closing-soon scholarships require an essay?",
+      "answer": "Many listings in this slice appear to have lighter requirements, and often no essay is flagged in the catalog data. Still, requirements can change, so always verify application steps on the official scholarship page before you apply."
+    }
+  ],
+  "page_data": {
+    "exactCount": 17,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 17,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 17,
+      "within60Days": 17,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-04-08",
+        "2026-04-08",
+        "2026-04-08"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 17,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "college_2",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services",
+        "computer_and_information_sciences",
+        "health_professions_and_clinical_sciences",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "CollegeReady",
+        "count": 15
+      },
+      {
+        "name": "PNC Bank",
+        "count": 1
+      },
+      {
+        "name": "Wisconsin Council of the Blind and Visually Impaired",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "arts",
+      "humanities",
+      "law",
+      "medical",
+      "stem"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "financial-need/wisconsin/closing-soon",
+    "generatedAt": "2026-04-26T15:01:10.285Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 17,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

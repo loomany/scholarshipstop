@@ -1,46 +1,117 @@
 {
-  "seo_title": "California Scholarships for First-Generation Students",
-  "seo_description": "Explore 5 scholarships for first-generation students in California. Award sizes vary; check deadlines and requirements for each listing.",
-  "intro": "For first-generation college students in California, there are 5 available scholarships that can provide valuable financial support. Award sizes typically range from $1,500 to $5,000, making them a significant resource for your educational journey. As deadlines vary across listings, it's important to check each opportunity promptly to ensure you don’t miss out on funding that could help you succeed in your academic pursuits.",
-  "h1": "First-Generation Scholarships in California",
-  "supporting": "This selection of scholarships includes opportunities across various categories such as community, education, and the arts. Many of these listings have lighter requirements, with several not requiring essays, which may simplify your application process. Take the time to compare the award amounts and deadlines to find the best fit for your needs.",
-  "related_intro": "If you're interested in exploring more funding options, consider checking out related pages that focus on scholarships for first-generation students or those available in specific California regions.",
+  "seo_title": "Find First-Generation Scholarships in California, USA",
+  "seo_description": "First-generation scholarships in California, USA with award ranges and varying deadlines. Compare current listings and apply on official pages.",
+  "intro": "Trying to find first-generation scholarships in California usually means sorting through programs that define eligibility, study level, and application materials a little differently. This filtered USA view brings together a focused set of listings tied to first-generation status and California, so you can compare options without jumping between unrelated results. You’ll see programs connected to areas like community, education, miscellaneous topics, and arts, with examples spanning levels from high school senior to graduate student. Award amounts are listed on these rows, but they vary by program and should be verified on the official pages. Deadlines also differ across listings, and some appear to be coming up soon, so it makes sense to check date details promptly as you apply.",
+  "h1": "Find First-Generation Scholarships in California USA",
+  "supporting": "A useful way to read this list is to compare the requirement lines, study level fit, and category tags before opening each scholarship. Many listings in this slice appear to have lighter-touch applications, and many may not require an essay, but each row still needs a careful review. If you want to compare programs quickly, start with the title, amount shown, deadline text, and any field-of-study clues such as education or architecture and related services. That makes it easier to shortlist the California opportunities that best match your background and timing.",
+  "related_intro": "If you want to widen or narrow your search, related pages can help you compare nearby scholarship paths by eligibility theme, location, or category. That’s useful when you qualify as a first-generation applicant but want to explore other California-focused options with different subject or audience tags.",
   "how_to_use": [
-    "Review each listing for specific award amounts and categories",
-    "Check deadlines closely, especially for upcoming opportunities",
-    "Look for scholarships that may not require essays",
-    "Shortlist your top choices based on eligibility and funding needs",
-    "Visit the official sponsor pages for the most accurate application details"
+    "Compare each row’s deadline text first, since timing differs by program and some listings may close soon",
+    "Scan the award amount shown on each listing, then verify the current amount and terms on the official page",
+    "Read the eligibility and requirement lines carefully to confirm the California and first-generation fit",
+    "Open promising listings in separate tabs and compare study level, category tags, and field-of-study clues",
+    "Shortlist the best matches, then apply through the official source after checking the latest details"
   ],
   "who_for": [
-    "First-generation college students in California",
-    "Students pursuing education in community or arts fields",
-    "Applicants looking for scholarships with minimal requirements"
+    "California applicants who identify as first-generation and want to find relevant scholarship options in one place",
+    "High school seniors in California comparing first-generation awards before choosing where to apply",
+    "Graduate students looking for California scholarships that include first-generation eligibility",
+    "Applicants interested in community, education, arts, or miscellaneous scholarship categories tied to this filter"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for first-generation students in California?",
-      "answer": "This filter currently lists 5 scholarships specifically for first-generation students in California, covering various categories such as community, education, and arts. Each scholarship may have different focuses and eligibility criteria, so it's essential to review each listing for specific details."
+      "question": "How can I find first-generation scholarships in California that fit me?",
+      "answer": "Use this filtered view to compare California listings tagged for first-generation students, then open each row to confirm eligibility on the official source. Study level, field, amount, and deadline can all vary by program."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "The scholarships in this selection generally offer awards ranging from approximately $1,500 to $5,000. However, each scholarship may have its own specific amount, so be sure to check the details for each listing."
+      "question": "Can I apply to more than one scholarship from this California list?",
+      "answer": "Usually, you can explore multiple listings and apply to any programs whose official rules you meet. Treat each scholarship as separate and verify requirements, documents, and submission steps on the provider’s page."
     },
     {
-      "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, but it's important to verify each individual listing for specific requirements. While many scholarships in this category have lighter application processes, checking the details will ensure you meet all necessary criteria."
+      "question": "What should I compare before I apply?",
+      "answer": "Focus on eligibility, California location fit, study level, field of study, award amount, and deadline text shown in each row. Amounts vary by listing, and final details should always be checked against the official scholarship page."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All 5 scholarships in this filter have deadlines, but they vary from one listing to another. It's advisable to check the specific deadline for each scholarship promptly, as some deadlines are approaching within the next 45 days."
+      "question": "Are deadlines the same for all first-generation scholarships in California?",
+      "answer": "No—deadlines differ by program in this catalog slice. Since these rows show different dates and at least some appear soon, it’s smart to check the current deadline promptly before you apply."
+    },
+    {
+      "question": "Do these scholarships usually require an essay?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and several may not require an essay, but that is not a guarantee for every program. Always verify the application checklist on the official source before you start."
     }
   ],
+  "page_data": {
+    "exactCount": 5,
+    "award": {
+      "medianUsd": 3000,
+      "minUsd": 1500,
+      "maxUsd": 5000,
+      "statedAmountCount": 5,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 5,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-04-06"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 5,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education",
+        "architecture_and_related_services"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Catalino Tapia Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Central California Asian Pacific Women",
+        "count": 1
+      },
+      {
+        "name": "Central Valley Scholars",
+        "count": 1
+      },
+      {
+        "name": "Hannah Project Partnership for Academic Achievement",
+        "count": 1
+      },
+      {
+        "name": "PlaceWorks",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "arts",
+      "miscellaneous"
+    ]
+  },
   "_meta": {
     "canonicalPath": "first-generation/california",
-    "generatedAt": "2026-04-02T10:50:46.943Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T15:01:42.116Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 5,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

@@ -1,48 +1,117 @@
 {
-  "seo_title": "First Generation Scholarships in Florida",
-  "seo_description": "Explore 7 scholarships for first-generation students in Florida. Award sizes range from $500 to $3,000. Check deadlines promptly.",
-  "intro": "Navigating the world of scholarships can be especially challenging for first-generation college students in Florida. This curated list features 7 scholarships specifically for those who are blazing new trails in higher education. Award sizes typically range from $500 to $3,000, and while many listings have lighter requirements, it's important to check each one for specific details. With deadlines varying across the board, some opportunities may require prompt action, so reviewing the dates is crucial.",
-  "h1": "Florida Scholarships for First-Generation Students",
-  "supporting": "This selection of scholarships covers a variety of categories, including STEM and education, offering a range of funding options for eligible students. As you explore these listings, pay attention to the award amounts and any unique requirements that might apply. Comparing different scholarships can help you find the best fit for your educational journey, and many of these opportunities do not require essays, making the application process potentially smoother.",
-  "related_intro": "For more options, consider checking out related scholarship categories that may align with your interests or qualifications.",
+  "seo_title": "Find First-Generation Scholarships in Florida, USA",
+  "seo_description": "First-generation scholarships in Florida, USA with award ranges, categories, and varying deadlines. Compare listings and apply before dates pass.",
+  "intro": "Trying to find Florida scholarships for first-generation students usually means narrowing a broad search into programs that actually match your background and where you plan to study. This filtered USA view brings together a focused set of listings tied to first-generation eligibility and Florida, so you can compare options without jumping between unrelated results. The programs below span themes such as education, STEM, community, and miscellaneous awards, with study levels that can include early college, high school senior, and graduate paths. Award amounts, deadlines, and requirement details vary by listing, and many rows appear to have lighter application signals, often with no essay noted, but you should still verify every rule on the official source before you apply.",
+  "h1": "Find Florida First-Generation Scholarships USA",
+  "supporting": "Use this slice to compare more than just the title. Check how each listing describes first-generation eligibility, look at the study level and field tags, and note whether the opportunity leans toward education, STEM, or community-focused support. Because deadline text differs across the rows and some dates may be coming up soon, it is smart to review timing early. Amounts also vary by listing, so treat the catalog as a starting point, then open the official page to confirm current details, required materials, and any Florida-specific conditions before you apply.",
+  "related_intro": "If you are close to applying but not finding enough matches here, related pages can help you compare nearby paths, such as other first-generation scholarship filters or Florida-focused scholarship categories with different subject or study-level emphasis.",
   "how_to_use": [
-    "Review the list for scholarship titles that resonate with your goals",
-    "Compare deadlines to ensure timely applications",
-    "Examine award amounts to prioritize funding opportunities",
-    "Check requirement lines for specific eligibility criteria",
-    "Visit official pages for the most accurate and detailed information"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official source before you apply",
+    "Shortlist listings by study level and category",
+    "Verify award details on sponsor pages"
   ],
   "who_for": [
-    "First-generation college students in Florida",
-    "Students pursuing STEM fields",
-    "Individuals interested in community-focused scholarships",
-    "Undergraduate and graduate students",
-    "Students seeking scholarships with lighter requirements"
+    "Florida first-generation college applicants",
+    "High school seniors planning college in Florida",
+    "Current college students seeking Florida aid",
+    "Graduate students looking for first-generation support"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for first-generation students in Florida?",
-      "answer": "There are currently 7 scholarships listed specifically for first-generation students in Florida. These scholarships cover various categories, including STEM, Education, and Community, allowing applicants to find opportunities that align with their interests and goals."
+      "question": "How can I find Florida scholarships for first-generation students on this filtered page?",
+      "answer": "Use this focused set of Florida listings to compare eligibility, study level, field, amount, and deadline row by row. Then open the official scholarship source for any program you want to apply to and verify the current rules."
     },
     {
-      "question": "Do these scholarships require essays?",
-      "answer": "Most of the scholarships in this listing do not require essays, making the application process potentially easier for many applicants. However, it's important to verify the specific requirements for each scholarship, as details can vary."
+      "question": "Can I compare award amounts and deadlines here before I apply?",
+      "answer": "Yes—these rows let you quickly compare listed amounts and deadline text, but details vary by program. Award amounts and due dates are not universal for the whole page, so confirm both on the official page before you apply."
     },
     {
-      "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships range from approximately $500 to $3,000. Each scholarship may have different amounts, so it's advisable to review the individual listings for specific details."
+      "question": "Are these Florida scholarships only for college students, or can other study levels explore them too?",
+      "answer": "This filtered view includes sample study levels such as high school senior, college-level, and graduate student. Check each listing carefully, because eligibility can differ even within the same first-generation and Florida filter."
     },
     {
-      "question": "When are the deadlines for these scholarships?",
-      "answer": "All 7 scholarships listed have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's crucial to check the specific dates for each scholarship promptly."
+      "question": "What kinds of scholarships can I browse in this Florida first-generation list?",
+      "answer": "You can explore programs connected to categories like STEM, Education, Miscellaneous, and Community, with sample fields including education, English, history, business, and foreign languages. Not every listing fits every subject, so compare the row details before applying."
+    },
+    {
+      "question": "Do many of these USA scholarships have simple application requirements?",
+      "answer": "Many listings in this Florida, USA slice appear to have lighter requirement signals, and many sampled rows show no essay flag. Still, requirements can change by scholarship, so always verify the application steps on the official source."
     }
   ],
+  "page_data": {
+    "exactCount": 7,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 3000,
+      "statedAmountCount": 7,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 5,
+      "within60Days": 7,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-05-26",
+        "2026-04-15",
+        "2026-04-14"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 7,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_1"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "english_language_and_literature",
+        "foreign_languages_literature_and_linguistics",
+        "history"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "University of South Florida",
+        "count": 3
+      },
+      {
+        "name": "Citrus County Coalition for College & Careers",
+        "count": 2
+      },
+      {
+        "name": "Haitian American Chamber of Commerce of Florida",
+        "count": 1
+      },
+      {
+        "name": "The College of the Florida Keys",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "stem",
+      "community"
+    ]
+  },
   "_meta": {
     "canonicalPath": "first-generation/florida",
-    "generatedAt": "2026-04-02T10:48:05.024Z",
-    "promptVersion": "v3",
+    "generatedAt": "2026-04-26T15:02:16.112Z",
+    "promptVersion": "v4",
     "scholarshipsCount": 7,
-    "model": "gpt-4o-mini",
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

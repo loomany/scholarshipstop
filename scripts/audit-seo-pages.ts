@@ -8,6 +8,7 @@
  */
 import fs from 'fs/promises';
 import path from 'path';
+import { JWT } from 'google-auth-library';
 
 import { getLongTailSitemapSlugs } from '../app/scholarships/scholarshipLongTailPresets';
 import type { Scholarship } from '../app/scholarships/scholarshipsData';
@@ -38,6 +39,14 @@ type OutputPageType =
 type Status = 'good' | 'medium' | 'bad';
 type FixPriority = 'critical' | 'high' | 'medium' | 'low';
 type SourceType = 'internal' | 'http_fallback';
+type PriorityStage =
+  | 'gsc_impressions'
+  | 'seo_pages'
+  | 'grants'
+  | 'providers'
+  | 'essays'
+  | 'compare'
+  | 'other';
 
 type CheckResult = {
   ok: boolean;
@@ -56,6 +65,7 @@ type PageAudit = {
   pageType: PageType;
   outputType: OutputPageType;
   sourceType: SourceType;
+  priorityStage: PriorityStage;
   url: string;
   score: number;
   status: Status;
@@ -83,6 +93,7 @@ type PageAudit = {
 
 type AuditInputPage = {
   pageType: PageType;
+  priorityStage?: PriorityStage;
   urlPath: string;
   sourceKey: string;
   canonicalPath?: string;
@@ -160,6 +171,11 @@ const FAQ_POINTS = 10;
 const RESULTS_POINTS = 15;
 const CANONICAL_ROBOTS_POINTS = 10;
 const DUP_POINTS = 5;
+const GSC_SCOPE_WEBMASTERS_READONLY =
+  'https://www.googleapis.com/auth/webmasters.readonly';
+const SEARCH_ANALYTICS_QUERY_PATH =
+  'https://www.googleapis.com/webmasters/v3/sites';
+const SEARCH_ANALYTICS_ROW_LIMIT = 25_000;
 
 function envInt(name: string): number | null {
   const raw = process.env[name]?.trim();
@@ -167,6 +183,11 @@ function envInt(name: string): number | null {
   const parsed = Number(raw);
   if (!Number.isFinite(parsed) || parsed <= 0) return null;
   return Math.floor(parsed);
+}
+
+function envIntWithDefault(name: string, fallback: number): number {
+  const value = envInt(name);
+  return value == null ? fallback : value;
 }
 
 function normalizeWhitespace(input: string | null | undefined): string {
@@ -198,6 +219,176 @@ function toOutputType(pageType: PageType): OutputPageType {
   if (pageType === 'essay_page') return 'essay';
   if (pageType === 'compare_page') return 'compare';
   return 'provider';
+}
+
+function defaultPriorityStageForPageType(pageType: PageType): PriorityStage {
+  if (pageType === 'scholarship_seo' || pageType === 'content_page') return 'seo_pages';
+  if (pageType === 'scholarship_detail') return 'grants';
+  if (pageType === 'provider_page') return 'providers';
+  if (pageType === 'essay_page') return 'essays';
+  if (pageType === 'compare_page') return 'compare';
+  return 'other';
+}
+
+function normalizeUrlPathForMatching(input: string): string {
+  const raw = normalizeWhitespace(input);
+  if (!raw) return '/';
+  let pathname = raw;
+  if (raw.startsWith('http://') || raw.startsWith('https://')) {
+    try {
+      pathname = new URL(raw).pathname || '/';
+    } catch {
+      pathname = raw;
+    }
+  }
+  if (!pathname.startsWith('/')) pathname = `/${pathname}`;
+  pathname = pathname.replace(/\/{2,}/g, '/');
+  if (pathname.length > 1) pathname = pathname.replace(/\/+$/, '');
+  return pathname || '/';
+}
+
+function getSearchConsoleSitePropertyUrlFromEnv(baseUrl: string): string {
+  const fromEnv = process.env.GOOGLE_SEARCH_CONSOLE_SITE_URL?.trim();
+  if (fromEnv) {
+    if (fromEnv.startsWith('sc-domain:')) return fromEnv.replace(/\/+$/, '');
+    const normalized = fromEnv.replace(/\/+$/, '');
+    return `${normalized}/`;
+  }
+  const normalizedBase = baseUrl.replace(/\/+$/, '');
+  return `${normalizedBase}/`;
+}
+
+function buildGscJwtClientOrNull(): JWT | null {
+  const email = process.env.GOOGLE_INDEXING_CLIENT_EMAIL?.trim();
+  const rawKey = process.env.GOOGLE_INDEXING_PRIVATE_KEY?.trim();
+  if (!email || !rawKey) return null;
+  return new JWT({
+    email,
+    key: rawKey.replace(/\\n/g, '\n'),
+    scopes: [GSC_SCOPE_WEBMASTERS_READONLY]
+  });
+}
+
+async function fetchSearchAnalyticsImpressionPaths(params: {
+  baseUrl: string;
+  reportWarnings: string[];
+}): Promise<Set<string>> {
+  const gscDays = Math.max(1, Math.min(400, envIntWithDefault('SEO_AUDIT_GSC_DAYS', 90)));
+  const maxPaths = Math.max(1, envIntWithDefault('SEO_AUDIT_GSC_MAX_PATHS', 10000));
+  const client = buildGscJwtClientOrNull();
+  if (!client) {
+    params.reportWarnings.push('gsc_priority_skipped_missing_credentials');
+    return new Set();
+  }
+
+  const end = new Date();
+  end.setUTCDate(end.getUTCDate() - 1);
+  const start = new Date(end);
+  start.setUTCDate(start.getUTCDate() - (gscDays - 1));
+  const endDate = end.toISOString().slice(0, 10);
+  const startDate = start.toISOString().slice(0, 10);
+
+  try {
+    const accessToken = await client.getAccessToken();
+    const token =
+      typeof accessToken === 'string' ? accessToken : accessToken?.token ?? null;
+    if (!token) {
+      params.reportWarnings.push('gsc_priority_skipped_no_access_token');
+      return new Set();
+    }
+
+    const siteUrl = getSearchConsoleSitePropertyUrlFromEnv(params.baseUrl);
+    const endpoint = `${SEARCH_ANALYTICS_QUERY_PATH}/${encodeURIComponent(siteUrl)}/searchAnalytics/query`;
+    const out = new Set<string>();
+    let startRow = 0;
+
+    for (;;) {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          startDate,
+          endDate,
+          dimensions: ['page'],
+          rowLimit: SEARCH_ANALYTICS_ROW_LIMIT,
+          startRow,
+          dataState: 'all'
+        })
+      });
+      if (!response.ok) {
+        params.reportWarnings.push(`gsc_priority_query_failed_${response.status}`);
+        return out;
+      }
+
+      const payload = (await response.json()) as {
+        rows?: Array<{ keys?: string[]; impressions?: number }>;
+      };
+      const rows = payload.rows ?? [];
+      for (const row of rows) {
+        const pageUrl = row.keys?.[0];
+        if (!pageUrl) continue;
+        out.add(normalizeUrlPathForMatching(pageUrl));
+        if (out.size >= maxPaths) return out;
+      }
+
+      if (rows.length < SEARCH_ANALYTICS_ROW_LIMIT) break;
+      startRow += SEARCH_ANALYTICS_ROW_LIMIT;
+    }
+    return out;
+  } catch (e) {
+    params.reportWarnings.push(
+      `gsc_priority_query_error:${e instanceof Error ? e.message : String(e)}`
+    );
+    return new Set();
+  }
+}
+
+function applyPriorityOrder(
+  pages: AuditInputPage[],
+  impressionPaths: Set<string>
+): {
+  ordered: AuditInputPage[];
+  priorityCounts: Record<PriorityStage, number>;
+} {
+  const stageOrder: PriorityStage[] = [
+    'gsc_impressions',
+    'seo_pages',
+    'grants',
+    'providers',
+    'essays',
+    'compare',
+    'other'
+  ];
+  const buckets = new Map<PriorityStage, AuditInputPage[]>(
+    stageOrder.map((stage) => [stage, []])
+  );
+  for (const page of pages) {
+    const normalizedPath = normalizeUrlPathForMatching(page.urlPath);
+    const stage: PriorityStage = impressionPaths.has(normalizedPath)
+      ? 'gsc_impressions'
+      : defaultPriorityStageForPageType(page.pageType);
+    buckets.get(stage)!.push({ ...page, priorityStage: stage });
+  }
+  const ordered = stageOrder.flatMap((stage) => buckets.get(stage) ?? []);
+  const priorityCounts = stageOrder.reduce(
+    (acc, stage) => {
+      acc[stage] = buckets.get(stage)?.length ?? 0;
+      return acc;
+    },
+    {
+      gsc_impressions: 0,
+      seo_pages: 0,
+      grants: 0,
+      providers: 0,
+      essays: 0,
+      compare: 0,
+      other: 0
+    } as Record<PriorityStage, number>
+  );
+  return { ordered, priorityCounts };
 }
 
 function normalizeIssueCode(issue: string): string {
@@ -1228,7 +1419,15 @@ async function main() {
     'http://localhost:3000';
 
   const { pages, reportWarnings } = await listAuditPages();
-  const targetPages = selectPagesForAudit(pages, limit);
+  const impressionPaths = await fetchSearchAnalyticsImpressionPaths({
+    baseUrl,
+    reportWarnings
+  });
+  const { ordered: prioritizedPages, priorityCounts: stagePriorityCounts } = applyPriorityOrder(
+    pages,
+    impressionPaths
+  );
+  const targetPages = selectPagesForAudit(prioritizedPages, limit);
 
   const provisional: PageAudit[] = [];
   const titleKeyToIdx = new Map<string, number[]>();
@@ -1340,6 +1539,7 @@ async function main() {
       pageType: page.pageType,
       outputType: toOutputType(page.pageType),
       sourceType,
+      priorityStage: page.priorityStage ?? defaultPriorityStageForPageType(page.pageType),
       url: page.urlPath,
       score,
       status: statusFromScore(score),
@@ -1478,11 +1678,22 @@ async function main() {
         compare: compareCount,
         provider: providerCount
       },
+      priorityOrder: [
+        'gsc_impressions',
+        'seo_pages',
+        'grants',
+        'providers',
+        'essays',
+        'compare',
+        'other'
+      ],
+      priorityCounts: stagePriorityCounts,
       reportWarnings,
       generatedAt: new Date().toISOString()
     },
     pages: provisional.map((p) => ({
       type: p.outputType,
+      priorityStage: p.priorityStage,
       sourceType: p.sourceType,
       url: p.url,
       score: p.score,
@@ -1501,6 +1712,7 @@ async function main() {
   const csvHeader = [
     'url',
     'type',
+    'priorityStage',
     'sourceType',
     'score',
     'status',
@@ -1514,6 +1726,7 @@ async function main() {
     [
       toCsvValue(p.url),
       toCsvValue(p.outputType),
+      toCsvValue(p.priorityStage),
       toCsvValue(p.sourceType),
       toCsvValue(p.score),
       toCsvValue(p.status),
@@ -1610,6 +1823,9 @@ async function main() {
   console.log(`Essays: ${essayCount}`);
   console.log(`Compare: ${compareCount}`);
   console.log(`Providers: ${providerCount}`);
+  console.log(
+    `Priority (GSC impressions first): gsc=${stagePriorityCounts.gsc_impressions}, seo=${stagePriorityCounts.seo_pages}, grants=${stagePriorityCounts.grants}, providers=${stagePriorityCounts.providers}, essays=${stagePriorityCounts.essays}, compare=${stagePriorityCounts.compare}, other=${stagePriorityCounts.other}`
+  );
   console.log(`Warnings: ${reportWarnings.length > 0 ? reportWarnings.join(', ') : 'none'}`);
   console.log('');
   console.log('Main problems:');

@@ -1,48 +1,130 @@
 {
-  "seo_title": "Washington Scholarships for Financial Need",
-  "seo_description": "Explore 45 scholarships for financial need in Washington. Award sizes vary; check individual listings for deadlines and requirements.",
-  "intro": "Finding financial support for your education in Washington can be a crucial step in achieving your academic goals. This catalog features 45 scholarships specifically aimed at students with financial need, with award sizes ranging from approximately $500 to $25,000. Since deadlines and requirements vary across listings, it's essential to review each opportunity carefully to identify the best fit for your situation.",
-  "h1": "Find Financial Need Scholarships in Washington",
-  "supporting": "As you explore this selection, consider comparing the award amounts, deadlines, and specific eligibility criteria. Some scholarships may require essays, while others have lighter requirements, allowing for a more straightforward application process. This diverse range of options ensures that you can find opportunities that align with your educational path and financial needs.",
-  "related_intro": "If you're interested in scholarships based on different criteria or locations, check out our related pages for more tailored opportunities.",
+  "seo_title": "Find Financial Need Scholarships in Washington, USA",
+  "seo_description": "Financial need scholarships in Washington, USA: compare awards, review varying deadlines and requirements, and apply through official program pages.",
+  "intro": "Trying to find Washington scholarships tied to financial need usually means balancing urgency with fit: you want options you can actually apply for, not a generic national list. This filtered USA view brings together a focused set of listings connected to need-based eligibility in Washington, with programs spanning areas such as education, community, STEM, medicine, disability, and more. You can compare opportunities for different study stages, including high school seniors, college students, graduate students, and adult or nontraditional learners. Awards, deadlines, residency details, and application steps vary across the rows below, and some listings may be lighter-touch than others. Because deadline text differs by program and some dates may be coming up soon, it is smart to review each listing promptly and verify details on the official source.",
+  "h1": "Compare Financial Need Scholarships in Washington USA",
+  "supporting": "Use this list to compare more than just the title. Scan the requirement lines for study level, Washington location fit, and citizenship or residency language such as USA citizen or permanent resident status where shown. Then read the award text carefully, since amounts vary by listing and should be confirmed on the official page. It is also worth checking whether an essay is mentioned, because requirements are mixed in this slice. A quick shortlist can help you focus on the programs that best match your background, field of study, and timeline.",
+  "related_intro": "If these Washington need-based listings feel close but not quite right, related pages can help you narrow by study level, subject area, or other eligibility details. That is often the fastest way to find similar USA scholarships with a better match for your academic path or application preferences.",
   "how_to_use": [
-    "Review the list for scholarship amounts and categories",
-    "Check individual deadlines for timely applications",
-    "Look for lighter requirement options to streamline your applications",
-    "Open official pages for detailed eligibility and application instructions",
-    "Shortlist scholarships that best match your profile and needs"
+    "Compare deadline text across the rows",
+    "Read each requirement line carefully",
+    "Open the official page to verify details",
+    "Shortlist listings that match your study level",
+    "Check award wording and essay expectations"
   ],
   "who_for": [
-    "Students with financial need in Washington",
-    "Undergraduates pursuing education-related fields",
-    "High school seniors planning to attend college",
-    "Students interested in arts and community service",
-    "Applicants seeking scholarships with varying essay requirements"
+    "Washington applicants with financial need",
+    "High school seniors planning for college costs",
+    "Graduate students comparing need-based funding options",
+    "Adult or nontraditional learners returning to school",
+    "USA citizens or permanent residents checking eligibility language"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Washington?",
-      "answer": "There are 45 scholarships listed that cater to students with financial need in Washington. These scholarships cover a variety of categories, including education, community service, STEM, disability, and medicine."
+      "question": "How can I find financial need scholarships in Washington that fit my situation?",
+      "answer": "Use this filtered view to compare Washington scholarship rows by study level, field, and eligibility details on each listing. Then open the official source for any program you want to apply to, since requirements vary row by row."
     },
     {
-      "question": "How do I find specific scholarship details, including deadlines and requirements?",
-      "answer": "Each scholarship listing includes unique details such as deadlines and application requirements. While all 45 listings have deadlines, they vary by program, so it's important to check each one promptly for the most accurate information."
+      "question": "Who should explore these Washington financial need scholarship listings?",
+      "answer": "This set is most relevant for people looking for USA scholarships tied to financial need and Washington location criteria. In these rows, you may also see different study levels such as high school senior, graduate student, adult/non-traditional, and college students, so check each listing closely."
     },
     {
-      "question": "Are there scholarships that require essays?",
-      "answer": "Scholarship requirements vary, with some listings requiring essays and others not. Out of the 45 scholarships, approximately 6 have essay requirements, while the majority do not, so be sure to review each listing carefully."
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these listings include award and deadline information, but both can differ by program. Amounts in this slice range from smaller awards to larger ones, and deadlines vary by row, so verify the latest details on the official scholarship page before you apply."
     },
     {
-      "question": "What is the range of award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts generally ranging from around $500 to $25,000. Specific details can be found in each individual listing."
+      "question": "Do all Washington financial need scholarships here require essays or the same application steps?",
+      "answer": "No—application requirements are mixed across the catalog, and some programs may be lighter-touch than others. Before you apply, check the official source for essay instructions, eligibility wording, residency or citizenship details, and any documents the scholarship asks for."
     }
   ],
+  "page_data": {
+    "exactCount": 50,
+    "award": {
+      "medianUsd": 3250,
+      "minUsd": 500,
+      "maxUsd": 25000,
+      "statedAmountCount": 50,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 37,
+      "within60Days": 47,
+      "rollingOrUnknown": 0,
+      "nearestDays": 5,
+      "nearestLabels": [
+        "2026-04-29",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 6,
+      "noCount": 44,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "personal_statement",
+        "document",
+        "transcript",
+        "recommendation"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "adult_non_traditional",
+        "college_2"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "legal_professions_and_law_studies"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "Community Foundation of North Central Washington",
+        "count": 5
+      },
+      {
+        "name": "Washington State Business and Professional Women's Foundation",
+        "count": 5
+      },
+      {
+        "name": "Jewish Social Service Agency of Metropolitan Washington",
+        "count": 3
+      },
+      {
+        "name": "Alpha Kappa Alpha Sorority-Rho Mu Omega Chapter",
+        "count": 2
+      },
+      {
+        "name": "Central Intelligence Agency",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "disability"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/washington",
-    "generatedAt": "2026-04-02T10:52:41.912Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 45,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:59:10.422Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 50,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

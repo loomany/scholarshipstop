@@ -1,48 +1,128 @@
 {
-  "seo_title": "Virginia Scholarships for Financial Need | Find Your Aid",
-  "seo_description": "Explore 36 scholarships in Virginia for financial need, with awards from $500 to $20,000. Check deadlines and requirements for each.",
-  "intro": "Finding financial support can be a challenge, especially for students in Virginia. This catalog features 36 scholarships specifically aimed at those demonstrating financial need, with award amounts ranging from approximately $500 to $20,000. It's important to note that the requirements and deadlines vary, so reviewing each listing carefully will help you identify the best opportunities for your situation.",
-  "h1": "Financial Need Scholarships in Virginia",
-  "supporting": "As you explore this list, pay attention to the diverse categories available, including education, community, STEM, and more. Some scholarships may require essays, while others do not, providing a range of application experiences. Comparing the award sizes and deadlines can help you prioritize which scholarships to pursue, making your search for funding more efficient.",
-  "related_intro": "If you're interested in similar funding opportunities, consider checking out related pages that focus on specific categories or broader financial aid resources.",
+  "seo_title": "Find Financial Need Scholarships in Virginia, USA",
+  "seo_description": "Financial need scholarships in Virginia, USA with deadlines, requirements, and award ranges by listing. Compare options and apply on official pages.",
+  "intro": "Trying to find Virginia scholarships tied to financial need usually means sorting through programs that also differ by study level, residency language, and field of study. This filtered USA view brings those rows into one place so you can apply with more focus, compare options faster, and spot programs that match your situation. In these listings, award amounts vary by program and should be verified on the official page, though the rows here do include listed amounts. Deadlines also differ by program, and some appear to be coming up soon, so it is worth checking dates promptly. You will also see that requirements are not identical across the set: some opportunities may be lighter-touch, while others may ask for more materials or specific eligibility details.",
+  "h1": "Apply for Financial Need Scholarships in Virginia USA",
+  "supporting": "A useful way to read this list is to compare more than the title alone. Check the requirement lines for Virginia location fit, financial-need language, study level, and any citizenship or residency notes such as U.S. citizen or permanent resident. It is also worth scanning category and field labels like Education, STEM, Community, Arts, Medicine, business, engineering, health professions, or construction trades to find stronger matches. If a listing looks promising, open the official source before you apply and confirm the current amount, deadline, and submission steps.",
+  "related_intro": "If this Virginia financial-need slice feels close but not quite right, use related pages to compare nearby combinations of filters. You may find a better fit by switching the location, checking a different eligibility angle, or narrowing toward a study level or subject area that appears often in these rows.",
   "how_to_use": [
-    "Compare deadlines for timely applications",
-    "Scan award amounts to identify suitable options",
-    "Read requirement details for each scholarship",
-    "Open official pages for complete application instructions",
-    "Shortlist your favorites for further review"
+    "Compare the deadline text across the rows first, since timing varies and some programs may be closing soon",
+    "Read each listing for study level, Virginia location fit, and financial-need wording before you shortlist it",
+    "Scan category and field labels to find stronger matches in areas like Education, STEM, health professions, business, engineering, or construction trades",
+    "Open the official page for every scholarship you plan to apply to and verify the amount, requirements, and submission instructions"
   ],
   "who_for": [
-    "Virginia residents seeking financial assistance",
-    "Students pursuing education in STEM fields",
-    "Applicants interested in community-focused scholarships",
-    "Individuals looking for study abroad funding",
-    "Law students seeking scholarship support"
+    "Virginia applicants who need to find scholarships that explicitly align with financial-need eligibility",
+    "High school seniors in the USA comparing Virginia-based aid options before choosing where to apply",
+    "Current college and graduate students looking for Virginia scholarships with education, STEM, community, arts, or medicine ties",
+    "U.S. citizens or permanent residents checking whether Virginia listings match their residency language and study plans"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Virginia?",
-      "answer": "There are 36 scholarships listed that cater to students with financial need in Virginia. These scholarships cover a range of categories including education, community, STEM, medicine, and the arts."
+      "question": "How can I find financial need scholarships in Virginia that fit my situation?",
+      "answer": "Use this filtered view to compare Virginia listings by study level, field, and eligibility details shown in each row. Then open the official source for any program you want to apply to, since requirements and documents can differ."
     },
     {
-      "question": "Do all scholarships require an essay?",
-      "answer": "Requirements vary among the scholarships. While some may require an essay, the majority do not, so it's important to check the specific details for each listing."
+      "question": "Who should explore these Virginia financial need scholarship listings?",
+      "answer": "This set is most relevant for applicants looking for USA scholarships tied to financial need and Virginia-based eligibility. You may also find options across levels such as high school senior, college, and graduate study, but each listing sets its own rules."
     },
     {
-      "question": "How can I find the deadlines for these scholarships?",
-      "answer": "All 36 scholarships have deadlines, but they differ from one another. Some deadlines are approaching within the next 45 days, so it's advisable to verify the dates promptly for each scholarship."
+      "question": "Can I compare award amounts and deadlines on this page?",
+      "answer": "Yes—these rows include award and deadline information, but both vary by program. Amounts can range widely by listing, and deadlines differ by row, so verify the latest details on the official scholarship page before you apply."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this category vary significantly, with amounts ranging approximately from $500 to $20,000. Be sure to review each listing for specific details."
+      "question": "Are these scholarships only for certain majors or categories?",
+      "answer": "No single major defines this filter slice; the listings span areas like education, community, STEM, arts, medicine, business, health professions, construction trades, and engineering. If you want to browse efficiently, compare both the category labels and the field-of-study details on each listing."
+    },
+    {
+      "question": "Do all Virginia financial need scholarships here require an essay?",
+      "answer": "Not necessarily—requirements appear mixed across the catalog. Before you apply, check the official source for the exact application steps, because essay expectations and other materials can vary from one scholarship to another."
     }
   ],
+  "page_data": {
+    "exactCount": 43,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 500,
+      "maxUsd": 20000,
+      "statedAmountCount": 43,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 24,
+      "within60Days": 38,
+      "rollingOrUnknown": 0,
+      "nearestDays": 9,
+      "nearestLabels": [
+        "2026-04-25",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 3,
+      "noCount": 40,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_3",
+        "adult_non_traditional"
+      ],
+      "commonFields": [
+        "education",
+        "business_management_and_marketing",
+        "health_professions_and_clinical_sciences",
+        "construction_trades",
+        "engineering"
+      ],
+      "commonResidency": [
+        "us_citizen",
+        "us_permanent_resident"
+      ]
+    },
+    "topProviders": [
+      {
+        "name": "UVA Alumni Association",
+        "count": 5
+      },
+      {
+        "name": "Southeast Virginia Community Foundation",
+        "count": 4
+      },
+      {
+        "name": "Cumberland Valley Volunteer Firemen's Association",
+        "count": 2
+      },
+      {
+        "name": "Delta Sigma Pi",
+        "count": 2
+      },
+      {
+        "name": "Eastern West Virginia Community Foundation",
+        "count": 2
+      }
+    ],
+    "topTags": [
+      "education",
+      "miscellaneous",
+      "community",
+      "stem",
+      "arts",
+      "medical"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/virginia",
-    "generatedAt": "2026-04-02T10:56:34.024Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 36,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T14:58:52.197Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 43,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

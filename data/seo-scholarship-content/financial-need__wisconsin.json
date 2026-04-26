@@ -1,46 +1,124 @@
 {
-  "seo_title": "Wisconsin Scholarships for Financial Need Students",
-  "seo_description": "Explore 26 scholarships in Wisconsin for students with financial need. Check varied deadlines and award amounts up to $6,000.",
-  "intro": "Navigating the financial landscape of higher education can be challenging, especially for those in Wisconsin facing financial need. This catalog features 26 scholarship opportunities tailored to support students who require financial assistance. Award sizes vary significantly, ranging from around $500 to $6,000, and deadlines differ across listings, so it's important to check each one closely for specific details and timelines.",
-  "h1": "Wisconsin Scholarships for Financial Need",
-  "supporting": "As you explore these scholarships, consider comparing the award amounts, categories, and any essay requirements. Some listings may have lighter requirements, making them more accessible. With a diverse range of scholarships available in areas like education, STEM, and community service, this selection is worth your time to review thoroughly.",
-  "related_intro": "If you’re interested in more specific funding options, check out related pages for scholarships focused on different criteria or locations.",
+  "seo_title": "Find Financial Need Scholarships in Wisconsin, USA",
+  "seo_description": "Financial need scholarships in Wisconsin, USA with varied awards and deadlines. Compare listings and apply early on official pages.",
+  "intro": "Trying to find Wisconsin scholarships tied to financial need usually means balancing location rules, study level, and how much effort each application may take. This filtered USA view brings together a focused set of listings so you can compare programs that share those core filters without jumping between unrelated results. The rows below span areas such as community, education, STEM, medicine, law, and miscellaneous topics, with options that may fit high school seniors, college students, and graduate students. Awards vary by listing, deadlines differ by program, and requirements are not identical, so it helps to read each row closely. Some opportunities may be relatively lighter touch, while others ask for more supporting material, so verify details on the official scholarship page before you apply.",
+  "h1": "Compare Wisconsin Financial Need Scholarships USA",
+  "supporting": "A smart way to use this list is to compare more than the title. Check the award text, scan the deadline field early, and read the requirement summary for clues about essays, eligibility, and study level. Because this Wisconsin financial need slice includes a mix of subject areas and applicant types, it is worth opening several rows side by side before you decide where to apply. Use the catalog to find likely matches, then confirm every rule, document request, and deadline on the sponsor or official program page.",
+  "related_intro": "If these Wisconsin financial need listings are close but not quite right, related pages can help you compare nearby options by topic, study level, or other eligibility filters. That is useful when you want to widen your search without losing the USA context or the need-based focus.",
   "how_to_use": [
-    "Compare deadlines across listings to prioritize applications",
-    "Scan award amounts to identify the best fit for your needs",
-    "Review requirement lines for essay and eligibility details",
-    "Open official pages for the most accurate information",
-    "Shortlist scholarships that align with your profile"
+    "Compare award text across several rows",
+    "Check each deadline field as early as possible",
+    "Read the requirement line for essays and eligibility details",
+    "Open the official page before you apply",
+    "Shortlist the best matches and verify every rule"
   ],
   "who_for": [
-    "Students in Wisconsin with financial need",
-    "Undergraduates pursuing education or STEM fields",
-    "Individuals involved in community service or athletics"
+    "Wisconsin residents seeking need-based scholarship options",
+    "High school seniors comparing local aid opportunities",
+    "College or graduate students with financial need",
+    "Applicants interested in education, STEM, medicine, or community awards"
   ],
   "faq": [
     {
-      "question": "What types of scholarships are available for students with financial need in Wisconsin?",
-      "answer": "There are 26 scholarships listed specifically for students demonstrating financial need in Wisconsin. These scholarships cover a range of categories including community, education, STEM, medicine, and law."
+      "question": "How can I find Wisconsin scholarships for financial need that fit my situation?",
+      "answer": "Use this filtered view to compare rows by study level, field, and category, then open the official source for the final eligibility details. In this USA-focused list, programs span areas like Community, Education, STEM, Medicine, and Law, with examples ranging from high school seniors to graduate students."
     },
     {
-      "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 26 listings include deadline information. It's important to check each scholarship's details promptly, as some deadlines are approaching within the next 45 days."
+      "question": "Can I apply to every scholarship listed here if I have financial need?",
+      "answer": "Not automatically. Financial need and Wisconsin are the shared filters, but each listing can still have its own rules for study level, field of study, or other eligibility details that you should verify on the official page before you apply."
     },
     {
-      "question": "Do I need to submit essays for these scholarships?",
-      "answer": "Requirements vary among the scholarships; some may require essays while others do not. Be sure to review the specific requirements for each listing to understand what is needed."
+      "question": "How do I compare award amounts and deadlines on this page?",
+      "answer": "Compare each row individually, because amounts and deadlines vary by program. The catalog shows listed award amounts, but you should confirm the current amount and deadline on the official source before applying, especially since some dates appear to be coming up soon."
     },
     {
-      "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for these scholarships range from approximately $500 to $6,000. However, the exact amount can vary by scholarship, so it's best to check the individual listings for specific details."
+      "question": "Do all Wisconsin financial-need scholarships here require essays?",
+      "answer": "Requirements vary by listing, so do not assume every program has the same application steps. Some rows may be lighter-touch, while others may ask for more materials, so check the catalog entry and then confirm on the official scholarship page."
     }
   ],
+  "page_data": {
+    "exactCount": 30,
+    "award": {
+      "medianUsd": 1000,
+      "minUsd": 500,
+      "maxUsd": 6000,
+      "statedAmountCount": 30,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 23,
+      "within60Days": 27,
+      "rollingOrUnknown": 0,
+      "nearestDays": 7,
+      "nearestLabels": [
+        "2026-05-01",
+        "2026-05-01",
+        "2026-05-01"
+      ]
+    },
+    "essays": {
+      "yesCount": 4,
+      "noCount": 26,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [
+        "essay",
+        "document",
+        "transcript"
+      ],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student",
+        "college_2",
+        "college_4"
+      ],
+      "commonFields": [
+        "education",
+        "engineering",
+        "health_professions_and_clinical_sciences",
+        "architecture_and_related_services",
+        "business_management_and_marketing"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "CollegeReady",
+        "count": 16
+      },
+      {
+        "name": "Brewers Community Foundation",
+        "count": 2
+      },
+      {
+        "name": "American Hellenic Educational Progressive Association-Chicago Chapter 260",
+        "count": 1
+      },
+      {
+        "name": "Antiochian Orthodox Christian Archdiocese of North America",
+        "count": 1
+      },
+      {
+        "name": "Cooperative Institute for Meteorological Satellite Studies",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "community",
+      "education",
+      "miscellaneous",
+      "stem",
+      "medical",
+      "arts"
+    ]
+  },
   "_meta": {
     "canonicalPath": "financial-need/wisconsin",
-    "generatedAt": "2026-04-02T11:00:24.994Z",
-    "promptVersion": "v3",
-    "scholarshipsCount": 26,
-    "model": "gpt-4o-mini",
+    "generatedAt": "2026-04-26T15:00:28.556Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 30,
+    "model": "gpt-5.4",
     "bodySource": "ai",
     "generationMode": "rewrite"
   }

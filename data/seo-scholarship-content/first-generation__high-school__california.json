@@ -1,0 +1,108 @@
+{
+  "seo_title": "Find First-Generation High School Scholarships in California, US…",
+  "seo_description": "First-generation high school scholarships in California, USA: compare deadlines, amounts vary by listing, and apply after checking official pages.",
+  "intro": "Trying to find California scholarships for first-generation students while still in high school usually means sorting through broad results that mix in the wrong level, location, or eligibility. This filtered slice narrows the search to programs tied to those terms so you can apply with less guesswork and compare options that are more likely to fit. The rows below lean toward education and community themes, and many listings appear to have lighter application signals, with no-essay options showing up often in this set. Awards, deadlines, and requirement details still vary by listing, so treat each row as a starting point and verify the official page before you move forward.",
+  "h1": "Compare First-Generation California High School Scholarships USA…",
+  "supporting": "A useful way to read this USA scholarship list is to compare the requirement line first, then scan award text, category labels, and deadline wording side by side. Some programs in this slice may be relatively straightforward to apply for, but eligibility details can still differ in important ways. Open each listing to confirm location fit, first-generation wording, and any school-status expectations before you shortlist it. If you are applying for scholarships in California for the upcoming cycle, it is smart to check dates promptly because timing varies across these rows.",
+  "related_intro": "If these listings are close but not quite right, related pages can help you widen the search by keeping one filter and changing another. That is useful when you want to compare California options against broader high school results or look at first-generation scholarships with a different location focus.",
+  "how_to_use": [
+    "Compare deadline wording across the rows first",
+    "Read each requirement line before you apply",
+    "Open the official page to verify eligibility details",
+    "Shortlist the listings that match your California and school status filters",
+    "Check award text carefully because amounts and terms can vary"
+  ],
+  "who_for": [
+    "California high school students who identify as first-generation",
+    "High school seniors comparing local and statewide scholarship options",
+    "Applicants looking for education or community themed awards",
+    "Students hoping to find many no-essay or lighter-touch applications"
+  ],
+  "faq": [
+    {
+      "question": "How can I find first-generation scholarships for high school students in California?",
+      "answer": "Use this filtered view to explore a focused set of USA listings tied to first-generation status, high school, and California. Then open each row and verify eligibility, location rules, and application steps on the official scholarship page."
+    },
+    {
+      "question": "Can I apply to every scholarship listed on this California filter page?",
+      "answer": "Not automatically—each program has its own requirements, even within the same catalog slice. Compare the rows first, then check the official source to confirm who can apply, what documents are needed, and whether the listing fits your situation."
+    },
+    {
+      "question": "Do these scholarships all have the same deadline or award amount?",
+      "answer": "No. Deadlines differ by program, and award amounts vary by listing, so check each row carefully and confirm details on the official page before you apply."
+    },
+    {
+      "question": "Are these first-generation California scholarships usually essay-heavy?",
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many sampled rows show no essay flag. Still, requirements can change row to row, so review the catalog entry and official source before starting an application."
+    }
+  ],
+  "page_data": {
+    "exactCount": 4,
+    "award": {
+      "medianUsd": 2500,
+      "minUsd": 1500,
+      "maxUsd": 4500,
+      "statedAmountCount": 4,
+      "unstatedAmountCount": 0
+    },
+    "deadline": {
+      "within30Days": 4,
+      "within60Days": 4,
+      "rollingOrUnknown": 0,
+      "nearestDays": 4,
+      "nearestLabels": [
+        "2026-04-30",
+        "2026-05-01",
+        "2026-04-06"
+      ]
+    },
+    "essays": {
+      "yesCount": 0,
+      "noCount": 4,
+      "unknownCount": 0
+    },
+    "requirements": {
+      "commonRequirementTypes": [],
+      "commonStudyLevels": [
+        "high_school_senior",
+        "graduate_student"
+      ],
+      "commonFields": [
+        "education"
+      ],
+      "commonResidency": []
+    },
+    "topProviders": [
+      {
+        "name": "Catalino Tapia Scholarship Foundation",
+        "count": 1
+      },
+      {
+        "name": "Central California Asian Pacific Women",
+        "count": 1
+      },
+      {
+        "name": "Central Valley Scholars",
+        "count": 1
+      },
+      {
+        "name": "Hannah Project Partnership for Academic Achievement",
+        "count": 1
+      }
+    ],
+    "topTags": [
+      "education",
+      "community",
+      "miscellaneous"
+    ]
+  },
+  "_meta": {
+    "canonicalPath": "first-generation/high-school/california",
+    "generatedAt": "2026-04-26T15:02:35.628Z",
+    "promptVersion": "v4",
+    "scholarshipsCount": 4,
+    "model": "gpt-5.4",
+    "bodySource": "ai",
+    "generationMode": "rewrite"
+  }
+}

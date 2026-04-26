@@ -1,25 +1,12 @@
 {
   "summary": {
-    "totalIssues": 123,
+    "totalIssues": 18,
     "critical": 0,
-    "high": 10,
-    "medium": 51,
-    "low": 21
+    "high": 3,
+    "medium": 3,
+    "low": 1
   },
   "topFixes": [
-    {
-      "url": "/essays",
-      "type": "essay",
-      "score": 40,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "title_length_out_of_range",
-        "meta_description_length_out_of_range",
-        "faq_missing"
-      ],
-      "fixPriority": "high",
-      "fixSuggestion": "Add FAQ block with at least one helpful Q/A."
-    },
     {
       "url": "/providers",
       "type": "provider",
@@ -34,88 +21,17 @@
       "fixSuggestion": "Add FAQ block with at least one helpful Q/A."
     },
     {
-      "url": "/essays/how-to-write-lee-a-christy-endowed-scholarship-scholarship-essay",
+      "url": "/essays",
       "type": "essay",
-      "score": 50,
+      "score": 40,
       "issueCodes": [
         "result_count_unavailable_internal_context",
         "title_length_out_of_range",
-        "meta_description_length_out_of_range"
+        "meta_description_length_out_of_range",
+        "faq_missing"
       ],
       "fixPriority": "high",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-david-e-mrizek-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 50,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "title_length_out_of_range",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "high",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-san-antonio-light-endowed-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 50,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "title_length_out_of_range",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "high",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-juan-ortiz-mariachi-academy-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 50,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "title_length_out_of_range",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "high",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-new-jersey-state-elks-vocational-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 50,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "title_length_out_of_range",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "high",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-woman-s-club-of-aurora-nursing-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 50,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "title_length_out_of_range",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "high",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-trellis-company-nursing-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 50,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "title_length_out_of_range",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "high",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A."
     },
     {
       "url": "/resources",
@@ -142,118 +58,38 @@
       "fixSuggestion": "Add FAQ block with at least one helpful Q/A."
     },
     {
-      "url": "/essays/how-to-write-general-foundation-scholarship-fund-scholarship-essay",
-      "type": "essay",
-      "score": 65,
+      "url": "/compare",
+      "type": "compare",
+      "score": 75,
       "issueCodes": [
         "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
+        "faq_missing"
       ],
       "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A."
     },
     {
-      "url": "/essays/how-to-write-tourism-hospitality-culinary-arts-thca-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 65,
+      "url": "/compare/universities",
+      "type": "compare",
+      "score": 75,
       "issueCodes": [
         "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
+        "faq_missing"
       ],
       "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
+      "fixSuggestion": "Add FAQ block with at least one helpful Q/A."
     },
     {
-      "url": "/essays/how-to-write-harold-d-carpenter-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 65,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-the-dennis-b-and-susan-lamb-cook-endowed-scholarship-in-the-school-of-la-scholarship-essay",
-      "type": "essay",
-      "score": 65,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-dr-thomas-soltz-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 65,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-delphine-rutkowski-memorial-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 65,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-mary-e-kreppel-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 65,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-cabela-s-stars-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 65,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
-    },
-    {
-      "url": "/essays/how-to-write-randolph-brooks-founder-s-endowed-scholarship-scholarship-essay",
-      "type": "essay",
-      "score": 65,
-      "issueCodes": [
-        "result_count_unavailable_internal_context",
-        "meta_description_length_out_of_range"
-      ],
-      "fixPriority": "medium",
-      "fixSuggestion": "Provide Supabase env for full internal audit context or treat this check as partial."
+      "url": "/scholarships/for-women",
+      "type": "listing",
+      "score": 100,
+      "issueCodes": [],
+      "fixPriority": "low",
+      "fixSuggestion": "No immediate action required."
     }
   ],
   "buckets": {
     "topWorstPages": [
-      {
-        "url": "/essays",
-        "type": "essay",
-        "score": 40,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "title_length_out_of_range",
-          "meta_description_length_out_of_range",
-          "faq_missing"
-        ]
-      },
       {
         "url": "/providers",
         "type": "provider",
@@ -266,73 +102,14 @@
         ]
       },
       {
-        "url": "/essays/how-to-write-lee-a-christy-endowed-scholarship-scholarship-essay",
+        "url": "/essays",
         "type": "essay",
-        "score": 50,
+        "score": 40,
         "issueCodes": [
           "result_count_unavailable_internal_context",
           "title_length_out_of_range",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-david-e-mrizek-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "title_length_out_of_range",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-san-antonio-light-endowed-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "title_length_out_of_range",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-juan-ortiz-mariachi-academy-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "title_length_out_of_range",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-new-jersey-state-elks-vocational-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "title_length_out_of_range",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-woman-s-club-of-aurora-nursing-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "title_length_out_of_range",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-trellis-company-nursing-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "title_length_out_of_range",
-          "meta_description_length_out_of_range"
+          "meta_description_length_out_of_range",
+          "faq_missing"
         ]
       },
       {
@@ -356,85 +133,28 @@
         ]
       },
       {
-        "url": "/essays/how-to-write-general-foundation-scholarship-fund-scholarship-essay",
-        "type": "essay",
-        "score": 65,
+        "url": "/compare",
+        "type": "compare",
+        "score": 75,
         "issueCodes": [
           "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
+          "faq_missing"
         ]
       },
       {
-        "url": "/essays/how-to-write-tourism-hospitality-culinary-arts-thca-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
+        "url": "/compare/universities",
+        "type": "compare",
+        "score": 75,
         "issueCodes": [
           "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
+          "faq_missing"
         ]
       },
       {
-        "url": "/essays/how-to-write-harold-d-carpenter-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-the-dennis-b-and-susan-lamb-cook-endowed-scholarship-in-the-school-of-la-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-dr-thomas-soltz-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-delphine-rutkowski-memorial-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-mary-e-kreppel-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-cabela-s-stars-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
-        ]
-      },
-      {
-        "url": "/essays/how-to-write-randolph-brooks-founder-s-endowed-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "issueCodes": [
-          "result_count_unavailable_internal_context",
-          "meta_description_length_out_of_range"
-        ]
+        "url": "/scholarships/for-women",
+        "type": "listing",
+        "score": 100,
+        "issueCodes": []
       }
     ],
     "weakMetaDescriptions": [
@@ -445,226 +165,16 @@
         "metaDescriptionLength": 102
       },
       {
-        "url": "/essays",
-        "type": "essay",
-        "score": 40,
-        "metaDescriptionLength": 82
-      },
-      {
-        "url": "/essays/how-to-write-lee-a-christy-endowed-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "metaDescriptionLength": 99
-      },
-      {
-        "url": "/essays/how-to-write-david-e-mrizek-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "metaDescriptionLength": 98
-      },
-      {
-        "url": "/essays/how-to-write-san-antonio-light-endowed-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "metaDescriptionLength": 97
-      },
-      {
-        "url": "/essays/how-to-write-juan-ortiz-mariachi-academy-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "metaDescriptionLength": 116
-      },
-      {
-        "url": "/essays/how-to-write-new-jersey-state-elks-vocational-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "metaDescriptionLength": 106
-      },
-      {
-        "url": "/essays/how-to-write-general-foundation-scholarship-fund-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 107
-      },
-      {
-        "url": "/essays/how-to-write-woman-s-club-of-aurora-nursing-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "metaDescriptionLength": 117
-      },
-      {
-        "url": "/essays/how-to-write-tourism-hospitality-culinary-arts-thca-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 107
-      },
-      {
-        "url": "/essays/how-to-write-harold-d-carpenter-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 97
-      },
-      {
-        "url": "/essays/how-to-write-the-dennis-b-and-susan-lamb-cook-endowed-scholarship-in-the-school-of-la-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 113
-      },
-      {
-        "url": "/essays/how-to-write-dr-thomas-soltz-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 103
-      },
-      {
-        "url": "/essays/how-to-write-delphine-rutkowski-memorial-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 114
-      },
-      {
-        "url": "/essays/how-to-write-mary-e-kreppel-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 104
-      },
-      {
-        "url": "/essays/how-to-write-trellis-company-nursing-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 50,
-        "metaDescriptionLength": 95
-      },
-      {
-        "url": "/essays/how-to-write-cabela-s-stars-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 113
-      },
-      {
-        "url": "/essays/how-to-write-randolph-brooks-founder-s-endowed-scholarship-scholarship-essay",
-        "type": "essay",
-        "score": 65,
-        "metaDescriptionLength": 110
-      },
-      {
         "url": "/providers",
         "type": "provider",
         "score": 40,
         "metaDescriptionLength": 86
       },
       {
-        "url": "/providers/loyola-university-chicago",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 663
-      },
-      {
-        "url": "/providers/tarleton-state-university",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 520
-      },
-      {
-        "url": "/providers/stetson-university",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 566
-      },
-      {
-        "url": "/providers/alamo-colleges-foundation",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 1023
-      },
-      {
-        "url": "/providers/johnson-county-community-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 551
-      },
-      {
-        "url": "/providers/pensacola-state-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 508
-      },
-      {
-        "url": "/providers/broward-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 463
-      },
-      {
-        "url": "/providers/eastern-florida-state-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 601
-      },
-      {
-        "url": "/providers/worcester-state-university",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 667
-      },
-      {
-        "url": "/providers/university-of-west-florida",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 994
-      },
-      {
-        "url": "/providers/tallahassee-state-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 435
-      },
-      {
-        "url": "/providers/san-jacinto-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 470
-      },
-      {
-        "url": "/providers/southwestern-illinois-college-foundation",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 576
-      },
-      {
-        "url": "/providers/waubonsee-community-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 558
-      },
-      {
-        "url": "/providers/chipola-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 488
-      },
-      {
-        "url": "/providers/austin-community-college",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 586
-      },
-      {
-        "url": "/providers/university-of-north-florida",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 991
-      },
-      {
-        "url": "/providers/kankakee-community-college-foundation",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 1051
-      },
-      {
-        "url": "/providers/university-of-massachusetts-amherst",
-        "type": "provider",
-        "score": 70,
-        "metaDescriptionLength": 644
+        "url": "/essays",
+        "type": "essay",
+        "score": 40,
+        "metaDescriptionLength": 82
       }
     ],
     "missingFaqPages": [
@@ -672,6 +182,11 @@
         "url": "/resources",
         "type": "article",
         "score": 55
+      },
+      {
+        "url": "/providers",
+        "type": "provider",
+        "score": 40
       },
       {
         "url": "/essays",
@@ -692,106 +207,6 @@
         "url": "/compare/states",
         "type": "compare",
         "score": 60
-      },
-      {
-        "url": "/providers",
-        "type": "provider",
-        "score": 40
-      },
-      {
-        "url": "/providers/loyola-university-chicago",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/tarleton-state-university",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/stetson-university",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/alamo-colleges-foundation",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/johnson-county-community-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/pensacola-state-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/broward-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/eastern-florida-state-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/worcester-state-university",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/university-of-west-florida",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/tallahassee-state-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/san-jacinto-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/southwestern-illinois-college-foundation",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/waubonsee-community-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/chipola-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/austin-community-college",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/university-of-north-florida",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/kankakee-community-college-foundation",
-        "type": "provider",
-        "score": 70
-      },
-      {
-        "url": "/providers/university-of-massachusetts-amherst",
-        "type": "provider",
-        "score": 70
       }
     ],
     "badScholarshipDetailPages": [],
@@ -809,19 +224,19 @@
     "topIssueTypes": [
       {
         "issueCode": "result_count_unavailable_internal_context",
-        "count": 42
-      },
-      {
-        "issueCode": "meta_description_length_out_of_range",
-        "count": 38
+        "count": 6
       },
       {
         "issueCode": "faq_missing",
-        "count": 25
+        "count": 6
+      },
+      {
+        "issueCode": "meta_description_length_out_of_range",
+        "count": 3
       },
       {
         "issueCode": "title_length_out_of_range",
-        "count": 18
+        "count": 3
       }
     ]
   }
