@@ -25,9 +25,9 @@ import { getURL } from '@/utils/helpers';
 
 export const revalidate = 300;
 
-const baseTitle = `${ESSAYS_PAGE_TITLE} — How to Write`;
+const baseTitle = 'Scholarship Essay Guides & Examples (2026)';
 const baseDescription =
-  'Long-tail guides that teach you how to plan, draft, and revise scholarship essays—without replacing our scholarship directory pages.';
+  'Explore scholarship essay examples and step-by-step writing guides. Learn how to structure your essay and improve your chances of winning scholarships.';
 
 export function generateMetadata({
   searchParams

@@ -40,6 +40,7 @@ type OutputPageType =
 type Status = 'good' | 'medium' | 'bad';
 type FixPriority = 'critical' | 'high' | 'medium' | 'low';
 type SourceType = 'internal' | 'http_fallback';
+type Severity = 'critical' | 'important' | 'minor' | 'false_positive';
 type PriorityStage =
   | 'gsc_impressions'
   | 'seo_pages'
@@ -74,9 +75,15 @@ type PageAudit = {
   sourceType: SourceType;
   priorityStage: PriorityStage;
   url: string;
+  type: OutputPageType;
+  rawScore: number;
+  realScore: number;
   score: number;
   status: Status;
   issues: string[];
+  warnings: string[];
+  falsePositives: string[];
+  severityByIssue: Array<{ code: string; severity: Severity }>;
   checks: {
     title: CheckResult;
     metaDescription: CheckResult;
@@ -94,6 +101,8 @@ type PageAudit = {
   scholarshipResultsCount: number | null;
   indexable: boolean | null;
   issueCodes: string[];
+  warningCodes: string[];
+  falsePositiveCodes: string[];
   fixPriority: FixPriority;
   fixSuggestion: string;
 };
@@ -202,6 +211,13 @@ function envIntWithDefault(name: string, fallback: number): number {
 function envFlag(name: string): boolean {
   const raw = process.env[name]?.trim().toLowerCase();
   return raw === '1' || raw === 'true' || raw === 'yes';
+}
+
+function argString(name: string): string | null {
+  const raw = process.argv.find((a) => a.startsWith(`--${name}=`));
+  if (!raw) return null;
+  const value = raw.slice(name.length + 3).trim();
+  return value || null;
 }
 
 function normalizeWhitespace(input: string | null | undefined): string {
@@ -716,17 +732,120 @@ function statusFromScore(score: number): Status {
   return 'bad';
 }
 
+function getTitleRangeForType(_type: OutputPageType): { min: number; max: number } {
+  return { min: 25, max: 70 };
+}
+
+function getMetaRangeForType(_type: OutputPageType): { min: number; max: number } {
+  return { min: 120, max: 160 };
+}
+
+function checkRangeSoft(
+  value: number,
+  min: number,
+  max: number,
+  maxPoints: number,
+  name: string
+): CheckResult {
+  if (value >= min && value <= max) {
+    return { ok: true, pointsAwarded: maxPoints, maxPoints, value, min, max };
+  }
+  const distance = value < min ? min - value : value - max;
+  const allowedSlack = 5;
+  const pointsAwarded =
+    distance <= allowedSlack ? Math.max(1, Math.round(maxPoints * 0.6)) : 0;
+  return {
+    ok: false,
+    pointsAwarded,
+    maxPoints,
+    value,
+    min,
+    max,
+    reason: `${name}_out_of_range`
+  };
+}
+
+function classifyIssueSeverity(code: string): Severity {
+  const critical = new Set([
+    'title_missing',
+    'meta_description_missing',
+    'h1_missing',
+    'content_blocks_missing'
+  ]);
+  const important = new Set([
+    'title_length_out_of_range',
+    'meta_description_length_out_of_range',
+    'faq_missing',
+    'canonical_missing',
+    'robots_noindex_or_invalid',
+    'scholarship_results_zero',
+    'duplicate_title',
+    'duplicate_meta_description',
+    'comparison_content_missing',
+    'internal_links_missing',
+    'provider_scholarship_list_missing',
+    'overview_missing',
+    'eligibility_missing',
+    'application_missing'
+  ]);
+  if (code === 'result_count_unavailable_internal_context') return 'false_positive';
+  if (critical.has(code)) return 'critical';
+  if (important.has(code)) return 'important';
+  return 'minor';
+}
+
 type InternalExtract = {
   title: string | null;
   metaDescription: string | null;
   h1: string | null;
   hasContentBlocks: boolean;
   hasFaq: boolean;
+  faqFromData?: boolean;
   scholarshipResultsCount: number | null;
   canonical: string | null;
   indexable: boolean | null;
+  contentLength?: number;
+  internalLinksCount?: number;
+  hasOverview?: boolean;
+  hasEligibility?: boolean;
+  hasEligibilityEvidence?: boolean;
+  hasApplication?: boolean;
+  hasComparisonContent?: boolean;
+  hasScholarshipList?: boolean;
   issues: string[];
 };
+
+function hasNonEmptyUnknownArray(value: unknown): boolean {
+  return Array.isArray(value) && value.length > 0;
+}
+
+function hasScholarshipEligibilitySignals(s: Scholarship): boolean {
+  const rec = s as unknown as Record<string, unknown>;
+  const textSignals = [
+    normalizeWhitespace(String(rec.eligibilityText ?? '')),
+    normalizeWhitespace(String(rec.eligibility_summary ?? '')),
+    normalizeWhitespace(String(rec.eligibility_notes ?? '')),
+    normalizeWhitespace(String(rec.requirementsTextClean ?? '')),
+    normalizeWhitespace(String(rec.seoEligibility ?? ''))
+  ];
+  if (textSignals.some((v) => v.length >= 20)) return true;
+  if (hasNonEmptyUnknownArray(rec.aiEligibilitySummary)) return true;
+  if (hasNonEmptyUnknownArray(rec.documentsRequired)) return true;
+  const boolSignals = [
+    rec.essayRequired,
+    rec.transcriptRequired,
+    rec.recommendationRequired,
+    rec.documentRequired,
+    rec.photoRequired,
+    rec.videoRequired,
+    rec.linkRequired,
+    rec.surveyRequired,
+    rec.questionRequired,
+    rec.goalRequired,
+    rec.specialEligibilityRequired
+  ];
+  return boolSignals.some((v) => v === true);
+}
 
 async function extractScholarshipListingInternal(page: AuditInputPage): Promise<InternalExtract> {
   const issues: string[] = [];
@@ -759,6 +878,9 @@ async function extractScholarshipListingInternal(page: AuditInputPage): Promise<
       .length ?? 0) > 0 ||
     (longTail?.faq?.filter((f) => normalizeWhitespace(f.question) && normalizeWhitespace(f.answer))
       .length ?? 0) > 0;
+  const listingBody = normalizeWhitespace(
+    `${seo?.intro ?? ''} ${seo?.supporting ?? ''} ${longTail?.intro ?? ''} ${longTail?.body_html ?? ''}`
+  );
 
   let scholarshipResultsCount: number | null = null;
   scholarshipResultsCount =
@@ -775,9 +897,15 @@ async function extractScholarshipListingInternal(page: AuditInputPage): Promise<
     h1,
     hasContentBlocks,
     hasFaq,
+    faqFromData: hasFaq,
     scholarshipResultsCount,
     canonical: `/scholarships/${canonicalPath}`,
     indexable: true,
+    contentLength: listingBody.length,
+    internalLinksCount: (longTail?.body_html?.match(/<a\b/gi) ?? []).length,
+    hasOverview: hasContentBlocks,
+    hasEligibility: hasContentBlocks,
+    hasApplication: hasContentBlocks,
     issues
   };
 }
@@ -806,15 +934,28 @@ async function extractScholarshipDetailInternal(page: AuditInputPage): Promise<I
       normalizeWhitespace(s.fullContentHtml)
   );
   const hasFaq = (s.seoFaq?.length ?? 0) > 0;
+  const overview = normalizeWhitespace(s.seoOverview);
+  const eligibility = normalizeWhitespace(s.seoEligibility);
+  const application = normalizeWhitespace(s.seoApplication);
+  const fullHtml = normalizeWhitespace(s.fullContentHtml);
+  const eligibilityEvidence = hasScholarshipEligibilitySignals(s);
+  const hasEligibility = Boolean(eligibility || eligibilityEvidence);
   return {
     title: buildScholarshipDetailSeoTitle(normalizeWhitespace(s.title) || 'Scholarship'),
     metaDescription: detailMetaFallbackDescription(s),
     h1: normalizeWhitespace(s.title) || 'Scholarship',
     hasContentBlocks,
     hasFaq,
+    faqFromData: hasFaq,
     scholarshipResultsCount: 1,
     canonical: scholarshipPublicPath(s),
     indexable: s.isIndexable !== false,
+    contentLength: normalizeWhitespace(`${overview} ${eligibility} ${application} ${fullHtml}`).length,
+    internalLinksCount: (s.fullContentHtml?.match(/<a\b/gi) ?? []).length,
+    hasOverview: Boolean(overview || normalizeWhitespace(s.description)),
+    hasEligibility,
+    hasEligibilityEvidence: eligibilityEvidence,
+    hasApplication: Boolean(application),
     issues
   };
 }
@@ -875,15 +1016,19 @@ async function extractContentInternal(page: AuditInputPage): Promise<InternalExt
       : 0;
   const h1 = normalizeWhitespace(post?.title ?? '');
   const hasContentBlocks = Boolean(normalizeWhitespace(post?.body_html ?? ''));
+  const bodyHtml = normalizeWhitespace(post?.body_html ?? '');
   return {
     title: normalizeWhitespace(post?.meta_title ?? post?.title ?? '') || null,
     metaDescription: normalizeWhitespace(post?.meta_description ?? '') || null,
     h1: h1 || null,
     hasContentBlocks,
     hasFaq: faqCount > 0,
+    faqFromData: faqCount > 0,
     scholarshipResultsCount: null,
     canonical: `/resources/${encodeURIComponent(slug)}`,
     indexable: true,
+    contentLength: bodyHtml.length,
+    internalLinksCount: ((post?.body_html ?? '').match(/<a\b/gi) ?? []).length,
     issues: ['result_count_unavailable_internal_context']
   };
 }
@@ -911,9 +1056,9 @@ async function extractEssayInternal(page: AuditInputPage): Promise<InternalExtra
   const issues: string[] = [];
   if (page.urlPath === '/essays') {
     return {
-      title: ESSAYS_PAGE_TITLE,
+      title: 'Scholarship Essay Guides & Examples (2026)',
       metaDescription:
-        'Long-tail guides that teach you how to plan, draft, and revise scholarship essays.',
+        'Explore scholarship essay examples and step-by-step writing guides. Learn how to structure your essay and improve your chances of winning scholarships.',
       h1: ESSAYS_PAGE_TITLE,
       hasContentBlocks: true,
       hasFaq: false,
@@ -955,15 +1100,19 @@ async function extractEssayInternal(page: AuditInputPage): Promise<InternalExtra
   }
 
   const faq = parseFaqLikeArray(essay.faq);
+  const essayHtml = normalizeWhitespace(essay.content_html);
   return {
     title: normalizeWhitespace(essay.title) || null,
     metaDescription: normalizeWhitespace(essay.meta_description) || null,
     h1: normalizeWhitespace(essay.title) || null,
     hasContentBlocks: Boolean(normalizeWhitespace(essay.content_html)),
     hasFaq: faq.length > 0,
+    faqFromData: faq.length > 0,
     scholarshipResultsCount: null,
     canonical: `/essays/${encodeURIComponent(slug)}`,
     indexable: true,
+    contentLength: essayHtml.length,
+    internalLinksCount: ((essay.content_html ?? '').match(/<a\b/gi) ?? []).length,
     issues: ['result_count_unavailable_internal_context']
   };
 }
@@ -1058,12 +1207,16 @@ async function extractCompareInternal(page: AuditInputPage): Promise<InternalExt
     h1: title,
     hasContentBlocks: Boolean(bodyHtml || normalizeWhitespace(row.ai_verdict)),
     hasFaq: faq.length > 0,
+    faqFromData: faq.length > 0,
     scholarshipResultsCount: null,
     canonical:
       page.compareType === 'state'
         ? `/compare/states/${encodeURIComponent(slug)}`
         : `/compare/universities/${encodeURIComponent(slug)}`,
     indexable: true,
+    contentLength: bodyHtml.length,
+    internalLinksCount: (String(content.body_html ?? '').match(/<a\b/gi) ?? []).length,
+    hasComparisonContent: Boolean(bodyHtml || normalizeWhitespace(row.ai_verdict)),
     issues: ['result_count_unavailable_internal_context']
   };
 }
@@ -1123,10 +1276,14 @@ async function extractProviderInternal(page: AuditInputPage): Promise<InternalEx
     h1: displayName,
     hasContentBlocks: Boolean(normalizeWhitespace(row.ai_description)),
     hasFaq: providerFaq.length > 0,
+    faqFromData: providerFaq.length > 0,
     scholarshipResultsCount:
       typeof row.scholarship_count === 'number' ? row.scholarship_count : null,
     canonical: `/providers/${encodeURIComponent(slug)}`,
     indexable: true,
+    contentLength: normalizeWhitespace(row.ai_description).length,
+    hasScholarshipList:
+      typeof row.scholarship_count === 'number' ? row.scholarship_count > 0 : false,
     issues:
       typeof row.scholarship_count === 'number'
         ? []
@@ -1577,7 +1734,34 @@ function selectPagesForAudit(
 }
 
 async function main() {
+  let previousReportSummary: {
+    averageScore?: number;
+    rawAverageScore?: number;
+    realAverageScore?: number;
+    bad?: number;
+    realBadPages?: number;
+    falseBadPages?: number;
+  } | null = null;
+  try {
+    const previousRaw = await fs.readFile(REPORT_JSON_PATH, 'utf-8');
+    const previousParsed = JSON.parse(previousRaw) as {
+      summary?: {
+        averageScore?: number;
+        rawAverageScore?: number;
+        realAverageScore?: number;
+        bad?: number;
+        realBadPages?: number;
+        falseBadPages?: number;
+      };
+    };
+    previousReportSummary = previousParsed.summary ?? null;
+  } catch {
+    previousReportSummary = null;
+  }
+
   const limit = envInt('SEO_AUDIT_LIMIT');
+  const typeFilterRaw = argString('type');
+  const typeFilter = typeFilterRaw ? new Set(typeFilterRaw.split(',').map((x) => x.trim()).filter(Boolean)) : null;
   const progressEvery = Math.max(1, envIntWithDefault('SEO_AUDIT_PROGRESS_EVERY', 25));
   const telegramProgress = envFlag('SEO_AUDIT_NOTIFY_TELEGRAM');
   const baseUrl =
@@ -1598,7 +1782,10 @@ async function main() {
   const filteredByUrl = urlFilterSet
     ? prioritizedPages.filter((p) => urlFilterSet.has(normalizeUrlPathForMatching(p.urlPath)))
     : prioritizedPages;
-  const targetPages = selectPagesForAudit(filteredByUrl, limit);
+  const filteredByType = typeFilter
+    ? filteredByUrl.filter((p) => typeFilter.has(toOutputType(p.pageType)))
+    : filteredByUrl;
+  const targetPages = selectPagesForAudit(filteredByType, limit);
   const executionSummaryRows = buildExecutionSummaryRows(targetPages);
 
   console.log('[seo:audit] Starting prioritized full audit');
@@ -1680,7 +1867,7 @@ async function main() {
     const h1 = extracted?.h1 ?? fallback?.h1 ?? null;
     const hasContentBlocks =
       extracted?.hasContentBlocks ?? fallback?.hasContentBlocks ?? false;
-    const hasFaq = extracted?.hasFaq ?? fallback?.hasFaq ?? false;
+    const hasFaq = Boolean(extracted?.hasFaq || extracted?.faqFromData || fallback?.hasFaq);
     const scholarshipResultsCount = extracted?.scholarshipResultsCount ?? null;
     const canonical = extracted?.canonical ?? fallback?.canonical ?? null;
     const indexable =
@@ -1688,46 +1875,118 @@ async function main() {
       (typeof fallback?.robots === 'string'
         ? !fallback.robots.toLowerCase().includes('noindex')
         : null);
+    const outputType = toOutputType(page.pageType);
+    const contentLength = extracted?.contentLength ?? 0;
+    const internalLinksCount = extracted?.internalLinksCount ?? 0;
+    const hasOverview = extracted?.hasOverview ?? hasContentBlocks;
+    const hasEligibility = extracted?.hasEligibility ?? hasContentBlocks;
+    const hasApplication = extracted?.hasApplication ?? hasContentBlocks;
+    const hasComparisonContent = extracted?.hasComparisonContent ?? hasContentBlocks;
+    const hasScholarshipList =
+      extracted?.hasScholarshipList ??
+      (typeof scholarshipResultsCount === 'number' ? scholarshipResultsCount > 0 : false);
 
     const titleLength = normalizeWhitespace(title).length;
     const metaLength = normalizeWhitespace(metaDescription).length;
+    const titleRange = getTitleRangeForType(outputType);
+    const metaRange = getMetaRangeForType(outputType);
+    const passCheck = (points: number, value?: string | number | boolean | null): CheckResult => ({
+      ok: true,
+      pointsAwarded: points,
+      maxPoints: points,
+      value
+    });
+
     const titleCheck = title
-      ? checkRange(titleLength, 30, 65, TITLE_POINTS, 'title_length')
+      ? checkRangeSoft(titleLength, titleRange.min, titleRange.max, TITLE_POINTS, 'title_length')
       : checkExists(title, TITLE_POINTS, 'title_missing');
     const metaCheck = metaDescription
-      ? checkRange(metaLength, 120, 160, META_POINTS, 'meta_description_length')
+      ? checkRangeSoft(
+          metaLength,
+          metaRange.min,
+          metaRange.max,
+          META_POINTS,
+          'meta_description_length'
+        )
       : checkExists(metaDescription, META_POINTS, 'meta_description_missing');
     const h1Check = checkExists(h1, H1_POINTS, 'h1_missing');
-    const contentCheck = checkBoolean(
-      hasContentBlocks,
-      CONTENT_POINTS,
-      'content_blocks_missing',
-      hasContentBlocks
-    );
-    const faqCheck = checkBoolean(hasFaq, FAQ_POINTS, 'faq_missing', hasFaq);
+    const contentCheck =
+      outputType === 'scholarship'
+        ? checkBoolean(
+            hasOverview && hasEligibility && hasApplication,
+            CONTENT_POINTS,
+            !hasOverview
+              ? 'overview_missing'
+              : !hasEligibility
+                ? 'eligibility_missing'
+                : 'application_missing',
+            hasOverview && hasEligibility && hasApplication
+          )
+        : outputType === 'compare'
+          ? checkBoolean(
+              hasComparisonContent,
+              CONTENT_POINTS,
+              'comparison_content_missing',
+              hasComparisonContent
+            )
+          : outputType === 'provider'
+            ? checkBoolean(
+                hasContentBlocks && hasScholarshipList,
+                CONTENT_POINTS,
+                !hasContentBlocks
+                  ? 'provider_overview_missing'
+                  : 'provider_scholarship_list_missing',
+                hasContentBlocks && hasScholarshipList
+              )
+            : outputType === 'article' || outputType === 'essay'
+              ? checkBoolean(
+                  hasContentBlocks && contentLength >= 500,
+                  CONTENT_POINTS,
+                  !hasContentBlocks ? 'content_blocks_missing' : 'content_length_low',
+                  hasContentBlocks && contentLength >= 500
+                )
+              : checkBoolean(
+                  hasContentBlocks,
+                  CONTENT_POINTS,
+                  'content_blocks_missing',
+                  hasContentBlocks
+                );
+    const faqCheck =
+      outputType === 'article' || outputType === 'essay'
+        ? passCheck(FAQ_POINTS, hasFaq)
+        : checkBoolean(hasFaq, FAQ_POINTS, 'faq_missing', hasFaq);
 
     let resultsCheck: CheckResult;
-    if (scholarshipResultsCount == null) {
-      resultsCheck = checkUnavailable(
-        'result_count_unavailable_internal_context',
-        RESULTS_POINTS
-      );
+    if (outputType === 'listing' || outputType === 'provider') {
+      if (scholarshipResultsCount == null) {
+        resultsCheck = checkUnavailable(
+          'result_count_unavailable_internal_context',
+          RESULTS_POINTS
+        );
+      } else {
+        resultsCheck = checkBoolean(
+          scholarshipResultsCount > 0,
+          RESULTS_POINTS,
+          'scholarship_results_zero',
+          scholarshipResultsCount > 0
+        );
+        resultsCheck.value = scholarshipResultsCount;
+      }
     } else {
-      resultsCheck = checkBoolean(
-        scholarshipResultsCount > 0,
-        RESULTS_POINTS,
-        'scholarship_results_zero',
-        scholarshipResultsCount > 0
-      );
-      resultsCheck.value = scholarshipResultsCount;
+      resultsCheck = passCheck(RESULTS_POINTS, scholarshipResultsCount);
     }
 
-    const canonicalRobotsCheck = checkBoolean(
-      Boolean(canonical) && indexable !== false,
-      CANONICAL_ROBOTS_POINTS,
-      !canonical ? 'canonical_missing' : 'robots_noindex_or_invalid',
-      indexable === true
-    );
+    const canonicalRobotsCheck =
+      outputType === 'essay' || outputType === 'article' || outputType === 'listing' || outputType === 'scholarship' || outputType === 'compare' || outputType === 'provider'
+        ? checkBoolean(
+            Boolean(canonical) && indexable !== false,
+            CANONICAL_ROBOTS_POINTS,
+            !canonical ? 'canonical_missing' : 'robots_noindex_or_invalid',
+            indexable === true
+          )
+        : passCheck(CANONICAL_ROBOTS_POINTS, indexable === true);
+    const linksCheckNeeded = outputType === 'compare' || outputType === 'article';
+    const internalLinksMissing = linksCheckNeeded && internalLinksCount <= 0;
 
     const duplicateCheck = {
       ok: true,
@@ -1745,7 +2004,7 @@ async function main() {
       issues.push(canonicalRobotsCheck.reason);
     }
 
-    const score =
+    const rawScore =
       titleCheck.pointsAwarded +
       metaCheck.pointsAwarded +
       h1Check.pointsAwarded +
@@ -1755,15 +2014,74 @@ async function main() {
       canonicalRobotsCheck.pointsAwarded +
       duplicateCheck.pointsAwarded;
 
+    const normalizedIssues = Array.from(new Set(issues.map((issue) => normalizeIssueCode(issue))));
+    const falsePositives: string[] = normalizedIssues.filter((code) => {
+      if (code === 'result_count_unavailable_internal_context') return true;
+      if (code === 'faq_missing' && extracted?.faqFromData) return true;
+      return false;
+    });
+    const warnings: string[] = normalizedIssues.filter(
+      (code) => code === 'result_count_unavailable_internal_context'
+    );
+    const realIssueCodes: string[] = normalizedIssues.filter(
+      (code) => !falsePositives.includes(code) && !warnings.includes(code)
+    );
+    if (internalLinksMissing) {
+      const likelyClientOrDataRendered =
+        sourceType === 'internal' &&
+        (outputType === 'compare' || outputType === 'article' || outputType === 'essay');
+      if (likelyClientOrDataRendered) {
+        if (!warnings.includes('internal_links_missing')) warnings.push('internal_links_missing');
+        if (!falsePositives.includes('internal_links_missing'))
+          falsePositives.push('internal_links_missing');
+      } else if (!realIssueCodes.includes('internal_links_missing')) {
+        realIssueCodes.push('internal_links_missing');
+      }
+    }
+    if (realIssueCodes.includes('eligibility_missing')) {
+      const likelyEligibilityInDataOrDerived =
+        outputType === 'scholarship' &&
+        sourceType === 'internal' &&
+        Boolean(
+          extracted?.hasEligibilityEvidence ||
+            extracted?.hasEligibility ||
+            extracted?.contentLength && extracted.contentLength > 200
+        );
+      if (likelyEligibilityInDataOrDerived) {
+        if (!warnings.includes('eligibility_missing')) warnings.push('eligibility_missing');
+        if (!falsePositives.includes('eligibility_missing')) {
+          falsePositives.push('eligibility_missing');
+        }
+        const idx = realIssueCodes.indexOf('eligibility_missing');
+        if (idx >= 0) realIssueCodes.splice(idx, 1);
+      }
+    }
+
+    const severityByIssue = realIssueCodes.map((code) => ({
+      code,
+      severity: classifyIssueSeverity(code)
+    }));
+    const criticalCount = severityByIssue.filter((x) => x.severity === 'critical').length;
+    const importantCount = severityByIssue.filter((x) => x.severity === 'important').length;
+    const minorCount = severityByIssue.filter((x) => x.severity === 'minor').length;
+    const realPenalty = criticalCount * 12 + importantCount * 6 + minorCount * 2;
+    const realScore = Math.max(0, rawScore - realPenalty);
+
     const pageAudit: PageAudit = {
       pageType: page.pageType,
-      outputType: toOutputType(page.pageType),
+      outputType,
+      type: outputType,
       sourceType,
       priorityStage: page.priorityStage ?? defaultPriorityStageForPageType(page.pageType),
       url: page.urlPath,
-      score,
-      status: statusFromScore(score),
-      issues: Array.from(new Set(issues)),
+      rawScore,
+      realScore,
+      score: realScore,
+      status: statusFromScore(realScore),
+      issues: realIssueCodes,
+      warnings,
+      falsePositives,
+      severityByIssue,
       checks: {
         title: titleCheck,
         metaDescription: metaCheck,
@@ -1780,20 +2098,18 @@ async function main() {
       metaDescriptionLength: metaLength,
       scholarshipResultsCount,
       indexable,
-      issueCodes: [],
+      issueCodes: realIssueCodes,
+      warningCodes: warnings,
+      falsePositiveCodes: falsePositives,
       fixPriority: 'low',
       fixSuggestion: ''
     };
-    pageAudit.issueCodes = Array.from(
-      new Set(pageAudit.issues.map((issue) => normalizeIssueCode(issue)))
-    );
     pageAudit.fixPriority = deriveFixPriority(
       pageAudit.issueCodes,
-      pageAudit.score,
+      pageAudit.realScore,
       pageAudit.status
     );
     pageAudit.fixSuggestion = pickFixSuggestion(pageAudit.issueCodes, pageAudit.status);
-
     const tKey = normalizeDuplicateKey(title);
     if (tKey) {
       const list = titleKeyToIdx.get(tKey) ?? [];
@@ -1842,8 +2158,11 @@ async function main() {
         p.checks.duplicateSafety.pointsAwarded = 0;
         p.checks.duplicateSafety.reason = 'duplicate_title';
         p.issues.push('duplicate_title');
-        p.score -= DUP_POINTS;
-        p.status = statusFromScore(p.score);
+        p.issueCodes = Array.from(new Set(p.issues));
+        p.rawScore = Math.max(0, p.rawScore - DUP_POINTS);
+        p.realScore = Math.max(0, p.realScore - 6);
+        p.score = p.realScore;
+        p.status = statusFromScore(p.realScore);
       }
     }
   }
@@ -1858,18 +2177,28 @@ async function main() {
         p.checks.duplicateSafety.pointsAwarded = 0;
         p.checks.duplicateSafety.reason = 'duplicate_meta_description';
         p.issues.push('duplicate_meta_description');
-        p.score -= DUP_POINTS;
-        p.status = statusFromScore(p.score);
+        p.issueCodes = Array.from(new Set(p.issues));
+        p.rawScore = Math.max(0, p.rawScore - DUP_POINTS);
+        p.realScore = Math.max(0, p.realScore - 6);
+        p.score = p.realScore;
+        p.status = statusFromScore(p.realScore);
       }
     }
   }
 
   const pagesChecked = provisional.length;
-  const sum = provisional.reduce((acc, p) => acc + p.score, 0);
-  const averageScore = pagesChecked > 0 ? Number((sum / pagesChecked).toFixed(2)) : 0;
+  const sumRaw = provisional.reduce((acc, p) => acc + p.rawScore, 0);
+  const sumReal = provisional.reduce((acc, p) => acc + p.realScore, 0);
+  const averageRawScore = pagesChecked > 0 ? Number((sumRaw / pagesChecked).toFixed(2)) : 0;
+  const averageRealScore = pagesChecked > 0 ? Number((sumReal / pagesChecked).toFixed(2)) : 0;
+  const averageScore = averageRealScore;
   const good = provisional.filter((p) => p.status === 'good').length;
   const medium = provisional.filter((p) => p.status === 'medium').length;
   const bad = provisional.filter((p) => p.status === 'bad').length;
+  const falseBadPages = provisional.filter(
+    (p) => statusFromScore(p.rawScore) === 'bad' && statusFromScore(p.realScore) !== 'bad'
+  ).length;
+  const realBadPages = provisional.filter((p) => statusFromScore(p.realScore) === 'bad').length;
   const zeroResultPages = provisional.filter((p) => p.scholarshipResultsCount === 0).length;
   const missingMetaDescriptions = provisional.filter(
     (p) => !normalizeWhitespace(p.metaDescription).length
@@ -1899,14 +2228,38 @@ async function main() {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 15)
     .map(([issueCode, count]) => ({ issueCode, count }));
+  const internalLinksMissingRealCount = provisional.filter((p) =>
+    p.issueCodes.includes('internal_links_missing')
+  ).length;
+  const internalLinksMissingWarningCount = provisional.filter(
+    (p) =>
+      p.warningCodes.includes('internal_links_missing') ||
+      p.falsePositiveCodes.includes('internal_links_missing')
+  ).length;
+  const eligibilityMissingRealCount = provisional.filter((p) =>
+    p.issueCodes.includes('eligibility_missing')
+  ).length;
+  const eligibilityMissingWarningCount = provisional.filter(
+    (p) =>
+      p.warningCodes.includes('eligibility_missing') ||
+      p.falsePositiveCodes.includes('eligibility_missing')
+  ).length;
 
   const payload = {
     summary: {
       pagesChecked,
-      averageScore,
+      averageScore: averageRealScore,
+      rawAverageScore: averageRawScore,
+      realAverageScore: averageRealScore,
       good,
       medium,
       bad,
+      realBadPages,
+      falseBadPages,
+      internalLinksMissingRealCount,
+      internalLinksMissingWarningCount,
+      eligibilityMissingRealCount,
+      eligibilityMissingWarningCount,
       duplicateTitles,
       duplicateMetaDescriptions,
       zeroResultPages,
@@ -1942,12 +2295,19 @@ async function main() {
       priorityStage: p.priorityStage,
       sourceType: p.sourceType,
       url: p.url,
-      score: p.score,
+      score: p.realScore,
+      rawScore: p.rawScore,
+      realScore: p.realScore,
       status: p.status,
       issueCodes: p.issueCodes,
+      warningCodes: p.warningCodes,
+      falsePositiveCodes: p.falsePositiveCodes,
       fixPriority: p.fixPriority,
       fixSuggestion: p.fixSuggestion,
       issues: Array.from(new Set(p.issues)),
+      warnings: Array.from(new Set(p.warnings)),
+      falsePositives: Array.from(new Set(p.falsePositives)),
+      severityByIssue: p.severityByIssue,
       checks: p.checks
     }))
   };
@@ -1961,6 +2321,8 @@ async function main() {
     'priorityStage',
     'sourceType',
     'score',
+    'rawScore',
+    'realScore',
     'status',
     'titleLength',
     'metaDescriptionLength',
@@ -1974,7 +2336,9 @@ async function main() {
       toCsvValue(p.outputType),
       toCsvValue(p.priorityStage),
       toCsvValue(p.sourceType),
-      toCsvValue(p.score),
+      toCsvValue(p.realScore),
+      toCsvValue(p.rawScore),
+      toCsvValue(p.realScore),
       toCsvValue(p.status),
       toCsvValue(p.titleLength),
       toCsvValue(p.metaDescriptionLength),
@@ -2057,11 +2421,14 @@ async function main() {
     'utf-8'
   );
 
-  console.log(`SEO AUDIT SCORE: ${Math.round(averageScore)}/100`);
+  console.log(`SEO AUDIT REAL SCORE: ${Math.round(averageRealScore)}/100`);
+  console.log(`SEO AUDIT RAW SCORE: ${Math.round(averageRawScore)}/100`);
   console.log(`Pages checked: ${pagesChecked}`);
   console.log(`Good: ${good}`);
   console.log(`Medium: ${medium}`);
   console.log(`Bad: ${bad}`);
+  console.log(`Real bad pages: ${realBadPages}`);
+  console.log(`False bad pages: ${falseBadPages}`);
   console.log('');
   console.log(`Listings: ${listingCount}`);
   console.log(`Scholarship detail pages: ${scholarshipCount}`);
@@ -2095,7 +2462,38 @@ async function main() {
   for (const row of topIssueTypes.slice(0, 10)) {
     console.log(`- ${row.issueCode}: ${row.count}`);
   }
+  console.log(`- internal_links_missing (real): ${internalLinksMissingRealCount}`);
+  console.log(`- internal_links_missing (warning/false-positive): ${internalLinksMissingWarningCount}`);
+  console.log(`- eligibility_missing (real): ${eligibilityMissingRealCount}`);
+  console.log(`- eligibility_missing (warning/false-positive): ${eligibilityMissingWarningCount}`);
   console.log('');
+  if (previousReportSummary) {
+    const prevReal =
+      previousReportSummary.realAverageScore ??
+      previousReportSummary.averageScore ??
+      null;
+    const prevRaw =
+      previousReportSummary.rawAverageScore ??
+      previousReportSummary.averageScore ??
+      null;
+    const prevFalseBad = previousReportSummary.falseBadPages ?? 0;
+    const prevBad =
+      previousReportSummary.realBadPages ??
+      previousReportSummary.bad ??
+      null;
+    console.log('Previous vs new:');
+    if (prevReal != null) {
+      console.log(`- real average score: ${prevReal} -> ${averageRealScore}`);
+    }
+    if (prevRaw != null) {
+      console.log(`- raw average score: ${prevRaw} -> ${averageRawScore}`);
+    }
+    if (prevBad != null) {
+      console.log(`- real bad pages: ${prevBad} -> ${realBadPages}`);
+    }
+    console.log(`- false bad pages: ${prevFalseBad} -> ${falseBadPages}`);
+    console.log('');
+  }
   console.log(`JSON report: ${REPORT_JSON_PATH}`);
   console.log(`CSV report: ${REPORT_CSV_PATH}`);
   console.log(`Action plan: ${ACTION_PLAN_JSON_PATH}`);
@@ -2104,9 +2502,10 @@ async function main() {
     await notifyAuditProgressTelegram(
       [
         '🏁 SEO audit finished',
-        `Score: ${Math.round(averageScore)}/100`,
+        `Real score: ${Math.round(averageRealScore)}/100`,
+        `Raw score: ${Math.round(averageRawScore)}/100`,
         `Pages checked: ${pagesChecked}`,
-        `Good/Medium/Bad: ${good}/${medium}/${bad}`,
+        `Good/Medium/Bad: ${good}/${medium}/${bad} (real bad=${realBadPages}, false bad=${falseBadPages})`,
         `Warnings: ${reportWarnings.length > 0 ? reportWarnings.join(', ') : 'none'}`
       ].join('\n')
     );

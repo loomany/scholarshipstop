@@ -214,26 +214,26 @@ export async function fetchPublishedEssaysBySlugsOrdered(
     .filter((x): x is EssayListFields => Boolean(x));
 }
 
-export const fetchPublishedEssayBySlug = cache(
-  async (slug: string): Promise<EssayDetailRow | null> => {
-    const raw = slug.trim();
-    if (!raw) return null;
+export async function fetchPublishedEssayBySlug(
+  slug: string
+): Promise<EssayDetailRow | null> {
+  const raw = slug.trim();
+  if (!raw) return null;
 
-    const supabase = createPublicClient();
-    if (!supabase) return null;
-    const { data, error } = await supabase
-      .from('essays')
-      .select(
-        'id, slug, title, content_html, hero_image_url, hero_is_real, sources, faq, meta_description, hub_category_slug, hub_category_label, manual_topic, is_published, created_at, updated_at'
-      )
-      .eq('slug', raw)
-      .eq('is_published', true)
-      .maybeSingle();
+  const supabase = createPublicClient();
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from('essays')
+    .select(
+      'id, slug, title, content_html, hero_image_url, hero_is_real, sources, faq, meta_description, hub_category_slug, hub_category_label, manual_topic, is_published, created_at, updated_at'
+    )
+    .eq('slug', raw)
+    .eq('is_published', true)
+    .maybeSingle();
 
-    if (error) throw new Error(error.message);
-    return data as EssayDetailRow | null;
-  }
-);
+  if (error) throw new Error(error.message);
+  return data as EssayDetailRow | null;
+}
 
 export async function fetchScholarshipRowsForEssay(
   essayId: string,
