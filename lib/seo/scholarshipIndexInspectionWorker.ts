@@ -65,12 +65,41 @@ export async function runScholarshipIndexInspectionBatch(
 
   const list = rows ?? [];
   const results: ScholarshipIndexInspectionResult[] = [];
+  const statusLabel = statuses.join(',');
 
-  for (const row of list) {
+  console.log(
+    '[scholarshipIndexInspection] batch selected',
+    JSON.stringify({
+      statuses,
+      requestedLimit: params.limit,
+      limitApplied,
+      selected: list.length
+    })
+  );
+
+  if (list.length === 0) {
+    console.log(
+      '[scholarshipIndexInspection] nothing to inspect',
+      JSON.stringify({ statuses: statusLabel })
+    );
+  }
+
+  for (let idx = 0; idx < list.length; idx += 1) {
+    const row = list[idx]!;
     const url = scholarshipIndexingUrl({
       id: row.id,
       slug: row.slug
     });
+    console.log(
+      '[scholarshipIndexInspection] inspect start',
+      JSON.stringify({
+        statuses: statusLabel,
+        index: idx + 1,
+        total: list.length,
+        id: row.id,
+        url
+      })
+    );
     const inspection = await checkUrlIndexStatus(url);
     const now = new Date().toISOString();
 
@@ -85,6 +114,16 @@ export async function runScholarshipIndexInspectionBatch(
         indexed: false,
         skipped: inspection.error
       });
+      console.warn(
+        '[scholarshipIndexInspection] inspect error',
+        JSON.stringify({
+          statuses: statusLabel,
+          index: idx + 1,
+          total: list.length,
+          id: row.id,
+          error: inspection.error
+        })
+      );
       continue;
     }
 
@@ -101,6 +140,16 @@ export async function runScholarshipIndexInspectionBatch(
         verdict: inspection.verdict,
         indexed: false
       });
+      console.log(
+        '[scholarshipIndexInspection] not indexed yet',
+        JSON.stringify({
+          statuses: statusLabel,
+          index: idx + 1,
+          total: list.length,
+          id: row.id,
+          verdict: inspection.verdict
+        })
+      );
       continue;
     }
 
@@ -134,6 +183,32 @@ export async function runScholarshipIndexInspectionBatch(
       verdict: inspection.verdict,
       indexed: true
     });
+
+    console.log(
+      '[scholarshipIndexInspection] marked indexed',
+      JSON.stringify({
+        statuses: statusLabel,
+        index: idx + 1,
+        total: list.length,
+        id: row.id,
+        verdict: inspection.verdict
+      })
+    );
+
+    if ((idx + 1) % 5 === 0 || idx + 1 === list.length) {
+      const indexedCount = results.filter((item) => item.indexed).length;
+      const skippedCount = results.filter((item) => Boolean(item.skipped)).length;
+      console.log(
+        '[scholarshipIndexInspection] progress',
+        JSON.stringify({
+          statuses: statusLabel,
+          processed: idx + 1,
+          total: list.length,
+          indexed: indexedCount,
+          skipped: skippedCount
+        })
+      );
+    }
   }
 
   return { scanned: list.length, results, limitApplied };
