@@ -13,6 +13,7 @@ import {
   mapScholarshipRow,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
+import { filterOutCompetitorAggregatorUrls } from '@/lib/providers/enrichProviderDataCore';
 import type { Database, Json } from '@/types_db';
 import { createPublicClient } from '@/utils/supabase/public';
 
@@ -163,7 +164,10 @@ export async function loadProviderProfilePage(
   const displayName = providerRow?.display_name ?? fallbackName;
   const officialUrl = providerRow?.official_url ?? null;
   const aiDescription = effectiveProviderDescription(providerRow);
-  const aiSources = effectiveProviderSources(providerRow);
+  /** Display-only — omit competitor aggregators even if legacy rows still store them in JSON. */
+  const aiSources = filterOutCompetitorAggregatorUrls(
+    effectiveProviderSources(providerRow)
+  );
   const aiFaq = providerRow ? parseProviderAiFaqJson(providerRow.ai_faq) : [];
   const isEnriched = providerRow?.is_enriched ?? false;
 
