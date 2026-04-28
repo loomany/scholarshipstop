@@ -5,6 +5,8 @@
  *   npx tsx scripts/enrich-all-providers.ts
  *   npx tsx scripts/enrich-all-providers.ts --dry-run
  *   npx tsx scripts/enrich-all-providers.ts --limit=20
+ *   npm run providers:enrich -- --no-sync-providers --limit=5
+ *     (skip stats→providers upsert; only enrich existing pending rows)
  *
  * Requires: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
  */
@@ -177,6 +179,9 @@ function parseLimitArg(): number | null {
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const enrichLimit = parseLimitArg();
+  const noSyncProviders =
+    process.argv.includes('--no-sync-providers') ||
+    process.argv.includes('--only-enrich-existing');
   loadEnvFiles();
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -196,70 +201,81 @@ async function main() {
 
   const supabase = createClient<Database>(url, key);
 
-  console.log('Loading provider_scholarship_stats…');
-  const stats = await fetchAllStats(supabase);
-  console.log(`Found ${stats.length} provider slugs in stats view.`);
-  console.log('Loading official provider URLs from scholarships…');
-  const officialUrlsBySlug = await fetchProviderOfficialUrlsBySlug(
-    supabase,
-    stats.map((row) => row.slug)
-  );
-  const sourceUrlsBySlug = await fetchProviderSourceUrlsBySlug(
-    supabase,
-    stats.map((row) => row.slug)
-  );
-  console.log(
-    `Found ${officialUrlsBySlug.size} provider slug(s) with an official URL.`
-  );
+  let officialUrlsBySlug: Map<string, string>;
+  let sourceUrlsBySlug: Map<string, string[]>;
 
-  const upsertRows = stats.map((row) => {
-    const slug = row.slug.trim();
-    const display_name =
-      row.display_name?.trim() || slug.replace(/-/g, ' ');
-    const officialUrl = officialUrlsBySlug.get(slug);
-    return {
-      slug,
-      display_name,
-      ...(officialUrl ? { official_url: officialUrl } : {})
-    };
-  });
+  if (!noSyncProviders) {
+    console.log('Loading provider_scholarship_stats…');
+    const stats = await fetchAllStats(supabase);
+    console.log(`Found ${stats.length} provider slugs in stats view.`);
+    console.log('Loading official provider URLs from scholarships…');
+    officialUrlsBySlug = await fetchProviderOfficialUrlsBySlug(
+      supabase,
+      stats.map((row) => row.slug)
+    );
+    sourceUrlsBySlug = await fetchProviderSourceUrlsBySlug(
+      supabase,
+      stats.map((row) => row.slug)
+    );
+    console.log(
+      `Found ${officialUrlsBySlug.size} provider slug(s) with an official URL.`
+    );
 
-  let synced = 0;
-  const syncedProviderSlugs: string[] = [];
-  if (dryRun) {
-    synced = upsertRows.length;
-    console.log(
-      `[dry-run] would upsert ${synced} row(s) from stats (onConflict slug, ignoreDuplicates).`
-    );
-  } else if (upsertRows.length > 0) {
-    const BATCH = 150;
-    for (let i = 0; i < upsertRows.length; i += BATCH) {
-      const chunk = upsertRows.slice(i, i + BATCH);
-      await upsertProvidersBatchWithRetry(
-        supabase,
-        chunk,
-        `offset ${i}`
-      );
-      synced += chunk.length;
-      syncedProviderSlugs.push(...chunk.map((row) => row.slug));
+    const upsertRows = stats.map((row) => {
+      const slug = row.slug.trim();
+      const display_name =
+        row.display_name?.trim() || slug.replace(/-/g, ' ');
+      const officialUrl = officialUrlsBySlug.get(slug);
+      return {
+        slug,
+        display_name,
+        ...(officialUrl ? { official_url: officialUrl } : {})
+      };
+    });
+
+    let synced = 0;
+    const syncedProviderSlugs: string[] = [];
+    if (dryRun) {
+      synced = upsertRows.length;
       console.log(
-        `Upserted batch ${Math.floor(i / BATCH) + 1} (${chunk.length} rows), cumulative ${synced}/${upsertRows.length}`
+        `[dry-run] would upsert ${synced} row(s) from stats (onConflict slug, ignoreDuplicates).`
       );
-    }
-    console.log(
-      'Sync done: new slugs inserted; existing slugs left unchanged (ignoreDuplicates).'
-    );
-    if (syncedProviderSlugs.length > 0) {
-      const queue = await enqueueProviderUrlsForScript(
-        [...new Set(syncedProviderSlugs.map((s) => s.trim()))],
-        'script:enrich-all-providers:sync'
-      );
+    } else if (upsertRows.length > 0) {
+      const BATCH = 150;
+      for (let i = 0; i < upsertRows.length; i += BATCH) {
+        const chunk = upsertRows.slice(i, i + BATCH);
+        await upsertProvidersBatchWithRetry(
+          supabase,
+          chunk,
+          `offset ${i}`
+        );
+        synced += chunk.length;
+        syncedProviderSlugs.push(...chunk.map((row) => row.slug));
+        console.log(
+          `Upserted batch ${Math.floor(i / BATCH) + 1} (${chunk.length} rows), cumulative ${synced}/${upsertRows.length}`
+        );
+      }
       console.log(
-        `google indexing queue: +${queue.enqueued} provider URL(s), total queued ${queue.total}`
+        'Sync done: new slugs inserted; existing slugs left unchanged (ignoreDuplicates).'
       );
+      if (syncedProviderSlugs.length > 0) {
+        const queue = await enqueueProviderUrlsForScript(
+          [...new Set(syncedProviderSlugs.map((s) => s.trim()))],
+          'script:enrich-all-providers:sync'
+        );
+        console.log(
+          `google indexing queue: +${queue.enqueued} provider URL(s), total queued ${queue.total}`
+        );
+      }
+    } else {
+      console.log('No rows from stats to sync.');
     }
   } else {
-    console.log('No rows from stats to sync.');
+    console.log(
+      '[--no-sync-providers] skipping stats load and stats→providers upsert.'
+    );
+    officialUrlsBySlug = new Map();
+    sourceUrlsBySlug = new Map();
   }
 
   const { data: pending, error: pendErr } = await supabase
@@ -297,6 +313,20 @@ async function main() {
     process.exit(0);
   }
 
+  if (noSyncProviders) {
+    const needSlugs = queue
+      .map((r) => r.slug?.trim())
+      .filter((s): s is string => Boolean(s));
+    console.log(
+      `[--no-sync-providers] loading URL maps for ${needSlugs.length} queued slug(s)…`
+    );
+    officialUrlsBySlug = await fetchProviderOfficialUrlsBySlug(supabase, needSlugs);
+    sourceUrlsBySlug = await fetchProviderSourceUrlsBySlug(supabase, needSlugs);
+    console.log(
+      `--no-sync providers: ${officialUrlsBySlug.size} slug(s) with an official URL in scholarships.`
+    );
+  }
+
   let done = 0;
   const enrichedProviderSlugs: string[] = [];
   for (const row of queue) {
@@ -316,6 +346,8 @@ async function main() {
     }
 
     const enriched = await enrichProviderData(name, {
+      officialWebsiteUrl: officialUrl,
+      providerSlug: slug,
       sourceUrls: [
         ...(officialUrl ? [officialUrl] : []),
         ...sourceUrls
