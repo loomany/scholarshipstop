@@ -9,6 +9,7 @@ import {
   NATIONWIDE_LOCATION
 } from '@/lib/scholarships/scholarshipCatalog';
 import { isInternationalFriendlyScholarship } from '@/lib/scholarships/internationalFriendly';
+import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
 export type DeadlinePreset = 'any' | 'lt1d' | 'd1_7' | 'w1_4' | 'gt4w';
 
@@ -108,13 +109,8 @@ export function parseScholarshipAmount(s: Scholarship): number {
 }
 
 function deadlineMs(s: Scholarship): number | null {
-  if (s.deadlineAt) {
-    const t = new Date(s.deadlineAt).getTime();
-    if (!Number.isNaN(t)) return t;
-  }
-  const p = Date.parse(s.deadline);
-  if (!Number.isNaN(p)) return p;
-  return null;
+  const d = parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
+  return d ? d.getTime() : null;
 }
 
 export function daysUntilDeadline(s: Scholarship): number | null {

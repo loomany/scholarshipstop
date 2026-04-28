@@ -13,6 +13,10 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/server';
 import { legacyScholarshipSlugCandidates } from '@/lib/seo/legacyScholarshipSlugAliases';
 import { createPublicClient } from '@/utils/supabase/public';
+import {
+  deadlineTextAllowsCalendarSemantics,
+  isPhantomCalendarYear2001
+} from '@/lib/scholarships/scholarshipDeadlineTrust';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
 
@@ -379,9 +383,21 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
   );
   const awardText = row.award_amount_text?.trim() || '';
   const deadlineText = row.deadline_text?.trim() || '';
-  const deadlineAt = row.deadline_date
-    ? `${row.deadline_date}T12:00:00.000Z`
-    : undefined;
+  const deadlineAtIso =
+    row.deadline_date != null
+      ? `${row.deadline_date}T12:00:00.000Z`
+      : undefined;
+  const textAllowsCalendar = deadlineTextAllowsCalendarSemantics(
+    row.deadline_text ?? undefined
+  );
+  const phantomDeadline =
+    deadlineAtIso != null &&
+    isPhantomCalendarYear2001(deadlineAtIso, row.deadline_text ?? undefined);
+  /** Omit deadline_date when listing text has no year (show text only); omit phantom 2001 rows. */
+  const deadlineAt =
+    deadlineAtIso && textAllowsCalendar && !phantomDeadline
+      ? deadlineAtIso
+      : undefined;
 
   const dbCatalog: ScholarshipDbCatalogFields = {
     seo_tags: row.seo_tags ?? null,
@@ -459,10 +475,15 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     internationalFriendlyListing: row.international_friendly_listing === true,
     scholarshipStatus: row.scholarship_status?.trim() || undefined,
     daysUntilDeadline:
-      row.days_until_deadline != null && !Number.isNaN(row.days_until_deadline)
-        ? row.days_until_deadline
-        : undefined,
-    deadlineBucket: row.deadline_bucket?.trim() || undefined,
+      !textAllowsCalendar || phantomDeadline
+        ? undefined
+        : row.days_until_deadline != null && !Number.isNaN(row.days_until_deadline)
+          ? row.days_until_deadline
+          : undefined,
+    deadlineBucket:
+      !textAllowsCalendar || phantomDeadline
+        ? undefined
+        : row.deadline_bucket?.trim() || undefined,
     awardAmountNumericSort:
       row.award_amount_numeric_sort != null &&
       !Number.isNaN(Number(row.award_amount_numeric_sort))
@@ -824,11 +845,27 @@ export async function fetchActiveScholarshipsByInstitutionIdForListing(
       row.days_until_deadline != null && !Number.isNaN(row.days_until_deadline)
         ? row.days_until_deadline
         : null;
-    const deadlineMs = row.deadline_date
-      ? Date.parse(`${row.deadline_date}T23:59:59.999Z`)
-      : null;
+    const textAllowsCalendar = deadlineTextAllowsCalendarSemantics(
+      row.deadline_text ?? undefined
+    );
+    const atIso = row.deadline_date
+      ? `${row.deadline_date}T12:00:00.000Z`
+      : undefined;
+    const phantom =
+      row.deadline_date != null &&
+      isPhantomCalendarYear2001(atIso, row.deadline_text ?? undefined);
+    const deadlineMs =
+      row.deadline_date && textAllowsCalendar && !phantom
+        ? Date.parse(`${row.deadline_date}T23:59:59.999Z`)
+        : null;
     const isExpired =
-      daysUntil != null ? daysUntil < 0 : deadlineMs != null ? deadlineMs < now : false;
+      textAllowsCalendar && !phantom
+        ? daysUntil != null
+          ? daysUntil < 0
+          : deadlineMs != null
+            ? deadlineMs < now
+            : false
+        : false;
     return { row, isExpired };
   });
 

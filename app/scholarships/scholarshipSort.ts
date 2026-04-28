@@ -1,4 +1,5 @@
 import type { Scholarship } from './scholarshipsData';
+import { scholarshipDeadlineSortMs } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
 export type SortOption =
   | 'magic'
@@ -54,13 +55,7 @@ function parseAmount(s: Scholarship): number {
 }
 
 function deadlineMs(s: Scholarship): number {
-  if (s.deadlineAt) {
-    const t = new Date(s.deadlineAt).getTime();
-    if (!Number.isNaN(t)) return t;
-  }
-  const p = Date.parse(s.deadline);
-  if (!Number.isNaN(p)) return p;
-  return Number.MAX_SAFE_INTEGER;
+  return scholarshipDeadlineSortMs(s.deadlineAt, s.deadline);
 }
 
 function reqSignalCount(s: Scholarship): number {

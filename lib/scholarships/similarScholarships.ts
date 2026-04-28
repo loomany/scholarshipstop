@@ -2,6 +2,7 @@ import {
   formatScholarshipAwardDisplay,
   type Scholarship
 } from '@/app/scholarships/scholarshipsData';
+import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 import {
   isScholarshipUSA,
   normalizeCategoryId,
@@ -28,13 +29,8 @@ function sameCategorySlug(a: Scholarship, canonicalSlug: string): boolean {
 }
 
 function deadlineMs(sch: Scholarship): number {
-  if (sch.deadlineAt) {
-    const t = new Date(sch.deadlineAt).getTime();
-    if (!Number.isNaN(t)) return t;
-  }
-  const p = Date.parse(sch.deadline);
-  if (!Number.isNaN(p)) return p;
-  return Number.MAX_SAFE_INTEGER;
+  const d = parseScholarshipDeadlineAnchor(sch.deadlineAt, sch.deadline);
+  return d ? d.getTime() : Number.MAX_SAFE_INTEGER;
 }
 
 function recentMs(sch: Scholarship): number {
@@ -48,9 +44,9 @@ function recentMs(sch: Scholarship): number {
 
 /** Есть парсируемый дедлайн и он уже в прошлом. */
 export function scholarshipDeadlineHasPassed(s: Scholarship): boolean {
-  const t = deadlineMs(s);
-  if (t === Number.MAX_SAFE_INTEGER) return false;
-  return t < Date.now();
+  const d = parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
+  if (!d) return false;
+  return d.getTime() < Date.now();
 }
 
 export function formatScholarshipAwardLine(s: Scholarship): string {

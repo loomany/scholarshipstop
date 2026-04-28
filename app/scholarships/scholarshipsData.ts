@@ -1,4 +1,9 @@
 import type { ScholarshipCatalogView } from '@/lib/scholarships/scholarshipCatalogTypes';
+import {
+  deadlineTextAllowsCalendarSemantics,
+  isPhantomCalendarYear2001,
+  parseScholarshipDeadlineAnchor
+} from '@/lib/scholarships/scholarshipDeadlineTrust';
 
 /** Parsed from `scholarships.raw_data.catalog_ui` for human-readable catalog UI. */
 export type ScholarshipCatalogUi = {
@@ -325,17 +330,7 @@ export function isScholarshipDeadlineDateOnlyIso(iso: string | undefined): boole
 }
 
 function scholarshipDeadlineAnchorDate(s: Scholarship): Date | null {
-  const iso = s.deadlineAt?.trim();
-  if (iso) {
-    const d = new Date(iso);
-    if (!Number.isNaN(d.getTime())) return d;
-  }
-  const raw = s.deadline?.trim();
-  if (raw && raw !== '—') {
-    const ts = Date.parse(raw);
-    if (!Number.isNaN(ts)) return new Date(ts);
-  }
-  return null;
+  return parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
 }
 
 /** Pulls a time fragment from listing `deadline` text (e.g. "11:59 PM UTC"); does not invent times. */
@@ -437,9 +432,21 @@ export function getScholarshipDeadlineDisplayParts(s: Scholarship): {
 
 /** Full deadline line for card tooltip; uses `deadlineAt` when parseable, else raw `deadline`. */
 export function formatDeadlineTooltipText(s: Scholarship): string {
-  if (s.deadlineAt) {
-    const d = new Date(s.deadlineAt);
-    if (!Number.isNaN(d.getTime())) {
+  const rawLine = s.deadline?.trim();
+  if (
+    rawLine &&
+    rawLine !== '—' &&
+    !deadlineTextAllowsCalendarSemantics(rawLine)
+  ) {
+    return rawLine;
+  }
+  const iso = s.deadlineAt?.trim();
+  if (iso) {
+    const d = new Date(iso);
+    if (
+      !Number.isNaN(d.getTime()) &&
+      !isPhantomCalendarYear2001(iso, s.deadline)
+    ) {
       const weekday = d.toLocaleDateString('en-US', { weekday: 'long' });
       const month = d.toLocaleDateString('en-US', { month: 'long' });
       const day = d.getDate();

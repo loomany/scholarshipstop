@@ -55,6 +55,7 @@ import {
   type MoreFiltersJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
+import { scholarshipDeadlineSortMs } from '@/lib/scholarships/scholarshipDeadlineTrust';
 import type { createClient } from '@/utils/supabase/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -1643,12 +1644,14 @@ export async function executeScholarshipListQuery(
             Number.isNaN(b.scholarship.daysUntilDeadline)
               ? Number.POSITIVE_INFINITY
               : b.scholarship.daysUntilDeadline;
-          const deadlineA = a.scholarship.deadlineAt
-            ? Date.parse(a.scholarship.deadlineAt)
-            : Number.POSITIVE_INFINITY;
-          const deadlineB = b.scholarship.deadlineAt
-            ? Date.parse(b.scholarship.deadlineAt)
-            : Number.POSITIVE_INFINITY;
+          const deadlineA = scholarshipDeadlineSortMs(
+            a.scholarship.deadlineAt,
+            a.scholarship.deadline
+          );
+          const deadlineB = scholarshipDeadlineSortMs(
+            b.scholarship.deadlineAt,
+            b.scholarship.deadline
+          );
           const verifiedA = a.scholarship.verified ? 1 : 0;
           const verifiedB = b.scholarship.verified ? 1 : 0;
 

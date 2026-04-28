@@ -15,6 +15,7 @@ import {
 import { resolveScholarshipCategorySlug } from '@/lib/scholarships/similarScholarships';
 import { getURL } from '@/utils/helpers';
 import { generateScholarshipSlugLayoutMetadata } from '@/app/scholarships/scholarshipSlugLayoutMetadata';
+import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -64,18 +65,8 @@ function programDescriptionForSchema(
 }
 
 function scholarshipDeadlineIso(s: Scholarship): string | null {
-  const iso = s.deadlineAt?.trim();
-  if (iso) {
-    const parsed = new Date(iso);
-    if (!Number.isNaN(parsed.getTime())) {
-      return parsed.toISOString();
-    }
-  }
-  const raw = s.deadline?.trim();
-  if (!raw || raw === '—') return null;
-  const parsedMs = Date.parse(raw);
-  if (Number.isNaN(parsedMs)) return null;
-  return new Date(parsedMs).toISOString();
+  const anchor = parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
+  return anchor ? anchor.toISOString() : null;
 }
 
 function legacyFaqItems(s: Scholarship): { question: string; answer: string }[] {

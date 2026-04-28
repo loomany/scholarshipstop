@@ -2,6 +2,7 @@ import {
   formatScholarshipAwardDisplay,
   type Scholarship
 } from '@/app/scholarships/scholarshipsData';
+import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
 function joinListNatural(items: string[]): string {
   const x = items.filter(Boolean);
@@ -12,28 +13,17 @@ function joinListNatural(items: string[]): string {
 }
 
 function formatDeadlinePhrase(s: Scholarship): string | null {
+  const anchor = parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
+  if (anchor) {
+    return `Plan to apply by ${anchor.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    })}.`;
+  }
   const raw = s.deadline?.trim();
   if (raw && raw !== '—') {
-    const ts = Date.parse(raw);
-    if (!Number.isNaN(ts)) {
-      const d = new Date(ts);
-      return `Plan to apply by ${d.toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      })}.`;
-    }
     return `Plan to apply by ${raw}.`;
-  }
-  if (s.deadlineAt) {
-    const d = new Date(s.deadlineAt);
-    if (!Number.isNaN(d.getTime())) {
-      return `Plan to apply by ${d.toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      })}.`;
-    }
   }
   return null;
 }

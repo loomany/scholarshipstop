@@ -405,6 +405,17 @@ def _enforce_non_monetary_for_award_signals(record: dict[str, Any]) -> None:
         record["payout_method"] = "non_monetary"
 
 
+def _deadline_text_allows_calendar_date(deadline_text: str | None) -> bool:
+    """
+    Empty or em-dash-only text: calendar may rely on deadline_date alone.
+    Non-empty text without a four-digit year: do not persist or derive calendar fields.
+    """
+    s = (deadline_text or "").strip()
+    if not s or s == "—":
+        return True
+    return bool(re.search(r"\b(19|20)\d{2}\b", s))
+
+
 def _deadline_fields(
     deadline_date: str | None,
     status_text: str | None,
@@ -1040,6 +1051,12 @@ def apply_normalization(record: dict[str, Any]) -> None:
 
     prov = record.get("provider_name") or ""
     record["provider_slug"] = _slugify(str(prov), None) if prov else None
+
+    if (
+        record.get("deadline_date") is not None
+        and not _deadline_text_allows_calendar_date(record.get("deadline_text"))
+    ):
+        record["deadline_date"] = None
 
     days, d_bucket, sch_status = _deadline_fields(
         record.get("deadline_date"),
