@@ -11,6 +11,8 @@
  *   npm run providers:enrich -- --no-sync-providers --only-slug=a,b,c --force
  * Bounded full-table re-enrich (FIFO by created_at; requires explicit --limit):
  *   npm run providers:enrich -- --no-sync-providers --limit=5 --force
+ * Large bounded run (e.g. --limit=100000 --force); each row logs https://scholarshiptop.com/providers/{slug}.
+ * Override log base URL: PROVIDER_ENRICH_LOG_SITE_URL=https://…
  *
  * Requires: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
  */
@@ -63,6 +65,17 @@ const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships'
 
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+/**
+ * Profile URL printed for each enriched row — defaults to production so logs stay
+ * clickable when NEXT_PUBLIC_SITE_URL is ngrok/local. Override with PROVIDER_ENRICH_LOG_SITE_URL.
+ */
+function providerPublicProfileUrl(slug: string): string {
+  const origin =
+    process.env.PROVIDER_ENRICH_LOG_SITE_URL?.trim() ||
+    'https://scholarshiptop.com';
+  return `${origin.replace(/\/+$/, '')}/providers/${encodeURIComponent(slug)}`;
 }
 
 /** PostgREST sometimes returns HTML bodies (502/Cloudflare) as the error message. */
@@ -465,6 +478,7 @@ async function main() {
     console.log(
       `[${done + 1}/${queue.length}] Processing provider: ${name || '(missing display name)'} (${slug})`
     );
+    console.log(`[${done + 1}/${queue.length}] ${providerPublicProfileUrl(slug)}`);
     if (!name) {
       console.log(
         `[${done + 1}/${queue.length}] FAIL display name is missing; provider left pending.`
