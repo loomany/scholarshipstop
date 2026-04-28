@@ -14,6 +14,9 @@
  * Large bounded run (e.g. --limit=100000 --force); each row logs https://scholarshiptop.com/providers/{slug}.
  * Override log base URL: PROVIDER_ENRICH_LOG_SITE_URL=https://…
  *
+ * With --force, rows already successfully written (is_enriched / enriched_at + text) are skipped so a
+ * restarted run continues where a crash left off. To re-process everyone: add --re-enrich-all.
+ *
  * Requires: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
  */
 
@@ -76,6 +79,20 @@ function providerPublicProfileUrl(slug: string): string {
     process.env.PROVIDER_ENRICH_LOG_SITE_URL?.trim() ||
     'https://scholarshiptop.com';
   return `${origin.replace(/\/+$/, '')}/providers/${encodeURIComponent(slug)}`;
+}
+
+/** Matches a row after a successful buildProviderEnrichmentWritePatch (resume after crash mid-run). */
+function isProviderEnrichmentPersisted(row: {
+  description?: string | null;
+  ai_description?: string | null;
+  is_enriched?: boolean | null;
+  enriched_at?: string | null;
+}): boolean {
+  const text =
+    row.description?.trim() || row.ai_description?.trim() || '';
+  if (!text) return false;
+  if (row.is_enriched === true) return true;
+  return Boolean(row.enriched_at?.trim());
 }
 
 /** PostgREST sometimes returns HTML bodies (502/Cloudflare) as the error message. */
@@ -225,6 +242,7 @@ async function main() {
   const enrichLimit = parseLimitArg();
   const onlySlugs = parseOnlySlugList();
   const forceReenrich = process.argv.includes('--force');
+  const reEnrichAll = process.argv.includes('--re-enrich-all');
   const noSyncProviders =
     process.argv.includes('--no-sync-providers') ||
     process.argv.includes('--only-enrich-existing');
@@ -339,14 +357,20 @@ async function main() {
     display_name: string | null;
     ai_description: string | null;
     description: string | null;
+    is_enriched?: boolean | null;
+    enriched_at?: string | null;
   };
 
   let queue: QueueRow[];
+  /** How many forced-queue rows skipped as already persisted (for empty-queue messaging). */
+  let resumeDroppedAlreadyEnriched = 0;
 
   if (forceReenrich && onlySlugs.length > 0) {
     const { data, error: loadErr } = await supabase
       .from('providers')
-      .select('id, slug, display_name, ai_description, description')
+      .select(
+        'id, slug, display_name, ai_description, description, is_enriched, enriched_at'
+      )
       .in('slug', onlySlugs)
       .order('created_at', { ascending: true });
     if (loadErr) {
@@ -382,7 +406,9 @@ async function main() {
       const take = Math.min(PAGE, remaining);
       const { data: forcedRows, error: forcedErr } = await supabase
         .from('providers')
-        .select('id, slug, display_name, ai_description, description')
+        .select(
+          'id, slug, display_name, ai_description, description, is_enriched, enriched_at'
+        )
         .not('slug', 'is', null)
         .order('created_at', { ascending: true })
         .range(from, from + take - 1);
@@ -443,12 +469,29 @@ async function main() {
     }
   }
 
+  if (forceReenrich && !reEnrichAll && queue.length > 0) {
+    const before = queue.length;
+    queue = queue.filter((r) => !isProviderEnrichmentPersisted(r));
+    resumeDroppedAlreadyEnriched = before - queue.length;
+    if (resumeDroppedAlreadyEnriched > 0) {
+      console.log(
+        `[resume] skipping ${resumeDroppedAlreadyEnriched} provider(s) already persisted as enriched (--re-enrich-all disables this)`
+      );
+    }
+  }
+
   if (queue.length === 0) {
-    console.log(
-      onlySlugs.length && !forceReenrich
-        ? 'No matching pending providers. Use --force with --only-slug=... to re-enrich providers that already have ai_description.'
-        : 'No providers to enrich. Exiting...'
-    );
+    if (resumeDroppedAlreadyEnriched > 0) {
+      console.log(
+        'No providers left to enrich — every loaded row was already persisted (--re-enrich-all to redo). Exiting.'
+      );
+    } else {
+      console.log(
+        onlySlugs.length && !forceReenrich
+          ? 'No matching pending providers. Use --force with --only-slug=... to re-enrich providers that already have ai_description.'
+          : 'No providers to enrich. Exiting...'
+      );
+    }
     process.exit(0);
   }
 
