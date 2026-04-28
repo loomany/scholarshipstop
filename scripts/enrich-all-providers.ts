@@ -5,6 +5,10 @@
  *   npx tsx scripts/enrich-all-providers.ts
  *   npx tsx scripts/enrich-all-providers.ts --dry-run
  *   npx tsx scripts/enrich-all-providers.ts --limit=20
+ *   npm run providers:enrich -- --no-sync-providers --limit=5
+ *     (skip stats→providers upsert; only enrich existing pending rows)
+ * Re-enrich specific slugs even when ai_description is already filled:
+ *   npm run providers:enrich -- --no-sync-providers --only-slug=a,b,c --force
  *
  * Requires: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
  */
@@ -19,6 +23,7 @@ import {
   fetchProviderOfficialUrlsBySlug,
   fetchProviderSourceUrlsBySlug
 } from '../lib/providers/providerOfficialUrl';
+import { buildProviderEnrichmentWritePatch } from '../lib/providers/providerEnrichmentStorageUpdate';
 import { enqueueProviderUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
 
@@ -173,10 +178,49 @@ function parseLimitArg(): number | null {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
+function parseOnlySlugList(): string[] {
+  const raw = process.argv.find((a) => a.startsWith('--only-slug='));
+  if (!raw) return [];
+  return raw
+    .slice('--only-slug='.length)
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+/** Skip re-generation when canonical copy already looks like a solid org profile. */
+function isGoodDescription(text: string | null | undefined): boolean {
+  if (!text) return false;
+  const t = text.trim();
+  if (!t) return false;
+
+  const wordCount = t.split(/\s+/).filter(Boolean).length;
+  const lower = t.toLowerCase();
+
+  return (
+    wordCount >= 180 &&
+    !lower.includes('publicly described') &&
+    !lower.includes('publicly presented') &&
+    !lower.includes('as reflected')
+  );
+}
+
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const enrichLimit = parseLimitArg();
+  const onlySlugs = parseOnlySlugList();
+  const forceReenrich = process.argv.includes('--force');
+  const noSyncProviders =
+    process.argv.includes('--no-sync-providers') ||
+    process.argv.includes('--only-enrich-existing');
   loadEnvFiles();
+
+  if (forceReenrich && onlySlugs.length === 0) {
+    console.error(
+      'Refusing: --force requires --only-slug=slug1,slug2,... (prevents accidental full re-enrich).'
+    );
+    process.exit(1);
+  }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
@@ -195,90 +239,165 @@ async function main() {
 
   const supabase = createClient<Database>(url, key);
 
-  console.log('Loading provider_scholarship_stats…');
-  const stats = await fetchAllStats(supabase);
-  console.log(`Found ${stats.length} provider slugs in stats view.`);
-  console.log('Loading official provider URLs from scholarships…');
-  const officialUrlsBySlug = await fetchProviderOfficialUrlsBySlug(
-    supabase,
-    stats.map((row) => row.slug)
-  );
-  const sourceUrlsBySlug = await fetchProviderSourceUrlsBySlug(
-    supabase,
-    stats.map((row) => row.slug)
-  );
-  console.log(
-    `Found ${officialUrlsBySlug.size} provider slug(s) with an official URL.`
-  );
+  let officialUrlsBySlug: Map<string, string>;
+  let sourceUrlsBySlug: Map<string, string[]>;
 
-  const upsertRows = stats.map((row) => {
-    const slug = row.slug.trim();
-    const display_name =
-      row.display_name?.trim() || slug.replace(/-/g, ' ');
-    const officialUrl = officialUrlsBySlug.get(slug);
-    return {
-      slug,
-      display_name,
-      ...(officialUrl ? { official_url: officialUrl } : {})
-    };
-  });
+  if (!noSyncProviders) {
+    console.log('Loading provider_scholarship_stats…');
+    const stats = await fetchAllStats(supabase);
+    console.log(`Found ${stats.length} provider slugs in stats view.`);
+    console.log('Loading official provider URLs from scholarships…');
+    officialUrlsBySlug = await fetchProviderOfficialUrlsBySlug(
+      supabase,
+      stats.map((row) => row.slug)
+    );
+    sourceUrlsBySlug = await fetchProviderSourceUrlsBySlug(
+      supabase,
+      stats.map((row) => row.slug)
+    );
+    console.log(
+      `Found ${officialUrlsBySlug.size} provider slug(s) with an official URL.`
+    );
 
-  let synced = 0;
-  const syncedProviderSlugs: string[] = [];
-  if (dryRun) {
-    synced = upsertRows.length;
-    console.log(
-      `[dry-run] would upsert ${synced} row(s) from stats (onConflict slug, ignoreDuplicates).`
-    );
-  } else if (upsertRows.length > 0) {
-    const BATCH = 150;
-    for (let i = 0; i < upsertRows.length; i += BATCH) {
-      const chunk = upsertRows.slice(i, i + BATCH);
-      await upsertProvidersBatchWithRetry(
-        supabase,
-        chunk,
-        `offset ${i}`
-      );
-      synced += chunk.length;
-      syncedProviderSlugs.push(...chunk.map((row) => row.slug));
+    const upsertRows = stats.map((row) => {
+      const slug = row.slug.trim();
+      const display_name =
+        row.display_name?.trim() || slug.replace(/-/g, ' ');
+      const officialUrl = officialUrlsBySlug.get(slug);
+      return {
+        slug,
+        display_name,
+        ...(officialUrl ? { official_url: officialUrl } : {})
+      };
+    });
+
+    let synced = 0;
+    const syncedProviderSlugs: string[] = [];
+    if (dryRun) {
+      synced = upsertRows.length;
       console.log(
-        `Upserted batch ${Math.floor(i / BATCH) + 1} (${chunk.length} rows), cumulative ${synced}/${upsertRows.length}`
+        `[dry-run] would upsert ${synced} row(s) from stats (onConflict slug, ignoreDuplicates).`
       );
-    }
-    console.log(
-      'Sync done: new slugs inserted; existing slugs left unchanged (ignoreDuplicates).'
-    );
-    if (syncedProviderSlugs.length > 0) {
-      const queue = await enqueueProviderUrlsForScript(
-        [...new Set(syncedProviderSlugs.map((s) => s.trim()))],
-        'script:enrich-all-providers:sync'
-      );
+    } else if (upsertRows.length > 0) {
+      const BATCH = 150;
+      for (let i = 0; i < upsertRows.length; i += BATCH) {
+        const chunk = upsertRows.slice(i, i + BATCH);
+        await upsertProvidersBatchWithRetry(
+          supabase,
+          chunk,
+          `offset ${i}`
+        );
+        synced += chunk.length;
+        syncedProviderSlugs.push(...chunk.map((row) => row.slug));
+        console.log(
+          `Upserted batch ${Math.floor(i / BATCH) + 1} (${chunk.length} rows), cumulative ${synced}/${upsertRows.length}`
+        );
+      }
       console.log(
-        `google indexing queue: +${queue.enqueued} provider URL(s), total queued ${queue.total}`
+        'Sync done: new slugs inserted; existing slugs left unchanged (ignoreDuplicates).'
       );
+      if (syncedProviderSlugs.length > 0) {
+        const queue = await enqueueProviderUrlsForScript(
+          [...new Set(syncedProviderSlugs.map((s) => s.trim()))],
+          'script:enrich-all-providers:sync'
+        );
+        console.log(
+          `google indexing queue: +${queue.enqueued} provider URL(s), total queued ${queue.total}`
+        );
+      }
+    } else {
+      console.log('No rows from stats to sync.');
     }
   } else {
-    console.log('No rows from stats to sync.');
+    console.log(
+      '[--no-sync-providers] skipping stats load and stats→providers upsert.'
+    );
+    officialUrlsBySlug = new Map();
+    sourceUrlsBySlug = new Map();
   }
 
-  const { data: pending, error: pendErr } = await supabase
-    .from('providers')
-    .select('id, slug, display_name, ai_description')
-    .or('ai_description.is.null,ai_description.eq.')
-    .order('created_at', { ascending: true });
+  type QueueRow = {
+    id: string;
+    slug: string | null;
+    display_name: string | null;
+    ai_description: string | null;
+    description: string | null;
+  };
 
-  if (pendErr) {
-    console.error(pendErr);
-    process.exit(1);
+  let queue: QueueRow[];
+
+  if (forceReenrich && onlySlugs.length > 0) {
+    const { data, error: loadErr } = await supabase
+      .from('providers')
+      .select('id, slug, display_name, ai_description, description')
+      .in('slug', onlySlugs)
+      .order('created_at', { ascending: true });
+    if (loadErr) {
+      console.error(loadErr);
+      process.exit(1);
+    }
+    queue = (data ?? []) as QueueRow[];
+    console.log(
+      `[--force --only-slug] loaded ${queue.length} provider row(s) for re-enrichment (${onlySlugs.length} slug(s) requested).`
+    );
+    if (queue.length < onlySlugs.length) {
+      const found = new Set(
+        queue.map((r) => r.slug?.trim()).filter(Boolean) as string[]
+      );
+      const missing = onlySlugs.filter((s) => !found.has(s));
+      if (missing.length > 0) {
+        console.log(`Warning: slug(s) not found in providers: ${missing.join(', ')}`);
+      }
+    }
+  } else {
+    const { data: pending, error: pendErr } = await supabase
+      .from('providers')
+      .select('id, slug, display_name, ai_description, description')
+      .or('ai_description.is.null,ai_description.eq.')
+      .order('created_at', { ascending: true });
+
+    if (pendErr) {
+      console.error(pendErr);
+      process.exit(1);
+    }
+
+    queue = (pending ?? []) as QueueRow[];
+    console.log(
+      `Found ${queue.length} provider(s) with empty ai_description ready for enrichment.`
+    );
+
+    if (onlySlugs.length > 0) {
+      const want = new Set(onlySlugs.map((s) => s.trim()));
+      const before = queue.length;
+      queue = queue.filter((r) => r.slug && want.has(r.slug.trim()));
+      console.log(
+        `--only-slug: ${queue.length}/${before} pending provider(s) matched.`
+      );
+    }
+
+    if (!forceReenrich && queue.length > 0) {
+      const kept: QueueRow[] = [];
+      for (const row of queue) {
+        if (isGoodDescription(row.description)) {
+          const slug = row.slug?.trim();
+          console.log('[skip:good-description]', slug || row.id);
+          continue;
+        }
+        kept.push(row);
+      }
+      queue = kept;
+      console.log(
+        `After good-description gate: ${queue.length} provider(s) still queued for OpenAI enrich.`
+      );
+    }
   }
-
-  let queue = pending ?? [];
-  console.log(
-    `Found ${queue.length} provider(s) with empty ai_description ready for enrichment.`
-  );
 
   if (queue.length === 0) {
-    console.log('No new providers to enrich. Exiting...');
+    console.log(
+      onlySlugs.length && !forceReenrich
+        ? 'No matching pending providers. Use --force with --only-slug=... to re-enrich providers that already have ai_description.'
+        : 'No providers to enrich. Exiting...'
+    );
     process.exit(0);
   }
 
@@ -294,6 +413,20 @@ async function main() {
   if (dryRun) {
     console.log('Dry run: skipping OpenAI calls.');
     process.exit(0);
+  }
+
+  if (noSyncProviders) {
+    const needSlugs = queue
+      .map((r) => r.slug?.trim())
+      .filter((s): s is string => Boolean(s));
+    console.log(
+      `[--no-sync-providers] loading URL maps for ${needSlugs.length} queued slug(s)…`
+    );
+    officialUrlsBySlug = await fetchProviderOfficialUrlsBySlug(supabase, needSlugs);
+    sourceUrlsBySlug = await fetchProviderSourceUrlsBySlug(supabase, needSlugs);
+    console.log(
+      `--no-sync providers: ${officialUrlsBySlug.size} slug(s) with an official URL in scholarships.`
+    );
   }
 
   let done = 0;
@@ -315,6 +448,8 @@ async function main() {
     }
 
     const enriched = await enrichProviderData(name, {
+      officialWebsiteUrl: officialUrl,
+      providerSlug: slug,
       sourceUrls: [
         ...(officialUrl ? [officialUrl] : []),
         ...sourceUrls
@@ -330,17 +465,26 @@ async function main() {
       continue;
     }
 
+    if (enriched.postQualityPassed !== true) {
+      console.log(
+        `[${done + 1}/${queue.length}] SKIP postQualityPassed=false; provider left pending.`
+      );
+      done += 1;
+      continue;
+    }
+
     const { error: upErr } = await supabase
       .from('providers')
-      .update({
-        ai_description: description,
-        ...(officialUrl ? { official_url: officialUrl } : {}),
-        ai_sources: sources,
-        ai_faq: enriched.faq,
-        state: enriched.state,
-        is_enriched: true,
-        updated_at: new Date().toISOString()
-      })
+      .update(
+        buildProviderEnrichmentWritePatch({
+          description,
+          sources,
+          faq: enriched.faq,
+          state: enriched.state,
+          officialUrl: officialUrl ?? undefined,
+          postQualityPassed: true
+        })
+      )
       .eq('id', row.id);
 
     if (upErr) {

@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { enrichProviderData } from '@/lib/providers/enrichProviderDataCore';
+import { buildProviderEnrichmentWritePatch } from '@/lib/providers/providerEnrichmentStorageUpdate';
 import {
   fetchProviderOfficialUrlsBySlug,
   fetchProviderSourceUrlsBySlug
@@ -67,29 +68,39 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
     }
 
     const enriched = await enrichProviderData(name, {
+      officialWebsiteUrl: officialUrl,
+      providerSlug: row.slug?.trim() || null,
       sourceUrls: [
         ...(officialUrl ? [officialUrl] : []),
         ...sourceUrls
       ]
     });
     const description = enriched.description?.trim() || '';
-    const sources = enriched.sources.filter(Boolean);
-    if (!description || sources.length === 0) {
+    const sources = (
+      Array.isArray(enriched.sources) ? enriched.sources : []
+    ).filter(Boolean);
+    if (!description) {
+      processed += 1;
+      continue;
+    }
+
+    if (enriched.postQualityPassed !== true) {
       processed += 1;
       continue;
     }
 
     const { error: updateError } = await admin
       .from('providers')
-      .update({
-        ai_description: description,
-        ...(officialUrl ? { official_url: officialUrl } : {}),
-        ai_sources: sources,
-        ai_faq: enriched.faq,
-        state: enriched.state,
-        is_enriched: true,
-        updated_at: new Date().toISOString()
-      })
+      .update(
+        buildProviderEnrichmentWritePatch({
+          description,
+          sources,
+          faq: enriched.faq,
+          state: enriched.state,
+          officialUrl: officialUrl ?? undefined,
+          postQualityPassed: true
+        })
+      )
       .eq('id', row.id);
     if (updateError) {
       processed += 1;
