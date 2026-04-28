@@ -58,6 +58,10 @@ export type ProviderEnrichmentRunDiagnostics = {
 };
 
 const VALID_US_STATE_CODES = new Set(Object.keys(US_STATE_CODE_TO_NAME));
+/** Target token budget for fetched page HTML→text sent to the model (~4 chars per token ≈ UTF-8 Latin). */
+const MAX_SOURCE_TOKENS = 1500;
+/** ~{@link MAX_SOURCE_TOKENS} tokens in characters — primary cap before assembling prompt (word-safe truncation). */
+const MAX_SOURCE_INPUT_CHARS = MAX_SOURCE_TOKENS * 4;
 /** Stored org profile copy (page body); meta tags truncate separately in the UI. */
 const PROVIDER_ENRICHMENT_DESCRIPTION_MAX_CHARS = 12_000;
 const PROVIDER_ENRICHMENT_DESCRIPTION_FILL_MIN_CHARS = 150;
@@ -87,6 +91,20 @@ function isHttpUrl(s: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Caps raw fetched text for prompting; trims at a word boundary near the limit (avoids mid-word cuts).
+ */
+function truncateText(text: string, maxChars = MAX_SOURCE_INPUT_CHARS): string {
+  if (!text) return text;
+  const t = text.trim();
+  if (t.length <= maxChars) return t;
+  const slice = t.slice(0, maxChars);
+  const lastBoundary = slice.lastIndexOf(' ');
+  const cut =
+    lastBoundary >= Math.floor(maxChars * 0.88) ? lastBoundary : maxChars;
+  return `${slice.slice(0, cut).trimEnd()}…`;
 }
 
 function normalizeFaqEntry(raw: unknown): ProviderEnrichmentFaqItem | null {
@@ -806,19 +824,22 @@ async function runProviderEnrichmentEngine(
 
   diagnostics.gate = 'ok';
 
-  let sourceMaterialForPrompt = source?.text ?? '';
+  const trimmedSourceText = source?.text ? truncateText(source.text) : '';
+
+  let sourceMaterialForPrompt = trimmedSourceText;
   if (
     source &&
+    trimmedSourceText &&
     options?.providerSlug?.trim() &&
-    source.text.length <
+    trimmedSourceText.length <
       PROVIDER_ENRICH_SCHOLARSHIP_SUPPLEMENT_THRESHOLD_CHARS
   ) {
     const extra = await fetchScholarshipSupplementFactsForProvider(
       options.providerSlug.trim(),
-      { primarySourceText: source.text }
+      { primarySourceText: trimmedSourceText }
     );
     if (extra) {
-      sourceMaterialForPrompt = `${source.text}\n\n---\nInternal scholarship-record excerpts (same provider; context only—infer facts about the ORGANIZATION: mission, audiences, focus areas. Do not write the description as a brochure for a single grant. Avoid "this scholarship…" / "the award provides…" as the dominant voice; prefer "the organization offers…" / "it supports…". Do not list these rows as public citation URLs.):\n${extra}`;
+      sourceMaterialForPrompt = `${trimmedSourceText}\n\n---\nInternal scholarship-record excerpts (same provider; context only—infer facts about the ORGANIZATION: mission, audiences, focus areas. Do not write the description as a brochure for a single grant. Avoid "this scholarship…" / "the award provides…" as the dominant voice; prefer "the organization offers…" / "it supports…". Do not list these rows as public citation URLs.):\n${extra}`;
     }
   }
 

@@ -188,6 +188,23 @@ function parseOnlySlugList(): string[] {
     .filter(Boolean);
 }
 
+/** Skip re-generation when canonical copy already looks like a solid org profile. */
+function isGoodDescription(text: string | null | undefined): boolean {
+  if (!text) return false;
+  const t = text.trim();
+  if (!t) return false;
+
+  const wordCount = t.split(/\s+/).filter(Boolean).length;
+  const lower = t.toLowerCase();
+
+  return (
+    wordCount >= 180 &&
+    !lower.includes('publicly described') &&
+    !lower.includes('publicly presented') &&
+    !lower.includes('as reflected')
+  );
+}
+
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const enrichLimit = parseLimitArg();
@@ -304,6 +321,7 @@ async function main() {
     slug: string | null;
     display_name: string | null;
     ai_description: string | null;
+    description: string | null;
   };
 
   let queue: QueueRow[];
@@ -311,7 +329,7 @@ async function main() {
   if (forceReenrich && onlySlugs.length > 0) {
     const { data, error: loadErr } = await supabase
       .from('providers')
-      .select('id, slug, display_name, ai_description')
+      .select('id, slug, display_name, ai_description, description')
       .in('slug', onlySlugs)
       .order('created_at', { ascending: true });
     if (loadErr) {
@@ -334,7 +352,7 @@ async function main() {
   } else {
     const { data: pending, error: pendErr } = await supabase
       .from('providers')
-      .select('id, slug, display_name, ai_description')
+      .select('id, slug, display_name, ai_description, description')
       .or('ai_description.is.null,ai_description.eq.')
       .order('created_at', { ascending: true });
 
@@ -354,6 +372,22 @@ async function main() {
       queue = queue.filter((r) => r.slug && want.has(r.slug.trim()));
       console.log(
         `--only-slug: ${queue.length}/${before} pending provider(s) matched.`
+      );
+    }
+
+    if (!forceReenrich && queue.length > 0) {
+      const kept: QueueRow[] = [];
+      for (const row of queue) {
+        if (isGoodDescription(row.description)) {
+          const slug = row.slug?.trim();
+          console.log('[skip:good-description]', slug || row.id);
+          continue;
+        }
+        kept.push(row);
+      }
+      queue = kept;
+      console.log(
+        `After good-description gate: ${queue.length} provider(s) still queued for OpenAI enrich.`
       );
     }
   }
