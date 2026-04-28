@@ -59,6 +59,32 @@ function sourcesFromJson(value: Json | null | undefined): string[] {
   return value.filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
 }
 
+type ProviderRow = Database['public']['Tables']['providers']['Row'];
+
+/** Canonical columns may exist in DB before `types_db` is regenerated (optional dual-read). */
+type ProviderRowWithCanonicalFields = ProviderRow & {
+  description?: string | null;
+  sources?: Json | null;
+};
+
+/** Prefer canonical `description`, then legacy `ai_description`. */
+function effectiveProviderDescription(row: ProviderRow | null | undefined): string | null {
+  if (!row) return null;
+  const extended = row as ProviderRowWithCanonicalFields;
+  const primary = normalizeProviderAiDescription(extended.description);
+  if (primary) return primary;
+  return normalizeProviderAiDescription(extended.ai_description);
+}
+
+/** Prefer non-empty canonical `sources`, then legacy `ai_sources`. */
+function effectiveProviderSources(row: ProviderRow | null | undefined): string[] {
+  if (!row) return [];
+  const extended = row as ProviderRowWithCanonicalFields;
+  const fromCanonical = sourcesFromJson(extended.sources ?? undefined);
+  if (fromCanonical.length > 0) return fromCanonical;
+  return sourcesFromJson(extended.ai_sources);
+}
+
 type ProviderScholarshipStatRow = {
   slug: string;
   display_name: string | null;
@@ -66,8 +92,6 @@ type ProviderScholarshipStatRow = {
 };
 
 const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships';
-
-type ProviderRow = Database['public']['Tables']['providers']['Row'];
 
 export const resolveProviderProfileSlug = cache(
   async (rawParam: string): Promise<string | null> => {
@@ -138,8 +162,8 @@ export async function loadProviderProfilePage(
   const providerId: string | null = providerRow?.id ?? null;
   const displayName = providerRow?.display_name ?? fallbackName;
   const officialUrl = providerRow?.official_url ?? null;
-  const aiDescription = normalizeProviderAiDescription(providerRow?.ai_description);
-  const aiSources = providerRow ? sourcesFromJson(providerRow.ai_sources) : [];
+  const aiDescription = effectiveProviderDescription(providerRow);
+  const aiSources = effectiveProviderSources(providerRow);
   const aiFaq = providerRow ? parseProviderAiFaqJson(providerRow.ai_faq) : [];
   const isEnriched = providerRow?.is_enriched ?? false;
 
