@@ -14,6 +14,12 @@ import {
   fetchInitialHubScholarshipsPayload,
   fetchInitialLongTailScholarshipsPayload
 } from '@/app/scholarships/scholarshipListServerPayload';
+import { scholarshipHubQueryStringFromURLSearchParams } from '@/app/scholarships/scholarshipHubCanonicalQueryString';
+import {
+  HUB_PATH_PREFIX,
+  hubPathToTab,
+  type HubPathToTabResult
+} from '@/app/scholarships/scholarshipHubPath';
 import { SCHOLARSHIPS_HUB_ALL_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import {
   getLongTailPreset,
@@ -73,6 +79,22 @@ function safeScholarshipReturnToHref(searchParamsString: string): string {
     return SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
   }
   return raw;
+}
+
+function hubRouteEffectiveSearchParamsString(
+  incomingSearchParamsString: string,
+  hub: HubPathToTabResult
+): string {
+  const merged = new URLSearchParams(incomingSearchParamsString);
+  merged.delete('tab');
+  merged.delete('scope');
+  merged.set('tab', hub.tab);
+  if (hub.audience === 'international_friendly') {
+    merged.set('aud', 'international_friendly');
+  } else {
+    merged.delete('aud');
+  }
+  return scholarshipHubQueryStringFromURLSearchParams(merged);
 }
 
 function isPromotedManifestSeoRoute(entry: {
@@ -211,6 +233,23 @@ export default async function ScholarshipsSlugPathPageBody({
   segments,
   searchParamsString = ''
 }: ScholarshipsSlugPathPageBodyProps) {
+  /** `/scholarships/hub/{segment}` — same hub UI as `/scholarships`; never hit SEO/detail resolve. */
+  if (segments[0] === HUB_PATH_PREFIX) {
+    const hubResolved = hubPathToTab(segments);
+    if (!hubResolved) {
+      notFound();
+    }
+    const effectiveSearchParamsString = hubRouteEffectiveSearchParamsString(
+      searchParamsString,
+      hubResolved
+    );
+    return (
+      <Suspense fallback={<HubShellFallback />}>
+        <HubRootStreamedBridge searchParamsString={effectiveSearchParamsString} />
+      </Suspense>
+    );
+  }
+
   const returnToHref = safeScholarshipReturnToHref(searchParamsString);
 
   if (segments.length === 0) {

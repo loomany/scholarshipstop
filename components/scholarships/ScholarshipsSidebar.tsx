@@ -13,7 +13,10 @@ import {
   type LucideIcon
 } from 'lucide-react';
 
-import { buildScholarshipTabHref } from '@/app/scholarships/scholarshipListUrl';
+import {
+  SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF,
+  buildScholarshipTabHref
+} from '@/app/scholarships/scholarshipListUrl';
 import type {
   ScholarshipListTabId,
   ScholarshipSidebarCounts
@@ -23,6 +26,7 @@ import {
   parseHubScholarshipTabParam,
   parseHubScholarshipTabParamForGuest
 } from '@/app/scholarships/scholarshipTabs';
+import { hubResolvedFromPathname } from '@/app/scholarships/scholarshipHubPath';
 import { DarkTooltip } from '@/components/ui/DarkTooltip';
 import {
   scholarshipSidebarActiveRowClass
@@ -130,6 +134,16 @@ function resolveActiveTabId(
   if (isDetail) return 'matches';
 
   if (!isScholarshipListPath(pathname)) return null;
+
+  const hubResolved = hubResolvedFromPathname(pathname);
+  if (hubResolved) {
+    const raw = searchParams?.get('tab') ?? null;
+    if (raw === 'from-email') return null;
+    const fromPath = hubResolved.tab;
+    return guestMode
+      ? parseHubScholarshipTabParamForGuest(fromPath)
+      : fromPath;
+  }
 
   const raw = searchParams?.get('tab') ?? null;
   if (raw === 'from-email') return null;
@@ -560,7 +574,7 @@ export default function ScholarshipsSidebar({
               </button>
             ) : (
               <Link
-                href={intl.href ?? '/scholarships?tab=matches&scope=catalog&aud=international_friendly'}
+                href={intl.href ?? SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF}
                 prefetch={false}
                 className={`${intlRowClass} w-full cursor-pointer text-left group`}
                 title={useDarkTooltips ? undefined : intlTip}

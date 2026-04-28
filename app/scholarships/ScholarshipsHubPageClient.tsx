@@ -97,6 +97,7 @@ import {
 } from './scholarshipTabs';
 import { getViewedScholarshipIds } from './viewedScholarships';
 import {
+  buildHubCatalogBrowserUrl,
   buildScholarshipListSearchParams,
   SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF,
   buildScholarshipTabHref,
@@ -115,6 +116,7 @@ import {
 } from './scholarshipListFetch';
 import { buildInitialListRequestKey } from './buildInitialListRequestKey';
 import { scholarshipHubQueryStringFromURLSearchParams } from './scholarshipHubCanonicalQueryString';
+import { hubResolvedFromPathname } from './scholarshipHubPath';
 import type {
   InitialScholarshipsPayload,
   LongTailRouteScopePayload
@@ -366,11 +368,26 @@ function ScholarshipsPageInner({
   const searchParams = useSearchParams();
   const currentPathname = usePathname();
   const pathname = currentPathname || '/scholarships';
-  /** Business-only, stable order — matches SSR `searchParamsString` and excludes framework keys. */
-  const searchParamsString = useMemo(
-    () => scholarshipHubQueryStringFromURLSearchParams(searchParams),
-    [searchParams]
-  );
+  const hubRouteResolved = useMemo(() => {
+    if (routeScope) return null;
+    return hubResolvedFromPathname(pathname);
+  }, [pathname, routeScope]);
+  /**
+   * Allowlisted query for hub keys + API; on `/scholarships/hub/*` inject `tab`/`aud` so
+   * payloads align with pathname when the browser omits those params from the visible URL.
+   */
+  const searchParamsString = useMemo(() => {
+    const base = scholarshipHubQueryStringFromURLSearchParams(searchParams);
+    if (routeScope || !hubRouteResolved) return base;
+    const sp = new URLSearchParams(base);
+    sp.set('tab', hubRouteResolved.tab);
+    if (hubRouteResolved.audience === 'international_friendly') {
+      sp.set('aud', 'international_friendly');
+    } else {
+      sp.delete('aud');
+    }
+    return scholarshipHubQueryStringFromURLSearchParams(sp);
+  }, [searchParams, routeScope, hubRouteResolved]);
   const hubListRequestKey = useMemo(
     () =>
       routeScope
@@ -386,9 +403,10 @@ function ScholarshipsPageInner({
           }),
     [routeScope, pathname, searchParamsString]
   );
-  const activeTab: ScholarshipListTabId = parseHubScholarshipTabParam(
-    searchParams.get('tab')
-  );
+  const activeTab: ScholarshipListTabId = useMemo(() => {
+    if (hubRouteResolved) return hubRouteResolved.tab;
+    return parseHubScholarshipTabParam(searchParams.get('tab'));
+  }, [hubRouteResolved, searchParams]);
   /**
    * SSR list for guests on Best has no `guestBestRecommendationPreviewEnabled` and is always empty.
    * Do not use it as `initialListData` / first paint — the client may still apply
@@ -399,10 +417,16 @@ function ScholarshipsPageInner({
     !isAuthenticated &&
     activeTab === 'best-recommendation';
 
-  const parsedList = useMemo(
-    () => parseScholarshipListUrl(new URLSearchParams(searchParamsString)),
-    [searchParamsString]
-  );
+  const parsedList = useMemo(() => {
+    const base = parseScholarshipListUrl(new URLSearchParams(searchParamsString));
+    if (
+      !routeScope &&
+      hubRouteResolved?.audience === 'international_friendly'
+    ) {
+      return { ...base, audience: 'international_friendly' as const };
+    }
+    return base;
+  }, [searchParamsString, routeScope, hubRouteResolved]);
   const fromEmailIds = useMemo(
     () => parseIdCsv(new URLSearchParams(searchParamsString).get('email_ids')),
     [searchParamsString]
@@ -624,20 +648,30 @@ function ScholarshipsPageInner({
       patch: Parameters<typeof buildScholarshipListSearchParams>[1],
       options?: { scroll?: boolean }
     ) => {
-      const p = buildScholarshipListSearchParams(
-        new URLSearchParams(searchParamsString),
-        patch
-      );
-      if (!p.get('tab')) {
-        p.set('tab', activeTab);
-      }
-      const qs = p.toString();
-      const url = qs ? `${pathname}?${qs}` : pathname;
       startTransition(() => {
+        if (routeScope) {
+          const p = buildScholarshipListSearchParams(
+            new URLSearchParams(searchParamsString),
+            patch
+          );
+          if (!p.get('tab')) {
+            p.set('tab', activeTab);
+          }
+          const qs = p.toString();
+          const url = qs ? `${pathname}?${qs}` : pathname;
+          router.replace(url, { scroll: options?.scroll ?? false });
+          return;
+        }
+        const { pathname: hubPathname, search } = buildHubCatalogBrowserUrl(
+          searchParamsString,
+          patch,
+          activeTab
+        );
+        const url = search ? `${hubPathname}?${search}` : hubPathname;
         router.replace(url, { scroll: options?.scroll ?? false });
       });
     },
-    [pathname, router, searchParamsString, activeTab]
+    [pathname, router, searchParamsString, activeTab, routeScope]
   );
 
   const handleGuestBestRecommendationEditAnswers = useCallback(() => {
@@ -890,7 +924,7 @@ function ScholarshipsPageInner({
     const sp = new URLSearchParams(searchParamsString);
     const tab = sp.get('tab');
     /** Personal tabs (saved/ignored) stay in the URL for deep links (e.g. Telegram → hub). */
-    const needDefaultHubTab = !tab;
+    const needDefaultHubTab = !tab && !hubRouteResolved;
     const parsedDeadline = parseDeadlineFromParam(sp.get('deadline'));
     const hasAdvDeadline = parsedDeadline != null && parsedDeadline !== 'any';
     if (!needDefaultHubTab && !hasAdvDeadline) {
@@ -907,6 +941,7 @@ function ScholarshipsPageInner({
     isAuthenticated,
     authResolved,
     searchParamsString,
+    hubRouteResolved,
     replaceListingParams
   ]);
 
@@ -2576,14 +2611,22 @@ function ScholarshipsPageInner({
 
   const buildPageHref = useCallback(
     (page: number) => {
-      const p = buildScholarshipListSearchParams(
-        new URLSearchParams(searchParams.toString()),
-        { page, resetPage: false }
+      if (routeScope) {
+        const p = buildScholarshipListSearchParams(
+          new URLSearchParams(searchParams.toString()),
+          { page, resetPage: false }
+        );
+        const qs = p.toString();
+        return qs ? `${pathname}?${qs}` : pathname;
+      }
+      const { pathname: hubPathname, search } = buildHubCatalogBrowserUrl(
+        searchParamsString,
+        { page, resetPage: false },
+        activeTab
       );
-      const qs = p.toString();
-      return qs ? `${pathname}?${qs}` : pathname;
+      return search ? `${hubPathname}?${search}` : hubPathname;
     },
-    [pathname, searchParams]
+    [pathname, searchParams, searchParamsString, activeTab, routeScope]
   );
 
   const currentListingHref = useMemo(() => {
@@ -2642,10 +2685,13 @@ function ScholarshipsPageInner({
   }, [routeBaseMoreFilters, moreFiltersApplied]);
 
   const internationalSidebarChecked = useMemo(() => {
+    if (!routeScope && hubRouteResolved?.audience === 'international_friendly') {
+      return true;
+    }
     const currentAudience =
       mergedHubCitizenshipSource?.citizenshipAudience ?? 'any';
     return currentAudience === 'international_friendly';
-  }, [mergedHubCitizenshipSource]);
+  }, [hubRouteResolved, mergedHubCitizenshipSource, routeScope]);
 
   const toggleInternationalAudienceSidebar = useCallback(() => {
     const current =
@@ -2700,9 +2746,11 @@ function ScholarshipsPageInner({
         })
       );
     }
-    const isHubRoot = pathname === '/scholarships';
+    const isHubCatalog =
+      !routeScope &&
+      (pathname === '/scholarships' || pathname.startsWith('/scholarships/hub/'));
     router.replace(
-      isHubRoot ? buildScholarshipTabHref(activeTab) : pathname,
+      isHubCatalog ? buildScholarshipTabHref(activeTab) : pathname,
       { scroll: false }
     );
   }, [

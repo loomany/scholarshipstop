@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { legacyTabQueryToHubPath } from '@/app/scholarships/scholarshipHubPath';
 import { preferredScholarshipSlugForLegacySlug } from '@/lib/seo/legacyScholarshipSlugAliases';
 import { canonicalStateVsSlug } from '@/lib/seo/stateCompareSlug';
 import { canonicalUniversityVsSlug } from '@/lib/seo/universityCompareSlug';
@@ -56,14 +57,16 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  /** Old hub tab «Saved Filters» (tab=recommended) — send users to catalog Matches. */
+  /**
+   * Legacy hub URLs: `/scholarships?tab=…` → `/scholarships/hub/{segment}` (clean URL).
+   * Preserves page, sort, q, etc.; drops tab/scope; drops aud when targeting international-friendly hub.
+   */
   if (pathname === '/scholarships' || pathname === '/scholarships/') {
-    if (request.nextUrl.searchParams.get('tab') === 'recommended') {
+    const legacy = legacyTabQueryToHubPath(request.nextUrl.searchParams);
+    if (legacy) {
       const url = request.nextUrl.clone();
-      url.searchParams.set('tab', 'matches');
-      if (!url.searchParams.get('scope')) {
-        url.searchParams.set('scope', 'catalog');
-      }
+      url.pathname = legacy.pathname;
+      url.search = legacy.search;
       return NextResponse.redirect(url, 308);
     }
   }

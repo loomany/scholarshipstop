@@ -4,28 +4,36 @@
 
 import type { ScholarshipCategoryId } from './scholarshipCategories';
 import { normalizeCategoryId, SCHOLARSHIP_CATEGORY_ORDER } from './scholarshipCategories';
+import { scholarshipHubQueryStringFromURLSearchParams } from './scholarshipHubCanonicalQueryString';
+import {
+  HUB_INTERNATIONAL_SEGMENT,
+  tabToHubPath
+} from './scholarshipHubPath';
 import type { DeadlinePreset } from './moreFilters';
 import type { SortOption } from './scholarshipSort';
-import type { ScholarshipListTabId } from './scholarshipTabs';
+import {
+  parseHubScholarshipTabParam,
+  type ScholarshipListTabId
+} from './scholarshipTabs';
 
 export const SCHOLARSHIPS_PAGE_SIZE = 9;
 
-/** Hub URL for the catalog “All” view (`tab=matches` + `scope=catalog`). */
-export const SCHOLARSHIPS_HUB_ALL_MATCHES_HREF =
-  '/scholarships?tab=matches&scope=catalog';
+/** Hub URL for the catalog “All” view (matches tab). */
+export const SCHOLARSHIPS_HUB_ALL_MATCHES_HREF = tabToHubPath('matches');
 
-/** Hub URL for Best recommendation: tab + default sort (amount ↓, then newest). */
+/** Hub URL for Best recommendation. */
 export const SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF =
-  '/scholarships?tab=best-recommendation&scope=catalog';
+  tabToHubPath('best-recommendation');
 /** Backward-compat alias while old imports are being migrated. */
 export const SCHOLARSHIPS_HUB_BEST_MATCHES_HREF =
   SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF;
-/** Catalog Matches narrowed to international-friendly audience. */
-export const SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF =
-  '/scholarships?tab=matches&scope=catalog&aud=international_friendly';
+/** Catalog “International Friendly” (matches + international audience). */
+export const SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF = tabToHubPath(
+  HUB_INTERNATIONAL_SEGMENT
+);
 
 /** Saved grants (My scholarships → Saved); same data as `user_saved_scholarships`. */
-export const SCHOLARSHIPS_HUB_SAVED_TAB_HREF = '/scholarships?tab=saved';
+export const SCHOLARSHIPS_HUB_SAVED_TAB_HREF = tabToHubPath('saved');
 
 const SORT_VALUES = new Set<string>([
   'magic',
@@ -241,6 +249,39 @@ export function buildScholarshipListSearchParams(
   return p;
 }
 
+/** Catalog hub: pathname for tab + audience (International Friendly has its own segment). */
+export function hubCatalogPathnameForListingTab(
+  tab: ScholarshipListTabId,
+  audience: ScholarshipAudienceParam
+): string {
+  if (tab === 'matches' && audience === 'international_friendly') {
+    return tabToHubPath(HUB_INTERNATIONAL_SEGMENT);
+  }
+  return tabToHubPath(tab);
+}
+
+/**
+ * Product hub: browser URL is `/scholarships/hub/{segment}` + search without `tab`, `scope`, or `aud`.
+ */
+export function buildHubCatalogBrowserUrl(
+  baseSearchParamsString: string,
+  patch: Parameters<typeof buildScholarshipListSearchParams>[1],
+  fallbackTab: ScholarshipListTabId
+): { pathname: string; search: string } {
+  const merged = buildScholarshipListSearchParams(
+    new URLSearchParams(baseSearchParamsString),
+    patch
+  );
+  const tab = parseHubScholarshipTabParam(merged.get('tab') ?? fallbackTab);
+  const audience = parseAudienceFromParam(merged.get('aud'));
+  const pathname = hubCatalogPathnameForListingTab(tab, audience);
+  merged.delete('tab');
+  merged.delete('scope');
+  merged.delete('aud');
+  const search = scholarshipHubQueryStringFromURLSearchParams(merged);
+  return { pathname, search };
+}
+
 /** URL для `/scholarships/category/[slug]`: без `tab`, остальное как у каталога. */
 export function buildScholarshipCategoryPageSearchParams(
   base: URLSearchParams,
@@ -259,14 +300,9 @@ export function buildScholarshipCategoryPageSearchParams(
 }
 
 /**
- * Ссылка на вкладку: только tab (чистый контекст раздела).
- * Сбрасываем page, q, category, sort, deadline — предсказуемо при смене Matches ↔ Saved и т.д.
+ * Ссылка на вкладку хаба: `/scholarships/hub/{segment}` (без query).
+ * Смена вкладки сбрасывает фильтры через отдельные обработчики, не здесь.
  */
 export function buildScholarshipTabHref(id: ScholarshipListTabId): string {
-  if (id === 'best-recommendation') {
-    return SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF;
-  }
-  if (id === 'matches') return '/scholarships?scope=catalog&tab=matches';
-  if (id === 'hot-deadlines') return '/scholarships?tab=hot-deadlines';
-  return `/scholarships?tab=${encodeURIComponent(id)}`;
+  return tabToHubPath(id);
 }
