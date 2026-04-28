@@ -7,6 +7,8 @@
  *   npx tsx scripts/enrich-all-providers.ts --limit=20
  *   npm run providers:enrich -- --no-sync-providers --limit=5
  *     (skip stats→providers upsert; only enrich existing pending rows)
+ * Re-enrich specific slugs even when ai_description is already filled:
+ *   npm run providers:enrich -- --no-sync-providers --only-slug=a,b,c --force
  *
  * Requires: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
  */
@@ -176,13 +178,32 @@ function parseLimitArg(): number | null {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
+function parseOnlySlugList(): string[] {
+  const raw = process.argv.find((a) => a.startsWith('--only-slug='));
+  if (!raw) return [];
+  return raw
+    .slice('--only-slug='.length)
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const enrichLimit = parseLimitArg();
+  const onlySlugs = parseOnlySlugList();
+  const forceReenrich = process.argv.includes('--force');
   const noSyncProviders =
     process.argv.includes('--no-sync-providers') ||
     process.argv.includes('--only-enrich-existing');
   loadEnvFiles();
+
+  if (forceReenrich && onlySlugs.length === 0) {
+    console.error(
+      'Refusing: --force requires --only-slug=slug1,slug2,... (prevents accidental full re-enrich).'
+    );
+    process.exit(1);
+  }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
@@ -278,24 +299,71 @@ async function main() {
     sourceUrlsBySlug = new Map();
   }
 
-  const { data: pending, error: pendErr } = await supabase
-    .from('providers')
-    .select('id, slug, display_name, ai_description')
-    .or('ai_description.is.null,ai_description.eq.')
-    .order('created_at', { ascending: true });
+  type QueueRow = {
+    id: string;
+    slug: string | null;
+    display_name: string | null;
+    ai_description: string | null;
+  };
 
-  if (pendErr) {
-    console.error(pendErr);
-    process.exit(1);
+  let queue: QueueRow[];
+
+  if (forceReenrich && onlySlugs.length > 0) {
+    const { data, error: loadErr } = await supabase
+      .from('providers')
+      .select('id, slug, display_name, ai_description')
+      .in('slug', onlySlugs)
+      .order('created_at', { ascending: true });
+    if (loadErr) {
+      console.error(loadErr);
+      process.exit(1);
+    }
+    queue = (data ?? []) as QueueRow[];
+    console.log(
+      `[--force --only-slug] loaded ${queue.length} provider row(s) for re-enrichment (${onlySlugs.length} slug(s) requested).`
+    );
+    if (queue.length < onlySlugs.length) {
+      const found = new Set(
+        queue.map((r) => r.slug?.trim()).filter(Boolean) as string[]
+      );
+      const missing = onlySlugs.filter((s) => !found.has(s));
+      if (missing.length > 0) {
+        console.log(`Warning: slug(s) not found in providers: ${missing.join(', ')}`);
+      }
+    }
+  } else {
+    const { data: pending, error: pendErr } = await supabase
+      .from('providers')
+      .select('id, slug, display_name, ai_description')
+      .or('ai_description.is.null,ai_description.eq.')
+      .order('created_at', { ascending: true });
+
+    if (pendErr) {
+      console.error(pendErr);
+      process.exit(1);
+    }
+
+    queue = (pending ?? []) as QueueRow[];
+    console.log(
+      `Found ${queue.length} provider(s) with empty ai_description ready for enrichment.`
+    );
+
+    if (onlySlugs.length > 0) {
+      const want = new Set(onlySlugs.map((s) => s.trim()));
+      const before = queue.length;
+      queue = queue.filter((r) => r.slug && want.has(r.slug.trim()));
+      console.log(
+        `--only-slug: ${queue.length}/${before} pending provider(s) matched.`
+      );
+    }
   }
 
-  let queue = pending ?? [];
-  console.log(
-    `Found ${queue.length} provider(s) with empty ai_description ready for enrichment.`
-  );
-
   if (queue.length === 0) {
-    console.log('No new providers to enrich. Exiting...');
+    console.log(
+      onlySlugs.length && !forceReenrich
+        ? 'No matching pending providers. Use --force with --only-slug=... to re-enrich providers that already have ai_description.'
+        : 'No providers to enrich. Exiting...'
+    );
     process.exit(0);
   }
 
