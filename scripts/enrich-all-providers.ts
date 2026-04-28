@@ -14,8 +14,8 @@
  * Large bounded run (e.g. --limit=100000 --force); each row logs https://scholarshiptop.com/providers/{slug}.
  * Override log base URL: PROVIDER_ENRICH_LOG_SITE_URL=https://…
  *
- * With --force, rows skipped as resume only if they match a full successful enrichment write:
- * is_enriched + enriched_at + long description (~same bar as pipeline). Stub text + flags alone never skip.
+ * With --force, resume skips only rows with: is_enriched, enriched_at, non-empty canonical description,
+ * and description word count >= 180. Otherwise the row stays in the enrichment queue.
  * To re-process everyone: --re-enrich-all.
  *
  * Requires: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
@@ -82,24 +82,19 @@ function providerPublicProfileUrl(slug: string): string {
   return `${origin.replace(/\/+$/, '')}/providers/${encodeURIComponent(slug)}`;
 }
 
-/**
- * Matches a row after successful buildProviderEnrichmentWritePatch — not loose flags + stub text.
- */
-const MIN_RESUME_DESCRIPTION_WORDS = 150;
+/** Canonical description length gate (prompt minimum ~180 words). */
+const MIN_RESUME_DESCRIPTION_WORDS = 180;
 
 function isProviderEnrichmentPersisted(row: {
   description?: string | null;
-  ai_description?: string | null;
   is_enriched?: boolean | null;
   enriched_at?: string | null;
 }): boolean {
-  if (row.is_enriched !== true || !String(row.enriched_at ?? '').trim()) {
-    return false;
-  }
-  const text =
-    row.description?.trim() || row.ai_description?.trim() || '';
-  if (!text) return false;
-  const wordCount = text.split(/\s+/).filter(Boolean).length;
+  if (row.is_enriched !== true) return false;
+  if (!String(row.enriched_at ?? '').trim()) return false;
+  const desc = row.description?.trim() ?? '';
+  if (!desc) return false;
+  const wordCount = desc.split(/\s+/).filter(Boolean).length;
   return wordCount >= MIN_RESUME_DESCRIPTION_WORDS;
 }
 
