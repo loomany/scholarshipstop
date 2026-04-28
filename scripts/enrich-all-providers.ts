@@ -372,19 +372,31 @@ async function main() {
     enrichLimit >= 1 &&
     onlySlugs.length === 0
   ) {
-    const { data: forcedRows, error: forcedErr } = await supabase
-      .from('providers')
-      .select('id, slug, display_name, ai_description, description')
-      .not('slug', 'is', null)
-      .order('created_at', { ascending: true })
-      .limit(enrichLimit);
+    /** PostgREST caps a single response (~1000 rows); page until we reach --limit or run out of rows. */
+    const PAGE = 1000;
+    queue = [];
+    let from = 0;
+    for (;;) {
+      const remaining = enrichLimit - queue.length;
+      if (remaining <= 0) break;
+      const take = Math.min(PAGE, remaining);
+      const { data: forcedRows, error: forcedErr } = await supabase
+        .from('providers')
+        .select('id, slug, display_name, ai_description, description')
+        .not('slug', 'is', null)
+        .order('created_at', { ascending: true })
+        .range(from, from + take - 1);
 
-    if (forcedErr) {
-      console.error(forcedErr);
-      process.exit(1);
+      if (forcedErr) {
+        console.error(forcedErr);
+        process.exit(1);
+      }
+
+      const batch = (forcedRows ?? []) as QueueRow[];
+      queue.push(...batch);
+      if (batch.length < take) break;
+      from += batch.length;
     }
-
-    queue = (forcedRows ?? []) as QueueRow[];
     console.log(
       `[--force --limit=${enrichLimit}] loaded ${queue.length} provider row(s) for bounded re-enrichment (FIFO by created_at).`
     );
