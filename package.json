@@ -49,6 +49,7 @@
     "audit:seo-full-poststeps": "npx tsx scripts/seo-full-poststeps-audit.ts --full",
     "debug:first-gen-tags": "npx tsx scripts/debug-eligibility-first-generation.ts",
     "enrich-providers": "npx tsx scripts/enrich-all-providers.ts",
+    "providers:enrich": "npx tsx scripts/enrich-all-providers.ts",
     "content:reprocess-articles": "npx tsx scripts/reprocess-content-posts.ts",
     "content:inspect-recent": "node scripts/inspect-content-posts-recent.mjs",
     "content:audit-related": "node scripts/audit-content-posts-related-scholarships.mjs",

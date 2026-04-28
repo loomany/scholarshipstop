@@ -68,6 +68,8 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
     }
 
     const enriched = await enrichProviderData(name, {
+      officialWebsiteUrl: officialUrl,
+      providerSlug: row.slug?.trim() || null,
       sourceUrls: [
         ...(officialUrl ? [officialUrl] : []),
         ...sourceUrls
@@ -77,7 +79,7 @@ export async function enrichAllMissingProvidersAction(): Promise<BulkEnrichResul
     const sources = (
       Array.isArray(enriched.sources) ? enriched.sources : []
     ).filter(Boolean);
-    if (!description || sources.length === 0) {
+    if (!description) {
       processed += 1;
       continue;
     }
