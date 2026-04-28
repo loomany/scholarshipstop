@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { unstable_noStore as noStore } from 'next/cache';
 import SubscriptionPricingClient from '@/components/subscription/SubscriptionPricingClient';
-import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import type { Json, Tables } from '@/types_db';
 import {
   deriveSubscriptionPresentation,
@@ -133,7 +132,6 @@ export default async function SubscriptionPage() {
           </p>
         </div>
       </section>
-      <SiteFooter />
     </>
   );
 }

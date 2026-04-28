@@ -4,7 +4,6 @@ import HomePageClient from './HomePageClient';
 import FeaturedResources from '@/components/home/FeaturedResources';
 import HomeFinalCta from '@/components/home/HomeFinalCta';
 import { HomePageJsonLd } from '@/components/seo/HomePageJsonLd';
-import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import { fetchHomeResourcesCarouselItems } from '@/lib/home/homeResourcesCarousel';
 import { SITE_BRAND } from '@/lib/seo/siteTitle';
 import { getURL } from '@/utils/helpers';
@@ -54,7 +53,7 @@ export const metadata: Metadata = {
 /** Align with `/resources` and `/essays` index revalidation for hub content. */
 export const revalidate = 300;
 
-/** Home-only bottom stack: final CTA + footer exist only on `/` (this route). */
+/** Home-only bottom stack: final CTA on `/` (footer is global in root layout). */
 export default async function HomePage() {
   let featuredResourceItems: Awaited<
     ReturnType<typeof fetchHomeResourcesCarouselItems>
@@ -71,7 +70,6 @@ export default async function HomePage() {
       <HomePageClient />
       <FeaturedResources items={featuredResourceItems} />
       <HomeFinalCta />
-      <SiteFooter />
     </>
   );
 }

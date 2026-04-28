@@ -6,11 +6,13 @@ import { useEffect, useState } from 'react';
 
 import { siteNavLink as n } from '@/components/ui/nav/siteNavLink';
 
-const ITEMS: {
+type FooterLink = {
   href: string;
   label: string;
   isActive: (pathname: string) => boolean;
-}[] = [
+};
+
+const PRIMARY_LINKS: FooterLink[] = [
   { href: '/', label: 'Home', isActive: (p) => p === '/' },
   {
     href: '/about',
@@ -38,28 +40,15 @@ const ITEMS: {
     label: 'Refund Policy',
     isActive: (p) => p === '/refund-policy' || p.startsWith('/refund-policy/')
   },
-  { href: '/faq', label: 'FAQ', isActive: (p) => p === '/faq' || p.startsWith('/faq/') },
-  {
-    href: '/how-we-verify-scholarships',
-    label: 'How we verify',
-    isActive: (p) => p === '/how-we-verify-scholarships'
-  },
-  {
-    href: '/editorial-policy',
-    label: 'Editorial policy',
-    isActive: (p) => p === '/editorial-policy'
-  },
-  {
-    href: '/how-ai-is-used',
-    label: 'How AI is used',
-    isActive: (p) => p === '/how-ai-is-used'
-  },
-  {
-    href: '/listing-review-policy',
-    label: 'Listing review',
-    isActive: (p) => p === '/listing-review-policy'
-  }
+  { href: '/faq', label: 'FAQ', isActive: (p) => p === '/faq' || p.startsWith('/faq/') }
 ];
+
+const linkClass = (active: boolean) =>
+  clsx(
+    n.light,
+    'text-[11px] tracking-tight sm:text-sm sm:tracking-normal',
+    active && n.lightActive
+  );
 
 export default function SiteFooterNav() {
   const [pathname, setPathname] = useState('');
@@ -71,18 +60,14 @@ export default function SiteFooterNav() {
 
   return (
     <nav
-      className="flex w-full min-w-0 max-w-full shrink-0 flex-row flex-wrap items-center justify-start gap-x-1 gap-y-1.5 sm:gap-x-3 sm:gap-y-2"
+      className="flex w-auto max-w-full min-w-0 shrink-0 flex-row flex-wrap items-center justify-center gap-x-2 gap-y-1.5 md:gap-x-3 md:gap-y-2"
       aria-label="Footer"
     >
-      {ITEMS.map(({ href, label, isActive }) => (
+      {PRIMARY_LINKS.map(({ href, label, isActive }) => (
         <Link
           key={href}
           href={href}
-          className={clsx(
-            n.light,
-            'text-[11px] tracking-tight sm:text-sm sm:tracking-normal',
-            isActive(pathname) && n.lightActive
-          )}
+          className={linkClass(isActive(pathname))}
         >
           {label}
         </Link>

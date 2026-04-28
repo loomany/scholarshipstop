@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import clsx from 'clsx';
 
-import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 
 export const metadata: Metadata = {
@@ -80,7 +79,6 @@ export default function RefundPolicyPage() {
           </section>
         </div>
       </article>
-      <SiteFooter />
     </>
   );
 }

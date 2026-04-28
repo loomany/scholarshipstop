@@ -10,7 +10,7 @@ const SiteFooterNav = dynamic(() => import('@/components/ui/Footer/SiteFooterNav
   ssr: false,
   loading: () => (
     <nav
-      className="flex w-full min-w-0 max-w-full shrink-0 flex-row flex-wrap items-center justify-start gap-x-1 gap-y-1.5 opacity-60 sm:gap-x-3 sm:gap-y-2"
+      className="flex min-h-[1.25rem] w-full min-w-0 max-w-full shrink-0 flex-row flex-wrap justify-center gap-2 opacity-60"
       aria-label="Footer"
       aria-busy="true"
     />
@@ -24,35 +24,33 @@ export default function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-gray-200 bg-gray-50">
-      <div className="mx-auto max-w-6xl py-2.5 pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pb-[max(0.625rem,env(safe-area-inset-bottom,0px))] sm:px-6 sm:py-3 sm:pb-3">
-        <div className="flex justify-start sm:justify-center">
-          <div className="flex max-w-full flex-col items-start gap-3 sm:flex-row sm:items-start sm:gap-x-3">
-            <div className="hidden shrink-0 -translate-x-0.5 sm:block sm:-translate-x-1">
+    <footer className="border-t border-gray-200/80 bg-[#f8f9fa]">
+      <div className="mx-auto max-w-6xl px-4 py-8 pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pb-[max(2rem,env(safe-area-inset-bottom,0px))] sm:px-6 sm:py-10 sm:pb-10">
+        <div className="flex justify-center">
+          <div className="flex max-w-full flex-col items-center gap-6 md:flex-row md:items-start md:gap-10">
+            <div className="shrink-0">
               <Link
                 href="/"
-                className="inline-flex rounded-xl bg-black px-3 py-2 ring-1 ring-gray-800 transition hover:ring-gray-600"
+                className="inline-flex rounded-full bg-black px-4 py-2.5 ring-1 ring-gray-800 transition hover:ring-gray-600"
                 aria-label="ScholarshipTop — Home"
               >
                 <Logo variant="footer" />
               </Link>
             </div>
-            <div className="flex w-full min-w-0 flex-col items-start gap-1.5 sm:w-auto sm:gap-2">
-              <div className="flex w-full min-w-0 justify-start">
+            <div className="flex w-full min-w-0 flex-col items-center gap-3 md:w-auto md:max-w-full md:gap-3">
+              <div className="flex w-full min-w-0 justify-center md:w-auto">
                 <SiteFooterNav />
               </div>
-              <div className="max-w-3xl text-left text-xs leading-snug sm:text-sm">
-                <div className="sm:hidden">
-                  <p className="text-gray-600">
-                    Helping students find the right scholarships faster.
-                  </p>
-                  <p className="mt-1 text-gray-500 tabular-nums">
-                    © {year} <span className="text-gray-600">ScholarshipTop</span>
+              <div className="max-w-3xl text-center text-xs leading-snug text-slate-600 sm:text-sm">
+                <div className="md:hidden">
+                  <p>Helping students find the right scholarships faster.</p>
+                  <p className="mt-1 tabular-nums text-slate-500">
+                    © {year} <span className="text-slate-600">ScholarshipTop</span>
                   </p>
                 </div>
-                <p className="hidden text-gray-600 sm:block">
+                <p className="hidden md:block">
                   Helping students find the right scholarships faster.{' '}
-                  <span className="text-gray-500 tabular-nums">
+                  <span className="tabular-nums text-slate-500">
                     | © {year} ScholarshipTop
                   </span>
                 </p>

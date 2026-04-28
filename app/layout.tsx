@@ -18,6 +18,7 @@ import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
 import { ScholarshipOnboardingDraftPostAuthSync } from '@/components/onboarding/ScholarshipOnboardingDraftPostAuthSync';
 import { NavigationProgress } from '@/components/ui/NavigationProgress';
+import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import dynamic from 'next/dynamic';
 import 'styles/main.css';
 
@@ -164,9 +165,8 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
         {/*
-          Width boundary for header + main (overflow-x is html/body — avoid
+          Width boundary for header + main + footer (overflow-x is html/body — avoid
           overflow-x-clip here so sticky navbar is not turned into a nested scroll box).
-          Home page includes its own footer + final CTA in `app/page.tsx` only.
           Toaster stays outside so position:fixed stays viewport-relative.
         */}
         <div className="w-full min-w-0 max-w-full">
@@ -179,6 +179,7 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
           >
             {children}
           </main>
+          <SiteFooter />
         </div>
         <Suspense fallback={null}>
           <Toaster />

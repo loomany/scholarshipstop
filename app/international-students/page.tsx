@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 
 import { homePrimaryCtaClass } from '@/components/home/homeMarketingCtaClasses';
-import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import { SiteFaqAccordion, type SiteFaqItem } from '@/components/ui/SiteFaqAccordion';
 import { getURL } from '@/utils/helpers';
 
@@ -379,8 +378,6 @@ export default function InternationalStudentsPage() {
           </p>
         </div>
       </section>
-
-      <SiteFooter />
     </div>
   );
 }

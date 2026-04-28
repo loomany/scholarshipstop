@@ -10,7 +10,6 @@ import {
   Users
 } from 'lucide-react';
 
-import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { getURL } from '@/utils/helpers';
 
@@ -263,8 +262,6 @@ export default function ForOrganizationsPage() {
           </Link>
         </div>
       </section>
-
-      <SiteFooter />
     </div>
   );
 }

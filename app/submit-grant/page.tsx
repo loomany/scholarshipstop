@@ -5,7 +5,6 @@ import { Building, FileText, HeartHandshake, Target } from 'lucide-react';
 
 import PartnerRequestAccess from '@/components/submit-grant/PartnerRequestAccess';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
-import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import { getURL } from '@/utils/helpers';
 
 const description =
@@ -126,7 +125,6 @@ export default function SubmitGrantPage() {
           </p>
         </div>
       </div>
-      <SiteFooter />
     </>
   );
 }
