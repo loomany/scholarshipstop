@@ -9,6 +9,8 @@
  *     (skip stats→providers upsert; only enrich existing pending rows)
  * Re-enrich specific slugs even when ai_description is already filled:
  *   npm run providers:enrich -- --no-sync-providers --only-slug=a,b,c --force
+ * Bounded full-table re-enrich (FIFO by created_at; requires explicit --limit):
+ *   npm run providers:enrich -- --no-sync-providers --limit=5 --force
  *
  * Requires: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY
  */
@@ -216,10 +218,12 @@ async function main() {
   loadEnvFiles();
 
   if (forceReenrich && onlySlugs.length === 0) {
-    console.error(
-      'Refusing: --force requires --only-slug=slug1,slug2,... (prevents accidental full re-enrich).'
-    );
-    process.exit(1);
+    if (enrichLimit == null || enrichLimit < 1) {
+      console.error(
+        'Refusing: --force requires --only-slug=slug1,slug2,... or bounded --limit=N (prevents full-table re-enrich).'
+      );
+      process.exit(1);
+    }
   }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -349,6 +353,28 @@ async function main() {
         console.log(`Warning: slug(s) not found in providers: ${missing.join(', ')}`);
       }
     }
+  } else if (
+    forceReenrich &&
+    enrichLimit != null &&
+    enrichLimit >= 1 &&
+    onlySlugs.length === 0
+  ) {
+    const { data: forcedRows, error: forcedErr } = await supabase
+      .from('providers')
+      .select('id, slug, display_name, ai_description, description')
+      .not('slug', 'is', null)
+      .order('created_at', { ascending: true })
+      .limit(enrichLimit);
+
+    if (forcedErr) {
+      console.error(forcedErr);
+      process.exit(1);
+    }
+
+    queue = (forcedRows ?? []) as QueueRow[];
+    console.log(
+      `[--force --limit=${enrichLimit}] loaded ${queue.length} provider row(s) for bounded re-enrichment (FIFO by created_at).`
+    );
   } else {
     const { data: pending, error: pendErr } = await supabase
       .from('providers')

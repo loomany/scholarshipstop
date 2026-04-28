@@ -5,6 +5,7 @@ import {
   fetchScholarshipSupplementFactsForProvider,
   PROVIDER_ENRICH_SCHOLARSHIP_SUPPLEMENT_THRESHOLD_CHARS
 } from '@/lib/providers/providerScholarshipSupplements';
+import { hasConcreteSignal } from '@/lib/providers/postQualityProviderEnrichment';
 import { normalizeProviderOfficialUrl } from '@/lib/providers/providerOfficialUrl';
 
 export type ProviderEnrichmentFaqItem = { question: string; answer: string };
@@ -861,7 +862,15 @@ ${sourceMaterialForPrompt}
 
 Rules:
 1. DO NOT invent concrete specifics (amounts, dates, names, geographies) that are not in the source material. If the material cannot support a fact, omit it; description may still use careful generalization (see rule 2). If nothing meaningful can be said, return null for description.
+
+FACT REQUIREMENT — If the Source material includes any of: amounts or other numbers (\$, counts), calendar years or dates ("founded", "established", dated programs), geography (state, region, city, territory), named programs/initiatives, or identifiable audiences, you MUST work at least 1–2 of those verifiable specifics into the description (accuracy only).
+
+UNIQUE ANCHOR — The description MUST contain at least one vivid anchor drawn from verified material: (a) a specific program/initiative/scholarship name or line of work; (b) a concrete audience (e.g., first-generation graduates, STEM majors—only if supported); or (c) an explicit geography beyond repeating the organization name alone (city, metro, state/province, country—or that the program is statewide/national-wide if sourced).
+
+FACT & ANTI-GENERIC — It is forbidden to output only bland generalizations with no specificity. ❌ Wrong: generic lines like "supports students pursuing education" or "provides opportunities for learners" with no dollar amounts, years, named programs, geography, audiences, or other concrete anchors from rules above. Prefer null over generic filler when sourcing will not bear facts.
+
 2. Field "description" — authoritative encyclopedia-style portrait of the organization—as if written by editors who know the institution, not as an aggregated recap of whatever appeared online. ORGANIZATION-level only; NOT a scholarship listing. Minimum 180 words; aim for 200–300. Use multiple paragraphs; in JSON you may use \\n\\n between paragraphs. The FIRST sentence MUST start with the Organization name exactly as given above, then either " is an organization that" or " is a foundation that" (use "foundation" only when sources clearly identify a foundation). Then cover: what the entity is, what it does, whom it supports, and broader context (education, community, impact). Use scholarship/program details only to illustrate what the organization offers; never make the entire description about one award. Voice: direct declarative assertions—state facts plainly (e.g. "Its work centers on…", "The organization prioritizes…", "It serves…"). FORBIDDEN wording (and close paraphrases): "publicly presented", "publicly described", "publicly available", "as reflected", "as shown", "as described", "according to", "the available source", "the page/listing says", or other meta hedges that distance the reader from the fact. FORBIDDEN: naming third-party platforms in running prose (e.g. "through Bold.org"), "this scholarship provides". If internal scholarship-record excerpts appear below, use them only as organizational context—never as the sole subject.
+
 3. Generate 3-4 FAQ pairs based ONLY on this source material. Use the same direct, confident tone; avoid the hedge phrases banned in rule 2.
 4. Return an array of the exact URL sources you used. Prefer the official URL above.
 5. Identify the primary U.S. state (USPS two-letter code, e.g. "CA") where the organization is headquartered or primarily operates in the United States. If unknown, nationwide, or non-US, set "state" to null.
@@ -870,6 +879,11 @@ Rules:
     : `You are a strict data researcher. Find factual information about the organization: ${nameInPrompt}.
 Rules:
 1. DO NOT invent concrete specifics you cannot verify. Use careful generalization where evidence is thin; if nothing meaningful can be said, return null for description.
+
+UNIQUE ANCHOR — Whenever you can responsibly ground them from verifiable cues, description MUST include at least one concrete anchor: a specific program/scholarship line, a named audience, or an explicit region/scale (beyond the org name alone). If you cannot cite any specificity, prefer null rather than bland platitudes.
+
+FACT & ANTI-GENERIC — It is forbidden to output only bland generalizations with no verifiable specificity. ❌ Wrong: "supports students pursuing education" / "provides opportunities for learners" with no geography, numeric detail, institutional role, audiences, programs, or other concrete grounding you can responsibly claim.
+
 2. Field "description" — authoritative encyclopedia-style portrait of the organization (not aggregated recap); NOT a single-scholarship write-up. Minimum 180 words; aim for 200–300. Multiple paragraphs; use \\n\\n in JSON for breaks. The FIRST sentence MUST start with the organization’s name, then " is an organization that" or " is a foundation that" (use "foundation" only when that is clearly accurate). Cover what it is, what it does, whom it supports, and context (education, community, impact). Voice: direct assertions (e.g. "Its work centers on…" not "Its publicly described work centers on…"; "The organization prioritizes…"). FORBIDDEN: "publicly presented", "publicly described", "publicly available", "as reflected", "as shown", "as described", "according to", "through Bold.org", "this scholarship provides", "the page says", listing-only recap tone.
 3. Generate 3-4 FAQ pairs based ONLY on real data. Direct tone; avoid the hedges listed in rule 2.
 4. Return an array of the exact URL sources you used.
@@ -887,7 +901,7 @@ Rules:
         {
           role: 'system',
           content:
-            'You output only one JSON object. Use null for unknown description or state. Omit speculation. The "description" must read as an authoritative org profile—not a scraped recap—minimum ~180 words unless truly impossible; no hedges (publicly presented/described/available, as reflected/shown/described, according to…); no aggregator names in prose. FAQ items grounded in same facts as description. Sources: absolute https URLs only. Field "state": valid USPS code or null.'
+            'You output only one JSON object. Use null for unknown description or state. Omit speculation. The "description" must read as an authoritative org profile—not a scraped recap—minimum ~180 words unless truly impossible; when source material mentions amounts, dates, geography, audiences, programs, those facts must surface in prose (without inventing). Descriptions without concrete anchors must be avoided (prefer null). No hedges (publicly presented/described/available, as reflected/shown/described, according to…); no aggregator names in prose. FAQ items grounded in same facts as description. Sources: absolute https URLs only. Field "state": valid USPS code or null.'
         },
         { role: 'user', content: userPrompt }
       ]
@@ -918,10 +932,19 @@ Rules:
     });
 
     const description = parsed.description?.trim() || '';
-    diagnostics.passesCatalogCompletenessCheck = Boolean(description);
-    diagnostics.completenessGap = diagnostics.passesCatalogCompletenessCheck
-      ? null
-      : 'empty description after parse + SEO normalization (catalog requires non-empty description)';
+    const hasBody = Boolean(description);
+    const concreteOk = hasBody && hasConcreteSignal(description);
+
+    diagnostics.passesCatalogCompletenessCheck = hasBody && concreteOk;
+    if (!hasBody) {
+      diagnostics.completenessGap =
+        'empty description after parse + SEO normalization (catalog requires non-empty description)';
+    } else if (!concreteOk) {
+      diagnostics.completenessGap =
+        'description failed post-quality: lacks concrete signal (digits, institution/program vocabulary, Title Case tokens, acronym tokens, or long non-stopword tokens)';
+    } else {
+      diagnostics.completenessGap = null;
+    }
 
     return {
       result: {
@@ -956,7 +979,7 @@ export async function enrichProviderData(
 
 /**
  * Same OpenAI + fetch path as {@link enrichProviderData}, plus structured diagnostics (CLI / troubleshooting).
- * Prompt strings are unchanged; curated display `sources` replace raw model URLs when applicable.
+ * Same enrichment policy as {@link enrichProviderData}; enriched display `sources` replace raw URLs when applicable.
  */
 export async function diagnoseProviderEnrichment(
   providerName: string,
