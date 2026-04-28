@@ -1093,6 +1093,9 @@ export interface Database {
           slug: string
           display_name: string
           official_url: string | null
+          description: string | null
+          sources: Json
+          enriched_at: string | null
           state: string | null
           ai_description: string | null
           ai_sources: Json
@@ -1106,6 +1109,9 @@ export interface Database {
           slug: string
           display_name: string
           official_url?: string | null
+          description?: string | null
+          sources?: Json
+          enriched_at?: string | null
           state?: string | null
           ai_description?: string | null
           ai_sources?: Json
@@ -1119,6 +1125,9 @@ export interface Database {
           slug?: string
           display_name?: string
           official_url?: string | null
+          description?: string | null
+          sources?: Json
+          enriched_at?: string | null
           state?: string | null
           ai_description?: string | null
           ai_sources?: Json

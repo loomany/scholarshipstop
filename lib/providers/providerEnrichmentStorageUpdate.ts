@@ -30,8 +30,7 @@ type EnrichmentStorageWriteInput = {
 };
 
 /**
- * Writes enriched copy into `ai_*` fields and marks the row enriched.
- * (Schema in `types_db` matches `public.providers` — canonical `description`/`sources` appear when generated types include them.)
+ * Dual-write canonical `description` / `sources` / `enriched_at` with legacy `ai_*` caches.
  */
 export function buildProviderEnrichmentWritePatch(
   input: EnrichmentStorageWriteInput
@@ -45,8 +44,11 @@ export function buildProviderEnrichmentWritePatch(
   const sources = normalizeEnrichmentSourcesForStorage(input.sources);
   const t = new Date().toISOString();
   return {
+    description: input.description,
+    sources: sources as unknown as Json,
+    enriched_at: t,
     ai_description: input.description,
-    ai_sources: sources,
+    ai_sources: sources as unknown as Json,
     ai_faq: input.faq as unknown as Json,
     state: input.state,
     is_enriched: true,

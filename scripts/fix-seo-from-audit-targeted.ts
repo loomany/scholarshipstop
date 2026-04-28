@@ -1058,6 +1058,8 @@ async function main() {
             if (!guardCost()) break;
             const official = row.official_url ?? null;
             const enriched = await enrichProviderData(name, {
+              officialWebsiteUrl: official,
+              providerSlug: slug,
               sourceUrls: [...(official ? [official] : [])]
             });
             nextDescription = ensureMeta(enriched.description ?? '', templateDescription);
@@ -1072,6 +1074,7 @@ async function main() {
               issues.has('provider_overview_missing')
             ) {
               payload.ai_description = nextDescription;
+              payload.description = nextDescription;
             }
             if (forceAiBad || issues.has('faq_missing')) payload.ai_faq = nextFaq as unknown as Json;
             if (Object.keys(payload).length === 0) {

@@ -19,6 +19,7 @@ import {
   fetchProviderOfficialUrlsBySlug,
   fetchProviderSourceUrlsBySlug
 } from '../lib/providers/providerOfficialUrl';
+import { buildProviderEnrichmentWritePatch } from '../lib/providers/providerEnrichmentStorageUpdate';
 import { enqueueProviderUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
 
@@ -330,17 +331,26 @@ async function main() {
       continue;
     }
 
+    if (enriched.postQualityPassed !== true) {
+      console.log(
+        `[${done + 1}/${queue.length}] SKIP postQualityPassed=false; provider left pending.`
+      );
+      done += 1;
+      continue;
+    }
+
     const { error: upErr } = await supabase
       .from('providers')
-      .update({
-        ai_description: description,
-        ...(officialUrl ? { official_url: officialUrl } : {}),
-        ai_sources: sources,
-        ai_faq: enriched.faq,
-        state: enriched.state,
-        is_enriched: true,
-        updated_at: new Date().toISOString()
-      })
+      .update(
+        buildProviderEnrichmentWritePatch({
+          description,
+          sources,
+          faq: enriched.faq,
+          state: enriched.state,
+          officialUrl: officialUrl ?? undefined,
+          postQualityPassed: true
+        })
+      )
       .eq('id', row.id);
 
     if (upErr) {
