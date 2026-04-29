@@ -34,8 +34,45 @@ import { getURL } from '@/utils/helpers';
 export const revalidate = 300;
 
 const ORG_NAME = 'ScholarshipTop';
+const SAME_DAY_MS = 24 * 60 * 60 * 1000;
 
 type PageProps = { params: { slug: string } };
+
+function formatArticleDate(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const date = new Date(iso);
+  if (!Number.isFinite(date.getTime())) return null;
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(date);
+}
+
+function articleDateLine({
+  publishedAt,
+  updatedAt
+}: {
+  publishedAt: string | null | undefined;
+  updatedAt: string | null | undefined;
+}): string | null {
+  const publishedLabel = formatArticleDate(publishedAt);
+  const updatedLabel = formatArticleDate(updatedAt);
+  if (!publishedLabel && !updatedLabel) return null;
+
+  const publishedMs = publishedAt ? new Date(publishedAt).getTime() : NaN;
+  const updatedMs = updatedAt ? new Date(updatedAt).getTime() : NaN;
+  const updatedIsDistinct =
+    Number.isFinite(publishedMs) &&
+    Number.isFinite(updatedMs) &&
+    Math.abs(updatedMs - publishedMs) > SAME_DAY_MS;
+
+  if (publishedLabel && updatedLabel && updatedIsDistinct) {
+    return `Published ${publishedLabel} · Updated ${updatedLabel}`;
+  }
+  if (publishedLabel) return `Published ${publishedLabel}`;
+  return updatedLabel ? `Updated ${updatedLabel}` : null;
+}
 
 function EssayTableOfContents({ items }: { items: EssayTocItem[] }) {
   if (items.length === 0) return null;
@@ -342,6 +379,10 @@ export default async function EssayGuidePage({ params }: PageProps) {
     sources.length > 0 ? (
       <EssaySourcesInset sources={sources} standalone />
     ) : undefined;
+  const visibleDateLine = articleDateLine({
+    publishedAt: essay.created_at,
+    updatedAt: essay.updated_at
+  });
 
   return (
     <div className="bg-white text-gray-900 antialiased">
@@ -375,6 +416,11 @@ export default async function EssayGuidePage({ params }: PageProps) {
             {essay.title?.trim() || 'Essay guide'}
           </h1>
           <div className="mt-4 space-y-2">
+            {visibleDateLine ? (
+              <p className="text-xs font-medium text-gray-500 sm:text-sm">
+                {visibleDateLine}
+              </p>
+            ) : null}
             <p className="max-w-2xl border-l-2 border-indigo-200 pl-3 text-xs leading-relaxed text-gray-600">
               Written by {ORG_NAME} AI • Reviewed by Editorial Team
             </p>

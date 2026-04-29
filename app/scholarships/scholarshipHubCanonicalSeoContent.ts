@@ -93,6 +93,10 @@ export const SCHOLARSHIP_HUB_CANONICAL_SEO: Record<
     ],
     extraRelatedHrefs: [
       {
+        label: 'International student scholarship guide',
+        href: '/resources/scholarships-for-international-students-guide'
+      },
+      {
         label: 'Easy apply scholarships',
         href: '/scholarships/hub/easy-apply'
       }

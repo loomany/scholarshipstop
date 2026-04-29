@@ -104,6 +104,16 @@ type Props = {
 
 /** SEO category POST must not send saved/ignored/started/submitted — they skew SQL / fallback. */
 const SEO_LIST_FETCH_ID_LISTS: string[] = [];
+
+function scholarshipListingFreshnessLine(
+  total: number | null,
+  fallbackUsed: boolean
+): string | null {
+  if (fallbackUsed) return 'Showing a broad selection of scholarships';
+  if (total == null || total <= 0) return null;
+  return `${total.toLocaleString('en-US')} scholarships currently listed`;
+}
+
 function buildCategoryListingSearchParams(options: {
   base: URLSearchParams;
   page: number;
@@ -186,7 +196,9 @@ export default function ScholarshipCategoryPageClient({
   const appliedProviderSlug = moreFiltersApplied?.filterUniversitySlug ?? null;
   const [previewCount, setPreviewCount] = useState(0);
   const [seoFallbackMeta, setSeoFallbackMeta] =
-    useState<SeoListingFallbackMeta | null>(null);
+    useState<SeoListingFallbackMeta | null>(
+      initialPayload?.result.seoFallback ?? null
+    );
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [registrationWallVariant, setRegistrationWallVariant] = useState<
     'scholarships' | 'essay' | 'locked-category'
@@ -768,6 +780,10 @@ export default function ScholarshipCategoryPageClient({
   }, []);
 
   const resultCountForHeader = isLoading ? null : listTotalForUi;
+  const freshnessLine = scholarshipListingFreshnessLine(
+    isLoading ? null : totalCount,
+    Boolean(seoFallbackMeta?.used)
+  );
   const showingFrom =
     !isLoading && listTotalForUi > 0 ? listStart + 1 : null;
   const showingTo =
@@ -792,6 +808,11 @@ export default function ScholarshipCategoryPageClient({
             <p className="max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem]">
               {introParagraph}
             </p>
+            {freshnessLine ? (
+              <p className="text-xs font-medium text-slate-500 sm:text-sm">
+                {freshnessLine}
+              </p>
+            ) : null}
           </div>
         }
         sidebar={

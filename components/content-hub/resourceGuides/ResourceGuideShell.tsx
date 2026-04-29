@@ -62,6 +62,21 @@ export default function ResourceGuideShell({
       }
     ]
   };
+  const faqSchema =
+    faq.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faq.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: item.answer
+            }
+          }))
+        }
+      : null;
 
   return (
     <div className="min-h-[calc(100dvh-5rem)] bg-zinc-50 pb-16 pt-10 sm:pb-24 sm:pt-14">
@@ -69,6 +84,12 @@ export default function ResourceGuideShell({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
       />
+      {faqSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
       <article className="mx-auto max-w-3xl px-5 sm:px-6">
         <nav className="mb-8 text-sm" aria-label="Breadcrumb">
           <Link href="/" className={clsx(nav.legal, 'inline-block')}>

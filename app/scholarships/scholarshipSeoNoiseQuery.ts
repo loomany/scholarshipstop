@@ -7,7 +7,10 @@ const SCHOLARSHIP_SEO_NOISE_QUERY_KEYS = [
   'category',
   'deadline',
   'email_ids',
+  'fbclid',
+  'gclid',
   'limit',
+  'msclkid',
   'next',
   'page',
   'q',
@@ -16,7 +19,12 @@ const SCHOLARSHIP_SEO_NOISE_QUERY_KEYS = [
   'sort',
   'status',
   'step',
-  'tab'
+  'tab',
+  'utm_campaign',
+  'utm_content',
+  'utm_medium',
+  'utm_source',
+  'utm_term'
 ] as const;
 
 type NextSearchParamsRecord = Record<string, string | string[] | undefined>;

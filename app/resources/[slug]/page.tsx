@@ -34,6 +34,44 @@ export const revalidate = 300;
 
 type PageProps = { params: { slug: string } };
 
+const SAME_DAY_MS = 24 * 60 * 60 * 1000;
+
+function formatArticleDate(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const date = new Date(iso);
+  if (!Number.isFinite(date.getTime())) return null;
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(date);
+}
+
+function articleDateLine({
+  publishedAt,
+  updatedAt
+}: {
+  publishedAt: string | null | undefined;
+  updatedAt: string | null | undefined;
+}): string | null {
+  const publishedLabel = formatArticleDate(publishedAt);
+  const updatedLabel = formatArticleDate(updatedAt);
+  if (!publishedLabel && !updatedLabel) return null;
+
+  const publishedMs = publishedAt ? new Date(publishedAt).getTime() : NaN;
+  const updatedMs = updatedAt ? new Date(updatedAt).getTime() : NaN;
+  const updatedIsDistinct =
+    Number.isFinite(publishedMs) &&
+    Number.isFinite(updatedMs) &&
+    Math.abs(updatedMs - publishedMs) > SAME_DAY_MS;
+
+  if (publishedLabel && updatedLabel && updatedIsDistinct) {
+    return `Published ${publishedLabel} · Updated ${updatedLabel}`;
+  }
+  if (publishedLabel) return `Published ${publishedLabel}`;
+  return updatedLabel ? `Updated ${updatedLabel}` : null;
+}
+
 export async function generateMetadata({
   params
 }: PageProps): Promise<Metadata> {
@@ -175,6 +213,10 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
       url: getURL()
     }
   };
+  const visibleDateLine = articleDateLine({
+    publishedAt: post.published_at,
+    updatedAt: post.updated_at
+  });
 
   const faqSchema =
     faq.length > 0
@@ -255,6 +297,11 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.25rem] lg:leading-tight">
             {post.title?.trim() || 'Untitled'}
           </h1>
+          {visibleDateLine ? (
+            <p className="mt-3 text-xs font-medium text-gray-500 sm:text-sm">
+              {visibleDateLine}
+            </p>
+          ) : null}
         </header>
 
         {post.cover_image_url?.trim() ? (

@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Link from 'next/link';
 
 import ContinueScholarshipSearchCardGrid from '@/components/scholarships/ContinueScholarshipSearchCardGrid';
 import {
@@ -6,6 +7,10 @@ import {
   categoryListingFaqItems,
   categoryListingFaqSectionTitle
 } from '@/app/scholarships/category/categoryListingSeoCopy';
+import {
+  resolveCategoryExpertContent,
+  type CategoryExpertContent
+} from '@/app/scholarships/category/categoryExpertContent';
 import type { ScholarshipCategoryId } from '@/app/scholarships/scholarshipCategories';
 
 function categoryListingFaqPageJsonLd(
@@ -26,6 +31,42 @@ function categoryListingFaqPageJsonLd(
   };
 }
 
+function categoryHowThisPageWorksText(
+  expertContent: CategoryExpertContent | null,
+  categoryWord: string
+): string {
+  return (
+    expertContent?.howThisPageWorks ??
+    `This page helps you review ${categoryWord} scholarships from the ScholarshipTop catalog. Use filters to narrow results by deadline, award amount, GPA, eligibility, location, and application requirements before opening provider details.`
+  );
+}
+
+function categoryChanceBullets(
+  expertContent: CategoryExpertContent | null,
+  categoryWord: string
+): string[] {
+  return (
+    expertContent?.howToIncreaseChances ?? [
+      `Focus first on ${categoryWord} scholarships where your background matches the listed eligibility requirements.`,
+      'Compare deadlines and required materials before choosing which applications to prioritize.',
+      'Prepare essays, transcripts, recommendation requests, and proof of enrollment before the final week.',
+      'Confirm official provider requirements and submission instructions before applying.'
+    ]
+  );
+}
+
+function categoryGuideLink(
+  categoryId: ScholarshipCategoryId | null
+): { href: string; label: string; description: string } | null {
+  if (categoryId !== 'medical') return null;
+  return {
+    href: '/resources/medical-scholarships-guide',
+    label: 'Read the medical scholarships guide',
+    description:
+      'Get practical advice on healthcare scholarship eligibility, essays, documents, and application planning.'
+  };
+}
+
 type Props = {
   canonicalSlug: string;
   categoryId: ScholarshipCategoryId | null;
@@ -36,10 +77,18 @@ export default function ScholarshipCategoryPostListingSeo({
   categoryId
 }: Props) {
   const categoryWordForFaq = categoryListingBrowseWord(categoryId, canonicalSlug);
-  const faqItems = categoryListingFaqItems(categoryWordForFaq);
+  const expertContent = resolveCategoryExpertContent(categoryId);
+  const faqItems =
+    expertContent?.faqItems ?? categoryListingFaqItems(categoryWordForFaq);
   const faqLd = categoryListingFaqPageJsonLd(faqItems);
   const faqSectionHeading = categoryListingFaqSectionTitle(categoryId, canonicalSlug);
   const idPrefix = `category-${canonicalSlug}-faq`;
+  const howThisPageWorks = categoryHowThisPageWorksText(
+    expertContent,
+    categoryWordForFaq
+  );
+  const chanceBullets = categoryChanceBullets(expertContent, categoryWordForFaq);
+  const guideLink = categoryGuideLink(categoryId);
 
   return (
     <>
@@ -49,6 +98,59 @@ export default function ScholarshipCategoryPostListingSeo({
           // eslint-disable-next-line react/no-danger -- FAQPage mirrors visible accordion below
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
         />
+      ) : null}
+
+      <section
+        className="mt-8 grid max-w-5xl gap-4 lg:mx-auto lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
+        aria-label={`How to use this ${categoryWordForFaq} scholarships page`}
+      >
+        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-600">
+            How this page works
+          </p>
+          <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-900">
+            Compare scholarships with the listing tools above
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            {howThisPageWorks}
+          </p>
+        </article>
+
+        <article className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-orange-50/40 p-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-600">
+            How to increase your chances
+          </p>
+          <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-900">
+            Choose applications with a stronger fit
+          </h2>
+          <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600">
+            {chanceBullets.map((bullet) => (
+              <li key={bullet} className="flex gap-3">
+                <span
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500"
+                  aria-hidden
+                />
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      </section>
+
+      {guideLink ? (
+        <section className="mt-6 max-w-5xl lg:mx-auto" aria-label="Related guide">
+          <Link
+            href={guideLink.href}
+            className="group block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F3F7FA]"
+          >
+            <span className="text-sm font-semibold text-blue-700 group-hover:text-blue-900">
+              {guideLink.label}
+            </span>
+            <span className="mt-2 block text-sm leading-6 text-slate-600">
+              {guideLink.description}
+            </span>
+          </Link>
+        </section>
       ) : null}
 
       <section

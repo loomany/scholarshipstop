@@ -206,6 +206,15 @@ const HUB_TABS_SSR_NEVER_SEEDS_ID_LIST: readonly ScholarshipListTabId[] = [
 const EMPTY_LOCATION_OPTIONS: string[] = [];
 const PREVIEW_COUNT_CACHE_TTL_MS = 30_000;
 
+function scholarshipListingFreshnessLine(
+  total: number | null,
+  fallbackUsed: boolean
+): string | null {
+  if (fallbackUsed) return 'Showing a broad selection of scholarships';
+  if (total == null || total <= 0) return null;
+  return `${total.toLocaleString('en-US')} scholarships currently listed`;
+}
+
 function longTailRequestRouteKeyFromPathname(pathname: string): string {
   return pathname.replace(/^\/scholarships\/?/, '');
 }
@@ -2941,6 +2950,10 @@ function ScholarshipsPageInner({
   const blockingListLoad = blockingInitialLoad || blockingApplyLoad;
   const resultCountForHeader =
     blockingListLoad ? null : headerTotalCount === null ? null : headerTotalCount;
+  const freshnessLine = scholarshipListingFreshnessLine(
+    resultCountForHeader,
+    Boolean(listQuery.data?.seoFallback?.used ?? initialPayload?.result.seoFallback?.used)
+  );
   const rangeTotalForPager =
     headerTotalCount === null
       ? guestBestPreviewStaleMatchesTotal
@@ -3112,6 +3125,11 @@ function ScholarshipsPageInner({
                   {hubListingPageTitle}
                 </h1>
                 {hubCanonicalIntroBelowTitle}
+                {freshnessLine ? (
+                  <p className="mt-3 text-xs font-medium text-slate-500 sm:text-sm">
+                    {freshnessLine}
+                  </p>
+                ) : null}
               </div>
             </div>
           )

@@ -29,14 +29,11 @@ export function categoryListingBrowseWord(
   return breadcrumbCategoryLabel(slugFallback).toLowerCase();
 }
 
-/** SSR intro below H1 — medical uses dedicated copy; other slugs use the generic template. */
+/** Generic SSR intro below H1; dedicated overrides live in categoryExpertContent. */
 export function categoryListingIntroParagraph(
   canonicalSlug: string,
   categoryId: ScholarshipCategoryId | null
 ): string {
-  if (categoryId === 'medical') {
-    return 'Find medicine scholarships for students pursuing healthcare, nursing, pre-med, public health, and related fields. Compare deadlines, award amounts, GPA requirements, eligibility rules, and application steps before applying.';
-  }
   const label = headingLabelForCategory(categoryId, canonicalSlug);
   return `Find ${label} scholarships for students looking for funding in this field. Compare deadlines, award amounts, GPA requirements, eligibility rules, and application steps before applying.`;
 }

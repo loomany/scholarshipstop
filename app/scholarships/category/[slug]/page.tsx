@@ -10,6 +10,7 @@ import {
   categoryListingMetaDescription,
   categoryListingMetaTitle
 } from '@/app/scholarships/category/categoryListingSeoCopy';
+import { resolveCategoryExpertContent } from '@/app/scholarships/category/categoryExpertContent';
 import {
   formatCategoryPageH1,
   normalizeCategoryId
@@ -123,10 +124,9 @@ export default async function ScholarshipCategoryPage({
 }) {
   const { canonicalSlug, pageTitle } = resolveCategorySlugParam(params.slug);
   const categoryId = normalizeCategoryId(canonicalSlug.toLowerCase());
-  const introParagraph = categoryListingIntroParagraph(
-    canonicalSlug,
-    categoryId
-  );
+  const expertContent = resolveCategoryExpertContent(categoryId);
+  const introParagraph =
+    expertContent?.intro ?? categoryListingIntroParagraph(canonicalSlug, categoryId);
   const listingExploreHeading = categoryListingAvailableHeading(
     categoryId,
     canonicalSlug

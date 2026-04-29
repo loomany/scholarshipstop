@@ -5,7 +5,9 @@
 export const RESOURCE_GUIDE_SLUGS = [
   'how-to-apply-for-scholarships',
   'scholarship-deadlines-explained',
-  'combine-multiple-scholarships'
+  'combine-multiple-scholarships',
+  'medical-scholarships-guide',
+  'scholarships-for-international-students-guide'
 ] as const;
 
 export type ResourceGuideSlug = (typeof RESOURCE_GUIDE_SLUGS)[number];

@@ -30,6 +30,14 @@ const LINK_COPY: Record<
   'combine-multiple-scholarships': {
     title: 'Can You Combine Multiple Scholarships',
     after: 'clarifies stacking awards legally and effectively.'
+  },
+  'medical-scholarships-guide': {
+    title: 'Medical Scholarships Guide',
+    after: 'helps healthcare students prioritize stronger applications.'
+  },
+  'scholarships-for-international-students-guide': {
+    title: 'Scholarships for International Students',
+    after: 'explains eligibility checks and document planning.'
   }
 };
 

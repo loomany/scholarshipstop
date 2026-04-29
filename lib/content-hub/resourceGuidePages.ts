@@ -11,7 +11,7 @@ export type ResourceGuideCard = {
   continueBlurb: string;
 };
 
-/** Canonical copy for Related Guides cards (all three guides). */
+/** Canonical copy for Related Guides cards. */
 export const RESOURCE_GUIDE_CARDS: ResourceGuideCard[] = [
   {
     slug: 'how-to-apply-for-scholarships',
@@ -36,6 +36,22 @@ export const RESOURCE_GUIDE_CARDS: ResourceGuideCard[] = [
       'What “stacking” means, where schools draw the line, and how to stay within the rules.',
     continueBlurb:
       'understand how stacking scholarships works and which rules to watch'
+  },
+  {
+    slug: 'medical-scholarships-guide',
+    title: 'Medical Scholarships Guide',
+    description:
+      'How healthcare students can find, qualify for, and prioritize stronger medical scholarship applications.',
+    continueBlurb:
+      'practical guidance for healthcare, nursing, pre-med, and public health scholarship searches'
+  },
+  {
+    slug: 'scholarships-for-international-students-guide',
+    title: 'Scholarships for International Students',
+    description:
+      'Eligibility checks, documents, essays, and search habits for international students looking for scholarships.',
+    continueBlurb:
+      'eligibility and application guidance for international student scholarship searches'
   }
 ];
 
