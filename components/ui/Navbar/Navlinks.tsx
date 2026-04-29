@@ -49,8 +49,12 @@ const ABOUT_SUBLINKS = [
   { href: '/terms', label: 'Terms' },
   { href: '/faq', label: 'FAQ' },
   { href: '/refund-policy', label: 'Refund Policy' },
-  { href: '/subscription', label: 'Pricing' }
+  { href: '/for-organizations', label: 'For Organizations' }
 ] as const;
+
+const MOBILE_ABOUT_SUBLINKS = ABOUT_SUBLINKS.filter(
+  ({ href }) => href !== '/for-organizations'
+);
 
 const ESSAY_MENTOR_PATH = '/essay';
 const VERSUS_HUB_PATH = '/compare';
@@ -148,16 +152,16 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
     [pathname]
   );
 
+  const pricingActive = useMemo(
+    () =>
+      pathname === '/subscription' || pathname.startsWith('/subscription/'),
+    [pathname]
+  );
+
   const forOrganizationsActive = useMemo(
     () =>
       pathname === '/for-organizations' ||
       pathname.startsWith('/for-organizations/'),
-    [pathname]
-  );
-
-  const pricingActive = useMemo(
-    () =>
-      pathname === '/subscription' || pathname.startsWith('/subscription/'),
     [pathname]
   );
 
@@ -439,13 +443,13 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               </div>
             </div>
             <Link
-              href="/for-organizations"
+              href="/subscription"
               className={clsx(
                 nav.dark,
-                forOrganizationsActive && nav.darkActive
+                pricingActive && nav.darkActive
               )}
             >
-              For Organizations
+              Pricing
             </Link>
           </nav>
         </div>
@@ -558,7 +562,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                       role="group"
                       aria-label="Help and legal"
                     >
-                      {ABOUT_SUBLINKS.map(({ href, label }) => {
+                      {MOBILE_ABOUT_SUBLINKS.map(({ href, label }) => {
                         const active = sublinkActive(href, pathname);
                         return (
                           <Link
@@ -815,6 +819,18 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 </div>
               </div>
               <Link
+                href="/subscription"
+                className={clsx(
+                  nav.darkDrawer,
+                  'flex w-full max-w-full items-center gap-3',
+                  pricingActive && nav.darkDrawerActive
+                )}
+                onClick={closeMenu}
+              >
+                <MobileDrawerNavIcon icon={BadgeDollarSign} active={pricingActive} />
+                <span className="min-w-0">Pricing</span>
+              </Link>
+              <Link
                 href="/for-organizations"
                 className={clsx(
                   nav.darkDrawer,
@@ -828,18 +844,6 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   active={forOrganizationsActive}
                 />
                 <span className="min-w-0">For Organizations</span>
-              </Link>
-              <Link
-                href="/subscription"
-                className={clsx(
-                  nav.darkDrawer,
-                  'flex w-full max-w-full items-center gap-3',
-                  pricingActive && nav.darkDrawerActive
-                )}
-                onClick={closeMenu}
-              >
-                <MobileDrawerNavIcon icon={BadgeDollarSign} active={pricingActive} />
-                <span className="min-w-0">Pricing</span>
               </Link>
               <NavbarUserSlot
                 pathname={pathname}

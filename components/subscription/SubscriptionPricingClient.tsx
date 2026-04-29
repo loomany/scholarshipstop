@@ -341,6 +341,7 @@ const QUARTERLY_FEATURES: string[] = [
   'Unlock AI Essay Mentor',
   'Smart Interview & Voice Input',
   'Unlimited essay generations',
+  'Instant email alerts for new matches',
   'Save 35% compared to monthly',
 ];
 
@@ -349,6 +350,7 @@ const LIFETIME_FEATURES: string[] = [
   'Unlock AI Essay Mentor',
   'Best price per month',
   'Priority AI processing',
+  'Priority email alerts for new matches',
   'Full access for the entire application season',
   'Save 50% compared to monthly'
 ];
