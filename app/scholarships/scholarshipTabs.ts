@@ -185,7 +185,7 @@ export function scholarshipListPageTitle(
   const guest = options?.guest === true;
   switch (tab) {
     case 'best-recommendation':
-      return guest ? 'Best recommendations' : 'Best recommendations for you';
+      return 'Best recommendations';
     case 'saved':
       return 'Saved scholarships';
     case 'from-email':
@@ -204,7 +204,7 @@ export function scholarshipListPageTitle(
       return 'Ignored scholarships';
     case 'matches':
     default:
-      return guest ? 'Browse scholarships' : 'Scholarship matches';
+      return 'Scholarship matches';
   }
 }
 

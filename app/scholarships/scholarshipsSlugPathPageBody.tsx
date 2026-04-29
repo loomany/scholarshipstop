@@ -1,9 +1,21 @@
-import { Suspense } from 'react';
+import { Suspense, type ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
+import ScholarshipsHubShellSkeleton from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipDetailPageAuthBridge from '@/app/scholarships/ScholarshipDetailPageAuthBridge';
 import ScholarshipsHubPageAuthBridge from '@/app/scholarships/ScholarshipsHubPageAuthBridge';
+import ContinueScholarshipSearchCardGrid from '@/components/scholarships/ContinueScholarshipSearchCardGrid';
+import {
+  SCHOLARSHIP_HUB_CANONICAL_SEO,
+  isScholarshipHubCanonicalSeoSlug,
+  type ScholarshipHubCanonicalSeoSlug
+} from '@/app/scholarships/scholarshipHubCanonicalSeoContent';
+import { scholarshipListPageTitle } from '@/app/scholarships/scholarshipTabs';
+import {
+  ScholarshipHubCanonicalIntro,
+  ScholarshipHubCanonicalListingFooter
+} from '@/components/scholarships/ScholarshipHubCanonicalSeo';
 import {
   SeoScholarshipHero,
   SeoScholarshipPostListingSeo
@@ -53,6 +65,7 @@ import { fetchComparePeersForInstitution } from '@/lib/seo/comparePeersServer';
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { createPublicClient } from '@/utils/supabase/public';
 import { createClient as createServerSupabase } from '@/utils/supabase/server';
+import { buildScholarshipListingJsonLd } from '@/app/scholarships/scholarshipListingJsonLd';
 
 /** Set DEBUG_SEO_SCHOLARSHIP=1 to log which SEO bundle and copy the server picked. */
 function debugLogListingSeo(payload: Record<string, unknown>) {
@@ -119,71 +132,42 @@ export type ScholarshipsSlugPathPageBodyProps = {
   searchParamsString?: string;
 };
 
-function HubShellFallback() {
+const SCHOLARSHIPS_ROOT_SCHEMA_DESCRIPTION =
+  'Browse the ScholarshipTop catalog to find scholarships by deadline, award amount, eligibility, field of study, GPA, and student background.';
+
+function ScholarshipCatalogRootIntro() {
   return (
-    <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 sm:px-5 md:py-12 lg:px-8">
-      <div className="mx-auto w-full max-w-[1200px]">
-        <div className="space-y-5 sm:space-y-6">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
-            Scholarship matches
-          </h1>
-          <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-            <div className="mb-3 h-4 w-48 rounded bg-gray-200" />
-            <div className="mb-3 h-11 w-full rounded-xl bg-gray-100" />
-            <div className="flex gap-3">
-              <div className="h-10 w-24 rounded-xl bg-gray-100" />
-              <div className="h-10 w-28 rounded-xl bg-gray-100" />
-              <div className="h-10 w-24 rounded-xl bg-gray-100" />
-            </div>
-          </div>
-        </div>
-        <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="space-y-4">
-            {Array.from({ length: 3 }).map((_, idx) => (
-              <div
-                key={`hub-shell-card-${idx}`}
-                className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"
-              >
-                <div className="mb-3 h-5 w-2/3 rounded bg-gray-200" />
-                <div className="mb-2 h-4 w-full rounded bg-gray-100" />
-                <div className="mb-4 h-4 w-5/6 rounded bg-gray-100" />
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="h-9 rounded bg-gray-100" />
-                  <div className="h-9 rounded bg-gray-100" />
-                  <div className="h-9 rounded bg-gray-100" />
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="space-y-4">
-            <div className="rounded-2xl bg-white p-3 shadow-sm">
-              <div className="rounded-lg bg-black px-4 py-3.5 text-center">
-                <span className="text-sm font-bold tracking-tight text-white">
-                  My scholarships
-                </span>
-              </div>
-              <ul className="mt-2 space-y-1">
-                {Array.from({ length: 7 }).map((_, idx) => (
-                  <li key={idx} className="flex items-center gap-3 rounded-lg py-2.5 pr-2 pl-3">
-                    <span className="h-[18px] w-[18px] rounded-full bg-orange-200" />
-                    <span className="h-4 flex-1 rounded bg-gray-200" />
-                    <span className="h-3 w-[4.5ch] rounded bg-gray-200" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="h-40 rounded-2xl bg-white shadow-sm" />
-          </div>
-        </div>
-      </div>
-    </section>
+    <div className="mt-5 max-w-5xl rounded-2xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/90 p-5 text-sm leading-relaxed text-slate-600 shadow-sm sm:mt-6 sm:p-6 sm:text-[0.9375rem] lg:mx-auto">
+      <p>
+        Browse the ScholarshipTop catalog to compare scholarships by deadline,
+        award amount, eligibility, field of study, GPA, and student background.
+        Use the filters to narrow the full catalog and open each listing to
+        review requirements before you apply.
+      </p>
+    </div>
   );
 }
 
 async function HubRootStreamedBridge({
-  searchParamsString
+  searchParamsString,
+  hubCanonicalSeoSlug,
+  hubCanonicalIntroBelowTitle,
+  postListingContent,
+  listingJsonLdPath,
+  listingJsonLdName,
+  listingJsonLdDescription,
+  includeListingJsonLd = false,
+  fallbackPageTitle = 'Scholarship matches'
 }: {
   searchParamsString: string;
+  hubCanonicalSeoSlug?: ScholarshipHubCanonicalSeoSlug;
+  hubCanonicalIntroBelowTitle?: ReactNode;
+  postListingContent?: ReactNode;
+  listingJsonLdPath?: string;
+  listingJsonLdName?: string;
+  listingJsonLdDescription?: string;
+  includeListingJsonLd?: boolean;
+  fallbackPageTitle?: string;
 }) {
   type HubListingClient = ReturnType<typeof createPublicClient>;
   let profile: ProfilesRow | null = null;
@@ -211,17 +195,55 @@ async function HubRootStreamedBridge({
     profile,
     searchParamsString
   );
+  const hubIntro =
+    hubCanonicalSeoSlug != null ? (
+      <ScholarshipHubCanonicalIntro
+        slug={hubCanonicalSeoSlug}
+        introMarginTopClassName={
+          hubCanonicalSeoSlug === 'best-recommendation' ? 'mt-5 sm:mt-6' : undefined
+        }
+      />
+    ) : (
+      hubCanonicalIntroBelowTitle ?? null
+    );
+  const hubFooter =
+    hubCanonicalSeoSlug != null ? (
+      <ScholarshipHubCanonicalListingFooter slug={hubCanonicalSeoSlug} />
+    ) : (
+      postListingContent ?? null
+    );
+  const listingJsonLd =
+    includeListingJsonLd && listingJsonLdPath && listingJsonLdName
+      ? buildScholarshipListingJsonLd({
+          name: listingJsonLdName,
+          description: listingJsonLdDescription ?? listingJsonLdName,
+          path: listingJsonLdPath,
+          result: initialListPayload
+        })
+      : null;
+
   return (
-    <ScholarshipsHubPageAuthBridge
-      initialPayload={createInitialScholarshipsPayload(
-        buildInitialListRequestKey({
-          kind: 'hub',
-          routeKey: 'hub',
-          searchParamsString
-        }),
-        initialListPayload
-      )}
-    />
+    <>
+      {listingJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
+        />
+      ) : null}
+      <ScholarshipsHubPageAuthBridge
+        initialPayload={createInitialScholarshipsPayload(
+          buildInitialListRequestKey({
+            kind: 'hub',
+            routeKey: 'hub',
+            searchParamsString
+          }),
+          initialListPayload
+        )}
+        hubCanonicalIntroBelowTitle={hubIntro}
+        postListingContent={hubFooter}
+        fallbackPageTitle={fallbackPageTitle}
+      />
+    </>
   );
 }
 
@@ -243,9 +265,30 @@ export default async function ScholarshipsSlugPathPageBody({
       searchParamsString,
       hubResolved
     );
+    const hubSlugNorm = normalizeScholarshipDynamicParam(segments[1] ?? '');
+    const hubCanonicalSeoSlug: ScholarshipHubCanonicalSeoSlug | undefined =
+      isScholarshipHubCanonicalSeoSlug(hubSlugNorm) ? hubSlugNorm : undefined;
+    const hubFallbackPageTitle =
+      hubResolved.audience === 'international_friendly'
+        ? 'Scholarships for international students'
+        : scholarshipListPageTitle(hubResolved.tab, { guest: true });
     return (
-      <Suspense fallback={<HubShellFallback />}>
-        <HubRootStreamedBridge searchParamsString={effectiveSearchParamsString} />
+      <Suspense
+        fallback={<ScholarshipsHubShellSkeleton pageTitle={hubFallbackPageTitle} />}
+      >
+        <HubRootStreamedBridge
+          searchParamsString={effectiveSearchParamsString}
+          hubCanonicalSeoSlug={hubCanonicalSeoSlug}
+          listingJsonLdPath={`/scholarships/hub/${encodeURIComponent(segments[1] ?? '')}`}
+          listingJsonLdName={hubFallbackPageTitle}
+          listingJsonLdDescription={
+            hubCanonicalSeoSlug
+              ? SCHOLARSHIP_HUB_CANONICAL_SEO[hubCanonicalSeoSlug].introText
+              : hubFallbackPageTitle
+          }
+          includeListingJsonLd={searchParamsString.length === 0}
+          fallbackPageTitle={hubFallbackPageTitle}
+        />
       </Suspense>
     );
   }
@@ -254,8 +297,21 @@ export default async function ScholarshipsSlugPathPageBody({
 
   if (segments.length === 0) {
     return (
-      <Suspense fallback={<HubShellFallback />}>
-        <HubRootStreamedBridge searchParamsString={searchParamsString} />
+      <Suspense fallback={<ScholarshipsHubShellSkeleton />}>
+        <HubRootStreamedBridge
+          searchParamsString={searchParamsString}
+          hubCanonicalIntroBelowTitle={<ScholarshipCatalogRootIntro />}
+          postListingContent={
+            <ContinueScholarshipSearchCardGrid
+              idPrefix="scholarships-root-continue"
+              className="mt-10 max-w-5xl lg:mx-auto"
+            />
+          }
+          listingJsonLdPath="/scholarships"
+          listingJsonLdName="Find Scholarships"
+          listingJsonLdDescription={SCHOLARSHIPS_ROOT_SCHEMA_DESCRIPTION}
+          includeListingJsonLd={searchParamsString.length === 0}
+        />
       </Suspense>
     );
   }
@@ -376,30 +432,45 @@ export default async function ScholarshipsSlugPathPageBody({
       chosenIntroPreview: introParagraph?.slice(0, 120) ?? null
     });
 
+    const listingJsonLd = buildScholarshipListingJsonLd({
+      name: pageTitle,
+      description: introParagraph ?? longTail.metaDescription,
+      path: `/scholarships/${longTail.slug}`,
+      result: initialListPayload
+    });
+
     return (
-      <Suspense
-        fallback={
-          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
-            <div className="mx-auto max-w-5xl">
-              <ScholarshipsBrandLoading showTopAccentBar />
-            </div>
-          </section>
-        }
-      >
-        <ScholarshipsHubPageAuthBridge
-          initialPayload={createInitialScholarshipsPayload(
-            buildInitialListRequestKey({
-              kind: 'long_tail',
-              routeKey: longTail.slug,
-              searchParamsString: ''
-            }),
-            initialListPayload
-          )}
-          routeScope={routeScope}
-          leadContent={null}
-          postListingContent={null}
-        />
-      </Suspense>
+      <>
+        {listingJsonLd ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
+          />
+        ) : null}
+        <Suspense
+          fallback={
+            <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
+              <div className="mx-auto max-w-5xl">
+                <ScholarshipsBrandLoading showTopAccentBar />
+              </div>
+            </section>
+          }
+        >
+          <ScholarshipsHubPageAuthBridge
+            initialPayload={createInitialScholarshipsPayload(
+              buildInitialListRequestKey({
+                kind: 'long_tail',
+                routeKey: longTail.slug,
+                searchParamsString: ''
+              }),
+              initialListPayload
+            )}
+            routeScope={routeScope}
+            leadContent={null}
+            postListingContent={null}
+          />
+        </Suspense>
+      </>
     );
   }
 
@@ -512,8 +583,21 @@ export default async function ScholarshipsSlugPathPageBody({
       promotedChrome
     });
 
+    const listingJsonLd = buildScholarshipListingJsonLd({
+      name: pageTitle,
+      description: introParagraph,
+      path: `/scholarships/${canonicalPath}`,
+      result: initialListPayload
+    });
+
     return (
       <>
+        {listingJsonLd ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
+          />
+        ) : null}
         <h1 className="sr-only">{pageTitle}</h1>
         <Suspense
           fallback={

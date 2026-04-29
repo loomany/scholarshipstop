@@ -2361,7 +2361,7 @@ export default function ScholarshipDetailPageClient({
         ) : null}
 
         {showFaqBlock ? (
-          <div className="mt-3 border-t border-zinc-200 pt-4">
+          <div className="mt-8 border-t border-zinc-200 pt-6">
             <ScholarshipFaqAccordion items={faqItemsOnPage} />
           </div>
         ) : null}
@@ -2375,7 +2375,14 @@ export default function ScholarshipDetailPageClient({
                 : 'mt-3'
             } scroll-mt-24 border-t border-zinc-200 pt-4`}
           >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+            <div className="flex flex-col gap-4">
+              <Link
+                href={backToMatchesHref}
+                scroll
+                className={detailBackToMatchesLinkClass}
+              >
+                ← Back to Matches
+              </Link>
               <div className="min-w-0 space-y-2">
                 <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
                   Similar scholarships
@@ -2412,13 +2419,6 @@ export default function ScholarshipDetailPageClient({
                   </p>
                 )}
               </div>
-              <Link
-                href={backToMatchesHref}
-                scroll
-                className={`shrink-0 self-start sm:self-auto ${detailBackToMatchesLinkClass}`}
-              >
-                ← Back to Matches
-              </Link>
             </div>
 
             {similarSplitIntoSections ? (

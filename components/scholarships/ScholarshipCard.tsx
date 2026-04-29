@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo } from 'react';
+import type { MouseEvent } from 'react';
 import { Info, Lock, Star } from 'lucide-react';
 import {
   formatDeadlineTooltipText,
@@ -291,35 +292,39 @@ export default function ScholarshipCard({
     ? 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50/95 shadow-sm transition-all duration-200 hover:border-zinc-300 hover:shadow-md focus-within:border-zinc-300 focus-within:shadow-md'
     : 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg focus-within:border-gray-300 focus-within:shadow-lg';
 
+  const handleDetailLinkClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (targetedCategoryLocked) {
+      e.preventDefault();
+      onLockedScholarshipNavigate?.();
+      return;
+    }
+    const budgetMode = !isAuthenticated
+      ? resolveScholarshipDetailClickBudgetMode({
+          isAuthenticated,
+          hasSubscription
+        })
+      : null;
+    const onBlockedNavigate =
+      budgetMode === 'guest' || budgetMode === 'signed-in-no-subscription'
+        ? onGuestDetailNavigate ?? onSubscriptionDetailNavigate
+        : undefined;
+    if (!budgetMode || !onBlockedNavigate) return;
+    if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
+      e.preventDefault();
+      onBlockedNavigate();
+      return;
+    }
+    recordScholarshipDetailFreeNavigation(budgetMode);
+  };
+
   return (
     <article className={cardArticleClass} data-scholarship-card>
       <Link
         href={detailHref}
-        onClick={(e) => {
-          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-          if (targetedCategoryLocked) {
-            e.preventDefault();
-            onLockedScholarshipNavigate?.();
-            return;
-          }
-          const budgetMode = !isAuthenticated
-            ? resolveScholarshipDetailClickBudgetMode({
-                isAuthenticated,
-                hasSubscription
-              })
-            : null;
-          const onBlockedNavigate =
-            budgetMode === 'guest' || budgetMode === 'signed-in-no-subscription'
-              ? onGuestDetailNavigate ?? onSubscriptionDetailNavigate
-              : undefined;
-          if (!budgetMode || !onBlockedNavigate) return;
-          if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
-            e.preventDefault();
-            onBlockedNavigate();
-            return;
-          }
-          recordScholarshipDetailFreeNavigation(budgetMode);
-        }}
+        onClick={handleDetailLinkClick}
+        tabIndex={-1}
+        aria-hidden="true"
         className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A1A]/50"
         aria-label={
           targetedCategoryLocked
@@ -327,7 +332,7 @@ export default function ScholarshipCard({
             : `View scholarship: ${scholarship.title}`
         }
       >
-        <span className="sr-only">Open scholarship details</span>
+        <span className="sr-only">{scholarship.title}</span>
       </Link>
       <div
         className={`relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] pointer-events-none ${deadlinePassed ? 'bg-zinc-400' : 'bg-gray-900'}`}
@@ -459,16 +464,22 @@ export default function ScholarshipCard({
                   : scholarship.title
             }
           >
-            {targetedCategoryLocked && titleBlurPhrase
-              ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
-                  blurEntireWhenNoSubstringMatch: false,
-                  lockedObscuredInteractive: false
-                })
-              : providerNameObscured
-              ? renderTextWithObscuredProviderName(scholarship.title, providerLine, {
-                  blurEntireWhenNoSubstringMatch: false
-                })
-              : scholarship.title}
+            <Link
+              href={detailHref}
+              onClick={handleDetailLinkClick}
+              className="relative z-10 text-inherit no-underline outline-none pointer-events-auto focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-[#FF7A1A]/50 focus-visible:ring-offset-2"
+            >
+              {targetedCategoryLocked && titleBlurPhrase
+                ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
+                    blurEntireWhenNoSubstringMatch: false,
+                    lockedObscuredInteractive: false
+                  })
+                : providerNameObscured
+                ? renderTextWithObscuredProviderName(scholarship.title, providerLine, {
+                    blurEntireWhenNoSubstringMatch: false
+                  })
+                : scholarship.title}
+            </Link>
           </h2>
           <p
             className="mt-1 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-400 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"

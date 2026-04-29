@@ -30,6 +30,9 @@ import ScholarshipsMoreFiltersPanel, {
 import ScholarshipsPagination from '@/components/scholarships/ScholarshipsPagination';
 import ScholarshipsSidebar from '@/components/scholarships/ScholarshipsSidebar';
 import ScholarshipsTwoColumnLayout from '@/components/scholarships/ScholarshipsTwoColumnLayout';
+import ScholarshipsHubShellSkeleton, {
+  HubListSkeleton
+} from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ManageSavedFilterPresetModal from '@/components/scholarships/ManageSavedFilterPresetModal';
 import SaveFilterPresetModal from '@/components/scholarships/SaveFilterPresetModal';
 import { ScholarshipsEmailConfirmationBanner } from '@/components/scholarships/ScholarshipsEmailConfirmationBanner';
@@ -145,9 +148,10 @@ import {
   BEST_RECOMMENDATION_WIZARD_DRAFT_KEY,
   bestRecommendationWizardHasUsableData,
   bridgeBestRecommendationWizardToOnboardingDraft,
-  buildBestRecommendationWizardSeed,
+  buildBestRecommendationWizardStoreFromLandingDraft,
   emptyBestRecommendationWizardDraft,
   loadBestRecommendationWizardDraft,
+  resolveBestRecommendationProfileSeedForHub,
   saveBestRecommendationWizardDraft,
   type BestRecommendationWizardStore
 } from '@/lib/onboarding/bestRecommendationWizardDraft';
@@ -204,82 +208,6 @@ const PREVIEW_COUNT_CACHE_TTL_MS = 30_000;
 
 function longTailRequestRouteKeyFromPathname(pathname: string): string {
   return pathname.replace(/^\/scholarships\/?/, '');
-}
-
-function HubListSkeleton({
-  showApplyingLabel = false
-}: {
-  showApplyingLabel?: boolean;
-}) {
-  return (
-    <div aria-live="polite" aria-busy className="space-y-4">
-      {showApplyingLabel ? (
-        <div className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-600 shadow-sm">
-          Applying filters...
-        </div>
-      ) : null}
-      {Array.from({ length: 3 }).map((_, idx) => (
-        <div
-          key={`hub-list-skeleton-${idx}`}
-          className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"
-        >
-          <div className="mb-3 h-5 w-2/3 rounded bg-gray-200" />
-          <div className="mb-2 h-4 w-full rounded bg-gray-100" />
-          <div className="mb-4 h-4 w-5/6 rounded bg-gray-100" />
-          <div className="grid grid-cols-3 gap-2">
-            <div className="h-9 rounded bg-gray-100" />
-            <div className="h-9 rounded bg-gray-100" />
-            <div className="h-9 rounded bg-gray-100" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function HubShellSuspenseFallback() {
-  return (
-    <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 sm:px-5 md:py-12 lg:px-8">
-      <div className="mx-auto w-full max-w-[1200px]">
-        <div className="space-y-5 sm:space-y-6">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
-            Scholarship matches
-          </h1>
-          <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-            <div className="mb-3 h-4 w-48 rounded bg-gray-200" />
-            <div className="mb-3 h-11 w-full rounded-xl bg-gray-100" />
-            <div className="flex gap-3">
-              <div className="h-10 w-24 rounded-xl bg-gray-100" />
-              <div className="h-10 w-28 rounded-xl bg-gray-100" />
-              <div className="h-10 w-24 rounded-xl bg-gray-100" />
-            </div>
-          </div>
-        </div>
-        <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <HubListSkeleton />
-          <div className="space-y-4">
-            <div className="rounded-2xl bg-white p-3 shadow-sm">
-              <div className="rounded-lg bg-black px-4 py-3.5 text-center">
-                <span className="text-sm font-bold tracking-tight text-white">
-                  My scholarships
-                </span>
-              </div>
-              <ul className="mt-2 space-y-1">
-                {Array.from({ length: 7 }).map((_, idx) => (
-                  <li key={idx} className="flex items-center gap-3 rounded-lg py-2.5 pr-2 pl-3">
-                    <span className="h-[18px] w-[18px] rounded-full bg-orange-200" />
-                    <span className="h-4 flex-1 rounded bg-gray-200" />
-                    <span className="h-3 w-[4.5ch] rounded bg-gray-200" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="h-40 rounded-2xl bg-white shadow-sm" />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
 }
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
@@ -353,7 +281,8 @@ function ScholarshipsPageInner({
   initialPayload = null,
   routeScope = null,
   leadContent = null,
-  postListingContent = null
+  postListingContent = null,
+  hubCanonicalIntroBelowTitle = null
 }: {
   isAuthenticated: boolean;
   /** False until Supabase session is known — avoids guest URL normalization racing ahead of login. */
@@ -363,6 +292,8 @@ function ScholarshipsPageInner({
   routeScope?: LongTailRouteScopePayload | null;
   leadContent?: ReactNode;
   postListingContent?: ReactNode;
+  /** Canonical `/scholarships/hub/*` SSR intro — rendered under h1 before filters (when `leadContent` omitted). */
+  hubCanonicalIntroBelowTitle?: ReactNode;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -444,6 +375,13 @@ function ScholarshipsPageInner({
    * Do not show guest padlocks / guest empty states in that window.
    */
   const hubTreatAsGuest = !isAuthenticated && Boolean(authResolved);
+  /** Hub `/international-friendly` uses `matches` tab but gets its own H1. */
+  const hubListingPageTitle = useMemo(() => {
+    if (hubRouteResolved?.audience === 'international_friendly') {
+      return 'Scholarships for international students';
+    }
+    return scholarshipListPageTitle(activeTab, { guest: hubTreatAsGuest });
+  }, [hubRouteResolved?.audience, activeTab, hubTreatAsGuest]);
   /** Guest parity limits for anyone without a subscription (includes guests). */
   const catalogFreeTier = authResolved && !hasSubscription;
   /** Best tab: avoid one frame of guest UI before we know the session (prevents card ↔ locks flicker). */
@@ -766,14 +704,14 @@ function ScholarshipsPageInner({
   /** `/get-scholarships` quiz: merged into API body only for best/recommended (guest); not into Matches. */
   const [landingQuizProfileSeed, setLandingQuizProfileSeed] =
     useState<ScholarshipProfileFilterSeed | null>(null);
-  const bestRecommendationWizardSeed = useMemo(
-    () => buildBestRecommendationWizardSeed(bestRecommendationWizardStore),
-    [bestRecommendationWizardStore]
-  );
+  /** Hub guest Best tab draft only (`resolve…` scopes); landed quiz overrides. */
+  const bestRecommendationHubProfileSeed = useMemo(() => {
+    if (!hubTreatAsGuest || activeTab !== 'best-recommendation') return null;
+    return resolveBestRecommendationProfileSeedForHub(bestRecommendationWizardStore);
+  }, [hubTreatAsGuest, activeTab, bestRecommendationWizardStore]);
   const transientBestRecommendationProfileSeed = useMemo(
-    // Fresh landing quiz answers should win over stale wizard drafts.
-    () => landingQuizProfileSeed ?? bestRecommendationWizardSeed ?? null,
-    [landingQuizProfileSeed, bestRecommendationWizardSeed]
+    () => landingQuizProfileSeed ?? bestRecommendationHubProfileSeed ?? null,
+    [landingQuizProfileSeed, bestRecommendationHubProfileSeed]
   );
   /** When true, list POST must send `guestBestRecommendationPreviewEnabled` or the API returns an empty guest list. */
   const guestBestRecommendationPreviewEnabled =
@@ -819,6 +757,46 @@ function ScholarshipsPageInner({
     authResolved &&
     (hubTreatAsGuest ||
       (isAuthenticated && profileInitResolved && !profileInitialized));
+
+  /** Only when Hub guest Best tab wizard is active — drives list/cache refetch per field edit. */
+  const guestBestWizardFingerprint = useMemo(() => {
+    if (!hubTreatAsGuest || activeTab !== 'best-recommendation') return '';
+    const d =
+      bestRecommendationWizardStore ??
+      emptyBestRecommendationWizardDraft('guest');
+    return JSON.stringify({
+      schoolLevel: d.draft.step1.schoolLevel.trim(),
+      fieldOfStudy: d.draft.step1.fieldOfStudy.trim(),
+      citizenship: d.draft.step1.citizenship.trim(),
+      gpa: d.draft.step3.gpa.trim(),
+      state: d.draft.step4.state.trim()
+    });
+  }, [hubTreatAsGuest, activeTab, bestRecommendationWizardStore]);
+
+  const guestBestRecommendationStackedBrowsingUi =
+    hubTreatAsGuest &&
+    catalogFreeTier &&
+    activeTab === 'best-recommendation' &&
+    shouldPromptScholarshipQuiz;
+
+  /** Hub guest wizard with no usable seed yet: skip expensive Best preview POST until there is usable data (show matches “top explore” fallback instead). */
+  const guestBestSkipHubBestListUntilPreview =
+    guestBestRecommendationStackedBrowsingUi &&
+    transientBestRecommendationProfileSeed == null;
+
+  /**
+   * Orange “answers you just added / Create account” CTA — only final funnel UX:
+   * landing quiz redirect (`landingQuizProfileSeed`) or wizard Continue on step 5 (`store.submitted`).
+   * Omit when transient seed comes from partial Hub draft only (`resolveBestRecommendationProfileSeedForHub` without finalize).
+   */
+  const showGuestBestOrangeRecommendationCta =
+    hubTreatAsGuest &&
+    activeTab === 'best-recommendation' &&
+    shouldPromptScholarshipQuiz &&
+    transientBestRecommendationProfileSeed != null &&
+    (landingQuizProfileSeed != null ||
+      bestRecommendationWizardStore?.submitted === true);
+
   const appliedProviderSlug =
     routeScope?.providerSlug ?? moreFiltersApplied?.filterUniversitySlug ?? null;
   const [previewCount, setPreviewCount] = useState<number | null>(null);
@@ -1055,6 +1033,8 @@ function ScholarshipsPageInner({
   }, []);
 
   const landingQuizHubSeedAppliedRef = useRef(false);
+  /** Guest: one-shot bridge from landing quiz draft → hub wizard localStorage (`submitted: true`). */
+  const guestLandingQuizToBestWizardBridgeAppliedRef = useRef(false);
 
   /**
    * `/get-scholarships` finish: one-shot `LANDING_QUIZ_HUB_SEED_KEY`, or after refresh rebuild from
@@ -1104,6 +1084,51 @@ function ScholarshipsPageInner({
     setLandingQuizProfileSeed(seed);
     replaceListingParams({ resetPage: true });
   }, [replaceListingParams]);
+
+  /**
+   * `/get-scholarships` stores answers under completed/pending keys, not hub wizard LS.
+   * One-time hydrate so Best wizard reflects landing answers (submitted ⇒ wizard hidden + Edit answers).
+   */
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!authResolved) return;
+    if (!hubTreatAsGuest || activeTab !== 'best-recommendation') return;
+    if (!bestRecommendationWizardHydrated) return;
+    if (guestLandingQuizToBestWizardBridgeAppliedRef.current) return;
+
+    const current = loadBestRecommendationWizardDraft();
+
+    if (
+      current &&
+      bestRecommendationWizardHasUsableData(current) &&
+      current.submitted === false
+    ) {
+      return;
+    }
+    if (
+      current &&
+      current.submitted === true &&
+      bestRecommendationWizardHasUsableData(current)
+    ) {
+      guestLandingQuizToBestWizardBridgeAppliedRef.current = true;
+      return;
+    }
+
+    const landingDraft = loadGuestLandingQuizDraftForHubReEdit();
+    if (!landingDraft) return;
+
+    const next = buildBestRecommendationWizardStoreFromLandingDraft(landingDraft);
+    if (!next) return;
+
+    guestLandingQuizToBestWizardBridgeAppliedRef.current = true;
+    persistBestRecommendationWizardStore(next);
+  }, [
+    authResolved,
+    hubTreatAsGuest,
+    activeTab,
+    bestRecommendationWizardHydrated,
+    persistBestRecommendationWizardStore
+  ]);
 
   const [savedFiltersRevision, setSavedFiltersRevision] = useState(0);
   const [savedFilterPresetsRevision, setSavedFilterPresetsRevision] = useState(0);
@@ -1965,13 +1990,18 @@ function ScholarshipsPageInner({
           : null,
         landingQuiz: transientBestRecommendationProfileSeed,
         tab: activeTab,
-        auth: isAuthenticated
+        auth: isAuthenticated,
+        ...(hubTreatAsGuest && activeTab === 'best-recommendation'
+          ? { bestWizardFp: guestBestWizardFingerprint }
+          : {})
       }),
     [
       moreFiltersApplied,
       transientBestRecommendationProfileSeed,
       activeTab,
-      isAuthenticated
+      isAuthenticated,
+      hubTreatAsGuest,
+      guestBestWizardFingerprint
     ]
   );
 
@@ -2178,11 +2208,96 @@ function ScholarshipsPageInner({
       );
       return data;
     },
-    enabled: listQueryEnabled,
+    enabled:
+      listQueryEnabled && !guestBestSkipHubBestListUntilPreview,
     initialData: initialListData,
     staleTime: 300_000,
     refetchOnMount: true
   });
+
+  const guestBestTopExploreListingMoreFilters = useMemo(() => {
+    if (!guestBestRecommendationStackedBrowsingUi || !listMeta?.filterBounds) {
+      return null;
+    }
+    return cloneMoreFilters(
+      withUrlAudience(
+        buildHubTabPresetMoreFilters({
+          tab: 'matches',
+          filterBounds: listMeta.filterBounds,
+          deadlineFromUrl: parsedList.deadline,
+          routeScope,
+          profileFilterSeed: listMeta.profileFilterSeed,
+          landingQuizProfileSeed: null,
+          savedFiltersFromStorage: savedFiltersForHub,
+          isAuthenticated
+        }),
+        parsedList.audience
+      )
+    );
+  }, [
+    guestBestRecommendationStackedBrowsingUi,
+    listMeta?.filterBounds,
+    listMeta?.profileFilterSeed,
+    parsedList.deadline,
+    parsedList.audience,
+    routeScope,
+    savedFiltersForHub,
+    isAuthenticated
+  ]);
+
+  const guestBestTopExploreQuery = useQuery({
+    queryKey: [
+      'scholarships',
+      'hub',
+      'guest-best-top-explore',
+      guestBestWizardFingerprint,
+      searchParamsString,
+      Boolean(guestBestTopExploreListingMoreFilters)
+    ] as const,
+    queryFn: async ({ signal }) => {
+      const ids = userListIdsRef.current;
+      const sp = buildHubListingSearchParams({
+        base: new URLSearchParams(searchParamsString),
+        page: 1,
+        tab: 'matches',
+        meta: false,
+        saved: ids.saved,
+        ignored: ids.ignored,
+        started: ids.started,
+        submitted: ids.submitted,
+        scope: 'catalog'
+      });
+      if (!guestBestTopExploreListingMoreFilters) {
+        throw new Error('guest best explore filters not ready');
+      }
+      return postScholarshipsList(
+        {
+          searchParams: sp.toString(),
+          moreFilters: moreFiltersToJson(guestBestTopExploreListingMoreFilters),
+          savedFiltersSnapshot: savedFiltersSnapshotJson,
+          guestBestRecommendationPreviewEnabled: false,
+          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+          seoListingFallback: routeScope?.seoListingFallback,
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+          providerSlug: appliedProviderSlug
+        },
+        { signal }
+      );
+    },
+    enabled:
+      authResolved &&
+      guestBestRecommendationStackedBrowsingUi &&
+      transientBestRecommendationProfileSeed == null &&
+      guestBestTopExploreListingMoreFilters != null,
+    staleTime: 300_000,
+    refetchOnMount: true
+  });
+
+  const guestBestStackExploreScholarships = useMemo(() => {
+    const raw = guestBestTopExploreQuery.data?.scholarships ?? [];
+    return applyGuestQuizMatchPercentToScholarships(raw, null);
+  }, [guestBestTopExploreQuery.data]);
 
   const sidebarMetaQuery = useQuery({
     queryKey: hubMetaQueryKey,
@@ -2206,7 +2321,7 @@ function ScholarshipsPageInner({
             ? moreFiltersToJson(hubSidebarMetaMoreFilters)
             : undefined,
           savedFiltersSnapshot: savedFiltersSnapshotJson,
-          guestBestRecommendationPreviewEnabled,
+          guestBestRecommendationPreviewEnabled: false,
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
@@ -2858,9 +2973,12 @@ function ScholarshipsPageInner({
     activeTab === 'best-recommendation' &&
     bestRecommendationWizardHydrated &&
     !bestTabAuthPending &&
-    ((shouldPromptScholarshipQuiz && !guestBestRecommendationPreviewEnabled) ||
+    ((hubTreatAsGuest &&
+      shouldPromptScholarshipQuiz &&
+      bestRecommendationWizardStore?.submitted !== true) ||
       (!hubTreatAsGuest &&
-        (bestRecommendationWizardInProgress ||
+        ((shouldPromptScholarshipQuiz && !guestBestRecommendationPreviewEnabled) ||
+          bestRecommendationWizardInProgress ||
           (!bestRecommendationWizardStore &&
             isAuthenticated &&
             authResolved &&
@@ -2906,8 +3024,18 @@ function ScholarshipsPageInner({
 
   const guestPersonalizedEmpty =
     hubTreatAsGuest && activeTab === 'recommended';
+  const guestBestRecommendationSeededZeroResults =
+    hubTreatAsGuest &&
+    activeTab === 'best-recommendation' &&
+    transientBestRecommendationProfileSeed != null &&
+    totalCount === 0 &&
+    !blockingListLoad &&
+    !hasError;
   const guestBestRecommendationEmptyHidden =
-    hubTreatAsGuest && activeTab === 'best-recommendation';
+    hubTreatAsGuest &&
+    activeTab === 'best-recommendation' &&
+    transientBestRecommendationProfileSeed == null &&
+    guestBestSkipHubBestListUntilPreview;
 
   /**
    * Saved Filters: completion card only when meta explicitly says profile is not ready for personalization.
@@ -2943,6 +3071,33 @@ function ScholarshipsPageInner({
    * Centered completion / signup card (toolbar with search · filters · categories stays visible above).
    */
   const profileCompletionEmptyOnly = authRecommendedProfileIncompleteEmpty;
+  const guestBestRecommendationSeededEmptyState =
+    guestBestRecommendationSeededZeroResults ? (
+      <div className="rounded-2xl border border-[#FFD9B3] bg-white p-5 text-center text-[#7A3B00] shadow-sm sm:p-6">
+        <p className="text-base font-semibold text-[#7A3B00]">
+          No recommendations matched your answers yet.
+        </p>
+        <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-[#8C5A2B]">
+          Try broadening your answers, or browse the full scholarship catalog while
+          we keep improving your matches.
+        </p>
+        <div className="mt-5 flex flex-col justify-center gap-2 sm:flex-row">
+          <button
+            type="button"
+            onClick={handleGuestBestRecommendationEditAnswers}
+            className="inline-flex items-center justify-center rounded-xl border border-[#FFD9B3] bg-[#FFF8F1] px-4 py-2.5 text-sm font-semibold text-[#7A3B00] shadow-sm transition hover:bg-[#FFF3E8]"
+          >
+            Edit answers
+          </button>
+          <Link
+            href="/scholarships/hub/matches"
+            className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50"
+          >
+            Browse Matches
+          </Link>
+        </div>
+      </div>
+    ) : null;
 
   return (
     <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 text-left text-zinc-900 sm:px-5 md:py-12 lg:px-8">
@@ -2952,11 +3107,12 @@ function ScholarshipsPageInner({
           leadContent ?? (
             <div className="space-y-5 sm:space-y-6">
               <ScholarshipsEmailConfirmationBanner />
-              <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
-                {scholarshipListPageTitle(activeTab, {
-                  guest: hubTreatAsGuest
-                })}
-              </h1>
+              <div className="space-y-0">
+                <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
+                  {hubListingPageTitle}
+                </h1>
+                {hubCanonicalIntroBelowTitle}
+              </div>
             </div>
           )
         }
@@ -3001,9 +3157,7 @@ function ScholarshipsPageInner({
                 showingFrom={showingFrom}
                 showingTo={showingTo}
                 onOpenMoreFilters={openMoreFilters}
-                pageTitle={scholarshipListPageTitle(activeTab, {
-                  guest: hubTreatAsGuest
-                })}
+                pageTitle={hubListingPageTitle}
                 omitHeadlineBlock
                 loadingCountText={scholarshipListLoadingText(activeTab)}
                 listTab={activeTab}
@@ -3020,6 +3174,11 @@ function ScholarshipsPageInner({
                 savedFilterBarHint={savedFilterBarHint}
                 savedFilterPresetButtons={headerSavedFilterPresetButtons}
                 onSavedFilterPresetSelect={openManageSavedFilterPreset}
+                suppressBottomMargin={
+                  activeTab === 'best-recommendation' &&
+                  shouldShowBestRecommendationWizard
+                }
+                centerResultSummary={activeTab === 'best-recommendation'}
               />
               {activeTab === 'from-email' ? (
                 <div className="mb-3 rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 text-sm text-orange-900">
@@ -3029,6 +3188,174 @@ function ScholarshipsPageInner({
 
               {bestRecommendationWizardPendingHydration ? (
                 <HubListSkeleton />
+              ) : guestBestRecommendationStackedBrowsingUi &&
+                shouldShowBestRecommendationWizard ? (
+                <>
+                  <BestRecommendationWizard
+                    store={wizardDisplayStore}
+                    saving={bestRecommendationWizardSaving}
+                    onChange={persistBestRecommendationWizardStore}
+                    onPersistSignedInStep={
+                      isAuthenticated ? persistBestRecommendationWizardProfileStep : undefined
+                    }
+                    onSubmit={async (next) => {
+                      persistBestRecommendationWizardStore(next);
+                      saveCompletedLandingQuizDraft(next.draft);
+                      stashLandingQuizDraftForOnboardingMerge(next.draft);
+                      void notifyQuizCompletionClient({
+                        flow: 'best_recommendation_wizard',
+                        landingPath: '/scholarships',
+                        authState: isAuthenticated ? 'authenticated' : 'guest',
+                        onceKey: `st_quiz_complete_best_recommendation_${isAuthenticated ? 'auth' : 'guest'}`
+                      });
+                      replaceListingParams({ resetPage: true });
+                    }}
+                  />
+                  <div className="flex flex-col mt-5 sm:mt-6">
+                    <h2 className="text-center text-lg font-semibold tracking-tight text-zinc-900">
+                      {transientBestRecommendationProfileSeed
+                        ? 'Recommended scholarships for you'
+                        : 'Top scholarships to explore'}
+                    </h2>
+                    <div className="mt-4 flex flex-col gap-4">
+                    {guestBestSkipHubBestListUntilPreview ? (
+                      guestBestTopExploreQuery.isPending &&
+                      guestBestStackExploreScholarships.length === 0 ? (
+                        <HubListSkeleton />
+                      ) : guestBestTopExploreQuery.isError ? (
+                        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                          {scholarshipRequestErrorMessage(
+                            guestBestTopExploreQuery.error,
+                            'Failed to load scholarships.'
+                          )}
+                        </div>
+                      ) : (
+                        <div className="relative z-0 flex flex-col gap-4">
+                          {guestBestStackExploreScholarships.map((s) => (
+                            <ScholarshipCard
+                              key={s.id}
+                              scholarship={s}
+                              isUnread={!viewedSet.has(s.id)}
+                              saved={savedSet.has(s.id)}
+                              onToggleSave={toggleSave}
+                              onHide={ignoreScholarship}
+                              ignoreAction="hide"
+                              showCardActions={scholarshipTabShowsCardActions(
+                                'best-recommendation'
+                              )}
+                              subscriptionLocked={false}
+                              isAuthenticated={isAuthenticated}
+                              hasSubscription={hasSubscription}
+                              listingTab="best-recommendation"
+                              onSubscriptionLockedCategoryClick={
+                                openLockedCategoryWall
+                              }
+                              onLockedScholarshipNavigate={openLockedCategoryWall}
+                              onSubscriptionDetailNavigate={undefined}
+                              onGuestDetailNavigate={
+                                catalogFreeTier
+                                  ? () => openRegistrationWall('card-unlock')
+                                  : undefined
+                              }
+                              returnToHref={currentListingHref}
+                            />
+                          ))}
+                        </div>
+                      )
+                    ) : blockingListLoad ? (
+                      <HubListSkeleton showApplyingLabel={blockingApplyLoad} />
+                    ) : hasError ? (
+                      <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {errorMessage || 'Failed to load scholarships.'}
+                      </div>
+                    ) : guestBestRecommendationSeededZeroResults ? (
+                      guestBestRecommendationSeededEmptyState
+                    ) : (
+                      <>
+                        {isLoading ? (
+                          <div className="mb-3 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-600 shadow-sm">
+                            Updating scholarships and counts...
+                          </div>
+                        ) : null}
+                        {showGuestBestOrangeRecommendationCta ? (
+                          <div className="rounded-2xl border border-[#FFD9B3] bg-[#FFF8F1] p-4 text-[#7A3B00] shadow-sm">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                              <div>
+                                <p className="text-sm font-semibold">
+                                  Your best recommendations are based on
+                                  <br />
+                                  the answers you just added.
+                                </p>
+                                <p className="mt-1 text-sm text-[#8C5A2B]">
+                                  Open two scholarship details for free. On the
+                                  third one, we&apos;ll ask you to create an
+                                  account.
+                                </p>
+                              </div>
+                              <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[148px]">
+                                <button
+                                  type="button"
+                                  onClick={handleGuestBestRecommendationEditAnswers}
+                                  className="inline-flex w-full items-center justify-center rounded-xl border border-[#FFD9B3] bg-white px-4 py-2.5 text-sm font-semibold text-[#7A3B00] shadow-sm transition hover:bg-[#FFF3E8]"
+                                >
+                                  Edit answers
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={handleBestRecommendationWizardCreateAccount}
+                                  className="inline-flex w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C]"
+                                >
+                                  Create free account
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ) : null}
+                        <div className="relative z-0 flex flex-col gap-4">
+                          {scholarshipsForCards.map((s) => (
+                            <ScholarshipCard
+                              key={s.id}
+                              scholarship={s}
+                              isUnread={!viewedSet.has(s.id)}
+                              saved={savedSet.has(s.id)}
+                              onToggleSave={toggleSave}
+                              onHide={ignoreScholarship}
+                              ignoreAction="hide"
+                              showCardActions={scholarshipTabShowsCardActions(
+                                'best-recommendation'
+                              )}
+                              subscriptionLocked={false}
+                              isAuthenticated={isAuthenticated}
+                              hasSubscription={hasSubscription}
+                              listingTab="best-recommendation"
+                              onSubscriptionLockedCategoryClick={
+                                openLockedCategoryWall
+                              }
+                              onLockedScholarshipNavigate={openLockedCategoryWall}
+                              onSubscriptionDetailNavigate={undefined}
+                              onGuestDetailNavigate={
+                                catalogFreeTier
+                                  ? () => openRegistrationWall('card-unlock')
+                                  : undefined
+                              }
+                              returnToHref={currentListingHref}
+                            />
+                          ))}
+                        </div>
+                        <ScholarshipsPagination
+                          currentPage={listPageForUi}
+                          totalPages={totalPages}
+                          buildHref={buildPageHref}
+                          guestPaginationLocked={catalogFreeTier}
+                          onGuestLockedClick={
+                            catalogFreeTier ? () => openRegistrationWall() : undefined
+                          }
+                        />
+                      </>
+                    )}
+                    </div>
+                  </div>
+                </>
               ) : shouldShowBestRecommendationWizard ? (
                 <BestRecommendationWizard
                   store={wizardDisplayStore}
@@ -3083,7 +3410,9 @@ function ScholarshipsPageInner({
                 </div>
               ) : null}
               {guestBestRecommendationEmptyHidden ? null : (
-                guestPersonalizedEmpty ? (
+                guestBestRecommendationSeededZeroResults ? (
+                  guestBestRecommendationSeededEmptyState
+                ) : guestPersonalizedEmpty ? (
                   <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm sm:p-6">
                     <p className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
                       Want better scholarship matches?
@@ -3145,42 +3474,49 @@ function ScholarshipsPageInner({
                   </div>
                 </div>
               ) : null}
-              {shouldPromptScholarshipQuiz &&
-              activeTab === 'best-recommendation' &&
-              transientBestRecommendationProfileSeed ? (
-                <div className="mb-4 rounded-2xl border border-[#FFD9B3] bg-[#FFF8F1] p-4 text-[#7A3B00] shadow-sm">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <p className="text-sm font-semibold">
-                        Your best recommendations are based on
-                        <br />
-                        the answers you just added.
-                      </p>
-                      <p className="mt-1 text-sm text-[#8C5A2B]">
-                        Open two scholarship details for free. On the third one, we&apos;ll ask you
-                        to create an account.
-                      </p>
-                    </div>
-                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[148px]">
-                      <button
-                        type="button"
-                        onClick={handleGuestBestRecommendationEditAnswers}
-                        className="inline-flex w-full items-center justify-center rounded-xl border border-[#FFD9B3] bg-white px-4 py-2.5 text-sm font-semibold text-[#7A3B00] shadow-sm transition hover:bg-[#FFF3E8]"
-                      >
-                        Edit answers
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleBestRecommendationWizardCreateAccount}
-                        className="inline-flex w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C]"
-                      >
-                        Create free account
-                      </button>
+              {showGuestBestOrangeRecommendationCta ? (
+                <div className="flex flex-col gap-4">
+                  <h2 className="text-center text-lg font-semibold tracking-tight text-zinc-900">
+                    Recommended scholarships for you
+                  </h2>
+                  <div className="rounded-2xl border border-[#FFD9B3] bg-[#FFF8F1] p-4 text-[#7A3B00] shadow-sm">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-sm font-semibold">
+                          Your best recommendations are based on
+                          <br />
+                          the answers you just added.
+                        </p>
+                        <p className="mt-1 text-sm text-[#8C5A2B]">
+                          Open two scholarship details for free. On the third one, we&apos;ll ask you
+                          to create an account.
+                        </p>
+                      </div>
+                      <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[148px]">
+                        <button
+                          type="button"
+                          onClick={handleGuestBestRecommendationEditAnswers}
+                          className="inline-flex w-full items-center justify-center rounded-xl border border-[#FFD9B3] bg-white px-4 py-2.5 text-sm font-semibold text-[#7A3B00] shadow-sm transition hover:bg-[#FFF3E8]"
+                        >
+                          Edit answers
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleBestRecommendationWizardCreateAccount}
+                          className="inline-flex w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#E6670C]"
+                        >
+                          Create free account
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               ) : null}
-              <div className="relative z-0 flex flex-col gap-4">
+              <div
+                className={`relative z-0 flex flex-col gap-4${
+                  showGuestBestOrangeRecommendationCta ? ' mt-4' : ''
+                }`}
+              >
                 {scholarshipsForCards.map((s) => (
                   <ScholarshipCard
                     key={s.id}
@@ -3291,7 +3627,9 @@ export default function ScholarshipsHubPageClient({
   initialPayload = null,
   routeScope = null,
   leadContent = null,
-  postListingContent = null
+  postListingContent = null,
+  hubCanonicalIntroBelowTitle = null,
+  fallbackPageTitle = 'Scholarship matches'
 }: {
   isAuthenticated?: boolean;
   authResolved?: boolean;
@@ -3300,11 +3638,13 @@ export default function ScholarshipsHubPageClient({
   routeScope?: LongTailRouteScopePayload | null;
   leadContent?: ReactNode;
   postListingContent?: ReactNode;
+  hubCanonicalIntroBelowTitle?: ReactNode;
+  fallbackPageTitle?: string;
 }) {
   return (
     <ScholarshipsHubQueryProvider>
       <Suspense
-        fallback={<HubShellSuspenseFallback />}
+        fallback={<ScholarshipsHubShellSkeleton pageTitle={fallbackPageTitle} />}
       >
         <ScholarshipsPageInner
           isAuthenticated={isAuthenticated}
@@ -3314,6 +3654,7 @@ export default function ScholarshipsHubPageClient({
           routeScope={routeScope}
           leadContent={leadContent}
           postListingContent={postListingContent}
+          hubCanonicalIntroBelowTitle={hubCanonicalIntroBelowTitle}
         />
       </Suspense>
     </ScholarshipsHubQueryProvider>

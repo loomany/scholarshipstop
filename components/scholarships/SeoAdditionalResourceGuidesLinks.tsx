@@ -7,7 +7,13 @@ import {
   resourceGuideHref
 } from '@/lib/scholarships/resourceGuideRoutes';
 
-const linkClass = 'font-medium text-blue-600 underline-offset-2 hover:underline';
+const LISTING_GUIDE_SLUGS = [
+  'how-to-apply-for-scholarships',
+  'scholarship-deadlines-explained'
+] as const satisfies readonly (typeof RESOURCE_GUIDE_SLUGS)[number][];
+
+const CARD_CLASS =
+  'group block rounded-xl border border-slate-200 bg-white p-3 transition hover:border-orange-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 sm:p-4';
 
 const LINK_COPY: Record<
   (typeof RESOURCE_GUIDE_SLUGS)[number],
@@ -27,35 +33,49 @@ const LINK_COPY: Record<
   }
 };
 
+type Props = {
+  /** `listing`: two core guides for long-tail SEO footers. `full`: all configured guides. */
+  variant?: 'listing' | 'full';
+};
+
 /**
  * Internal links to static resource guides — root-absolute hrefs only (next/link).
  */
-export default function SeoAdditionalResourceGuidesLinks() {
+export default function SeoAdditionalResourceGuidesLinks({
+  variant = 'listing'
+}: Props) {
+  const slugs =
+    variant === 'listing'
+      ? LISTING_GUIDE_SLUGS
+      : ([...RESOURCE_GUIDE_SLUGS] as (typeof RESOURCE_GUIDE_SLUGS)[number][]);
+
   return (
     <section
-      className="space-y-2"
+      className="space-y-3"
       aria-labelledby="seo-additional-resources-heading"
     >
       <h2
         id="seo-additional-resources-heading"
-        className="text-base font-semibold text-zinc-900"
+        className="text-lg font-bold tracking-tight text-slate-900 md:text-xl"
       >
-        Additional Resources
+        Helpful guides
       </h2>
-      <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-        {RESOURCE_GUIDE_SLUGS.map((slug) => {
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {slugs.map((slug) => {
           const href = resourceGuideHref(slug);
           const { title, after } = LINK_COPY[slug];
           return (
-            <li key={slug}>
-              <Link href={href} className={linkClass}>
-                {title}
-              </Link>{' '}
-              {after}
-            </li>
+            <Link key={slug} href={href} className={CARD_CLASS}>
+              <p className="text-sm leading-relaxed text-slate-700">
+                <span className="font-semibold text-slate-900 underline decoration-slate-300 underline-offset-2 transition group-hover:text-orange-700 group-hover:decoration-orange-400">
+                  {title}
+                </span>{' '}
+                <span className="text-slate-600">{after}</span>
+              </p>
+            </Link>
           );
         })}
-      </ul>
+      </div>
     </section>
   );
 }

@@ -24,11 +24,13 @@ export const dynamic = 'force-dynamic';
 
 const baseDescription =
   'Explore organizations and foundations offering financial aid across the United States.';
+const baseTitle = 'Scholarship Providers';
 
-export const metadata: Metadata = {
-  title: 'Scholarship Providers',
-  description: baseDescription,
-  openGraph: { description: baseDescription }
+export type ProvidersHubSearchParams = {
+  q?: string | string[];
+  state?: string | string[];
+  page?: string | string[];
+  sort?: string | string[];
 };
 
 function searchQueryFromParams(q: string | string[] | undefined): string | undefined {
@@ -37,12 +39,57 @@ function searchQueryFromParams(q: string | string[] | undefined): string | undef
   return undefined;
 }
 
-type PageProps = {
-  searchParams: {
-    q?: string | string[];
-    state?: string | string[];
-    page?: string | string[];
+/** Clean `/providers` hub (no filters / pagination / sort) — indexable with canonical `/providers`. */
+function providersHubIsCanonicalListingView(
+  searchParams: ProvidersHubSearchParams | undefined
+): boolean {
+  if (!searchParams) return true;
+  const allowed = new Set(['q', 'state', 'page', 'sort']);
+  for (const key of Object.keys(searchParams)) {
+    if (!allowed.has(key)) return false;
+  }
+  const q = searchQueryFromParams(searchParams.q);
+  const stateCode =
+    parseProvidersHubStateParam(searchParams.state) ?? '';
+  const page = parseProvidersHubPageParam(searchParams.page);
+  const sortRaw =
+    typeof searchParams.sort === 'string'
+      ? searchParams.sort
+      : Array.isArray(searchParams.sort)
+        ? searchParams.sort[0]
+        : undefined;
+  if (q?.trim()) return false;
+  if (stateCode) return false;
+  if (page > 1) return false;
+  if (sortRaw?.trim()) return false;
+  return true;
+}
+
+export async function generateMetadata({
+  searchParams
+}: {
+  searchParams: ProvidersHubSearchParams;
+}): Promise<Metadata> {
+  const canonicalUrl = getURL('providers');
+  const isCanonicalListing = providersHubIsCanonicalListingView(searchParams);
+  return {
+    title: baseTitle,
+    description: baseDescription,
+    alternates: { canonical: canonicalUrl },
+    ...(isCanonicalListing
+      ? {}
+      : { robots: { index: false, follow: true } }),
+    openGraph: {
+      title: baseTitle,
+      description: baseDescription,
+      url: canonicalUrl,
+      type: 'website'
+    }
   };
+}
+
+type PageProps = {
+  searchParams: ProvidersHubSearchParams;
 };
 
 export default async function ProvidersHubPage({ searchParams }: PageProps) {

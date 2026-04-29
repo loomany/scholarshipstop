@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import manifestData from '@/data/seo-scholarship-routes.json';
 
+import {
+  SafeScholarshipHtml,
+  scholarshipRichProseClassName
+} from '@/components/scholarships/SafeScholarshipHtml';
 import type { LongTailListingMode } from '@/lib/scholarships/seoScholarshipListing';
 
 type LinkItem = { href: string; label: string };
@@ -91,35 +95,46 @@ function collectLinks(mode: LongTailListingMode): LinkItem[] {
 
 export function SeoRelatedScholarshipsSection({
   listingMode,
-  className = ''
+  className = '',
+  /** Preserved for crawlers / optional readers; shown in a compact disclosure. */
+  introHtml = null
 }: {
   listingMode: LongTailListingMode;
   className?: string;
+  introHtml?: string | null;
 }) {
   const links = collectLinks(listingMode);
   if (links.length === 0) return null;
 
   return (
-    <div className={`mt-6 text-left ${className}`}>
-      <h2 className="text-base font-semibold text-zinc-900">
-        Related pages
+    <div className={`text-left ${className}`}>
+      <h2 className="text-lg font-bold tracking-tight text-slate-900 md:text-xl">
+        Related searches
       </h2>
-      <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-        These links stay inside the current promoted SEO set and point only to
-        nearby scholarship topics with live exact matches.
-      </p>
-      <ul className="mt-4 flex flex-col gap-2 sm:max-w-3xl">
+      <div className="mt-3 flex flex-wrap gap-2">
         {links.slice(0, 12).map(({ href, label }) => (
-          <li key={href}>
-            <Link
-              href={href}
-              className="text-sm font-medium text-teal-700 underline decoration-teal-600/35 underline-offset-2 hover:text-teal-900"
-            >
-              {label}
-            </Link>
-          </li>
+          <Link
+            key={href}
+            href={href}
+            className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 transition hover:border-orange-300 hover:text-orange-600 sm:text-sm"
+          >
+            {label}
+          </Link>
         ))}
-      </ul>
+      </div>
+      {introHtml?.trim() ? (
+        <details className="group mt-4 rounded-lg border border-dashed border-slate-200 bg-slate-50/80 px-3 py-2 text-sm text-slate-600">
+          <summary className="cursor-pointer font-medium text-slate-700 marker:text-slate-400 hover:text-slate-900">
+            About these links
+          </summary>
+          <div className="mt-2 border-t border-slate-200/80 pt-2">
+            <SafeScholarshipHtml
+              html={introHtml.trim()}
+              className={`${scholarshipRichProseClassName} text-sm leading-relaxed text-slate-600 [&_p]:my-1`}
+            />
+          </div>
+        </details>
+      ) : null}
     </div>
   );
 }

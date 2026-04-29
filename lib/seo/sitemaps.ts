@@ -22,6 +22,7 @@ import {
   manifestEntryMeetsSitemapGrantThreshold
 } from '@/lib/scholarships/seoScholarshipResolve';
 import { getURL } from '@/utils/helpers';
+import { tabToHubPath } from '@/app/scholarships/scholarshipHubPath';
 
 export { isSeoDripFeedActive } from '@/lib/seo/seoDripFeed';
 
@@ -349,7 +350,14 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     { url: `${base}/compare/states`, lastModified: new Date() },
     { url: `${base}/resources`, lastModified: new Date() },
     { url: `${base}/essays`, lastModified: new Date() },
-    { url: `${base}/providers`, lastModified: new Date() }
+    { url: `${base}/providers`, lastModified: new Date() },
+    { url: `${base}${tabToHubPath('matches')}`, lastModified: new Date() },
+    { url: `${base}${tabToHubPath('easy-apply')}`, lastModified: new Date() },
+    {
+      url: `${base}${tabToHubPath('international-friendly')}`,
+      lastModified: new Date()
+    },
+    { url: `${base}${tabToHubPath('hot-deadlines')}`, lastModified: new Date() }
   ];
 
   const resourcePosts = await fetchAllPublishedContentPostsForSitemap();

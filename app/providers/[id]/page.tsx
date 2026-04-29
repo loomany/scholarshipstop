@@ -5,6 +5,8 @@ import type { Metadata } from 'next';
 
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import ProviderProfilePageAuthBridge from '@/app/providers/ProviderProfilePageAuthBridge';
+import { ProviderProfileContextLinks } from '@/components/providers/ProviderProfileContextLinks';
+import { ProviderProfileTableOfContents } from '@/components/providers/ProviderProfileTableOfContents';
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
 import { ProviderOfficialWebsiteGate } from '@/components/providers/ProviderOfficialWebsiteGate';
 import { ProviderProfileScholarshipsScroll } from '@/components/providers/ProviderProfileScholarshipsScroll';
@@ -75,20 +77,52 @@ function providerProfileSourceLinks(urls: string[]): string[] {
   return out;
 }
 
+function providerProfileSourceLabel(href: string, index: number): string {
+  try {
+    const parsed = new URL(href);
+    const host = parsed.hostname.replace(/^www\./i, '');
+    return host ? `Source ${index + 1}: ${host}` : `Source ${index + 1}`;
+  } catch {
+    return `Source ${index + 1}`;
+  }
+}
+
 type PageProps = {
   params: { id: string };
   searchParams?: { page?: string | string[] };
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams
+}: PageProps): Promise<Metadata> {
   const slug = await resolveProviderProfileSlug(params.id);
   const data = slug ? await getCachedProviderProfilePage(slug, 1) : null;
   if (!data) {
     return { title: 'Provider' };
   }
+  const profilePath = `/providers/${encodeURIComponent(data.slug)}`;
+  const canonicalUrl = getURL(profilePath.replace(/^\//, ''));
+  const listingPage = parseProviderProfilePageParam(searchParams?.page);
+  const isPaginatedListing = listingPage > 1;
+  const pageTitleMeta = `${data.displayName} | Scholarship Provider`;
+  const description = providerMetaDescription(
+    data.aiDescription,
+    data.displayName
+  );
   return {
-    title: `${data.displayName} | Scholarship Provider`,
-    description: providerMetaDescription(data.aiDescription, data.displayName)
+    title: pageTitleMeta,
+    description,
+    alternates: { canonical: canonicalUrl },
+    ...(isPaginatedListing
+      ? { robots: { index: false, follow: true } }
+      : {}),
+    openGraph: {
+      title: pageTitleMeta,
+      description,
+      url: canonicalUrl,
+      type: 'website'
+    }
   };
 }
 
@@ -132,24 +166,116 @@ export default async function ProviderProfilePage({
   const aboutParas = aboutProviderParagraphs(data.aiDescription);
   const sourceLinks = providerProfileSourceLinks(data.aiSources);
 
+  const officialHrefNormalized = data.officialUrl?.trim()
+    ? normalizeAiSourceHref(data.officialUrl)
+    : null;
+
   const providerPath = `/providers/${encodeURIComponent(data.slug)}`;
   const providerUrl = getURL(providerPath);
+  const resolvedDescription = providerMetaDescription(
+    data.aiDescription,
+    data.displayName
+  );
+  const pageTitleMeta = `${data.displayName} | Scholarship Provider`;
   const providerSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: data.displayName,
     url: data.officialUrl?.trim() || providerUrl,
     mainEntityOfPage: providerUrl,
-    description: providerMetaDescription(data.aiDescription, data.displayName),
+    description: resolvedDescription,
     ...(data.officialUrl?.trim() ? { sameAs: [data.officialUrl.trim()] } : {})
   };
+
+  const breadcrumbsLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: getURL('/') },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Providers',
+        item: getURL('providers')
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: data.displayName,
+        item: providerUrl
+      }
+    ]
+  };
+
+  const webPageLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: pageTitleMeta,
+    url: providerUrl,
+    description: resolvedDescription
+  };
+
+  const tocItems: Array<{ id: string; label: string }> = [];
+
+  tocItems.push(
+    { id: 'provider-about', label: 'About Provider' },
+    { id: 'provider-explore-scholarships', label: 'Explore scholarships and guides' }
+  );
+  if (officialHrefNormalized || sourceLinks.length > 0) {
+    tocItems.push({
+      id: 'provider-official-sources',
+      label: officialHrefNormalized
+        ? 'Official website'
+        : 'Sources'
+    });
+  }
+  if (data.aiFaq.length > 0) {
+    tocItems.push({ id: 'provider-faq-heading', label: 'FAQ' });
+  }
+  tocItems.push({ id: 'provider-scholarships', label: 'Scholarships from this provider' });
+  if (data.similarProviders.length > 0) {
+    tocItems.push({
+      id: 'provider-similar-organizations',
+      label: 'Similar organizations'
+    });
+  }
+
+  const faqLd =
+    data.aiFaq.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: data.aiFaq.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: item.answer
+            }
+          }))
+        }
+      : null;
 
   return (
     <div className="min-h-screen bg-[#f9fafb] pb-16 pt-8 sm:pt-12">
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(providerSchema) }}
       />
+      {faqLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      ) : null}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="rounded-2xl border border-gray-100 bg-white px-6 py-8 shadow-sm sm:px-10 sm:py-10">
           <div className="min-w-0 space-y-4">
@@ -173,7 +299,12 @@ export default async function ProviderProfilePage({
           </div>
         </header>
 
-        <section className="mt-10 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
+        <ProviderProfileTableOfContents items={tocItems} />
+
+        <section
+          id="provider-about"
+          className="scroll-mt-24 mt-10 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8"
+        >
           <h2 className="text-lg font-bold text-gray-900">About Provider</h2>
           {aboutParas.length > 0 ? (
             <div className="mt-4 max-w-3xl space-y-4 text-sm leading-relaxed text-gray-700 sm:text-[0.9375rem]">
@@ -189,42 +320,66 @@ export default async function ProviderProfilePage({
           )}
         </section>
 
-        {data.officialUrl?.trim() ? (
-          <section className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-lg font-bold text-gray-900">Official Website</h2>
-            <div className="mt-4">
-              <ProviderOfficialWebsiteGate
-                href={normalizeAiSourceHref(data.officialUrl)}
-                label="Open official website"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"
-              />
-            </div>
-          </section>
-        ) : null}
+        <ProviderProfileContextLinks />
 
-        {sourceLinks.length > 0 ? (
-          <section className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-lg font-bold text-gray-900">Sources</h2>
-            <ul className="mt-4 list-none space-y-2.5 text-sm">
-              {sourceLinks.map((href) => (
-                <li key={href}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="break-words font-medium text-emerald-800 underline decoration-emerald-600/35 underline-offset-[3px] transition hover:text-emerald-900 hover:decoration-emerald-700/50"
-                  >
-                    {href.replace(/^https?:\/\//i, '')}
-                  </a>
-                </li>
-              ))}
-            </ul>
+        {officialHrefNormalized || sourceLinks.length > 0 ? (
+          <section
+            id="provider-official-sources"
+            className="scroll-mt-24 mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8"
+          >
+            <h2 className="text-lg font-bold text-gray-900">
+              {officialHrefNormalized ? 'Official Website' : 'Sources'}
+            </h2>
+            {officialHrefNormalized ? (
+              <div className="mt-4">
+                <ProviderOfficialWebsiteGate
+                  href={officialHrefNormalized}
+                  label="Open official website"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"
+                />
+              </div>
+            ) : null}
+            {sourceLinks.length > 0 ? (
+              <div
+                className={officialHrefNormalized ? 'mt-8' : 'mt-4'}
+              >
+                {officialHrefNormalized ? (
+                  <h3 className="text-lg font-bold text-gray-900">Sources</h3>
+                ) : null}
+                <ul
+                  className={
+                    officialHrefNormalized
+                      ? 'mt-4 list-none space-y-2.5 text-sm'
+                      : 'mt-4 list-none space-y-2.5 text-sm'
+                  }
+                >
+                  {sourceLinks.map((href, index) => (
+                    <li
+                      key={href}
+                      className="rounded-xl border border-emerald-100 bg-emerald-50/50 px-4 py-3 transition hover:border-emerald-200 hover:bg-emerald-50"
+                    >
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block break-words font-semibold text-emerald-900 transition hover:text-emerald-950"
+                      >
+                        {providerProfileSourceLabel(href, index)}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </section>
         ) : null}
 
         <ProviderProfileFaqAccordion items={data.aiFaq} />
 
-        <section id="provider-scholarships" className="mt-12 scroll-mt-24">
+        <section
+          id="provider-scholarships"
+          className="mt-12 scroll-mt-24 md:scroll-mt-28"
+        >
           <ProviderProfileScholarshipsScroll page={currentPage} />
           <div className="mb-6 flex flex-col gap-4">
             <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
@@ -243,6 +398,38 @@ export default async function ProviderProfilePage({
               </HomePrimaryCtaClient>
             </div>
           </div>
+
+          {data.similarProviders.length > 0 ? (
+            <section
+              id="provider-similar-organizations"
+              aria-labelledby="provider-similar-orgs-heading"
+              className="scroll-mt-24 mt-8 mb-8"
+            >
+              <h2
+                id="provider-similar-orgs-heading"
+                className="mb-3 text-xl font-bold text-gray-900 sm:mb-6"
+              >
+                Explore similar organizations
+              </h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {data.similarProviders.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/providers/${encodeURIComponent(p.slug)}`}
+                    className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition hover:border-emerald-200/80 hover:shadow-md"
+                  >
+                    <div className="h-1 w-10 rounded-full bg-emerald-500/90 transition group-hover:w-14" />
+                    <p className="mt-3 line-clamp-2 text-sm font-semibold text-gray-900">
+                      {p.displayName}
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {p.scholarshipCount.toLocaleString()} scholarships
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           {data.totalScholarshipCount === 0 ? (
             <div className="rounded-2xl border border-zinc-200 bg-white p-8 text-center shadow-sm sm:p-10">
@@ -280,30 +467,6 @@ export default async function ProviderProfilePage({
           )}
         </section>
 
-        {data.similarProviders.length > 0 ? (
-          <section className="mt-4 border-t border-gray-200/80 pt-4 sm:mt-14 sm:pt-12">
-            <h2 className="mb-3 text-xl font-bold text-gray-900 sm:mb-6">
-              Explore similar organizations
-            </h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {data.similarProviders.map((p) => (
-                <Link
-                  key={p.slug}
-                  href={`/providers/${encodeURIComponent(p.slug)}`}
-                  className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition hover:border-emerald-200/80 hover:shadow-md"
-                >
-                  <div className="h-1 w-10 rounded-full bg-emerald-500/90 transition group-hover:w-14" />
-                  <p className="mt-3 line-clamp-2 text-sm font-semibold text-gray-900">
-                    {p.displayName}
-                  </p>
-                  <p className="mt-1 text-xs text-gray-500">
-                    {p.scholarshipCount.toLocaleString()} scholarships
-                  </p>
-                </Link>
-              ))}
-            </div>
-          </section>
-        ) : null}
       </div>
     </div>
   );

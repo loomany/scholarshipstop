@@ -1,0 +1,40 @@
+/**
+ * Public scholarship pages should index only clean canonical URLs.
+ * These params are useful for UX/listing state, but should not create indexable URLs.
+ */
+const SCHOLARSHIP_SEO_NOISE_QUERY_KEYS = [
+  'aud',
+  'category',
+  'deadline',
+  'email_ids',
+  'limit',
+  'next',
+  'page',
+  'q',
+  'return_to',
+  'scope',
+  'sort',
+  'status',
+  'step',
+  'tab'
+] as const;
+
+type NextSearchParamsRecord = Record<string, string | string[] | undefined>;
+
+function hasNonEmptySearchParamValue(
+  value: string | string[] | undefined
+): boolean {
+  if (Array.isArray(value)) {
+    return value.some((part) => typeof part === 'string' && part.trim().length > 0);
+  }
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+export function isSeoNoiseQuery(
+  searchParams?: NextSearchParamsRecord
+): boolean {
+  if (!searchParams) return false;
+  return SCHOLARSHIP_SEO_NOISE_QUERY_KEYS.some((key) =>
+    hasNonEmptySearchParamValue(searchParams[key])
+  );
+}

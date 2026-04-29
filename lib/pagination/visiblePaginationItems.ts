@@ -1,6 +1,6 @@
-/** Single-row on small screens; optional horizontal scroll if needed. */
+/** One row everywhere; horizontal scroll when page chips overflow (never wrap “Next”). */
 export const paginationControlsRowClassName =
-  'flex max-w-full flex-nowrap items-center justify-center gap-1.5 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-0.5 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:pb-0';
+  'flex max-w-full min-w-0 flex-nowrap items-center justify-center gap-1 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-0.5 sm:gap-2 sm:pb-0';
 
 /**
  * Page index chips for pagination UIs. Above `maxFullList`, uses ellipses so

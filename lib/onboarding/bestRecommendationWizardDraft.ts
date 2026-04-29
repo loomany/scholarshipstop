@@ -15,10 +15,12 @@ import {
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import {
   buildScholarshipProfileFilterSeedFromDraftWithoutBirth,
+  buildScholarshipProfileFilterSeedFromWizardDraftForGuestPreview,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
 import { validateScholarshipOnboardingBasicsOptionalWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
 import { validateScholarshipOnboardingStep3GpaOptional } from '@/lib/validation/scholarshipOnboardingStep3Schema';
+import { hasUsableLandingQuizData } from '@/lib/onboarding/mergeLandingQuizIntoOnboardingDraft';
 
 export const BEST_RECOMMENDATION_WIZARD_DRAFT_KEY =
   'scholarship_best_recommendation_wizard_draft_v1';
@@ -63,6 +65,55 @@ export function emptyBestRecommendationWizardDraft(
       step3: emptyStep3(),
       step4: emptyStep4()
     }
+  };
+}
+
+/**
+ * Hydrate hub Best wizard storage from a `/get-scholarships` completed/pending draft
+ * (same `StoredOnboardingDraft` shape). Omits `quizVariant` so the hub wizard uses
+ * a neutral stored draft.
+ */
+export function buildBestRecommendationWizardStoreFromLandingDraft(
+  landingDraft: StoredOnboardingDraft
+): BestRecommendationWizardStore | null {
+  if (!hasUsableLandingQuizData(landingDraft)) return null;
+
+  const step1 = mergeDraftWithDefaults(landingDraft.step1);
+  const draft: StoredOnboardingDraft = {
+    v: 7,
+    activeStep: 5,
+    step1,
+    step2: {
+      firstName:
+        typeof landingDraft.step2?.firstName === 'string'
+          ? landingDraft.step2.firstName
+          : '',
+      lastName:
+        typeof landingDraft.step2?.lastName === 'string'
+          ? landingDraft.step2.lastName
+          : '',
+      email:
+        typeof landingDraft.step2?.email === 'string'
+          ? landingDraft.step2.email
+          : ''
+    },
+    step3: {
+      gpa:
+        typeof landingDraft.step3?.gpa === 'string' ? landingDraft.step3.gpa : ''
+    },
+    step4: {
+      state:
+        typeof landingDraft.step4?.state === 'string'
+          ? landingDraft.step4.state
+          : ''
+    }
+  };
+
+  return {
+    v: 1,
+    mode: 'guest',
+    submitted: true,
+    draft
   };
 }
 
@@ -175,6 +226,22 @@ export function buildBestRecommendationWizardSeed(
 ): ScholarshipProfileFilterSeed | null {
   if (!store?.submitted) return null;
   return buildScholarshipProfileFilterSeedFromDraftWithoutBirth(store.draft);
+}
+
+/**
+ * Hub guest Best tab only (caller scopes): partial preview seed before submit,
+ * strict submitted seed afterward, or null if there is nothing usable yet.
+ */
+export function resolveBestRecommendationProfileSeedForHub(
+  store: BestRecommendationWizardStore | null
+): ScholarshipProfileFilterSeed | null {
+  if (!bestRecommendationWizardHasUsableData(store)) return null;
+  if (!store!.submitted) {
+    return buildScholarshipProfileFilterSeedFromWizardDraftForGuestPreview(
+      store!.draft
+    );
+  }
+  return buildScholarshipProfileFilterSeedFromDraftWithoutBirth(store!.draft);
 }
 
 export function isBestRecommendationWizardDraftComplete(

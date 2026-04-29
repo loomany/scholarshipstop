@@ -1,0 +1,296 @@
+[
+  {
+    "anchorPhrases": [
+      "easy to apply scholarships",
+      "easy apply scholarships",
+      "scholarships that are easy to apply for"
+    ],
+    "targetUrl": "/scholarships/hub/easy-apply",
+    "priority": 23,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "no essay scholarships",
+      "scholarships with no essay",
+      "scholarships without an essay"
+    ],
+    "targetUrl": "/scholarships/hub/easy-apply",
+    "priority": 22,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarships for international students",
+      "international student scholarships",
+      "scholarships for international undergraduates"
+    ],
+    "targetUrl": "/scholarships/hub/international-friendly",
+    "priority": 24,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "study abroad scholarships",
+      "scholarships for study abroad",
+      "funding for study abroad"
+    ],
+    "targetUrl": "/scholarships/hub/international-friendly",
+    "priority": 21,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarships for low GPA students",
+      "low GPA scholarships",
+      "merit aid with a low GPA"
+    ],
+    "targetUrl": "/scholarships/hub/matches?q=low+gpa",
+    "priority": 23,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "upcoming scholarship deadlines",
+      "scholarship application deadlines",
+      "deadlines for scholarship applications"
+    ],
+    "targetUrl": "/scholarships/hub/hot-deadlines",
+    "priority": 22,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarship deadlines",
+      "approaching scholarship deadlines"
+    ],
+    "targetUrl": "/scholarships/hub/hot-deadlines",
+    "priority": 18,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "merit-based scholarships",
+      "merit scholarships",
+      "merit scholarship awards"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 20,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "need-based scholarships",
+      "need-based financial aid",
+      "need based scholarship programs"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 20,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "undergraduate scholarships",
+      "scholarships for undergraduates",
+      "undergraduate merit scholarships"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 19,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "graduate school scholarships",
+      "graduate scholarships",
+      "scholarships for graduate students"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 20,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarships for high school seniors",
+      "high school senior scholarships",
+      "scholarships for graduating seniors"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 20,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarships for college students",
+      "college student scholarships",
+      "scholarships for current undergraduates"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 20,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "complete the FAFSA",
+      "file the FAFSA",
+      "FAFSA application"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 19,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarship essay tips",
+      "writing a winning scholarship essay",
+      "how to write a scholarship essay"
+    ],
+    "targetUrl": "/essays",
+    "priority": 22,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "personal statement for scholarships",
+      "scholarship personal statement"
+    ],
+    "targetUrl": "/essays",
+    "priority": 21,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarship providers",
+      "college scholarship providers"
+    ],
+    "targetUrl": "/providers",
+    "priority": 18,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarship provider profiles",
+      "provider profiles for scholarships"
+    ],
+    "targetUrl": "/providers",
+    "priority": 19,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "how to search for scholarships",
+      "scholarship search tips",
+      "finding scholarships online"
+    ],
+    "targetUrl": "/resources",
+    "priority": 19,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarship directory",
+      "scholarship search directory",
+      "browse scholarship listings"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 17,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "first-generation college students",
+      "first generation student scholarships",
+      "scholarships for first-generation students"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 21,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "STEM field scholarships",
+      "STEM scholarships",
+      "scholarships for STEM majors"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 19,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "community college scholarships",
+      "scholarships for community college students",
+      "transfer student scholarships"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 20,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "women in STEM scholarships",
+      "scholarships for women in STEM"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 19,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarships for underrepresented students",
+      "minority scholarships",
+      "scholarships for minority students"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 18,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "public policy scholarship essay",
+      "policy scholarship essay",
+      "public policy essay"
+    ],
+    "targetUrl": "/essays",
+    "priority": 22,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "international student",
+      "international students",
+      "international student scholarship"
+    ],
+    "targetUrl": "/scholarships/hub/international-friendly",
+    "priority": 21,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarship essay",
+      "scholarship essays",
+      "strong scholarship essay"
+    ],
+    "targetUrl": "/essays",
+    "priority": 20,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "compelling scholarship essay",
+      "write a compelling scholarship essay",
+      "writing a scholarship essay"
+    ],
+    "targetUrl": "/essays",
+    "priority": 20,
+    "maxPerArticle": 1
+  },
+  {
+    "anchorPhrases": [
+      "scholarship application",
+      "scholarship applications"
+    ],
+    "targetUrl": "/scholarships/hub/matches",
+    "priority": 18,
+    "maxPerArticle": 1
+  }
+]

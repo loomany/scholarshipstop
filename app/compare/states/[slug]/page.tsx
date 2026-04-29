@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import clsx from 'clsx';
 
+import CompareExploreRelatedScholarships from '@/components/compare/CompareExploreRelatedScholarships';
+import CompareTableOfContents from '@/components/compare/CompareTableOfContents';
+import CompareThinVerdictExplanation from '@/components/compare/CompareThinVerdictExplanation';
 import { SafeCompareHtml } from '@/components/compare/SafeCompareHtml';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
@@ -17,6 +20,13 @@ import {
   stateComparisonGrantCountsOk,
   stateContentJsonAsRecord
 } from '@/lib/seo/stateCompareServer';
+import { injectH2H3IdsAndExtractToc } from '@/lib/content-hub/resourceArticleBodyToc';
+import { buildStateCompareTocMerged } from '@/lib/seo/comparePageToc';
+import {
+  buildStateThinVerdictParagraphs,
+  countWordsInCompareSources,
+  isCompareArticleThin
+} from '@/lib/seo/compareThinVerdictNarrative';
 import { getURL } from '@/utils/helpers';
 
 const COMPARE_YEAR = 2026;
@@ -195,12 +205,15 @@ export default async function StateComparePage({
 
   const a = data?.['state_a'] as Record<string, unknown> | undefined;
   const b = data?.['state_b'] as Record<string, unknown> | undefined;
-  const baseUrl = getURL().replace(/\/$/, '');
   const canonicalPath = `/compare/states/${encodeURIComponent(slug)}`;
 
   const content = stateContentJsonAsRecord(page.content_json);
-  const bodyHtml =
+  const bodyHtmlRaw =
     typeof content['body_html'] === 'string' ? content['body_html'] : '';
+  const { html: bodyHtmlAnchored, toc: bodyTocItems } =
+    injectH2H3IdsAndExtractToc(bodyHtmlRaw.trim(), {
+      idSlugPrefix: 'compare-body'
+    });
   const climate = content['climate_summary'] as
     | { state_a?: string; state_b?: string }
     | undefined;
@@ -239,11 +252,91 @@ export default async function StateComparePage({
       page.meta_title?.trim() ||
       `${stateA.name} vs ${stateB.name}: Scholarship Climate ${COMPARE_YEAR}`,
     aiVerdict: page.ai_verdict,
-    bodyHtml,
+    bodyHtml: bodyHtmlAnchored,
     essayTextA: climate?.state_a,
     essayTextB: climate?.state_b,
     limit: 3
   });
+
+  const compareTocItems = buildStateCompareTocMerged({
+    bodyToc: bodyTocItems,
+    hasClimateEssay: Boolean(climate?.state_a?.trim() || climate?.state_b?.trim()),
+    faqCount: faqItems.length,
+    sourcesCount: sources.length,
+    hasRelated:
+      relatedContent.resources.length > 0 || relatedContent.essays.length > 0
+  });
+
+  const documentTitle =
+    page.meta_title?.trim() ||
+    `${stateA.name} vs ${stateB.name}: Scholarship Climate ${COMPARE_YEAR}`;
+  const fallbackDescriptionMeta =
+    page.meta_description?.trim() ||
+    `Compare scholarship climate, grant volume, and top universities in ${stateA.name} and ${stateB.name}.`;
+  const resolvedMetaDescription =
+    (await resolveAiMetaDescription({
+      canonicalPath,
+      routeKind: 'compare_state',
+      title: documentTitle,
+      fallbackDescription: fallbackDescriptionMeta,
+      context: {
+        slug,
+        stateA: stateA.name,
+        stateB: stateB.name
+      },
+      priority: 6
+    })) ?? fallbackDescriptionMeta;
+
+  const comparePageAbsoluteUrl = getURL(canonicalPath.replace(/^\/+/, ''));
+
+  const breadcrumbsSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: getURL('/')
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Compare',
+        item: getURL('compare')
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'State vs State',
+        item: getURL('compare/states')
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: `${stateA.name} vs ${stateB.name}`,
+        item: comparePageAbsoluteUrl
+      }
+    ]
+  };
+
+  const grantCountA =
+    typeof a?.['grant_count'] === 'number' && !Number.isNaN(a['grant_count'] as number)
+      ? (a['grant_count'] as number)
+      : null;
+  const grantCountB =
+    typeof b?.['grant_count'] === 'number' && !Number.isNaN(b['grant_count'] as number)
+      ? (b['grant_count'] as number)
+      : null;
+
+  const compareWordTotal = countWordsInCompareSources(
+    bodyHtmlRaw,
+    page.ai_verdict,
+    climate?.state_a,
+    climate?.state_b
+  );
+  const showThinVerdict = isCompareArticleThin(compareWordTotal);
+
   const faqJsonLd =
     faqItems.length > 0
       ? {
@@ -264,13 +357,17 @@ export default async function StateComparePage({
     <div className="bg-white text-gray-900 antialiased">
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'WebPage',
-            name: `${stateA.name} vs ${stateB.name}: Scholarship Climate ${COMPARE_YEAR}`,
-            url: `${baseUrl}${canonicalPath}`,
-            description: page.meta_description ?? undefined
+            name: documentTitle,
+            url: comparePageAbsoluteUrl,
+            description: resolvedMetaDescription
           })
         }}
       />
@@ -340,6 +437,11 @@ export default async function StateComparePage({
           ) : null}
         </header>
 
+        <CompareTableOfContents
+          items={compareTocItems}
+          labelId="compare-state-toc-label"
+        />
+
         <section className="mt-8 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8">
           <span className="inline-flex rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-800">
             State vs State
@@ -357,7 +459,10 @@ export default async function StateComparePage({
         </section>
 
         <section className="mt-10 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="text-center text-xl font-bold tracking-tight text-gray-900">
+          <h2
+            id="compare-state-quick-heading"
+            className="scroll-mt-28 text-center text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24"
+          >
             Quick comparison
           </h2>
           <div className="mt-5">
@@ -407,15 +512,28 @@ export default async function StateComparePage({
               </tbody>
             </table>
           </div>
-          {bodyHtml.trim() ? (
-            <div className="mt-8 border-t border-gray-100 pt-8 sm:pt-10">
-              <SafeCompareHtml html={bodyHtml} />
+          {bodyHtmlAnchored.trim() ? (
+            <div className="mt-8 border-t border-gray-100 pt-8 [&_h2[id]]:scroll-mt-28 [&_h2[id]]:sm:scroll-mt-24 [&_h3[id]]:scroll-mt-28 [&_h3[id]]:sm:scroll-mt-24 sm:pt-10">
+              <SafeCompareHtml html={bodyHtmlAnchored} />
             </div>
           ) : null}
         </section>
 
+        {showThinVerdict ? (
+          <CompareThinVerdictExplanation
+            paragraphs={buildStateThinVerdictParagraphs({
+              year: COMPARE_YEAR,
+              stateAName: stateA.name,
+              stateBName: stateB.name,
+              grantCountA,
+              grantCountB
+            })}
+          />
+        ) : null}
+
         <section
-          className="mt-10 grid gap-6 md:grid-cols-2"
+          id="compare-state-top-providers-heading"
+          className="scroll-mt-28 mt-10 grid gap-6 sm:scroll-mt-24 md:grid-cols-2"
           aria-label="Top scholarship providers in each state"
         >
           <TopScholarshipProvidersColumn
@@ -440,7 +558,10 @@ export default async function StateComparePage({
             <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
               🎯
             </span>
-            <h2 className="text-left text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap">
+            <h2
+              id="compare-state-cta-heading"
+              className="scroll-mt-28 text-left text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:scroll-mt-24 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap"
+            >
               Get matched with scholarships in 2 minutes
             </h2>
           </div>
@@ -458,7 +579,7 @@ export default async function StateComparePage({
           >
             <h2
               id="state-climate-heading"
-              className="text-center text-xl font-bold tracking-tight text-gray-900"
+              className="scroll-mt-28 text-center text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24"
             >
               Scholarship climate by state
             </h2>
@@ -486,12 +607,14 @@ export default async function StateComparePage({
               answer: item.a
             }))}
             className="mt-10"
+            headingClassName="scroll-mt-28 text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24"
             headingId="state-compare-faq-heading"
             idPrefix="state-compare-faq"
-            headingClassName="text-xl font-bold tracking-tight text-gray-900"
             headingToAccordionClassName="mt-4"
           />
         ) : null}
+
+        <CompareExploreRelatedScholarships />
 
         {sources.length > 0 ? (
           <section
@@ -501,7 +624,7 @@ export default async function StateComparePage({
             <div className="max-w-2xl">
               <h2
                 id="state-compare-sources-heading"
-                className="text-xl font-bold tracking-tight text-gray-900"
+                className="scroll-mt-28 text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24"
               >
                 Sources and official pages
               </h2>
@@ -543,7 +666,7 @@ export default async function StateComparePage({
             <div className="max-w-2xl">
               <h2
                 id="state-related-guides-heading"
-                className="text-xl font-bold tracking-tight text-gray-900"
+                className="scroll-mt-28 text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24"
               >
                 More guides around this State vs State comparison
               </h2>

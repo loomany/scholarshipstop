@@ -10,13 +10,18 @@ type ScholarshipsHubPageAuthBridgeProps = {
   routeScope?: LongTailRouteScopePayload | null;
   leadContent?: React.ReactNode;
   postListingContent?: React.ReactNode;
+  /** Canonical `/scholarships/hub/[segment]` SSR copy under listings h1. */
+  hubCanonicalIntroBelowTitle?: React.ReactNode;
+  fallbackPageTitle?: string;
 };
 
 export default function ScholarshipsHubPageAuthBridge({
   initialPayload,
   routeScope = null,
   leadContent = null,
-  postListingContent = null
+  postListingContent = null,
+  hubCanonicalIntroBelowTitle = null,
+  fallbackPageTitle = 'Scholarship matches'
 }: ScholarshipsHubPageAuthBridgeProps) {
   return (
     <AuthStatusProvider>
@@ -29,6 +34,8 @@ export default function ScholarshipsHubPageAuthBridge({
           routeScope={routeScope}
           leadContent={leadContent}
           postListingContent={postListingContent}
+          hubCanonicalIntroBelowTitle={hubCanonicalIntroBelowTitle}
+          fallbackPageTitle={fallbackPageTitle}
         />
       )}
     </AuthStatusProvider>

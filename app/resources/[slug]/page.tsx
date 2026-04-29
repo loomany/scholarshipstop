@@ -6,24 +6,28 @@ import ContentHubArticleMatchedScholarships from '@/components/content-hub/Conte
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import ContentHubScholarshipCta from '@/components/content-hub/ContentHubScholarshipCta';
 import ResourceGuidesContinueSection from '@/components/content-hub/resourceGuides/ResourceGuidesContinueSection';
+import ResourceArticleTableOfContents from '@/components/content-hub/ResourceArticleTableOfContents';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
 import { getRelatedScholarshipsForResourceArticle } from '@/lib/content-hub/relatedScholarshipsForResourceArticle';
 import { contentPostFaqFromJson } from '@/lib/content-hub/contentPostFaq';
+import {
+  extractInlineFaqFromBodyHtml,
+  mergeUniqueFaqItems
+} from '@/lib/content-hub/extractInlineFaqFromBodyHtml';
 import {
   RESOURCES_PAGE_TITLE,
   RESOURCES_SECTION_PATH,
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
+import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
+import { injectH2H3IdsAndExtractToc } from '@/lib/content-hub/resourceArticleBodyToc';
 import {
   splitForMidCtaInRemainder,
   splitForPrimaryCtaInsertion
 } from '@/lib/content-hub/splitContentPostHtml';
-import {
-  fetchPublishedContentPostBySlug,
-  fetchRelatedPublishedContentPosts
-} from '@/lib/content-hub/contentPostsServer';
+import { fetchPublishedContentPostBySlug } from '@/lib/content-hub/contentPostsServer';
 import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 
 export const revalidate = 300;
@@ -60,11 +64,8 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   const post = await fetchPublishedContentPostBySlug(params.slug);
   if (!post || !post.slug?.trim()) notFound();
 
-  const faq = contentPostFaqFromJson(post.faq);
-  const [matchedRelatedScholarships, related] = await Promise.all([
-    getRelatedScholarshipsForResourceArticle(post),
-    fetchRelatedPublishedContentPosts(post.slug, 3)
-  ]);
+  const matchedRelatedScholarships =
+    await getRelatedScholarshipsForResourceArticle(post);
   const hubScholarshipKeys = matchedRelatedScholarships.map((r) =>
     r.slug.trim()
   );
@@ -72,18 +73,56 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     hubScholarshipKeys.length > 0
       ? await fetchScholarshipsBySlugsOrIdsOrdered(hubScholarshipKeys)
       : [];
-  const bodyHtml = deduplicateQuickSummaryBlocksInHtml(
+  const bodyHtmlDeduped = deduplicateQuickSummaryBlocksInHtml(
     post.body_html?.trim() ?? ''
   );
-  const primarySplit = bodyHtml
-    ? splitForPrimaryCtaInsertion(bodyHtml)
+  const bodyHtmlAfterLinks = applyAutoInternalLinks(bodyHtmlDeduped, {
+    enabled: process.env.CONTENT_HUB_ENABLE_AUTO_INTERNAL_LINKS === '1',
+    maxLinksPerArticle: Number(
+      process.env.CONTENT_HUB_AUTO_LINK_MAX_PER_ARTICLE ?? 3
+    )
+  });
+
+  const {
+    html: bodyWithoutInlineFaq,
+    items: inlineFaqItems,
+    sectionHeading: inlineFaqSectionHeading
+  } = extractInlineFaqFromBodyHtml(bodyHtmlAfterLinks);
+
+  const faq = mergeUniqueFaqItems(
+    contentPostFaqFromJson(post.faq),
+    inlineFaqItems
+  );
+  const faqAccordionHeading =
+    inlineFaqItems.length > 0 && inlineFaqSectionHeading
+      ? inlineFaqSectionHeading
+      : 'FAQ';
+
+  const {
+    html: bodyHtmlAnchored,
+    toc: tocItems
+  } = injectH2H3IdsAndExtractToc(bodyWithoutInlineFaq);
+
+  /** Local dev-only: remove before shipping — do not rely on prod logs. */
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[auto-links]', {
+      enabled: process.env.CONTENT_HUB_ENABLE_AUTO_INTERNAL_LINKS,
+      beforeHasScholarship: bodyHtmlDeduped.includes('scholarship'),
+      afterHasHubLink: bodyHtmlAfterLinks.includes('/scholarships/hub/')
+    });
+    console.log('[auto-links-count]', {
+      matches: (bodyHtmlAfterLinks.match(/\/scholarships\/hub\//g) || []).length
+    });
+  }
+
+  const primarySplit = bodyHtmlAnchored
+    ? splitForPrimaryCtaInsertion(bodyHtmlAnchored)
     : null;
   const midSplit =
     primarySplit != null
       ? splitForMidCtaInRemainder(primarySplit.after)
       : null;
 
-  const relatedWithSlug = related.filter((r) => r.slug?.trim());
   const articlePath = resourcesArticlePath(post.slug.trim());
   const articleUrl = getURL(articlePath);
   const articleDescription =
@@ -137,6 +176,22 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     }
   };
 
+  const faqSchema =
+    faq.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faq.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: item.answer
+            }
+          }))
+        }
+      : null;
+
   return (
     <div className="bg-white text-gray-900 antialiased">
       <script
@@ -147,6 +202,12 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
+      {faqSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
       <article className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <p>
           <Link
@@ -211,7 +272,9 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           </div>
         ) : null}
 
-        {bodyHtml ? (
+        <ResourceArticleTableOfContents items={tocItems} />
+
+        {bodyHtmlAnchored ? (
           primarySplit ? (
             <>
               <SafeContentPostBody html={primarySplit.before} />
@@ -248,7 +311,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
             </>
           ) : (
             <>
-              <SafeContentPostBody html={bodyHtml} />
+              <SafeContentPostBody html={bodyHtmlAnchored} />
               <ContentHubScholarshipCta
                 className="mt-4 sm:mt-5"
                 title="💡 See scholarships you may qualify for"
@@ -262,6 +325,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
         {faq.length > 0 ? (
           <SiteFaqAccordion
             items={faq}
+            heading={faqAccordionHeading}
             className="mt-10"
             headingId="content-faq-heading"
             idPrefix="content-post-faq"
@@ -283,24 +347,6 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
             buttonText="Browse Scholarships"
           />
         )}
-
-        {relatedWithSlug.length > 0 ? (
-          <section className="mt-6 sm:mt-8">
-            <h2 className="text-lg font-bold text-gray-900">More articles</h2>
-            <ul className="mt-4 space-y-3">
-              {relatedWithSlug.map((r) => (
-                <li key={r.id}>
-                  <Link
-                    href={resourcesArticlePath(r.slug!.trim())}
-                    className="text-sm font-medium text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
-                  >
-                    {r.title?.trim() || r.slug}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
       </article>
     </div>
   );

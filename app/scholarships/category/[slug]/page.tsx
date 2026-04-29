@@ -2,6 +2,14 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
+import ScholarshipCategoryPostListingSeo from '@/components/scholarships/ScholarshipCategoryPostListingSeo';
+import {
+  categoryListingAvailableHeading,
+  categoryListingAvailableIntro,
+  categoryListingIntroParagraph,
+  categoryListingMetaDescription,
+  categoryListingMetaTitle
+} from '@/app/scholarships/category/categoryListingSeoCopy';
 import {
   formatCategoryPageH1,
   normalizeCategoryId
@@ -20,6 +28,8 @@ import { ScholarshipsBrandLoading } from '@/components/scholarships/Scholarships
 import ScholarshipCategoryPageAuthBridge from '../ScholarshipCategoryPageAuthBridge';
 import { createPublicClient } from '@/utils/supabase/public';
 import { getURL } from '@/utils/helpers';
+import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
+import { buildScholarshipListingJsonLd } from '@/app/scholarships/scholarshipListingJsonLd';
 
 export const revalidate = 300;
 
@@ -69,8 +79,8 @@ export async function generateMetadata({
   const lower = raw.toLowerCase();
   const id = normalizeCategoryId(lower);
   const canonicalSlug = id ?? lower;
-  const title = formatCategoryPageH1(id, lower);
-  const description = `Browse ${title} — deadlines, award amounts, and eligibility.`;
+  const title = categoryListingMetaTitle(id, lower);
+  const description = categoryListingMetaDescription(id, lower);
   const meta: Metadata = {
     title,
     description,
@@ -80,14 +90,7 @@ export async function generateMetadata({
       canonical: `/scholarships/category/${canonicalSlug}`
     }
   };
-  const hasNonCanonicalQuery =
-    Boolean(searchParams?.q) ||
-    Boolean(searchParams?.category) ||
-    Boolean(searchParams?.sort) ||
-    Boolean(searchParams?.page) ||
-    Boolean(searchParams?.deadline) ||
-    Boolean(searchParams?.tab);
-  if (hasNonCanonicalQuery) {
+  if (isSeoNoiseQuery(searchParams)) {
     meta.robots = { index: false, follow: true };
     return meta;
   }
@@ -119,6 +122,19 @@ export default async function ScholarshipCategoryPage({
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const { canonicalSlug, pageTitle } = resolveCategorySlugParam(params.slug);
+  const categoryId = normalizeCategoryId(canonicalSlug.toLowerCase());
+  const introParagraph = categoryListingIntroParagraph(
+    canonicalSlug,
+    categoryId
+  );
+  const listingExploreHeading = categoryListingAvailableHeading(
+    categoryId,
+    canonicalSlug
+  );
+  const listingExploreIntro = categoryListingAvailableIntro(
+    categoryId,
+    canonicalSlug
+  );
   const supabase = createPublicClient();
   const searchParamsString = toSearchParamsString(searchParams);
   const initialListPayload = await fetchInitialCategoryScholarshipsPayload(
@@ -150,6 +166,15 @@ export default async function ScholarshipCategoryPage({
       }
     ]
   };
+  const listingJsonLd =
+    searchParamsString.length === 0
+      ? buildScholarshipListingJsonLd({
+          name: pageTitle,
+          description: introParagraph,
+          path: `/scholarships/category/${canonicalSlug}`,
+          result: initialListPayload
+        })
+      : null;
 
   return (
     <>
@@ -157,6 +182,12 @@ export default async function ScholarshipCategoryPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
       />
+      {listingJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
+        />
+      ) : null}
       <Suspense
         fallback={
           <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
@@ -169,6 +200,9 @@ export default async function ScholarshipCategoryPage({
         <ScholarshipCategoryPageAuthBridge
           categorySlug={canonicalSlug}
           pageTitle={pageTitle}
+          introParagraph={introParagraph}
+          listingExploreHeading={listingExploreHeading}
+          listingExploreIntro={listingExploreIntro}
           initialPayload={createInitialScholarshipsPayload(
             buildInitialListRequestKey({
               kind: 'category',
@@ -179,6 +213,16 @@ export default async function ScholarshipCategoryPage({
           )}
         />
       </Suspense>
+      {/*
+        SSR FAQ + related cards must stay outside the client boundary — passing them as
+        children/props through nested Client Components can drop Server Component output in production.
+      */}
+      <div className="bg-[#F3F7FA] px-4 pb-16 pt-8 sm:px-5 sm:pt-10 md:pb-20 lg:px-8">
+        <ScholarshipCategoryPostListingSeo
+          canonicalSlug={canonicalSlug}
+          categoryId={categoryId}
+        />
+      </div>
     </>
   );
 }

@@ -13,7 +13,14 @@ import {
   gpaForProfileDb,
   profileGpaSelectionFromSnapshot
 } from '@/lib/constants/scholarshipGpaOptions';
-import { DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP } from '@/lib/constants/onboardingCitizenshipAndLocation';
+import {
+  DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP,
+  isValidCitizenshipSlug
+} from '@/lib/constants/onboardingCitizenshipAndLocation';
+import {
+  FIELD_OF_STUDY_OPTIONS,
+  SCHOOL_LEVEL_OPTIONS
+} from '@/lib/constants/scholarshipProfileOptions';
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { parseUserGpa, type ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
@@ -146,6 +153,86 @@ export function buildScholarshipProfileFilterSeedFromDraftWithoutBirth(
       : null
   });
   const eligibilityIds = eligibilityIdsFromProfileCitizenship(citizenship);
+
+  return {
+    fieldOfStudy,
+    schoolLevel,
+    citizenship,
+    stateInput,
+    gpa: gpaNum,
+    gpaSelection,
+    educationLevelIds,
+    gpaBucketIds,
+    eligibilityIds
+  };
+}
+
+const ALLOWED_WIZARD_SCHOOL = new Set(
+  SCHOOL_LEVEL_OPTIONS.map((o) => o.value)
+);
+const ALLOWED_WIZARD_FIELD = new Set(
+  FIELD_OF_STUDY_OPTIONS.map((o) => o.value)
+);
+
+/**
+ * Lenient Hub guest preview: merges only valid wizard fields so partial drafts
+ * still produce a usable seed without requiring submit or rejecting the whole draft.
+ */
+export function buildScholarshipProfileFilterSeedFromWizardDraftForGuestPreview(
+  draft: StoredOnboardingDraft
+): ScholarshipProfileFilterSeed | null {
+  const schoolRaw = draft.step1.schoolLevel.trim();
+  const schoolLevel =
+    schoolRaw && ALLOWED_WIZARD_SCHOOL.has(schoolRaw) ? schoolRaw : null;
+
+  const fieldRaw = draft.step1.fieldOfStudy.trim();
+  const fieldOfStudy =
+    fieldRaw && ALLOWED_WIZARD_FIELD.has(fieldRaw) ? fieldRaw : null;
+
+  const citRaw = draft.step1.citizenship.trim();
+  const citizenship =
+    citRaw && isValidCitizenshipSlug(citRaw) ? citRaw : null;
+
+  let stateInput = '';
+  const trimmedState = draft.step4.state.trim();
+  if (trimmedState) {
+    const canon = normalizeUsStateToCanonical(trimmedState);
+    if (canon) stateInput = canon;
+  }
+
+  let gpaNum: ProfilesRow['gpa'] | null = null;
+  let gpaSelection: string | null = null;
+  let gpaBucketIds: string[] = [];
+  if (validateScholarshipOnboardingStep3GpaOptional(draft.step3).ok) {
+    const gpaChoice = gpaForProfile(draft.step3.gpa);
+    const n = gpaForProfileDb(gpaChoice);
+    gpaSelection = isGpaBucketChoice(gpaChoice) ? gpaChoice : null;
+    gpaNum = n ?? null;
+    gpaBucketIds = gpaBucketIdsFromProfile({
+      gpa: n,
+      saved_filters_snapshot: gpaSelection
+        ? { [PROFILE_GPA_SELECTION_SNAPSHOT_KEY]: gpaSelection }
+        : null
+    });
+  }
+
+  const educationLevelIds =
+    educationLevelIdsFromProfileSchoolLevel(schoolLevel);
+  const eligibilityIds = eligibilityIdsFromProfileCitizenship(citizenship);
+
+  if (
+    !fieldOfStudy &&
+    !schoolLevel &&
+    !citizenship &&
+    !stateInput &&
+    gpaNum == null &&
+    !gpaSelection &&
+    educationLevelIds.length === 0 &&
+    gpaBucketIds.length === 0 &&
+    eligibilityIds.length === 0
+  ) {
+    return null;
+  }
 
   return {
     fieldOfStudy,

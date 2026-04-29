@@ -2,7 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
+import CompareExploreRelatedScholarships from '@/components/compare/CompareExploreRelatedScholarships';
 import CompareInstitutionScholarshipColumns from '@/components/compare/CompareInstitutionScholarshipColumns';
+import CompareTableOfContents from '@/components/compare/CompareTableOfContents';
+import CompareThinVerdictExplanation from '@/components/compare/CompareThinVerdictExplanation';
 import { SafeCompareHtml } from '@/components/compare/SafeCompareHtml';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
@@ -23,6 +26,13 @@ import {
   fetchComparisonDataRpc,
   fetchPublishedComparePageBySlug
 } from '@/lib/seo/universityCompareServer';
+import { injectH2H3IdsAndExtractToc } from '@/lib/content-hub/resourceArticleBodyToc';
+import { buildUniversityCompareTocMerged } from '@/lib/seo/comparePageToc';
+import {
+  buildUniversityThinVerdictParagraphs,
+  countWordsInCompareSources,
+  isCompareArticleThin
+} from '@/lib/seo/compareThinVerdictNarrative';
 import { getURL } from '@/utils/helpers';
 
 const COMPARE_YEAR = 2026;
@@ -119,12 +129,15 @@ export default async function UniversityComparePage({
 
   const a = data?.['institution_a'] as Record<string, unknown> | undefined;
   const b = data?.['institution_b'] as Record<string, unknown> | undefined;
-  const baseUrl = getURL().replace(/\/$/, '');
   const canonicalPath = `/compare/universities/${encodeURIComponent(slug)}`;
 
   const content = contentJsonAsRecord(page.content_json);
-  const bodyHtml =
+  const bodyHtmlRaw =
     typeof content['body_html'] === 'string' ? content['body_html'] : '';
+  const { html: bodyHtmlAnchored, toc: bodyTocItems } =
+    injectH2H3IdsAndExtractToc(bodyHtmlRaw.trim(), {
+      idSlugPrefix: 'compare-body'
+    });
   const essay = content['essay_insights'] as
     | { inst_a?: string; inst_b?: string }
     | undefined;
@@ -190,14 +203,93 @@ export default async function UniversityComparePage({
     stateB: stateLabelB,
     pageTitle,
     aiVerdict: page.ai_verdict,
-    bodyHtml,
+    bodyHtml: bodyHtmlAnchored,
     essayTextA: essay?.inst_a,
     essayTextB: essay?.inst_b,
     limit: 3
   });
 
+  const compareTocItems = buildUniversityCompareTocMerged({
+    bodyToc: bodyTocItems,
+    hasEssayInsights: Boolean(essay?.inst_a?.trim() || essay?.inst_b?.trim()),
+    hasStateBattle: Boolean(
+      stateBattleSlug && stateLabelA && stateLabelB
+    ),
+    faqCount: faqItems.length,
+    sourcesCount: sources.length,
+    hasRelated:
+      relatedContent.resources.length > 0 || relatedContent.essays.length > 0
+  });
+
+  const fallbackDescriptionMeta =
+    page.meta_description?.trim() ||
+    `Compare scholarships and aid signals for ${instA.name} and ${instB.name}.`;
+  const resolvedMetaDescription =
+    (await resolveAiMetaDescription({
+      canonicalPath,
+      routeKind: 'compare_university',
+      title: pageTitle,
+      fallbackDescription: fallbackDescriptionMeta,
+      context: {
+        slug,
+        institutionA: instA.name,
+        institutionB: instB.name
+      },
+      priority: 6
+    })) ?? fallbackDescriptionMeta;
+
+  const comparePageAbsoluteUrl = getURL(canonicalPath.replace(/^\/+/, ''));
+
+  const breadcrumbsSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: getURL('/')
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Compare',
+        item: getURL('compare')
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'University vs University',
+        item: getURL('compare/universities')
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: pageTitle,
+        item: comparePageAbsoluteUrl
+      }
+    ]
+  };
+
+  const grantCountUniA =
+    typeof totalA === 'number' && !Number.isNaN(totalA) ? totalA : null;
+  const grantCountUniB =
+    typeof totalB === 'number' && !Number.isNaN(totalB) ? totalB : null;
+
+  const compareWordTotal = countWordsInCompareSources(
+    bodyHtmlRaw,
+    page.ai_verdict,
+    essay?.inst_a,
+    essay?.inst_b
+  );
+  const showThinVerdictUni = isCompareArticleThin(compareWordTotal);
+
   return (
     <div className="bg-white text-gray-900 antialiased">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -205,8 +297,8 @@ export default async function UniversityComparePage({
             '@context': 'https://schema.org',
             '@type': 'WebPage',
             name: pageTitle,
-            url: `${baseUrl}${canonicalPath}`,
-            description: page.meta_description ?? undefined
+            url: comparePageAbsoluteUrl,
+            description: resolvedMetaDescription
           })
         }}
       />
@@ -283,6 +375,11 @@ export default async function UniversityComparePage({
           ) : null}
         </header>
 
+        <CompareTableOfContents
+          items={compareTocItems}
+          labelId="compare-university-toc-label"
+        />
+
         <section className="mt-8 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8">
           <span className="inline-flex rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-800">
             University vs University
@@ -304,7 +401,10 @@ export default async function UniversityComparePage({
         </section>
 
         <section className="mt-10 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="text-center text-xl font-bold tracking-tight text-gray-900">
+          <h2
+            id="compare-uni-quick-heading"
+            className="scroll-mt-28 text-center text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24"
+          >
             Quick comparison
           </h2>
           <div className="mt-5">
@@ -378,9 +478,9 @@ export default async function UniversityComparePage({
           </div>
         </section>
 
-        {bodyHtml.trim() ? (
-          <div className="mt-10 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
-            <SafeCompareHtml html={bodyHtml} />
+        {bodyHtmlAnchored.trim() ? (
+          <div className="mt-10 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8 lg:p-10 [&_h2[id]]:scroll-mt-28 [&_h2[id]]:sm:scroll-mt-24 [&_h3[id]]:scroll-mt-28 [&_h3[id]]:sm:scroll-mt-24">
+            <SafeCompareHtml html={bodyHtmlAnchored} />
           </div>
         ) : null}
 
@@ -434,6 +534,18 @@ export default async function UniversityComparePage({
           </section>
         ) : null}
 
+        {showThinVerdictUni ? (
+          <CompareThinVerdictExplanation
+            paragraphs={buildUniversityThinVerdictParagraphs({
+              year: COMPARE_YEAR,
+              instAName: instA.name,
+              instBName: instB.name,
+              grantCountA: grantCountUniA,
+              grantCountB: grantCountUniB
+            })}
+          />
+        ) : null}
+
         <CompareInstitutionScholarshipColumns
           left={{ title: instA.name, href: instAHref, scholarships: topScholarshipsA }}
           right={{ title: instB.name, href: instBHref, scholarships: topScholarshipsB }}
@@ -447,7 +559,10 @@ export default async function UniversityComparePage({
             <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
               🎯
             </span>
-            <h2 className="text-left text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap">
+            <h2
+              id="compare-uni-cta-heading"
+              className="scroll-mt-28 text-left text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:scroll-mt-24 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap"
+            >
               Get matched with scholarships in 2 minutes
             </h2>
           </div>
@@ -491,10 +606,12 @@ export default async function UniversityComparePage({
             className="mt-10"
             headingId="compare-faq-heading"
             idPrefix="compare-faq"
-            headingClassName="text-xl font-bold tracking-tight text-gray-900"
+            headingClassName="scroll-mt-28 text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24"
             headingToAccordionClassName="mt-4"
           />
         ) : null}
+
+        <CompareExploreRelatedScholarships />
 
         {sources.length > 0 ? (
           <section

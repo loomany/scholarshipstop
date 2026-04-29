@@ -189,7 +189,7 @@ export default function BestRecommendationWizard({
   };
 
   return (
-    <div className="mt-4 flex w-full flex-col items-center px-2 pb-10 pt-2 sm:mt-6 sm:pb-16 sm:pt-4">
+    <div className="mt-5 flex w-full flex-col items-center px-2 pb-0 pt-2 sm:mt-6 sm:pt-4">
       <div className="w-full max-w-2xl rounded-3xl border border-[#FFD9B3] bg-gradient-to-b from-[#FFF8F1] to-white p-6 shadow-sm sm:p-8">
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A45A16]">

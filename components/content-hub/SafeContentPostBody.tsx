@@ -1,8 +1,6 @@
-'use client';
-
-import { useMemo, type ReactNode } from 'react';
 import clsx from 'clsx';
-import createDOMPurify from 'dompurify';
+import sanitizeHtml from 'sanitize-html';
+import type { ReactNode } from 'react';
 
 import { contentHubProseClassName } from '@/lib/content-hub/contentHubProseClassName';
 import {
@@ -10,8 +8,9 @@ import {
   normalizeScholarshipEntryLinksInHtml
 } from '@/lib/scholarships/resourceGuideRoutes';
 
-const SANITIZE_OPTIONS = {
-  ALLOWED_TAGS: [
+/** Mirrors previous DOMPurify allowlist; avoids jsdom/Turbopack path issues on SSR. */
+const SANITIZE_HTML_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: [
     'p',
     'br',
     'hr',
@@ -41,19 +40,21 @@ const SANITIZE_OPTIONS = {
     'td',
     'caption'
   ],
-  ALLOWED_ATTR: [
-    'id',
-    'href',
-    'target',
-    'rel',
-    'colspan',
-    'rowspan',
-    'class',
-    'style',
-    'title',
-    'aria-label'
-  ],
-  ALLOW_DATA_ATTR: false
+  allowedAttributes: {
+    '*': [
+      'id',
+      'href',
+      'target',
+      'rel',
+      'colspan',
+      'rowspan',
+      'class',
+      'style',
+      'title',
+      'aria-label'
+    ]
+  },
+  allowProtocolRelative: true
 };
 
 type SafeContentPostBodyProps = {
@@ -64,24 +65,21 @@ type SafeContentPostBodyProps = {
   footer?: ReactNode;
 };
 
+function sanitizeArticleHtml(html: string): string {
+  return sanitizeHtml(
+    normalizeScholarshipEntryLinksInHtml(
+      absolutizeResourceGuideLinksInHtml(html)
+    ),
+    SANITIZE_HTML_OPTIONS
+  );
+}
+
 export default function SafeContentPostBody({
   html,
   tightTop = false,
   footer
 }: SafeContentPostBodyProps) {
-  const clean = useMemo(
-    () => {
-      if (typeof window === 'undefined') return '';
-      const DOMPurify = createDOMPurify(window);
-      return DOMPurify.sanitize(
-        normalizeScholarshipEntryLinksInHtml(
-          absolutizeResourceGuideLinksInHtml(html)
-        ),
-        SANITIZE_OPTIONS
-      );
-    },
-    [html]
-  );
+  const clean = sanitizeArticleHtml(html);
 
   if (!clean.trim() && !footer) return null;
 
@@ -94,7 +92,19 @@ export default function SafeContentPostBody({
     >
       {clean.trim() ? (
         <div
-          className={contentHubProseClassName}
+          className={clsx(
+            contentHubProseClassName,
+            '!text-lg !leading-relaxed md:!text-lg',
+            '[&_h1]:text-center [&_h1]:text-3xl [&_h1]:!mt-10 [&_h1]:first:!mt-0',
+            '[&_h2]:!text-center [&_h2]:!text-2xl [&_h2]:!mt-12 [&_h2]:first:!mt-0',
+            '[&_h3]:!text-center [&_h3]:!text-xl [&_h3]:!mt-10 [&_h3]:first:!mt-0',
+            '[&_.article-tldr-block]:!text-left',
+            '[&_.article-tldr-block_h2]:!text-left',
+            '[&_.article-tldr-block_h3]:!text-left',
+            '[&_.article-tldr-block_ul]:text-left [&_.article-tldr-block_ol]:text-left',
+            '[&_p]:leading-relaxed [&_li]:leading-relaxed',
+            "[&_a[href^='/scholarships/hub/']]:font-medium [&_a[href^='/scholarships/hub/']]:text-blue-700 [&_a[href^='/scholarships/hub/']]:underline [&_a[href^='/scholarships/hub/']]:underline-offset-2 [&_a[href^='/scholarships/hub/']]:transition [&_a[href^='/scholarships/hub/']]:hover:text-blue-900"
+          )}
           dangerouslySetInnerHTML={{ __html: clean }}
         />
       ) : null}

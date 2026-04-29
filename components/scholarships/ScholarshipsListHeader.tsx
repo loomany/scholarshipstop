@@ -91,6 +91,10 @@ type ScholarshipsListHeaderProps = {
   onSavedFilterPresetSelect?: (id: string) => void;
   /** Short line before preset chips (e.g. “Saved in this section”). */
   savedFilterBarHint?: string;
+  /** Avoid stacking margin with a following block (e.g. Best recommendation wizard). */
+  suppressBottomMargin?: boolean;
+  /** Center the “Showing … / Found …” summary line (e.g. best hub). */
+  centerResultSummary?: boolean;
 };
 
 function listingResultUnit(
@@ -202,7 +206,9 @@ function ScholarshipsListHeader({
   catalogListingLocked,
   savedFilterPresetButtons = [],
   onSavedFilterPresetSelect,
-  savedFilterBarHint
+  savedFilterBarHint,
+  suppressBottomMargin = false,
+  centerResultSummary = false
 }: ScholarshipsListHeaderProps) {
   const catalogLocked =
     catalogListingLocked !== undefined
@@ -400,7 +406,11 @@ function ScholarshipsListHeader({
 
   return (
     <div
-      className="relative z-[80] mb-4 space-y-5 sm:mb-5 sm:space-y-6"
+      className={
+        suppressBottomMargin
+          ? 'relative z-[80] mb-0 space-y-5 sm:space-y-6'
+          : 'relative z-[80] mb-4 space-y-5 sm:mb-5 sm:space-y-6'
+      }
     >
       {!omitHeadlineBlock ? (
         <>
@@ -417,8 +427,16 @@ function ScholarshipsListHeader({
       ) : null}
 
       <div className="flex w-full min-w-0 flex-col gap-4 sm:overflow-visible">
-        <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
-          <p className="mb-3 text-sm font-medium text-gray-500">
+        <div
+          className={`rounded-2xl bg-white p-4 shadow-sm ${
+            suppressBottomMargin ? 'mb-0' : 'mb-4'
+          }`}
+        >
+          <p
+            className={`mb-3 text-sm font-medium text-gray-500 ${
+              centerResultSummary ? 'text-center' : ''
+            }`}
+          >
             {resultCount === null
               ? loadingCountText
               : resultCount === 0

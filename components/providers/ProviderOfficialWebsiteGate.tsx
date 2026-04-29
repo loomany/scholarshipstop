@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import type { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { ExternalLink, Lock } from 'lucide-react';
 
@@ -34,6 +35,15 @@ function ProviderOfficialWebsiteGateInner({
     setPaywallOpen(true);
   }, []);
 
+  const handleAnchorClick = useCallback(
+    (e: MouseEvent<HTMLAnchorElement>) => {
+      if (!isBlocked) return;
+      e.preventDefault();
+      openPaywall();
+    },
+    [isBlocked, openPaywall]
+  );
+
   const closePaywall = useCallback(() => {
     setPaywallOpen(false);
   }, []);
@@ -50,31 +60,22 @@ function ProviderOfficialWebsiteGateInner({
 
   return (
     <>
-      {isBlocked ? (
-        <button
-          type="button"
-          onClick={openPaywall}
-          title={title}
-          aria-label={label}
-          className={baseClassName}
-        >
-          <span>{label}</span>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={title}
+        aria-label={label}
+        onClick={handleAnchorClick}
+        className={baseClassName}
+      >
+        <span>{label}</span>
+        {isBlocked ? (
           <Lock className="h-4 w-4 shrink-0" aria-hidden />
-        </button>
-      ) : (
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          title={title}
-          className={baseClassName}
-        >
-          <span>{label}</span>
-          {variant === 'button' ? (
-            <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
-          ) : null}
-        </a>
-      )}
+        ) : variant === 'button' ? (
+          <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+        ) : null}
+      </a>
 
       <PremiumPaywallModal
         isOpen={paywallOpen}

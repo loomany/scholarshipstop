@@ -22,6 +22,10 @@ export type SiteFaqAccordionProps = {
   className?: string;
   /** Classes on the bordered accordion box. */
   accordionClassName?: string;
+  /** Override `<summary>` row styling (e.g. larger SaaS listing FAQ). */
+  summaryClassName?: string;
+  /** Override FAQ answer panel typography. */
+  answerClassName?: string;
   idPrefix?: string;
   /** Initially open panel; `null` = all closed. Default `0`. */
   initialOpenIndex?: number | null;
@@ -42,6 +46,8 @@ export function SiteFaqAccordion({
   as: Tag = 'section',
   className,
   accordionClassName,
+  summaryClassName,
+  answerClassName,
   idPrefix = 'site-faq',
   initialOpenIndex = 0
 }: SiteFaqAccordionProps) {
@@ -64,7 +70,10 @@ export function SiteFaqAccordion({
             open={openDefault}
           >
             <summary
-              className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 text-left text-sm font-semibold text-gray-900 transition marker:content-none hover:bg-gray-50/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 sm:px-5 [&::-webkit-details-marker]:hidden"
+              className={clsx(
+                'flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 text-left text-sm font-semibold text-gray-900 transition marker:content-none hover:bg-gray-50/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 sm:px-5 [&::-webkit-details-marker]:hidden',
+                summaryClassName
+              )}
               id={`${idPrefix}-q-${i}`}
             >
               <span className="min-w-0 flex-1 pr-2">{item.question}</span>
@@ -77,7 +86,10 @@ export function SiteFaqAccordion({
               id={`${idPrefix}-a-${i}`}
               role="region"
               aria-labelledby={`${idPrefix}-q-${i}`}
-              className="border-t border-gray-100 px-4 pb-4 pt-3 text-sm leading-relaxed text-gray-600 sm:px-5"
+              className={clsx(
+                'border-t border-gray-100 px-4 pb-4 pt-3 text-sm leading-relaxed text-gray-600 sm:px-5',
+                answerClassName
+              )}
             >
               {item.answer}
             </div>

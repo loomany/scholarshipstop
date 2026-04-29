@@ -2,7 +2,9 @@ import { normalizeCategoryId, type ScholarshipCategoryId } from '@/app/scholarsh
 
 const CATEGORY_SEO_ALLOWLIST = new Set<ScholarshipCategoryId>([
   'arts',
+  'education',
   'humanities',
+  'stem',
   'medical',
   'law',
   'community',

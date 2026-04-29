@@ -1,34 +1,49 @@
 import type { Metadata } from 'next';
 
 import ScholarshipsSlugPathPageBody from '@/app/scholarships/scholarshipsSlugPathPageBody';
+import { hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
+import { buildScholarshipHubRouteMetadata } from '@/app/scholarships/scholarshipHubPageMetadata';
 import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarshipLongTailPresets';
 import { scholarshipHubQueryStringFromNextSearchParamsRecord } from '@/app/scholarships/scholarshipHubCanonicalQueryString';
+import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
 
 export const revalidate = 300;
 
 type PageProps = { params: { slugPath?: string[] } };
 
-export function generateMetadata({
+const SCHOLARSHIPS_ROOT_DESCRIPTION =
+  'Browse the ScholarshipTop catalog to find scholarships by deadline, award amount, eligibility, field of study, GPA, and student background.';
+
+export async function generateMetadata({
   params,
   searchParams
 }: PageProps & {
   searchParams?: Record<string, string | string[] | undefined>;
-}): Metadata {
+}): Promise<Metadata> {
   const segments = (params.slugPath ?? []).map((s) =>
     normalizeScholarshipDynamicParam(decodeURIComponent(s))
   );
-  if (segments.length > 0) return {};
-
-  const hasNonCanonicalQuery =
-    Boolean(searchParams?.q) ||
-    Boolean(searchParams?.category) ||
-    Boolean(searchParams?.sort) ||
-    Boolean(searchParams?.page) ||
-    Boolean(searchParams?.deadline) ||
-    Boolean(searchParams?.tab);
+  if (hubPathToTab(segments)) {
+    return buildScholarshipHubRouteMetadata({
+      hubSegment: segments[1]!,
+      searchParams
+    });
+  }
+  const hasNonCanonicalQuery = isSeoNoiseQuery(searchParams);
+  if (segments.length > 0) {
+    return hasNonCanonicalQuery
+      ? {
+          robots: {
+            index: false,
+            follow: true
+          }
+        }
+      : {};
+  }
 
   return {
     title: 'Find Scholarships',
+    description: SCHOLARSHIPS_ROOT_DESCRIPTION,
     alternates: { canonical: '/scholarships' },
     ...(hasNonCanonicalQuery
       ? {

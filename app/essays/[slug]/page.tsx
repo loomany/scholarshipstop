@@ -8,6 +8,7 @@ import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { fetchRelatedPublishedContentPosts } from '@/lib/content-hub/contentPostsServer';
+import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
 import {
   splitForMidCtaInRemainder,
@@ -180,10 +181,37 @@ export default async function EssayGuidePage({ params }: PageProps) {
   const essay = await fetchPublishedEssayBySlug(slug);
   if (!essay || !essay.slug?.trim()) notFound();
 
-  const rawBody = deduplicateQuickSummaryBlocksInHtml(
+  const bodyHtmlDeduped = deduplicateQuickSummaryBlocksInHtml(
     essay.content_html?.trim() ?? ''
   );
-  const { html: bodyHtml, toc: tocItems } = injectH2IdsAndExtractToc(rawBody);
+  const bodyHtmlAfterLinks = applyAutoInternalLinks(bodyHtmlDeduped, {
+    enabled: process.env.CONTENT_HUB_ENABLE_AUTO_INTERNAL_LINKS === '1',
+    maxLinksPerArticle: Number(
+      process.env.CONTENT_HUB_AUTO_LINK_MAX_PER_ARTICLE ?? 3
+    )
+  });
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[essay-auto-links]', {
+      enabled: process.env.CONTENT_HUB_ENABLE_AUTO_INTERNAL_LINKS,
+      beforeLength: bodyHtmlDeduped.length,
+      afterHasHubLink: bodyHtmlAfterLinks.includes('/scholarships/hub/'),
+      hubLinkCount: (bodyHtmlAfterLinks.match(/\/scholarships\/hub\//g) || [])
+        .length,
+      hasEssayPhrases: {
+        easyApply: /easy apply scholarships/i.test(bodyHtmlDeduped),
+        noEssay: /no essay scholarships/i.test(bodyHtmlDeduped),
+        deadlines: /scholarship deadlines/i.test(bodyHtmlDeduped),
+        international:
+          /international student scholarships|scholarships for international students/i.test(
+            bodyHtmlDeduped
+          )
+      }
+    });
+  }
+
+  const { html: bodyHtml, toc: tocItems } =
+    injectH2IdsAndExtractToc(bodyHtmlAfterLinks);
   const primarySplit = bodyHtml
     ? splitForPrimaryCtaInsertion(bodyHtml)
     : null;
@@ -408,19 +436,11 @@ export default async function EssayGuidePage({ params }: PageProps) {
           />
         ) : null}
 
-        {relatedScholarshipItems.length > 0 ? (
-          <ContentHubArticleMatchedScholarships
-            items={relatedScholarshipItems}
-            hubScholarships={essayHubScholarships}
-            sectionClassName="mt-10"
-            heading="Related scholarships"
-            headingId="related-scholarships-heading"
-            subheading={null}
-          />
-        ) : null}
-
         {relatedArticles.length > 0 ? (
-          <section className="mt-8 sm:mt-10" aria-labelledby="related-articles-heading">
+          <section
+            className="mt-8 sm:mt-10"
+            aria-labelledby="related-articles-heading"
+          >
             <h2
               id="related-articles-heading"
               className="text-lg font-bold text-gray-900"
@@ -432,10 +452,13 @@ export default async function EssayGuidePage({ params }: PageProps) {
                 const s = r.slug?.trim();
                 if (!s) return null;
                 return (
-                  <li key={r.id}>
+                  <li
+                    key={r.id}
+                    className="rounded-xl border border-orange-100 bg-orange-50/40 p-4 transition hover:border-orange-200 hover:bg-orange-50"
+                  >
                     <Link
                       href={`/resources/${encodeURIComponent(s)}`}
-                      className="text-sm font-medium text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
+                      className="block text-sm font-semibold leading-relaxed text-orange-700 underline-offset-2 hover:text-orange-800 hover:underline"
                     >
                       {r.title?.trim() || s}
                     </Link>
@@ -444,6 +467,17 @@ export default async function EssayGuidePage({ params }: PageProps) {
               })}
             </ul>
           </section>
+        ) : null}
+
+        {relatedScholarshipItems.length > 0 ? (
+          <ContentHubArticleMatchedScholarships
+            items={relatedScholarshipItems}
+            hubScholarships={essayHubScholarships}
+            sectionClassName="mt-10"
+            heading="Related scholarships"
+            headingId="related-scholarships-heading"
+            subheading={null}
+          />
         ) : null}
       </article>
     </div>

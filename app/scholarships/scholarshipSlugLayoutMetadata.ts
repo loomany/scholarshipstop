@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { buildScholarshipHubRouteMetadata } from '@/app/scholarships/scholarshipHubPageMetadata';
+import { hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
 import {
   getLongTailPreset,
   normalizeScholarshipDynamicParam
@@ -80,6 +82,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
   );
   if (segments.length === 0) {
     return { title: 'Find Scholarships' };
+  }
+
+  /** Product hub: canonical/title/description from layout (Next 14: layout `generateMetadata` has no `searchParams`). */
+  if (hubPathToTab(segments)) {
+    return buildScholarshipHubRouteMetadata({
+      hubSegment: segments[1]!,
+      searchParams: undefined
+    });
   }
 
   const resolved = resolveScholarshipSlugPath(segments);

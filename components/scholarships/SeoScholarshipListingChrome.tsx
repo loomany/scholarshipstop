@@ -1,6 +1,8 @@
 'use client';
 
 import type { LongTailSlug } from '@/app/scholarships/scholarshipLongTailPresets';
+import ContinueScholarshipSearchCardGrid from '@/components/scholarships/ContinueScholarshipSearchCardGrid';
+import SeoListingFaqExpandable from '@/components/scholarships/SeoListingFaqExpandable';
 import SeoAdditionalResourceGuidesLinks from '@/components/scholarships/SeoAdditionalResourceGuidesLinks';
 import { SeoRelatedScholarshipsSection } from '@/components/scholarships/SeoRelatedScholarshipsSection';
 import {
@@ -8,7 +10,6 @@ import {
   scholarshipRichProseClassName
 } from '@/components/scholarships/SafeScholarshipHtml';
 import { ScholarshipSeoBlock } from '@/components/scholarships/ScholarshipSeoBlock';
-import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { stripSeoAdditionalResourcesSection } from '@/lib/scholarships/stripSeoAdditionalResourcesSection';
 import { stripNumericSuffixFromSeoHeading } from '@/lib/scholarships/seoAiNumericSanitizer';
 import type { SeoListingPageData } from '@/lib/scholarships/seoScholarshipPageData';
@@ -447,8 +448,22 @@ export type SeoScholarshipPostListingProps = {
   relatedMode?: LongTailListingMode | null;
 };
 
-const softCard =
-  'rounded-lg border border-slate-200/70 bg-slate-50/60 px-3 py-2.5 text-sm text-slate-700';
+const POST_LISTING_SHELL = 'max-w-5xl mx-auto mt-8 space-y-5 sm:space-y-6';
+const SNAP_CARD_COMPACT =
+  'rounded-xl border border-slate-200 bg-white p-4 shadow-sm';
+const SNAP_LABEL_COMPACT =
+  'text-[11px] font-semibold uppercase tracking-wide text-slate-500';
+const SNAP_H3_COMPACT = 'text-base font-semibold text-slate-900';
+const SNAP_BODY_COMPACT = 'text-sm leading-relaxed text-slate-700';
+
+const HOW_TO_USE_LIST_SHORT =
+  'Compare deadlines, award amounts, and eligibility notes before opening the official scholarship page. Save strong matches and apply before the listed deadline.';
+
+function quickListingSummary(pageData: SeoListingPageData): string {
+  return `${pageData.exactCount.toLocaleString(
+    'en-US'
+  )} scholarships match this page's filters. Scan the table for requirements, then open official links when you are ready to apply.`;
+}
 
 function aggregateFaq(
   heading: string,
@@ -497,8 +512,8 @@ export function SeoScholarshipPostListingSeo({
   heading,
   supportingParagraph,
   relatedIntroParagraph,
-  howToUseLines,
-  whoForLines,
+  howToUseLines: _howToUseLines,
+  whoForLines: _whoForLines,
   faqItems,
   pageData,
   qualityBucket,
@@ -506,15 +521,11 @@ export function SeoScholarshipPostListingSeo({
   legacySeoSlug,
   relatedMode = null
 }: SeoScholarshipPostListingProps) {
-  const hasHow = howToUseLines && howToUseLines.length > 0;
-  const hasWho = whoForLines && whoForLines.length > 0;
   const showLegacyBlock =
-    legacySeoSlug && !hasHow && !hasWho && !supportingParagraph?.trim();
+    Boolean(legacySeoSlug) && !supportingParagraph?.trim();
 
   const hasAny =
     supportingParagraph?.trim() ||
-    hasHow ||
-    hasWho ||
     relatedIntroParagraph?.trim() ||
     (faqItems && faqItems.length > 0) ||
     showLegacyBlock ||
@@ -523,8 +534,17 @@ export function SeoScholarshipPostListingSeo({
 
   if (!hasAny) {
     return (
-      <div className={`${PROSE} mt-8 space-y-3 border-t border-slate-200/80 pt-6`}>
-        {relatedMode ? <SeoRelatedScholarshipsSection listingMode={relatedMode} /> : null}
+      <div className={POST_LISTING_SHELL}>
+        {relatedMode ? (
+          <SeoRelatedScholarshipsSection
+            listingMode={relatedMode}
+            introHtml={relatedIntroParagraph?.trim() ?? null}
+          />
+        ) : null}
+        <ContinueScholarshipSearchCardGrid
+          idPrefix="seo-postlisting-minimal-continue"
+          variant="exploring"
+        />
       </div>
     );
   }
@@ -537,149 +557,122 @@ export function SeoScholarshipPostListingSeo({
         : undefined;
 
   return (
-    <div
-      className={`${PROSE} mt-8 space-y-4 border-t border-slate-200/80 pt-6 sm:space-y-5`}
-    >
+    <div className={POST_LISTING_SHELL}>
       {isGoodSeoPage && pageData ? (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <div className={softCard}>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Quick summary
-            </p>
-            <p className="mt-1.5 leading-relaxed">
-              {pageData.exactCount.toLocaleString('en-US')} exact scholarships are on
-              this page. {formatAwardRange(pageData) ?? 'Award details vary by listing.'}{' '}
-              {formatDeadlineSummary(pageData) ?? 'Deadline timing varies by listing.'}{' '}
-              {whoThisPageIsFor(pageData)
-                ? `Best fit signals include ${whoThisPageIsFor(pageData)}.`
-                : ''}
-            </p>
-          </div>
-          <div className={softCard}>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Last catalog update
-            </p>
-            <p className="mt-1.5 leading-relaxed">
-              This page uses exact route matches from the current scholarship catalog.
-            </p>
-            {formatUpdatedDate(updatedAt ?? null) ? (
-              <p className="mt-1 text-slate-600">
-                Snapshot updated {formatUpdatedDate(updatedAt ?? null)}.
+        <>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            <div className={SNAP_CARD_COMPACT}>
+              <p className={SNAP_LABEL_COMPACT}>Quick summary</p>
+              <p className={`${SNAP_BODY_COMPACT} mt-2`}>
+                {quickListingSummary(pageData)}
               </p>
-            ) : null}
+            </div>
+            <div className={SNAP_CARD_COMPACT}>
+              <h3 className={SNAP_H3_COMPACT}>Deadline snapshot</h3>
+              <p className={`${SNAP_BODY_COMPACT} mt-2`}>
+                {pageData.deadline.within30Days} close within 30 days ·{' '}
+                {pageData.deadline.within60Days} within 60 ·{' '}
+                {pageData.deadline.rollingOrUnknown} rolling or unclear.
+              </p>
+            </div>
+            <div className={SNAP_CARD_COMPACT}>
+              <h3 className={SNAP_H3_COMPACT}>Award snapshot</h3>
+              <p className={`${SNAP_BODY_COMPACT} mt-2`}>
+                {formatAwardRange(pageData) ?? 'Award sizes vary by listing.'}{' '}
+                <span className="text-slate-600">
+                  ({pageData.award.statedAmountCount} stated amounts.)
+                </span>
+              </p>
+            </div>
           </div>
-          <div className={softCard}>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Award snapshot
-            </p>
-            <p className="mt-1.5 leading-relaxed">
-              {formatAwardRange(pageData) ?? 'Award sizes vary by listing.'} {` `}
-              {pageData.award.statedAmountCount} listings have stated amounts and{' '}
-              {pageData.award.unstatedAmountCount} do not.
-            </p>
-          </div>
-          <div className={softCard}>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Deadline snapshot
-            </p>
-            <p className="mt-1.5 leading-relaxed">
-              {pageData.deadline.within30Days} close within 30 days,{' '}
-              {pageData.deadline.within60Days} within 60 days, and{' '}
-              {pageData.deadline.rollingOrUnknown} have rolling or unclear deadlines.
-            </p>
-          </div>
-          <div className={softCard}>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Common eligibility patterns
-            </p>
-            <p className="mt-1.5 leading-relaxed">
-              {requirementPatternSummary(pageData) ??
-                'Eligibility patterns vary across current listings.'}
-            </p>
-          </div>
-          <div className={softCard}>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Top providers
-            </p>
-            <p className="mt-1.5 leading-relaxed">
-              {pageData.topProviders.length > 0
-                ? pageData.topProviders
-                    .map((provider) => `${provider.name} (${provider.count})`)
-                    .join(', ')
-                : 'Provider mix varies across current listings.'}
-            </p>
-          </div>
-        </div>
+
+          <details className="rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-3 shadow-sm">
+            <summary className="cursor-pointer text-sm font-semibold text-slate-900 marker:text-slate-400">
+              More insights
+            </summary>
+            <div className="mt-3 space-y-3 border-t border-slate-200/90 pt-3 text-sm leading-relaxed text-slate-700">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                  Last catalog update
+                </p>
+                <p className="mt-1">
+                  Exact route matches from the current scholarship catalog.
+                  {formatUpdatedDate(updatedAt ?? null)
+                    ? ` Snapshot updated ${formatUpdatedDate(updatedAt ?? null)}.`
+                    : ''}
+                </p>
+              </div>
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                  Common eligibility patterns
+                </p>
+                <p className="mt-1">
+                  {requirementPatternSummary(pageData) ??
+                    'Eligibility patterns vary across current listings.'}
+                </p>
+              </div>
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                  Top providers
+                </p>
+                <p className="mt-1">
+                  {pageData.topProviders.length > 0
+                    ? pageData.topProviders
+                        .map((provider) => `${provider.name} (${provider.count})`)
+                        .join(', ')
+                    : 'Provider mix varies across current listings.'}
+                </p>
+              </div>
+            </div>
+          </details>
+        </>
       ) : null}
 
-      {supportingParagraph?.trim() ? (
-        <SafeScholarshipHtml
-          html={stripSeoAdditionalResourcesSection(supportingParagraph.trim())}
-          className={scholarshipRichProseClassName}
-        />
-      ) : null}
+      <div className="rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
+        <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+          How to use this list
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+          {HOW_TO_USE_LIST_SHORT}
+        </p>
+        {supportingParagraph?.trim() ? (
+          <details className="group mt-3 rounded-lg border border-dashed border-slate-200 bg-slate-50/90 px-3 py-2">
+            <summary className="cursor-pointer text-sm font-semibold text-orange-700 hover:text-orange-800">
+              Full guidance
+            </summary>
+            <div className="mt-3 text-sm leading-relaxed text-slate-700">
+              <SafeScholarshipHtml
+                html={stripSeoAdditionalResourcesSection(supportingParagraph.trim())}
+                className={`${scholarshipRichProseClassName} [&_p]:my-2`}
+              />
+            </div>
+          </details>
+        ) : null}
+      </div>
 
       <SeoAdditionalResourceGuidesLinks />
 
-      {hasHow || hasWho ? (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
-          {hasHow ? (
-            <div className={softCard}>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                How to use this page
-              </p>
-              {howToUseLines!.length > 1 ? (
-                <ul className="mt-1.5 list-disc space-y-1 pl-4 leading-relaxed">
-                  {howToUseLines!.map((line, i) => (
-                    <li key={`how-${i}-${line.slice(0, 20)}`}>{line}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-1.5 leading-relaxed">{howToUseLines![0]}</p>
-              )}
-            </div>
-          ) : null}
-          {hasWho ? (
-            <div className={softCard}>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Who this page is for
-              </p>
-              {whoForLines!.length > 1 ? (
-                <ul className="mt-1.5 list-disc space-y-1 pl-4 leading-relaxed">
-                  {whoForLines!.map((line, i) => (
-                    <li key={`who-${i}-${line.slice(0, 20)}`}>{line}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-1.5 leading-relaxed">{whoForLines![0]}</p>
-              )}
-            </div>
-          ) : null}
+      {showLegacyBlock ? (
+        <div className={`${SNAP_CARD_COMPACT}`}>
+          <ScholarshipSeoBlock slug={legacySeoSlug!} />
         </div>
       ) : null}
 
-      {showLegacyBlock ? <ScholarshipSeoBlock slug={legacySeoSlug!} /> : null}
-
-      <div className="space-y-2">
-        {relatedIntroParagraph?.trim() ? (
-          <SafeScholarshipHtml
-            html={relatedIntroParagraph.trim()}
-            className={scholarshipRichProseClassName}
-          />
-        ) : null}
-        {relatedMode ? <SeoRelatedScholarshipsSection listingMode={relatedMode} /> : null}
-      </div>
-
-      {generatedFaq && generatedFaq.length > 0 ? (
-        <SiteFaqAccordion
-          items={generatedFaq}
-          as="div"
-          headingClassName="text-base font-semibold text-zinc-900"
-          headingId="seo-listing-faq-heading"
-          headingToAccordionClassName="mt-2.5"
-          idPrefix="seo-listing-faq"
+      {relatedMode ? (
+        <SeoRelatedScholarshipsSection
+          listingMode={relatedMode}
+          introHtml={relatedIntroParagraph?.trim() ?? null}
         />
       ) : null}
+
+      {generatedFaq && generatedFaq.length > 0 ? (
+        <SeoListingFaqExpandable items={generatedFaq} idPrefix="seo-listing-faq" />
+      ) : null}
+
+      <ContinueScholarshipSearchCardGrid
+        idPrefix="seo-postlisting-continue"
+        variant="exploring"
+      />
     </div>
   );
 }

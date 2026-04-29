@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
+import ScholarshipCategoryListingBreadcrumbs from '@/components/scholarships/ScholarshipCategoryListingBreadcrumbs';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
@@ -89,6 +90,11 @@ const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
 type Props = {
   categorySlug: string;
   pageTitle: string;
+  /** SSR intro copy beneath H1 (keyword intro from server). */
+  introParagraph: string;
+  /** H2 above the scholarship cards (SSR copy). */
+  listingExploreHeading: string;
+  listingExploreIntro: string;
   isAuthenticated?: boolean;
   /** When true and user is signed out, hide My scholarships sidebar. */
   authResolved?: boolean;
@@ -131,6 +137,9 @@ function buildCategoryListingSearchParams(options: {
 export default function ScholarshipCategoryPageClient({
   categorySlug,
   pageTitle,
+  introParagraph,
+  listingExploreHeading,
+  listingExploreIntro,
   isAuthenticated = false,
   authResolved = false,
   hasSubscription = false,
@@ -770,24 +779,20 @@ export default function ScholarshipCategoryPageClient({
     showEmptyState &&
     (hasListingParams || moreFiltersOffDefault || query.trim().length > 0);
 
-  // eslint-disable-next-line no-console -- temporary SEO list diagnostics
-  console.log('RENDER STATE', {
-    scholarshipsLength: scholarships.length,
-    totalCount,
-    hasError,
-    isLoading,
-    seoFallbackMeta,
-    showEmptyState
-  });
-
   return (
     <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 text-left text-zinc-900 sm:px-5 md:py-12 lg:px-8">
       <ScholarshipsTwoColumnLayout
         maxWidth="listing"
         lead={
-          <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
-            {pageTitle}
-          </h1>
+          <div className="min-w-0 space-y-4">
+            <ScholarshipCategoryListingBreadcrumbs pageTitle={pageTitle} />
+            <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
+              {pageTitle}
+            </h1>
+            <p className="max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem]">
+              {introParagraph}
+            </p>
+          </div>
         }
         sidebar={
           isAuthenticated || !authResolved ? (
@@ -845,6 +850,15 @@ export default function ScholarshipCategoryPageClient({
             }
             catalogListingLocked={false}
           />
+
+          <div className="mb-6 mt-2 space-y-2">
+            <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
+              {listingExploreHeading}
+            </h2>
+            <p className="max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem]">
+              {listingExploreIntro}
+            </p>
+          </div>
 
           {isLoading ? (
             <ScholarshipsBrandLoading density="compact" showTopAccentBar />

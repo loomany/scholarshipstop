@@ -31,6 +31,20 @@ function stripUnsafeCompareHtml(html: string): string {
       const tag = rawTag.toLowerCase();
       if (!ALLOWED_TAGS.has(tag)) return '';
 
+      if (tag === 'h2' || tag === 'h3') {
+        const idDq = rawAttrs.match(/\bid\s*=\s*"([^"]*)"/i);
+        const idSq = rawAttrs.match(/\bid\s*=\s*'([^']*)'/i);
+        const idVal = (idDq?.[1] ?? idSq?.[1] ?? '').trim();
+        if (
+          idVal &&
+          /^[\w\-:.]+$/.test(idVal) &&
+          !/\s|^javascript:/i.test(idVal)
+        ) {
+          return `<${tag} id="${idVal.replace(/"/g, '&quot;')}">`;
+        }
+        return `<${tag}>`;
+      }
+
       if (tag !== 'a') return `<${tag}>`;
 
       const hrefMatch = rawAttrs.match(/\bhref\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/i);
