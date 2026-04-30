@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
-import ScholarshipIqTestClient from './ScholarshipIqTestClient';
+import GeneralIqFunnelClient from './GeneralIqFunnelClient';
 
-const title = 'Scholarship IQ Test | Intelligence Diagnostic for Funding Paths';
+const title = 'Online IQ Test | IQ-Style Score and Cognitive Profile';
 const description =
-  'Take an 18-step Scholarship Intelligence Diagnostic and unlock a personal reasoning report with curated scholarship matches.';
+  'Take a short online IQ-style test inspired by modern psychometrics. Get a cognitive profile across reasoning, spatial intelligence, verbal logic, numerical logic, and decision speed.';
 
 export const metadata: Metadata = {
   title,
@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     description,
     url: 'https://iq.scholarshiptop.com/',
     type: 'website',
-    siteName: 'ScholarshipTop IQ',
+    siteName: 'Online IQ Test',
     locale: 'en_US',
     images: [
       {
         url: '/logo-preview.png',
         width: 1200,
         height: 630,
-        alt: 'ScholarshipTop IQ Report'
+        alt: 'Online IQ Test cognitive profile report'
       }
     ]
   },
@@ -37,5 +37,5 @@ export const metadata: Metadata = {
 };
 
 export default function ScholarshipIqPage() {
-  return <ScholarshipIqTestClient />;
+  return <GeneralIqFunnelClient />;
 }

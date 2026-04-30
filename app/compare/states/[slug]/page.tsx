@@ -1,12 +1,16 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import clsx from 'clsx';
+import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import CompareExploreRelatedScholarships from '@/components/compare/CompareExploreRelatedScholarships';
 import CompareTableOfContents from '@/components/compare/CompareTableOfContents';
 import CompareThinVerdictExplanation from '@/components/compare/CompareThinVerdictExplanation';
-import { SafeCompareHtml } from '@/components/compare/SafeCompareHtml';
+import {
+  formatCompareNumericText,
+  SafeCompareHtml
+} from '@/components/compare/SafeCompareHtml';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
@@ -58,7 +62,7 @@ function fmtNum(n: unknown, digits = 0): string {
 }
 
 function grantBadgeLabel(raw: unknown): string {
-  if (typeof raw !== 'number' || Number.isNaN(raw)) return '—';
+  if (typeof raw !== 'number' || Number.isNaN(raw)) return 'вЂ”';
   const n = Math.round(raw);
   return `${n} grant${n === 1 ? '' : 's'}`;
 }
@@ -89,7 +93,7 @@ function TopScholarshipProvidersColumn({
             className="inline-flex items-center gap-1 text-sm font-semibold text-orange-600 transition hover:text-orange-700"
           >
             View all scholarships
-            <span aria-hidden>→</span>
+            <span aria-hidden>в†’</span>
           </Link>
         </p>
       ) : null}
@@ -145,6 +149,94 @@ function TopScholarshipProvidersColumn({
         )}
       </ul>
     </div>
+  );
+}
+
+function StateCompareIqCta({
+  stateA,
+  stateB
+}: {
+  stateA: string;
+  stateB: string;
+}) {
+  return (
+    <Link
+      href="/iq/assessment?intent=college_fit"
+      className="group relative mt-6 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.65)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-32px_rgba(234,88,12,0.76)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:mt-8 sm:p-6"
+      aria-labelledby="state-compare-iq-cta-heading"
+    >
+      <div
+        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+        aria-hidden
+      />
+      <div
+        className="absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FF7A1A]/18 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="absolute bottom-0 right-16 h-28 w-28 rounded-full bg-sky-300/20 blur-2xl"
+        aria-hidden
+      />
+
+      <div className="relative grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <div className="min-w-0">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
+              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              Featured Tool
+            </span>
+            <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+              Market fit
+            </span>
+          </div>
+          <h2
+            id="state-compare-iq-cta-heading"
+            className="text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 sm:text-3xl"
+          >
+            Which scholarship market fits your thinking style?
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+            Before comparing {stateA} and {stateB}, take a comprehensive
+            cognitive assessment to see how your logic, speed, and pattern
+            recognition shape the way you evaluate scholarship opportunities.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {['Logic', 'Speed', 'Patterns', 'Strategy'].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-white/80 bg-white/75 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur sm:w-48">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            Preview report
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">IQ</p>
+              <p className="mt-1 text-base font-bold leading-none text-slate-950">
+                --
+              </p>
+            </div>
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">Type</p>
+              <p className="mt-1 text-sm font-bold leading-none text-slate-950">
+                ???
+              </p>
+            </div>
+          </div>
+          <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
+            Start IQ Test
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </span>
+        </div>
+      </div>
+    </Link>
   );
 }
 
@@ -384,7 +476,7 @@ export default async function StateComparePage({
             href="/compare/states"
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            ← Back to State vs State
+            в†ђ Back to State vs State
           </Link>
         </p>
 
@@ -433,7 +525,7 @@ export default async function StateComparePage({
           {page.ai_verdict?.trim() ? (
             <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
               <span className="font-semibold text-gray-900">Which climate fits best? </span>
-              {page.ai_verdict.trim()}
+              {formatCompareNumericText(page.ai_verdict.trim())}
             </p>
           ) : null}
         </header>
@@ -513,6 +605,7 @@ export default async function StateComparePage({
               </tbody>
             </table>
           </div>
+          <StateCompareIqCta stateA={stateA.name} stateB={stateB.name} />
           {bodyHtmlAnchored.trim() ? (
             <div className="mt-8 border-t border-gray-100 pt-8 [&_h2[id]]:scroll-mt-28 [&_h2[id]]:sm:scroll-mt-24 [&_h3[id]]:scroll-mt-28 [&_h3[id]]:sm:scroll-mt-24 sm:pt-10">
               <SafeCompareHtml html={bodyHtmlAnchored} />
@@ -557,7 +650,7 @@ export default async function StateComparePage({
         >
           <div className="mx-auto flex items-center justify-center gap-3 sm:gap-4">
             <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
-              🎯
+              рџЋЇ
             </span>
             <h2
               id="compare-state-cta-heading"
@@ -588,13 +681,17 @@ export default async function StateComparePage({
               <div className="rounded-xl border border-gray-200 bg-gray-50/70 p-5">
                 <h3 className="text-sm font-semibold text-gray-900">{stateA.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-900">
-                  {climate?.state_a?.trim() || 'No data available'}
+                  {climate?.state_a?.trim()
+                    ? formatCompareNumericText(climate.state_a.trim())
+                    : 'No data available'}
                 </p>
               </div>
               <div className="rounded-xl border border-gray-200 bg-gray-50/70 p-5">
                 <h3 className="text-sm font-semibold text-gray-900">{stateB.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-900">
-                  {climate?.state_b?.trim() || 'No data available'}
+                  {climate?.state_b?.trim()
+                    ? formatCompareNumericText(climate.state_b.trim())
+                    : 'No data available'}
                 </p>
               </div>
             </div>

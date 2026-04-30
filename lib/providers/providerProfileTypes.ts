@@ -18,6 +18,9 @@ export type ProviderProfilePayload = {
   aiFaq: ProviderFaqItem[];
   isEnriched: boolean;
   totalScholarshipCount: number;
+  totalAwardAmount: number | null;
+  knownAwardAmountCount: number;
+  lastUpdatedAt: string | null;
   scholarships: Scholarship[];
   similarProviders: SimilarProviderSummary[];
 };

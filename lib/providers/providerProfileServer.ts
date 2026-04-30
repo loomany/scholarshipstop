@@ -93,6 +93,11 @@ type ProviderScholarshipStatRow = {
   scholarship_count: number;
 };
 
+type ProviderScholarshipAggregateRow = {
+  award_amount_numeric_sort: number | string | null;
+  updated_at: string | null;
+};
+
 const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships';
 
 export const resolveProviderProfileSlug = cache(
@@ -191,6 +196,41 @@ export async function loadProviderProfilePage(
     .map((r) => mapScholarshipRow(r as ScholarshipRow))
     .sort(compareScholarshipsByDeadlineState);
 
+  const { data: aggregateRowsRaw } =
+    totalScholarshipCount > 0
+      ? await supabase
+          .from('scholarships')
+          .select('award_amount_numeric_sort, updated_at')
+          .eq('provider_slug', slugForScholarships)
+          .eq('is_active', true)
+          .range(0, 9999)
+      : { data: [] as ProviderScholarshipAggregateRow[] };
+
+  const aggregateRows = (aggregateRowsRaw ?? []) as ProviderScholarshipAggregateRow[];
+  let totalAwardAmount = 0;
+  let knownAwardAmountCount = 0;
+  let lastUpdatedAt: string | null = providerRow?.updated_at ?? null;
+
+  for (const row of aggregateRows) {
+    const award =
+      row.award_amount_numeric_sort != null
+        ? Number(row.award_amount_numeric_sort)
+        : NaN;
+    if (Number.isFinite(award) && award > 0) {
+      totalAwardAmount += award;
+      knownAwardAmountCount += 1;
+    }
+
+    const updated = row.updated_at?.trim();
+    if (
+      updated &&
+      (!lastUpdatedAt ||
+        new Date(updated).getTime() > new Date(lastUpdatedAt).getTime())
+    ) {
+      lastUpdatedAt = updated;
+    }
+  }
+
   const { data: similarRowsRaw } = await supabase
     .from(PROVIDER_STATS)
     .select('slug, display_name, scholarship_count')
@@ -220,6 +260,9 @@ export async function loadProviderProfilePage(
     aiFaq,
     isEnriched,
     totalScholarshipCount,
+    totalAwardAmount: knownAwardAmountCount > 0 ? totalAwardAmount : null,
+    knownAwardAmountCount,
+    lastUpdatedAt,
     scholarships,
     similarProviders
   };

@@ -9,7 +9,7 @@ export const RESOURCES_SECTION_LABEL = 'Resources';
 export const RESOURCES_PAGE_TITLE = 'Scholarship Resources';
 
 /** Articles per page on `/resources` index. */
-export const RESOURCES_INDEX_PAGE_SIZE = 12;
+export const RESOURCES_INDEX_PAGE_SIZE = 8;
 
 export function resourcesArticlePath(slug: string): string {
   const s = slug.trim();

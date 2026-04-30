@@ -63,6 +63,22 @@ export const SITEMAP_MAX_URLS_PER_FILE = 50_000;
 /** Page size for Supabase `.range()` pagination (not a cap on total rows). */
 export const SITEMAP_DB_PAGE_SIZE = 1000;
 
+const IQ_SEO_BASE_URL = 'https://iq.scholarshiptop.com';
+const IQ_SEO_SITEMAP_PATHS = [
+  '/',
+  '/scholarship-match',
+  '/provider-research',
+  '/college-fit',
+  '/essay-prep',
+  '/deadline-strategy',
+  '/about',
+  '/help',
+  '/privacy-policy',
+  '/terms',
+  '/refund-policy',
+  '/faq'
+] as const;
+
 /**
  * @deprecated Use {@link SITEMAP_DB_PAGE_SIZE} (DB batching) or {@link SITEMAP_MAX_URLS_PER_FILE} (XML chunking).
  */
@@ -344,6 +360,10 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
 
   const core: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified: new Date() },
+    ...IQ_SEO_SITEMAP_PATHS.map((path) => ({
+      url: `${IQ_SEO_BASE_URL}${path === '/' ? '' : path}`,
+      lastModified: new Date()
+    })),
     { url: `${base}/scholarships`, lastModified: new Date() },
     { url: `${base}/compare`, lastModified: new Date() },
     { url: `${base}/compare/universities`, lastModified: new Date() },

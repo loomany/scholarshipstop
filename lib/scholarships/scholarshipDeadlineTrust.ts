@@ -39,7 +39,7 @@ export function isPhantomCalendarYear2001(
 }
 
 /**
- * Calendar anchor for UX (cards, expiry): Supabase `deadline_date` → noon UTC when allowed,
+ * Calendar anchor for UX (cards, expiry): Supabase `deadline_date` → end-of-day UTC when allowed,
  * else parse `deadline` text only if it contains an explicit four-digit year.
  */
 export function parseScholarshipDeadlineAnchor(

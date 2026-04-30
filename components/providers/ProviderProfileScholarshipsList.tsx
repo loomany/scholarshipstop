@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import ScholarshipIqInlineCard from '@/components/scholarships/ScholarshipIqInlineCard';
 
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
@@ -181,27 +182,29 @@ export function ProviderProfileScholarshipsList({
   return (
     <>
       <div className="relative z-0 flex w-full min-w-0 flex-col gap-4">
-        {visibleWithMatch.map((s) => (
-          <ScholarshipCard
-            key={s.id}
-            scholarship={s}
-            isUnread={!viewedIds.includes(s.id)}
-            saved={savedIds.includes(s.id)}
-            onToggleSave={toggleSave}
-            onHide={ignoreScholarship}
-            showCardActions
-            subscriptionLocked={false}
-            isAuthenticated={isAuthenticated}
-            hasSubscription={hasSubscription}
-            onSubscriptionLockedCategoryClick={openLockedCategoryWall}
-            onLockedScholarshipNavigate={openLockedCategoryWall}
-            onSubscriptionDetailNavigate={undefined}
-            onGuestDetailNavigate={
-              catalogFreeTier
-                ? () => openRegistrationWall('card-unlock')
-                : undefined
-            }
-          />
+        {visibleWithMatch.map((s, index) => (
+          <div key={s.id} className="flex min-w-0 flex-col gap-4">
+            <ScholarshipCard
+              scholarship={s}
+              isUnread={!viewedIds.includes(s.id)}
+              saved={savedIds.includes(s.id)}
+              onToggleSave={toggleSave}
+              onHide={ignoreScholarship}
+              showCardActions
+              subscriptionLocked={false}
+              isAuthenticated={isAuthenticated}
+              hasSubscription={hasSubscription}
+              onSubscriptionLockedCategoryClick={openLockedCategoryWall}
+              onLockedScholarshipNavigate={openLockedCategoryWall}
+              onSubscriptionDetailNavigate={undefined}
+              onGuestDetailNavigate={
+                catalogFreeTier
+                  ? () => openRegistrationWall('card-unlock')
+                  : undefined
+              }
+            />
+            {index === 0 ? <ScholarshipIqInlineCard /> : null}
+          </div>
         ))}
       </div>
       <ScholarshipRegistrationWallModal

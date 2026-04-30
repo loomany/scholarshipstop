@@ -1,7 +1,8 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
+import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import CompareCardGrid from '@/components/compare/CompareCardGrid';
 import CompareIndexToolbar from '@/components/compare/CompareIndexToolbar';
@@ -25,6 +26,54 @@ export const revalidate = 3600;
 const baseTitle = 'Scholarship Comparisons';
 const baseDescription =
   'Browse published state and university scholarship comparisons with searchable filters, categories, and fresh matchup cards.';
+
+function CompareIqAssessmentCard() {
+  return (
+    <Link
+      href="/iq/assessment?intent=college_fit"
+      aria-label="Start IQ assessment"
+      className="group relative block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.58)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-34px_rgba(234,88,12,0.72)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 lg:min-h-[13.25rem]"
+    >
+      <div
+        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+        aria-hidden
+      />
+      <div
+        className="absolute -right-12 -top-16 h-36 w-36 rounded-full bg-[#FF7A1A]/16 blur-3xl"
+        aria-hidden
+      />
+      <div className="relative flex h-full min-w-0 flex-col justify-between pl-1">
+        <div>
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB875] bg-white/80 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#B45309] shadow-sm">
+              <BrainCircuit className="h-3 w-3 text-[#F97316]" aria-hidden />
+              Featured Tool
+            </span>
+            <span className="rounded-full bg-slate-950 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
+              IQ
+            </span>
+          </div>
+          <p className="text-xl font-semibold leading-snug tracking-tight text-slate-950">
+            Compare schools. Understand yourself first.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-500">
+            See how your logic, speed, and pattern recognition shape the way you
+            evaluate scholarship options.
+          </p>
+        </div>
+        <div className="mt-5 flex items-center justify-between gap-3 border-t border-orange-100 pt-3">
+          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            Assessment
+          </span>
+          <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-950 transition group-hover:text-[#B45309]">
+            Start IQ test
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export function generateMetadata({
   searchParams
@@ -172,34 +221,42 @@ export default async function CompareHubPage({
           </ol>
         </nav>
 
-        <header className="mt-8 max-w-3xl">
-          <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
-            Scholarship Comparisons
-          </h1>
-          <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-            Explore published state and university matchups, compare funding
-            environments, and jump into the strongest scholarship markets faster.
-          </p>
-        </header>
+        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
+          <div className="min-w-0">
+            <header className="max-w-3xl">
+              <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
+                Scholarship Comparisons
+              </h1>
+              <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
+                Explore published state and university matchups, compare funding
+                environments, and jump into the strongest scholarship markets faster.
+              </p>
+            </header>
 
-        {hasAnyPublished ? (
-          <Suspense
-            fallback={
-              <div
-                className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
-                aria-hidden
-              />
-            }
-          >
-            <CompareIndexToolbar
-              categoryCounts={categoryCounts}
-              resultCount={total}
-              showingFrom={showingFrom}
-              showingTo={showingTo}
-              suggestionItems={allItems}
-            />
-          </Suspense>
-        ) : null}
+            {hasAnyPublished ? (
+              <Suspense
+                fallback={
+                  <div
+                    className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
+                    aria-hidden
+                  />
+                }
+              >
+                <CompareIndexToolbar
+                  categoryCounts={categoryCounts}
+                  resultCount={total}
+                  showingFrom={showingFrom}
+                  showingTo={showingTo}
+                  suggestionItems={allItems}
+                />
+              </Suspense>
+            ) : null}
+          </div>
+
+          <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
+            <CompareIqAssessmentCard />
+          </aside>
+        </div>
 
         {!hasAnyPublished ? (
           <p className="mt-12 text-center text-gray-600">
@@ -213,21 +270,26 @@ export default async function CompareHubPage({
         )}
 
         {hasAnyPublished && slice.length > 0 ? (
-          <ResourcesPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            buildHref={(page) =>
-              buildCompareIndexHref(
-                page,
-                {
-                  q: queryState.q,
-                  category: queryState.category,
-                  sort: queryState.sort
-                },
-                '/compare'
-              )
-            }
-          />
+          <>
+            <div className="mt-6 lg:hidden">
+              <CompareIqAssessmentCard />
+            </div>
+            <ResourcesPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              buildHref={(page) =>
+                buildCompareIndexHref(
+                  page,
+                  {
+                    q: queryState.q,
+                    category: queryState.category,
+                    sort: queryState.sort
+                  },
+                  '/compare'
+                )
+              }
+            />
+          </>
         ) : null}
       </div>
     </div>

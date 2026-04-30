@@ -5,6 +5,20 @@ import { canonicalStateVsSlug } from '@/lib/seo/stateCompareSlug';
 import { canonicalUniversityVsSlug } from '@/lib/seo/universityCompareSlug';
 import { updateSession } from '@/utils/supabase/middleware';
 
+const IQ_SUBDOMAIN_REWRITE_PATHS = new Set([
+  '/about',
+  '/help',
+  '/privacy-policy',
+  '/terms',
+  '/refund-policy',
+  '/faq',
+  '/scholarship-match',
+  '/provider-research',
+  '/college-fit',
+  '/essay-prep',
+  '/deadline-strategy'
+]);
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
@@ -15,6 +29,18 @@ export async function middleware(request: NextRequest) {
   ) {
     const url = request.nextUrl.clone();
     url.pathname = '/iq';
+    return NextResponse.rewrite(url);
+  }
+
+  if (host === 'iq.scholarshiptop.com' && pathname === '/assessment') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/iq/assessment';
+    return NextResponse.rewrite(url);
+  }
+
+  if (host === 'iq.scholarshiptop.com' && IQ_SUBDOMAIN_REWRITE_PATHS.has(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/iq${pathname}`;
     return NextResponse.rewrite(url);
   }
 

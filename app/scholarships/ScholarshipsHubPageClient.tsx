@@ -22,6 +22,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ScholarshipsHubQueryProvider } from '@/components/providers/ScholarshipsHubQueryProvider';
 import BestRecommendationWizard from '@/components/scholarships/BestRecommendationWizard';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
+import ScholarshipIqInlineCard from '@/components/scholarships/ScholarshipIqInlineCard';
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel, {
@@ -205,6 +206,10 @@ const HUB_TABS_SSR_NEVER_SEEDS_ID_LIST: readonly ScholarshipListTabId[] = [
 ];
 const EMPTY_LOCATION_OPTIONS: string[] = [];
 const PREVIEW_COUNT_CACHE_TTL_MS = 30_000;
+
+function shouldShowIqInlineCard(index: number): boolean {
+  return index % 4 === 0;
+}
 
 function longTailRequestRouteKeyFromPathname(pathname: string): string {
   return pathname.replace(/^\/scholarships\/?/, '');
@@ -3231,34 +3236,38 @@ function ScholarshipsPageInner({
                         </div>
                       ) : (
                         <div className="relative z-0 flex flex-col gap-4">
-                          {guestBestStackExploreScholarships.map((s) => (
-                            <ScholarshipCard
-                              key={s.id}
-                              scholarship={s}
-                              isUnread={!viewedSet.has(s.id)}
-                              saved={savedSet.has(s.id)}
-                              onToggleSave={toggleSave}
-                              onHide={ignoreScholarship}
-                              ignoreAction="hide"
-                              showCardActions={scholarshipTabShowsCardActions(
-                                'best-recommendation'
-                              )}
-                              subscriptionLocked={false}
-                              isAuthenticated={isAuthenticated}
-                              hasSubscription={hasSubscription}
-                              listingTab="best-recommendation"
-                              onSubscriptionLockedCategoryClick={
-                                openLockedCategoryWall
-                              }
-                              onLockedScholarshipNavigate={openLockedCategoryWall}
-                              onSubscriptionDetailNavigate={undefined}
-                              onGuestDetailNavigate={
-                                catalogFreeTier
-                                  ? () => openRegistrationWall('card-unlock')
-                                  : undefined
-                              }
-                              returnToHref={currentListingHref}
-                            />
+                          {guestBestStackExploreScholarships.map((s, index) => (
+                            <div key={s.id} className="contents">
+                              <ScholarshipCard
+                                scholarship={s}
+                                isUnread={!viewedSet.has(s.id)}
+                                saved={savedSet.has(s.id)}
+                                onToggleSave={toggleSave}
+                                onHide={ignoreScholarship}
+                                ignoreAction="hide"
+                                showCardActions={scholarshipTabShowsCardActions(
+                                  'best-recommendation'
+                                )}
+                                subscriptionLocked={false}
+                                isAuthenticated={isAuthenticated}
+                                hasSubscription={hasSubscription}
+                                listingTab="best-recommendation"
+                                onSubscriptionLockedCategoryClick={
+                                  openLockedCategoryWall
+                                }
+                                onLockedScholarshipNavigate={openLockedCategoryWall}
+                                onSubscriptionDetailNavigate={undefined}
+                                onGuestDetailNavigate={
+                                  catalogFreeTier
+                                    ? () => openRegistrationWall('card-unlock')
+                                    : undefined
+                                }
+                                returnToHref={currentListingHref}
+                              />
+                              {shouldShowIqInlineCard(index) ? (
+                                <ScholarshipIqInlineCard />
+                              ) : null}
+                            </div>
                           ))}
                         </div>
                       )
@@ -3312,34 +3321,38 @@ function ScholarshipsPageInner({
                           </div>
                         ) : null}
                         <div className="relative z-0 flex flex-col gap-4">
-                          {scholarshipsForCards.map((s) => (
-                            <ScholarshipCard
-                              key={s.id}
-                              scholarship={s}
-                              isUnread={!viewedSet.has(s.id)}
-                              saved={savedSet.has(s.id)}
-                              onToggleSave={toggleSave}
-                              onHide={ignoreScholarship}
-                              ignoreAction="hide"
-                              showCardActions={scholarshipTabShowsCardActions(
-                                'best-recommendation'
-                              )}
-                              subscriptionLocked={false}
-                              isAuthenticated={isAuthenticated}
-                              hasSubscription={hasSubscription}
-                              listingTab="best-recommendation"
-                              onSubscriptionLockedCategoryClick={
-                                openLockedCategoryWall
-                              }
-                              onLockedScholarshipNavigate={openLockedCategoryWall}
-                              onSubscriptionDetailNavigate={undefined}
-                              onGuestDetailNavigate={
-                                catalogFreeTier
-                                  ? () => openRegistrationWall('card-unlock')
-                                  : undefined
-                              }
-                              returnToHref={currentListingHref}
-                            />
+                          {scholarshipsForCards.map((s, index) => (
+                            <div key={s.id} className="contents">
+                              <ScholarshipCard
+                                scholarship={s}
+                                isUnread={!viewedSet.has(s.id)}
+                                saved={savedSet.has(s.id)}
+                                onToggleSave={toggleSave}
+                                onHide={ignoreScholarship}
+                                ignoreAction="hide"
+                                showCardActions={scholarshipTabShowsCardActions(
+                                  'best-recommendation'
+                                )}
+                                subscriptionLocked={false}
+                                isAuthenticated={isAuthenticated}
+                                hasSubscription={hasSubscription}
+                                listingTab="best-recommendation"
+                                onSubscriptionLockedCategoryClick={
+                                  openLockedCategoryWall
+                                }
+                                onLockedScholarshipNavigate={openLockedCategoryWall}
+                                onSubscriptionDetailNavigate={undefined}
+                                onGuestDetailNavigate={
+                                  catalogFreeTier
+                                    ? () => openRegistrationWall('card-unlock')
+                                    : undefined
+                                }
+                                returnToHref={currentListingHref}
+                              />
+                              {shouldShowIqInlineCard(index) ? (
+                                <ScholarshipIqInlineCard />
+                              ) : null}
+                            </div>
                           ))}
                         </div>
                         <ScholarshipsPagination
@@ -3517,34 +3530,38 @@ function ScholarshipsPageInner({
                   showGuestBestOrangeRecommendationCta ? ' mt-4' : ''
                 }`}
               >
-                {scholarshipsForCards.map((s) => (
-                  <ScholarshipCard
-                    key={s.id}
-                    scholarship={s}
-                    isUnread={!viewedSet.has(s.id)}
-                    saved={savedSet.has(s.id)}
-                    onToggleSave={toggleSave}
-                    onHide={
-                      activeTab === 'ignored'
-                        ? restoreScholarship
-                        : ignoreScholarship
-                    }
-                    ignoreAction={activeTab === 'ignored' ? 'restore' : 'hide'}
-                    showCardActions={scholarshipTabShowsCardActions(activeTab)}
-                    subscriptionLocked={false}
-                    isAuthenticated={isAuthenticated}
-                    hasSubscription={hasSubscription}
-                    listingTab={activeTab}
-                    onSubscriptionLockedCategoryClick={openLockedCategoryWall}
-                    onLockedScholarshipNavigate={openLockedCategoryWall}
-                    onSubscriptionDetailNavigate={undefined}
-                    onGuestDetailNavigate={
-                      catalogFreeTier
-                        ? () => openRegistrationWall('card-unlock')
-                        : undefined
-                    }
-                    returnToHref={currentListingHref}
-                  />
+                {scholarshipsForCards.map((s, index) => (
+                  <div key={s.id} className="contents">
+                    <ScholarshipCard
+                      scholarship={s}
+                      isUnread={!viewedSet.has(s.id)}
+                      saved={savedSet.has(s.id)}
+                      onToggleSave={toggleSave}
+                      onHide={
+                        activeTab === 'ignored'
+                          ? restoreScholarship
+                          : ignoreScholarship
+                      }
+                      ignoreAction={activeTab === 'ignored' ? 'restore' : 'hide'}
+                      showCardActions={scholarshipTabShowsCardActions(activeTab)}
+                      subscriptionLocked={false}
+                      isAuthenticated={isAuthenticated}
+                      hasSubscription={hasSubscription}
+                      listingTab={activeTab}
+                      onSubscriptionLockedCategoryClick={openLockedCategoryWall}
+                      onLockedScholarshipNavigate={openLockedCategoryWall}
+                      onSubscriptionDetailNavigate={undefined}
+                      onGuestDetailNavigate={
+                        catalogFreeTier
+                          ? () => openRegistrationWall('card-unlock')
+                          : undefined
+                      }
+                      returnToHref={currentListingHref}
+                    />
+                    {shouldShowIqInlineCard(index) ? (
+                      <ScholarshipIqInlineCard />
+                    ) : null}
+                  </div>
                 ))}
               </div>
               <ScholarshipsPagination

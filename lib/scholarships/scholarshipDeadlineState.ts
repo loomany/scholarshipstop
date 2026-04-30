@@ -41,7 +41,7 @@ function dateIsoFromInput(input: ScholarshipDeadlineInput): string | undefined {
   const direct = input.deadlineAt?.trim();
   if (direct) return direct;
   const dateOnly = input.deadline_date?.trim();
-  return dateOnly ? `${dateOnly}T12:00:00.000Z` : undefined;
+  return dateOnly ? `${dateOnly}T23:59:59.999Z` : undefined;
 }
 
 function utcDateKey(d: Date): string {

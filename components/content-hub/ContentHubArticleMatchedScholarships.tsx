@@ -41,6 +41,8 @@ type Props = {
   items: RelatedScholarshipStored[];
   /** Full catalog rows (listing card) for hub-style cards; order follows items. */
   hubScholarships?: Scholarship[] | null;
+  /** Insert the IQ assessment promo after the first rendered card. */
+  showIqAdAfterFirst?: boolean;
   /** Section root classes. */
   sectionClassName?: string;
   /** Visible `<h2>` text. */
@@ -93,6 +95,7 @@ function MatchedScholarshipGrid({ items }: { items: RelatedScholarshipStored[] }
 export default function ContentHubArticleMatchedScholarships({
   items,
   hubScholarships = null,
+  showIqAdAfterFirst = false,
   sectionClassName = 'mt-4 sm:mt-5',
   heading = 'Related Scholarships',
   headingId = 'content-hub-matched-scholarships-heading',
@@ -133,6 +136,7 @@ export default function ContentHubArticleMatchedScholarships({
       {useHubCards ? (
         <ContentHubArticleMatchedScholarshipCards
           scholarships={hubScholarships}
+          showIqAdAfterFirst={showIqAdAfterFirst}
         />
       ) : (
         <MatchedScholarshipGrid items={items} />

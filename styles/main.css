@@ -146,6 +146,26 @@ body {
   overscroll-behavior-x: none;
 }
 
+/* The contextual IQ intro is a short landing page. Let its footer follow content
+   instead of inheriting the site-wide sticky-footer minimum height. */
+#skip:has(.iq-assessment-compact-page) {
+  min-height: 0;
+}
+
+/* The pricing page can be shorter than the site-wide sticky-footer shell,
+   especially when zoomed out. Keep the footer attached to the pricing content. */
+#skip:has(.subscription-compact-page) {
+  min-height: 0;
+}
+
+body:has(.iq-product-shell) footer:has(a[aria-label="ScholarshipTop — Home"]) {
+  display: none;
+}
+
+#skip:has(.iq-product-shell) {
+  min-height: 0;
+}
+
 a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }

@@ -1,6 +1,7 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
@@ -67,7 +68,7 @@ function articleDateLine({
     Math.abs(updatedMs - publishedMs) > SAME_DAY_MS;
 
   if (publishedLabel && updatedLabel && updatedIsDistinct) {
-    return `Published ${publishedLabel} · Updated ${updatedLabel}`;
+    return `Published ${publishedLabel} В· Updated ${updatedLabel}`;
   }
   if (publishedLabel) return `Published ${publishedLabel}`;
   return updatedLabel ? `Updated ${updatedLabel}` : null;
@@ -144,7 +145,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     toc: tocItems
   } = injectH2H3IdsAndExtractToc(bodyWithoutInlineFaq);
 
-  /** Local dev-only: remove before shipping — do not rely on prod logs. */
+  /** Local dev-only: remove before shipping вЂ” do not rely on prod logs. */
   if (process.env.NODE_ENV === 'development') {
     console.log('[auto-links]', {
       enabled: process.env.CONTENT_HUB_ENABLE_AUTO_INTERNAL_LINKS,
@@ -259,7 +260,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
             href={RESOURCES_SECTION_PATH}
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            ← Back to {RESOURCES_PAGE_TITLE}
+            в†ђ Back to {RESOURCES_PAGE_TITLE}
           </Link>
         </p>
 
@@ -328,18 +329,13 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           primarySplit ? (
             <>
               <SafeContentPostBody html={primarySplit.before} />
-              <ContentHubScholarshipCta
-                className="mt-4 sm:mt-5"
-                title="🎯 Get matched with scholarships in 2 minutes"
-                description="Answer a few quick questions and find scholarships you can apply for today"
-                buttonText="Find My Scholarships"
-              />
+              <ResourceArticleIqCta />
               {midSplit ? (
                 <>
                   <SafeContentPostBody html={midSplit.before} tightTop />
                   <ContentHubScholarshipCta
                     className="mt-4 sm:mt-5"
-                    title="💡 See scholarships you may qualify for"
+                    title="рџ’Ў See scholarships you may qualify for"
                     description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
                     buttonText="Explore Scholarships"
                   />
@@ -351,7 +347,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
                   {primarySplit.after.length > 650 ? (
                     <ContentHubScholarshipCta
                       className="mt-4 sm:mt-5"
-                      title="💡 See scholarships you may qualify for"
+                      title="рџ’Ў See scholarships you may qualify for"
                       description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
                       buttonText="Explore Scholarships"
                     />
@@ -362,12 +358,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           ) : (
             <>
               <SafeContentPostBody html={bodyHtmlAnchored} />
-              <ContentHubScholarshipCta
-                className="mt-4 sm:mt-5"
-                title="💡 See scholarships you may qualify for"
-                description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
-                buttonText="Explore Scholarships"
-              />
+              <ResourceArticleIqCta />
             </>
           )
         ) : null}
@@ -388,6 +379,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           <ContentHubArticleMatchedScholarships
             items={matchedRelatedScholarships}
             hubScholarships={hubScholarships}
+            showIqAdAfterFirst
           />
         ) : (
           <ContentHubScholarshipCta
@@ -399,5 +391,87 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
         )}
       </article>
     </div>
+  );
+}
+
+function ResourceArticleIqCta() {
+  return (
+    <Link
+      href="/iq/assessment?intent=scholarship_match"
+      className="group relative mt-4 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.65)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-32px_rgba(234,88,12,0.76)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:mt-5 sm:p-6"
+      aria-labelledby="resource-article-iq-cta-heading"
+    >
+      <div
+        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+        aria-hidden
+      />
+      <div
+        className="absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FF7A1A]/18 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="absolute bottom-0 right-16 h-28 w-28 rounded-full bg-sky-300/20 blur-2xl"
+        aria-hidden
+      />
+
+      <div className="relative grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <div className="min-w-0">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
+              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              Featured Tool
+            </span>
+            <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+              Strategy fit
+            </span>
+          </div>
+          <h2
+            id="resource-article-iq-cta-heading"
+            className="text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 sm:text-3xl"
+          >
+            Build a smarter scholarship strategy
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+            Take a comprehensive cognitive assessment to see whether your
+            strengths point toward essays, research, deadlines, or fast
+            applications.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {['Logic', 'Speed', 'Patterns', 'Strategy'].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-white/80 bg-white/75 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur sm:w-48">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            Preview report
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">IQ</p>
+              <p className="mt-1 text-base font-bold leading-none text-slate-950">
+                --
+              </p>
+            </div>
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">Type</p>
+              <p className="mt-1 text-sm font-bold leading-none text-slate-950">
+                ???
+              </p>
+            </div>
+          </div>
+          <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
+            Start IQ Test
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </span>
+        </div>
+      </div>
+    </Link>
   );
 }

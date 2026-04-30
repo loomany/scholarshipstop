@@ -1,4 +1,4 @@
-export const PROVIDERS_HUB_PAGE_SIZE = 9;
+export const PROVIDERS_HUB_PAGE_SIZE = 8;
 
 export function parseProvidersHubPageParam(
   raw: string | string[] | undefined

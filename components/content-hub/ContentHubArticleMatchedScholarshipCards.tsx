@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
+import ScholarshipIqInlineCard from '@/components/scholarships/ScholarshipIqInlineCard';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
@@ -34,6 +35,7 @@ import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profi
 
 type Props = {
   scholarships: Scholarship[];
+  showIqAdAfterFirst?: boolean;
 };
 
 /**
@@ -42,6 +44,7 @@ type Props = {
  */
 function ContentHubArticleMatchedScholarshipCardsInner({
   scholarships,
+  showIqAdAfterFirst = false,
   isAuthenticated,
   hasSubscription
 }: Props & {
@@ -177,7 +180,7 @@ function ContentHubArticleMatchedScholarshipCardsInner({
   return (
     <>
       <ul className="mt-6 list-none space-y-4">
-        {visibleWithMatch.map((scholarship) => (
+        {visibleWithMatch.map((scholarship, index) => (
           <li key={scholarship.id} className="block min-w-0 w-full">
             <div className="relative z-0 w-full min-w-0">
               <ScholarshipCard
@@ -200,6 +203,11 @@ function ContentHubArticleMatchedScholarshipCardsInner({
                 }
               />
             </div>
+            {showIqAdAfterFirst && index === 0 ? (
+              <div className="mt-4">
+                <ScholarshipIqInlineCard />
+              </div>
+            ) : null}
           </li>
         ))}
       </ul>

@@ -1,6 +1,7 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
@@ -69,7 +70,7 @@ function articleDateLine({
     Math.abs(updatedMs - publishedMs) > SAME_DAY_MS;
 
   if (publishedLabel && updatedLabel && updatedIsDistinct) {
-    return `Published ${publishedLabel} · Updated ${updatedLabel}`;
+    return `Published ${publishedLabel} В· Updated ${updatedLabel}`;
   }
   if (publishedLabel) return `Published ${publishedLabel}`;
   return updatedLabel ? `Updated ${updatedLabel}` : null;
@@ -137,7 +138,7 @@ function EssaySourcesInset({
   standalone = false
 }: {
   sources: { title: string; url: string }[];
-  /** No article body above — omit divider and top spacing */
+  /** No article body above вЂ” omit divider and top spacing */
   standalone?: boolean;
 }) {
   if (sources.length === 0) return null;
@@ -408,7 +409,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
             href={ESSAYS_SECTION_PATH}
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            ← Back to {ESSAYS_PAGE_TITLE}
+            в†ђ Back to {ESSAYS_PAGE_TITLE}
           </Link>
         </p>
 
@@ -423,7 +424,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
               </p>
             ) : null}
             <p className="max-w-2xl border-l-2 border-indigo-200 pl-3 text-xs leading-relaxed text-gray-600">
-              Written by {ORG_NAME} AI • Reviewed by Editorial Team
+              Written by {ORG_NAME} AI вЂў Reviewed by Editorial Team
             </p>
           </div>
         </header>
@@ -433,7 +434,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={essay.hero_image_url.trim()}
-              alt={`How to write a scholarship essay for ${essay.title?.trim() || 'this program'} — illustrative candid photo of students in a modern university or study environment`}
+              alt={`How to write a scholarship essay for ${essay.title?.trim() || 'this program'} вЂ” illustrative candid photo of students in a modern university or study environment`}
               className="aspect-[16/9] w-full object-cover"
             />
           </div>
@@ -445,7 +446,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
           primarySplit ? (
             <>
               <SafeContentPostBody html={primarySplit.before} />
-              <EssayBuilderCta />
+              <EssayIqCta />
               {midSplit ? (
                 <>
                   <SafeContentPostBody html={midSplit.before} tightTop />
@@ -467,7 +468,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
           ) : (
             <>
               <SafeContentPostBody html={bodyHtml} footer={sourcesInset} />
-              <EssayBuilderCta />
+              <EssayIqCta />
             </>
           )
         ) : sourcesStandalone ? (
@@ -520,6 +521,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
           <ContentHubArticleMatchedScholarships
             items={relatedScholarshipItems}
             hubScholarships={essayHubScholarships}
+            showIqAdAfterFirst
             sectionClassName="mt-10"
             heading="Related scholarships"
             headingId="related-scholarships-heading"
@@ -531,13 +533,95 @@ export default async function EssayGuidePage({ params }: PageProps) {
   );
 }
 
+function EssayIqCta() {
+  return (
+    <Link
+      href="/iq/assessment?intent=essay_prep"
+      className="group relative mt-6 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.65)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-32px_rgba(234,88,12,0.76)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:mt-8 sm:p-6"
+      aria-labelledby="essay-iq-cta-heading"
+    >
+      <div
+        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+        aria-hidden
+      />
+      <div
+        className="absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FF7A1A]/18 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="absolute bottom-0 right-16 h-28 w-28 rounded-full bg-sky-300/20 blur-2xl"
+        aria-hidden
+      />
+
+      <div className="relative grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <div className="min-w-0">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
+              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              Featured Tool
+            </span>
+            <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+              Essay insight
+            </span>
+          </div>
+          <h2
+            id="essay-iq-cta-heading"
+            className="text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 sm:text-3xl"
+          >
+            Find your Brain Archetype before writing your essay
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+            Turn self-reflection into a clearer story. Take a comprehensive
+            cognitive assessment and get your IQ score, percentile, and strengths
+            across logic, speed, spatial reasoning, and patterns.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {['Logic', 'Speed', 'Spatial', 'Patterns'].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-white/80 bg-white/75 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur sm:w-48">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            Preview report
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">IQ</p>
+              <p className="mt-1 text-base font-bold leading-none text-slate-950">
+                --
+              </p>
+            </div>
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">Type</p>
+              <p className="mt-1 text-sm font-bold leading-none text-slate-950">
+                ???
+              </p>
+            </div>
+          </div>
+          <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
+            Start IQ Test
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 function EssayBuilderCta({ variant = 'default' }: { variant?: 'default' | 'compact' }) {
   if (variant === 'compact') {
     return (
       <div className="mt-4 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:mt-5 sm:px-6 sm:py-5">
         <div className="mx-auto flex items-center justify-center gap-2.5">
           <span className="text-xl leading-none" aria-hidden>
-            🎯
+            рџЋЇ
           </span>
           <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
             Get matched with scholarships in 2 minutes
@@ -557,14 +641,14 @@ function EssayBuilderCta({ variant = 'default' }: { variant?: 'default' | 'compa
       className="mt-6 rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6 shadow-sm sm:mt-8 sm:p-8"
     >
       <p className="text-sm font-semibold text-indigo-950">
-        💡 This template was analyzed by our AI. Write your own unique version in
+        рџ’Ў This template was analyzed by our AI. Write your own unique version in
         2 minutes.
       </p>
       <Link
         href="/essay"
         className="mt-3 inline-flex items-center text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
       >
-        Try Essay Builder →
+        Try Essay Builder в†’
       </Link>
     </div>
   );

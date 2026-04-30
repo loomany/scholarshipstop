@@ -1,4 +1,4 @@
-export const COMPARE_INDEX_PAGE_SIZE = 12;
+export const COMPARE_INDEX_PAGE_SIZE = 11;
 
 export type CompareIndexCategory = 'all' | 'universities' | 'states';
 export type CompareIndexSort = 'latest' | 'title';

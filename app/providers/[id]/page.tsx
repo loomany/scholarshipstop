@@ -1,6 +1,6 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
-import { Check } from 'lucide-react';
+import { ArrowRight, BrainCircuit, Check } from 'lucide-react';
 import type { Metadata } from 'next';
 
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
@@ -33,10 +33,33 @@ function providerMetaDescription(
   if (!trimmed) {
     return `Scholarships and profile for ${displayName} on ScholarshipTop.`;
   }
+
   const singleLine = trimmed.replace(/\s+/g, ' ').trim();
   return singleLine.length <= 160
     ? singleLine
     : `${singleLine.slice(0, 157).trimEnd()}...`;
+}
+
+function formatProviderProfileDate(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const date = new Date(iso);
+  if (!Number.isFinite(date.getTime())) return null;
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(date);
+}
+
+function formatProviderAwardPool(amount: number | null | undefined): string | null {
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
+    return null;
+  }
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(amount);
 }
 
 function normalizeAiSourceHref(url: string): string {
@@ -214,7 +237,8 @@ export default async function ProviderProfilePage({
     '@type': 'WebPage',
     name: pageTitleMeta,
     url: providerUrl,
-    description: resolvedDescription
+    description: resolvedDescription,
+    ...(data.lastUpdatedAt ? { dateModified: data.lastUpdatedAt } : {})
   };
 
   const tocItems: Array<{ id: string; label: string }> = [];
@@ -257,6 +281,10 @@ export default async function ProviderProfilePage({
           }))
         }
       : null;
+  const formattedAwardPool = formatProviderAwardPool(data.totalAwardAmount);
+  const formattedLastUpdated = formatProviderProfileDate(data.lastUpdatedAt);
+  const showAwardPool =
+    data.totalScholarshipCount > 3 && formattedAwardPool != null;
 
   return (
     <div className="min-h-screen bg-[#f9fafb] pb-16 pt-8 sm:pt-12">
@@ -290,13 +318,38 @@ export default async function ProviderProfilePage({
                 Verified Provider
               </span>
             </div>
-            <div className="flex flex-wrap gap-6 text-sm text-gray-600">
-              <div>
-                <span className="font-semibold text-gray-900">Total scholarships</span>
-                <span className="ml-2 tabular-nums text-gray-700">
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
+                  Active scholarships
+                </p>
+                <p className="mt-1 tabular-nums text-xl font-bold text-gray-900">
                   {data.totalScholarshipCount.toLocaleString()}
-                </span>
+                </p>
               </div>
+              {showAwardPool ? (
+                <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 px-4 py-3">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-emerald-700">
+                    Total listed award pool
+                  </p>
+                  <p className="mt-1 tabular-nums text-xl font-bold text-emerald-950">
+                    {formattedAwardPool}
+                  </p>
+                  <p className="mt-1 text-xs text-emerald-700/80">
+                    Known amounts for {data.knownAwardAmountCount.toLocaleString()} awards
+                  </p>
+                </div>
+              ) : null}
+              {formattedLastUpdated ? (
+                <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
+                    Last updated
+                  </p>
+                  <p className="mt-1 text-xl font-bold text-gray-900">
+                    {formattedLastUpdated}
+                  </p>
+                </div>
+              ) : null}
             </div>
           </div>
         </header>
@@ -321,6 +374,8 @@ export default async function ProviderProfilePage({
             </p>
           )}
         </section>
+
+        <ProviderProfileIqCta providerName={data.displayName} />
 
         <ProviderProfileContextLinks />
 
@@ -387,7 +442,7 @@ export default async function ProviderProfilePage({
             <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
               <div className="flex items-center justify-center gap-2">
                 <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
-                  🎯
+                  рџЋЇ
                 </span>
                 <h3 className="text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap">
                   Get matched with scholarships in 2 minutes
@@ -471,5 +526,87 @@ export default async function ProviderProfilePage({
 
       </div>
     </div>
+  );
+}
+
+function ProviderProfileIqCta({ providerName }: { providerName: string }) {
+  return (
+    <Link
+      href="/iq/assessment?intent=provider_research"
+      className="group relative mt-6 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.65)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-32px_rgba(234,88,12,0.76)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:p-6"
+      aria-labelledby="provider-profile-iq-cta-heading"
+    >
+      <div
+        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+        aria-hidden
+      />
+      <div
+        className="absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FF7A1A]/18 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="absolute bottom-0 right-16 h-28 w-28 rounded-full bg-sky-300/20 blur-2xl"
+        aria-hidden
+      />
+
+      <div className="relative grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <div className="min-w-0">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
+              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              Featured Tool
+            </span>
+            <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+              Provider fit
+            </span>
+          </div>
+          <h2
+            id="provider-profile-iq-cta-heading"
+            className="text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 sm:text-3xl"
+          >
+            Prioritize {providerName} with your Brain Archetype
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+            Take a comprehensive cognitive assessment to understand whether your
+            strengths fit research-heavy, essay-heavy, deadline-driven, or
+            fast-apply scholarship opportunities.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {['Logic', 'Speed', 'Research', 'Essays'].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-white/80 bg-white/75 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur sm:w-48">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            Preview report
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">IQ</p>
+              <p className="mt-1 text-base font-bold leading-none text-slate-950">
+                --
+              </p>
+            </div>
+            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">Type</p>
+              <p className="mt-1 text-sm font-bold leading-none text-slate-950">
+                ???
+              </p>
+            </div>
+          </div>
+          <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
+            Start IQ Test
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </span>
+        </div>
+      </div>
+    </Link>
   );
 }

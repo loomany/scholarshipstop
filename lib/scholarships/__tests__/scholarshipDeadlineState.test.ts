@@ -33,6 +33,19 @@ test('past trusted date is expired', () => {
   assert.equal(scholarshipDeadlineHasPassed(input, NOW), true);
 });
 
+test('date-only deadline stays active through its calendar day', () => {
+  assert.equal(
+    getScholarshipDeadlineState(
+      {
+        deadline_text: 'April 30, 2026',
+        deadline_date: '2026-04-30'
+      },
+      new Date('2026-04-30T18:00:00.000Z')
+    ),
+    'active'
+  );
+});
+
 test('rolling deadline text is rolling', () => {
   for (const deadline of [
     'Rolling deadline',

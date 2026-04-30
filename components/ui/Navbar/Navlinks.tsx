@@ -49,7 +49,8 @@ const ABOUT_SUBLINKS = [
   { href: '/terms', label: 'Terms' },
   { href: '/faq', label: 'FAQ' },
   { href: '/refund-policy', label: 'Refund Policy' },
-  { href: '/for-organizations', label: 'For Organizations' }
+  { href: '/for-organizations', label: 'For Organizations' },
+  { href: '/iq', label: 'IQ Test' }
 ] as const;
 
 const MOBILE_ABOUT_SUBLINKS = ABOUT_SUBLINKS.filter(
@@ -102,6 +103,14 @@ function sublinkActive(href: string, pathname: string) {
 
 export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
   const pathname = usePathname() ?? '';
+  const isIqProductPage =
+    pathname === '/iq' ||
+    pathname === '/iq/about' ||
+    pathname === '/iq/help' ||
+    pathname === '/iq/privacy-policy' ||
+    pathname === '/iq/terms' ||
+    pathname === '/iq/refund-policy' ||
+    pathname === '/iq/faq';
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
   const [essaysExpanded, setEssaysExpanded] = useState(false);
@@ -235,6 +244,34 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
       setVersusExpanded(versusActive);
     }
   }, [menuOpen, aboutSectionActive, essayGuidesNavActive, versusActive]);
+
+  if (isIqProductPage) {
+    return (
+      <div className="relative flex min-h-16 items-center justify-between gap-3 py-2.5 md:min-h-20 md:py-3">
+        <Link
+          href="/iq"
+          className={`${s.logo} relative z-[1] shrink-0`}
+          aria-label="ScholarshipTop IQ — Home"
+        >
+          <Logo variant="header" />
+        </Link>
+
+        <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1.5 text-[0.68rem] font-bold text-zinc-200 md:hidden">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.9)]" />
+          Private report
+        </div>
+
+        <div className="hidden min-w-0 flex-1 items-center justify-center md:flex">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-zinc-200 shadow-[0_12px_40px_-28px_rgba(255,255,255,0.45)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_16px_rgba(52,211,153,0.9)]" />
+            Private IQ-style report
+            <span className="h-1 w-1 rounded-full bg-zinc-500" />
+            Delivered by email after checkout
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

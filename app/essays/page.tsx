@@ -1,7 +1,8 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, type CSSProperties } from 'react';
+import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import { EssaysIndexHeroMedia } from '@/components/essays/EssaysIndexHeroMedia';
 import { EssaysIndexResultSummary } from '@/components/essays/EssaysIndexResultSummary';
@@ -200,7 +201,7 @@ export default async function EssaysIndexPage({
                     {ESSAYS_PAGE_TITLE}
                   </h1>
                   <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                    How-to guides for scholarship essays—structured prompts,
+                    How-to guides for scholarship essaysвЂ”structured prompts,
                     outlines, and revision checklists. For browsing awards, use
                     the scholarship directory.
                   </p>
@@ -236,7 +237,7 @@ export default async function EssaysIndexPage({
                 {ESSAYS_PAGE_TITLE}
               </h1>
               <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                How-to guides for scholarship essays—structured prompts, outlines,
+                How-to guides for scholarship essaysвЂ”structured prompts, outlines,
                 and revision checklists. For browsing awards, use the scholarship
                 directory.
               </p>
@@ -288,19 +289,40 @@ export default async function EssaysIndexPage({
   );
 }
 
+const essaysHubCardLinkClassName =
+  'group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_12px_40px_-16px_rgba(15,23,42,0.12)] ring-1 ring-gray-100 transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_48px_-12px_rgba(15,23,42,0.16)]';
+
+const essaysHubIqPromoLinkClassName =
+  'group flex h-full flex-col overflow-hidden rounded-2xl border border-[#FFB875]/80 bg-white shadow-[0_14px_44px_-18px_rgba(234,88,12,0.26)] ring-1 ring-[#FFE2C2] transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_18px_52px_-18px_rgba(234,88,12,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2';
+
 function EssaysGrid({ posts }: { posts: EssayListFields[] }) {
+  if (posts.length === 0) {
+    return (
+      <ul className="mt-6 grid list-none gap-6 sm:mt-8 sm:grid-cols-2 lg:grid-cols-3" />
+    );
+  }
+
   return (
     <ul className="mt-6 grid list-none gap-6 sm:mt-8 sm:grid-cols-2 lg:grid-cols-3">
-      {posts.map((post) => {
+      <EssaysHubIqPromoLi
+        key="essays-hub-iq-promo-first"
+        variant="first"
+        listClassName="order-2 lg:order-1"
+      />
+      {posts.map((post, index) => {
         const slug = post.slug!.trim();
         const title = post.title?.trim() || 'Untitled';
         const desc = post.meta_description?.trim() || '';
         const href = essayHubArticlePath(slug);
         return (
-          <li key={post.id}>
+          <li
+            key={post.id}
+            className={index === 0 ? 'order-1 lg:order-2' : undefined}
+            style={index > 0 ? { order: index + 2 } : undefined}
+          >
             <Link
               href={href}
-              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_12px_40px_-16px_rgba(15,23,42,0.12)] ring-1 ring-gray-100 transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_48px_-12px_rgba(15,23,42,0.16)]"
+              className={essaysHubCardLinkClassName}
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
                 {post.hero_image_url?.trim() ? (
@@ -329,14 +351,90 @@ function EssaysGrid({ posts }: { posts: EssayListFields[] }) {
                   </p>
                 ) : null}
                 <span className="mt-4 inline-flex items-center text-sm font-semibold text-orange-600 group-hover:text-orange-700">
-                  Read guide →
+                  Read guide в†’
                 </span>
               </div>
             </Link>
           </li>
         );
       })}
+      <EssaysHubIqPromoLi
+        key="essays-hub-iq-promo-last"
+        variant="last"
+        listStyle={{ order: posts.length + 2 }}
+      />
     </ul>
+  );
+}
+
+function EssaysHubIqPromoLi({
+  variant,
+  listClassName,
+  listStyle
+}: {
+  variant: 'first' | 'last';
+  listClassName?: string;
+  listStyle?: CSSProperties;
+}) {
+  const heroSub =
+    variant === 'first'
+      ? 'After your first guide, map your Brain Archetype to sharpen essay strategy.'
+      : 'Before you keep browsing, unlock your reasoning profile.';
+  return (
+    <li className={listClassName} style={listStyle}>
+      <Link
+        href="/iq/assessment?intent=essay_prep"
+        aria-label="Start IQ assessment for scholarship applicants"
+        className={essaysHubIqPromoLinkClassName}
+      >
+        <div className="relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF]">
+          <div
+            className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+            aria-hidden
+          />
+          <div
+            className="absolute -right-14 -top-16 h-40 w-40 rounded-full bg-[#FF7A1A]/20 blur-3xl"
+            aria-hidden
+          />
+          <div
+            className="absolute bottom-4 right-8 h-24 w-24 rounded-full bg-sky-300/20 blur-2xl"
+            aria-hidden
+          />
+          <div className="relative flex h-full flex-col justify-between p-5 pl-6">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB875] bg-white/80 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#B45309] shadow-sm">
+                <BrainCircuit className="h-3 w-3 text-[#F97316]" aria-hidden />
+                Featured Tool
+              </span>
+              <span className="rounded-full bg-slate-950 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
+                IQ
+              </span>
+            </div>
+            <div>
+              <p className="text-2xl font-semibold leading-tight tracking-tight text-slate-950">
+                Map Your Cognitive DNA
+              </p>
+              <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-600">
+                {heroSub}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-1 flex-col border-t border-orange-100/80 bg-white p-5 sm:p-6">
+          <h2 className="text-lg font-bold leading-snug tracking-tight text-gray-900 sm:text-xl">
+            IQ Assessment for Scholarship Applicants
+          </h2>
+          <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-gray-600">
+            Identify your Brain Archetype through logic, spatial reasoning, and
+            pattern recognition before prioritizing applications.
+          </p>
+          <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 transition group-hover:text-orange-700">
+            Start IQ test
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+          </span>
+        </div>
+      </Link>
+    </li>
   );
 }
 

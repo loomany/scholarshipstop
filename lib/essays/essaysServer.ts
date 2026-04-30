@@ -47,7 +47,8 @@ export type EssayDetailRow = {
 const listSelect =
   'id, slug, title, hero_image_url, hero_is_real, meta_description, hub_category_slug, hub_category_label, hub_distribution_group, hub_distribution_rank, created_at' as const;
 
-export const ESSAYS_INDEX_PAGE_SIZE = 12;
+/** `/essays` grid also renders two inline IQ promo slots (first + last), so keep rows+2 divisible by 3 on large screens. */
+export const ESSAYS_INDEX_PAGE_SIZE = 10;
 
 export type EssaysHubCategoryOption = {
   key: string;

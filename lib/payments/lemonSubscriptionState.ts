@@ -13,6 +13,8 @@ export type LemonWebhookPayload = {
     custom_data?: {
       user_id?: string;
       userId?: string;
+      iq_report_id?: string;
+      funnel?: string;
     };
   };
   data?: {
@@ -43,6 +45,8 @@ export type LemonWebhookPayload = {
       custom_data?: {
         user_id?: string;
         userId?: string;
+        iq_report_id?: string;
+        funnel?: string;
       };
       urls?: {
         customer_portal?: string | null;
@@ -80,6 +84,8 @@ export type LemonWebhookPayload = {
     custom_data?: {
       user_id?: string;
       userId?: string;
+      iq_report_id?: string;
+      funnel?: string;
     };
     urls?: {
       customer_portal?: string | null;

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 import CompareCardGrid from '@/components/compare/CompareCardGrid';
+import CompareIqAssessmentCard from '@/components/compare/CompareIqAssessmentCard';
 import CompareIndexToolbar from '@/components/compare/CompareIndexToolbar';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import {
@@ -176,38 +177,46 @@ export default async function UniversityBattlesPage({
           </ol>
         </nav>
 
-        <header className="mt-8 max-w-3xl">
-          <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
-            {baseTitle}
-          </h1>
-          <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-            Explore published university-vs-university scholarship comparisons and
-            scan matchup cards faster with search and sorting.
-          </p>
-        </header>
+        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
+          <div className="min-w-0">
+            <header className="max-w-3xl">
+              <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
+                {baseTitle}
+              </h1>
+              <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
+                Explore published university-vs-university scholarship comparisons and
+                scan matchup cards faster with search and sorting.
+              </p>
+            </header>
 
-        {hasAnyPublished ? (
-          <Suspense
-            fallback={
-              <div
-                className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
-                aria-hidden
-              />
-            }
-          >
-            <CompareIndexToolbar
-              resultCount={total}
-              showingFrom={showingFrom}
-              showingTo={showingTo}
-              basePath={basePath}
-              showCategories={false}
-              fixedCategory="universities"
-              searchPlaceholder="Search University vs University"
-              resultLabel="University vs University"
-              suggestionItems={items}
-            />
-          </Suspense>
-        ) : null}
+            {hasAnyPublished ? (
+              <Suspense
+                fallback={
+                  <div
+                    className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
+                    aria-hidden
+                  />
+                }
+              >
+                <CompareIndexToolbar
+                  resultCount={total}
+                  showingFrom={showingFrom}
+                  showingTo={showingTo}
+                  basePath={basePath}
+                  showCategories={false}
+                  fixedCategory="universities"
+                  searchPlaceholder="Search University vs University"
+                  resultLabel="University vs University"
+                  suggestionItems={items}
+                />
+              </Suspense>
+            ) : null}
+          </div>
+
+          <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
+            <CompareIqAssessmentCard variant="universities" />
+          </aside>
+        </div>
 
         {!hasAnyPublished ? (
           <p className="mt-12 text-center text-gray-600">

@@ -19,9 +19,14 @@ import {
   lemonWebhookShouldSendSubscriptionCancelledEmail,
   lemonWebhookShouldSendSubscriptionPaymentFailedEmail
 } from '@/lib/email/sendLemonSubscriptionEmail';
-import { notifyTelegramPayment } from '@/lib/telegram/bot';
+import {
+  notifyTelegramPayment,
+  notifyTelegramStandaloneIqPaid
+} from '@/lib/telegram/bot';
 import { runInvoicePaymentFailedWebhookEffects } from '@/lib/payments/runInvoicePaymentFailedWebhookEffects';
 import { enrichInvoicePaymentSuccessWithSubscriptionFetch } from '@/lib/payments/lemonInvoiceWebhookEnrichment';
+import { sendIqReportReadyEmail } from '@/lib/email/sendIqReportReadyEmail';
+import { getIqReportAdminClient, getIqReportUrl } from '@/lib/iqReportOrders';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -67,6 +72,118 @@ function getStoredPayloadUpdatedAt(rawPayload: Json | null): string | null {
 
 function shouldSkipSignatureValidation() {
   return process.env.NODE_ENV !== 'production' && process.env.LEMON_WEBHOOK_SKIP_SIGNATURE === '1';
+}
+
+function getLemonAttributes(payload: LemonWebhookPayload) {
+  return payload.data?.attributes ?? payload.attributes;
+}
+
+function getIqReportIdFromPayload(payload: LemonWebhookPayload): string | null {
+  const value =
+    payload.meta?.custom_data?.iq_report_id ??
+    payload.data?.attributes?.custom_data?.iq_report_id ??
+    payload.attributes?.custom_data?.iq_report_id ??
+    null;
+  return typeof value === 'string' && value.trim() ? value.trim() : null;
+}
+
+function getCheckoutEmailFromPayload(payload: LemonWebhookPayload): string | null {
+  const attrs = getLemonAttributes(payload) as
+    | (NonNullable<LemonWebhookPayload['data']>['attributes'] & {
+        user_email?: string | null;
+        user_email_address?: string | null;
+        customer_email?: string | null;
+      })
+    | undefined;
+  const value = attrs?.user_email ?? attrs?.user_email_address ?? attrs?.customer_email ?? null;
+  return typeof value === 'string' && value.trim() ? value.trim().toLowerCase() : null;
+}
+
+async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
+  if (payload.meta?.event_name !== 'order_created') return null;
+
+  const reportId = getIqReportIdFromPayload(payload);
+  if (!reportId) return null;
+
+  const attrs = getLemonAttributes(payload);
+  const orderId =
+    attrs?.order_id != null
+      ? String(attrs.order_id)
+      : payload.data?.id != null
+        ? String(payload.data.id)
+        : null;
+
+  const paidAt = new Date().toISOString();
+  const { data: order, error } = await getIqReportAdminClient()
+    .from('iq_report_orders')
+    .update({
+      status: 'paid',
+      lemon_order_id: orderId,
+      lemon_checkout_email: getCheckoutEmailFromPayload(payload),
+      raw_payload: payload as Json,
+      paid_at: paidAt,
+      updated_at: paidAt
+    })
+    .eq('id', reportId)
+    .select('*')
+    .maybeSingle();
+
+  if (error || !order) {
+    console.error('[lemon:webhook] iq report order update failed', {
+      reportId,
+      message: error?.message
+    });
+    return new Response('Error updating IQ report order.', { status: 500 });
+  }
+
+  const reportUrl = getIqReportUrl(order.access_token);
+  const result = order.assessment_result as {
+    iqScore?: number;
+    archetype?: string;
+  };
+
+  await notifyTelegramStandaloneIqPaid({
+    email: order.email,
+    reportId,
+    orderId,
+    reportUrl,
+    iqScore: typeof result.iqScore === 'number' ? result.iqScore : null,
+    archetype: typeof result.archetype === 'string' ? result.archetype : null
+  });
+
+  const emailResult = await sendIqReportReadyEmail({
+    toEmail: order.email,
+    reportUrl,
+    iqScore: typeof result.iqScore === 'number' ? result.iqScore : 0,
+    archetype: typeof result.archetype === 'string' ? result.archetype : 'Cognitive Profile'
+  });
+
+  if (emailResult.ok) {
+    const sentAt = new Date().toISOString();
+    await getIqReportAdminClient()
+      .from('iq_report_orders')
+      .update({
+        status: 'email_sent',
+        email_sent_at: sentAt,
+        updated_at: sentAt
+      })
+      .eq('id', reportId);
+  } else {
+    console.warn('[lemon:webhook] iq report email not sent', {
+      reportId,
+      skipped: emailResult.skipped
+    });
+  }
+
+  return new Response(
+    JSON.stringify({
+      received: true,
+      iqReport: true,
+      emailSent: emailResult.ok,
+      skipped: emailResult.skipped
+    }),
+    { status: 200 }
+  );
 }
 
 /** Signing secret from the webhook in Lemon (6–40 chars), not the REST API key. Try all distinct env values. */
@@ -141,6 +258,9 @@ export async function POST(req: Request) {
       });
       payload = enriched;
     }
+
+    const iqReportResponse = await handleIqReportOrderCreated(payload);
+    if (iqReportResponse) return iqReportResponse;
 
     const decision = decideSubscriptionUpdate(payload);
     if (decision.kind === 'ignored') {

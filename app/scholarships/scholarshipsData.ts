@@ -321,14 +321,32 @@ export function resolveScholarshipCardAwardDisplay(s: Scholarship): {
   };
 }
 
-function pad2(n: number): string {
-  return n.toString().padStart(2, '0');
+function formatDeadlineDateOnly(d: Date): string {
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC'
+  });
 }
 
-/** Supabase maps `deadline_date` → `deadlineAt` with fixed noon UTC when time unknown. */
+function stripDeadlineTimeText(text: string): string {
+  return text
+    .replace(/T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z?$/i, '')
+    .replace(
+      /\s*(?:at\s*)?\b\d{1,2}:\d{2}\s*(?:AM|PM)?\s*(?:UTC|GMT|ET|EST|EDT|PT|PST|PDT)?\b/gi,
+      ''
+    )
+    .replace(/\s*[•,]\s*$/, '')
+    .trim();
+}
+
+/** Supabase maps `deadline_date` → `deadlineAt` with a synthetic UTC clock when time is unknown. */
 export function isScholarshipDeadlineDateOnlyIso(iso: string | undefined): boolean {
   const t = iso?.trim();
-  return Boolean(t?.endsWith('T12:00:00.000Z'));
+  return Boolean(
+    t?.endsWith('T12:00:00.000Z') || t?.endsWith('T23:59:59.999Z')
+  );
 }
 
 function scholarshipDeadlineAnchorDate(s: Scholarship): Date | null {
@@ -355,38 +373,14 @@ export function parseTimeFragmentFromDeadlineText(
   return null;
 }
 
-function formatUtcClockFromDate(d: Date): string {
-  let h = d.getUTCHours();
-  const mi = d.getUTCMinutes();
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12;
-  if (h === 0) h = 12;
-  return `${h}:${pad2(mi)} ${ampm} UTC`;
-}
-
 /**
- * Calendar date line: "May 14, 2026", optionally with time from `deadlineAt` (real UTC) or parsed from `deadline` text.
+ * Calendar date line: "May 14, 2026". Deadline times are intentionally hidden
+ * across the product because most catalog rows only provide date-level precision.
  */
 export function formatScholarshipDeadlineAbsoluteLine(s: Scholarship): string | null {
   const d = scholarshipDeadlineAnchorDate(s);
   if (!d) return null;
-  const datePart = d.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  });
-  const timeFromText = parseTimeFragmentFromDeadlineText(s.deadline);
-  if (timeFromText) {
-    return `${datePart} • ${timeFromText}`;
-  }
-  const iso = s.deadlineAt?.trim();
-  if (iso && isScholarshipDeadlineDateOnlyIso(iso)) {
-    return datePart;
-  }
-  if (iso) {
-    return `${datePart}, ${formatUtcClockFromDate(d)}`;
-  }
-  return datePart;
+  return formatDeadlineDateOnly(d);
 }
 
 function formatDaysLeftSubtitle(d: Date): string {
@@ -428,7 +422,9 @@ export function getScholarshipDeadlineDisplayParts(s: Scholarship): {
     return { primary: formatScholarshipDeadlineRelativePrimary(anchor), secondary: null };
   }
   const raw = s.deadline?.trim();
-  if (raw && raw !== '—') return { primary: raw, secondary: null };
+  if (raw && raw !== '—') {
+    return { primary: stripDeadlineTimeText(raw), secondary: null };
+  }
   return { primary: '—', secondary: null };
 }
 
@@ -440,7 +436,7 @@ export function formatDeadlineTooltipText(s: Scholarship): string {
     rawLine !== '—' &&
     !deadlineTextAllowsCalendarSemantics(rawLine)
   ) {
-    return rawLine;
+    return stripDeadlineTimeText(rawLine);
   }
   const iso = s.deadlineAt?.trim();
   if (iso) {
@@ -449,21 +445,21 @@ export function formatDeadlineTooltipText(s: Scholarship): string {
       !Number.isNaN(d.getTime()) &&
       !isPhantomCalendarYear2001(iso, s.deadline)
     ) {
-      const weekday = d.toLocaleDateString('en-US', { weekday: 'long' });
-      const month = d.toLocaleDateString('en-US', { month: 'long' });
-      const day = d.getDate();
-      const year = d.getFullYear();
-      let h = d.getHours();
-      const m = d.getMinutes();
-      const ampm = h >= 12 ? 'PM' : 'AM';
-      h = h % 12;
-      if (h === 0) h = 12;
-      const time = `${pad2(h)}:${pad2(m)}${ampm}`;
-      return `${weekday} ${month} ${day}, ${year}, ${time}`;
+      const weekday = d.toLocaleDateString('en-US', {
+        weekday: 'long',
+        timeZone: 'UTC'
+      });
+      const month = d.toLocaleDateString('en-US', {
+        month: 'long',
+        timeZone: 'UTC'
+      });
+      const day = d.getUTCDate();
+      const year = d.getUTCFullYear();
+      return `${weekday} ${month} ${day}, ${year}`;
     }
   }
   const raw = s.deadline?.trim();
-  if (raw && raw !== '—') return raw;
+  if (raw && raw !== '—') return stripDeadlineTimeText(raw);
   return 'Deadline details will be added when available.';
 }
 

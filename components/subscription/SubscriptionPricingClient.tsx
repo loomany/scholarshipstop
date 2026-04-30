@@ -73,7 +73,9 @@ function PlanFeatureList({ items }: { items: string[] }) {
           <span
             className={cn(
               'text-sm text-gray-600',
-              line.includes('Unlock AI Essay Mentor') && 'font-semibold text-gray-900'
+              (line.includes('Unlock AI Essay Mentor') ||
+                line.includes('Unlock IQ Strategy Report')) &&
+                'font-semibold text-gray-900'
             )}
           >
             {line}
@@ -331,6 +333,7 @@ function PlanGrantCard({
 
 const MONTHLY_FEATURES: string[] = [
   'Unlock Premium Scholarships',
+  'Unlock IQ Strategy Report',
   'Access "Easy Apply" & "International"',
   'Unblur all grant names & links',
   'Unlimited Smart Filters'
@@ -339,6 +342,7 @@ const MONTHLY_FEATURES: string[] = [
 const QUARTERLY_FEATURES: string[] = [
   'Everything in Monthly, plus:',
   'Unlock AI Essay Mentor',
+  'IQ-based grant strategy + essay next steps',
   'Smart Interview & Voice Input',
   'Unlimited essay generations',
   'Instant email alerts for new matches',
@@ -348,6 +352,7 @@ const QUARTERLY_FEATURES: string[] = [
 const LIFETIME_FEATURES: string[] = [
   'Everything in Quarterly, plus:',
   'Unlock AI Essay Mentor',
+  'Full IQ report with matched grants, awards, and deadlines',
   'Best price per month',
   'Priority AI processing',
   'Priority email alerts for new matches',

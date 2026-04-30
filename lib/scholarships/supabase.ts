@@ -386,7 +386,7 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
   const deadlineText = row.deadline_text?.trim() || '';
   const deadlineAtIso =
     row.deadline_date != null
-      ? `${row.deadline_date}T12:00:00.000Z`
+      ? `${row.deadline_date}T23:59:59.999Z`
       : undefined;
   const textAllowsCalendar = deadlineTextAllowsCalendarSemantics(
     row.deadline_text ?? undefined

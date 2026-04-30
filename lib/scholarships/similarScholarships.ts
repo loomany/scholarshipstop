@@ -8,6 +8,9 @@ import {
   normalizeCategoryId,
   scholarshipCategoryIds
 } from '@/app/scholarships/scholarshipCategories';
+import {
+  scholarshipDeadlineHasPassed as scholarshipDeadlineStateHasPassed
+} from '@/lib/scholarships/scholarshipDeadlineState';
 
 /** Detail page: max cards shown in the “Similar scholarships” block (API may fetch a small buffer). */
 export const SIMILAR_MAX = 4;
@@ -44,9 +47,7 @@ function recentMs(sch: Scholarship): number {
 
 /** Есть парсируемый дедлайн и он уже в прошлом. */
 export function scholarshipDeadlineHasPassed(s: Scholarship): boolean {
-  const d = parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
-  if (!d) return false;
-  return d.getTime() < Date.now();
+  return scholarshipDeadlineStateHasPassed(s);
 }
 
 export function formatScholarshipAwardLine(s: Scholarship): string {

@@ -21,6 +21,28 @@ const ALLOWED_TAGS = new Set([
   'a'
 ]);
 
+function formatLongDecimal(value: string): string {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return value;
+  return new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 2
+  }).format(n);
+}
+
+export function formatCompareNumericText(text: string): string {
+  return text.replace(
+    /(^|[^\w.])(\d{1,12}\.\d{3,})(?![\w.])/g,
+    (_match, prefix: string, value: string) => `${prefix}${formatLongDecimal(value)}`
+  );
+}
+
+function formatCompareNumericHtml(html: string): string {
+  return html
+    .split(/(<[^>]*>)/g)
+    .map((part) => (part.startsWith('<') ? part : formatCompareNumericText(part)))
+    .join('');
+}
+
 function stripUnsafeCompareHtml(html: string): string {
   if (!html.trim()) return '';
 
@@ -63,7 +85,7 @@ function stripUnsafeCompareHtml(html: string): string {
 
 /** Server-rendered HTML from compare AI body with a narrow allowlist. */
 export function SafeCompareHtml({ html, className }: SafeCompareHtmlProps) {
-  const clean = stripUnsafeCompareHtml(html);
+  const clean = formatCompareNumericHtml(stripUnsafeCompareHtml(html));
   if (!clean.trim()) return null;
   return (
     <div

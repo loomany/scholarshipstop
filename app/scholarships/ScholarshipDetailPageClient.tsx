@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import {
   useCallback,
@@ -11,8 +11,10 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
+  ArrowRight,
   BookOpen,
   CalendarClock,
+  BrainCircuit,
   CheckCircle2,
   ExternalLink,
   Facebook,
@@ -170,7 +172,7 @@ const detailOfficialSavePillClass =
   scholarshipSaveButtonClass.replace('rounded-xl', 'rounded-full');
 const detailOfficialSavedPillClass =
   scholarshipSavedButtonClass.replace('rounded-xl', 'rounded-full');
-/** Same emerald as Save — product parity for “Not relevant”. */
+/** Same emerald as Save вЂ” product parity for вЂњNot relevantвЂќ. */
 const detailOfficialNotRelevantPillClass = detailOfficialSavePillClass;
 const detailOfficialRestorePillClass = `w-full rounded-full px-4 py-2 text-center text-sm font-medium text-white transition ${SCHOLARSHIP_ACTION_FILL} ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
 
@@ -202,7 +204,7 @@ function extractProviderNameFromMission(
   if (!normalized) return null;
 
   const match = normalized.match(
-    /^([A-Z][A-Za-z0-9&'.’,-]*(?:\s+[A-Z][A-Za-z0-9&'.’,-]*){0,4})\s+(?:has|is|offers|supports)\b/
+    /^([A-Z][A-Za-z0-9&'.вЂ™,-]*(?:\s+[A-Z][A-Za-z0-9&'.вЂ™,-]*){0,4})\s+(?:has|is|offers|supports)\b/
   );
   if (!match) return null;
 
@@ -346,7 +348,7 @@ function SimilarScholarshipDetailListItem({
   highlightPrimary: boolean;
   profileMatchPercent: number | null;
   isPrimarySimilarOpen: boolean;
-  /** Open-deadline similar rows only (not “past deadline” reference cards). */
+  /** Open-deadline similar rows only (not вЂњpast deadlineвЂќ reference cards). */
   eligibleForMatchPill: boolean;
   isAuthenticated: boolean;
   hasSubscription: boolean;
@@ -501,6 +503,129 @@ function SimilarScholarshipDetailListItem({
         {cardInner}
       </Link>
     </li>
+  );
+}
+
+function SimilarScholarshipIqPromoCard() {
+  return (
+    <li className="min-w-0">
+      <Link
+        href="/iq/assessment?intent=scholarship_match"
+        aria-label="Start IQ assessment"
+        className="group relative block h-full min-w-0 overflow-hidden rounded-xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-3 text-left shadow-sm ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 md:p-3.5"
+      >
+        <div
+          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+          aria-hidden
+        />
+        <div
+          className="absolute -right-10 -top-12 h-28 w-28 rounded-full bg-[#FF7A1A]/16 blur-2xl"
+          aria-hidden
+        />
+        <div className="relative flex h-full min-h-[6.25rem] flex-col justify-between pl-1">
+          <div>
+            <div className="mb-2 flex flex-wrap items-center gap-1.5">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB875] bg-white/80 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#B45309] shadow-sm">
+                <BrainCircuit className="h-3 w-3 text-[#F97316]" aria-hidden />
+                Featured Tool
+              </span>
+              <span className="rounded-full bg-slate-950 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
+                IQ
+              </span>
+            </div>
+            <p className="text-base font-semibold leading-snug tracking-tight text-slate-950">
+              Find scholarships that fit how you think
+            </p>
+            <p className="mt-1 line-clamp-2 text-sm leading-5 text-slate-500">
+              See whether your strengths fit essays, research-heavy awards, or
+              fast applications.
+            </p>
+          </div>
+          <div className="mt-3 flex items-center justify-between gap-3 border-t border-orange-100 pt-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+              Assessment
+            </span>
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-950 transition group-hover:text-[#B45309]">
+              Start IQ test
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+            </span>
+          </div>
+        </div>
+      </Link>
+    </li>
+  );
+}
+
+function ScholarshipDetailIqDecisionCard() {
+  return (
+    <Link
+      href="/iq/assessment?intent=scholarship_match"
+      aria-label="Start IQ assessment"
+      className="group relative mt-8 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.58)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-34px_rgba(234,88,12,0.72)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:p-6"
+    >
+      <div
+        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+        aria-hidden
+      />
+      <div
+        className="absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FF7A1A]/16 blur-3xl"
+        aria-hidden
+      />
+      <div className="relative grid gap-5 md:grid-cols-[minmax(0,1fr)_220px] md:items-center">
+        <div className="min-w-0">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/80 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
+              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              Applicant intelligence
+            </span>
+            <span className="rounded-full bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+              IQ assessment
+            </span>
+          </div>
+          <p className="text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl">
+            Is this scholarship worth your time?
+          </p>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem]">
+            Take a cognitive assessment to see whether your strengths fit
+            essay-heavy, research-heavy, fast-apply, or logic-based scholarship
+            opportunities.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {['Essay fit', 'Fast apply', 'Priority clarity'].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-white/80 bg-white/75 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm backdrop-blur">
+          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+            Cognitive preview
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-3 py-2">
+              <p className="text-[10px] font-medium text-slate-500">IQ</p>
+              <p className="mt-1 text-base font-bold leading-none text-slate-950">
+                --
+              </p>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-3 py-2">
+              <p className="text-[10px] font-medium text-slate-500">Type</p>
+              <p className="mt-1 truncate text-sm font-bold leading-none text-slate-950">
+                ???
+              </p>
+            </div>
+          </div>
+          <span className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-black px-4 py-2.5 text-sm font-bold text-white shadow-[0_12px_28px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
+            Start IQ test
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+          </span>
+        </div>
+      </div>
+    </Link>
   );
 }
 
@@ -807,7 +932,7 @@ export default function ScholarshipDetailPageClient({
           <div className={scholarshipDetailShellClass}>
             <ScholarshipsBrandLoading
               density="comfortable"
-              label="Loading scholarship…"
+              label="Loading scholarshipвЂ¦"
               showTopAccentBar
             />
           </div>
@@ -846,7 +971,7 @@ export default function ScholarshipDetailPageClient({
               scroll
               className="mb-6 inline-flex items-center text-sm font-medium text-zinc-600 transition hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
             >
-              ← Back to Matches
+              в†ђ Back to Matches
             </Link>
             <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 text-zinc-600 shadow-sm ring-1 ring-zinc-100/50">
               Scholarship not found
@@ -990,7 +1115,7 @@ export default function ScholarshipDetailPageClient({
   const deadlinePrimary = deadlineDisplay.primary;
   const deadlineSecondaryLine =
     deadlineDisplay.secondary ??
-    (deadlineDisplay.primary !== '—' ? 'Scholarship deadline' : null);
+    (deadlineDisplay.primary !== 'вЂ”' ? 'Scholarship deadline' : null);
   const hasDeadlineStat =
     Boolean(scholarship.deadline?.trim()) ||
     Boolean(scholarship.deadlineAt?.trim());
@@ -1093,7 +1218,7 @@ export default function ScholarshipDetailPageClient({
   const overviewShown =
     descExpanded || !overviewLong
       ? overviewBody
-      : `${overviewBody.slice(0, OVERVIEW_COLLAPSE_AT).trim()}…`;
+      : `${overviewBody.slice(0, OVERVIEW_COLLAPSE_AT).trim()}вЂ¦`;
 
   const hasCredibilityBlock =
     scholarship.verified || Boolean(scholarship.credibilityLabel?.trim());
@@ -1244,7 +1369,7 @@ export default function ScholarshipDetailPageClient({
 
   const eligibilityFromAi = hasNonEmptyArray(scholarship.aiEligibilitySummary);
 
-  /** Never show `official_source_name` here — it often mirrors the data feed (e.g. BigFuture), not the sponsor. Real sponsor stays under “About the provider”. */
+  /** Never show `official_source_name` here вЂ” it often mirrors the data feed (e.g. BigFuture), not the sponsor. Real sponsor stays under вЂњAbout the providerвЂќ. */
   const officialName = isSimplerGov
     ? simplerGrantsGovOfficialLabel()
     : undefined;
@@ -1285,7 +1410,7 @@ export default function ScholarshipDetailPageClient({
       beforeMissing.length > 0 ||
       beforeFlags.length > 0);
 
-  /** Guest blur + “Sign in to unlock AI insights” overlay disabled — full detail body stays readable. */
+  /** Guest blur + вЂњSign in to unlock AI insightsвЂќ overlay disabled вЂ” full detail body stays readable. */
   const showLockedDetailOverlay = false;
   const openLockedAccessWall = openPremiumPaywall;
   const openApplyAccessWall = openPremiumPaywall;
@@ -1301,7 +1426,7 @@ export default function ScholarshipDetailPageClient({
           scroll
           className={detailBackToMatchesLinkClass}
         >
-          ← Back to Matches
+          в†ђ Back to Matches
         </Link>
 
         <div className={`mt-4 ${scholarshipDetailHeroSurfaceClass}`}>
@@ -1425,6 +1550,7 @@ export default function ScholarshipDetailPageClient({
             <AiLowConfidenceNote />
           </div>
         ) : null}
+        <ScholarshipDetailIqDecisionCard />
         {whoLines.length > 0 ? (
           <div className="mt-10">
             <SectionLabel>Who can apply</SectionLabel>
@@ -1458,7 +1584,7 @@ export default function ScholarshipDetailPageClient({
           <div className="mt-8 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
             <div className="mx-auto flex items-center justify-center gap-2.5">
               <span className="text-xl leading-none" aria-hidden>
-                🎯
+                рџЋЇ
               </span>
               <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
                 Get matched with scholarships in 2 minutes
@@ -1515,7 +1641,7 @@ export default function ScholarshipDetailPageClient({
                     className="mt-1 text-sm leading-relaxed text-zinc-700"
                     title={
                       providerNameLocked
-                        ? 'Institution details may name the sponsor — hidden until you subscribe.'
+                        ? 'Institution details may name the sponsor вЂ” hidden until you subscribe.'
                         : undefined
                     }
                   >
@@ -1651,7 +1777,7 @@ export default function ScholarshipDetailPageClient({
               Related scholarship hubs
             </h2>
             <p className="mb-3 text-sm leading-relaxed text-zinc-600">
-              Browse curated listings that match this program’s state and field.
+              Browse curated listings that match this programвЂ™s state and field.
             </p>
             <ul className="flex flex-wrap gap-2" role="list">
               {initialRelatedHubLinks.map((link) => (
@@ -1806,7 +1932,7 @@ export default function ScholarshipDetailPageClient({
                     href={`/essay?scholarship=${encodeURIComponent(scholarship.title)}`}
                     className="mt-2 inline-flex text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
                   >
-                    Open AI Essay Writer →
+                    Open AI Essay Writer в†’
                   </Link>
                 </div>
               </div>
@@ -2499,7 +2625,7 @@ export default function ScholarshipDetailPageClient({
                       );
                     }}
                   >
-                    {savedIds.includes(scholarship.id) ? 'Saved ✓' : 'Save'}
+                    {savedIds.includes(scholarship.id) ? 'Saved вњ“' : 'Save'}
                   </button>
                 </li>
                 <li className="min-w-0 flex-1 basis-0">
@@ -2564,7 +2690,7 @@ export default function ScholarshipDetailPageClient({
                 scroll
                 className={detailBackToMatchesLinkClass}
               >
-                ← Back to Matches
+                в†ђ Back to Matches
               </Link>
               <div className="min-w-0 space-y-2">
                 <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
@@ -2572,7 +2698,7 @@ export default function ScholarshipDetailPageClient({
                 </h2>
                 <p className="text-sm leading-relaxed text-zinc-600">
                   <span className="font-semibold text-zinc-800">Open deadlines first</span>{' '}
-                  — same category when possible, then active picks from the catalog. Up to three closed
+                  вЂ” same category when possible, then active picks from the catalog. Up to three closed
                   grants from this category are shown at the end for context.
                 </p>
                 <p className="text-xs font-medium text-zinc-500">
@@ -2620,6 +2746,7 @@ export default function ScholarshipDetailPageClient({
                     </span>
                   </div>
                   <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
+                    <SimilarScholarshipIqPromoCard />
                     {similarOpenList.map((s) => (
                       <SimilarScholarshipDetailListItem
                         key={s.id}
@@ -2645,7 +2772,7 @@ export default function ScholarshipDetailPageClient({
                     >
                       Past deadline
                     </h3>
-                    <span className="text-xs text-zinc-500">Same category · reference only</span>
+                    <span className="text-xs text-zinc-500">Same category В· reference only</span>
                   </div>
                   <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
                     {similarClosedList.map((s) => (
@@ -2667,6 +2794,7 @@ export default function ScholarshipDetailPageClient({
               </div>
             ) : (
               <ul className={`${similarScholarshipsGridClass} mt-5`} role="list">
+                <SimilarScholarshipIqPromoCard />
                 {similarScholarshipsWithMatch.map((s) => {
                   const isOpen = !scholarshipDeadlineHasPassed(s);
                   const isPrimaryOpen = isOpen && s.id === similarFirstOpenId;
@@ -2694,7 +2822,7 @@ export default function ScholarshipDetailPageClient({
                 scroll
                 className={detailBackToMatchesLinkClass}
               >
-                ← Back to Matches
+                в†ђ Back to Matches
               </Link>
             </div>
           </div>

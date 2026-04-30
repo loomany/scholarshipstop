@@ -24,23 +24,14 @@ export function profileFirstNameFromRow(p: {
 }
 
 /**
- * Navbar account link (desktop + mobile): first name → first word of full name → email → fallback.
+ * Navbar account link (desktop + mobile): keep the header stable and compact.
+ * Names/emails belong inside the account page, not in the top nav.
  */
 export function accountNavbarLabel(
   firstNameFromProfile: string | null | undefined,
   profileDisplayName: string | null | undefined,
   user: Pick<User, 'email'> | null
 ): string {
-  if (!user) return 'Account';
-  const fn = firstNameFromProfile?.trim();
-  if (fn) return fn;
-  const full = profileDisplayName?.trim();
-  if (full) {
-    const firstToken = full.split(/\s+/)[0];
-    if (firstToken) return firstToken;
-  }
-  const em = user.email?.trim();
-  if (em) return em;
   return 'Account';
 }
 

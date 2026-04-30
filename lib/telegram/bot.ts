@@ -1225,6 +1225,120 @@ export async function notifyTelegramSignup(payload: {
   }
 }
 
+export async function notifyTelegramIqTestSignup(payload: {
+  userId: string;
+  email: string;
+  archetype?: string | null;
+  iqScore?: number | null;
+}) {
+  try {
+    const inserted = await logTelegramEvent(
+      'iq_test_signup',
+      {
+        email: payload.email,
+        archetype: payload.archetype ?? null,
+        iq_score: payload.iqScore ?? null,
+        source: 'iq_test'
+      },
+      { dedupeByUserId: payload.userId }
+    );
+
+    if (!inserted) return;
+
+    const emailSafe = escapeTelegramHtml(payload.email);
+    const archetypeSafe = payload.archetype
+      ? escapeTelegramHtml(payload.archetype)
+      : '—';
+    const scoreSafe =
+      typeof payload.iqScore === 'number' ? String(payload.iqScore) : '—';
+
+    await sendTelegramAdminBroadcastHtml(
+      [
+        '<b>🧠 Регистрация при помощи IQ теста</b>',
+        '<b>Статус:</b> Успешно',
+        '',
+        `<b>Email:</b> ${emailSafe}`,
+        `<b>IQ score:</b> ${scoreSafe}`,
+        `<b>Archetype:</b> ${archetypeSafe}`
+      ].join('\n'),
+      'auth'
+    );
+  } catch (e) {
+    console.error('[telegram] notifyTelegramIqTestSignup failed', e);
+  }
+}
+
+export async function notifyTelegramStandaloneIqEmailCaptured(payload: {
+  email: string;
+  reportId?: string | null;
+  iqScore?: number | null;
+  archetype?: string | null;
+}) {
+  try {
+    const emailSafe = escapeTelegramHtml(payload.email);
+    const reportIdSafe = payload.reportId ? escapeTelegramHtml(payload.reportId) : '—';
+    const archetypeSafe = payload.archetype
+      ? escapeTelegramHtml(payload.archetype)
+      : '—';
+    const scoreSafe =
+      typeof payload.iqScore === 'number' ? String(payload.iqScore) : '—';
+
+    await sendTelegramAdminBroadcastHtml(
+      [
+        '<b>🧠 IQ лендинг — пользователь ввел email</b>',
+        '<b>Статус:</b> Report prepared before payment',
+        '',
+        `<b>Email:</b> ${emailSafe}`,
+        `<b>IQ score:</b> ${scoreSafe}`,
+        `<b>Archetype:</b> ${archetypeSafe}`,
+        `<b>Report ID:</b> ${reportIdSafe}`
+      ].join('\n'),
+      'auth'
+    );
+  } catch (e) {
+    console.error('[telegram] notifyTelegramStandaloneIqEmailCaptured failed', e);
+  }
+}
+
+export async function notifyTelegramStandaloneIqPaid(payload: {
+  email: string;
+  reportId: string;
+  orderId?: string | null;
+  iqScore?: number | null;
+  archetype?: string | null;
+  reportUrl?: string | null;
+}) {
+  try {
+    const emailSafe = escapeTelegramHtml(payload.email);
+    const reportIdSafe = escapeTelegramHtml(payload.reportId);
+    const orderIdSafe = payload.orderId ? escapeTelegramHtml(payload.orderId) : '—';
+    const archetypeSafe = payload.archetype
+      ? escapeTelegramHtml(payload.archetype)
+      : '—';
+    const scoreSafe =
+      typeof payload.iqScore === 'number' ? String(payload.iqScore) : '—';
+    const reportUrlLine = payload.reportUrl
+      ? `\n<b>Report URL:</b> ${escapeTelegramHtml(payload.reportUrl)}`
+      : '';
+
+    await sendTelegramAdminBroadcastHtml(
+      [
+        '<b>💳 IQ лендинг — оплата прошла</b>',
+        '<b>Статус:</b> Paid IQ report',
+        '',
+        `<b>Email:</b> ${emailSafe}`,
+        `<b>IQ score:</b> ${scoreSafe}`,
+        `<b>Archetype:</b> ${archetypeSafe}`,
+        `<b>Order ID:</b> ${orderIdSafe}`,
+        `<b>Report ID:</b> ${reportIdSafe}${reportUrlLine}`
+      ].join('\n'),
+      'auth'
+    );
+  } catch (e) {
+    console.error('[telegram] notifyTelegramStandaloneIqPaid failed', e);
+  }
+}
+
 export async function notifyTelegramEmailVerified(payload: {
   userId: string;
   email: string;
