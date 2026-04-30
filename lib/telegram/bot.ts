@@ -2906,8 +2906,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
         'Очередь Google Indexing API:',
         `• pending: ${queue.pending}`,
         `• processed: ${queue.processed}`,
-        `• failed: ${queue.failed}`,
-        `• total: ${queue.total}`
+        `• active total: ${queue.pending + queue.processed}`
       ];
       await sendTelegramMessage(
         user.telegram_chat_id,

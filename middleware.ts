@@ -7,6 +7,16 @@ import { updateSession } from '@/utils/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
+
+  if (
+    host === 'iq.scholarshiptop.com' &&
+    (pathname === '/' || pathname === '')
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/iq';
+    return NextResponse.rewrite(url);
+  }
 
   /** Canonical alphabetically sorted `-vs-` pairs for university comparison URLs. */
   const compareSeg = pathname.match(/^\/compare\/universities\/([^/]+)\/?$/i);
