@@ -184,6 +184,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
   );
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const iqHomeHref = isIqSubdomain ? '/' : '/iq';
 
   useEffect(() => {
     closeMenu();
@@ -253,17 +254,18 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
     return (
       <div className="relative flex min-h-16 items-center justify-between gap-3 py-2.5 md:min-h-20 md:py-3">
         <Link
-          href="/iq"
+          href={iqHomeHref}
+          onClick={(event) => {
+            if (window.location.pathname !== iqHomeHref) return;
+            event.preventDefault();
+            window.location.assign(iqHomeHref);
+          }}
           className={`${s.logo} relative z-[1] shrink-0`}
           aria-label="ScholarshipTop IQ — Home"
         >
           <Logo variant="header" />
         </Link>
 
-        <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1.5 text-[0.68rem] font-bold text-zinc-200 md:hidden">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.9)]" />
-          Private report
-        </div>
       </div>
     );
   }

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import {
   ArrowRight,
   BookOpen,
@@ -47,6 +48,7 @@ export default function ContextualStrategyPaywall({
   onRestart,
   premiumLocked = false
 }: ContextualStrategyPaywallProps) {
+  const [localPreviewUnlocked, setLocalPreviewUnlocked] = useState(false);
   const sortedDomains = [...result.domainScores].sort((a, b) => b.score - a.score);
   const topDomain = sortedDomains[0];
   const topThreeDomains = sortedDomains.slice(0, 3);
@@ -54,6 +56,12 @@ export default function ContextualStrategyPaywall({
     145,
     result.iqScore + 4
   )}`;
+  const reportLocked = premiumLocked && !localPreviewUnlocked;
+
+  useEffect(() => {
+    const hostname = window.location.hostname.toLowerCase();
+    setLocalPreviewUnlocked(hostname === 'localhost' || hostname === '127.0.0.1');
+  }, []);
 
   return (
     <main className="bg-[radial-gradient(circle_at_12%_8%,#ffedd5_0,transparent_30%),radial-gradient(circle_at_86%_10%,#dbeafe_0,transparent_28%),#F8FAFC] px-4 py-10 text-slate-950 sm:px-6 sm:py-14">
@@ -69,7 +77,7 @@ export default function ContextualStrategyPaywall({
             </p>
             <h1
               className={
-                premiumLocked
+                reportLocked
                   ? 'mt-2 select-none text-4xl font-semibold tracking-tight text-slate-950 blur-[4px] sm:text-5xl'
                   : 'mt-2 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl'
               }
@@ -78,7 +86,7 @@ export default function ContextualStrategyPaywall({
             </h1>
             <p
               className={
-                premiumLocked
+                reportLocked
                   ? 'mt-4 select-none text-base leading-7 text-slate-600 blur-[3px]'
                   : 'mt-4 text-base leading-7 text-slate-600'
               }
@@ -90,7 +98,7 @@ export default function ContextualStrategyPaywall({
 
             <div
               className={
-                premiumLocked
+                reportLocked
                   ? 'mt-7 grid select-none gap-3 blur-[3px] sm:grid-cols-2'
                   : 'mt-7 grid gap-3 sm:grid-cols-2'
               }
@@ -101,7 +109,7 @@ export default function ContextualStrategyPaywall({
                 value={topDomain?.label ?? 'Cognitive Reasoning'}
               />
             </div>
-            {premiumLocked ? <PremiumReportLockOverlay placement="numbers" /> : null}
+            {reportLocked ? <PremiumReportLockOverlay placement="numbers" /> : null}
 
             <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center gap-2">
@@ -112,7 +120,7 @@ export default function ContextualStrategyPaywall({
               </div>
               <div
                 className={
-                  premiumLocked
+                  reportLocked
                     ? 'mt-4 select-none space-y-3 blur-[3px]'
                     : 'mt-4 space-y-3'
                 }
@@ -143,7 +151,7 @@ export default function ContextualStrategyPaywall({
               </div>
               <p
                 className={
-                  premiumLocked
+                  reportLocked
                     ? 'mt-4 select-none text-base leading-7 text-slate-700 blur-[3px]'
                     : 'mt-4 text-base leading-7 text-slate-700'
                 }
@@ -155,7 +163,7 @@ export default function ContextualStrategyPaywall({
             {onRestart ? (
               <div
                 className={
-                  premiumLocked
+                  reportLocked
                     ? 'mt-6 select-none rounded-[1.75rem] border border-orange-100 bg-orange-50/70 p-5 opacity-75 shadow-sm blur-[3px]'
                     : 'mt-6 rounded-[1.75rem] border border-orange-100 bg-orange-50/70 p-5 shadow-sm'
                 }
@@ -177,8 +185,8 @@ export default function ContextualStrategyPaywall({
                 </div>
                 <button
                   type="button"
-                  onClick={premiumLocked ? undefined : onRestart}
-                  disabled={premiumLocked}
+                  onClick={reportLocked ? undefined : onRestart}
+                  disabled={reportLocked}
                   className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
                 >
                   Start IQ test again
@@ -212,12 +220,12 @@ export default function ContextualStrategyPaywall({
                     <Link
                         key={grant.id}
                         href={
-                          premiumLocked
+                          reportLocked
                             ? '/subscription'
                             : scholarshipPublicPath(grant)
                         }
-                        target={premiumLocked ? undefined : '_blank'}
-                        rel={premiumLocked ? undefined : 'noreferrer'}
+                        target={reportLocked ? undefined : '_blank'}
+                        rel={reportLocked ? undefined : 'noreferrer'}
                         className="group block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
                       >
                         <div className="flex items-start justify-between gap-4">
@@ -232,7 +240,7 @@ export default function ContextualStrategyPaywall({
                             </div>
                             <p
                               className={
-                                premiumLocked
+                                reportLocked
                                   ? 'mt-3 line-clamp-3 select-none text-sm leading-6 text-slate-500 blur-[3px]'
                                   : 'mt-3 line-clamp-3 text-sm leading-6 text-slate-500'
                               }
@@ -271,15 +279,15 @@ export default function ContextualStrategyPaywall({
 
               <Link
                 href={
-                  premiumLocked
+                  reportLocked
                     ? '/subscription'
                     : '/scholarships/hub/best-recommendation'
                 }
-                target={premiumLocked ? undefined : '_blank'}
-                rel={premiumLocked ? undefined : 'noreferrer'}
+                target={reportLocked ? undefined : '_blank'}
+                rel={reportLocked ? undefined : 'noreferrer'}
                 className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
               >
-                {premiumLocked ? 'Unlock matched grants' : 'View scholarships'}
+                {reportLocked ? 'Unlock matched grants' : 'View scholarships'}
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
 
@@ -294,12 +302,12 @@ export default function ContextualStrategyPaywall({
                   {strategy.recommended_reading.map((item) => (
                     <Link
                       key={item.id}
-                      href={premiumLocked ? '/subscription' : item.url}
-                      target={premiumLocked ? undefined : '_blank'}
-                      rel={premiumLocked ? undefined : 'noreferrer'}
+                      href={reportLocked ? '/subscription' : item.url}
+                      target={reportLocked ? undefined : '_blank'}
+                      rel={reportLocked ? undefined : 'noreferrer'}
                       className="group flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-200 hover:bg-white"
                     >
-                      <span className={premiumLocked ? 'blur-[3px]' : undefined}>
+                      <span className={reportLocked ? 'blur-[3px]' : undefined}>
                         {item.title}
                       </span>
                       <ExternalLink
@@ -331,12 +339,12 @@ export default function ContextualStrategyPaywall({
                   ].map((item) => (
                     <Link
                       key={item.href}
-                      href={premiumLocked ? '/subscription' : item.href}
-                      target={premiumLocked ? undefined : '_blank'}
-                      rel={premiumLocked ? undefined : 'noreferrer'}
+                      href={reportLocked ? '/subscription' : item.href}
+                      target={reportLocked ? undefined : '_blank'}
+                      rel={reportLocked ? undefined : 'noreferrer'}
                       className="group flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-200 hover:bg-white"
                     >
-                      <span className={premiumLocked ? 'blur-[3px]' : undefined}>
+                      <span className={reportLocked ? 'blur-[3px]' : undefined}>
                         {item.title}
                       </span>
                       <ExternalLink

@@ -138,6 +138,116 @@ const intentCopy: Record<
   }
 };
 
+type ContextualPreview = {
+  label: string;
+  archetype: string;
+  topDomain: string;
+  iqRange: string;
+  summary: string;
+  grants: Array<{ title: string; reason: string; amount: string; match: string }>;
+  reading: string[];
+  essays: string[];
+};
+
+const contextualPreviews: Record<UserIntent, ContextualPreview> = {
+  general_iq: {
+    label: 'Personalized strategy report',
+    archetype: 'Pattern Strategist',
+    topDomain: 'Abstract Reasoning',
+    iqRange: '114-122',
+    summary:
+      'Your profile turns a cognitive score into a practical scholarship plan: which grants to prioritize, what to read next, and how to explain your strengths without sounding generic.',
+    grants: [
+      { title: 'Future Scholars Merit Award', reason: 'Strong fit for high-achieving students with clear goals.', amount: '$10.000', match: '94% match' },
+      { title: 'Student Opportunity Grant', reason: 'Broad eligibility and fast application path.', amount: '$5.000', match: '91% match' },
+      { title: 'Leadership Essay Scholarship', reason: 'Best when your story connects reasoning style to impact.', amount: '$2.500', match: '89% match' },
+      { title: 'Community Achievement Fund', reason: 'Matches focused students with consistent progress.', amount: '$1.000', match: '87% match' }
+    ],
+    reading: ['How to compare scholarship fit fast', 'Scholarship deadlines explained'],
+    essays: ['Build a stronger scholarship story', 'Turn strengths into essay angles']
+  },
+  essay_prep: {
+    label: 'Essay prep strategy report',
+    archetype: 'Narrative Strategist',
+    topDomain: 'Verbal Reasoning',
+    iqRange: '112-120',
+    summary:
+      'Your report points toward essay-heavy awards where structure, clarity, and original framing can outperform generic applications.',
+    grants: [
+      { title: 'Personal Story Scholarship', reason: 'Strong match for a clear personal narrative.', amount: '$5.000', match: '94% match' },
+      { title: 'Future Leaders Essay Award', reason: 'Good fit for structured goals and reflection.', amount: '$2.500', match: '91% match' },
+      { title: 'Community Voice Grant', reason: 'Connect service, growth, and impact.', amount: '$1.500', match: '89% match' },
+      { title: 'Creative Problem Solver Scholarship', reason: 'Explain how you think through hard problems.', amount: '$3.000', match: '87% match' }
+    ],
+    reading: ['Scholarship essays that stand out', 'Choose your strongest essay angle'],
+    essays: ['Open essay improvement tools', 'Start a scholarship essay draft']
+  },
+  college_fit: {
+    label: 'College fit strategy report',
+    archetype: 'Systems Planner',
+    topDomain: 'Verbal Reasoning',
+    iqRange: '108-116',
+    summary:
+      'Your profile supports a fit-first plan: compare schools by scholarship opportunity, support systems, and application effort instead of brand names alone.',
+    grants: [
+      { title: 'College Fit Merit Scholarship', reason: 'Align academic goals with school-specific awards.', amount: '$8.000', match: '92% match' },
+      { title: 'Transfer Pathway Grant', reason: 'Compare affordability and completion path.', amount: '$3.000', match: '89% match' },
+      { title: 'Campus Leadership Award', reason: 'Clear communication and planning fit well here.', amount: '$2.500', match: '87% match' },
+      { title: 'First-Year Student Success Fund', reason: 'Practical school and scholarship plan match.', amount: '$1.500', match: '85% match' }
+    ],
+    reading: ['Compare colleges by scholarships', 'Build an affordability shortlist'],
+    essays: ['Explain why this school fits', 'Write a focused college-fit essay']
+  },
+  scholarship_match: {
+    label: 'Scholarship match strategy report',
+    archetype: 'Pattern Strategist',
+    topDomain: 'Abstract Reasoning',
+    iqRange: '114-122',
+    summary:
+      'Your strongest signals prioritize grants that match your profile first, then show what to read and write next.',
+    grants: [
+      { title: 'Future Scholars Merit Award', reason: 'Strong academic direction and profile fit.', amount: '$10.000', match: '94% match' },
+      { title: 'Student Opportunity Grant', reason: 'Broad eligibility and fast application path.', amount: '$5.000', match: '91% match' },
+      { title: 'Leadership Essay Scholarship', reason: 'Connect reasoning style to impact.', amount: '$2.500', match: '89% match' },
+      { title: 'Community Achievement Fund', reason: 'Focused goals and consistent progress.', amount: '$1.000', match: '87% match' }
+    ],
+    reading: ['How to compare scholarship fit fast', 'Scholarship deadlines explained'],
+    essays: ['Build a stronger scholarship story', 'Turn strengths into essay angles']
+  },
+  provider_research: {
+    label: 'Provider research strategy report',
+    archetype: 'Quantitative Analyst / Spatial Architect',
+    topDomain: 'Numerical Logic',
+    iqRange: '110-118',
+    summary:
+      'Your profile fits a research-first provider strategy: compare sponsors by eligibility density, award size, repeatability, and deadline effort before writing.',
+    grants: [
+      { title: 'STEM Provider Research Award', reason: 'Strong fit for comparing eligibility and award history.', amount: '$7.500', match: '93% match' },
+      { title: 'Foundation Opportunity Grant', reason: 'Broad provider criteria and repeatable applications.', amount: '$4.000', match: '90% match' },
+      { title: 'Regional Sponsor Scholarship', reason: 'Provider research with state and community filters.', amount: '$2.000', match: '88% match' },
+      { title: 'Industry Partner Tuition Fund', reason: 'Provider mission overlaps with study direction.', amount: '$3.500', match: '86% match' }
+    ],
+    reading: ['How to research scholarship providers', 'Spot repeatable scholarship awards'],
+    essays: ['Write to a provider mission', 'Turn provider research into an essay']
+  },
+  deadline_strategy: {
+    label: 'Deadline strategy report',
+    archetype: 'Execution Planner',
+    topDomain: 'Decision Speed',
+    iqRange: '106-114',
+    summary:
+      'Your profile supports a deadline-first plan: split quick wins from high-effort essays and avoid low-match applications.',
+    grants: [
+      { title: 'Fast Application Grant', reason: 'High priority because effort is low and eligibility broad.', amount: '$1.000', match: '93% match' },
+      { title: 'Monthly Student Award', reason: 'Recurring deadlines and quick submission cycles.', amount: '$2.000', match: '90% match' },
+      { title: 'Priority Deadline Scholarship', reason: 'High match and fixed deadline.', amount: '$4.000', match: '88% match' },
+      { title: 'Short Essay Tuition Fund', reason: 'Move quickly without losing quality.', amount: '$1.500', match: '86% match' }
+    ],
+    reading: ['Plan scholarship deadlines', 'Quick wins vs high-effort applications'],
+    essays: ['Draft faster without sounding generic', 'Reuse essay ideas across deadlines']
+  }
+};
+
 const sciencePillars = [
   {
     name: 'ICAR',
@@ -697,6 +807,7 @@ export default function ContextualAssessmentFunnelClient({
           transitionPhase('qualification');
         }}
         onUnlockIqReport={() => transitionPhase('iq_report_paywall')}
+        onRestart={restartAssessment}
       />
     );
   }
@@ -707,6 +818,7 @@ export default function ContextualAssessmentFunnelClient({
         result={result}
         email={contextualEmail}
         funnel="contextual_iq_assessment"
+        onRestart={restartAssessment}
       />
     );
   }
@@ -960,10 +1072,12 @@ function ContextualIqEmailGate({
 
 function ContextualIqReadyChoice({
   onRevealMatches,
-  onUnlockIqReport
+  onUnlockIqReport,
+  onRestart
 }: {
   onRevealMatches: () => void;
   onUnlockIqReport: () => void;
+  onRestart: () => void;
 }) {
   return (
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[radial-gradient(circle_at_15%_8%,#dbeafe_0,transparent_30%),radial-gradient(circle_at_85%_12%,#ffedd5_0,transparent_30%),#F8FAFC] px-4 py-8 text-slate-950 sm:px-6">
@@ -1013,6 +1127,13 @@ function ContextualIqReadyChoice({
               <ArrowRight className="h-4 w-4" aria-hidden />
             </button>
           </div>
+          <button
+            type="button"
+            onClick={onRestart}
+            className="mt-5 text-sm font-semibold text-slate-500 transition hover:text-slate-950 hover:underline"
+          >
+            Start again
+          </button>
         </div>
       </section>
     </main>
@@ -1383,7 +1504,239 @@ function ContextualIntro({
           </div>
         </aside>
       </section>
-
+      <ContextualStrategyPreview preview={contextualPreviews[intent]} />
     </main>
+  );
+}
+
+function ContextualStrategyPreview({ preview }: { preview: ContextualPreview }) {
+  return (
+    <section className="mx-auto max-w-7xl px-6 pb-14 lg:px-8">
+      <div className="mb-6 max-w-3xl">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600">
+          Final report preview
+        </p>
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+          The test turns into a scholarship strategy dashboard.
+        </h2>
+        <p className="mt-3 text-base leading-7 text-slate-600">
+          This is the kind of output users see after the IQ profile and matching
+          details: ranked grants, money context, next reading, and essay actions.
+        </p>
+      </div>
+
+      <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_28px_90px_-45px_rgba(15,23,42,0.45)]">
+        <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="p-6 sm:p-8">
+            <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-orange-700 ring-1 ring-orange-100">
+              <Sparkles className="h-4 w-4" aria-hidden />
+              {preview.label}
+            </div>
+            <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-slate-500">
+              Brain Archetype
+            </p>
+            <h3 className="mt-2 text-4xl font-semibold tracking-tight text-slate-950">
+              {preview.archetype}
+            </h3>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              Your profile becomes a practical plan, not just a score screen.
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <PreviewStat label="Estimated IQ range" value={preview.iqRange} />
+              <PreviewStat label="Top cognitive domain" value={preview.topDomain} />
+            </div>
+
+            <div className="mt-6 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">
+                Strategy summary
+              </p>
+              <p className="mt-3 text-sm leading-6 text-slate-700">
+                {preview.summary}
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-200 bg-slate-50 p-6 sm:p-8 lg:border-l lg:border-t-0">
+            <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">
+                  Recommended grants
+                </p>
+                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                  4 matches
+                </span>
+              </div>
+
+              <div className="mt-4 grid gap-3">
+                {preview.grants.map((grant, index) => (
+                  <div
+                    key={grant.title}
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <div className="flex items-start gap-2">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-950 text-xs font-semibold text-white">
+                            {index + 1}
+                          </span>
+                          <p className="text-sm font-semibold leading-5 text-slate-950">
+                            {grant.title}
+                          </p>
+                        </div>
+                        <p className="mt-2 text-sm leading-6 text-slate-500">
+                          {grant.reason}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 flex-col items-end gap-2">
+                        <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                          {grant.match}
+                        </span>
+                        <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                          {grant.amount}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                <PreviewList title="Recommended reading path" items={preview.reading} />
+                <PreviewList title="Improve essays" items={preview.essays} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ReportDecisionAnalytics />
+    </section>
+  );
+}
+
+function PreviewStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <p className="text-xs font-semibold text-slate-500">{label}</p>
+      <p className="mt-2 text-xl font-semibold tracking-tight text-slate-950">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function PreviewList({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+      <p className="text-sm font-bold text-slate-950">{title}</p>
+      <div className="mt-3 space-y-2">
+        {items.map((item) => (
+          <div
+            key={item}
+            className="rounded-xl border border-slate-100 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700"
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ReportDecisionAnalytics() {
+  return (
+    <div className="mt-6 grid overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-50 shadow-[0_24px_80px_-50px_rgba(15,23,42,0.45)] lg:grid-cols-[1fr_0.92fr_1fr]">
+      <div className="bg-slate-950 p-6 text-white sm:p-8">
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-300">
+            Strategy decision layer
+          </p>
+          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-slate-200 ring-1 ring-white/15">
+            Saved plan
+          </span>
+        </div>
+        <blockquote className="mt-8 text-2xl font-semibold leading-tight tracking-tight text-slate-100">
+          “Prioritize the awards where fit, effort, and payoff line up first.”
+        </blockquote>
+        <div className="mt-8 grid gap-3 text-sm">
+          {[
+            ['Match', 'Cognitive profile + eligibility + award size'],
+            ['Plan', 'Grants first, then reading, then essay moves'],
+            ['Action', 'Clear next click instead of a static score']
+          ].map(([label, value]) => (
+            <div key={label} className="grid grid-cols-[5rem_1fr] gap-3">
+              <span className="font-bold uppercase tracking-[0.16em] text-emerald-300">
+                {label}
+              </span>
+              <span className="leading-6 text-slate-300">{value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="border-y border-slate-200 bg-white p-6 sm:p-8 lg:border-x lg:border-y-0">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-500">
+          Application sequence
+        </p>
+        <h3 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">
+          The report turns insight into a weekly action path.
+        </h3>
+        <div className="mt-8 flex h-44 items-end gap-4 border-b border-slate-200">
+          {[
+            ['Picks', '88%'],
+            ['Read', '54%'],
+            ['Draft', '72%'],
+            ['Submit', '96%']
+          ].map(([label, height]) => (
+            <div key={label} className="flex flex-1 flex-col items-center gap-2">
+              <div className="flex h-36 w-full items-end rounded-t-2xl bg-slate-100 px-1">
+                <div
+                  className="w-full rounded-t-xl bg-slate-950 shadow-[0_12px_30px_-16px_rgba(15,23,42,0.8)]"
+                  style={{ height }}
+                />
+              </div>
+              <span className="text-xs font-semibold text-slate-500">{label}</span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-5 text-sm leading-6 text-slate-600">
+          Instead of dumping recommendations, the dashboard shows what should
+          happen first and what supports the same scholarship path.
+        </p>
+      </div>
+
+      <div className="bg-white p-6 sm:p-8">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-500">
+          Output matrix
+        </p>
+        <h3 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">
+          Three product layers, one unlock.
+        </h3>
+        <div className="mt-8 space-y-4">
+          {[
+            ['Grant picks', '4'],
+            ['Reading steps', '2'],
+            ['Essay moves', '2'],
+            ['Saved strategy', '1']
+          ].map(([label, value]) => (
+            <div
+              key={label}
+              className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"
+            >
+              <div>
+                <p className="text-sm font-semibold text-slate-950">{label}</p>
+                <p className="mt-0.5 text-xs font-medium text-slate-500">
+                  unlocked section
+                </p>
+              </div>
+              <span className="text-2xl font-semibold tracking-tight text-slate-950">
+                {value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

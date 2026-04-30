@@ -28,6 +28,7 @@ export type DomainScore = {
 export type AssessmentResult = {
   answers: Record<string, CognitiveOptionKey>;
   timedOutQuestionIds: string[];
+  totalDurationSeconds?: number;
   weightedScore: number;
   iqScore: number;
   percentile: number;

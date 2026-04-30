@@ -17,6 +17,16 @@ export default function GeneralIqFunnelClient() {
   const [result, setResult] = useState<AssessmentResult | null>(null);
   const [email, setEmail] = useState('');
 
+  const restartAssessment = () => {
+    try {
+      window.localStorage.removeItem('iq_general_assessment:v1');
+    } catch {
+      // Ignore storage failures.
+    }
+    setResult(null);
+    setPhase('assessment');
+  };
+
   if (phase === 'email') {
     return (
       <IqReportEmailGate
@@ -41,7 +51,13 @@ export default function GeneralIqFunnelClient() {
   }
 
   if (phase === 'paywall' && result) {
-    return <StandardIqPaywall result={result} email={email} />;
+    return (
+      <StandardIqPaywall
+        result={result}
+        email={email}
+        onRestart={restartAssessment}
+      />
+    );
   }
 
   return (

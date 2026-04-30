@@ -1,7 +1,15 @@
 import IqProductFooter from '@/components/iq/IqProductFooter';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
 
-export default function UnlockedIqReport({ result }: { result: AssessmentResult }) {
+export default function UnlockedIqReport({
+  result,
+  onRestart,
+  localPreview = false
+}: {
+  result: AssessmentResult;
+  onRestart?: () => void;
+  localPreview?: boolean;
+}) {
   const topDomains = [...result.domainScores].sort((a, b) => b.score - a.score);
 
   return (
@@ -9,7 +17,7 @@ export default function UnlockedIqReport({ result }: { result: AssessmentResult 
       <section className="mx-auto max-w-5xl px-6 py-12 sm:py-16">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_28px_90px_-42px_rgba(15,23,42,0.45)] sm:p-8 lg:p-10">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-600">
-            Full report unlocked
+            {localPreview ? 'Local preview unlocked' : 'Full report unlocked'}
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
             Your IQ-style cognitive profile
@@ -19,6 +27,24 @@ export default function UnlockedIqReport({ result }: { result: AssessmentResult 
             domain profile, and Brain Archetype. It is not a clinical diagnosis
             or licensed psychological assessment.
           </p>
+          {localPreview || onRestart ? (
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              {localPreview ? (
+                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
+                  Visible only on localhost. Production stays locked.
+                </span>
+              ) : null}
+              {onRestart ? (
+                <button
+                  type="button"
+                  onClick={onRestart}
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950"
+                >
+                  Start again
+                </button>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             <ReportStat label="IQ-style score" value={String(result.iqScore)} />

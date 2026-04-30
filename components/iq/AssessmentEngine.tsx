@@ -1,8 +1,8 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, BrainCircuit, Clock3, Timer } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ArrowRight, BrainCircuit, Clock3, RotateCcw, Timer } from 'lucide-react';
 
 import {
   cognitiveAssessmentQuestions,
@@ -32,6 +32,7 @@ type AssessmentDraft = {
   currentIndex: number;
   answers: AnswerMap;
   timedOutQuestionIds: string[];
+  assessmentStartedAt: number | null;
   questionStartedAt: number | null;
   updatedAt: string;
 };
@@ -67,6 +68,7 @@ function readAssessmentDraft(storageKey: string): AssessmentDraft | null {
       currentIndex?: unknown;
       answers?: unknown;
       timedOutQuestionIds?: unknown;
+      assessmentStartedAt?: unknown;
       questionStartedAt?: unknown;
       updatedAt?: unknown;
     };
@@ -123,6 +125,13 @@ function readAssessmentDraft(storageKey: string): AssessmentDraft | null {
       currentIndex,
       answers,
       timedOutQuestionIds,
+      assessmentStartedAt:
+        typeof parsed.assessmentStartedAt === 'number' &&
+        Number.isFinite(parsed.assessmentStartedAt)
+          ? parsed.assessmentStartedAt
+          : phase === 'assessment' || phase === 'analyzing'
+            ? Date.now()
+            : null,
       questionStartedAt:
         typeof parsed.questionStartedAt === 'number' &&
         Number.isFinite(parsed.questionStartedAt)
@@ -148,7 +157,8 @@ function writeAssessmentDraft(storageKey: string, draft: AssessmentDraft) {
 
 function buildAssessmentResult(
   answers: AnswerMap,
-  timedOutQuestionIds: string[]
+  timedOutQuestionIds: string[],
+  totalDurationSeconds?: number
 ): AssessmentResult {
   const weightedScore = scoreQuestionBank(cognitiveAssessmentQuestions, answers);
   const iqScore = iqScoreFromWeightedScore(weightedScore);
@@ -158,6 +168,7 @@ function buildAssessmentResult(
   return {
     answers,
     timedOutQuestionIds,
+    totalDurationSeconds,
     weightedScore,
     iqScore,
     percentile,
@@ -188,14 +199,19 @@ export default function AssessmentEngine({
     useState<CognitiveOptionKey | null>(null);
   const [messageIndex, setMessageIndex] = useState(0);
   const [draftHydrated, setDraftHydrated] = useState(false);
+  const [assessmentStartedAt, setAssessmentStartedAt] = useState<number | null>(
+    startImmediately ? Date.now() : null
+  );
   const [questionStartedAt, setQuestionStartedAt] = useState<number | null>(
     startImmediately ? Date.now() : null
   );
   const [timeLeft, setTimeLeft] = useState(
     cognitiveAssessmentQuestions[0]?.time_limit_sec ?? 0
   );
+  const [totalElapsedSeconds, setTotalElapsedSeconds] = useState(0);
   const advancingRef = useRef(false);
   const completedRef = useRef(false);
+  const advanceTimeoutRef = useRef<number | null>(null);
 
   const currentQuestion =
     cognitiveAssessmentQuestions[currentIndex] ?? cognitiveAssessmentQuestions[0];
@@ -203,15 +219,6 @@ export default function AssessmentEngine({
   const progress = Math.round((step / TOTAL_QUESTIONS) * 100);
   const progressPhase =
     phase === 'assessment' ? progressPhaseForStep(step) : 'IQ Report';
-  const timedOut = currentQuestion
-    ? timedOutQuestionIds.includes(currentQuestion.id)
-    : false;
-
-  const result = useMemo(
-    () => buildAssessmentResult(answers, timedOutQuestionIds),
-    [answers, timedOutQuestionIds]
-  );
-
   useEffect(() => {
     const draft = readAssessmentDraft(storageKey);
     if (draft) {
@@ -219,10 +226,19 @@ export default function AssessmentEngine({
       setCurrentIndex(draft.currentIndex);
       setAnswers(draft.answers);
       setTimedOutQuestionIds(draft.timedOutQuestionIds);
+      setAssessmentStartedAt(draft.assessmentStartedAt);
+      setTotalElapsedSeconds(
+        draft.assessmentStartedAt
+          ? Math.max(0, Math.floor((Date.now() - draft.assessmentStartedAt) / 1000))
+          : 0
+      );
       setQuestionStartedAt(draft.questionStartedAt);
       setSelectedOption(null);
     } else if (startImmediately) {
-      setQuestionStartedAt(Date.now());
+      const startedAt = Date.now();
+      setAssessmentStartedAt(startedAt);
+      setTotalElapsedSeconds(0);
+      setQuestionStartedAt(startedAt);
     }
     setDraftHydrated(true);
   }, [startImmediately, storageKey]);
@@ -234,11 +250,13 @@ export default function AssessmentEngine({
       currentIndex,
       answers,
       timedOutQuestionIds,
+      assessmentStartedAt,
       questionStartedAt,
       updatedAt: new Date().toISOString()
     });
   }, [
     answers,
+    assessmentStartedAt,
     currentIndex,
     draftHydrated,
     phase,
@@ -264,20 +282,55 @@ export default function AssessmentEngine({
       } catch {
         // Ignore storage failures.
       }
-      onComplete(result);
+      onComplete(
+        buildAssessmentResult(
+          answers,
+          timedOutQuestionIds,
+          assessmentStartedAt
+            ? Math.max(1, Math.round((Date.now() - assessmentStartedAt) / 1000))
+            : undefined
+        )
+      );
     }, 3000);
 
     return () => {
       window.clearInterval(interval);
       window.clearTimeout(done);
     };
-  }, [onComplete, phase, result, storageKey]);
+  }, [
+    answers,
+    assessmentStartedAt,
+    onComplete,
+    phase,
+    storageKey,
+    timedOutQuestionIds
+  ]);
 
   useEffect(() => {
     if (!draftHydrated || phase !== 'assessment') return;
     if (questionStartedAt != null) return;
     setQuestionStartedAt(Date.now());
   }, [draftHydrated, phase, questionStartedAt]);
+
+  useEffect(() => {
+    if (
+      !draftHydrated ||
+      !assessmentStartedAt ||
+      (phase !== 'assessment' && phase !== 'analyzing')
+    ) {
+      return;
+    }
+
+    const updateElapsed = () => {
+      setTotalElapsedSeconds(
+        Math.max(0, Math.floor((Date.now() - assessmentStartedAt) / 1000))
+      );
+    };
+
+    updateElapsed();
+    const interval = window.setInterval(updateElapsed, 1000);
+    return () => window.clearInterval(interval);
+  }, [assessmentStartedAt, draftHydrated, phase]);
 
   useEffect(() => {
     if (
@@ -321,7 +374,7 @@ export default function AssessmentEngine({
       if (advancingRef.current) return;
       advancingRef.current = true;
 
-      window.setTimeout(() => {
+      advanceTimeoutRef.current = window.setTimeout(() => {
         if (currentIndex >= TOTAL_QUESTIONS - 1) {
           setQuestionStartedAt(null);
           setPhase('analyzing');
@@ -359,12 +412,18 @@ export default function AssessmentEngine({
 
   const startAssessment = () => {
     const startedAt = Date.now();
+    if (advanceTimeoutRef.current != null) {
+      window.clearTimeout(advanceTimeoutRef.current);
+      advanceTimeoutRef.current = null;
+    }
     completedRef.current = false;
     advancingRef.current = false;
     setAnswers({});
     setTimedOutQuestionIds([]);
     setCurrentIndex(0);
     setSelectedOption(null);
+    setAssessmentStartedAt(startedAt);
+    setTotalElapsedSeconds(0);
     setQuestionStartedAt(startedAt);
     setTimeLeft(cognitiveAssessmentQuestions[0]?.time_limit_sec ?? 0);
     setPhase('assessment');
@@ -405,10 +464,10 @@ export default function AssessmentEngine({
             <QuestionScreen
               question={currentQuestion}
               step={step}
-              timeLeft={timeLeft}
-              timedOut={timedOut}
+              totalElapsedSeconds={totalElapsedSeconds}
               selectedOption={selectedOption}
               onAnswer={answerQuestion}
+              onRestart={startAssessment}
             />
           ) : null}
 
@@ -519,20 +578,27 @@ function ProgressHeader({
   );
 }
 
+function formatAssessmentDuration(totalSeconds: number) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes <= 0) return `${seconds}s`;
+  return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+}
+
 function QuestionScreen({
   question,
   step,
-  timeLeft,
-  timedOut,
+  totalElapsedSeconds,
   selectedOption,
-  onAnswer
+  onAnswer,
+  onRestart
 }: {
   question: CognitiveAssessmentQuestion;
   step: number;
-  timeLeft: number;
-  timedOut: boolean;
+  totalElapsedSeconds: number;
   selectedOption: CognitiveOptionKey | null;
   onAnswer: (optionKey: CognitiveOptionKey) => void;
+  onRestart: () => void;
 }) {
   return (
     <section className="w-full">
@@ -544,26 +610,22 @@ function QuestionScreen({
           <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
             {question.difficulty}
           </span>
-          <span
-            className={cn(
-              'inline-flex items-center gap-1.5 rounded-full border bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em]',
-              timeLeft <= 10
-                ? 'border-red-200 text-red-600'
-                : 'border-slate-200 text-slate-500'
-            )}
-          >
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
             <Timer className="h-3.5 w-3.5" aria-hidden />
-            {timeLeft}s
+            Total {formatAssessmentDuration(totalElapsedSeconds)}
           </span>
+          <button
+            type="button"
+            onClick={onRestart}
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-500 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950"
+          >
+            <RotateCcw className="h-3.5 w-3.5" aria-hidden />
+            Start again
+          </button>
         </div>
         <h1 className="mx-auto mt-3 max-w-3xl text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:text-[2rem]">
           {question.prompt}
         </h1>
-        {timedOut ? (
-          <p className="mt-3 text-sm font-semibold text-red-600">
-            Time is up - answer to continue. Speed credit for this item is 0.
-          </p>
-        ) : null}
       </div>
 
       <div

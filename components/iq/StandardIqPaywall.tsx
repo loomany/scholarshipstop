@@ -1,28 +1,41 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { ArrowRight, BrainCircuit, CheckCircle2, Lock, Sparkles } from 'lucide-react';
 
 import { getIqReportCheckoutURL } from '@/app/actions/iqReportCheckout';
 import IqProductFooter from '@/components/iq/IqProductFooter';
+import UnlockedIqReport from '@/components/iq/UnlockedIqReport';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
 
 type StandardIqPaywallProps = {
   result: AssessmentResult;
   email: string;
   funnel?: 'standalone_iq' | 'contextual_iq_assessment';
+  onRestart?: () => void;
 };
 
 export default function StandardIqPaywall({
   result,
   email,
-  funnel = 'standalone_iq'
+  funnel = 'standalone_iq',
+  onRestart
 }: StandardIqPaywallProps) {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [localPreviewUnlocked, setLocalPreviewUnlocked] = useState(false);
   const topDomains = [...result.domainScores]
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
+
+  useEffect(() => {
+    const hostname = window.location.hostname.toLowerCase();
+    setLocalPreviewUnlocked(hostname === 'localhost' || hostname === '127.0.0.1');
+  }, []);
+
+  if (localPreviewUnlocked) {
+    return <UnlockedIqReport result={result} onRestart={onRestart} localPreview />;
+  }
 
   function handleCheckout() {
     setError(null);
@@ -153,6 +166,15 @@ export default function StandardIqPaywall({
                   <Sparkles className="h-3.5 w-3.5" aria-hidden />
                   One-time payment. Secure LemonSqueezy checkout.
                 </p>
+                {onRestart ? (
+                  <button
+                    type="button"
+                    onClick={onRestart}
+                    className="mt-3 w-full text-center text-sm font-semibold text-slate-500 transition hover:text-slate-950 hover:underline"
+                  >
+                    Start again
+                  </button>
+                ) : null}
               </div>
             </div>
           </div>
@@ -174,3 +196,4 @@ function LockedResultCard({ label }: { label: string }) {
     </div>
   );
 }
+
