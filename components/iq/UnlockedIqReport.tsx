@@ -1,6 +1,13 @@
 import IqProductFooter from '@/components/iq/IqProductFooter';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
 
+function formatReportDuration(totalSeconds: number) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes <= 0) return `${seconds}s`;
+  return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+}
+
 export default function UnlockedIqReport({
   result,
   onRestart,
@@ -11,6 +18,11 @@ export default function UnlockedIqReport({
   localPreview?: boolean;
 }) {
   const topDomains = [...result.domainScores].sort((a, b) => b.score - a.score);
+  const totalDuration =
+    typeof result.totalDurationSeconds === 'number' &&
+    Number.isFinite(result.totalDurationSeconds)
+      ? Math.max(0, Math.round(result.totalDurationSeconds))
+      : null;
 
   return (
     <main className="iq-product-shell min-h-screen bg-[#f8fafc] text-slate-950">
@@ -42,6 +54,11 @@ export default function UnlockedIqReport({
                 >
                   Start again
                 </button>
+              ) : null}
+              {totalDuration !== null ? (
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold tabular-nums text-slate-700">
+                  Total time {formatReportDuration(totalDuration)}
+                </span>
               ) : null}
             </div>
           ) : null}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, BrainCircuit, CheckCircle2 } from 'lucide-react';
 
 import { DarkSelect } from '@/components/home/DarkSelect';
@@ -20,6 +20,7 @@ import type { QualificationData } from '@/lib/iqAssessmentTypes';
 
 type PostAssessmentQuizProps = {
   storageKey: string;
+  startImmediately?: boolean;
   onComplete: (qualificationData: QualificationData) => void;
 };
 
@@ -149,11 +150,105 @@ function writeDraft(storageKey: string, draft: Partial<QualificationData>) {
   }
 }
 
+function StateAutocomplete({
+  id,
+  label,
+  placeholder,
+  value,
+  onChange
+}: {
+  id: string;
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (next: string) => void;
+}) {
+  const selected = stateOptions.find((option) => option.value === value);
+  const [query, setQuery] = useState(selected?.label ?? '');
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setQuery(selected?.label ?? '');
+  }, [selected?.label]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', onDoc);
+    return () => document.removeEventListener('mousedown', onDoc);
+  }, [open]);
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const showSuggestions = open && normalizedQuery.length > 0;
+  const matches = stateOptions
+    .filter((option) => {
+      return (
+        option.label.toLowerCase().includes(normalizedQuery) ||
+        option.value.toLowerCase().includes(normalizedQuery)
+      );
+    })
+    .slice(0, 8);
+
+  const chooseState = (option: QuizOption) => {
+    onChange(option.value);
+    setQuery(option.label);
+    setOpen(false);
+  };
+
+  return (
+    <div ref={rootRef} className="relative">
+      <input
+        id={id}
+        type="text"
+        value={query}
+        onFocus={() => setOpen(query.trim().length > 0)}
+        onChange={(event) => {
+          const nextQuery = event.target.value;
+          const exactMatch = stateOptions.find(
+            (option) =>
+              option.label.toLowerCase() === nextQuery.trim().toLowerCase() ||
+              option.value.toLowerCase() === nextQuery.trim().toLowerCase()
+          );
+          setQuery(nextQuery);
+          onChange(exactMatch?.value ?? '');
+          setOpen(nextQuery.trim().length > 0);
+        }}
+        placeholder={placeholder}
+        aria-label={label}
+        autoComplete="off"
+        className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm outline-none transition-all duration-200 placeholder:text-zinc-400 hover:border-zinc-300 focus:border-orange-400 focus:ring-2 focus:ring-orange-200/70"
+      />
+      {showSuggestions ? (
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-44 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
+          {matches.length > 0 ? (
+            matches.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => chooseState(option)}
+                className="block w-full px-4 py-2.5 text-left text-sm text-zinc-900 transition hover:bg-zinc-50"
+              >
+                {option.label}
+              </button>
+            ))
+          ) : (
+            <p className="px-4 py-2.5 text-sm text-zinc-500">No state found</p>
+          )}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export default function PostAssessmentQuiz({
   storageKey,
+  startImmediately = false,
   onComplete
 }: PostAssessmentQuizProps) {
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(startImmediately);
   const [currentStep, setCurrentStep] = useState(0);
   const [draft, setDraft] = useState<Partial<QualificationData>>({});
 
@@ -164,8 +259,10 @@ export default function PostAssessmentQuiz({
       const firstMissing = steps.findIndex((step) => !saved[step.id]);
       setStarted(true);
       setCurrentStep(firstMissing === -1 ? steps.length - 1 : firstMissing);
+    } else if (startImmediately) {
+      setStarted(true);
     }
-  }, [storageKey]);
+  }, [startImmediately, storageKey]);
 
   useEffect(() => {
     writeDraft(storageKey, draft);
@@ -195,8 +292,8 @@ export default function PostAssessmentQuiz({
 
   if (!started) {
     return (
-      <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] px-4 py-8 text-slate-950 sm:px-6">
-        <section className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-3xl items-center">
+      <main className="fixed inset-0 z-[200] overflow-hidden bg-[#F8FAFC] px-4 py-8 text-slate-950 sm:px-6">
+        <section className="mx-auto flex h-full max-w-3xl items-center">
           <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 text-center shadow-[0_24px_70px_-34px_rgba(15,23,42,0.42)] sm:p-8">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white">
               <BrainCircuit className="h-7 w-7" aria-hidden />
@@ -226,8 +323,8 @@ export default function PostAssessmentQuiz({
   }
 
   return (
-    <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] px-4 py-8 text-slate-950 sm:px-6">
-      <section className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl items-center">
+    <main className="fixed inset-0 z-[200] overflow-hidden bg-[#F8FAFC] px-3 py-3 text-slate-950 sm:px-6 sm:py-8">
+      <section className="mx-auto flex h-full max-w-4xl items-center">
         <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_70px_-34px_rgba(15,23,42,0.42)] sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
@@ -260,14 +357,24 @@ export default function PostAssessmentQuiz({
             >
               {step.label}
             </label>
-            <DarkSelect
-              id={`iq-qualification-${step.id}`}
-              ariaLabel={step.label}
-              options={[{ value: '', label: step.placeholder }, ...step.options]}
-              value={draft[step.id] ?? ''}
-              onChange={(value) => choose(step.id, value)}
-              menuClassName={step.id === 'fieldOfStudy' ? 'max-h-72' : undefined}
-            />
+            {step.id === 'state' ? (
+              <StateAutocomplete
+                id={`iq-qualification-${step.id}`}
+                label={step.label}
+                placeholder={step.placeholder}
+                value={draft.state ?? ''}
+                onChange={(value) => choose('state', value)}
+              />
+            ) : (
+              <DarkSelect
+                id={`iq-qualification-${step.id}`}
+                ariaLabel={step.label}
+                options={[{ value: '', label: step.placeholder }, ...step.options]}
+                value={draft[step.id] ?? ''}
+                onChange={(value) => choose(step.id, value)}
+                menuClassName={step.id === 'fieldOfStudy' ? 'max-h-72' : undefined}
+              />
+            )}
             {draft[step.id] ? (
               <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-emerald-700">
                 <CheckCircle2 className="h-4 w-4" aria-hidden />
@@ -276,15 +383,7 @@ export default function PostAssessmentQuiz({
             ) : null}
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
-            <button
-              type="button"
-              onClick={() => setCurrentStep((index) => Math.max(0, index - 1))}
-              disabled={currentStep === 0}
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Back
-            </button>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row-reverse sm:justify-between">
             <button
               type="button"
               onClick={continueStep}
@@ -293,6 +392,14 @@ export default function PostAssessmentQuiz({
             >
               {currentStep === steps.length - 1 ? 'Save and continue' : 'Continue'}
               <ArrowRight className="h-4 w-4" aria-hidden />
+            </button>
+            <button
+              type="button"
+              onClick={() => setCurrentStep((index) => Math.max(0, index - 1))}
+              disabled={currentStep === 0}
+              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Back
             </button>
           </div>
         </div>

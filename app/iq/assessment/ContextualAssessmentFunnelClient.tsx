@@ -841,6 +841,7 @@ export default function ContextualAssessmentFunnelClient({
     return (
       <PostAssessmentQuiz
         storageKey={QUALIFICATION_STORAGE_KEY}
+        startImmediately
         onComplete={(data) => {
           setQualificationData(data);
           writeJsonStorage(QUALIFICATION_STORAGE_KEY, data);
@@ -1006,7 +1007,7 @@ function ContextualIqEmailGate({
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] px-4 py-8 text-slate-950 sm:px-6">
       <section className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl items-center">
         <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 text-center shadow-[0_24px_70px_-34px_rgba(15,23,42,0.42)] sm:p-8">
-          <form onSubmit={submit} className="mx-auto max-w-2xl">
+          <form noValidate onSubmit={submit} className="mx-auto max-w-2xl">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white">
               <BrainCircuit className="h-7 w-7" aria-hidden />
             </div>
@@ -1027,7 +1028,8 @@ function ContextualIqEmailGate({
               <span className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 ring-1 ring-transparent transition focus-within:border-slate-400 focus-within:bg-white focus-within:ring-slate-200">
                 <Mail className="h-5 w-5 text-slate-400" aria-hidden />
                 <input
-                  type="email"
+                  type="text"
+                  inputMode="email"
                   autoComplete="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
@@ -1080,13 +1082,13 @@ function ContextualIqReadyChoice({
   onRestart: () => void;
 }) {
   return (
-    <main className="fixed inset-0 z-[200] overflow-y-auto bg-[radial-gradient(circle_at_15%_8%,#dbeafe_0,transparent_30%),radial-gradient(circle_at_85%_12%,#ffedd5_0,transparent_30%),#F8FAFC] px-4 py-8 text-slate-950 sm:px-6">
-      <section className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center">
-        <div className="w-full overflow-hidden rounded-[2.25rem] border border-slate-200 bg-white p-6 text-center shadow-[0_30px_100px_-50px_rgba(15,23,42,0.5)] sm:p-8 lg:p-10">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white">
+    <main className="bg-[radial-gradient(circle_at_15%_8%,#dbeafe_0,transparent_30%),radial-gradient(circle_at_85%_12%,#ffedd5_0,transparent_30%),#F8FAFC] text-slate-950">
+      <section className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-5xl px-5 py-7 sm:px-6 sm:py-10 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-900/10 sm:h-14 sm:w-14">
             <BrainCircuit className="h-7 w-7" aria-hidden />
           </div>
-          <p className="mt-6 text-sm font-bold uppercase tracking-[0.2em] text-indigo-600">
+          <p className="mt-5 text-xs font-bold uppercase tracking-[0.22em] text-indigo-600 sm:text-sm">
             IQ profile generated
           </p>
           <h1 className="mx-auto mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
@@ -1096,20 +1098,25 @@ function ContextualIqReadyChoice({
             You can unlock the full IQ-style report now, or add scholarship details
             to turn this cognitive profile into matched grants and next steps.
           </p>
+        </div>
 
-          <div className="mx-auto mt-7 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
-            {[
-              'IQ-style score context saved',
-              'Brain Archetype prepared',
-              'Matched grants can be revealed next'
-            ].map((item) => (
-              <div key={item} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-700">
-                {item}
-              </div>
-            ))}
-          </div>
+        <div className="mx-auto mt-8 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
+          {[
+            'IQ-style score context saved',
+            'Brain Archetype prepared',
+            'Matched grants can be revealed next'
+          ].map((item) => (
+            <div
+              key={item}
+              className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm font-semibold text-slate-700 shadow-sm"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
 
-          <div className="mx-auto mt-8 grid max-w-2xl gap-3 sm:grid-cols-2">
+        <div className="mx-auto mt-8 max-w-2xl rounded-[1.75rem] border border-slate-200 bg-white/90 p-4 shadow-[0_22px_70px_-46px_rgba(15,23,42,0.55)] sm:p-5">
+          <div className="grid gap-3 sm:grid-cols-2">
             <button
               type="button"
               onClick={onUnlockIqReport}
@@ -1130,7 +1137,7 @@ function ContextualIqReadyChoice({
           <button
             type="button"
             onClick={onRestart}
-            className="mt-5 text-sm font-semibold text-slate-500 transition hover:text-slate-950 hover:underline"
+            className="mt-5 w-full text-center text-sm font-semibold text-slate-500 transition hover:text-slate-950 hover:underline"
           >
             Start again
           </button>
@@ -1335,7 +1342,7 @@ function StrategyAccountGate({
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] px-4 py-8 text-slate-950 sm:px-6">
       <section className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl items-center">
         <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_70px_-34px_rgba(15,23,42,0.42)] sm:p-8">
-          <form onSubmit={submit}>
+          <form noValidate onSubmit={submit}>
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
@@ -1364,7 +1371,8 @@ function StrategyAccountGate({
                   Email
                 </span>
                 <input
-                  type="email"
+                  type="text"
+                  inputMode="email"
                   autoComplete="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}

@@ -431,7 +431,7 @@ export default function AssessmentEngine({
 
   return (
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] text-slate-950">
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-5 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-2.5 sm:px-6 sm:py-5 lg:px-8">
         <ProgressHeader
           phase={progressPhase}
           progress={
@@ -452,7 +452,7 @@ export default function AssessmentEngine({
             phase === 'intro'
               ? 'items-start pt-6 pb-8 sm:pt-8 sm:pb-12'
               : phase === 'assessment'
-                ? 'items-start pt-8 pb-8 sm:pt-10 sm:pb-12 lg:pt-5 lg:pb-6'
+                ? 'items-start pt-3 pb-5 sm:pt-10 sm:pb-12 lg:pt-5 lg:pb-6'
                 : 'items-center py-8 sm:py-12'
           )}
         >
@@ -548,29 +548,29 @@ function ProgressHeader({
   step: number;
 }) {
   return (
-    <header className="mx-auto w-full border-b border-slate-200 pb-5 lg:pb-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <header className="mx-auto w-full border-b border-slate-200 pb-3 sm:pb-5 lg:pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-500 sm:text-xs">
             SaaS IQ Test
           </p>
-          <p className="mt-1 text-lg font-semibold tracking-tight text-slate-950">
+          <p className="mt-0.5 text-base font-semibold tracking-tight text-slate-950 sm:mt-1 sm:text-lg">
             {phase}
           </p>
         </div>
-        <p className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold tabular-nums text-slate-600">
+        <p className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold tabular-nums text-slate-600 shadow-sm sm:py-1.5 sm:text-sm">
           Step {step} of {TOTAL_QUESTIONS}
         </p>
       </div>
 
-      <div className="mt-5 flex items-center gap-4 lg:mt-4">
-        <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-200">
+      <div className="mt-3 flex items-center gap-3 sm:mt-5 sm:gap-4 lg:mt-4">
+        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-200 sm:h-2">
           <div
             className="h-full rounded-full bg-slate-950 transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <span className="min-w-12 text-right text-sm font-semibold tabular-nums text-slate-500">
+        <span className="min-w-10 text-right text-xs font-semibold tabular-nums text-slate-500 sm:min-w-12 sm:text-sm">
           {progress}%
         </span>
       </div>
@@ -602,35 +602,37 @@ function QuestionScreen({
 }) {
   return (
     <section className="w-full">
-      <div className="mb-6 text-center lg:mb-5">
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-white">
+      <div className="mb-4 text-center sm:mb-6 lg:mb-5">
+        <div className="mx-auto grid max-w-[20rem] grid-cols-2 gap-1.5 rounded-[1.15rem] border border-slate-200/80 bg-white/80 p-1 shadow-[0_18px_45px_-32px_rgba(15,23,42,0.45)] backdrop-blur sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:justify-center sm:gap-2 sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-0">
+          <span className="inline-flex min-h-7 items-center justify-center rounded-full bg-slate-950 px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-white shadow-sm sm:min-h-0 sm:px-3 sm:text-xs sm:tracking-[0.14em]">
             {domainLabels[question.domain]}
           </span>
-          <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+          <span className="inline-flex min-h-7 items-center justify-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-slate-500 shadow-sm sm:min-h-0 sm:px-3 sm:text-xs sm:tracking-[0.14em]">
             {question.difficulty}
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
-            <Timer className="h-3.5 w-3.5" aria-hidden />
-            Total {formatAssessmentDuration(totalElapsedSeconds)}
+          <span className="inline-flex min-h-7 items-center justify-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-slate-500 shadow-sm sm:min-h-0 sm:gap-1.5 sm:px-3 sm:text-xs sm:tracking-[0.14em]">
+            <Timer className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
+            <span className="whitespace-nowrap">
+              Total {formatAssessmentDuration(totalElapsedSeconds)}
+            </span>
           </span>
           <button
             type="button"
             onClick={onRestart}
-            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-500 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950"
+            className="inline-flex min-h-7 items-center justify-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-slate-500 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950 sm:min-h-0 sm:gap-1.5 sm:px-3 sm:text-xs sm:tracking-[0.14em]"
           >
-            <RotateCcw className="h-3.5 w-3.5" aria-hidden />
-            Start again
+            <RotateCcw className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
+            <span className="whitespace-nowrap">Start again</span>
           </button>
         </div>
-        <h1 className="mx-auto mt-3 max-w-3xl text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:text-[2rem]">
+        <h1 className="mx-auto mt-2 max-w-3xl rounded-[1.35rem] border border-slate-200 bg-white px-4 py-3 text-[1.08rem] font-semibold leading-snug tracking-tight text-slate-950 shadow-[0_16px_44px_-34px_rgba(15,23,42,0.55)] sm:mt-3 sm:rounded-[1.6rem] sm:px-6 sm:py-4 sm:text-3xl sm:leading-tight lg:text-[2rem]">
           {question.prompt}
         </h1>
       </div>
 
       <div
         className={cn(
-          'rounded-[2rem] border border-slate-200 bg-white p-4 shadow-[0_20px_60px_-34px_rgba(15,23,42,0.35)] sm:p-6 lg:p-5',
+          'rounded-[1.5rem] border border-slate-200 bg-white p-3.5 shadow-[0_20px_60px_-34px_rgba(15,23,42,0.35)] sm:rounded-[2rem] sm:p-6 lg:p-5',
           question.visual
             ? 'lg:grid lg:min-h-[430px] lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-5'
             : 'mx-auto max-w-3xl'
@@ -693,8 +695,8 @@ function CognitiveVisualCard({
   if (!question.visual) return null;
 
   return (
-    <div className="mb-5 overflow-hidden rounded-[1.5rem] border border-slate-200 bg-slate-50 lg:mb-0">
-      <div className="flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3">
+    <div className="mb-4 overflow-hidden rounded-[1.35rem] border border-slate-200 bg-slate-50 sm:mb-5 sm:rounded-[1.5rem] lg:mb-0">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-3.5 py-2.5 sm:px-4 sm:py-3">
         <div>
           <p className="text-sm font-bold text-slate-950">
             {question.visual.title}
@@ -705,7 +707,7 @@ function CognitiveVisualCard({
         </div>
         <Clock3 className="h-4 w-4 shrink-0 text-slate-400" aria-hidden />
       </div>
-      <div className="grid min-h-56 place-items-center p-5 lg:min-h-[330px]">
+      <div className="grid min-h-48 place-items-center p-3.5 sm:min-h-56 sm:p-5 lg:min-h-[330px]">
         <VisualSketch kind={question.visual.kind} id={question.id} />
       </div>
     </div>
@@ -722,7 +724,7 @@ function VisualSketch({ kind, id }: { kind: CognitiveVisualKind; id: string }) {
 
 function MatrixSketch({ id }: { id: string }) {
   return (
-    <svg viewBox="0 0 360 220" className="h-56 w-full max-w-xl" role="img">
+    <svg viewBox="0 0 360 220" className="h-44 w-full max-w-xl sm:h-56" role="img">
       <rect width="360" height="220" rx="24" fill="#F8FAFC" />
       {Array.from({ length: 9 }).map((_, index) => {
         const x = 58 + (index % 3) * 82;
@@ -769,7 +771,7 @@ function MatrixSketch({ id }: { id: string }) {
 
 function RotationSketch() {
   return (
-    <svg viewBox="0 0 360 220" className="h-56 w-full max-w-xl" role="img">
+    <svg viewBox="0 0 360 220" className="h-44 w-full max-w-xl sm:h-56" role="img">
       <rect width="360" height="220" rx="24" fill="#F8FAFC" />
       <path
         d="M105 70 h64 v32 h-32 v48 h-32z"
@@ -805,7 +807,7 @@ function RotationSketch() {
 
 function MirrorSketch() {
   return (
-    <svg viewBox="0 0 360 220" className="h-56 w-full max-w-xl" role="img">
+    <svg viewBox="0 0 360 220" className="h-44 w-full max-w-xl sm:h-56" role="img">
       <rect width="360" height="220" rx="24" fill="#F8FAFC" />
       <line
         x1="180"
@@ -836,7 +838,7 @@ function MirrorSketch() {
 
 function BlocksSketch() {
   return (
-    <svg viewBox="0 0 360 220" className="h-56 w-full max-w-xl" role="img">
+    <svg viewBox="0 0 360 220" className="h-44 w-full max-w-xl sm:h-56" role="img">
       <rect width="360" height="220" rx="24" fill="#F8FAFC" />
       {[0, 1, 2, 3].map((index) => {
         const x = 110 + (index % 2) * 42;
@@ -902,7 +904,7 @@ function BlocksSketch() {
 
 function CubeSketch() {
   return (
-    <svg viewBox="0 0 360 220" className="h-56 w-full max-w-xl" role="img">
+    <svg viewBox="0 0 360 220" className="h-44 w-full max-w-xl sm:h-56" role="img">
       <rect width="360" height="220" rx="24" fill="#F8FAFC" />
       <path
         d="M90 80 h62 l36 34 v62 h-62 l-36 -34z"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, BrainCircuit, Mail } from 'lucide-react';
 
 import AssessmentEngine from '@/components/iq/AssessmentEngine';
@@ -12,27 +12,112 @@ import ScholarshipIqTestClient from './ScholarshipIqTestClient';
 
 type GeneralFunnelPhase = 'landing' | 'assessment' | 'email' | 'paywall';
 
+const GENERAL_ASSESSMENT_STORAGE_KEY = 'iq_general_assessment:v1';
+const GENERAL_FUNNEL_PHASE_STORAGE_KEY = 'iq_general_funnel_phase:v1';
+const GENERAL_EMAIL_STORAGE_KEY = 'iq_general_email:v1';
+const GENERAL_RESULT_STORAGE_KEY = 'iq_general_result:v1';
+
+function isGeneralFunnelPhase(value: unknown): value is GeneralFunnelPhase {
+  return (
+    value === 'landing' ||
+    value === 'assessment' ||
+    value === 'email' ||
+    value === 'paywall'
+  );
+}
+
+function readJsonStorage<T>(key: string): T | null {
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return null;
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
+
+function writeJsonStorage(key: string, value: unknown) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Ignore storage failures.
+  }
+}
+
+function writeTextStorage(key: string, value: string) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Ignore storage failures.
+  }
+}
+
 export default function GeneralIqFunnelClient() {
   const [phase, setPhase] = useState<GeneralFunnelPhase>('landing');
   const [result, setResult] = useState<AssessmentResult | null>(null);
   const [email, setEmail] = useState('');
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const storedPhaseRaw = window.localStorage.getItem(
+      GENERAL_FUNNEL_PHASE_STORAGE_KEY
+    );
+    const storedPhase = isGeneralFunnelPhase(storedPhaseRaw) ? storedPhaseRaw : null;
+    const storedEmail = window.localStorage.getItem(GENERAL_EMAIL_STORAGE_KEY) ?? '';
+    const storedResult = readJsonStorage<AssessmentResult>(GENERAL_RESULT_STORAGE_KEY);
+    const hasAssessmentDraft = Boolean(
+      readJsonStorage<unknown>(GENERAL_ASSESSMENT_STORAGE_KEY)
+    );
+
+    if (storedEmail) setEmail(storedEmail);
+    if (storedResult) setResult(storedResult);
+
+    if (storedPhase === 'paywall' && storedResult) {
+      setPhase('paywall');
+    } else if (storedPhase === 'assessment' || hasAssessmentDraft) {
+      setPhase('assessment');
+    } else if (storedPhase === 'email') {
+      setPhase('email');
+    } else {
+      setPhase('landing');
+    }
+
+    setHydrated(true);
+  }, []);
+
+  const transitionPhase = (nextPhase: GeneralFunnelPhase) => {
+    setPhase(nextPhase);
+    writeTextStorage(GENERAL_FUNNEL_PHASE_STORAGE_KEY, nextPhase);
+  };
+
+  const updateEmail = (nextEmail: string) => {
+    setEmail(nextEmail);
+    writeTextStorage(GENERAL_EMAIL_STORAGE_KEY, nextEmail);
+  };
 
   const restartAssessment = () => {
     try {
-      window.localStorage.removeItem('iq_general_assessment:v1');
+      window.localStorage.removeItem(GENERAL_ASSESSMENT_STORAGE_KEY);
+      window.localStorage.removeItem(GENERAL_RESULT_STORAGE_KEY);
     } catch {
       // Ignore storage failures.
     }
     setResult(null);
-    setPhase('assessment');
+    transitionPhase('assessment');
   };
+
+  if (!hydrated) {
+    return (
+      <main className="iq-product-shell min-h-screen bg-[#F8FAFC] text-slate-950" />
+    );
+  }
 
   if (phase === 'email') {
     return (
       <IqReportEmailGate
         email={email}
-        onEmailChange={setEmail}
-        onContinue={() => setPhase('assessment')}
+        onEmailChange={updateEmail}
+        onContinue={() => transitionPhase('assessment')}
       />
     );
   }
@@ -40,11 +125,12 @@ export default function GeneralIqFunnelClient() {
   if (phase === 'assessment') {
     return (
       <AssessmentEngine
-        storageKey="iq_general_assessment:v1"
+        storageKey={GENERAL_ASSESSMENT_STORAGE_KEY}
         startImmediately
         onComplete={(assessmentResult) => {
           setResult(assessmentResult);
-          setPhase('paywall');
+          writeJsonStorage(GENERAL_RESULT_STORAGE_KEY, assessmentResult);
+          transitionPhase('paywall');
         }}
       />
     );
@@ -61,7 +147,7 @@ export default function GeneralIqFunnelClient() {
   }
 
   return (
-    <ScholarshipIqTestClient onStartAssessment={() => setPhase('email')} />
+    <ScholarshipIqTestClient onStartAssessment={() => transitionPhase('email')} />
   );
 }
 
@@ -92,6 +178,7 @@ function IqReportEmailGate({
     <main className="iq-product-shell min-h-screen bg-[radial-gradient(circle_at_15%_8%,#dbeafe_0,transparent_30%),radial-gradient(circle_at_85%_12%,#e0e7ff_0,transparent_30%),#F8FAFC] text-slate-950">
       <section className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-3xl items-center px-6 py-12">
         <form
+          noValidate
           onSubmit={handleSubmit}
           className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 text-center shadow-[0_28px_90px_-42px_rgba(15,23,42,0.5)] sm:p-8"
         >
@@ -114,7 +201,8 @@ function IqReportEmailGate({
             <span className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 ring-1 ring-transparent transition focus-within:border-slate-400 focus-within:bg-white focus-within:ring-slate-200">
               <Mail className="h-5 w-5 text-slate-400" aria-hidden />
               <input
-                type="email"
+                type="text"
+                inputMode="email"
                 value={email}
                 onChange={(event) => onEmailChange(event.target.value)}
                 placeholder="you@example.com"
