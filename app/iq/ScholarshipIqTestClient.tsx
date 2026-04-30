@@ -508,9 +508,6 @@ export default function ScholarshipIqTestClient({
             Start with a focused assessment, then unlock a report that explains
             your cognitive profile in a way that feels clear, modern, and useful.
           </p>
-          <p className="mx-auto mt-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-indigo-100 ring-1 ring-white/15">
-            Full report unlock: $9.99 one-time payment
-          </p>
           <div className="mt-8">
             <button
               type="button"
