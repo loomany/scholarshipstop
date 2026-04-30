@@ -11,7 +11,6 @@ import {
   Layers3,
   LineChart,
   Lock,
-  Microscope,
   Network,
   ShieldCheck,
   Sparkles,
@@ -76,37 +75,6 @@ const domains = [
     description:
       'Timed prioritization and how efficiently you choose under constraints.',
     icon: Gauge
-  }
-];
-
-const scientificLineage = [
-  {
-    name: 'David M. Condon & William Revelle',
-    role: 'ICAR / modern online psychometrics',
-    description:
-      'The closest SaaS-era reference: a public-domain, multi-domain cognitive battery designed for large-scale remote assessment.',
-    href: 'https://icar-project.com/'
-  },
-  {
-    name: 'John C. Raven',
-    role: 'Progressive matrices',
-    description:
-      'A landmark tradition for nonverbal pattern reasoning and language-reduced cognitive tasks.',
-    href: 'https://www.pearsonassessments.com/en-us/Store/Professional-Assessments/Cognition-%26-Neuro/Raven%E2%80%99s-Progressive-Matrices-Second-Edition-%7C-Raven%27s-2/p/100001960'
-  },
-  {
-    name: 'David Wechsler',
-    role: 'multi-index intelligence profiles',
-    description:
-      'The inspiration for showing more than one score: a profile across different cognitive abilities.',
-    href: 'https://support.pearson.com/usclinical/s/article/WAIS-IV-Technical-Manual-Contents'
-  },
-  {
-    name: 'Raymond B. Cattell',
-    role: 'fluid intelligence and culture-reduced design',
-    description:
-      'A key influence behind visual, less language-heavy approaches to reasoning measurement.',
-    href: 'https://en.wikipedia.org/wiki/Raymond_Cattell'
   }
 ];
 
@@ -339,50 +307,111 @@ export default function ScholarshipIqTestClient({
         className="border-y border-slate-200 bg-slate-950 py-16 text-white sm:py-24"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-indigo-100 ring-1 ring-white/15">
-                <Microscope className="h-4 w-4" aria-hidden />
-                Scientific lineage
+          <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
+            <div className="relative">
+              <div className="absolute -inset-8 rounded-[3rem] bg-indigo-500/10 blur-3xl" />
+              <div className="relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.06] p-5 shadow-2xl shadow-black/25 backdrop-blur">
+                <div className="rounded-[1.75rem] border border-white/10 bg-white text-slate-950">
+                  <div className="border-b border-slate-200 px-6 py-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-600">
+                      Final IQ report
+                    </p>
+                    <div className="mt-3 flex items-start justify-between gap-4">
+                      <div>
+                        <h2 className="text-3xl font-semibold tracking-tight">
+                          Pattern Strategist
+                        </h2>
+                        <p className="mt-1 text-sm font-medium text-slate-500">
+                          Five-domain cognitive profile
+                        </p>
+                      </div>
+                      <div className="rounded-2xl bg-slate-950 px-4 py-3 text-right text-white">
+                        <p className="text-xs font-semibold text-slate-300">
+                          IQ-style band
+                        </p>
+                        <p className="text-3xl font-semibold leading-none">118</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-5 p-6 sm:grid-cols-[0.9fr_1.1fr]">
+                    <div className="rounded-3xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                      <p className="text-sm font-bold text-slate-950">
+                        Strength profile
+                      </p>
+                      <div className="mt-5 space-y-4">
+                        {[
+                          ['Abstract reasoning', '92%'],
+                          ['Spatial intelligence', '84%'],
+                          ['Decision speed', '78%']
+                        ].map(([label, value]) => (
+                          <div key={label}>
+                            <div className="mb-1 flex items-center justify-between text-xs font-semibold text-slate-500">
+                              <span>{label}</span>
+                              <span>{value}</span>
+                            </div>
+                            <div className="h-2 rounded-full bg-white ring-1 ring-slate-200">
+                              <div
+                                className="h-full rounded-full bg-slate-950"
+                                style={{ width: value }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      {[
+                        'Plain-English score interpretation',
+                        'Brain Archetype explanation',
+                        'Domain ranking and strongest area',
+                        'Personal strengths summary'
+                      ].map((item) => (
+                        <div
+                          key={item}
+                          className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 ring-1 ring-slate-200"
+                        >
+                          <CheckCircle2
+                            className="h-4 w-4 shrink-0 text-emerald-600"
+                            aria-hidden
+                          />
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h2 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
-                Serious inspiration, careful claims.
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-slate-300">
-                The research brief points to ICAR as the closest real prototype
-                for a short online cognitive battery, with Raven, Wechsler, and
-                Cattell as major historical foundations. We use that lineage to
-                explain the design, not to pretend this is a clinical exam.
-              </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {scientificLineage.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group rounded-3xl border border-white/10 bg-white/[0.06] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]"
-                >
-                  <p className="text-lg font-semibold text-white">
-                    {item.name}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-indigo-200">
-                    {item.role}
-                  </p>
-                  <p className="mt-4 text-sm leading-6 text-slate-300">
-                    {item.description}
-                  </p>
-                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white">
-                    Source
-                    <ArrowRight
-                      className="h-4 w-4 transition group-hover:translate-x-0.5"
-                      aria-hidden
-                    />
-                  </span>
-                </a>
-              ))}
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-indigo-100 ring-1 ring-white/15">
+                <FileText className="h-4 w-4" aria-hidden />
+                Report preview
+              </div>
+              <h2 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
+                A polished final report, not just a score.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-300">
+                After the assessment, your answers become a clean IQ-style report
+                with score context, a five-domain breakdown, Brain Archetype, and
+                a practical explanation of how you solve problems.
+              </p>
+              <div className="mt-8 grid gap-3">
+                {[
+                  'See the exact cognitive pattern behind your score band',
+                  'Understand your strongest domain and where speed affects performance',
+                  'Get a private report link delivered to your email after unlock'
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 text-sm font-semibold leading-6 text-slate-200"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
