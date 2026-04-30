@@ -264,15 +264,6 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.9)]" />
           Private report
         </div>
-
-        <div className="hidden min-w-0 flex-1 items-center justify-center md:flex">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-zinc-200 shadow-[0_12px_40px_-28px_rgba(255,255,255,0.45)]">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_16px_rgba(52,211,153,0.9)]" />
-            Private IQ-style report
-            <span className="h-1 w-1 rounded-full bg-zinc-500" />
-            Delivered by email after checkout
-          </div>
-        </div>
       </div>
     );
   }
