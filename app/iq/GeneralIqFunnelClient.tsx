@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { ArrowRight, BrainCircuit, Mail } from 'lucide-react';
 
-import { notifyIqReportEmailCaptured } from '@/app/actions/iqReportCheckout';
 import AssessmentEngine from '@/components/iq/AssessmentEngine';
 import StandardIqPaywall from '@/components/iq/StandardIqPaywall';
 import IqProductFooter from '@/components/iq/IqProductFooter';
@@ -18,6 +17,16 @@ export default function GeneralIqFunnelClient() {
   const [result, setResult] = useState<AssessmentResult | null>(null);
   const [email, setEmail] = useState('');
 
+  if (phase === 'email') {
+    return (
+      <IqReportEmailGate
+        email={email}
+        onEmailChange={setEmail}
+        onContinue={() => setPhase('assessment')}
+      />
+    );
+  }
+
   if (phase === 'assessment') {
     return (
       <AssessmentEngine
@@ -25,19 +34,8 @@ export default function GeneralIqFunnelClient() {
         startImmediately
         onComplete={(assessmentResult) => {
           setResult(assessmentResult);
-          setPhase('email');
+          setPhase('paywall');
         }}
-      />
-    );
-  }
-
-  if (phase === 'email' && result) {
-    return (
-      <IqReportEmailGate
-        email={email}
-        onEmailChange={setEmail}
-        result={result}
-        onContinue={() => setPhase('paywall')}
       />
     );
   }
@@ -47,23 +45,20 @@ export default function GeneralIqFunnelClient() {
   }
 
   return (
-    <ScholarshipIqTestClient onStartAssessment={() => setPhase('assessment')} />
+    <ScholarshipIqTestClient onStartAssessment={() => setPhase('email')} />
   );
 }
 
 function IqReportEmailGate({
   email,
   onEmailChange,
-  result,
   onContinue
 }: {
   email: string;
   onEmailChange: (email: string) => void;
-  result: AssessmentResult;
   onContinue: () => void;
 }) {
   const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,17 +69,7 @@ function IqReportEmailGate({
     }
     setError(null);
     onEmailChange(normalized);
-    startTransition(async () => {
-      const notification = await notifyIqReportEmailCaptured({
-        email: normalized,
-        result
-      });
-      if (!notification.ok) {
-        setError(notification.error ?? 'Enter a valid email address.');
-        return;
-      }
-      onContinue();
-    });
+    onContinue();
   }
 
   return (
@@ -98,14 +83,14 @@ function IqReportEmailGate({
             <BrainCircuit className="h-7 w-7" aria-hidden />
           </div>
           <p className="mt-6 text-sm font-bold uppercase tracking-[0.2em] text-indigo-600">
-            Your report is ready
+            Start your private report
           </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-            Where should we send your unlocked report?
+            Where should we send your IQ profile?
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-600">
-            Enter your email before checkout. After payment, we will send your
-            full IQ-style report and private access link to this address.
+            Enter your email before the test. If you unlock the full report
+            after the assessment, your private access link will be sent here.
           </p>
 
           <label className="mx-auto mt-8 block max-w-md text-left">
@@ -130,18 +115,17 @@ function IqReportEmailGate({
 
           <button
             type="submit"
-            disabled={isPending}
             className="group mt-7 inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800"
           >
-            {isPending ? 'Preparing your report...' : 'Continue to unlock report'}
+            Continue to IQ test
             <ArrowRight
               className="h-4 w-4 transition group-hover:translate-x-0.5"
               aria-hidden
             />
           </button>
           <p className="mx-auto mt-4 max-w-md text-xs leading-5 text-slate-500">
-            One-time $9.99 payment on the next screen. We use your email only
-            to deliver the purchased report and support access.
+            No account required to start. We use your email to keep report access
+            tied to you if you decide to unlock it.
           </p>
         </form>
       </section>

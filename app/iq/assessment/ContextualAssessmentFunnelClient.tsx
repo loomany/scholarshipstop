@@ -454,7 +454,7 @@ export default function ContextualAssessmentFunnelClient({
       setPhase(storedEmail ? 'iq_report_paywall' : 'iq_ready');
     } else if (storedPhase === 'iq_ready' && storedResult) {
       setPhase('iq_ready');
-    } else if (storedPhase === 'email_capture' && storedResult) {
+    } else if (storedPhase === 'email_capture') {
       setPhase('email_capture');
     } else if (storedPhase === 'strategy_paywall' && storedResult && storedQualification) {
       setPhase('strategy_paywall');
@@ -488,6 +488,33 @@ export default function ContextualAssessmentFunnelClient({
     setRecommendedGrants([]);
     transitionPhase('assessment');
   };
+
+  const startContextualAssessment = useCallback(async () => {
+    const supabase = createClient();
+    const {
+      data: { session }
+    } = await supabase.auth.getSession();
+    const activeUserId = session?.user.id ?? null;
+    const activeEmail = session?.user.email?.trim().toLowerCase() ?? '';
+
+    if (activeEmail) {
+      setContextualEmail(activeEmail);
+      try {
+        window.localStorage.setItem(CONTEXTUAL_EMAIL_STORAGE_KEY, activeEmail);
+      } catch {
+        // Ignore storage failures.
+      }
+    }
+
+    if (activeUserId) {
+      setIsAuthenticated(true);
+      setUserId(activeUserId);
+      transitionPhase('assessment');
+      return;
+    }
+
+    transitionPhase('email_capture');
+  }, [transitionPhase]);
 
   const completeWithExistingProfile = useCallback(
     async (currentUserId: string) => {
@@ -624,6 +651,7 @@ export default function ContextualAssessmentFunnelClient({
   if (phase === 'email_capture' && result) {
     return (
       <ContextualIqEmailGate
+        mode="post_assessment"
         result={result}
         intent={intent}
         onComplete={(email, completedUserId) => {
@@ -636,6 +664,26 @@ export default function ContextualAssessmentFunnelClient({
             // Ignore storage failures.
           }
           transitionPhase('iq_ready');
+        }}
+      />
+    );
+  }
+
+  if (phase === 'email_capture') {
+    return (
+      <ContextualIqEmailGate
+        mode="pre_assessment"
+        intent={intent}
+        onComplete={(email, completedUserId) => {
+          setContextualEmail(email);
+          setIsAuthenticated(true);
+          setUserId(completedUserId);
+          try {
+            window.localStorage.setItem(CONTEXTUAL_EMAIL_STORAGE_KEY, email);
+          } catch {
+            // Ignore storage failures.
+          }
+          transitionPhase('assessment');
         }}
       />
     );
@@ -734,19 +782,19 @@ export default function ContextualAssessmentFunnelClient({
   return (
     <ContextualIntro
       intent={intent}
-      onStart={() => {
-        transitionPhase('assessment');
-      }}
+      onStart={startContextualAssessment}
     />
   );
 }
 
 function ContextualIqEmailGate({
+  mode,
   result,
   intent,
   onComplete
 }: {
-  result: AssessmentResult;
+  mode: 'pre_assessment' | 'post_assessment';
+  result?: AssessmentResult;
   intent: UserIntent;
   onComplete: (email: string, userId: string) => void;
 }) {
@@ -783,9 +831,9 @@ function ContextualIqEmailGate({
           data: {
             iq_contextual_strategy: JSON.stringify({
               intent,
-              iqScore: result.iqScore,
-              percentile: result.percentile,
-              archetype: result.archetype
+              iqScore: result?.iqScore ?? null,
+              percentile: result?.percentile ?? null,
+              archetype: result?.archetype ?? null
             })
           }
         }
@@ -826,8 +874,8 @@ function ContextualIqEmailGate({
           body: JSON.stringify({
             userId,
             email: normalizedEmail,
-            archetype: result.archetype,
-            iqScore: result.iqScore
+            archetype: result?.archetype ?? null,
+            iqScore: result?.iqScore ?? null
           }),
           keepalive: true
         });
@@ -851,14 +899,15 @@ function ContextualIqEmailGate({
               <BrainCircuit className="h-7 w-7" aria-hidden />
             </div>
             <p className="mt-6 text-sm font-bold uppercase tracking-[0.2em] text-indigo-600">
-              Your report is ready
+              {mode === 'pre_assessment' ? 'Start your IQ profile' : 'Your report is ready'}
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
               Where should we save your IQ profile?
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-600">
-              Enter your email so your IQ profile is saved before you choose whether
-              to unlock the full IQ report or continue to matched grants.
+              {mode === 'pre_assessment'
+                ? 'Enter your email before the test so your IQ result can be saved and connected to your next step.'
+                : 'Enter your email so your IQ profile is saved before you choose whether to unlock the full IQ report or continue to matched grants.'}
             </p>
 
             <label className="mx-auto mt-8 block max-w-md text-left">
@@ -887,7 +936,11 @@ function ContextualIqEmailGate({
               disabled={submitting}
               className="group mt-7 inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? 'Saving your IQ profile...' : 'Continue'}
+              {submitting
+                ? 'Saving your IQ profile...'
+                : mode === 'pre_assessment'
+                  ? 'Continue to IQ test'
+                  : 'Continue'}
               <ArrowRight
                 className="h-4 w-4 transition group-hover:translate-x-0.5"
                 aria-hidden
@@ -896,7 +949,7 @@ function ContextualIqEmailGate({
 
             <p className="mx-auto mt-4 max-w-md text-xs leading-5 text-slate-500">
               No password needed now. Your account keeps the IQ result available if
-              you continue to scholarship matching.
+              you continue after the test.
             </p>
           </form>
         </div>
@@ -1231,7 +1284,7 @@ function ContextualIntro({
   onStart
 }: {
   intent: UserIntent;
-  onStart: () => void;
+  onStart: () => void | Promise<void>;
 }) {
   const copy = intentCopy[intent];
 
