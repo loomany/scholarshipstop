@@ -32,6 +32,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
 
+  if (host === 'iq.scholarshiptop.com' && pathname === '/iq') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/';
+    return NextResponse.redirect(url, 308);
+  }
+
+  if (host === 'iq.scholarshiptop.com' && pathname.startsWith('/iq/')) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/iq/, '') || '/';
+    return NextResponse.redirect(url, 308);
+  }
+
   if (host === 'iq.scholarshiptop.com' && pathname === '/assessment') {
     const url = request.nextUrl.clone();
     url.pathname = '/iq/assessment';

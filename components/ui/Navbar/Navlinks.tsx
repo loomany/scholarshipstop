@@ -103,7 +103,11 @@ function sublinkActive(href: string, pathname: string) {
 
 export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
   const pathname = usePathname() ?? '';
+  const isIqSubdomain =
+    typeof window !== 'undefined' &&
+    window.location.hostname.toLowerCase() === 'iq.scholarshiptop.com';
   const isIqProductPage =
+    isIqSubdomain ||
     pathname === '/iq' ||
     pathname === '/iq/about' ||
     pathname === '/iq/help' ||
