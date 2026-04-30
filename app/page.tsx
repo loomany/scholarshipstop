@@ -6,10 +6,9 @@ import HomeFinalCta from '@/components/home/HomeFinalCta';
 import { HomePageJsonLd } from '@/components/seo/HomePageJsonLd';
 import { fetchHomeResourcesCarouselItems } from '@/lib/home/homeResourcesCarousel';
 import { SITE_BRAND } from '@/lib/seo/siteTitle';
-import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
-const siteOrigin = getURL().replace(/\/+$/, '');
-const homeCanonical = `${siteOrigin}/`;
+const homeCanonical = getCanonical('/');
 
 /** Page segment for root `title.template` (`ScholarshipTop | %s`). */
 const homeTitleSegment = 'Get Matched With Scholarships in 2 Minutes';

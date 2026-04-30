@@ -80,6 +80,8 @@ export type Scholarship = {
   stateTerritoryText?: string | null;
   supportEmail?: string | null;
   supportPhone?: string | null;
+  supportEmailRedacted?: boolean;
+  supportPhoneRedacted?: boolean;
   /** Full Eligibility section from source page. */
   eligibilityText?: string | null;
   /** Full Awards section. */

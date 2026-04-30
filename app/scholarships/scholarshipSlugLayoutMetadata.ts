@@ -17,6 +17,7 @@ import {
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
+import { getCanonical } from '@/lib/seo/canonical';
 
 function withExplicitIndexFollowWhenUnset(meta: Metadata): Metadata {
   if (meta.robots !== undefined) return meta;
@@ -29,13 +30,14 @@ function applyScholarshipContentBundleIndexingPolicy(
 ): Metadata {
   if (!readScholarshipSeoContent(canonicalPath)) return meta;
   const selfPath = `/scholarships/${canonicalPath}`;
+  const canonical = getCanonical(selfPath);
   const next: Metadata = {
     ...meta,
     robots: { index: true, follow: true },
-    alternates: { canonical: selfPath }
+    alternates: { canonical }
   };
   if (meta.openGraph && typeof meta.openGraph === 'object') {
-    next.openGraph = { ...meta.openGraph, url: selfPath };
+    next.openGraph = { ...meta.openGraph, url: canonical };
   }
   return next;
 }
@@ -96,14 +98,16 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
 
   if (resolved.kind === 'redirect_canonical') {
     if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
+      const canonical = getCanonical(`/scholarships/${resolved.canonicalPath}`);
       return withExplicitIndexFollowWhenUnset({
         title: 'Find Scholarships',
-        alternates: { canonical: `/scholarships/${resolved.canonicalPath}` }
+        alternates: { canonical }
       });
     }
     const entry = getSeoListingEntry(resolved.canonicalPath);
     if (entry) {
       const path = `/scholarships/${resolved.canonicalPath}`;
+      const canonical = getCanonical(path);
       const seo = readScholarshipSeoContent(resolved.canonicalPath);
       const title = seo?.seo_title ?? entry.h1Fallback;
       const fallbackDescription =
@@ -123,7 +127,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         openGraph: {
           title,
           description,
-          url: path,
+          url: canonical,
           type: 'website'
         },
         twitter: {
@@ -132,7 +136,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
           description
         },
         alternates: {
-          canonical: path
+          canonical
         }
       };
       return withExplicitIndexFollowWhenUnset(
@@ -142,21 +146,23 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     return {
       title: 'Find Scholarships',
       alternates: {
-        canonical: `/scholarships/${resolved.canonicalPath}`
+        canonical: getCanonical(`/scholarships/${resolved.canonicalPath}`)
       }
     };
   }
 
   if (resolved.kind === 'legacy_long_tail') {
     if (shouldBlockScholarshipListingForDrip(resolved.slug)) {
+      const canonical = getCanonical(`/scholarships/${resolved.slug}`);
       return withExplicitIndexFollowWhenUnset({
         title: 'Find Scholarships',
-        alternates: { canonical: `/scholarships/${resolved.slug}` }
+        alternates: { canonical }
       });
     }
     const longTail = getLongTailPreset(resolved.slug);
     if (!longTail) return { title: 'Find Scholarships' };
     const path = `/scholarships/${longTail.slug}`;
+    const canonical = getCanonical(path);
     const seo = readLongTailSeoBundle(longTail.slug);
     const title = seo?.seo_title ?? longTail.metaTitle;
     const fallbackDescription = seo?.seo_description ?? longTail.metaDescription;
@@ -175,7 +181,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       openGraph: {
         title,
         description,
-        url: path,
+        url: canonical,
         type: 'website'
       },
       twitter: {
@@ -184,7 +190,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         description
       },
       alternates: {
-        canonical: path
+        canonical
       }
     };
     return withExplicitIndexFollowWhenUnset(meta);
@@ -192,12 +198,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
 
   if (resolved.kind === 'manifest_seo') {
     if (shouldBlockScholarshipListingForDrip(resolved.canonicalPath)) {
+      const canonical = getCanonical(`/scholarships/${resolved.canonicalPath}`);
       return withExplicitIndexFollowWhenUnset({
         title: 'Find Scholarships',
-        alternates: { canonical: `/scholarships/${resolved.canonicalPath}` }
+        alternates: { canonical }
       });
     }
     const path = `/scholarships/${resolved.canonicalPath}`;
+    const canonical = getCanonical(path);
     const seo = readScholarshipSeoContent(resolved.canonicalPath);
     const hubMeta = await fetchSeoHubContentMeta(resolved.canonicalPath);
     const title =
@@ -223,7 +231,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       openGraph: {
         title,
         description,
-        url: path,
+        url: canonical,
         type: 'website'
       },
       twitter: {
@@ -232,7 +240,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         description
       },
       alternates: {
-        canonical: path
+        canonical
       }
     };
     return withExplicitIndexFollowWhenUnset(
@@ -255,6 +263,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
   const title = buildScholarshipDetailSeoTitle(record.title);
   const fallbackDescription = metaDescription(record);
   const path = scholarshipPublicPath(record);
+  const canonical = getCanonical(path);
   const description =
     (await resolveAiMetaDescription({
       canonicalPath: path,
@@ -275,7 +284,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     openGraph: {
       title,
       description,
-      url: path,
+      url: canonical,
       type: 'article'
     },
     twitter: {
@@ -284,7 +293,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       description
     },
     alternates: {
-      canonical: path
+      canonical
     }
   };
 

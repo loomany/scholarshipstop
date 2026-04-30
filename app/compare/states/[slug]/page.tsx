@@ -28,6 +28,7 @@ import {
   isCompareArticleThin
 } from '@/lib/seo/compareThinVerdictNarrative';
 import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 const COMPARE_YEAR = 2026;
 export const revalidate = 300;
@@ -154,8 +155,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const row = await fetchPublishedStateComparePageBySlug(slug.trim().toLowerCase());
-  const base = getURL().replace(/\/$/, '');
   const path = `/compare/states/${encodeURIComponent(slug.trim().toLowerCase())}`;
+  const canonical = getCanonical(path);
   if (!row) {
     return {
       title: 'State vs State',
@@ -184,8 +185,8 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `${base}${path}` },
-    openGraph: { title, description, url: `${base}${path}` }
+    alternates: { canonical },
+    openGraph: { title, description, url: canonical }
   };
 }
 

@@ -15,6 +15,7 @@ import {
 } from '@/lib/scholarships/universityHubServer';
 import { getURL } from '@/utils/helpers';
 import { createPublicClient } from '@/utils/supabase/public';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
 
@@ -44,17 +45,18 @@ export async function generateMetadata({
   }
 
   const path = `/scholarships/${hub.stateSlug}/${hub.slug}`;
+  const canonical = getCanonical(path);
   const title = `Fully Funded Scholarships at ${hub.displayName}, ${hub.stateName} ${SEO_YEAR}`;
   const description = `Find ${hub.scholarshipCount || 'active'} scholarships and grants linked to ${hub.displayName} in ${hub.stateName}. Compare ${SEO_YEAR} deadlines, requirements, and award amounts—then apply on the official provider site.`;
 
   return {
     title,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical },
     openGraph: {
       title,
       description,
-      url: path,
+      url: canonical,
       type: 'website'
     },
     twitter: {

@@ -19,6 +19,7 @@ import {
   PROVIDERS_HUB_PAGE_SIZE
 } from '@/lib/providers/providersHubUrl';
 import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const dynamic = 'force-dynamic';
 
@@ -70,7 +71,7 @@ export async function generateMetadata({
 }: {
   searchParams: ProvidersHubSearchParams;
 }): Promise<Metadata> {
-  const canonicalUrl = getURL('providers');
+  const canonicalUrl = getCanonical('/providers');
   const isCanonicalListing = providersHubIsCanonicalListingView(searchParams);
   return {
     title: baseTitle,

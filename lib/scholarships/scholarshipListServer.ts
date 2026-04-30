@@ -54,6 +54,10 @@ import {
   moreFiltersToJson,
   type MoreFiltersJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
+import {
+  compareScholarshipsByDeadlineState,
+  getScholarshipDeadlineState
+} from '@/lib/scholarships/scholarshipDeadlineState';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import { scholarshipDeadlineSortMs } from '@/lib/scholarships/scholarshipDeadlineTrust';
 import type { createClient } from '@/utils/supabase/server';
@@ -280,6 +284,34 @@ function clampInt(n: number, min: number, max: number): number {
 
 function listingFrom(supabase: ServerSupabaseClient): any {
   return (supabase as any).from(SCHOLARSHIPS_LISTING_SOURCE);
+}
+
+function todayIsoDate(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function isDeadlineStateTerminal(s: Scholarship): boolean {
+  const state = getScholarshipDeadlineState(s);
+  return state === 'expired' || state === 'broken';
+}
+
+function applyDeadlineStateSafetyOrder<T extends Scholarship>(rows: T[]): T[] {
+  return [...rows].sort((a, b) => {
+    const aTerminal = isDeadlineStateTerminal(a);
+    const bTerminal = isDeadlineStateTerminal(b);
+    if (!aTerminal && !bTerminal) return 0;
+    return compareScholarshipsByDeadlineState(a, b);
+  });
+}
+
+function compareDeadlineStateSafetyOrder(
+  a: Scholarship,
+  b: Scholarship
+): number {
+  const aTerminal = isDeadlineStateTerminal(a);
+  const bTerminal = isDeadlineStateTerminal(b);
+  if (!aTerminal && !bTerminal) return 0;
+  return compareScholarshipsByDeadlineState(a, b);
 }
 
 export function parseCommaUuids(raw: string | null | undefined): string[] {
@@ -988,7 +1020,11 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
       return applyTabScopeFixed({ ...req, tab: 'matches' }, q);
     case 'hot-deadlines': {
       const nq = applyTabScopeFixed({ ...req, tab: 'matches' }, q);
-      return nq.in('deadline_bucket', ['lt_1d', 'd1_7']);
+      return nq
+        .eq('is_expired', false)
+        .not('deadline_date', 'is', null)
+        .gte('deadline_date', todayIsoDate())
+        .in('deadline_bucket', ['lt_1d', 'd1_7']);
     }
     default:
       return q;
@@ -1582,7 +1618,9 @@ export async function executeScholarshipListQuery(
       const { data, error: dErr } = await qn.range(from, to);
       if (dErr) throw new Error(postgrestErrorToMessage(dErr));
       const rows = (data ?? []) as unknown as ScholarshipRow[];
-      scholarships = rows.map((r) => ({ ...mapScholarshipRow(r), profileMatchPercent: null }));
+      scholarships = applyDeadlineStateSafetyOrder(
+        rows.map((r) => ({ ...mapScholarshipRow(r), profileMatchPercent: null }))
+      );
     } else {
       const slicePage =
         rawTotal > cap ? Math.min(effectivePage, pagesRanked) : effectivePage;
@@ -1609,10 +1647,12 @@ export async function executeScholarshipListQuery(
           };
         });
         ranked.sort((a, b) => {
-          const aExpired = scholarshipDeadlineHasPassed(a.scholarship);
-          const bExpired = scholarshipDeadlineHasPassed(b.scholarship);
-          if (aExpired !== bExpired) {
-            return aExpired ? 1 : -1;
+          const deadlineStateOrder = compareDeadlineStateSafetyOrder(
+            a.scholarship,
+            b.scholarship
+          );
+          if (deadlineStateOrder !== 0) {
+            return deadlineStateOrder;
           }
           const amountA = a.scholarship.awardAmountNumericSort ?? 0;
           const amountB = b.scholarship.awardAmountNumericSort ?? 0;
@@ -1691,9 +1731,11 @@ export async function executeScholarshipListQuery(
           return amountB - amountA;
         });
         const start = (slicePage - 1) * req.limit;
-        scholarships = ranked
+        scholarships = applyDeadlineStateSafetyOrder(
+          ranked
           .slice(start, start + req.limit)
-          .map(({ scholarship, pct }) => ({ ...scholarship, profileMatchPercent: pct }));
+          .map(({ scholarship, pct }) => ({ ...scholarship, profileMatchPercent: pct }))
+        );
       }
     }
 
@@ -1757,7 +1799,9 @@ export async function executeScholarshipListQuery(
     });
   }
 
-  const scholarships = rows.map((r) => mapScholarshipRow(r));
+  const scholarships = applyDeadlineStateSafetyOrder(
+    rows.map((r) => mapScholarshipRow(r))
+  );
 
   if (process.env.SCHOLARSHIPS_LIST_SYNC_DEBUG === '1') {
     // eslint-disable-next-line no-console -- opt-in listing vs sidebar diagnostics

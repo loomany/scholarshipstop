@@ -9,6 +9,7 @@ import {
   SITE_METADATA_TITLE_TEMPLATE,
   SITE_TITLE_TAGLINE
 } from '@/lib/seo/siteTitle';
+import { getCanonical } from '@/lib/seo/canonical';
 import { getURL } from '@/utils/helpers';
 import {
   GoogleTagManager,
@@ -32,10 +33,10 @@ const defaultDescription =
   'Discover and manage the best scholarship grants tailored for your education. ScholarshipTop helps students find funding opportunities worldwide.';
 const openGraphDescription =
   'Discover and manage thousands of scholarship grants.';
-const canonicalSiteUrl = getURL().replace(/\/+$/, '');
+const canonicalSiteUrl = getCanonical('/').replace(/\/+$/, '');
 
 export const metadata: Metadata = {
-  metadataBase: new URL(getURL()),
+  metadataBase: new URL(getCanonical('/')),
   title: {
     default: SITE_DEFAULT_TITLE,
     template: SITE_METADATA_TITLE_TEMPLATE

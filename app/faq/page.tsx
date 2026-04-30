@@ -3,12 +3,12 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
-import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 const faqDescription =
   'Answers to common questions about scholarships, how ScholarshipTop works, profile matching, saving scholarships, eligibility, and support.';
 
-const faqCanonical = getURL('faq');
+const faqCanonical = getCanonical('/faq');
 
 export const metadata: Metadata = {
   title: 'FAQ',

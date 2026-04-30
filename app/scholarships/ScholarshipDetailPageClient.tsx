@@ -114,6 +114,7 @@ import {
   scholarshipDeadlineHasPassed,
   SIMILAR_MAX
 } from '@/lib/scholarships/similarScholarships';
+import { getScholarshipDeadlineState } from '@/lib/scholarships/scholarshipDeadlineState';
 import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
 import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCurrentUserScholarshipMatchProfile';
@@ -192,6 +193,62 @@ function formatLastVerified(iso: string | null | undefined): string | null {
     month: 'short',
     day: 'numeric'
   });
+}
+
+function extractProviderNameFromMission(
+  mission: string | null | undefined
+): string | null {
+  const normalized = mission?.trim().replace(/\s+/g, ' ');
+  if (!normalized) return null;
+
+  const match = normalized.match(
+    /^([A-Z][A-Za-z0-9&'.’,-]*(?:\s+[A-Z][A-Za-z0-9&'.’,-]*){0,4})\s+(?:has|is|offers|supports)\b/
+  );
+  if (!match) return null;
+
+  return match[1].trim();
+}
+
+function formatScholarshipSourceLabel(
+  officialSourceName: string | null | undefined,
+  source: string | null | undefined
+): string | null {
+  const official = officialSourceName?.trim();
+  if (official) return official;
+
+  const raw = source?.trim();
+  if (!raw) return null;
+
+  return raw
+    .split(/[_-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+const BLOCKED_SOURCE_FALLBACK_LABELS = new Set([
+  'scholarshipscom',
+  'scholarshipamerica'
+]);
+
+function normalizeSourceFallbackLabel(value: string | null | undefined): string {
+  return value?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '') ?? '';
+}
+
+function shouldShowScholarshipSourceFallback(
+  officialSourceName: string | null | undefined,
+  source: string | null | undefined
+): boolean {
+  const official = officialSourceName?.trim();
+  if (official) {
+    return !BLOCKED_SOURCE_FALLBACK_LABELS.has(
+      normalizeSourceFallbackLabel(official)
+    );
+  }
+
+  const raw = source?.trim();
+  if (!raw) return false;
+  return !BLOCKED_SOURCE_FALLBACK_LABELS.has(normalizeSourceFallbackLabel(raw));
 }
 
 function payoutMethodDetailLabel(
@@ -501,13 +558,15 @@ function StatCard({
   primary,
   secondary,
   extra,
-  deadlineFooter
+  deadlineFooter,
+  notice
 }: {
   primary: string;
   secondary: string;
   extra?: React.ReactNode;
   /** Green calendar icon + label row (deadline card). */
   deadlineFooter?: boolean;
+  notice?: React.ReactNode;
 }) {
   return (
     <div className="relative flex h-full min-h-[6.5rem] flex-col justify-center rounded-xl border border-zinc-200/90 bg-white px-5 py-4 shadow-sm ring-1 ring-zinc-100/50">
@@ -525,6 +584,7 @@ function StatCard({
         {extra}
         <span>{secondary}</span>
       </p>
+      {notice ? <div className="mt-3">{notice}</div> : null}
     </div>
   );
 }
@@ -855,7 +915,12 @@ export default function ScholarshipDetailPageClient({
     winnerPaymentRaw
   );
 
-  const providerName = scholarship.provider?.trim();
+  const providerNameFromRecord = scholarship.provider?.trim();
+  const providerMissionRaw = scholarship.providerMission?.trim() ?? '';
+  const providerNameFromMission = providerNameFromRecord
+    ? null
+    : extractProviderNameFromMission(providerMissionRaw);
+  const providerName = providerNameFromRecord || providerNameFromMission || undefined;
   const providerSlugTrimmed = scholarship.providerSlug?.trim() ?? '';
   const providerProfileHref = providerSlugTrimmed
     ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
@@ -865,26 +930,43 @@ export default function ScholarshipDetailPageClient({
   const titleBlurPhrase = targetedCategoryLocked
     ? pickScholarshipLockedTitleBlurPhrase(scholarship.title, providerName)
     : null;
-  const providerMissionRaw = scholarship.providerMission?.trim() ?? '';
   const hasMission = Boolean(providerMissionRaw);
   const showMissionCompact =
     hasMission && providerMissionRaw.length > 0 && providerMissionRaw.length <= 420;
+  const showProviderMission =
+    hasMission &&
+    Boolean(providerName) &&
+    (!providerNameFromRecord || (hasSubscription && showMissionCompact));
   const providerUrlRaw = scholarship.providerUrl?.trim();
   const logoUrl = scholarship.providerLogo?.trim();
+  const showStandaloneProviderWebsiteRow =
+    Boolean(providerUrlRaw) &&
+    !providerName &&
+    !providerProfileHref &&
+    !logoUrl;
   const social = scholarship.socialLinks;
   const hasSocial = Boolean(
     social?.facebook || social?.instagram || social?.linkedin
   );
 
-  const showProviderSection =
+  const hasVisibleProviderContent =
     Boolean(providerName) ||
-    Boolean(providerUrlRaw) ||
-    Boolean(logoUrl) ||
-    hasSocial ||
-    hasMission;
+    Boolean(providerProfileHref) ||
+    showProviderMission;
+  const sourceFallbackLabel = formatScholarshipSourceLabel(
+    scholarship.officialSourceName,
+    scholarship.source
+  );
+  const showSourceFallbackBlock =
+    !hasVisibleProviderContent &&
+    Boolean(sourceFallbackLabel) &&
+    shouldShowScholarshipSourceFallback(
+      scholarship.officialSourceName,
+      scholarship.source
+    );
 
   /** Provider identity and external links are visible only with an active subscription. */
-  const providerNameLocked = Boolean(providerName) && !hasSubscription;
+  const providerNameLocked = Boolean(providerNameFromRecord) && !hasSubscription;
   const providerBlurPhrases = providerNameLocked
     ? buildScholarshipProviderBlurPhrases(scholarship)
     : [];
@@ -901,7 +983,9 @@ export default function ScholarshipDetailPageClient({
         })
       : text;
 
-  const detailDeadlinePassed = scholarshipDeadlineHasPassed(scholarship);
+  const detailDeadlineState = getScholarshipDeadlineState(scholarship);
+  const detailDeadlineNeedsNotice =
+    detailDeadlineState === 'expired' || detailDeadlineState === 'broken';
   const deadlineDisplay = getScholarshipDeadlineDisplayParts(scholarship);
   const deadlinePrimary = deadlineDisplay.primary;
   const deadlineSecondaryLine =
@@ -918,8 +1002,36 @@ export default function ScholarshipDetailPageClient({
   ) : null;
 
   const applyHref = scholarship.applyLink?.trim();
+  const officialApplicationHref = applyHref || scholarship.listingUrl?.trim();
   const detailApplyPrimaryClass =
     'inline-flex h-11 min-h-[2.75rem] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 sm:px-6 sm:text-base';
+  const providerWebsiteCta = providerUrlRaw && !providerProfileHref ? (
+    hasSubscription ? (
+      <a
+        href={providerUrlRaw}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={detailApplyPrimaryClass}
+      >
+        <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+        Provider website
+      </a>
+    ) : (
+      <button
+        type="button"
+        className={detailApplyPrimaryClass}
+        onClick={openPremiumPaywall}
+        title="Premium subscription required to visit the provider website"
+      >
+        <Lock
+          className="h-4 w-4 shrink-0 text-white stroke-white"
+          strokeWidth={2}
+          aria-hidden
+        />
+        Provider website
+      </button>
+    )
+  ) : null;
 
   const statusDisplay = scholarshipStatusDisplay(scholarship);
   const studyLevelsList = studyLevelsDisplayList(scholarship);
@@ -932,7 +1044,13 @@ export default function ScholarshipDetailPageClient({
 
   const supportEmail = scholarship.supportEmail?.trim();
   const supportPhone = scholarship.supportPhone?.trim();
-  const showSupport = Boolean(supportEmail) || Boolean(supportPhone);
+  const supportEmailRedacted = Boolean(scholarship.supportEmailRedacted);
+  const supportPhoneRedacted = Boolean(scholarship.supportPhoneRedacted);
+  const showSupport =
+    Boolean(supportEmail) ||
+    Boolean(supportPhone) ||
+    supportEmailRedacted ||
+    supportPhoneRedacted;
 
   const docs = scholarship.documentsRequired?.filter(Boolean) ?? [];
   const officialDocumentLinks = (scholarship.documentUrls ?? [])
@@ -1240,7 +1358,7 @@ export default function ScholarshipDetailPageClient({
                 })
               : scholarship.title}
           </h1>
-          {detailDeadlinePassed ? (
+          {detailDeadlineNeedsNotice ? (
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <ScholarshipExpiredBadge />
             </div>
@@ -1265,6 +1383,13 @@ export default function ScholarshipDetailPageClient({
               secondary={deadlineSecondaryLine ?? 'Scholarship deadline'}
               deadlineFooter
               extra={recurringExtra}
+              notice={
+                detailDeadlineNeedsNotice ? (
+                  <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium leading-snug text-amber-900">
+                    Deadline may have passed. Check the official provider page before applying.
+                  </p>
+                ) : null
+              }
             />
           ) : null}
           {hasAwardStat ? (
@@ -1443,6 +1568,26 @@ export default function ScholarshipDetailPageClient({
                     <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
                     {supportEmail}
                   </a>
+                ) : supportEmailRedacted ? (
+                  <button
+                    type="button"
+                    onClick={openPremiumPaywall}
+                    className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700"
+                    aria-label="Support email hidden. Upgrade to premium to see contact details."
+                  >
+                    <Lock
+                      className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
+                      strokeWidth={2}
+                      aria-hidden
+                    />
+                    <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+                    <span
+                      className={SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}
+                      aria-hidden
+                    >
+                      support@example.org
+                    </span>
+                  </button>
                 ) : null}
                 {supportPhone ? (
                   <a
@@ -1452,6 +1597,26 @@ export default function ScholarshipDetailPageClient({
                     <Phone className="h-4 w-4 shrink-0" strokeWidth={1.75} />
                     {supportPhone}
                   </a>
+                ) : supportPhoneRedacted ? (
+                  <button
+                    type="button"
+                    onClick={openPremiumPaywall}
+                    className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700"
+                    aria-label="Support phone hidden. Upgrade to premium to see contact details."
+                  >
+                    <Lock
+                      className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
+                      strokeWidth={2}
+                      aria-hidden
+                    />
+                    <Phone className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+                    <span
+                      className={SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}
+                      aria-hidden
+                    >
+                      (555) 555-5555
+                    </span>
+                  </button>
                 ) : null}
               </div>
             </div>
@@ -1917,7 +2082,7 @@ export default function ScholarshipDetailPageClient({
           </div>
         ) : null}
 
-        {showProviderSection ? (
+        {hasVisibleProviderContent ? (
           <div className="mt-10">
             <SectionLabel variant="support">About the provider</SectionLabel>
             <div className={scholarshipDetailCardSupportClass}>
@@ -1990,7 +2155,7 @@ export default function ScholarshipDetailPageClient({
                       </div>
                       <div className="min-w-0 flex-1">
                         {providerName ? (
-                          <p className="text-lg font-semibold text-zinc-900 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
+                          <p className="text-lg font-semibold text-emerald-800 underline decoration-emerald-600/40 underline-offset-4 transition group-hover:text-emerald-900">
                             {providerName}
                           </p>
                         ) : (
@@ -2037,7 +2202,7 @@ export default function ScholarshipDetailPageClient({
                       </p>
                     </div>
                   </button>
-                ) : (
+                ) : providerName || logoUrl || showStandaloneProviderWebsiteRow ? (
                   <div className="flex min-w-0 gap-3 sm:gap-4">
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
                       {logoUrl ? (
@@ -2063,41 +2228,45 @@ export default function ScholarshipDetailPageClient({
                         <p className="text-lg font-semibold text-zinc-900">
                           {providerName}
                         </p>
+                      ) : showStandaloneProviderWebsiteRow && providerUrlRaw ? (
+                        hasSubscription ? (
+                          <a
+                            href={providerUrlRaw}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex w-fit items-center justify-center gap-1.5 rounded-xl border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-700 shadow-sm transition hover:border-sky-200 hover:bg-sky-100"
+                          >
+                            <ExternalLink
+                              className="h-3.5 w-3.5 shrink-0"
+                              aria-hidden
+                            />
+                            Provider website
+                          </a>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={openPremiumPaywall}
+                            className="inline-flex w-fit items-center justify-center gap-1.5 rounded-xl border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-700 shadow-sm transition hover:border-sky-200 hover:bg-sky-100"
+                          >
+                            <Lock
+                              className="h-3.5 w-3.5 shrink-0"
+                              strokeWidth={2}
+                              aria-hidden
+                            />
+                            Provider website
+                          </button>
+                        )
                       ) : null}
                     </div>
                   </div>
-                )}
-                {providerUrlRaw ? (
-                  hasSubscription ? (
-                    <a
-                      href={providerUrlRaw}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex w-fit items-center gap-1 text-sm font-medium text-sky-700 underline-offset-2 hover:underline sm:ml-14"
-                    >
-                      <ExternalLink
-                        className="h-3.5 w-3.5 shrink-0"
-                        aria-hidden
-                      />
-                      Provider website
-                    </a>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={openPremiumPaywall}
-                      className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-sky-700 underline-offset-2 hover:underline sm:ml-14"
-                    >
-                      <Lock
-                        className="h-3.5 w-3.5 shrink-0"
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                      Provider website
-                    </button>
-                  )
+                ) : null}
+                {providerWebsiteCta ? (
+                  <div className="mt-3 w-full sm:ml-14 sm:max-w-sm">
+                    {providerWebsiteCta}
+                  </div>
                 ) : null}
               </div>
-              {showMissionCompact && hasSubscription ? (
+              {showProviderMission ? (
                 <p className="mt-4 text-sm leading-relaxed text-zinc-600">
                   {providerMissionRaw}
                 </p>
@@ -2144,6 +2313,20 @@ export default function ScholarshipDetailPageClient({
                   </div>
                 </div>
               ) : null}
+            </div>
+          </div>
+        ) : null}
+
+        {showSourceFallbackBlock && sourceFallbackLabel ? (
+          <div className="mt-10">
+            <SectionLabel variant="support">Source</SectionLabel>
+            <div className={scholarshipDetailCardSupportClass}>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">
+                Source
+              </p>
+              <p className="mt-1 text-lg font-semibold text-zinc-900">
+                {sourceFallbackLabel}
+              </p>
             </div>
           </div>
         ) : null}
@@ -2233,7 +2416,7 @@ export default function ScholarshipDetailPageClient({
         ) : null}
         </ScholarshipDetailGuestLockSection>
 
-        {applyHref || officialName || lastVerifiedLabel ? (
+        {officialApplicationHref || officialName || lastVerifiedLabel ? (
           <div className="mt-8 pb-0">
             <h2 className="mb-2 text-lg font-semibold tracking-tight text-zinc-900">
               Sponsor & application
@@ -2247,11 +2430,11 @@ export default function ScholarshipDetailPageClient({
                 </p>
               ) : null}
               <ul className="mt-4 flex list-none flex-col gap-3 p-0 sm:flex-row sm:items-stretch sm:gap-3">
-                {applyHref ? (
+                {officialApplicationHref ? (
                   <li className="min-w-0 flex-1 basis-0">
                     {hasSubscription ? (
                       <a
-                        href={applyHref}
+                        href={officialApplicationHref}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={detailApplyPrimaryClass}

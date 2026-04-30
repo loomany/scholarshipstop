@@ -3,7 +3,7 @@ import test from 'node:test';
 
 import { sortPreferDeadlineFirst } from '../relatedScholarshipSort';
 
-test('sortPreferDeadlineFirst puts items with deadline_text first', () => {
+test('sortPreferDeadlineFirst orders related items by deadline state', () => {
   const items = [
     { slug: 'a', title: 'A', score: 0, reason: 'r', deadline_text: null },
     {
@@ -11,10 +11,27 @@ test('sortPreferDeadlineFirst puts items with deadline_text first', () => {
       title: 'B',
       score: 0,
       reason: 'r',
-      deadline_text: 'March 1, 2026'
+      deadline_text: 'March 1, 2002'
     },
-    { slug: 'c', title: 'C', score: 0, reason: 'r', deadline_text: '  ' }
+    { slug: 'c', title: 'C', score: 0, reason: 'r', deadline_text: '  ' },
+    {
+      slug: 'd',
+      title: 'D',
+      score: 0,
+      reason: 'r',
+      deadline_text: 'December 31, 2099'
+    },
+    {
+      slug: 'e',
+      title: 'E',
+      score: 0,
+      reason: 'r',
+      deadline_text: 'Rolling deadline'
+    }
   ];
   const out = sortPreferDeadlineFirst(items);
-  assert.equal(out[0]!.slug, 'b');
+  assert.deepEqual(
+    out.map((item) => item.slug),
+    ['d', 'e', 'a', 'c', 'b']
+  );
 });

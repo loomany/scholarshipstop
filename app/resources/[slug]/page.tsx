@@ -20,6 +20,7 @@ import {
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
 import { injectH2H3IdsAndExtractToc } from '@/lib/content-hub/resourceArticleBodyToc';
@@ -84,15 +85,17 @@ export async function generateMetadata({
     post.meta_title?.trim() || post.title?.trim() || 'Article';
   const description = post.meta_description?.trim() || undefined;
   const ogImage = post.cover_image_url?.trim();
+  const canonical = getCanonical(resourcesArticlePath(slug));
   return {
     title,
     description,
     alternates: {
-      canonical: resourcesArticlePath(slug)
+      canonical
     },
     openGraph: {
       title,
       description,
+      url: canonical,
       ...(ogImage ? { images: [{ url: ogImage }] } : {})
     }
   };

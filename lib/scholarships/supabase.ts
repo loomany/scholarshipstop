@@ -17,6 +17,7 @@ import {
   deadlineTextAllowsCalendarSemantics,
   isPhantomCalendarYear2001
 } from '@/lib/scholarships/scholarshipDeadlineTrust';
+import { compareScholarshipsByDeadlineState } from '@/lib/scholarships/scholarshipDeadlineState';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
 
@@ -839,41 +840,10 @@ export async function fetchActiveScholarshipsByInstitutionIdForListing(
   if (error) throw new Error(error.message);
 
   const rows = (data ?? []) as unknown as ScholarshipRow[];
-  const now = Date.now();
-  const withStatus = rows.map((row) => {
-    const daysUntil =
-      row.days_until_deadline != null && !Number.isNaN(row.days_until_deadline)
-        ? row.days_until_deadline
-        : null;
-    const textAllowsCalendar = deadlineTextAllowsCalendarSemantics(
-      row.deadline_text ?? undefined
-    );
-    const atIso = row.deadline_date
-      ? `${row.deadline_date}T12:00:00.000Z`
-      : undefined;
-    const phantom =
-      row.deadline_date != null &&
-      isPhantomCalendarYear2001(atIso, row.deadline_text ?? undefined);
-    const deadlineMs =
-      row.deadline_date && textAllowsCalendar && !phantom
-        ? Date.parse(`${row.deadline_date}T23:59:59.999Z`)
-        : null;
-    const isExpired =
-      textAllowsCalendar && !phantom
-        ? daysUntil != null
-          ? daysUntil < 0
-          : deadlineMs != null
-            ? deadlineMs < now
-            : false
-        : false;
-    return { row, isExpired };
-  });
-
-  const liveRows = withStatus.filter((item) => !item.isExpired).map((item) => item.row);
-  const expiredRows = withStatus.filter((item) => item.isExpired).map((item) => item.row);
-  const chosen = (liveRows.length > 0 ? liveRows : expiredRows).slice(0, limit);
-
-  return chosen.map((row) => mapScholarshipRow(row));
+  return rows
+    .map((row) => mapScholarshipRow(row))
+    .sort(compareScholarshipsByDeadlineState)
+    .slice(0, limit);
 }
 
 /** One recent active scholarship for email/Telegram preview cards (service role). */

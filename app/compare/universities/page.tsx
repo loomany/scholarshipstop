@@ -16,6 +16,7 @@ import {
 import { buildUniversityCompareItems } from '@/lib/seo/compareIndexData';
 import { fetchAllPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
 import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 3600;
 
@@ -32,15 +33,17 @@ export function generateMetadata({
   const queryState = parseCompareIndexSearchParams(searchParams);
   const hasNonCanonicalView =
     queryState.page > 1 || queryState.q.length > 0 || queryState.sort !== 'latest';
+  const canonical = getCanonical(basePath);
 
   return {
     title: `${baseTitle} | ScholarshipTop`,
     description: baseDescription,
     openGraph: {
       title: `${baseTitle} | ScholarshipTop`,
-      description: baseDescription
+      description: baseDescription,
+      url: canonical
     },
-    alternates: { canonical: basePath },
+    alternates: { canonical },
     ...(hasNonCanonicalView
       ? {
           robots: {

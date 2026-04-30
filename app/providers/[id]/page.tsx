@@ -21,6 +21,7 @@ import {
   parseProviderProfilePageParam,
   PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE
 } from '@/lib/providers/providerProfilePagination';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 60;
 
@@ -63,13 +64,14 @@ function providerProfileSourceLinks(urls: string[]): string[] {
     if (typeof raw !== 'string') continue;
     const u = normalizeAiSourceHref(raw).trim();
     if (!u) continue;
+    let key: string;
     try {
       const parsed = new URL(u);
       if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') continue;
+      key = parsed.hostname.replace(/^www\./i, '').toLowerCase();
     } catch {
       continue;
     }
-    const key = u.split('#')[0]?.toLowerCase() ?? u.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
     out.push(u);
@@ -102,7 +104,7 @@ export async function generateMetadata({
     return { title: 'Provider' };
   }
   const profilePath = `/providers/${encodeURIComponent(data.slug)}`;
-  const canonicalUrl = getURL(profilePath.replace(/^\//, ''));
+  const canonicalUrl = getCanonical(profilePath);
   const listingPage = parseProviderProfilePageParam(searchParams?.page);
   const isPaginatedListing = listingPage > 1;
   const pageTitleMeta = `${data.displayName} | Scholarship Provider`;

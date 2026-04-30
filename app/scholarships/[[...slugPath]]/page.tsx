@@ -6,6 +6,7 @@ import { buildScholarshipHubRouteMetadata } from '@/app/scholarships/scholarship
 import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarshipLongTailPresets';
 import { scholarshipHubQueryStringFromNextSearchParamsRecord } from '@/app/scholarships/scholarshipHubCanonicalQueryString';
 import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
 
@@ -31,8 +32,10 @@ export async function generateMetadata({
   }
   const hasNonCanonicalQuery = isSeoNoiseQuery(searchParams);
   if (segments.length > 0) {
+    const canonical = getCanonical(`/scholarships/${segments.join('/')}`);
     return hasNonCanonicalQuery
       ? {
+          alternates: { canonical },
           robots: {
             index: false,
             follow: true
@@ -41,10 +44,17 @@ export async function generateMetadata({
       : {};
   }
 
+  const canonical = getCanonical('/scholarships');
   return {
     title: 'Find Scholarships',
     description: SCHOLARSHIPS_ROOT_DESCRIPTION,
-    alternates: { canonical: '/scholarships' },
+    alternates: { canonical },
+    openGraph: {
+      title: 'Find Scholarships',
+      description: SCHOLARSHIPS_ROOT_DESCRIPTION,
+      url: canonical,
+      type: 'website'
+    },
     ...(hasNonCanonicalQuery
       ? {
           robots: {

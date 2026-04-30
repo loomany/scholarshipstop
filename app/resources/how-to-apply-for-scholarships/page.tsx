@@ -5,21 +5,24 @@ import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCa
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
 import { resourceGuideHref } from '@/lib/scholarships/resourceGuideRoutes';
+import { getCanonical } from '@/lib/seo/canonical';
 
 const hrefDeadlines = resourceGuideHref('scholarship-deadlines-explained');
 const hrefCombine = resourceGuideHref('combine-multiple-scholarships');
+const canonical = getCanonical('/resources/how-to-apply-for-scholarships');
 
 export const metadata: Metadata = {
   title: 'How to Apply for Scholarships in 2026',
   description:
     'Step-by-step guide on how to apply for scholarships: where to look, what to prepare, mistakes to skip, and tips to submit stronger applications and improve your odds of funding.',
   alternates: {
-    canonical: '/resources/how-to-apply-for-scholarships'
+    canonical
   },
   openGraph: {
     title: 'How to Apply for Scholarships in 2026',
     description:
-      'Step-by-step guide on how to apply for scholarships: where to look, what to prepare, mistakes to skip, and tips to submit stronger applications and improve your odds of funding.'
+      'Step-by-step guide on how to apply for scholarships: where to look, what to prepare, mistakes to skip, and tips to submit stronger applications and improve your odds of funding.',
+    url: canonical
   }
 };
 

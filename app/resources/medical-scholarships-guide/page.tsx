@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
+import { getCanonical } from '@/lib/seo/canonical';
 
 const hrefMedicalCategory = '/scholarships/category/medical';
 const hrefMatches = '/scholarships/hub/matches';
@@ -10,18 +11,20 @@ const hrefEasyApply = '/scholarships/hub/easy-apply';
 const hrefEssays = '/essays';
 const hrefApplyGuide = '/resources/how-to-apply-for-scholarships';
 const hrefDeadlines = '/resources/scholarship-deadlines-explained';
+const canonical = getCanonical('/resources/medical-scholarships-guide');
 
 export const metadata: Metadata = {
   title: 'Medical Scholarships Guide for Healthcare Students',
   description:
     'A practical guide to medical and healthcare scholarships: where to look, how to qualify, what materials to prepare, and how to choose stronger applications.',
   alternates: {
-    canonical: '/resources/medical-scholarships-guide'
+    canonical
   },
   openGraph: {
     title: 'Medical Scholarships Guide for Healthcare Students',
     description:
-      'A practical guide to medical and healthcare scholarships: where to look, how to qualify, what materials to prepare, and how to choose stronger applications.'
+      'A practical guide to medical and healthcare scholarships: where to look, how to qualify, what materials to prepare, and how to choose stronger applications.',
+    url: canonical
   }
 };
 

@@ -26,6 +26,7 @@ import {
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
 
@@ -45,12 +46,13 @@ export function generateMetadata({
     queryState.categoryId != null ||
     queryState.subcategoryIds.size > 0 ||
     queryState.sort !== 'latest';
+  const canonical = getCanonical(RESOURCES_SECTION_PATH);
 
   return {
     title: baseTitle,
     description: baseDescription,
-    openGraph: { title: baseTitle, description: baseDescription },
-    alternates: { canonical: RESOURCES_SECTION_PATH },
+    openGraph: { title: baseTitle, description: baseDescription, url: canonical },
+    alternates: { canonical },
     ...(hasNonCanonicalView
       ? {
           robots: {

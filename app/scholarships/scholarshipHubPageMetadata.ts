@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
-import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 type HubSeoCopy = { title: string; description: string };
 
@@ -70,13 +70,13 @@ export function buildScholarshipHubRouteMetadata(opts: {
   const key = opts.hubSegment.trim().toLowerCase();
   const copy = SCHOLARSHIP_HUB_SEGMENT_SEO[key] ?? FALLBACK_HUB;
   const path = `/scholarships/hub/${encodeURIComponent(opts.hubSegment)}`;
-  const canonicalUrl = getURL(path.replace(/^\//, ''));
+  const canonicalUrl = getCanonical(path);
   const nonClean = scholarshipHubListingQueryIsNonCanonical(opts.searchParams);
 
   return {
     title: copy.title,
     description: copy.description,
-    alternates: { canonical: path },
+    alternates: { canonical: canonicalUrl },
     robots: nonClean
       ? { index: false, follow: true }
       : { index: true, follow: true },

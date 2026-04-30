@@ -30,6 +30,7 @@ import {
 import { getRelatedScholarshipsForEssayGuide } from '@/lib/essays/relatedScholarshipsForEssayGuide';
 import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
 
@@ -188,13 +189,13 @@ export async function generateMetadata({
     `How to write a strong essay for your scholarship application: ${title}`;
   const og = essay.hero_image_url?.trim();
   const path = essayHubArticlePath(slug);
-  const url = getURL(path);
+  const url = getCanonical(path);
   const published = essay.created_at || undefined;
   const modified = essay.updated_at || essay.created_at || undefined;
   return {
     title,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: url },
     openGraph: {
       type: 'article',
       url,

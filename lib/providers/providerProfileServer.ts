@@ -13,6 +13,7 @@ import {
   mapScholarshipRow,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
+import { compareScholarshipsByDeadlineState } from '@/lib/scholarships/scholarshipDeadlineState';
 import { filterOutCompetitorAggregatorUrls } from '@/lib/providers/enrichProviderDataCore';
 import type { Database, Json } from '@/types_db';
 import { createPublicClient } from '@/utils/supabase/public';
@@ -186,9 +187,9 @@ export async function loadProviderProfilePage(
           .range(offset, offset + pageSize - 1)
       : { data: [] as ScholarshipRow[] };
 
-  const scholarships = (scholarshipRows ?? []).map((r) =>
-    mapScholarshipRow(r as ScholarshipRow)
-  );
+  const scholarships = (scholarshipRows ?? [])
+    .map((r) => mapScholarshipRow(r as ScholarshipRow))
+    .sort(compareScholarshipsByDeadlineState);
 
   const { data: similarRowsRaw } = await supabase
     .from(PROVIDER_STATS)

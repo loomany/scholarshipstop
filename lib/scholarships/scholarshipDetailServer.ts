@@ -8,6 +8,8 @@ export function redactPremiumScholarshipFields(
     ...scholarship,
     premiumFieldsRedacted: true,
     providerUrl: undefined,
+    supportEmailRedacted: Boolean(scholarship.supportEmail?.trim()),
+    supportPhoneRedacted: Boolean(scholarship.supportPhone?.trim()),
     supportEmail: null,
     supportPhone: null
   };

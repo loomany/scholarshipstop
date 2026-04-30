@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
+import { getCanonical } from '@/lib/seo/canonical';
 
 const hrefInternationalHub = '/scholarships/hub/international-friendly';
 const hrefMatches = '/scholarships/hub/matches';
@@ -10,18 +11,20 @@ const hrefEasyApply = '/scholarships/hub/easy-apply';
 const hrefEssays = '/essays';
 const hrefApplyGuide = '/resources/how-to-apply-for-scholarships';
 const hrefDeadlines = '/resources/scholarship-deadlines-explained';
+const canonical = getCanonical('/resources/scholarships-for-international-students-guide');
 
 export const metadata: Metadata = {
   title: 'Scholarships for International Students: Practical Guide',
   description:
     'A practical guide for international students looking for scholarships: eligibility checks, documents, essays, deadlines, and how to use international-friendly listings.',
   alternates: {
-    canonical: '/resources/scholarships-for-international-students-guide'
+    canonical
   },
   openGraph: {
     title: 'Scholarships for International Students: Practical Guide',
     description:
-      'A practical guide for international students looking for scholarships: eligibility checks, documents, essays, deadlines, and how to use international-friendly listings.'
+      'A practical guide for international students looking for scholarships: eligibility checks, documents, essays, deadlines, and how to use international-friendly listings.',
+    url: canonical
   }
 };
 

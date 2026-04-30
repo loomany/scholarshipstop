@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 
 import { homePrimaryCtaClass } from '@/components/home/homeMarketingCtaClasses';
 import { SiteFaqAccordion, type SiteFaqItem } from '@/components/ui/SiteFaqAccordion';
-import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 const container = 'mx-auto w-full max-w-7xl';
 
@@ -20,7 +20,7 @@ const h2Section =
 const pageDescription =
   'Find scholarships open to international students and F1 visa holders in the USA. Filter by eligibility, country, and degree level. Updated listings with official application links.';
 
-const pageCanonical = getURL('international-students');
+const pageCanonical = getCanonical('/international-students');
 const getScholarshipsCtaPath = '/get-scholarships';
 
 export const metadata: Metadata = {

@@ -31,6 +31,7 @@ import { createPublicClient } from '@/utils/supabase/public';
 import { getURL } from '@/utils/helpers';
 import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
 import { buildScholarshipListingJsonLd } from '@/app/scholarships/scholarshipListingJsonLd';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
 
@@ -82,13 +83,14 @@ export async function generateMetadata({
   const canonicalSlug = id ?? lower;
   const title = categoryListingMetaTitle(id, lower);
   const description = categoryListingMetaDescription(id, lower);
+  const canonical = getCanonical(`/scholarships/category/${canonicalSlug}`);
   const meta: Metadata = {
     title,
     description,
-    openGraph: { title, description },
+    openGraph: { title, description, url: canonical },
     twitter: { card: 'summary_large_image', title, description },
     alternates: {
-      canonical: `/scholarships/category/${canonicalSlug}`
+      canonical
     }
   };
   if (isSeoNoiseQuery(searchParams)) {
@@ -103,12 +105,16 @@ export async function generateMetadata({
     const live = await evaluateCategorySeoListingThin(canonicalSlug);
     if (live.thinListing || live.broadFallbackNoindex) {
       meta.robots = { index: false, follow: true };
-      meta.alternates = {
-        canonical: seoThinCanonicalHref({
+      const thinCanonical = getCanonical(
+        seoThinCanonicalHref({
           kind: 'category',
           canonicalPath: canonicalSlug
         })
+      );
+      meta.alternates = {
+        canonical: thinCanonical
       };
+      meta.openGraph = { title, description, url: thinCanonical };
     }
   } catch {
     /* ignore */

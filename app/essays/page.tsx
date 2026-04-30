@@ -22,6 +22,7 @@ import {
   essayHubArticlePath
 } from '@/lib/essays/essayHubSection';
 import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
 
@@ -40,12 +41,13 @@ export function generateMetadata({
     queryState.q.length > 0 ||
     queryState.categoryKey != null ||
     queryState.sort !== 'latest';
+  const canonical = getCanonical(ESSAYS_SECTION_PATH);
 
   return {
     title: baseTitle,
     description: baseDescription,
-    openGraph: { title: baseTitle, description: baseDescription },
-    alternates: { canonical: ESSAYS_SECTION_PATH },
+    openGraph: { title: baseTitle, description: baseDescription, url: canonical },
+    alternates: { canonical },
     ...(hasNonCanonicalView
       ? {
           robots: {

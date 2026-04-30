@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
-import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 const container = 'mx-auto w-full max-w-7xl';
 
@@ -30,7 +30,7 @@ const heroPrimaryCtaClass =
 const orgDescription =
   'ScholarshipTop connects universities and foundations with motivated students worldwide. Publish your grants in one trusted place and reach candidates who are actively searching for funding.';
 
-const pageCanonical = getURL('for-organizations');
+const pageCanonical = getCanonical('/for-organizations');
 
 export const metadata: Metadata = {
   title: 'For organizations',

@@ -354,15 +354,61 @@ def _requirements_html_and_plain(
     return html_out, plain
 
 
-def _guess_provider_from_intro(soup: BeautifulSoup) -> str | None:
-    first_p = soup.select_one(".scholarship-content__intro-text p")
-    if not first_p:
+_PROVIDER_IDENTITY_VERBS_RE = (
+    r"has\s+established|has\s+created|is\s+offering|offers|supports"
+)
+_PROVIDER_IDENTITY_BLOCKLIST = {
+    "scholarship america",
+    "scholars apply",
+    "scholarsapply",
+}
+_PROVIDER_IDENTITY_PROGRAM_RE = re.compile(
+    r"\b(scholarship|program|application|award|grant|fellowship)\b",
+    flags=re.I,
+)
+
+
+def _clean_provider_identity_guess(value: str | None) -> str | None:
+    if not value:
         return None
-    text = first_p.get_text(strip=True)
-    m = re.match(r"^The\s+(.+?)\s+has\s+established\b", text, flags=re.I)
+    name = re.sub(r"\s+", " ", value).strip(" \t\n\r\"'“”‘’.,;:")
+    if not name:
+        return None
+    if name.lower() in _PROVIDER_IDENTITY_BLOCKLIST:
+        return None
+    if _PROVIDER_IDENTITY_PROGRAM_RE.search(name):
+        return None
+    words = [w for w in re.split(r"\s+", name) if w]
+    if len(words) < 1 or len(words) > 5:
+        return None
+    return name
+
+
+def _guess_provider_from_identity_text(text: str | None) -> str | None:
+    if not text:
+        return None
+    single_line = re.sub(r"\s+", " ", text).strip()
+    m = re.match(
+        rf"^(?:The\s+)?(.{{2,100}}?)\s+(?:{_PROVIDER_IDENTITY_VERBS_RE})\b",
+        single_line,
+        flags=re.I,
+    )
     if m:
-        return m.group(1).strip()
+        return _clean_provider_identity_guess(m.group(1))
     return None
+
+
+def _guess_provider_from_intro(
+    soup: BeautifulSoup,
+    provider_mission: str | None = None,
+) -> str | None:
+    first_p = soup.select_one(".scholarship-content__intro-text p")
+    intro_guess = _guess_provider_from_identity_text(
+        first_p.get_text(" ", strip=True) if first_p else None
+    )
+    if intro_guess:
+        return intro_guess
+    return _guess_provider_from_identity_text(provider_mission)
 
 
 def _first_http_link_outside_sa(intro: Tag | None) -> str | None:
@@ -622,7 +668,7 @@ def parse_detail_page(soup: BeautifulSoup, page_url: str) -> dict[str, Any]:
     hero = soup.select_one(".mgpb-hero__description.wysiwyg")
     out["provider_mission"] = _text_or_none(hero)
 
-    guessed = _guess_provider_from_intro(soup)
+    guessed = _guess_provider_from_intro(soup, out["provider_mission"])
     if guessed:
         out["provider_name"] = guessed
 

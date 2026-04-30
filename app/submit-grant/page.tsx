@@ -5,12 +5,12 @@ import { Building, FileText, HeartHandshake, Target } from 'lucide-react';
 
 import PartnerRequestAccess from '@/components/submit-grant/PartnerRequestAccess';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
-import { getURL } from '@/utils/helpers';
+import { getCanonical } from '@/lib/seo/canonical';
 
 const description =
   'Request a verified organization account on ScholarshipTop. Access your partner dashboard to publish and manage scholarship programs.';
 
-const canonical = getURL('submit-grant');
+const canonical = getCanonical('/submit-grant');
 
 export const metadata: Metadata = {
   title: 'Request an Organization Account',
