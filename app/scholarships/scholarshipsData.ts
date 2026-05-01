@@ -343,6 +343,66 @@ function stripDeadlineTimeText(text: string): string {
     .trim();
 }
 
+function rawDeadlineDisplayParts(text: string): {
+  primary: string;
+  secondary: string | null;
+} {
+  const cleaned = stripDeadlineTimeText(text).replace(/\s+/g, ' ').trim();
+  const annual = /\bannual(?:ly)?\b/i.test(cleaned);
+  const monthLookup: Record<string, string> = {
+    jan: 'Jan',
+    january: 'Jan',
+    feb: 'Feb',
+    february: 'Feb',
+    mar: 'Mar',
+    march: 'Mar',
+    apr: 'Apr',
+    april: 'Apr',
+    may: 'May',
+    jun: 'Jun',
+    june: 'Jun',
+    jul: 'Jul',
+    july: 'Jul',
+    aug: 'Aug',
+    august: 'Aug',
+    sep: 'Sep',
+    sept: 'Sep',
+    september: 'Sep',
+    oct: 'Oct',
+    october: 'Oct',
+    nov: 'Nov',
+    november: 'Nov',
+    dec: 'Dec',
+    december: 'Dec'
+  };
+  const dayFirst = cleaned.match(
+    /\b(?:before|by|due(?:\s+date)?|deadline)?\s*(\d{1,2})(?:st|nd|rd|th)?\s*([A-Za-z]{3,9})\b/i
+  );
+  const monthFirst = cleaned.match(
+    /\b([A-Za-z]{3,9})\s*(\d{1,2})(?:st|nd|rd|th)?\b/i
+  );
+  const match = dayFirst
+    ? { day: dayFirst[1], month: dayFirst[2] }
+    : monthFirst
+      ? { day: monthFirst[2], month: monthFirst[1] }
+      : null;
+  const month = match ? monthLookup[match.month.toLowerCase()] : null;
+  if (month && match) {
+    return {
+      primary: `${month} ${Number(match.day)}`,
+      secondary: annual ? 'Annual deadline' : null
+    };
+  }
+  return {
+    primary: cleaned
+      .replace(/\s*\((?:annual|annually)\)\s*/gi, ' ')
+      .replace(/\bannual(?:ly)?\b/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim(),
+    secondary: annual ? 'Annual deadline' : null
+  };
+}
+
 /** Supabase maps `deadline_date` → `deadlineAt` with a synthetic UTC clock when time is unknown. */
 export function isScholarshipDeadlineDateOnlyIso(iso: string | undefined): boolean {
   const t = iso?.trim();
@@ -425,7 +485,7 @@ export function getScholarshipDeadlineDisplayParts(s: Scholarship): {
   }
   const raw = s.deadline?.trim();
   if (raw && raw !== '—') {
-    return { primary: stripDeadlineTimeText(raw), secondary: null };
+    return rawDeadlineDisplayParts(raw);
   }
   return { primary: '—', secondary: null };
 }

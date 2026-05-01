@@ -30,6 +30,81 @@ function normalizeProviderAiDescription(
   return trimmed ? trimmed : null;
 }
 
+function normalizeProviderText(value: string | null | undefined): string | null {
+  const normalized = value?.trim().replace(/\s+/g, ' ');
+  return normalized ? normalized : null;
+}
+
+function isLikelyProviderDisplayName(value: string | null | undefined): value is string {
+  const normalized = normalizeProviderText(value);
+  if (!normalized) return false;
+  if (normalized.length > 120) return false;
+  if (normalized.split(/\s+/).length > 14) return false;
+  if (/[.!?]\s/.test(normalized) || /[•:]/.test(normalized)) return false;
+  return true;
+}
+
+function hostLabelFromUrl(value: string | null | undefined): string | null {
+  const raw = value?.trim();
+  if (!raw) return null;
+  try {
+    const parsed = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
+    const host = parsed.hostname.replace(/^www\./i, '');
+    return host || null;
+  } catch {
+    return null;
+  }
+}
+
+function titleCaseSlug(value: string): string {
+  return value
+    .replace(/[-_]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function providerDisplayNameFallback(slug: string, officialUrl: string | null): string {
+  const host = hostLabelFromUrl(officialUrl);
+  if (isLikelyProviderDisplayName(host)) return host;
+
+  const fromSlug = titleCaseSlug(slug);
+  return isLikelyProviderDisplayName(fromSlug) ? fromSlug : 'Scholarship provider';
+}
+
+function resolveProviderDisplayName({
+  providerDisplayName,
+  statDisplayName,
+  slug,
+  officialUrl
+}: {
+  providerDisplayName: string | null | undefined;
+  statDisplayName: string | null | undefined;
+  slug: string;
+  officialUrl: string | null | undefined;
+}): string {
+  const candidates = [providerDisplayName, statDisplayName];
+  for (const candidate of candidates) {
+    if (isLikelyProviderDisplayName(candidate)) {
+      return normalizeProviderText(candidate)!;
+    }
+  }
+  return providerDisplayNameFallback(slug, officialUrl ?? null);
+}
+
+function displayNameDescriptionFallback(
+  providerDisplayName: string | null | undefined,
+  statDisplayName: string | null | undefined
+): string | null {
+  for (const candidate of [providerDisplayName, statDisplayName]) {
+    const normalized = normalizeProviderText(candidate);
+    if (normalized && !isLikelyProviderDisplayName(normalized)) {
+      return normalized;
+    }
+  }
+  return null;
+}
+
 function faqFromJson(value: Json | null | undefined): ProviderFaqItem[] {
   if (!value || !Array.isArray(value)) return [];
   const out: ProviderFaqItem[] = [];
@@ -154,8 +229,6 @@ export async function loadProviderProfilePage(
   if (statError || !statRow) return null;
 
   const totalScholarshipCount = Number(statRow.scholarship_count) || 0;
-  const fallbackName =
-    (statRow.display_name && statRow.display_name.trim()) || slugForScholarships;
 
   if (!providerRow) {
     const { data: bySlug } = await supabase
@@ -167,9 +240,16 @@ export async function loadProviderProfilePage(
   }
 
   const providerId: string | null = providerRow?.id ?? null;
-  const displayName = providerRow?.display_name ?? fallbackName;
   const officialUrl = providerRow?.official_url ?? null;
-  const aiDescription = effectiveProviderDescription(providerRow);
+  const displayName = resolveProviderDisplayName({
+    providerDisplayName: providerRow?.display_name,
+    statDisplayName: statRow.display_name,
+    slug: slugForScholarships,
+    officialUrl
+  });
+  const aiDescription =
+    effectiveProviderDescription(providerRow) ??
+    displayNameDescriptionFallback(providerRow?.display_name, statRow.display_name);
   /** Display-only — omit competitor aggregators even if legacy rows still store them in JSON. */
   const aiSources = filterOutCompetitorAggregatorUrls(
     effectiveProviderSources(providerRow)
@@ -245,8 +325,12 @@ export async function loadProviderProfilePage(
     .slice(0, 4)
     .map((r) => ({
       slug: r.slug,
-      displayName:
-        (r.display_name && r.display_name.trim()) || r.slug,
+      displayName: resolveProviderDisplayName({
+        providerDisplayName: null,
+        statDisplayName: r.display_name,
+        slug: r.slug,
+        officialUrl: null
+      }),
       scholarshipCount: r.scholarship_count ?? 0
     }));
 

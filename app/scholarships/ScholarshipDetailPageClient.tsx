@@ -212,6 +212,25 @@ function extractProviderNameFromMission(
   return match[1].trim();
 }
 
+function isLikelyProviderName(value: string | null | undefined): value is string {
+  const normalized = value?.trim().replace(/\s+/g, ' ');
+  if (!normalized) return false;
+  if (normalized.length > 120) return false;
+  if (normalized.split(/\s+/).length > 14) return false;
+  if (/[.!?]\s/.test(normalized) || /[•:]/.test(normalized)) return false;
+  return true;
+}
+
+function compactProviderDescription(value: string): string {
+  const normalized = value.trim().replace(/\s+/g, ' ');
+  if (normalized.length <= 320) return normalized;
+
+  const firstSentence = normalized.match(/^.{80,260}?[.!?](?=\s|$)/)?.[0];
+  if (firstSentence) return firstSentence.trim();
+
+  return `${normalized.slice(0, 317).trimEnd()}...`;
+}
+
 function formatScholarshipSourceLabel(
   officialSourceName: string | null | undefined,
   source: string | null | undefined
@@ -1085,8 +1104,19 @@ export default function ScholarshipDetailPageClient({
     winnerPaymentRaw
   );
 
-  const providerNameFromRecord = scholarship.provider?.trim();
-  const providerMissionRaw = scholarship.providerMission?.trim() ?? '';
+  const providerNameFromRecordRaw = scholarship.provider?.trim();
+  const providerNameFromRecord = isLikelyProviderName(providerNameFromRecordRaw)
+    ? providerNameFromRecordRaw
+    : undefined;
+  const providerDescriptionFromRecord =
+    providerNameFromRecordRaw && !providerNameFromRecord
+      ? providerNameFromRecordRaw
+      : null;
+  const providerMissionRaw =
+    scholarship.providerMission?.trim() || providerDescriptionFromRecord || '';
+  const providerMissionDisplay = providerMissionRaw
+    ? compactProviderDescription(providerMissionRaw)
+    : '';
   const providerNameFromMission = providerNameFromRecord
     ? null
     : extractProviderNameFromMission(providerMissionRaw);
@@ -1105,7 +1135,7 @@ export default function ScholarshipDetailPageClient({
     hasMission && providerMissionRaw.length > 0 && providerMissionRaw.length <= 420;
   const showProviderMission =
     hasMission &&
-    Boolean(providerName) &&
+    (Boolean(providerName) || Boolean(providerDescriptionFromRecord)) &&
     (!providerNameFromRecord || (hasSubscription && showMissionCompact));
   const providerUrlRaw = scholarship.providerUrl?.trim();
   const logoUrl = scholarship.providerLogo?.trim();
@@ -2443,7 +2473,7 @@ export default function ScholarshipDetailPageClient({
               </div>
               {showProviderMission ? (
                 <p className="mt-4 text-sm leading-relaxed text-zinc-600">
-                  {providerMissionRaw}
+                  {providerMissionDisplay}
                 </p>
               ) : null}
               {social && hasSocial && hasSubscription ? (
