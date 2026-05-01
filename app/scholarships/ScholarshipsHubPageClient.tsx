@@ -2965,13 +2965,22 @@ function ScholarshipsPageInner({
     scholarshipsForCards.length === 0 &&
     !hasError &&
     (listQuery.isPending || listQuery.isFetching || !listQuery.isFetched);
-  const guestBestLandingSeedPending =
-    hubTreatAsGuest &&
+  const seededBestCurrentListResponsePending =
+    activeTab === 'best-recommendation' &&
+    transientBestRecommendationProfileSeed != null &&
+    scholarshipsForCards.length === 0 &&
+    !hasError &&
+    (!listQuery.data ||
+      listQuery.data.__clientRequestKey !== hubListDataRequestKey ||
+      listQuery.isPending ||
+      listQuery.isFetching);
+  const bestLandingSeedPending =
     activeTab === 'best-recommendation' &&
     !landingQuizSeedHydrated;
   const blockingInitialLoad =
     (isLoading && !hasInitialLoadCompleted) ||
-    guestBestLandingSeedPending ||
+    bestLandingSeedPending ||
+    seededBestCurrentListResponsePending ||
     guestBestSeededListPending;
   const blockingApplyLoad = isApplyingMoreFilters || isApplyingListControls;
   const blockingListLoad = blockingInitialLoad || blockingApplyLoad;

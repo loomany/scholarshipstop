@@ -105,6 +105,32 @@ async function waitForCanadaBestReady(page: Page, phase: string): Promise<void> 
   });
 }
 
+async function waitForCanadaBestReadyWithoutZeroFlash(
+  page: Page,
+  phase: string
+): Promise<void> {
+  const deadline = Date.now() + 45_000;
+  let lastText = '';
+  while (Date.now() < deadline) {
+    const text = await bodyText(page).catch(() => '');
+    lastText = text;
+    if (/Found 0 scholarships/i.test(text)) {
+      throw new Error(
+        `Canada best recommendation flashed Found 0 during ${phase}. Visible text: ${text
+          .replace(/\s+/g, ' ')
+          .slice(0, 1200)}`
+      );
+    }
+    if (canadaBestReadyFromText(text)) return;
+    await page.waitForTimeout(100);
+  }
+  throw new Error(
+    `Canada best recommendation did not become ready during ${phase}. Visible text: ${lastText
+      .replace(/\s+/g, ' ')
+      .slice(0, 1200)}`
+  );
+}
+
 async function runCanadaFirstLoadRegression(page: Page): Promise<CheckResult> {
   const email = smokeEmail('canada');
   await page.goto(url('/get-scholarships'), { waitUntil: 'domcontentloaded' });
@@ -116,10 +142,10 @@ async function runCanadaFirstLoadRegression(page: Page): Promise<CheckResult> {
   await page.getByRole('button', { name: /See scholarship matches/i }).click();
   await page.waitForURL(/\/scholarships\/hub\/best-recommendation/, { timeout: 30_000 });
 
-  await waitForCanadaBestReady(page, 'first load after quiz redirect');
+  await waitForCanadaBestReadyWithoutZeroFlash(page, 'first load after quiz redirect');
   const beforeReload = await bodyText(page);
   await page.reload({ waitUntil: 'domcontentloaded' });
-  await waitForCanadaBestReady(page, 'manual reload');
+  await waitForCanadaBestReadyWithoutZeroFlash(page, 'manual reload');
   const afterReload = await bodyText(page);
 
   const beforeHasExpected = beforeReload.includes(`of ${CANADA_EXPECTED_COUNT} scholarships`);
