@@ -23,6 +23,12 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
 
+  if (host === 'www.scholarshiptop.com') {
+    const url = request.nextUrl.clone();
+    url.hostname = 'scholarshiptop.com';
+    return NextResponse.redirect(url, 301);
+  }
+
   if (
     host === 'iq.scholarshiptop.com' &&
     (pathname === '/' || pathname === '')
