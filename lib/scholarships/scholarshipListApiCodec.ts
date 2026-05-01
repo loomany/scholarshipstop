@@ -61,6 +61,7 @@ export function moreFiltersToJson(f: MoreFiltersState): MoreFiltersJson {
     includeGpaBuckets: Array.from(f.includeGpaBuckets),
     includeLocationLabels: Array.from(f.includeLocationLabels),
     includeApplicantCountryCodes: Array.from(f.includeApplicantCountryCodes),
+    includeUnspecifiedApplicantCountries: f.includeUnspecifiedApplicantCountries,
     includeEasyApply: Array.from(f.includeEasyApply)
   };
 }

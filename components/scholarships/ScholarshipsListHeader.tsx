@@ -351,16 +351,17 @@ function ScholarshipsListHeader({
   };
 
   const activeFilterCount = appliedCategoryIds.size;
-  const activeCountryCount =
-    appliedCountryCodes.size + (appliedIncludeUnspecifiedCountry ? 1 : 0);
+  const activeCountryCount = appliedCountryCodes.size;
+  const showCountryBadge =
+    activeCountryCount > 0 || appliedIncludeUnspecifiedCountry;
   const moreFiltersApplyLocked = !hasSubscription;
   const countryApplyLocked = !hasSubscription;
   const countryButtonLabel =
     activeCountryCount === 1
-      ? appliedIncludeUnspecifiedCountry
+      ? countryCounts.find((country) => appliedCountryCodes.has(country.code))?.label ??
+        'Countries'
+      : activeCountryCount === 0 && appliedIncludeUnspecifiedCountry
         ? 'Open'
-        : countryCounts.find((country) => appliedCountryCodes.has(country.code))?.label ??
-          'Countries'
       : 'Countries';
 
   const sortTriggerLabel = SORT_TRIGGER_LABEL[sortBy];
@@ -722,9 +723,9 @@ function ScholarshipsListHeader({
                       />
                     ) : null}
                     Countries
-                    {activeCountryCount > 0 ? (
+                    {showCountryBadge ? (
                       <span className="tabular-nums text-gray-600">
-                        ({activeCountryCount === 1 ? countryButtonLabel : activeCountryCount})
+                        ({activeCountryCount <= 1 ? countryButtonLabel : activeCountryCount})
                       </span>
                     ) : null}
                     <ChevronDown
