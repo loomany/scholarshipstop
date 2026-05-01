@@ -138,6 +138,7 @@ async function runCanadaFirstLoadRegression(page: Page): Promise<CheckResult> {
   await selectDarkSelectOption(page, /Applicant country/i, /^Canada$/);
   await page.getByRole('button', { name: /^Continue/i }).click();
   await waitForVisibleBodyText(page, 'Where should we send your scholarship matches?');
+  await page.getByRole('button', { name: /Sign in with Google/i }).waitFor({ timeout: 10_000 });
   await page.locator('#country-email').fill(email);
   await page.getByRole('button', { name: /See scholarship matches/i }).click();
   await page.waitForURL(/\/scholarships\/hub\/best-recommendation/, { timeout: 30_000 });
@@ -233,6 +234,32 @@ async function runUsMultiStepRegistrationSmoke(browser: Browser): Promise<CheckR
   }
 }
 
+async function runIqGoogleButtonSmoke(browser: Browser): Promise<CheckResult> {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  attachPageDiagnostics(page);
+  try {
+    await page.goto(url('/iq'), { waitUntil: 'domcontentloaded' });
+    await page.getByRole('button', { name: /Start|Take/i }).first().click({ timeout: 15_000 }).catch(async () => {
+      await page.goto(url('/iq?phase=email'), { waitUntil: 'domcontentloaded' });
+    });
+    await waitForVisibleBodyText(page, 'Where should we save your IQ profile?', 20_000);
+    await page.getByRole('button', { name: /Sign in with Google/i }).waitFor({ timeout: 10_000 });
+    return { name: 'IQ email gate exposes Google sign-in', ok: true };
+  } catch (error) {
+    const text = await bodyText(page).catch(() => '');
+    return {
+      name: 'IQ email gate exposes Google sign-in',
+      ok: false,
+      detail: `${error instanceof Error ? error.message : String(error)} text=${text
+        .replace(/\s+/g, ' ')
+        .slice(0, 800)}`
+    };
+  } finally {
+    await context.close();
+  }
+}
+
 async function assertHubPage(page: Page, path: string, expected: RegExp): Promise<CheckResult> {
   await page.goto(url(path), { waitUntil: 'domcontentloaded' });
   await waitForVisibleBodyText(page, expected, 25_000);
@@ -303,6 +330,7 @@ async function runSmoke() {
     await canadaContext.close();
 
     results.push(await runUsMultiStepRegistrationSmoke(browser));
+    results.push(await runIqGoogleButtonSmoke(browser));
 
     const hubContext = await browser.newContext();
     const page = await hubContext.newPage();

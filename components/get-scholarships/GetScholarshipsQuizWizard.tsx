@@ -57,6 +57,7 @@ import {
   isBestRecommendationWizardDraftComplete,
   loadBestRecommendationWizardDraft
 } from '@/lib/onboarding/bestRecommendationWizardDraft';
+import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 
 function notifyDestructive(title: string, description?: string) {
   toast({
@@ -116,6 +117,7 @@ export function GetScholarshipsQuizWizard({
   const [emailError, setEmailError] = useState<string | null>(null);
   const [stepReady, setStepReady] = useState(false);
   const [navigatingToHub, setNavigatingToHub] = useState(false);
+  const [googleSignInPending, setGoogleSignInPending] = useState(false);
 
   useEffect(() => {
     setDraft(loadLandingQuizDraft() ?? emptyLandingQuizDraft());
@@ -333,6 +335,67 @@ export function GetScholarshipsQuizWizard({
     });
   }, [buildSignupProfileFromDraft, finishAndGoToHub]);
 
+  const continueWithGoogle = useCallback(async () => {
+    if (!selectedCountryCode) {
+      setEmailError('Choose your country first.');
+      setQuizStep('country');
+      return;
+    }
+    const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
+    const seed =
+      selectedCountryCode === 'US'
+        ? buildScholarshipProfileFilterSeedFromDraftWithoutBirth(base)
+        : buildScholarshipProfileFilterSeedFromCountry(selectedCountryCode);
+    if (!seed) {
+      notifyDestructive(
+        'Almost there',
+        selectedCountryCode === 'US'
+          ? 'Please complete all steps before continuing with Google.'
+          : 'Could not prepare your scholarship filters.'
+      );
+      return;
+    }
+    seed.applicantCountryCodes = [selectedCountryCode];
+
+    setEmailError(null);
+    setGoogleSignInPending(true);
+    setNavigatingToHub(true);
+    try {
+      sessionStorage.setItem(LANDING_QUIZ_HUB_SEED_KEY, JSON.stringify(seed));
+      const completedDraft = {
+        ...base,
+        step2: {
+          ...base.step2,
+          email: ''
+        }
+      };
+      saveCompletedLandingQuizDraft(completedDraft);
+      stashLandingQuizDraftForOnboardingMerge(completedDraft);
+      clearLandingQuizDraft();
+    } catch {
+      setGoogleSignInPending(false);
+      setNavigatingToHub(false);
+      notifyDestructive(
+        'Could not save your filters',
+        'Check browser storage settings and try again.'
+      );
+      return;
+    }
+
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: getOAuthCallbackUrlWithNext(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF)
+      }
+    });
+    if (error) {
+      setGoogleSignInPending(false);
+      setNavigatingToHub(false);
+      setEmailError(error.message || 'Google sign-in failed.');
+    }
+  }, [selectedCountryCode]);
+
   const handleBack = useCallback(
     (s: LandingQuizStep) => {
       if (s === 'country') {
@@ -536,6 +599,7 @@ export function GetScholarshipsQuizWizard({
               submitLabel={
                 navigatingToHub ? 'Preparing your matches...' : 'See scholarship matches'
               }
+              googleSubmitting={googleSignInPending}
               error={emailError}
               onEmailChange={(value) => {
                 setEmail(value);
@@ -547,6 +611,7 @@ export function GetScholarshipsQuizWizard({
                   ? completeUsQuizSignup
                   : completeCountryOnlySignup
               }
+              onGoogleSignIn={continueWithGoogle}
             />
           ) : null}
         </div>

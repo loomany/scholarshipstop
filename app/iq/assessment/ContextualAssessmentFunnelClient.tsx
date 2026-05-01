@@ -59,6 +59,7 @@ import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/scholarshipDead
 import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 import { generateStrategy } from '@/lib/strategyRecommendationEngine';
 import { createClient } from '@/utils/supabase/client';
+import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 
 type ContextualFunnelPhase =
   | 'intro'
@@ -940,6 +941,7 @@ function ContextualIqEmailGate({
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [googleSubmitting, setGoogleSubmitting] = useState(false);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1029,6 +1031,28 @@ function ContextualIqEmailGate({
     }
   };
 
+  const continueWithGoogle = async () => {
+    setError(null);
+    setGoogleSubmitting(true);
+    try {
+      window.localStorage.setItem(FUNNEL_PHASE_STORAGE_KEY, 'assessment');
+      const supabase = createClient();
+      const { error: googleError } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: getOAuthCallbackUrlWithNext('/iq/assessment')
+        }
+      });
+      if (googleError) {
+        setGoogleSubmitting(false);
+        setError(googleError.message || 'Google sign-in failed.');
+      }
+    } catch {
+      setGoogleSubmitting(false);
+      setError('Google sign-in failed. Try again in a moment.');
+    }
+  };
+
   return (
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] px-4 py-8 text-slate-950 sm:px-6">
       <section className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl items-center">
@@ -1073,7 +1097,7 @@ function ContextualIqEmailGate({
 
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || googleSubmitting}
               className="group mt-7 inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting
@@ -1085,6 +1109,20 @@ function ContextualIqEmailGate({
                 className="h-4 w-4 transition group-hover:translate-x-0.5"
                 aria-hidden
               />
+            </button>
+            <button
+              type="button"
+              onClick={continueWithGoogle}
+              disabled={submitting || googleSubmitting}
+              className="mx-auto mt-3 flex w-full max-w-md items-center justify-center gap-3 rounded-2xl border border-slate-300 bg-white px-5 py-3.5 text-base font-semibold text-slate-800 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 48 48" aria-hidden>
+                <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
+                <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
+                <path fill="#4CAF50" d="M24 44c5.1 0 9.8-2 13.3-5.2l-6.2-5.2C29.1 35.1 26.7 36 24 36c-5.2 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z" />
+                <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l6.2 5.2C36.9 39.1 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
+              </svg>
+              {googleSubmitting ? 'Opening Google...' : 'Sign in with Google'}
             </button>
 
             <p className="mx-auto mt-4 max-w-md text-xs leading-5 text-slate-500">

@@ -12,6 +12,7 @@ const inputErrorClass = `w-full rounded-xl border border-amber-400/90 bg-white p
 type Props = {
   disabled?: boolean;
   submitting?: boolean;
+  googleSubmitting?: boolean;
   email: string;
   countryLabel: string;
   progressEyebrow: string;
@@ -22,11 +23,13 @@ type Props = {
   onEmailChange: (value: string) => void;
   onBack?: () => void;
   onSubmit: () => void;
+  onGoogleSignIn?: () => void;
 };
 
 export function CountryEmailSignupStep({
   disabled = false,
   submitting = false,
+  googleSubmitting = false,
   email,
   countryLabel,
   progressEyebrow,
@@ -36,7 +39,8 @@ export function CountryEmailSignupStep({
   error = null,
   onEmailChange,
   onBack,
-  onSubmit
+  onSubmit,
+  onGoogleSignIn
 }: Props) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -96,13 +100,42 @@ export function CountryEmailSignupStep({
 
         <button
           type="submit"
-          disabled={disabled || submitting}
+          disabled={disabled || submitting || googleSubmitting}
           aria-busy={submitting}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
           {submitting ? 'Saving...' : submitLabel}
           {!submitting ? <ArrowRight className="ml-2 h-4 w-4" aria-hidden /> : null}
         </button>
+        {onGoogleSignIn ? (
+          <button
+            type="button"
+            onClick={onGoogleSignIn}
+            disabled={disabled || submitting || googleSubmitting}
+            aria-busy={googleSubmitting}
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-300 bg-white px-4 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 48 48" aria-hidden>
+              <path
+                fill="#FFC107"
+                d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"
+              />
+              <path
+                fill="#FF3D00"
+                d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
+              />
+              <path
+                fill="#4CAF50"
+                d="M24 44c5.1 0 9.8-2 13.3-5.2l-6.2-5.2C29.1 35.1 26.7 36 24 36c-5.2 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"
+              />
+              <path
+                fill="#1976D2"
+                d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l6.2 5.2C36.9 39.1 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"
+              />
+            </svg>
+            {googleSubmitting ? 'Opening Google...' : 'Sign in with Google'}
+          </button>
+        ) : null}
         <p className="text-center text-xs leading-5 text-zinc-500">
           You can unsubscribe anytime. No password needed now; if you want one later,
           use forgot password.

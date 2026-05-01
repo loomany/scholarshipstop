@@ -8,6 +8,8 @@ import StandardIqPaywall from '@/components/iq/StandardIqPaywall';
 import IqProductFooter from '@/components/iq/IqProductFooter';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
 import { CountryEmailSignupStep } from '@/components/onboarding/CountryEmailSignupStep';
+import { createClient } from '@/utils/supabase/client';
+import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 
 import ScholarshipIqTestClient from './ScholarshipIqTestClient';
 
@@ -59,6 +61,7 @@ export default function GeneralIqFunnelClient() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const [googleSignInPending, setGoogleSignInPending] = useState(false);
 
   useEffect(() => {
     const storedPhaseRaw = window.localStorage.getItem(
@@ -121,6 +124,28 @@ export default function GeneralIqFunnelClient() {
     transitionPhase('assessment');
   };
 
+  const continueWithGoogle = async () => {
+    setEmailError(null);
+    setGoogleSignInPending(true);
+    writeTextStorage(GENERAL_FUNNEL_PHASE_STORAGE_KEY, 'assessment');
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: getOAuthCallbackUrlWithNext('/iq')
+        }
+      });
+      if (error) {
+        setGoogleSignInPending(false);
+        setEmailError(error.message || 'Google sign-in failed.');
+      }
+    } catch {
+      setGoogleSignInPending(false);
+      setEmailError('Google sign-in failed. Try again in a moment.');
+    }
+  };
+
   if (!hydrated) {
     return (
       <main className="iq-product-shell min-h-screen bg-[#F8FAFC] text-slate-950" />
@@ -139,12 +164,14 @@ export default function GeneralIqFunnelClient() {
               title="Where should we save your IQ profile?"
               description="Enter your email to continue to the IQ test. You can use the same email again anytime; after payment we will send your full report and private result link."
               submitLabel="Continue to IQ test"
+              googleSubmitting={googleSignInPending}
               error={emailError}
               onEmailChange={(value) => {
                 updateEmail(value);
                 setEmailError(null);
               }}
               onSubmit={continueFromEmail}
+              onGoogleSignIn={continueWithGoogle}
             />
           </div>
         </section>
