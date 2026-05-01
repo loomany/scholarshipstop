@@ -25,7 +25,9 @@ export async function middleware(request: NextRequest) {
 
   if (host === 'www.scholarshiptop.com') {
     const url = request.nextUrl.clone();
+    url.protocol = 'https:';
     url.hostname = 'scholarshiptop.com';
+    url.port = '';
     return NextResponse.redirect(url, 301);
   }
 
