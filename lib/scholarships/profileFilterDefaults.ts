@@ -419,6 +419,8 @@ export function mergeBestRecommendationFiltersFromProfile(
     prof.includeApplicantCountryCodes.size > 0
   ) {
     out.includeApplicantCountryCodes = new Set(prof.includeApplicantCountryCodes);
+    out.includeUnspecifiedApplicantCountries =
+      prof.includeUnspecifiedApplicantCountries;
   }
   if (!out.profileFieldOfStudySlug.trim() && prof.profileFieldOfStudySlug.trim()) {
     out.profileFieldOfStudySlug = prof.profileFieldOfStudySlug;

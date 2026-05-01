@@ -25,7 +25,6 @@ import {
 } from './assessmentScoring';
 
 type AssessmentPhase = 'intro' | 'assessment' | 'analyzing';
-type ProgressPhase = 'Calibration' | 'Fluid Reasoning' | 'IQ Report';
 
 type AssessmentDraft = {
   phase: AssessmentPhase;
@@ -45,6 +44,7 @@ type AssessmentEngineProps = {
 };
 
 const TOTAL_QUESTIONS = cognitiveAssessmentQuestions.length;
+const ASSESSMENT_TIME_LIMIT_SECONDS = 30 * 60;
 const analyzerMessages = [
   'Scoring weighted IQ items...',
   'Calculating IQ percentile...',
@@ -53,10 +53,6 @@ const analyzerMessages = [
 
 function isOptionKey(value: unknown): value is CognitiveOptionKey {
   return typeof value === 'string' && optionKeys.includes(value as CognitiveOptionKey);
-}
-
-function addOnce(values: string[], value: string) {
-  return values.includes(value) ? values : [...values, value];
 }
 
 function readAssessmentDraft(storageKey: string): AssessmentDraft | null {
@@ -177,12 +173,6 @@ function buildAssessmentResult(
   };
 }
 
-function progressPhaseForStep(step: number): ProgressPhase {
-  if (step <= 10) return 'Calibration';
-  if (step <= 24) return 'Fluid Reasoning';
-  return 'IQ Report';
-}
-
 export default function AssessmentEngine({
   storageKey,
   intro,
@@ -205,9 +195,6 @@ export default function AssessmentEngine({
   const [questionStartedAt, setQuestionStartedAt] = useState<number | null>(
     startImmediately ? Date.now() : null
   );
-  const [timeLeft, setTimeLeft] = useState(
-    cognitiveAssessmentQuestions[0]?.time_limit_sec ?? 0
-  );
   const [totalElapsedSeconds, setTotalElapsedSeconds] = useState(0);
   const advancingRef = useRef(false);
   const completedRef = useRef(false);
@@ -217,8 +204,11 @@ export default function AssessmentEngine({
     cognitiveAssessmentQuestions[currentIndex] ?? cognitiveAssessmentQuestions[0];
   const step = currentIndex + 1;
   const progress = Math.round((step / TOTAL_QUESTIONS) * 100);
-  const progressPhase =
-    phase === 'assessment' ? progressPhaseForStep(step) : 'IQ Report';
+  const totalRemainingSeconds = Math.max(
+    0,
+    ASSESSMENT_TIME_LIMIT_SECONDS - totalElapsedSeconds
+  );
+
   useEffect(() => {
     const draft = readAssessmentDraft(storageKey);
     if (draft) {
@@ -322,52 +312,35 @@ export default function AssessmentEngine({
     }
 
     const updateElapsed = () => {
-      setTotalElapsedSeconds(
-        Math.max(0, Math.floor((Date.now() - assessmentStartedAt) / 1000))
+      const elapsed = Math.max(
+        0,
+        Math.floor((Date.now() - assessmentStartedAt) / 1000)
       );
+      setTotalElapsedSeconds(elapsed);
+      if (phase === 'assessment' && elapsed >= ASSESSMENT_TIME_LIMIT_SECONDS) {
+        if (advanceTimeoutRef.current != null) {
+          window.clearTimeout(advanceTimeoutRef.current);
+          advanceTimeoutRef.current = null;
+        }
+        const answered = new Set(Object.keys(answers));
+        setTimedOutQuestionIds((previous) => [
+          ...new Set([
+            ...previous,
+            ...cognitiveAssessmentQuestions
+              .filter((question) => !answered.has(question.id))
+              .map((question) => question.id)
+          ])
+        ]);
+        setQuestionStartedAt(null);
+        setSelectedOption(null);
+        setPhase('analyzing');
+      }
     };
 
     updateElapsed();
     const interval = window.setInterval(updateElapsed, 1000);
     return () => window.clearInterval(interval);
-  }, [assessmentStartedAt, draftHydrated, phase]);
-
-  useEffect(() => {
-    if (
-      !draftHydrated ||
-      phase !== 'assessment' ||
-      selectedOption !== null ||
-      questionStartedAt == null ||
-      !currentQuestion
-    ) {
-      return;
-    }
-
-    const updateRemaining = () => {
-      const elapsedSeconds = Math.floor((Date.now() - questionStartedAt) / 1000);
-      const remaining = Math.max(
-        0,
-        currentQuestion.time_limit_sec - elapsedSeconds
-      );
-      setTimeLeft(remaining);
-
-      if (remaining <= 0) {
-        setTimedOutQuestionIds((previous) =>
-          addOnce(previous, currentQuestion.id)
-        );
-      }
-    };
-
-    updateRemaining();
-    const interval = window.setInterval(updateRemaining, 250);
-    return () => window.clearInterval(interval);
-  }, [
-    currentQuestion,
-    draftHydrated,
-    phase,
-    questionStartedAt,
-    selectedOption
-  ]);
+  }, [answers, assessmentStartedAt, draftHydrated, phase]);
 
   const finishCurrentQuestion = useCallback(
     (delayMs = 0) => {
@@ -386,9 +359,6 @@ export default function AssessmentEngine({
         const startedAt = Date.now();
         setCurrentIndex(nextIndex);
         setQuestionStartedAt(startedAt);
-        setTimeLeft(
-          cognitiveAssessmentQuestions[nextIndex]?.time_limit_sec ?? 0
-        );
         setSelectedOption(null);
         advancingRef.current = false;
       }, delayMs);
@@ -425,7 +395,6 @@ export default function AssessmentEngine({
     setAssessmentStartedAt(startedAt);
     setTotalElapsedSeconds(0);
     setQuestionStartedAt(startedAt);
-    setTimeLeft(cognitiveAssessmentQuestions[0]?.time_limit_sec ?? 0);
     setPhase('assessment');
   };
 
@@ -433,7 +402,6 @@ export default function AssessmentEngine({
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] text-slate-950">
       <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-2.5 sm:px-6 sm:py-5 lg:px-8">
         <ProgressHeader
-          phase={progressPhase}
           progress={
             !draftHydrated
               ? 0
@@ -464,7 +432,7 @@ export default function AssessmentEngine({
             <QuestionScreen
               question={currentQuestion}
               step={step}
-              totalElapsedSeconds={totalElapsedSeconds}
+              totalRemainingSeconds={totalRemainingSeconds}
               selectedOption={selectedOption}
               onAnswer={answerQuestion}
               onRestart={startAssessment}
@@ -539,25 +507,15 @@ export function AssessmentIntro({ onStart }: { onStart: () => void }) {
 }
 
 function ProgressHeader({
-  phase,
   progress,
   step
 }: {
-  phase: ProgressPhase;
   progress: number;
   step: number;
 }) {
   return (
     <header className="mx-auto w-full border-b border-slate-200 pb-3 sm:pb-5 lg:pb-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-        <div>
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-500 sm:text-xs">
-            SaaS IQ Test
-          </p>
-          <p className="mt-0.5 text-base font-semibold tracking-tight text-slate-950 sm:mt-1 sm:text-lg">
-            {phase}
-          </p>
-        </div>
+      <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
         <p className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold tabular-nums text-slate-600 shadow-sm sm:py-1.5 sm:text-sm">
           Step {step} of {TOTAL_QUESTIONS}
         </p>
@@ -578,24 +536,23 @@ function ProgressHeader({
   );
 }
 
-function formatAssessmentDuration(totalSeconds: number) {
+function formatCountdown(totalSeconds: number) {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  if (minutes <= 0) return `${seconds}s`;
-  return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
 function QuestionScreen({
   question,
   step,
-  totalElapsedSeconds,
+  totalRemainingSeconds,
   selectedOption,
   onAnswer,
   onRestart
 }: {
   question: CognitiveAssessmentQuestion;
   step: number;
-  totalElapsedSeconds: number;
+  totalRemainingSeconds: number;
   selectedOption: CognitiveOptionKey | null;
   onAnswer: (optionKey: CognitiveOptionKey) => void;
   onRestart: () => void;
@@ -613,7 +570,7 @@ function QuestionScreen({
           <span className="inline-flex min-h-7 items-center justify-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-slate-500 shadow-sm sm:min-h-0 sm:gap-1.5 sm:px-3 sm:text-xs sm:tracking-[0.14em]">
             <Timer className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
             <span className="whitespace-nowrap">
-              Total {formatAssessmentDuration(totalElapsedSeconds)}
+              Time left {formatCountdown(totalRemainingSeconds)}
             </span>
           </span>
           <button
