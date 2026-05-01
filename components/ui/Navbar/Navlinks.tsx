@@ -43,6 +43,8 @@ type NavlinksProps = {
   initialNavbarAuth?: NavbarInitialAuth;
 };
 
+const IQ_TEST_HOME_HREF = 'https://iq.scholarshiptop.com/';
+
 const ABOUT_SUBLINKS = [
   { href: '/help', label: 'Help' },
   { href: '/privacy-policy', label: 'Privacy Policy' },
@@ -50,7 +52,7 @@ const ABOUT_SUBLINKS = [
   { href: '/faq', label: 'FAQ' },
   { href: '/refund-policy', label: 'Refund Policy' },
   { href: '/for-organizations', label: 'For Organizations' },
-  { href: '/iq', label: 'IQ Test' }
+  { href: IQ_TEST_HOME_HREF, label: 'IQ Test' }
 ] as const;
 
 const MOBILE_ABOUT_SUBLINKS = ABOUT_SUBLINKS.filter(
