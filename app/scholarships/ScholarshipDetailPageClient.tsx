@@ -180,9 +180,6 @@ const detailOfficialRestorePillClass = `w-full rounded-full px-4 py-2 text-cente
 const detailBackToMatchesLinkClass =
   'inline-flex items-center text-sm font-medium text-zinc-600 transition hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2';
 
-const TOOLTIP_NOT_VERIFIED =
-  'We have not independently verified this scholarship yet.';
-
 function requirementsCleanLines(s: Scholarship): string[] {
   return sanitizeRequirementLines(s.requirementsTextClean ?? undefined);
 }
@@ -2551,44 +2548,24 @@ export default function ScholarshipDetailPageClient({
                   <p className="text-xs font-medium text-zinc-500">
                     Credibility score:
                   </p>
-                  <DarkTooltip
-                    content={
-                      scholarship.verified ? (
-                        <div className="space-y-2 font-bold leading-snug">
-                          <p>Verified: Extremely safe.</p>
-                          <p>
-                            Scholarship award guaranteed by ScholarshipOwl.
-                          </p>
-                        </div>
-                      ) : (
-                        TOOLTIP_NOT_VERIFIED
-                      )
-                    }
-                    side="bottom"
-                    align="start"
-                  >
-                    <button
-                      type="button"
-                      className="mt-1 flex max-w-full items-center gap-2 rounded-lg p-1 text-left -m-1 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400"
-                    >
-                      {scholarship.verified ? (
-                        <>
-                          <CheckCircle2
-                            className="h-5 w-5 shrink-0 text-emerald-500"
-                            aria-hidden
-                          />
-                          <span className="text-base font-semibold text-zinc-900">
-                            Verified
-                          </span>
-                        </>
-                      ) : (
-                        <span className="text-base font-semibold text-zinc-600">
-                          {scholarship.credibilityLabel?.trim() ||
-                            'Not verified'}
+                  <div className="mt-1 flex max-w-full items-center gap-2">
+                    {scholarship.verified ? (
+                      <>
+                        <CheckCircle2
+                          className="h-5 w-5 shrink-0 text-emerald-500"
+                          aria-hidden
+                        />
+                        <span className="text-base font-semibold text-zinc-900">
+                          Verified
                         </span>
-                      )}
-                    </button>
-                  </DarkTooltip>
+                      </>
+                    ) : (
+                      <span className="text-base font-semibold text-zinc-600">
+                        {scholarship.credibilityLabel?.trim() ||
+                          'Not verified'}
+                      </span>
+                    )}
+                  </div>
                 </div>
               ) : null}
               {overviewBody ? (
