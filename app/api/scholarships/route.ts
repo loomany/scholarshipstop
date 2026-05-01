@@ -496,6 +496,13 @@ async function handleList(
       moreFilters: stripHubProfileHardMatchMoreFilters(req.moreFilters)
     };
   }
+  const guestBestHasExplicitCountryFilter =
+    !authUser &&
+    req.tab === 'best-recommendation' &&
+    (req.moreFilters.includeApplicantCountryCodes.size > 0 ||
+      req.moreFilters.includeUnspecifiedApplicantCountries);
+  const guestBestRecommendationPreviewAllowed =
+    guestBestRecommendationPreviewEnabled || guestBestHasExplicitCountryFilter;
 
   if (hubDbg) {
     // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
@@ -518,7 +525,7 @@ async function handleList(
       meta = await fetchScholarshipListMeta(listingSupabase, req, bounds, {
         includeCategoryCounts,
         skipBestRecommendationSidebarCount:
-          !authUser && !guestBestRecommendationPreviewEnabled,
+          !authUser && !guestBestRecommendationPreviewAllowed,
         skipGuestZeroedSidebarCounts: !authUser
       });
       logApiTiming('meta-query', {
@@ -541,7 +548,7 @@ async function handleList(
     applyListingMetaGuestPatches(meta, {
       authUser: Boolean(authUser),
       keepBestRecommendationCount:
-        !authUser && guestBestRecommendationPreviewEnabled
+        !authUser && guestBestRecommendationPreviewAllowed
     });
     const response = NextResponse.json({
       meta,
@@ -595,7 +602,7 @@ async function handleList(
     !similarTo &&
     !authUser &&
     req.tab === 'best-recommendation' &&
-    !guestBestRecommendationPreviewEnabled
+    !guestBestRecommendationPreviewAllowed
   ) {
     const r = await emptyListResult(
       req,
@@ -768,7 +775,7 @@ async function handleList(
     applyListingMetaGuestPatches(result.meta, {
       authUser: Boolean(authUser),
       keepBestRecommendationCount:
-        !authUser && guestBestRecommendationPreviewEnabled
+        !authUser && guestBestRecommendationPreviewAllowed
     });
   }
   if (hubDbg && result.meta && !countOnly) {
