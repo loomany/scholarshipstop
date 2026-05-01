@@ -24,10 +24,10 @@ export async function middleware(request: NextRequest) {
   const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
 
   if (host === 'www.scholarshiptop.com') {
-    const url = request.nextUrl.clone();
-    url.protocol = 'https:';
-    url.hostname = 'scholarshiptop.com';
-    url.port = '';
+    const url = new URL(
+      `${request.nextUrl.pathname}${request.nextUrl.search}`,
+      'https://scholarshiptop.com'
+    );
     return NextResponse.redirect(url, 301);
   }
 
