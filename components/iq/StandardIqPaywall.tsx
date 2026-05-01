@@ -34,7 +34,14 @@ export default function StandardIqPaywall({
   }, []);
 
   if (localPreviewUnlocked) {
-    return <UnlockedIqReport result={result} onRestart={onRestart} localPreview />;
+    return (
+      <UnlockedIqReport
+        result={result}
+        email={email}
+        onRestart={onRestart}
+        localPreview
+      />
+    );
   }
 
   function handleCheckout() {

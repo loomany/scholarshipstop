@@ -10,14 +10,17 @@ function formatReportDuration(totalSeconds: number) {
 
 export default function UnlockedIqReport({
   result,
+  email,
   onRestart,
   localPreview = false
 }: {
   result: AssessmentResult;
+  email?: string | null;
   onRestart?: () => void;
   localPreview?: boolean;
 }) {
   const topDomains = [...result.domainScores].sort((a, b) => b.score - a.score);
+  const normalizedEmail = email?.trim() || null;
   const totalDuration =
     typeof result.totalDurationSeconds === 'number' &&
     Number.isFinite(result.totalDurationSeconds)
@@ -104,6 +107,15 @@ export default function UnlockedIqReport({
               text={`${topDomains[0]?.label ?? 'Your top domain'} appears as your strongest relative area in this run. Use that as a practical clue about how you naturally approach new problems.`}
             />
           </div>
+
+          {normalizedEmail ? (
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-sm font-semibold text-slate-500">Report email</p>
+              <p className="mt-2 break-all text-base font-semibold text-slate-950">
+                {normalizedEmail}
+              </p>
+            </div>
+          ) : null}
         </div>
       </section>
       <IqProductFooter />

@@ -8,6 +8,7 @@ import {
   decideSubscriptionUpdate,
   isSubscriptionInvoicePayload,
   mergeSubscriptionPaymentFailedInvoiceUpsert,
+  normalizeLemonEventName,
   type LemonWebhookPayload
 } from '@/lib/payments/lemonSubscriptionState';
 import type { Json } from '@/types_db';
@@ -26,6 +27,10 @@ import {
 import { runInvoicePaymentFailedWebhookEffects } from '@/lib/payments/runInvoicePaymentFailedWebhookEffects';
 import { enrichInvoicePaymentSuccessWithSubscriptionFetch } from '@/lib/payments/lemonInvoiceWebhookEnrichment';
 import { sendIqReportReadyEmail } from '@/lib/email/sendIqReportReadyEmail';
+import {
+  sendLemonAdminPaymentEmail,
+  shouldSendLemonAdminPaymentEmail
+} from '@/lib/email/sendLemonAdminPaymentEmail';
 import { getIqReportAdminClient, getIqReportUrl } from '@/lib/iqReportOrders';
 
 export const runtime = 'nodejs';
@@ -99,11 +104,43 @@ function getCheckoutEmailFromPayload(payload: LemonWebhookPayload): string | nul
   return typeof value === 'string' && value.trim() ? value.trim().toLowerCase() : null;
 }
 
+async function notifyAdminLemonPaymentEmail(options: {
+  payload: LemonWebhookPayload;
+  eventName: string;
+  userEmail?: string | null;
+  context?: string;
+  orderId?: string | null;
+  reportId?: string | null;
+  subscriptionId?: string | null;
+}) {
+  if (!shouldSendLemonAdminPaymentEmail(options.eventName)) return;
+  try {
+    const result = await sendLemonAdminPaymentEmail(options);
+    if (!result.ok) {
+      console.warn('[lemon:webhook] admin payment email not sent', {
+        eventName: options.eventName,
+        skipped: result.skipped
+      });
+    }
+  } catch (error) {
+    console.error('[lemon:webhook] admin payment email failed', {
+      eventName: options.eventName,
+      message: error instanceof Error ? error.message : String(error)
+    });
+  }
+}
+
 async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
   if (payload.meta?.event_name !== 'order_created') return null;
 
   const reportId = getIqReportIdFromPayload(payload);
-  if (!reportId) return null;
+  if (!reportId) {
+    console.warn('[lemon:webhook] order_created without iq_report_id', {
+      dataId: payload.data?.id ?? null,
+      customData: payload.meta?.custom_data ?? payload.data?.attributes?.custom_data ?? null
+    });
+    return null;
+  }
 
   const attrs = getLemonAttributes(payload);
   const orderId =
@@ -151,6 +188,15 @@ async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
     archetype: typeof result.archetype === 'string' ? result.archetype : null
   });
 
+  await notifyAdminLemonPaymentEmail({
+    payload,
+    eventName: 'order_created',
+    userEmail: order.email,
+    context: 'iq_report',
+    orderId,
+    reportId
+  });
+
   const emailResult = await sendIqReportReadyEmail({
     toEmail: order.email,
     reportUrl,
@@ -174,6 +220,13 @@ async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
       skipped: emailResult.skipped
     });
   }
+
+  console.info('[lemon:webhook] iq report order processed', {
+    reportId,
+    orderId,
+    emailSent: emailResult.ok,
+    skipped: emailResult.skipped
+  });
 
   return new Response(
     JSON.stringify({
@@ -251,6 +304,7 @@ export async function POST(req: Request) {
   }
 
   try {
+    const originalEventName = normalizeLemonEventName(payload.meta?.event_name);
     const enriched = await enrichInvoicePaymentSuccessWithSubscriptionFetch(payload);
     if (enriched) {
       console.info('[lemon:webhook] enriched invoice webhook via Lemon API GET /subscriptions', {
@@ -265,6 +319,12 @@ export async function POST(req: Request) {
     const decision = decideSubscriptionUpdate(payload);
     if (decision.kind === 'ignored') {
       const invoiceFx = await runInvoicePaymentFailedWebhookEffects(getSupabaseAdmin(), payload);
+      await notifyAdminLemonPaymentEmail({
+        payload,
+        eventName: originalEventName,
+        userEmail: getCheckoutEmailFromPayload(payload),
+        context: 'ignored_order_or_invoice'
+      });
       return new Response(
         JSON.stringify({
           received: true,
@@ -450,6 +510,17 @@ export async function POST(req: Request) {
         plan: decision.subscriptionPlan,
         status: decision.subscription.status ?? 'unknown',
         eventName: decision.eventName
+      });
+
+      const adminPaymentEventName = shouldSendLemonAdminPaymentEmail(originalEventName)
+        ? originalEventName
+        : decision.eventName;
+      await notifyAdminLemonPaymentEmail({
+        payload,
+        eventName: adminPaymentEventName,
+        userEmail,
+        context: 'subscription',
+        subscriptionId: decision.subscription.id
       });
 
       if (!userEmail?.trim()) {

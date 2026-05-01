@@ -37,7 +37,7 @@ export default async function IqReportPage({
   if (!data) return <ReportNotFound />;
 
   const report = data as IqReportOrderRow;
-  return <UnlockedIqReport result={report.assessment_result} />;
+  return <UnlockedIqReport result={report.assessment_result} email={report.email} />;
 }
 
 function ReportNotFound() {
