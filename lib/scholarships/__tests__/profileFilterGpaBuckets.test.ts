@@ -2,7 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { buildScholarshipProfileFilterSeed } from '@/lib/scholarships/profileFilterDefaults';
-import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
+import {
+  scholarshipMatchProfileVersion,
+  type ProfilesRow
+} from '@/lib/scholarships/scholarshipMatch';
 
 function baseProfile(over: Partial<ProfilesRow>): ProfilesRow {
   return {
@@ -81,5 +84,24 @@ test('buildScholarshipProfileFilterSeed supports upward GPA bucket selection fro
   assert.deepEqual(
     Array.from(new Set(seed!.gpaBucketIds)).sort(),
     ['gpa_2_5_plus', 'gpa_3_0_plus', 'gpa_3_5_plus'].sort()
+  );
+});
+
+test('scholarshipMatchProfileVersion changes when country or GPA bucket snapshot changes', () => {
+  const base = baseProfile({
+    country_code: 'CA',
+    gpa: 2.5,
+    saved_filters_snapshot: { profileGpaSelection: 'gpa_2_5_plus' }
+  });
+  assert.notEqual(
+    scholarshipMatchProfileVersion(base),
+    scholarshipMatchProfileVersion({ ...base, country_code: 'US' })
+  );
+  assert.notEqual(
+    scholarshipMatchProfileVersion(base),
+    scholarshipMatchProfileVersion({
+      ...base,
+      saved_filters_snapshot: { profileGpaSelection: 'gpa_3_5_plus' }
+    })
   );
 });

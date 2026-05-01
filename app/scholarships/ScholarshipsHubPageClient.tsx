@@ -635,6 +635,7 @@ function ScholarshipsPageInner({
   /** `/get-scholarships` quiz: merged into API body only for best/recommended (guest); not into Matches. */
   const [landingQuizProfileSeed, setLandingQuizProfileSeed] =
     useState<ScholarshipProfileFilterSeed | null>(null);
+  const [landingQuizSeedHydrated, setLandingQuizSeedHydrated] = useState(false);
   /** Hub guest Best tab draft only (`resolve…` scopes); landed quiz overrides. */
   const bestRecommendationHubProfileSeed = useMemo(() => {
     if (!hubTreatAsGuest || activeTab !== 'best-recommendation') return null;
@@ -982,7 +983,10 @@ function ScholarshipsPageInner({
    */
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
-    if (landingQuizHubSeedAppliedRef.current) return;
+    if (landingQuizHubSeedAppliedRef.current) {
+      setLandingQuizSeedHydrated(true);
+      return;
+    }
     try {
       if (
         sessionStorage.getItem(SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY) ===
@@ -990,6 +994,7 @@ function ScholarshipsPageInner({
       ) {
         sessionStorage.removeItem(SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY);
         landingQuizHubSeedAppliedRef.current = true;
+        setLandingQuizSeedHydrated(true);
         return;
       }
     } catch {
@@ -1013,10 +1018,14 @@ function ScholarshipsPageInner({
     if (!seed) {
       seed = tryBuildProfileSeedFromCompletedLandingQuiz();
     }
-    if (!seed) return;
+    if (!seed) {
+      setLandingQuizSeedHydrated(true);
+      return;
+    }
 
     landingQuizHubSeedAppliedRef.current = true;
     setLandingQuizProfileSeed(seed);
+    setLandingQuizSeedHydrated(true);
     replaceListingParams({ resetPage: true });
   }, [replaceListingParams]);
 
@@ -2092,7 +2101,9 @@ function ScholarshipsPageInner({
     ]
   );
 
-  const listQueryEnabled = activeTab !== 'recommended' || hasPresets;
+  const listQueryEnabled =
+    (activeTab !== 'recommended' || hasPresets) &&
+    (activeTab !== 'best-recommendation' || landingQuizSeedHydrated);
 
   const initialMetaData = useMemo(() => {
     if (!initialPayload?.result?.meta) return undefined;
@@ -2920,8 +2931,14 @@ function ScholarshipsPageInner({
     scholarshipsForCards.length === 0 &&
     !hasError &&
     (listQuery.isPending || listQuery.isFetching || !listQuery.isFetched);
+  const guestBestLandingSeedPending =
+    hubTreatAsGuest &&
+    activeTab === 'best-recommendation' &&
+    !landingQuizSeedHydrated;
   const blockingInitialLoad =
-    (isLoading && !hasInitialLoadCompleted) || guestBestSeededListPending;
+    (isLoading && !hasInitialLoadCompleted) ||
+    guestBestLandingSeedPending ||
+    guestBestSeededListPending;
   const blockingApplyLoad = isApplyingMoreFilters || isApplyingListControls;
   const blockingListLoad = blockingInitialLoad || blockingApplyLoad;
   const resultCountForHeader =

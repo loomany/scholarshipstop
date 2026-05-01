@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 
 import ScholarshipsSlugPathPageBody from '@/app/scholarships/scholarshipsSlugPathPageBody';
+import { buildScholarshipHubRouteMetadata } from '@/app/scholarships/scholarshipHubPageMetadata';
+import { HUB_PATH_PREFIX, hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
 import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarshipLongTailPresets';
 import { generateScholarshipSlugLayoutMetadata } from '@/app/scholarships/scholarshipSlugLayoutMetadata';
 import UniversityHubPageContent from '@/components/scholarships/UniversityHubPageContent';
@@ -36,6 +38,11 @@ export async function generateMetadata({
   params: PageParams;
 }): Promise<Metadata> {
   const { state, university } = normalizeParams(params);
+  if (state === HUB_PATH_PREFIX && hubPathToTab([state, university])) {
+    return buildScholarshipHubRouteMetadata({
+      hubSegment: university
+    });
+  }
   const hub = await fetchUniversityHubRow(state, university);
 
   if (!hub) {
@@ -74,6 +81,9 @@ export default async function UniversityScholarshipsPage({
   params: PageParams;
 }) {
   const { state, university } = normalizeParams(params);
+  if (state === HUB_PATH_PREFIX && hubPathToTab([state, university])) {
+    return <ScholarshipsSlugPathPageBody segments={[state, university]} />;
+  }
   const hub = await fetchUniversityHubRow(state, university);
 
   if (!hub) {
