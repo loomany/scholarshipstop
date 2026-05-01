@@ -1154,20 +1154,51 @@ export async function notifyAdminsScholarshipIndexed(payload: {
 }
 
 /** Admin-only alert when a new row appears in `scholarships` (link uses slug when present). */
+function formatScholarshipParserLabel(source: string | null | undefined): string | null {
+  const raw = source?.trim();
+  if (!raw) return null;
+  const known: Record<string, string> = {
+    bigfuture_collegeboard: 'BigFuture / College Board',
+    scholarship_america: 'Scholarship America',
+    scholarships_com: 'Scholarships.com',
+    simpler_grants_gov: 'Simpler.Grants.gov'
+  };
+  const key = raw.toLowerCase();
+  if (known[key]) return known[key];
+  return raw
+    .replace(/^parser[:_-]?/i, '')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 export async function notifyEnvTelegramAdminsNewScholarship(row: {
   id: string;
   slug?: string | null;
   title?: string | null;
+  source?: string | null;
+  sourceId?: string | null;
+  originalUrl?: string | null;
+  officialSourceName?: string | null;
 }) {
   const title = row.title?.trim() || 'Новый грант';
+  const parserLabel = formatScholarshipParserLabel(row.source);
+  const sourceLabel = row.officialSourceName?.trim() || parserLabel;
+  const sourceLines = [
+    sourceLabel ? `⚙️ Источник: ${sourceLabel}` : null,
+    row.sourceId?.trim() ? `ID источника: ${row.sourceId.trim()}` : null,
+    row.originalUrl?.trim() ? `↗ Оригинал: ${row.originalUrl.trim()}` : null
+  ].filter((line): line is string => Boolean(line));
   const path = scholarshipPublicPath({
     id: row.id,
     slug: row.slug ?? undefined
   });
   const url = `${getSiteUrl()}${path}`;
   const text = [
-    '🆕 Добавлен новый грант',
+    '➕ Добавлен новый грант',
     'Статус: Требует внимания',
+    ...sourceLines,
     '',
     `Название: ${title}`,
     `URL: ${url}`

@@ -35,6 +35,10 @@ type ScholarshipRowLike = {
   id?: unknown;
   slug?: unknown;
   title?: unknown;
+  source?: unknown;
+  source_id?: unknown;
+  url?: unknown;
+  official_source_name?: unknown;
 };
 
 function pickRecord(body: unknown): ScholarshipRowLike | null {
@@ -78,8 +82,33 @@ export async function POST(request: Request) {
     typeof record.title === 'string' && record.title.trim()
       ? record.title.trim()
       : null;
+  const source =
+    typeof record.source === 'string' && record.source.trim()
+      ? record.source.trim()
+      : null;
+  const sourceId =
+    typeof record.source_id === 'string' && record.source_id.trim()
+      ? record.source_id.trim()
+      : null;
+  const originalUrl =
+    typeof record.url === 'string' && record.url.trim()
+      ? record.url.trim()
+      : null;
+  const officialSourceName =
+    typeof record.official_source_name === 'string' &&
+    record.official_source_name.trim()
+      ? record.official_source_name.trim()
+      : null;
 
-  await notifyEnvTelegramAdminsNewScholarship({ id, slug, title });
+  await notifyEnvTelegramAdminsNewScholarship({
+    id,
+    slug,
+    title,
+    source,
+    sourceId,
+    originalUrl,
+    officialSourceName
+  });
 
   const scholarshipUrl = scholarshipIndexingUrl({ id, slug });
   const googleIndexing = await pingGoogleIndexingDirect(scholarshipUrl);
