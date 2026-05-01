@@ -17,7 +17,7 @@ import {
   type ReactNode
 } from 'react';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ScholarshipsHubQueryProvider } from '@/components/providers/ScholarshipsHubQueryProvider';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
@@ -293,6 +293,7 @@ function ScholarshipsPageInner({
   hubCanonicalIntroBelowTitle?: ReactNode;
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const pathname = currentPathname || '/scholarships';
   const hubRouteResolved = useMemo(() => {
@@ -1024,10 +1025,14 @@ function ScholarshipsPageInner({
     }
 
     landingQuizHubSeedAppliedRef.current = true;
+    queryClient.removeQueries({
+      queryKey: ['scholarships', 'hub', 'list'],
+      exact: false
+    });
     setLandingQuizProfileSeed(seed);
     setLandingQuizSeedHydrated(true);
     replaceListingParams({ resetPage: true });
-  }, [replaceListingParams]);
+  }, [queryClient, replaceListingParams]);
 
   /**
    * `/get-scholarships` stores answers under completed/pending keys, not hub wizard LS.
@@ -2104,6 +2109,9 @@ function ScholarshipsPageInner({
   const listQueryEnabled =
     (activeTab !== 'recommended' || hasPresets) &&
     (activeTab !== 'best-recommendation' || landingQuizSeedHydrated);
+  const forceFreshSeededBestList =
+    activeTab === 'best-recommendation' &&
+    transientBestRecommendationProfileSeed != null;
 
   const initialMetaData = useMemo(() => {
     if (!initialPayload?.result?.meta) return undefined;
@@ -2131,9 +2139,16 @@ function ScholarshipsPageInner({
     ]
   );
 
+  type ClientScholarshipsListResponse = ScholarshipsListResponse & {
+    __clientRequestKey?: string;
+  };
+  const hubListDataRequestKey = useMemo(
+    () => JSON.stringify(hubListQueryKey),
+    [hubListQueryKey]
+  );
   const listQuery = useQuery({
     queryKey: hubListQueryKey,
-    queryFn: async ({ signal }): Promise<ScholarshipsListResponse> => {
+    queryFn: async ({ signal }): Promise<ClientScholarshipsListResponse> => {
       const metaKey = `${activeTab}|${catalogListScope}|${searchParamsString}|${listingRequestFingerprint}|sf:${savedFiltersSnapshotJson ?? 'none'}|gb:${guestBestRecommendationPreviewEnabled ? 1 : 0}`;
       const ids = userListIdsRef.current;
       const sp = buildHubListingSearchParams({
@@ -2163,13 +2178,16 @@ function ScholarshipsPageInner({
         },
         { signal }
       );
-      return data;
+      return {
+        ...data,
+        __clientRequestKey: hubListDataRequestKey
+      };
     },
     enabled:
       listQueryEnabled && !guestBestSkipHubBestListUntilPreview,
-    initialData: initialListData,
-    staleTime: 300_000,
-    refetchOnMount: false
+    initialData: initialListData as ClientScholarshipsListResponse | undefined,
+    staleTime: forceFreshSeededBestList ? 0 : 300_000,
+    refetchOnMount: forceFreshSeededBestList ? 'always' : false
   });
 
   const guestBestTopExploreListingMoreFilters = useMemo(() => {
@@ -2323,6 +2341,18 @@ function ScholarshipsPageInner({
       return;
     }
     const d = listQuery.data;
+    const guestBestRequiresCurrentResponse =
+      hubTreatAsGuest &&
+      activeTab === 'best-recommendation' &&
+      transientBestRecommendationProfileSeed != null;
+    if (
+      d &&
+      guestBestRequiresCurrentResponse &&
+      d.__clientRequestKey !== hubListDataRequestKey
+    ) {
+      setIsLoading(listQuery.isPending || listQuery.isFetching);
+      return;
+    }
     if (d) {
       setScholarships(d.scholarships);
       setTotalCount(d.total);
@@ -2355,10 +2385,14 @@ function ScholarshipsPageInner({
     listQuery.data,
     listQuery.isError,
     listQuery.isPending,
+    listQuery.isFetching,
     listQuery.isFetched,
     listQuery.error,
     sidebarMetaRequestKey,
-    guestBestRecommendationPreviewEnabled
+    guestBestRecommendationPreviewEnabled,
+    hubTreatAsGuest,
+    transientBestRecommendationProfileSeed,
+    hubListDataRequestKey
   ]);
 
   useEffect(() => {
