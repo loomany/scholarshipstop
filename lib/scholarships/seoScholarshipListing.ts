@@ -126,10 +126,22 @@ export function mergeMoreFilterStates(
         ? a.filterUniversityInput
         : b.filterUniversityInput,
     filterUniversitySlug: a.filterUniversitySlug ?? b.filterUniversitySlug,
+    profileSchoolLevelSlug:
+      a.profileSchoolLevelSlug.trim() !== ''
+        ? a.profileSchoolLevelSlug
+        : b.profileSchoolLevelSlug,
     profileFieldOfStudySlug:
       a.profileFieldOfStudySlug.trim() !== ''
         ? a.profileFieldOfStudySlug
         : b.profileFieldOfStudySlug,
+    profileCitizenshipStatus:
+      a.profileCitizenshipStatus.trim() !== ''
+        ? a.profileCitizenshipStatus
+        : b.profileCitizenshipStatus,
+    gpaChoice:
+      a.gpaChoice.trim() !== ''
+        ? a.gpaChoice
+        : b.gpaChoice,
     profileCitizenshipNarrow:
       a.profileCitizenshipNarrow !== 'none'
         ? a.profileCitizenshipNarrow

@@ -8,6 +8,7 @@ import {
   getScholarshipCatalog,
   NATIONWIDE_LOCATION
 } from '@/lib/scholarships/scholarshipCatalog';
+import { SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY } from '@/lib/constants/scholarshipGpaOptions';
 import { isInternationalFriendlyScholarship } from '@/lib/scholarships/internationalFriendly';
 import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
@@ -75,7 +76,10 @@ export type MoreFiltersState = {
    * Profile-backed field-of-study slug (same space as `profiles.field_of_study` / onboarding).
    * When set, listing SQL ORs `field_of_study` JSON + soft title/summary match.
    */
+  profileSchoolLevelSlug: string;
   profileFieldOfStudySlug: string;
+  profileCitizenshipStatus: string;
+  gpaChoice: string;
   /** Narrow listing toward domestic vs international signals when the profile says so. */
   profileCitizenshipNarrow: ProfileCitizenshipNarrow;
 };
@@ -180,6 +184,28 @@ function matchesGpaBuckets(s: Scholarship, selected: Set<string>): boolean {
   return false;
 }
 
+export function gpaBucketIdsFromFilterChoice(choice: string): string[] {
+  const t = choice.trim();
+  if (!t || t === SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY) return [];
+  if (
+    t === 'no_gpa_requirement' ||
+    t === 'gpa_2_0_plus' ||
+    t === 'gpa_2_5_plus' ||
+    t === 'gpa_3_0_plus' ||
+    t === 'gpa_3_5_plus'
+  ) {
+    return [t];
+  }
+  const gpa = Number.parseFloat(t);
+  if (!Number.isFinite(gpa)) return [];
+  const out = ['no_gpa_requirement'];
+  if (gpa >= 2.0) out.push('gpa_2_0_plus');
+  if (gpa >= 2.5) out.push('gpa_2_5_plus');
+  if (gpa >= 3.0) out.push('gpa_3_0_plus');
+  if (gpa >= 3.5) out.push('gpa_3_5_plus');
+  return out;
+}
+
 function matchesLocation(s: Scholarship, selected: Set<string>): boolean {
   if (selected.size === 0) return true;
   const cat = getScholarshipCatalog(s);
@@ -281,7 +307,10 @@ export function defaultMoreFiltersFromBounds(bounds: {
     filterStateInput: '',
     filterUniversityInput: '',
     filterUniversitySlug: null,
+    profileSchoolLevelSlug: '',
     profileFieldOfStudySlug: '',
+    profileCitizenshipStatus: '',
+    gpaChoice: '',
     profileCitizenshipNarrow: 'none'
   };
 }
@@ -348,7 +377,11 @@ export function scholarshipPassesMoreFilters(
   if (!matchesDataCompletenessAndVerified(s, f.dataCompleteness)) return false;
   if (!matchesPayout(s, f.payout)) return false;
   // Eligibility and education include filtering are server-only (SQL source of truth).
-  if (!matchesGpaBuckets(s, f.includeGpaBuckets)) return false;
+  const effectiveGpaBuckets = new Set([
+    ...Array.from(f.includeGpaBuckets),
+    ...gpaBucketIdsFromFilterChoice(f.gpaChoice)
+  ]);
+  if (!matchesGpaBuckets(s, effectiveGpaBuckets)) return false;
   if (!matchesLocation(s, f.includeLocationLabels)) return false;
   if (
     f.includeApplicantCountryCodes.size > 0 ||
@@ -401,7 +434,10 @@ export function cloneMoreFilters(f: MoreFiltersState): MoreFiltersState {
     filterStateInput: f.filterStateInput,
     filterUniversityInput: f.filterUniversityInput,
     filterUniversitySlug: f.filterUniversitySlug,
+    profileSchoolLevelSlug: f.profileSchoolLevelSlug,
     profileFieldOfStudySlug: f.profileFieldOfStudySlug,
+    profileCitizenshipStatus: f.profileCitizenshipStatus,
+    gpaChoice: f.gpaChoice,
     profileCitizenshipNarrow: f.profileCitizenshipNarrow
   };
 }
@@ -428,7 +464,10 @@ export function moreFiltersHasProfileOrQuizListingSignals(
   if (mf.includeApplicantCountryCodes.size > 0) return true;
   if (mf.includeUnspecifiedApplicantCountries) return true;
   if (mf.includeEasyApply.size > 0) return true;
+  if (mf.profileSchoolLevelSlug.trim().length > 0) return true;
   if (mf.profileFieldOfStudySlug.trim().length > 0) return true;
+  if (mf.profileCitizenshipStatus.trim().length > 0) return true;
+  if (gpaBucketIdsFromFilterChoice(mf.gpaChoice).length > 0) return true;
   if (mf.profileCitizenshipNarrow !== 'none') return true;
   return false;
 }
@@ -464,7 +503,10 @@ export function countMoreFilterSelections(
   n += f.includeEasyApply.size;
   if (f.filterStateInput.trim() !== '') n++;
   if (f.filterUniversitySlug?.trim()) n++;
+  if (f.profileSchoolLevelSlug.trim()) n++;
   if (f.profileFieldOfStudySlug.trim()) n++;
+  if (f.profileCitizenshipStatus.trim()) n++;
+  if (gpaBucketIdsFromFilterChoice(f.gpaChoice).length > 0) n++;
   if (f.profileCitizenshipNarrow !== 'none') n++;
   return n;
 }
@@ -536,7 +578,15 @@ export function countMoreFilterDeltaFromBaseline(
   n += setSymmetricDiffCount(f.includeEasyApply, baseline.includeEasyApply);
   if (f.filterStateInput.trim() !== baseline.filterStateInput.trim()) n++;
   if ((f.filterUniversitySlug ?? '') !== (baseline.filterUniversitySlug ?? '')) n++;
+  if (f.profileSchoolLevelSlug.trim() !== baseline.profileSchoolLevelSlug.trim()) n++;
   if (f.profileFieldOfStudySlug.trim() !== baseline.profileFieldOfStudySlug.trim()) n++;
+  if (f.profileCitizenshipStatus.trim() !== baseline.profileCitizenshipStatus.trim()) n++;
+  if (
+    gpaBucketIdsFromFilterChoice(f.gpaChoice).join('|') !==
+    gpaBucketIdsFromFilterChoice(baseline.gpaChoice).join('|')
+  ) {
+    n++;
+  }
   if (f.profileCitizenshipNarrow !== baseline.profileCitizenshipNarrow) n++;
   return n;
 }

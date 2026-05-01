@@ -15,7 +15,10 @@ export type MoreFiltersJson = Omit<
   | 'citizenshipAudience'
   | 'filterUniversityInput'
   | 'filterUniversitySlug'
+  | 'profileSchoolLevelSlug'
   | 'profileFieldOfStudySlug'
+  | 'profileCitizenshipStatus'
+  | 'gpaChoice'
   | 'profileCitizenshipNarrow'
 > & {
   /** Omitted in older saved snapshots — decoded as `any`. */
@@ -23,7 +26,10 @@ export type MoreFiltersJson = Omit<
   filterUniversityInput?: string;
   filterUniversitySlug?: string | null;
   /** Omitted in older snapshots — decoded as empty / `none`. */
+  profileSchoolLevelSlug?: string;
   profileFieldOfStudySlug?: string;
+  profileCitizenshipStatus?: string;
+  gpaChoice?: string;
   profileCitizenshipNarrow?: ProfileCitizenshipNarrow;
   includeRequirementTypes: string[];
   includeEligibility: string[];
@@ -126,10 +132,20 @@ export function moreFiltersFromJson(
       typeof raw.filterUniversitySlug === 'string' && raw.filterUniversitySlug.trim()
         ? raw.filterUniversitySlug.trim()
         : null,
+    profileSchoolLevelSlug:
+      typeof raw.profileSchoolLevelSlug === 'string'
+        ? raw.profileSchoolLevelSlug.trim()
+        : '',
     profileFieldOfStudySlug:
       typeof raw.profileFieldOfStudySlug === 'string'
         ? raw.profileFieldOfStudySlug.trim()
         : '',
+    profileCitizenshipStatus:
+      typeof raw.profileCitizenshipStatus === 'string'
+        ? raw.profileCitizenshipStatus.trim()
+        : '',
+    gpaChoice:
+      typeof raw.gpaChoice === 'string' ? raw.gpaChoice.trim() : '',
     profileCitizenshipNarrow:
       raw.profileCitizenshipNarrow === 'us_domestic' ? 'us_domestic' : 'none'
   };

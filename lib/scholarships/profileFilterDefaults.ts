@@ -90,7 +90,7 @@ function gpaBucketIdsFromProfile(profile: Pick<ProfilesRow, 'gpa' | 'saved_filte
   return out;
 }
 
-function educationLevelIdsFromProfileSchoolLevel(
+export function educationLevelIdsFromProfileSchoolLevel(
   schoolLevel: string | null | undefined
 ): string[] {
   const raw = schoolLevel?.trim() ?? '';
@@ -126,7 +126,7 @@ function eligibilityIdsFromProfileCitizenship(
   return [];
 }
 
-function profileCitizenshipNarrowFromCitizenship(
+export function profileCitizenshipNarrowFromCitizenship(
   citizenship: string | null | undefined
 ): ProfileCitizenshipNarrow {
   const raw = citizenship?.trim().toLowerCase() ?? '';
@@ -377,7 +377,10 @@ export function stripHubProfileHardMatchMoreFilters(
   out.includeGpaBuckets = new Set();
   out.includeEligibility = new Set();
   out.filterStateInput = '';
+  out.profileSchoolLevelSlug = '';
   out.profileFieldOfStudySlug = '';
+  out.profileCitizenshipStatus = '';
+  out.gpaChoice = '';
   out.profileCitizenshipNarrow = 'none';
   out.citizenshipAudience = 'any';
   return out;

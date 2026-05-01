@@ -5,6 +5,7 @@ import { defaultMoreFiltersFromBounds } from '@/app/scholarships/moreFilters';
 import { DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
   buildMoreFiltersWithProfileDefaults,
+  educationLevelIdsFromProfileSchoolLevel,
   mergeBestRecommendationFiltersFromProfile,
   stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
@@ -262,4 +263,15 @@ test('mergeBestRecommendationFiltersFromProfile uses applicant country as the on
   assert.equal(out.includeEligibility.size, 0);
   assert.equal(out.profileFieldOfStudySlug, '');
   assert.equal(out.citizenshipAudience, 'any');
+});
+
+test('student profile filter helpers map quiz choices to catalog filters', () => {
+  assert.deepEqual(
+    educationLevelIdsFromProfileSchoolLevel('college_1'),
+    ['undergraduate']
+  );
+  assert.deepEqual(
+    educationLevelIdsFromProfileSchoolLevel('high_school_senior'),
+    ['high_school_senior', 'high_school']
+  );
 });

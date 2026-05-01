@@ -2913,7 +2913,15 @@ function ScholarshipsPageInner({
     [activeTab]
   );
 
-  const blockingInitialLoad = isLoading && !hasInitialLoadCompleted;
+  const guestBestSeededListPending =
+    hubTreatAsGuest &&
+    activeTab === 'best-recommendation' &&
+    transientBestRecommendationProfileSeed != null &&
+    scholarshipsForCards.length === 0 &&
+    !hasError &&
+    (listQuery.isPending || listQuery.isFetching || !listQuery.isFetched);
+  const blockingInitialLoad =
+    (isLoading && !hasInitialLoadCompleted) || guestBestSeededListPending;
   const blockingApplyLoad = isApplyingMoreFilters || isApplyingListControls;
   const blockingListLoad = blockingInitialLoad || blockingApplyLoad;
   const resultCountForHeader =

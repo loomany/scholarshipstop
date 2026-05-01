@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Lock, X } from 'lucide-react';
+import { ChevronDown, Lock, X } from 'lucide-react';
 
 import type {
   CitizenshipAudienceFilter,
@@ -20,9 +20,18 @@ import { SITE_SEARCH_INPUT_CHROME } from '@/lib/constants/catalogControlBar';
 import {
   EASY_APPLY_OPTIONS,
   EDUCATION_LEVEL_OPTIONS,
-  ELIGIBILITY_OPTIONS,
-  GPA_BUCKET_OPTIONS
+  ELIGIBILITY_OPTIONS
 } from '@/lib/scholarships/scholarshipCatalog';
+import {
+  FIELD_OF_STUDY_OPTIONS,
+  SCHOOL_LEVEL_OPTIONS
+} from '@/lib/constants/scholarshipProfileOptions';
+import { CITIZENSHIP_OPTIONS } from '@/lib/constants/onboardingCitizenshipAndLocation';
+import {
+  SCHOLARSHIP_GPA_BUCKET_OPTIONS,
+  SCHOLARSHIP_GPA_OPTIONS,
+  SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY
+} from '@/lib/constants/scholarshipGpaOptions';
 import {
   SUBSCRIPTION_LOCKED_EASY_APPLY_IDS
 } from '@/lib/scholarships/subscriptionLockedCategory';
@@ -159,6 +168,90 @@ type CheckboxGroupOption = {
   label: string;
   locked?: boolean;
 };
+
+type ProfileSelectOption = {
+  value: string;
+  label: string;
+};
+
+function ProfileSelectField({
+  id,
+  label,
+  value,
+  options,
+  onChange,
+  helper
+}: {
+  id: string;
+  label: string;
+  value: string;
+  options: readonly ProfileSelectOption[];
+  onChange: (value: string) => void;
+  helper?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const selectedLabel =
+    options.find((option) => option.value === value)?.label ?? options[0]?.label ?? '';
+
+  return (
+    <div className="relative">
+      <span className="mb-1.5 block text-sm font-medium text-zinc-800" id={`${id}-label`}>
+        {label}
+      </span>
+      <button
+        type="button"
+        id={id}
+        aria-labelledby={`${id}-label ${id}`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((next) => !next)}
+        className={`flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
+      >
+        <span className="min-w-0 truncate">{selectedLabel}</span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-zinc-500 transition ${open ? 'rotate-180' : ''}`}
+          strokeWidth={2}
+          aria-hidden
+        />
+      </button>
+      {open ? (
+        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-[90] overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg ring-1 ring-zinc-900/5">
+          <ul className="max-h-72 overflow-y-auto overscroll-contain px-2 py-1" role="listbox" aria-labelledby={`${id}-label`}>
+            {options.map((option) => (
+              <li key={option.value || 'any'} role="option" aria-selected={value === option.value}>
+                <button
+                  type="button"
+                  className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-zinc-50 focus:bg-zinc-50 focus:outline-none"
+                  onClick={() => {
+                    onChange(option.value);
+                    setOpen(false);
+                  }}
+                >
+                  <span
+                    className={`h-4 w-4 shrink-0 rounded border ${
+                      value === option.value
+                        ? 'border-emerald-500 bg-emerald-500'
+                        : 'border-zinc-200 bg-white'
+                    }`}
+                    aria-hidden
+                  />
+                  <span className="min-w-0 flex-1 text-sm font-medium text-zinc-800">
+                    {option.label}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {helper ? (
+        <span className="mt-1 block text-xs leading-relaxed text-zinc-500">
+          {helper}
+        </span>
+      ) : null}
+    </div>
+  );
+}
 
 const FilterCheckboxGroup = memo(function FilterCheckboxGroup({
   options,
@@ -519,9 +612,29 @@ export default function ScholarshipsMoreFiltersPanel({
       payout: { ...value.payout, [key]: v }
     });
 
+  const profileSchoolLevelOptions = [
+    { value: '', label: 'Any school level' },
+    ...SCHOOL_LEVEL_OPTIONS
+  ];
+  const profileFieldOfStudyOptions = [
+    { value: '', label: 'Any field of study' },
+    ...FIELD_OF_STUDY_OPTIONS
+  ];
+  const profileCitizenshipOptions = [
+    { value: '', label: 'Any citizenship status' },
+    ...CITIZENSHIP_OPTIONS
+  ];
+  const gpaSelectOptions = [
+    { value: '', label: 'Any GPA' },
+    {
+      value: SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY,
+      label: 'Prefer not to say (optional)'
+    },
+    ...SCHOLARSHIP_GPA_BUCKET_OPTIONS,
+    ...SCHOLARSHIP_GPA_OPTIONS
+  ];
   const requirementOptions = REQUIREMENT_TYPE_OPTIONS;
   const educationOptions = EDUCATION_LEVEL_OPTIONS;
-  const gpaOptions = GPA_BUCKET_OPTIONS;
   const easyApplyOptions: CheckboxGroupOption[] = EASY_APPLY_OPTIONS.map((opt) => ({
     id: opt.id,
     label: opt.label,
@@ -545,12 +658,6 @@ export default function ScholarshipsMoreFiltersPanel({
       )
     });
 
-  const onGpaCheckedChange = (id: string, checked: boolean) =>
-    onChange({
-      ...value,
-      includeGpaBuckets: toggleInSet(value.includeGpaBuckets, id, checked)
-    });
-
   const onEasyApplyCheckedChange = (id: string, checked: boolean) => {
     const optionLocked =
       !hasSubscription &&
@@ -562,6 +669,15 @@ export default function ScholarshipsMoreFiltersPanel({
     onChange({
       ...value,
       includeEasyApply: toggleInSet(value.includeEasyApply, id, checked)
+    });
+  };
+
+  const clearStudentProfileChoices = () => {
+    onChange({
+      ...value,
+      profileSchoolLevelSlug: '',
+      profileFieldOfStudySlug: '',
+      profileCitizenshipStatus: ''
     });
   };
 
@@ -647,6 +763,54 @@ export default function ScholarshipsMoreFiltersPanel({
               ))}
             </div>
           ) : null}
+          <section className={`py-5 ${divider}`}>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h3 className={sectionTitle}>Student profile</h3>
+                <p className={sectionHint}>
+                  Add the quiz-style profile choices that are not covered by the
+                  advanced filters below.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={clearStudentProfileChoices}
+                className="shrink-0 text-sm font-medium text-zinc-500 transition hover:text-zinc-800"
+              >
+                Clear
+              </button>
+            </div>
+            <div className="mt-4 space-y-4">
+              <ProfileSelectField
+                id="profile-school-level"
+                label="Current school level"
+                value={value.profileSchoolLevelSlug}
+                options={profileSchoolLevelOptions}
+                onChange={(profileSchoolLevelSlug) =>
+                  onChange({ ...value, profileSchoolLevelSlug })
+                }
+              />
+              <ProfileSelectField
+                id="profile-field-of-study"
+                label="Field of study"
+                value={value.profileFieldOfStudySlug}
+                options={profileFieldOfStudyOptions}
+                onChange={(profileFieldOfStudySlug) =>
+                  onChange({ ...value, profileFieldOfStudySlug })
+                }
+              />
+              <ProfileSelectField
+                id="profile-citizenship-status"
+                label="Citizenship status"
+                value={value.profileCitizenshipStatus}
+                options={profileCitizenshipOptions}
+                onChange={(profileCitizenshipStatus) =>
+                  onChange({ ...value, profileCitizenshipStatus })
+                }
+              />
+            </div>
+          </section>
+
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>
               Filter by time until deadline
@@ -1024,14 +1188,21 @@ export default function ScholarshipsMoreFiltersPanel({
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>GPA</h3>
             <p className={sectionHint}>
-              Show scholarships whose stated GPA bar matches any selection (OR).
+              Choose the GPA level you want scholarship requirements matched against.
             </p>
             <div className="mt-4">
-              <FilterCheckboxGroup
-                options={gpaOptions}
-                selected={value.includeGpaBuckets}
-                onCheckedChange={onGpaCheckedChange}
-                columnsClassName="grid grid-cols-1 gap-2"
+              <ProfileSelectField
+                id="more-filters-gpa"
+                label="GPA"
+                value={value.gpaChoice}
+                options={gpaSelectOptions}
+                onChange={(next) =>
+                  onChange({
+                    ...value,
+                    gpaChoice: next,
+                    includeGpaBuckets: new Set()
+                  })
+                }
               />
             </div>
           </section>

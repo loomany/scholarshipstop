@@ -10,6 +10,7 @@ import {
 import {
   cloneMoreFilters,
   defaultMoreFiltersFromBounds,
+  gpaBucketIdsFromFilterChoice,
   type DeadlinePreset,
   type MoreFiltersState
 } from '@/app/scholarships/moreFilters';
@@ -36,7 +37,9 @@ import {
 } from '@/lib/scholarships/supabase';
 import {
   buildScholarshipProfileFilterSeed,
+  educationLevelIdsFromProfileSchoolLevel,
   mergeBestRecommendationFiltersFromProfile,
+  profileCitizenshipNarrowFromCitizenship,
   stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
@@ -755,6 +758,7 @@ function moreFiltersReducedForSeoListing(base: MoreFiltersState): MoreFiltersSta
   f.includeEligibility.clear();
   f.includeEducationLevels.clear();
   f.includeGpaBuckets.clear();
+  f.gpaChoice = '';
   f.includeEasyApply.clear();
   f.dataCompleteness = {
     low: false,
@@ -845,17 +849,28 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     }
     q = q.or(parts.join(','));
   }
-  if (f.includeEducationLevels.size > 0) {
+  const profileEducationLevelIds = educationLevelIdsFromProfileSchoolLevel(
+    f.profileSchoolLevelSlug
+  );
+  const effectiveEducationLevelIds = new Set([
+    ...Array.from(f.includeEducationLevels),
+    ...profileEducationLevelIds
+  ]);
+  if (effectiveEducationLevelIds.size > 0) {
     const eduParts: string[] = [];
-    for (const id of f.includeEducationLevels) {
+    for (const id of effectiveEducationLevelIds) {
       const j = JSON.stringify([id]);
       eduParts.push(`catalog_education_levels.cs.${j}`);
       eduParts.push(`study_levels.cs.${j}`);
     }
     q = q.or(eduParts.join(','));
   }
-  if (f.includeGpaBuckets.size > 0) {
-    q = q.in('gpa_bucket', Array.from(f.includeGpaBuckets));
+  const effectiveGpaBucketIds = new Set([
+    ...Array.from(f.includeGpaBuckets),
+    ...gpaBucketIdsFromFilterChoice(f.gpaChoice)
+  ]);
+  if (effectiveGpaBucketIds.size > 0) {
+    q = q.in('gpa_bucket', Array.from(effectiveGpaBucketIds));
   }
   if (f.includeLocationLabels.size > 0) {
     /**
@@ -902,7 +917,11 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     q = q.or(fosParts.join(','));
   }
 
-  if (f.profileCitizenshipNarrow === 'us_domestic') {
+  const effectiveProfileCitizenshipNarrow =
+    f.profileCitizenshipNarrow !== 'none'
+      ? f.profileCitizenshipNarrow
+      : profileCitizenshipNarrowFromCitizenship(f.profileCitizenshipStatus);
+  if (effectiveProfileCitizenshipNarrow === 'us_domestic') {
     q = q.or(
       [
         'citizenship_statuses.cs.["us_citizen"]',
@@ -915,7 +934,12 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     );
   }
 
-  if (f.citizenshipAudience === 'international_friendly') {
+  const effectiveCitizenshipAudience =
+    f.citizenshipAudience === 'international_friendly' ||
+    f.profileCitizenshipStatus.trim().toLowerCase() === 'international_student'
+      ? 'international_friendly'
+      : 'any';
+  if (effectiveCitizenshipAudience === 'international_friendly') {
     /**
      * `international_friendly_listing` is maintained in DB (see migration) with the same
      * disjunction as the legacy OR below — btree-friendly vs many `ilike` on text blobs.
@@ -959,6 +983,7 @@ function applyBestRecommendationProfileGpaFilter(
   if (req.tab !== 'best-recommendation') return q;
   if (req.moreFilters.includeApplicantCountryCodes.size > 0) return q;
   if (req.moreFilters.includeGpaBuckets.size > 0) return q;
+  if (gpaBucketIdsFromFilterChoice(req.moreFilters.gpaChoice).length > 0) return q;
   const orParts = buildBestRecommendationProfileGpaOrParts(
     req.personalizedProfile ?? null
   );
@@ -1401,9 +1426,12 @@ function bestRecommendationHasRelaxableHardFilters(req: ScholarshipListRequest):
   return (
     f.includeEducationLevels.size > 0 ||
     f.includeGpaBuckets.size > 0 ||
+    gpaBucketIdsFromFilterChoice(f.gpaChoice).length > 0 ||
     f.includeEligibility.size > 0 ||
     f.filterStateInput.trim().length > 0 ||
+    f.profileSchoolLevelSlug.trim().length > 0 ||
     f.profileFieldOfStudySlug.trim().length > 0 ||
+    f.profileCitizenshipStatus.trim().length > 0 ||
     f.profileCitizenshipNarrow !== 'none' ||
     f.citizenshipAudience !== 'any'
   );
