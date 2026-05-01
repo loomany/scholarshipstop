@@ -20,6 +20,8 @@ type Body = {
   landing_path?: unknown;
   visitor_id?: unknown;
   auth_state?: unknown;
+  country?: unknown;
+  email?: unknown;
 };
 
 function normalizeFlow(raw: unknown): string {
@@ -39,6 +41,10 @@ function normalizeAuthState(raw: unknown): string {
   return 'unknown';
 }
 
+function normalizeShortText(raw: unknown, maxLength: number): string {
+  return typeof raw === 'string' ? raw.trim().slice(0, maxLength) : '';
+}
+
 export async function POST(request: Request) {
   let body: Body;
   try {
@@ -50,6 +56,8 @@ export async function POST(request: Request) {
   const flow = normalizeFlow(body.flow);
   const landingPath = normalizePath(body.landing_path);
   const authState = normalizeAuthState(body.auth_state);
+  const country = normalizeShortText(body.country, 120);
+  const email = normalizeShortText(body.email, 254);
   const visitorId =
     typeof body.visitor_id === 'string' && UUID_V4_RE.test(body.visitor_id.trim())
       ? body.visitor_id.trim()
@@ -80,6 +88,8 @@ export async function POST(request: Request) {
     '<b>✅ Quiz completed</b>',
     `<b>Flow:</b> ${escapeTelegramHtml(flow)}`,
     `<b>Auth:</b> ${escapeTelegramHtml(authState)}`,
+    `<b>Country:</b> ${escapeTelegramHtml(country || '-')}`,
+    `<b>Email:</b> ${escapeTelegramHtml(email || '-')}`,
     `<b>Source:</b> ${escapeTelegramHtml(sourceLabel)}`,
     `<b>Landing:</b> ${escapeTelegramHtml(landingPath)}`,
     `<b>Referrer:</b> ${escapeTelegramHtml(firstReferrer)}`,

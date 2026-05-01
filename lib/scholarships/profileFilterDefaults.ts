@@ -347,7 +347,7 @@ export function buildMoreFiltersWithProfileDefaults(
         .map((code) => code.trim().toUpperCase())
         .filter((code) => /^[A-Z]{2}$/.test(code))
     );
-    next.includeUnspecifiedApplicantCountries = true;
+    next.includeUnspecifiedApplicantCountries = false;
   }
   next.profileFieldOfStudySlug = seed.fieldOfStudy?.trim().toLowerCase() ?? '';
   next.profileCitizenshipNarrow = profileCitizenshipNarrowFromCitizenship(

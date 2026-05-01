@@ -4,7 +4,9 @@ import assert from 'node:assert/strict';
 import { defaultMoreFiltersFromBounds } from '@/app/scholarships/moreFilters';
 import { DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
+  buildMoreFiltersWithProfileDefaults,
   mergeBestRecommendationFiltersFromProfile,
+  stripHubProfileHardMatchMoreFilters,
   type ScholarshipProfileFilterSeed
 } from '@/lib/scholarships/profileFilterDefaults';
 
@@ -196,4 +198,38 @@ test('mergeBestRecommendationFiltersFromProfile returns clone when seed is null'
   assert.equal(out.filterStateInput, 'Texas');
   out.filterStateInput = 'Changed';
   assert.equal(base.filterStateInput, 'Texas');
+});
+
+test('stripHubProfileHardMatchMoreFilters preserves applicant country hard filters', () => {
+  const base = defaultMoreFiltersFromBounds(bounds);
+  base.includeEducationLevels.add('undergraduate');
+  base.profileFieldOfStudySlug = 'engineering';
+  base.includeApplicantCountryCodes.add('CA');
+  base.includeUnspecifiedApplicantCountries = false;
+
+  const out = stripHubProfileHardMatchMoreFilters(base);
+
+  assert.equal(out.includeEducationLevels.size, 0);
+  assert.equal(out.profileFieldOfStudySlug, '');
+  assert.deepEqual(out.includeApplicantCountryCodes, new Set(['CA']));
+  assert.equal(out.includeUnspecifiedApplicantCountries, false);
+  assert.equal(base.includeApplicantCountryCodes.has('CA'), true);
+});
+
+test('buildMoreFiltersWithProfileDefaults keeps selected applicant country exact by default', () => {
+  const seed: ScholarshipProfileFilterSeed = {
+    fieldOfStudy: null,
+    schoolLevel: null,
+    citizenship: null,
+    applicantCountryCodes: ['CA'],
+    stateInput: '',
+    educationLevelIds: [],
+    gpaBucketIds: [],
+    eligibilityIds: []
+  };
+
+  const out = buildMoreFiltersWithProfileDefaults(bounds, seed);
+
+  assert.deepEqual(out.includeApplicantCountryCodes, new Set(['CA']));
+  assert.equal(out.includeUnspecifiedApplicantCountries, false);
 });

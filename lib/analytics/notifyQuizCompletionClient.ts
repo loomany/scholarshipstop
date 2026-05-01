@@ -14,6 +14,8 @@ type NotifyQuizCompletionPayload = {
   landingPath: string;
   authState: 'guest' | 'authenticated';
   onceKey: string;
+  country?: string;
+  email?: string;
 };
 
 export async function notifyQuizCompletionClient(
@@ -35,6 +37,8 @@ export async function notifyQuizCompletionClient(
         flow: payload.flow,
         landing_path: payload.landingPath,
         auth_state: payload.authState,
+        country: payload.country,
+        email: payload.email,
         visitor_id: visitorId
       }),
       keepalive: true

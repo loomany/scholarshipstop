@@ -1394,6 +1394,29 @@ function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRe
   return base;
 }
 
+function bestRecommendationHasRelaxableHardFilters(req: ScholarshipListRequest): boolean {
+  if (req.tab !== 'best-recommendation') return false;
+  const f = req.moreFilters;
+  return (
+    f.includeEducationLevels.size > 0 ||
+    f.includeGpaBuckets.size > 0 ||
+    f.includeEligibility.size > 0 ||
+    f.filterStateInput.trim().length > 0 ||
+    f.profileFieldOfStudySlug.trim().length > 0 ||
+    f.profileCitizenshipNarrow !== 'none' ||
+    f.citizenshipAudience !== 'any'
+  );
+}
+
+function relaxBestRecommendationHardFilters(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
+  return {
+    ...req,
+    moreFilters: stripHubProfileHardMatchMoreFilters(req.moreFilters)
+  };
+}
+
 /** Canonical pipeline is catalog SQL; keep tab selection intact. */
 export function applyCatalogOnlyListingNormalization(
   req: ScholarshipListRequest
@@ -1436,7 +1459,18 @@ export async function countScholarshipsForTabRequest(
     const q: any = buildScholarshipListFilterQuery(supabase, true, r);
     const { error, count } = await q;
     if (error) throw new Error(postgrestErrorToMessage(error));
-    return count ?? 0;
+    const total = count ?? 0;
+    if (total > 0 || !bestRecommendationHasRelaxableHardFilters(r)) {
+      return total;
+    }
+    const relaxed = {
+      ...effectiveListingRequest(relaxBestRecommendationHardFilters(r)),
+      tab
+    };
+    const retryQ: any = buildScholarshipListFilterQuery(supabase, true, relaxed);
+    const retry = await retryQ;
+    if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
+    return retry.count ?? 0;
   };
   try {
     return await run();
@@ -1657,7 +1691,7 @@ export async function executeScholarshipListQuery(
     };
   }
 
-  const rEff = effectiveListingRequest(req);
+  let rEff = effectiveListingRequest(req);
 
   let bounds: ScholarshipListMeta['filterBounds'] | undefined;
   if (opts.includeMeta) {
@@ -1665,9 +1699,16 @@ export async function executeScholarshipListQuery(
   }
 
   if (opts.countOnly) {
-    const q: any = buildScholarshipListFilterQuery(supabase, true, rEff);
-    const { error, count } = await q;
+    let q: any = buildScholarshipListFilterQuery(supabase, true, rEff);
+    let { error, count } = await q;
     if (error) throw new Error(postgrestErrorToMessage(error));
+    if ((count ?? 0) === 0 && bestRecommendationHasRelaxableHardFilters(rEff)) {
+      rEff = effectiveListingRequest(relaxBestRecommendationHardFilters(rEff));
+      q = buildScholarshipListFilterQuery(supabase, true, rEff);
+      const retry = await q;
+      if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
+      count = retry.count;
+    }
     return {
       scholarships: [],
       total: count ?? 0,
@@ -1682,22 +1723,30 @@ export async function executeScholarshipListQuery(
     !req.similarToId;
 
   if (personalizedHubTab && req.personalizedProfile) {
-    const personalizedReq =
+    let personalizedReq =
       req.tab === 'best-recommendation'
         ? bestRecommendationRequest(
             req,
             bounds ?? (await fetchGlobalFilterBounds(supabase))
           )
         : req;
-    const personalizedEff = effectiveListingRequest(personalizedReq);
-    const qc: any = buildScholarshipListFilterQuery(
+    let personalizedEff = effectiveListingRequest(personalizedReq);
+    let qc: any = buildScholarshipListFilterQuery(
       supabase,
       true,
       personalizedEff
     );
-    const { error: cErr, count } = await qc;
+    let { error: cErr, count } = await qc;
     if (cErr) throw new Error(postgrestErrorToMessage(cErr));
-    const rawTotal = count ?? 0;
+    let rawTotal = count ?? 0;
+    if (rawTotal === 0 && bestRecommendationHasRelaxableHardFilters(personalizedReq)) {
+      personalizedReq = relaxBestRecommendationHardFilters(personalizedReq);
+      personalizedEff = effectiveListingRequest(personalizedReq);
+      qc = buildScholarshipListFilterQuery(supabase, true, personalizedEff);
+      const retry = await qc;
+      if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
+      rawTotal = retry.count ?? 0;
+    }
 
     let meta: ScholarshipListMeta | undefined;
     if (opts.includeMeta && bounds) {
@@ -1880,9 +1929,20 @@ export async function executeScholarshipListQuery(
   let effectivePage = req.page;
   let from = (effectivePage - 1) * req.limit;
   let to = from + req.limit - 1;
-  const { data, error, count } = await buildListPageQuery(from, to);
+  let { data, error, count } = await buildListPageQuery(from, to);
   if (error) throw new Error(postgrestErrorToMessage(error));
-  const rawTotal = count ?? 0;
+  let rawTotal = count ?? 0;
+  if (rawTotal === 0 && bestRecommendationHasRelaxableHardFilters(rEff)) {
+    rEff = effectiveListingRequest(relaxBestRecommendationHardFilters(rEff));
+    effectivePage = 1;
+    from = 0;
+    to = req.limit - 1;
+    const retry = await buildListPageQuery(from, to);
+    if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
+    data = retry.data;
+    count = retry.count;
+    rawTotal = count ?? 0;
+  }
   const sqlTotalBeforePostProcessing = rawTotal;
 
   let total = rawTotal;

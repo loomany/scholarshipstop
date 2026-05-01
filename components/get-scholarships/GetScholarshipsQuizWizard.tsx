@@ -256,7 +256,9 @@ export function GetScholarshipsQuizWizard({
       flow: 'get_scholarships_quiz',
       landingPath: '/get-scholarships',
       authState: 'guest',
-      onceKey: 'st_quiz_complete_get_scholarships'
+      onceKey: 'st_quiz_complete_get_scholarships',
+      country: `${countryLabelFromCode(selectedCountryCode)} (${selectedCountryCode})`,
+      email: normalizedEmail
     });
     router.replace(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF);
   },
