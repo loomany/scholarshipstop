@@ -131,6 +131,8 @@ export type Scholarship = {
   studyLevels?: string[];
   fieldOfStudy?: string[];
   citizenshipStatuses?: string[];
+  applicantCountryCodes?: string[];
+  hostCountryCodes?: string[];
   locationScope?: string | null;
   stateCodes?: string[];
   institutionTypes?: string[];

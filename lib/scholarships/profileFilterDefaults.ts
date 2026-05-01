@@ -32,6 +32,7 @@ export type ScholarshipProfileFilterSeed = {
   fieldOfStudy: string | null;
   schoolLevel: string | null;
   citizenship: string | null;
+  applicantCountryCodes?: string[];
   stateInput: string;
   gpa?: ProfilesRow['gpa'] | null;
   gpaSelection?: string | null;
@@ -39,6 +40,25 @@ export type ScholarshipProfileFilterSeed = {
   gpaBucketIds: string[];
   eligibilityIds: string[];
 };
+
+export function buildScholarshipProfileFilterSeedFromCountry(
+  countryCode: string
+): ScholarshipProfileFilterSeed | null {
+  const normalized = countryCode.trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(normalized)) return null;
+  return {
+    fieldOfStudy: null,
+    schoolLevel: null,
+    citizenship: null,
+    applicantCountryCodes: [normalized],
+    stateInput: '',
+    gpa: null,
+    gpaSelection: null,
+    educationLevelIds: [],
+    gpaBucketIds: [],
+    eligibilityIds: []
+  };
+}
 
 /**
  * Scholarship `gpa_bucket` stores the award's **minimum** GPA bar (see `gpaMinToBucketId`
@@ -158,6 +178,7 @@ export function buildScholarshipProfileFilterSeedFromDraftWithoutBirth(
     fieldOfStudy,
     schoolLevel,
     citizenship,
+    applicantCountryCodes: [],
     stateInput,
     gpa: gpaNum,
     gpaSelection,
@@ -266,6 +287,10 @@ export function buildScholarshipProfileFilterSeed(
   const schoolLevel = profile.school_level?.trim() || null;
   const citizenship = profile.citizenship_status?.trim() || null;
   const stateInput = normalizeUsStateToCanonical(profile.state_region?.trim() ?? '') ?? '';
+  const countryCode =
+    typeof profile.country_code === 'string' && /^[A-Z]{2}$/i.test(profile.country_code.trim())
+      ? profile.country_code.trim().toUpperCase()
+      : null;
   const educationLevelIds = educationLevelIdsFromProfileSchoolLevel(schoolLevel);
   const gpaSelection = profileGpaSelectionFromSnapshot(profile.saved_filters_snapshot);
   const gpaBucketIds = gpaBucketIdsFromProfile(profile);
@@ -275,6 +300,7 @@ export function buildScholarshipProfileFilterSeed(
     !fieldOfStudy &&
     !schoolLevel &&
     !citizenship &&
+    !countryCode &&
     !stateInput &&
     profile.gpa == null &&
     !gpaSelection &&
@@ -289,6 +315,7 @@ export function buildScholarshipProfileFilterSeed(
     fieldOfStudy,
     schoolLevel,
     citizenship,
+    applicantCountryCodes: countryCode ? [countryCode] : [],
     stateInput,
     gpa: profile.gpa ?? null,
     gpaSelection,
@@ -314,6 +341,13 @@ export function buildMoreFiltersWithProfileDefaults(
   next.includeEducationLevels = new Set(seed.educationLevelIds);
   next.includeGpaBuckets = new Set(seed.gpaBucketIds);
   next.includeEligibility = new Set(seed.eligibilityIds);
+  if (seed.applicantCountryCodes?.length) {
+    next.includeApplicantCountryCodes = new Set(
+      seed.applicantCountryCodes
+        .map((code) => code.trim().toUpperCase())
+        .filter((code) => /^[A-Z]{2}$/.test(code))
+    );
+  }
   next.profileFieldOfStudySlug = seed.fieldOfStudy?.trim().toLowerCase() ?? '';
   next.profileCitizenshipNarrow = profileCitizenshipNarrowFromCitizenship(
     seed.citizenship
@@ -378,6 +412,12 @@ export function mergeBestRecommendationFiltersFromProfile(
   }
   if (out.includeEligibility.size === 0 && prof.includeEligibility.size > 0) {
     out.includeEligibility = new Set(prof.includeEligibility);
+  }
+  if (
+    out.includeApplicantCountryCodes.size === 0 &&
+    prof.includeApplicantCountryCodes.size > 0
+  ) {
+    out.includeApplicantCountryCodes = new Set(prof.includeApplicantCountryCodes);
   }
   if (!out.profileFieldOfStudySlug.trim() && prof.profileFieldOfStudySlug.trim()) {
     out.profileFieldOfStudySlug = prof.profileFieldOfStudySlug;

@@ -10,6 +10,7 @@
 import {
   clearLandingQuizDraft,
   loadCompletedLandingQuizDraft,
+  loadLandingQuizSelectedCountry,
   loadLandingQuizDraft
 } from '@/lib/onboarding/getScholarshipsLandingDraft';
 import {
@@ -158,10 +159,10 @@ export function stashLandingQuizDraftForOnboardingMerge(
 export function tryBuildProfileSeedFromPendingLandingSession(): ScholarshipProfileFilterSeed | null {
   const draft = readPendingLandingDraftFromStorage();
   if (!draft) return null;
-  return (
+  const seed =
     buildScholarshipProfileFilterSeedFromQuizDraft(draft) ??
-    buildScholarshipProfileFilterSeedFromDraftWithoutBirth(draft)
-  );
+    buildScholarshipProfileFilterSeedFromDraftWithoutBirth(draft);
+  return withSelectedCountrySeed(seed);
 }
 
 export function tryBuildProfileSeedFromCompletedLandingQuiz(): ScholarshipProfileFilterSeed | null {
@@ -169,10 +170,23 @@ export function tryBuildProfileSeedFromCompletedLandingQuiz(): ScholarshipProfil
   try {
     const draft = loadCompletedLandingQuizDraft();
     if (!draft) return null;
-    return buildScholarshipProfileFilterSeedFromDraftWithoutBirth(draft);
+    return withSelectedCountrySeed(
+      buildScholarshipProfileFilterSeedFromDraftWithoutBirth(draft)
+    );
   } catch {
     return null;
   }
+}
+
+function withSelectedCountrySeed(
+  seed: ScholarshipProfileFilterSeed | null
+): ScholarshipProfileFilterSeed | null {
+  const countryCode = loadLandingQuizSelectedCountry();
+  if (!seed || !/^[A-Z]{2}$/.test(countryCode)) return seed;
+  return {
+    ...seed,
+    applicantCountryCodes: [countryCode]
+  };
 }
 
 function stripQuizVariant(d: StoredOnboardingDraft): StoredOnboardingDraft {

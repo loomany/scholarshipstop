@@ -14,7 +14,7 @@ type Result = {
 };
 
 const PROFILE_MATCH_FIELDS =
-  'field_of_study, field_of_study_label, school_level, citizenship_status, state_region, gpa, saved_filters_snapshot, onboarding_completed';
+  'field_of_study, field_of_study_label, school_level, citizenship_status, state_region, country_code, city, gpa, saved_filters_snapshot, onboarding_completed';
 
 export function useCurrentUserScholarshipMatchProfile(
   enabled: boolean

@@ -9,6 +9,7 @@ import { ScholarshipOnboardingStep1 } from '@/components/onboarding/ScholarshipO
 import { ScholarshipOnboardingStep2 } from '@/components/onboarding/ScholarshipOnboardingStep2';
 import { ScholarshipOnboardingStep3Gpa } from '@/components/onboarding/ScholarshipOnboardingStep3Gpa';
 import { ScholarshipOnboardingStep4State } from '@/components/onboarding/ScholarshipOnboardingStep4State';
+import { CountryFirstStep } from '@/components/onboarding/CountryFirstStep';
 import { buildCompleteScholarshipUserProfile } from '@/lib/onboarding/buildScholarshipUserProfile';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import {
@@ -37,6 +38,7 @@ import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
 import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 
 /** Default landing after onboarding: scholarship hub, Best recommendation tab. */
 const POST_ONBOARDING_PATH = SCHOLARSHIPS_HUB_BEST_MATCHES_HREF;
@@ -56,7 +58,7 @@ function emptyDraft(): StoredOnboardingDraft {
     step1: mergeDraftWithDefaults(null),
     step2: { firstName: '', lastName: '', email: '' },
     step3: { gpa: '' },
-    step4: { state: '' }
+    step4: { countryCode: '', state: '' }
   };
 }
 
@@ -106,6 +108,7 @@ export function ScholarshipOnboardingWizard({
   const finalizeInFlight = useRef(false);
   const [embeddedStep, setEmbeddedStep] = useState<OnboardingStep>(1);
   const [embeddedStepReady, setEmbeddedStepReady] = useState(false);
+  const [countryError, setCountryError] = useState<string | null>(null);
 
   useEffect(() => {
     const merged = applyPendingLandingQuizMergeIfNeeded();
@@ -172,21 +175,32 @@ export function ScholarshipOnboardingWizard({
     [mode, router, safeNext]
   );
 
-  const handleSchoolLevelContinue = useCallback(
-    (values: OnboardingFormValues) => {
+  const handleCountryContinue = useCallback(
+    (countryCodeRaw: string) => {
+      const code = normalizeCountryCode(countryCodeRaw);
+      if (!code) {
+        setCountryError('Choose your country to continue.');
+        return;
+      }
+      setCountryError(null);
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
+      const nextStep = (code === 'US' ? 2 : 7) as OnboardingStep;
       persistFull({
         ...base,
         v: 7,
-        step1: values,
-        activeStep: 2
+        step4: {
+          ...base.step4,
+          countryCode: code,
+          state: code === 'US' ? base.step4.state : ''
+        },
+        activeStep: nextStep
       });
-      navigateToStep(2);
+      navigateToStep(nextStep);
     },
     [persistFull, navigateToStep]
   );
 
-  const handleFieldOfStudyContinue = useCallback(
+  const handleSchoolLevelContinue = useCallback(
     (values: OnboardingFormValues) => {
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       persistFull({
@@ -200,7 +214,7 @@ export function ScholarshipOnboardingWizard({
     [persistFull, navigateToStep]
   );
 
-  const handleCitizenshipContinue = useCallback(
+  const handleFieldOfStudyContinue = useCallback(
     (values: OnboardingFormValues) => {
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       persistFull({
@@ -214,17 +228,21 @@ export function ScholarshipOnboardingWizard({
     [persistFull, navigateToStep]
   );
 
-  const handleAfterState = useCallback(() => {
-    const base = loadStoredOnboardingDraft() ?? emptyDraft();
-    persistFull({
-      ...base,
-      v: 7,
-      activeStep: 5
-    });
-    navigateToStep(5);
-  }, [persistFull, navigateToStep]);
+  const handleCitizenshipContinue = useCallback(
+    (values: OnboardingFormValues) => {
+      const base = loadStoredOnboardingDraft() ?? emptyDraft();
+      persistFull({
+        ...base,
+        v: 7,
+        step1: values,
+        activeStep: 5
+      });
+      navigateToStep(5);
+    },
+    [persistFull, navigateToStep]
+  );
 
-  const handleAfterGpa = useCallback(() => {
+  const handleAfterState = useCallback(() => {
     const base = loadStoredOnboardingDraft() ?? emptyDraft();
     persistFull({
       ...base,
@@ -232,6 +250,16 @@ export function ScholarshipOnboardingWizard({
       activeStep: 6
     });
     navigateToStep(6);
+  }, [persistFull, navigateToStep]);
+
+  const handleAfterGpa = useCallback(() => {
+    const base = loadStoredOnboardingDraft() ?? emptyDraft();
+    persistFull({
+      ...base,
+      v: 7,
+      activeStep: 7
+    });
+    navigateToStep(7);
   }, [persistFull, navigateToStep]);
 
   const handleBack = useCallback(
@@ -322,6 +350,27 @@ export function ScholarshipOnboardingWizard({
           } catch (error) {
             console.warn('[onboarding:telegram] registration notify failed', error);
           }
+        };
+
+        const syncProfileViaCountrySignup = async () => {
+          const profileCountryCode = normalizeCountryCode(built.profile.countryCode);
+          if (!profileCountryCode) return false;
+          const res = await fetch('/api/onboarding/country-signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+              email,
+              countryCode: profileCountryCode,
+              source: mode === 'embedded' ? 'embedded-onboarding' : 'onboarding',
+              profile: built.profile
+            })
+          });
+          if (!res.ok) {
+            const payload = (await res.json().catch(() => null)) as { error?: string } | null;
+            throw new Error(payload?.error ?? 'Could not save your scholarship profile.');
+          }
+          return true;
         };
 
         const finishWithSession = async () => {
@@ -421,6 +470,9 @@ export function ScholarshipOnboardingWizard({
           return;
         }
 
+        if (signUpData.user?.id) {
+          await syncProfileViaCountrySignup();
+        }
         clearScholarshipOnboardingDraft();
         setLoading(false);
         finalizeInFlight.current = false;
@@ -456,7 +508,7 @@ export function ScholarshipOnboardingWizard({
           lastName: payload.lastName.trim(),
           email: payload.email.trim()
         },
-        activeStep: 6
+        activeStep: 7
       });
       void finalizeOnboarding(payload.password, payload.confirmPassword);
     },
@@ -474,6 +526,8 @@ export function ScholarshipOnboardingWizard({
 
   const showEmbeddedLeave =
     mode === 'embedded' && typeof onLeaveEmbeddedQuiz === 'function';
+  const selectedCountryCode = normalizeCountryCode(draft.step4.countryCode);
+  const isUnitedStatesFlow = selectedCountryCode === 'US';
 
   return (
     <div className="min-h-[calc(100dvh-4rem)] bg-zinc-50 px-4 py-10 sm:py-14">
@@ -499,69 +553,101 @@ export function ScholarshipOnboardingWizard({
 
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
           {step === 1 ? (
-            <ScholarshipOnboardingStep1
+            <CountryFirstStep
               disabled={loading}
-              initialStep1={draft.step1}
-              basicStep="schoolLevel"
-              progressEyebrow="Step 1 of 6 · Basics"
-              title="Tell us about you"
-              description="We use this to match scholarships to your background and goals."
-              helperText="The more details you share, the better we can tailor scholarship matches to you."
-              onContinue={handleSchoolLevelContinue}
+              value={draft.step4.countryCode ?? ''}
+              progressEyebrow="Step 1 · Country"
+              title="Where are you applying from?"
+              description="Choose your applicant country first. We'll adapt the signup questions and scholarship matching to that country."
+              error={countryError}
+              onChange={(value) => {
+                setCountryError(null);
+                persistFull({
+                  ...draft,
+                  v: 7,
+                  step4: {
+                    ...draft.step4,
+                    countryCode: value,
+                    state: normalizeCountryCode(value) === 'US' ? draft.step4.state : ''
+                  }
+                });
+              }}
+              onContinue={() => handleCountryContinue(draft.step4.countryCode ?? '')}
             />
           ) : null}
           {step === 2 ? (
             <ScholarshipOnboardingStep1
               disabled={loading}
               initialStep1={draft.step1}
-              basicStep="fieldOfStudy"
-              progressEyebrow="Step 2 of 6 · Basics"
+              basicStep="schoolLevel"
+              progressEyebrow="Step 2 of 7 · Basics"
               title="Tell us about you"
               description="We use this to match scholarships to your background and goals."
               helperText="The more details you share, the better we can tailor scholarship matches to you."
+              visualVariant="saas"
               onBack={() => handleBack(1)}
-              onContinue={handleFieldOfStudyContinue}
+              onContinue={handleSchoolLevelContinue}
             />
           ) : null}
           {step === 3 ? (
             <ScholarshipOnboardingStep1
               disabled={loading}
               initialStep1={draft.step1}
-              basicStep="citizenship"
-              progressEyebrow="Step 3 of 6 · Basics"
+              basicStep="fieldOfStudy"
+              progressEyebrow="Step 3 of 7 · Basics"
               title="Tell us about you"
               description="We use this to match scholarships to your background and goals."
               helperText="The more details you share, the better we can tailor scholarship matches to you."
+              visualVariant="saas"
               onBack={() => handleBack(2)}
-              onContinue={handleCitizenshipContinue}
+              onContinue={handleFieldOfStudyContinue}
             />
           ) : null}
           {step === 4 ? (
-            <ScholarshipOnboardingStep4State
+            <ScholarshipOnboardingStep1
               disabled={loading}
-              initialStep4={draft.step4}
-              progressEyebrow="Step 4 of 6 · State"
+              initialStep1={draft.step1}
+              basicStep="citizenship"
+              progressEyebrow="Step 4 of 7 · Basics"
+              title="Tell us about you"
+              description="We use this to match scholarships to your background and goals."
+              helperText="The more details you share, the better we can tailor scholarship matches to you."
+              visualVariant="saas"
               onBack={() => handleBack(3)}
-              onContinue={handleAfterState}
+              onContinue={handleCitizenshipContinue}
             />
           ) : null}
           {step === 5 ? (
-            <ScholarshipOnboardingStep3Gpa
+            <ScholarshipOnboardingStep4State
               disabled={loading}
-              initialStep3={draft.step3}
-              progressEyebrow="Step 5 of 6 · GPA"
+              initialStep4={draft.step4}
+              progressEyebrow="Step 5 of 7 · State"
+              visualVariant="saas"
               onBack={() => handleBack(4)}
-              onContinue={handleAfterGpa}
+              onContinue={handleAfterState}
             />
           ) : null}
           {step === 6 ? (
+            <ScholarshipOnboardingStep3Gpa
+              disabled={loading}
+              initialStep3={draft.step3}
+              progressEyebrow="Step 6 of 7 · GPA"
+              visualVariant="saas"
+              onBack={() => handleBack(5)}
+              onContinue={handleAfterGpa}
+            />
+          ) : null}
+          {step === 7 ? (
             <ScholarshipOnboardingStep2
               disabled={loading}
               isSubmitting={loading}
               initialStep1={draft.step1}
               initialStep2={draft.step2}
-              progressEyebrow="Step 6 of 6 · Account"
-              onBack={() => handleBack(5)}
+              progressEyebrow={
+                isUnitedStatesFlow ? 'Step 7 of 7 · Account' : 'Step 2 of 2 · Account'
+              }
+              visualVariant="saas"
+              onBack={() => handleBack(isUnitedStatesFlow ? 6 : 1)}
               onContinue={handleAccountSubmit}
               oauthRedirectAfterAuthPath={afterAuthPath}
             />

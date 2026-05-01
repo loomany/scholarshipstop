@@ -1,9 +1,21 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, BrainCircuit, CheckCircle2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  BrainCircuit,
+  CheckCircle2,
+  GraduationCap,
+  MapPin,
+  Sparkles,
+  type LucideIcon
+} from 'lucide-react';
 
 import { DarkSelect } from '@/components/home/DarkSelect';
+import { CountryFirstStep } from '@/components/onboarding/CountryFirstStep';
+import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
 import {
   CITIZENSHIP_OPTIONS,
   US_STATE_OPTIONS
@@ -17,6 +29,7 @@ import {
   SCHOLARSHIP_GPA_OPTIONS
 } from '@/lib/constants/scholarshipGpaOptions';
 import type { QualificationData } from '@/lib/iqAssessmentTypes';
+import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 
 type PostAssessmentQuizProps = {
   storageKey: string;
@@ -37,6 +50,7 @@ type QuizStep = {
   label: string;
   placeholder: string;
   options: QuizOption[];
+  icon: LucideIcon;
 };
 
 const schoolLevelOptions = SCHOOL_LEVEL_OPTIONS.map((option) => ({
@@ -79,7 +93,8 @@ const steps: QuizStep[] = [
       'We use this to tighten recommendations by education stage, just like the scholarship matching quiz.',
     label: 'Current school level',
     placeholder: 'Select your school level',
-    options: schoolLevelOptions
+    options: schoolLevelOptions,
+    icon: GraduationCap
   },
   {
     id: 'fieldOfStudy',
@@ -89,7 +104,8 @@ const steps: QuizStep[] = [
       'Your major helps connect your cognitive profile to the right scholarship categories.',
     label: 'Field of study',
     placeholder: 'Select your field of study',
-    options: fieldOfStudyOptions
+    options: fieldOfStudyOptions,
+    icon: BookOpen
   },
   {
     id: 'citizenship',
@@ -99,7 +115,8 @@ const steps: QuizStep[] = [
       'Scholarship eligibility often depends on citizenship or international student status.',
     label: 'Citizenship status',
     placeholder: 'Select citizenship status',
-    options: citizenshipOptions
+    options: citizenshipOptions,
+    icon: Sparkles
   },
   {
     id: 'state',
@@ -109,7 +126,8 @@ const steps: QuizStep[] = [
       'Add a state if you want the strategy to include state-specific scholarship signals.',
     label: 'U.S. state',
     placeholder: 'Select your state',
-    options: stateOptions
+    options: stateOptions,
+    icon: MapPin
   },
   {
     id: 'gpa',
@@ -119,13 +137,20 @@ const steps: QuizStep[] = [
       'GPA helps us rank scholarships with academic requirements and avoid weak-fit paths.',
     label: 'GPA',
     placeholder: 'Select your GPA',
-    options: gpaOptions
+    options: gpaOptions,
+    icon: GraduationCap
   }
 ];
 
 function isCompleteDraft(value: Partial<QualificationData>): value is QualificationData {
+  const countryCode = normalizeCountryCode(value.countryCode);
+  if (countryCode && countryCode !== 'US') {
+    return true;
+  }
+
   return Boolean(
-    value.schoolLevel &&
+    countryCode === 'US' &&
+      value.schoolLevel &&
       value.fieldOfStudy &&
       value.citizenship &&
       value.gpa
@@ -249,18 +274,27 @@ export default function PostAssessmentQuiz({
   onComplete
 }: PostAssessmentQuizProps) {
   const [started, setStarted] = useState(startImmediately);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(-1);
   const [draft, setDraft] = useState<Partial<QualificationData>>({});
+  const [countryError, setCountryError] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = readDraft(storageKey);
     setDraft(saved);
     if (Object.keys(saved).length > 0) {
-      const firstMissing = steps.findIndex((step) => !saved[step.id]);
       setStarted(true);
-      setCurrentStep(firstMissing === -1 ? steps.length - 1 : firstMissing);
+      const countryCode = normalizeCountryCode(saved.countryCode);
+      if (!countryCode) {
+        setCurrentStep(-1);
+      } else if (countryCode !== 'US') {
+        setCurrentStep(-1);
+      } else {
+        const firstMissing = steps.findIndex((step) => !saved[step.id]);
+        setCurrentStep(firstMissing === -1 ? steps.length - 1 : firstMissing);
+      }
     } else if (startImmediately) {
       setStarted(true);
+      setCurrentStep(-1);
     }
   }, [startImmediately, storageKey]);
 
@@ -268,21 +302,46 @@ export default function PostAssessmentQuiz({
     writeDraft(storageKey, draft);
   }, [draft, storageKey]);
 
-  const step = steps[currentStep]!;
-  const progress = useMemo(
-    () => Math.round(((currentStep + 1) / steps.length) * 100),
-    [currentStep]
-  );
-
   const choose = (stepId: keyof QualificationData, value: string) => {
     const next = { ...draft, [stepId]: value } as Partial<QualificationData>;
     setDraft(next);
   };
 
+  const continueCountry = () => {
+    const countryCode = normalizeCountryCode(draft.countryCode);
+    if (!countryCode) {
+      setCountryError('Choose your country to continue.');
+      return;
+    }
+
+    const next = {
+      ...draft,
+      countryCode,
+      state: countryCode === 'US' ? draft.state ?? '' : ''
+    } as Partial<QualificationData>;
+    setCountryError(null);
+    setDraft(next);
+    writeDraft(storageKey, next);
+
+    if (countryCode !== 'US') {
+      onComplete({
+        countryCode,
+        schoolLevel: '',
+        fieldOfStudy: '',
+        citizenship: '',
+        state: '',
+        gpa: ''
+      });
+      return;
+    }
+
+    setCurrentStep(0);
+  };
+
   const continueStep = () => {
     if (currentStep >= steps.length - 1) {
       if (isCompleteDraft(draft)) {
-        onComplete({ ...draft, state: draft.state ?? '' });
+        onComplete({ ...draft, countryCode: 'US', state: draft.state ?? '' });
       }
       return;
     }
@@ -322,84 +381,104 @@ export default function PostAssessmentQuiz({
     );
   }
 
+  if (currentStep === -1) {
+    return (
+      <main className="fixed inset-0 z-[200] overflow-hidden bg-[#F8FAFC] px-3 py-3 text-slate-950 sm:px-6 sm:py-8">
+        <section className="mx-auto flex h-full max-w-lg items-center">
+          <div className="w-full rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
+            <CountryFirstStep
+              value={draft.countryCode ?? ''}
+              progressEyebrow="Step 1 · Applicant country"
+              title="Which country are you applying from?"
+              description="Choose your country first. If you pick the United States, we will ask the full scholarship details. Other countries can skip those U.S.-specific steps."
+              error={countryError}
+              onChange={(value) => {
+                choose('countryCode', value);
+                setCountryError(null);
+              }}
+              onContinue={continueCountry}
+            />
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  const step = steps[currentStep]!;
+  const Icon = step.icon;
+
   return (
     <main className="fixed inset-0 z-[200] overflow-hidden bg-[#F8FAFC] px-3 py-3 text-slate-950 sm:px-6 sm:py-8">
-      <section className="mx-auto flex h-full max-w-4xl items-center">
-        <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_70px_-34px_rgba(15,23,42,0.42)] sm:p-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
-                {step.eyebrow}
+      <section className="mx-auto flex h-full max-w-lg items-center">
+        <div className="w-full rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
+          <div className="w-full space-y-6">
+            <button
+              type="button"
+              onClick={() => setCurrentStep((index) => Math.max(-1, index - 1))}
+              className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50"
+            >
+              <ArrowLeft className="mr-2 inline h-4 w-4" aria-hidden />
+              Back
+            </button>
+
+            <div className="mx-auto max-w-lg text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF3E8] text-[#FF7A1A] ring-1 ring-[#FFD9B3]">
+                <Icon className="h-6 w-6" aria-hidden />
+              </div>
+              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-[#A45A16]">
+                Step {currentStep + 2} of {steps.length + 1} · {step.eyebrow}
               </p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
+              <h1 className="mt-2 text-2xl font-bold tracking-tight text-[#7A3B00] sm:text-3xl">
                 {step.title}
               </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+              <p className="mx-auto mt-3 max-w-md text-base font-medium leading-7 text-[#8C5A2B] sm:max-w-lg">
                 {step.description}
               </p>
             </div>
-            <p className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-600">
-              Step {currentStep + 1} of {steps.length} • Takes 45 seconds
-            </p>
-          </div>
 
-          <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-100">
-            <div
-              className="h-full rounded-full bg-slate-950 transition-all"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-
-          <div className="mt-8">
-            <label
-              htmlFor={`iq-qualification-${step.id}`}
-              className="mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-slate-500"
-            >
-              {step.label}
-            </label>
-            {step.id === 'state' ? (
-              <StateAutocomplete
-                id={`iq-qualification-${step.id}`}
-                label={step.label}
-                placeholder={step.placeholder}
-                value={draft.state ?? ''}
-                onChange={(value) => choose('state', value)}
-              />
-            ) : (
-              <DarkSelect
-                id={`iq-qualification-${step.id}`}
-                ariaLabel={step.label}
-                options={[{ value: '', label: step.placeholder }, ...step.options]}
-                value={draft[step.id] ?? ''}
-                onChange={(value) => choose(step.id, value)}
-                menuClassName={step.id === 'fieldOfStudy' ? 'max-h-72' : undefined}
-              />
-            )}
-            {draft[step.id] ? (
-              <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-emerald-700">
-                <CheckCircle2 className="h-4 w-4" aria-hidden />
-                Saved for your strategy
+            <div className="space-y-5 text-left">
+              <div>
+                <label
+                  htmlFor={`iq-qualification-${step.id}`}
+                  className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-gray-700"
+                >
+                  {step.label}
+                </label>
+                {step.id === 'state' ? (
+                  <StateAutocomplete
+                    id={`iq-qualification-${step.id}`}
+                    label={step.label}
+                    placeholder={step.placeholder}
+                    value={draft.state ?? ''}
+                    onChange={(value) => choose('state', value)}
+                  />
+                ) : (
+                  <DarkSelect
+                    id={`iq-qualification-${step.id}`}
+                    ariaLabel={step.label}
+                    options={[{ value: '', label: step.placeholder }, ...step.options]}
+                    value={draft[step.id] ?? ''}
+                    onChange={(value) => choose(step.id, value)}
+                    menuClassName={step.id === 'fieldOfStudy' ? 'max-h-72' : undefined}
+                  />
+                )}
+                {draft[step.id] ? (
+                  <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                    <CheckCircle2 className="h-4 w-4" aria-hidden />
+                    Saved for your strategy
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-          </div>
+            </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row-reverse sm:justify-between">
             <button
               type="button"
               onClick={continueStep}
               disabled={step.id !== 'state' && !draft[step.id]}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className={ONBOARDING_PRIMARY_BUTTON_CLASS}
             >
               {currentStep === steps.length - 1 ? 'Save and continue' : 'Continue'}
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </button>
-            <button
-              type="button"
-              onClick={() => setCurrentStep((index) => Math.max(0, index - 1))}
-              disabled={currentStep === 0}
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Back
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </button>
           </div>
         </div>

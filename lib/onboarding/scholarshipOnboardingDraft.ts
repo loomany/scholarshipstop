@@ -57,6 +57,7 @@ const emptyStep3 = (): OnboardingStep3DraftFields => ({
 });
 
 const emptyStep4 = (): OnboardingStep4DraftFields => ({
+  countryCode: '',
   state: ''
 });
 
@@ -140,6 +141,10 @@ function parseStored(raw: string): StoredOnboardingDraft | null {
         version === 7 && typeof s4next.state === 'string'
           ? s4next.state
           : '';
+      const countryCodeFromStep4 =
+        version === 7 && typeof s4next.countryCode === 'string'
+          ? s4next.countryCode
+          : '';
       if (version === 6 && activeStep > 3) {
         activeStep = 3;
       }
@@ -166,7 +171,7 @@ function parseStored(raw: string): StoredOnboardingDraft | null {
           email: typeof s2.email === 'string' ? s2.email : ''
         },
         step3: { gpa },
-        step4: { state: stateFromStep4 }
+        step4: { countryCode: countryCodeFromStep4, state: stateFromStep4 }
       };
     }
 
@@ -263,7 +268,7 @@ export function saveStep4DraftFields(
   const prev = base ?? defaultStored();
   writeStored({
     ...prev,
-    step4: { ...step4 }
+    step4: { ...prev.step4, ...step4 }
   });
 }
 

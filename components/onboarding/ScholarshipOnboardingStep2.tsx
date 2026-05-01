@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { ArrowLeft, ArrowRight, Mail } from 'lucide-react';
 import { DarkSelect } from '@/components/home/DarkSelect';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { buildCompleteScholarshipUserProfile } from '@/lib/onboarding/buildScholarshipUserProfile';
@@ -66,6 +67,7 @@ type Props = {
   /** `/get-scholarships` quiz uses a separate localStorage draft from `/onboarding`. */
   draftStore?: 'onboarding' | 'landing';
   progressEyebrow?: string;
+  visualVariant?: 'default' | 'saas';
 };
 
 export function ScholarshipOnboardingStep2({
@@ -77,7 +79,8 @@ export function ScholarshipOnboardingStep2({
   onContinue,
   oauthRedirectAfterAuthPath,
   draftStore = 'onboarding',
-  progressEyebrow
+  progressEyebrow,
+  visualVariant = 'default'
 }: Props) {
   const loadDraft =
     draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
@@ -286,6 +289,7 @@ export function ScholarshipOnboardingStep2({
 
   const fieldClass = (key: keyof Step2FormValues) =>
     errors[key] ? inputErrorClass : inputClass;
+  const isSaas = visualVariant === 'saas';
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -352,19 +356,25 @@ export function ScholarshipOnboardingStep2({
         disabled={disabled}
         className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
       >
-        ← Back
+        <ArrowLeft className="mr-2 inline h-4 w-4" aria-hidden />
+        Back
       </button>
       <div className="mx-auto max-w-lg text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
+        {isSaas ? (
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF3E8] text-[#FF7A1A] ring-1 ring-[#FFD9B3]">
+            <Mail className="h-6 w-6" aria-hidden />
+          </div>
+        ) : null}
+        <p className={`${isSaas ? 'mt-5 text-[#A45A16]' : 'text-zinc-500'} text-xs font-semibold uppercase tracking-[0.14em]`}>
           {progressEyebrow ?? 'Step 4 of 4 · Account'}
         </p>
         <h2
           id="onboarding-step2-title"
-          className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl"
+          className={`mt-2 text-2xl font-bold tracking-tight sm:text-3xl ${isSaas ? 'text-[#7A3B00]' : 'text-zinc-900'}`}
         >
           Create your account
         </h2>
-        <p className="mx-auto mt-3 flex max-w-md flex-col gap-1 text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
+        <p className={`mx-auto mt-3 flex max-w-md flex-col gap-1 text-base font-medium leading-7 sm:max-w-lg ${isSaas ? 'text-[#8C5A2B]' : 'text-zinc-600'}`}>
           <span>
             Your email is used to save your matches and personalize results.
           </span>
@@ -574,7 +584,12 @@ export function ScholarshipOnboardingStep2({
           aria-busy={isSubmitting}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
-          {isSubmitting ? 'Creating account...' : 'Create account & find scholarships →'}
+          {isSubmitting ? 'Creating account...' : 'Create account & find scholarships'}
+          {!isSubmitting && isSaas ? (
+            <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+          ) : !isSubmitting ? (
+            ' →'
+          ) : null}
         </button>
       </form>
     </div>

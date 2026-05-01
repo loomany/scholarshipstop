@@ -9,6 +9,8 @@ export type MoreFiltersJson = Omit<
   | 'includeEducationLevels'
   | 'includeGpaBuckets'
   | 'includeLocationLabels'
+  | 'includeApplicantCountryCodes'
+  | 'includeUnspecifiedApplicantCountries'
   | 'includeEasyApply'
   | 'citizenshipAudience'
   | 'filterUniversityInput'
@@ -28,6 +30,8 @@ export type MoreFiltersJson = Omit<
   includeEducationLevels: string[];
   includeGpaBuckets: string[];
   includeLocationLabels: string[];
+  includeApplicantCountryCodes?: string[];
+  includeUnspecifiedApplicantCountries?: boolean;
   includeEasyApply: string[];
 };
 
@@ -56,6 +60,7 @@ export function moreFiltersToJson(f: MoreFiltersState): MoreFiltersJson {
     includeEducationLevels: Array.from(f.includeEducationLevels),
     includeGpaBuckets: Array.from(f.includeGpaBuckets),
     includeLocationLabels: Array.from(f.includeLocationLabels),
+    includeApplicantCountryCodes: Array.from(f.includeApplicantCountryCodes),
     includeEasyApply: Array.from(f.includeEasyApply)
   };
 }
@@ -102,6 +107,13 @@ export function moreFiltersFromJson(
       (raw.includeGpaBuckets ?? []).map((id) => normalizeGpaBucketId(id))
     ),
     includeLocationLabels: new Set(raw.includeLocationLabels ?? []),
+    includeApplicantCountryCodes: new Set(
+      (raw.includeApplicantCountryCodes ?? [])
+        .map((code) => String(code).trim().toUpperCase())
+        .filter((code) => /^[A-Z]{2}$/.test(code))
+    ),
+    includeUnspecifiedApplicantCountries:
+      raw.includeUnspecifiedApplicantCountries === true,
     includeEasyApply: new Set(raw.includeEasyApply ?? []),
     filterStateInput:
       typeof raw.filterStateInput === 'string' ? raw.filterStateInput : '',

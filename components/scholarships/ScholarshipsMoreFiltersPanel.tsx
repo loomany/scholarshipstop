@@ -479,6 +479,7 @@ export default function ScholarshipsMoreFiltersPanel({
   }, [open, previewCountLoading]);
 
   if (!open) return null;
+  const applySubscriptionLocked = !hasSubscription;
   const targetedCategoryLockAction = !hasSubscription
     ? onSubscriptionLockedAction ?? onGuestLockedAction
     : undefined;
@@ -1359,8 +1360,8 @@ export default function ScholarshipsMoreFiltersPanel({
               type="button"
               onClick={() => {
                 if (applyButtonBusy) return;
-                if (!isAuthenticated) {
-                  onGuestLockedAction?.();
+                if (applySubscriptionLocked) {
+                  (onSubscriptionLockedAction ?? onGuestLockedAction)?.();
                   return;
                 }
                 onApply();
@@ -1368,11 +1369,11 @@ export default function ScholarshipsMoreFiltersPanel({
               disabled={applyButtonBusy}
               aria-busy={applyButtonBusy}
               title={
-                !isAuthenticated
-                  ? 'Apply filters after you start your free trial'
+                applySubscriptionLocked
+                  ? 'Premium subscription required to apply filters'
                   : undefined
               }
-              className={`${scholarshipSeeResultsButtonClass} ${!isAuthenticated ? 'opacity-95' : ''} ${
+              className={`${scholarshipSeeResultsButtonClass} ${applySubscriptionLocked ? 'opacity-95' : ''} ${
                 applyButtonBusy ? 'opacity-50' : ''
               }`}
             >
@@ -1382,7 +1383,7 @@ export default function ScholarshipsMoreFiltersPanel({
                   aria-hidden
                 />
               ) : null}
-              {!isAuthenticated ? (
+              {applySubscriptionLocked ? (
                 <Lock
                   className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
                   strokeWidth={2}

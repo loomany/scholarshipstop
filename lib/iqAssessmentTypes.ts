@@ -12,6 +12,7 @@ export type UserIntent =
   | 'deadline_strategy';
 
 export type QualificationData = {
+  countryCode: string;
   schoolLevel: string;
   fieldOfStudy: string;
   citizenship: string;

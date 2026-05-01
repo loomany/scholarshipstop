@@ -50,6 +50,7 @@ import {
 import { AWARD_SIGNAL_SEO_TAGS } from '@/lib/scholarships/seoTags/awardSignalTags';
 import { isSeoCanonicalTag } from '@/lib/scholarships/seoTags/vocabulary';
 import { requirementTypesToDbColumns } from '@/lib/scholarships/requirementTypeMapping';
+import { countryLabelFromCode } from '@/lib/scholarships/countryEligibility/countries';
 import {
   moreFiltersToJson,
   type MoreFiltersJson
@@ -116,6 +117,8 @@ export type ScholarshipListMeta = {
   };
   sidebarCounts: ScholarshipSidebarCounts;
   categoryCounts: Record<ScholarshipCategoryId, number>;
+  countryCounts: Array<{ code: string; label: string; count: number }>;
+  unspecifiedApplicantCountryCount: number;
   /** Hub: filled when personalized match index is available. */
   profileMatchSummary?: {
     field: string;
@@ -258,6 +261,8 @@ function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMet
     filterBounds: { ...meta.filterBounds },
     sidebarCounts: { ...meta.sidebarCounts },
     categoryCounts: { ...meta.categoryCounts },
+    countryCounts: (meta.countryCounts ?? []).map((country) => ({ ...country })),
+    unspecifiedApplicantCountryCount: meta.unspecifiedApplicantCountryCount ?? 0,
     profileMatchSummary: meta.profileMatchSummary
       ? { ...meta.profileMatchSummary }
       : meta.profileMatchSummary,
@@ -802,6 +807,18 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
     if (parts.length > 0) q = q.or(parts.join(','));
   };
   addIncludeCs('eligibility_tags', f.includeEligibility);
+  if (
+    f.includeApplicantCountryCodes.size > 0 ||
+    f.includeUnspecifiedApplicantCountries
+  ) {
+    const parts = Array.from(f.includeApplicantCountryCodes).map(
+      (code) => `applicant_country_codes.cs.${JSON.stringify([code])}`
+    );
+    if (f.includeUnspecifiedApplicantCountries) {
+      parts.push('applicant_country_codes.eq.[]');
+    }
+    q = q.or(parts.join(','));
+  }
   if (f.includeEducationLevels.size > 0) {
     const eduParts: string[] = [];
     for (const id of f.includeEducationLevels) {
@@ -1269,6 +1286,56 @@ function buildListMetaCacheKey(
     `catSubj:${req.catalogSubjectCategoryId ?? ''}`,
     `mf:${moreFiltersKey}`
   ].join('|');
+}
+
+async function fetchApplicantCountryCounts(
+  supabase: ServerSupabaseClient
+): Promise<{
+  countryCounts: ScholarshipListMeta['countryCounts'];
+  unspecifiedApplicantCountryCount: number;
+}> {
+  const counts = new Map<string, number>();
+  let unspecifiedApplicantCountryCount = 0;
+  const pageSize = 1000;
+  let from = 0;
+
+  for (;;) {
+    const { data, error } = await listingFrom(supabase)
+      .select('applicant_country_codes')
+      .eq('is_active', true)
+      .range(from, from + pageSize - 1);
+    if (error) throw new Error(postgrestErrorToMessage(error));
+    const rows = (data ?? []) as Array<{ applicant_country_codes?: unknown }>;
+    if (rows.length === 0) break;
+
+    for (const row of rows) {
+      const codes = Array.isArray(row.applicant_country_codes)
+        ? row.applicant_country_codes
+        : [];
+      if (codes.length === 0) {
+        unspecifiedApplicantCountryCount += 1;
+        continue;
+      }
+      for (const raw of codes) {
+        const code = String(raw).trim().toUpperCase();
+        if (/^[A-Z]{2}$/.test(code)) counts.set(code, (counts.get(code) ?? 0) + 1);
+      }
+    }
+
+    if (rows.length < pageSize) break;
+    from += pageSize;
+  }
+
+  return {
+    countryCounts: [...counts.entries()]
+      .map(([code, count]) => ({
+        code,
+        label: countryLabelFromCode(code),
+        count
+      }))
+      .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label)),
+    unspecifiedApplicantCountryCount
+  };
 }
 
 /** Single catalog pipeline: no personalized SQL branch. */
@@ -2394,7 +2461,7 @@ export async function fetchScholarshipListMeta(
   const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
   const effectiveReq = sidebarGlobalCountsBasisRequest(req, b);
-  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v8`;
+  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v9`;
   const cached = readTtlValue(listMetaCache.get(cacheKey));
   if (cached) {
     return cloneScholarshipListMeta(cached);
@@ -2429,10 +2496,15 @@ export async function fetchScholarshipListMeta(
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) categoryCounts[id] = 0;
   }
 
+  const { countryCounts, unspecifiedApplicantCountryCount } =
+    await fetchApplicantCountryCounts(supabase);
+
   const meta: ScholarshipListMeta = {
     filterBounds: b,
     sidebarCounts,
     categoryCounts,
+    countryCounts,
+    unspecifiedApplicantCountryCount,
     personalizedMatchReady: Boolean(
       buildScholarshipProfileFilterSeed(req.personalizedProfile ?? null)
     )

@@ -30,6 +30,7 @@ import {
   isSubscriptionLockedScholarship,
   pickScholarshipLockedTitleBlurPhrase
 } from '@/lib/scholarships/subscriptionLockedCategory';
+import { countryLabelFromCode } from '@/lib/scholarships/countryEligibility/countries';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import {
   recordScholarshipDetailFreeNavigation,
@@ -74,6 +75,8 @@ type ScholarshipCardProps = {
    * the next click opens the parent’s registration modal instead of navigating.
    */
   onGuestDetailNavigate?: () => void;
+  /** Active applicant country filter, used to make the card badge match user intent. */
+  selectedApplicantCountryCodes?: Set<string>;
   /** Optional listing URL used by the detail page Back link. */
   returnToHref?: string;
 };
@@ -99,6 +102,7 @@ export default function ScholarshipCard({
   onLockedScholarshipNavigate,
   onSubscriptionDetailNavigate,
   onGuestDetailNavigate,
+  selectedApplicantCountryCodes = new Set(),
   returnToHref
 }: ScholarshipCardProps) {
   const detailHref = useMemo(() => {
@@ -110,6 +114,34 @@ export default function ScholarshipCard({
     return `${base}?${params.toString()}`;
   }, [scholarship, returnToHref]);
   const deadlinePassed = scholarshipDeadlineHasPassed(scholarship);
+  const applicantCountryBadge = useMemo(() => {
+    const codes = Array.from(
+      new Set(
+        (scholarship.applicantCountryCodes ?? [])
+          .map((code) => code.trim().toUpperCase())
+          .filter((code) => /^[A-Z]{2}$/.test(code))
+      )
+    ).sort();
+    const selectedCodes = Array.from(selectedApplicantCountryCodes)
+      .map((code) => code.trim().toUpperCase())
+      .filter((code) => /^[A-Z]{2}$/.test(code));
+    const primary =
+      selectedCodes.find((code) => codes.includes(code)) ?? codes[0];
+    if (!primary) return null;
+    const label = countryLabelFromCode(primary);
+    const matchesSelectedCountry = selectedCodes.includes(primary);
+    return {
+      code: primary,
+      extraCount: Math.max(0, codes.length - 1),
+      text: `For ${label}`,
+      title:
+        matchesSelectedCountry
+          ? `Matches your country filter: ${label}`
+          : codes.length > 1
+          ? `For applicants from ${label} and ${codes.length - 1} more countries`
+          : `For applicants from ${label}`
+    };
+  }, [scholarship.applicantCountryCodes, selectedApplicantCountryCodes]);
 
   const gridShell = stackedListing
     ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5'
@@ -195,6 +227,7 @@ export default function ScholarshipCard({
     () => scholarshipCardChips(scholarship).visible,
     [scholarship]
   );
+  const premiumDetailLocked = !hasSubscription;
   const targetedCategoryLocked =
     !hasSubscription && isSubscriptionLockedScholarship(scholarship);
   const LOCKED_CARD_CATEGORY_IDS = new Set([
@@ -209,10 +242,16 @@ export default function ScholarshipCard({
     !showHotDeadlinesLockBadge &&
     easyApplyIds.some((id) => LOCKED_CARD_CATEGORY_IDS.has(id));
   const showTargetedCategoryLockBadge = targetedCategoryLocked;
+  const showPremiumDetailLockBadge =
+    premiumDetailLocked &&
+    !showHotDeadlinesLockBadge &&
+    !showEasyApplyLockBadge &&
+    !showTargetedCategoryLockBadge;
   const showTopRightLockBadge =
     showHotDeadlinesLockBadge ||
     showEasyApplyLockBadge ||
-    showTargetedCategoryLockBadge;
+    showTargetedCategoryLockBadge ||
+    showPremiumDetailLockBadge;
   const topRightBadgeLabel =
     badgeLabelOverride?.trim() || (isUnread ? 'NEW' : null);
   const topRightBadgeAriaLabel = badgeLabelOverride?.trim()
@@ -294,6 +333,11 @@ export default function ScholarshipCard({
 
   const handleDetailLinkClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (premiumDetailLocked) {
+      e.preventDefault();
+      onSubscriptionDetailNavigate?.();
+      return;
+    }
     if (targetedCategoryLocked) {
       e.preventDefault();
       onLockedScholarshipNavigate?.();
@@ -429,18 +473,22 @@ export default function ScholarshipCard({
                       onLockedScholarshipNavigate?.();
                       return;
                     }
+                    if (showPremiumDetailLockBadge) {
+                      onSubscriptionDetailNavigate?.();
+                      return;
+                    }
                     onSubscriptionLockedCategoryClick?.(
                       showHotDeadlinesLockBadge ? 'hot_deadlines' : 'easy_apply'
                     );
                   }}
                   className="relative z-30 inline-flex h-5 w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-1 pointer-events-auto"
                   title={
-                    showTargetedCategoryLockBadge
+                    showTargetedCategoryLockBadge || showPremiumDetailLockBadge
                       ? 'Premium subscription required'
                       : 'Start your free access to unlock this category'
                   }
                   aria-label={
-                    showTargetedCategoryLockBadge
+                    showTargetedCategoryLockBadge || showPremiumDetailLockBadge
                       ? 'Locked scholarship category. Open subscription plans.'
                       : 'Locked category. Start free access to unlock.'
                   }
@@ -741,12 +789,27 @@ export default function ScholarshipCard({
           </>
         )}
 
-        {catalogChips.length > 0 ? (
+        {catalogChips.length > 0 || applicantCountryBadge ? (
           <div
             className="col-span-full min-w-0 border-t border-gray-200 pt-2.5 xl:row-start-3"
             aria-label="Scholarship tags"
           >
-            <ScholarshipCatalogChipRow chips={catalogChips} />
+            <div className="grid min-w-0 grid-cols-1 items-center gap-2 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:gap-x-2.5">
+              <div className="min-w-0 xl:col-span-2">
+                <ScholarshipCatalogChipRow chips={catalogChips} />
+              </div>
+              <div className="flex min-w-0 justify-end xl:justify-start">
+                <span
+                  className={`inline-flex h-9 w-[148px] max-w-[42vw] shrink-0 items-center justify-center rounded-full border border-orange-200 bg-orange-50 px-4 text-center text-xs font-extrabold tracking-tight text-orange-700 shadow-sm ring-1 ring-orange-100 ${
+                    applicantCountryBadge ? '' : 'invisible'
+                  }`}
+                  title={applicantCountryBadge?.title}
+                  aria-label={applicantCountryBadge?.title}
+                >
+                  {applicantCountryBadge?.text ?? 'Country'}
+                </span>
+              </div>
+            </div>
           </div>
         ) : null}
       </div>

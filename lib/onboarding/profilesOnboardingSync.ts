@@ -27,6 +27,8 @@ export const PROFILES_UPSERT_ALLOWED_KEYS = new Set([
   'field_of_study_label',
   'citizenship_status',
   'citizenship_status_label',
+  'country_code',
+  'city',
   'gpa',
   'saved_filters_snapshot',
   'state_region',
@@ -60,6 +62,8 @@ export type ProfilesOnboardingRow = {
   field_of_study_label: string | null;
   citizenship_status: string | null;
   citizenship_status_label: string | null;
+  country_code: string | null;
+  city: string | null;
   gpa: number | null;
   saved_filters_snapshot?: Record<string, unknown> | null;
   state_region: string | null;
@@ -127,6 +131,8 @@ export function profileToProfilesOnboardingRow(profile: UserProfile): ProfilesOn
     field_of_study_label: profile.fieldOfStudyLabel,
     citizenship_status: profile.citizenshipStatus,
     citizenship_status_label: profile.citizenshipStatusLabel,
+    country_code: profile.countryCode?.trim().toUpperCase() || null,
+    city: profile.city?.trim() || null,
     gpa: gpaForProfileDb(profile.gpa),
     ...(Object.prototype.hasOwnProperty.call(profile, 'savedFiltersSnapshot')
       ? {

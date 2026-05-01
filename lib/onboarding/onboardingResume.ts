@@ -1,8 +1,8 @@
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 
-/** Last onboarding screen in the wizard (account creation). Email confirm is no longer a step. */
-const UI_MAX_STEP = 6 as OnboardingStep;
+/** Last onboarding screen in the wizard (account creation). */
+const UI_MAX_STEP = 7 as OnboardingStep;
 
 /**
  * Furthest URL step: basics are split into 3 screens, then steps 4-6 open by progress.
@@ -11,17 +11,22 @@ const UI_MAX_STEP = 6 as OnboardingStep;
 export function getMaxAllowedOnboardingStep(
   draft: StoredOnboardingDraft
 ): OnboardingStep {
+  const countryCode = draft.step4.countryCode?.trim().toUpperCase() ?? '';
+  if (!countryCode) return 1;
+  if (draft.activeStep === 1) return 1;
+  if (countryCode !== 'US') return UI_MAX_STEP;
+
   const schoolLevelReady = draft.step1.schoolLevel.trim().length > 0;
-  if (!schoolLevelReady) return 1;
+  if (!schoolLevelReady) return 2;
 
   const fieldOfStudyReady = draft.step1.fieldOfStudy.trim().length > 0;
-  if (!fieldOfStudyReady) return 2;
+  if (!fieldOfStudyReady) return 3;
 
   const citizenshipReady = draft.step1.citizenship.trim().length > 0;
-  if (!citizenshipReady) return 3;
+  if (!citizenshipReady) return 4;
 
   const furthest = Math.min(draft.activeStep, UI_MAX_STEP) as OnboardingStep;
-  return Math.min(UI_MAX_STEP, Math.max(4, furthest)) as OnboardingStep;
+  return Math.min(UI_MAX_STEP, Math.max(5, furthest)) as OnboardingStep;
 }
 
 export function onboardingStepHref(
@@ -34,7 +39,7 @@ export function onboardingStepHref(
   return `${base}&next=${encodeURIComponent(n)}`;
 }
 
-/** Sign-in surfaces “Create one” / “Sign up” → new account flow, step 1 (“Tell us about you”). */
+/** Sign-in surfaces “Create one” / “Sign up” → country-first account flow. */
 export const SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF = onboardingStepHref(1);
 
 export function clampOnboardingStepToProgress(

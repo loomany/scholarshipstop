@@ -239,6 +239,7 @@ async function HubRootStreamedBridge({
           }),
           initialListPayload
         )}
+        currentPathname={listingJsonLdPath ?? '/scholarships'}
         hubCanonicalIntroBelowTitle={hubIntro}
         postListingContent={hubFooter}
         fallbackPageTitle={fallbackPageTitle}
@@ -466,6 +467,7 @@ export default async function ScholarshipsSlugPathPageBody({
               initialListPayload
             )}
             routeScope={routeScope}
+            currentPathname={`/scholarships/${longTail.slug}`}
             leadContent={null}
             postListingContent={null}
           />
@@ -618,6 +620,7 @@ export default async function ScholarshipsSlugPathPageBody({
               initialListPayload
             )}
             routeScope={routeScope}
+            currentPathname={`/scholarships/${canonicalPath}`}
             leadContent={
               promotedChrome ? (
                 <SeoScholarshipHero

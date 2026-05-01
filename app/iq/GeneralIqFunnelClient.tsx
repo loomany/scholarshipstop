@@ -1,25 +1,33 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowRight, BrainCircuit, Mail } from 'lucide-react';
 
 import AssessmentEngine from '@/components/iq/AssessmentEngine';
 import StandardIqPaywall from '@/components/iq/StandardIqPaywall';
 import IqProductFooter from '@/components/iq/IqProductFooter';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
+import { CountryEmailSignupStep } from '@/components/onboarding/CountryEmailSignupStep';
+import { CountryFirstStep } from '@/components/onboarding/CountryFirstStep';
+import { createCountryFirstScholarshipAccount } from '@/lib/onboarding/countryFirstSignupClient';
+import {
+  countryLabelFromCode,
+  normalizeCountryCode
+} from '@/lib/scholarships/countryEligibility/countries';
 
 import ScholarshipIqTestClient from './ScholarshipIqTestClient';
 
-type GeneralFunnelPhase = 'landing' | 'assessment' | 'email' | 'paywall';
+type GeneralFunnelPhase = 'landing' | 'country' | 'assessment' | 'email' | 'paywall';
 
 const GENERAL_ASSESSMENT_STORAGE_KEY = 'iq_general_assessment:v1';
 const GENERAL_FUNNEL_PHASE_STORAGE_KEY = 'iq_general_funnel_phase:v1';
+const GENERAL_COUNTRY_STORAGE_KEY = 'iq_general_country:v1';
 const GENERAL_EMAIL_STORAGE_KEY = 'iq_general_email:v1';
 const GENERAL_RESULT_STORAGE_KEY = 'iq_general_result:v1';
 
 function isGeneralFunnelPhase(value: unknown): value is GeneralFunnelPhase {
   return (
     value === 'landing' ||
+    value === 'country' ||
     value === 'assessment' ||
     value === 'email' ||
     value === 'paywall'
@@ -55,7 +63,11 @@ function writeTextStorage(key: string, value: string) {
 export default function GeneralIqFunnelClient() {
   const [phase, setPhase] = useState<GeneralFunnelPhase>('landing');
   const [result, setResult] = useState<AssessmentResult | null>(null);
+  const [countryCode, setCountryCode] = useState('');
+  const [countryError, setCountryError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [submittingAccount, setSubmittingAccount] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -63,12 +75,14 @@ export default function GeneralIqFunnelClient() {
       GENERAL_FUNNEL_PHASE_STORAGE_KEY
     );
     const storedPhase = isGeneralFunnelPhase(storedPhaseRaw) ? storedPhaseRaw : null;
+    const storedCountry = window.localStorage.getItem(GENERAL_COUNTRY_STORAGE_KEY) ?? '';
     const storedEmail = window.localStorage.getItem(GENERAL_EMAIL_STORAGE_KEY) ?? '';
     const storedResult = readJsonStorage<AssessmentResult>(GENERAL_RESULT_STORAGE_KEY);
     const hasAssessmentDraft = Boolean(
       readJsonStorage<unknown>(GENERAL_ASSESSMENT_STORAGE_KEY)
     );
 
+    if (storedCountry) setCountryCode(storedCountry);
     if (storedEmail) setEmail(storedEmail);
     if (storedResult) setResult(storedResult);
 
@@ -78,6 +92,8 @@ export default function GeneralIqFunnelClient() {
       setPhase('assessment');
     } else if (storedPhase === 'email') {
       setPhase('email');
+    } else if (storedPhase === 'country') {
+      setPhase('country');
     } else {
       setPhase('landing');
     }
@@ -95,6 +111,11 @@ export default function GeneralIqFunnelClient() {
     writeTextStorage(GENERAL_EMAIL_STORAGE_KEY, nextEmail);
   };
 
+  const updateCountry = (nextCountry: string) => {
+    setCountryCode(nextCountry);
+    writeTextStorage(GENERAL_COUNTRY_STORAGE_KEY, nextCountry);
+  };
+
   const restartAssessment = () => {
     try {
       window.localStorage.removeItem(GENERAL_ASSESSMENT_STORAGE_KEY);
@@ -106,19 +127,101 @@ export default function GeneralIqFunnelClient() {
     transitionPhase('assessment');
   };
 
+  const continueFromCountry = () => {
+    const normalized = normalizeCountryCode(countryCode);
+    if (!normalized) {
+      setCountryError('Choose your country to continue.');
+      return;
+    }
+    setCountryError(null);
+    updateCountry(normalized);
+    transitionPhase('email');
+  };
+
+  const continueFromEmail = async () => {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      setEmailError('Enter a valid email address.');
+      return;
+    }
+    const normalizedCountry = normalizeCountryCode(countryCode);
+    if (!normalizedCountry) {
+      setEmailError('Choose your country first.');
+      transitionPhase('country');
+      return;
+    }
+    setSubmittingAccount(true);
+    setEmailError(null);
+    updateEmail(normalizedEmail);
+    const signup = await createCountryFirstScholarshipAccount({
+      email: normalizedEmail,
+      countryCode: normalizedCountry,
+      source: 'iq-general',
+      profile: { onboardingCompleted: false }
+    });
+    setSubmittingAccount(false);
+    if (!signup.ok) {
+      setEmailError(signup.error);
+      return;
+    }
+    transitionPhase('assessment');
+  };
+
   if (!hydrated) {
     return (
       <main className="iq-product-shell min-h-screen bg-[#F8FAFC] text-slate-950" />
     );
   }
 
+  if (phase === 'country') {
+    return (
+      <main className="iq-product-shell min-h-screen bg-[radial-gradient(circle_at_15%_8%,#dbeafe_0,transparent_30%),radial-gradient(circle_at_85%_12%,#e0e7ff_0,transparent_30%),#F8FAFC] text-slate-950">
+        <section className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-3xl items-center px-6 py-12">
+          <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_28px_90px_-42px_rgba(15,23,42,0.5)] sm:p-8">
+            <CountryFirstStep
+              value={countryCode}
+              progressEyebrow="Step 1 · Country"
+              title="Where are you applying from?"
+              description="Choose your country first so your IQ profile can connect to scholarship matches that fit your eligibility."
+              error={countryError}
+              onChange={(value) => {
+                updateCountry(value);
+                setCountryError(null);
+              }}
+              onContinue={continueFromCountry}
+            />
+          </div>
+        </section>
+        <IqProductFooter />
+      </main>
+    );
+  }
+
   if (phase === 'email') {
     return (
-      <IqReportEmailGate
-        email={email}
-        onEmailChange={updateEmail}
-        onContinue={() => transitionPhase('assessment')}
-      />
+      <main className="iq-product-shell min-h-screen bg-[radial-gradient(circle_at_15%_8%,#dbeafe_0,transparent_30%),radial-gradient(circle_at_85%_12%,#e0e7ff_0,transparent_30%),#F8FAFC] text-slate-950">
+        <section className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-3xl items-center px-6 py-12">
+          <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_28px_90px_-42px_rgba(15,23,42,0.5)] sm:p-8">
+            <CountryEmailSignupStep
+              email={email}
+              countryLabel={countryCode ? countryLabelFromCode(countryCode) : 'your country'}
+              progressEyebrow="Step 2 · Email"
+              title="Where should we save your IQ profile?"
+              description="No password needed now. We will save your profile, send a confirmation link, and continue to the IQ test."
+              submitLabel="Continue to IQ test"
+              error={emailError}
+              submitting={submittingAccount}
+              onEmailChange={(value) => {
+                updateEmail(value);
+                setEmailError(null);
+              }}
+              onBack={() => transitionPhase('country')}
+              onSubmit={() => void continueFromEmail()}
+            />
+          </div>
+        </section>
+        <IqProductFooter />
+      </main>
     );
   }
 
@@ -147,93 +250,6 @@ export default function GeneralIqFunnelClient() {
   }
 
   return (
-    <ScholarshipIqTestClient onStartAssessment={() => transitionPhase('email')} />
-  );
-}
-
-function IqReportEmailGate({
-  email,
-  onEmailChange,
-  onContinue
-}: {
-  email: string;
-  onEmailChange: (email: string) => void;
-  onContinue: () => void;
-}) {
-  const [error, setError] = useState<string | null>(null);
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const normalized = email.trim().toLowerCase();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
-      setError('Enter a valid email address.');
-      return;
-    }
-    setError(null);
-    onEmailChange(normalized);
-    onContinue();
-  }
-
-  return (
-    <main className="iq-product-shell min-h-screen bg-[radial-gradient(circle_at_15%_8%,#dbeafe_0,transparent_30%),radial-gradient(circle_at_85%_12%,#e0e7ff_0,transparent_30%),#F8FAFC] text-slate-950">
-      <section className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-3xl items-center px-6 py-12">
-        <form
-          noValidate
-          onSubmit={handleSubmit}
-          className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 text-center shadow-[0_28px_90px_-42px_rgba(15,23,42,0.5)] sm:p-8"
-        >
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white">
-            <BrainCircuit className="h-7 w-7" aria-hidden />
-          </div>
-          <p className="mt-6 text-sm font-bold uppercase tracking-[0.2em] text-indigo-600">
-            Start your private report
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-            Where should we send your IQ profile?
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-600">
-            Enter your email before the test. If you unlock the full report
-            after the assessment, your private access link will be sent here.
-          </p>
-
-          <label className="mx-auto mt-8 block max-w-md text-left">
-            <span className="text-sm font-semibold text-slate-700">Email</span>
-            <span className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 ring-1 ring-transparent transition focus-within:border-slate-400 focus-within:bg-white focus-within:ring-slate-200">
-              <Mail className="h-5 w-5 text-slate-400" aria-hidden />
-              <input
-                type="text"
-                inputMode="email"
-                value={email}
-                onChange={(event) => onEmailChange(event.target.value)}
-                placeholder="you@example.com"
-                autoComplete="email"
-                className="min-w-0 flex-1 bg-transparent text-base font-medium text-slate-950 outline-none placeholder:text-slate-400"
-              />
-            </span>
-          </label>
-          {error ? (
-            <p className="mx-auto mt-3 max-w-md rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-              {error}
-            </p>
-          ) : null}
-
-          <button
-            type="submit"
-            className="group mt-7 inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800"
-          >
-            Continue to IQ test
-            <ArrowRight
-              className="h-4 w-4 transition group-hover:translate-x-0.5"
-              aria-hidden
-            />
-          </button>
-          <p className="mx-auto mt-4 max-w-md text-xs leading-5 text-slate-500">
-            No account required to start. We use your email to keep report access
-            tied to you if you decide to unlock it.
-          </p>
-        </form>
-      </section>
-      <IqProductFooter />
-    </main>
+    <ScholarshipIqTestClient onStartAssessment={() => transitionPhase('country')} />
   );
 }

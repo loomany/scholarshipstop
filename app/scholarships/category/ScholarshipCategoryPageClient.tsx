@@ -650,6 +650,7 @@ export default function ScholarshipCategoryPageClient({
     if (moreFiltersApplied.includeEducationLevels.size > 0) return true;
     if (moreFiltersApplied.includeGpaBuckets.size > 0) return true;
     if (moreFiltersApplied.includeLocationLabels.size > 0) return true;
+    if (moreFiltersApplied.includeApplicantCountryCodes.size > 0) return true;
     if (moreFiltersApplied.includeEasyApply.size > 0) return true;
     if (moreFiltersApplied.filterStateInput.trim() !== '') return true;
     if (moreFiltersApplied.filterUniversitySlug) return true;
@@ -847,7 +848,7 @@ export default function ScholarshipCategoryPageClient({
             onGuestSortBlocked={
               catalogFreeTier ? openRegistrationWall : undefined
             }
-            onSubscriptionSortBlocked={undefined}
+            onSubscriptionSortBlocked={openLockedCategoryWall}
             onGuestLockedAction={
               catalogFreeTier ? openRegistrationWall : undefined
             }
@@ -912,9 +913,12 @@ export default function ScholarshipCategoryPageClient({
                     subscriptionLocked={false}
                     isAuthenticated={isAuthenticated}
                     hasSubscription={hasSubscription}
+                    selectedApplicantCountryCodes={
+                      moreFiltersApplied?.includeApplicantCountryCodes
+                    }
                     onSubscriptionLockedCategoryClick={openLockedCategoryWall}
                     onLockedScholarshipNavigate={openLockedCategoryWall}
-                    onSubscriptionDetailNavigate={undefined}
+                    onSubscriptionDetailNavigate={openLockedCategoryWall}
                     onGuestDetailNavigate={
                       catalogFreeTier
                         ? () => openRegistrationWall('card-unlock')

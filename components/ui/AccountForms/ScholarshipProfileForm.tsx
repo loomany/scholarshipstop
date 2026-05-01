@@ -53,6 +53,11 @@ import {
 import type { Database, Tables } from '@/types_db';
 import { updateEmail } from '@/utils/auth-helpers/server';
 import { createClient } from '@/utils/supabase/client';
+import {
+  countryLabelFromCode,
+  normalizeCountryCode,
+  SCHOLARSHIP_COUNTRY_OPTIONS
+} from '@/lib/scholarships/countryEligibility/countries';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 type Subscription = Tables<'subscriptions'>;
@@ -136,6 +141,14 @@ const citizenshipSelectOptions = [
   ...CITIZENSHIP_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 ];
 
+const countrySelectOptions = [
+  { value: '', label: 'Select applicant country' },
+  ...SCHOLARSHIP_COUNTRY_OPTIONS.map((country) => ({
+    value: country.code,
+    label: country.code === 'US' ? 'United States (America)' : country.label
+  }))
+];
+
 const birthMonthOptions = buildBirthMonthSelectOptions();
 
 const gpaProfileSelectOptions = [
@@ -160,6 +173,7 @@ const EDUCATION_PATCH_KEYS = [
 const ELIGIBILITY_PATCH_KEYS = [
   'citizenship_status',
   'citizenship_status_label',
+  'country_code',
   'state_region',
   'gpa',
   'saved_filters_snapshot'
@@ -325,6 +339,9 @@ export default function ScholarshipProfileForm({
   const [stateRegionInput, setStateRegionInput] = useState(
     () => profile?.state_region?.trim() ?? ''
   );
+  const [countryCodeInput, setCountryCodeInput] = useState(
+    () => normalizeCountryCode(profile?.country_code) ?? ''
+  );
   const [emailInput, setEmailInput] = useState(() => userEmail?.trim() ?? '');
 
   const profileSnapshot = useMemo(
@@ -338,6 +355,7 @@ export default function ScholarshipProfileForm({
             fos: profile.field_of_study,
             cit: profile.citizenship_status,
             st: profile.state_region,
+            cc: profile.country_code,
             dob: profile.date_of_birth,
             bm: profile.birth_month,
             bd: profile.birth_day,
@@ -360,6 +378,7 @@ export default function ScholarshipProfileForm({
     setCitizenshipStatus(profile.citizenship_status ?? '');
     setGpaChoice(resolveStoredProfileGpaChoice(profile.gpa, profile.saved_filters_snapshot));
     setStateRegionInput(profile.state_region?.trim() ?? '');
+    setCountryCodeInput(normalizeCountryCode(profile.country_code) ?? '');
   }, [profile, profileSnapshot]);
 
   useEffect(() => {
@@ -403,6 +422,7 @@ export default function ScholarshipProfileForm({
       schoolLevel,
       fieldOfStudy,
       citizenshipStatus,
+      countryCode: countryCodeInput,
       gpaChoice,
       stateRegionInput
     }),
@@ -411,6 +431,7 @@ export default function ScholarshipProfileForm({
       birthMonth,
       birthYear,
       citizenshipStatus,
+      countryCodeInput,
       fieldOfStudy,
       firstName,
       lastName,
@@ -784,6 +805,19 @@ export default function ScholarshipProfileForm({
   const ic = isSaas ? inputClassSaaS : inputClass;
   const lc = isSaas ? labelClassSaaS : labelClass;
   const selectWrapClass = isSaas ? 'mt-2 w-full' : 'mt-2 w-full max-w-xl';
+  const profileCountryCode = normalizeCountryCode(profile?.country_code);
+  const selectedCountryCode = normalizeCountryCode(countryCodeInput);
+  const showStateField = selectedCountryCode === 'US';
+  const selectedCountryLabel = selectedCountryCode
+    ? countryLabelFromCode(selectedCountryCode)
+    : null;
+  const handleCountryCodeChange = useCallback((value: string) => {
+    const normalized = normalizeCountryCode(value) ?? '';
+    setCountryCodeInput(normalized);
+    if (normalized !== 'US') {
+      setStateRegionInput('');
+    }
+  }, []);
   const birthGridClass = `mt-2 grid w-full grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3${
     isSaas ? '' : ' max-w-xl'
   }`;
@@ -907,19 +941,40 @@ export default function ScholarshipProfileForm({
         />
       </div>
 
-      <label className={lc} htmlFor="spf-state" id="spf-state-label">
-        State (optional)
+      <label className={lc} htmlFor="spf-country">
+        Applicant country
       </label>
-      <UsStateAutocomplete
-        id="spf-state"
-        labelId="spf-state-label"
-        value={stateRegionInput}
-        onChange={setStateRegionInput}
-        inputClassName={ic}
-        placeholder={US_STATE_AUTOCOMPLETE_PLACEHOLDER}
-        suggestionListZIndexClass="z-[60]"
-        disabled={submitting}
-      />
+      <div className={selectWrapClass}>
+        <DarkSelect
+          id="spf-country"
+          ariaLabel="Applicant country"
+          options={countrySelectOptions}
+          value={countryCodeInput}
+          onChange={handleCountryCodeChange}
+          menuClassName="max-h-72"
+          disabled={submitting}
+        />
+      </div>
+      {showStateField ? (
+        <div className="mt-4">
+          <label className={lc} htmlFor="spf-state" id="spf-state-label">
+            U.S. state
+          </label>
+          <UsStateAutocomplete
+            id="spf-state"
+            labelId="spf-state-label"
+            value={stateRegionInput}
+            onChange={setStateRegionInput}
+            inputClassName={ic}
+            placeholder={US_STATE_AUTOCOMPLETE_PLACEHOLDER}
+            suggestionListZIndexClass="z-[60]"
+            disabled={submitting}
+          />
+          <p className="mt-1 text-xs leading-5 text-zinc-500">
+            Used for state-specific scholarships inside the U.S.
+          </p>
+        </div>
+      ) : null}
 
       <label className={lc} htmlFor="spf-gpa">
         GPA
@@ -1630,19 +1685,40 @@ export default function ScholarshipProfileForm({
                   disabled={submitting}
                 />
               </div>
-              <label className={lc} htmlFor="spf-state-saas" id="spf-state-saas-label">
-                U.S. state (optional)
+              <label className={lc} htmlFor="spf-country-saas">
+                Applicant country
               </label>
-              <UsStateAutocomplete
-                id="spf-state-saas"
-                labelId="spf-state-saas-label"
-                value={stateRegionInput}
-                onChange={setStateRegionInput}
-                inputClassName={ic}
-                placeholder={US_STATE_AUTOCOMPLETE_PLACEHOLDER}
-                suggestionListZIndexClass="z-[60]"
-                disabled={submitting}
-              />
+              <div className={selectWrapClass}>
+                <DarkSelect
+                  id="spf-country-saas"
+                  ariaLabel="Applicant country"
+                  options={countrySelectOptions}
+                  value={countryCodeInput}
+                  onChange={handleCountryCodeChange}
+                  menuClassName="max-h-72"
+                  disabled={submitting}
+                />
+              </div>
+              {showStateField ? (
+                <div className="mt-4">
+                  <label className={lc} htmlFor="spf-state-saas" id="spf-state-saas-label">
+                    U.S. state
+                  </label>
+                  <UsStateAutocomplete
+                    id="spf-state-saas"
+                    labelId="spf-state-saas-label"
+                    value={stateRegionInput}
+                    onChange={setStateRegionInput}
+                    inputClassName={ic}
+                    placeholder={US_STATE_AUTOCOMPLETE_PLACEHOLDER}
+                    suggestionListZIndexClass="z-[60]"
+                    disabled={submitting}
+                  />
+                  <p className="mt-1 text-xs leading-5 text-zinc-500">
+                    Used for state-specific scholarships inside the U.S.
+                  </p>
+                </div>
+              ) : null}
               <label className={lc} htmlFor="spf-gpa">
                 GPA
               </label>

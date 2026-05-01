@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { ArrowLeft, ArrowRight, GraduationCap } from 'lucide-react';
 import { DarkSelect } from '@/components/home/DarkSelect';
 import {
   normalizeGpaForSelect,
@@ -47,6 +48,7 @@ type Props = {
   submitButtonLabel?: string;
   title?: string;
   description?: string;
+  visualVariant?: 'default' | 'saas';
 };
 
 export function ScholarshipOnboardingStep3Gpa({
@@ -58,7 +60,8 @@ export function ScholarshipOnboardingStep3Gpa({
   progressEyebrow,
   submitButtonLabel,
   title,
-  description
+  description,
+  visualVariant = 'default'
 }: Props) {
   const loadDraft =
     draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
@@ -100,6 +103,9 @@ export function ScholarshipOnboardingStep3Gpa({
     runFinish(gpa);
   };
 
+  const isSaas = visualVariant === 'saas';
+  const buttonLabel = submitButtonLabel ?? 'Continue →';
+
   return (
     <div className="w-full space-y-6">
       <button
@@ -108,16 +114,22 @@ export function ScholarshipOnboardingStep3Gpa({
         disabled={disabled}
         className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
       >
-        ← Back
+        <ArrowLeft className="mr-2 inline h-4 w-4" aria-hidden />
+        Back
       </button>
       <div className="mx-auto max-w-lg text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
+        {isSaas ? (
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF3E8] text-[#FF7A1A] ring-1 ring-[#FFD9B3]">
+            <GraduationCap className="h-6 w-6" aria-hidden />
+          </div>
+        ) : null}
+        <p className={`${isSaas ? 'mt-5 text-[#A45A16]' : 'text-zinc-500'} text-xs font-semibold uppercase tracking-[0.14em]`}>
           {progressEyebrow ?? 'Step 3 of 4 · GPA'}
         </p>
-        <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+        <h2 className={`mt-2 text-2xl font-bold tracking-tight sm:text-3xl ${isSaas ? 'text-[#7A3B00]' : 'text-zinc-900'}`}>
           {title ?? "What's your GPA?"}
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
+        <p className={`mx-auto mt-3 max-w-md text-base font-medium leading-7 sm:max-w-lg ${isSaas ? 'text-[#8C5A2B]' : 'text-zinc-600'}`}>
           {description ?? 'Some scholarships use academic standing.'}
         </p>
       </div>
@@ -145,7 +157,10 @@ export function ScholarshipOnboardingStep3Gpa({
 
         <div className="flex flex-col gap-3">
           <button type="submit" disabled={disabled} className={ONBOARDING_PRIMARY_BUTTON_CLASS}>
-            {submitButtonLabel ?? 'Continue →'}
+            {buttonLabel}
+            {isSaas && !buttonLabel.includes('Preparing') ? (
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+            ) : null}
           </button>
         </div>
       </form>

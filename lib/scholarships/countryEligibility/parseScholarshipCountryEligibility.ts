@@ -1,0 +1,150 @@
+import type { Json } from '@/types_db';
+import {
+  countryCodesFromText,
+  normalizeCountryCode,
+  sanitizeCountryCodes
+} from './countries';
+
+export type ScholarshipCountryEligibilityInput = {
+  title?: string | null;
+  providerName?: string | null;
+  source?: string | null;
+  stateTerritoryText?: string | null;
+  eligibilityText?: string | null;
+  requirementsText?: string | null;
+  description?: string | null;
+  summaryShort?: string | null;
+  summaryLong?: string | null;
+  rawData?: Json | null;
+};
+
+export type ScholarshipCountryEligibility = {
+  applicantCountryCodes: string[];
+  hostCountryCodes: string[];
+  reasons: string[];
+};
+
+function compactText(parts: Array<string | null | undefined>): string {
+  return parts
+    .map((part) => part?.trim() ?? '')
+    .filter(Boolean)
+    .join(' | ');
+}
+
+function extractIefaField(label: string, blob: string): string | null {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = blob.match(new RegExp(`${escaped}:\\s*([^|\\n]+)`, 'i'));
+  return match?.[1]?.trim().replace(/\s+/g, ' ') || null;
+}
+
+function addDelimitedCountryCodes(target: Set<string>, raw: string | null): void {
+  if (!raw) return;
+  if (/^unrestricted$/i.test(raw)) return;
+  const parts = raw
+    .split(/,|\band\b|\/|;/i)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  for (const part of parts) {
+    const code = normalizeCountryCode(part);
+    if (code) target.add(code);
+  }
+  for (const code of countryCodesFromText(raw)) target.add(code);
+}
+
+function applicantCodesFromStrongPhrases(blob: string): string[] {
+  const out = new Set<string>();
+  const phrasePatterns = [
+    /\b(?:citizens?|nationals?|residents?)\s+of\s+([^.;|]+)/gi,
+    /\b(?:from|born\s+in)\s+([^.;|]+)/gi,
+    /\bmust\s+be\s+(?:a\s+)?(?:citizen|national|resident)\s+of\s+([^.;|]+)/gi,
+    /\bopen\s+to\s+(?:students\s+)?from\s+([^.;|]+)/gi
+  ];
+
+  for (const pattern of phrasePatterns) {
+    for (const match of blob.matchAll(pattern)) {
+      addDelimitedCountryCodes(out, match[1] ?? null);
+    }
+  }
+
+  if (
+    /\bu\.?s\.?\s+citizens?\b/i.test(blob) ||
+    /\bcitizens?\s+of\s+the\s+united\s+states\b/i.test(blob) ||
+    /\bpermanent\s+residents?\s+of\s+the\s+united\s+states\b/i.test(blob)
+  ) {
+    out.add('US');
+  }
+
+  return [...out].sort();
+}
+
+function hostCodesFromStrongPhrases(blob: string): string[] {
+  const out = new Set<string>();
+  const hostPatterns = [
+    /\bHost countries \(IEFA\):\s*([^|;\n]+)/gi,
+    /\bstudy(?:ing)?\s+(?:in|at)\s+([^.;|]+)/gi,
+    /\battend(?:ing)?\s+(?:school|college|university)?\s*(?:in|at)\s+([^.;|]+)/gi
+  ];
+
+  for (const pattern of hostPatterns) {
+    for (const match of blob.matchAll(pattern)) {
+      addDelimitedCountryCodes(out, match[1] ?? null);
+    }
+  }
+
+  return [...out].sort();
+}
+
+export function parseScholarshipCountryEligibility(
+  input: ScholarshipCountryEligibilityInput
+): ScholarshipCountryEligibility {
+  const applicant = new Set<string>();
+  const host = new Set<string>();
+  const reasons: string[] = [];
+  const blob = compactText([
+    input.title,
+    input.providerName,
+    input.stateTerritoryText,
+    input.eligibilityText,
+    input.requirementsText,
+    input.summaryShort,
+    input.summaryLong,
+    input.description,
+    input.rawData && typeof input.rawData === 'object'
+      ? JSON.stringify(input.rawData)
+      : null
+  ]);
+
+  const iefaNationality = extractIefaField('Nationality (IEFA)', blob);
+  const iefaHost = extractIefaField('Host countries (IEFA)', blob);
+  if (iefaNationality) {
+    const before = applicant.size;
+    addDelimitedCountryCodes(applicant, iefaNationality);
+    if (applicant.size > before) reasons.push('IEFA nationality');
+  }
+  if (iefaHost) {
+    const before = host.size;
+    addDelimitedCountryCodes(host, iefaHost);
+    if (host.size > before) reasons.push('IEFA host countries');
+  }
+
+  const phraseApplicants = applicantCodesFromStrongPhrases(blob);
+  for (const code of phraseApplicants) applicant.add(code);
+  if (phraseApplicants.length > 0) reasons.push('applicant country text');
+
+  const phraseHosts = hostCodesFromStrongPhrases(blob);
+  for (const code of phraseHosts) host.add(code);
+  if (phraseHosts.length > 0) reasons.push('host country text');
+
+  if (
+    applicant.size === 0 &&
+    /\b(?:international|foreign)\s+students?\b/i.test(blob)
+  ) {
+    reasons.push('international student text without specific country');
+  }
+
+  return {
+    applicantCountryCodes: sanitizeCountryCodes(applicant),
+    hostCountryCodes: sanitizeCountryCodes(host),
+    reasons: [...new Set(reasons)]
+  };
+}

@@ -1401,6 +1401,9 @@ export interface Database {
           study_levels: Json
           field_of_study: Json
           citizenship_statuses: Json
+          applicant_country_codes: Json
+          host_country_codes: Json
+          country_eligibility_notes: Json
           location_scope: string | null
           state_codes: Json
           institution_types: Json
@@ -1539,6 +1542,9 @@ export interface Database {
           study_levels?: Json
           field_of_study?: Json
           citizenship_statuses?: Json
+          applicant_country_codes?: Json
+          host_country_codes?: Json
+          country_eligibility_notes?: Json
           location_scope?: string | null
           state_codes?: Json
           institution_types?: Json
@@ -1674,6 +1680,9 @@ export interface Database {
           study_levels?: Json
           field_of_study?: Json
           citizenship_statuses?: Json
+          applicant_country_codes?: Json
+          host_country_codes?: Json
+          country_eligibility_notes?: Json
           location_scope?: string | null
           state_codes?: Json
           institution_types?: Json

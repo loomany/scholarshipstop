@@ -18,12 +18,10 @@ import {
 } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ScholarshipsHubQueryProvider } from '@/components/providers/ScholarshipsHubQueryProvider';
-import BestRecommendationWizard from '@/components/scholarships/BestRecommendationWizard';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipIqInlineCard from '@/components/scholarships/ScholarshipIqInlineCard';
-import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel, {
   type ScholarshipsMoreFiltersContextNotice
@@ -144,7 +142,6 @@ import {
   tryBuildProfileSeedFromCompletedLandingQuiz,
   tryBuildProfileSeedFromPendingLandingSession
 } from '@/lib/onboarding/mergeLandingQuizIntoOnboardingDraft';
-import { saveCompletedLandingQuizDraft } from '@/lib/onboarding/getScholarshipsLandingDraft';
 import {
   BEST_RECOMMENDATION_WIZARD_DRAFT_KEY,
   bestRecommendationWizardHasUsableData,
@@ -172,11 +169,6 @@ import {
 } from '@/lib/scholarships/profileMatchBadge';
 import { storageKeyMatchesBase } from '@/app/scholarships/userScopedStorage';
 import { toast } from '@/components/ui/Toasts/use-toast';
-import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
-import { pickAllowedProfilesUpsertFields } from '@/lib/onboarding/profilesOnboardingSync';
-import { notifyQuizCompletionClient } from '@/lib/analytics/notifyQuizCompletionClient';
-import { createClient } from '@/utils/supabase/client';
-import type { Database } from '@/types_db';
 
 const EMPTY_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   bestRecommendation: 0,
@@ -214,8 +206,6 @@ function shouldShowIqInlineCard(index: number): boolean {
 function longTailRequestRouteKeyFromPathname(pathname: string): string {
   return pathname.replace(/^\/scholarships\/?/, '');
 }
-
-type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 
 function parseIdCsv(raw: string | null): string[] {
   if (!raw?.trim()) return [];
@@ -285,6 +275,7 @@ function ScholarshipsPageInner({
   hasSubscription = false,
   initialPayload = null,
   routeScope = null,
+  currentPathname = '/scholarships',
   leadContent = null,
   postListingContent = null,
   hubCanonicalIntroBelowTitle = null
@@ -295,6 +286,7 @@ function ScholarshipsPageInner({
   hasSubscription?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
+  currentPathname?: string;
   leadContent?: ReactNode;
   postListingContent?: ReactNode;
   /** Canonical `/scholarships/hub/*` SSR intro — rendered under h1 before filters (when `leadContent` omitted). */
@@ -302,7 +294,6 @@ function ScholarshipsPageInner({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentPathname = usePathname();
   const pathname = currentPathname || '/scholarships';
   const hubRouteResolved = useMemo(() => {
     if (routeScope) return null;
@@ -445,8 +436,6 @@ function ScholarshipsPageInner({
     useState<BestRecommendationWizardStore | null>(null);
   const [bestRecommendationWizardHydrated, setBestRecommendationWizardHydrated] =
     useState(false);
-  const [bestRecommendationWizardSaving, setBestRecommendationWizardSaving] =
-    useState(false);
   /**
    * Guest Best preview list total while `tab=best-recommendation`; reused in the sidebar row
    * after navigating to Matches etc. (meta + guest patches otherwise force Best → 0 off-tab).
@@ -522,69 +511,6 @@ function ScholarshipsPageInner({
     bridgeBestRecommendationWizardToOnboardingDraft(bestRecommendationWizardStore);
     router.push('/onboarding');
   }, [bestRecommendationWizardStore, router]);
-
-  const persistBestRecommendationWizardProfileStep = useCallback(
-    async (next: BestRecommendationWizardStore) => {
-      if (!isAuthenticated) return;
-      setBestRecommendationWizardSaving(true);
-      try {
-        const supabase = createClient();
-        const {
-          data: { user }
-        } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { data: currentProfile } = await supabase
-          .from('profiles')
-          .select(
-            'first_name,last_name,birth_month,birth_day,birth_year,date_of_birth,school_level,field_of_study,citizenship_status,gpa,saved_filters_snapshot,state_region'
-          )
-          .eq('id', user.id)
-          .maybeSingle();
-
-        const currentProfileRow = (currentProfile ?? null) as ProfilesRow | null;
-
-        const patch = buildScholarshipProfileFormPatch(
-          currentProfileRow,
-          {
-            firstName: currentProfileRow?.first_name ?? '',
-            lastName: currentProfileRow?.last_name ?? '',
-            birthMonth:
-              currentProfileRow?.birth_month != null
-                ? String(currentProfileRow.birth_month)
-                : '',
-            birthDay:
-              currentProfileRow?.birth_day != null
-                ? String(currentProfileRow.birth_day)
-                : '',
-            birthYear:
-              currentProfileRow?.birth_year != null
-                ? String(currentProfileRow.birth_year)
-                : '',
-            schoolLevel: next.draft.step1.schoolLevel,
-            fieldOfStudy: next.draft.step1.fieldOfStudy,
-            citizenshipStatus: next.draft.step1.citizenship,
-            gpaChoice: next.draft.step3.gpa,
-            stateRegionInput: next.draft.step4.state
-          }
-        );
-
-        const payload = pickAllowedProfilesUpsertFields({
-          id: user.id,
-          updated_at: new Date().toISOString(),
-          ...patch
-        }) as Database['public']['Tables']['profiles']['Insert'];
-
-        await supabase
-          .schema('public')
-          .from('profiles')
-          .upsert(payload, { onConflict: 'id' });
-      } finally {
-        setBestRecommendationWizardSaving(false);
-      }
-    },
-    [isAuthenticated]
-  );
 
   const replaceListingParams = useCallback(
     (
@@ -755,13 +681,17 @@ function ScholarshipsPageInner({
     totalCount
   ]);
 
-  const bestRecommendationWizardInProgress =
-    bestRecommendationWizardStore != null &&
-    bestRecommendationWizardStore.submitted === false;
   const shouldPromptScholarshipQuiz =
     authResolved &&
     (hubTreatAsGuest ||
       (isAuthenticated && profileInitResolved && !profileInitialized));
+  const guestCompletedScholarshipQuiz =
+    landingQuizProfileSeed != null ||
+    bestRecommendationWizardStore?.submitted === true;
+  const shouldShowScholarshipQuestionsCta =
+    hubTreatAsGuest &&
+    shouldPromptScholarshipQuiz &&
+    !guestCompletedScholarshipQuiz;
 
   /** Only when Hub guest Best tab wizard is active — drives list/cache refetch per field edit. */
   const guestBestWizardFingerprint = useMemo(() => {
@@ -1389,6 +1319,8 @@ function ScholarshipsPageInner({
       ),
     [userOverlayMoreFilters, hubTabCanonicalPreset, filterBounds]
   );
+  const selectedApplicantCountryCodes =
+    hubListingBodyMoreFilters.includeApplicantCountryCodes;
 
   const listMoreFiltersJson = useMemo((): MoreFiltersJson | null => {
     if (!hubListingBodyMoreFilters) return null;
@@ -1936,6 +1868,9 @@ function ScholarshipsPageInner({
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) z[id] = 0;
     return z;
   }, [listMeta?.categoryCounts]);
+  const countryCounts = listMeta?.countryCounts ?? [];
+  const unspecifiedApplicantCountryCount =
+    listMeta?.unspecifiedApplicantCountryCount ?? 0;
   const scholarshipsForCards = useMemo(() => {
     const base =
       currentMatchProfile != null
@@ -2416,7 +2351,10 @@ function ScholarshipsPageInner({
       prev
         ? {
             ...prev,
-            sidebarCounts: sidebarMeta.sidebarCounts
+            sidebarCounts: sidebarMeta.sidebarCounts,
+            countryCounts: sidebarMeta.countryCounts,
+            unspecifiedApplicantCountryCount:
+              sidebarMeta.unspecifiedApplicantCountryCount
           }
         : sidebarMeta
     );
@@ -2564,6 +2502,31 @@ function ScholarshipsPageInner({
     }
     setMoreFiltersOpen(false);
   }, [moreFiltersDraft, commitMoreFiltersApply]);
+
+  const onApplyCountries = useCallback(
+    (nextCodes: Set<string>, includeUnspecified: boolean) => {
+      const basis = cloneMoreFilters(
+        moreFiltersApplied ?? moreFiltersBaseline ?? defaultMoreFiltersFromBounds(filterBounds)
+      );
+      basis.includeApplicantCountryCodes = new Set(
+        Array.from(nextCodes)
+          .map((code) => code.trim().toUpperCase())
+          .filter((code) => /^[A-Z]{2}$/.test(code))
+      );
+      basis.includeUnspecifiedApplicantCountries = includeUnspecified;
+      setIsApplyingListControls(true);
+      applyingListControlsSawFetchRef.current = false;
+      applyingListControlsBaseSearchRef.current = searchParamsString;
+      commitMoreFiltersApply(basis);
+    },
+    [
+      moreFiltersApplied,
+      moreFiltersBaseline,
+      filterBounds,
+      searchParamsString,
+      commitMoreFiltersApply
+    ]
+  );
 
   useEffect(() => {
     if (!isApplyingMoreFilters) return;
@@ -2965,32 +2928,11 @@ function ScholarshipsPageInner({
     !hasError &&
     (hasListingParams || moreFiltersOffDefault || query.trim().length > 0);
 
-  const wizardDisplayStore = useMemo(
-    () =>
-      bestRecommendationWizardStore ??
-      emptyBestRecommendationWizardDraft(
-        hubTreatAsGuest ? 'guest' : 'signed-in'
-      ),
-    [bestRecommendationWizardStore, hubTreatAsGuest]
-  );
-
   const shouldShowBestRecommendationWizard =
     activeTab === 'best-recommendation' &&
     bestRecommendationWizardHydrated &&
     !bestTabAuthPending &&
-    ((hubTreatAsGuest &&
-      shouldPromptScholarshipQuiz &&
-      bestRecommendationWizardStore?.submitted !== true) ||
-      (!hubTreatAsGuest &&
-        ((shouldPromptScholarshipQuiz && !guestBestRecommendationPreviewEnabled) ||
-          bestRecommendationWizardInProgress ||
-          (!bestRecommendationWizardStore &&
-            isAuthenticated &&
-            authResolved &&
-            profileInitResolved &&
-            !profileInitialized &&
-            currentMatchProfile == null &&
-            listMeta?.personalizedMatchReady === false))));
+    shouldShowScholarshipQuestionsCta;
 
   const bestRecommendationWizardPendingHydration =
     activeTab === 'best-recommendation' &&
@@ -3103,6 +3045,28 @@ function ScholarshipsPageInner({
         </div>
       </div>
     ) : null;
+  const bestRecommendationStartCta = (
+    <div className="overflow-hidden rounded-[1.75rem] border border-orange-200/70 bg-gradient-to-br from-white via-[#FFF8F1] to-white px-5 py-6 text-center shadow-[0_18px_50px_-34px_rgba(15,23,42,0.55)] ring-1 ring-white/80 sm:px-8 sm:py-7">
+      <div className="mx-auto mb-3 inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-[#A45A16]">
+        1-minute setup
+      </div>
+      <p className="text-2xl font-semibold tracking-tight text-zinc-950 sm:text-[1.7rem]">
+        Want better scholarship matches?
+      </p>
+      <p className="mx-auto mt-2.5 max-w-2xl text-pretty text-sm leading-6 text-slate-600 sm:text-base">
+        Answer a few quick questions in about 1 minute, and we&apos;ll open your
+        personalized scholarship matches.
+      </p>
+      <div className="mx-auto mt-5 max-w-xl">
+        <Link
+          href="/get-scholarships"
+          className="inline-flex w-full items-center justify-center rounded-2xl bg-black px-6 py-3.5 text-center text-sm font-semibold text-white shadow-[0_14px_28px_-16px_rgba(0,0,0,0.8)] transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-zinc-900 hover:shadow-[0_18px_36px_-18px_rgba(0,0,0,0.9)] sm:text-base"
+        >
+          Answer questions and find scholarships
+        </Link>
+      </div>
+    </div>
+  );
 
   return (
     <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 text-left text-zinc-900 sm:px-5 md:py-12 lg:px-8">
@@ -3154,6 +3118,17 @@ function ScholarshipsPageInner({
                 query={query}
                 onQueryChange={onQueryChange}
                 categoryCounts={categoryCounts}
+                countryCounts={countryCounts}
+                unspecifiedApplicantCountryCount={
+                  unspecifiedApplicantCountryCount
+                }
+                appliedCountryCodes={
+                  hubListingBodyMoreFilters.includeApplicantCountryCodes
+                }
+                appliedIncludeUnspecifiedCountry={
+                  hubListingBodyMoreFilters.includeUnspecifiedApplicantCountries
+                }
+                onApplyCountries={onApplyCountries}
                 appliedCategoryIds={appliedCategoryIds}
                 onApplyCategories={onApplyCategories}
                 sortBy={sortBy}
@@ -3173,15 +3148,16 @@ function ScholarshipsPageInner({
                 onGuestSortBlocked={
                   guestLockedAction
                 }
-                onSubscriptionSortBlocked={undefined}
+                onSubscriptionSortBlocked={openLockedCategoryWall}
                 onGuestLockedAction={guestLockedAction}
                 catalogListingLocked={hubTreatAsGuest}
                 savedFilterBarHint={savedFilterBarHint}
                 savedFilterPresetButtons={headerSavedFilterPresetButtons}
                 onSavedFilterPresetSelect={openManageSavedFilterPreset}
                 suppressBottomMargin={
-                  activeTab === 'best-recommendation' &&
-                  shouldShowBestRecommendationWizard
+                  (activeTab === 'best-recommendation' &&
+                    shouldShowBestRecommendationWizard) ||
+                  (activeTab === 'matches' && shouldPromptScholarshipQuiz)
                 }
                 centerResultSummary={activeTab === 'best-recommendation'}
               />
@@ -3196,26 +3172,7 @@ function ScholarshipsPageInner({
               ) : guestBestRecommendationStackedBrowsingUi &&
                 shouldShowBestRecommendationWizard ? (
                 <>
-                  <BestRecommendationWizard
-                    store={wizardDisplayStore}
-                    saving={bestRecommendationWizardSaving}
-                    onChange={persistBestRecommendationWizardStore}
-                    onPersistSignedInStep={
-                      isAuthenticated ? persistBestRecommendationWizardProfileStep : undefined
-                    }
-                    onSubmit={async (next) => {
-                      persistBestRecommendationWizardStore(next);
-                      saveCompletedLandingQuizDraft(next.draft);
-                      stashLandingQuizDraftForOnboardingMerge(next.draft);
-                      void notifyQuizCompletionClient({
-                        flow: 'best_recommendation_wizard',
-                        landingPath: '/scholarships',
-                        authState: isAuthenticated ? 'authenticated' : 'guest',
-                        onceKey: `st_quiz_complete_best_recommendation_${isAuthenticated ? 'auth' : 'guest'}`
-                      });
-                      replaceListingParams({ resetPage: true });
-                    }}
-                  />
+                  <div className="mt-5">{bestRecommendationStartCta}</div>
                   <div className="flex flex-col mt-5 sm:mt-6">
                     <h2 className="text-center text-lg font-semibold tracking-tight text-zinc-900">
                       {transientBestRecommendationProfileSeed
@@ -3252,11 +3209,12 @@ function ScholarshipsPageInner({
                                 isAuthenticated={isAuthenticated}
                                 hasSubscription={hasSubscription}
                                 listingTab="best-recommendation"
+                                selectedApplicantCountryCodes={selectedApplicantCountryCodes}
                                 onSubscriptionLockedCategoryClick={
                                   openLockedCategoryWall
                                 }
                                 onLockedScholarshipNavigate={openLockedCategoryWall}
-                                onSubscriptionDetailNavigate={undefined}
+                                onSubscriptionDetailNavigate={openLockedCategoryWall}
                                 onGuestDetailNavigate={
                                   catalogFreeTier
                                     ? () => openRegistrationWall('card-unlock')
@@ -3337,11 +3295,12 @@ function ScholarshipsPageInner({
                                 isAuthenticated={isAuthenticated}
                                 hasSubscription={hasSubscription}
                                 listingTab="best-recommendation"
+                                selectedApplicantCountryCodes={selectedApplicantCountryCodes}
                                 onSubscriptionLockedCategoryClick={
                                   openLockedCategoryWall
                                 }
                                 onLockedScholarshipNavigate={openLockedCategoryWall}
-                                onSubscriptionDetailNavigate={undefined}
+                                onSubscriptionDetailNavigate={openLockedCategoryWall}
                                 onGuestDetailNavigate={
                                   catalogFreeTier
                                     ? () => openRegistrationWall('card-unlock')
@@ -3370,26 +3329,7 @@ function ScholarshipsPageInner({
                   </div>
                 </>
               ) : shouldShowBestRecommendationWizard ? (
-                <BestRecommendationWizard
-                  store={wizardDisplayStore}
-                  saving={bestRecommendationWizardSaving}
-                  onChange={persistBestRecommendationWizardStore}
-                  onPersistSignedInStep={
-                    isAuthenticated ? persistBestRecommendationWizardProfileStep : undefined
-                  }
-                  onSubmit={async (next) => {
-                    persistBestRecommendationWizardStore(next);
-                    saveCompletedLandingQuizDraft(next.draft);
-                    stashLandingQuizDraftForOnboardingMerge(next.draft);
-                    void notifyQuizCompletionClient({
-                      flow: 'best_recommendation_wizard',
-                      landingPath: '/scholarships',
-                      authState: isAuthenticated ? 'authenticated' : 'guest',
-                      onceKey: `st_quiz_complete_best_recommendation_${isAuthenticated ? 'auth' : 'guest'}`
-                    });
-                    replaceListingParams({ resetPage: true });
-                  }}
-                />
+                <div className="my-5">{bestRecommendationStartCta}</div>
               ) : blockingListLoad ? (
             <HubListSkeleton showApplyingLabel={blockingApplyLoad} />
           ) : hasError ? (
@@ -3425,24 +3365,8 @@ function ScholarshipsPageInner({
               {guestBestRecommendationEmptyHidden ? null : (
                 guestBestRecommendationSeededZeroResults ? (
                   guestBestRecommendationSeededEmptyState
-                ) : guestPersonalizedEmpty ? (
-                  <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-center shadow-sm sm:p-6">
-                    <p className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
-                      Want better scholarship matches?
-                    </p>
-                    <p className="mx-auto mt-3 max-w-3xl text-pretty text-base leading-relaxed text-slate-600 sm:mt-4 sm:text-lg">
-                      Answer 5 quick questions about your background and goals, then we&apos;ll open
-                      your Best recommendation list with scholarships tailored to you.
-                    </p>
-                    <div className="mt-5 sm:mt-6">
-                      <Link
-                        href="/onboarding"
-                        className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-3 text-center text-sm font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.35)] transition duration-200 ease-out hover:bg-zinc-900 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.4)] sm:text-base"
-                      >
-                        Answer 5 questions and find scholarships
-                      </Link>
-                    </div>
-                  </div>
+                ) : guestPersonalizedEmpty && shouldShowScholarshipQuestionsCta ? (
+                  <div className="my-5">{bestRecommendationStartCta}</div>
                 ) : (
                   <div className="rounded-xl border border-zinc-200 bg-white px-5 py-10 text-center text-slate-600 shadow-sm">
                     <p className="text-base font-medium text-zinc-800">
@@ -3470,22 +3394,8 @@ function ScholarshipsPageInner({
                   Updating scholarships and counts...
                 </div>
               ) : null}
-              {shouldPromptScholarshipQuiz && activeTab === 'matches' ? (
-                <div className="mb-4 rounded-2xl border border-gray-200/90 bg-gradient-to-br from-gray-50 via-white to-gray-50/80 p-4 text-center shadow-sm ring-1 ring-gray-100 sm:p-5">
-                  <p className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg">
-                    Want better scholarship matches?
-                  </p>
-                  <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-[0.9375rem]">
-                    Answer 5 quick questions about your background and goals, then
-                    we&apos;ll open your Best recommendation list with scholarships
-                    tailored to you.
-                  </p>
-                  <div className="mt-4">
-                    <ScholarshipCatalogEntryLink className="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-3 text-center text-sm font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.35)] transition duration-200 ease-out hover:bg-zinc-900 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.4)] sm:text-base">
-                      Answer 5 questions and find scholarships
-                    </ScholarshipCatalogEntryLink>
-                  </div>
-                </div>
+              {shouldShowScholarshipQuestionsCta && activeTab === 'matches' ? (
+                <div className="my-5">{bestRecommendationStartCta}</div>
               ) : null}
               {showGuestBestOrangeRecommendationCta ? (
                 <div className="flex flex-col gap-4">
@@ -3548,9 +3458,10 @@ function ScholarshipsPageInner({
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
                       listingTab={activeTab}
+                      selectedApplicantCountryCodes={selectedApplicantCountryCodes}
                       onSubscriptionLockedCategoryClick={openLockedCategoryWall}
                       onLockedScholarshipNavigate={openLockedCategoryWall}
-                      onSubscriptionDetailNavigate={undefined}
+                      onSubscriptionDetailNavigate={openLockedCategoryWall}
                       onGuestDetailNavigate={
                         catalogFreeTier
                           ? () => openRegistrationWall('card-unlock')
@@ -3643,6 +3554,7 @@ export default function ScholarshipsHubPageClient({
   hasSubscription = false,
   initialPayload = null,
   routeScope = null,
+  currentPathname = '/scholarships',
   leadContent = null,
   postListingContent = null,
   hubCanonicalIntroBelowTitle = null,
@@ -3653,6 +3565,7 @@ export default function ScholarshipsHubPageClient({
   hasSubscription?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
+  currentPathname?: string;
   leadContent?: ReactNode;
   postListingContent?: ReactNode;
   hubCanonicalIntroBelowTitle?: ReactNode;
@@ -3669,6 +3582,7 @@ export default function ScholarshipsHubPageClient({
           hasSubscription={hasSubscription}
           initialPayload={initialPayload}
           routeScope={routeScope}
+          currentPathname={currentPathname}
           leadContent={leadContent}
           postListingContent={postListingContent}
           hubCanonicalIntroBelowTitle={hubCanonicalIntroBelowTitle}

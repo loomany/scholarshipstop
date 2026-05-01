@@ -239,7 +239,7 @@ export default function CompareInstitutionScholarshipColumns({
           hasSubscription={hasSubscription}
           onSubscriptionLockedCategoryClick={openLockedCategoryWall}
           onLockedScholarshipNavigate={openLockedCategoryWall}
-          onSubscriptionDetailNavigate={undefined}
+          onSubscriptionDetailNavigate={openLockedCategoryWall}
           onGuestDetailNavigate={
             catalogFreeTier ? () => openRegistrationWall('card-unlock') : undefined
           }

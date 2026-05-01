@@ -12,6 +12,7 @@ import {
 import { createPortal } from 'react-dom';
 import {
   ChevronDown,
+  Globe2,
   LayoutGrid,
   Lock,
   Search,
@@ -46,6 +47,11 @@ type ScholarshipsListHeaderProps = {
   onQueryChange: (value: string) => void;
   /** Counts по base dataset текущей вкладки (не глобальный каталог). */
   categoryCounts: Record<ScholarshipCategoryId, number>;
+  countryCounts?: Array<{ code: string; label: string; count: number }>;
+  unspecifiedApplicantCountryCount?: number;
+  appliedCountryCodes?: Set<string>;
+  appliedIncludeUnspecifiedCountry?: boolean;
+  onApplyCountries?: (next: Set<string>, includeUnspecified: boolean) => void;
   appliedCategoryIds: Set<ScholarshipCategoryId>;
   onApplyCategories: (next: Set<ScholarshipCategoryId>) => void;
   sortBy: SortOption;
@@ -181,6 +187,11 @@ function ScholarshipsListHeader({
   query,
   onQueryChange,
   categoryCounts,
+  countryCounts = [],
+  unspecifiedApplicantCountryCount = 0,
+  appliedCountryCodes = new Set(),
+  appliedIncludeUnspecifiedCountry = false,
+  onApplyCountries,
   appliedCategoryIds,
   onApplyCategories,
   sortBy,
@@ -216,16 +227,24 @@ function ScholarshipsListHeader({
       : !isAuthenticated;
   const guestCatalogUiLocked = !isAuthenticated;
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [countriesOpen, setCountriesOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [categorySearch, setCategorySearch] = useState('');
+  const [countrySearch, setCountrySearch] = useState('');
   const [draftCategories, setDraftCategories] = useState<
     Set<ScholarshipCategoryId>
   >(() => new Set());
+  const [draftCountryCodes, setDraftCountryCodes] = useState<Set<string>>(
+    () => new Set()
+  );
+  const [draftIncludeUnspecifiedCountry, setDraftIncludeUnspecifiedCountry] =
+    useState(false);
   const [categoryPanelLayout, setCategoryPanelLayout] =
     useState<CategoryPanelLayout | null>(null);
   const [mounted, setMounted] = useState(false);
 
   const categoriesRef = useRef<HTMLDivElement>(null);
+  const countriesRef = useRef<HTMLDivElement>(null);
   const categoryDropdownRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
 
@@ -259,29 +278,32 @@ function ScholarshipsListHeader({
   }, [categoriesOpen, updateCategoryPanelLayout]);
 
   useEffect(() => {
-    if (!categoriesOpen && !sortOpen) return;
+    if (!categoriesOpen && !countriesOpen && !sortOpen) return;
     const onDown = (e: PointerEvent) => {
       const t = e.target as Node;
       if (categoriesRef.current?.contains(t)) return;
+      if (countriesRef.current?.contains(t)) return;
       if (categoryDropdownRef.current?.contains(t)) return;
       if (sortRef.current?.contains(t)) return;
       setCategoriesOpen(false);
+      setCountriesOpen(false);
       setSortOpen(false);
     };
     document.addEventListener('pointerdown', onDown);
     return () => document.removeEventListener('pointerdown', onDown);
-  }, [categoriesOpen, sortOpen]);
+  }, [categoriesOpen, countriesOpen, sortOpen]);
 
   useEffect(() => {
-    if (!categoriesOpen && !sortOpen) return;
+    if (!categoriesOpen && !countriesOpen && !sortOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       setCategoriesOpen(false);
+      setCountriesOpen(false);
       setSortOpen(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [categoriesOpen, sortOpen]);
+  }, [categoriesOpen, countriesOpen, sortOpen]);
 
   const optionSelectedClass =
     'bg-gray-100 font-medium text-gray-900';
@@ -295,6 +317,30 @@ function ScholarshipsListHeader({
     });
   }, [categorySearch]);
 
+  const filteredCountryRows = useMemo(() => {
+    const q = countrySearch.trim().toLowerCase();
+    return countryCounts
+      .filter((country) => country.count > 0)
+      .filter((country) => {
+        if (!q) return true;
+        return (
+          country.label.toLowerCase().includes(q) ||
+          country.code.toLowerCase().includes(q)
+        );
+      })
+      .sort((a, b) => {
+        const aSelected = appliedCountryCodes.has(a.code) ? 1 : 0;
+        const bSelected = appliedCountryCodes.has(b.code) ? 1 : 0;
+        return bSelected - aSelected || b.count - a.count || a.label.localeCompare(b.label);
+      });
+  }, [appliedCountryCodes, countryCounts, countrySearch]);
+  const showUnspecifiedCountryRow = useMemo(() => {
+    if (unspecifiedApplicantCountryCount <= 0) return false;
+    const q = countrySearch.trim().toLowerCase();
+    if (!q) return true;
+    return 'open / not country-specific'.includes(q) || 'unspecified'.includes(q);
+  }, [countrySearch, unspecifiedApplicantCountryCount]);
+
   const toggleDraft = (id: ScholarshipCategoryId) => {
     setDraftCategories((prev) => {
       const next = new Set(prev);
@@ -305,6 +351,17 @@ function ScholarshipsListHeader({
   };
 
   const activeFilterCount = appliedCategoryIds.size;
+  const activeCountryCount =
+    appliedCountryCodes.size + (appliedIncludeUnspecifiedCountry ? 1 : 0);
+  const moreFiltersApplyLocked = !hasSubscription;
+  const countryApplyLocked = !hasSubscription;
+  const countryButtonLabel =
+    activeCountryCount === 1
+      ? appliedIncludeUnspecifiedCountry
+        ? 'Open'
+        : countryCounts.find((country) => appliedCountryCodes.has(country.code))?.label ??
+          'Countries'
+      : 'Countries';
 
   const sortTriggerLabel = SORT_TRIGGER_LABEL[sortBy];
 
@@ -512,6 +569,7 @@ function ScholarshipsListHeader({
                     }
                     onClick={() => {
                       setCategoriesOpen(false);
+                      setCountriesOpen(false);
                       setSortOpen((o) => !o);
                     }}
                     aria-expanded={sortOpen}
@@ -590,32 +648,29 @@ function ScholarshipsListHeader({
 
             <div className="min-w-0">
               <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <div className="flex min-w-0 flex-wrap items-center gap-3 sm:gap-4">
+                <div className="grid w-full min-w-0 grid-cols-2 items-center gap-3 sm:flex sm:flex-wrap sm:gap-4">
                 <button
                   type="button"
                   aria-label="Open more filters"
                   title={
-                    catalogLocked
-                      ? 'Apply filters after you start your free trial'
+                    moreFiltersApplyLocked
+                      ? 'Premium subscription required to apply filters'
                       : undefined
                   }
                   onClick={() => {
                     setCategoriesOpen(false);
+                    setCountriesOpen(false);
                     setSortOpen(false);
-                    if (catalogLocked) {
-                      onGuestLockedAction?.();
-                      return;
-                    }
                     onOpenMoreFilters?.();
                   }}
-                  className={CATALOG_CONTROL_BAR_BTN}
+                  className={`${CATALOG_CONTROL_BAR_BTN} order-1 w-full sm:order-none sm:w-auto`}
                 >
                   <SlidersHorizontal
                     className="h-[18px] w-[18px] shrink-0 text-gray-600"
                     strokeWidth={2}
                     aria-hidden
                   />
-                  {catalogLocked ? (
+                  {moreFiltersApplyLocked ? (
                     <Lock
                       className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
                       strokeWidth={2}
@@ -630,8 +685,174 @@ function ScholarshipsListHeader({
                   ) : null}
                 </button>
 
+                {onApplyCountries ? (
                 <div
-                  className="relative min-w-0 sm:min-w-0 sm:shrink-0"
+                  className="relative order-3 col-span-2 min-w-0 justify-self-center sm:order-none sm:col-span-1 sm:min-w-0 sm:shrink-0"
+                  ref={countriesRef}
+                >
+                  <button
+                    type="button"
+                    disabled={!onApplyCountries}
+                    onClick={() => {
+                      if (!onApplyCountries) return;
+                      setSortOpen(false);
+                      setCategoriesOpen(false);
+                      setCountriesOpen((open) => {
+                        const next = !open;
+                        if (next) {
+                          setDraftCountryCodes(new Set(appliedCountryCodes));
+                          setDraftIncludeUnspecifiedCountry(
+                            appliedIncludeUnspecifiedCountry
+                          );
+                          setCountrySearch('');
+                        }
+                        return next;
+                      });
+                    }}
+                    aria-expanded={countriesOpen}
+                    aria-haspopup="dialog"
+                    className={`${CATALOG_CONTROL_BAR_BTN} max-w-full sm:w-auto`}
+                  >
+                    <Globe2 className="h-[18px] w-[18px] text-gray-600" />
+                    {countryApplyLocked ? (
+                      <Lock
+                        className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                    ) : null}
+                    Countries
+                    {activeCountryCount > 0 ? (
+                      <span className="tabular-nums text-gray-600">
+                        ({activeCountryCount === 1 ? countryButtonLabel : activeCountryCount})
+                      </span>
+                    ) : null}
+                    <ChevronDown
+                      className={`h-4 w-4 text-gray-500 transition ${countriesOpen ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  {countriesOpen ? (
+                    <div
+                      role="dialog"
+                      aria-label="Filter by country"
+                      className="absolute left-0 top-[calc(100%+0.5rem)] z-[80] flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5"
+                    >
+                      <div className="border-b border-zinc-100 px-4 py-3">
+                        <h2 className="text-base font-semibold text-zinc-900">
+                          Find scholarships for students from...
+                        </h2>
+                        <p className="mt-0.5 text-xs leading-relaxed text-zinc-500">
+                          Choose your citizenship or home country, or include grants
+                          without a listed country restriction.
+                        </p>
+                      </div>
+                      <div className="px-4 py-3">
+                        <input
+                          value={countrySearch}
+                          onChange={(e) => setCountrySearch(e.target.value)}
+                          placeholder="Search countries"
+                          aria-label="Search countries"
+                          className={`w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
+                        />
+                      </div>
+                      <ul className="max-h-72 overflow-y-auto overscroll-contain px-2 py-1" role="list">
+                        {showUnspecifiedCountryRow || filteredCountryRows.length > 0 ? (
+                          <>
+                            {showUnspecifiedCountryRow ? (
+                              <li>
+                                <label className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-zinc-50">
+                                  <input
+                                    type="checkbox"
+                                    checked={draftIncludeUnspecifiedCountry}
+                                    onChange={() =>
+                                      setDraftIncludeUnspecifiedCountry((prev) => !prev)
+                                    }
+                                    className="scholarship-filter-checkbox h-4 w-4 shrink-0"
+                                  />
+                                  <span className="min-w-0 flex-1 text-sm font-medium text-zinc-800">
+                                    Open / not country-specific
+                                  </span>
+                                  <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold tabular-nums text-zinc-600">
+                                    {unspecifiedApplicantCountryCount.toLocaleString()}
+                                  </span>
+                                </label>
+                              </li>
+                            ) : null}
+                            {filteredCountryRows.map((country) => (
+                            <li key={country.code}>
+                              <label className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-zinc-50">
+                                <input
+                                  type="checkbox"
+                                  checked={draftCountryCodes.has(country.code)}
+                                  onChange={() => {
+                                    setDraftCountryCodes((prev) => {
+                                      const next = new Set(prev);
+                                      if (next.has(country.code)) next.delete(country.code);
+                                      else next.add(country.code);
+                                      return next;
+                                    });
+                                  }}
+                                  className="scholarship-filter-checkbox h-4 w-4 shrink-0"
+                                />
+                                <span className="min-w-0 flex-1 text-sm font-medium text-zinc-800">
+                                  {country.label}
+                                </span>
+                                <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold tabular-nums text-zinc-600">
+                                  {country.count.toLocaleString()}
+                                </span>
+                              </label>
+                            </li>
+                            ))}
+                          </>
+                        ) : (
+                          <li className="px-3 py-6 text-center text-sm text-zinc-500">
+                            No dedicated matches yet. Try International-friendly grants.
+                          </li>
+                        )}
+                      </ul>
+                      <div className="flex items-center justify-between gap-3 border-t border-zinc-100 px-4 py-3">
+                        <button
+                          type="button"
+                          className="text-sm font-medium text-zinc-500 transition hover:text-zinc-800"
+                          onClick={() => {
+                            setDraftCountryCodes(new Set());
+                            setDraftIncludeUnspecifiedCountry(false);
+                          }}
+                        >
+                          Clear
+                        </button>
+                        <button
+                          type="button"
+                          className={`${scholarshipCategoriesApplyButtonClass} inline-flex items-center justify-center gap-1.5`}
+                          onClick={() => {
+                            if (countryApplyLocked) {
+                              onSubscriptionSortBlocked?.();
+                              return;
+                            }
+                            onApplyCountries?.(
+                              new Set(draftCountryCodes),
+                              draftIncludeUnspecifiedCountry
+                            );
+                            setCountriesOpen(false);
+                          }}
+                        >
+                          {countryApplyLocked ? (
+                            <Lock
+                              className="h-3.5 w-3.5 shrink-0 text-[#FFB000]"
+                              strokeWidth={2}
+                              aria-hidden
+                            />
+                          ) : null}
+                          Show scholarships
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+                ) : null}
+
+                <div
+                  className="relative order-2 min-w-0 justify-self-stretch sm:order-none sm:min-w-0 sm:shrink-0"
                   ref={categoriesRef}
                 >
                   <button
@@ -645,6 +866,7 @@ function ScholarshipsListHeader({
                     onClick={() => {
                       if (categoriesDisabled) return;
                       setSortOpen(false);
+                      setCountriesOpen(false);
                       setCategoriesOpen((o) => {
                         const next = !o;
                         if (next) {
@@ -677,27 +899,30 @@ function ScholarshipsListHeader({
                     />
                   </button>
                 </div>
-                </div>
-                {savedFilterPresetButtons.length > 0 ? (
-                  <div className="mt-2 flex min-w-0 w-full max-w-full flex-wrap items-center justify-start gap-3 sm:mt-0 sm:w-auto sm:flex-1 sm:gap-4 sm:justify-start">
-                    {savedFilterPresetButtons.map((preset) => (
-                      <button
-                        key={preset.id}
-                        type="button"
-                        onClick={() => onSavedFilterPresetSelect?.(preset.id)}
-                        className={`max-w-[12rem] truncate rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                          preset.active
-                            ? 'border-[#FF7A1A] bg-[#FF7A1A] text-white'
-                            : 'border-[#FF7A1A] bg-white text-[#FF7A1A] hover:bg-orange-50'
-                        }`}
-                        title={preset.name}
-                      >
-                        {preset.name}
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
               </div>
+              </div>
+              {savedFilterPresetButtons.length > 0 ? (
+                <div className="mt-3 flex min-w-0 flex-wrap items-center gap-2 border-t border-zinc-100 pt-3">
+                  <span className="text-xs font-medium text-zinc-400">
+                    {savedFilterBarHint?.trim() || 'Saved filters'}
+                  </span>
+                  {savedFilterPresetButtons.map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => onSavedFilterPresetSelect?.(preset.id)}
+                      className={`max-w-[12rem] truncate rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                        preset.active
+                          ? 'border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm'
+                          : 'border-orange-200 bg-orange-50 text-[#D95F00] hover:border-orange-300 hover:bg-orange-100'
+                      }`}
+                      title={preset.name}
+                    >
+                      {preset.name}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

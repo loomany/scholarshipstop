@@ -1,6 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  GraduationCap,
+  Sparkles,
+  type LucideIcon
+} from 'lucide-react';
 import { DarkSelect } from '@/components/home/DarkSelect';
 import { CITIZENSHIP_OPTIONS } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
@@ -45,6 +53,7 @@ export type ScholarshipOnboardingStep1Props = {
   description?: string;
   helperText?: string;
   onBack?: () => void;
+  visualVariant?: 'default' | 'saas';
   onContinue: (values: OnboardingFormValues) => void;
 };
 
@@ -57,6 +66,7 @@ export function ScholarshipOnboardingStep1({
   description,
   helperText,
   onBack,
+  visualVariant = 'default',
   onContinue
 }: ScholarshipOnboardingStep1Props) {
   const [values, setValues] = useState<OnboardingFormValues>(() => ({
@@ -119,7 +129,8 @@ export function ScholarshipOnboardingStep1({
           value: values.schoolLevel,
           error: errors.schoolLevel,
           onChange: (v: string) => setField('schoolLevel', v),
-          menuClassName: undefined as string | undefined
+          menuClassName: undefined as string | undefined,
+          icon: GraduationCap as LucideIcon
         }
       : basicStep === 'fieldOfStudy'
         ? {
@@ -129,7 +140,8 @@ export function ScholarshipOnboardingStep1({
             value: values.fieldOfStudy,
             error: errors.fieldOfStudy,
             onChange: (v: string) => setField('fieldOfStudy', v),
-            menuClassName: 'max-h-72'
+            menuClassName: 'max-h-72',
+            icon: BookOpen as LucideIcon
           }
         : {
             selectId: 'onb-citizenship',
@@ -138,8 +150,11 @@ export function ScholarshipOnboardingStep1({
             value: values.citizenship,
             error: errors.citizenship,
             onChange: (v: string) => setField('citizenship', v),
-            menuClassName: undefined as string | undefined
+            menuClassName: undefined as string | undefined,
+            icon: Sparkles as LucideIcon
           };
+  const isSaas = visualVariant === 'saas';
+  const Icon = fieldConfig.icon;
 
   return (
     <form
@@ -155,21 +170,27 @@ export function ScholarshipOnboardingStep1({
           disabled={disabled}
           className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
         >
-          ← Back
+          <ArrowLeft className="mr-2 inline h-4 w-4" aria-hidden />
+          Back
         </button>
       ) : null}
 
       <div className="mx-auto max-w-lg text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">
+        {isSaas ? (
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF3E8] text-[#FF7A1A] ring-1 ring-[#FFD9B3]">
+            <Icon className="h-6 w-6" aria-hidden />
+          </div>
+        ) : null}
+        <p className={`${isSaas ? 'mt-5 text-[#A45A16]' : 'text-zinc-500'} text-xs font-semibold uppercase tracking-[0.14em]`}>
           {progressEyebrow ?? 'Step 1 of 6 · Basics'}
         </p>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+        <h1 className={`mt-2 text-2xl font-bold tracking-tight sm:text-3xl ${isSaas ? 'text-[#7A3B00]' : 'text-zinc-900'}`}>
           {title ?? 'Tell us about you'}
         </h1>
-        <p className="mx-auto mt-3 max-w-md text-base font-medium leading-7 text-zinc-600 sm:max-w-lg">
+        <p className={`mx-auto mt-3 max-w-md text-base font-medium leading-7 sm:max-w-lg ${isSaas ? 'text-[#8C5A2B]' : 'text-zinc-600'}`}>
           {description ?? 'We use this to match scholarships to your background and goals.'}
         </p>
-        <p className="mx-auto mt-2.5 max-w-md text-sm leading-relaxed text-zinc-500 sm:max-w-lg">
+        <p className={`mx-auto mt-2.5 max-w-md text-sm leading-relaxed sm:max-w-lg ${isSaas ? 'text-[#8C5A2B]/80' : 'text-zinc-500'}`}>
           {helperText ??
             'The more details you share, the better we can tailor scholarship matches to you.'}
         </p>
@@ -199,7 +220,8 @@ export function ScholarshipOnboardingStep1({
         disabled={disabled}
         className={ONBOARDING_PRIMARY_BUTTON_CLASS}
       >
-        Continue →
+        Continue
+        {isSaas ? <ArrowRight className="ml-2 h-4 w-4" aria-hidden /> : ' →'}
       </button>
     </form>
   );

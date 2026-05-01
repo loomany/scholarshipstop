@@ -57,6 +57,8 @@ export type MoreFiltersState = {
   includeEducationLevels: Set<string>;
   includeGpaBuckets: Set<string>;
   includeLocationLabels: Set<string>;
+  includeApplicantCountryCodes: Set<string>;
+  includeUnspecifiedApplicantCountries: boolean;
   includeEasyApply: Set<string>;
   /**
    * Optional U.S. state (type full name; must match canonical list to narrow SQL).
@@ -273,6 +275,8 @@ export function defaultMoreFiltersFromBounds(bounds: {
     includeEducationLevels: new Set(),
     includeGpaBuckets: new Set(),
     includeLocationLabels: new Set(),
+    includeApplicantCountryCodes: new Set(),
+    includeUnspecifiedApplicantCountries: false,
     includeEasyApply: new Set(),
     filterStateInput: '',
     filterUniversityInput: '',
@@ -346,6 +350,20 @@ export function scholarshipPassesMoreFilters(
   // Eligibility and education include filtering are server-only (SQL source of truth).
   if (!matchesGpaBuckets(s, f.includeGpaBuckets)) return false;
   if (!matchesLocation(s, f.includeLocationLabels)) return false;
+  if (
+    f.includeApplicantCountryCodes.size > 0 ||
+    f.includeUnspecifiedApplicantCountries
+  ) {
+    const codes = new Set((s.applicantCountryCodes ?? []).map((code) => code.toUpperCase()));
+    const matchesSelectedCountry = Array.from(f.includeApplicantCountryCodes).some((code) =>
+      codes.has(code.toUpperCase())
+    );
+    const matchesUnspecified =
+      f.includeUnspecifiedApplicantCountries && codes.size === 0;
+    if (!matchesSelectedCountry && !matchesUnspecified) {
+      return false;
+    }
+  }
   if (!matchesEasyApply(s, f.includeEasyApply)) return false;
   if (!matchesFilterStateInput(s, f.filterStateInput)) return false;
   if (f.citizenshipAudience === 'international_friendly') {
@@ -378,6 +396,7 @@ export function cloneMoreFilters(f: MoreFiltersState): MoreFiltersState {
     includeEducationLevels: new Set(f.includeEducationLevels),
     includeGpaBuckets: new Set(f.includeGpaBuckets),
     includeLocationLabels: new Set(f.includeLocationLabels),
+    includeApplicantCountryCodes: new Set(f.includeApplicantCountryCodes),
     includeEasyApply: new Set(f.includeEasyApply),
     filterStateInput: f.filterStateInput,
     filterUniversityInput: f.filterUniversityInput,
@@ -406,6 +425,8 @@ export function moreFiltersHasProfileOrQuizListingSignals(
   if (mf.deadlinePreset !== 'any') return true;
   if (mf.includeRequirementTypes.size > 0) return true;
   if (mf.includeLocationLabels.size > 0) return true;
+  if (mf.includeApplicantCountryCodes.size > 0) return true;
+  if (mf.includeUnspecifiedApplicantCountries) return true;
   if (mf.includeEasyApply.size > 0) return true;
   if (mf.profileFieldOfStudySlug.trim().length > 0) return true;
   if (mf.profileCitizenshipNarrow !== 'none') return true;
@@ -438,6 +459,8 @@ export function countMoreFilterSelections(
   n += f.includeEducationLevels.size;
   n += f.includeGpaBuckets.size;
   n += f.includeLocationLabels.size;
+  n += f.includeApplicantCountryCodes.size;
+  if (f.includeUnspecifiedApplicantCountries) n++;
   n += f.includeEasyApply.size;
   if (f.filterStateInput.trim() !== '') n++;
   if (f.filterUniversitySlug?.trim()) n++;
@@ -500,6 +523,16 @@ export function countMoreFilterDeltaFromBaseline(
     f.includeLocationLabels,
     baseline.includeLocationLabels
   );
+  n += setSymmetricDiffCount(
+    f.includeApplicantCountryCodes,
+    baseline.includeApplicantCountryCodes
+  );
+  if (
+    f.includeUnspecifiedApplicantCountries !==
+    baseline.includeUnspecifiedApplicantCountries
+  ) {
+    n++;
+  }
   n += setSymmetricDiffCount(f.includeEasyApply, baseline.includeEasyApply);
   if (f.filterStateInput.trim() !== baseline.filterStateInput.trim()) n++;
   if ((f.filterUniversitySlug ?? '') !== (baseline.filterUniversitySlug ?? '')) n++;

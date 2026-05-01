@@ -16,6 +16,8 @@ export const GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY =
   'scholarship_get_scholarships_quiz_draft_v1';
 export const COMPLETED_GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY =
   'scholarship_get_scholarships_quiz_completed_v1';
+export const GET_SCHOLARSHIPS_SELECTED_COUNTRY_KEY =
+  'scholarship_get_scholarships_country_v1';
 
 function withLandingMeta(draft: StoredOnboardingDraft): StoredOnboardingDraft {
   return { ...draft, v: 7, quizVariant: 'landing_no_birth' };
@@ -142,5 +144,29 @@ export function clearLandingQuizDraft(): void {
     localStorage.removeItem(GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY);
   } catch (error) {
     console.warn('[landing-quiz] clear draft failed', error);
+  }
+}
+
+export function loadLandingQuizSelectedCountry(): string {
+  if (typeof window === 'undefined') return '';
+  try {
+    const raw = localStorage.getItem(GET_SCHOLARSHIPS_SELECTED_COUNTRY_KEY);
+    return typeof raw === 'string' ? raw.trim().toUpperCase() : '';
+  } catch {
+    return '';
+  }
+}
+
+export function saveLandingQuizSelectedCountry(countryCode: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const normalized = countryCode.trim().toUpperCase();
+    if (normalized) {
+      localStorage.setItem(GET_SCHOLARSHIPS_SELECTED_COUNTRY_KEY, normalized);
+    } else {
+      localStorage.removeItem(GET_SCHOLARSHIPS_SELECTED_COUNTRY_KEY);
+    }
+  } catch (error) {
+    console.warn('[landing-quiz] write country failed', error);
   }
 }

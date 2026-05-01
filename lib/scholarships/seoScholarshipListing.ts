@@ -102,6 +102,14 @@ export function mergeMoreFilterStates(
         Array.from(b.includeLocationLabels)
       )
     ),
+    includeApplicantCountryCodes: new Set(
+      Array.from(a.includeApplicantCountryCodes).concat(
+        Array.from(b.includeApplicantCountryCodes)
+      )
+    ),
+    includeUnspecifiedApplicantCountries:
+      a.includeUnspecifiedApplicantCountries ||
+      b.includeUnspecifiedApplicantCountries,
     includeEasyApply: new Set(
       Array.from(a.includeEasyApply).concat(Array.from(b.includeEasyApply))
     ),

@@ -8,6 +8,7 @@ import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
 type ScholarshipsHubPageAuthBridgeProps = {
   initialPayload: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
+  currentPathname?: string;
   leadContent?: React.ReactNode;
   postListingContent?: React.ReactNode;
   /** Canonical `/scholarships/hub/[segment]` SSR copy under listings h1. */
@@ -18,6 +19,7 @@ type ScholarshipsHubPageAuthBridgeProps = {
 export default function ScholarshipsHubPageAuthBridge({
   initialPayload,
   routeScope = null,
+  currentPathname = '/scholarships',
   leadContent = null,
   postListingContent = null,
   hubCanonicalIntroBelowTitle = null,
@@ -32,6 +34,7 @@ export default function ScholarshipsHubPageAuthBridge({
           hasSubscription={hasSubscription}
           initialPayload={initialPayload}
           routeScope={routeScope}
+          currentPathname={currentPathname}
           leadContent={leadContent}
           postListingContent={postListingContent}
           hubCanonicalIntroBelowTitle={hubCanonicalIntroBelowTitle}

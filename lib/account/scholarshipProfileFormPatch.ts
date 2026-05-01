@@ -12,6 +12,7 @@ import {
   schoolLevelLabelForValue
 } from '@/lib/constants/scholarshipProfileOptions';
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
+import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 import {
   composeBirthDateValue,
   parseBirthDayValue,
@@ -102,6 +103,7 @@ export type ScholarshipProfileFormValues = {
   schoolLevel: string;
   fieldOfStudy: string;
   citizenshipStatus: string;
+  countryCode: string;
   gpaChoice: string;
   stateRegionInput: string;
 };
@@ -150,6 +152,9 @@ export function buildScholarshipProfileFormPatch(
   patch.citizenship_status = citizenship_status;
   patch.citizenship_status_label = citizenship_status_label;
 
+  const countryCode = normalizeCountryCode(v.countryCode);
+  patch.country_code = countryCode;
+
   const formGpa = gpaForProfileDb(v.gpaChoice);
   /** `prefer_not_to_say` must always persist as `null` in DB. */
   patch.gpa = formGpa;
@@ -165,7 +170,7 @@ export function buildScholarshipProfileFormPatch(
   }
 
   const formState =
-    normalizeUsStateToCanonical(v.stateRegionInput) || null;
+    countryCode === 'US' ? normalizeUsStateToCanonical(v.stateRegionInput) || null : null;
   patch.state_region = formState;
 
   return patch;

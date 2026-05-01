@@ -53,8 +53,10 @@ import type {
 } from '@/lib/iqAssessmentTypes';
 import { parseUserIntent } from '@/lib/iqIntent';
 import { syncOnboardingToProfiles } from '@/lib/onboarding/syncScholarshipProfile';
+import { createCountryFirstScholarshipAccount } from '@/lib/onboarding/countryFirstSignupClient';
 import type { UserProfile } from '@/lib/onboarding/userProfile';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/scholarshipDeadlineState';
+import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 import { generateStrategy } from '@/lib/strategyRecommendationEngine';
 import { createClient } from '@/utils/supabase/client';
 
@@ -77,6 +79,7 @@ type ProfileQualificationRow = Pick<
   | 'school_level'
   | 'field_of_study'
   | 'citizenship_status'
+  | 'country_code'
   | 'state_region'
   | 'gpa'
   | 'saved_filters_snapshot'
@@ -339,8 +342,15 @@ function writePhaseStorage(phase: ContextualFunnelPhase) {
 function isStoredQualificationData(value: unknown): value is QualificationData {
   if (!value || typeof value !== 'object') return false;
   const data = value as Partial<Record<keyof QualificationData, unknown>>;
+  const countryCode =
+    typeof data.countryCode === 'string' ? normalizeCountryCode(data.countryCode) : '';
+
+  if (countryCode && countryCode !== 'US') {
+    return true;
+  }
 
   return (
+    countryCode === 'US' &&
     typeof data.schoolLevel === 'string' &&
     data.schoolLevel.trim().length > 0 &&
     typeof data.fieldOfStudy === 'string' &&
@@ -359,11 +369,12 @@ function normalizeStoredQualificationData(
   if (!isStoredQualificationData(value)) return null;
 
   return {
-    schoolLevel: value.schoolLevel,
-    fieldOfStudy: value.fieldOfStudy,
-    citizenship: value.citizenship,
+    countryCode: normalizeCountryCode(value.countryCode) || 'US',
+    schoolLevel: value.schoolLevel ?? '',
+    fieldOfStudy: value.fieldOfStudy ?? '',
+    citizenship: value.citizenship ?? '',
     state: value.state ?? '',
-    gpa: value.gpa
+    gpa: value.gpa ?? ''
   };
 }
 
@@ -384,6 +395,17 @@ function qualificationDataFromProfileRow(
   profile: ProfileQualificationRow | null
 ): QualificationData | null {
   if (!profile) return null;
+  const countryCode = normalizeCountryCode(profile.country_code);
+  if (countryCode && countryCode !== 'US') {
+    return {
+      countryCode,
+      schoolLevel: '',
+      fieldOfStudy: '',
+      citizenship: '',
+      state: '',
+      gpa: ''
+    };
+  }
 
   const schoolLevel = profile.school_level?.trim() ?? '';
   const fieldOfStudy = profile.field_of_study?.trim() ?? '';
@@ -404,6 +426,7 @@ function qualificationDataFromProfileRow(
   }
 
   return {
+    countryCode: countryCode || 'US',
     schoolLevel,
     fieldOfStudy,
     citizenship,
@@ -413,6 +436,7 @@ function qualificationDataFromProfileRow(
 }
 
 function qualificationDataToProfile(data: QualificationData): UserProfile {
+  const countryCode = normalizeCountryCode(data.countryCode) || 'US';
   const schoolLevel = data.schoolLevel.trim() || null;
   const fieldOfStudy = data.fieldOfStudy.trim() || null;
   const citizenship = data.citizenship.trim() || null;
@@ -436,9 +460,11 @@ function qualificationDataToProfile(data: QualificationData): UserProfile {
     citizenshipStatusLabel: citizenship
       ? citizenshipLabelForValue(citizenship)
       : null,
-    countryCode: null,
+    countryCode,
     stateRegion:
-      US_STATE_OPTIONS.some((option) => option.value === state) ? state : null,
+      countryCode === 'US' && US_STATE_OPTIONS.some((option) => option.value === state)
+        ? state
+        : null,
     city: null,
     gpa: gpaForProfile(gpa),
     savedFiltersSnapshot: withProfileGpaSelectionSnapshot(null, gpa),
@@ -463,7 +489,7 @@ async function readProfileQualificationData(userId: string) {
   const { data } = await supabase
     .from('profiles')
     .select(
-      'school_level,field_of_study,citizenship_status,state_region,gpa,saved_filters_snapshot'
+      'school_level,field_of_study,citizenship_status,country_code,state_region,gpa,saved_filters_snapshot'
     )
     .eq('id', userId)
     .maybeSingle<ProfileQualificationRow>();
@@ -1224,67 +1250,15 @@ function StrategyAccountGate({
 
     setSubmitting(true);
     try {
-      const supabase = createClient();
-      const generatedPassword =
-        typeof crypto !== 'undefined' && 'randomUUID' in crypto
-          ? `${crypto.randomUUID()}A1!`
-          : `${Date.now()}-${Math.random()}A1!`;
-      const emailRedirectTo =
-        typeof window !== 'undefined'
-          ? `${window.location.origin}/scholarships/hub/best-recommendation`
-          : undefined;
-      const { error: signUpError } = await supabase.auth.signUp({
+      const profile = qualificationDataToProfile(qualificationData);
+      const signup = await createCountryFirstScholarshipAccount({
         email: normalizedEmail,
-        password: generatedPassword,
-        options: {
-          emailRedirectTo,
-          data: {
-            iq_contextual_strategy: JSON.stringify({
-              intent,
-              qualificationData,
-              iqScore: result.iqScore,
-              percentile: result.percentile,
-              archetype: result.archetype
-            })
-          }
-        }
+        countryCode: profile.countryCode ?? 'US',
+        source: 'iq-contextual-strategy',
+        profile
       });
-
-      if (signUpError) {
-        setError(signUpError.message || 'Could not create your account.');
-        setSubmitting(false);
-        return;
-      }
-
-      const {
-        data: { session: existingSession }
-      } = await supabase.auth.getSession();
-
-      const activeSession =
-        existingSession ??
-        (
-          await supabase.auth.signInWithPassword({
-            email: normalizedEmail,
-            password: generatedPassword
-          })
-        ).data.session;
-
-      const userId = activeSession?.user.id;
-      if (!userId) {
-        setError(
-          'Account was created, but we could not start your session. Check your email to continue.'
-        );
-        setSubmitting(false);
-        return;
-      }
-
-      const sync = await syncOnboardingToProfiles(
-        supabase,
-        userId,
-        qualificationDataToProfile(qualificationData)
-      );
-      if (!sync.ok) {
-        setError(sync.error ?? 'Could not save your scholarship profile.');
+      if (!signup.ok) {
+        setError(signup.error);
         setSubmitting(false);
         return;
       }
@@ -1296,7 +1270,7 @@ function StrategyAccountGate({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            userId,
+            userId: signup.userId,
             email: normalizedEmail,
             archetype: result.archetype,
             iqScore: result.iqScore
@@ -1307,7 +1281,7 @@ function StrategyAccountGate({
         console.warn('[iq:telegram] iq registration notify failed', notifyError);
       }
 
-      onComplete(grants, true, userId);
+      onComplete(grants, signup.signedIn, signup.userId);
     } catch {
       setError('Something went wrong. Check your connection and try again.');
       setSubmitting(false);

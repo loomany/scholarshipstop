@@ -89,6 +89,7 @@
     "providers:audit": "dotenv -e .env.local -- npx tsx scripts/audit-providers.ts",
     "audit:scholarship-facets": "dotenv -e .env.local -- npx tsx scripts/audit-scholarship-facets.ts",
     "audit:profile-grant-coverage": "dotenv -e .env.local -- npx tsx scripts/audit-profile-grant-coverage.ts",
+    "backfill:scholarship-countries": "dotenv -e .env.local -- npx tsx scripts/backfill-scholarship-country-fields.ts",
     "seo:pilot-launch": "dotenv -e .env.local -- npx tsx scripts/seo-pilot-launch.ts",
     "seo:grand-audit": "dotenv -e .env.local -- npx tsx scripts/seo-grand-audit.ts",
     "seo:worker-generate": "dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts",

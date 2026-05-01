@@ -1,6 +1,7 @@
 import { US_STATE_NAME_TO_CODE } from '@/lib/constants/usStates';
 import { SCHOLARSHIP_FIELD_OF_STUDY_OPTIONS } from '@/lib/constants/scholarshipFieldOfStudyOptions';
 import type { Database, Json } from '@/types_db';
+import { parseScholarshipCountryEligibility } from '@/lib/scholarships/countryEligibility/parseScholarshipCountryEligibility';
 
 import { matchTextBlobFromRow, type ScholarshipRowForMatchBlob } from './matchTextBlobFromRow';
 
@@ -9,7 +10,13 @@ export type ScholarshipRowForCatalogBackfill = ScholarshipRowForMatchBlob &
     Database['public']['Tables']['scholarships']['Row'],
     | 'id'
     | 'slug'
+    | 'source'
+    | 'provider_name'
+    | 'raw_data'
     | 'citizenship_statuses'
+    | 'applicant_country_codes'
+    | 'host_country_codes'
+    | 'country_eligibility_notes'
     | 'catalog_education_levels'
     | 'study_levels'
     | 'field_of_study'
@@ -22,6 +29,9 @@ export type ScholarshipRowForCatalogBackfill = ScholarshipRowForMatchBlob &
 
 export type CatalogMatchBackfillPatch = {
   citizenship_statuses?: Json;
+  applicant_country_codes?: Json;
+  host_country_codes?: Json;
+  country_eligibility_notes?: Json;
   catalog_education_levels?: Json;
   study_levels?: Json;
   field_of_study?: Json;
@@ -239,6 +249,45 @@ export function proposeScholarshipCatalogBackfill(
       patch.citizenship_statuses = inferred;
       reasons.push(`citizenship_statuses ← [${inferred.join(', ')}]`);
     }
+  }
+
+  const applicantCountries = uniqSorted(jsonStrArr(row.applicant_country_codes));
+  const hostCountries = uniqSorted(jsonStrArr(row.host_country_codes));
+  const countryEligibility = parseScholarshipCountryEligibility({
+    title: row.title,
+    providerName: row.provider_name,
+    source: row.source,
+    stateTerritoryText: row.state_territory_text,
+    eligibilityText: row.eligibility_text,
+    requirementsText: row.requirements_text,
+    description: row.description,
+    summaryShort: row.summary_short,
+    summaryLong: row.summary_long,
+    rawData: row.raw_data
+  });
+  const nextApplicantCountries = uniqSorted([
+    ...applicantCountries,
+    ...countryEligibility.applicantCountryCodes
+  ]);
+  const nextHostCountries = uniqSorted([
+    ...hostCountries,
+    ...countryEligibility.hostCountryCodes
+  ]);
+  if (!jsonArraysEqual(applicantCountries, nextApplicantCountries)) {
+    patch.applicant_country_codes = nextApplicantCountries;
+    reasons.push(
+      `applicant_country_codes (${applicantCountries.length}→${nextApplicantCountries.length})`
+    );
+  }
+  if (!jsonArraysEqual(hostCountries, nextHostCountries)) {
+    patch.host_country_codes = nextHostCountries;
+    reasons.push(`host_country_codes (${hostCountries.length}→${nextHostCountries.length})`);
+  }
+  if (
+    countryEligibility.reasons.length > 0 &&
+    jsonStrArr(row.country_eligibility_notes).length === 0
+  ) {
+    patch.country_eligibility_notes = countryEligibility.reasons;
   }
 
   const catalogEdu = jsonStrArr(row.catalog_education_levels);
