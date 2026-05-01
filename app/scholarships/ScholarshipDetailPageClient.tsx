@@ -172,7 +172,7 @@ const detailOfficialSavePillClass =
   scholarshipSaveButtonClass.replace('rounded-xl', 'rounded-full');
 const detailOfficialSavedPillClass =
   scholarshipSavedButtonClass.replace('rounded-xl', 'rounded-full');
-/** Same emerald as Save вЂ” product parity for вЂњNot relevantвЂќ. */
+/** Same emerald as Save — product parity for “Not relevant”. */
 const detailOfficialNotRelevantPillClass = detailOfficialSavePillClass;
 const detailOfficialRestorePillClass = `w-full rounded-full px-4 py-2 text-center text-sm font-medium text-white transition ${SCHOLARSHIP_ACTION_FILL} ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
 
@@ -204,7 +204,7 @@ function extractProviderNameFromMission(
   if (!normalized) return null;
 
   const match = normalized.match(
-    /^([A-Z][A-Za-z0-9&'.вЂ™,-]*(?:\s+[A-Z][A-Za-z0-9&'.вЂ™,-]*){0,4})\s+(?:has|is|offers|supports)\b/
+    /^([A-Z][A-Za-z0-9&'.’,-]*(?:\s+[A-Z][A-Za-z0-9&'.’,-]*){0,4})\s+(?:has|is|offers|supports)\b/
   );
   if (!match) return null;
 
@@ -348,7 +348,7 @@ function SimilarScholarshipDetailListItem({
   highlightPrimary: boolean;
   profileMatchPercent: number | null;
   isPrimarySimilarOpen: boolean;
-  /** Open-deadline similar rows only (not вЂњpast deadlineвЂќ reference cards). */
+  /** Open-deadline similar rows only (not “past deadline” reference cards). */
   eligibleForMatchPill: boolean;
   isAuthenticated: boolean;
   hasSubscription: boolean;
@@ -932,7 +932,7 @@ export default function ScholarshipDetailPageClient({
           <div className={scholarshipDetailShellClass}>
             <ScholarshipsBrandLoading
               density="comfortable"
-              label="Loading scholarshipвЂ¦"
+              label="Loading scholarship…"
               showTopAccentBar
             />
           </div>
@@ -971,7 +971,7 @@ export default function ScholarshipDetailPageClient({
               scroll
               className="mb-6 inline-flex items-center text-sm font-medium text-zinc-600 transition hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
             >
-              в†ђ Back to Matches
+              ← Back to Matches
             </Link>
             <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 text-zinc-600 shadow-sm ring-1 ring-zinc-100/50">
               Scholarship not found
@@ -1115,7 +1115,7 @@ export default function ScholarshipDetailPageClient({
   const deadlinePrimary = deadlineDisplay.primary;
   const deadlineSecondaryLine =
     deadlineDisplay.secondary ??
-    (deadlineDisplay.primary !== 'вЂ”' ? 'Scholarship deadline' : null);
+    (deadlineDisplay.primary !== '—' ? 'Scholarship deadline' : null);
   const hasDeadlineStat =
     Boolean(scholarship.deadline?.trim()) ||
     Boolean(scholarship.deadlineAt?.trim());
@@ -1218,7 +1218,7 @@ export default function ScholarshipDetailPageClient({
   const overviewShown =
     descExpanded || !overviewLong
       ? overviewBody
-      : `${overviewBody.slice(0, OVERVIEW_COLLAPSE_AT).trim()}вЂ¦`;
+      : `${overviewBody.slice(0, OVERVIEW_COLLAPSE_AT).trim()}…`;
 
   const hasCredibilityBlock =
     scholarship.verified || Boolean(scholarship.credibilityLabel?.trim());
@@ -1369,7 +1369,7 @@ export default function ScholarshipDetailPageClient({
 
   const eligibilityFromAi = hasNonEmptyArray(scholarship.aiEligibilitySummary);
 
-  /** Never show `official_source_name` here вЂ” it often mirrors the data feed (e.g. BigFuture), not the sponsor. Real sponsor stays under вЂњAbout the providerвЂќ. */
+  /** Never show `official_source_name` here — it often mirrors the data feed (e.g. BigFuture), not the sponsor. Real sponsor stays under “About the provider”. */
   const officialName = isSimplerGov
     ? simplerGrantsGovOfficialLabel()
     : undefined;
@@ -1410,7 +1410,7 @@ export default function ScholarshipDetailPageClient({
       beforeMissing.length > 0 ||
       beforeFlags.length > 0);
 
-  /** Guest blur + вЂњSign in to unlock AI insightsвЂќ overlay disabled вЂ” full detail body stays readable. */
+  /** Guest blur + “Sign in to unlock AI insights” overlay disabled — full detail body stays readable. */
   const showLockedDetailOverlay = false;
   const openLockedAccessWall = openPremiumPaywall;
   const openApplyAccessWall = openPremiumPaywall;
@@ -1426,7 +1426,7 @@ export default function ScholarshipDetailPageClient({
           scroll
           className={detailBackToMatchesLinkClass}
         >
-          в†ђ Back to Matches
+          ← Back to Matches
         </Link>
 
         <div className={`mt-4 ${scholarshipDetailHeroSurfaceClass}`}>
@@ -1584,7 +1584,7 @@ export default function ScholarshipDetailPageClient({
           <div className="mt-8 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
             <div className="mx-auto flex items-center justify-center gap-2.5">
               <span className="text-xl leading-none" aria-hidden>
-                рџЋЇ
+                🎯
               </span>
               <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
                 Get matched with scholarships in 2 minutes
@@ -1641,7 +1641,7 @@ export default function ScholarshipDetailPageClient({
                     className="mt-1 text-sm leading-relaxed text-zinc-700"
                     title={
                       providerNameLocked
-                        ? 'Institution details may name the sponsor вЂ” hidden until you subscribe.'
+                        ? 'Institution details may name the sponsor — hidden until you subscribe.'
                         : undefined
                     }
                   >
@@ -1777,7 +1777,7 @@ export default function ScholarshipDetailPageClient({
               Related scholarship hubs
             </h2>
             <p className="mb-3 text-sm leading-relaxed text-zinc-600">
-              Browse curated listings that match this programвЂ™s state and field.
+              Browse curated listings that match this program’s state and field.
             </p>
             <ul className="flex flex-wrap gap-2" role="list">
               {initialRelatedHubLinks.map((link) => (
@@ -1932,7 +1932,7 @@ export default function ScholarshipDetailPageClient({
                     href={`/essay?scholarship=${encodeURIComponent(scholarship.title)}`}
                     className="mt-2 inline-flex text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
                   >
-                    Open AI Essay Writer в†’
+                    Open AI Essay Writer →
                   </Link>
                 </div>
               </div>
@@ -2690,7 +2690,7 @@ export default function ScholarshipDetailPageClient({
                 scroll
                 className={detailBackToMatchesLinkClass}
               >
-                в†ђ Back to Matches
+                ← Back to Matches
               </Link>
               <div className="min-w-0 space-y-2">
                 <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
@@ -2698,7 +2698,7 @@ export default function ScholarshipDetailPageClient({
                 </h2>
                 <p className="text-sm leading-relaxed text-zinc-600">
                   <span className="font-semibold text-zinc-800">Open deadlines first</span>{' '}
-                  вЂ” same category when possible, then active picks from the catalog. Up to three closed
+                  — same category when possible, then active picks from the catalog. Up to three closed
                   grants from this category are shown at the end for context.
                 </p>
                 <p className="text-xs font-medium text-zinc-500">
@@ -2772,7 +2772,7 @@ export default function ScholarshipDetailPageClient({
                     >
                       Past deadline
                     </h3>
-                    <span className="text-xs text-zinc-500">Same category В· reference only</span>
+                    <span className="text-xs text-zinc-500">Same category · reference only</span>
                   </div>
                   <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
                     {similarClosedList.map((s) => (
@@ -2822,7 +2822,7 @@ export default function ScholarshipDetailPageClient({
                 scroll
                 className={detailBackToMatchesLinkClass}
               >
-                в†ђ Back to Matches
+                ← Back to Matches
               </Link>
             </div>
           </div>

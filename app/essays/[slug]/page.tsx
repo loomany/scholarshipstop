@@ -70,7 +70,7 @@ function articleDateLine({
     Math.abs(updatedMs - publishedMs) > SAME_DAY_MS;
 
   if (publishedLabel && updatedLabel && updatedIsDistinct) {
-    return `Published ${publishedLabel} В· Updated ${updatedLabel}`;
+    return `Published ${publishedLabel} · Updated ${updatedLabel}`;
   }
   if (publishedLabel) return `Published ${publishedLabel}`;
   return updatedLabel ? `Updated ${updatedLabel}` : null;
@@ -138,7 +138,7 @@ function EssaySourcesInset({
   standalone = false
 }: {
   sources: { title: string; url: string }[];
-  /** No article body above вЂ” omit divider and top spacing */
+  /** No article body above — omit divider and top spacing */
   standalone?: boolean;
 }) {
   if (sources.length === 0) return null;
@@ -409,7 +409,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
             href={ESSAYS_SECTION_PATH}
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            в†ђ Back to {ESSAYS_PAGE_TITLE}
+            ← Back to {ESSAYS_PAGE_TITLE}
           </Link>
         </p>
 
@@ -424,7 +424,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
               </p>
             ) : null}
             <p className="max-w-2xl border-l-2 border-indigo-200 pl-3 text-xs leading-relaxed text-gray-600">
-              Written by {ORG_NAME} AI вЂў Reviewed by Editorial Team
+              Written by {ORG_NAME} AI • Reviewed by Editorial Team
             </p>
           </div>
         </header>
@@ -434,7 +434,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={essay.hero_image_url.trim()}
-              alt={`How to write a scholarship essay for ${essay.title?.trim() || 'this program'} вЂ” illustrative candid photo of students in a modern university or study environment`}
+              alt={`How to write a scholarship essay for ${essay.title?.trim() || 'this program'} — illustrative candid photo of students in a modern university or study environment`}
               className="aspect-[16/9] w-full object-cover"
             />
           </div>
@@ -621,7 +621,7 @@ function EssayBuilderCta({ variant = 'default' }: { variant?: 'default' | 'compa
       <div className="mt-4 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:mt-5 sm:px-6 sm:py-5">
         <div className="mx-auto flex items-center justify-center gap-2.5">
           <span className="text-xl leading-none" aria-hidden>
-            рџЋЇ
+            🎯
           </span>
           <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
             Get matched with scholarships in 2 minutes
@@ -641,14 +641,14 @@ function EssayBuilderCta({ variant = 'default' }: { variant?: 'default' | 'compa
       className="mt-6 rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6 shadow-sm sm:mt-8 sm:p-8"
     >
       <p className="text-sm font-semibold text-indigo-950">
-        рџ’Ў This template was analyzed by our AI. Write your own unique version in
+        💡 This template was analyzed by our AI. Write your own unique version in
         2 minutes.
       </p>
       <Link
         href="/essay"
         className="mt-3 inline-flex items-center text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
       >
-        Try Essay Builder в†’
+        Try Essay Builder →
       </Link>
     </div>
   );

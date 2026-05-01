@@ -86,7 +86,7 @@ function searchQueryFromParams(q: string | string[] | undefined): string | undef
   return undefined;
 }
 
-/** Clean `/providers` hub (no filters / pagination / sort) вЂ” indexable with canonical `/providers`. */
+/** Clean `/providers` hub (no filters / pagination / sort) — indexable with canonical `/providers`. */
 function providersHubIsCanonicalListingView(
   searchParams: ProvidersHubSearchParams | undefined
 ): boolean {
@@ -232,7 +232,7 @@ export default async function ProvidersHubPage({ searchParams }: PageProps) {
 
             <p className="mt-6 text-sm text-zinc-500">
               Showing {showingFrom}-{showingTo} of {total.toLocaleString()} providers
-              {q?.trim() ? ` matching вЂњ${q.trim()}вЂќ` : ''}
+              {q?.trim() ? ` matching “${q.trim()}”` : ''}
               {stateName ? ` in ${stateName}` : ''}
             </p>
 

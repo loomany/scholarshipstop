@@ -31,7 +31,7 @@ import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
 
-const baseTitle = `${RESOURCES_PAGE_TITLE} вЂ” Guides & Tips`;
+const baseTitle = `${RESOURCES_PAGE_TITLE} — Guides & Tips`;
 const baseDescription =
   'Guides and expert tips to help you find scholarships, write stronger applications, and stay organized.';
 
@@ -380,7 +380,7 @@ function ResourcesGrid({
                     </p>
                   ) : null}
                   <span className="mt-4 inline-flex items-center text-sm font-semibold text-orange-600 group-hover:text-orange-700">
-                    Read more в†’
+                    Read more →
                   </span>
                 </div>
               </Link>

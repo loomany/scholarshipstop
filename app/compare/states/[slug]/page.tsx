@@ -62,7 +62,7 @@ function fmtNum(n: unknown, digits = 0): string {
 }
 
 function grantBadgeLabel(raw: unknown): string {
-  if (typeof raw !== 'number' || Number.isNaN(raw)) return 'вЂ”';
+  if (typeof raw !== 'number' || Number.isNaN(raw)) return '—';
   const n = Math.round(raw);
   return `${n} grant${n === 1 ? '' : 's'}`;
 }
@@ -93,7 +93,7 @@ function TopScholarshipProvidersColumn({
             className="inline-flex items-center gap-1 text-sm font-semibold text-orange-600 transition hover:text-orange-700"
           >
             View all scholarships
-            <span aria-hidden>в†’</span>
+            <span aria-hidden>→</span>
           </Link>
         </p>
       ) : null}
@@ -476,7 +476,7 @@ export default async function StateComparePage({
             href="/compare/states"
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            в†ђ Back to State vs State
+            ← Back to State vs State
           </Link>
         </p>
 
@@ -650,7 +650,7 @@ export default async function StateComparePage({
         >
           <div className="mx-auto flex items-center justify-center gap-3 sm:gap-4">
             <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
-              рџЋЇ
+              🎯
             </span>
             <h2
               id="compare-state-cta-heading"

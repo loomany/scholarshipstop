@@ -320,7 +320,7 @@ export default async function UniversityComparePage({
             href="/compare/universities"
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            в†ђ Back to University vs University
+            ← Back to University vs University
           </Link>
         </p>
 
@@ -472,10 +472,10 @@ export default async function UniversityComparePage({
                     Merit vs need (approx.)
                   </td>
                   <td className="px-3 py-3 text-xs leading-snug text-gray-700 sm:px-4">
-                    Merit {fmtPct(a?.['merit_pct'])} В· Need {fmtPct(a?.['need_pct'])}
+                    Merit {fmtPct(a?.['merit_pct'])} · Need {fmtPct(a?.['need_pct'])}
                   </td>
                   <td className="px-3 py-3 text-xs leading-snug text-gray-700 sm:px-4">
-                    Merit {fmtPct(b?.['merit_pct'])} В· Need {fmtPct(b?.['need_pct'])}
+                    Merit {fmtPct(b?.['merit_pct'])} · Need {fmtPct(b?.['need_pct'])}
                   </td>
                 </tr>
               </tbody>
@@ -571,7 +571,7 @@ export default async function UniversityComparePage({
         >
           <div className="mx-auto flex items-center justify-center gap-3 sm:gap-4">
             <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
-              рџЋЇ
+              🎯
             </span>
             <h2
               id="compare-uni-cta-heading"
@@ -656,7 +656,7 @@ export default async function UniversityComparePage({
                   </a>
                   <span className="text-gray-500">
                     {' '}
-                    вЂ”{' '}
+                    —{' '}
                     {source.type === 'official'
                       ? 'official university source'
                       : source.type === 'government'

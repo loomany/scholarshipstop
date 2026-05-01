@@ -68,7 +68,7 @@ function articleDateLine({
     Math.abs(updatedMs - publishedMs) > SAME_DAY_MS;
 
   if (publishedLabel && updatedLabel && updatedIsDistinct) {
-    return `Published ${publishedLabel} В· Updated ${updatedLabel}`;
+    return `Published ${publishedLabel} · Updated ${updatedLabel}`;
   }
   if (publishedLabel) return `Published ${publishedLabel}`;
   return updatedLabel ? `Updated ${updatedLabel}` : null;
@@ -145,7 +145,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     toc: tocItems
   } = injectH2H3IdsAndExtractToc(bodyWithoutInlineFaq);
 
-  /** Local dev-only: remove before shipping вЂ” do not rely on prod logs. */
+  /** Local dev-only: remove before shipping — do not rely on prod logs. */
   if (process.env.NODE_ENV === 'development') {
     console.log('[auto-links]', {
       enabled: process.env.CONTENT_HUB_ENABLE_AUTO_INTERNAL_LINKS,
@@ -260,7 +260,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
             href={RESOURCES_SECTION_PATH}
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            в†ђ Back to {RESOURCES_PAGE_TITLE}
+            ← Back to {RESOURCES_PAGE_TITLE}
           </Link>
         </p>
 
@@ -335,7 +335,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
                   <SafeContentPostBody html={midSplit.before} tightTop />
                   <ContentHubScholarshipCta
                     className="mt-4 sm:mt-5"
-                    title="рџ’Ў See scholarships you may qualify for"
+                    title="💡 See scholarships you may qualify for"
                     description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
                     buttonText="Explore Scholarships"
                   />
@@ -347,7 +347,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
                   {primarySplit.after.length > 650 ? (
                     <ContentHubScholarshipCta
                       className="mt-4 sm:mt-5"
-                      title="рџ’Ў See scholarships you may qualify for"
+                      title="💡 See scholarships you may qualify for"
                       description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
                       buttonText="Explore Scholarships"
                     />

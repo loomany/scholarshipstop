@@ -201,7 +201,7 @@ export default async function EssaysIndexPage({
                     {ESSAYS_PAGE_TITLE}
                   </h1>
                   <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                    How-to guides for scholarship essaysвЂ”structured prompts,
+                    How-to guides for scholarship essays—structured prompts,
                     outlines, and revision checklists. For browsing awards, use
                     the scholarship directory.
                   </p>
@@ -237,7 +237,7 @@ export default async function EssaysIndexPage({
                 {ESSAYS_PAGE_TITLE}
               </h1>
               <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                How-to guides for scholarship essaysвЂ”structured prompts, outlines,
+                How-to guides for scholarship essays—structured prompts, outlines,
                 and revision checklists. For browsing awards, use the scholarship
                 directory.
               </p>
@@ -351,7 +351,7 @@ function EssaysGrid({ posts }: { posts: EssayListFields[] }) {
                   </p>
                 ) : null}
                 <span className="mt-4 inline-flex items-center text-sm font-semibold text-orange-600 group-hover:text-orange-700">
-                  Read guide в†’
+                  Read guide →
                 </span>
               </div>
             </Link>

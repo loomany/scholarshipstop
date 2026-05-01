@@ -442,7 +442,7 @@ export default async function ProviderProfilePage({
             <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
               <div className="flex items-center justify-center gap-2">
                 <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
-                  рџЋЇ
+                  🎯
                 </span>
                 <h3 className="text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap">
                   Get matched with scholarships in 2 minutes

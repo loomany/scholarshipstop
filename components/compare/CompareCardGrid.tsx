@@ -162,7 +162,7 @@ export default function CompareCardGrid({
                               aria-hidden
                             />
                           ) : null}
-                          Read more в†’
+                          Read more →
                         </span>
                         {showLock ? (
                           <span id={`${headingId}-lock-hint`} className="sr-only">
