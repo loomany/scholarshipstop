@@ -133,6 +133,8 @@ export type ScholarshipListMeta = {
   personalizedMatchReady?: boolean;
   /** Authenticated hub: saved preset persisted on the user profile. */
   savedFiltersSnapshotJson?: MoreFiltersJson | null;
+  /** First paint can use bounds/profile fields while exact counts load in the background. */
+  deferredCounts?: boolean;
   /**
    * Personalized hub: count in the “Matches” bucket after ignored + listing SQL filters (aligned with sidebar).
    * Catalog / fallback: raw index bucket size after ignored only.
@@ -229,6 +231,19 @@ const listMetaCache = new Map<
   }
 >();
 
+const EMPTY_SCHOLARSHIP_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
+  bestRecommendation: 0,
+  recommended: 0,
+  easyApply: 0,
+  hotDeadlines: 0,
+  internationalFriendly: 0,
+  matches: 0,
+  saved: 0,
+  started: 0,
+  submitted: 0,
+  ignored: 0
+};
+
 function buildEasyApplyOrParts(sel: Iterable<string>): string[] {
   const parts: string[] = [];
   for (const id of sel) {
@@ -278,6 +293,7 @@ function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMet
     savedFiltersSnapshotJson: meta.savedFiltersSnapshotJson
       ? { ...meta.savedFiltersSnapshotJson }
       : meta.savedFiltersSnapshotJson,
+    deferredCounts: meta.deferredCounts,
     matchedTotal: meta.matchedTotal
   };
 }
@@ -2213,6 +2229,26 @@ async function countCategory(
   const { error, count } = await q;
   if (error) throw new Error(postgrestErrorToMessage(error));
   return count ?? 0;
+}
+
+export function createDeferredScholarshipListMeta(
+  req: ScholarshipListRequest,
+  bounds: ScholarshipListMeta['filterBounds']
+): ScholarshipListMeta {
+  const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
+  for (const id of SCHOLARSHIP_CATEGORY_ORDER) categoryCounts[id] = 0;
+
+  return {
+    filterBounds: { ...bounds },
+    sidebarCounts: { ...EMPTY_SCHOLARSHIP_SIDEBAR_COUNTS },
+    categoryCounts,
+    countryCounts: [],
+    unspecifiedApplicantCountryCount: 0,
+    personalizedMatchReady: Boolean(
+      buildScholarshipProfileFilterSeed(req.personalizedProfile ?? null)
+    ),
+    deferredCounts: true
+  };
 }
 
 /**

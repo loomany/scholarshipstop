@@ -78,6 +78,10 @@ function hubSidebarMetaDebugEnabled(): boolean {
   );
 }
 
+function scholarshipsApiTimingDebugEnabled(): boolean {
+  return process.env.SCHOLARSHIPS_API_TIMING_DEBUG === '1';
+}
+
 const SCHOLARSHIPS_API_PROFILE_CACHE_SEC = 20;
 
 /**
@@ -355,6 +359,29 @@ async function handleList(
 
   const hubDebugReqId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   const hubDbg = hubSidebarMetaDebugEnabled() && isHubPrimaryListing;
+  const apiTimingDebug = scholarshipsApiTimingDebugEnabled();
+  const requestStartedAt = performance.now();
+  const logApiTiming = (
+    phase: string,
+    extra: Record<string, unknown> = {}
+  ) => {
+    if (!apiTimingDebug) return;
+    // eslint-disable-next-line no-console -- opt-in production performance diagnostics
+    console.log('[scholarships-api-timing]', {
+      reqId: hubDebugReqId,
+      phase,
+      elapsedMs: Math.round(performance.now() - requestStartedAt),
+      tab: req.tab,
+      scope: req.listScope,
+      metaOnly,
+      sidebarOnlyMeta,
+      countOnly,
+      includeMeta,
+      includeCategoryCounts,
+      authUser: Boolean(authUser),
+      ...extra
+    });
+  };
 
   let authUser: { id?: string } | null = sessionUser;
   let profileRow: ProfilesRow | null = null;
@@ -478,6 +505,7 @@ async function handleList(
 
   if (metaOnly) {
     let meta: ScholarshipListMeta;
+    const metaStartedAt = performance.now();
     try {
       meta = await fetchScholarshipListMeta(listingSupabase, req, bounds, {
         includeCategoryCounts,
@@ -485,7 +513,13 @@ async function handleList(
           !authUser && !guestBestRecommendationPreviewEnabled,
         skipGuestZeroedSidebarCounts: !authUser
       });
+      logApiTiming('meta-query', {
+        queryMs: Math.round(performance.now() - metaStartedAt)
+      });
     } catch (error) {
+      logApiTiming('meta-query-error', {
+        queryMs: Math.round(performance.now() - metaStartedAt)
+      });
       const message = error instanceof Error ? error.message : String(error);
       throw new Error(`Scholarship meta query failed for tab "${req.tab}": ${message}`);
     }
@@ -656,6 +690,7 @@ async function handleList(
   }
 
   let result: ScholarshipListResult;
+  const listStartedAt = performance.now();
   try {
     result = seoFallbackEnabled
       ? await executeScholarshipListQueryWithSeoFallback(
@@ -682,7 +717,17 @@ async function handleList(
           includeCategoryCounts,
           isProSubscriber
         });
+    logApiTiming('list-query', {
+      queryMs: Math.round(performance.now() - listStartedAt),
+      rows: result.scholarships?.length ?? 0,
+      total: result.total,
+      seoFallbackUsed: Boolean(result.seoFallback?.used)
+    });
   } catch (error) {
+    logApiTiming('list-query-error', {
+      queryMs: Math.round(performance.now() - listStartedAt),
+      seoFallbackEnabled
+    });
     const message = error instanceof Error ? error.message : String(error);
     const phase = countOnly ? 'count' : includeMeta ? 'list+meta' : 'list';
     throw new Error(`Scholarship ${phase} query failed for tab "${req.tab}": ${message}`);

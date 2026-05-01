@@ -11,9 +11,9 @@ import {
 } from '@/lib/scholarships/seoScholarshipListing';
 import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMetaGuestPatches';
 import {
+  createDeferredScholarshipListMeta,
   executeScholarshipListQuery,
   executeScholarshipListQueryWithSeoFallback,
-  fetchScholarshipListMeta,
   fetchGlobalFilterBounds,
   resolveCatalogSubjectCategoryForPageSlug,
   savedFiltersSnapshotJsonFromProfile,
@@ -120,11 +120,7 @@ export async function fetchInitialHubScholarshipsPayload(
 
   if (!profile && req.tab === 'best-recommendation') {
     try {
-      const meta = await fetchScholarshipListMeta(supabase, req, defaultBounds, {
-        includeCategoryCounts: true,
-        skipBestRecommendationSidebarCount: true,
-        skipGuestZeroedSidebarCounts: true
-      });
+      const meta = createDeferredScholarshipListMeta(req, defaultBounds);
       applyListingMetaGuestPatches(meta, { authUser: false });
       return {
         scholarships: [],
@@ -157,12 +153,8 @@ export async function fetchInitialHubScholarshipsPayload(
       profile ? { ...req, personalizedProfile: profile } : req,
       {
         countOnly: false,
-        /**
-         * Include list meta on first paint so category counters are populated even
-         * before client-side `/api/scholarships?meta=1` warms up.
-         */
-        includeMeta: true,
-        includeCategoryCounts: true,
+        includeMeta: false,
+        includeCategoryCounts: false,
         isProSubscriber: false
       }
     );
@@ -183,6 +175,8 @@ export async function fetchInitialHubScholarshipsPayload(
   }
 
   /** Hub SSR uses public Supabase only; align sidebar with POST `/api/scholarships` for guests. */
+  const metaReq = profile ? { ...req, personalizedProfile: profile } : req;
+  result.meta = createDeferredScholarshipListMeta(metaReq, defaultBounds);
   if (!profile && result.meta) {
     applyListingMetaGuestPatches(result.meta, { authUser: false });
   }

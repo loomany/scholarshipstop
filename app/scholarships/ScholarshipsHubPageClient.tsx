@@ -1995,6 +1995,7 @@ function ScholarshipsPageInner({
   useLayoutEffect(() => {
     if (initialSidebarMetaHydratedRef.current) return;
     if (!initialPayload?.result?.meta?.sidebarCounts) return;
+    if (initialPayload.result.meta.deferredCounts) return;
     initialSidebarMetaHydratedRef.current = true;
     setSidebarGlobalMetaAppliedKey(sidebarMetaRequestKey);
   }, [initialPayload, sidebarMetaRequestKey]);
@@ -2092,6 +2093,7 @@ function ScholarshipsPageInner({
   const initialMetaData = useMemo(() => {
     if (!initialPayload?.result?.meta) return undefined;
     if (initialPayload.requestKey !== hubListRequestKey) return undefined;
+    if (initialPayload.result.meta.deferredCounts) return undefined;
     if (hasClientAppliedDeltaMoreFilters) return undefined;
     const r = initialPayload.result;
     return { meta: r.meta, page: r.page, limit: r.limit };
@@ -2152,7 +2154,7 @@ function ScholarshipsPageInner({
       listQueryEnabled && !guestBestSkipHubBestListUntilPreview,
     initialData: initialListData,
     staleTime: 300_000,
-    refetchOnMount: true
+    refetchOnMount: false
   });
 
   const guestBestTopExploreListingMoreFilters = useMemo(() => {
@@ -2231,7 +2233,7 @@ function ScholarshipsPageInner({
       transientBestRecommendationProfileSeed == null &&
       guestBestTopExploreListingMoreFilters != null,
     staleTime: 300_000,
-    refetchOnMount: true
+    refetchOnMount: false
   });
 
   const guestBestStackExploreScholarships = useMemo(() => {
@@ -2267,7 +2269,7 @@ function ScholarshipsPageInner({
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
           providerSlug: appliedProviderSlug,
-          sidebarOnlyMeta: true
+          sidebarOnlyMeta: false
         },
         { signal }
       );
@@ -2352,9 +2354,11 @@ function ScholarshipsPageInner({
         ? {
             ...prev,
             sidebarCounts: sidebarMeta.sidebarCounts,
+            categoryCounts: sidebarMeta.categoryCounts,
             countryCounts: sidebarMeta.countryCounts,
             unspecifiedApplicantCountryCount:
-              sidebarMeta.unspecifiedApplicantCountryCount
+              sidebarMeta.unspecifiedApplicantCountryCount,
+            deferredCounts: false
           }
         : sidebarMeta
     );
