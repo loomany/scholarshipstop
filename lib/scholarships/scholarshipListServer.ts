@@ -957,6 +957,7 @@ function applyBestRecommendationProfileGpaFilter(
   q: any
 ): any {
   if (req.tab !== 'best-recommendation') return q;
+  if (req.moreFilters.includeApplicantCountryCodes.size > 0) return q;
   if (req.moreFilters.includeGpaBuckets.size > 0) return q;
   const orParts = buildBestRecommendationProfileGpaOrParts(
     req.personalizedProfile ?? null

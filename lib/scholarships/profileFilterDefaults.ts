@@ -400,7 +400,22 @@ export function mergeBestRecommendationFiltersFromProfile(
   }
 
   const prof = buildMoreFiltersWithProfileDefaults(bounds, seed);
+  const bestRecommendationUsesCountryAsPrimaryFilter =
+    tab === 'best-recommendation' &&
+    prof.includeApplicantCountryCodes.size > 0;
   const autoProfileCitizenshipSqlNarrowAllowed = tab !== 'best-recommendation';
+
+  if (
+    out.includeApplicantCountryCodes.size === 0 &&
+    prof.includeApplicantCountryCodes.size > 0
+  ) {
+    out.includeApplicantCountryCodes = new Set(prof.includeApplicantCountryCodes);
+    out.includeUnspecifiedApplicantCountries =
+      prof.includeUnspecifiedApplicantCountries;
+  }
+  if (bestRecommendationUsesCountryAsPrimaryFilter) {
+    return out;
+  }
 
   if (!out.filterStateInput.trim() && prof.filterStateInput.trim()) {
     out.filterStateInput = prof.filterStateInput;
@@ -413,14 +428,6 @@ export function mergeBestRecommendationFiltersFromProfile(
   }
   if (out.includeEligibility.size === 0 && prof.includeEligibility.size > 0) {
     out.includeEligibility = new Set(prof.includeEligibility);
-  }
-  if (
-    out.includeApplicantCountryCodes.size === 0 &&
-    prof.includeApplicantCountryCodes.size > 0
-  ) {
-    out.includeApplicantCountryCodes = new Set(prof.includeApplicantCountryCodes);
-    out.includeUnspecifiedApplicantCountries =
-      prof.includeUnspecifiedApplicantCountries;
   }
   if (!out.profileFieldOfStudySlug.trim() && prof.profileFieldOfStudySlug.trim()) {
     out.profileFieldOfStudySlug = prof.profileFieldOfStudySlug;

@@ -233,3 +233,33 @@ test('buildMoreFiltersWithProfileDefaults keeps selected applicant country exact
   assert.deepEqual(out.includeApplicantCountryCodes, new Set(['CA']));
   assert.equal(out.includeUnspecifiedApplicantCountries, false);
 });
+
+test('mergeBestRecommendationFiltersFromProfile uses applicant country as the only hard best filter', () => {
+  const base = defaultMoreFiltersFromBounds(bounds);
+  const seed: ScholarshipProfileFilterSeed = {
+    fieldOfStudy: 'engineering',
+    schoolLevel: 'college_freshman',
+    citizenship: 'international_student',
+    applicantCountryCodes: ['CA'],
+    stateInput: 'Florida',
+    educationLevelIds: ['undergraduate'],
+    gpaBucketIds: ['gpa_3_0_plus'],
+    eligibilityIds: ['first_generation']
+  };
+
+  const out = mergeBestRecommendationFiltersFromProfile(
+    'best-recommendation',
+    base,
+    seed,
+    bounds
+  );
+
+  assert.deepEqual(out.includeApplicantCountryCodes, new Set(['CA']));
+  assert.equal(out.includeUnspecifiedApplicantCountries, false);
+  assert.equal(out.filterStateInput, '');
+  assert.equal(out.includeEducationLevels.size, 0);
+  assert.equal(out.includeGpaBuckets.size, 0);
+  assert.equal(out.includeEligibility.size, 0);
+  assert.equal(out.profileFieldOfStudySlug, '');
+  assert.equal(out.citizenshipAudience, 'any');
+});
