@@ -50,6 +50,7 @@ import {
   fieldOfStudyDisplayList,
   formatScholarshipAwardDisplay,
   getScholarshipDeadlineDisplayParts,
+  resolveScholarshipCardAwardDisplay,
   scholarshipPublicPath,
   scholarshipStatusDisplay,
   studyLevelsDisplayList
@@ -679,23 +680,62 @@ function RequirementsRichOrList({
   );
 }
 
+function compactScholarshipAwardStatDisplay(raw: string, fallback: string): string {
+  const formatted = formatScholarshipAwardDisplay(raw);
+  if (!formatted) return fallback;
+
+  let text = formatted;
+  const colonIndex = text.lastIndexOf(':');
+  if (colonIndex > 0) {
+    const prefix = text.slice(0, colonIndex);
+    const suffix = text.slice(colonIndex + 1).trim();
+    if (
+      /\b(scholarship|award|program|grant)\b/i.test(prefix) &&
+      /(?:[$€£¥]|\btuition\b|\bfee\b|\bannum\b|\byear\b|\bvaries\b)/i.test(suffix)
+    ) {
+      text = suffix;
+    }
+  }
+
+  text = text
+    .replace(/\s+paid directly\b.*?(?=\.|$)/i, '')
+    .replace(/\bper annum\b/gi, '/yr')
+    .replace(/\bper year\b/gi, '/yr')
+    .replace(/\btuition fees?\b/gi, 'tuition')
+    .replace(/\s+/g, ' ')
+    .replace(/\.\s*$/, '')
+    .trim();
+
+  const firstSentence = text.match(/^.{24,}?[.!?](?=\s|$)/)?.[0]?.trim();
+  if (text.length > 72 && firstSentence) {
+    text = firstSentence.replace(/\.\s*$/, '');
+  }
+
+  return text.length > 72 && fallback.length < text.length ? fallback : text;
+}
+
 function StatCard({
   primary,
   secondary,
+  primaryTitle,
   extra,
   deadlineFooter,
   notice
 }: {
   primary: string;
   secondary: string;
+  primaryTitle?: string;
   extra?: React.ReactNode;
   /** Green calendar icon + label row (deadline card). */
   deadlineFooter?: boolean;
   notice?: React.ReactNode;
 }) {
   return (
-    <div className="relative flex h-full min-h-[6.5rem] flex-col justify-center rounded-xl border border-zinc-200/90 bg-white px-5 py-4 shadow-sm ring-1 ring-zinc-100/50">
-      <p className="text-xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-2xl">
+    <div className="relative flex h-full min-h-[7rem] min-w-0 flex-col justify-start rounded-xl border border-zinc-200/90 bg-white px-5 py-4 shadow-sm ring-1 ring-zinc-100/50">
+      <p
+        className="min-w-0 overflow-hidden text-lg font-bold leading-tight tracking-tight text-zinc-900 sm:text-xl [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
+        title={primaryTitle ?? primary}
+      >
         {primary}
       </p>
       <p className="mt-2 flex flex-wrap items-center gap-1.5 text-xs font-medium leading-snug text-zinc-500">
@@ -1025,7 +1065,12 @@ export default function ScholarshipDetailPageClient({
 
   const awardCatalogText =
     scholarship.amount?.trim() || scholarship.awardAmount?.trim() || '';
-  const awardDisplay = formatScholarshipAwardDisplay(awardCatalogText);
+  const awardFullDisplay = formatScholarshipAwardDisplay(awardCatalogText);
+  const awardStatLine = resolveScholarshipCardAwardDisplay(scholarship);
+  const awardDisplay = compactScholarshipAwardStatDisplay(
+    awardCatalogText,
+    awardStatLine.line
+  );
   const hasAwardStat = Boolean(awardCatalogText);
 
   const hasApplicantsStat =
@@ -1518,7 +1563,11 @@ export default function ScholarshipDetailPageClient({
             />
           ) : null}
           {hasAwardStat ? (
-            <StatCard primary={awardDisplay} secondary="Award amount" />
+            <StatCard
+              primary={awardDisplay}
+              primaryTitle={awardStatLine.lineTitle ?? awardFullDisplay}
+              secondary="Award amount"
+            />
           ) : null}
           {hasApplicantsStat ? (
             <StatCard
@@ -2147,7 +2196,7 @@ export default function ScholarshipDetailPageClient({
               {hasAwardStat ? (
                 <p>
                   <span className="font-semibold text-zinc-900">Amount:</span>{' '}
-                  {awardDisplay}
+                  {awardFullDisplay}
                 </p>
               ) : awardsPlain ? (
                 <p className="whitespace-pre-line">
