@@ -2,6 +2,22 @@
 
 import { useEffect } from 'react';
 
+function isChunkLoadError(error: Error): boolean {
+  const message = error.message ?? '';
+  return /Loading chunk \d+ failed|ChunkLoadError|failed to fetch dynamically imported module|Importing a module script failed/i.test(
+    message
+  );
+}
+
+function reloadOnceForChunkError(error: Error): boolean {
+  if (!isChunkLoadError(error) || typeof window === 'undefined') return false;
+  const key = `scholarshiptop:chunk-reload:${window.location.pathname}`;
+  if (window.sessionStorage.getItem(key) === '1') return false;
+  window.sessionStorage.setItem(key, '1');
+  window.location.reload();
+  return true;
+}
+
 export default function ErrorPage({
   error,
   reset
@@ -10,6 +26,7 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   useEffect(() => {
+    if (reloadOnceForChunkError(error)) return;
     console.error(error);
   }, [error]);
   const detail = error.message?.trim();
