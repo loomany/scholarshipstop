@@ -267,6 +267,14 @@ async function handleList(
     bodyMoreFilters,
     bounds
   );
+  const audienceParam =
+    searchParams.get('aud') ?? searchParams.get('audience');
+  if (
+    audienceParam === 'international_friendly' &&
+    moreFilters.citizenshipAudience === 'any'
+  ) {
+    moreFilters.citizenshipAudience = 'international_friendly';
+  }
 
   const lt =
     bodyLongTail ??

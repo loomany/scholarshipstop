@@ -217,9 +217,19 @@ const MAX_LIMIT = 50;
 const SCHOLARSHIPS_LISTING_SOURCE = 'scholarships_listing_view';
 const GLOBAL_FILTER_BOUNDS_TTL_MS = 5 * 60 * 1000;
 const LIST_META_CACHE_TTL_MS = 120 * 1000;
+const APPLICANT_COUNTRY_COUNTS_CACHE_TTL_MS = 5 * 60 * 1000;
 let globalFilterBoundsCache:
   | {
       value: ScholarshipListMeta['filterBounds'];
+      expiresAt: number;
+    }
+  | null = null;
+let applicantCountryCountsCache:
+  | {
+      value: {
+        countryCounts: ScholarshipListMeta['countryCounts'];
+        unspecifiedApplicantCountryCount: number;
+      };
       expiresAt: number;
     }
   | null = null;
@@ -1310,6 +1320,14 @@ async function fetchApplicantCountryCounts(
   countryCounts: ScholarshipListMeta['countryCounts'];
   unspecifiedApplicantCountryCount: number;
 }> {
+  const cached = readTtlValue(applicantCountryCountsCache);
+  if (cached) {
+    return {
+      countryCounts: cached.countryCounts.map((country) => ({ ...country })),
+      unspecifiedApplicantCountryCount: cached.unspecifiedApplicantCountryCount
+    };
+  }
+
   const counts = new Map<string, number>();
   let unspecifiedApplicantCountryCount = 0;
   const pageSize = 1000;
@@ -1342,7 +1360,7 @@ async function fetchApplicantCountryCounts(
     from += pageSize;
   }
 
-  return {
+  const value = {
     countryCounts: [...counts.entries()]
       .map(([code, count]) => ({
         code,
@@ -1352,6 +1370,14 @@ async function fetchApplicantCountryCounts(
       .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label)),
     unspecifiedApplicantCountryCount
   };
+  applicantCountryCountsCache = {
+    value: {
+      countryCounts: value.countryCounts.map((country) => ({ ...country })),
+      unspecifiedApplicantCountryCount: value.unspecifiedApplicantCountryCount
+    },
+    expiresAt: Date.now() + APPLICANT_COUNTRY_COUNTS_CACHE_TTL_MS
+  };
+  return value;
 }
 
 /** Single catalog pipeline: no personalized SQL branch. */

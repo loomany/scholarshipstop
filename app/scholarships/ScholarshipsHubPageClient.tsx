@@ -1348,10 +1348,14 @@ function ScholarshipsPageInner({
   }, [routeBaseMoreFilters, filterBounds]);
 
   useEffect(() => {
-    if (isAuthenticated && listMeta?.profileFilterSeed) {
+    if (
+      isAuthenticated &&
+      listMeta?.profileFilterSeed &&
+      activeTab !== 'best-recommendation'
+    ) {
       setLandingQuizProfileSeed(null);
     }
-  }, [isAuthenticated, listMeta?.profileFilterSeed]);
+  }, [activeTab, isAuthenticated, listMeta?.profileFilterSeed]);
 
   useEffect(() => {
     if (!bestRecommendationWizardHydrated) return;
@@ -2615,8 +2619,9 @@ function ScholarshipsPageInner({
             previewBaseSearchParams.delete('deadline');
           }
           if (moreFiltersDraft.citizenshipAudience !== 'any') {
-            previewBaseSearchParams.set('audience', moreFiltersDraft.citizenshipAudience);
+            previewBaseSearchParams.set('aud', moreFiltersDraft.citizenshipAudience);
           } else {
+            previewBaseSearchParams.delete('aud');
             previewBaseSearchParams.delete('audience');
           }
           const sp = buildHubListingSearchParams({

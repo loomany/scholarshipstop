@@ -31,38 +31,79 @@ function compactText(parts: Array<string | null | undefined>): string {
     .join(' | ');
 }
 
+function normalizeCountryBlob(raw: string): string {
+  return raw.replace(/\\n/g, '\n').replace(/\\r/g, '\n');
+}
+
+function textFromJson(value: Json | null | undefined): string | null {
+  if (typeof value === 'string') return value;
+  if (!value || typeof value !== 'object') return null;
+  const out: string[] = [];
+  const visit = (item: unknown) => {
+    if (typeof item === 'string') {
+      const s = item.trim();
+      if (s) out.push(s);
+      return;
+    }
+    if (!item || typeof item !== 'object') return;
+    if (Array.isArray(item)) {
+      for (const child of item) visit(child);
+      return;
+    }
+    for (const child of Object.values(item)) visit(child);
+  };
+  visit(value);
+  return out.length > 0 ? out.join('\n') : null;
+}
+
 function extractIefaField(label: string, blob: string): string | null {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const match = blob.match(new RegExp(`${escaped}:\\s*([^|\\n]+)`, 'i'));
   return match?.[1]?.trim().replace(/\s+/g, ' ') || null;
 }
 
-function addDelimitedCountryCodes(target: Set<string>, raw: string | null): void {
+function cleanCountryPhrase(raw: string): string {
+  return raw
+    .replace(
+      /\b(?:target\s+group|host\s+institution(?:\(s\))?|field\s+of\s+study|scholarship\s+value|eligibility|candidates?|number\s+of\s+awards)\s*:.*$/i,
+      ''
+    )
+    .trim();
+}
+
+function addDelimitedCountryCodes(
+  target: Set<string>,
+  raw: string | null,
+  opts?: { maxDelimitedParts?: number }
+): void {
   if (!raw) return;
-  if (/^unrestricted$/i.test(raw)) return;
-  const parts = raw
+  const cleaned = cleanCountryPhrase(raw);
+  if (!cleaned || /^unrestricted$/i.test(cleaned)) return;
+  const parts = cleaned
     .split(/,|\band\b|\/|;/i)
     .map((part) => part.trim())
     .filter(Boolean);
+  if (opts?.maxDelimitedParts && parts.length > opts.maxDelimitedParts) return;
   for (const part of parts) {
     const code = normalizeCountryCode(part);
     if (code) target.add(code);
   }
-  for (const code of countryCodesFromText(raw)) target.add(code);
+  for (const code of countryCodesFromText(cleaned)) target.add(code);
 }
 
 function applicantCodesFromStrongPhrases(blob: string): string[] {
   const out = new Set<string>();
   const phrasePatterns = [
-    /\b(?:citizens?|nationals?|residents?)\s+of\s+([^.;|]+)/gi,
-    /\b(?:from|born\s+in)\s+([^.;|]+)/gi,
-    /\bmust\s+be\s+(?:a\s+)?(?:citizen|national|resident)\s+of\s+([^.;|]+)/gi,
-    /\bopen\s+to\s+(?:students\s+)?from\s+([^.;|]+)/gi
+    /\btarget\s+group\s*:\s*([^\n.;|]+)/gi,
+    /\bnationality\s*:\s*([^\n.;|]+)/gi,
+    /\b(?:citizens?|nationals?|residents?)\s+of\s+([^\n.;|]+)/gi,
+    /\bmust\s+be\s+(?:a\s+)?(?:citizen|national|resident)\s+of\s+([^\n.;|]+)/gi,
+    /\bopen\s+to\s+(?:students\s+)?from\s+([^\n.;|]+)/gi
   ];
 
   for (const pattern of phrasePatterns) {
     for (const match of blob.matchAll(pattern)) {
-      addDelimitedCountryCodes(out, match[1] ?? null);
+      addDelimitedCountryCodes(out, match[1] ?? null, { maxDelimitedParts: 12 });
     }
   }
 
@@ -81,8 +122,9 @@ function hostCodesFromStrongPhrases(blob: string): string[] {
   const out = new Set<string>();
   const hostPatterns = [
     /\bHost countries \(IEFA\):\s*([^|;\n]+)/gi,
-    /\bstudy(?:ing)?\s+(?:in|at)\s+([^.;|]+)/gi,
-    /\battend(?:ing)?\s+(?:school|college|university)?\s*(?:in|at)\s+([^.;|]+)/gi
+    /\bstudy\s+in\s*:?\s*([^\n.;|]+)/gi,
+    /\bhost\s+(?:country|countries)\s*:?\s*([^\n.;|]+)/gi,
+    /\bhost\s+institution(?:\(s\))?\s*:?\s*([^\n.;|]+)/gi
   ];
 
   for (const pattern of hostPatterns) {
@@ -100,7 +142,7 @@ export function parseScholarshipCountryEligibility(
   const applicant = new Set<string>();
   const host = new Set<string>();
   const reasons: string[] = [];
-  const blob = compactText([
+  const blob = normalizeCountryBlob(compactText([
     input.title,
     input.providerName,
     input.stateTerritoryText,
@@ -109,10 +151,8 @@ export function parseScholarshipCountryEligibility(
     input.summaryShort,
     input.summaryLong,
     input.description,
-    input.rawData && typeof input.rawData === 'object'
-      ? JSON.stringify(input.rawData)
-      : null
-  ]);
+    textFromJson(input.rawData)
+  ]));
 
   const iefaNationality = extractIefaField('Nationality (IEFA)', blob);
   const iefaHost = extractIefaField('Host countries (IEFA)', blob);
