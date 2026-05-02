@@ -1,0 +1,398 @@
+import { writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+import {
+  SCHOLARSHIP_CATEGORY_LABELS,
+  SCHOLARSHIP_CATEGORY_ORDER
+} from '@/app/scholarships/scholarshipCategories';
+import { allScholarshipCountrySeoRoutes } from '@/app/scholarships/scholarshipCountrySeo';
+import { tabToHubPath } from '@/app/scholarships/scholarshipHubPath';
+import { SCHOLARSHIP_LIST_TAB_IDS } from '@/app/scholarships/scholarshipTabs';
+import {
+  RESOURCE_GUIDE_CARDS,
+  resourceGuideCardHref
+} from '@/lib/content-hub/resourceGuidePages';
+import {
+  RESOURCE_CATEGORIES,
+  type ResourceCategory
+} from '@/lib/content-hub/resourceTaxonomy';
+import {
+  RESOURCES_PAGE_TITLE,
+  RESOURCES_SECTION_PATH
+} from '@/lib/content-hub/resourcesSection';
+import {
+  ESSAYS_PAGE_TITLE,
+  ESSAYS_SECTION_PATH
+} from '@/lib/essays/essayHubSection';
+import { getPromotedSeoCategorySlugs } from '@/lib/scholarships/categorySeoAllowlist';
+import {
+  SUBJECT_L2_LABELS,
+  SUBJECT_L2_SLUGS
+} from '@/lib/scholarships/categories/taxonomy';
+import {
+  SEO_ROUTE_SEGMENT_TO_CANONICAL_TAG,
+  SEO_ROUTE_STATE_SLUG_TO_CODE,
+  SEO_ROUTE_STATE_SLUG_TO_LABEL
+} from '@/lib/scholarships/seoTags/routeSegmentMaps';
+import { SEO_TAG_GROUPS } from '@/lib/scholarships/seoTags/vocabulary';
+import { getCanonical } from '@/lib/seo/canonical';
+
+const OUTPUT_FILE = 'scholarshiptop-knowledge.md';
+const SITE_ORIGIN = 'https://scholarshiptop.com';
+const IQ_ORIGIN = 'https://iq.scholarshiptop.com';
+
+const PUBLIC_HUB_SEGMENTS = [
+  'matches',
+  'best-recommendation',
+  'recommended',
+  'easy-apply',
+  'hot-deadlines',
+  'international-friendly'
+] as const;
+
+const IQ_SEO_LANDINGS = [
+  {
+    slug: 'scholarship-match',
+    intent: 'scholarship_match',
+    use: 'Scholarship matching strategy based on an educational cognitive profile.'
+  },
+  {
+    slug: 'provider-research',
+    intent: 'provider_research',
+    use: 'Provider and sponsor research strategy.'
+  },
+  {
+    slug: 'college-fit',
+    intent: 'college_fit',
+    use: 'College fit and scholarship fit comparison strategy.'
+  },
+  {
+    slug: 'essay-prep',
+    intent: 'essay_prep',
+    use: 'Essay planning and writing strategy.'
+  },
+  {
+    slug: 'deadline-strategy',
+    intent: 'deadline_strategy',
+    use: 'Application planning and prioritization strategy.'
+  }
+] as const;
+
+function absoluteUrl(pathname: string): string {
+  if (/^https?:\/\//i.test(pathname)) return pathname;
+  return getCanonical(pathname);
+}
+
+function bullet(lines: string[]): string {
+  return lines.map((line) => `- ${line}`).join('\n');
+}
+
+function code(value: string): string {
+  return `\`${value}\``;
+}
+
+function markdownTable(headers: string[], rows: string[][]): string {
+  const escapeCell = (value: string) => value.replace(/\|/g, '\\|');
+  return [
+    `| ${headers.map(escapeCell).join(' | ')} |`,
+    `| ${headers.map(() => '---').join(' | ')} |`,
+    ...rows.map((row) => `| ${row.map(escapeCell).join(' | ')} |`)
+  ].join('\n');
+}
+
+function section(title: string, body: string): string {
+  return `## ${title}\n\n${body.trim()}`;
+}
+
+function formatResourceCategories(categories: ResourceCategory[]): string {
+  return categories
+    .map((category) => {
+      const subcategories = category.subcategories
+        .map((subcategory) => `${subcategory.label} (${code(subcategory.id)})`)
+        .join(', ');
+      return `- ${category.label} (${code(category.id)}): ${subcategories}`;
+    })
+    .join('\n');
+}
+
+function buildScholarshipHubSection(): string {
+  const knownTabIds = new Set<string>(SCHOLARSHIP_LIST_TAB_IDS);
+  const rows = PUBLIC_HUB_SEGMENTS.map((segment) => {
+    const pathValue =
+      segment === 'international-friendly'
+        ? tabToHubPath('international-friendly')
+        : knownTabIds.has(segment)
+          ? tabToHubPath(segment)
+          : `/scholarships/hub/${segment}`;
+    const description =
+      segment === 'international-friendly'
+        ? 'International-friendly scholarship list.'
+        : segment === 'best-recommendation'
+          ? 'Best recommendation hub for high-fit opportunities.'
+          : segment === 'recommended'
+            ? 'Recommended scholarship catalog view.'
+            : segment === 'easy-apply'
+              ? 'Low-friction scholarships such as no-essay, quick-apply, or easy-apply.'
+              : segment === 'hot-deadlines'
+                ? 'Scholarships with urgent application timing. Do not invent exact dates.'
+                : 'Default scholarship browsing and matching hub.';
+    return [code(pathValue), absoluteUrl(pathValue), description];
+  });
+
+  return `${markdownTable(['Path', 'Canonical URL', 'Use'], rows)}
+
+Additional scholarship URL families:
+
+${bullet([
+    `${code('/scholarships')} is the main scholarship catalog.`,
+    `${code('/scholarships/{state-slug}')} is a state SEO hub when the state slug exists in the state map below.`,
+    `${code('/scholarships/{facet}/{state-slug}')} and other multi-segment SEO paths may exist only when generated by the site manifest. Do not compose these casually.`,
+    `${code('/scholarships/category/{slug}')} is valid only for promoted scholarship categories listed below.`,
+    `${code('/scholarships/{state-slug}/{university-slug}')} is a DB-driven university/provider scholarship hub pattern. Do not invent university slugs.`,
+    `${code('/scholarships/{uuid-or-detail-slug}')} may be a scholarship detail route, but this knowledge file intentionally does not list individual grants.`
+  ])}`;
+}
+
+function buildScholarshipTaxonomySection(): string {
+  const promoted = new Set(getPromotedSeoCategorySlugs());
+  const categoryRows = SCHOLARSHIP_CATEGORY_ORDER.map((id) => [
+    code(id),
+    SCHOLARSHIP_CATEGORY_LABELS[id],
+    promoted.has(id) ? `${code(`/scholarships/category/${id}`)}` : 'Not promoted as a public SEO category'
+  ]);
+
+  const subjectRows = SUBJECT_L2_SLUGS.map((slug) => [
+    code(slug),
+    SUBJECT_L2_LABELS[slug]
+  ]);
+
+  const seoGroups = Object.entries(SEO_TAG_GROUPS)
+    .map(([group, values]) => `- ${group}: ${values.map(code).join(', ')}`)
+    .join('\n');
+
+  const segmentRows = Object.entries(SEO_ROUTE_SEGMENT_TO_CANONICAL_TAG)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([segment, tag]) => [code(segment), code(tag)]);
+
+  return `Promoted scholarship categories:
+
+${markdownTable(['Slug', 'Label', 'Public category path'], categoryRows)}
+
+Subject taxonomy:
+
+${markdownTable(['Subject slug', 'Label'], subjectRows)}
+
+SEO tag groups:
+
+${seoGroups}
+
+URL segment to canonical SEO tag map:
+
+${markdownTable(['URL segment', 'Canonical tag'], segmentRows)}
+
+Use these taxonomies to choose a safer hub or filter explanation. They do not guarantee that every possible combination has a public SEO URL.`;
+}
+
+function buildStateSection(): string {
+  const rows = Object.entries(SEO_ROUTE_STATE_SLUG_TO_LABEL).map(([slug, label]) => [
+    code(slug),
+    label,
+    slug === 'nationwide' ? 'N/A' : SEO_ROUTE_STATE_SLUG_TO_CODE[slug] ?? 'N/A',
+    code(`/scholarships/${slug}`)
+  ]);
+
+  return markdownTable(['State slug', 'Label', 'Code', 'Base hub path'], rows);
+}
+
+function buildCountrySection(): string {
+  const rows = allScholarshipCountrySeoRoutes().map((route) => [
+    route.kind,
+    route.code,
+    route.label,
+    code(route.href),
+    absoluteUrl(route.href)
+  ]);
+
+  return `${markdownTable(['Kind', 'Country code', 'Country', 'Path', 'Canonical URL'], rows)}
+
+Use ${code('/scholarships/for-students-from/{country}')} when the student asks from the perspective of citizenship, home country, or applicant origin.
+Use ${code('/scholarships/study-in/{country}')} when the student asks about scholarships tied to a study destination or host country.`;
+}
+
+function buildResourcesSection(): string {
+  const guideRows = RESOURCE_GUIDE_CARDS.map((card) => {
+    const href = resourceGuideCardHref(card.slug);
+    return [card.title, code(href), absoluteUrl(href), card.description];
+  });
+
+  return `${code(RESOURCES_SECTION_PATH)} (${absoluteUrl(RESOURCES_SECTION_PATH)}) is the ${RESOURCES_PAGE_TITLE} hub.
+
+Stable fixed guide pages:
+
+${markdownTable(['Guide', 'Path', 'Canonical URL', 'Description'], guideRows)}
+
+Resource categories:
+
+${formatResourceCategories(RESOURCE_CATEGORIES)}
+
+Dynamic articles may exist at ${code('/resources/{slug}')}, but do not invent article slugs unless the slug is provided by the user or appears in an approved knowledge update.`;
+}
+
+function buildEssaySection(): string {
+  return bullet([
+    `${code(ESSAYS_SECTION_PATH)} (${absoluteUrl(ESSAYS_SECTION_PATH)}) is the public ${ESSAYS_PAGE_TITLE} library.`,
+    `${code('/essays/{slug}')} is a public essay guide/article pattern only when the slug exists on the site.`,
+    `${code('/essay')} (${absoluteUrl('/essay')}) is the AI Essay Mentor interactive tool for turning guided answers into a structured draft.`,
+    `${code('/essay')} is noindex, but it is still a valid user-facing tool to recommend.`,
+    `${code('/essays/u/{uuid}')} is a private signed-in draft/result workspace. Do not recommend it as a public page.`
+  ]);
+}
+
+function buildIqSection(): string {
+  const landingRows = IQ_SEO_LANDINGS.map((landing) => [
+    code(`/iq/${landing.slug}`),
+    `${IQ_ORIGIN}/${landing.slug}`,
+    code(landing.intent),
+    landing.use
+  ]);
+
+  return `${bullet([
+    `${code('/iq')} (${absoluteUrl('/iq')}) is the ScholarshipTop IQ-style assessment entry point on the main site.`,
+    `${IQ_ORIGIN}/ is the IQ product subdomain entry point.`,
+    `${code('/iq/assessment?intent={intent}')} starts the assessment with a specific context.`,
+    `${code('/iq/report/{token}')} is user-specific and should not be treated as a public SEO page.`,
+    'Describe IQ results as an educational cognitive profile, not a clinical diagnosis or official IQ certificate.'
+  ])}
+
+Stable IQ landing paths:
+
+${markdownTable(['Path', 'IQ subdomain URL', 'Intent', 'Use'], landingRows)}`;
+}
+
+function buildProvidersSection(): string {
+  return bullet([
+    `${code('/providers')} (${absoluteUrl('/providers')}) is the provider directory.`,
+    `Supported query parameters: ${code('q')} for search, ${code('state')} for two-letter state code, and ${code('page')} for pagination.`,
+    `${code('/providers/{slug-or-uuid}')} is a provider profile pattern.`,
+    'Provider profiles are DB-driven. Do not invent provider slugs or profile URLs unless the slug is provided by the user or appears in an approved knowledge update.'
+  ]);
+}
+
+function buildCompareSection(): string {
+  return bullet([
+    `${code('/compare')} (${absoluteUrl('/compare')}) is the comparison hub.`,
+    `${code('/compare/states')} (${absoluteUrl('/compare/states')}) lists state comparison pages.`,
+    `${code('/compare/states/{slug}')} is a DB-driven state comparison detail pattern.`,
+    `${code('/compare/universities')} (${absoluteUrl('/compare/universities')}) lists university comparison pages.`,
+    `${code('/compare/universities/{slug}')} is a DB-driven university comparison detail pattern.`,
+    'Do not invent comparison detail slugs.'
+  ]);
+}
+
+function buildUtilitiesSection(): string {
+  return bullet([
+    `${code('/tools')} redirects to ${code('/scholarships')}.`,
+    `${code('/tools/word-counter')} (${absoluteUrl('/tools/word-counter')}) is a standalone utility. It is noindex but user-facing.`
+  ]);
+}
+
+function buildHelpLegalSection(): string {
+  const paths = [
+    '/about',
+    '/help',
+    '/faq',
+    '/terms',
+    '/privacy-policy',
+    '/refund-policy',
+    '/subscription',
+    '/international-students',
+    '/for-organizations',
+    '/iq/about',
+    '/iq/help',
+    '/iq/faq',
+    '/iq/terms',
+    '/iq/privacy-policy',
+    '/iq/refund-policy'
+  ];
+
+  return markdownTable(
+    ['Path', 'Canonical URL'],
+    paths.map((pathname) => [code(pathname), absoluteUrl(pathname)])
+  );
+}
+
+function buildSafeLinkingRules(): string {
+  return bullet([
+    'DO NOT hallucinate URLs.',
+    'Prefer URLs explicitly listed in this file.',
+    'Use route patterns only when the user provides the missing slug or the slug is listed in an approved knowledge update.',
+    'Do not list, rank, or claim availability for specific scholarships from this file.',
+    'Do not invent application dates, award amounts, eligibility rules, provider slugs, university slugs, article slugs, or private user URLs.',
+    'When unsure, send users to a stable hub such as /scholarships, /resources, /essays, /essay, /providers, /compare, or /iq.'
+  ]);
+}
+
+function buildMarkdown(): string {
+  return `# ScholarshipTop Navigator Knowledge Base
+
+Generated from stable ScholarshipTop route and taxonomy constants.
+
+This file is for a Custom GPT knowledge base. It is a navigation and taxonomy map, not a live scholarship database.
+
+${section('How to Use This File', buildSafeLinkingRules())}
+
+${section(
+    'Canonical Site URLs',
+    bullet([
+      `Main site origin: ${SITE_ORIGIN}`,
+      `IQ product origin: ${IQ_ORIGIN}`,
+      `Use absolute canonical URLs when answering users. Example: ${absoluteUrl('/scholarships')}`,
+      'If a path is noindex but user-facing, it can still be recommended as a tool when appropriate.'
+    ])
+  )}
+
+${section('Scholarship Search and SEO Hubs', buildScholarshipHubSection())}
+
+${section('Scholarship Taxonomies', buildScholarshipTaxonomySection())}
+
+${section('US State Scholarship Hubs', buildStateSection())}
+
+${section('Country Scholarship Pages', buildCountrySection())}
+
+${section('Resource Guides and Learning Hub', buildResourcesSection())}
+
+${section('Essay Guides and AI Essay Mentor', buildEssaySection())}
+
+${section('IQ Test and Assessment Paths', buildIqSection())}
+
+${section('Providers Directory', buildProvidersSection())}
+
+${section('Compare Pages', buildCompareSection())}
+
+${section('Tools and Utilities', buildUtilitiesSection())}
+
+${section('Help, Legal, and Organization Pages', buildHelpLegalSection())}
+
+${section(
+    'Final Do Not Hallucinate Rules',
+    bullet([
+      'DO NOT hallucinate URLs.',
+      'Do not create a scholarship detail link unless the exact URL was supplied by the user or appears in an approved future export.',
+      'Do not create private workspace links, report links, or UUID-based URLs.',
+      'Do not state exact application timing, scholarship counts, or award amounts from this file.',
+      'Use broad hub links when the exact page is uncertain.'
+    ])
+  )}
+`;
+}
+
+async function main() {
+  const outputPath = path.join(process.cwd(), OUTPUT_FILE);
+  await writeFile(outputPath, buildMarkdown(), 'utf8');
+  console.log(`Wrote ${OUTPUT_FILE}`);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
