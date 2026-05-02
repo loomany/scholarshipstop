@@ -50,6 +50,23 @@ const GRANT_DIGEST_EMAIL_MAX_ITEMS = Math.max(
 
 const EMAIL_DIGEST_MIN_MATCH_PERCENT = 50;
 
+function createChannelCounts(): Record<ChannelId, number> {
+  return {
+    best: 0,
+    saved_filters: 0,
+    easy_apply: 0,
+    hot_deadlines: 0
+  };
+}
+
+function incrementChannelCount(counts: Record<ChannelId, number>, channel: ChannelId): void {
+  counts[channel] += 1;
+}
+
+function logGrantNotify(event: string, payload: Record<string, unknown>): void {
+  console.log(`[grant-notify] ${event}`, JSON.stringify(payload));
+}
+
 function channelProfileColumn(c: ChannelId): keyof ProfileRow {
   switch (c) {
     case 'best':
@@ -225,6 +242,7 @@ export type GrantNotificationDispatchResult = {
 };
 
 export async function runGrantNotificationDispatch(): Promise<GrantNotificationDispatchResult> {
+  const dispatchStartedAtMs = Date.now();
   const adminRaw = createServiceRoleSupabaseClient();
   if (!adminRaw) {
     return {
@@ -240,7 +258,15 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   }
   const admin = adminRaw;
 
+  logGrantNotify('init', {
+    lookbackHours: LOOKBACK_HOURS,
+    sinceIso: new Date(Date.now() - LOOKBACK_HOURS * 60 * 60 * 1000).toISOString()
+  });
+
   const bounds = await fetchGlobalFilterBounds(admin);
+  logGrantNotify('bounds-loaded', {
+    elapsedMs: Date.now() - dispatchStartedAtMs
+  });
   const mfBase = defaultMoreFiltersFromBounds(bounds);
 
   const easyReq = scholarshipListRequestFromParts({
@@ -289,7 +315,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   const rows = (scholarshipRows ?? []) as unknown as ScholarshipRow[];
   const scholarships = rows.map((r) => mapScholarshipRow(r));
 
-  const { data: tgRows } = await admin
+  const { data: tgRows, error: tgErr } = await admin
     .from('telegram_users')
     .select('*')
     .not('app_user_id', 'is', null)
@@ -297,13 +323,19 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       'notify_best_matches.eq.true,notify_saved_filters.eq.true,notify_easy_apply.eq.true,notify_hot_deadlines.eq.true'
     );
 
+  logGrantNotify('telegram-users-query', {
+    rows: tgRows?.length ?? 0,
+    error: tgErr?.message ?? null,
+    elapsedMs: Date.now() - dispatchStartedAtMs
+  });
+
   type TgRow = Database['public']['Tables']['telegram_users']['Row'];
   const telegramByUser = new Map<string, TgRow>();
   for (const t of tgRows ?? []) {
     if (t.app_user_id) telegramByUser.set(t.app_user_id, t);
   }
 
-  const { data: profileRows } = await admin
+  const { data: profileRows, error: profileErr } = await admin
     .from('profiles')
     .select('*')
     .or(
@@ -311,6 +343,12 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     )
     .order('updated_at', { ascending: false })
     .limit(MAX_PROFILES);
+
+  logGrantNotify('profiles-query', {
+    rows: profileRows?.length ?? 0,
+    error: profileErr?.message ?? null,
+    elapsedMs: Date.now() - dispatchStartedAtMs
+  });
 
   const profileById = new Map<string, ProfileRow>();
   for (const profile of (profileRows ?? []) as ProfileRow[]) {
@@ -331,6 +369,10 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     for (const profile of (telegramProfileRows ?? []) as ProfileRow[]) {
       profileById.set(profile.id, profile);
     }
+    logGrantNotify('telegram-only-profiles-query', {
+      requested: telegramOnlyProfileIds.length,
+      loaded: telegramProfileRows?.length ?? 0
+    });
   }
 
   const profiles = Array.from(profileById.values());
@@ -362,6 +404,16 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   let freshSelected = 0;
   let tailSelected = 0;
   let fallbackUsers = 0;
+  let missingEmailUsers = 0;
+  let emailDup = 0;
+  let telegramDup = 0;
+  let telegramFailed = 0;
+  let emailDigestSentUsers = 0;
+  let emailDigestSkippedUnsubscribed = 0;
+
+  const matchedByChannel = createChannelCounts();
+  const emailCandidatesByChannel = createChannelCounts();
+  const telegramCandidatesByChannel = createChannelCounts();
 
   const channels: ChannelId[] = ['best', 'saved_filters', 'easy_apply', 'hot_deadlines'];
   const savedGrantByUserScholarship = new Map<string, boolean>();
@@ -417,6 +469,21 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   for (let i = 0; i < scholarships.length; i++) {
     const s = scholarships[i]!;
     const sid = s.id;
+    const scholarshipStartedAtMs = Date.now();
+    const beforeMatchedPairs = matchedPairs;
+    const beforeEmailCandidates = emailCandidates;
+    const beforeTelegramCandidates = telegramCandidates;
+    const beforeEmailSent = emailSent;
+    const beforeTelegramSent = telegramSent;
+    const beforeSkippedDup = skippedDup;
+    const beforeErrors = errors;
+    logGrantNotify('scholarship-start', {
+      scholarshipIndex: i + 1,
+      scholarshipsTotal: scholarships.length,
+      scholarshipId: sid,
+      title: s.title?.slice(0, 120) ?? null,
+      updatedAt: s.updatedAt ?? null
+    });
     if (i === 0 || (i + 1) % 5 === 0) {
       console.log(
         '[grant-notify] progress',
@@ -438,6 +505,12 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     try {
       easyOk = await scholarshipMatchesTabListSql(admin, easyReq, 'easy-apply', sid);
       hotOk = await scholarshipMatchesTabListSql(admin, hotReq, 'hot-deadlines', sid);
+      logGrantNotify('tab-precalc', {
+        scholarshipId: sid,
+        easyApply: easyOk,
+        hotDeadlines: hotOk,
+        elapsedMs: Date.now() - scholarshipStartedAtMs
+      });
     } catch (e) {
       errors += 1;
       console.error('[grant-notify] tab precalc', sid, e);
@@ -480,6 +553,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
 
         if (!match) continue;
         matchedPairs += 1;
+        incrementChannelCount(matchedByChannel, ch);
 
         ops += 1;
         if (ops > MAX_OPS) {
@@ -493,8 +567,10 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
             const dup = await alreadySent(admin, uid, sid, ch, 'email');
             if (dup) {
               skippedDup += 1;
+              emailDup += 1;
             } else {
               emailCandidates += 1;
+              incrementChannelCount(emailCandidatesByChannel, ch);
               let lines = pendingEmailByUser.get(uid);
               if (!lines) {
                 lines = [];
@@ -507,14 +583,18 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
                 firstName: profile.first_name ?? null
               });
             }
+          } else {
+            missingEmailUsers += 1;
           }
         }
 
         if (tg && wantsTelegram) {
           telegramCandidates += 1;
+          incrementChannelCount(telegramCandidatesByChannel, ch);
           const dupT = await alreadySent(admin, uid, sid, ch, 'telegram');
           if (dupT) {
             skippedDup += 1;
+            telegramDup += 1;
           } else {
             const ok = await sendScholarshipTelegramCardToChat(tg.telegram_chat_id, s, {
               categoryLabel: grantNotifyTelegramCardCategoryLabel(ch),
@@ -525,6 +605,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
               telegramSent += 1;
             } else {
               errors += 1;
+              telegramFailed += 1;
             }
           }
         }
@@ -533,8 +614,41 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       if (cappedOps) break;
     }
 
+    logGrantNotify('scholarship-summary', {
+      scholarshipIndex: i + 1,
+      scholarshipsTotal: scholarships.length,
+      scholarshipId: sid,
+      matchedPairs: matchedPairs - beforeMatchedPairs,
+      emailCandidates: emailCandidates - beforeEmailCandidates,
+      telegramCandidates: telegramCandidates - beforeTelegramCandidates,
+      emailSent: emailSent - beforeEmailSent,
+      telegramSent: telegramSent - beforeTelegramSent,
+      skippedDup: skippedDup - beforeSkippedDup,
+      errors: errors - beforeErrors,
+      ops,
+      cappedOps,
+      elapsedMs: Date.now() - scholarshipStartedAtMs
+    });
+
     if (cappedOps) break;
   }
+
+  logGrantNotify('matching-complete', {
+    matchedPairs,
+    matchedByChannel,
+    emailCandidates,
+    emailCandidatesByChannel,
+    telegramCandidates,
+    telegramCandidatesByChannel,
+    pendingEmailUsers: pendingEmailByUser.size,
+    missingEmailUsers,
+    emailDup,
+    telegramDup,
+    telegramFailed,
+    ops,
+    cappedOps,
+    elapsedMs: Date.now() - dispatchStartedAtMs
+  });
 
   for (const profile of profiles) {
     const uid = profile.id;
@@ -570,11 +684,21 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     }
   }
 
+  logGrantNotify('fallback-complete', {
+    fallbackUsers,
+    pendingEmailUsers: pendingEmailByUser.size,
+    elapsedMs: Date.now() - dispatchStartedAtMs
+  });
+
   for (const [uid, lines] of pendingEmailByUser) {
     const email = await getEmail(uid);
     if (!email) continue;
     if (await userHasRecentEmailDelivery(admin, uid)) {
       emailSkippedCooldownUsers += 1;
+      logGrantNotify('digest-skip-cooldown', {
+        userId: uid,
+        queuedLines: lines.length
+      });
       continue;
     }
 
@@ -631,6 +755,15 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     ];
 
     emailDigestAttempts += 1;
+    logGrantNotify('digest-send-start', {
+      userId: uid,
+      queuedLines: lines.length,
+      uniqueLines: uniqueLines.length,
+      selectedLines: selectedLines.length,
+      fresh: fresh.length,
+      tail: tail.length,
+      rankedIds: rankedIds.length
+    });
     const r = await sendGrantDigestBatchEmail({
       toEmail: email,
       categories,
@@ -654,6 +787,18 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
         await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
         emailSent += 1;
       }
+      emailDigestSentUsers += 1;
+      logGrantNotify('digest-send-ok', {
+        userId: uid,
+        selectedLines: selectedLines.length,
+        emailSent
+      });
+    } else {
+      emailDigestSkippedUnsubscribed += 1;
+      logGrantNotify('digest-skip-unsubscribed', {
+        userId: uid,
+        selectedLines: selectedLines.length
+      });
     }
   }
 
@@ -678,15 +823,25 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       telegramCandidates,
       emailDigestAttempts,
       emailSkippedCooldownUsers,
+      missingEmailUsers,
       freshSelected,
       tailSelected,
       fallbackUsers,
+      matchedByChannel,
+      emailCandidatesByChannel,
+      telegramCandidatesByChannel,
+      emailDup,
+      telegramDup,
+      telegramFailed,
+      emailDigestSentUsers,
+      emailDigestSkippedUnsubscribed,
       emailSent,
       telegramSent,
       skippedDup,
       errors,
       cappedOps,
-      bottleneckHint
+      bottleneckHint,
+      elapsedMs: Date.now() - dispatchStartedAtMs
     })
   );
 
