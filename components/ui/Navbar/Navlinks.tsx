@@ -56,7 +56,7 @@ const ABOUT_SUBLINKS = [
 ] as const;
 
 const MOBILE_ABOUT_SUBLINKS = ABOUT_SUBLINKS.filter(
-  ({ href }) => href !== '/for-organizations'
+  ({ href }) => href !== '/for-organizations' && href !== IQ_TEST_HOME_HREF
 );
 
 const ESSAY_MENTOR_PATH = '/essay';
@@ -854,6 +854,17 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   </div>
                 </div>
               </div>
+              <Link
+                href={IQ_TEST_HOME_HREF}
+                className={clsx(
+                  nav.darkDrawer,
+                  'flex w-full max-w-full items-center gap-3'
+                )}
+                onClick={closeMenu}
+              >
+                <MobileDrawerNavIcon icon={Sparkles} active={false} />
+                <span className="min-w-0">IQ Test</span>
+              </Link>
               <Link
                 href="/subscription"
                 className={clsx(

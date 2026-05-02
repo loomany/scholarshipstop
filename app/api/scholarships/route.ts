@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { createPublicClient } from '@/utils/supabase/public';
 import {
   parseDeadlineFromParam,
+  parseHubListingCountryCodesParam,
   parseSortFromParam,
   SCHOLARSHIPS_PAGE_SIZE
 } from '@/app/scholarships/scholarshipListUrl';
@@ -191,6 +192,7 @@ function buildGuestPublicCacheControl(args: {
   if (args.req.categoryIds.size > 0) return null;
   if (args.req.categoryPageSlug || args.req.catalogSubjectCategoryId) return null;
   if (args.req.stateCodes.length > 0) return null;
+  if (args.req.hostCountryCodesFilter.length > 0) return null;
   if (args.req.longTailLegacySlugs.length > 0) return null;
   if (args.req.providerSlug) return null;
   if (args.req.similarToId) return null;
@@ -261,6 +263,12 @@ async function handleList(
   const similarCategorySlug = searchParams.get('similar_category_slug');
   const similarStateSlug = searchParams.get('similar_state_slug');
   const listScope = searchParams.get('scope');
+  const appCountryCodesFromUrl = parseHubListingCountryCodesParam(
+    searchParams.get('app_cc')
+  );
+  const hostCountryCodesFromUrl = parseHubListingCountryCodesParam(
+    searchParams.get('host_cc')
+  );
 
   const bounds = await fetchGlobalFilterBounds(listingSupabase);
   const moreFilters = moreFiltersFromJson(
@@ -329,6 +337,10 @@ async function handleList(
       started,
       submitted,
       moreFilters,
+      appCountryCodesFromUrl:
+        appCountryCodesFromUrl.length > 0 ? appCountryCodesFromUrl : null,
+      hostCountryCodesFromUrl:
+        hostCountryCodesFromUrl.length > 0 ? hostCountryCodesFromUrl : null,
       longTailLegacySlugs: lt.filter(Boolean),
       similarTo,
       similarCategorySlug,

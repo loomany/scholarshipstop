@@ -12,6 +12,10 @@ import {
   type Scholarship
 } from '@/app/scholarships/scholarshipsData';
 import {
+  buildScholarshipTagHubHref,
+  scholarshipCatalogChipHubHref
+} from '@/app/scholarships/scholarshipTagHubLinks';
+import {
   SCHOLARSHIP_ACTION_FILL,
   SCHOLARSHIP_ACTION_FILL_PRESSED,
   SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
@@ -204,6 +208,32 @@ export default function ScholarshipCard({
     return null;
   }, [scholarship.hostCountryCodes, scholarship.stateCodes]);
 
+  const grantLocationHubHref = useMemo(() => {
+    if (!grantLocationBadge) return null;
+    if (grantLocationBadge.key === 'grant-location-multi') return null;
+    if (
+      grantLocationBadge.key === 'grant-location-us' ||
+      grantLocationBadge.text === 'US-based'
+    ) {
+      return buildScholarshipTagHubHref({ hostCountryCode: 'US' });
+    }
+    const prefix = 'grant-location-';
+    if (grantLocationBadge.key.startsWith(prefix)) {
+      const code = grantLocationBadge.key.slice(prefix.length).toUpperCase();
+      if (/^[A-Z]{2}$/.test(code)) {
+        return buildScholarshipTagHubHref({ hostCountryCode: code });
+      }
+    }
+    return null;
+  }, [grantLocationBadge]);
+
+  const applicantCountryHubHref = useMemo(() => {
+    if (!applicantCountryBadge) return null;
+    return buildScholarshipTagHubHref({
+      appCountryCode: applicantCountryBadge.code
+    });
+  }, [applicantCountryBadge]);
+
   const gridShell = stackedListing
     ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5'
     : 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:grid-rows-[auto_auto_auto] xl:gap-x-2.5 xl:gap-y-2 xl:items-start';
@@ -239,6 +269,9 @@ export default function ScholarshipCard({
     'inline-flex h-9 w-[148px] max-w-[42vw] shrink-0 items-center justify-center rounded-full border border-orange-200 bg-orange-50 px-4 text-center text-xs font-extrabold tracking-tight text-orange-700 shadow-sm ring-1 ring-orange-100';
   const locationBadgeClass =
     'inline-flex h-9 min-w-[148px] max-w-[42vw] shrink-0 items-center justify-center rounded-full border border-orange-200 bg-white px-4 text-center text-xs font-extrabold tracking-tight text-orange-700 shadow-sm ring-1 ring-orange-100';
+
+  const geoFilterLinkClass =
+    'pointer-events-auto relative z-20 cursor-pointer no-underline transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1';
 
   const awardLine = resolveScholarshipCardAwardDisplay(scholarship);
   const awardCell = awardLine.line;
@@ -774,22 +807,46 @@ export default function ScholarshipCard({
                       <div className={cardActionsWrap}>{cardActionControls}</div>
                     ) : null}
                     {grantLocationBadge ? (
-                      <span
-                        className={`${locationBadgeClass} w-full min-w-0 max-w-none`}
-                        title={grantLocationBadge.title}
-                        aria-label={grantLocationBadge.title}
-                      >
-                        <span className="truncate">{grantLocationBadge.text}</span>
-                      </span>
+                      grantLocationHubHref ? (
+                        <Link
+                          href={grantLocationHubHref}
+                          className={`${locationBadgeClass} ${geoFilterLinkClass} w-full min-w-0 max-w-none`}
+                          title={`${grantLocationBadge.title} — browse matching scholarships`}
+                          aria-label={`Browse scholarships filtered by ${grantLocationBadge.text}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <span className="truncate">{grantLocationBadge.text}</span>
+                        </Link>
+                      ) : (
+                        <span
+                          className={`${locationBadgeClass} w-full min-w-0 max-w-none`}
+                          title={grantLocationBadge.title}
+                          aria-label={grantLocationBadge.title}
+                        >
+                          <span className="truncate">{grantLocationBadge.text}</span>
+                        </span>
+                      )
                     ) : null}
                     {applicantCountryBadge ? (
-                      <span
-                        className={`${countryBadgeClass} w-full max-w-none`}
-                        title={applicantCountryBadge.title}
-                        aria-label={applicantCountryBadge.title}
-                      >
-                        {applicantCountryBadge.text}
-                      </span>
+                      applicantCountryHubHref ? (
+                        <Link
+                          href={applicantCountryHubHref}
+                          className={`${countryBadgeClass} ${geoFilterLinkClass} w-full max-w-none`}
+                          title={`${applicantCountryBadge.title} — browse matching scholarships`}
+                          aria-label={`Browse scholarships filtered by ${applicantCountryBadge.text}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {applicantCountryBadge.text}
+                        </Link>
+                      ) : (
+                        <span
+                          className={`${countryBadgeClass} w-full max-w-none`}
+                          title={applicantCountryBadge.title}
+                          aria-label={applicantCountryBadge.title}
+                        >
+                          {applicantCountryBadge.text}
+                        </span>
+                      )
                     ) : null}
                   </div>
                 ) : null}
@@ -867,31 +924,58 @@ export default function ScholarshipCard({
 
         {catalogChips.length > 0 || applicantCountryBadge || grantLocationBadge ? (
           <div
-            className="col-span-full min-w-0 border-t border-gray-200 pt-2.5 xl:row-start-3"
+            className="col-span-full min-w-0 border-t border-gray-200 pt-2.5 pointer-events-auto xl:row-start-3"
             aria-label="Scholarship tags"
           >
             <div className="grid min-w-0 grid-cols-1 items-center gap-2 xl:grid-cols-[minmax(0,1fr)_auto] xl:gap-x-3">
-              <div className="min-w-0">
-                <ScholarshipCatalogChipRow chips={catalogChips} />
+              <div className="min-w-0 pointer-events-auto">
+                <ScholarshipCatalogChipRow
+                  chips={catalogChips}
+                  getChipHref={scholarshipCatalogChipHubHref}
+                />
               </div>
-              <div className="hidden min-w-0 justify-end gap-2 xl:flex">
+              <div className="pointer-events-auto hidden min-w-0 justify-end gap-2 xl:flex">
                 {grantLocationBadge ? (
-                  <span
-                    className={locationBadgeClass}
-                    title={grantLocationBadge.title}
-                    aria-label={grantLocationBadge.title}
-                  >
-                    <span className="truncate">{grantLocationBadge.text}</span>
-                  </span>
+                  grantLocationHubHref ? (
+                    <Link
+                      href={grantLocationHubHref}
+                      className={`${locationBadgeClass} ${geoFilterLinkClass}`}
+                      title={`${grantLocationBadge.title} — browse matching scholarships`}
+                      aria-label={`Browse scholarships filtered by ${grantLocationBadge.text}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span className="truncate">{grantLocationBadge.text}</span>
+                    </Link>
+                  ) : (
+                    <span
+                      className={locationBadgeClass}
+                      title={grantLocationBadge.title}
+                      aria-label={grantLocationBadge.title}
+                    >
+                      <span className="truncate">{grantLocationBadge.text}</span>
+                    </span>
+                  )
                 ) : null}
                 {applicantCountryBadge ? (
-                  <span
-                    className={countryBadgeClass}
-                    title={applicantCountryBadge.title}
-                    aria-label={applicantCountryBadge.title}
-                  >
-                    {applicantCountryBadge.text}
-                  </span>
+                  applicantCountryHubHref ? (
+                    <Link
+                      href={applicantCountryHubHref}
+                      className={`${countryBadgeClass} ${geoFilterLinkClass}`}
+                      title={`${applicantCountryBadge.title} — browse matching scholarships`}
+                      aria-label={`Browse scholarships filtered by ${applicantCountryBadge.text}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {applicantCountryBadge.text}
+                    </Link>
+                  ) : (
+                    <span
+                      className={countryBadgeClass}
+                      title={applicantCountryBadge.title}
+                      aria-label={applicantCountryBadge.title}
+                    >
+                      {applicantCountryBadge.text}
+                    </span>
+                  )
                 ) : null}
               </div>
             </div>

@@ -157,6 +157,10 @@ export type ScholarshipListRequest = {
   categoryPageSlug: string | null;
   deadline: DeadlinePreset;
   stateCodes: string[];
+  /**
+   * URL-driven filter: host/program country (`host_country_codes` contains any listed ISO2).
+   */
+  hostCountryCodesFilter: string[];
   ignored: string[];
   saved: string[];
   started: string[];
@@ -465,6 +469,15 @@ export async function resolveCatalogSubjectCategoryForPageSlug(
   return { legacyCategoryPageSlug: raw, catalogSubjectCategoryId: null };
 }
 
+function sanitizeScholarshipListingIso2List(
+  raw: string[] | null | undefined
+): string[] {
+  if (!raw?.length) return [];
+  return raw
+    .map((x) => String(x).trim().toUpperCase())
+    .filter((c) => /^[A-Z]{2}$/.test(c));
+}
+
 /** URLSearchParams / JSON body → request (caller resolves sort/tab/deadline from existing parsers). */
 export function scholarshipListRequestFromParts(parts: {
   page?: string | number | null;
@@ -482,6 +495,10 @@ export function scholarshipListRequestFromParts(parts: {
   started?: string | null;
   submitted?: string | null;
   moreFilters: MoreFiltersState;
+  /** Merged into `moreFilters.includeApplicantCountryCodes` (OR; same as hub `app_cc`). */
+  appCountryCodesFromUrl?: string[] | null;
+  /** Maps to `hostCountryCodesFilter` (hub `host_cc`). */
+  hostCountryCodesFromUrl?: string[] | null;
   longTailLegacySlugs?: string[] | null;
   similarTo?: string | null;
   similarCategorySlug?: string | null;
@@ -508,6 +525,20 @@ export function scholarshipListRequestFromParts(parts: {
     .map((s) => String(s).trim().toLowerCase())
     .filter(Boolean) as LongTailSlug[];
 
+  const hostCountryCodesFilter = sanitizeScholarshipListingIso2List(
+    parts.hostCountryCodesFromUrl
+  );
+  const appFromUrl = sanitizeScholarshipListingIso2List(
+    parts.appCountryCodesFromUrl
+  );
+  let moreFilters = parts.moreFilters;
+  if (appFromUrl.length > 0) {
+    moreFilters = cloneMoreFilters(moreFilters);
+    for (const c of appFromUrl) {
+      moreFilters.includeApplicantCountryCodes.add(c);
+    }
+  }
+
   return {
     page,
     limit,
@@ -519,11 +550,12 @@ export function scholarshipListRequestFromParts(parts: {
     categoryPageSlug: parts.categoryPageSlug?.trim() || null,
     deadline: parts.deadline,
     stateCodes: parseCommaStateCodes(parts.state ?? null),
+    hostCountryCodesFilter,
     ignored: parseCommaUuids(parts.ignored ?? null),
     saved: parseCommaUuids(parts.saved ?? null),
     started: parseCommaUuids(parts.started ?? null),
     submitted: parseCommaUuids(parts.submitted ?? null),
-    moreFilters: parts.moreFilters,
+    moreFilters,
     longTailLegacySlugs: lt,
     similarToId: parts.similarTo?.trim() || null,
     similarCategorySlug: parts.similarCategorySlug?.trim().toLowerCase() || null,
@@ -1179,6 +1211,12 @@ function applyCommonFilters(req: ScholarshipListRequest, q: any): any {
     );
     q = q.or(parts.join(','));
   }
+  if (req.hostCountryCodesFilter.length > 0) {
+    const hostParts = req.hostCountryCodesFilter.map(
+      (c) => `host_country_codes.cs.${JSON.stringify([c])}`
+    );
+    q = q.or(hostParts.join(','));
+  }
   if (!seoListing) {
     for (const slug of req.longTailLegacySlugs) {
       q = applyLegacyLongTailBase(q, slug);
@@ -1217,6 +1255,7 @@ function metaBasisRequest(
     categoryPageSlug: null,
     catalogSubjectCategoryId: null,
     moreFilters: defaultMoreFiltersFromBounds(bounds),
+    hostCountryCodesFilter: [],
     page: 1,
     limit: 1
   };
@@ -1239,6 +1278,7 @@ function sidebarGlobalCountsBasisRequest(
     catalogSubjectCategoryId: null,
     deadline: 'any',
     stateCodes: [],
+    hostCountryCodesFilter: [],
     moreFilters: defaultMoreFiltersFromBounds(bounds),
     page: 1,
     limit: 1

@@ -3,12 +3,14 @@
  * These params are useful for UX/listing state, but should not create indexable URLs.
  */
 const SCHOLARSHIP_SEO_NOISE_QUERY_KEYS = [
+  'app_cc',
   'aud',
   'category',
   'deadline',
   'email_ids',
   'fbclid',
   'gclid',
+  'host_cc',
   'limit',
   'msclkid',
   'next',

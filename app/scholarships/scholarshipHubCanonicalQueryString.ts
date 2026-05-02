@@ -4,10 +4,12 @@
  */
 
 const HUB_LISTING_URL_KEYS = [
+  'app_cc',
   'aud',
   'category',
   'deadline',
   'email_ids',
+  'host_cc',
   'limit',
   'page',
   'q',

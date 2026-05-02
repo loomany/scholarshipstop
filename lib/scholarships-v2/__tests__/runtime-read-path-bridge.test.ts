@@ -18,6 +18,7 @@ function baseRequest(): ScholarshipListRequest {
     categoryPageSlug: null,
     deadline: 'any',
     stateCodes: [],
+    hostCountryCodesFilter: [],
     ignored: [],
     saved: [],
     started: [],

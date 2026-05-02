@@ -18,7 +18,6 @@ import {
 import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
 import { ScholarshipOnboardingDraftPostAuthSync } from '@/components/onboarding/ScholarshipOnboardingDraftPostAuthSync';
-import { NavigationProgress } from '@/components/ui/NavigationProgress';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import dynamic from 'next/dynamic';
 import 'styles/main.css';
@@ -26,6 +25,15 @@ import 'styles/main.css';
 /** Client-only: `usePathname` / `useSearchParams` can throw with Turbopack SSR (`useContext` null). */
 const AnalyticsTracker = dynamic(
   () => import('@/components/AnalyticsTracker'),
+  { ssr: false }
+);
+
+/** `nextjs-toploader` listens to the pathname; same Turbopack SSR pitfall as AnalyticsTracker. */
+const NavigationProgress = dynamic(
+  () =>
+    import('@/components/ui/NavigationProgress').then((m) => ({
+      default: m.NavigationProgress
+    })),
   { ssr: false }
 );
 

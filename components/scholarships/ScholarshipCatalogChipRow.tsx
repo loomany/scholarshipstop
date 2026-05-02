@@ -1,11 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 import type { CardChip } from '@/lib/scholarships/scholarshipCatalog';
 
 const CHIP_CLASS =
   'shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600 ring-1 ring-gray-200/80';
+
+const CHIP_LINK_CLASS = `${CHIP_CLASS} pointer-events-auto relative z-20 cursor-pointer text-gray-700 underline-offset-2 transition hover:bg-gray-200/90 hover:ring-gray-300/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1`;
 
 const MORE_CLASS = 'shrink-0 text-[10px] font-semibold text-gray-500';
 
@@ -29,7 +32,14 @@ function measureMoreLabelWidth(count: number): number {
 /**
  * Single-row chip list: show as many labels as fit; overflow becomes "+N more".
  */
-export default function ScholarshipCatalogChipRow({ chips }: { chips: CardChip[] }) {
+export default function ScholarshipCatalogChipRow({
+  chips,
+  getChipHref
+}: {
+  chips: CardChip[];
+  /** When set, chips with a non-null href render as catalog deep links. */
+  getChipHref?: (chip: CardChip) => string | null;
+}) {
   const chipsRef = useRef(chips);
   chipsRef.current = chips;
 
@@ -126,11 +136,27 @@ export default function ScholarshipCatalogChipRow({ chips }: { chips: CardChip[]
         ref={outerRef}
         className="flex min-w-0 flex-nowrap items-center gap-x-2 overflow-hidden"
       >
-        {chips.slice(0, visible).map((c) => (
-          <span key={c.key} className={CHIP_CLASS}>
-            {c.label}
-          </span>
-        ))}
+        {chips.slice(0, visible).map((c) => {
+          const href = getChipHref?.(c) ?? null;
+          if (href) {
+            return (
+              <Link
+                key={c.key}
+                href={href}
+                className={CHIP_LINK_CLASS}
+                onClick={(e) => e.stopPropagation()}
+                title={`Browse scholarships: ${c.label}`}
+              >
+                {c.label}
+              </Link>
+            );
+          }
+          return (
+            <span key={c.key} className={CHIP_CLASS}>
+              {c.label}
+            </span>
+          );
+        })}
         {overflow > 0 ? (
           <span className={MORE_CLASS}>+{overflow} more</span>
         ) : null}

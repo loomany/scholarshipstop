@@ -23,6 +23,7 @@ import {
 import {
   parseDeadlineFromParam,
   parseAudienceFromParam,
+  parseHubListingCountryCodesParam,
   parseSortFromParam,
   SCHOLARSHIPS_PAGE_SIZE
 } from '@/app/scholarships/scholarshipListUrl';
@@ -67,6 +68,8 @@ export async function fetchInitialHubScholarshipsPayload(
   }
   const defaultBounds = await fetchGlobalFilterBounds(supabase);
   const searchParams = new URLSearchParams(searchParamsString);
+  const appCc = parseHubListingCountryCodesParam(searchParams.get('app_cc'));
+  const hostCc = parseHubListingCountryCodesParam(searchParams.get('host_cc'));
   let req = scholarshipListRequestFromParts({
     page: getSearchParamValue(searchParams, 'page'),
     limit: SCHOLARSHIPS_PAGE_SIZE,
@@ -83,6 +86,8 @@ export async function fetchInitialHubScholarshipsPayload(
     started: null,
     submitted: null,
     moreFilters: defaultMoreFiltersFromBounds(defaultBounds),
+    appCountryCodesFromUrl: appCc.length > 0 ? appCc : null,
+    hostCountryCodesFromUrl: hostCc.length > 0 ? hostCc : null,
     longTailLegacySlugs: [],
     similarTo: null,
     similarCategorySlug: null,

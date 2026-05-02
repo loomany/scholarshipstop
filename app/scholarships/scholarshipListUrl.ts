@@ -82,6 +82,19 @@ export function parseSortFromParam(raw: string | null): SortOption {
   return 'magic';
 }
 
+/** ISO 3166-1 alpha-2 codes from a hub listing URL (`app_cc` / `host_cc`), comma-separated. */
+export function parseHubListingCountryCodesParam(
+  raw: string | null | undefined
+): string[] {
+  if (!raw?.trim()) return [];
+  const out: string[] = [];
+  for (const part of raw.split(',')) {
+    const c = part.trim().toUpperCase();
+    if (/^[A-Z]{2}$/.test(c)) out.push(c);
+  }
+  return out;
+}
+
 export function parseCategoriesFromParam(
   raw: string | null
 ): Set<ScholarshipCategoryId> {
@@ -172,6 +185,10 @@ export function buildScholarshipListSearchParams(
     scope?: ScholarshipListScope | null;
     /** When true, omit page from output (same as page 1). */
     resetPage?: boolean;
+    /** Applicant-country filter (merged into listing request). Single or comma-separated ISO2. */
+    appCc?: string | null;
+    /** Scholarship host-country filter. Single or comma-separated ISO2. */
+    hostCc?: string | null;
   }
 ): URLSearchParams {
   const p = new URLSearchParams(base.toString());
@@ -243,6 +260,24 @@ export function buildScholarshipListSearchParams(
       p.delete('aud');
     } else {
       p.set('aud', patch.audience);
+    }
+  }
+
+  if (patch.appCc !== undefined) {
+    const v = patch.appCc?.trim().toUpperCase();
+    if (!v) {
+      p.delete('app_cc');
+    } else {
+      p.set('app_cc', v);
+    }
+  }
+
+  if (patch.hostCc !== undefined) {
+    const v = patch.hostCc?.trim().toUpperCase();
+    if (!v) {
+      p.delete('host_cc');
+    } else {
+      p.set('host_cc', v);
     }
   }
 

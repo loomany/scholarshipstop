@@ -39,6 +39,7 @@ import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipEx
 import PremiumPaywallModal from '@/components/scholarships/PremiumPaywallModal';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
+import { buildScholarshipTagHubHref } from '@/app/scholarships/scholarshipTagHubLinks';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
@@ -117,6 +118,7 @@ import {
   scholarshipDeadlineHasPassed,
   SIMILAR_MAX
 } from '@/lib/scholarships/similarScholarships';
+import { countryLabelFromCode } from '@/lib/scholarships/countryEligibility/countries';
 import { getScholarshipDeadlineState } from '@/lib/scholarships/scholarshipDeadlineState';
 import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
@@ -391,6 +393,92 @@ function SimilarScholarshipDetailListItem({
 
   const awardLine = formatScholarshipAwardLine(s);
 
+  const applicantCountryBadge = useMemo(() => {
+    const codes = Array.from(
+      new Set(
+        (s.applicantCountryCodes ?? [])
+          .map((code) => code.trim().toUpperCase())
+          .filter((code) => /^[A-Z]{2}$/.test(code))
+      )
+    ).sort();
+    const primary = codes.length === 1 ? codes[0] : null;
+    if (!primary) return null;
+    const label = countryLabelFromCode(primary);
+    return {
+      code: primary,
+      text: `For ${label}`,
+      title: `For applicants from ${label}`
+    };
+  }, [s.applicantCountryCodes]);
+
+  const grantLocationBadge = useMemo(() => {
+    const hostCodes = Array.from(
+      new Set(
+        (s.hostCountryCodes ?? [])
+          .map((code) => code.trim().toUpperCase())
+          .filter((code) => /^[A-Z]{2}$/.test(code))
+      )
+    ).sort();
+    const hasStateSignal = (s.stateCodes ?? []).some((code) =>
+      /^[A-Z]{2}$/i.test(code.trim())
+    );
+    if (hostCodes.includes('US') || hasStateSignal) {
+      return {
+        key: 'grant-location-us' as const,
+        text: 'US-based',
+        title: 'This scholarship is based in the United States'
+      };
+    }
+    if (hostCodes.length === 1) {
+      const label = countryLabelFromCode(hostCodes[0]!);
+      return {
+        key: `grant-location-${hostCodes[0]}`,
+        text: `Hosted in ${label}`,
+        title: `This scholarship is hosted in ${label}`
+      };
+    }
+    if (hostCodes.length > 1) {
+      return {
+        key: 'grant-location-multi' as const,
+        text: `${hostCodes.length} host countries`,
+        title: `This scholarship is hosted in ${hostCodes.length} countries`
+      };
+    }
+    return null;
+  }, [s.hostCountryCodes, s.stateCodes]);
+
+  const grantLocationHubHref = useMemo(() => {
+    if (!grantLocationBadge) return null;
+    if (grantLocationBadge.key === 'grant-location-multi') return null;
+    if (
+      grantLocationBadge.key === 'grant-location-us' ||
+      grantLocationBadge.text === 'US-based'
+    ) {
+      return buildScholarshipTagHubHref({ hostCountryCode: 'US' });
+    }
+    const prefix = 'grant-location-';
+    if (grantLocationBadge.key.startsWith(prefix)) {
+      const code = grantLocationBadge.key.slice(prefix.length).toUpperCase();
+      if (/^[A-Z]{2}$/.test(code)) {
+        return buildScholarshipTagHubHref({ hostCountryCode: code });
+      }
+    }
+    return null;
+  }, [grantLocationBadge]);
+
+  const applicantCountryHubHref = useMemo(() => {
+    if (!applicantCountryBadge) return null;
+    return buildScholarshipTagHubHref({
+      appCountryCode: applicantCountryBadge.code
+    });
+  }, [applicantCountryBadge]);
+
+  const similarGrantGeoPillClass = deadlinePassed
+    ? 'inline-flex max-w-full items-center rounded-full border border-orange-100/90 bg-orange-50/75 px-2.5 py-1 text-[10px] font-semibold tracking-tight text-orange-900/85 ring-1 ring-orange-50 sm:text-[11px]'
+    : 'inline-flex max-w-full items-center rounded-full border border-orange-200/85 bg-orange-50/95 px-2.5 py-1 text-[10px] font-semibold tracking-tight text-orange-950 ring-1 ring-orange-100 sm:text-[11px]';
+
+  const similarGeoHubLinkClass = `${similarGrantGeoPillClass} relative z-10 cursor-pointer no-underline transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1`;
+
   const recommendationPill =
     showBestRecommendation ? (
       <span
@@ -454,9 +542,6 @@ function SimilarScholarshipDetailListItem({
               </span>
             )
           ) : null}
-          {recommendationPill ? (
-            <div className="mt-2.5 flex min-h-[1.75rem] items-start">{recommendationPill}</div>
-          ) : null}
         </div>
         <div className="flex w-[min(11rem,42%)] shrink-0 flex-col items-end gap-1.5 text-right">
           <span
@@ -489,6 +574,60 @@ function SimilarScholarshipDetailListItem({
           </div>
         </div>
       </div>
+      {recommendationPill || grantLocationBadge || applicantCountryBadge ? (
+        <div
+          className="mt-2.5 flex w-full min-w-0 items-center justify-between gap-2 pb-0.5"
+          aria-label={
+            grantLocationBadge || applicantCountryBadge
+              ? 'Match score, host location, and eligibility'
+              : 'Match score'
+          }
+        >
+          <div className="min-w-0 shrink-0">{recommendationPill}</div>
+          {grantLocationBadge || applicantCountryBadge ? (
+            <div className="ml-auto flex min-w-0 flex-1 flex-nowrap justify-end gap-1.5 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>*]:shrink-0">
+              {grantLocationBadge ? (
+                grantLocationHubHref ? (
+                  <Link
+                    href={grantLocationHubHref}
+                    className={similarGeoHubLinkClass}
+                    title={`${grantLocationBadge.title} — browse matching scholarships`}
+                    aria-label={`Browse scholarships filtered by ${grantLocationBadge.text}`}
+                  >
+                    <span className="truncate">{grantLocationBadge.text}</span>
+                  </Link>
+                ) : (
+                  <span
+                    className={similarGrantGeoPillClass}
+                    title={grantLocationBadge.title}
+                  >
+                    <span className="truncate">{grantLocationBadge.text}</span>
+                  </span>
+                )
+              ) : null}
+              {applicantCountryBadge ? (
+                applicantCountryHubHref ? (
+                  <Link
+                    href={applicantCountryHubHref}
+                    className={similarGeoHubLinkClass}
+                    title={`${applicantCountryBadge.title} — browse matching scholarships`}
+                    aria-label={`Browse scholarships filtered by ${applicantCountryBadge.text}`}
+                  >
+                    <span className="truncate">{applicantCountryBadge.text}</span>
+                  </Link>
+                ) : (
+                  <span
+                    className={similarGrantGeoPillClass}
+                    title={applicantCountryBadge.title}
+                  >
+                    <span className="truncate">{applicantCountryBadge.text}</span>
+                  </span>
+                )
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 
@@ -875,12 +1014,22 @@ export default function ScholarshipDetailPageClient({
       return;
     }
 
+    const pathLastSeg = (
+      p: Pick<Scholarship, 'id' | 'slug'>
+    ): string | null => {
+      const raw = scholarshipPublicPath(p).split('/').filter(Boolean).pop();
+      if (!raw) return null;
+      try {
+        return decodeURIComponent(raw);
+      } catch {
+        return raw;
+      }
+    };
+
     const initialMatchesRoute =
       serverScholarship != null &&
-      scholarshipPublicPath(serverScholarship)
-        .split('/')
-        .filter(Boolean)
-        .slice(-1)[0] === routeParam;
+      pathLastSeg(serverScholarship)?.toLowerCase() === routeParam.toLowerCase();
+
     if (initialMatchesRoute) {
       setScholarship(serverScholarship);
       setDetailLoadState('ok');
@@ -889,6 +1038,28 @@ export default function ScholarshipDetailPageClient({
       if (!needsHydratedPremiumFields) {
         return;
       }
+
+      let cancelled = false;
+      const paramEncoded = encodeURIComponent(routeParam);
+      void (async () => {
+        try {
+          const detailRes = await fetch(`/api/scholarships/${paramEncoded}`);
+          const detailJson: unknown = await detailRes.json();
+          if (cancelled) return;
+          if (detailRes.ok) {
+            const row = detailJson as Scholarship;
+            if (row && typeof row.id === 'string') {
+              setScholarship(row);
+            }
+          }
+        } catch {
+          /* keep SSR row if fetch fails */
+        }
+      })();
+
+      return () => {
+        cancelled = true;
+      };
     }
 
     let cancelled = false;
