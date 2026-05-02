@@ -2255,7 +2255,6 @@ function easyApplyListCanonicalRequest(
   req: ScholarshipListRequest
 ): ScholarshipListRequest {
   const moreFilters = cloneMoreFilters(req.moreFilters);
-  moreFilters.includeEasyApply.add('no_essay');
   moreFilters.includeEasyApply.add('easy_apply');
   moreFilters.includeEasyApply.add('quick_apply');
   return {
