@@ -64,6 +64,7 @@ import {
 } from '@/lib/scholarships/scholarshipDeadlineState';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import { scholarshipDeadlineSortMs } from '@/lib/scholarships/scholarshipDeadlineTrust';
+import { isSubscriptionLockedScholarship } from '@/lib/scholarships/subscriptionLockedCategory';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 type ServerSupabaseClient = SupabaseClient<Database>;
@@ -220,6 +221,7 @@ export type ScholarshipListResult = {
 
 const DEFAULT_LIMIT = SCHOLARSHIPS_PAGE_SIZE;
 const MAX_LIMIT = 50;
+const FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW = SCHOLARSHIPS_PAGE_SIZE * 12;
 const SCHOLARSHIPS_LISTING_SOURCE = 'scholarships_safe_listing';
 const GLOBAL_FILTER_BOUNDS_TTL_MS = 5 * 60 * 1000;
 const LIST_META_CACHE_TTL_MS = 120 * 1000;
@@ -352,6 +354,67 @@ function applyDeadlineStateSafetyOrder<T extends Scholarship>(rows: T[]): T[] {
     if (!aTerminal && !bTerminal) return 0;
     return compareScholarshipsByDeadlineState(a, b);
   });
+}
+
+function shouldInterleaveFreeTierLockedOpenCards(
+  req: ScholarshipListRequest,
+  opts: ScholarshipListQueryOpts
+): boolean {
+  if (opts.isProSubscriber) return false;
+  if (req.similarToId) return false;
+  if (req.listScope !== 'catalog') return false;
+  if (!['magic', 'best_match', 'best_recommendation'].includes(req.sort)) {
+    return false;
+  }
+  return req.tab === 'matches' || req.tab === 'recommended';
+}
+
+function interleaveSubscriptionLockedAndOpenScholarships<T extends Scholarship>(
+  rows: T[]
+): T[] {
+  const locked: T[] = [];
+  const open: T[] = [];
+
+  for (const row of rows) {
+    if (isSubscriptionLockedScholarship(row)) locked.push(row);
+    else open.push(row);
+  }
+
+  if (locked.length === 0 || open.length === 0) return rows;
+
+  const out: T[] = [];
+  let lockedIndex = 0;
+  let openIndex = 0;
+  let nextLocked = isSubscriptionLockedScholarship(rows[0]!);
+
+  while (lockedIndex < locked.length && openIndex < open.length) {
+    if (nextLocked) {
+      out.push(locked[lockedIndex]!);
+      lockedIndex += 1;
+    } else {
+      out.push(open[openIndex]!);
+      openIndex += 1;
+    }
+    nextLocked = !nextLocked;
+  }
+
+  return [
+    ...out,
+    ...locked.slice(lockedIndex),
+    ...open.slice(openIndex)
+  ];
+}
+
+function sliceFreeTierLockedOpenInterleavedPage<T extends Scholarship>(
+  rows: T[],
+  page: number,
+  limit: number
+): T[] {
+  const start = (page - 1) * limit;
+  return interleaveSubscriptionLockedAndOpenScholarships(rows).slice(
+    start,
+    start + limit
+  );
 }
 
 function compareDeadlineStateSafetyOrder(
@@ -2055,7 +2118,14 @@ export async function executeScholarshipListQuery(
   let effectivePage = req.page;
   let from = (effectivePage - 1) * req.limit;
   let to = from + req.limit - 1;
-  let { data, error, count } = await buildListPageQuery(from, to);
+  const freeTierLockedOpenInterleave =
+    shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
+    from < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW;
+  const queryFrom = freeTierLockedOpenInterleave ? 0 : from;
+  const queryTo = freeTierLockedOpenInterleave
+    ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1
+    : to;
+  let { data, error, count } = await buildListPageQuery(queryFrom, queryTo);
   if (error) throw new Error(postgrestErrorToMessage(error));
   let rawTotal = count ?? 0;
   if (rawTotal === 0 && bestRecommendationHasRelaxableHardFilters(rEff)) {
@@ -2063,7 +2133,12 @@ export async function executeScholarshipListQuery(
     effectivePage = 1;
     from = 0;
     to = req.limit - 1;
-    const retry = await buildListPageQuery(from, to);
+    const retry = await buildListPageQuery(
+      freeTierLockedOpenInterleave ? 0 : from,
+      freeTierLockedOpenInterleave
+        ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1
+        : to
+    );
     if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
     data = retry.data;
     count = retry.count;
@@ -2080,7 +2155,15 @@ export async function executeScholarshipListQuery(
     effectivePage = maxPage;
     from = (effectivePage - 1) * req.limit;
     to = from + req.limit - 1;
-    const r2 = await buildListPageQuery(from, to);
+    const retryInterleaveWindow =
+      shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
+      from < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW;
+    const r2 = await buildListPageQuery(
+      retryInterleaveWindow ? 0 : from,
+      retryInterleaveWindow
+        ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1
+        : to
+    );
     if (r2.error) throw new Error(postgrestErrorToMessage(r2.error));
     rows = (r2.data ?? []) as unknown as ScholarshipRow[];
   }
@@ -2094,9 +2177,18 @@ export async function executeScholarshipListQuery(
     });
   }
 
-  const scholarships = applyDeadlineStateSafetyOrder(
+  const safeOrderedRows = applyDeadlineStateSafetyOrder(
     rows.map((r) => mapScholarshipRow(r))
   );
+  const scholarships =
+    shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
+    (effectivePage - 1) * req.limit < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW
+      ? sliceFreeTierLockedOpenInterleavedPage(
+          safeOrderedRows,
+          effectivePage,
+          req.limit
+        )
+      : safeOrderedRows;
 
   if (process.env.SCHOLARSHIPS_LIST_SYNC_DEBUG === '1') {
     // eslint-disable-next-line no-console -- opt-in listing vs sidebar diagnostics
