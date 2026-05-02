@@ -20,6 +20,9 @@ import { createPublicClient } from '@/utils/supabase/public';
 /** Max scholarship cards at the bottom of `/resources/[slug]`. */
 export const RESOURCE_ARTICLE_RELATED_SCHOLARSHIPS_MAX = 3;
 
+/** Catalog rows change slowly; avoid cold-cache full scans every 5 minutes. */
+const ARTICLE_MATCHING_CATALOG_REVALIDATE_SEC = 86_400; // 24h
+
 async function fetchArticleMatchingCatalogRowsCached(): Promise<ScholarshipMatchDbRow[]> {
   return unstable_cache(
     async () => {
@@ -27,8 +30,11 @@ async function fetchArticleMatchingCatalogRowsCached(): Promise<ScholarshipMatch
       if (!supabase) return [];
       return fetchScholarshipsForArticleMatching(supabase);
     },
-    ['resource-article-matching-catalog-v1'],
-    { revalidate: 300, tags: ['scholarships:article-matching-catalog'] }
+    ['resource-article-matching-catalog-v2'],
+    {
+      revalidate: ARTICLE_MATCHING_CATALOG_REVALIDATE_SEC,
+      tags: ['scholarships:article-matching-catalog']
+    }
   )();
 }
 
@@ -116,11 +122,16 @@ async function computeRelatedScholarships(
   const seen = new Set(base.map((b) => b.slug.trim()));
   let merged: RelatedScholarshipStored[] = [...base];
 
-  if (merged.length < RESOURCE_ARTICLE_RELATED_SCHOLARSHIPS_MAX) {
+  /**
+   * Full O(N) catalog match only when the post has zero related rows from Hub
+   * (`related_scholarships` or parsed `scholarship_links`). If the editor already
+   * attached 1–2 cards, skip expensive “fill to 3” scanning (timeout risk on long pages).
+   */
+  if (merged.length === 0) {
     const extra = await relatedFromMatchingExcluding(
       post,
       seen,
-      RESOURCE_ARTICLE_RELATED_SCHOLARSHIPS_MAX - merged.length
+      RESOURCE_ARTICLE_RELATED_SCHOLARSHIPS_MAX
     );
     merged = merged.concat(extra);
   }
@@ -139,7 +150,7 @@ export async function getRelatedScholarshipsForResourceArticle(
   return unstable_cache(
     () => computeRelatedScholarships(post),
     [
-      'resource-article-related-v1',
+      'resource-article-related-v2',
       post.id,
       updated,
       String(RESOURCE_ARTICLE_RELATED_SCHOLARSHIPS_MAX)

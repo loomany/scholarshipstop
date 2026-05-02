@@ -89,11 +89,12 @@ const countryCardLinkClass =
 
 function CountryCard({ row }: { row: HomeInternationalGrantsCountryRow }) {
   const href = `/get-scholarships?country=${encodeURIComponent(row.code)}`;
+  const formattedCount = formatInteger(row.count);
   return (
     <Link
       href={href}
       className={countryCardLinkClass}
-      aria-label={`${row.label}: ${row.count.toLocaleString()} scholarship listings — start matching`}
+      aria-label={`${row.label}: ${formattedCount} scholarship listings — start matching`}
     >
       <img
         src={flagCdnUrl(row.code)}
@@ -110,7 +111,7 @@ function CountryCard({ row }: { row: HomeInternationalGrantsCountryRow }) {
           {row.label}
         </p>
         <p className="mt-0.5 text-xs tabular-nums text-gray-500 transition group-hover:text-orange-800/90 sm:text-sm lg:text-[0.9375rem]">
-          {row.count.toLocaleString()} listings
+          {formattedCount} listings
         </p>
       </div>
     </Link>

@@ -27,10 +27,12 @@ select
   s.source,
   s.title,
   s.provider_name,
+  s.provider_slug,
   s.award_amount_text,
   s.award_amount_min,
   s.award_amount_max,
   s.currency,
+  s.award_amount_numeric_sort,
   s.deadline_text,
   s.deadline_date,
   s.days_until_deadline,
@@ -61,6 +63,7 @@ select
   s.is_recurring,
   s.winner_payment_text,
   s.summary_short,
+  s.summary_long,
   case
     when nullif(btrim(s.description), '') is null then s.description
     else s.description
@@ -69,7 +72,9 @@ select
       || '">ScholarshipTop</a></span>'
   end as description,
   s.requirements_text,
+  s.requirements_text_clean,
   s.eligibility_text,
+  s.official_source_name,
   s.category,
   s.tags,
   s.scholarship_status,

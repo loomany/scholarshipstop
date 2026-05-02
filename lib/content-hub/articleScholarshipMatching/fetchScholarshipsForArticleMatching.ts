@@ -8,8 +8,9 @@ const PAGE = 1000;
 
 const BAD_STATUS = new Set(['archived', 'deleted', 'closed', 'inactive', 'draft']);
 
+/** Omit `description` (large + watermark HTML) — matching uses summary, title, tags, etc. */
 const SELECT =
-  'id, slug, title, scholarship_status, is_indexable, international_friendly_listing, description, summary_short, eligibility_text, category, category_slug, tags, study_levels, field_of_study, location_scope, award_amount_text, deadline_text, deadline_date';
+  'id, slug, title, scholarship_status, is_indexable, international_friendly_listing, summary_short, eligibility_text, category, category_slug, tags, study_levels, field_of_study, location_scope, award_amount_text, deadline_text, deadline_date';
 
 export async function fetchScholarshipsForArticleMatching(
   supabase: SupabaseClient<Database>,

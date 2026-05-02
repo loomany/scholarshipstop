@@ -21,7 +21,7 @@ const SiteFooterNav = dynamic(() => import('@/components/ui/Footer/SiteFooterNav
  * Primary site footer — ScholarshipTop branding and nav (same on all pages).
  */
 export default function SiteFooter() {
-  const year = new Date().getFullYear();
+  const year = new Date().getUTCFullYear();
 
   return (
     <footer className="border-t border-gray-200/80 bg-[#f8f9fa]">

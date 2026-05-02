@@ -16,7 +16,7 @@ function formatDeadlineDisplay(raw: string | null | undefined): string {
   if (/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(s)) {
     const d = new Date(s);
     if (!Number.isNaN(d.getTime())) {
-      return d.toLocaleDateString(undefined, {
+      return d.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'numeric',
         day: 'numeric'
@@ -27,7 +27,7 @@ function formatDeadlineDisplay(raw: string | null | undefined): string {
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
     const d = new Date(`${s}T12:00:00`);
     if (!Number.isNaN(d.getTime())) {
-      return d.toLocaleDateString(undefined, {
+      return d.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'numeric',
         day: 'numeric'

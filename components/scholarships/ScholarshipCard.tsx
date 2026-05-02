@@ -654,7 +654,7 @@ export default function ScholarshipCard({
               title={applicantsTitle}
             >
               <span className="font-medium text-gray-700">
-                {scholarship.applicantCount!.toLocaleString()}
+                {scholarship.applicantCount!.toLocaleString('en-US')}
               </span>{' '}
               applicants
               {scholarship.applicantsCountIsEstimated ? ' (est.)' : ''}

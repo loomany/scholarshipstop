@@ -16,7 +16,8 @@ export type ScholarshipMatchDbRow = {
   scholarship_status: string | null;
   is_indexable: boolean | null;
   international_friendly_listing?: boolean | null;
-  description: string | null;
+  /** Not loaded for listing matcher — optional for rows from other code paths. */
+  description?: string | null;
   summary_short: string | null;
   eligibility_text: string | null;
   category: string | null;
