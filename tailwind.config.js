@@ -68,6 +68,11 @@ module.exports = {
             boxShadow:
               '0 14px 36px -12px rgba(249, 115, 22, 0.35), 0 0 0 1px rgba(251, 146, 60, 0.4)'
           }
+        },
+        /** Home international USP: seamless horizontal marquee (content duplicated 2×). */
+        'home-country-marquee': {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' }
         }
       },
       animation: {
@@ -92,7 +97,8 @@ module.exports = {
         'mic-recording-pulse': 'mic-recording-pulse 1.35s ease-in-out infinite',
         'shimmer-wave': 'shimmer-wave 1.35s ease-in-out infinite',
         'scholarship-brand-mark-breathe':
-          'scholarship-brand-mark-breathe 1.85s cubic-bezier(0.45, 0, 0.55, 1) infinite'
+          'scholarship-brand-mark-breathe 1.85s cubic-bezier(0.45, 0, 0.55, 1) infinite',
+        'home-country-marquee': 'home-country-marquee 42s linear infinite'
       }
     }
   },

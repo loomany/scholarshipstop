@@ -269,6 +269,40 @@ function withUrlAudience(
   return next;
 }
 
+function isUsContextScholarship(s: Scholarship): boolean {
+  const stateCodes = s.stateCodes ?? [];
+  if (stateCodes.some((code) => /^[A-Z]{2}$/i.test(String(code)))) return true;
+  const hostCountryCodes = s.hostCountryCodes ?? [];
+  if (hostCountryCodes.some((code) => String(code).toUpperCase() === 'US')) return true;
+  return false;
+}
+
+function interleaveUsContextScholarships(scholarships: Scholarship[]): Scholarship[] {
+  const usContext: Scholarship[] = [];
+  const other: Scholarship[] = [];
+
+  for (const scholarship of scholarships) {
+    if (isUsContextScholarship(scholarship)) {
+      usContext.push(scholarship);
+    } else {
+      other.push(scholarship);
+    }
+  }
+
+  if (usContext.length === 0 || other.length === 0) return scholarships;
+
+  const out: Scholarship[] = [];
+  let usIndex = 0;
+  for (const scholarship of other) {
+    out.push(scholarship);
+    if (usIndex < usContext.length) {
+      out.push(usContext[usIndex]!);
+      usIndex += 1;
+    }
+  }
+  return [...out, ...usContext.slice(usIndex)];
+}
+
 function ScholarshipsPageInner({
   isAuthenticated,
   authResolved = true,
@@ -1911,14 +1945,18 @@ function ScholarshipsPageInner({
               ? transientBestRecommendationProfileSeed
               : null
           );
+    const audienceOrdered =
+      parsedList.audience === 'international_friendly'
+        ? interleaveUsContextScholarships(base)
+        : base;
     if (activeTab !== 'from-email' || fromEmailIds.length === 0) {
-      return base;
+      return audienceOrdered;
     }
     const emailRank = new Map<string, number>();
     for (let i = 0; i < fromEmailIds.length; i += 1) {
       emailRank.set(fromEmailIds[i]!, i);
     }
-    return [...base].sort((a, b) => {
+    return [...audienceOrdered].sort((a, b) => {
       const ai = emailRank.get(a.id);
       const bi = emailRank.get(b.id);
       if (ai == null && bi == null) return 0;
@@ -1932,6 +1970,7 @@ function ScholarshipsPageInner({
     currentMatchProfile,
     fromEmailIds,
     isAuthenticated,
+    parsedList.audience,
     scholarships,
     transientBestRecommendationProfileSeed
   ]);

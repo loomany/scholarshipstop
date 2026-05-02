@@ -64,7 +64,6 @@ import {
 } from '@/lib/scholarships/scholarshipDeadlineState';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import { scholarshipDeadlineSortMs } from '@/lib/scholarships/scholarshipDeadlineTrust';
-import type { createClient } from '@/utils/supabase/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 type ServerSupabaseClient = SupabaseClient<Database>;
@@ -221,6 +220,13 @@ const SCHOLARSHIPS_LISTING_SOURCE = 'scholarships_listing_view';
 const GLOBAL_FILTER_BOUNDS_TTL_MS = 5 * 60 * 1000;
 const LIST_META_CACHE_TTL_MS = 120 * 1000;
 const APPLICANT_COUNTRY_COUNTS_CACHE_TTL_MS = 5 * 60 * 1000;
+const HOME_CATALOG_STATS_CACHE_TTL_MS = 5 * 60 * 1000;
+
+export type HomeScholarshipCatalogStats = {
+  activeScholarshipCount: number;
+  totalKnownAwardAmount: number;
+};
+
 let globalFilterBoundsCache:
   | {
       value: ScholarshipListMeta['filterBounds'];
@@ -233,6 +239,12 @@ let applicantCountryCountsCache:
         countryCounts: ScholarshipListMeta['countryCounts'];
         unspecifiedApplicantCountryCount: number;
       };
+      expiresAt: number;
+    }
+  | null = null;
+let homeCatalogStatsCache:
+  | {
+      value: HomeScholarshipCatalogStats;
       expiresAt: number;
     }
   | null = null;
@@ -1340,7 +1352,7 @@ function buildListMetaCacheKey(
   ].join('|');
 }
 
-async function fetchApplicantCountryCounts(
+export async function fetchApplicantCountryCounts(
   supabase: ServerSupabaseClient
 ): Promise<{
   countryCounts: ScholarshipListMeta['countryCounts'];
@@ -1404,6 +1416,51 @@ async function fetchApplicantCountryCounts(
     expiresAt: Date.now() + APPLICANT_COUNTRY_COUNTS_CACHE_TTL_MS
   };
   return value;
+}
+
+export async function fetchHomeScholarshipCatalogStats(
+  supabase: ServerSupabaseClient
+): Promise<HomeScholarshipCatalogStats> {
+  const cached = readTtlValue(homeCatalogStatsCache);
+  if (cached) return { ...cached };
+
+  const countResult = await listingFrom(supabase)
+    .select('id', { count: 'exact', head: true })
+    .eq('is_active', true);
+  if (countResult.error) throw new Error(postgrestErrorToMessage(countResult.error));
+
+  let totalKnownAwardAmount = 0;
+  const pageSize = 1000;
+  let from = 0;
+
+  for (;;) {
+    const { data, error } = await listingFrom(supabase)
+      .select('award_amount_numeric_sort')
+      .eq('is_active', true)
+      .not('award_amount_numeric_sort', 'is', null)
+      .range(from, from + pageSize - 1);
+    if (error) throw new Error(postgrestErrorToMessage(error));
+    const rows = (data ?? []) as Array<{ award_amount_numeric_sort?: unknown }>;
+    if (rows.length === 0) break;
+
+    for (const row of rows) {
+      const amount = Number(row.award_amount_numeric_sort);
+      if (Number.isFinite(amount) && amount > 0) totalKnownAwardAmount += amount;
+    }
+
+    if (rows.length < pageSize) break;
+    from += pageSize;
+  }
+
+  const value = {
+    activeScholarshipCount: Number(countResult.count ?? 0),
+    totalKnownAwardAmount: Math.round(totalKnownAwardAmount)
+  };
+  homeCatalogStatsCache = {
+    value,
+    expiresAt: Date.now() + HOME_CATALOG_STATS_CACHE_TTL_MS
+  };
+  return { ...value };
 }
 
 /** Single catalog pipeline: no personalized SQL branch. */

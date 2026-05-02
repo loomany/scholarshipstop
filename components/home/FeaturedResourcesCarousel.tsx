@@ -14,6 +14,9 @@ import {
 const scrollbarHide =
   '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden';
 
+const marqueeCardWidth =
+  'w-[min(88vw,280px)] shrink-0 snap-start sm:w-[min(46vw,272px)] md:w-[min(31vw,268px)] lg:w-80';
+
 function getScrollStepPx(scroller: HTMLDivElement): number {
   const first = scroller.querySelector('article');
   if (!first) return 400;
@@ -34,6 +37,7 @@ export default function FeaturedResourcesCarousel({
   items: HomeResourcesCarouselItem[];
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const marqueeItems = [...items, ...items];
 
   const scrollByDir = useCallback((dir: -1 | 1) => {
     const el = scrollerRef.current;
@@ -42,76 +46,135 @@ export default function FeaturedResourcesCarousel({
     el.scrollBy({ left: dir * step, behavior: 'smooth' });
   }, []);
 
+  const renderItem = (item: HomeResourcesCarouselItem, keySuffix = '') => (
+    <article
+      key={`${item.kind}-${item.href}${keySuffix}`}
+      role="listitem"
+      className={carouselCardWidthThreeUp}
+    >
+      <Link
+        href={item.href}
+        className="group flex h-full min-h-[280px] flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition duration-300 ease-out hover:-translate-y-1 hover:shadow-md sm:min-h-[260px] sm:p-8"
+      >
+        <span
+          className={`inline-flex w-fit rounded-md px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${badgeClass(item.kind)}`}
+        >
+          {item.badgeLabel}
+        </span>
+        <h3
+          className={`mt-4 line-clamp-2 text-lg font-bold leading-snug sm:text-xl ${
+            item.kind === 'resource' ? 'text-emerald-950' : 'text-gray-900'
+          }`}
+        >
+          {item.title}
+        </h3>
+        <p className="mt-2 flex-grow text-sm leading-relaxed text-gray-500 line-clamp-3 sm:text-base">
+          {item.description ||
+            'Open the full piece for the complete walkthrough and tips.'}
+        </p>
+        <span
+          className={`mt-auto flex items-center gap-1.5 pt-6 text-sm font-semibold transition sm:text-base ${
+            item.kind === 'resource'
+              ? 'text-emerald-900 group-hover:text-emerald-700'
+              : 'text-gray-900 group-hover:text-orange-600'
+          }`}
+        >
+          {item.ctaLabel}
+          <ArrowRight
+            className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5"
+            aria-hidden
+          />
+        </span>
+      </Link>
+    </article>
+  );
+
+  const renderMarqueeItem = (item: HomeResourcesCarouselItem, keySuffix = '') => (
+    <article
+      key={`${item.kind}-${item.href}${keySuffix}`}
+      role="listitem"
+      className={marqueeCardWidth}
+    >
+      <Link
+        href={item.href}
+        className="group flex h-full min-h-[280px] flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition duration-300 ease-out hover:-translate-y-1 hover:shadow-md sm:min-h-[260px] sm:p-8"
+      >
+        <span
+          className={`inline-flex w-fit rounded-md px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${badgeClass(item.kind)}`}
+        >
+          {item.badgeLabel}
+        </span>
+        <h3
+          className={`mt-4 line-clamp-2 text-lg font-bold leading-snug sm:text-xl ${
+            item.kind === 'resource' ? 'text-emerald-950' : 'text-gray-900'
+          }`}
+        >
+          {item.title}
+        </h3>
+        <p className="mt-2 flex-grow text-sm leading-relaxed text-gray-500 line-clamp-3 sm:text-base">
+          {item.description ||
+            'Open the full piece for the complete walkthrough and tips.'}
+        </p>
+        <span
+          className={`mt-auto flex items-center gap-1.5 pt-6 text-sm font-semibold transition sm:text-base ${
+            item.kind === 'resource'
+              ? 'text-emerald-900 group-hover:text-emerald-700'
+              : 'text-gray-900 group-hover:text-orange-600'
+          }`}
+        >
+          {item.ctaLabel}
+          <ArrowRight
+            className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5"
+            aria-hidden
+          />
+        </span>
+      </Link>
+    </article>
+  );
+
   return (
     <div className="group relative mt-10 w-full lg:mt-12">
       <div className={carouselEdgeFadeClass('left', 'gray50')} aria-hidden />
       <div className={carouselEdgeFadeClass('right', 'gray50')} aria-hidden />
 
-      <button
-        type="button"
-        onClick={() => scrollByDir(-1)}
-        className={`${carouselNavButtonClass} left-1 sm:left-3 md:left-4`}
-        aria-label="Previous items"
-      >
-        <ChevronLeft className="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" strokeWidth={2} />
-      </button>
-      <button
-        type="button"
-        onClick={() => scrollByDir(1)}
-        className={`${carouselNavButtonClass} right-1 sm:right-3 md:right-4`}
-        aria-label="Next items"
-      >
-        <ChevronRight className="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" strokeWidth={2} />
-      </button>
+      <div className="hidden motion-reduce:block">
+        <button
+          type="button"
+          onClick={() => scrollByDir(-1)}
+          className={`${carouselNavButtonClass} left-1 sm:left-3 md:left-4`}
+          aria-label="Previous items"
+        >
+          <ChevronLeft className="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" strokeWidth={2} />
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollByDir(1)}
+          className={`${carouselNavButtonClass} right-1 sm:right-3 md:right-4`}
+          aria-label="Next items"
+        >
+          <ChevronRight className="h-5 w-5 sm:h-[1.35rem] sm:w-[1.35rem]" strokeWidth={2} />
+        </button>
+      </div>
 
       <div
         ref={scrollerRef}
-        className={`flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-8 pl-10 pr-10 pt-0.5 sm:pl-12 sm:pr-12 md:pl-14 md:pr-14 ${scrollbarHide}`}
+        className={`hidden snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-8 pl-10 pr-10 pt-0.5 motion-reduce:flex sm:pl-12 sm:pr-12 md:pl-14 md:pr-14 ${scrollbarHide}`}
         role="list"
         aria-label="Featured guides and resources"
       >
-        {items.map((item) => (
-          <article
-            key={`${item.kind}-${item.href}`}
-            role="listitem"
-            className={carouselCardWidthThreeUp}
-          >
-            <Link
-              href={item.href}
-              className="group flex h-full min-h-[280px] flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition duration-300 ease-out hover:-translate-y-1 hover:shadow-md sm:min-h-[260px] sm:p-8"
-            >
-              <span
-                className={`inline-flex w-fit rounded-md px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${badgeClass(item.kind)}`}
-              >
-                {item.badgeLabel}
-              </span>
-              <h3
-                className={`mt-4 line-clamp-2 text-lg font-bold leading-snug sm:text-xl ${
-                  item.kind === 'resource' ? 'text-emerald-950' : 'text-gray-900'
-                }`}
-              >
-                {item.title}
-              </h3>
-              <p className="mt-2 flex-grow text-sm leading-relaxed text-gray-500 line-clamp-3 sm:text-base">
-                {item.description ||
-                  'Open the full piece for the complete walkthrough and tips.'}
-              </p>
-              <span
-                className={`mt-auto flex items-center gap-1.5 pt-6 text-sm font-semibold transition sm:text-base ${
-                  item.kind === 'resource'
-                    ? 'text-emerald-900 group-hover:text-emerald-700'
-                    : 'text-gray-900 group-hover:text-orange-600'
-                }`}
-              >
-                {item.ctaLabel}
-                <ArrowRight
-                  className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5"
-                  aria-hidden
-                />
-              </span>
-            </Link>
-          </article>
-        ))}
+        {items.map((item) => renderItem(item))}
+      </div>
+
+      <div className={`overflow-x-auto pb-8 pt-0.5 motion-reduce:hidden ${scrollbarHide}`}>
+        <div
+          className="flex w-max animate-home-country-marquee gap-6 [animation-duration:140s] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused]"
+          role="list"
+          aria-label="Featured guides and resources"
+        >
+          {marqueeItems.map((item, index) =>
+            renderMarqueeItem(item, `-marquee-${index >= items.length ? 'copy' : 'base'}-${index}`)
+          )}
+        </div>
       </div>
     </div>
   );

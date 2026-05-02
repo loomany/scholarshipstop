@@ -799,7 +799,7 @@ function ScholarshipsListHeader({
                           <>
                             {showUnspecifiedCountryRow ? (
                               <li>
-                                <label className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-zinc-50">
+                                <label className="group flex cursor-pointer items-center gap-3 rounded-2xl border border-emerald-200/80 bg-gradient-to-b from-white to-emerald-50/80 px-3 py-3 shadow-[0_10px_28px_-22px_rgba(16,185,129,0.42)] ring-1 ring-emerald-100/70 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-[0_14px_34px_-22px_rgba(16,185,129,0.5)]">
                                   <input
                                     type="checkbox"
                                     checked={draftIncludeUnspecifiedCountry}
@@ -812,10 +812,20 @@ function ScholarshipsListHeader({
                                     }
                                     className="scholarship-filter-checkbox h-4 w-4 shrink-0"
                                   />
-                                  <span className="min-w-0 flex-1 text-sm font-medium text-zinc-800">
-                                    Open / not country-specific
+                                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-white text-emerald-700 shadow-[0_6px_18px_-12px_rgba(16,185,129,0.5)] transition group-hover:border-emerald-300 group-hover:text-emerald-800">
+                                    <Globe2 className="h-4.5 w-4.5" strokeWidth={2.25} aria-hidden />
                                   </span>
-                                  <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold tabular-nums text-zinc-600">
+                                  <span className="min-w-0 flex-1">
+                                    <span className="flex flex-wrap items-center gap-2">
+                                      <span className="text-sm font-semibold leading-snug text-emerald-950">
+                                        Open to many countries
+                                      </span>
+                                    </span>
+                                    <span className="mt-1 block text-xs leading-snug text-emerald-700/90">
+                                      No country restriction listed.
+                                    </span>
+                                  </span>
+                                  <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-semibold tabular-nums text-emerald-800 ring-1 ring-emerald-200">
                                     {unspecifiedApplicantCountryCount.toLocaleString()}
                                   </span>
                                 </label>

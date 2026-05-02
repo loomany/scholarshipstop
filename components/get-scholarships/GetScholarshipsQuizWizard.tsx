@@ -121,7 +121,16 @@ export function GetScholarshipsQuizWizard({
 
   useEffect(() => {
     setDraft(loadLandingQuizDraft() ?? emptyLandingQuizDraft());
-    const storedCountry = loadLandingQuizSelectedCountry();
+    let storedCountry = loadLandingQuizSelectedCountry();
+    if (typeof window !== 'undefined') {
+      const fromQuery = normalizeCountryCode(
+        new URLSearchParams(window.location.search).get('country')
+      );
+      if (fromQuery) {
+        storedCountry = fromQuery;
+        saveLandingQuizSelectedCountry(fromQuery);
+      }
+    }
     setSelectedCountryCode(storedCountry);
   }, []);
 

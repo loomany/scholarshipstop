@@ -1,12 +1,20 @@
 import type { Metadata } from 'next';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 import HomePageClient from './HomePageClient';
 import FeaturedResources from '@/components/home/FeaturedResources';
 import HomeFinalCta from '@/components/home/HomeFinalCta';
 import { HomePageJsonLd } from '@/components/seo/HomePageJsonLd';
 import { fetchHomeResourcesCarouselItems } from '@/lib/home/homeResourcesCarousel';
+import {
+  fetchApplicantCountryCounts,
+  fetchHomeScholarshipCatalogStats,
+  type HomeScholarshipCatalogStats
+} from '@/lib/scholarships/scholarshipListServer';
+import { createClient } from '@/utils/supabase/server';
 import { SITE_BRAND } from '@/lib/seo/siteTitle';
 import { getCanonical } from '@/lib/seo/canonical';
+import type { Database } from '@/types_db';
 
 const homeCanonical = getCanonical('/');
 
@@ -63,10 +71,27 @@ export default async function HomePage() {
     console.error('[HomePage] fetchHomeResourcesCarouselItems failed', err);
   }
 
+  let topApplicantCountries: { code: string; label: string; count: number }[] = [];
+  let scholarshipCatalogStats: HomeScholarshipCatalogStats | null = null;
+  try {
+    const supabase = createClient() as unknown as SupabaseClient<Database>;
+    const [{ countryCounts }, catalogStats] = await Promise.all([
+      fetchApplicantCountryCounts(supabase),
+      fetchHomeScholarshipCatalogStats(supabase)
+    ]);
+    topApplicantCountries = countryCounts.slice(0, 24);
+    scholarshipCatalogStats = catalogStats;
+  } catch (err) {
+    console.error('[HomePage] fetch home scholarship catalog stats failed', err);
+  }
+
   return (
     <>
       <HomePageJsonLd />
-      <HomePageClient />
+      <HomePageClient
+        topApplicantCountries={topApplicantCountries}
+        scholarshipCatalogStats={scholarshipCatalogStats}
+      />
       <FeaturedResources items={featuredResourceItems} />
       <HomeFinalCta />
     </>

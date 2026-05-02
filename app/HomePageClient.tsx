@@ -7,6 +7,7 @@ import { BookOpen, Check, Heart, Layers } from 'lucide-react';
 
 import { FeaturedBrandScholarshipsSection } from '@/components/home/FeaturedBrandScholarshipsSection';
 import HomeGuidedEssaySupport from '@/components/home/HomeGuidedEssaySupport';
+import HomeInternationalGrantsUsp from '@/components/home/HomeInternationalGrantsUsp';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import {
   homePremiumCtaClass,
@@ -16,8 +17,14 @@ import HomeTrustStrip from '@/components/home/HomeTrustStrip';
 import HomeWhatWeVerify from '@/components/home/HomeWhatWeVerify';
 import SuccessStoriesCarousel from '@/components/home/SuccessStoriesCarousel';
 import ScholarshipPreviewList from '@/components/scholarships/ScholarshipPreviewList';
+import type {
+  HomeScholarshipCatalogStats,
+  ScholarshipListMeta
+} from '@/lib/scholarships/scholarshipListServer';
 
 const container = 'mx-auto w-full max-w-7xl';
+
+export type HomeTopApplicantCountry = ScholarshipListMeta['countryCounts'][number];
 
 const homeSectionPadX =
   'pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6';
@@ -37,7 +44,13 @@ const homeY = {
 
 const worksListIconClass = 'mt-1 h-6 w-6 shrink-0 text-orange-500';
 
-export default function HomePageClient() {
+export default function HomePageClient({
+  topApplicantCountries = [],
+  scholarshipCatalogStats = null
+}: {
+  topApplicantCountries?: HomeTopApplicantCountry[];
+  scholarshipCatalogStats?: HomeScholarshipCatalogStats | null;
+}) {
   const painSectionRef = useRef<HTMLDivElement>(null);
   const [painSectionVisible, setPainSectionVisible] = useState(false);
   const worksSectionRef = useRef<HTMLDivElement>(null);
@@ -107,6 +120,13 @@ export default function HomePageClient() {
           </p>
         </div>
       </section>
+
+      <HomeInternationalGrantsUsp
+        sectionPadX={homeSectionPadX}
+        sectionY={homeY.block}
+        topApplicantCountries={topApplicantCountries}
+        catalogStats={scholarshipCatalogStats}
+      />
 
       <HomeTrustStrip sectionPadX={homeSectionPadX} sectionY={homeY.strip} />
 
