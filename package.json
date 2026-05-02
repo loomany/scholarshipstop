@@ -114,6 +114,7 @@
     "audit:jsonld-sitemap:dry": "dotenv -e .env.local -- npx tsx scripts/audit-jsonld-sitemap.ts --dry-run",
     "audit:jsonld-sitemap:prod": "npx tsx scripts/audit-jsonld-sitemap.ts",
     "audit:production-site": "npx tsx scripts/audit-production-site.ts",
+    "audit:final-check": "npx tsx scripts/final-check.ts",
     "smoke:scholarship-funnel": "npx tsx scripts/smoke-scholarship-funnel.ts"
   },
   "dependencies": {

@@ -6,16 +6,11 @@ export function hasExplicitNoEssaySignal(text: string): boolean {
 }
 
 export const NO_ESSAY_SQL_PARTS = [
-  'title.ilike.%no essay%',
-  'title.ilike.%no-essay%',
-  'title.ilike.%without an essay%',
-  'title.ilike.%essay not required%',
-  'description.ilike.%no essay%',
-  'description.ilike.%no-essay%',
-  'description.ilike.%without an essay%',
-  'description.ilike.%essay not required%',
-  'requirements_text_clean.ilike.%no essay%',
-  'requirements_text_clean.ilike.%no-essay%',
-  'requirements_text_clean.ilike.%without an essay%',
-  'requirements_text_clean.ilike.%essay not required%'
+  /**
+   * Keep listing SQL index-friendly. The previous ILIKE scan over title /
+   * description / requirements_text_clean caused statement timeouts on the
+   * public safe listing after the catalog grew and description gained watermark
+   * HTML. `easy_apply_flags` is backed by a GIN index.
+   */
+  'easy_apply_flags.cs.["no_essay"]'
 ] as const;
