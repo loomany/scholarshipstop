@@ -14,7 +14,10 @@ import {
   paginateCompareIndexItems,
   parseCompareIndexSearchParams
 } from '@/lib/seo/compareIndexFilters';
-import { buildStateCompareItems } from '@/lib/seo/compareIndexData';
+import {
+  buildCompareSuggestionSeedItems,
+  buildStateCompareItems
+} from '@/lib/seo/compareIndexData';
 import { fetchAllPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
@@ -64,6 +67,7 @@ export default async function StateBattlesPage({
   const queryState = parseCompareIndexSearchParams(searchParams);
   const pages = await fetchAllPublishedStateComparePages();
   const items = buildStateCompareItems(pages);
+  const suggestionItems = buildCompareSuggestionSeedItems(items);
   const filtered = filterAndSortCompareIndexItems(items, {
     q: queryState.q,
     category: 'all',
@@ -207,7 +211,7 @@ export default async function StateBattlesPage({
                   fixedCategory="states"
                   searchPlaceholder="Search State vs State"
                   resultLabel="State vs State"
-                  suggestionItems={items}
+                  suggestionItems={suggestionItems}
                 />
               </Suspense>
             ) : null}

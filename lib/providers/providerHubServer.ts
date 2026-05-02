@@ -1,8 +1,10 @@
 import 'server-only';
 
+import { unstable_cache } from 'next/cache';
+
 import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
 import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
-import { createClient } from '@/utils/supabase/server';
+import { createPublicClient } from '@/utils/supabase/public';
 
 export type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 
@@ -29,66 +31,61 @@ export type ProviderHubFetchResult = {
   total: number;
 };
 
+const fetchProviderHubListingCached = unstable_cache(
+  async (
+    token: string,
+    stateCode: string,
+    page: number,
+    pageSize: number
+  ): Promise<ProviderHubFetchResult> => {
+    const supabase = createPublicClient();
+    if (!supabase) return { rows: [], total: 0 };
+
+    const from = (page - 1) * pageSize;
+    let dataQuery = supabase
+      .from(PROVIDER_HUB_LISTING)
+      .select('slug, display_name, scholarship_count, state, ai_description', {
+        count: 'exact'
+      })
+      .order('scholarship_count', { ascending: false })
+      .range(from, from + pageSize - 1);
+
+    if (stateCode) {
+      dataQuery = dataQuery.eq('state', stateCode);
+    }
+    if (token.length > 0) {
+      const pattern = `%${token}%`;
+      dataQuery = dataQuery.or(
+        `display_name.ilike.${pattern},slug.ilike.${pattern}`
+      );
+    }
+
+    const { data, count, error } = await dataQuery;
+    if (error) {
+      return { rows: [], total: 0 };
+    }
+
+    const rows = ((data ?? []) as ProviderHubRow[]).filter((r) =>
+      Boolean(r.slug?.trim())
+    );
+
+    return { rows, total: count ?? 0 };
+  },
+  ['provider-hub-listing-v2'],
+  { revalidate: 300 }
+);
+
 export async function fetchProviderHubListing(options: {
   qRaw: string | undefined;
   stateRaw: string | undefined;
   page?: number;
   pageSize?: number;
 }): Promise<ProviderHubFetchResult> {
-  const supabase = createClient();
   const token = sanitizeSearchToken(options.qRaw ?? '');
   const stateCode = normalizeStateFilter(options.stateRaw);
   const pageSize = options.pageSize ?? 9;
   const page = Math.max(1, Math.floor(options.page ?? 1) || 1);
-  const from = (page - 1) * pageSize;
-
-  let countQuery = supabase
-    .from(PROVIDER_HUB_LISTING)
-    .select('slug', { count: 'exact', head: true });
-
-  if (stateCode) {
-    countQuery = countQuery.eq('state', stateCode);
-  }
-  if (token.length > 0) {
-    const pattern = `%${token}%`;
-    countQuery = countQuery.or(
-      `display_name.ilike.${pattern},slug.ilike.${pattern}`
-    );
-  }
-
-  const { count, error: countErr } = await countQuery;
-  if (countErr) {
-    return { rows: [], total: 0 };
-  }
-
-  const total = count ?? 0;
-
-  let dataQuery = supabase
-    .from(PROVIDER_HUB_LISTING)
-    .select('slug, display_name, scholarship_count, state, ai_description')
-    .order('scholarship_count', { ascending: false })
-    .range(from, from + pageSize - 1);
-
-  if (stateCode) {
-    dataQuery = dataQuery.eq('state', stateCode);
-  }
-  if (token.length > 0) {
-    const pattern = `%${token}%`;
-    dataQuery = dataQuery.or(
-      `display_name.ilike.${pattern},slug.ilike.${pattern}`
-    );
-  }
-
-  const { data, error } = await dataQuery;
-  if (error) {
-    return { rows: [], total: 0 };
-  }
-
-  const rows = ((data ?? []) as ProviderHubRow[]).filter((r) =>
-    Boolean(r.slug?.trim())
-  );
-
-  return { rows, total };
+  return fetchProviderHubListingCached(token, stateCode ?? '', page, pageSize);
 }
 
 export async function countUnenrichedProviders(): Promise<number> {

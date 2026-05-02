@@ -1,3 +1,5 @@
+import { unstable_cache } from 'next/cache';
+
 import { createPublicClient } from '@/utils/supabase/public';
 import type { Database, Json } from '@/types_db';
 
@@ -22,7 +24,7 @@ export type StateRow = Pick<
   'id' | 'name' | 'slug' | 'code' | 'region' | 'description_json'
 >;
 
-export async function fetchStateComparisonDataRpc(
+async function fetchStateComparisonDataRpcUncached(
   stateACode: string,
   stateBCode: string
 ): Promise<StateComparisonDataJson | null> {
@@ -39,7 +41,13 @@ export async function fetchStateComparisonDataRpc(
   return (data as StateComparisonDataJson) ?? null;
 }
 
-export async function fetchPublishedStateComparePageBySlug(
+export const fetchStateComparisonDataRpc = unstable_cache(
+  fetchStateComparisonDataRpcUncached,
+  ['state-comparison-data-rpc-v2'],
+  { revalidate: 300 }
+);
+
+async function fetchPublishedStateComparePageBySlugUncached(
   slug: string
 ): Promise<{
   page: StateComparePageRow;
@@ -75,7 +83,13 @@ export async function fetchPublishedStateComparePageBySlug(
   return { page, stateA, stateB };
 }
 
-export async function fetchPublishedStateCompareSlugByCodes(
+export const fetchPublishedStateComparePageBySlug = unstable_cache(
+  fetchPublishedStateComparePageBySlugUncached,
+  ['published-state-compare-page-by-slug-v2'],
+  { revalidate: 300 }
+);
+
+async function fetchPublishedStateCompareSlugByCodesUncached(
   stateACode: string,
   stateBCode: string
 ): Promise<string | null> {
@@ -95,6 +109,12 @@ export async function fetchPublishedStateCompareSlugByCodes(
   if (error) return null;
   return data?.slug?.trim() || null;
 }
+
+export const fetchPublishedStateCompareSlugByCodes = unstable_cache(
+  fetchPublishedStateCompareSlugByCodesUncached,
+  ['published-state-compare-slug-by-codes-v2'],
+  { revalidate: 300 }
+);
 
 export type StateCompareIndexRow = Pick<
   Database['public']['Tables']['state_compare_pages']['Row'],

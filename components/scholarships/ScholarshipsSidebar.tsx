@@ -250,6 +250,10 @@ export default function ScholarshipsSidebar({
     active: boolean
   ) => {
     const textClass = active ? 'text-white' : 'text-gray-400';
+    const loadingShellClass = active
+      ? 'bg-white/15 ring-white/25'
+      : 'bg-[#FF7A1A]/10 ring-[#FF7A1A]/20 shadow-[0_0_16px_-8px_rgba(255,122,26,0.85)]';
+    const loadingDotClass = active ? 'bg-white' : 'bg-[#FF7A1A]';
     if (countSuffix) {
       return (
         <span
@@ -262,10 +266,20 @@ export default function ScholarshipsSidebar({
     }
     return (
       <span
-        className="inline-block shrink-0 text-right"
-        aria-hidden
+        className={`inline-flex h-4 min-w-[2.5ch] shrink-0 items-center justify-center rounded-full align-middle ring-1 ${loadingShellClass}`}
+        role="status"
+        aria-label="Loading scholarship count"
       >
-        <span className="inline-block h-3 w-[2.5ch] rounded bg-gray-200/90 align-middle" />
+        <span className="sr-only">Loading scholarship count</span>
+        <span className="flex items-center gap-0.5" aria-hidden>
+          {[0, 1, 2].map((idx) => (
+            <span
+              key={idx}
+              className={`h-1 w-1 rounded-full ${loadingDotClass} animate-bounce`}
+              style={{ animationDelay: `${idx * 110}ms` }}
+            />
+          ))}
+        </span>
       </span>
     );
   };

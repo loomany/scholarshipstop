@@ -336,20 +336,42 @@ export default async function StateComparePage({
   const topStateBHref = stateB.slug?.trim()
     ? `/scholarships/${encodeURIComponent(stateB.slug.trim())}`
     : null;
-  const relatedContent = await fetchCompareRelatedContent({
+  const documentTitle =
+    page.meta_title?.trim() ||
+    `${stateA.name} vs ${stateB.name}: Scholarship Climate ${COMPARE_YEAR}`;
+  const fallbackDescriptionMeta =
+    page.meta_description?.trim() ||
+    `Compare scholarship climate, grant volume, and top universities in ${stateA.name} and ${stateB.name}.`;
+  const relatedContentPromise = fetchCompareRelatedContent({
     instAName: stateA.name,
     instBName: stateB.name,
     stateA: stateA.name,
     stateB: stateB.name,
-    pageTitle:
-      page.meta_title?.trim() ||
-      `${stateA.name} vs ${stateB.name}: Scholarship Climate ${COMPARE_YEAR}`,
+    pageTitle: documentTitle,
     aiVerdict: page.ai_verdict,
     bodyHtml: bodyHtmlAnchored,
     essayTextA: climate?.state_a,
     essayTextB: climate?.state_b,
     limit: 3
   });
+  const resolvedMetaDescriptionPromise = resolveAiMetaDescription({
+    canonicalPath,
+    routeKind: 'compare_state',
+    title: documentTitle,
+    fallbackDescription: fallbackDescriptionMeta,
+    context: {
+      slug,
+      stateA: stateA.name,
+      stateB: stateB.name
+    },
+    priority: 6
+  });
+  const [relatedContent, resolvedMetaDescriptionMaybe] = await Promise.all([
+    relatedContentPromise,
+    resolvedMetaDescriptionPromise
+  ]);
+  const resolvedMetaDescription =
+    resolvedMetaDescriptionMaybe ?? fallbackDescriptionMeta;
 
   const compareTocItems = buildStateCompareTocMerged({
     bodyToc: bodyTocItems,
@@ -359,26 +381,6 @@ export default async function StateComparePage({
     hasRelated:
       relatedContent.resources.length > 0 || relatedContent.essays.length > 0
   });
-
-  const documentTitle =
-    page.meta_title?.trim() ||
-    `${stateA.name} vs ${stateB.name}: Scholarship Climate ${COMPARE_YEAR}`;
-  const fallbackDescriptionMeta =
-    page.meta_description?.trim() ||
-    `Compare scholarship climate, grant volume, and top universities in ${stateA.name} and ${stateB.name}.`;
-  const resolvedMetaDescription =
-    (await resolveAiMetaDescription({
-      canonicalPath,
-      routeKind: 'compare_state',
-      title: documentTitle,
-      fallbackDescription: fallbackDescriptionMeta,
-      context: {
-        slug,
-        stateA: stateA.name,
-        stateB: stateB.name
-      },
-      priority: 6
-    })) ?? fallbackDescriptionMeta;
 
   const comparePageAbsoluteUrl = getURL(canonicalPath.replace(/^\/+/, ''));
 

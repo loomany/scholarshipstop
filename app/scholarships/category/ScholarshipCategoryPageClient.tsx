@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
+import { HubListSkeleton } from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipCategoryListingBreadcrumbs from '@/components/scholarships/ScholarshipCategoryListingBreadcrumbs';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipRegistrationWallModal, {
@@ -865,7 +865,7 @@ export default function ScholarshipCategoryPageClient({
           </div>
 
           {isLoading ? (
-            <ScholarshipsBrandLoading density="compact" showTopAccentBar />
+            <HubListSkeleton showApplyingLabel />
           ) : hasError ? (
             <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {errorMessage || 'Failed to load scholarships.'}

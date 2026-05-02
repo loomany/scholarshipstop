@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 
 import { PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE } from '@/lib/providers/providerProfilePagination';
 import type {
@@ -173,7 +174,108 @@ type ProviderScholarshipAggregateRow = {
   updated_at: string | null;
 };
 
+type ProviderProfileAggregate = {
+  totalAwardAmount: number | null;
+  knownAwardAmountCount: number;
+  lastScholarshipUpdatedAt: string | null;
+};
+
+type ProviderProfileAggregateRpcRow = {
+  total_award_amount: number | string | null;
+  known_award_amount_count: number | string | null;
+  last_scholarship_updated_at: string | null;
+};
+
 const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships';
+
+function numberFromDb(value: number | string | null | undefined): number | null {
+  if (value == null) return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+async function fetchProviderProfileAggregateFallback(
+  supabase: NonNullable<ReturnType<typeof createPublicClient>>,
+  providerSlug: string
+): Promise<ProviderProfileAggregate> {
+  const { data: aggregateRowsRaw } = await supabase
+    .from('scholarships')
+    .select('award_amount_numeric_sort, updated_at')
+    .eq('provider_slug', providerSlug)
+    .eq('is_active', true)
+    .range(0, 9999);
+
+  const aggregateRows = (aggregateRowsRaw ?? []) as ProviderScholarshipAggregateRow[];
+  let totalAwardAmount = 0;
+  let knownAwardAmountCount = 0;
+  let lastScholarshipUpdatedAt: string | null = null;
+
+  for (const row of aggregateRows) {
+    const award = numberFromDb(row.award_amount_numeric_sort);
+    if (award != null && award > 0) {
+      totalAwardAmount += award;
+      knownAwardAmountCount += 1;
+    }
+
+    const updated = row.updated_at?.trim();
+    if (
+      updated &&
+      (!lastScholarshipUpdatedAt ||
+        new Date(updated).getTime() > new Date(lastScholarshipUpdatedAt).getTime())
+    ) {
+      lastScholarshipUpdatedAt = updated;
+    }
+  }
+
+  return {
+    totalAwardAmount: knownAwardAmountCount > 0 ? totalAwardAmount : null,
+    knownAwardAmountCount,
+    lastScholarshipUpdatedAt
+  };
+}
+
+async function fetchProviderProfileAggregate(
+  supabase: NonNullable<ReturnType<typeof createPublicClient>>,
+  providerSlug: string
+): Promise<ProviderProfileAggregate> {
+  const { data, error } = await (
+    supabase as unknown as {
+      rpc: (
+        fn: 'provider_profile_scholarship_aggregate',
+        args: { p_provider_slug: string }
+      ) => Promise<{
+        data: ProviderProfileAggregateRpcRow[] | ProviderProfileAggregateRpcRow | null;
+        error: { message?: string } | null;
+      }>;
+    }
+  ).rpc('provider_profile_scholarship_aggregate', {
+    p_provider_slug: providerSlug
+  });
+  if (error) {
+    return fetchProviderProfileAggregateFallback(supabase, providerSlug);
+  }
+
+  const row = Array.isArray(data) ? data[0] : data;
+  if (!row) {
+    return {
+      totalAwardAmount: null,
+      knownAwardAmountCount: 0,
+      lastScholarshipUpdatedAt: null
+    };
+  }
+
+  const totalAwardAmount = numberFromDb(row.total_award_amount);
+  const knownAwardAmountCount = numberFromDb(row.known_award_amount_count) ?? 0;
+
+  return {
+    totalAwardAmount:
+      knownAwardAmountCount > 0 && totalAwardAmount != null
+        ? totalAwardAmount
+        : null,
+    knownAwardAmountCount,
+    lastScholarshipUpdatedAt: row.last_scholarship_updated_at ?? null
+  };
+}
 
 export const resolveProviderProfileSlug = cache(
   async (rawParam: string): Promise<string | null> => {
@@ -276,40 +378,21 @@ export async function loadProviderProfilePage(
     .map((r) => mapScholarshipRow(r as ScholarshipRow))
     .sort(compareScholarshipsByDeadlineState);
 
-  const { data: aggregateRowsRaw } =
+  const aggregate =
     totalScholarshipCount > 0
-      ? await supabase
-          .from('scholarships')
-          .select('award_amount_numeric_sort, updated_at')
-          .eq('provider_slug', slugForScholarships)
-          .eq('is_active', true)
-          .range(0, 9999)
-      : { data: [] as ProviderScholarshipAggregateRow[] };
-
-  const aggregateRows = (aggregateRowsRaw ?? []) as ProviderScholarshipAggregateRow[];
-  let totalAwardAmount = 0;
-  let knownAwardAmountCount = 0;
-  let lastUpdatedAt: string | null = providerRow?.updated_at ?? null;
-
-  for (const row of aggregateRows) {
-    const award =
-      row.award_amount_numeric_sort != null
-        ? Number(row.award_amount_numeric_sort)
-        : NaN;
-    if (Number.isFinite(award) && award > 0) {
-      totalAwardAmount += award;
-      knownAwardAmountCount += 1;
-    }
-
-    const updated = row.updated_at?.trim();
-    if (
-      updated &&
-      (!lastUpdatedAt ||
-        new Date(updated).getTime() > new Date(lastUpdatedAt).getTime())
-    ) {
-      lastUpdatedAt = updated;
-    }
-  }
+      ? await fetchProviderProfileAggregate(supabase, slugForScholarships)
+      : {
+          totalAwardAmount: null,
+          knownAwardAmountCount: 0,
+          lastScholarshipUpdatedAt: null
+        };
+  const lastUpdatedAt =
+    aggregate.lastScholarshipUpdatedAt &&
+    (!providerRow?.updated_at ||
+      new Date(aggregate.lastScholarshipUpdatedAt).getTime() >
+        new Date(providerRow.updated_at).getTime())
+      ? aggregate.lastScholarshipUpdatedAt
+      : providerRow?.updated_at ?? null;
 
   const { data: similarRowsRaw } = await supabase
     .from(PROVIDER_STATS)
@@ -344,13 +427,21 @@ export async function loadProviderProfilePage(
     aiFaq,
     isEnriched,
     totalScholarshipCount,
-    totalAwardAmount: knownAwardAmountCount > 0 ? totalAwardAmount : null,
-    knownAwardAmountCount,
+    totalAwardAmount: aggregate.totalAwardAmount,
+    knownAwardAmountCount: aggregate.knownAwardAmountCount,
     lastUpdatedAt,
     scholarships,
     similarProviders
   };
 }
 
-/** Dedupes provider resolution + enrichment when `generateMetadata` and the page run in the same request. */
-export const getCachedProviderProfilePage = cache(loadProviderProfilePage);
+const getProviderProfilePageCachedAcrossRequests = unstable_cache(
+  loadProviderProfilePage,
+  ['provider-profile-page-v2'],
+  { revalidate: 60 }
+);
+
+/** Dedupes provider resolution + enrichment for metadata/page and keeps public profiles warm briefly. */
+export const getCachedProviderProfilePage = cache(
+  getProviderProfilePageCachedAcrossRequests
+);

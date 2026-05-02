@@ -25,7 +25,7 @@ import {
   createInitialScholarshipsPayload,
   fetchInitialCategoryScholarshipsPayload
 } from '@/app/scholarships/scholarshipListServerPayload';
-import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
+import ScholarshipsHubShellSkeleton from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipCategoryPageAuthBridge from '../ScholarshipCategoryPageAuthBridge';
 import { createPublicClient } from '@/utils/supabase/public';
 import { getURL } from '@/utils/helpers';
@@ -194,15 +194,7 @@ export default async function ScholarshipCategoryPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
         />
       ) : null}
-      <Suspense
-        fallback={
-          <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
-            <div className="mx-auto max-w-5xl">
-              <ScholarshipsBrandLoading showTopAccentBar />
-            </div>
-          </section>
-        }
-      >
+      <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}>
         <ScholarshipCategoryPageAuthBridge
           categorySlug={canonicalSlug}
           pageTitle={pageTitle}

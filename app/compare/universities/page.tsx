@@ -14,7 +14,10 @@ import {
   paginateCompareIndexItems,
   parseCompareIndexSearchParams
 } from '@/lib/seo/compareIndexFilters';
-import { buildUniversityCompareItems } from '@/lib/seo/compareIndexData';
+import {
+  buildCompareSuggestionSeedItems,
+  buildUniversityCompareItems
+} from '@/lib/seo/compareIndexData';
 import { fetchAllPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
@@ -64,6 +67,7 @@ export default async function UniversityBattlesPage({
   const queryState = parseCompareIndexSearchParams(searchParams);
   const pages = await fetchAllPublishedUniversityComparePages();
   const items = buildUniversityCompareItems(pages);
+  const suggestionItems = buildCompareSuggestionSeedItems(items);
   const filtered = filterAndSortCompareIndexItems(items, {
     q: queryState.q,
     category: 'all',
@@ -207,7 +211,7 @@ export default async function UniversityBattlesPage({
                   fixedCategory="universities"
                   searchPlaceholder="Search University vs University"
                   resultLabel="University vs University"
-                  suggestionItems={items}
+                  suggestionItems={suggestionItems}
                 />
               </Suspense>
             ) : null}

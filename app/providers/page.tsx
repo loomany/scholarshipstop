@@ -19,7 +19,7 @@ import {
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 const baseDescription =
   'Explore organizations and foundations offering financial aid across the United States.';

@@ -4,7 +4,9 @@ import {
   type CompareIndexItem
 } from '@/lib/seo/compareIndexFilters';
 import type { StateCompareIndexRow } from '@/lib/seo/stateCompareServer';
+import { parseStateVsSlug } from '@/lib/seo/stateCompareSlug';
 import type { UniversityCompareIndexRow } from '@/lib/seo/universityCompareServer';
+import { parseUniversityVsSlug } from '@/lib/seo/universityCompareSlug';
 
 export function normalizeCompareTitle(rawTitle: string | null, slug: string): string {
   return rawTitle?.trim() || slug.replace(/-/g, ' ');
@@ -56,4 +58,32 @@ export function buildCombinedCompareItems(args: {
     sortCompareIndexSlice(states, 'latest'),
     sortCompareIndexSlice(universities, 'latest')
   );
+}
+
+/**
+ * Client search only needs enough compare rows to discover unique state/school
+ * names. Keep visible cards/server HTML unchanged, but avoid serializing every
+ * published compare page into the toolbar payload.
+ */
+export function buildCompareSuggestionSeedItems(
+  items: CompareIndexItem[]
+): CompareIndexItem[] {
+  const seen = new Set<string>();
+  const out: CompareIndexItem[] = [];
+
+  for (const item of items) {
+    const pair =
+      item.type === 'states'
+        ? parseStateVsSlug(item.slug)
+        : parseUniversityVsSlug(item.slug);
+    if (!pair) continue;
+
+    const keys = pair.map((slug) => `${item.type}:${slug}`);
+    if (keys.some((key) => !seen.has(key))) {
+      out.push(item);
+      keys.forEach((key) => seen.add(key));
+    }
+  }
+
+  return out;
 }

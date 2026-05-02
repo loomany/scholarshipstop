@@ -193,15 +193,15 @@ export default async function UniversityComparePage({
   const stateCodeB = instB.state?.trim().toUpperCase() || null;
   const instAHref = buildUniversityHubHref(stateCodeA, instA.slug);
   const instBHref = buildUniversityHubHref(stateCodeB, instB.slug);
-  const stateBattleSlug =
+  const stateBattleSlugPromise =
     stateCodeA && stateCodeB && stateCodeA !== stateCodeB
-      ? await fetchPublishedStateCompareSlugByCodes(stateCodeA, stateCodeB)
-      : null;
+      ? fetchPublishedStateCompareSlugByCodes(stateCodeA, stateCodeB)
+      : Promise.resolve(null);
   const stateSlugA = stateCodeA ? stateSlugFromCode(stateCodeA) : null;
   const stateSlugB = stateCodeB ? stateSlugFromCode(stateCodeB) : null;
   const stateLabelA = stateSlugA ? stateLabelFromSlug(stateSlugA) : null;
   const stateLabelB = stateSlugB ? stateLabelFromSlug(stateSlugB) : null;
-  const relatedContent = await fetchCompareRelatedContent({
+  const relatedContentPromise = fetchCompareRelatedContent({
     instAName: instA.name,
     instBName: instB.name,
     stateA: stateLabelA,
@@ -214,6 +214,31 @@ export default async function UniversityComparePage({
     limit: 3
   });
 
+  const fallbackDescriptionMeta =
+    page.meta_description?.trim() ||
+    `Compare scholarships and aid signals for ${instA.name} and ${instB.name}.`;
+  const resolvedMetaDescriptionPromise = resolveAiMetaDescription({
+    canonicalPath,
+    routeKind: 'compare_university',
+    title: pageTitle,
+    fallbackDescription: fallbackDescriptionMeta,
+    context: {
+      slug,
+      institutionA: instA.name,
+      institutionB: instB.name
+    },
+    priority: 6
+  });
+
+  const [stateBattleSlug, relatedContent, resolvedMetaDescriptionMaybe] =
+    await Promise.all([
+      stateBattleSlugPromise,
+      relatedContentPromise,
+      resolvedMetaDescriptionPromise
+    ]);
+  const resolvedMetaDescription =
+    resolvedMetaDescriptionMaybe ?? fallbackDescriptionMeta;
+
   const compareTocItems = buildUniversityCompareTocMerged({
     bodyToc: bodyTocItems,
     hasEssayInsights: Boolean(essay?.inst_a?.trim() || essay?.inst_b?.trim()),
@@ -225,23 +250,6 @@ export default async function UniversityComparePage({
     hasRelated:
       relatedContent.resources.length > 0 || relatedContent.essays.length > 0
   });
-
-  const fallbackDescriptionMeta =
-    page.meta_description?.trim() ||
-    `Compare scholarships and aid signals for ${instA.name} and ${instB.name}.`;
-  const resolvedMetaDescription =
-    (await resolveAiMetaDescription({
-      canonicalPath,
-      routeKind: 'compare_university',
-      title: pageTitle,
-      fallbackDescription: fallbackDescriptionMeta,
-      context: {
-        slug,
-        institutionA: instA.name,
-        institutionB: instB.name
-      },
-      priority: 6
-    })) ?? fallbackDescriptionMeta;
 
   const comparePageAbsoluteUrl = getURL(canonicalPath.replace(/^\/+/, ''));
 

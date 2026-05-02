@@ -15,7 +15,10 @@ import {
   paginateCompareIndexItems,
   parseCompareIndexSearchParams,
 } from '@/lib/seo/compareIndexFilters';
-import { buildCombinedCompareItems } from '@/lib/seo/compareIndexData';
+import {
+  buildCombinedCompareItems,
+  buildCompareSuggestionSeedItems
+} from '@/lib/seo/compareIndexData';
 import { fetchAllPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
 import { fetchAllPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
 import { getURL } from '@/utils/helpers';
@@ -124,6 +127,7 @@ export default async function CompareHubPage({
     universities: universityBattles,
     states: stateWars
   });
+  const suggestionItems = buildCompareSuggestionSeedItems(allItems);
   const categoryCounts = compareCategoryCountsAfterQuery(allItems, queryState.q);
   const filtered = filterAndSortCompareIndexItems(allItems, queryState);
   const { slice, total, totalPages, currentPage } = paginateCompareIndexItems(
@@ -247,7 +251,7 @@ export default async function CompareHubPage({
                   resultCount={total}
                   showingFrom={showingFrom}
                   showingTo={showingTo}
-                  suggestionItems={allItems}
+                  suggestionItems={suggestionItems}
                 />
               </Suspense>
             ) : null}

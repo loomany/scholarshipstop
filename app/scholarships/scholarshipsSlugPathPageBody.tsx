@@ -1,7 +1,6 @@
 import { Suspense, type ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 
-import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipsHubShellSkeleton from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipDetailPageAuthBridge from '@/app/scholarships/ScholarshipDetailPageAuthBridge';
 import ScholarshipsHubPageAuthBridge from '@/app/scholarships/ScholarshipsHubPageAuthBridge';
@@ -448,15 +447,7 @@ export default async function ScholarshipsSlugPathPageBody({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
           />
         ) : null}
-        <Suspense
-          fallback={
-            <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
-              <div className="mx-auto max-w-5xl">
-                <ScholarshipsBrandLoading showTopAccentBar />
-              </div>
-            </section>
-          }
-        >
+        <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}>
           <ScholarshipsHubPageAuthBridge
             initialPayload={createInitialScholarshipsPayload(
               buildInitialListRequestKey({
@@ -601,15 +592,7 @@ export default async function ScholarshipsSlugPathPageBody({
           />
         ) : null}
         <h1 className="sr-only">{pageTitle}</h1>
-        <Suspense
-          fallback={
-            <section className="min-h-screen bg-[#F3F7FA] px-4 py-12 sm:px-5 md:py-12 lg:px-8">
-              <div className="mx-auto max-w-5xl">
-                <ScholarshipsBrandLoading showTopAccentBar />
-              </div>
-            </section>
-          }
-        >
+        <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}>
           <ScholarshipsHubPageAuthBridge
             initialPayload={createInitialScholarshipsPayload(
               buildInitialListRequestKey({

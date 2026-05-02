@@ -1,9 +1,11 @@
+import { unstable_cache } from 'next/cache';
+
 import { createPublicClient } from '@/utils/supabase/public';
 import type { Database, Json } from '@/types_db';
 
 export type ComparisonDataJson = Record<string, unknown>;
 
-export async function fetchComparisonDataRpc(
+async function fetchComparisonDataRpcUncached(
   instA: string,
   instB: string
 ): Promise<ComparisonDataJson | null> {
@@ -19,6 +21,12 @@ export async function fetchComparisonDataRpc(
   }
   return (data as ComparisonDataJson) ?? null;
 }
+
+export const fetchComparisonDataRpc = unstable_cache(
+  fetchComparisonDataRpcUncached,
+  ['university-comparison-data-rpc-v2'],
+  { revalidate: 300 }
+);
 
 export type ComparePageRow = Pick<
   Database['public']['Tables']['compare_pages']['Row'],
@@ -39,7 +47,7 @@ export type InstitutionRow = Pick<
   'id' | 'name' | 'slug' | 'logo_url' | 'city' | 'state' | 'country' | 'website_url'
 >;
 
-export async function fetchPublishedComparePageBySlug(
+async function fetchPublishedComparePageBySlugUncached(
   slug: string
 ): Promise<{
   page: ComparePageRow;
@@ -74,6 +82,12 @@ export async function fetchPublishedComparePageBySlug(
 
   return { page, instA, instB };
 }
+
+export const fetchPublishedComparePageBySlug = unstable_cache(
+  fetchPublishedComparePageBySlugUncached,
+  ['published-university-compare-page-by-slug-v2'],
+  { revalidate: 300 }
+);
 
 export type UniversityCompareIndexRow = Pick<
   Database['public']['Tables']['compare_pages']['Row'],

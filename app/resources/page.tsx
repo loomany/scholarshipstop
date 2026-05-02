@@ -399,11 +399,12 @@ export default async function ResourcesIndexPage({
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const queryState = parseResourcesIndexSearchParams(searchParams);
-  const allPosts = await fetchAllPublishedContentPostsListFields();
+  const [allPosts, latestEssays] = await Promise.all([
+    fetchAllPublishedContentPostsListFields(),
+    fetchLatestPublishedEssayHubList(240)
+  ]);
   const classified = classifyResourcePosts(allPosts);
-  const essayCovers = (
-    await fetchLatestPublishedEssayHubList(240)
-  )
+  const essayCovers = latestEssays
     .map((essay) => essay.hero_image_url?.trim() ?? '')
     .filter(Boolean);
   const fallbackCoverByPostId = buildResourceFallbackCovers(

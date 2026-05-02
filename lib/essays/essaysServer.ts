@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 
 import { createPublicClient } from '@/utils/supabase/public';
 
@@ -215,7 +216,7 @@ export async function fetchPublishedEssaysBySlugsOrdered(
     .filter((x): x is EssayListFields => Boolean(x));
 }
 
-export async function fetchPublishedEssayBySlug(
+async function fetchPublishedEssayBySlugUncached(
   slug: string
 ): Promise<EssayDetailRow | null> {
   const raw = slug.trim();
@@ -236,7 +237,15 @@ export async function fetchPublishedEssayBySlug(
   return data as EssayDetailRow | null;
 }
 
-export async function fetchScholarshipRowsForEssay(
+const fetchPublishedEssayBySlugCached = unstable_cache(
+  fetchPublishedEssayBySlugUncached,
+  ['published-essay-by-slug-v2'],
+  { revalidate: 300 }
+);
+
+export const fetchPublishedEssayBySlug = cache(fetchPublishedEssayBySlugCached);
+
+async function fetchScholarshipRowsForEssayUncached(
   essayId: string,
   limit = 8
 ): Promise<
@@ -266,6 +275,14 @@ export async function fetchScholarshipRowsForEssay(
   if (e2) throw new Error(e2.message);
   return (rows ?? []) as { id: string; slug: string | null; title: string | null }[];
 }
+
+const fetchScholarshipRowsForEssayCached = unstable_cache(
+  fetchScholarshipRowsForEssayUncached,
+  ['scholarship-rows-for-essay-v2'],
+  { revalidate: 300 }
+);
+
+export const fetchScholarshipRowsForEssay = cache(fetchScholarshipRowsForEssayCached);
 
 const ESSAYS_SITEMAP_BATCH = 500;
 

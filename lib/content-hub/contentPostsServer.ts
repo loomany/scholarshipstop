@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 
 import type { ContentPostRow, ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import { createPublicClient } from '@/utils/supabase/public';
@@ -154,7 +155,7 @@ export async function fetchPublishedContentPosts(
   return fetchPublishedContentPostsPage(1, limit);
 }
 
-export const fetchPublishedContentPostBySlug = cache(
+const fetchPublishedContentPostBySlugCached = unstable_cache(
   async (slug: string): Promise<ContentPostRow | null> => {
     const raw = slug.trim();
     if (!raw) return null;
@@ -170,7 +171,13 @@ export const fetchPublishedContentPostBySlug = cache(
 
     if (error) throw new Error(error.message);
     return data as ContentPostRow | null;
-  }
+  },
+  ['published-content-post-by-slug-v2'],
+  { revalidate: 300 }
+);
+
+export const fetchPublishedContentPostBySlug = cache(
+  fetchPublishedContentPostBySlugCached
 );
 
 export async function fetchRelatedPublishedContentPosts(
