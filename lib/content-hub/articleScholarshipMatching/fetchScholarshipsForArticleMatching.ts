@@ -18,8 +18,8 @@ export async function fetchScholarshipsForArticleMatching(
   const out: ScholarshipMatchDbRow[] = [];
   let from = 0;
   for (;;) {
-    let query = supabase
-      .from('scholarships')
+    let query = (supabase as any)
+      .from('scholarships_safe_listing')
       .select(SELECT)
       .range(from, from + PAGE - 1);
     if (options.onlyInternationalFriendly) {

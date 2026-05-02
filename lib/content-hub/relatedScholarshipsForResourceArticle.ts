@@ -39,8 +39,8 @@ async function enrichFromCatalog(
   const supabase = createPublicClient();
   if (!supabase) return items;
   const slugs = [...new Set(items.map((i) => i.slug.trim()).filter(Boolean))];
-  const { data, error } = await supabase
-    .from('scholarships')
+  const { data, error } = await (supabase as any)
+    .from('scholarships_safe_listing')
     .select('slug, title, award_amount_text, deadline_text')
     .in('slug', slugs);
 

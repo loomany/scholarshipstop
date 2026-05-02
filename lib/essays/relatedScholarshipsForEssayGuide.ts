@@ -39,8 +39,8 @@ async function enrichLinkedEssayScholarships(
   const supabase = createPublicClient();
   if (!supabase) return [];
   const ids = linked.map((row) => row.id).filter(Boolean);
-  const { data, error } = await supabase
-    .from('scholarships')
+  const { data, error } = await (supabase as any)
+    .from('scholarships_safe_listing')
     .select(
       'id, slug, title, award_amount_text, deadline_text, international_friendly_listing'
     )

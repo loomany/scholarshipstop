@@ -13,6 +13,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/server';
 import { legacyScholarshipSlugCandidates } from '@/lib/seo/legacyScholarshipSlugAliases';
 import { createPublicClient } from '@/utils/supabase/public';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import {
   deadlineTextAllowsCalendarSemantics,
   isPhantomCalendarYear2001
@@ -24,6 +25,10 @@ type ServerSupabaseClient = ReturnType<typeof createClient>;
 export type ScholarshipRow = Database['public']['Tables']['scholarships']['Row'];
 
 export { sanitizeRequirementLines };
+
+function createScholarshipBaseReadClient(): SupabaseClient<Database> | null {
+  return createServiceRoleSupabaseClient() ?? createPublicClient();
+}
 
 /**
  * PostgREST limits rows per HTTP response (Supabase default `max_rows` = 1000 in
@@ -222,9 +227,26 @@ export const ACTIVE_CATALOG_SELECT = [
   'ai_difficulty_level'
 ].join(', ');
 
-const LISTING_CARD_COLUMNS_NO_RAW = LISTING_CARD_SELECT_COLUMNS.filter(
-  (col) => col !== 'raw_data'
+const PUBLIC_LISTING_CARD_SELECT_COLUMNS = LISTING_CARD_SELECT_COLUMNS.filter(
+  (col) =>
+    ![
+      'provider_url',
+      'apply_url',
+      'url',
+      'provider_social_facebook',
+      'provider_social_instagram',
+      'provider_social_linkedin',
+      'ai_match_score',
+      'ai_match_band',
+      'raw_data'
+    ].includes(col)
 );
+
+/**
+ * Public anon listing payload. Must match `public.scholarships_safe_listing`.
+ * Keep raw URLs, social URLs, raw blobs, and internal AI fields out of this select.
+ */
+export const PUBLIC_LIST_CARD_SELECT = PUBLIC_LISTING_CARD_SELECT_COLUMNS.join(', ');
 
 /**
  * Same as {@link ACTIVE_CATALOG_SELECT} but omits `raw_data`. CLI scripts
@@ -233,7 +255,7 @@ const LISTING_CARD_COLUMNS_NO_RAW = LISTING_CARD_SELECT_COLUMNS.filter(
  * can break JSON parsing or hit proxy limits.
  */
 export const ACTIVE_CATALOG_SELECT_NO_RAW = [
-  ...LISTING_CARD_COLUMNS_NO_RAW,
+  ...LISTING_CARD_SELECT_COLUMNS.filter((col) => col !== 'raw_data'),
   'provider_mission',
   'payment_details',
   'description',
@@ -317,6 +339,10 @@ export const DETAIL_SELECT = [
  */
 export function scholarshipListSelectWithCatalogSubjectJoin(): string {
   return `${LIST_CARD_SELECT},scholarship_categories!inner(category_id)`;
+}
+
+export function publicScholarshipListSelectWithCatalogSubjectJoin(): string {
+  return `${PUBLIC_LIST_CARD_SELECT},scholarship_categories!inner(category_id)`;
 }
 
 function buildCategories(
@@ -596,7 +622,8 @@ export async function fetchScholarshipsByCategorySlug(
     new Set([raw].concat(canonical ? [canonical] : []))
   );
 
-  const supabase = createClient();
+  const supabase = createScholarshipBaseReadClient();
+  if (!supabase) return [];
   const rows: ScholarshipRow[] = [];
   let offset = 0;
   for (;;) {
@@ -653,7 +680,8 @@ async function loadPagedActiveScholarships(
 }
 
 export async function fetchActiveScholarships(): Promise<Scholarship[]> {
-  const supabase = createClient() as unknown as SupabaseClient<Database>;
+  const supabase = createScholarshipBaseReadClient();
+  if (!supabase) return [];
   return loadPagedActiveScholarships(supabase);
 }
 
@@ -687,7 +715,7 @@ export async function fetchActiveScholarshipsForScript(): Promise<Scholarship[]>
 export async function fetchScholarshipById(
   id: string
 ): Promise<Scholarship | null> {
-  const supabase = createPublicClient();
+  const supabase = createScholarshipBaseReadClient();
   if (!supabase) return null;
   const { data, error } = await supabase
     .from('scholarships')
@@ -703,7 +731,7 @@ export async function fetchScholarshipById(
 export async function fetchScholarshipBySlug(
   slug: string
 ): Promise<Scholarship | null> {
-  const supabase = createPublicClient();
+  const supabase = createScholarshipBaseReadClient();
   if (!supabase) return null;
   const { data, error } = await supabase
     .from('scholarships')
@@ -727,7 +755,7 @@ export async function fetchScholarshipBySlugOrId(
   if (candidates.length === 1) {
     return fetchScholarshipBySlug(candidates[0]!);
   }
-  const supabase = createPublicClient();
+  const supabase = createScholarshipBaseReadClient();
   if (!supabase) return null;
   const { data, error } = await supabase
     .from('scholarships')
@@ -764,7 +792,7 @@ export async function fetchScholarshipsBySlugsOrIdsOrdered(
     else slugKeys.push(k);
   }
 
-  const supabase = createPublicClient();
+  const supabase = createScholarshipBaseReadClient();
   if (!supabase) return [];
   const bySlug = new Map<string, Scholarship>();
   const byId = new Map<string, Scholarship>();
@@ -829,7 +857,7 @@ export async function fetchActiveScholarshipsByInstitutionIdForListing(
 ): Promise<Scholarship[]> {
   const id = institutionId.trim();
   if (!id) return [];
-  const supabase = createPublicClient();
+  const supabase = createScholarshipBaseReadClient();
   if (!supabase) return [];
 
   const cap = Math.min(24, Math.max(1, Math.floor(limit) * 4));

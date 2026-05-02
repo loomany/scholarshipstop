@@ -10,7 +10,7 @@ import type {
   SimilarProviderSummary
 } from '@/lib/providers/providerProfileTypes';
 import {
-  LIST_CARD_SELECT,
+  PUBLIC_LIST_CARD_SELECT,
   mapScholarshipRow,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
@@ -198,8 +198,8 @@ async function fetchProviderProfileAggregateFallback(
   supabase: NonNullable<ReturnType<typeof createPublicClient>>,
   providerSlug: string
 ): Promise<ProviderProfileAggregate> {
-  const { data: aggregateRowsRaw } = await supabase
-    .from('scholarships')
+  const { data: aggregateRowsRaw } = await (supabase as any)
+    .from('scholarships_safe_listing')
     .select('award_amount_numeric_sort, updated_at')
     .eq('provider_slug', providerSlug)
     .eq('is_active', true)
@@ -365,16 +365,16 @@ export async function loadProviderProfilePage(
 
   const { data: scholarshipRows } =
     totalScholarshipCount > 0
-      ? await supabase
-          .from('scholarships')
-          .select(LIST_CARD_SELECT)
+      ? await (supabase as any)
+          .from('scholarships_safe_listing')
+          .select(PUBLIC_LIST_CARD_SELECT)
           .eq('provider_slug', slugForScholarships)
           .eq('is_active', true)
           .order('ranking_score', { ascending: false, nullsFirst: false })
           .range(offset, offset + pageSize - 1)
       : { data: [] as ScholarshipRow[] };
 
-  const scholarships = (scholarshipRows ?? [])
+  const scholarships = ((scholarshipRows ?? []) as ScholarshipRow[])
     .map((r) => mapScholarshipRow(r as ScholarshipRow))
     .sort(compareScholarshipsByDeadlineState);
 

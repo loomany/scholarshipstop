@@ -41,7 +41,7 @@ import {
   type MoreFiltersJson
 } from '@/lib/scholarships/scholarshipListApiCodec';
 import {
-  LIST_CARD_SELECT,
+  PUBLIC_LIST_CARD_SELECT,
   mapScholarshipRow,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
@@ -681,8 +681,8 @@ async function handleList(
     // eslint-disable-next-line no-console -- SEO SQL debug
     console.log('[SEO_SQL_DEBUG_BYPASS] active: is_active=true, limit 10, no moreFilters');
     const { data, error, count } = await listingSupabase
-      .from('scholarships_listing_view')
-      .select(LIST_CARD_SELECT, { count: 'exact' })
+      .from('scholarships_safe_listing')
+      .select(PUBLIC_LIST_CARD_SELECT, { count: 'exact' })
       .eq('is_active', true)
       .limit(10);
     if (error) throw new Error(error.message);

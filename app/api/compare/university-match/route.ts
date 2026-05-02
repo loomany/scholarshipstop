@@ -190,8 +190,8 @@ export async function POST(req: Request) {
       .from('institutions')
       .select('id, state, name')
       .in('id', [instAId, instBId]),
-    supabase
-      .from('scholarships')
+    (supabase as any)
+      .from('scholarships_safe_listing')
       .select(
         'id, institution_id, award_amount_max, award_amount_numeric_sort, citizenship_statuses, gpa_requirement_min, state_codes, location_scope'
       )

@@ -6,6 +6,7 @@ import { fetchAllPublishedEssaySitemapRows } from '@/lib/essays/essaysServer';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { createPublicClient } from '@/utils/supabase/public';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database } from '@/types_db';
 import { SCHOLARSHIP_CATEGORY_ORDER } from '@/app/scholarships/scholarshipCategories';
 import { getLongTailSitemapSlugs } from '@/app/scholarships/scholarshipLongTailPresets';
@@ -207,9 +208,13 @@ type UniversityHubSitemapRow = {
   updated_at: string;
 };
 
+function createSitemapReadClient() {
+  return createServiceRoleSupabaseClient() ?? createPublicClient();
+}
+
 /** Published `/compare/universities/[slug]` pages. */
 async function fetchCompareSitemapRows(): Promise<CompareSitemapRow[]> {
-  const supabase = createPublicClient();
+  const supabase = createSitemapReadClient();
   if (!supabase) return [];
   const { data, error } = await supabase.rpc('compare_pages_sitemap_rows', {});
   if (error) {
@@ -221,7 +226,7 @@ async function fetchCompareSitemapRows(): Promise<CompareSitemapRow[]> {
 
 /** Published `/compare/states/[slug]` pages. */
 async function fetchStateCompareSitemapRows(): Promise<CompareSitemapRow[]> {
-  const supabase = createPublicClient();
+  const supabase = createSitemapReadClient();
   if (!supabase) return [];
   const { data, error } = await supabase.rpc('state_compare_pages_sitemap_rows', {});
   if (error) {
@@ -233,7 +238,7 @@ async function fetchStateCompareSitemapRows(): Promise<CompareSitemapRow[]> {
 
 /** `/scholarships/{state}/{university}` hubs backed by `provider_hub_listing` + `states` + `providers`. */
 async function fetchUniversityHubSitemapRows(): Promise<UniversityHubSitemapRow[]> {
-  const supabase = createPublicClient();
+  const supabase = createSitemapReadClient();
   if (!supabase) return [];
   const { data, error } = await supabase.rpc('university_hub_sitemap_rows', {});
   if (error) {
@@ -247,7 +252,7 @@ async function fetchUniversityHubSitemapRows(): Promise<UniversityHubSitemapRow[
 async function fetchSeoGenerationSitemapRows(
   minGrants = 3
 ): Promise<SeoGenerationSitemapRow[]> {
-  const supabase = createPublicClient();
+  const supabase = createSitemapReadClient();
   if (!supabase) return [];
   const { data, error } = await supabase.rpc('seo_generation_sitemap_paths', {
     p_min_grants: minGrants
@@ -261,7 +266,7 @@ async function fetchSeoGenerationSitemapRows(
 
 /** States with &gt;3 active grants (RPC); used alongside manifest SEO URLs. */
 async function fetchStateGrantSitemapRows(): Promise<StateGrantCountRow[]> {
-  const supabase = createPublicClient();
+  const supabase = createSitemapReadClient();
   if (!supabase) return [];
   const { data, error } = await supabase.rpc(
     'scholarship_active_counts_by_state_code'
@@ -279,7 +284,7 @@ async function fetchStateGrantSitemapRows(): Promise<StateGrantCountRow[]> {
 async function fetchScholarshipSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
-  const supabase = createPublicClient();
+  const supabase = createSitemapReadClient();
   if (!supabase) return [];
   const out: MetadataRoute.Sitemap = [];
   let offset = 0;
@@ -311,7 +316,7 @@ async function fetchScholarshipSitemapEntries(
 async function fetchProviderSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
-  const supabase = createPublicClient();
+  const supabase = createSitemapReadClient();
   if (!supabase) return [];
   const rows: ProviderSitemapRow[] = [];
   let offset = 0;

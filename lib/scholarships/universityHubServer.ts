@@ -3,7 +3,7 @@ import 'server-only';
 import type { Database, Json } from '@/types_db';
 import { US_STATE_NAME_TO_CODE } from '@/lib/constants/usStates';
 import {
-  LIST_CARD_SELECT,
+  PUBLIC_LIST_CARD_SELECT,
   mapScholarshipRow,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
@@ -102,9 +102,9 @@ export async function fetchScholarshipsForUniversitySlug(
       error: 'Unable to load scholarships.'
     };
   }
-  const { data, error } = await supabase
-    .from('scholarships')
-    .select(LIST_CARD_SELECT)
+  const { data, error } = await (supabase as any)
+    .from('scholarships_safe_listing')
+    .select(PUBLIC_LIST_CARD_SELECT)
     .eq('provider_slug', universitySlug)
     .eq('is_active', true)
     .order('ranking_score', { ascending: false, nullsFirst: false })

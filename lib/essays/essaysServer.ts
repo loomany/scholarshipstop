@@ -265,8 +265,8 @@ async function fetchScholarshipRowsForEssayUncached(
     .filter(Boolean) as string[];
   if (ids.length === 0) return [];
 
-  const { data: rows, error: e2 } = await supabase
-    .from('scholarships')
+  const { data: rows, error: e2 } = await (supabase as any)
+    .from('scholarships_safe_listing')
     .select('id, slug, title')
     .in('id', ids)
     .eq('is_active', true)

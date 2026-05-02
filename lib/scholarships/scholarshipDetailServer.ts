@@ -7,7 +7,10 @@ export function redactPremiumScholarshipFields(
   return {
     ...scholarship,
     premiumFieldsRedacted: true,
+    applyLink: undefined,
+    listingUrl: undefined,
     providerUrl: undefined,
+    socialLinks: undefined,
     supportEmailRedacted: Boolean(scholarship.supportEmail?.trim()),
     supportPhoneRedacted: Boolean(scholarship.supportPhone?.trim()),
     supportEmail: null,

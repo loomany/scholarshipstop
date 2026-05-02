@@ -30,9 +30,9 @@ import {
   seoRequestHasCatalogStateGeo
 } from '@/lib/scholarships/seoScholarshipFallback';
 import {
-  LIST_CARD_SELECT,
+  PUBLIC_LIST_CARD_SELECT,
   mapScholarshipRow,
-  scholarshipListSelectWithCatalogSubjectJoin,
+  publicScholarshipListSelectWithCatalogSubjectJoin,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
 import {
@@ -220,7 +220,7 @@ export type ScholarshipListResult = {
 
 const DEFAULT_LIMIT = SCHOLARSHIPS_PAGE_SIZE;
 const MAX_LIMIT = 50;
-const SCHOLARSHIPS_LISTING_SOURCE = 'scholarships_listing_view';
+const SCHOLARSHIPS_LISTING_SOURCE = 'scholarships_safe_listing';
 const GLOBAL_FILTER_BOUNDS_TTL_MS = 5 * 60 * 1000;
 const LIST_META_CACHE_TTL_MS = 120 * 1000;
 const APPLICANT_COUNTRY_COUNTS_CACHE_TTL_MS = 5 * 60 * 1000;
@@ -1150,8 +1150,8 @@ function baseSelect(
   req: Pick<ScholarshipListRequest, 'catalogSubjectCategoryId'>
 ) {
   const sel = req.catalogSubjectCategoryId
-    ? scholarshipListSelectWithCatalogSubjectJoin()
-    : LIST_CARD_SELECT;
+    ? publicScholarshipListSelectWithCatalogSubjectJoin()
+    : PUBLIC_LIST_CARD_SELECT;
   if (head) {
     return listingFrom(supabase).select(sel, { count: 'exact', head: true });
   }
@@ -1635,7 +1635,7 @@ async function loadSimilarScholarshipsLegacyRows(
   req: ScholarshipListRequest
 ): Promise<ScholarshipRow[]> {
   let q = listingFrom(supabase)
-    .select(LIST_CARD_SELECT)
+    .select(PUBLIC_LIST_CARD_SELECT)
     .eq('is_active', true)
     .neq('id', req.similarToId!);
   if (req.similarCategorySlug) {
@@ -1688,7 +1688,7 @@ async function fetchSimilarListFillerScholarships(
   if (need <= 0) return [];
   const todayIso = new Date().toISOString().slice(0, 10);
   let q: any = listingFrom(supabase)
-    .select(LIST_CARD_SELECT)
+    .select(PUBLIC_LIST_CARD_SELECT)
     .eq('is_active', true)
     .or(`deadline_date.gte.${todayIso},deadline_date.is.null`)
     .order('is_expired', { ascending: true, nullsFirst: false })
