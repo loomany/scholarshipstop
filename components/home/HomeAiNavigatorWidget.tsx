@@ -2,6 +2,28 @@
 
 import { getScholarshipTopNavigatorHref } from '@/lib/nav/scholarshipTopNavigator';
 
+/** Fire-and-forget: notifies admins via Telegram (server). Does not block opening GPT. */
+function notifyAiNavigatorTelemetry(): void {
+  if (typeof window === 'undefined') return;
+  const pathname = `${window.location.pathname}${window.location.search || ''}`;
+  const referrer = typeof document !== 'undefined' ? document.referrer || '' : '';
+  const body = JSON.stringify({ pathname, referrer });
+  try {
+    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+      const blob = new Blob([body], { type: 'application/json;charset=UTF-8' });
+      if (navigator.sendBeacon('/api/telemetry/ai-navigator-click', blob)) return;
+    }
+  } catch {
+    /* fallback below */
+  }
+  void fetch('/api/telemetry/ai-navigator-click', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body,
+    keepalive: true
+  }).catch(() => {});
+}
+
 const DOT_ANGLES = [0, 52, 108, 163, 221, 276, 322] as const;
 const DRIFT_ANGLES = [0, 108, 221, 322] as const;
 
@@ -61,8 +83,9 @@ function MicrobeOrb() {
 }
 
 /**
- * Site-wide AI launcher (`app/layout.tsx`): opens ScholarshipTop Navigator GPT in a new tab.
- * Uses `NEXT_PUBLIC_SCHOLARSHIPTOP_NAVIGATOR_URL` when valid; otherwise the bundled default GPT URL.
+ * Site-wide AI launcher (`app/layout.tsx`): opens ScholarshipTop Navigator GPT in a new tab,
+ * pings POST `/api/telemetry/ai-navigator-click` so admins can receive a Telegram ping (traffic
+ * category prefs). Disabled with AI_NAVIGATOR_CLICK_TELEGRAM_NOTIFY=0.
  */
 export default function HomeAiNavigatorWidget() {
   const href = getScholarshipTopNavigatorHref();
@@ -76,6 +99,12 @@ export default function HomeAiNavigatorWidget() {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => {
+          notifyAiNavigatorTelemetry();
+        }}
+        onAuxClick={(event) => {
+          if (event.button === 1) notifyAiNavigatorTelemetry();
+        }}
         className="relative isolate block size-full cursor-pointer rounded-full outline-none transition-transform duration-150 active:scale-[0.94] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         style={{ WebkitTapHighlightColor: 'transparent' }}
         aria-label="ScholarshipTop Navigator AI assistant — opens in a new tab"
