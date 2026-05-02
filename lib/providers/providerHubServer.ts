@@ -51,7 +51,7 @@ const fetchProviderHubListingCached = unstable_cache(
       .range(from, from + pageSize - 1);
 
     if (stateCode) {
-      dataQuery = dataQuery.eq('state', stateCode);
+      dataQuery = dataQuery.filter('state', 'eq', stateCode);
     }
     if (token.length > 0) {
       const pattern = `%${token}%`;
@@ -65,7 +65,7 @@ const fetchProviderHubListingCached = unstable_cache(
       return { rows: [], total: 0 };
     }
 
-    const rows = ((data ?? []) as ProviderHubRow[]).filter((r) =>
+    const rows = ((data ?? []) as unknown as ProviderHubRow[]).filter((r) =>
       Boolean(r.slug?.trim())
     );
 
@@ -89,7 +89,8 @@ export async function fetchProviderHubListing(options: {
 }
 
 export async function countUnenrichedProviders(): Promise<number> {
-  const supabase = createClient();
+  const supabase = createPublicClient();
+  if (!supabase) return 0;
   const { count, error } = await supabase
     .from('providers')
     .select('id', { count: 'exact', head: true })
