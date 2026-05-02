@@ -188,7 +188,7 @@ function displayCountryCountRow(country: CountryCountRow): CountryCountRow {
   return {
     ...country,
     code,
-    label: countryLabelFromIsoCode(code) ?? label || code
+    label: (countryLabelFromIsoCode(code) ?? label) || code
   };
 }
 
