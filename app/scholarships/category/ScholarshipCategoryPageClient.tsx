@@ -848,7 +848,6 @@ export default function ScholarshipCategoryPageClient({
             onGuestSortBlocked={
               catalogFreeTier ? openRegistrationWall : undefined
             }
-            onSubscriptionSortBlocked={openLockedCategoryWall}
             onGuestLockedAction={
               catalogFreeTier ? openRegistrationWall : undefined
             }

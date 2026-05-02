@@ -47,7 +47,8 @@ type ScholarshipsListHeaderProps = {
   onQueryChange: (value: string) => void;
   /** Counts по base dataset текущей вкладки (не глобальный каталог). */
   categoryCounts: Record<ScholarshipCategoryId, number>;
-  countryCounts?: Array<{ code: string; label: string; count: number }>;
+  countryCounts?: CountryCountRow[];
+  countryCountsLoading?: boolean;
   unspecifiedApplicantCountryCount?: number;
   appliedCountryCodes?: Set<string>;
   appliedIncludeUnspecifiedCountry?: boolean;
@@ -85,7 +86,6 @@ type ScholarshipsListHeaderProps = {
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
   onGuestSortBlocked?: () => void;
-  onSubscriptionSortBlocked?: () => void;
   onGuestLockedAction?: () => void;
   /**
    * When set (e.g. hub passes `catalogFreeTier`), search/filters/categories locks and
@@ -163,6 +163,35 @@ type CategoryPanelLayout = {
   maxHeight: number;
 };
 
+type CountryCountRow = { code: string; label: string; count: number };
+
+let englishRegionDisplayNames: Intl.DisplayNames | null | undefined;
+
+function countryLabelFromIsoCode(code: string): string | null {
+  const normalized = code.trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(normalized)) return null;
+  if (englishRegionDisplayNames === undefined) {
+    englishRegionDisplayNames =
+      typeof Intl.DisplayNames === 'function'
+        ? new Intl.DisplayNames(['en'], { type: 'region' })
+        : null;
+  }
+  const label = englishRegionDisplayNames?.of(normalized)?.trim();
+  if (!label || label === normalized || label === 'Unknown Region') return null;
+  return label;
+}
+
+function displayCountryCountRow(country: CountryCountRow): CountryCountRow {
+  const code = country.code.trim().toUpperCase();
+  const label = country.label.trim();
+  if (label && label.toUpperCase() !== code) return country;
+  return {
+    ...country,
+    code,
+    label: countryLabelFromIsoCode(code) ?? label || code
+  };
+}
+
 function measureCategoryPanel(el: HTMLElement): CategoryPanelLayout {
   const r = el.getBoundingClientRect();
   const width = Math.min(
@@ -188,6 +217,7 @@ function ScholarshipsListHeader({
   onQueryChange,
   categoryCounts,
   countryCounts = [],
+  countryCountsLoading = false,
   unspecifiedApplicantCountryCount = 0,
   appliedCountryCodes = new Set(),
   appliedIncludeUnspecifiedCountry = false,
@@ -212,7 +242,6 @@ function ScholarshipsListHeader({
   isAuthenticated = true,
   hasSubscription = true,
   onGuestSortBlocked,
-  onSubscriptionSortBlocked,
   onGuestLockedAction,
   catalogListingLocked,
   savedFilterPresetButtons = [],
@@ -320,6 +349,7 @@ function ScholarshipsListHeader({
   const filteredCountryRows = useMemo(() => {
     const q = countrySearch.trim().toLowerCase();
     return countryCounts
+      .map(displayCountryCountRow)
       .filter((country) => country.count > 0)
       .filter((country) => {
         if (!q) return true;
@@ -355,7 +385,6 @@ function ScholarshipsListHeader({
   const showCountryBadge =
     activeCountryCount > 0 || appliedIncludeUnspecifiedCountry;
   const moreFiltersApplyLocked = !hasSubscription;
-  const countryApplyLocked = !hasSubscription;
   const countryButtonLabel =
     activeCountryCount === 1
       ? countryCounts.find((country) => appliedCountryCodes.has(country.code))?.label ??
@@ -715,13 +744,6 @@ function ScholarshipsListHeader({
                     className={`${CATALOG_CONTROL_BAR_BTN} max-w-full sm:w-auto`}
                   >
                     <Globe2 className="h-[18px] w-[18px] text-gray-600" />
-                    {countryApplyLocked ? (
-                      <Lock
-                        className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                    ) : null}
                     Countries
                     {showCountryBadge ? (
                       <span className="tabular-nums text-gray-600">
@@ -736,7 +758,7 @@ function ScholarshipsListHeader({
                     <div
                       role="dialog"
                       aria-label="Filter by country"
-                      className="absolute left-0 top-[calc(100%+0.5rem)] z-[80] flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5"
+                      className="absolute left-1/2 top-[calc(100%+0.5rem)] z-[80] flex w-[min(22rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 sm:left-0 sm:translate-x-0"
                     >
                       <div className="border-b border-zinc-100 px-4 py-3">
                         <h2 className="text-base font-semibold text-zinc-900">
@@ -757,7 +779,23 @@ function ScholarshipsListHeader({
                         />
                       </div>
                       <ul className="max-h-72 overflow-y-auto overscroll-contain px-2 py-1" role="list">
-                        {showUnspecifiedCountryRow || filteredCountryRows.length > 0 ? (
+                        {countryCountsLoading ? (
+                          <li className="space-y-2 px-3 py-3" aria-live="polite">
+                            <p className="text-sm font-medium text-zinc-600">
+                              Loading country filters...
+                            </p>
+                            {[0, 1, 2].map((i) => (
+                              <div
+                                key={i}
+                                className="flex animate-pulse items-center gap-3 rounded-xl py-2"
+                              >
+                                <span className="h-4 w-4 rounded border border-zinc-200 bg-zinc-100" />
+                                <span className="h-4 flex-1 rounded-full bg-zinc-100" />
+                                <span className="h-5 w-8 rounded-full bg-zinc-100" />
+                              </div>
+                            ))}
+                          </li>
+                        ) : showUnspecifiedCountryRow || filteredCountryRows.length > 0 ? (
                           <>
                             {showUnspecifiedCountryRow ? (
                               <li>
@@ -766,7 +804,11 @@ function ScholarshipsListHeader({
                                     type="checkbox"
                                     checked={draftIncludeUnspecifiedCountry}
                                     onChange={() =>
-                                      setDraftIncludeUnspecifiedCountry((prev) => !prev)
+                                      setDraftIncludeUnspecifiedCountry((prev) => {
+                                        const next = !prev;
+                                        if (next) setDraftCountryCodes(new Set());
+                                        return next;
+                                      })
                                     }
                                     className="scholarship-filter-checkbox h-4 w-4 shrink-0"
                                   />
@@ -787,11 +829,10 @@ function ScholarshipsListHeader({
                                   checked={draftCountryCodes.has(country.code)}
                                   onChange={() => {
                                     setDraftCountryCodes((prev) => {
-                                      const next = new Set(prev);
-                                      if (next.has(country.code)) next.delete(country.code);
-                                      else next.add(country.code);
-                                      return next;
+                                      if (prev.has(country.code)) return new Set();
+                                      return new Set([country.code]);
                                     });
+                                    setDraftIncludeUnspecifiedCountry(false);
                                   }}
                                   className="scholarship-filter-checkbox h-4 w-4 shrink-0"
                                 />
@@ -826,10 +867,6 @@ function ScholarshipsListHeader({
                           type="button"
                           className={`${scholarshipCategoriesApplyButtonClass} inline-flex items-center justify-center gap-1.5`}
                           onClick={() => {
-                            if (countryApplyLocked) {
-                              onSubscriptionSortBlocked?.();
-                              return;
-                            }
                             onApplyCountries?.(
                               new Set(draftCountryCodes),
                               draftIncludeUnspecifiedCountry
@@ -837,13 +874,6 @@ function ScholarshipsListHeader({
                             setCountriesOpen(false);
                           }}
                         >
-                          {countryApplyLocked ? (
-                            <Lock
-                              className="h-3.5 w-3.5 shrink-0 text-[#FFB000]"
-                              strokeWidth={2}
-                              aria-hidden
-                            />
-                          ) : null}
                           Show scholarships
                         </button>
                       </div>

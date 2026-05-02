@@ -109,6 +109,7 @@ export type Scholarship = {
   daysUntilDeadline?: number | null;
   deadlineBucket?: string | null;
   awardAmountNumericSort?: number | null;
+  awardCurrency?: string | null;
   payoutMethod?: string | null;
   credibilityScore?: number | null;
   credibilityBucket?: string | null;
@@ -244,37 +245,51 @@ export function scholarshipPublicSlugForMatching(
   return sl;
 }
 
+function formatAwardIntegerWithDots(raw: string): string {
+  const digits = raw.replace(/[,\.\s]/g, '');
+  if (!/^\d+$/.test(digits)) return raw;
+  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function formatAwardThousandsWithDots(text: string): string {
+  return text.replace(
+    /(^|[^\w.])(\d{1,3}(?:,\d{3})+|\d{4,})(?![\w.])/g,
+    (_match, prefix: string, amount: string) =>
+      `${prefix}${formatAwardIntegerWithDots(amount)}`
+  );
+}
+
 /**
- * Shows a leading $ for plain numeric catalog amounts (e.g. "2,500").
- * Leaves text that already has a currency symbol or non-cash phrases unchanged.
+ * Shows a leading $ for plain numeric catalog amounts (e.g. "2.500").
+ * Award UI uses dot thousands separators so source currencies stay readable.
  */
 export function formatScholarshipAwardDisplay(
   raw: string | null | undefined
 ): string {
   const t = raw?.trim() ?? '';
   if (!t || t === '—') return t;
-  if (/[\$€£¥]/.test(t)) return t;
+  const rangeMatch = t.match(/^(\d[\d,.\s]*)\s*[-–]\s*(\d[\d,.\s]*)$/);
+  if (rangeMatch) {
+    return `$${formatAwardIntegerWithDots(rangeMatch[1])} – $${formatAwardIntegerWithDots(rangeMatch[2])}`;
+  }
+  if (/^\d[\d,.\s]*$/.test(t)) return `$${formatAwardIntegerWithDots(t)}`;
   if (
-    /\b(usd|eur|gbp|full\s+tuition|full\s+ride|non[-\s]?monetary|amount\s+varies|varies|see\s+(the\s+)?(site|page|listing))\b/i.test(
+    /\b(full\s+tuition|full\s+ride|non[-\s]?monetary|amount\s+varies|varies|see\s+(the\s+)?(site|page|listing))\b/i.test(
       t
     )
   ) {
-    return t;
+    return formatAwardThousandsWithDots(t);
   }
-  const rangeMatch = t.match(/^(\d[\d,]*)\s*[-–]\s*(\d[\d,]*)$/);
-  if (rangeMatch) {
-    return `$${rangeMatch[1]} – $${rangeMatch[2]}`;
-  }
-  if (/^\d[\d,]*$/.test(t)) return `$${t}`;
-  return t;
+  return formatAwardThousandsWithDots(t);
 }
 
 /** Listing cards: max visible characters for text awards (Full Ride, Amount Varies, …). */
 export const SCHOLARSHIP_CARD_AWARD_TEXT_MAX_LEN = 25;
 
 /**
- * Card award line: prefer structured numeric sort, then `amount`/`awardAmount` (DB award text),
- * else a neutral placeholder. Truncates long text; use `lineTitle` for full string when truncated.
+ * Card award line: prefer source display text, then numeric sort as a fallback only.
+ * `awardAmountNumericSort` powers sorting/filtering and may not preserve source currency.
+ * Truncates long text; use `lineTitle` for full string when truncated.
  */
 export function resolveScholarshipCardAwardDisplay(s: Scholarship): {
   line: string;
@@ -282,16 +297,6 @@ export function resolveScholarshipCardAwardDisplay(s: Scholarship): {
   lineTitle?: string;
   isNumeric: boolean;
 } {
-  const n = s.awardAmountNumericSort;
-  if (n != null && Number.isFinite(n) && n > 0) {
-    const rounded = Math.round(n);
-    const withCommas = rounded.toLocaleString('en-US');
-    return {
-      line: formatScholarshipAwardDisplay(withCommas),
-      isPlaceholder: false,
-      isNumeric: true
-    };
-  }
   const raw = (s.amount ?? s.awardAmount)?.trim() ?? '';
   if (raw && raw !== '—') {
     const formatted = formatScholarshipAwardDisplay(raw).trim();
@@ -314,6 +319,16 @@ export function resolveScholarshipCardAwardDisplay(s: Scholarship): {
       isPlaceholder: false,
       lineTitle: formatted,
       isNumeric: false
+    };
+  }
+  const n = s.awardAmountNumericSort;
+  if (n != null && Number.isFinite(n) && n > 0) {
+    const rounded = Math.round(n);
+    const withDots = formatAwardIntegerWithDots(String(rounded));
+    return {
+      line: formatScholarshipAwardDisplay(withDots),
+      isPlaceholder: false,
+      isNumeric: true
     };
   }
   return {

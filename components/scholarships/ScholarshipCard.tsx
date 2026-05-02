@@ -84,6 +84,22 @@ type ScholarshipCardProps = {
 const METRIC_LABEL =
   'mt-1 text-[10px] font-normal leading-snug text-gray-500 sm:text-[11px] sm:normal-case';
 
+function replaceSummaryDollarAwardWithSourceCurrency(
+  summary: string,
+  scholarship: Scholarship,
+  awardDisplay: string,
+  hasAwardContent: boolean
+): string {
+  if (!hasAwardContent) return summary;
+  const rawAward = (scholarship.amount ?? scholarship.awardAmount)?.trim();
+  const currency = scholarship.awardCurrency?.trim().toUpperCase();
+  const hasSourceCurrency =
+    Boolean(rawAward && /\b[A-Z]{3}\b/.test(rawAward)) ||
+    Boolean(currency && currency !== 'USD');
+  if (!hasSourceCurrency) return summary;
+  return summary.replace(/(?:\bUS\s*)?\$[\d,.\s]+(?:\s+USD)?/g, awardDisplay);
+}
+
 export default function ScholarshipCard({
   scholarship,
   isUnread = false,
@@ -174,6 +190,8 @@ export default function ScholarshipCard({
   const cardActionBtnBase = `w-full rounded-lg px-2.5 py-1.5 text-center text-xs font-semibold text-white transition ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
   const cardActionSaveClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL}`;
   const cardActionSavedClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL_PRESSED}`;
+  const countryBadgeClass =
+    'inline-flex h-9 w-[148px] max-w-[42vw] shrink-0 items-center justify-center rounded-full border border-orange-200 bg-orange-50 px-4 text-center text-xs font-extrabold tracking-tight text-orange-700 shadow-sm ring-1 ring-orange-100';
 
   const awardLine = resolveScholarshipCardAwardDisplay(scholarship);
   const awardCell = awardLine.line;
@@ -221,7 +239,12 @@ export default function ScholarshipCard({
   );
 
   const summaryLine =
-    scholarship.summaryShort?.trim() || requirementsSummary;
+    replaceSummaryDollarAwardWithSourceCurrency(
+      scholarship.summaryShort?.trim() || requirementsSummary,
+      scholarship,
+      awardCell,
+      hasAwardContent
+    );
 
   const catalogChips = useMemo(
     () => scholarshipCardChips(scholarship).visible,
@@ -698,8 +721,21 @@ export default function ScholarshipCard({
                 <div className="min-w-0 flex-1 text-left">
                   {requirementsMetricInner}
                 </div>
-                {showCardActions ? (
-                  <div className={cardActionsWrap}>{cardActionControls}</div>
+                {showCardActions || applicantCountryBadge ? (
+                  <div className="relative z-10 flex w-full max-w-[148px] shrink-0 flex-col items-stretch gap-2 self-start pointer-events-auto">
+                    {showCardActions ? (
+                      <div className={cardActionsWrap}>{cardActionControls}</div>
+                    ) : null}
+                    {applicantCountryBadge ? (
+                      <span
+                        className={`${countryBadgeClass} w-full max-w-none`}
+                        title={applicantCountryBadge.title}
+                        aria-label={applicantCountryBadge.title}
+                      >
+                        {applicantCountryBadge.text}
+                      </span>
+                    ) : null}
+                  </div>
                 ) : null}
               </div>
             </div>
@@ -782,9 +818,9 @@ export default function ScholarshipCard({
               <div className="min-w-0 xl:col-span-2">
                 <ScholarshipCatalogChipRow chips={catalogChips} />
               </div>
-              <div className="flex min-w-0 justify-end xl:justify-start">
+              <div className="hidden min-w-0 justify-end xl:flex xl:justify-start">
                 <span
-                  className={`inline-flex h-9 w-[148px] max-w-[42vw] shrink-0 items-center justify-center rounded-full border border-orange-200 bg-orange-50 px-4 text-center text-xs font-extrabold tracking-tight text-orange-700 shadow-sm ring-1 ring-orange-100 ${
+                  className={`${countryBadgeClass} ${
                     applicantCountryBadge ? '' : 'invisible'
                   }`}
                   title={applicantCountryBadge?.title}

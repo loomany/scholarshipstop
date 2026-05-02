@@ -1,6 +1,7 @@
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { matchesDeadlinePreset } from '@/app/scholarships/moreFilters';
 import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
+import { countryCodesFromText } from '@/lib/scholarships/countryEligibility/countries';
 import { isInternationalFriendlyScholarship } from '@/lib/scholarships/internationalFriendly';
 
 export const SUBSCRIPTION_LOCKED_EASY_APPLY_IDS = new Set([
@@ -58,9 +59,16 @@ export function isSubscriptionLockedEasyApplyId(id: string | null | undefined): 
 }
 
 export function isCountrySpecificScholarship(scholarship: Scholarship): boolean {
-  return (scholarship.applicantCountryCodes ?? []).some((code) =>
+  const hasStructuredCountryCode = [
+    ...(scholarship.applicantCountryCodes ?? []),
+    ...(scholarship.hostCountryCodes ?? [])
+  ].some((code) =>
     /^[A-Z]{2}$/i.test(code.trim())
   );
+  if (hasStructuredCountryCode) return true;
+
+  const identityText = `${scholarship.title} ${scholarship.provider ?? ''}`;
+  return countryCodesFromText(identityText).length > 0;
 }
 
 export function isHotDeadlineScholarship(scholarship: Scholarship): boolean {

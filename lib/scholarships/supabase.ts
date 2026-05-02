@@ -125,6 +125,7 @@ const LISTING_CARD_SELECT_COLUMNS = [
   'provider_name',
   'provider_url',
   'award_amount_text',
+  'currency',
   'award_amount_numeric_sort',
   'deadline_text',
   'deadline_date',
@@ -492,6 +493,7 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
       !Number.isNaN(Number(row.award_amount_numeric_sort))
         ? Number(row.award_amount_numeric_sort)
         : undefined,
+    awardCurrency: row.currency?.trim().toUpperCase() || undefined,
     payoutMethod: row.payout_method?.trim() || undefined,
     credibilityScore:
       row.credibility_score != null && !Number.isNaN(row.credibility_score)

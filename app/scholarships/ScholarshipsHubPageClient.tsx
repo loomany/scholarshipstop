@@ -3196,6 +3196,7 @@ function ScholarshipsPageInner({
                 onQueryChange={onQueryChange}
                 categoryCounts={categoryCounts}
                 countryCounts={countryCounts}
+                countryCountsLoading={!sidebarCountsReady}
                 unspecifiedApplicantCountryCount={
                   unspecifiedApplicantCountryCount
                 }
@@ -3225,7 +3226,6 @@ function ScholarshipsPageInner({
                 onGuestSortBlocked={
                   guestLockedAction
                 }
-                onSubscriptionSortBlocked={openLockedCategoryWall}
                 onGuestLockedAction={guestLockedAction}
                 catalogListingLocked={hubTreatAsGuest}
                 savedFilterBarHint={savedFilterBarHint}
@@ -3395,10 +3395,6 @@ function ScholarshipsPageInner({
                           currentPage={listPageForUi}
                           totalPages={totalPages}
                           buildHref={buildPageHref}
-                          guestPaginationLocked={catalogFreeTier}
-                          onGuestLockedClick={
-                            catalogFreeTier ? () => openRegistrationWall() : undefined
-                          }
                         />
                       </>
                     )}
@@ -3556,14 +3552,6 @@ function ScholarshipsPageInner({
                 currentPage={listPageForUi}
                 totalPages={totalPages}
                 buildHref={buildPageHref}
-                guestPaginationLocked={
-                  catalogFreeTier && activeTab === 'best-recommendation'
-                }
-                onGuestLockedClick={
-                  catalogFreeTier && activeTab === 'best-recommendation'
-                    ? () => openRegistrationWall()
-                    : undefined
-                }
               />
             </>
           )}

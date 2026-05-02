@@ -1,9 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Lock } from 'lucide-react';
 
-import { scholarshipGuestLockIconClass } from '@/lib/constants/scholarshipActionUi';
 import {
   sitePaginationActiveClass,
   sitePaginationDisabledClass,
@@ -22,12 +20,6 @@ type ScholarshipsPaginationProps = {
   currentPage: number;
   totalPages: number;
   buildHref: (page: number) => string;
-  /**
-   * Guest + Best recommendation: only page 1 is navigable; other page numbers and Next
-   * open the registration flow instead of changing the URL.
-   */
-  guestPaginationLocked?: boolean;
-  onGuestLockedClick?: () => void;
 };
 
 const linkClass = sitePaginationLinkClass;
@@ -37,9 +29,7 @@ const disabledClass = sitePaginationDisabledClass;
 export default function ScholarshipsPagination({
   currentPage,
   totalPages,
-  buildHref,
-  guestPaginationLocked = false,
-  onGuestLockedClick
+  buildHref
 }: ScholarshipsPaginationProps) {
   if (totalPages <= 1) {
     return null;
@@ -49,8 +39,6 @@ export default function ScholarshipsPagination({
   const itemsDesktop = visiblePaginationItemsDesktop(currentPage, totalPages);
   const prevDisabled = currentPage <= 1;
   const nextDisabled = currentPage >= totalPages;
-  const nextGuestLocked =
-    guestPaginationLocked && !nextDisabled && Boolean(onGuestLockedClick);
 
   const renderItems = (
     items: (number | 'ellipsis')[],
@@ -65,24 +53,6 @@ export default function ScholarshipsPagination({
         >
           …
         </span>
-      ) : guestPaginationLocked && item > 1 ? (
-        <button
-          key={`${keyPrefix}-p-${item}`}
-          type="button"
-          onClick={onGuestLockedClick}
-          title="Create a free account to see more pages"
-          className={`${linkClass} cursor-pointer ${item === currentPage ? activeClass : ''}`}
-          aria-current={item === currentPage ? 'page' : undefined}
-        >
-          <span className="inline-flex items-center justify-center gap-0.5 tabular-nums">
-            {item}
-            <Lock
-              className={`h-3 w-3 shrink-0 ${scholarshipGuestLockIconClass}`}
-              strokeWidth={2}
-              aria-hidden
-            />
-          </span>
-        </button>
       ) : (
         <Link
           key={`${keyPrefix}-p-${item}`}
@@ -125,22 +95,6 @@ export default function ScholarshipsPagination({
           <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
             Next
           </span>
-        ) : nextGuestLocked ? (
-          <button
-            type="button"
-            onClick={onGuestLockedClick}
-            title="Create a free account to see more pages"
-            className={`${linkClass} cursor-pointer`}
-          >
-            <span className="inline-flex items-center justify-center gap-1">
-              Next
-              <Lock
-                className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                strokeWidth={2}
-                aria-hidden
-              />
-            </span>
-          </button>
         ) : (
           <Link
             href={buildHref(currentPage + 1)}
@@ -172,22 +126,6 @@ export default function ScholarshipsPagination({
           <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
             Next
           </span>
-        ) : nextGuestLocked ? (
-          <button
-            type="button"
-            onClick={onGuestLockedClick}
-            title="Create a free account to see more pages"
-            className={`${linkClass} cursor-pointer`}
-          >
-            <span className="inline-flex items-center justify-center gap-1">
-              Next
-              <Lock
-                className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                strokeWidth={2}
-                aria-hidden
-              />
-            </span>
-          </button>
         ) : (
           <Link
             href={buildHref(currentPage + 1)}

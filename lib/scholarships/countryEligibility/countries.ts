@@ -78,10 +78,34 @@ for (const country of SCHOLARSHIP_COUNTRY_OPTIONS) {
   for (const alias of country.aliases) ALIAS_TO_CODE.set(alias.toLowerCase(), country.code);
 }
 
+let englishRegionDisplayNames: Intl.DisplayNames | null | undefined;
+
+function getEnglishRegionDisplayNames(): Intl.DisplayNames | null {
+  if (englishRegionDisplayNames !== undefined) return englishRegionDisplayNames;
+  if (typeof Intl.DisplayNames !== 'function') {
+    englishRegionDisplayNames = null;
+    return englishRegionDisplayNames;
+  }
+  englishRegionDisplayNames = new Intl.DisplayNames(['en'], { type: 'region' });
+  return englishRegionDisplayNames;
+}
+
+function labelFromIsoCountryCode(code: string): string | null {
+  const normalized = code.trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(normalized)) return null;
+  const label = getEnglishRegionDisplayNames()?.of(normalized)?.trim();
+  if (!label || label === normalized || label === 'Unknown Region') return null;
+  return label;
+}
+
 export function countryLabelFromCode(code: string): string {
-  const normalized = normalizeCountryCode(code);
-  if (!normalized) return code.trim().toUpperCase();
-  return SCHOLARSHIP_COUNTRY_BY_CODE[normalized]?.label ?? normalized;
+  const normalized = code.trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(normalized)) return normalized;
+  return (
+    SCHOLARSHIP_COUNTRY_BY_CODE[normalized]?.label ??
+    labelFromIsoCountryCode(normalized) ??
+    normalized
+  );
 }
 
 export function normalizeCountryCode(raw: string | null | undefined): string | null {
@@ -89,7 +113,9 @@ export function normalizeCountryCode(raw: string | null | undefined): string | n
   if (!t) return null;
   const upper = t.toUpperCase();
   if (/^[A-Z]{2}$/.test(upper)) {
-    return SCHOLARSHIP_COUNTRY_BY_CODE[upper] ? upper : null;
+    return SCHOLARSHIP_COUNTRY_BY_CODE[upper] || labelFromIsoCountryCode(upper)
+      ? upper
+      : null;
   }
   return ALIAS_TO_CODE.get(t.toLowerCase()) ?? null;
 }
