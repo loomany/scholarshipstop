@@ -172,6 +172,8 @@ type SeoListBodyOpts = {
   slugOnlyMoreFilters?: MoreFiltersJson;
   /** Manifest / long-tail SEO: canonical `seo_tags` AND filter (allowlisted server-side). */
   requiredSeoTags?: string[];
+  /** Clean SEO routes can own host-country filters without exposing `host_cc` query. */
+  hostCountryCodes?: string[];
 };
 
 function buildGuestPublicCacheControl(args: {
@@ -269,6 +271,9 @@ async function handleList(
   const hostCountryCodesFromUrl = parseHubListingCountryCodesParam(
     searchParams.get('host_cc')
   );
+  const hostCountryCodesFromBody = Array.isArray(seoBody?.hostCountryCodes)
+    ? seoBody.hostCountryCodes
+    : [];
 
   const bounds = await fetchGlobalFilterBounds(listingSupabase);
   const moreFilters = moreFiltersFromJson(
@@ -340,7 +345,9 @@ async function handleList(
       appCountryCodesFromUrl:
         appCountryCodesFromUrl.length > 0 ? appCountryCodesFromUrl : null,
       hostCountryCodesFromUrl:
-        hostCountryCodesFromUrl.length > 0 ? hostCountryCodesFromUrl : null,
+        hostCountryCodesFromUrl.length > 0 || hostCountryCodesFromBody.length > 0
+          ? [...hostCountryCodesFromUrl, ...hostCountryCodesFromBody]
+          : null,
       longTailLegacySlugs: lt.filter(Boolean),
       similarTo,
       similarCategorySlug,
@@ -904,6 +911,7 @@ export async function POST(request: Request) {
       slugOnlyMoreFilters?: MoreFiltersJson;
       requiredSeoTags?: string[];
       providerSlug?: string | null;
+      hostCountryCodes?: string[];
       /** `null` = client has no saved filter preset (Saved Filters count = 0). */
       savedFiltersSnapshot?: MoreFiltersJson | null;
       guestBestRecommendationPreviewEnabled?: boolean;
@@ -922,7 +930,8 @@ export async function POST(request: Request) {
     return await handleList(sp, json.moreFilters, json.longTailLegacySlugs, {
       seoListingFallback: json.seoListingFallback,
       slugOnlyMoreFilters: json.slugOnlyMoreFilters,
-      requiredSeoTags: json.requiredSeoTags
+      requiredSeoTags: json.requiredSeoTags,
+      hostCountryCodes: json.hostCountryCodes
     }, json.savedFiltersSnapshot, json.providerSlug, json.guestBestRecommendationPreviewEnabled === true, json.sidebarOnlyMeta === true);
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));

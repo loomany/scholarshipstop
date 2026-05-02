@@ -23,6 +23,7 @@ import {
 } from '@/lib/scholarships/seoScholarshipResolve';
 import { getURL } from '@/utils/helpers';
 import { tabToHubPath } from '@/app/scholarships/scholarshipHubPath';
+import { allScholarshipCountrySeoRoutes } from '@/app/scholarships/scholarshipCountrySeo';
 
 export { isSeoDripFeedActive } from '@/lib/seo/seoDripFeed';
 
@@ -470,12 +471,20 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
       };
     });
 
+  const countrySeoPages: MetadataRoute.Sitemap = allScholarshipCountrySeoRoutes()
+    .filter((route) => canonicalPathAllowedInSeoSitemap(route.canonicalPath))
+    .map((route) => ({
+      url: `${base}${route.href}`,
+      lastModified: new Date()
+    }));
+
   const seo = dedupeSitemapEntries([
     ...manifestSeoPages,
     ...longTailPages,
     ...stateListingPages,
     ...programmaticHubPages,
-    ...universityHubPages
+    ...universityHubPages,
+    ...countrySeoPages
   ]);
 
   const [scholarships, providers, compareRows, stateCompareRows] = await Promise.all([

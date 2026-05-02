@@ -40,6 +40,10 @@ import PremiumPaywallModal from '@/components/scholarships/PremiumPaywallModal';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import { buildScholarshipTagHubHref } from '@/app/scholarships/scholarshipTagHubLinks';
+import {
+  scholarshipApplicantCountrySeoHref,
+  scholarshipHostCountrySeoHref
+} from '@/app/scholarships/scholarshipCountrySeo';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
@@ -454,13 +458,19 @@ function SimilarScholarshipDetailListItem({
       grantLocationBadge.key === 'grant-location-us' ||
       grantLocationBadge.text === 'US-based'
     ) {
-      return buildScholarshipTagHubHref({ hostCountryCode: 'US' });
+      return (
+        scholarshipHostCountrySeoHref('US') ??
+        buildScholarshipTagHubHref({ hostCountryCode: 'US' })
+      );
     }
     const prefix = 'grant-location-';
     if (grantLocationBadge.key.startsWith(prefix)) {
       const code = grantLocationBadge.key.slice(prefix.length).toUpperCase();
       if (/^[A-Z]{2}$/.test(code)) {
-        return buildScholarshipTagHubHref({ hostCountryCode: code });
+        return (
+          scholarshipHostCountrySeoHref(code) ??
+          buildScholarshipTagHubHref({ hostCountryCode: code })
+        );
       }
     }
     return null;
@@ -468,9 +478,12 @@ function SimilarScholarshipDetailListItem({
 
   const applicantCountryHubHref = useMemo(() => {
     if (!applicantCountryBadge) return null;
-    return buildScholarshipTagHubHref({
-      appCountryCode: applicantCountryBadge.code
-    });
+    return (
+      scholarshipApplicantCountrySeoHref(applicantCountryBadge.code) ??
+      buildScholarshipTagHubHref({
+        appCountryCode: applicantCountryBadge.code
+      })
+    );
   }, [applicantCountryBadge]);
 
   const similarGrantGeoPillClass = deadlinePassed

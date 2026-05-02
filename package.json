@@ -98,6 +98,7 @@
     "seo:worker-drain": "dotenv -e .env.local -- npx tsx scripts/seo-worker-drain.ts",
     "seo:batch-local": "powershell -ExecutionPolicy Bypass -File scripts/run-seo-batch.ps1",
     "seo:enqueue-missing": "dotenv -e .env.local -- npx tsx scripts/seo-enqueue-missing-hubs.ts",
+    "seo:enqueue-country-pages": "dotenv -e .env.local -- npx tsx scripts/enqueue-country-seo-pages.ts --execute",
     "seo:enqueue-university-compare": "dotenv -e .env.local -- npx tsx scripts/enqueue-university-compare.ts",
     "seo:enqueue-state-compare": "dotenv -e .env.local -- npx tsx scripts/enqueue-state-compare.ts",
     "seo:refresh-university-compare-sources": "dotenv -e .env.local -- npx tsx scripts/refresh-university-compare-sources.ts",

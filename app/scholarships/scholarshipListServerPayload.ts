@@ -30,6 +30,7 @@ import {
 import { parseHubScholarshipTabParam } from '@/app/scholarships/scholarshipTabs';
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import type { createClient } from '@/utils/supabase/server';
+import type { ScholarshipCountrySeoRoute } from '@/app/scholarships/scholarshipCountrySeo';
 import {
   moreFiltersFromJson,
   moreFiltersToJson,
@@ -301,6 +302,94 @@ export async function fetchInitialLongTailScholarshipsPayload(
   };
 }
 
+export async function fetchInitialCountryScholarshipsPayload(
+  supabase: ServerSupabaseClient | null,
+  route: ScholarshipCountrySeoRoute
+): Promise<{
+  result: ScholarshipListResult;
+  routeScope: LongTailRouteScopePayload;
+}> {
+  const offlineBounds = {
+    amountMin: 0,
+    amountMax: 50000,
+    applicantsMin: 0,
+    applicantsMax: 200000
+  } as Awaited<ReturnType<typeof fetchGlobalFilterBounds>>;
+
+  const makeMoreFilters = (
+    bounds: Awaited<ReturnType<typeof fetchGlobalFilterBounds>>
+  ) => {
+    const moreFilters = defaultMoreFiltersFromBounds(bounds);
+    if (route.kind === 'applicant') {
+      moreFilters.includeApplicantCountryCodes.add(route.code);
+    }
+    return moreFilters;
+  };
+
+  if (!supabase) {
+    const moreFilters = makeMoreFilters(offlineBounds);
+    return {
+      result: {
+        scholarships: [],
+        total: 0,
+        page: 1,
+        limit: SCHOLARSHIPS_PAGE_SIZE
+      },
+      routeScope: {
+        longTailLegacySlugs: [],
+        requiredSeoTags: [],
+        baseMoreFilters: moreFiltersToJson(moreFilters),
+        slugOnlyMoreFilters: moreFiltersToJson(moreFilters),
+        seoListingFallback: false,
+        hostCountryCodes: route.kind === 'host' ? [route.code] : []
+      }
+    };
+  }
+
+  const bounds = await fetchGlobalFilterBounds(supabase);
+  const moreFilters = makeMoreFilters(bounds);
+  const req = scholarshipListRequestFromParts({
+    page: 1,
+    limit: SCHOLARSHIPS_PAGE_SIZE,
+    sort: 'magic',
+    tab: 'matches',
+    q: '',
+    category: null,
+    categoryPageSlug: null,
+    catalogSubjectCategoryId: null,
+    deadline: 'any',
+    state: null,
+    ignored: null,
+    saved: null,
+    started: null,
+    submitted: null,
+    moreFilters,
+    hostCountryCodesFromUrl: route.kind === 'host' ? [route.code] : null,
+    longTailLegacySlugs: [],
+    similarTo: null,
+    similarCategorySlug: null,
+    listScope: 'catalog',
+    requiredSeoTags: []
+  });
+  const result = await executeScholarshipListQuery(supabase, req, {
+    countOnly: false,
+    includeMeta: true,
+    includeCategoryCounts: true,
+    isProSubscriber: false
+  });
+  return {
+    result,
+    routeScope: {
+      longTailLegacySlugs: [],
+      requiredSeoTags: [],
+      baseMoreFilters: moreFiltersToJson(moreFilters),
+      slugOnlyMoreFilters: moreFiltersToJson(moreFilters),
+      seoListingFallback: false,
+      hostCountryCodes: route.kind === 'host' ? [route.code] : []
+    }
+  };
+}
+
 export type LongTailRouteScopePayload = {
   longTailLegacySlugs: string[];
   requiredSeoTags: string[];
@@ -308,6 +397,7 @@ export type LongTailRouteScopePayload = {
   slugOnlyMoreFilters: MoreFiltersJson;
   seoListingFallback: boolean;
   providerSlug?: string | null;
+  hostCountryCodes?: string[];
 };
 
 export async function fetchInitialUniversityHubScholarshipsPayload(

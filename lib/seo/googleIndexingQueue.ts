@@ -92,8 +92,20 @@ function distributeEvenly(total: number, buckets: GoogleIndexingQuotaBucket[]) {
 }
 
 function computeBucketCapsPerLane(
-  laneCap: number
+  laneCap: number,
+  input?: { seoPagePriorityActive?: boolean }
 ): Record<GoogleIndexingQuotaBucket, number> {
+  if (input?.seoPagePriorityActive) {
+    const pageCap = Math.floor(laneCap / 2);
+    return {
+      scholarship: Math.floor(laneCap * 0.42),
+      resource: Math.max(1, Math.floor(laneCap * 0.02)),
+      provider: Math.max(1, Math.floor(laneCap * 0.02)),
+      essay: Math.max(1, Math.floor(laneCap * 0.02)),
+      page: pageCap
+    };
+  }
+
   const scholarshipShare = parsePercent(
     process.env.GOOGLE_INDEXING_SCHOLARSHIP_SHARE_PERCENT,
     80
@@ -108,6 +120,23 @@ function computeBucketCapsPerLane(
     essay: distributed.essay,
     page: distributed.page
   };
+}
+
+async function hasPendingSeoPageIndexingBacklog(
+  admin: ReturnType<typeof createServiceRoleSupabaseClient>
+): Promise<boolean> {
+  if (!admin) return false;
+  if (process.env.GOOGLE_INDEXING_SEO_PAGE_PRIORITY === '0') return false;
+  const { count, error } = await admin
+    .from('google_indexing_queue')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'pending')
+    .eq('content_kind', 'page');
+  if (error) {
+    console.error('[google-indexing] pending page backlog check', error.message);
+    return false;
+  }
+  return (count ?? 0) > 0;
 }
 
 function quotaBucketForKind(
@@ -142,7 +171,10 @@ async function tryReserveIndexingPublish(
   if (!client) return 'no_service_role';
   const totalCap = maxPublishPerDay();
   const laneCaps = computeLaneCaps(totalCap);
-  const bucketCaps = computeBucketCapsPerLane(laneCaps[input.lane]);
+  const seoPagePriorityActive = await hasPendingSeoPageIndexingBacklog(client);
+  const bucketCaps = computeBucketCapsPerLane(laneCaps[input.lane], {
+    seoPagePriorityActive
+  });
   /**
    * Call `client.rpc(...)` on the client — do not assign `client.rpc` to a variable and invoke it,
    * or `this` is lost inside @supabase/supabase-js and you get `Cannot read properties of undefined (reading 'rest')`.

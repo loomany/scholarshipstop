@@ -10,6 +10,10 @@ import {
   listUsStateSeoSlugs
 } from '@/lib/scholarships/seoScholarshipRouteTokens';
 import type { SeoScholarshipRouteManifestEntry } from '@/lib/scholarships/seoScholarshipManifest';
+import {
+  resolveScholarshipCountrySeoRoute,
+  type ScholarshipCountrySeoRoute
+} from '@/app/scholarships/scholarshipCountrySeo';
 
 /** US state segments first so filters and canonical URLs prioritize location (e.g. nursing/california → california/nursing). */
 function prioritizeUsStateSegmentsNorm(norm: string[]): string[] {
@@ -26,6 +30,7 @@ function prioritizeUsStateSegmentsNorm(norm: string[]): string[] {
 export type ResolvedScholarshipSlugPath =
   | { kind: 'scholarship_detail' }
   | { kind: 'legacy_long_tail'; slug: string }
+  | { kind: 'country_seo'; route: ScholarshipCountrySeoRoute }
   | {
       kind: 'manifest_seo';
       entry: SeoScholarshipRouteManifestEntry;
@@ -107,6 +112,11 @@ export function resolveScholarshipSlugPath(
   segments: string[]
 ): ResolvedScholarshipSlugPath {
   const norm = segments.map((s) => normalizeScholarshipDynamicParam(s));
+
+  const countrySeo = resolveScholarshipCountrySeoRoute(norm);
+  if (countrySeo) {
+    return { kind: 'country_seo', route: countrySeo };
+  }
 
   if (norm.length === 1 && isScholarshipDetailUuidParam(norm[0]!)) {
     return { kind: 'scholarship_detail' };

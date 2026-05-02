@@ -22,6 +22,7 @@ import {
 import {
   buildInitialListRequestKey,
   createInitialScholarshipsPayload,
+  fetchInitialCountryScholarshipsPayload,
   fetchInitialHubScholarshipsPayload,
   fetchInitialLongTailScholarshipsPayload
 } from '@/app/scholarships/scholarshipListServerPayload';
@@ -392,6 +393,73 @@ export default async function ScholarshipsSlugPathPageBody({
           initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
           initialComparePeers={initialComparePeers}
         />
+      </>
+    );
+  }
+
+  if (resolved.kind === 'country_seo') {
+    const supabase = createPublicClient();
+    const { route } = resolved;
+    const { result: initialListPayload, routeScope } =
+      await fetchInitialCountryScholarshipsPayload(supabase, route);
+    const listingJsonLd = buildScholarshipListingJsonLd({
+      name: route.h1,
+      description: route.metaDescription,
+      path: route.href,
+      result: initialListPayload
+    });
+
+    return (
+      <>
+        {listingJsonLd ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
+          />
+        ) : null}
+        <h1 className="sr-only">{route.h1}</h1>
+        <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={route.h1} />}>
+          <ScholarshipsHubPageAuthBridge
+            initialPayload={createInitialScholarshipsPayload(
+              buildInitialListRequestKey({
+                kind: 'long_tail',
+                routeKey: route.canonicalPath,
+                searchParamsString: ''
+              }),
+              initialListPayload
+            )}
+            routeScope={routeScope}
+            currentPathname={route.href}
+            leadContent={
+              <SeoScholarshipHero
+                heading={route.h1}
+                scholarshipCount={initialListPayload.total}
+                listLoading={false}
+                introHtml={route.intro}
+                introFromSeoBundle={false}
+                fallbackUsed={false}
+                thinListing={initialListPayload.total < 4}
+                exactFilterMatchTotal={initialListPayload.total}
+                qualityBucket={initialListPayload.total >= 4 ? 'GOOD' : 'THIN'}
+                pageData={null}
+                updatedAt={null}
+                canonicalTarget={null}
+                publicSeoPage
+              />
+            }
+            postListingContent={
+              <SeoScholarshipPostListingSeo
+                heading={route.h1}
+                supportingParagraph={route.supporting}
+                relatedIntroParagraph={null}
+                faqItems={route.faq}
+                pageData={null}
+                qualityBucket={initialListPayload.total >= 4 ? 'GOOD' : 'THIN'}
+                updatedAt={null}
+              />
+            }
+          />
+        </Suspense>
       </>
     );
   }

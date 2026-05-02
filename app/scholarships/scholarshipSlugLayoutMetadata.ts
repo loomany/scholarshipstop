@@ -151,6 +151,30 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     };
   }
 
+  if (resolved.kind === 'country_seo') {
+    const { route } = resolved;
+    const canonical = getCanonical(route.href);
+    const meta: Metadata = {
+      title: route.metaTitle,
+      description: route.metaDescription,
+      openGraph: {
+        title: route.metaTitle,
+        description: route.metaDescription,
+        url: canonical,
+        type: 'website'
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: route.metaTitle,
+        description: route.metaDescription
+      },
+      alternates: {
+        canonical
+      }
+    };
+    return withExplicitIndexFollowWhenUnset(meta);
+  }
+
   if (resolved.kind === 'legacy_long_tail') {
     if (shouldBlockScholarshipListingForDrip(resolved.slug)) {
       const canonical = getCanonical(`/scholarships/${resolved.slug}`);

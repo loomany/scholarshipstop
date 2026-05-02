@@ -16,6 +16,10 @@ import {
   scholarshipCatalogChipHubHref
 } from '@/app/scholarships/scholarshipTagHubLinks';
 import {
+  scholarshipApplicantCountrySeoHref,
+  scholarshipHostCountrySeoHref
+} from '@/app/scholarships/scholarshipCountrySeo';
+import {
   SCHOLARSHIP_ACTION_FILL,
   SCHOLARSHIP_ACTION_FILL_PRESSED,
   SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
@@ -215,13 +219,19 @@ export default function ScholarshipCard({
       grantLocationBadge.key === 'grant-location-us' ||
       grantLocationBadge.text === 'US-based'
     ) {
-      return buildScholarshipTagHubHref({ hostCountryCode: 'US' });
+      return (
+        scholarshipHostCountrySeoHref('US') ??
+        buildScholarshipTagHubHref({ hostCountryCode: 'US' })
+      );
     }
     const prefix = 'grant-location-';
     if (grantLocationBadge.key.startsWith(prefix)) {
       const code = grantLocationBadge.key.slice(prefix.length).toUpperCase();
       if (/^[A-Z]{2}$/.test(code)) {
-        return buildScholarshipTagHubHref({ hostCountryCode: code });
+        return (
+          scholarshipHostCountrySeoHref(code) ??
+          buildScholarshipTagHubHref({ hostCountryCode: code })
+        );
       }
     }
     return null;
@@ -229,9 +239,12 @@ export default function ScholarshipCard({
 
   const applicantCountryHubHref = useMemo(() => {
     if (!applicantCountryBadge) return null;
-    return buildScholarshipTagHubHref({
-      appCountryCode: applicantCountryBadge.code
-    });
+    return (
+      scholarshipApplicantCountrySeoHref(applicantCountryBadge.code) ??
+      buildScholarshipTagHubHref({
+        appCountryCode: applicantCountryBadge.code
+      })
+    );
   }, [applicantCountryBadge]);
 
   const gridShell = stackedListing

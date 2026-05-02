@@ -38,6 +38,8 @@ export type ScholarshipsListPostBody = {
   slugOnlyMoreFilters?: MoreFiltersJson;
   requiredSeoTags?: string[];
   providerSlug?: string | null;
+  /** Route-owned host country filters for clean SEO paths (no `host_cc` in URL). */
+  hostCountryCodes?: string[];
   /** Sidebar-only meta refresh can skip category dropdown counts. */
   sidebarOnlyMeta?: boolean;
 };
@@ -107,6 +109,7 @@ export async function postScholarshipsCount(
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
       requiredSeoTags: body.requiredSeoTags,
       providerSlug: body.providerSlug,
+      hostCountryCodes: body.hostCountryCodes,
       sidebarOnlyMeta: body.sidebarOnlyMeta
     })
   });
@@ -135,6 +138,7 @@ export async function postScholarshipsMeta(
       slugOnlyMoreFilters: body.slugOnlyMoreFilters,
       requiredSeoTags: body.requiredSeoTags,
       providerSlug: body.providerSlug,
+      hostCountryCodes: body.hostCountryCodes,
       sidebarOnlyMeta: body.sidebarOnlyMeta
     })
   });

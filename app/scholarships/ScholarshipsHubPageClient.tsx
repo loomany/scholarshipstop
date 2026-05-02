@@ -695,7 +695,8 @@ function ScholarshipsPageInner({
             baseMoreFilters: routeScope.baseMoreFilters,
             slugOnlyMoreFilters: routeScope.slugOnlyMoreFilters,
             seoListingFallback: routeScope.seoListingFallback,
-            providerSlug: routeScope.providerSlug
+            providerSlug: routeScope.providerSlug,
+            hostCountryCodes: routeScope.hostCountryCodes
           })
         : 'hub',
     [routeScope]
@@ -2233,7 +2234,8 @@ function ScholarshipsPageInner({
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-          providerSlug: appliedProviderSlug
+          providerSlug: appliedProviderSlug,
+          hostCountryCodes: routeScope?.hostCountryCodes ?? []
         },
         { signal }
       );
@@ -2321,7 +2323,8 @@ function ScholarshipsPageInner({
           requiredSeoTags: routeScope?.requiredSeoTags ?? [],
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-          providerSlug: appliedProviderSlug
+          providerSlug: appliedProviderSlug,
+          hostCountryCodes: routeScope?.hostCountryCodes ?? []
         },
         { signal }
       );
@@ -2385,6 +2388,7 @@ function ScholarshipsPageInner({
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
           providerSlug: appliedProviderSlug,
+          hostCountryCodes: routeScope?.hostCountryCodes ?? [],
           sidebarOnlyMeta: false
         },
         { signal }
@@ -2782,6 +2786,7 @@ function ScholarshipsPageInner({
             requiredSeoTags: routeScope?.requiredSeoTags ?? [],
             seoListingFallback: routeScope?.seoListingFallback,
             slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+            hostCountryCodes: routeScope?.hostCountryCodes ?? [],
             providerSlug:
               routeScope?.providerSlug ?? moreFiltersDraft?.filterUniversitySlug ?? null
           } as const;
