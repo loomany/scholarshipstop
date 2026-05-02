@@ -833,7 +833,11 @@ async function sendTelegramAdminBroadcast(text: string, category: AdminNotifyCat
 }
 
 /** Same recipients as {@link sendTelegramAdminBroadcast}, HTML body. */
-async function sendTelegramAdminBroadcastHtml(text: string, category: AdminNotifyCategory) {
+async function sendTelegramAdminBroadcastHtml(
+  text: string,
+  category: AdminNotifyCategory,
+  replyMarkup?: TelegramReplyMarkup
+) {
   try {
     const chatIds = await collectTelegramAdminAlertChatIdsForCategory(category);
     if (chatIds.length === 0) {
@@ -842,7 +846,7 @@ async function sendTelegramAdminBroadcastHtml(text: string, category: AdminNotif
       );
       return;
     }
-    const merged = mergeAdminAlertReplyMarkup(undefined);
+    const merged = mergeAdminAlertReplyMarkup(replyMarkup);
     for (const chatId of chatIds) {
       try {
         await sendTelegramMessage(chatId, text, merged, { parse_mode: 'HTML' });
@@ -1277,6 +1281,11 @@ export async function notifyTelegramSignup(payload: {
     const sourceSafe = escapeTelegramHtml(
       formatAdminSourceLabel(payload.source ?? 'app')
     );
+    const signupMarkup: TelegramReplyMarkup = {
+      inline_keyboard: [
+        [button('👤 Открыть пользователя', buildUsersOpenCallbackData(payload.userId))]
+      ]
+    };
     await sendTelegramAdminBroadcastHtml(
       [
         '<b>✨ Новая регистрация в ScholarshipTop</b>',
@@ -1285,7 +1294,8 @@ export async function notifyTelegramSignup(payload: {
         `<b>Email:</b> ${emailSafe}`,
         `<b>Источник:</b> ${sourceSafe}`
       ].join('\n'),
-      'auth'
+      'auth',
+      signupMarkup
     );
     logRegistrationPipeline('TelegramNotificationSent', {
       event: 'signup',
@@ -1434,6 +1444,11 @@ export async function notifyTelegramEmailVerified(payload: {
     }
 
     const emailSafe = escapeTelegramHtml(payload.email);
+    const verifiedMarkup: TelegramReplyMarkup = {
+      inline_keyboard: [
+        [button('👤 Открыть пользователя', buildUsersOpenCallbackData(payload.userId))]
+      ]
+    };
     await sendTelegramAdminBroadcastHtml(
       [
         '<b>Подтверждение email</b>',
@@ -1441,7 +1456,8 @@ export async function notifyTelegramEmailVerified(payload: {
         '',
         `<b>Email:</b> ${emailSafe}`
       ].join('\n'),
-      'auth'
+      'auth',
+      verifiedMarkup
     );
     logRegistrationPipeline('TelegramNotificationSent', {
       event: 'email_verified',
@@ -2095,13 +2111,37 @@ async function sendAdminUserAudit(
     return;
   }
 
-  const { data: touch, error: touchErr } = await admin
+  let effectiveVisitorId = visitorId;
+  const touchSelect =
+    'visitor_id, landing_url, traffic_channel, created_at, is_likely_bot, referrer, utm_source, utm_medium, utm_campaign, utm_content, click_id, user_agent_snapshot';
+
+  let { data: touch, error: touchErr } = await admin
     .from('anonymous_visitor_first_touch')
-    .select(
-      'visitor_id, landing_url, traffic_channel, created_at, is_likely_bot, referrer, utm_source, utm_medium, utm_campaign, utm_content, click_id, user_agent_snapshot'
-    )
-    .eq('visitor_id', visitorId)
+    .select(touchSelect)
+    .eq('visitor_id', effectiveVisitorId)
     .maybeSingle();
+
+  if (touchErr || !touch) {
+    const { data: linkRows, error: linkErr } = await (admin as any)
+      .from('visitor_attribution')
+      .select('visitor_id')
+      .eq('user_id', visitorId)
+      .order('last_seen_at', { ascending: false })
+      .limit(1);
+    if (!linkErr && linkRows?.length) {
+      const vid = String((linkRows[0] as { visitor_id?: string }).visitor_id ?? '').trim();
+      if (vid && VISITOR_ID_RE.test(vid)) {
+        effectiveVisitorId = vid;
+        const retry = await admin
+          .from('anonymous_visitor_first_touch')
+          .select(touchSelect)
+          .eq('visitor_id', effectiveVisitorId)
+          .maybeSingle();
+        touch = retry.data as typeof touch;
+        touchErr = retry.error;
+      }
+    }
+  }
 
   if (touchErr || !touch) {
     await failPlain(`Пользователь не найден: ${visitorId}`);
@@ -2113,13 +2153,13 @@ async function sendAdminUserAudit(
     .select(
       'user_id,first_seen_at,last_seen_at,first_source,first_medium,first_campaign,first_referrer,first_landing_path,last_source,last_medium,last_campaign,last_referrer,last_landing_path'
     )
-    .eq('visitor_id', visitorId)
+    .eq('visitor_id', effectiveVisitorId)
     .maybeSingle();
 
   const { data: pageViewsRaw, error: pvErr } = await (admin as any)
     .from('visitor_page_views')
     .select('path, kind, event_source, full_url, seen_at')
-    .eq('visitor_id', visitorId)
+    .eq('visitor_id', effectiveVisitorId)
     .order('seen_at', { ascending: false })
     .limit(80);
 
@@ -2132,7 +2172,7 @@ async function sendAdminUserAudit(
       const { data: legacyPageViewsRaw, error: legacyErr } = await (admin as any)
         .from('visitor_page_views')
         .select('path, kind, seen_at')
-        .eq('visitor_id', visitorId)
+        .eq('visitor_id', effectiveVisitorId)
         .order('seen_at', { ascending: false })
         .limit(80);
       if (legacyErr) {
@@ -2170,7 +2210,7 @@ async function sendAdminUserAudit(
   let textParts: string[];
   try {
     textParts = buildVisitorAdminCardHtmlParts({
-      visitorId,
+      visitorId: effectiveVisitorId,
       touch: touch as VisitorCardTouch,
       attribution: (attribution ?? null) as VisitorCardAttribution | null,
       pageViews,
@@ -2190,7 +2230,7 @@ async function sendAdminUserAudit(
     return;
   }
 
-  const refreshMarkup = buildVisitorCardRefreshMarkup(visitorId);
+  const refreshMarkup = buildVisitorCardRefreshMarkup(effectiveVisitorId);
 
   if (editTarget) {
     if (textParts.length > 1) {
