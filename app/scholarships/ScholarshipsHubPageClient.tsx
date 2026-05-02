@@ -690,10 +690,19 @@ function ScholarshipsPageInner({
   const guestCompletedScholarshipQuiz =
     landingQuizProfileSeed != null ||
     bestRecommendationWizardStore?.submitted === true;
+  const guestBestHasManualCountryFilter =
+    activeTab === 'best-recommendation' &&
+    transientBestRecommendationProfileSeed == null &&
+    Boolean(
+      moreFiltersApplied &&
+        (moreFiltersApplied.includeApplicantCountryCodes.size > 0 ||
+          moreFiltersApplied.includeUnspecifiedApplicantCountries)
+    );
   const shouldShowScholarshipQuestionsCta =
     hubTreatAsGuest &&
     shouldPromptScholarshipQuiz &&
-    !guestCompletedScholarshipQuiz;
+    !guestCompletedScholarshipQuiz &&
+    !guestBestHasManualCountryFilter;
 
   /** Only when Hub guest Best tab wizard is active — drives list/cache refetch per field edit. */
   const guestBestWizardFingerprint = useMemo(() => {
@@ -2194,7 +2203,7 @@ function ScholarshipsPageInner({
     if (!guestBestRecommendationStackedBrowsingUi || !listMeta?.filterBounds) {
       return null;
     }
-    return cloneMoreFilters(
+    const base = cloneMoreFilters(
       withUrlAudience(
         buildHubTabPresetMoreFilters({
           tab: 'matches',
@@ -2209,6 +2218,7 @@ function ScholarshipsPageInner({
         parsedList.audience
       )
     );
+    return moreFiltersApplied ? mergeMoreFilterStates(base, moreFiltersApplied) : base;
   }, [
     guestBestRecommendationStackedBrowsingUi,
     listMeta?.filterBounds,
@@ -2217,8 +2227,14 @@ function ScholarshipsPageInner({
     parsedList.audience,
     routeScope,
     savedFiltersForHub,
-    isAuthenticated
+    isAuthenticated,
+    moreFiltersApplied
   ]);
+
+  const guestBestTopExploreMoreFiltersJson = useMemo(() => {
+    if (!guestBestTopExploreListingMoreFilters) return null;
+    return moreFiltersToJson(guestBestTopExploreListingMoreFilters);
+  }, [guestBestTopExploreListingMoreFilters]);
 
   const guestBestTopExploreQuery = useQuery({
     queryKey: [
@@ -2227,7 +2243,7 @@ function ScholarshipsPageInner({
       'guest-best-top-explore',
       guestBestWizardFingerprint,
       searchParamsString,
-      Boolean(guestBestTopExploreListingMoreFilters)
+      guestBestTopExploreMoreFiltersJson
     ] as const,
     queryFn: async ({ signal }) => {
       const ids = userListIdsRef.current;
@@ -2248,7 +2264,7 @@ function ScholarshipsPageInner({
       return postScholarshipsList(
         {
           searchParams: sp.toString(),
-          moreFilters: moreFiltersToJson(guestBestTopExploreListingMoreFilters),
+          moreFilters: guestBestTopExploreMoreFiltersJson ?? undefined,
           savedFiltersSnapshot: savedFiltersSnapshotJson,
           guestBestRecommendationPreviewEnabled: false,
           longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
@@ -2264,7 +2280,8 @@ function ScholarshipsPageInner({
       authResolved &&
       guestBestRecommendationStackedBrowsingUi &&
       transientBestRecommendationProfileSeed == null &&
-      guestBestTopExploreListingMoreFilters != null,
+      guestBestTopExploreListingMoreFilters != null &&
+      guestBestTopExploreMoreFiltersJson != null,
     staleTime: 300_000,
     refetchOnMount: false
   });
@@ -3010,6 +3027,9 @@ function ScholarshipsPageInner({
     bestRecommendationWizardHydrated &&
     !bestTabAuthPending &&
     shouldShowScholarshipQuestionsCta;
+  const showGuestBestExploreFallback =
+    guestBestRecommendationStackedBrowsingUi &&
+    (shouldShowBestRecommendationWizard || guestBestHasManualCountryFilter);
 
   const bestRecommendationWizardPendingHydration =
     activeTab === 'best-recommendation' &&
@@ -3246,10 +3266,11 @@ function ScholarshipsPageInner({
 
               {bestRecommendationWizardPendingHydration ? (
                 <HubListSkeleton />
-              ) : guestBestRecommendationStackedBrowsingUi &&
-                shouldShowBestRecommendationWizard ? (
+              ) : showGuestBestExploreFallback ? (
                 <>
-                  <div className="mt-5">{bestRecommendationStartCta}</div>
+                  {shouldShowBestRecommendationWizard ? (
+                    <div className="mt-5">{bestRecommendationStartCta}</div>
+                  ) : null}
                   <div className="flex flex-col mt-5 sm:mt-6">
                     <h2 className="text-center text-lg font-semibold tracking-tight text-zinc-900">
                       {transientBestRecommendationProfileSeed
