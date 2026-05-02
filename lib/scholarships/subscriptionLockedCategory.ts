@@ -1,4 +1,5 @@
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import { matchesDeadlinePreset } from '@/app/scholarships/moreFilters';
 import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import { isInternationalFriendlyScholarship } from '@/lib/scholarships/internationalFriendly';
 
@@ -56,6 +57,19 @@ export function isSubscriptionLockedEasyApplyId(id: string | null | undefined): 
   return SUBSCRIPTION_LOCKED_EASY_APPLY_IDS.has(normalized);
 }
 
+export function isCountrySpecificScholarship(scholarship: Scholarship): boolean {
+  return (scholarship.applicantCountryCodes ?? []).some((code) =>
+    /^[A-Z]{2}$/i.test(code.trim())
+  );
+}
+
+export function isHotDeadlineScholarship(scholarship: Scholarship): boolean {
+  return (
+    matchesDeadlinePreset(scholarship, 'lt1d') ||
+    matchesDeadlinePreset(scholarship, 'd1_7')
+  );
+}
+
 export function isSubscriptionLockedScholarship(scholarship: Scholarship): boolean {
   const catalog = getScholarshipCatalog(scholarship);
   if (
@@ -63,7 +77,11 @@ export function isSubscriptionLockedScholarship(scholarship: Scholarship): boole
   ) {
     return true;
   }
-  return isInternationalFriendlyScholarship(scholarship);
+  return (
+    isInternationalFriendlyScholarship(scholarship) ||
+    isCountrySpecificScholarship(scholarship) ||
+    isHotDeadlineScholarship(scholarship)
+  );
 }
 
 export function pickScholarshipLockedTitleBlurPhrase(

@@ -227,7 +227,6 @@ export default function ScholarshipCard({
     () => scholarshipCardChips(scholarship).visible,
     [scholarship]
   );
-  const premiumDetailLocked = !hasSubscription;
   const targetedCategoryLocked =
     !hasSubscription && isSubscriptionLockedScholarship(scholarship);
   const LOCKED_CARD_CATEGORY_IDS = new Set([
@@ -242,16 +241,10 @@ export default function ScholarshipCard({
     !showHotDeadlinesLockBadge &&
     easyApplyIds.some((id) => LOCKED_CARD_CATEGORY_IDS.has(id));
   const showTargetedCategoryLockBadge = targetedCategoryLocked;
-  const showPremiumDetailLockBadge =
-    premiumDetailLocked &&
-    !showHotDeadlinesLockBadge &&
-    !showEasyApplyLockBadge &&
-    !showTargetedCategoryLockBadge;
   const showTopRightLockBadge =
     showHotDeadlinesLockBadge ||
     showEasyApplyLockBadge ||
-    showTargetedCategoryLockBadge ||
-    showPremiumDetailLockBadge;
+    showTargetedCategoryLockBadge;
   const topRightBadgeLabel =
     badgeLabelOverride?.trim() || (isUnread ? 'NEW' : null);
   const topRightBadgeAriaLabel = badgeLabelOverride?.trim()
@@ -333,11 +326,6 @@ export default function ScholarshipCard({
 
   const handleDetailLinkClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    if (premiumDetailLocked) {
-      e.preventDefault();
-      onSubscriptionDetailNavigate?.();
-      return;
-    }
     if (targetedCategoryLocked) {
       e.preventDefault();
       onLockedScholarshipNavigate?.();
@@ -473,22 +461,18 @@ export default function ScholarshipCard({
                       onLockedScholarshipNavigate?.();
                       return;
                     }
-                    if (showPremiumDetailLockBadge) {
-                      onSubscriptionDetailNavigate?.();
-                      return;
-                    }
                     onSubscriptionLockedCategoryClick?.(
                       showHotDeadlinesLockBadge ? 'hot_deadlines' : 'easy_apply'
                     );
                   }}
                   className="relative z-30 inline-flex h-5 w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-1 pointer-events-auto"
                   title={
-                    showTargetedCategoryLockBadge || showPremiumDetailLockBadge
+                    showTargetedCategoryLockBadge
                       ? 'Premium subscription required'
                       : 'Start your free access to unlock this category'
                   }
                   aria-label={
-                    showTargetedCategoryLockBadge || showPremiumDetailLockBadge
+                    showTargetedCategoryLockBadge
                       ? 'Locked scholarship category. Open subscription plans.'
                       : 'Locked category. Start free access to unlock.'
                   }
