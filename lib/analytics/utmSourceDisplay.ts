@@ -72,7 +72,24 @@ export function formatVisitorSourceDisplay(
     }
     if (lower === 'tiktok') return 'TIKTOK';
     if (lower === 'reddit') return 'REDDIT';
-    if (lower === 'google') return 'Google Ads';
+    if (
+      lower.includes('chatgpt') ||
+      lower.includes('openai') ||
+      lower === 'chat.openai.com'
+    ) {
+      return '🤖 ChatGPT';
+    }
+    if (lower.includes('copilot') || lower.includes('bing')) {
+      return '🔵 Bing / Copilot';
+    }
+    if (lower.includes('claude') || lower.includes('anthropic')) {
+      return '🧠 Claude';
+    }
+    if (lower.includes('perplexity')) {
+      return '🔮 Perplexity';
+    }
+    if (lower === 'google') return '🔍 Google Search';
+    if (lower.includes('yandex')) return '🔴 Yandex';
     return source.toUpperCase();
   }
 

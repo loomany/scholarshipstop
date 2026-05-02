@@ -4,6 +4,7 @@ import {
   pingGoogleIndexingDirect,
   scholarshipIndexingUrl
 } from '@/lib/seo/googleIndexingQueue';
+import { submitToIndexNow } from '@/lib/seo/indexNow';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { notifyEnvTelegramAdminsNewScholarship } from '@/lib/telegram/bot';
 
@@ -111,7 +112,49 @@ export async function POST(request: Request) {
   });
 
   const scholarshipUrl = scholarshipIndexingUrl({ id, slug });
-  const googleIndexing = await pingGoogleIndexingDirect(scholarshipUrl);
+  const [googleIndexingResult, indexNowResult] = await Promise.allSettled([
+    pingGoogleIndexingDirect(scholarshipUrl),
+    submitToIndexNow([scholarshipUrl])
+  ]);
+
+  const googleIndexing =
+    googleIndexingResult.status === 'fulfilled'
+      ? googleIndexingResult.value
+      : {
+          ok: false,
+          error:
+            googleIndexingResult.reason instanceof Error
+              ? googleIndexingResult.reason.message
+              : String(googleIndexingResult.reason)
+        };
+
+  const indexNow =
+    indexNowResult.status === 'fulfilled'
+      ? indexNowResult.value
+      : {
+          ok: false,
+          submitted: 0,
+          status: null,
+          accepted: false,
+          urls: [scholarshipUrl],
+          error:
+            indexNowResult.reason instanceof Error
+              ? indexNowResult.reason.message
+              : String(indexNowResult.reason)
+        };
+
+  if (indexNow.ok) {
+    console.log('[notify-admin-new] IndexNow ping completed', {
+      submitted: indexNow.submitted,
+      status: indexNow.status,
+      accepted: indexNow.accepted
+    });
+  } else {
+    console.error('[notify-admin-new] IndexNow ping failed', {
+      status: indexNow.status,
+      error: 'error' in indexNow ? indexNow.error : undefined
+    });
+  }
 
   const admin = createServiceRoleSupabaseClient();
   if (admin) {
@@ -131,5 +174,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true, googleIndexing });
+  return NextResponse.json({ ok: true, googleIndexing, indexNow });
 }

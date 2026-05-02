@@ -1,7 +1,11 @@
 import 'server-only';
 
-import { formatTrafficChannelLabel } from '@/lib/analytics/resolveTrafficChannel';
-import type { TrafficChannel } from '@/lib/analytics/resolveTrafficChannel';
+import {
+  formatFirstTouchVisitorAlertLabel,
+  resolveTrafficChannel,
+  isAiVisitorChannel,
+  isDiscoveryHighlightChannel
+} from '@/lib/analytics/resolveTrafficChannel';
 import { getEmailSiteOrigin } from '@/lib/email/emailSiteOrigin';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 
@@ -388,7 +392,27 @@ function buildVisitorAdminCardLines(input: {
     0,
     Math.floor((new Date(lastSeen).getTime() - new Date(firstSeen).getTime()) / 1000)
   );
-  const source = formatTrafficChannelLabel((touch.traffic_channel as TrafficChannel) ?? null);
+  const resolvedChannel = resolveTrafficChannel({
+    landingUrl: touch.landing_url,
+    referrer: touch.referrer ?? '',
+    utm_source: touch.utm_source ?? '',
+    utm_medium: touch.utm_medium ?? '',
+    utm_campaign: touch.utm_campaign ?? ''
+  });
+  const source = formatFirstTouchVisitorAlertLabel({
+    traffic_channel: resolvedChannel,
+    landing_url: touch.landing_url,
+    referrer: touch.referrer,
+    utm_source: touch.utm_source,
+    utm_medium: touch.utm_medium,
+    utm_campaign: touch.utm_campaign
+  });
+  const cardTitle = isAiVisitorChannel(resolvedChannel)
+    ? '<b>⚡️ 🤖 НОВЫЙ ИИ-ВИЗИТ НА SCHOLARSHIPTOP!</b>'
+    : '<b>Карточка пользователя (без ботов)</b>';
+  const sourceLine = isDiscoveryHighlightChannel(resolvedChannel)
+    ? `<b>Источник:</b> <b>${escapeTelegramHtml(source)}</b>`
+    : `<b>Источник:</b> ${escapeTelegramHtml(source)}`;
   const qualityFlags = [
     touch.click_id ? 'paid-marker:yes' : 'paid-marker:no',
     (touch.referrer ?? '').toLowerCase().includes('google.com')
@@ -403,11 +427,11 @@ function buildVisitorAdminCardLines(input: {
   const visitedBlock = buildVisitedSection(pageViews, lastSeen);
 
   return [
-    '<b>Карточка пользователя (без ботов)</b>',
+    cardTitle,
     `<i>Время: Караганда (${KARAGANDA_TZ}, UTC+5)</i>`,
     '',
     `<b>ID:</b> <code>${escapeTelegramHtml(visitorId)}</code>`,
-    `<b>Источник:</b> ${escapeTelegramHtml(source)}`,
+    sourceLine,
     `<b>Первый заход:</b> ${escapeTelegramHtml(formatKaragandaDateTime(firstSeen))}`,
     `<b>Последний заход:</b> ${escapeTelegramHtml(formatKaragandaDateTime(lastSeen))}`,
     `<b>Время на сайте:</b> ${escapeTelegramHtml(formatDurationRu(durationSec))}`,

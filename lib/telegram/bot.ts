@@ -27,8 +27,12 @@ import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import {
   getFirstTouchNotifySourceKey,
   labelForVisitorRow,
+  resolveTrafficChannel,
   type TrafficChannel,
-  formatFirstTouchVisitorAlertLabel
+  formatFirstTouchVisitorAlertLabel,
+  isAiVisitorChannel,
+  isDiscoveryHighlightChannel,
+  shouldStripMarketingParamsFromLandingDisplay
 } from '@/lib/analytics/resolveTrafficChannel';
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
@@ -855,12 +859,18 @@ async function sendTelegramAdminBroadcastHtml(text: string, category: AdminNotif
  * Human-readable landing line for admin Telegram: short path, clickable link without hash/tokens.
  * Defense-in-depth if a legacy or malformed URL still contains secrets.
  */
-function formatVisitorFirstTouchLandingTelegramHtml(landingUrl: string): string {
+function formatVisitorFirstTouchLandingTelegramHtml(
+  landingUrl: string,
+  opts?: { pathnameOnlyDisplay?: boolean }
+): string {
   try {
     const u = new URL(landingUrl);
     u.hash = '';
     u.searchParams.delete('code');
     u.searchParams.delete('token_hash');
+    if (opts?.pathnameOnlyDisplay) {
+      u.search = '';
+    }
     const safeUrl = u.toString();
     const pathQuery = `${u.pathname}${u.search}` || '/';
     const displayPath =
@@ -888,12 +898,18 @@ function formatVisitorFirstTouchLandingTelegramHtml(landingUrl: string): string 
   }
 }
 
-function formatVisitorFirstTouchLandingTelegramHtmlCompact(landingUrl: string): string {
+function formatVisitorFirstTouchLandingTelegramHtmlCompact(
+  landingUrl: string,
+  opts?: { pathnameOnlyDisplay?: boolean }
+): string {
   try {
     const u = new URL(landingUrl);
     u.hash = '';
     u.searchParams.delete('code');
     u.searchParams.delete('token_hash');
+    if (opts?.pathnameOnlyDisplay) {
+      u.search = '';
+    }
     const safeUrl = u.toString();
     const pathQuery = `${u.pathname}${u.search}` || '/';
     const displayPath =
@@ -921,8 +937,16 @@ function buildVisitorFirstTouchMessageHtml(
   payload: VisitorFirstTouchAdminPayload,
   view: 'short' | 'full'
 ): string {
+  const resolved = resolveTrafficChannel({
+    landingUrl: payload.landingUrl,
+    referrer: payload.referrer ?? '',
+    utm_source: payload.utm_source ?? '',
+    utm_medium: payload.utm_medium ?? '',
+    utm_campaign: payload.utm_campaign ?? ''
+  });
+
   const channelDisplay = formatFirstTouchVisitorAlertLabel({
-    traffic_channel: payload.trafficChannel,
+    traffic_channel: resolved,
     landing_url: payload.landingUrl,
     referrer: payload.referrer,
     utm_source: payload.utm_source,
@@ -930,7 +954,10 @@ function buildVisitorFirstTouchMessageHtml(
     utm_campaign: payload.utm_campaign
   });
 
-  const lines: string[] = ['<b>Новый визит на ScholarshipTop</b>', '<b>Статус:</b> Успешно'];
+  const title = isAiVisitorChannel(resolved)
+    ? '<b>⚡️ 🤖 НОВЫЙ ИИ-ВИЗИТ НА SCHOLARSHIPTOP!</b>'
+    : '<b>Новый визит на ScholarshipTop</b>';
+  const lines: string[] = [title, '<b>Статус:</b> Успешно'];
   const showGoogleAdsTag = payload.clickIdParam === 'gclid';
   const showPaidTag = payload.clickIdParam === 'fbclid';
   if (showGoogleAdsTag) {
@@ -938,13 +965,27 @@ function buildVisitorFirstTouchMessageHtml(
   } else if (showPaidTag) {
     lines.push('', '🚀 <b>Источник:</b> Реклама');
   }
+
+  const channelLine = isDiscoveryHighlightChannel(resolved)
+    ? `<b>Канал:</b> <b>${escapeTelegramHtml(channelDisplay)}</b>`
+    : `<b>Канал:</b> ${escapeTelegramHtml(channelDisplay)}`;
+
+  const pathnameOnly = shouldStripMarketingParamsFromLandingDisplay({
+    resolvedChannel: resolved,
+    utm_source: payload.utm_source
+  });
+
   lines.push(
     '',
-    `<b>Канал:</b> ${escapeTelegramHtml(channelDisplay)}`,
+    channelLine,
     '',
     view === 'short'
-      ? formatVisitorFirstTouchLandingTelegramHtmlCompact(payload.landingUrl)
-      : formatVisitorFirstTouchLandingTelegramHtml(payload.landingUrl)
+      ? formatVisitorFirstTouchLandingTelegramHtmlCompact(payload.landingUrl, {
+          pathnameOnlyDisplay: pathnameOnly
+        })
+      : formatVisitorFirstTouchLandingTelegramHtml(payload.landingUrl, {
+          pathnameOnlyDisplay: pathnameOnly
+        })
   );
   return lines.join('\n');
 }
