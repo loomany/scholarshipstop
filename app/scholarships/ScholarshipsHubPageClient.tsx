@@ -726,7 +726,7 @@ function ScholarshipsPageInner({
     bestRecommendationWizardStore?.submitted === true;
   const guestBestHasManualCountryFilter =
     activeTab === 'best-recommendation' &&
-    transientBestRecommendationProfileSeed == null &&
+    !guestCompletedScholarshipQuiz &&
     Boolean(
       moreFiltersApplied &&
         (moreFiltersApplied.includeApplicantCountryCodes.size > 0 ||
@@ -763,6 +763,9 @@ function ScholarshipsPageInner({
   const guestBestSkipHubBestListUntilPreview =
     guestBestRecommendationStackedBrowsingUi &&
     transientBestRecommendationProfileSeed == null;
+  const guestBestCatalogFallbackActive =
+    guestBestSkipHubBestListUntilPreview ||
+    guestBestHasManualCountryFilter;
 
   /**
    * Orange “answers you just added / Create account” CTA — only final funnel UX:
@@ -2082,11 +2085,19 @@ function ScholarshipsPageInner({
   const rawPageParam = new URLSearchParams(searchParamsString).get('page');
   const pageFromUrl = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
-  /** Guests on Best recommendation only load page 1; URL may still carry `page` until normalized. */
+  /** Guests on Best recommendation only load page 1 unless they manually use catalog country filters. */
   const hubListingPage =
-    catalogFreeTier && activeTab === 'best-recommendation' ? 1 : pageFromUrl;
+    catalogFreeTier &&
+    activeTab === 'best-recommendation' &&
+    !guestBestHasManualCountryFilter
+      ? 1
+      : pageFromUrl;
   const listPageForUi =
-    catalogFreeTier && activeTab === 'best-recommendation' ? 1 : currentPage;
+    catalogFreeTier &&
+    activeTab === 'best-recommendation' &&
+    !guestBestHasManualCountryFilter
+      ? 1
+      : currentPage;
 
   const hasClientAppliedDeltaMoreFilters = useMemo(() => {
     if (!moreFiltersApplied) return false;
@@ -2288,7 +2299,7 @@ function ScholarshipsPageInner({
       const ids = userListIdsRef.current;
       const sp = buildHubListingSearchParams({
         base: new URLSearchParams(searchParamsString),
-        page: 1,
+        page: guestBestHasManualCountryFilter ? pageFromUrl : 1,
         tab: 'matches',
         meta: false,
         saved: ids.saved,
@@ -2318,17 +2329,33 @@ function ScholarshipsPageInner({
     enabled:
       authResolved &&
       guestBestRecommendationStackedBrowsingUi &&
-      transientBestRecommendationProfileSeed == null &&
+      guestBestCatalogFallbackActive &&
       guestBestTopExploreListingMoreFilters != null &&
       guestBestTopExploreMoreFiltersJson != null,
     staleTime: 300_000,
     refetchOnMount: false
   });
 
+  const guestBestTopExploreTotal =
+    guestBestCatalogFallbackActive && guestBestTopExploreQuery.data
+      ? guestBestTopExploreQuery.data.total
+      : null;
+
   const guestBestStackExploreScholarships = useMemo(() => {
     const raw = guestBestTopExploreQuery.data?.scholarships ?? [];
     return applyGuestQuizMatchPercentToScholarships(raw, null);
   }, [guestBestTopExploreQuery.data]);
+
+  useEffect(() => {
+    if (!guestBestCatalogFallbackActive) return;
+    const data = guestBestTopExploreQuery.data;
+    if (!data) return;
+    setTotalCount(data.total);
+    setHasError(Boolean(data.errorMessage));
+    setErrorMessage(data.errorMessage ?? '');
+    setIsLoading(false);
+    setHasInitialLoadCompleted(true);
+  }, [guestBestCatalogFallbackActive, guestBestTopExploreQuery.data]);
 
   const sidebarMetaQuery = useQuery({
     queryKey: hubMetaQueryKey,
@@ -2484,11 +2511,18 @@ function ScholarshipsPageInner({
   useEffect(() => {
     if (isAuthenticated) return;
     if (activeTab !== 'best-recommendation') return;
+    if (guestBestHasManualCountryFilter) return;
     const n = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
     if (n > 1) {
       replaceListingParams({ page: 1, resetPage: false });
     }
-  }, [isAuthenticated, activeTab, rawPageParam, replaceListingParams]);
+  }, [
+    isAuthenticated,
+    activeTab,
+    rawPageParam,
+    replaceListingParams,
+    guestBestHasManualCountryFilter
+  ]);
 
   const moreFiltersPanelContextNotices = useMemo((): ScholarshipsMoreFiltersContextNotice[] => {
     const out: ScholarshipsMoreFiltersContextNotice[] = [];
@@ -2653,9 +2687,13 @@ function ScholarshipsPageInner({
     return () => window.clearTimeout(fallback);
   }, [isApplyingMoreFilters, listQuery.isFetching]);
 
+  const listControlsFetching = guestBestHasManualCountryFilter
+    ? guestBestTopExploreQuery.isFetching
+    : listQuery.isFetching;
+
   useEffect(() => {
     if (!isApplyingListControls) return;
-    if (listQuery.isFetching) {
+    if (listControlsFetching) {
       applyingListControlsSawFetchRef.current = true;
       return;
     }
@@ -2669,7 +2707,7 @@ function ScholarshipsPageInner({
       setIsApplyingListControls(false);
     }, 4000);
     return () => window.clearTimeout(fallback);
-  }, [isApplyingListControls, listQuery.isFetching]);
+  }, [isApplyingListControls, listControlsFetching]);
 
   const clearMoreFiltersDraft = useCallback(() => {
     const resetState = cloneMoreFilters(emptyMoreFiltersState);
@@ -3040,14 +3078,24 @@ function ScholarshipsPageInner({
     guestBestSeededListPending;
   const blockingApplyLoad = isApplyingMoreFilters || isApplyingListControls;
   const blockingListLoad = blockingInitialLoad || blockingApplyLoad;
+  const effectiveHeaderTotalCount =
+    guestBestTopExploreTotal != null ? guestBestTopExploreTotal : headerTotalCount;
   const resultCountForHeader =
-    blockingListLoad ? null : headerTotalCount === null ? null : headerTotalCount;
+    blockingListLoad
+      ? null
+      : effectiveHeaderTotalCount === null
+        ? null
+        : effectiveHeaderTotalCount;
   const rangeTotalForPager =
-    headerTotalCount === null
+    effectiveHeaderTotalCount === null
       ? guestBestPreviewStaleMatchesTotal
         ? 0
         : totalCount
-      : headerTotalCount;
+      : effectiveHeaderTotalCount;
+  const totalPagesForUi = Math.max(
+    1,
+    Math.ceil(rangeTotalForPager / SCHOLARSHIPS_PAGE_SIZE)
+  );
   const showingFrom =
     !blockingListLoad && rangeTotalForPager > 0 ? listStart + 1 : null;
   const showingTo =
@@ -3317,7 +3365,7 @@ function ScholarshipsPageInner({
                         : 'Top scholarships to explore'}
                     </h2>
                     <div className="mt-4 flex flex-col gap-4">
-                    {guestBestSkipHubBestListUntilPreview ? (
+                    {guestBestCatalogFallbackActive ? (
                       guestBestTopExploreQuery.isPending &&
                       guestBestStackExploreScholarships.length === 0 ? (
                         <HubListSkeleton />
@@ -3453,7 +3501,7 @@ function ScholarshipsPageInner({
                         </div>
                         <ScholarshipsPagination
                           currentPage={listPageForUi}
-                          totalPages={totalPages}
+                          totalPages={totalPagesForUi}
                           buildHref={buildPageHref}
                         />
                       </>
@@ -3610,7 +3658,7 @@ function ScholarshipsPageInner({
               </div>
               <ScholarshipsPagination
                 currentPage={listPageForUi}
-                totalPages={totalPages}
+                totalPages={totalPagesForUi}
                 buildHref={buildPageHref}
               />
             </>
