@@ -84,6 +84,17 @@ type ScholarshipCardProps = {
 const METRIC_LABEL =
   'mt-1 text-[10px] font-normal leading-snug text-gray-500 sm:text-[11px] sm:normal-case';
 
+type ScholarshipCardChip = {
+  key: string;
+  label: string;
+};
+
+type ScholarshipCardBadge = {
+  key: string;
+  text: string;
+  title: string;
+};
+
 function replaceSummaryDollarAwardWithSourceCurrency(
   summary: string,
   scholarship: Scholarship,
@@ -141,11 +152,11 @@ export default function ScholarshipCard({
     const selectedCodes = Array.from(selectedApplicantCountryCodes)
       .map((code) => code.trim().toUpperCase())
       .filter((code) => /^[A-Z]{2}$/.test(code));
-    const primary =
-      selectedCodes.find((code) => codes.includes(code)) ?? codes[0];
+    const selectedMatch = selectedCodes.find((code) => codes.includes(code));
+    const primary = selectedMatch ?? (codes.length === 1 ? codes[0] : null);
     if (!primary) return null;
     const label = countryLabelFromCode(primary);
-    const matchesSelectedCountry = selectedCodes.includes(primary);
+    const matchesSelectedCountry = selectedMatch === primary;
     return {
       code: primary,
       extraCount: Math.max(0, codes.length - 1),
@@ -153,11 +164,45 @@ export default function ScholarshipCard({
       title:
         matchesSelectedCountry
           ? `Matches your country filter: ${label}`
-          : codes.length > 1
-          ? `For applicants from ${label} and ${codes.length - 1} more countries`
           : `For applicants from ${label}`
     };
   }, [scholarship.applicantCountryCodes, selectedApplicantCountryCodes]);
+
+  const grantLocationBadge = useMemo<ScholarshipCardBadge | null>(() => {
+    const hostCodes = Array.from(
+      new Set(
+        (scholarship.hostCountryCodes ?? [])
+          .map((code) => code.trim().toUpperCase())
+          .filter((code) => /^[A-Z]{2}$/.test(code))
+      )
+    ).sort();
+    const hasStateSignal = (scholarship.stateCodes ?? []).some((code) =>
+      /^[A-Z]{2}$/i.test(code.trim())
+    );
+    if (hostCodes.includes('US') || hasStateSignal) {
+      return {
+        key: 'grant-location-us',
+        text: 'US-based',
+        title: 'This scholarship is based in the United States'
+      };
+    }
+    if (hostCodes.length === 1) {
+      const label = countryLabelFromCode(hostCodes[0]!);
+      return {
+        key: `grant-location-${hostCodes[0]}`,
+        text: `Hosted in ${label}`,
+        title: `This scholarship is hosted in ${label}`
+      };
+    }
+    if (hostCodes.length > 1) {
+      return {
+        key: 'grant-location-multi',
+        text: `${hostCodes.length} host countries`,
+        title: `This scholarship is hosted in ${hostCodes.length} countries`
+      };
+    }
+    return null;
+  }, [scholarship.hostCountryCodes, scholarship.stateCodes]);
 
   const gridShell = stackedListing
     ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5'
@@ -192,6 +237,8 @@ export default function ScholarshipCard({
   const cardActionSavedClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL_PRESSED}`;
   const countryBadgeClass =
     'inline-flex h-9 w-[148px] max-w-[42vw] shrink-0 items-center justify-center rounded-full border border-orange-200 bg-orange-50 px-4 text-center text-xs font-extrabold tracking-tight text-orange-700 shadow-sm ring-1 ring-orange-100';
+  const locationBadgeClass =
+    'inline-flex h-9 min-w-[148px] max-w-[42vw] shrink-0 items-center justify-center rounded-full border border-orange-200 bg-white px-4 text-center text-xs font-extrabold tracking-tight text-orange-700 shadow-sm ring-1 ring-orange-100';
 
   const awardLine = resolveScholarshipCardAwardDisplay(scholarship);
   const awardCell = awardLine.line;
@@ -246,7 +293,7 @@ export default function ScholarshipCard({
       hasAwardContent
     );
 
-  const catalogChips = useMemo(
+  const catalogChips = useMemo<ScholarshipCardChip[]>(
     () => scholarshipCardChips(scholarship).visible,
     [scholarship]
   );
@@ -721,10 +768,19 @@ export default function ScholarshipCard({
                 <div className="min-w-0 flex-1 text-left">
                   {requirementsMetricInner}
                 </div>
-                {showCardActions || applicantCountryBadge ? (
+                {showCardActions || applicantCountryBadge || grantLocationBadge ? (
                   <div className="relative z-10 flex w-full max-w-[148px] shrink-0 flex-col items-stretch gap-2 self-start pointer-events-auto">
                     {showCardActions ? (
                       <div className={cardActionsWrap}>{cardActionControls}</div>
+                    ) : null}
+                    {grantLocationBadge ? (
+                      <span
+                        className={`${locationBadgeClass} w-full min-w-0 max-w-none`}
+                        title={grantLocationBadge.title}
+                        aria-label={grantLocationBadge.title}
+                      >
+                        <span className="truncate">{grantLocationBadge.text}</span>
+                      </span>
                     ) : null}
                     {applicantCountryBadge ? (
                       <span
@@ -809,25 +865,34 @@ export default function ScholarshipCard({
           </>
         )}
 
-        {catalogChips.length > 0 || applicantCountryBadge ? (
+        {catalogChips.length > 0 || applicantCountryBadge || grantLocationBadge ? (
           <div
             className="col-span-full min-w-0 border-t border-gray-200 pt-2.5 xl:row-start-3"
             aria-label="Scholarship tags"
           >
-            <div className="grid min-w-0 grid-cols-1 items-center gap-2 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:gap-x-2.5">
-              <div className="min-w-0 xl:col-span-2">
+            <div className="grid min-w-0 grid-cols-1 items-center gap-2 xl:grid-cols-[minmax(0,1fr)_auto] xl:gap-x-3">
+              <div className="min-w-0">
                 <ScholarshipCatalogChipRow chips={catalogChips} />
               </div>
-              <div className="hidden min-w-0 justify-end xl:flex xl:justify-start">
-                <span
-                  className={`${countryBadgeClass} ${
-                    applicantCountryBadge ? '' : 'invisible'
-                  }`}
-                  title={applicantCountryBadge?.title}
-                  aria-label={applicantCountryBadge?.title}
-                >
-                  {applicantCountryBadge?.text ?? 'Country'}
-                </span>
+              <div className="hidden min-w-0 justify-end gap-2 xl:flex">
+                {grantLocationBadge ? (
+                  <span
+                    className={locationBadgeClass}
+                    title={grantLocationBadge.title}
+                    aria-label={grantLocationBadge.title}
+                  >
+                    <span className="truncate">{grantLocationBadge.text}</span>
+                  </span>
+                ) : null}
+                {applicantCountryBadge ? (
+                  <span
+                    className={countryBadgeClass}
+                    title={applicantCountryBadge.title}
+                    aria-label={applicantCountryBadge.title}
+                  >
+                    {applicantCountryBadge.text}
+                  </span>
+                ) : null}
               </div>
             </div>
           </div>

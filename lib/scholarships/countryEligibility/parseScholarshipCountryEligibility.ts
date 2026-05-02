@@ -56,6 +56,30 @@ function textFromJson(value: Json | null | undefined): string | null {
   return out.length > 0 ? out.join('\n') : null;
 }
 
+function rawLocationTexts(value: Json | null | undefined): string[] {
+  if (!value || typeof value !== 'object') return [];
+  const out: string[] = [];
+  const visit = (item: unknown) => {
+    if (!item || typeof item !== 'object') return;
+    if (Array.isArray(item)) {
+      for (const child of item) visit(child);
+      return;
+    }
+    for (const [key, child] of Object.entries(item)) {
+      if (
+        typeof child === 'string' &&
+        /^(?:location_text|location|host_country|host_countries)$/i.test(key)
+      ) {
+        const value = child.trim();
+        if (value) out.push(value);
+      }
+      visit(child);
+    }
+  };
+  visit(value);
+  return [...new Set(out)];
+}
+
 function extractIefaField(label: string, blob: string): string | null {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const match = blob.match(new RegExp(`${escaped}:\\s*([^|\\n]+)`, 'i'));
@@ -101,6 +125,13 @@ function applicantCodesFromStrongPhrases(blob: string): string[] {
     /\bopen\s+to\s+(?:students\s+)?from\s+([^\n.;|]+)/gi
   ];
 
+  if (
+    /\b(?:resident|residents|residency)\s+of\s+(?:the\s+)?u\.?s\.?\b/i.test(blob) ||
+    /\b(?:u\.?s\.?|united\s+states)\s+(?:citizens?|nationals?|residents?)\b/i.test(blob)
+  ) {
+    out.add('US');
+  }
+
   for (const pattern of phrasePatterns) {
     for (const match of blob.matchAll(pattern)) {
       addDelimitedCountryCodes(out, match[1] ?? null, { maxDelimitedParts: 12 });
@@ -127,12 +158,27 @@ function hostCodesFromStrongPhrases(blob: string): string[] {
     /\bhost\s+institution(?:\(s\))?\s*:?\s*([^\n.;|]+)/gi
   ];
 
+  if (
+    /\b(?:study|studying|host(?:ed)?|located)\s+in\s+(?:the\s+)?u\.?s\.?\b/i.test(blob) ||
+    /\b(?:study|studying|host(?:ed)?|located)\s+in\s+(?:the\s+)?united\s+states\b/i.test(blob)
+  ) {
+    out.add('US');
+  }
+
   for (const pattern of hostPatterns) {
     for (const match of blob.matchAll(pattern)) {
       addDelimitedCountryCodes(out, match[1] ?? null);
     }
   }
 
+  return [...out].sort();
+}
+
+function hostCodesFromRawLocations(rawData: Json | null | undefined): string[] {
+  const out = new Set<string>();
+  for (const locationText of rawLocationTexts(rawData)) {
+    addDelimitedCountryCodes(out, locationText);
+  }
   return [...out].sort();
 }
 
@@ -174,6 +220,10 @@ export function parseScholarshipCountryEligibility(
   const phraseHosts = hostCodesFromStrongPhrases(blob);
   for (const code of phraseHosts) host.add(code);
   if (phraseHosts.length > 0) reasons.push('host country text');
+
+  const rawLocationHosts = hostCodesFromRawLocations(input.rawData);
+  for (const code of rawLocationHosts) host.add(code);
+  if (rawLocationHosts.length > 0) reasons.push('raw location text');
 
   if (
     applicant.size === 0 &&

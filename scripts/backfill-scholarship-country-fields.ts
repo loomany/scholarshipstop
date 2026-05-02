@@ -34,6 +34,7 @@ type Row = Pick<
 >;
 
 const PAGE_SIZE = 500;
+const APPLY_CONCURRENCY = 12;
 
 function parseArgs() {
   const argv = process.argv.slice(2);
@@ -65,6 +66,26 @@ function arraysEqual(a: string[], b: string[]): boolean {
 
 function addCounts(map: Map<string, number>, codes: string[]) {
   for (const code of codes) map.set(code, (map.get(code) ?? 0) + 1);
+}
+
+async function runWithConcurrency<T>(
+  items: T[],
+  concurrency: number,
+  task: (item: T, index: number) => Promise<void>
+) {
+  let nextIndex = 0;
+  const workers = Array.from(
+    { length: Math.min(concurrency, Math.max(items.length, 1)) },
+    async () => {
+      for (;;) {
+        const index = nextIndex;
+        nextIndex += 1;
+        if (index >= items.length) return;
+        await task(items[index]!, index);
+      }
+    }
+  );
+  await Promise.all(workers);
 }
 
 async function main() {
@@ -187,13 +208,15 @@ async function main() {
     return;
   }
 
-  for (const item of pending) {
-    const { error } = await supabase
-      .from('scholarships')
-      .update(item.patch)
-      .eq('id', item.id);
+  let applied = 0;
+  await runWithConcurrency(pending, APPLY_CONCURRENCY, async (item) => {
+    const { error } = await supabase.from('scholarships').update(item.patch).eq('id', item.id);
     if (error) throw new Error(`${item.slug ?? item.id}: ${error.message}`);
-  }
+    applied += 1;
+    if (applied % 250 === 0 || applied === pending.length) {
+      console.log(`Applied progress: ${applied}/${pending.length}`);
+    }
+  });
   console.log(`Applied ${pending.length} update(s).`);
 }
 
