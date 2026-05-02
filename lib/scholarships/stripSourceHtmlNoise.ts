@@ -5,6 +5,10 @@
 export function stripScholarshipSourceHtmlNoise(html: string): string {
   if (!html) return html;
   let s = html;
+  s = s.replace(
+    /<span\b[^>]*class=(["'])[^"']*\bst-source-data\b[^"']*\1[^>]*>[\s\S]*?<\/span>/gi,
+    ''
+  );
   const blocks: RegExp[] = [
     /[\s\S]{0,800}?application\s+is\s+ready\s+to\s+be\s+submitted[\s\S]{0,800}?/gi,
     /[\s\S]{0,600}?mark\s+as\s+started[\s\S]{0,600}?/gi,

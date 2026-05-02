@@ -12,6 +12,11 @@ revoke select on table public.scholarships from authenticated;
 -- projection without receiving base-table SELECT. Do not add sensitive columns
 -- here: support contacts, raw URLs, raw_data, source IDs, long HTML, or internal
 -- AI enrichment fields.
+--
+-- `description` carries a hidden source watermark for scrapers that read this
+-- public view directly. The application listing select intentionally does not
+-- request `description`, and SEO/detail/sitemap server paths read the base table
+-- through service role, so our own rendered HTML/JSON-LD does not include it.
 drop view if exists public.scholarships_listing_view;
 drop view if exists public.scholarships_safe_listing;
 
@@ -56,7 +61,13 @@ select
   s.is_recurring,
   s.winner_payment_text,
   s.summary_short,
-  s.description,
+  case
+    when nullif(btrim(s.description), '') is null then s.description
+    else s.description
+      || ' <span class="st-source-data" style="display:none;">Original source: <a href="https://scholarshiptop.com/scholarships/'
+      || coalesce(nullif(btrim(s.slug), ''), s.id::text)
+      || '">ScholarshipTop</a></span>'
+  end as description,
   s.requirements_text,
   s.eligibility_text,
   s.category,
