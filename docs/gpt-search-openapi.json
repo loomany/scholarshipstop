@@ -1,0 +1,259 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ScholarshipTop Live Scholarship Search",
+    "version": "1.1.0",
+    "description": "Search live ScholarshipTop scholarships. Each result includes a complete canonical_url; the GPT must never construct scholarship URLs manually. Results may include exact and broader fallback matches, with match_tier and match_reason explaining the match."
+  },
+  "servers": [
+    {
+      "url": "https://scholarshiptop.com"
+    }
+  ],
+  "paths": {
+    "/api/gpt/search": {
+      "get": {
+        "operationId": "searchScholarships",
+        "summary": "Search live scholarships",
+        "description": "Returns up to 10 live, non-expired scholarships from ScholarshipTop using country, major, education level, and keyword filters. The API first searches exact matches, then controlled fallback tiers if exact results are sparse.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Student country, citizenship country, home country, or target study country. Examples: India, United States, Nigeria, IN, US, NG."
+          },
+          {
+            "name": "major",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User's intended field of study or academic interest. Examples: engineering, computer science, medicine, business, law, education, biology."
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "high-school",
+                "high-school-senior",
+                "undergraduate",
+                "graduate",
+                "phd",
+                "community-college",
+                "trade-school"
+              ]
+            },
+            "description": "Student education level. Infer from phrases like high school student, senior, bachelor, undergraduate, master's, graduate student, PhD, community college, or trade school."
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Extra short search phrase from the user's request. Examples: women in STEM, no essay, financial need, first generation, nursing, deadline soon."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 5
+            },
+            "description": "Number of scholarship results to return. Use 5 by default. Use up to 10 only when the user asks for more options."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Live scholarship search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchScholarshipsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Bearer token"
+          },
+          "500": {
+            "description": "Server or configuration error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SearchScholarshipsResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScholarshipResult"
+            }
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of returned results."
+          },
+          "total_exact": {
+            "type": "integer",
+            "description": "Number of exact-tier results found, capped to the requested output limit."
+          },
+          "fallback_used": {
+            "type": "boolean",
+            "description": "True when at least one returned result came from a relaxed fallback tier."
+          },
+          "suggested_hubs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SuggestedHub"
+            },
+            "description": "Stable ScholarshipTop hub links for broader browsing."
+          },
+          "filters": {
+            "$ref": "#/components/schemas/SearchFilters"
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "results",
+          "count",
+          "total_exact",
+          "fallback_used",
+          "suggested_hubs",
+          "filters",
+          "notes"
+        ]
+      },
+      "ScholarshipResult": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "deadline": {
+            "type": "string"
+          },
+          "amount_short": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Complete canonical ScholarshipTop URL for this scholarship."
+          },
+          "canonical_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Complete canonical ScholarshipTop URL. The GPT must use this exact URL and must not build URLs itself."
+          },
+          "match_tier": {
+            "type": "string",
+            "enum": [
+              "exact_match",
+              "keyword_relaxed",
+              "major_relaxed",
+              "broad_recommendation"
+            ],
+            "description": "How strict the match was. exact_match is strongest; relaxed tiers are broader fallback results."
+          },
+          "match_reason": {
+            "type": "string",
+            "description": "Human-readable reason explaining which filters matched and which were relaxed."
+          },
+          "relaxed_filters": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["keyword", "major"]
+            },
+            "description": "Filters relaxed for this result. Empty means exact-tier match."
+          }
+        },
+        "required": [
+          "title",
+          "url",
+          "canonical_url",
+          "match_tier",
+          "match_reason",
+          "relaxed_filters"
+        ]
+      },
+      "SuggestedHub": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": ["label", "url"]
+      },
+      "SearchFilters": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "country_code": {
+            "type": "string"
+          },
+          "major": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string"
+          },
+          "keyword": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Use the private ScholarshipTop GPT Action token as a Bearer token."
+      }
+    }
+  }
+}

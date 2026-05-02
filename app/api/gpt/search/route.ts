@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { scholarshipCountrySlugFromCode } from '@/app/scholarships/scholarshipCountrySeo';
 import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 import { getCanonical } from '@/lib/seo/canonical';
 import { createClient } from '@/utils/supabase/server';
@@ -8,6 +9,7 @@ export const runtime = 'nodejs';
 
 const DEFAULT_LIMIT = 5;
 const MAX_LIMIT = 10;
+const MIN_EXACT_BEFORE_FALLBACK = 2;
 
 const SELECT_COLUMNS = [
   'title',
@@ -21,8 +23,40 @@ const SELECT_COLUMNS = [
   'summary_short',
   'summary_long',
   'ranking_score',
-  'is_verified'
+  'is_verified',
+  'applicant_country_codes',
+  'host_country_codes',
+  'catalog_education_levels',
+  'study_levels',
+  'field_of_study'
 ].join(', ');
+
+type MatchTier =
+  | 'exact_match'
+  | 'keyword_relaxed'
+  | 'major_relaxed'
+  | 'broad_recommendation';
+
+type RelaxedFilter = 'keyword' | 'major';
+
+type SearchInputs = {
+  country: string | null;
+  countryCode: string | null;
+  major: string | null;
+  level: string | null;
+  keyword: string | null;
+  limit: number;
+};
+
+type SearchTier = {
+  tier: MatchTier;
+  includeCountry: boolean;
+  includeMajor: boolean;
+  includeLevel: boolean;
+  includeKeyword: boolean;
+  relaxedFilters: RelaxedFilter[];
+  reason: string;
+};
 
 type SafeScholarshipRow = {
   title: string | null;
@@ -37,6 +71,11 @@ type SafeScholarshipRow = {
   summary_long: string | null;
   ranking_score: number | null;
   is_verified: boolean | null;
+  applicant_country_codes: unknown;
+  host_country_codes: unknown;
+  catalog_education_levels: unknown;
+  study_levels: unknown;
+  field_of_study: unknown;
 };
 
 type GptScholarshipResult = {
@@ -47,11 +86,22 @@ type GptScholarshipResult = {
   summary: string | null;
   url: string;
   canonical_url: string;
+  match_tier: MatchTier;
+  match_reason: string;
+  relaxed_filters: RelaxedFilter[];
+};
+
+type SuggestedHub = {
+  label: string;
+  url: string;
 };
 
 type GptSearchResponse = {
   results: GptScholarshipResult[];
   count: number;
+  total_exact: number;
+  fallback_used: boolean;
+  suggested_hubs: SuggestedHub[];
   filters: {
     country: string | null;
     country_code: string | null;
@@ -61,6 +111,12 @@ type GptSearchResponse = {
     limit: number;
   };
   notes: string[];
+};
+
+type ScoredCandidate = {
+  row: SafeScholarshipRow;
+  tier: SearchTier;
+  score: number;
 };
 
 const LEVEL_SYNONYMS: Record<string, string[]> = {
@@ -82,6 +138,13 @@ const LEVEL_SYNONYMS: Record<string, string[]> = {
   phd: ['phd', 'ph.d.', 'doctoral', 'doctorate'],
   'community-college': ['community college', 'community_college'],
   'trade-school': ['trade school', 'trade_school', 'vocational']
+};
+
+const TIER_BASE_SCORE: Record<MatchTier, number> = {
+  exact_match: 1000,
+  keyword_relaxed: 800,
+  major_relaxed: 650,
+  broad_recommendation: 450
 };
 
 function jsonArrayContains(column: string, value: string): string {
@@ -134,6 +197,11 @@ function unauthorized(message = 'Unauthorized') {
   );
 }
 
+function normalizeLoose(raw: string | null): string | null {
+  const safe = sanitizeIlike(raw);
+  return safe ? safe.toLowerCase() : null;
+}
+
 function levelTerms(raw: string | null): string[] {
   const safe = sanitizeIlike(raw);
   if (!safe) return [];
@@ -141,8 +209,69 @@ function levelTerms(raw: string | null): string[] {
   return LEVEL_SYNONYMS[normalized] ?? [safe.toLowerCase()];
 }
 
-function applyCountryFilter(query: any, country: string | null): any {
-  const countryCode = normalizeCountryCode(country);
+function unknownStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => (typeof item === 'string' ? item.trim() : ''))
+    .filter(Boolean);
+}
+
+function textIncludes(value: string | null | undefined, needle: string | null): boolean {
+  if (!value || !needle) return false;
+  return value.toLowerCase().includes(needle.toLowerCase());
+}
+
+function rowText(row: SafeScholarshipRow): string {
+  return [row.title, row.provider_name, row.summary_short, row.summary_long]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+}
+
+function countryMatches(row: SafeScholarshipRow, countryCode: string | null): boolean {
+  if (!countryCode) return false;
+  const code = countryCode.toUpperCase();
+  return (
+    unknownStringArray(row.applicant_country_codes).some(
+      (value) => value.toUpperCase() === code
+    ) ||
+    unknownStringArray(row.host_country_codes).some(
+      (value) => value.toUpperCase() === code
+    )
+  );
+}
+
+function majorMatches(row: SafeScholarshipRow, major: string | null): boolean {
+  const safe = normalizeLoose(major);
+  if (!safe) return false;
+  return (
+    unknownStringArray(row.field_of_study).some((value) =>
+      value.toLowerCase().includes(safe)
+    ) || rowText(row).includes(safe)
+  );
+}
+
+function levelMatches(row: SafeScholarshipRow, level: string | null): boolean {
+  const terms = levelTerms(level);
+  if (terms.length === 0) return false;
+  const levelValues = [
+    ...unknownStringArray(row.catalog_education_levels),
+    ...unknownStringArray(row.study_levels)
+  ].map((value) => value.toLowerCase());
+  const text = rowText(row);
+  return terms.some(
+    (term) =>
+      levelValues.some((value) => value.includes(term)) || text.includes(term)
+  );
+}
+
+function keywordMatches(row: SafeScholarshipRow, keyword: string | null): boolean {
+  const safe = normalizeLoose(keyword);
+  if (!safe) return false;
+  return rowText(row).includes(safe);
+}
+
+function applyCountryFilter(query: any, countryCode: string | null): any {
   if (!countryCode) return query;
   return query.or(
     [
@@ -216,24 +345,206 @@ function scholarshipUrl(row: SafeScholarshipRow): string {
   return getCanonical(`/scholarships/${encodeURIComponent(slug || '')}`);
 }
 
-function mapResult(row: SafeScholarshipRow): GptScholarshipResult | null {
-  const slug = row.slug?.trim();
-  const title = row.title?.trim();
+function scoreCandidate(
+  row: SafeScholarshipRow,
+  tier: SearchTier,
+  inputs: SearchInputs
+): number {
+  let score = TIER_BASE_SCORE[tier.tier];
+  if (majorMatches(row, inputs.major)) score += 30;
+  if (countryMatches(row, inputs.countryCode)) score += 25;
+  if (levelMatches(row, inputs.level)) score += 20;
+  if (keywordMatches(row, inputs.keyword)) score += 15;
+  if (row.is_verified) score += 10;
+  if (row.deadline_date) score += 5;
+  if (Number.isFinite(Number(row.ranking_score))) {
+    score += Math.min(100, Math.max(0, Number(row.ranking_score))) / 100;
+  }
+  return score;
+}
+
+function mapResult(candidate: ScoredCandidate): GptScholarshipResult | null {
+  const slug = candidate.row.slug?.trim();
+  const title = candidate.row.title?.trim();
   if (!slug || !title) return null;
 
-  const canonicalUrl = scholarshipUrl(row);
+  const canonicalUrl = scholarshipUrl(candidate.row);
   return {
     title,
-    provider: row.provider_name?.trim() || null,
-    deadline: row.deadline_text?.trim() || row.deadline_date || null,
-    amount_short: amountShort(row),
-    summary: row.summary_short?.trim() || row.summary_long?.trim() || null,
+    provider: candidate.row.provider_name?.trim() || null,
+    deadline: candidate.row.deadline_text?.trim() || candidate.row.deadline_date || null,
+    amount_short: amountShort(candidate.row),
+    summary:
+      candidate.row.summary_short?.trim() ||
+      candidate.row.summary_long?.trim() ||
+      null,
     url: canonicalUrl,
-    canonical_url: canonicalUrl
+    canonical_url: canonicalUrl,
+    match_tier: candidate.tier.tier,
+    match_reason: candidate.tier.reason,
+    relaxed_filters: candidate.tier.relaxedFilters
   };
 }
 
+function buildSearchTiers(inputs: SearchInputs): SearchTier[] {
+  const hasKeyword = Boolean(sanitizeIlike(inputs.keyword));
+  const hasMajor = Boolean(sanitizeIlike(inputs.major));
+
+  return [
+    {
+      tier: 'exact_match',
+      includeCountry: true,
+      includeMajor: true,
+      includeLevel: true,
+      includeKeyword: true,
+      relaxedFilters: [],
+      reason: 'Matched country, level, major, and keyword when those filters were provided.'
+    },
+    ...(hasKeyword
+      ? [
+          {
+            tier: 'keyword_relaxed' as const,
+            includeCountry: true,
+            includeMajor: true,
+            includeLevel: true,
+            includeKeyword: false,
+            relaxedFilters: ['keyword' as const],
+            reason:
+              'Matched country, level, and major; keyword was relaxed to broaden results.'
+          }
+        ]
+      : []),
+    ...(hasMajor
+      ? [
+          {
+            tier: 'major_relaxed' as const,
+            includeCountry: true,
+            includeMajor: false,
+            includeLevel: true,
+            includeKeyword: true,
+            relaxedFilters: ['major' as const],
+            reason:
+              'Matched country, level, and keyword; major was relaxed because field labels can vary.'
+          }
+        ]
+      : []),
+    {
+      tier: 'broad_recommendation',
+      includeCountry: true,
+      includeMajor: false,
+      includeLevel: true,
+      includeKeyword: false,
+      relaxedFilters: ['keyword', 'major'],
+      reason:
+        'Broad recommendation matched country and level; keyword and major were relaxed to avoid empty results.'
+    }
+  ];
+}
+
+function applyTierFilters(query: any, tier: SearchTier, inputs: SearchInputs): any {
+  let q = query;
+  if (tier.includeCountry) q = applyCountryFilter(q, inputs.countryCode);
+  if (tier.includeMajor) q = applyMajorFilter(q, inputs.major);
+  if (tier.includeLevel) q = applyLevelFilter(q, inputs.level);
+  if (tier.includeKeyword) q = applyKeywordFilter(q, inputs.keyword);
+  return q;
+}
+
+async function runTier(
+  supabase: ReturnType<typeof createClient>,
+  tier: SearchTier,
+  inputs: SearchInputs
+): Promise<SafeScholarshipRow[]> {
+  const candidateLimit = Math.max(inputs.limit * 4, 25);
+  let query = supabase
+    .from('scholarships_safe_listing')
+    .select(SELECT_COLUMNS)
+    .eq('is_active', true)
+    .eq('is_expired', false)
+    .not('slug', 'is', null);
+
+  query = applyTierFilters(query, tier, inputs);
+
+  const { data, error } = await query
+    .order('is_verified', { ascending: false, nullsFirst: false })
+    .order('deadline_date', { ascending: true, nullsFirst: false })
+    .order('ranking_score', { ascending: false, nullsFirst: false })
+    .limit(candidateLimit);
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as SafeScholarshipRow[];
+}
+
+function dedupeAndScore(
+  rowsByTier: Array<{ tier: SearchTier; rows: SafeScholarshipRow[] }>,
+  inputs: SearchInputs
+): ScoredCandidate[] {
+  const bySlug = new Map<string, ScoredCandidate>();
+
+  for (const { tier, rows } of rowsByTier) {
+    for (const row of rows) {
+      const slug = row.slug?.trim();
+      if (!slug || !row.title?.trim()) continue;
+
+      const candidate: ScoredCandidate = {
+        row,
+        tier,
+        score: scoreCandidate(row, tier, inputs)
+      };
+
+      const existing = bySlug.get(slug);
+      if (!existing || candidate.score > existing.score) {
+        bySlug.set(slug, candidate);
+      }
+    }
+  }
+
+  return Array.from(bySlug.values()).sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    const aRank = Number(a.row.ranking_score ?? 0);
+    const bRank = Number(b.row.ranking_score ?? 0);
+    return bRank - aRank;
+  });
+}
+
+function countryHub(inputs: SearchInputs): SuggestedHub | null {
+  if (!inputs.countryCode) return null;
+  const slug = scholarshipCountrySlugFromCode(inputs.countryCode);
+  if (!slug) return null;
+  return {
+    label: `Scholarships for students from ${inputs.country ?? inputs.countryCode}`,
+    url: getCanonical(`/scholarships/for-students-from/${slug}`)
+  };
+}
+
+function buildSuggestedHubs(inputs: SearchInputs): SuggestedHub[] {
+  const hubs: SuggestedHub[] = [];
+  const applicantCountryHub = countryHub(inputs);
+  if (applicantCountryHub) hubs.push(applicantCountryHub);
+
+  hubs.push({
+    label: 'Browse all ScholarshipTop matches',
+    url: getCanonical('/scholarships/hub/matches')
+  });
+
+  if (textIncludes(inputs.keyword, 'international') || inputs.countryCode) {
+    hubs.push({
+      label: 'International-friendly scholarships',
+      url: getCanonical('/scholarships/hub/international-friendly')
+    });
+  }
+
+  return hubs;
+}
+
+function tierCountsLog(rowsByTier: Array<{ tier: SearchTier; rows: SafeScholarshipRow[] }>) {
+  return Object.fromEntries(
+    rowsByTier.map(({ tier, rows }) => [tier.tier, rows.length])
+  );
+}
+
 export async function GET(request: Request) {
+  const startedAt = performance.now();
   const configuredToken = expectedBearerToken();
   if (!configuredToken) {
     return NextResponse.json(
@@ -252,42 +563,69 @@ export async function GET(request: Request) {
   const level = readSingleParam(searchParams, 'level');
   const keyword = readSingleParam(searchParams, 'keyword');
   const limit = readLimit(searchParams);
-  const countryCode = normalizeCountryCode(country);
+
+  const inputs: SearchInputs = {
+    country,
+    countryCode: normalizeCountryCode(country),
+    major,
+    level,
+    keyword,
+    limit
+  };
 
   try {
     const supabase = createClient();
-    let query = supabase
-      .from('scholarships_safe_listing')
-      .select(SELECT_COLUMNS)
-      .eq('is_active', true)
-      .eq('is_expired', false)
-      .not('slug', 'is', null);
+    const tiers = buildSearchTiers(inputs);
+    const rowsByTier: Array<{ tier: SearchTier; rows: SafeScholarshipRow[] }> = [];
+    const collected = new Set<string>();
 
-    query = applyCountryFilter(query, country);
-    query = applyMajorFilter(query, major);
-    query = applyLevelFilter(query, level);
-    query = applyKeywordFilter(query, keyword);
+    for (const tier of tiers) {
+      if (
+        tier.tier !== 'exact_match' &&
+        collected.size >= limit &&
+        rowsByTier[0]?.rows.length >= MIN_EXACT_BEFORE_FALLBACK
+      ) {
+        break;
+      }
 
-    const { data, error } = await query
-      .order('is_verified', { ascending: false, nullsFirst: false })
-      .order('deadline_date', { ascending: true, nullsFirst: false })
-      .order('ranking_score', { ascending: false, nullsFirst: false })
-      .limit(limit);
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      const rows = await runTier(supabase, tier, inputs);
+      rowsByTier.push({ tier, rows });
+      for (const row of rows) {
+        if (row.slug) collected.add(row.slug);
+      }
+      if (collected.size >= limit && tier.tier !== 'exact_match') break;
     }
 
-    const results = ((data ?? []) as SafeScholarshipRow[])
+    const totalExact = rowsByTier.find(({ tier }) => tier.tier === 'exact_match')?.rows
+      .length ?? 0;
+    const scored = dedupeAndScore(rowsByTier, inputs);
+    const results = scored
+      .slice(0, limit)
       .map(mapResult)
       .filter((row): row is GptScholarshipResult => row != null);
+    const fallbackUsed = results.some((result) => result.match_tier !== 'exact_match');
+    const latencyMs = Math.round(performance.now() - startedAt);
+
+    console.log('[gpt-search]', {
+      filters: inputs,
+      tierCounts: tierCountsLog(rowsByTier),
+      finalCount: results.length,
+      fallbackUsed,
+      relaxedFilters: Array.from(
+        new Set(results.flatMap((result) => result.relaxed_filters))
+      ),
+      latencyMs
+    });
 
     const response: GptSearchResponse = {
       results,
       count: results.length,
+      total_exact: Math.min(totalExact, limit),
+      fallback_used: fallbackUsed,
+      suggested_hubs: buildSuggestedHubs(inputs),
       filters: {
         country,
-        country_code: countryCode,
+        country_code: inputs.countryCode,
         major,
         level,
         keyword,
@@ -296,7 +634,10 @@ export async function GET(request: Request) {
       notes: [
         'Results are live from scholarships_safe_listing.',
         'Each result includes a complete canonical_url. The GPT must not construct scholarship URLs itself.',
-        'If results are sparse, recommend a stable ScholarshipTop hub from the knowledge file for broader browsing.'
+        fallbackUsed
+          ? 'Some results are broader fallback matches. Use match_tier and match_reason when explaining them.'
+          : 'All returned results are exact-tier matches for the provided filters.',
+        'If results are sparse, recommend a stable ScholarshipTop hub from suggested_hubs or the knowledge file for broader browsing.'
       ]
     };
 
