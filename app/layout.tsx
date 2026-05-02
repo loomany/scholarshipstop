@@ -18,6 +18,7 @@ import {
 import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
 import { ScholarshipOnboardingDraftPostAuthSync } from '@/components/onboarding/ScholarshipOnboardingDraftPostAuthSync';
+import HomeAiNavigatorWidget from '@/components/home/HomeAiNavigatorWidget';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import dynamic from 'next/dynamic';
 import 'styles/main.css';
@@ -190,6 +191,7 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
           </main>
           <SiteFooter />
         </div>
+        <HomeAiNavigatorWidget />
         <Suspense fallback={null}>
           <Toaster />
         </Suspense>

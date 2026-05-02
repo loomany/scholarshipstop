@@ -73,6 +73,49 @@ module.exports = {
         'home-country-marquee': {
           from: { transform: 'translateX(0)' },
           to: { transform: 'translateX(-50%)' }
+        },
+        /** Home AI microbe orb: spin + protrusions + fade-in */
+        'ai-widget-entry': {
+          from: {
+            opacity: '0',
+            transform: 'translate3d(0,14px,0) scale(0.88)'
+          },
+          to: {
+            opacity: '1',
+            transform: 'translate3d(0,0,0) scale(1)'
+          }
+        },
+        'ai-microbe-spin': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' }
+        },
+        'ai-microbe-protrude': {
+          '0%, 100%': {
+            transform: 'translateX(-50%) translateY(-50%) translateY(0)',
+            opacity: '0.9'
+          },
+          '35%': {
+            transform: 'translateX(-50%) translateY(-50%) translateY(-8px)',
+            opacity: '1'
+          },
+          '68%': {
+            transform: 'translateX(-50%) translateY(-50%) translateY(5px)',
+            opacity: '0.85'
+          }
+        },
+        'ai-microbe-protrude-slow': {
+          '0%, 100%': {
+            transform: 'translateX(-50%) translateY(-50%) translateY(0)',
+            opacity: '0.45'
+          },
+          '40%': {
+            transform: 'translateX(-50%) translateY(-50%) translateY(-6px)',
+            opacity: '0.95'
+          },
+          '75%': {
+            transform: 'translateX(-50%) translateY(-50%) translateY(4px)',
+            opacity: '0.5'
+          }
         }
       },
       animation: {
@@ -98,7 +141,11 @@ module.exports = {
         'shimmer-wave': 'shimmer-wave 1.35s ease-in-out infinite',
         'scholarship-brand-mark-breathe':
           'scholarship-brand-mark-breathe 1.85s cubic-bezier(0.45, 0, 0.55, 1) infinite',
-        'home-country-marquee': 'home-country-marquee 42s linear infinite'
+        'home-country-marquee': 'home-country-marquee 42s linear infinite',
+        'ai-widget-entry': 'ai-widget-entry 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+        'ai-microbe-spin': 'ai-microbe-spin 16s linear infinite',
+        'ai-microbe-protrude': 'ai-microbe-protrude 2.55s ease-in-out infinite',
+        'ai-microbe-protrude-slow': 'ai-microbe-protrude-slow 3.4s ease-in-out infinite'
       }
     }
   },
