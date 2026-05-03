@@ -102,7 +102,7 @@ export async function fetchAllPublishedContentPostsForSitemap(): Promise<
 }
 
 /** All published posts with slug (for `/resources` filtering). Batched for large catalogs. */
-export async function fetchAllPublishedContentPostsListFields(): Promise<
+async function fetchAllPublishedContentPostsListFieldsImpl(): Promise<
   ContentPostListFields[]
 > {
   const out: ContentPostListFields[] = [];
@@ -118,6 +118,22 @@ export async function fetchAllPublishedContentPostsListFields(): Promise<
   }
   return out;
 }
+
+export async function fetchAllPublishedContentPostsListFields(): Promise<
+  ContentPostListFields[]
+> {
+  return fetchAllPublishedContentPostsListFieldsImpl();
+}
+
+/**
+ * Home `/` resource carousel fallback only: avoids re-fetching every published article
+ * on uncached carousel rebuilds across requests / instances.
+ */
+export const fetchAllPublishedContentPostsForHomeCarouselFallbackCached = unstable_cache(
+  fetchAllPublishedContentPostsListFieldsImpl,
+  ['home-resources-carousel-fallback-v1'],
+  { revalidate: 3600 }
+);
 
 /**
  * Published list fields for specific slugs, **in the same order as `slugs`**

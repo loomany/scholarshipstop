@@ -3,7 +3,7 @@ import { homePrimaryCtaClass } from '@/components/home/homeMarketingCtaClasses';
 
 const container = 'mx-auto w-full max-w-7xl';
 
-/** Matches `HomePageClient` horizontal padding + safe-area. */
+/** Matches the home page horizontal padding + safe-area. */
 const homeSectionPadX =
   'pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6';
 

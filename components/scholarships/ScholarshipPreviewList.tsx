@@ -1,5 +1,3 @@
-'use client';
-
 import ScholarshipCardPreview from '@/components/scholarships/ScholarshipCardPreview';
 import ScholarshipsSidebarPreview from '@/components/scholarships/ScholarshipsSidebarPreview';
 

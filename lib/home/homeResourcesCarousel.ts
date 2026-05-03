@@ -4,7 +4,7 @@ import { cache } from 'react';
 
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import {
-  fetchAllPublishedContentPostsListFields,
+  fetchAllPublishedContentPostsForHomeCarouselFallbackCached,
   fetchPublishedContentPostsBySlugsOrdered
 } from '@/lib/content-hub/contentPostsServer';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
@@ -115,7 +115,7 @@ async function pickTopResourcePosts(): Promise<ContentPostListFields[]> {
   }
 
   const seen = new Set(have.map((p) => p.slug!.toLowerCase()));
-  const pool = await fetchAllPublishedContentPostsListFields();
+  const pool = await fetchAllPublishedContentPostsForHomeCarouselFallbackCached();
   const rest = pool
     .filter((p) => p.slug?.trim() && !seen.has(p.slug.toLowerCase()))
     .map((p) => ({ p, score: scoreResourcePost(p) }))
