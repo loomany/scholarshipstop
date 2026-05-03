@@ -90,8 +90,9 @@ function MicrobeOrb() {
 export default function HomeAiNavigatorWidget() {
   const href = getScholarshipTopNavigatorHref();
 
+  /** Anchored bottom-right; extra bottom inset on phones clears browser chrome (still under mobile nav overlays z-[98]+). */
   const shellClass =
-    'fixed bottom-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.25rem))] right-[max(0.75rem,calc(env(safe-area-inset-right,0px)+0.25rem))] z-30 h-12 w-12 sm:bottom-6 sm:right-6 sm:h-[3.375rem] sm:w-[3.375rem] lg:h-14 lg:w-14';
+    'fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom,0px)+3rem))] right-[max(1rem,calc(env(safe-area-inset-right,0px)+0.5rem))] z-[70] h-12 w-12 sm:bottom-8 sm:right-6 sm:h-[3.375rem] sm:w-[3.375rem] lg:bottom-8 lg:right-8 lg:h-14 lg:w-14';
 
   return (
     <aside className={`${shellClass} block`}>
