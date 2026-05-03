@@ -1,18 +1,30 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 const STORAGE_KEY = 'gpt_tracked';
 
-function isUtmGpt(utmSource: string | null): boolean {
-  return utmSource?.trim().toLowerCase() === 'gpt';
+/** Ground truth lives on `window`; `useSearchParams` can lag on first hydration / in-app browsers. */
+function utmSourceGptFromLocation(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const v = new URLSearchParams(window.location.search).get('utm_source');
+    return v?.trim().toLowerCase() === 'gpt';
+  } catch {
+    return false;
+  }
 }
 
-function isChatGptReferrer(): boolean {
+function isGptLikeReferrer(): boolean {
   if (typeof document === 'undefined') return false;
   try {
-    return document.referrer.toLowerCase().includes('chatgpt.com');
+    const r = document.referrer.toLowerCase();
+    return (
+      r.includes('chatgpt.com') ||
+      r.includes('chat.openai.com') ||
+      r.includes('openai.com')
+    );
   } catch {
     return false;
   }
@@ -24,8 +36,6 @@ function isChatGptReferrer(): boolean {
  */
 export default function GptTrafficTracker() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const utmSource = searchParams.get('utm_source');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -34,12 +44,12 @@ export default function GptTrafficTracker() {
     try {
       already = sessionStorage.getItem(STORAGE_KEY);
     } catch {
-      return;
+      already = null;
     }
     if (already) return;
 
-    const fromUtm = isUtmGpt(utmSource);
-    const fromReferrer = isChatGptReferrer();
+    const fromUtm = utmSourceGptFromLocation();
+    const fromReferrer = isGptLikeReferrer();
     if (!fromUtm && !fromReferrer) return;
 
     try {
@@ -48,7 +58,15 @@ export default function GptTrafficTracker() {
       /* private / blocked storage — still try one ping */
     }
 
-    const path = pathname && pathname.length > 0 ? pathname : '/';
+    const path = (() => {
+      try {
+        const fromBar = window.location.pathname;
+        if (fromBar && fromBar.length > 0) return fromBar;
+      } catch {
+        /* ignore */
+      }
+      return pathname && pathname.length > 0 ? pathname : '/';
+    })();
 
     void fetch('/api/track-gpt-visit', {
       method: 'POST',
@@ -56,7 +74,7 @@ export default function GptTrafficTracker() {
       body: JSON.stringify({ pathname: path }),
       keepalive: true
     }).catch(() => {});
-  }, [pathname, utmSource]);
+  }, [pathname]);
 
   return null;
 }
