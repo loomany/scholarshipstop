@@ -16,6 +16,7 @@ import {
   GoogleTagManagerNoScript
 } from '@/components/analytics/GoogleTagManager';
 import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
+import GptTrafficTracker from '@/components/analytics/GptTrafficTracker';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
 import { ScholarshipOnboardingDraftPostAuthSync } from '@/components/onboarding/ScholarshipOnboardingDraftPostAuthSync';
 import HomeAiNavigatorWidget from '@/components/home/HomeAiNavigatorWidget';
@@ -194,6 +195,9 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
         <HomeAiNavigatorWidget />
         <Suspense fallback={null}>
           <Toaster />
+        </Suspense>
+        <Suspense fallback={null}>
+          <GptTrafficTracker />
         </Suspense>
         <WebVitalsClient />
         <AnalyticsTracker />
