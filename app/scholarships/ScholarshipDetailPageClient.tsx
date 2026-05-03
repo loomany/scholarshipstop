@@ -117,7 +117,6 @@ import {
   pickScholarshipLockedTitleBlurPhrase
 } from '@/lib/scholarships/subscriptionLockedCategory';
 import {
-  formatScholarshipAwardLine,
   resolveScholarshipCategorySlug,
   scholarshipDeadlineHasPassed,
   SIMILAR_MAX
@@ -395,7 +394,7 @@ function SimilarScholarshipDetailListItem({
     !showBestRecommendation &&
     profileMatchPercent != null;
 
-  const awardLine = formatScholarshipAwardLine(s);
+  const awardDisplay = resolveScholarshipCardAwardDisplay(s);
 
   const applicantCountryBadge = useMemo(() => {
     const codes = Array.from(
@@ -558,11 +557,20 @@ function SimilarScholarshipDetailListItem({
         </div>
         <div className="flex w-[min(11rem,42%)] shrink-0 flex-col items-end gap-1.5 text-right">
           <span
-            className={`block w-full text-base font-semibold tabular-nums leading-tight sm:text-[1.0625rem] ${
-              deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'
+            title={awardDisplay.lineTitle}
+            className={`block w-full max-w-full truncate text-base font-semibold leading-tight sm:text-[1.0625rem] ${
+              awardDisplay.isNumeric ? 'tabular-nums' : ''
+            } ${
+              !awardDisplay.isPlaceholder
+                ? deadlinePassed
+                  ? 'text-zinc-500'
+                  : 'text-zinc-900'
+                : deadlinePassed
+                  ? 'text-zinc-400'
+                  : 'text-zinc-500'
             }`}
           >
-            {awardLine}
+            {awardDisplay.line}
           </span>
           <div
             className={
