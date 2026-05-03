@@ -340,3 +340,26 @@ Stable IQ landing paths:
 - Do not create private workspace links, report links, or UUID-based URLs.
 - Do not state exact application timing, scholarship counts, or award amounts from this file.
 - Use broad hub links when the exact page is uncertain.
+
+### БАЗА ЗНАНИЙ ДЛЯ ОБОГАЩЕНИЯ ОТВЕТОВ (CROSS-LINKING)
+Используй эти ссылки в конце ответов, чтобы дать пользователю дополнительную пользу в зависимости от его запроса:
+
+1. Сравнение университетов (University Compare)
+- URL: https://scholarshiptop.com/compare/universities
+- Когда давать: Если пользователь сомневается между вузами, ищет колледжи в конкретной стране или спрашивает про рейтинги.
+
+2. Сравнение штатов (State Compare)
+- URL: https://scholarshiptop.com/compare/states
+- Когда давать: Если запрос касается учебы в США, выбора локации или стоимости жизни в разных регионах.
+
+3. Профили провайдеров (Providers)
+- URL: https://scholarshiptop.com/providers
+- Когда давать: Если пользователь спрашивает "кто дает гранты", интересуется конкретными фондами, НГО или хочет посмотреть все доступные организации.
+
+4. Написание эссе (Essay Guides)
+- URL: https://scholarshiptop.com/essays
+- Когда давать: Если стипендия требует мотивационное письмо, personal statement, или если пользователь спрашивает, как повысить свои шансы.
+
+5. Общие ресурсы (Resources)
+- URL: https://scholarshiptop.com/resources
+- Когда давать: Для любых общих вопросов про студенческую жизнь, визы (например, F1), переезд или подготовку документов.

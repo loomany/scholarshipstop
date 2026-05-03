@@ -23,6 +23,10 @@ services/content-hub/node_modules/
 # long-running SEO batch log (scripts/compare-battle-sequential.ts)
 /logs/compare-battle-sequential.log
 
+# local batch outputs / large downloaded datasets
+classified_hosts_result.json
+scripts/data/world_universities_and_domains.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { getScholarshipTopNavigatorHref } from '@/lib/nav/scholarshipTopNavigator';
@@ -29,6 +29,54 @@ function notifyAiNavigatorTelemetry(): void {
 
 const DOT_ANGLES = [0, 52, 108, 163, 221, 276, 322] as const;
 const DRIFT_ANGLES = [0, 108, 221, 322] as const;
+
+const ORB_SUBTITLE_PHRASE = 'Any language';
+
+/** Straight line under “AI”: letter-by-letter reveal, looping (motion-reduced: all visible). */
+function OrbSubtitleTypewriter() {
+  const chars = useMemo(
+    () => ORB_SUBTITLE_PHRASE.split('').map((c) => (c === ' ' ? '\u00a0' : c)),
+    []
+  );
+  const [visibleCount, setVisibleCount] = useState(0);
+
+  useEffect(() => {
+    const reduce =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      setVisibleCount(chars.length);
+      return;
+    }
+
+    const stepMs = 95;
+    const holdMs = 2200;
+
+    if (visibleCount < chars.length) {
+      const t = window.setTimeout(() => setVisibleCount((n) => n + 1), stepMs);
+      return () => window.clearTimeout(t);
+    }
+    const t = window.setTimeout(() => setVisibleCount(0), holdMs);
+    return () => window.clearTimeout(t);
+  }, [visibleCount, chars.length]);
+
+  return (
+    <span
+      className="-translate-y-0.5 inline-flex max-w-full justify-center whitespace-nowrap font-sans text-[6.25px] font-semibold leading-none tracking-[-0.03em] text-orange-400 [text-shadow:0_0.5px_0_rgba(0,0,0,0.95)] motion-reduce:translate-y-0 sm:-translate-y-1 sm:text-[7.25px] lg:text-[8px]"
+      aria-hidden
+    >
+      {chars.map((ch, i) => (
+        <span
+          key={`${i}-${ch}`}
+          className="motion-safe:transition-opacity motion-safe:duration-150"
+          style={{ opacity: i < visibleCount ? 1 : 0 }}
+        >
+          {ch}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 /** Shared layout/shell minus link wrapper (filled by parent). */
 function MicrobeOrb() {
@@ -76,10 +124,11 @@ function MicrobeOrb() {
         ))}
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-        <span className="text-[11px] font-black leading-none tracking-[-0.06em] text-orange-400 [text-shadow:0_1px_0_rgba(0,0,0,0.95),0_0_12px_rgba(0,0,0,0.5)] drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)] sm:text-[12px] lg:text-[13px]">
+      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1">
+        <span className="-translate-y-0.5 text-[11px] font-black leading-none tracking-[-0.06em] text-orange-400 [text-shadow:0_1px_0_rgba(0,0,0,0.95),0_0_12px_rgba(0,0,0,0.5)] drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)] motion-reduce:translate-y-0 sm:-translate-y-1 sm:text-[12px] lg:-translate-y-1.5 lg:text-[13px]">
           AI
         </span>
+        <OrbSubtitleTypewriter />
       </div>
     </div>
   );
