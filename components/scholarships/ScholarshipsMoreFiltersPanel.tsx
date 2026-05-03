@@ -32,9 +32,6 @@ import {
   SCHOLARSHIP_GPA_OPTIONS,
   SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY
 } from '@/lib/constants/scholarshipGpaOptions';
-import {
-  SUBSCRIPTION_LOCKED_EASY_APPLY_IDS
-} from '@/lib/scholarships/subscriptionLockedCategory';
 
 type Bounds = {
   amountMin: number;
@@ -536,8 +533,8 @@ export default function ScholarshipsMoreFiltersPanel({
   locationOptions,
   isAuthenticated = true,
   onGuestLockedAction,
-  hasSubscription = true,
-  onSubscriptionLockedAction,
+  hasSubscription: _hasSubscription = true,
+  onSubscriptionLockedAction: _onSubscriptionLockedAction,
   contextNotices
 }: ScholarshipsMoreFiltersPanelProps) {
   const [showSlowPreviewIndicator, setShowSlowPreviewIndicator] = useState(false);
@@ -572,16 +569,11 @@ export default function ScholarshipsMoreFiltersPanel({
   }, [open, previewCountLoading]);
 
   if (!open) return null;
-  const applySubscriptionLocked = !hasSubscription;
-  const targetedCategoryLockAction = !hasSubscription
-    ? onSubscriptionLockedAction ?? onGuestLockedAction
-    : undefined;
   const amountLocked = false;
   const eligibilityLocked = false;
   const applicantsLocked = false;
   const universityLocked = false;
   const deadlineShortRangeLocked = false;
-  const internationalAudienceGated = !hasSubscription;
   const SUBSCRIPTION_LOCKED_DEADLINE_PRESETS = new Set<DeadlinePreset>([
     'lt1d',
     'd1_7'
@@ -637,8 +629,7 @@ export default function ScholarshipsMoreFiltersPanel({
   const educationOptions = EDUCATION_LEVEL_OPTIONS;
   const easyApplyOptions: CheckboxGroupOption[] = EASY_APPLY_OPTIONS.map((opt) => ({
     id: opt.id,
-    label: opt.label,
-    locked: !hasSubscription && SUBSCRIPTION_LOCKED_EASY_APPLY_IDS.has(opt.id)
+    label: opt.label
   }));
 
   const onRequirementCheckedChange = (id: string, checked: boolean) => {
@@ -659,13 +650,6 @@ export default function ScholarshipsMoreFiltersPanel({
     });
 
   const onEasyApplyCheckedChange = (id: string, checked: boolean) => {
-    const optionLocked =
-      !hasSubscription &&
-      SUBSCRIPTION_LOCKED_EASY_APPLY_IDS.has(id);
-    if (optionLocked) {
-      targetedCategoryLockAction?.();
-      return;
-    }
     onChange({
       ...value,
       includeEasyApply: toggleInSet(value.includeEasyApply, id, checked)
@@ -884,42 +868,27 @@ export default function ScholarshipsMoreFiltersPanel({
                     'International Friendly (best effort)'
                   ]
                 ] as const
-              ).map(([id, label]) => {
-                const optionLocked =
-                  id === 'international_friendly' && internationalAudienceGated;
-                return (
-                  <li key={id}>
-                    <label className="flex cursor-pointer items-center gap-3">
-                      <input
-                        type="radio"
-                        name="citizenship-audience"
-                        checked={value.citizenshipAudience === id}
-                        onChange={() => {
-                          if (optionLocked) {
-                            targetedCategoryLockAction?.();
-                            return;
-                          }
-                          onChange({
-                            ...value,
-                            citizenshipAudience: id as CitizenshipAudienceFilter
-                          });
-                        }}
-                        className="scholarship-deadline-radio h-4 w-4 shrink-0"
-                      />
-                      <span className="inline-flex items-center gap-1.5 text-sm text-zinc-800">
-                        {label}
-                        {optionLocked ? (
-                          <Lock
-                            className={`h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
-                            strokeWidth={2}
-                            aria-hidden
-                          />
-                        ) : null}
-                      </span>
-                    </label>
-                  </li>
-                );
-              })}
+              ).map(([id, label]) => (
+                <li key={id}>
+                  <label className="flex cursor-pointer items-center gap-3">
+                    <input
+                      type="radio"
+                      name="citizenship-audience"
+                      checked={value.citizenshipAudience === id}
+                      onChange={() => {
+                        onChange({
+                          ...value,
+                          citizenshipAudience: id as CitizenshipAudienceFilter
+                        });
+                      }}
+                      className="scholarship-deadline-radio h-4 w-4 shrink-0"
+                    />
+                    <span className="inline-flex items-center gap-1.5 text-sm text-zinc-800">
+                      {label}
+                    </span>
+                  </label>
+                </li>
+              ))}
             </ul>
           </section>
 
@@ -1531,33 +1500,17 @@ export default function ScholarshipsMoreFiltersPanel({
               type="button"
               onClick={() => {
                 if (applyButtonBusy) return;
-                if (applySubscriptionLocked) {
-                  (onSubscriptionLockedAction ?? onGuestLockedAction)?.();
-                  return;
-                }
                 onApply();
               }}
               disabled={applyButtonBusy}
               aria-busy={applyButtonBusy}
-              title={
-                applySubscriptionLocked
-                  ? 'Premium subscription required to apply filters'
-                  : undefined
-              }
-              className={`${scholarshipSeeResultsButtonClass} ${applySubscriptionLocked ? 'opacity-95' : ''} ${
+              className={`${scholarshipSeeResultsButtonClass} ${
                 applyButtonBusy ? 'opacity-50' : ''
               }`}
             >
               {previewCountLoading && !applyPending ? (
                 <span
                   className="mr-1.5 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/50 border-t-white"
-                  aria-hidden
-                />
-              ) : null}
-              {applySubscriptionLocked ? (
-                <Lock
-                  className={`mr-1.5 inline-block h-3.5 w-3.5 ${scholarshipGuestLockIconClass}`}
-                  strokeWidth={2}
                   aria-hidden
                 />
               ) : null}

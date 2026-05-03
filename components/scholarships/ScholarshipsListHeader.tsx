@@ -14,7 +14,6 @@ import {
   ChevronDown,
   Globe2,
   LayoutGrid,
-  Lock,
   Search,
   SlidersHorizontal,
   X
@@ -30,14 +29,8 @@ import {
   CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS,
   SITE_SEARCH_INPUT_CHROME
 } from '@/lib/constants/catalogControlBar';
-import {
-  scholarshipCategoriesApplyButtonClass,
-  scholarshipGuestLockIconClass
-} from '@/lib/constants/scholarshipActionUi';
-import {
-  GUEST_LOCKED_SORT_OPTIONS,
-  type SortOption
-} from '@/app/scholarships/scholarshipSort';
+import { scholarshipCategoriesApplyButtonClass } from '@/lib/constants/scholarshipActionUi';
+import { type SortOption } from '@/app/scholarships/scholarshipSort';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 
 export type { SortOption };
@@ -79,19 +72,11 @@ type ScholarshipsListHeaderProps = {
   /** Активные фильтры над списком (поиск, категории, сводка по модалке). */
   activeListingChips?: { id: string; label: string; onDismiss: () => void }[];
   onClearAllListingChips?: () => void;
-  /**
-   * When false, “smart” sort options still appear but trigger `onGuestSortBlocked`
-   * instead of changing sort (hub guests).
-   */
+  /** Retained for call-site compatibility; catalog controls are always interactive. */
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
   onGuestSortBlocked?: () => void;
   onGuestLockedAction?: () => void;
-  /**
-   * When set (e.g. hub passes `catalogFreeTier`), search/filters/categories locks and
-   * `onGuestLockedAction` stay in sync. Without it, `isAuthenticated` alone drives locks
-   * and can disagree with `onGuestLockedAction` while `authResolved` is still false.
-   */
   catalogListingLocked?: boolean;
   savedFilterPresetButtons?: { id: string; name: string; active?: boolean }[];
   onSavedFilterPresetSelect?: (id: string) => void;
@@ -239,22 +224,17 @@ function ScholarshipsListHeader({
   moreFiltersActiveCount = 0,
   activeListingChips = [],
   onClearAllListingChips,
-  isAuthenticated = true,
-  hasSubscription = true,
-  onGuestSortBlocked,
-  onGuestLockedAction,
-  catalogListingLocked,
+  isAuthenticated: _isAuthenticated = true,
+  hasSubscription: _hasSubscription = true,
+  onGuestSortBlocked: _onGuestSortBlocked,
+  onGuestLockedAction: _onGuestLockedAction,
+  catalogListingLocked: _catalogListingLocked,
   savedFilterPresetButtons = [],
   onSavedFilterPresetSelect,
   savedFilterBarHint,
   suppressBottomMargin = false,
   centerResultSummary = false
 }: ScholarshipsListHeaderProps) {
-  const catalogLocked =
-    catalogListingLocked !== undefined
-      ? catalogListingLocked
-      : !isAuthenticated;
-  const guestCatalogUiLocked = !isAuthenticated;
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [countriesOpen, setCountriesOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
@@ -384,7 +364,6 @@ function ScholarshipsListHeader({
   const activeCountryCount = appliedCountryCodes.size;
   const showCountryBadge =
     activeCountryCount > 0 || appliedIncludeUnspecifiedCountry;
-  const moreFiltersApplyLocked = !hasSubscription;
   const countryButtonLabel =
     activeCountryCount === 1
       ? countryCounts.find((country) => appliedCountryCodes.has(country.code))?.label ??
@@ -463,27 +442,11 @@ function ScholarshipsListHeader({
           <button
             type="button"
             className={`${scholarshipCategoriesApplyButtonClass} inline-flex items-center justify-center gap-1.5`}
-            title={
-              guestCatalogUiLocked
-                ? 'Apply categories after you start your free trial'
-                : undefined
-            }
             onClick={() => {
-              if (guestCatalogUiLocked) {
-                onGuestLockedAction?.();
-                return;
-              }
               onApplyCategories(new Set(draftCategories));
               setCategoriesOpen(false);
             }}
           >
-            {guestCatalogUiLocked ? (
-              <Lock
-                className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                strokeWidth={2}
-                aria-hidden
-              />
-            ) : null}
             Apply
           </button>
         </div>
@@ -546,44 +509,11 @@ function ScholarshipsListHeader({
                 />
                 <input
                   value={query}
-                  onChange={(e) => {
-                    if (catalogLocked) return;
-                    onQueryChange(e.target.value);
-                  }}
-                  onClick={(e) => {
-                    if (!catalogLocked) return;
-                    e.preventDefault();
-                    onGuestLockedAction?.();
-                  }}
-                  onFocus={(e) => {
-                    if (!catalogLocked) return;
-                    e.currentTarget.blur();
-                    onGuestLockedAction?.();
-                  }}
-                  onMouseDown={(e) => {
-                    if (!catalogLocked) return;
-                    e.preventDefault();
-                    onGuestLockedAction?.();
-                  }}
-                  readOnly={catalogLocked}
+                  onChange={(e) => onQueryChange(e.target.value)}
                   placeholder="Search by keyword"
                   aria-label="Search by keyword"
-                  title={
-                    catalogLocked
-                      ? 'Search by keyword after you start your free trial'
-                      : undefined
-                  }
-                  className={`${CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS} ${
-                    catalogLocked ? 'cursor-pointer bg-gray-50 pr-10' : ''
-                  }`}
+                  className={CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS}
                 />
-                {catalogLocked ? (
-                  <Lock
-                    className={`pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 ${scholarshipGuestLockIconClass}`}
-                    strokeWidth={2}
-                    aria-hidden
-                  />
-                ) : null}
               </div>
               <div
                 className="relative w-full shrink-0 sm:w-auto sm:min-w-[11rem]"
@@ -592,11 +522,6 @@ function ScholarshipsListHeader({
                 <>
                   <button
                     type="button"
-                    title={
-                      guestCatalogUiLocked
-                        ? 'Some sort options require a free account'
-                        : undefined
-                    }
                     onClick={() => {
                       setCategoriesOpen(false);
                       setCountriesOpen(false);
@@ -608,13 +533,6 @@ function ScholarshipsListHeader({
                   >
                     <span className="flex min-w-0 flex-1 items-center gap-2 truncate">
                       <span className="shrink-0 text-gray-500">Sort:</span>
-                      {guestCatalogUiLocked ? (
-                        <Lock
-                          className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                          strokeWidth={2}
-                          aria-hidden
-                        />
-                      ) : null}
                       <span className="min-w-0 truncate font-medium text-gray-900">
                         {sortTriggerLabel}
                       </span>
@@ -630,46 +548,29 @@ function ScholarshipsListHeader({
                       aria-label="Sort options"
                       className="absolute left-0 z-[200] mt-2 w-full min-w-[12rem] max-w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-xl border border-gray-200 bg-white py-2 shadow-lg ring-1 ring-gray-900/5 sm:left-auto sm:right-0 sm:w-max"
                     >
-                      {SORT_OPTIONS.map((opt) => {
-                        const sortLocked =
-                          guestCatalogUiLocked &&
-                          GUEST_LOCKED_SORT_OPTIONS.has(opt.value);
-                        return (
-                          <li
-                            key={opt.value}
-                            role="option"
-                            aria-selected={sortBy === opt.value}
+                      {SORT_OPTIONS.map((opt) => (
+                        <li
+                          key={opt.value}
+                          role="option"
+                          aria-selected={sortBy === opt.value}
+                        >
+                          <button
+                            type="button"
+                            className={`flex w-full items-center gap-2 whitespace-nowrap px-4 py-2.5 text-left text-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 ${
+                              sortBy === opt.value
+                                ? optionSelectedClass
+                                : optionDefaultClass
+                            }`}
+                            onClick={() => {
+                              onSortChange(opt.value);
+                              setSortOpen(false);
+                            }}
                           >
-                            <button
-                              type="button"
-                              className={`flex w-full items-center gap-2 whitespace-nowrap px-4 py-2.5 text-left text-sm transition hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 ${
-                                sortBy === opt.value
-                                  ? optionSelectedClass
-                                  : optionDefaultClass
-                              }`}
-                              onClick={() => {
-                                if (sortLocked) {
-                                  onGuestSortBlocked?.();
-                                  return;
-                                }
-                                onSortChange(opt.value);
-                                setSortOpen(false);
-                              }}
-                            >
-                              {sortLocked ? (
-                                <Lock
-                                  className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                                  strokeWidth={2}
-                                  aria-hidden
-                                />
-                              ) : (
-                                <span className="w-3.5 shrink-0" aria-hidden />
-                              )}
-                              <span className="min-w-0">{opt.label}</span>
-                            </button>
-                          </li>
-                        );
-                      })}
+                            <span className="w-3.5 shrink-0" aria-hidden />
+                            <span className="min-w-0">{opt.label}</span>
+                          </button>
+                        </li>
+                      ))}
                     </ul>
                   ) : null}
                 </>
@@ -682,11 +583,6 @@ function ScholarshipsListHeader({
                 <button
                   type="button"
                   aria-label="Open more filters"
-                  title={
-                    moreFiltersApplyLocked
-                      ? 'Premium subscription required to apply filters'
-                      : undefined
-                  }
                   onClick={() => {
                     setCategoriesOpen(false);
                     setCountriesOpen(false);
@@ -700,13 +596,6 @@ function ScholarshipsListHeader({
                     strokeWidth={2}
                     aria-hidden
                   />
-                  {moreFiltersApplyLocked ? (
-                    <Lock
-                      className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                      strokeWidth={2}
-                      aria-hidden
-                    />
-                  ) : null}
                   Filters
                   {moreFiltersActiveCount > 0 ? (
                     <span className="tabular-nums text-gray-600">
@@ -899,11 +788,6 @@ function ScholarshipsListHeader({
                   <button
                     type="button"
                     disabled={categoriesDisabled}
-                    title={
-                      guestCatalogUiLocked
-                        ? 'Apply categories after you start your free trial'
-                        : undefined
-                    }
                     onClick={() => {
                       if (categoriesDisabled) return;
                       setSortOpen(false);
@@ -922,13 +806,6 @@ function ScholarshipsListHeader({
                     className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
                   >
                     <LayoutGrid className="h-[18px] w-[18px] text-gray-600" />
-                    {guestCatalogUiLocked ? (
-                      <Lock
-                        className={`h-3.5 w-3.5 shrink-0 ${scholarshipGuestLockIconClass}`}
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                    ) : null}
                     Categories
                     {activeFilterCount > 0 ? (
                       <span className="tabular-nums text-gray-600">
