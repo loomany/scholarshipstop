@@ -24,6 +24,8 @@ import {
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import { parseUserGpa, type ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
+import { preferredHostCountryCodesFromProfileJson } from '@/lib/scholarships/profilePreferredHostCountries';
+import { dedupeHostCountryCodesForDisplay } from '@/lib/scholarships/countryEligibility/countries';
 import { validateScholarshipOnboardingBasicsOptionalWithoutBirth, validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
 import { validateScholarshipOnboardingStep3GpaOptional } from '@/lib/validation/scholarshipOnboardingStep3Schema';
 import { validateScholarshipOnboardingStep4Draft } from '@/lib/validation/scholarshipOnboardingStep4Schema';
@@ -33,6 +35,10 @@ export type ScholarshipProfileFilterSeed = {
   schoolLevel: string | null;
   citizenship: string | null;
   applicantCountryCodes?: string[];
+  /** Hub: include rows with no explicit applicant-country eligibility signal. */
+  includeUnspecifiedApplicantCountries?: boolean;
+  /** Study destination prefs (filters `scholarships.host_country_codes`). */
+  preferredHostCountryCodes?: string[];
   stateInput: string;
   gpa?: ProfilesRow['gpa'] | null;
   gpaSelection?: string | null;
@@ -42,15 +48,46 @@ export type ScholarshipProfileFilterSeed = {
 };
 
 export function buildScholarshipProfileFilterSeedFromCountry(
-  countryCode: string
+  countryCode: string,
+  preferredHosts?: string[] | null
 ): ScholarshipProfileFilterSeed | null {
   const normalized = countryCode.trim().toUpperCase();
   if (!/^[A-Z]{2}$/.test(normalized)) return null;
+  const preferredHostCountryCodes =
+    preferredHosts && preferredHosts.length > 0
+      ? dedupeQuizPreferredHosts(preferredHosts)
+      : [];
   return {
     fieldOfStudy: null,
     schoolLevel: null,
     citizenship: null,
     applicantCountryCodes: [normalized],
+    includeUnspecifiedApplicantCountries: false,
+    preferredHostCountryCodes,
+    stateInput: '',
+    gpa: null,
+    gpaSelection: null,
+    educationLevelIds: [],
+    gpaBucketIds: [],
+    eligibilityIds: []
+  };
+}
+
+/** Applicant country step: explicit “citizenship not specified” / broad catalog browse. */
+export function buildScholarshipProfileFilterSeedForUnspecifiedApplicant(
+  preferredHosts?: string[] | null
+): ScholarshipProfileFilterSeed {
+  const preferredHostCountryCodes =
+    preferredHosts && preferredHosts.length > 0
+      ? dedupeQuizPreferredHosts(preferredHosts)
+      : [];
+  return {
+    fieldOfStudy: null,
+    schoolLevel: null,
+    citizenship: null,
+    applicantCountryCodes: [],
+    includeUnspecifiedApplicantCountries: true,
+    preferredHostCountryCodes,
     stateInput: '',
     gpa: null,
     gpaSelection: null,
@@ -126,6 +163,14 @@ function eligibilityIdsFromProfileCitizenship(
   return [];
 }
 
+function dedupeQuizPreferredHosts(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  const codes = raw
+    .map((x) => (typeof x === 'string' ? x.trim().toUpperCase() : ''))
+    .filter((c) => /^[A-Z]{2}$/.test(c));
+  return dedupeHostCountryCodesForDisplay(codes);
+}
+
 export function profileCitizenshipNarrowFromCitizenship(
   citizenship: string | null | undefined
 ): ProfileCitizenshipNarrow {
@@ -174,11 +219,16 @@ export function buildScholarshipProfileFilterSeedFromDraftWithoutBirth(
   });
   const eligibilityIds = eligibilityIdsFromProfileCitizenship(citizenship);
 
+  const preferredHostCountryCodes = dedupeQuizPreferredHosts(draft.preferredHostCountryCodes);
+
   return {
     fieldOfStudy,
     schoolLevel,
     citizenship,
     applicantCountryCodes: [],
+    includeUnspecifiedApplicantCountries:
+      draft.includeUnspecifiedApplicantCountries === true,
+    preferredHostCountryCodes,
     stateInput,
     gpa: gpaNum,
     gpaSelection,
@@ -248,9 +298,11 @@ export function buildScholarshipProfileFilterSeedFromWizardDraftForGuestPreview(
     !stateInput &&
     gpaNum == null &&
     !gpaSelection &&
+    dedupeQuizPreferredHosts(draft.preferredHostCountryCodes).length === 0 &&
     educationLevelIds.length === 0 &&
     gpaBucketIds.length === 0 &&
-    eligibilityIds.length === 0
+    eligibilityIds.length === 0 &&
+    draft.includeUnspecifiedApplicantCountries !== true
   ) {
     return null;
   }
@@ -259,6 +311,10 @@ export function buildScholarshipProfileFilterSeedFromWizardDraftForGuestPreview(
     fieldOfStudy,
     schoolLevel,
     citizenship,
+    applicantCountryCodes: [],
+    includeUnspecifiedApplicantCountries:
+      draft.includeUnspecifiedApplicantCountries === true || undefined,
+    preferredHostCountryCodes: dedupeQuizPreferredHosts(draft.preferredHostCountryCodes),
     stateInput,
     gpa: gpaNum,
     gpaSelection,
@@ -283,6 +339,9 @@ export function buildScholarshipProfileFilterSeed(
 ): ScholarshipProfileFilterSeed | null {
   if (!profile) return null;
 
+  const preferredHostCountryCodes =
+    preferredHostCountryCodesFromProfileJson(profile.preferred_host_country_codes);
+
   const fieldOfStudy = resolvedFieldOfStudySlugFromProfile(profile);
   const schoolLevel = profile.school_level?.trim() || null;
   const citizenship = profile.citizenship_status?.trim() || null;
@@ -295,6 +354,12 @@ export function buildScholarshipProfileFilterSeed(
   const gpaSelection = profileGpaSelectionFromSnapshot(profile.saved_filters_snapshot);
   const gpaBucketIds = gpaBucketIdsFromProfile(profile);
   const eligibilityIds = eligibilityIdsFromProfileCitizenship(citizenship);
+  const snap = profile.saved_filters_snapshot;
+  const includeUnspecifiedFromSnapshot =
+    snap &&
+    typeof snap === 'object' &&
+    !Array.isArray(snap) &&
+    (snap as Record<string, unknown>).includeUnspecifiedApplicantCountries === true;
 
   if (
     !fieldOfStudy &&
@@ -304,9 +369,11 @@ export function buildScholarshipProfileFilterSeed(
     !stateInput &&
     profile.gpa == null &&
     !gpaSelection &&
+    preferredHostCountryCodes.length === 0 &&
     educationLevelIds.length === 0 &&
     gpaBucketIds.length === 0 &&
-    eligibilityIds.length === 0
+    eligibilityIds.length === 0 &&
+    !includeUnspecifiedFromSnapshot
   ) {
     return null;
   }
@@ -316,6 +383,10 @@ export function buildScholarshipProfileFilterSeed(
     schoolLevel,
     citizenship,
     applicantCountryCodes: countryCode ? [countryCode] : [],
+    includeUnspecifiedApplicantCountries:
+      includeUnspecifiedFromSnapshot || undefined,
+    preferredHostCountryCodes:
+      preferredHostCountryCodes.length > 0 ? preferredHostCountryCodes : undefined,
     stateInput,
     gpa: profile.gpa ?? null,
     gpaSelection,
@@ -348,6 +419,9 @@ export function buildMoreFiltersWithProfileDefaults(
         .filter((code) => /^[A-Z]{2}$/.test(code))
     );
     next.includeUnspecifiedApplicantCountries = false;
+  } else if (seed.includeUnspecifiedApplicantCountries === true) {
+    next.includeApplicantCountryCodes = new Set();
+    next.includeUnspecifiedApplicantCountries = true;
   }
   next.profileFieldOfStudySlug = seed.fieldOfStudy?.trim().toLowerCase() ?? '';
   next.profileCitizenshipNarrow = profileCitizenshipNarrowFromCitizenship(
@@ -415,6 +489,12 @@ export function mergeBestRecommendationFiltersFromProfile(
     out.includeApplicantCountryCodes = new Set(prof.includeApplicantCountryCodes);
     out.includeUnspecifiedApplicantCountries =
       prof.includeUnspecifiedApplicantCountries;
+  } else if (
+    out.includeApplicantCountryCodes.size === 0 &&
+    !out.includeUnspecifiedApplicantCountries &&
+    prof.includeUnspecifiedApplicantCountries
+  ) {
+    out.includeUnspecifiedApplicantCountries = true;
   }
   if (bestRecommendationUsesCountryAsPrimaryFilter) {
     return out;

@@ -53,7 +53,10 @@ function notifyDestructive(title: string, description?: string) {
 
 function emptyDraft(): StoredOnboardingDraft {
   return {
-    v: 7,
+    v: 8,
+    preferredHostCountryCodes: [],
+    includeUnspecifiedApplicantCountries: false,
+    landingDestinationScreenCompleted: true,
     activeStep: 1,
     step1: mergeDraftWithDefaults(null),
     step2: { firstName: '', lastName: '', email: '' },
@@ -177,17 +180,30 @@ export function ScholarshipOnboardingWizard({
 
   const handleCountryContinue = useCallback(
     (countryCodeRaw: string) => {
+      const base = loadStoredOnboardingDraft() ?? emptyDraft();
+      if (base.includeUnspecifiedApplicantCountries === true) {
+        setCountryError(null);
+        persistFull({
+          ...base,
+          v: 8,
+          step4: { ...base.step4, countryCode: '', state: '' },
+          includeUnspecifiedApplicantCountries: true,
+          activeStep: 7
+        });
+        navigateToStep(7);
+        return;
+      }
       const code = normalizeCountryCode(countryCodeRaw);
       if (!code) {
         setCountryError('Choose your country to continue.');
         return;
       }
       setCountryError(null);
-      const base = loadStoredOnboardingDraft() ?? emptyDraft();
       const nextStep = (code === 'US' ? 2 : 7) as OnboardingStep;
       persistFull({
         ...base,
-        v: 7,
+        v: 8,
+        includeUnspecifiedApplicantCountries: false,
         step4: {
           ...base.step4,
           countryCode: code,
@@ -205,7 +221,7 @@ export function ScholarshipOnboardingWizard({
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       persistFull({
         ...base,
-        v: 7,
+        v: 8,
         step1: values,
         activeStep: 3
       });
@@ -219,7 +235,7 @@ export function ScholarshipOnboardingWizard({
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       persistFull({
         ...base,
-        v: 7,
+        v: 8,
         step1: values,
         activeStep: 4
       });
@@ -233,7 +249,7 @@ export function ScholarshipOnboardingWizard({
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       persistFull({
         ...base,
-        v: 7,
+        v: 8,
         step1: values,
         activeStep: 5
       });
@@ -246,7 +262,7 @@ export function ScholarshipOnboardingWizard({
     const base = loadStoredOnboardingDraft() ?? emptyDraft();
     persistFull({
       ...base,
-      v: 7,
+      v: 8,
       activeStep: 6
     });
     navigateToStep(6);
@@ -256,7 +272,7 @@ export function ScholarshipOnboardingWizard({
     const base = loadStoredOnboardingDraft() ?? emptyDraft();
     persistFull({
       ...base,
-      v: 7,
+      v: 8,
       activeStep: 7
     });
     navigateToStep(7);
@@ -265,7 +281,7 @@ export function ScholarshipOnboardingWizard({
   const handleBack = useCallback(
     (s: OnboardingStep) => {
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
-      persistFull({ ...base, v: 7, activeStep: s });
+      persistFull({ ...base, v: 8, activeStep: s });
       navigateToStep(s);
     },
     [persistFull, navigateToStep]
@@ -496,7 +512,7 @@ export function ScholarshipOnboardingWizard({
       const base = loadStoredOnboardingDraft() ?? emptyDraft();
       persistFull({
         ...base,
-        v: 7,
+        v: 8,
         step1: {
           ...base.step1,
           birthMonth: payload.birthMonth.trim(),
@@ -527,7 +543,9 @@ export function ScholarshipOnboardingWizard({
   const showEmbeddedLeave =
     mode === 'embedded' && typeof onLeaveEmbeddedQuiz === 'function';
   const selectedCountryCode = normalizeCountryCode(draft.step4.countryCode);
-  const isUnitedStatesFlow = selectedCountryCode === 'US';
+  const isUnitedStatesFlow =
+    selectedCountryCode === 'US' &&
+    draft.includeUnspecifiedApplicantCountries !== true;
 
   return (
     <div className="min-h-[calc(100dvh-4rem)] bg-zinc-50 px-4 py-10 sm:py-14">
@@ -556,6 +574,22 @@ export function ScholarshipOnboardingWizard({
             <CountryFirstStep
               disabled={loading}
               value={draft.step4.countryCode ?? ''}
+              includeUnspecifiedApplicantCountries={
+                draft.includeUnspecifiedApplicantCountries === true
+              }
+              onIncludeUnspecifiedApplicantCountriesChange={(next) => {
+                setCountryError(null);
+                persistFull({
+                  ...draft,
+                  v: 8,
+                  includeUnspecifiedApplicantCountries: next,
+                  step4: {
+                    ...draft.step4,
+                    countryCode: next ? '' : draft.step4.countryCode ?? '',
+                    state: next ? '' : draft.step4.state
+                  }
+                });
+              }}
               progressEyebrow="Step 1 · Country"
               title="Where are you applying from?"
               description="Choose your applicant country first. We'll adapt the signup questions and scholarship matching to that country."
@@ -564,7 +598,8 @@ export function ScholarshipOnboardingWizard({
                 setCountryError(null);
                 persistFull({
                   ...draft,
-                  v: 7,
+                  v: 8,
+                  includeUnspecifiedApplicantCountries: false,
                   step4: {
                     ...draft.step4,
                     countryCode: value,

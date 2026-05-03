@@ -174,6 +174,8 @@ type SeoListBodyOpts = {
   requiredSeoTags?: string[];
   /** Clean SEO routes can own host-country filters without exposing `host_cc` query. */
   hostCountryCodes?: string[];
+  /** Guest Best: transient quiz hosts (not hub `host_cc`) — cleared on SQL relax retries. */
+  bestRecommendationRelaxableQuizHostCountries?: boolean;
 };
 
 function buildGuestPublicCacheControl(args: {
@@ -348,6 +350,8 @@ async function handleList(
         hostCountryCodesFromUrl.length > 0 || hostCountryCodesFromBody.length > 0
           ? [...hostCountryCodesFromUrl, ...hostCountryCodesFromBody]
           : null,
+      bestRecommendationRelaxableQuizHostCountries:
+        seoBody?.bestRecommendationRelaxableQuizHostCountries === true,
       longTailLegacySlugs: lt.filter(Boolean),
       similarTo,
       similarCategorySlug,
@@ -356,6 +360,13 @@ async function handleList(
       requiredSeoTags: seoBody?.requiredSeoTags
     })
   );
+
+  if (hostCountryCodesFromUrl.length > 0) {
+    req = {
+      ...req,
+      bestRecommendationRelaxableQuizHostCountries: false
+    };
+  }
 
   if (savedFiltersSnapshotBody !== undefined) {
     req = {
@@ -912,6 +923,7 @@ export async function POST(request: Request) {
       requiredSeoTags?: string[];
       providerSlug?: string | null;
       hostCountryCodes?: string[];
+      bestRecommendationRelaxableQuizHostCountries?: boolean;
       /** `null` = client has no saved filter preset (Saved Filters count = 0). */
       savedFiltersSnapshot?: MoreFiltersJson | null;
       guestBestRecommendationPreviewEnabled?: boolean;
@@ -931,7 +943,9 @@ export async function POST(request: Request) {
       seoListingFallback: json.seoListingFallback,
       slugOnlyMoreFilters: json.slugOnlyMoreFilters,
       requiredSeoTags: json.requiredSeoTags,
-      hostCountryCodes: json.hostCountryCodes
+      hostCountryCodes: json.hostCountryCodes,
+      bestRecommendationRelaxableQuizHostCountries:
+        json.bestRecommendationRelaxableQuizHostCountries === true
     }, json.savedFiltersSnapshot, json.providerSlug, json.guestBestRecommendationPreviewEnabled === true, json.sidebarOnlyMeta === true);
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));

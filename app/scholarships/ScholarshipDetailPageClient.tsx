@@ -121,7 +121,10 @@ import {
   scholarshipDeadlineHasPassed,
   SIMILAR_MAX
 } from '@/lib/scholarships/similarScholarships';
-import { countryLabelFromCode } from '@/lib/scholarships/countryEligibility/countries';
+import {
+  countryLabelFromCode,
+  dedupeHostCountryCodesForDisplay
+} from '@/lib/scholarships/countryEligibility/countries';
 import { getScholarshipDeadlineState } from '@/lib/scholarships/scholarshipDeadlineState';
 import { getScholarshipCatalog } from '@/lib/scholarships/scholarshipCatalog';
 import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
@@ -404,47 +407,65 @@ function SimilarScholarshipDetailListItem({
           .filter((code) => /^[A-Z]{2}$/.test(code))
       )
     ).sort();
-    const primary = codes.length === 1 ? codes[0] : null;
-    if (!primary) return null;
-    const label = countryLabelFromCode(primary);
-    return {
-      code: primary,
-      text: `For ${label}`,
-      title: `For applicants from ${label}`
-    };
-  }, [s.applicantCountryCodes]);
-
-  const grantLocationBadge = useMemo(() => {
-    const hostCodes = Array.from(
+    const dedupApplicantAgainstHostCountries = Array.from(
       new Set(
         (s.hostCountryCodes ?? [])
           .map((code) => code.trim().toUpperCase())
           .filter((code) => /^[A-Z]{2}$/.test(code))
       )
     ).sort();
+    if (
+      s.internationalFriendlyListing === true &&
+      dedupApplicantAgainstHostCountries.length === 1 &&
+      codes.length === 1 &&
+      dedupApplicantAgainstHostCountries[0] === codes[0]
+    ) {
+      return null;
+    }
+    const primary = codes.length === 1 ? codes[0] : null;
+    if (!primary) return null;
+    const label = countryLabelFromCode(primary);
+    return {
+      code: primary,
+      text: `Eligible: ${label}`,
+      title: `Eligibility tied to applicants linked to ${label}`
+    };
+  }, [
+    s.applicantCountryCodes,
+    s.hostCountryCodes,
+    s.internationalFriendlyListing
+  ]);
+
+  const grantLocationBadge = useMemo(() => {
+    const hostCodes = dedupeHostCountryCodesForDisplay(
+      (s.hostCountryCodes ?? [])
+        .map((code) => code.trim().toUpperCase())
+        .filter((code) => /^[A-Z]{2}$/.test(code))
+    );
     const hasStateSignal = (s.stateCodes ?? []).some((code) =>
       /^[A-Z]{2}$/i.test(code.trim())
     );
     if (hostCodes.includes('US') || hasStateSignal) {
+      const usLabel = countryLabelFromCode('US');
       return {
         key: 'grant-location-us' as const,
-        text: 'US-based',
-        title: 'This scholarship is based in the United States'
+        text: `Location: ${usLabel}`,
+        title: `Study opportunity in ${usLabel}`
       };
     }
     if (hostCodes.length === 1) {
       const label = countryLabelFromCode(hostCodes[0]!);
       return {
         key: `grant-location-${hostCodes[0]}`,
-        text: `Hosted in ${label}`,
-        title: `This scholarship is hosted in ${label}`
+        text: `Location: ${label}`,
+        title: `Study opportunity in ${label}`
       };
     }
     if (hostCodes.length > 1) {
       return {
         key: 'grant-location-multi' as const,
-        text: `${hostCodes.length} host countries`,
-        title: `This scholarship is hosted in ${hostCodes.length} countries`
+        text: `Location: ${hostCodes.length} countries`,
+        title: `Study opportunities spanning ${hostCodes.length} countries`
       };
     }
     return null;
@@ -453,10 +474,7 @@ function SimilarScholarshipDetailListItem({
   const grantLocationHubHref = useMemo(() => {
     if (!grantLocationBadge) return null;
     if (grantLocationBadge.key === 'grant-location-multi') return null;
-    if (
-      grantLocationBadge.key === 'grant-location-us' ||
-      grantLocationBadge.text === 'US-based'
-    ) {
+    if (grantLocationBadge.key === 'grant-location-us') {
       return (
         scholarshipHostCountrySeoHref('US') ??
         buildScholarshipTagHubHref({ hostCountryCode: 'US' })

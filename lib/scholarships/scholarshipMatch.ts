@@ -1,4 +1,5 @@
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
+import { preferredHostCountryCodesFromProfileJson } from '@/lib/scholarships/profilePreferredHostCountries';
 import { profileGpaSelectionFromSnapshot } from '@/lib/constants/scholarshipGpaOptions';
 import type { Database } from '@/types_db';
 
@@ -67,6 +68,9 @@ export function computeScholarshipProfileMatchPercent(
  * Stable string for cache keys when profile fields that affect hub filters change.
  */
 export function scholarshipMatchProfileVersion(p: ProfilesRow): string {
+  const pref = preferredHostCountryCodesFromProfileJson(
+    p.preferred_host_country_codes
+  ).join(',');
   return [
     p.field_of_study ?? '',
     p.field_of_study_label ?? '',
@@ -80,6 +84,7 @@ export function scholarshipMatchProfileVersion(p: ProfilesRow): string {
     p.birth_day != null ? String(p.birth_day) : '',
     p.birth_year != null ? String(p.birth_year) : '',
     p.date_of_birth ?? '',
-    p.state_region ?? ''
+    p.state_region ?? '',
+    pref
   ].join('|');
 }

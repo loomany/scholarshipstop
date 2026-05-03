@@ -24,12 +24,21 @@ export type OnboardingFormValues = {
 };
 
 export type StoredOnboardingDraft = {
-  v: 7;
+  v: 8;
+  /**
+   * Applicant country step: browse grants with no explicit applicant-country signal in our data
+   * (mutually exclusive with `step4.countryCode` / landing selected country).
+   */
+  includeUnspecifiedApplicantCountries?: boolean;
   /**
    * `/get-scholarships` quiz: step 1 omits birthday; profile stores null DOB.
    * Does not use the main `scholarship_onboarding_draft_v2` key.
    */
   quizVariant?: 'landing_no_birth';
+  /** Landing quiz legacy flag; study-destination step removed — kept for draft compatibility. */
+  landingDestinationScreenCompleted?: boolean;
+  /** ISO2 host / study-destination prefs (persisted locally + synced to profiles). */
+  preferredHostCountryCodes?: string[];
   activeStep: OnboardingStep;
   step1: OnboardingFormValues;
   step2: OnboardingStep2DraftFields;
@@ -63,13 +72,27 @@ const emptyStep4 = (): OnboardingStep4DraftFields => ({
 
 function defaultStored(): StoredOnboardingDraft {
   return {
-    v: 7,
+    v: 8,
     activeStep: 1,
+    preferredHostCountryCodes: [],
+    includeUnspecifiedApplicantCountries: false,
+    landingDestinationScreenCompleted: true,
     step1: emptyStep1(),
     step2: emptyStep2(),
     step3: emptyStep3(),
     step4: emptyStep4()
   };
+}
+
+function sanitizePreferredHostsFromStored(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return [
+    ...new Set(
+      raw
+        .map((x) => (typeof x === 'string' ? x.trim().toUpperCase() : ''))
+        .filter((c) => /^[A-Z]{2}$/.test(c))
+    )
+  ];
 }
 
 function normalizeActiveStep(n: unknown): OnboardingStep {
@@ -81,6 +104,7 @@ function normalizeActiveStep(n: unknown): OnboardingStep {
  * Migrate v2–v7: location (old step3 country/state/city) dropped.
  * GPA lives in step3; legacy step4.gpa merged into step3.
  * v7 adds step4 US state (optional).
+ * v8 adds preferred study destinations (+ landing destination gate).
  */
 function parseStored(raw: string): StoredOnboardingDraft | null {
   try {
@@ -95,7 +119,8 @@ function parseStored(raw: string): StoredOnboardingDraft | null {
         version === 4 ||
         version === 5 ||
         version === 6 ||
-        version === 7) &&
+        version === 7 ||
+        version === 8) &&
       o.step1 &&
       typeof o.step1 === 'object';
 
@@ -151,10 +176,23 @@ function parseStored(raw: string): StoredOnboardingDraft | null {
 
       const quizVariant =
         o.quizVariant === 'landing_no_birth' ? ('landing_no_birth' as const) : undefined;
+      const preferredHostCountryCodes = sanitizePreferredHostsFromStored(
+        o.preferredHostCountryCodes
+      );
+
+      const landingGate =
+        o.landingDestinationScreenCompleted === true ? true : undefined;
+      const includeUnspecifiedApplicantCountries =
+        o.includeUnspecifiedApplicantCountries === true ? true : undefined;
 
       return {
-        v: 7,
+        v: 8,
         quizVariant,
+        ...(includeUnspecifiedApplicantCountries === true
+          ? { includeUnspecifiedApplicantCountries: true }
+          : {}),
+        ...(landingGate !== undefined ? { landingDestinationScreenCompleted: landingGate } : {}),
+        ...(preferredHostCountryCodes.length ? { preferredHostCountryCodes } : {}),
         activeStep,
         step1: {
           birthMonth: typeof s1.birthMonth === 'string' ? s1.birthMonth : '',
@@ -187,8 +225,11 @@ function parseStored(raw: string): StoredOnboardingDraft | null {
     if (Object.keys(out).length === 0 && !legacyField && !legacyCitizenship)
       return null;
     return {
-      v: 7,
+      v: 8,
       activeStep: 1,
+      preferredHostCountryCodes: [],
+      includeUnspecifiedApplicantCountries: false,
+      landingDestinationScreenCompleted: true,
       step1: {
         ...emptyStep1(),
         ...out,

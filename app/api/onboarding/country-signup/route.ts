@@ -26,11 +26,14 @@ type SignupProfileInput = {
   gpa?: number | string | null;
   savedFiltersSnapshot?: Record<string, unknown> | null;
   onboardingCompleted?: boolean | null;
+  preferredHostCountryCodes?: string[];
+  includeUnspecifiedApplicantCountries?: boolean | null;
 };
 
 type CountrySignupPayload = {
   email?: string;
-  countryCode?: string;
+  /** ISO2 applicant country; omit or null when `profile.includeUnspecifiedApplicantCountries` is true. */
+  countryCode?: string | null;
   source?: string;
   profile?: SignupProfileInput;
 };
@@ -68,14 +71,27 @@ async function findAuthUserIdByEmail(
   return null;
 }
 
+function normalizeStudyDestinationCodes(raw: unknown): string[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const next = [
+    ...new Set(
+      raw
+        .map((x) => (typeof x === 'string' ? x.trim().toUpperCase() : ''))
+        .filter((c) => /^[A-Z]{2}$/.test(c))
+    )
+  ];
+  return next;
+}
+
 function buildScholarshipProfileMetadata(
   profile: SignupProfileInput,
-  countryCode: string
+  countryCode: string | null
 ) {
   const gpa =
     typeof profile.gpa === 'number'
       ? profile.gpa
       : gpaForProfileDb(profile.gpa == null ? null : String(profile.gpa));
+  const pref = normalizeStudyDestinationCodes(profile.preferredHostCountryCodes);
   return {
     firstName: nonEmptyString(profile.firstName) ?? null,
     lastName: nonEmptyString(profile.lastName) ?? null,
@@ -89,25 +105,26 @@ function buildScholarshipProfileMetadata(
     fieldOfStudyLabel: nonEmptyString(profile.fieldOfStudyLabel) ?? null,
     citizenshipStatus: nonEmptyString(profile.citizenshipStatus) ?? null,
     citizenshipStatusLabel: nonEmptyString(profile.citizenshipStatusLabel) ?? null,
-    countryCode,
+    countryCode: countryCode ?? null,
     stateRegion: nonEmptyString(profile.stateRegion) ?? null,
     city: null,
     gpa,
     savedFiltersSnapshot: profile.savedFiltersSnapshot ?? null,
     onboardingCompleted: profile.onboardingCompleted === true,
-    emailVerified: false
+    emailVerified: false,
+    ...(pref?.length ? { preferredHostCountryCodes: pref } : {})
   };
 }
 
 function buildProfilesUpsert(
   userId: string,
   profile: SignupProfileInput,
-  countryCode: string,
+  countryCode: string | null,
   createdNewUser: boolean
 ): Database['public']['Tables']['profiles']['Insert'] {
   const row: Database['public']['Tables']['profiles']['Insert'] = {
     id: userId,
-    country_code: countryCode,
+    country_code: countryCode ?? null,
     email_weekly_free_digest: true,
     email_notify_best_matches: true,
     email_notify_saved_filters: true,
@@ -154,6 +171,16 @@ function buildProfilesUpsert(
     row.saved_filters_snapshot = profile.savedFiltersSnapshot as Json;
   }
 
+  if (
+    Object.prototype.hasOwnProperty.call(profile, 'preferredHostCountryCodes') &&
+    profile.preferredHostCountryCodes !== undefined &&
+    profile.preferredHostCountryCodes !== null
+  ) {
+    const hosts =
+      normalizeStudyDestinationCodes(profile.preferredHostCountryCodes) ?? [];
+    row.preferred_host_country_codes = hosts as unknown as Json;
+  }
+
   return row;
 }
 
@@ -193,14 +220,25 @@ async function upsertProfileWithSchemaFallback(
 export async function POST(request: Request) {
   const payload = (await request.json().catch(() => null)) as CountrySignupPayload | null;
   const email = payload?.email?.trim().toLowerCase() ?? '';
-  const countryCode = normalizeCountryCode(payload?.countryCode);
   const source = payload?.source?.trim() || 'country-signup';
   const profile = payload?.profile ?? {};
+  const unspecifiedApplicant =
+    profile.includeUnspecifiedApplicantCountries === true ||
+    (profile.savedFiltersSnapshot &&
+      typeof profile.savedFiltersSnapshot === 'object' &&
+      !Array.isArray(profile.savedFiltersSnapshot) &&
+      (profile.savedFiltersSnapshot as Record<string, unknown>).includeUnspecifiedApplicantCountries ===
+        true);
+  const countryCode = unspecifiedApplicant
+    ? null
+    : normalizeCountryCode(
+        typeof payload?.countryCode === 'string' ? payload.countryCode : ''
+      );
 
   if (!isValidEmail(email)) {
     return Response.json({ ok: false, error: 'Enter a valid email address.' }, { status: 400 });
   }
-  if (!countryCode) {
+  if (!countryCode && !unspecifiedApplicant) {
     return Response.json({ ok: false, error: 'Choose a valid country.' }, { status: 400 });
   }
 

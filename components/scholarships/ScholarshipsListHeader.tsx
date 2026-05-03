@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Globe2,
   LayoutGrid,
+  MapPin,
   Search,
   SlidersHorizontal,
   X
@@ -26,6 +27,7 @@ import {
 } from '@/app/scholarships/scholarshipCategories';
 import {
   CATALOG_CONTROL_BAR_BTN,
+  CATALOG_CONTROL_BAR_BTN_COMPACT,
   CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS,
   SITE_SEARCH_INPUT_CHROME
 } from '@/lib/constants/catalogControlBar';
@@ -46,6 +48,11 @@ type ScholarshipsListHeaderProps = {
   appliedCountryCodes?: Set<string>;
   appliedIncludeUnspecifiedCountry?: boolean;
   onApplyCountries?: (next: Set<string>, includeUnspecified: boolean) => void;
+  /** Host / program-location country counts (`host_country_codes`). */
+  hostCountryCounts?: CountryCountRow[];
+  hostCountryCountsLoading?: boolean;
+  appliedHostCountryCodes?: Set<string>;
+  onApplyHostCountries?: (next: Set<string>) => void;
   appliedCategoryIds: Set<ScholarshipCategoryId>;
   onApplyCategories: (next: Set<ScholarshipCategoryId>) => void;
   sortBy: SortOption;
@@ -177,6 +184,20 @@ function displayCountryCountRow(country: CountryCountRow): CountryCountRow {
   };
 }
 
+/** ISO2 codes for compact filter bar badges (e.g. `US, GB` or `US, GB +2`). */
+function formatIsoCodesForFilterBadge(
+  codes: Iterable<string>,
+  maxVisible = 5
+): string {
+  const sorted = [...codes]
+    .map((c) => c.trim().toUpperCase())
+    .filter((c) => /^[A-Z]{2}$/.test(c))
+    .sort((a, b) => a.localeCompare(b));
+  if (sorted.length === 0) return '';
+  if (sorted.length <= maxVisible) return sorted.join(', ');
+  return `${sorted.slice(0, maxVisible).join(', ')} +${sorted.length - maxVisible}`;
+}
+
 function measureCategoryPanel(el: HTMLElement): CategoryPanelLayout {
   const r = el.getBoundingClientRect();
   const width = Math.min(
@@ -207,6 +228,10 @@ function ScholarshipsListHeader({
   appliedCountryCodes = new Set(),
   appliedIncludeUnspecifiedCountry = false,
   onApplyCountries,
+  hostCountryCounts = [],
+  hostCountryCountsLoading = false,
+  appliedHostCountryCodes = new Set(),
+  onApplyHostCountries,
   appliedCategoryIds,
   onApplyCategories,
   sortBy,
@@ -237,9 +262,11 @@ function ScholarshipsListHeader({
 }: ScholarshipsListHeaderProps) {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [countriesOpen, setCountriesOpen] = useState(false);
+  const [destinationOpen, setDestinationOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [categorySearch, setCategorySearch] = useState('');
   const [countrySearch, setCountrySearch] = useState('');
+  const [destinationSearch, setDestinationSearch] = useState('');
   const [draftCategories, setDraftCategories] = useState<
     Set<ScholarshipCategoryId>
   >(() => new Set());
@@ -248,12 +275,16 @@ function ScholarshipsListHeader({
   );
   const [draftIncludeUnspecifiedCountry, setDraftIncludeUnspecifiedCountry] =
     useState(false);
+  const [draftHostCountryCodes, setDraftHostCountryCodes] = useState<
+    Set<string>
+  >(() => new Set());
   const [categoryPanelLayout, setCategoryPanelLayout] =
     useState<CategoryPanelLayout | null>(null);
   const [mounted, setMounted] = useState(false);
 
   const categoriesRef = useRef<HTMLDivElement>(null);
   const countriesRef = useRef<HTMLDivElement>(null);
+  const destinationRef = useRef<HTMLDivElement>(null);
   const categoryDropdownRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
 
@@ -287,32 +318,35 @@ function ScholarshipsListHeader({
   }, [categoriesOpen, updateCategoryPanelLayout]);
 
   useEffect(() => {
-    if (!categoriesOpen && !countriesOpen && !sortOpen) return;
+    if (!categoriesOpen && !countriesOpen && !destinationOpen && !sortOpen) return;
     const onDown = (e: PointerEvent) => {
       const t = e.target as Node;
       if (categoriesRef.current?.contains(t)) return;
       if (countriesRef.current?.contains(t)) return;
+      if (destinationRef.current?.contains(t)) return;
       if (categoryDropdownRef.current?.contains(t)) return;
       if (sortRef.current?.contains(t)) return;
       setCategoriesOpen(false);
       setCountriesOpen(false);
+      setDestinationOpen(false);
       setSortOpen(false);
     };
     document.addEventListener('pointerdown', onDown);
     return () => document.removeEventListener('pointerdown', onDown);
-  }, [categoriesOpen, countriesOpen, sortOpen]);
+  }, [categoriesOpen, countriesOpen, destinationOpen, sortOpen]);
 
   useEffect(() => {
-    if (!categoriesOpen && !countriesOpen && !sortOpen) return;
+    if (!categoriesOpen && !countriesOpen && !destinationOpen && !sortOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       setCategoriesOpen(false);
       setCountriesOpen(false);
+      setDestinationOpen(false);
       setSortOpen(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [categoriesOpen, countriesOpen, sortOpen]);
+  }, [categoriesOpen, countriesOpen, destinationOpen, sortOpen]);
 
   const optionSelectedClass =
     'bg-gray-100 font-medium text-gray-900';
@@ -326,11 +360,14 @@ function ScholarshipsListHeader({
     });
   }, [categorySearch]);
 
+  const countrySortSelection = countriesOpen
+    ? draftCountryCodes
+    : appliedCountryCodes;
+
   const filteredCountryRows = useMemo(() => {
     const q = countrySearch.trim().toLowerCase();
     return countryCounts
       .map(displayCountryCountRow)
-      .filter((country) => country.count > 0)
       .filter((country) => {
         if (!q) return true;
         return (
@@ -339,17 +376,69 @@ function ScholarshipsListHeader({
         );
       })
       .sort((a, b) => {
-        const aSelected = appliedCountryCodes.has(a.code) ? 1 : 0;
-        const bSelected = appliedCountryCodes.has(b.code) ? 1 : 0;
+        const aSelected = countrySortSelection.has(a.code) ? 1 : 0;
+        const bSelected = countrySortSelection.has(b.code) ? 1 : 0;
         return bSelected - aSelected || b.count - a.count || a.label.localeCompare(b.label);
       });
-  }, [appliedCountryCodes, countryCounts, countrySearch]);
+  }, [countrySortSelection, countryCounts, countrySearch]);
+
+  const hostSortSelection = destinationOpen
+    ? draftHostCountryCodes
+    : appliedHostCountryCodes;
+
+  const filteredHostRows = useMemo(() => {
+    const q = destinationSearch.trim().toLowerCase();
+    return hostCountryCounts
+      .map(displayCountryCountRow)
+      .filter((country) => {
+        if (!q) return true;
+        return (
+          country.label.toLowerCase().includes(q) ||
+          country.code.toLowerCase().includes(q)
+        );
+      })
+      .sort((a, b) => {
+        const aSelected = hostSortSelection.has(a.code) ? 1 : 0;
+        const bSelected = hostSortSelection.has(b.code) ? 1 : 0;
+        return (
+          bSelected - aSelected || b.count - a.count || a.label.localeCompare(b.label)
+        );
+      });
+  }, [destinationSearch, hostCountryCounts, hostSortSelection]);
+
+  /** Location: rows with scholarships in the current filtered list (for “Select all”). */
+  const selectableFilteredHostCodes = useMemo(
+    () => filteredHostRows.filter((c) => c.count > 0).map((c) => c.code),
+    [filteredHostRows]
+  );
+
+  const allFilteredSelectableHostsSelected = useMemo(() => {
+    if (selectableFilteredHostCodes.length === 0) return true;
+    return selectableFilteredHostCodes.every((code) =>
+      draftHostCountryCodes.has(code)
+    );
+  }, [draftHostCountryCodes, selectableFilteredHostCodes]);
+
   const showUnspecifiedCountryRow = useMemo(() => {
-    if (unspecifiedApplicantCountryCount <= 0) return false;
+    if (
+      unspecifiedApplicantCountryCount <= 0 &&
+      !appliedIncludeUnspecifiedCountry
+    ) {
+      return false;
+    }
     const q = countrySearch.trim().toLowerCase();
     if (!q) return true;
-    return 'open / not country-specific'.includes(q) || 'unspecified'.includes(q);
-  }, [countrySearch, unspecifiedApplicantCountryCount]);
+    return (
+      'open / not country-specific'.includes(q) ||
+      'unspecified'.includes(q) ||
+      q.includes('not specif') ||
+      q.includes('citizenship')
+    );
+  }, [
+    appliedIncludeUnspecifiedCountry,
+    countrySearch,
+    unspecifiedApplicantCountryCount
+  ]);
 
   const toggleDraft = (id: ScholarshipCategoryId) => {
     setDraftCategories((prev) => {
@@ -364,13 +453,19 @@ function ScholarshipsListHeader({
   const activeCountryCount = appliedCountryCodes.size;
   const showCountryBadge =
     activeCountryCount > 0 || appliedIncludeUnspecifiedCountry;
-  const countryButtonLabel =
-    activeCountryCount === 1
-      ? countryCounts.find((country) => appliedCountryCodes.has(country.code))?.label ??
-        'Countries'
-      : activeCountryCount === 0 && appliedIncludeUnspecifiedCountry
-        ? 'Open'
-      : 'Countries';
+  const countryBadgeCaption =
+    activeCountryCount === 0 && appliedIncludeUnspecifiedCountry
+      ? 'Not specified'
+      : activeCountryCount > 0
+        ? formatIsoCodesForFilterBadge(appliedCountryCodes)
+        : '';
+
+  const activeHostCountryCount = appliedHostCountryCodes.size;
+  const showHostCountryBadge = activeHostCountryCount > 0;
+  const hostCountryBadgeCaption =
+    activeHostCountryCount > 0
+      ? formatIsoCodesForFilterBadge(appliedHostCountryCodes)
+      : '';
 
   const sortTriggerLabel = SORT_TRIGGER_LABEL[sortBy];
 
@@ -525,6 +620,7 @@ function ScholarshipsListHeader({
                     onClick={() => {
                       setCategoriesOpen(false);
                       setCountriesOpen(false);
+                      setDestinationOpen(false);
                       setSortOpen((o) => !o);
                     }}
                     aria-expanded={sortOpen}
@@ -579,20 +675,25 @@ function ScholarshipsListHeader({
 
             <div className="min-w-0">
               <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <div className="grid w-full min-w-0 grid-cols-2 items-center gap-3 sm:flex sm:flex-wrap sm:gap-4">
+                {/*
+                  Do not use overflow-x-auto here: it creates a scrollport that clips
+                  `absolute` country/location popovers so only the footer shows.
+                */}
+                <div className="grid w-full min-w-0 grid-cols-2 items-center gap-3 sm:flex sm:flex-nowrap sm:gap-2 sm:overflow-visible">
                 <button
                   type="button"
                   aria-label="Open more filters"
                   onClick={() => {
                     setCategoriesOpen(false);
                     setCountriesOpen(false);
+                    setDestinationOpen(false);
                     setSortOpen(false);
                     onOpenMoreFilters?.();
                   }}
-                  className={`${CATALOG_CONTROL_BAR_BTN} order-1 w-full sm:order-none sm:w-auto`}
+                  className={`${CATALOG_CONTROL_BAR_BTN_COMPACT} order-1 w-full sm:order-none sm:w-auto sm:max-w-[min(100%,11rem)]`}
                 >
                   <SlidersHorizontal
-                    className="h-[18px] w-[18px] shrink-0 text-gray-600"
+                    className="h-4 w-4 shrink-0 text-gray-600"
                     strokeWidth={2}
                     aria-hidden
                   />
@@ -606,16 +707,22 @@ function ScholarshipsListHeader({
 
                 {onApplyCountries ? (
                 <div
-                  className="relative order-3 col-span-2 min-w-0 justify-self-center sm:order-none sm:col-span-1 sm:min-w-0 sm:shrink-0"
+                  className={`relative order-3 min-w-0 sm:order-2 sm:col-span-1 sm:min-w-0 sm:shrink ${
+                    onApplyHostCountries
+                      ? 'col-span-1 w-full sm:w-auto'
+                      : 'col-span-2 justify-self-center'
+                  }`}
                   ref={countriesRef}
                 >
                   <button
                     type="button"
                     disabled={!onApplyCountries}
+                    title="I am from (citizenship / home country)"
                     onClick={() => {
                       if (!onApplyCountries) return;
                       setSortOpen(false);
                       setCategoriesOpen(false);
+                      setDestinationOpen(false);
                       setCountriesOpen((open) => {
                         const next = !open;
                         if (next) {
@@ -630,13 +737,13 @@ function ScholarshipsListHeader({
                     }}
                     aria-expanded={countriesOpen}
                     aria-haspopup="dialog"
-                    className={`${CATALOG_CONTROL_BAR_BTN} max-w-full sm:w-auto`}
+                    className={`${CATALOG_CONTROL_BAR_BTN_COMPACT} w-full max-w-full sm:w-auto sm:max-w-[min(100%,12.5rem)]`}
                   >
-                    <Globe2 className="h-[18px] w-[18px] text-gray-600" />
-                    Countries
-                    {showCountryBadge ? (
-                      <span className="tabular-nums text-gray-600">
-                        ({activeCountryCount <= 1 ? countryButtonLabel : activeCountryCount})
+                    <Globe2 className="h-4 w-4 shrink-0 text-gray-600" />
+                    <span className="min-w-0 truncate">{"I'm from"}</span>
+                    {showCountryBadge && countryBadgeCaption ? (
+                      <span className="font-medium tabular-nums tracking-wide text-gray-600">
+                        ({countryBadgeCaption})
                       </span>
                     ) : null}
                     <ChevronDown
@@ -646,24 +753,25 @@ function ScholarshipsListHeader({
                   {countriesOpen ? (
                     <div
                       role="dialog"
-                      aria-label="Filter by country"
+                      aria-label="Filter by citizenship or home country"
                       className="absolute left-1/2 top-[calc(100%+0.5rem)] z-[80] flex w-[min(22rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 sm:left-0 sm:translate-x-0"
                     >
                       <div className="border-b border-zinc-100 px-4 py-3">
                         <h2 className="text-base font-semibold text-zinc-900">
-                          Find scholarships for students from...
+                          I am from (citizenship)
                         </h2>
                         <p className="mt-0.5 text-xs leading-relaxed text-zinc-500">
-                          Choose your citizenship or home country, or include grants
-                          without a listed country restriction.
+                          Choose your citizenship or home country for a targeted list, or
+                          browse grants where eligible countries are not explicitly recorded
+                          in our data (wider search—always verify eligibility).
                         </p>
                       </div>
                       <div className="px-4 py-3">
                         <input
                           value={countrySearch}
                           onChange={(e) => setCountrySearch(e.target.value)}
-                          placeholder="Search countries"
-                          aria-label="Search countries"
+                          placeholder="Search by country name"
+                          aria-label="Search by country name"
                           className={`w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
                         />
                       </div>
@@ -688,13 +796,26 @@ function ScholarshipsListHeader({
                           <>
                             {showUnspecifiedCountryRow ? (
                               <li>
-                                <label className="group flex cursor-pointer items-center gap-3 rounded-2xl border border-emerald-200/80 bg-gradient-to-b from-white to-emerald-50/80 px-3 py-3 shadow-[0_10px_28px_-22px_rgba(16,185,129,0.42)] ring-1 ring-emerald-100/70 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-[0_14px_34px_-22px_rgba(16,185,129,0.5)]">
+                                <label
+                                  className={`group flex items-center gap-3 rounded-2xl border border-emerald-200/80 bg-gradient-to-b from-white to-emerald-50/80 px-3 py-3 shadow-[0_10px_28px_-22px_rgba(16,185,129,0.42)] ring-1 ring-emerald-100/70 transition ${
+                                    unspecifiedApplicantCountryCount <= 0 &&
+                                    !draftIncludeUnspecifiedCountry
+                                      ? 'cursor-not-allowed opacity-50'
+                                      : 'cursor-pointer hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-[0_14px_34px_-22px_rgba(16,185,129,0.5)]'
+                                  }`}
+                                >
                                   <input
                                     type="checkbox"
                                     checked={draftIncludeUnspecifiedCountry}
                                     onChange={() =>
                                       setDraftIncludeUnspecifiedCountry((prev) => {
                                         const next = !prev;
+                                        if (
+                                          next &&
+                                          unspecifiedApplicantCountryCount <= 0
+                                        ) {
+                                          return prev;
+                                        }
                                         if (next) setDraftCountryCodes(new Set());
                                         return next;
                                       })
@@ -707,11 +828,13 @@ function ScholarshipsListHeader({
                                   <span className="min-w-0 flex-1">
                                     <span className="flex flex-wrap items-center gap-2">
                                       <span className="text-sm font-semibold leading-snug text-emerald-950">
-                                        Open to many countries
+                                        Citizenship not specified
                                       </span>
                                     </span>
                                     <span className="mt-1 block text-xs leading-snug text-emerald-700/90">
-                                      No country restriction listed.
+                                      Grants without explicit country eligibility in our
+                                      database. Local or other restrictions may still
+                                      apply—please verify before you apply.
                                     </span>
                                   </span>
                                   <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-semibold tabular-nums text-emerald-800 ring-1 ring-emerald-200">
@@ -720,15 +843,26 @@ function ScholarshipsListHeader({
                                 </label>
                               </li>
                             ) : null}
-                            {filteredCountryRows.map((country) => (
+                            {filteredCountryRows.map((country) => {
+                              const countryDisabled =
+                                country.count <= 0 &&
+                                !draftCountryCodes.has(country.code);
+                              return (
                             <li key={country.code}>
-                              <label className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-zinc-50">
+                              <label
+                                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition ${
+                                  countryDisabled
+                                    ? 'cursor-not-allowed opacity-50'
+                                    : 'cursor-pointer hover:bg-zinc-50'
+                                }`}
+                              >
                                 <input
                                   type="checkbox"
                                   checked={draftCountryCodes.has(country.code)}
                                   onChange={() => {
                                     setDraftCountryCodes((prev) => {
                                       if (prev.has(country.code)) return new Set();
+                                      if (country.count <= 0) return prev;
                                       return new Set([country.code]);
                                     });
                                     setDraftIncludeUnspecifiedCountry(false);
@@ -743,7 +877,8 @@ function ScholarshipsListHeader({
                                 </span>
                               </label>
                             </li>
-                            ))}
+                            );
+                            })}
                           </>
                         ) : (
                           <li className="px-3 py-6 text-center text-sm text-zinc-500">
@@ -781,8 +916,185 @@ function ScholarshipsListHeader({
                 </div>
                 ) : null}
 
+                {onApplyHostCountries ? (
+                  <div
+                    className={`relative order-4 min-w-0 sm:order-3 sm:col-span-1 sm:min-w-0 sm:shrink ${
+                      onApplyCountries
+                        ? 'col-span-1 w-full sm:w-auto'
+                        : 'col-span-2 justify-self-center'
+                    }`}
+                    ref={destinationRef}
+                  >
+                    <button
+                      type="button"
+                      disabled={!onApplyHostCountries}
+                      title="Program location (host country)"
+                      onClick={() => {
+                        setSortOpen(false);
+                        setCategoriesOpen(false);
+                        setCountriesOpen(false);
+                        setDestinationOpen((open) => {
+                          const next = !open;
+                          if (next) {
+                            setDraftHostCountryCodes(new Set(appliedHostCountryCodes));
+                            setDestinationSearch('');
+                          }
+                          return next;
+                        });
+                      }}
+                      aria-expanded={destinationOpen}
+                      aria-haspopup="dialog"
+                      className={`${CATALOG_CONTROL_BAR_BTN_COMPACT} w-full max-w-full sm:w-auto sm:max-w-[min(100%,12.5rem)]`}
+                    >
+                      <MapPin className="h-4 w-4 shrink-0 text-gray-600" />
+                      <span className="min-w-0 truncate">Location</span>
+                      {showHostCountryBadge && hostCountryBadgeCaption ? (
+                        <span className="font-medium tabular-nums tracking-wide text-gray-600">
+                          ({hostCountryBadgeCaption})
+                        </span>
+                      ) : null}
+                      <ChevronDown
+                        className={`h-4 w-4 shrink-0 text-gray-500 transition ${destinationOpen ? 'rotate-180' : ''}`}
+                      />
+                    </button>
+                    {destinationOpen ? (
+                      <div
+                        role="dialog"
+                        aria-label="Filter by program location"
+                        className="absolute left-1/2 top-[calc(100%+0.5rem)] z-[80] flex w-[min(22rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 sm:left-0 sm:translate-x-0"
+                      >
+                        <div className="border-b border-zinc-100 px-4 py-3">
+                          <h2 className="text-base font-semibold text-zinc-900">
+                            Program location
+                          </h2>
+                          <p className="mt-0.5 text-xs leading-relaxed text-zinc-500">
+                            Narrow to grants and scholarships hosted in your target country.
+                          </p>
+                        </div>
+                        <div className="px-4 py-3">
+                          <input
+                            value={destinationSearch}
+                            onChange={(e) => setDestinationSearch(e.target.value)}
+                            placeholder="Search countries"
+                            aria-label="Search countries"
+                            className={`w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
+                          />
+                        </div>
+                        <ul
+                          className="max-h-72 overflow-y-auto overscroll-contain px-2 py-1"
+                          role="list"
+                        >
+                          {hostCountryCountsLoading ? (
+                            <li className="space-y-2 px-3 py-3" aria-live="polite">
+                              <p className="text-sm font-medium text-zinc-600">
+                                Loading location filters…
+                              </p>
+                              {[0, 1, 2].map((i) => (
+                                <div
+                                  key={i}
+                                  className="flex animate-pulse items-center gap-3 rounded-xl py-2"
+                                >
+                                  <span className="h-4 w-4 rounded border border-zinc-200 bg-zinc-100" />
+                                  <span className="h-4 flex-1 rounded-full bg-zinc-100" />
+                                  <span className="h-5 w-8 rounded-full bg-zinc-100" />
+                                </div>
+                              ))}
+                            </li>
+                          ) : filteredHostRows.length > 0 ? (
+                            filteredHostRows.map((country) => {
+                              const hostOptionDisabled =
+                                country.count <= 0 &&
+                                !draftHostCountryCodes.has(country.code);
+                              return (
+                              <li key={country.code}>
+                                <label
+                                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition ${
+                                    hostOptionDisabled
+                                      ? 'cursor-not-allowed opacity-50'
+                                      : 'cursor-pointer hover:bg-zinc-50'
+                                  }`}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={draftHostCountryCodes.has(country.code)}
+                                    onChange={() => {
+                                      setDraftHostCountryCodes((prev) => {
+                                        const next = new Set(prev);
+                                        if (next.has(country.code)) {
+                                          next.delete(country.code);
+                                          return next;
+                                        }
+                                        if (country.count <= 0) return prev;
+                                        next.add(country.code);
+                                        return next;
+                                      });
+                                    }}
+                                    className="scholarship-filter-checkbox h-4 w-4 shrink-0"
+                                  />
+                                  <span className="min-w-0 flex-1 text-sm font-medium text-zinc-800">
+                                    {country.label}
+                                  </span>
+                                  <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold tabular-nums text-zinc-600">
+                                    {country.count.toLocaleString()}
+                                  </span>
+                                </label>
+                              </li>
+                            );
+                            })
+                          ) : (
+                            <li className="px-3 py-6 text-center text-sm text-zinc-500">
+                              No location data yet for this catalog.
+                            </li>
+                          )}
+                        </ul>
+                        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 px-4 py-3">
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                            <button
+                              type="button"
+                              className="text-sm font-medium text-zinc-500 transition hover:text-zinc-800"
+                              onClick={() => setDraftHostCountryCodes(new Set())}
+                            >
+                              Clear
+                            </button>
+                            <button
+                              type="button"
+                              disabled={
+                                hostCountryCountsLoading ||
+                                selectableFilteredHostCodes.length === 0 ||
+                                allFilteredSelectableHostsSelected
+                              }
+                              className="text-sm font-medium text-zinc-500 transition hover:text-zinc-800 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-zinc-500"
+                              onClick={() => {
+                                setDraftHostCountryCodes((prev) => {
+                                  const next = new Set(prev);
+                                  for (const code of selectableFilteredHostCodes) {
+                                    next.add(code);
+                                  }
+                                  return next;
+                                });
+                              }}
+                            >
+                              Select all
+                            </button>
+                          </div>
+                          <button
+                            type="button"
+                            className={`${scholarshipCategoriesApplyButtonClass} inline-flex shrink-0 items-center justify-center gap-1.5`}
+                            onClick={() => {
+                              onApplyHostCountries?.(new Set(draftHostCountryCodes));
+                              setDestinationOpen(false);
+                            }}
+                          >
+                            Show scholarships
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
+
                 <div
-                  className="relative order-2 min-w-0 justify-self-stretch sm:order-none sm:min-w-0 sm:shrink-0"
+                  className="relative order-2 min-w-0 justify-self-stretch sm:order-4 sm:min-w-0 sm:w-auto sm:shrink-0"
                   ref={categoriesRef}
                 >
                   <button
@@ -792,6 +1104,7 @@ function ScholarshipsListHeader({
                       if (categoriesDisabled) return;
                       setSortOpen(false);
                       setCountriesOpen(false);
+                      setDestinationOpen(false);
                       setCategoriesOpen((o) => {
                         const next = !o;
                         if (next) {

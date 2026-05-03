@@ -44,8 +44,11 @@ function preferNonEmpty(landingVal: string, baseVal: string): string {
 
 function emptyBase(): StoredOnboardingDraft {
   return {
-    v: 7,
+    v: 8,
     activeStep: 1,
+    preferredHostCountryCodes: [],
+    includeUnspecifiedApplicantCountries: false,
+    landingDestinationScreenCompleted: true,
     step1: mergeDraftWithDefaults(null),
     step2: { firstName: '', lastName: '', email: '' },
     step3: { gpa: '' },
@@ -54,8 +57,17 @@ function emptyBase(): StoredOnboardingDraft {
 }
 
 export function hasUsableLandingQuizData(landing: StoredOnboardingDraft): boolean {
+  if (landing.includeUnspecifiedApplicantCountries === true) {
+    return true;
+  }
   const s1 = landing.step1;
   if (s1.schoolLevel?.trim() || s1.fieldOfStudy?.trim() || s1.citizenship?.trim()) {
+    return true;
+  }
+  if (
+    Array.isArray(landing.preferredHostCountryCodes) &&
+    landing.preferredHostCountryCodes.length > 0
+  ) {
     return true;
   }
   if (landing.step3.gpa?.trim()) return true;
@@ -63,10 +75,28 @@ export function hasUsableLandingQuizData(landing: StoredOnboardingDraft): boolea
   return false;
 }
 
+function mergePreferredHostQuizFields(
+  a: string[] | undefined,
+  b: string[] | undefined
+): string[] {
+  const out = new Set([
+    ...(a ?? [])
+      .map((c) => c.trim().toUpperCase())
+      .filter((c) => /^[A-Z]{2}$/.test(c)),
+    ...(b ?? [])
+      .map((c) => c.trim().toUpperCase())
+      .filter((c) => /^[A-Z]{2}$/.test(c))
+  ]);
+  return [...out].sort((x, y) => x.localeCompare(y));
+}
+
 function parseSessionDraft(raw: string): StoredOnboardingDraft | null {
   try {
     const parsed = JSON.parse(raw) as StoredOnboardingDraft;
-    if (!parsed || parsed.v !== 7 || typeof parsed.step1 !== 'object') return null;
+    const dv = (parsed as unknown as { v?: unknown }).v;
+    const major = typeof dv === 'number' ? dv : 0;
+    if (!parsed || (major !== 7 && major !== 8) || typeof parsed.step1 !== 'object')
+      return null;
     return parsed;
   } catch {
     return null;
@@ -181,16 +211,25 @@ export function tryBuildProfileSeedFromCompletedLandingQuiz(): ScholarshipProfil
 function withSelectedCountrySeed(
   seed: ScholarshipProfileFilterSeed | null
 ): ScholarshipProfileFilterSeed | null {
+  if (!seed) return null;
+  if (seed.includeUnspecifiedApplicantCountries === true) {
+    return {
+      ...seed,
+      applicantCountryCodes: [],
+      includeUnspecifiedApplicantCountries: true
+    };
+  }
   const countryCode = loadLandingQuizSelectedCountry();
-  if (!seed || !/^[A-Z]{2}$/.test(countryCode)) return seed;
+  if (!/^[A-Z]{2}$/.test(countryCode)) return seed;
   return {
     ...seed,
-    applicantCountryCodes: [countryCode]
+    applicantCountryCodes: [countryCode],
+    includeUnspecifiedApplicantCountries: false
   };
 }
 
 function stripQuizVariant(d: StoredOnboardingDraft): StoredOnboardingDraft {
-  const copy: StoredOnboardingDraft = { ...d, v: 7 };
+  const copy: StoredOnboardingDraft = { ...d, v: 8 };
   delete copy.quizVariant;
   return copy;
 }
@@ -210,8 +249,22 @@ function mergeSourceIntoBase(
     citizenship: preferNonEmpty(source.step1.citizenship, b.step1.citizenship)
   };
 
+  /** Landing/completed quiz source wins over an older onboarding base. */
+  const mergedUnspecified = source.includeUnspecifiedApplicantCountries === true;
+  const mergedCountryCode = mergedUnspecified
+    ? ''
+    : preferNonEmpty(
+        typeof source.step4.countryCode === 'string' ? source.step4.countryCode : '',
+        typeof b.step4.countryCode === 'string' ? b.step4.countryCode : ''
+      );
+
   return {
-    v: 7,
+    v: 8,
+    preferredHostCountryCodes: mergePreferredHostQuizFields(
+      source.preferredHostCountryCodes,
+      b.preferredHostCountryCodes
+    ),
+    includeUnspecifiedApplicantCountries: mergedUnspecified,
     activeStep: b.activeStep,
     step1,
     step2: { ...b.step2 },
@@ -219,6 +272,7 @@ function mergeSourceIntoBase(
       gpa: preferNonEmpty(source.step3.gpa, b.step3.gpa)
     },
     step4: {
+      countryCode: mergedCountryCode,
       state: preferNonEmpty(source.step4.state, b.step4.state)
     }
   };

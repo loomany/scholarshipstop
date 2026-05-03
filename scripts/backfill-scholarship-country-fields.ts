@@ -57,6 +57,12 @@ function uniqSorted(values: string[]): string[] {
   return [...new Set(values.map((value) => value.trim()).filter(Boolean))].sort();
 }
 
+function applicantCodesWithoutHostOverlap(applicant: string[], host: string[]): string[] {
+  if (host.length === 0) return applicant;
+  const hs = new Set(host);
+  return applicant.filter((c) => !hs.has(c));
+}
+
 function arraysEqual(a: string[], b: string[]): boolean {
   if (a.length !== b.length) return false;
   const aa = [...a].sort();
@@ -156,11 +162,12 @@ async function main() {
       });
       const existingApplicant = uniqSorted(jsonStringArray(row.applicant_country_codes));
       const existingHost = uniqSorted(jsonStringArray(row.host_country_codes));
-      const nextApplicant = uniqSorted([
+      const nextHost = uniqSorted([...existingHost, ...parsed.hostCountryCodes]);
+      const mergedApplicant = uniqSorted([
         ...existingApplicant,
         ...parsed.applicantCountryCodes
       ]);
-      const nextHost = uniqSorted([...existingHost, ...parsed.hostCountryCodes]);
+      const nextApplicant = applicantCodesWithoutHostOverlap(mergedApplicant, nextHost);
       addCounts(applicantCounts, nextApplicant);
       addCounts(hostCounts, nextHost);
 

@@ -92,6 +92,7 @@
     "backfill:scholarship-countries": "dotenv -e .env.local -- npx tsx scripts/backfill-scholarship-country-fields.ts",
     "scholarships:classify-hosts": "dotenv -e .env.local -- npx tsx scripts/classify_hosts.ts",
     "scholarships:update-hosts": "dotenv -e .env.local -- npx tsx scripts/update_hosts_in_db.ts",
+    "scholarships:update-hosts-confident": "dotenv -e .env.local -- npx tsx scripts/update_hosts_in_db.ts --confident-only",
     "seo:pilot-launch": "dotenv -e .env.local -- npx tsx scripts/seo-pilot-launch.ts",
     "seo:grand-audit": "dotenv -e .env.local -- npx tsx scripts/seo-grand-audit.ts",
     "seo:worker-generate": "dotenv -e .env.local -- npx tsx scripts/seo-worker-generate.ts",
@@ -121,8 +122,8 @@
     "smoke:scholarship-funnel": "npx tsx scripts/smoke-scholarship-funnel.ts"
   },
   "dependencies": {
-    "@fal-ai/client": "^1.10.0",
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
+    "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@stripe/stripe-js": "2.4.0",

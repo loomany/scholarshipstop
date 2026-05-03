@@ -2,7 +2,7 @@ import { citizenshipLabelForValue } from '@/lib/constants/onboardingCitizenshipA
 import { gpaForProfileDb } from '@/lib/constants/scholarshipGpaOptions';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import type { Database } from '@/types_db';
+import type { Database, Json } from '@/types_db';
 import type { UserProfile } from '@/lib/onboarding/userProfile';
 import type { createClient as createBrowserClient } from '@/utils/supabase/client';
 import type { createClient as createServerClient } from '@/utils/supabase/server';
@@ -28,6 +28,7 @@ export const PROFILES_UPSERT_ALLOWED_KEYS = new Set([
   'citizenship_status',
   'citizenship_status_label',
   'country_code',
+  'preferred_host_country_codes',
   'city',
   'gpa',
   'saved_filters_snapshot',
@@ -63,6 +64,7 @@ export type ProfilesOnboardingRow = {
   citizenship_status: string | null;
   citizenship_status_label: string | null;
   country_code: string | null;
+  preferred_host_country_codes?: Json;
   city: string | null;
   gpa: number | null;
   saved_filters_snapshot?: Record<string, unknown> | null;
@@ -116,8 +118,23 @@ export function profilesRowOmitEmptyLocation(
   return out;
 }
 
+/** Normalized jsonb ISO2 array; empty clears stored destinations when included in payload. */
+function preferredHostCountryCodesJson(
+  codes: string[] | null | undefined
+): Json {
+  if (!codes?.length) return [] as unknown as Json;
+  const next = [
+    ...new Set(
+      codes
+        .map((c) => c.trim().toUpperCase())
+        .filter((c) => /^[A-Z]{2}$/.test(c))
+    )
+  ];
+  return next as unknown as Json;
+}
+
 export function profileToProfilesOnboardingRow(profile: UserProfile): ProfilesOnboardingRow {
-  return {
+  const row: ProfilesOnboardingRow = {
     first_name: profile.firstName?.trim() || null,
     last_name: profile.lastName?.trim() || null,
     birth_month:
@@ -144,6 +161,16 @@ export function profileToProfilesOnboardingRow(profile: UserProfile): ProfilesOn
     ...(profile.emailVerified === false ? { email_verified: false } : {}),
     updated_at: new Date().toISOString()
   };
+  if (
+    Object.prototype.hasOwnProperty.call(profile, 'preferredHostCountryCodes') &&
+    profile.preferredHostCountryCodes !== undefined &&
+    profile.preferredHostCountryCodes !== null
+  ) {
+    row.preferred_host_country_codes = preferredHostCountryCodesJson(
+      profile.preferredHostCountryCodes
+    );
+  }
+  return row;
 }
 
 /** Form / `UserProfile` → DB payload (snake_case, allowlist only). */
@@ -164,11 +191,27 @@ export function buildScholarshipProfilesUpsertPayload(
 function userProfileFromAuthMetadata(
   raw: Record<string, unknown>
 ): UserProfile {
-  const p = raw as Partial<UserProfile>;
+  const p = raw as Partial<UserProfile> & {
+    preferred_host_country_codes?: unknown;
+  };
   const st =
     typeof p.citizenshipStatus === 'string'
       ? p.citizenshipStatus.trim() || null
       : null;
+  const prefRaw = Array.isArray(p.preferredHostCountryCodes)
+    ? p.preferredHostCountryCodes
+    : Array.isArray(p.preferred_host_country_codes)
+      ? p.preferred_host_country_codes
+      : null;
+  const preferredHostCountryCodes = Array.isArray(prefRaw)
+    ? [
+        ...new Set(
+          prefRaw
+            .map((x) => String(x).trim().toUpperCase())
+            .filter((c) => /^[A-Z]{2}$/.test(c))
+        )
+      ]
+    : null;
   return {
     firstName: p.firstName ?? null,
     lastName: p.lastName ?? null,
@@ -184,6 +227,9 @@ function userProfileFromAuthMetadata(
     citizenshipStatusLabel:
       p.citizenshipStatusLabel ??
       (st ? citizenshipLabelForValue(st) : null),
+    ...(preferredHostCountryCodes && preferredHostCountryCodes.length > 0
+      ? { preferredHostCountryCodes }
+      : {}),
     countryCode: p.countryCode ?? null,
     stateRegion: p.stateRegion ?? null,
     city: p.city ?? null,

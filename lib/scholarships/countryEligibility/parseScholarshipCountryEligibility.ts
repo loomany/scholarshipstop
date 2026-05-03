@@ -232,9 +232,16 @@ export function parseScholarshipCountryEligibility(
     reasons.push('international student text without specific country');
   }
 
+  /** Host-country signals take precedence — never duplicate the same ISO2 as “applicant only”. */
+  const hostCountryCodes = sanitizeCountryCodes(host);
+  const hostSet = new Set(hostCountryCodes);
+  const applicantCountryCodes = sanitizeCountryCodes(applicant).filter(
+    (c) => !hostSet.has(c)
+  );
+
   return {
-    applicantCountryCodes: sanitizeCountryCodes(applicant),
-    hostCountryCodes: sanitizeCountryCodes(host),
+    applicantCountryCodes,
+    hostCountryCodes,
     reasons: [...new Set(reasons)]
   };
 }

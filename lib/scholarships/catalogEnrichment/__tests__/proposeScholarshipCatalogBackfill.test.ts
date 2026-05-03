@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import type { Json } from '@/types_db';
 
 import { proposeScholarshipCatalogBackfill } from '../proposeScholarshipCatalogBackfill';
 import type { ScholarshipRowForCatalogBackfill } from '../proposeScholarshipCatalogBackfill';
@@ -90,4 +91,16 @@ test('skips citizenship when already structured', () => {
   });
   const out = proposeScholarshipCatalogBackfill(r);
   assert.equal(out?.patch.citizenship_statuses, undefined);
+});
+
+test('removes applicant_country_codes iso2 duplicated as inferred host (raw location)', () => {
+  const r = row({
+    applicant_country_codes: ['AU'],
+    host_country_codes: [],
+    raw_data: { location_text: 'Australia' } as Json
+  });
+  const out = proposeScholarshipCatalogBackfill(r);
+  assert.ok(out);
+  assert.deepEqual(out!.patch.host_country_codes, ['AU']);
+  assert.deepEqual(out!.patch.applicant_country_codes, []);
 });

@@ -4,41 +4,52 @@
  *   dotenv -e .env.local -- npx tsx scripts/classify_hosts.ts
  *   dotenv -e .env.local -- npx tsx scripts/classify_hosts.ts --limit=500
  *
+ * Resume: строки из JSON сопоставляются с текущей выборкой по scholarship id — не нужно заново проходить
+ * уже сохранённые id, даже если в базе добавились новые гранты (список длиннее, порядок «плавает» по отношению
+ * к старому дампу файла). Периодически перезаписывает файл.
+ *
+ * Flags:
+ *   --fresh — не читать чекпоинт (начать с нуля и перезаписать файл)
+ *   --flush=50 — как часто сохранять JSON на диск (число новых строк; по умолчанию 50)
+ *   --no-wikidata — не вызывать Wikidata (только institution + HIPO по домену)
+ *
  * Env:
  *   NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (required)
- *   FAL_KEY — optional fal.ai API key (LLM skipped if unset; client also reads env automatically)
- *   FAL_LLM_ENDPOINT — default fal-ai/any-llm
- *   FAL_LLM_MODEL — default meta-llama/llama-3.1-8b-instruct
  *   HIPO_UNIVERSITIES_JSON_PATH — path to world_universities_and_domains.json (optional)
  *   HIPO_UNIVERSITIES_JSON_URL — HIPO dataset URL override (optional)
+ *   CLASSIFIED_HOSTS_RESULT_JSON — путь для чекпоинта и итога (совпадает с update_hosts_in_db.ts)
+ *   WIKIDATA_ENABLED — 1/true (default) включает шаг Wikidata после HIPO; 0/false/off — выключить
+ *   WIKIDATA_GAP_MS — пауза между запросами к wikidata.org (default 450)
+ *   WIKIDATA_SEARCH_LIMIT — сколько результатов поиска смотреть (default 8, max 20)
+ *   WIKIDATA_USER_AGENT — обязательно осмысленный UA для больших прогонов (желание Wikimedia Foundation)
  *
- * Output: classified_hosts_result.json under process.cwd() (run from repo root).
+ * Output: classified_hosts_result.json под process.cwd(), если CLASSIFIED_HOSTS_RESULT_JSON не задан.
+ * Бэкапы: перед каждой записью чекпоинта текущее содержимое копируется в *.bak (последнее откатное).
+ * При --fresh перед обнулением отдельно пишется *.before-fresh.bak — не перезаписывается дальнейшими flush.
  */
 
-import { mkdir, readFile, writeFile } from 'fs/promises';
+import { copyFile, mkdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
-import { fal } from '@fal-ai/client';
 import { createClient } from '@supabase/supabase-js';
 
 import type { Database } from '../types_db';
+
+import {
+  resolveHostCountryViaWikidata,
+  wikidataGapMs,
+  wikidataLookupEnabled
+} from './wikidata-host-country';
 
 const HIPO_DEFAULT_URL =
   'https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json';
 
 const RESULT_FILENAME = 'classified_hosts_result.json';
 const PAGE_SIZE = 500;
-const DELAY_MS = 260;
-const DEFAULT_FAL_LLM_ENDPOINT = 'fal-ai/any-llm';
-/** Cheap instruct model on fal (see `any-llm` ModelEnum); override via FAL_LLM_MODEL */
-const DEFAULT_FAL_LLM_MODEL = 'meta-llama/llama-3.1-8b-instruct';
+const DEFAULT_FLUSH_EVERY = 50;
 
-const SYSTEM_PROMPT_FAL =
-  'You reply with JSON only — a single small object: {"host_country_alpha2":"<ISO Alpha-2 upper>"} OR {"host_country_alpha2":null}. ' +
-  'Infer the host country where the scholarship or its provider is headquartered / primarily operated from. ' +
-  'Two-letter uppercase country code only. Use null when uncertain or for clearly borderless NGOs with no inferable HQ. No markdown.';
-
-type Method = 'LocalDomain' | 'LLM' | 'LocalDomainOnly';
+/** `LLM` оставлен в типе только для совместимости со старыми чекпоинтами (больше не выставляется). */
+type Method = 'LocalDomain' | 'Wikidata' | 'LLM' | 'LocalDomainOnly';
 
 type ResultRow = {
   id: string;
@@ -52,21 +63,109 @@ type HipoEntry = {
   domains?: unknown;
 };
 
-function parseArgs(): { limit: number | null } {
+type SchRow = Pick<
+  Database['public']['Tables']['scholarships']['Row'],
+  | 'id'
+  | 'provider_name'
+  | 'provider_url'
+  | 'official_source_name'
+  | 'institution_id'
+  | 'host_country_codes'
+>;
+
+function classifiedHostsOutputPath(): string {
+  const override = process.env.CLASSIFIED_HOSTS_RESULT_JSON?.trim();
+  if (override) return override;
+  return join(process.cwd(), RESULT_FILENAME);
+}
+
+/** Предыдущая версия чекпоинта перед перезаписью (перезатирается на каждый сохранённый шаг). */
+async function snapshotBackupRolling(primary: string): Promise<void> {
+  try {
+    await copyFile(primary, `${primary}.bak`);
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code === 'ENOENT') return;
+    throw err;
+  }
+}
+
+async function writeClassifiedCheckpoint(primary: string, rows: ResultRow[]): Promise<void> {
+  await snapshotBackupRolling(primary);
+  await writeFile(primary, JSON.stringify(rows, null, 2), 'utf-8');
+}
+
+function isMethod(s: string): s is Method {
+  return (
+    s === 'LocalDomain' || s === 'Wikidata' || s === 'LLM' || s === 'LocalDomainOnly'
+  );
+}
+
+/** Нормализует одну сохранённую строку результата (без текущего ряда Supabase). Дубликаты id в файле → последний. */
+function normalizeCheckpointEntry(raw: unknown): ResultRow | null {
+  if (typeof raw !== 'object' || raw === null) return null;
+  const r = raw as Record<string, unknown>;
+  if (typeof r.id !== 'string' || !r.id.trim()) return null;
+  const methodRaw = typeof r.method === 'string' && isMethod(r.method) ? r.method : 'LocalDomainOnly';
+  const phc = r.proposed_host_country;
+  return {
+    id: r.id.trim(),
+    provider_name: typeof r.provider_name === 'string' ? r.provider_name : null,
+    proposed_host_country: typeof phc === 'string' ? phc : phc === null ? null : null,
+    method: methodRaw
+  };
+}
+
+async function loadCheckpointById(outPath: string, fresh: boolean): Promise<Map<string, ResultRow>> {
+  const byId = new Map<string, ResultRow>();
+  if (fresh) return byId;
+  try {
+    const rawText = await readFile(outPath, 'utf-8');
+    const parsed = JSON.parse(rawText) as unknown;
+    if (!Array.isArray(parsed)) {
+      console.warn(`Чекпоинт: файл не массив — игнорируем (${outPath})`);
+      return byId;
+    }
+    for (const item of parsed) {
+      const n = normalizeCheckpointEntry(item);
+      if (n) byId.set(n.id, n);
+    }
+    const n = byId.size;
+    if (n > 0) {
+      console.log(`Чекпоинт: прочитано ${n.toLocaleString()} записей из файла по id (${outPath})`);
+    }
+    return byId;
+  } catch {
+    return byId;
+  }
+}
+
+function parseArgs(): {
+  limit: number | null;
+  fresh: boolean;
+  flushEvery: number;
+  noWikidata: boolean;
+} {
   const argv = process.argv.slice(2);
   let limit: number | null = null;
+  let flushEvery = DEFAULT_FLUSH_EVERY;
+  let fresh = false;
+  let noWikidata = false;
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i]!;
     if (a.startsWith('--limit=')) {
       const n = Number.parseInt(a.slice('--limit='.length), 10);
       if (Number.isFinite(n) && n > 0) limit = n;
+    } else if (a.startsWith('--flush=')) {
+      const n = Number.parseInt(a.slice('--flush='.length), 10);
+      if (Number.isFinite(n) && n > 0) flushEvery = Math.min(5000, Math.max(1, n));
+    } else if (a === '--fresh') {
+      fresh = true;
+    } else if (a === '--no-wikidata') {
+      noWikidata = true;
     }
   }
-  return { limit };
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return { limit, fresh, flushEvery, noWikidata };
 }
 
 function jsonStringArray(value: unknown): string[] {
@@ -167,97 +266,10 @@ function lookupCountryByDomain(domainMap: Map<string, string>, host: string | nu
   return null;
 }
 
-/** Disable LLM run for remaining rows — fal ApiError exposes HTTP status .status */
-function shouldDisableLlmGlobally(err: unknown): boolean {
-  const status = extractHttpStatus(err);
-  return status === 401 || status === 402 || status === 403 || status === 429;
-}
-
-function extractHttpStatus(err: unknown): number | undefined {
-  const e = err as { status?: number; statusCode?: number; cause?: unknown };
-  if (typeof e.status === 'number') return e.status;
-  if (typeof e.statusCode === 'number') return e.statusCode;
-  if (e.cause) return extractHttpStatus(e.cause);
-  return undefined;
-}
-
-function falLlmEndpoint(): string {
-  return process.env.FAL_LLM_ENDPOINT?.trim() || DEFAULT_FAL_LLM_ENDPOINT;
-}
-
-function falLlmModel(): string {
-  return process.env.FAL_LLM_MODEL?.trim() || DEFAULT_FAL_LLM_MODEL;
-}
-
-/** Strip optional ``` fences; parse first JSON object in string */
-function parseJsonAlpha2FromLlama(output: string): { host_country_alpha2?: unknown } | null {
-  let t = output.trim();
-  const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/i);
-  if (fence?.[1]) t = fence[1].trim();
-  try {
-    return JSON.parse(t) as { host_country_alpha2?: unknown };
-  } catch {
-    const idx = t.indexOf('{');
-    const end = t.lastIndexOf('}');
-    if (idx !== -1 && end > idx) {
-      try {
-        return JSON.parse(t.slice(idx, end + 1)) as { host_country_alpha2?: unknown };
-      } catch {
-        return null;
-      }
-    }
-    return null;
-  }
-}
-
-async function classifyWithFalLlm(input: {
-  provider_name: string | null;
-  official_source_name: string | null;
-  provider_url: string | null;
-  institution_country_hint: string | null;
-}): Promise<string | null> {
-  const userPayload = {
-    provider_name: input.provider_name,
-    official_source_name: input.official_source_name,
-    provider_url: input.provider_url,
-    institution_country_hint: input.institution_country_hint
-  };
-
-  const endpoint = falLlmEndpoint();
-  const { data } = await fal.subscribe(endpoint, {
-    input: {
-      system_prompt: SYSTEM_PROMPT_FAL,
-      prompt:
-        `Classify HQ country.\nGrant/provider fields (JSON):\n${JSON.stringify(userPayload)}\n` +
-        'Reply with ONLY: {"host_country_alpha2":"US"} or {"host_country_alpha2":null}',
-      temperature: 0,
-      max_tokens: 96,
-      model: falLlmModel(),
-      priority: 'throughput'
-    },
-    logs: false
-  });
-
-  type FalAnyLlmData = {
-    output?: string;
-    error?: string | null;
-  };
-
-  const d = data as FalAnyLlmData | undefined;
-  if (!d?.output?.trim() || (d.error && String(d.error).trim())) {
-    return null;
-  }
-
-  const parsed = parseJsonAlpha2FromLlama(d.output);
-  if (!parsed) return null;
-  const v = parsed.host_country_alpha2;
-  if (v === null || v === undefined) return null;
-  return normalizeIso(v);
-}
-
 async function main() {
-  const { limit } = parseArgs();
+  const { limit, fresh, flushEvery, noWikidata } = parseArgs();
   const supabase = serviceSupabase();
+  const outPath = classifiedHostsOutputPath();
 
   const jsonPath = await loadHipoJsonPath();
   const rawJson = await readFile(jsonPath, 'utf-8');
@@ -265,26 +277,14 @@ async function main() {
   const domainMap = buildDomainToCountry(dataset);
   console.log(`HIPO mappings ready: ${domainMap.size.toLocaleString()} labeled domains`);
 
-  const falKey = process.env.FAL_KEY?.trim();
-  let llmEnabled = Boolean(falKey);
-  if (!falKey) {
-    console.log('FAL_KEY not set → LLM step skipped (remaining rows → LocalDomainOnly).');
-  } else {
-    fal.config({ credentials: falKey });
+  const wikiEnabled = wikidataLookupEnabled(noWikidata);
+  if (wikiEnabled) {
     console.log(
-      `fal.ai LLM: endpoint=${falLlmEndpoint()} model=${falLlmModel()} (override with FAL_LLM_ENDPOINT / FAL_LLM_MODEL)`
+      `Wikidata lookup: вкл (пауза ${wikidataGapMs()}ms между HTTP; выключить WIKIDATA_ENABLED=0 или --no-wikidata)`
     );
+  } else {
+    console.log('Wikidata lookup: выкл');
   }
-
-  type SchRow = Pick<
-    Database['public']['Tables']['scholarships']['Row'],
-    | 'id'
-    | 'provider_name'
-    | 'provider_url'
-    | 'official_source_name'
-    | 'institution_id'
-    | 'host_country_codes'
-  >;
 
   const candidates: SchRow[] = [];
   let from = 0;
@@ -314,10 +314,11 @@ async function main() {
 
   const total = candidates.length;
   console.log(`\nСтрок к классификации: ${total.toLocaleString()}`);
+  console.log(`Запись/чекпоинт: ${outPath} (flush каждые ${flushEvery} новых строк)`);
+  if (fresh) console.log('Режим --fresh: сохранённые результаты в файле игнорируются для resume');
 
   const instIds = [...new Set(candidates.map((c) => c.institution_id).filter(Boolean))] as string[];
   const instCountryIsoById = new Map<string, string | null>();
-  const instCountryRawById = new Map<string, string | null>();
   if (instIds.length > 0) {
     const chunkSize = 200;
     for (let i = 0; i < instIds.length; i += chunkSize) {
@@ -325,25 +326,51 @@ async function main() {
       const { data, error } = await supabase.from('institutions').select('id, country').in('id', slice);
       if (error) throw new Error(error.message);
       for (const r of data ?? []) {
-        const raw =
-          typeof r.country === 'string' && r.country.trim().length > 0 ? r.country.trim() : null;
         instCountryIsoById.set(r.id, normalizeIso(r.country));
-        instCountryRawById.set(r.id, raw);
       }
     }
   }
 
-  const results: ResultRow[] = [];
+  const checkpointById = await loadCheckpointById(outPath, fresh);
+  if (fresh) {
+    try {
+      await copyFile(outPath, `${outPath}.before-fresh.bak`);
+      console.log(`Копия перед --fresh (не трогается при flush): ${outPath}.before-fresh.bak`);
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code;
+      if (code !== 'ENOENT') throw err;
+    }
+    await snapshotBackupRolling(outPath);
+    await writeFile(outPath, JSON.stringify([], null, 2), 'utf-8');
+  }
 
-  let done = 0;
-  for (const row of candidates) {
+  /** Сколько id из текущей выборки уже есть в сохранённом JSON (повторная классификация не нужна). */
+  const reusedPlannedCount = candidates.reduce(
+    (n, sch) => n + (checkpointById.has(sch.id) ? 1 : 0),
+    0
+  );
+  const classifyPlanned = total - reusedPlannedCount;
+  if (!fresh && reusedPlannedCount > 0) {
+    console.log(
+      `\nResume по scholarship id: ${reusedPlannedCount.toLocaleString()}/${total.toLocaleString()} уже в файле (не считают заново). Осталось классифицировать: ${classifyPlanned.toLocaleString()}`
+    );
+    if (classifyPlanned > 0) {
+      console.log(
+        `Прогресс каждые 500 позиций в выборке; Wikidata только для новых строк; чекпоинт каждые ${flushEvery} новых классификаций`
+      );
+    }
+  }
+
+  const results: ResultRow[] = [];
+  let newClassifiedSinceStart = 0;
+
+  /** Один новый результат по строке scholarships (ничего из чекпоинта). */
+  const classifyCandidateRow = async (row: SchRow, uiIndexOneBased: number): Promise<ResultRow> => {
     try {
       let proposed: string | null = null;
       let method: Method = 'LocalDomainOnly';
 
       const instIso = row.institution_id ? instCountryIsoById.get(row.institution_id) ?? null : null;
-      const instRaw =
-        row.institution_id ? instCountryRawById.get(row.institution_id) ?? null : null;
       if (instIso) {
         proposed = instIso;
         method = 'LocalDomain';
@@ -358,59 +385,103 @@ async function main() {
         }
       }
 
-      if (!proposed && llmEnabled) {
+      if (!proposed && wikiEnabled) {
         try {
-          await sleep(DELAY_MS);
-          proposed = await classifyWithFalLlm({
+          const hint =
+            row.provider_name?.trim() ??
+            row.official_source_name?.trim() ??
+            '(без имени)';
+          const sh = hint.slice(0, 64);
+          console.log(`→ Wikidata строка ${uiIndexOneBased}/${total} (${sh}${hint.length > 64 ? '…' : ''})`);
+          const wdIso = await resolveHostCountryViaWikidata({
             provider_name: row.provider_name ?? null,
-            official_source_name: row.official_source_name ?? null,
-            provider_url: row.provider_url ?? null,
-            institution_country_hint:
-              instRaw ?? instIso ?? null
+            official_source_name: row.official_source_name ?? null
           });
-          method = 'LLM';
-        } catch (llmErr) {
-          if (shouldDisableLlmGlobally(llmErr)) {
-            console.warn(
-              '\n⚠️ Ошибка API fal.ai (авторизация/оплата/лимит). Шаг с LLM отключен для оставшихся записей.\n'
-            );
-            llmEnabled = false;
-            proposed = null;
-            method = 'LocalDomainOnly';
-          } else {
-            console.warn(`fal.ai ошибка (${row.id}):`, (llmErr as Error).message ?? llmErr);
-            proposed = null;
-            method = 'LLM';
+          const normWd = wdIso ? normalizeIso(wdIso) : null;
+          if (normWd) {
+            proposed = normWd;
+            method = 'Wikidata';
           }
+        } catch (wdErr) {
+          console.warn(`Wikidata ошибка (${row.id}):`, (wdErr as Error).message ?? wdErr);
         }
-      } else if (!proposed) {
+      }
+
+      if (!proposed) {
         method = 'LocalDomainOnly';
       }
 
-      results.push({
+      return {
         id: row.id,
         provider_name: row.provider_name ?? null,
         proposed_host_country: proposed,
         method
-      });
+      };
     } catch (rowErr) {
       console.warn(`Строка ${row.id}:`, (rowErr as Error).message ?? rowErr);
-      results.push({
+      return {
         id: row.id,
         provider_name: row.provider_name ?? null,
         proposed_host_country: null,
         method: 'LocalDomainOnly'
-      });
+      };
+    }
+  };
+
+  if (total > 0 && classifyPlanned === 0 && !fresh) {
+    const complete = candidates.map((sch) => checkpointById.get(sch.id)!);
+    console.log(`\nУже есть полный результат по id (${total}). Синхронизируем порядок в файле → ${outPath}`);
+    await writeClassifiedCheckpoint(outPath, complete);
+    return;
+  }
+
+  for (let i = 0; i < total; i += 1) {
+    const row = candidates[i]!;
+    const reusedRow = checkpointById.get(row.id);
+    let resultRow: ResultRow;
+    if (reusedRow && reusedRow.id === row.id) {
+      resultRow = reusedRow;
+    } else {
+      resultRow = await classifyCandidateRow(row, i + 1);
+      newClassifiedSinceStart += 1;
     }
 
-    done += 1;
-    if (done === 1 || done % 100 === 0 || done === total) {
-      console.log(`Обработано ${done}/${total}…`);
+    results.push(resultRow);
+
+    const done = i + 1;
+    const shouldCheckpointWrite =
+      done === total ||
+      done % 500 === 0 ||
+      (newClassifiedSinceStart > 0 && newClassifiedSinceStart % flushEvery === 0);
+
+    if (shouldCheckpointWrite) {
+      await writeClassifiedCheckpoint(outPath, results);
+      if (newClassifiedSinceStart > 0) {
+        console.log(
+          `Чекпоинт сохранён: позиция в выборке ${done}/${total} (за этот запуск классифицировано заново ${newClassifiedSinceStart}/${classifyPlanned})`
+        );
+      } else if (done % 500 === 0 || done === total) {
+        console.log(
+          `Чекпоинт сохранён: позиция в выборке ${done}/${total} (повторное использование из файла, без Wikidata)`
+        );
+      }
+    }
+
+    const shouldLogProgress =
+      done === total ||
+      done % 500 === 0 ||
+      (newClassifiedSinceStart > 0 &&
+        (newClassifiedSinceStart === 1 || newClassifiedSinceStart % 25 === 0));
+    if (shouldLogProgress) {
+      console.log(
+        `Обработано ${done}/${total} позиций в выборке (заново посчитано в этом запуске: ${newClassifiedSinceStart}/${classifyPlanned})…`
+      );
     }
   }
 
-  const outPath = join(process.cwd(), RESULT_FILENAME);
-  await writeFile(outPath, JSON.stringify(results, null, 2), 'utf-8');
+  if (total === 0) {
+    await writeClassifiedCheckpoint(outPath, results);
+  }
   console.log(`\nГотово → ${results.length.toLocaleString()} записей сохранены в ${outPath}`);
 }
 

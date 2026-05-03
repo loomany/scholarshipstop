@@ -12,14 +12,17 @@ import {
   schoolLevelLabelForValue
 } from '@/lib/constants/scholarshipProfileOptions';
 import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
-import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
+import {
+  dedupeHostCountryCodesForDisplay,
+  normalizeCountryCode
+} from '@/lib/scholarships/countryEligibility/countries';
 import {
   composeBirthDateValue,
   parseBirthDayValue,
   parseBirthMonthValue,
   parseBirthYearValue
 } from '@/lib/validation/birthDateFields';
-import type { Database } from '@/types_db';
+import type { Database, Json } from '@/types_db';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 
@@ -104,6 +107,8 @@ export type ScholarshipProfileFormValues = {
   fieldOfStudy: string;
   citizenshipStatus: string;
   countryCode: string;
+  /** ISO2 host / study-destination preferences (`profiles.preferred_host_country_codes`). */
+  preferredStudyHostCountries: string[];
   gpaChoice: string;
   stateRegionInput: string;
 };
@@ -172,6 +177,9 @@ export function buildScholarshipProfileFormPatch(
   const formState =
     countryCode === 'US' ? normalizeUsStateToCanonical(v.stateRegionInput) || null : null;
   patch.state_region = formState;
+
+  const studyHosts = dedupeHostCountryCodesForDisplay(v.preferredStudyHostCountries ?? []);
+  patch.preferred_host_country_codes = studyHosts as unknown as Json;
 
   return patch;
 }

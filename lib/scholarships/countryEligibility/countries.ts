@@ -67,6 +67,85 @@ const COUNTRY_OPTIONS: CountryOption[] = [
 
 export const SCHOLARSHIP_COUNTRY_OPTIONS = COUNTRY_OPTIONS;
 
+/**
+ * Study-destination pickers: likeliest high-volume host markets first (curated; not live DB counts).
+ * Every code in `SCHOLARSHIP_COUNTRY_OPTIONS` should appear here so the rest do not fall into an undifferentiated bucket.
+ */
+const STUDY_DESTINATION_COUNTRY_ORDER_RANK: Readonly<Record<string, number>> =
+  Object.fromEntries(
+    [
+      'US',
+      'GB',
+      'CA',
+      'AU',
+      'DE',
+      'FR',
+      'NL',
+      'IE',
+      'NZ',
+      'JP',
+      'KR',
+      'SG',
+      'CH',
+      'SE',
+      'NO',
+      'DK',
+      'FI',
+      'BE',
+      'ES',
+      'IT',
+      'PT',
+      'PL',
+      'AE',
+      'SA',
+      'IL',
+      'HK',
+      'TW',
+      'MY',
+      'TH',
+      'VN',
+      'PH',
+      'IN',
+      'CN',
+      'BR',
+      'MX',
+      'ZA',
+      'NG',
+      'KE',
+      'GH',
+      'EG',
+      'TR',
+      'RU',
+      'UA',
+      'PK',
+      'BD',
+      'NP',
+      'LK',
+      'ID',
+      'CO',
+      'AR',
+      'CL',
+      'PE',
+      'VE',
+      'CU',
+      'JM',
+      'DO',
+      'ET',
+      'KZ'
+    ].map((code, i) => [code, i])
+  );
+
+/** Sort host/study-destination rows: priority block first, then label A–Z. */
+export function compareCountryOptionsForStudyDestination(
+  a: CountryOption,
+  b: CountryOption
+): number {
+  const ra = STUDY_DESTINATION_COUNTRY_ORDER_RANK[a.code] ?? 10_000;
+  const rb = STUDY_DESTINATION_COUNTRY_ORDER_RANK[b.code] ?? 10_000;
+  if (ra !== rb) return ra - rb;
+  return a.label.localeCompare(b.label);
+}
+
 export const SCHOLARSHIP_COUNTRY_BY_CODE = Object.fromEntries(
   SCHOLARSHIP_COUNTRY_OPTIONS.map((country) => [country.code, country])
 ) as Record<string, CountryOption | undefined>;
@@ -98,6 +177,17 @@ function labelFromIsoCountryCode(code: string): string | null {
   return label;
 }
 
+/**
+ * Collapse alpha-2 variants that refer to the same place for host/geo display
+ * (avoids duplicate menu rows like GB + UK → both “United Kingdom”).
+ */
+export function canonicalCountryIso2ForAggregation(code: string): string {
+  const u = code.trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(u)) return u;
+  if (u === 'UK') return 'GB';
+  return u;
+}
+
 export function countryLabelFromCode(code: string): string {
   const normalized = code.trim().toUpperCase();
   if (!/^[A-Z]{2}$/.test(normalized)) return normalized;
@@ -106,6 +196,27 @@ export function countryLabelFromCode(code: string): string {
     labelFromIsoCountryCode(normalized) ??
     normalized
   );
+}
+
+/** Unique sorted host codes: canonical variants (e.g. UK→GB), then one row per display label. */
+export function dedupeHostCountryCodesForDisplay(codes: string[]): string[] {
+  const seen = new Set<string>();
+  const canonicalList: string[] = [];
+  for (const raw of codes) {
+    const c = canonicalCountryIso2ForAggregation(raw.trim().toUpperCase());
+    if (!/^[A-Z]{2}$/.test(c)) continue;
+    if (seen.has(c)) continue;
+    seen.add(c);
+    canonicalList.push(c);
+  }
+  canonicalList.sort((a, b) => a.localeCompare(b));
+
+  const byDisplayLabel = new Map<string, string>();
+  for (const c of canonicalList) {
+    const labelKey = countryLabelFromCode(c).trim().toLowerCase();
+    if (!byDisplayLabel.has(labelKey)) byDisplayLabel.set(labelKey, c);
+  }
+  return [...byDisplayLabel.values()].sort((a, b) => a.localeCompare(b));
 }
 
 export function normalizeCountryCode(raw: string | null | undefined): string | null {

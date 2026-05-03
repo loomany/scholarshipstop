@@ -106,6 +106,7 @@ import {
   clampScholarshipListPage,
   parseDeadlineFromParam,
   type ScholarshipAudienceParam,
+  parseHubListingCountryCodesParam,
   parseScholarshipListUrl,
   SCHOLARSHIPS_PAGE_SIZE
 } from './scholarshipListUrl';
@@ -130,6 +131,7 @@ import {
 } from '@/lib/scholarships/scholarshipListApiCodec';
 import type { ScholarshipListMeta } from '@/lib/scholarships/scholarshipListServer';
 import { applyListingMetaGuestPatches } from '@/lib/scholarships/applyListingMetaGuestPatches';
+import { hubBestRecommendationMergeHostPosting } from '@/lib/scholarships/hubBestRecommendationHostCountries';
 import { buildHubTabPresetMoreFilters } from '@/lib/scholarships/hubTabPresetMoreFilters';
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
 import {
@@ -686,6 +688,25 @@ function ScholarshipsPageInner({
     activeTab === 'best-recommendation' &&
     transientBestRecommendationProfileSeed != null;
 
+  const hubListingHostPosting = useMemo(
+    () =>
+      hubBestRecommendationMergeHostPosting({
+        tab: activeTab,
+        hubTreatAsGuest,
+        routeScopeHosts: routeScope?.hostCountryCodes,
+        searchParamsString,
+        transientPreferredHosts:
+          transientBestRecommendationProfileSeed?.preferredHostCountryCodes ?? null
+      }),
+    [
+      activeTab,
+      hubTreatAsGuest,
+      routeScope?.hostCountryCodes,
+      searchParamsString,
+      transientBestRecommendationProfileSeed?.preferredHostCountryCodes
+    ]
+  );
+
   const routeScopeKey = useMemo(
     () =>
       routeScope
@@ -750,7 +771,12 @@ function ScholarshipsPageInner({
       fieldOfStudy: d.draft.step1.fieldOfStudy.trim(),
       citizenship: d.draft.step1.citizenship.trim(),
       gpa: d.draft.step3.gpa.trim(),
-      state: d.draft.step4.state.trim()
+      state: d.draft.step4.state.trim(),
+      prefHosts: [...(d.draft.preferredHostCountryCodes ?? [])]
+        .map((x) => x.trim().toUpperCase())
+        .filter((x) => /^[A-Z]{2}$/.test(x))
+        .sort()
+        .join(',')
     });
   }, [hubTreatAsGuest, activeTab, bestRecommendationWizardStore]);
 
@@ -1371,15 +1397,26 @@ function ScholarshipsPageInner({
   /** User overlay from Filters modal; null means “pure tab baseline”. */
   const userOverlayMoreFilters = moreFiltersApplied;
   /** Effective filters for list query only (tab baseline + user overlay). */
-  const hubListingBodyMoreFilters = useMemo(
-    () =>
-      cloneMoreFilters(
-        userOverlayMoreFilters ??
-          hubTabCanonicalPreset ??
-          defaultMoreFiltersFromBounds(filterBounds)
-      ),
-    [userOverlayMoreFilters, hubTabCanonicalPreset, filterBounds]
-  );
+  const hubListingBodyMoreFilters = useMemo(() => {
+    const m = cloneMoreFilters(
+      userOverlayMoreFilters ??
+        hubTabCanonicalPreset ??
+        defaultMoreFiltersFromBounds(filterBounds)
+    );
+    /** Keep citizenship chip + card badges aligned with bookmarkable `app_cc` URLs. */
+    const fromUrlApp = parseHubListingCountryCodesParam(
+      new URLSearchParams(searchParamsString).get('app_cc')
+    );
+    for (const code of fromUrlApp) {
+      m.includeApplicantCountryCodes.add(code);
+    }
+    return m;
+  }, [
+    userOverlayMoreFilters,
+    hubTabCanonicalPreset,
+    filterBounds,
+    searchParamsString
+  ]);
   const selectedApplicantCountryCodes =
     hubListingBodyMoreFilters.includeApplicantCountryCodes;
 
@@ -1934,8 +1971,18 @@ function ScholarshipsPageInner({
     return z;
   }, [listMeta?.categoryCounts]);
   const countryCounts = listMeta?.countryCounts ?? [];
+  const hostCountryCounts = listMeta?.hostCountryCounts ?? [];
   const unspecifiedApplicantCountryCount =
     listMeta?.unspecifiedApplicantCountryCount ?? 0;
+  const appliedHostCountryCodes = useMemo(
+    () =>
+      new Set(
+        parseHubListingCountryCodesParam(
+          new URLSearchParams(searchParamsString).get('host_cc')
+        )
+      ),
+    [searchParamsString]
+  );
   const scholarshipsForCards = useMemo(() => {
     const base =
       currentMatchProfile != null
@@ -2189,11 +2236,14 @@ function ScholarshipsPageInner({
         'hub',
         'meta',
         sidebarMetaRequestKey,
+        /** `app_cc` / `host_cc` live here; drive refetch for cross-filtered dropdown counts. */
+        sidebarMetaBaseSearchParamsString,
         activeTab,
         routeScopeKey
       ] as const,
     [
       sidebarMetaRequestKey,
+      sidebarMetaBaseSearchParamsString,
       activeTab,
       routeScopeKey
     ]
@@ -2235,7 +2285,9 @@ function ScholarshipsPageInner({
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
           providerSlug: appliedProviderSlug,
-          hostCountryCodes: routeScope?.hostCountryCodes ?? []
+          hostCountryCodes: hubListingHostPosting.hostCountryCodes,
+          bestRecommendationRelaxableQuizHostCountries:
+            hubListingHostPosting.bestRecommendationRelaxableQuizHostCountries
         },
         { signal }
       );
@@ -2324,7 +2376,9 @@ function ScholarshipsPageInner({
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
           providerSlug: appliedProviderSlug,
-          hostCountryCodes: routeScope?.hostCountryCodes ?? []
+          hostCountryCodes: hubListingHostPosting.hostCountryCodes,
+          bestRecommendationRelaxableQuizHostCountries:
+            hubListingHostPosting.bestRecommendationRelaxableQuizHostCountries
         },
         { signal }
       );
@@ -2388,7 +2442,9 @@ function ScholarshipsPageInner({
           seoListingFallback: routeScope?.seoListingFallback,
           slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
           providerSlug: appliedProviderSlug,
-          hostCountryCodes: routeScope?.hostCountryCodes ?? [],
+          hostCountryCodes: hubListingHostPosting.hostCountryCodes,
+          bestRecommendationRelaxableQuizHostCountries:
+            hubListingHostPosting.bestRecommendationRelaxableQuizHostCountries,
           sidebarOnlyMeta: false
         },
         { signal }
@@ -2492,6 +2548,7 @@ function ScholarshipsPageInner({
             sidebarCounts: sidebarMeta.sidebarCounts,
             categoryCounts: sidebarMeta.categoryCounts,
             countryCounts: sidebarMeta.countryCounts,
+            hostCountryCounts: sidebarMeta.hostCountryCounts,
             unspecifiedApplicantCountryCount:
               sidebarMeta.unspecifiedApplicantCountryCount,
             deferredCounts: false
@@ -2619,11 +2676,17 @@ function ScholarshipsPageInner({
           }
         }
       }
+      const appCcSorted = [...next.includeApplicantCountryCodes]
+        .map((code) => code.trim().toUpperCase())
+        .filter((code) => /^[A-Z]{2}$/.test(code))
+        .sort()
+        .join(',');
       replaceListingParams({
         tab: activeTab,
         scope: 'catalog',
         deadline: next.deadlinePreset,
         audience: next.citizenshipAudience,
+        appCc: appCcSorted.length > 0 ? appCcSorted : null,
         resetPage: true
       });
     },
@@ -2673,6 +2736,21 @@ function ScholarshipsPageInner({
       searchParamsString,
       commitMoreFiltersApply
     ]
+  );
+
+  const onApplyHostCountries = useCallback(
+    (nextCodes: Set<string>) => {
+      const normalized = Array.from(nextCodes)
+        .map((c) => c.trim().toUpperCase())
+        .filter((c) => /^[A-Z]{2}$/.test(c))
+        .sort();
+      const hostCc = normalized.length > 0 ? normalized.join(',') : null;
+      setIsApplyingListControls(true);
+      applyingListControlsSawFetchRef.current = false;
+      applyingListControlsBaseSearchRef.current = searchParamsString;
+      replaceListingParams({ hostCc, resetPage: true });
+    },
+    [replaceListingParams, searchParamsString]
   );
 
   useEffect(() => {
@@ -2786,7 +2864,9 @@ function ScholarshipsPageInner({
             requiredSeoTags: routeScope?.requiredSeoTags ?? [],
             seoListingFallback: routeScope?.seoListingFallback,
             slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
-            hostCountryCodes: routeScope?.hostCountryCodes ?? [],
+            hostCountryCodes: hubListingHostPosting.hostCountryCodes,
+            bestRecommendationRelaxableQuizHostCountries:
+              hubListingHostPosting.bestRecommendationRelaxableQuizHostCountries,
             providerSlug:
               routeScope?.providerSlug ?? moreFiltersDraft?.filterUniversitySlug ?? null
           } as const;
@@ -3234,7 +3314,9 @@ function ScholarshipsPageInner({
         </div>
       </div>
     ) : null;
-  const bestRecommendationStartCta = (
+  /** Hub promo (“1-minute setup” → /get-scholarships). Off by default per product UX. */
+  const SHOW_BEST_HUB_ONE_MINUTE_SETUP_CTA = false;
+  const bestRecommendationStartCta = SHOW_BEST_HUB_ONE_MINUTE_SETUP_CTA ? (
     <div className="overflow-hidden rounded-[1.75rem] border border-orange-200/70 bg-gradient-to-br from-white via-[#FFF8F1] to-white px-5 py-6 text-center shadow-[0_18px_50px_-34px_rgba(15,23,42,0.55)] ring-1 ring-white/80 sm:px-8 sm:py-7">
       <div className="mx-auto mb-3 inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-[#A45A16]">
         1-minute setup
@@ -3255,7 +3337,7 @@ function ScholarshipsPageInner({
         </Link>
       </div>
     </div>
-  );
+  ) : null;
 
   return (
     <section className="min-h-screen bg-[#F3F7FA] px-4 py-8 text-left text-zinc-900 sm:px-5 md:py-12 lg:px-8">
@@ -3312,6 +3394,10 @@ function ScholarshipsPageInner({
                 unspecifiedApplicantCountryCount={
                   unspecifiedApplicantCountryCount
                 }
+                hostCountryCounts={hostCountryCounts}
+                hostCountryCountsLoading={!sidebarCountsReady}
+                appliedHostCountryCodes={appliedHostCountryCodes}
+                onApplyHostCountries={onApplyHostCountries}
                 appliedCountryCodes={
                   hubListingBodyMoreFilters.includeApplicantCountryCodes
                 }
@@ -3360,7 +3446,7 @@ function ScholarshipsPageInner({
                 <HubListSkeleton />
               ) : showGuestBestExploreFallback ? (
                 <>
-                  {shouldShowBestRecommendationWizard ? (
+                  {shouldShowBestRecommendationWizard && bestRecommendationStartCta ? (
                     <div className="mt-5">{bestRecommendationStartCta}</div>
                   ) : null}
                   <div className="flex flex-col mt-5 sm:mt-6">
@@ -3514,7 +3600,7 @@ function ScholarshipsPageInner({
                     </div>
                   </div>
                 </>
-              ) : shouldShowBestRecommendationWizard ? (
+              ) : shouldShowBestRecommendationWizard && bestRecommendationStartCta ? (
                 <div className="my-5">{bestRecommendationStartCta}</div>
               ) : blockingListLoad ? (
             <HubListSkeleton showApplyingLabel={blockingApplyLoad} />
@@ -3551,7 +3637,9 @@ function ScholarshipsPageInner({
               {guestBestRecommendationEmptyHidden ? null : (
                 guestBestRecommendationSeededZeroResults ? (
                   guestBestRecommendationSeededEmptyState
-                ) : guestPersonalizedEmpty && shouldShowScholarshipQuestionsCta ? (
+                ) : guestPersonalizedEmpty &&
+                  shouldShowScholarshipQuestionsCta &&
+                  bestRecommendationStartCta ? (
                   <div className="my-5">{bestRecommendationStartCta}</div>
                 ) : (
                   <div className="rounded-xl border border-zinc-200 bg-white px-5 py-10 text-center text-slate-600 shadow-sm">
@@ -3580,7 +3668,9 @@ function ScholarshipsPageInner({
                   Updating scholarships and counts...
                 </div>
               ) : null}
-              {shouldShowScholarshipQuestionsCta && activeTab === 'matches' ? (
+              {shouldShowScholarshipQuestionsCta &&
+              activeTab === 'matches' &&
+              bestRecommendationStartCta ? (
                 <div className="my-5">{bestRecommendationStartCta}</div>
               ) : null}
               {showGuestBestOrangeRecommendationCta ? (
@@ -3621,11 +3711,7 @@ function ScholarshipsPageInner({
                   </div>
                 </div>
               ) : null}
-              <div
-                className={`relative z-0 flex flex-col gap-4${
-                  showGuestBestOrangeRecommendationCta ? ' mt-4' : ''
-                }`}
-              >
+              <div className="relative z-0 mt-4 flex flex-col gap-4">
                 {scholarshipsForCards.map((s, index) => (
                   <div key={s.id} className="contents">
                     <ScholarshipCard

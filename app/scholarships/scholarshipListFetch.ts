@@ -40,6 +40,8 @@ export type ScholarshipsListPostBody = {
   providerSlug?: string | null;
   /** Route-owned host country filters for clean SEO paths (no `host_cc` in URL). */
   hostCountryCodes?: string[];
+  /** Guest Best: transient quiz-derived hosts may be cleared on SQL relax retries. */
+  bestRecommendationRelaxableQuizHostCountries?: boolean;
   /** Sidebar-only meta refresh can skip category dropdown counts. */
   sidebarOnlyMeta?: boolean;
 };
@@ -110,6 +112,8 @@ export async function postScholarshipsCount(
       requiredSeoTags: body.requiredSeoTags,
       providerSlug: body.providerSlug,
       hostCountryCodes: body.hostCountryCodes,
+      bestRecommendationRelaxableQuizHostCountries:
+        body.bestRecommendationRelaxableQuizHostCountries,
       sidebarOnlyMeta: body.sidebarOnlyMeta
     })
   });
@@ -139,6 +143,8 @@ export async function postScholarshipsMeta(
       requiredSeoTags: body.requiredSeoTags,
       providerSlug: body.providerSlug,
       hostCountryCodes: body.hostCountryCodes,
+      bestRecommendationRelaxableQuizHostCountries:
+        body.bestRecommendationRelaxableQuizHostCountries,
       sidebarOnlyMeta: body.sidebarOnlyMeta
     })
   });

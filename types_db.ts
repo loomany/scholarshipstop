@@ -798,6 +798,7 @@ export interface Database {
           citizenship_status_label: string | null
           city: string | null
           country_code: string | null
+          preferred_host_country_codes: Json
           created_at: string
           date_of_birth: string | null
           email_verified: boolean
@@ -839,6 +840,7 @@ export interface Database {
           citizenship_status_label?: string | null
           city?: string | null
           country_code?: string | null
+          preferred_host_country_codes?: Json
           created_at?: string
           date_of_birth?: string | null
           email_verified?: boolean
@@ -880,6 +882,7 @@ export interface Database {
           citizenship_status_label?: string | null
           city?: string | null
           country_code?: string | null
+          preferred_host_country_codes?: Json
           created_at?: string
           date_of_birth?: string | null
           email_verified?: boolean

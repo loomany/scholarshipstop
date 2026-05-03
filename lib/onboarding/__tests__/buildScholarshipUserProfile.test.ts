@@ -6,7 +6,9 @@ import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardi
 
 function baseDraft(gpa: string): StoredOnboardingDraft {
   return {
-    v: 7,
+    v: 8,
+    preferredHostCountryCodes: [],
+    landingDestinationScreenCompleted: true,
     activeStep: 4,
     step1: {
       birthMonth: '1',

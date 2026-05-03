@@ -4,7 +4,6 @@
  */
 
 import type {
-  OnboardingFormValues,
   OnboardingStep2DraftFields,
   OnboardingStep3DraftFields,
   OnboardingStep4DraftFields,
@@ -19,8 +18,45 @@ export const COMPLETED_GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY =
 export const GET_SCHOLARSHIPS_SELECTED_COUNTRY_KEY =
   'scholarship_get_scholarships_country_v1';
 
+function sanitizeLandingHostCodes(parsed: StoredOnboardingDraft): string[] {
+  const raw = parsed.preferredHostCountryCodes;
+  if (!Array.isArray(raw)) return [];
+  return [
+    ...new Set(
+      raw
+        .filter((c): c is string => typeof c === 'string')
+        .map((c) => c.trim().toUpperCase())
+        .filter((c) => /^[A-Z]{2}$/.test(c))
+    )
+  ];
+}
+
+function rawDraftMajorVersion(parsed: StoredOnboardingDraft): number {
+  const v = (parsed as unknown as { v?: unknown }).v;
+  return typeof v === 'number' ? v : 0;
+}
+
+/** Normalize persisted landing drafts to current v8 + quiz markers (no activeStep remap). */
+export function normalizeLoadedLandingQuizDraft(parsed: StoredOnboardingDraft): StoredOnboardingDraft {
+  const hosts = sanitizeLandingHostCodes(parsed);
+  return {
+    ...parsed,
+    v: 8,
+    quizVariant: 'landing_no_birth',
+    preferredHostCountryCodes: hosts,
+    includeUnspecifiedApplicantCountries:
+      parsed.includeUnspecifiedApplicantCountries === true,
+    // Study-destination step removed; gate always satisfied for saved drafts.
+    landingDestinationScreenCompleted: true
+  };
+}
+
 function withLandingMeta(draft: StoredOnboardingDraft): StoredOnboardingDraft {
-  return { ...draft, v: 7, quizVariant: 'landing_no_birth' };
+  return {
+    ...draft,
+    v: 8,
+    quizVariant: 'landing_no_birth'
+  };
 }
 
 function writeLanding(draft: StoredOnboardingDraft): void {
@@ -37,8 +73,11 @@ function writeLanding(draft: StoredOnboardingDraft): void {
 
 export function emptyLandingQuizDraft(): StoredOnboardingDraft {
   return withLandingMeta({
-    v: 7,
+    v: 8,
     activeStep: 1,
+    preferredHostCountryCodes: [],
+    includeUnspecifiedApplicantCountries: false,
+    landingDestinationScreenCompleted: true,
     step1: mergeDraftWithDefaults(null),
     step2: { firstName: '', lastName: '', email: '' },
     step3: { gpa: '' },
@@ -52,10 +91,11 @@ export function loadLandingQuizDraft(): StoredOnboardingDraft | null {
     const raw = localStorage.getItem(GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredOnboardingDraft;
-    if (!parsed || parsed.v !== 7 || typeof parsed.step1 !== 'object') {
+    const dv = rawDraftMajorVersion(parsed);
+    if (!parsed || (dv !== 7 && dv !== 8) || typeof parsed.step1 !== 'object') {
       return null;
     }
-    return withLandingMeta(parsed);
+    return normalizeLoadedLandingQuizDraft(parsed);
   } catch (error) {
     console.warn('[landing-quiz] read draft failed', error);
     return null;
@@ -72,10 +112,11 @@ export function loadCompletedLandingQuizDraft(): StoredOnboardingDraft | null {
     const raw = localStorage.getItem(COMPLETED_GET_SCHOLARSHIPS_QUIZ_DRAFT_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredOnboardingDraft;
-    if (!parsed || parsed.v !== 7 || typeof parsed.step1 !== 'object') {
+    const dv = rawDraftMajorVersion(parsed);
+    if (!parsed || (dv !== 7 && dv !== 8) || typeof parsed.step1 !== 'object') {
       return null;
     }
-    return withLandingMeta(parsed);
+    return normalizeLoadedLandingQuizDraft(parsed);
   } catch (error) {
     console.warn('[landing-quiz] read completed draft failed', error);
     return null;
@@ -95,12 +136,12 @@ export function saveCompletedLandingQuizDraft(draft: StoredOnboardingDraft): voi
 }
 
 export function mergeAndSaveStep1LandingForm(
-  values: OnboardingFormValues,
+  values: import('@/lib/onboarding/scholarshipOnboardingDraft').OnboardingFormValues,
   base: StoredOnboardingDraft | null
 ): void {
   const prev = base ?? emptyLandingQuizDraft();
   writeLanding({
-    ...withLandingMeta(prev),
+    ...prev,
     step1: { ...values }
   });
 }
@@ -111,7 +152,7 @@ export function saveStep2LandingDraftFields(
 ): void {
   const prev = base ?? emptyLandingQuizDraft();
   writeLanding({
-    ...withLandingMeta(prev),
+    ...prev,
     step2: { ...step2 }
   });
 }
@@ -122,7 +163,7 @@ export function saveStep3LandingDraftFields(
 ): void {
   const prev = base ?? emptyLandingQuizDraft();
   writeLanding({
-    ...withLandingMeta(prev),
+    ...prev,
     step3: { ...step3 }
   });
 }
@@ -133,7 +174,7 @@ export function saveStep4LandingDraftFields(
 ): void {
   const prev = base ?? emptyLandingQuizDraft();
   writeLanding({
-    ...withLandingMeta(prev),
+    ...prev,
     step4: { ...step4 }
   });
 }

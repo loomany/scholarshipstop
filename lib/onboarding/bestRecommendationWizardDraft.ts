@@ -46,8 +46,39 @@ function emptyStep4(): OnboardingStep4DraftFields {
   return { state: '' };
 }
 
-function normalizeActiveStep(n: unknown): 1 | 2 | 3 | 4 | 5 {
-  return n === 2 || n === 3 || n === 4 || n === 5 ? n : 1;
+function sanitizePreferredHosts(raw: unknown): string[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const next = [
+    ...new Set(
+      raw
+        .filter((x): x is string => typeof x === 'string')
+        .map((c) => c.trim().toUpperCase())
+        .filter((c) => /^[A-Z]{2}$/.test(c))
+    )
+  ];
+  return next;
+}
+
+/** Hub wizard used 5 steps until destination was inserted before state/GPA (now 6). */
+function remapHubWizardDraftActiveStep(active: unknown): 1 | 2 | 3 | 4 | 5 | 6 {
+  if (active === 2 || active === 3 || active === 4 || active === 5 || active === 6)
+    return active;
+  return 1;
+}
+
+function remapLegacySevenStepWizardToSix(
+  draftV: unknown,
+  activeStepUnknown: unknown
+): 1 | 2 | 3 | 4 | 5 | 6 {
+  const raw = typeof activeStepUnknown === 'number' ? activeStepUnknown : 1;
+  const v = draftV as number | undefined;
+  if (v == null || v >= 8) {
+    return remapHubWizardDraftActiveStep(raw);
+  }
+  let n = raw;
+  if (n === 5) n = 6;
+  else if (n === 4) n = 5;
+  return remapHubWizardDraftActiveStep(n);
 }
 
 export function emptyBestRecommendationWizardDraft(
@@ -58,8 +89,9 @@ export function emptyBestRecommendationWizardDraft(
     mode,
     submitted: false,
     draft: {
-      v: 7,
+      v: 8,
       activeStep: 1,
+      preferredHostCountryCodes: [],
       step1: mergeDraftWithDefaults(null),
       step2: emptyStep2(),
       step3: emptyStep3(),
@@ -79,10 +111,12 @@ export function buildBestRecommendationWizardStoreFromLandingDraft(
   if (!hasUsableLandingQuizData(landingDraft)) return null;
 
   const step1 = mergeDraftWithDefaults(landingDraft.step1);
+  const prefs = sanitizePreferredHosts(landingDraft.preferredHostCountryCodes);
   const draft: StoredOnboardingDraft = {
-    v: 7,
-    activeStep: 5,
+    v: 8,
+    activeStep: 6,
     step1,
+    preferredHostCountryCodes: prefs ?? [],
     step2: {
       firstName:
         typeof landingDraft.step2?.firstName === 'string'
@@ -126,6 +160,7 @@ function normalizeLoadedStore(
   const draft = o.draft;
   if (!draft || typeof draft !== 'object') return null;
   const d = draft as Record<string, unknown>;
+  const dv = typeof d.v === 'number' ? d.v : 7;
   const step1 =
     d.step1 && typeof d.step1 === 'object'
       ? mergeDraftWithDefaults(d.step1 as Partial<OnboardingFormValues>)
@@ -142,14 +177,18 @@ function normalizeLoadedStore(
     d.step4 && typeof d.step4 === 'object'
       ? (d.step4 as Record<string, unknown>)
       : {};
+  const migratedStep = remapLegacySevenStepWizardToSix(dv, Number(d.activeStep));
+  const preferredHostCountryCodes =
+    sanitizePreferredHosts(d.preferredHostCountryCodes) ?? [];
 
   return {
     v: 1,
     mode: o.mode === 'signed-in' ? 'signed-in' : 'guest',
     submitted: o.submitted === true,
     draft: {
-      v: 7,
-      activeStep: normalizeActiveStep(d.activeStep),
+      v: 8,
+      activeStep: migratedStep,
+      preferredHostCountryCodes,
       step1,
       step2: {
         firstName: typeof step2.firstName === 'string' ? step2.firstName : '',
@@ -216,6 +255,7 @@ export function bestRecommendationWizardHasUsableData(
   ) {
     return true;
   }
+  if ((draft.preferredHostCountryCodes ?? []).length > 0) return true;
   if (draft.step3.gpa.trim()) return true;
   if (draft.step4.state.trim()) return true;
   return false;
@@ -228,10 +268,6 @@ export function buildBestRecommendationWizardSeed(
   return buildScholarshipProfileFilterSeedFromDraftWithoutBirth(store.draft);
 }
 
-/**
- * Hub guest Best tab only (caller scopes): partial preview seed before submit,
- * strict submitted seed afterward, or null if there is nothing usable yet.
- */
 export function resolveBestRecommendationProfileSeedForHub(
   store: BestRecommendationWizardStore | null
 ): ScholarshipProfileFilterSeed | null {
@@ -267,14 +303,32 @@ function preferNonEmpty(nextValue: string, currentValue: string): string {
   return currentValue?.trim() ?? '';
 }
 
+function mergePreferredQuizHosts(
+  a: string[] | undefined,
+  b: string[] | undefined
+): string[] {
+  const out = new Set<string>();
+  for (const xs of [a, b]) {
+    for (const c of xs ?? []) {
+      const u = c.trim().toUpperCase();
+      if (/^[A-Z]{2}$/.test(u)) out.add(u);
+    }
+  }
+  return [...out].sort((x, y) => x.localeCompare(y));
+}
+
 export function bridgeBestRecommendationWizardToOnboardingDraft(
   store: BestRecommendationWizardStore | null
 ): boolean {
   if (!store || !bestRecommendationWizardHasUsableData(store)) return false;
   const base = loadStoredOnboardingDraft();
   const merged: StoredOnboardingDraft = {
-    v: 7,
+    v: 8,
     activeStep: 1,
+    preferredHostCountryCodes: mergePreferredQuizHosts(
+      store.draft.preferredHostCountryCodes,
+      base?.preferredHostCountryCodes
+    ),
     step1: {
       birthMonth: base?.step1.birthMonth ?? '',
       birthDay: base?.step1.birthDay ?? '',

@@ -224,6 +224,16 @@ function inferFieldOfStudySlugs(blob: string): string[] {
   return uniqSorted([...out]);
 }
 
+/** Any ISO2 present as host must not remain in applicant (avoids duplicated geography semantics). */
+function applicantCodesWithoutHostOverlap(
+  applicant: string[],
+  host: string[]
+): string[] {
+  if (host.length === 0) return applicant;
+  const hs = new Set(host);
+  return applicant.filter((c) => !hs.has(c));
+}
+
 function jsonArraysEqual(a: string[], b: string[]): boolean {
   if (a.length !== b.length) return false;
   const sa = [...a].sort();
@@ -233,7 +243,8 @@ function jsonArraysEqual(a: string[], b: string[]): boolean {
 
 /**
  * Proposes DB column updates so hub profile filters (Best recommendation) hit more rows.
- * Conservative: fills empty / null structured fields from text; does not strip existing tags.
+ * Conservative: fills empty structured fields from text without removing unrelated structured tags,
+ * except applicant_country_codes overlaps with inferred host_country_codes are removed.
  */
 export function proposeScholarshipCatalogBackfill(
   row: ScholarshipRowForCatalogBackfill
@@ -265,14 +276,14 @@ export function proposeScholarshipCatalogBackfill(
     summaryLong: row.summary_long,
     rawData: row.raw_data
   });
-  const nextApplicantCountries = uniqSorted([
-    ...applicantCountries,
-    ...countryEligibility.applicantCountryCodes
-  ]);
   const nextHostCountries = uniqSorted([
     ...hostCountries,
     ...countryEligibility.hostCountryCodes
   ]);
+  const nextApplicantCountries = applicantCodesWithoutHostOverlap(
+    uniqSorted([...applicantCountries, ...countryEligibility.applicantCountryCodes]),
+    nextHostCountries
+  );
   if (!jsonArraysEqual(applicantCountries, nextApplicantCountries)) {
     patch.applicant_country_codes = nextApplicantCountries;
     reasons.push(

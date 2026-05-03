@@ -29,6 +29,7 @@ import {
   buildBirthMonthSelectOptions
 } from '@/lib/constants/scholarshipProfileOptions';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
+import { StudyDestinationCountriesField } from '@/components/onboarding/StudyDestinationCountriesField';
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { US_STATE_AUTOCOMPLETE_PLACEHOLDER } from '@/lib/constants/usStates';
 import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
@@ -58,6 +59,7 @@ import {
   normalizeCountryCode,
   SCHOLARSHIP_COUNTRY_OPTIONS
 } from '@/lib/scholarships/countryEligibility/countries';
+import { preferredHostCountryCodesFromProfileJson } from '@/lib/scholarships/profilePreferredHostCountries';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 type Subscription = Tables<'subscriptions'>;
@@ -342,6 +344,10 @@ export default function ScholarshipProfileForm({
   const [countryCodeInput, setCountryCodeInput] = useState(
     () => normalizeCountryCode(profile?.country_code) ?? ''
   );
+  const [preferredStudyHostCountries, setPreferredStudyHostCountries] = useState(
+    () =>
+      preferredHostCountryCodesFromProfileJson(profile?.preferred_host_country_codes)
+  );
   const [emailInput, setEmailInput] = useState(() => userEmail?.trim() ?? '');
 
   const profileSnapshot = useMemo(
@@ -359,7 +365,8 @@ export default function ScholarshipProfileForm({
             dob: profile.date_of_birth,
             bm: profile.birth_month,
             bd: profile.birth_day,
-            by: profile.birth_year
+            by: profile.birth_year,
+            ph: profile.preferred_host_country_codes
           })
         : '',
     [profile]
@@ -379,6 +386,9 @@ export default function ScholarshipProfileForm({
     setGpaChoice(resolveStoredProfileGpaChoice(profile.gpa, profile.saved_filters_snapshot));
     setStateRegionInput(profile.state_region?.trim() ?? '');
     setCountryCodeInput(normalizeCountryCode(profile.country_code) ?? '');
+    setPreferredStudyHostCountries(
+      preferredHostCountryCodesFromProfileJson(profile.preferred_host_country_codes)
+    );
   }, [profile, profileSnapshot]);
 
   useEffect(() => {
@@ -423,6 +433,7 @@ export default function ScholarshipProfileForm({
       fieldOfStudy,
       citizenshipStatus,
       countryCode: countryCodeInput,
+      preferredStudyHostCountries,
       gpaChoice,
       stateRegionInput
     }),
@@ -436,6 +447,7 @@ export default function ScholarshipProfileForm({
       firstName,
       lastName,
       gpaChoice,
+      preferredStudyHostCountries,
       stateRegionInput,
       schoolLevel
     ]
@@ -938,6 +950,16 @@ export default function ScholarshipProfileForm({
           value={citizenshipStatus}
           onChange={setCitizenshipStatus}
           disabled={submitting}
+        />
+      </div>
+
+      <div className="mt-4">
+        <p className={lc}>Target country / destination</p>
+        <StudyDestinationCountriesField
+          idPrefix="spf-study-dest"
+          disabled={submitting}
+          selected={preferredStudyHostCountries}
+          onChange={setPreferredStudyHostCountries}
         />
       </div>
 
@@ -1683,6 +1705,15 @@ export default function ScholarshipProfileForm({
                   value={citizenshipStatus}
                   onChange={setCitizenshipStatus}
                   disabled={submitting}
+                />
+              </div>
+              <div className="mt-6">
+                <p className={lc}>Target country / destination</p>
+                <StudyDestinationCountriesField
+                  idPrefix="spf-study-dest-saas"
+                  disabled={submitting}
+                  selected={preferredStudyHostCountries}
+                  onChange={setPreferredStudyHostCountries}
                 />
               </div>
               <label className={lc} htmlFor="spf-country-saas">

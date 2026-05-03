@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { DarkSelect } from '@/components/home/DarkSelect';
+import { StudyDestinationCountriesField } from '@/components/onboarding/StudyDestinationCountriesField';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
 import { CITIZENSHIP_OPTIONS } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
@@ -70,8 +71,10 @@ type Props = {
   onSubmit: (next: BestRecommendationWizardStore) => Promise<void> | void;
 };
 
+type WizardStepNumber = 1 | 2 | 3 | 4 | 5 | 6;
+
 type WizardStepConfig = {
-  step: 1 | 2 | 3 | 4 | 5;
+  step: WizardStepNumber;
   title: string;
   description: string;
 };
@@ -97,11 +100,17 @@ const STEP_CONFIG: WizardStepConfig[] = [
   },
   {
     step: 4,
+    title: 'Where do you want to study?',
+    description:
+      'Optional. Narrow Best matches by study destination countries, or leave empty for broader results.'
+  },
+  {
+    step: 5,
     title: 'What U.S. state are you in?',
     description: 'Optional. Add it if you want to surface state-specific scholarships too.'
   },
   {
-    step: 5,
+    step: 6,
     title: "What's your GPA?",
     description: 'Optional. Add it if you want GPA-aware ranking, or skip for broader results.'
   }
@@ -115,7 +124,7 @@ export default function BestRecommendationWizard({
   onSubmit
 }: Props) {
   const [error, setError] = useState<string | null>(null);
-  const currentStep = store.draft.activeStep;
+  const currentStep = store.draft.activeStep as WizardStepNumber;
   const currentConfig = useMemo(
     () => STEP_CONFIG.find((item) => item.step === currentStep) ?? STEP_CONFIG[0],
     [currentStep]
@@ -134,13 +143,13 @@ export default function BestRecommendationWizard({
       submitted: false,
       draft: {
         ...prev.draft,
-        activeStep: (currentStep - 1) as 1 | 2 | 3 | 4 | 5
+        activeStep: ((currentStep - 1) as WizardStepNumber)
       }
     }));
   };
 
   const continueStep = async () => {
-    if (currentStep === 4) {
+    if (currentStep === 5) {
       const trimmed = store.draft.step4.state.trim();
       if (trimmed && !normalizeUsStateToCanonical(trimmed)) {
         setError(
@@ -149,7 +158,7 @@ export default function BestRecommendationWizard({
         return;
       }
     }
-    if (currentStep === 5) {
+    if (currentStep === 6) {
       const result = validateScholarshipOnboardingStep3GpaOptional(store.draft.step3);
       if (!result.ok) {
         setError(result.errors.gpa ?? 'Please select your GPA.');
@@ -158,19 +167,20 @@ export default function BestRecommendationWizard({
     }
 
     const normalizedState =
-      currentStep === 4
+      currentStep === 5
         ? normalizeUsStateToCanonical(store.draft.step4.state.trim()) ?? ''
         : store.draft.step4.state;
 
     const next: BestRecommendationWizardStore = {
       ...store,
-      submitted: currentStep === 5,
+      submitted: currentStep === 6,
       draft: {
         ...store.draft,
         activeStep:
-          currentStep === 5
-            ? 5
-            : ((currentStep + 1) as 1 | 2 | 3 | 4 | 5),
+          currentStep === 6
+            ? 6
+            : (((currentStep + 1) as WizardStepNumber)),
+        preferredHostCountryCodes: store.draft.preferredHostCountryCodes ?? [],
         step4: {
           state: normalizedState
         }
@@ -183,7 +193,7 @@ export default function BestRecommendationWizard({
       await onPersistSignedInStep(next);
     }
 
-    if (currentStep === 5) {
+    if (currentStep === 6) {
       await onSubmit(next);
     }
   };
@@ -206,14 +216,14 @@ export default function BestRecommendationWizard({
         <div className="mt-6">
           <div className="mb-3 flex items-center justify-between text-xs font-medium uppercase tracking-[0.12em] text-[#A45A16]">
             <span>
-              Step {currentStep} of 5
+              Step {currentStep} of 6
             </span>
-            <span>{Math.round((currentStep / 5) * 100)}%</span>
+            <span>{Math.round((currentStep / 6) * 100)}%</span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-[#FFE5CC]">
             <div
               className="h-full rounded-full bg-[#FF7A1A] transition-all"
-              style={{ width: `${(currentStep / 5) * 100}%` }}
+              style={{ width: `${(currentStep / 6) * 100}%` }}
             />
           </div>
         </div>
@@ -307,6 +317,27 @@ export default function BestRecommendationWizard({
 
           {currentStep === 4 ? (
             <div>
+              <p className={labelClass}>Target country / destination</p>
+              <StudyDestinationCountriesField
+                idPrefix="hub-best-wizard-dest"
+                disabled={saving}
+                selected={store.draft.preferredHostCountryCodes ?? []}
+                onChange={(codes) =>
+                  updateStore((prev) => ({
+                    ...prev,
+                    submitted: false,
+                    draft: {
+                      ...prev.draft,
+                      preferredHostCountryCodes: codes
+                    }
+                  }))
+                }
+              />
+            </div>
+          ) : null}
+
+          {currentStep === 5 ? (
+            <div>
               <label htmlFor="best-rec-state" id="best-rec-state-label" className={labelClass}>
                 U.S. state (optional)
               </label>
@@ -334,7 +365,7 @@ export default function BestRecommendationWizard({
             </div>
           ) : null}
 
-          {currentStep === 5 ? (
+          {currentStep === 6 ? (
             <div>
               <label htmlFor="best-rec-gpa" className={labelClass}>
                 GPA
@@ -386,7 +417,7 @@ export default function BestRecommendationWizard({
             >
               {saving
                 ? 'Saving...'
-                : currentStep === 5
+                : currentStep === 6
                   ? 'Find My Scholarships'
                   : 'Continue'}
               {!saving ? <ArrowRight className="ml-2 h-4 w-4" aria-hidden /> : null}

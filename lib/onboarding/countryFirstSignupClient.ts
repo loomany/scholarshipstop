@@ -17,6 +17,9 @@ export type CountrySignupProfileInput = {
   gpa?: number | string | null;
   savedFiltersSnapshot?: Record<string, unknown> | null;
   onboardingCompleted?: boolean | null;
+  preferredHostCountryCodes?: string[];
+  /** Broad browse: no applicant ISO2; hub uses `includeUnspecifiedApplicantCountries`. */
+  includeUnspecifiedApplicantCountries?: boolean | null;
 };
 
 export type CountrySignupResult =
@@ -34,7 +37,7 @@ export type CountrySignupResult =
 
 export async function createCountryFirstScholarshipAccount(options: {
   email: string;
-  countryCode: string;
+  countryCode: string | null;
   source: string;
   profile?: CountrySignupProfileInput;
 }): Promise<CountrySignupResult> {

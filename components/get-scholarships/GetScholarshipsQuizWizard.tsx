@@ -31,6 +31,7 @@ import {
 } from '@/lib/onboarding/getScholarshipsLandingDraft';
 import type { OnboardingFormValues, StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 import {
+  buildScholarshipProfileFilterSeedForUnspecifiedApplicant,
   buildScholarshipProfileFilterSeedFromCountry,
   buildScholarshipProfileFilterSeedFromDraftWithoutBirth
 } from '@/lib/scholarships/profileFilterDefaults';
@@ -88,7 +89,15 @@ function defaultResumeLandingQuizStep(
   draft: StoredOnboardingDraft,
   selectedCountryCode: string
 ): LandingQuizStep {
-  if (!selectedCountryCode) return 'country';
+  if (!selectedCountryCode.trim()) {
+    if (
+      draft.includeUnspecifiedApplicantCountries === true &&
+      draft.landingDestinationScreenCompleted === true
+    ) {
+      return 'email';
+    }
+    return 'country';
+  }
   if (selectedCountryCode !== 'US') return 'email';
   if (draft.activeStep === 1 || draft.activeStep === 2 || draft.activeStep === 3) {
     return draft.activeStep;
@@ -174,7 +183,7 @@ export function GetScholarshipsQuizWizard({
       const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
       persistFull({
         ...base,
-        v: 7,
+        v: 8,
         quizVariant: 'landing_no_birth',
         step1: {
           ...base.step1,
@@ -191,7 +200,7 @@ export function GetScholarshipsQuizWizard({
     const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
     persistFull({
       ...base,
-      v: 7,
+      v: 8,
       quizVariant: 'landing_no_birth',
       activeStep: 5
     });
@@ -213,7 +222,12 @@ export function GetScholarshipsQuizWizard({
       setEmailError('Enter a valid email address.');
       return;
     }
-    if (!selectedCountryCode) {
+    const completionDraft =
+      options.completedDraft ?? loadLandingQuizDraft() ?? emptyLandingQuizDraft();
+    if (
+      !selectedCountryCode &&
+      completionDraft.includeUnspecifiedApplicantCountries !== true
+    ) {
       setEmailError('Choose your country first.');
       setQuizStep('country');
       return;
@@ -229,7 +243,10 @@ export function GetScholarshipsQuizWizard({
 
     const signup = await createCountryFirstScholarshipAccount({
       email: normalizedEmail,
-      countryCode: selectedCountryCode,
+      countryCode:
+        completionDraft.includeUnspecifiedApplicantCountries === true
+          ? null
+          : selectedCountryCode,
       source: options.source,
       profile: options.profile
     });
@@ -251,8 +268,7 @@ export function GetScholarshipsQuizWizard({
       );
       return;
     }
-    const draftForCompletion =
-      options.completedDraft ?? loadLandingQuizDraft() ?? emptyLandingQuizDraft();
+    const draftForCompletion = completionDraft;
     const completedDraft = {
       ...draftForCompletion,
       step2: {
@@ -268,18 +284,52 @@ export function GetScholarshipsQuizWizard({
       landingPath: '/get-scholarships',
       authState: 'guest',
       onceKey: 'st_quiz_complete_get_scholarships',
-      country: `${countryLabelFromCode(selectedCountryCode)} (${selectedCountryCode})`,
+      country:
+        options.completedDraft?.includeUnspecifiedApplicantCountries === true
+          ? 'Citizenship not specified'
+          : `${countryLabelFromCode(selectedCountryCode)} (${selectedCountryCode})`,
       email: normalizedEmail
     });
     router.replace(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF);
   },
   [email, router, selectedCountryCode]);
 
-  const countryLabel = selectedCountryCode
-    ? countryLabelFromCode(selectedCountryCode)
-    : 'your country';
+  const countryLabel =
+    draft?.includeUnspecifiedApplicantCountries === true
+      ? 'Citizenship not specified'
+      : selectedCountryCode
+        ? countryLabelFromCode(selectedCountryCode)
+        : 'your country';
+
+  const sanitizePreferredHostsForSignup = useCallback((d: StoredOnboardingDraft): string[] => {
+    const raw = d.preferredHostCountryCodes ?? [];
+    return [
+      ...new Set(
+        raw
+          .map((c) => c.trim().toUpperCase())
+          .filter((c) => /^[A-Z]{2}$/.test(c))
+      )
+    ];
+  }, []);
 
   const handleCountryContinue = useCallback(() => {
+    const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
+    if (base.includeUnspecifiedApplicantCountries === true) {
+      setCountryError(null);
+      saveLandingQuizSelectedCountry('');
+      setSelectedCountryCode('');
+      persistFull({
+        ...base,
+        v: 8,
+        quizVariant: 'landing_no_birth',
+        landingDestinationScreenCompleted: true,
+        includeUnspecifiedApplicantCountries: true,
+        step4: { state: '', countryCode: '' },
+        preferredHostCountryCodes: base.preferredHostCountryCodes ?? []
+      });
+      setQuizStep('email');
+      return;
+    }
     const code = normalizeCountryCode(selectedCountryCode);
     if (!code) {
       setCountryError('Choose your country to continue.');
@@ -288,16 +338,37 @@ export function GetScholarshipsQuizWizard({
     setCountryError(null);
     saveLandingQuizSelectedCountry(code);
     setSelectedCountryCode(code);
+    persistFull({
+      ...base,
+      v: 8,
+      quizVariant: 'landing_no_birth',
+      landingDestinationScreenCompleted: true,
+      includeUnspecifiedApplicantCountries: false,
+      step4: {
+        ...base.step4,
+        countryCode: code,
+        state: code === 'US' ? base.step4.state : ''
+      },
+      preferredHostCountryCodes: base.preferredHostCountryCodes ?? []
+    });
     setQuizStep(code === 'US' ? 1 : 'email');
-  }, [selectedCountryCode]);
+  }, [persistFull, selectedCountryCode]);
 
   const buildSignupProfileFromDraft = useCallback(
     (base: StoredOnboardingDraft, onboardingCompleted: boolean) => {
       const schoolLevel = base.step1.schoolLevel.trim() || null;
       const fieldOfStudy = base.step1.fieldOfStudy.trim() || null;
       const citizenship = base.step1.citizenship.trim() || null;
+      const prefHosts = sanitizePreferredHostsForSignup(base);
       const gpaChoice = gpaForProfile(base.step3.gpa);
       const gpaSelection = isGpaBucketChoice(gpaChoice) ? gpaChoice : null;
+      const snap: Record<string, unknown> = {};
+      if (gpaSelection) {
+        snap[PROFILE_GPA_SELECTION_SNAPSHOT_KEY] = gpaSelection;
+      }
+      if (base.includeUnspecifiedApplicantCountries === true) {
+        snap.includeUnspecifiedApplicantCountries = true;
+      }
       return {
         schoolLevel,
         schoolLevelLabel: schoolLevel ? schoolLevelLabelForValue(schoolLevel) : null,
@@ -307,23 +378,41 @@ export function GetScholarshipsQuizWizard({
         citizenshipStatusLabel: citizenship ? citizenshipLabelForValue(citizenship) : null,
         stateRegion: normalizeUsStateToCanonical(base.step4.state.trim()) ?? null,
         gpa: gpaForProfileDb(gpaChoice),
-        savedFiltersSnapshot: gpaSelection
-          ? { [PROFILE_GPA_SELECTION_SNAPSHOT_KEY]: gpaSelection }
-          : null,
-        onboardingCompleted
+        savedFiltersSnapshot: Object.keys(snap).length ? snap : null,
+        includeUnspecifiedApplicantCountries:
+          base.includeUnspecifiedApplicantCountries === true || undefined,
+        onboardingCompleted,
+        ...(prefHosts.length ? { preferredHostCountryCodes: prefHosts } : {})
       };
     },
-    []
+    [sanitizePreferredHostsForSignup]
   );
 
   const completeCountryOnlySignup = useCallback(() => {
-    const seed = buildScholarshipProfileFilterSeedFromCountry(selectedCountryCode);
+    const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
+    const pref = sanitizePreferredHostsForSignup(base);
+    if (base.includeUnspecifiedApplicantCountries === true) {
+      const seed = buildScholarshipProfileFilterSeedForUnspecifiedApplicant(pref);
+      void finishAndGoToHub({
+        source: 'get-scholarships-country-unspecified',
+        profile: {
+          onboardingCompleted: false,
+          includeUnspecifiedApplicantCountries: true,
+          savedFiltersSnapshot: { includeUnspecifiedApplicantCountries: true },
+          ...(pref.length ? { preferredHostCountryCodes: pref } : {})
+        },
+        seed,
+        completedDraft: base
+      });
+      return;
+    }
+    const seed = buildScholarshipProfileFilterSeedFromCountry(selectedCountryCode, pref);
     void finishAndGoToHub({
       source: 'get-scholarships-country',
-      profile: { onboardingCompleted: false },
+      profile: { onboardingCompleted: false, ...(pref.length ? { preferredHostCountryCodes: pref } : {}) },
       seed
     });
-  }, [finishAndGoToHub, selectedCountryCode]);
+  }, [finishAndGoToHub, sanitizePreferredHostsForSignup, selectedCountryCode]);
 
   const completeUsQuizSignup = useCallback(() => {
     const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
@@ -336,6 +425,7 @@ export function GetScholarshipsQuizWizard({
       return;
     }
     seed.applicantCountryCodes = ['US'];
+    seed.includeUnspecifiedApplicantCountries = false;
     void finishAndGoToHub({
       source: 'get-scholarships-us-quiz',
       profile: buildSignupProfileFromDraft(base, true),
@@ -345,16 +435,19 @@ export function GetScholarshipsQuizWizard({
   }, [buildSignupProfileFromDraft, finishAndGoToHub]);
 
   const continueWithGoogle = useCallback(async () => {
-    if (!selectedCountryCode) {
+    const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
+    const pref = sanitizePreferredHostsForSignup(base);
+    if (!selectedCountryCode && base.includeUnspecifiedApplicantCountries !== true) {
       setEmailError('Choose your country first.');
       setQuizStep('country');
       return;
     }
-    const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
-    const seed =
-      selectedCountryCode === 'US'
-        ? buildScholarshipProfileFilterSeedFromDraftWithoutBirth(base)
-        : buildScholarshipProfileFilterSeedFromCountry(selectedCountryCode);
+    let seed =
+      base.includeUnspecifiedApplicantCountries === true
+        ? buildScholarshipProfileFilterSeedForUnspecifiedApplicant(pref)
+        : selectedCountryCode === 'US'
+          ? buildScholarshipProfileFilterSeedFromDraftWithoutBirth(base)
+          : buildScholarshipProfileFilterSeedFromCountry(selectedCountryCode, pref);
     if (!seed) {
       notifyDestructive(
         'Almost there',
@@ -364,7 +457,9 @@ export function GetScholarshipsQuizWizard({
       );
       return;
     }
-    seed.applicantCountryCodes = [selectedCountryCode];
+    if (base.includeUnspecifiedApplicantCountries !== true) {
+      seed = { ...seed, applicantCountryCodes: [selectedCountryCode] };
+    }
 
     setEmailError(null);
     setGoogleSignInPending(true);
@@ -403,7 +498,7 @@ export function GetScholarshipsQuizWizard({
       setNavigatingToHub(false);
       setEmailError(error.message || 'Google sign-in failed.');
     }
-  }, [selectedCountryCode]);
+  }, [sanitizePreferredHostsForSignup, selectedCountryCode]);
 
   const handleBack = useCallback(
     (s: LandingQuizStep) => {
@@ -411,14 +506,11 @@ export function GetScholarshipsQuizWizard({
         setQuizStep('country');
         return;
       }
-      if (s === 'email') {
-        setQuizStep('email');
-        return;
-      }
+      if (typeof s !== 'number') return;
       const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
       persistFull({
         ...base,
-        v: 7,
+        v: 8,
         quizVariant: 'landing_no_birth',
         activeStep: s
       });
@@ -465,11 +557,54 @@ export function GetScholarshipsQuizWizard({
             <CountryFirstStep
               disabled={navigatingToHub}
               value={selectedCountryCode}
-              progressEyebrow="Step 1 · Applicant country"
+              includeUnspecifiedApplicantCountries={
+                draft.includeUnspecifiedApplicantCountries === true
+              }
+              onIncludeUnspecifiedApplicantCountriesChange={(next) => {
+                setCountryError(null);
+                const b = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
+                if (next) {
+                  saveLandingQuizSelectedCountry('');
+                  setSelectedCountryCode('');
+                }
+                persistFull({
+                  ...b,
+                  v: 8,
+                  quizVariant: 'landing_no_birth',
+                  includeUnspecifiedApplicantCountries: next,
+                  step4: {
+                    ...b.step4,
+                    countryCode: next ? '' : b.step4.countryCode ?? '',
+                    state: next ? '' : b.step4.state
+                  },
+                  preferredHostCountryCodes: b.preferredHostCountryCodes ?? []
+                });
+              }}
+              progressEyebrow={`Step 1 of ${
+                !selectedCountryCode &&
+                draft.includeUnspecifiedApplicantCountries !== true
+                  ? '…'
+                  : selectedCountryCode === 'US'
+                    ? '7'
+                    : '2'
+              } · Applicant country`}
               error={countryError}
               onChange={(value) => {
                 setSelectedCountryCode(value);
                 setCountryError(null);
+                const b = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
+                persistFull({
+                  ...b,
+                  v: 8,
+                  quizVariant: 'landing_no_birth',
+                  includeUnspecifiedApplicantCountries: false,
+                  step4: {
+                    ...b.step4,
+                    countryCode: value,
+                    state: normalizeCountryCode(value) === 'US' ? b.step4.state : ''
+                  },
+                  preferredHostCountryCodes: b.preferredHostCountryCodes ?? []
+                });
               }}
               onContinue={handleCountryContinue}
             />
@@ -489,7 +624,7 @@ export function GetScholarshipsQuizWizard({
               onChange={(value) =>
                 persistFull({
                   ...draft,
-                  v: 7,
+                  v: 8,
                   quizVariant: 'landing_no_birth',
                   step1: {
                     ...draft.step1,
@@ -497,7 +632,7 @@ export function GetScholarshipsQuizWizard({
                   }
                 })
               }
-              onBack={() => handleBack('country')}
+              onBack={() => setQuizStep('country')}
               onContinue={() => {
                 updateStep1AndAdvance('schoolLevel', draft.step1.schoolLevel, 2);
               }}
@@ -519,7 +654,7 @@ export function GetScholarshipsQuizWizard({
               onChange={(value) =>
                 persistFull({
                   ...draft,
-                  v: 7,
+                  v: 8,
                   quizVariant: 'landing_no_birth',
                   step1: {
                     ...draft.step1,
@@ -549,7 +684,7 @@ export function GetScholarshipsQuizWizard({
               onChange={(value) =>
                 persistFull({
                   ...draft,
-                  v: 7,
+                  v: 8,
                   quizVariant: 'landing_no_birth',
                   step1: {
                     ...draft.step1,
@@ -614,7 +749,9 @@ export function GetScholarshipsQuizWizard({
                 setEmail(value);
                 setEmailError(null);
               }}
-              onBack={() => handleBack(selectedCountryCode === 'US' ? 5 : 'country')}
+              onBack={() =>
+                setQuizStep(selectedCountryCode === 'US' ? 5 : 'country')
+              }
               onSubmit={
                 selectedCountryCode === 'US'
                   ? completeUsQuizSignup

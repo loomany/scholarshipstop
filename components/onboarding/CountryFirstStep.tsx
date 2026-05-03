@@ -28,6 +28,9 @@ type Props = {
   onChange: (value: string) => void;
   onContinue: () => void;
   onBack?: () => void;
+  /** Mutually exclusive with `value`: broad catalog (no explicit applicant-country filter). */
+  includeUnspecifiedApplicantCountries?: boolean;
+  onIncludeUnspecifiedApplicantCountriesChange?: (next: boolean) => void;
 };
 
 export function CountryFirstStep({
@@ -39,12 +42,17 @@ export function CountryFirstStep({
   error = null,
   onChange,
   onContinue,
-  onBack
+  onBack,
+  includeUnspecifiedApplicantCountries = false,
+  onIncludeUnspecifiedApplicantCountriesChange
 }: Props) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onContinue();
   };
+
+  const canContinue =
+    Boolean(value?.trim()) || includeUnspecifiedApplicantCountries === true;
 
   return (
     <div className="w-full space-y-6">
@@ -89,7 +97,7 @@ export function CountryFirstStep({
             options={countryOptions}
             value={value}
             onChange={onChange}
-            disabled={disabled}
+            disabled={disabled || includeUnspecifiedApplicantCountries}
             hasError={Boolean(error)}
             menuClassName="max-h-72"
           />
@@ -98,9 +106,48 @@ export function CountryFirstStep({
           ) : null}
         </div>
 
+        {typeof onIncludeUnspecifiedApplicantCountriesChange === 'function' ? (
+          <div className="space-y-3">
+            <div className="relative flex items-center gap-3 py-1">
+              <div className="h-px flex-1 bg-zinc-200" aria-hidden />
+              <span className="shrink-0 text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">
+                or
+              </span>
+              <div className="h-px flex-1 bg-zinc-200" aria-hidden />
+            </div>
+            <label
+              className={`group flex cursor-pointer items-center justify-start gap-3 rounded-2xl border px-4 py-3.5 shadow-sm transition ${
+                includeUnspecifiedApplicantCountries
+                  ? 'border-[#E8C9B0] bg-[#FFF8F2] ring-1 ring-[#FFD9B3]/90'
+                  : 'border-zinc-200 bg-white ring-1 ring-zinc-100 hover:border-zinc-300 hover:bg-zinc-50/80'
+              } ${disabled ? 'pointer-events-none opacity-50' : ''}`}
+            >
+              <input
+                type="checkbox"
+                checked={includeUnspecifiedApplicantCountries}
+                onChange={() => {
+                  const next = !includeUnspecifiedApplicantCountries;
+                  onIncludeUnspecifiedApplicantCountriesChange(next);
+                }}
+                disabled={disabled}
+                className="h-4 w-4 shrink-0 rounded border-zinc-300 text-[#A45A16] accent-[#A45A16] focus:ring-2 focus:ring-[#FFD9B3] focus:ring-offset-0"
+              />
+              <div className="min-w-0 flex-1 text-left">
+                <span className="block text-sm font-semibold leading-snug text-[#7A3B00]">
+                  Citizenship not specified
+                </span>
+                <span className="mt-1 block text-xs leading-snug text-[#8C5A2B]">
+                  Grants without explicit country eligibility in our database. Local or other
+                  restrictions may still apply—please verify before you apply.
+                </span>
+              </div>
+            </label>
+          </div>
+        ) : null}
+
         <button
           type="submit"
-          disabled={disabled}
+          disabled={disabled || !canContinue}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
           Continue

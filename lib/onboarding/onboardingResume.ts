@@ -11,8 +11,13 @@ const UI_MAX_STEP = 7 as OnboardingStep;
 export function getMaxAllowedOnboardingStep(
   draft: StoredOnboardingDraft
 ): OnboardingStep {
+  const unspecified = draft.includeUnspecifiedApplicantCountries === true;
   const countryCode = draft.step4.countryCode?.trim().toUpperCase() ?? '';
-  if (!countryCode) return 1;
+  if (!countryCode && !unspecified) return 1;
+  if (unspecified) {
+    if (draft.activeStep <= 1) return 1;
+    return UI_MAX_STEP;
+  }
   if (draft.activeStep === 1) return 1;
   if (countryCode !== 'US') return UI_MAX_STEP;
 

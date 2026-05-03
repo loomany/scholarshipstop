@@ -15,6 +15,8 @@ export type UserProfile = {
   /** Stored as `profiles.citizenship_status` (slug). */
   citizenshipStatus: string | null;
   citizenshipStatusLabel: string | null;
+  /** Hub Best: ISO2 destinations for `profiles.preferred_host_country_codes`. */
+  preferredHostCountryCodes?: string[];
   countryCode: string | null;
   stateRegion: string | null;
   city: string | null;

@@ -38,7 +38,10 @@ import {
   isSubscriptionLockedScholarship,
   pickScholarshipLockedTitleBlurPhrase
 } from '@/lib/scholarships/subscriptionLockedCategory';
-import { countryLabelFromCode } from '@/lib/scholarships/countryEligibility/countries';
+import {
+  countryLabelFromCode,
+  dedupeHostCountryCodesForDisplay
+} from '@/lib/scholarships/countryEligibility/countries';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import {
   recordScholarshipDetailFreeNavigation,
@@ -48,6 +51,7 @@ import {
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCatalogChipRow';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
+import { StudyInHostCountriesPopover } from '@/components/scholarships/StudyInHostCountriesPopover';
 
 type ScholarshipCardProps = {
   scholarship: Scholarship;
@@ -101,6 +105,8 @@ type ScholarshipCardBadge = {
   key: string;
   text: string;
   title: string;
+  /** Present when `key === 'grant-location-multi'` — sorted unique ISO2 host codes. */
+  hostCodes?: string[];
 };
 
 function replaceSummaryDollarAwardWithSourceCurrency(
@@ -157,6 +163,21 @@ export default function ScholarshipCard({
           .filter((code) => /^[A-Z]{2}$/.test(code))
       )
     ).sort();
+    const dedupApplicantAgainstHostCountries = Array.from(
+      new Set(
+        (scholarship.hostCountryCodes ?? [])
+          .map((code) => code.trim().toUpperCase())
+          .filter((code) => /^[A-Z]{2}$/.test(code))
+      )
+    ).sort();
+    if (
+      scholarship.internationalFriendlyListing === true &&
+      dedupApplicantAgainstHostCountries.length === 1 &&
+      codes.length === 1 &&
+      dedupApplicantAgainstHostCountries[0] === codes[0]
+    ) {
+      return null;
+    }
     const selectedCodes = Array.from(selectedApplicantCountryCodes)
       .map((code) => code.trim().toUpperCase())
       .filter((code) => /^[A-Z]{2}$/.test(code));
@@ -168,45 +189,50 @@ export default function ScholarshipCard({
     return {
       code: primary,
       extraCount: Math.max(0, codes.length - 1),
-      text: `For ${label}`,
+      text: `Eligible: ${label}`,
       title:
         matchesSelectedCountry
-          ? `Matches your country filter: ${label}`
-          : `For applicants from ${label}`
+          ? `Matches your country filter — eligibility tied to ${label}`
+          : `Eligibility tied to applicants linked to ${label}`
     };
-  }, [scholarship.applicantCountryCodes, selectedApplicantCountryCodes]);
+  }, [
+    scholarship.applicantCountryCodes,
+    scholarship.hostCountryCodes,
+    scholarship.internationalFriendlyListing,
+    selectedApplicantCountryCodes
+  ]);
 
   const grantLocationBadge = useMemo<ScholarshipCardBadge | null>(() => {
-    const hostCodes = Array.from(
-      new Set(
-        (scholarship.hostCountryCodes ?? [])
-          .map((code) => code.trim().toUpperCase())
-          .filter((code) => /^[A-Z]{2}$/.test(code))
-      )
-    ).sort();
+    const hostCodes = dedupeHostCountryCodesForDisplay(
+      (scholarship.hostCountryCodes ?? [])
+        .map((code) => code.trim().toUpperCase())
+        .filter((code) => /^[A-Z]{2}$/.test(code))
+    );
     const hasStateSignal = (scholarship.stateCodes ?? []).some((code) =>
       /^[A-Z]{2}$/i.test(code.trim())
     );
     if (hostCodes.includes('US') || hasStateSignal) {
+      const usLabel = countryLabelFromCode('US');
       return {
         key: 'grant-location-us',
-        text: 'US-based',
-        title: 'This scholarship is based in the United States'
+        text: `Location: ${usLabel}`,
+        title: `Study opportunity in ${usLabel}`
       };
     }
     if (hostCodes.length === 1) {
       const label = countryLabelFromCode(hostCodes[0]!);
       return {
         key: `grant-location-${hostCodes[0]}`,
-        text: `Hosted in ${label}`,
-        title: `This scholarship is hosted in ${label}`
+        text: `Location: ${label}`,
+        title: `Study opportunity in ${label}`
       };
     }
     if (hostCodes.length > 1) {
       return {
         key: 'grant-location-multi',
-        text: `${hostCodes.length} host countries`,
-        title: `This scholarship is hosted in ${hostCodes.length} countries`
+        text: `Location: ${hostCodes.length} countries`,
+        title: `Study opportunities spanning ${hostCodes.length} countries`,
+        hostCodes: [...hostCodes]
       };
     }
     return null;
@@ -215,10 +241,7 @@ export default function ScholarshipCard({
   const grantLocationHubHref = useMemo(() => {
     if (!grantLocationBadge) return null;
     if (grantLocationBadge.key === 'grant-location-multi') return null;
-    if (
-      grantLocationBadge.key === 'grant-location-us' ||
-      grantLocationBadge.text === 'US-based'
-    ) {
+    if (grantLocationBadge.key === 'grant-location-us') {
       return (
         scholarshipHostCountrySeoHref('US') ??
         buildScholarshipTagHubHref({ hostCountryCode: 'US' })
@@ -830,6 +853,15 @@ export default function ScholarshipCard({
                         >
                           <span className="truncate">{grantLocationBadge.text}</span>
                         </Link>
+                      ) : grantLocationBadge.key === 'grant-location-multi' &&
+                        grantLocationBadge.hostCodes &&
+                        grantLocationBadge.hostCodes.length > 1 ? (
+                        <StudyInHostCountriesPopover
+                          hostCodes={grantLocationBadge.hostCodes}
+                          triggerText={grantLocationBadge.text}
+                          title={grantLocationBadge.title}
+                          className={`${locationBadgeClass} ${geoFilterLinkClass} inline-flex w-full min-w-0 max-w-none cursor-pointer transition hover:border-orange-300 hover:bg-orange-50/80 hover:shadow`}
+                        />
                       ) : (
                         <span
                           className={`${locationBadgeClass} w-full min-w-0 max-w-none`}
@@ -959,6 +991,15 @@ export default function ScholarshipCard({
                     >
                       <span className="truncate">{grantLocationBadge.text}</span>
                     </Link>
+                  ) : grantLocationBadge.key === 'grant-location-multi' &&
+                    grantLocationBadge.hostCodes &&
+                    grantLocationBadge.hostCodes.length > 1 ? (
+                    <StudyInHostCountriesPopover
+                      hostCodes={grantLocationBadge.hostCodes}
+                      triggerText={grantLocationBadge.text}
+                      title={grantLocationBadge.title}
+                      className={`${locationBadgeClass} ${geoFilterLinkClass} inline-flex cursor-pointer transition hover:border-orange-300 hover:bg-orange-50/80 hover:shadow`}
+                    />
                   ) : (
                     <span
                       className={locationBadgeClass}

@@ -178,6 +178,7 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
         {/*
           Width boundary for header + main + footer (overflow-x is html/body — avoid
           overflow-x-clip here so sticky navbar is not turned into a nested scroll box).
+          Main uses relative z-10 so overlays (absolute dropdowns) paint above footer.
           Toaster stays outside so position:fixed stays viewport-relative.
         */}
         <div className="w-full min-w-0 max-w-full">
@@ -186,7 +187,7 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
           <Navbar />
           <main
             id="skip"
-            className="min-h-[calc(100dvh-4rem)] w-full min-w-0 md:min-h-[calc(100dvh-5rem)]"
+            className="relative z-10 min-h-[calc(100dvh-4rem)] w-full min-w-0 md:min-h-[calc(100dvh-5rem)]"
           >
             {children}
           </main>
