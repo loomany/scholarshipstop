@@ -86,12 +86,12 @@ function MicrobeOrb() {
 }
 
 /**
- * Keeps FAB above opaque mobile browser toolbars/lens UI: `visualViewport.height` excludes
- * that chrome; env(safe-area-inset-bottom) alone does not.
+ * FAB sits by default tight in the bottom-right viewport corner (safe-area + small gutter).
+ * When `visualViewport` reports overlapping browser chrome, bump insets above that obstruction.
  */
 function measureFabInsets(): { extraBottom: number; extraRight: number } {
   if (typeof window === 'undefined') {
-    return { extraBottom: 104, extraRight: 14 };
+    return { extraBottom: 14, extraRight: 12 };
   }
   const vv = window.visualViewport;
   const overlapBottom =
@@ -103,19 +103,19 @@ function measureFabInsets(): { extraBottom: number; extraRight: number } {
       ? Math.max(0, window.innerWidth - vv.offsetLeft - vv.width)
       : 0;
   const narrow = window.matchMedia('(max-width: 639px)').matches;
-  /** Base lift when browser reports zero overlap (covers many Android/iOS URL bars anyway). */
-  const floorBottom = narrow ? 100 : 40;
-  const floorRight = narrow ? 14 : 22;
+  const gutterB = narrow ? 12 : 16;
+  const gutterR = narrow ? 12 : 18;
+  const chromeThreshold = narrow ? 6 : 4;
 
-  const extraBottom = Math.round(
-    Math.min(
-      narrow ? 188 : 88,
-      Math.max(floorBottom, overlapBottom + (narrow ? 28 : 20))
-    )
-  );
-  const extraRight = Math.round(
-    Math.min(narrow ? 28 : 40, Math.max(floorRight, overlapRight + 14))
-  );
+  const extraBottom =
+    overlapBottom <= chromeThreshold
+      ? gutterB
+      : Math.round(Math.min(narrow ? 132 : 72, overlapBottom + (narrow ? 14 : 12)));
+
+  const extraRight =
+    overlapRight <= chromeThreshold
+      ? gutterR
+      : Math.round(Math.min(narrow ? 36 : 40, overlapRight + 12));
 
   return { extraBottom, extraRight };
 }
@@ -145,8 +145,8 @@ function AiFabFloatingLayer() {
   }, []);
 
   const insetStyle = {
-    bottom: `max(12px, calc(env(safe-area-inset-bottom, 0px) + ${insets.extraBottom}px))`,
-    right: `max(12px, calc(env(safe-area-inset-right, 0px) + ${insets.extraRight}px))`
+    bottom: `max(10px, calc(env(safe-area-inset-bottom, 0px) + ${insets.extraBottom}px))`,
+    right: `max(10px, calc(env(safe-area-inset-right, 0px) + ${insets.extraRight}px))`
   };
 
   /** Under mobile nav overlays (z-[98]+). Above sticky catalog chrome (~z-70–80). */
