@@ -1,5 +1,8 @@
 'use client';
 
+import { useLayoutEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+
 import { getScholarshipTopNavigatorHref } from '@/lib/nav/scholarshipTopNavigator';
 
 /** Fire-and-forget: notifies admins via Telegram (server). Does not block opening GPT. */
@@ -83,35 +86,119 @@ function MicrobeOrb() {
 }
 
 /**
+ * Keeps FAB above opaque mobile browser toolbars/lens UI: `visualViewport.height` excludes
+ * that chrome; env(safe-area-inset-bottom) alone does not.
+ */
+function measureFabInsets(): { extraBottom: number; extraRight: number } {
+  if (typeof window === 'undefined') {
+    return { extraBottom: 104, extraRight: 14 };
+  }
+  const vv = window.visualViewport;
+  const overlapBottom =
+    vv != null
+      ? Math.max(0, window.innerHeight - vv.offsetTop - vv.height)
+      : 0;
+  const overlapRight =
+    vv != null
+      ? Math.max(0, window.innerWidth - vv.offsetLeft - vv.width)
+      : 0;
+  const narrow = window.matchMedia('(max-width: 639px)').matches;
+  /** Base lift when browser reports zero overlap (covers many Android/iOS URL bars anyway). */
+  const floorBottom = narrow ? 100 : 40;
+  const floorRight = narrow ? 14 : 22;
+
+  const extraBottom = Math.round(
+    Math.min(
+      narrow ? 188 : 88,
+      Math.max(floorBottom, overlapBottom + (narrow ? 28 : 20))
+    )
+  );
+  const extraRight = Math.round(
+    Math.min(narrow ? 28 : 40, Math.max(floorRight, overlapRight + 14))
+  );
+
+  return { extraBottom, extraRight };
+}
+
+function AiFabFloatingLayer() {
+  const href = getScholarshipTopNavigatorHref();
+  const [insets, setInsets] = useState(() => measureFabInsets());
+
+  useLayoutEffect(() => {
+    const tick = () => setInsets(measureFabInsets());
+    tick();
+
+    const vv = window.visualViewport;
+    vv?.addEventListener('resize', tick);
+    vv?.addEventListener('scroll', tick);
+    window.addEventListener('resize', tick);
+
+    /** Some Android browsers repaint chrome after fullscreen paint. */
+    const t = window.requestAnimationFrame(tick);
+
+    return () => {
+      window.cancelAnimationFrame(t);
+      vv?.removeEventListener('resize', tick);
+      vv?.removeEventListener('scroll', tick);
+      window.removeEventListener('resize', tick);
+    };
+  }, []);
+
+  const insetStyle = {
+    bottom: `max(12px, calc(env(safe-area-inset-bottom, 0px) + ${insets.extraBottom}px))`,
+    right: `max(12px, calc(env(safe-area-inset-right, 0px) + ${insets.extraRight}px))`
+  };
+
+  /** Under mobile nav overlays (z-[98]+). Above sticky catalog chrome (~z-70–80). */
+  const shellClass =
+    'pointer-events-none fixed z-[94] h-12 w-12 sm:h-[3.375rem] sm:w-[3.375rem] lg:h-14 lg:w-14';
+
+  return (
+    <aside className={`${shellClass} block`} style={insetStyle}>
+      <div className="pointer-events-auto h-full w-full">
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            notifyAiNavigatorTelemetry();
+          }}
+          onAuxClick={(event) => {
+            if (event.button === 1) notifyAiNavigatorTelemetry();
+          }}
+          className="relative isolate block size-full cursor-pointer rounded-full outline-none transition-transform duration-150 active:scale-[0.94] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          style={{ WebkitTapHighlightColor: 'transparent' }}
+          aria-label="ScholarshipTop Navigator AI assistant — opens in a new tab"
+        >
+          <MicrobeOrb />
+        </a>
+      </div>
+    </aside>
+  );
+}
+
+/**
  * Site-wide AI launcher (`app/layout.tsx`): opens ScholarshipTop Navigator GPT in a new tab,
  * pings POST `/api/telemetry/ai-navigator-click` so admins can receive a Telegram ping (traffic
  * category prefs). Disabled with AI_NAVIGATOR_CLICK_TELEGRAM_NOTIFY=0.
+ *
+ * Mounted through a body portal so `position:fixed` stays viewport-relative and is not clipped
+ * by stacking / overflow quirks from layout wrappers.
  */
 export default function HomeAiNavigatorWidget() {
-  const href = getScholarshipTopNavigatorHref();
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
-  /** Anchored bottom-right; extra bottom inset on phones clears browser chrome (still under mobile nav overlays z-[98]+). */
-  const shellClass =
-    'fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom,0px)+3rem))] right-[max(1rem,calc(env(safe-area-inset-right,0px)+0.5rem))] z-[70] h-12 w-12 sm:bottom-8 sm:right-6 sm:h-[3.375rem] sm:w-[3.375rem] lg:bottom-8 lg:right-8 lg:h-14 lg:w-14';
+  useLayoutEffect(() => {
+    const mount = document.createElement('div');
+    mount.dataset.stAiFabPortal = '';
+    document.body.appendChild(mount);
+    setContainer(mount);
+    return () => {
+      setContainer(null);
+      mount.remove();
+    };
+  }, []);
 
-  return (
-    <aside className={`${shellClass} block`}>
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => {
-          notifyAiNavigatorTelemetry();
-        }}
-        onAuxClick={(event) => {
-          if (event.button === 1) notifyAiNavigatorTelemetry();
-        }}
-        className="relative isolate block size-full cursor-pointer rounded-full outline-none transition-transform duration-150 active:scale-[0.94] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        style={{ WebkitTapHighlightColor: 'transparent' }}
-        aria-label="ScholarshipTop Navigator AI assistant — opens in a new tab"
-      >
-        <MicrobeOrb />
-      </a>
-    </aside>
-  );
+  if (!container) return null;
+  return createPortal(<AiFabFloatingLayer />, container);
 }
