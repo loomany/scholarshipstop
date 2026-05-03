@@ -754,7 +754,7 @@ function ScholarshipsListHeader({
                     <div
                       role="dialog"
                       aria-label="Filter by citizenship or home country"
-                      className="absolute left-1/2 top-[calc(100%+0.5rem)] z-[80] flex w-[min(22rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 sm:left-0 sm:translate-x-0"
+                      className="absolute top-[calc(100%+0.5rem)] z-[80] flex max-h-[min(32rem,min(85dvh,calc(100svh-7rem)))] w-[min(22rem,calc(100vw-1rem))] max-w-[calc(100vw-1rem)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 left-1/2 -translate-x-1/2 max-sm:left-0 max-sm:right-auto max-sm:translate-x-0 sm:left-0 sm:translate-x-0"
                     >
                       <div className="border-b border-zinc-100 px-4 py-3">
                         <h2 className="text-base font-semibold text-zinc-900">
@@ -775,7 +775,10 @@ function ScholarshipsListHeader({
                           className={`w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
                         />
                       </div>
-                      <ul className="max-h-72 overflow-y-auto overscroll-contain px-2 py-1" role="list">
+                      <ul
+                        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-1 sm:max-h-72"
+                        role="list"
+                      >
                         {countryCountsLoading ? (
                           <li className="space-y-2 px-3 py-3" aria-live="polite">
                             <p className="text-sm font-medium text-zinc-600">
@@ -886,10 +889,10 @@ function ScholarshipsListHeader({
                           </li>
                         )}
                       </ul>
-                      <div className="flex items-center justify-between gap-3 border-t border-zinc-100 px-4 py-3">
+                      <div className="flex shrink-0 flex-col gap-3 border-t border-zinc-100 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] sm:flex-row sm:items-center sm:justify-between">
                         <button
                           type="button"
-                          className="text-sm font-medium text-zinc-500 transition hover:text-zinc-800"
+                          className="self-start text-sm font-medium text-zinc-500 transition hover:text-zinc-800 sm:self-auto"
                           onClick={() => {
                             setDraftCountryCodes(new Set());
                             setDraftIncludeUnspecifiedCountry(false);
@@ -899,7 +902,7 @@ function ScholarshipsListHeader({
                         </button>
                         <button
                           type="button"
-                          className={`${scholarshipCategoriesApplyButtonClass} inline-flex items-center justify-center gap-1.5`}
+                          className={`${scholarshipCategoriesApplyButtonClass} inline-flex w-full min-w-0 items-center justify-center gap-1.5 sm:w-auto`}
                           onClick={() => {
                             onApplyCountries?.(
                               new Set(draftCountryCodes),
@@ -961,7 +964,7 @@ function ScholarshipsListHeader({
                       <div
                         role="dialog"
                         aria-label="Filter by program location"
-                        className="absolute left-1/2 top-[calc(100%+0.5rem)] z-[80] flex w-[min(22rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 sm:left-0 sm:translate-x-0"
+                        className="absolute top-[calc(100%+0.5rem)] z-[80] flex max-h-[min(32rem,min(85dvh,calc(100svh-7rem)))] w-[min(22rem,calc(100vw-1rem))] max-w-[calc(100vw-1rem)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 left-1/2 -translate-x-1/2 max-sm:left-auto max-sm:right-0 max-sm:translate-x-0 sm:left-0 sm:translate-x-0"
                       >
                         <div className="border-b border-zinc-100 px-4 py-3">
                           <h2 className="text-base font-semibold text-zinc-900">
@@ -981,7 +984,7 @@ function ScholarshipsListHeader({
                           />
                         </div>
                         <ul
-                          className="max-h-72 overflow-y-auto overscroll-contain px-2 py-1"
+                          className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-1 sm:max-h-72"
                           role="list"
                         >
                           {hostCountryCountsLoading ? (
@@ -1047,7 +1050,7 @@ function ScholarshipsListHeader({
                             </li>
                           )}
                         </ul>
-                        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 px-4 py-3">
+                        <div className="flex shrink-0 flex-col gap-3 border-t border-zinc-100 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                             <button
                               type="button"
@@ -1079,7 +1082,7 @@ function ScholarshipsListHeader({
                           </div>
                           <button
                             type="button"
-                            className={`${scholarshipCategoriesApplyButtonClass} inline-flex shrink-0 items-center justify-center gap-1.5`}
+                            className={`${scholarshipCategoriesApplyButtonClass} inline-flex w-full min-w-0 shrink-0 items-center justify-center gap-1.5 sm:w-auto`}
                             onClick={() => {
                               onApplyHostCountries?.(new Set(draftHostCountryCodes));
                               setDestinationOpen(false);
