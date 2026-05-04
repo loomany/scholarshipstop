@@ -395,7 +395,7 @@ export default function CognitiveAssessmentEngineClient() {
 
   return (
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] text-slate-950">
-      <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-5 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 pb-5 pt-20 sm:px-6 sm:pt-24 lg:px-8">
         <ProgressHeader
           phase={progressPhase}
           progress={
