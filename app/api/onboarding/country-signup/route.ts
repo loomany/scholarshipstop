@@ -125,7 +125,6 @@ function buildProfilesUpsert(
   const row: Database['public']['Tables']['profiles']['Insert'] = {
     id: userId,
     country_code: countryCode ?? null,
-    email_weekly_free_digest: true,
     email_notify_best_matches: true,
     email_notify_saved_filters: true,
     email_notify_easy_apply: true,

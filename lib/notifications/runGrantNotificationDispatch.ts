@@ -24,13 +24,15 @@ import { userHasSavedScholarship } from '@/lib/account/userSavedScholarships';
 import { grantNotifyTelegramCardCategoryLabel } from '@/lib/notifications/grantNotificationPrefs';
 import { createGrantDigestToken } from '@/lib/notifications/grantDigestToken';
 import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
+import { preferredHostCountryCodesFromProfileJson } from '@/lib/scholarships/profilePreferredHostCountries';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { sendScholarshipTelegramCardToChat } from '@/lib/telegram/scholarshipTelegramCard';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
-type ChannelId = 'best' | 'saved_filters' | 'easy_apply' | 'hot_deadlines';
+type AlertChannelId = 'best' | 'saved_filters' | 'easy_apply' | 'hot_deadlines';
+type EmailSectionId = AlertChannelId | 'recommended';
 
 const LOOKBACK_HOURS = Number(
   process.env.GRANT_NOTIFICATION_LOOKBACK_HOURS?.trim() || '24'
@@ -47,10 +49,40 @@ const GRANT_DIGEST_EMAIL_MAX_ITEMS = Math.max(
   1,
   Number(process.env.GRANT_DIGEST_EMAIL_MAX_ITEMS?.trim() || '4')
 );
+const GRANT_DIGEST_BEST_MAX_ITEMS = Math.max(
+  1,
+  Number(process.env.GRANT_DIGEST_BEST_MAX_ITEMS?.trim() || '2')
+);
+const GRANT_DIGEST_MIN_TOTAL_ITEMS = Math.max(
+  1,
+  Number(process.env.GRANT_DIGEST_MIN_TOTAL_ITEMS?.trim() || '3')
+);
+const GRANT_DIGEST_FALLBACK_LOOKBACK_DAYS = Math.max(
+  1,
+  Number(process.env.GRANT_DIGEST_FALLBACK_LOOKBACK_DAYS?.trim() || '30')
+);
+const GRANT_DIGEST_FALLBACK_MAX_ITEMS = Math.max(
+  1,
+  Number(process.env.GRANT_DIGEST_FALLBACK_MAX_ITEMS?.trim() || '2')
+);
+const GRANT_DIGEST_FALLBACK_POOL_SIZE = Math.max(
+  20,
+  Number(process.env.GRANT_DIGEST_FALLBACK_POOL_SIZE?.trim() || '120')
+);
+const GRANT_DIGEST_FALLBACK_MIN_MATCH_PERCENT = Math.max(
+  1,
+  Number(process.env.GRANT_DIGEST_FALLBACK_MIN_MATCH_PERCENT?.trim() || '55')
+);
 
-const EMAIL_DIGEST_MIN_MATCH_PERCENT = 50;
+const EMAIL_CHANNEL_LABELS: Record<EmailSectionId, string> = {
+  best: 'Best recommendations',
+  saved_filters: 'Saved filters',
+  easy_apply: 'Easy apply',
+  hot_deadlines: 'Hot deadlines',
+  recommended: 'Recommended for you'
+};
 
-function createChannelCounts(): Record<ChannelId, number> {
+function createChannelCounts(): Record<AlertChannelId, number> {
   return {
     best: 0,
     saved_filters: 0,
@@ -59,7 +91,21 @@ function createChannelCounts(): Record<ChannelId, number> {
   };
 }
 
-function incrementChannelCount(counts: Record<ChannelId, number>, channel: ChannelId): void {
+function createEmailSectionCounts(): Record<EmailSectionId, number> {
+  return {
+    ...createChannelCounts(),
+    recommended: 0
+  };
+}
+
+function incrementChannelCount(counts: Record<AlertChannelId, number>, channel: AlertChannelId): void {
+  counts[channel] += 1;
+}
+
+function incrementEmailSectionCount(
+  counts: Record<EmailSectionId, number>,
+  channel: EmailSectionId
+): void {
   counts[channel] += 1;
 }
 
@@ -67,7 +113,7 @@ function logGrantNotify(event: string, payload: Record<string, unknown>): void {
   console.log(`[grant-notify] ${event}`, JSON.stringify(payload));
 }
 
-function channelProfileColumn(c: ChannelId): keyof ProfileRow {
+function channelProfileColumn(c: AlertChannelId): keyof ProfileRow {
   switch (c) {
     case 'best':
       return 'email_notify_best_matches';
@@ -80,7 +126,7 @@ function channelProfileColumn(c: ChannelId): keyof ProfileRow {
   }
 }
 
-function telegramColumn(c: ChannelId): keyof Database['public']['Tables']['telegram_users']['Row'] {
+function telegramColumn(c: AlertChannelId): keyof Database['public']['Tables']['telegram_users']['Row'] {
   switch (c) {
     case 'best':
       return 'notify_best_matches';
@@ -97,7 +143,7 @@ async function alreadySent(
   admin: SupabaseClient<Database>,
   userId: string,
   scholarshipId: string,
-  channel: ChannelId,
+  channel: AlertChannelId,
   medium: 'email' | 'telegram'
 ): Promise<boolean> {
   const { data } = await admin
@@ -115,7 +161,7 @@ async function recordDelivery(
   admin: SupabaseClient<Database>,
   userId: string,
   scholarshipId: string,
-  channel: ChannelId,
+  channel: AlertChannelId,
   medium: 'email' | 'telegram'
 ): Promise<void> {
   const { error } = await admin.from('grant_notification_deliveries').insert({
@@ -145,13 +191,85 @@ async function userHasRecentEmailDelivery(
     console.error('[grant-notify] recent-email-check', userId, error.message);
     return false;
   }
-  return Array.isArray(data) && data.length > 0;
+  if (Array.isArray(data) && data.length > 0) return true;
+
+  const { data: digestData, error: digestError } = await admin
+    .from('grant_email_digest_items')
+    .select('id')
+    .eq('user_id', userId)
+    .gte('created_at', sinceIso)
+    .limit(1);
+  if (digestError) {
+    console.error('[grant-notify] recent-digest-item-check', userId, digestError.message);
+    return false;
+  }
+  return Array.isArray(digestData) && digestData.length > 0;
+}
+
+async function recordDigestItemHistory(
+  admin: SupabaseClient<Database>,
+  userId: string,
+  lines: { scholarshipId: string; channel: EmailSectionId }[]
+): Promise<void> {
+  if (lines.length === 0) return;
+  const { error } = await admin.from('grant_email_digest_items').insert(
+    lines.map((line) => ({
+      user_id: userId,
+      scholarship_id: line.scholarshipId,
+      section: line.channel,
+      digest_kind: line.channel === 'recommended' ? 'fallback' : 'direct'
+    }))
+  );
+  if (error) {
+    console.error('[grant-notify] digest item history insert', error.message);
+  }
 }
 
 function scoreForEmailOrdering(s: Scholarship): number {
   const match = typeof s.profileMatchPercent === 'number' ? s.profileMatchPercent : 0;
   const updatedAtMs = s.updatedAt ? Date.parse(s.updatedAt) : 0;
   return match * 100_000_000 + (Number.isFinite(updatedAtMs) ? updatedAtMs : 0);
+}
+
+function normalizedProfileCountryCode(profile: ProfileRow): string | null {
+  const code = profile.country_code?.trim().toUpperCase();
+  return code && /^[A-Z]{2}$/.test(code) ? code : null;
+}
+
+function hasCountryCode(codes: string[] | undefined, code: string): boolean {
+  return Boolean(codes?.some((c) => c.trim().toUpperCase() === code));
+}
+
+function normalizedPreferredHostCountryCodes(profile: ProfileRow): string[] {
+  return preferredHostCountryCodesFromProfileJson(profile.preferred_host_country_codes);
+}
+
+function scholarshipHasPreferredHost(s: Scholarship, preferredHosts: string[]): boolean {
+  if (preferredHosts.length === 0) return true;
+  return Boolean(
+    s.hostCountryCodes?.some((code) => preferredHosts.includes(code.trim().toUpperCase()))
+  );
+}
+
+function hasStudyAbroadFit(s: Scholarship, profile: ProfileRow): boolean {
+  const applicantCountry = normalizedProfileCountryCode(profile);
+  if (!applicantCountry) return false;
+  if (!hasCountryCode(s.applicantCountryCodes, applicantCountry)) return false;
+  const preferredHosts = normalizedPreferredHostCountryCodes(profile);
+  return Boolean(
+    s.hostCountryCodes?.some((code) => {
+      const normalized = code.trim().toUpperCase();
+      if (!/^[A-Z]{2}$/.test(normalized) || normalized === applicantCountry) return false;
+      return preferredHosts.length === 0 || preferredHosts.includes(normalized);
+    })
+  );
+}
+
+function profileIntentMatchesScholarship(s: Scholarship, profile: ProfileRow): boolean {
+  const applicantCountry = normalizedProfileCountryCode(profile);
+  if (!applicantCountry) return false;
+  if (!hasCountryCode(s.applicantCountryCodes, applicantCountry)) return false;
+  return scholarshipHasPreferredHost(s, normalizedPreferredHostCountryCodes(profile));
 }
 
 export async function profileMatchesBest(
@@ -184,7 +302,7 @@ export async function profileMatchesBest(
   );
 }
 
-async function profileMatchesSavedFilters(
+export async function profileMatchesSavedFilters(
   admin: SupabaseClient<Database>,
   profile: ProfileRow,
   bounds: Awaited<ReturnType<typeof fetchGlobalFilterBounds>>,
@@ -315,6 +433,20 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   const rows = (scholarshipRows ?? []) as unknown as ScholarshipRow[];
   const scholarships = rows.map((r) => mapScholarshipRow(r));
 
+  const { data: fallbackScholarshipRows, error: fallbackScholarshipErr } = await admin
+    .from('scholarships')
+    .select('*')
+    .eq('is_active', true)
+    .order('ranking_score', { ascending: false, nullsFirst: false })
+    .order('updated_at', { ascending: false })
+    .limit(GRANT_DIGEST_FALLBACK_POOL_SIZE);
+  if (fallbackScholarshipErr) {
+    console.error('[grant-notify] fallback scholarship load', fallbackScholarshipErr.message);
+  }
+  const fallbackScholarships = ((fallbackScholarshipRows ?? []) as unknown as ScholarshipRow[]).map((r) =>
+    mapScholarshipRow(r)
+  );
+
   const { data: tgRows, error: tgErr } = await admin
     .from('telegram_users')
     .select('*')
@@ -415,19 +547,65 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   const emailCandidatesByChannel = createChannelCounts();
   const telegramCandidatesByChannel = createChannelCounts();
 
-  const channels: ChannelId[] = ['best', 'saved_filters', 'easy_apply', 'hot_deadlines'];
+  const channels: AlertChannelId[] = ['best', 'saved_filters', 'easy_apply', 'hot_deadlines'];
+  const emailSectionOrder: EmailSectionId[] = [
+    'best',
+    'recommended',
+    'saved_filters',
+    'easy_apply',
+    'hot_deadlines'
+  ];
   const savedGrantByUserScholarship = new Map<string, boolean>();
 
   type PendingEmailLine = {
     scholarshipId: string;
     scholarship: Scholarship;
-    channel: ChannelId;
+    channel: EmailSectionId;
     firstName: string | null;
   };
   const pendingEmailByUser = new Map<string, PendingEmailLine[]>();
   const scoredScholarshipCache = new Map<string, Map<string, Scholarship>>();
+  const seenEmailScholarshipIdsByUser = new Map<string, Set<string>>();
   const publicOrigin =
     process.env.NEXT_PUBLIC_SITE_URL?.trim()?.replace(/\/+$/, '') || 'https://scholarshiptop.com';
+
+  async function getSeenEmailScholarshipIds(userId: string): Promise<Set<string>> {
+    const cached = seenEmailScholarshipIdsByUser.get(userId);
+    if (cached) return cached;
+
+    const sinceIso = new Date(
+      Date.now() - GRANT_DIGEST_FALLBACK_LOOKBACK_DAYS * 24 * 60 * 60 * 1000
+    ).toISOString();
+    const seen = new Set<string>();
+
+    const { data: deliveryRows, error: deliveryErr } = await admin
+      .from('grant_notification_deliveries')
+      .select('scholarship_id')
+      .eq('user_id', userId)
+      .eq('medium', 'email')
+      .gte('created_at', sinceIso);
+    if (deliveryErr) {
+      console.error('[grant-notify] seen delivery history', userId, deliveryErr.message);
+    }
+    for (const row of deliveryRows ?? []) {
+      if (row.scholarship_id) seen.add(row.scholarship_id);
+    }
+
+    const { data: digestRows, error: digestErr } = await admin
+      .from('grant_email_digest_items')
+      .select('scholarship_id')
+      .eq('user_id', userId)
+      .gte('created_at', sinceIso);
+    if (digestErr) {
+      console.error('[grant-notify] seen digest item history', userId, digestErr.message);
+    }
+    for (const row of digestRows ?? []) {
+      if (row.scholarship_id) seen.add(row.scholarship_id);
+    }
+
+    seenEmailScholarshipIdsByUser.set(userId, seen);
+    return seen;
+  }
 
   function getScoredScholarshipForUser(
     profile: ProfileRow,
@@ -454,13 +632,20 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       maxProfiles: MAX_PROFILES,
       maxOps: MAX_OPS,
       emailCooldownHours: EMAIL_COOLDOWN_HOURS,
-      digestMaxItems: GRANT_DIGEST_EMAIL_MAX_ITEMS
+      digestMaxItems: GRANT_DIGEST_EMAIL_MAX_ITEMS,
+      digestBestMaxItems: GRANT_DIGEST_BEST_MAX_ITEMS,
+      digestMinTotalItems: GRANT_DIGEST_MIN_TOTAL_ITEMS,
+      fallbackLookbackDays: GRANT_DIGEST_FALLBACK_LOOKBACK_DAYS,
+      fallbackMaxItems: GRANT_DIGEST_FALLBACK_MAX_ITEMS,
+      fallbackPoolSize: GRANT_DIGEST_FALLBACK_POOL_SIZE,
+      fallbackMinMatchPercent: GRANT_DIGEST_FALLBACK_MIN_MATCH_PERCENT
     })
   );
   console.log(
     '[grant-notify] loaded',
     JSON.stringify({
       scholarships: scholarships.length,
+      fallbackScholarships: fallbackScholarships.length,
       profiles: profiles.length,
       telegramUsers: telegramByUser.size
     })
@@ -543,7 +728,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
           } else if (ch === 'saved_filters') {
             match = await profileMatchesSavedFilters(admin, profile, bounds, sid);
           } else {
-            match = true;
+            match = profileIntentMatchesScholarship(s, profile);
           }
         } catch (e) {
           errors += 1;
@@ -658,28 +843,36 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       Boolean(profile.email_notify_easy_apply) ||
       Boolean(profile.email_notify_hot_deadlines);
     if (!hasAnyEmailChannel) continue;
-    const existing = pendingEmailByUser.get(uid);
-    if (existing && existing.length > 0) continue;
+
+    const existing = pendingEmailByUser.get(uid) ?? [];
+    const existingRecommendedCount = existing.filter((line) => line.channel === 'recommended').length;
+
+    const seenScholarshipIds = await getSeenEmailScholarshipIds(uid);
+    const existingScholarshipIds = new Set(existing.map((line) => line.scholarshipId));
+    const fallbackTarget = Math.max(0, GRANT_DIGEST_FALLBACK_MAX_ITEMS - existingRecommendedCount);
+    if (fallbackTarget <= 0) continue;
 
     const fallbackLines: PendingEmailLine[] = applyProfileMatchPercentToScholarships(
-      scholarships,
+      fallbackScholarships,
       profile
     )
       .filter((s) => {
+        if (seenScholarshipIds.has(s.id) || existingScholarshipIds.has(s.id)) return false;
+        if (!hasStudyAbroadFit(s, profile)) return false;
         const p = typeof s.profileMatchPercent === 'number' ? s.profileMatchPercent : 0;
-        return p >= EMAIL_DIGEST_MIN_MATCH_PERCENT;
+        return p >= GRANT_DIGEST_FALLBACK_MIN_MATCH_PERCENT;
       })
       .sort((a, b) => scoreForEmailOrdering(b) - scoreForEmailOrdering(a))
-      .slice(0, Math.max(12, GRANT_DIGEST_EMAIL_MAX_ITEMS))
+      .slice(0, fallbackTarget)
       .map((s) => ({
         scholarshipId: s.id,
         scholarship: s,
-        channel: 'best' as const,
+        channel: 'recommended' as const,
         firstName: profile.first_name ?? null
       }));
 
     if (fallbackLines.length > 0) {
-      pendingEmailByUser.set(uid, fallbackLines);
+      pendingEmailByUser.set(uid, [...existing, ...fallbackLines]);
       fallbackUsers += 1;
     }
   }
@@ -702,16 +895,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       continue;
     }
 
-    const historySinceIso = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    const { data: recentHistoryRows } = await admin
-      .from('grant_notification_deliveries')
-      .select('scholarship_id')
-      .eq('user_id', uid)
-      .eq('medium', 'email')
-      .gte('created_at', historySinceIso);
-    const seenScholarshipIds = new Set(
-      (recentHistoryRows ?? []).map((row) => row.scholarship_id)
-    );
+    const seenScholarshipIds = await getSeenEmailScholarshipIds(uid);
 
     const byScholarship = new Map<string, PendingEmailLine>();
     for (const line of lines) {
@@ -725,34 +909,50 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     const fresh = uniqueLines
       .filter((line) => !seenScholarshipIds.has(line.scholarshipId))
       .sort((a, b) => scoreForEmailOrdering(b.scholarship) - scoreForEmailOrdering(a.scholarship));
-    const tail = uniqueLines
-      .filter((line) => seenScholarshipIds.has(line.scholarshipId))
-      .sort((a, b) => scoreForEmailOrdering(b.scholarship) - scoreForEmailOrdering(a.scholarship));
-
-    const selectedLines = [...fresh.slice(0, GRANT_DIGEST_EMAIL_MAX_ITEMS)];
-    if (selectedLines.length < GRANT_DIGEST_EMAIL_MAX_ITEMS) {
-      selectedLines.push(...tail.slice(0, GRANT_DIGEST_EMAIL_MAX_ITEMS - selectedLines.length));
+    const rankedLines = fresh;
+    const selectedLines: PendingEmailLine[] = [];
+    const selectedByChannel = createEmailSectionCounts();
+    for (const line of rankedLines) {
+      const maxItems =
+        line.channel === 'recommended'
+          ? GRANT_DIGEST_FALLBACK_MAX_ITEMS
+          : line.channel === 'best'
+            ? GRANT_DIGEST_BEST_MAX_ITEMS
+            : GRANT_DIGEST_EMAIL_MAX_ITEMS;
+      if (selectedByChannel[line.channel] >= maxItems) continue;
+      selectedLines.push(line);
+      incrementEmailSectionCount(selectedByChannel, line.channel);
     }
     if (selectedLines.length === 0) continue;
 
-    freshSelected += Math.min(fresh.length, GRANT_DIGEST_EMAIL_MAX_ITEMS);
-    tailSelected += Math.max(0, selectedLines.length - Math.min(fresh.length, GRANT_DIGEST_EMAIL_MAX_ITEMS));
+    freshSelected += selectedLines.filter((line) => !seenScholarshipIds.has(line.scholarshipId)).length;
 
-    const rankedIds = [...fresh, ...tail].map((line) => line.scholarshipId);
+    const rankedIds = rankedLines.map((line) => line.scholarshipId);
     const token = createGrantDigestToken(rankedIds);
     const digestViewAllUrl = token
       ? `${publicOrigin}/scholarships/email-digest/${encodeURIComponent(token)}`
       : `${publicOrigin}/scholarships?tab=best-recommendation&scope=catalog&sort=best_recommendation`;
 
-    const categories: GrantDigestCategory[] = [
-      {
-        id: 'best',
-        label: 'Best recommendation',
-        totalCount: rankedIds.length,
+    const rankedCountByChannel = createEmailSectionCounts();
+    const selectedLinesByChannel = new Map<EmailSectionId, PendingEmailLine[]>();
+    for (const line of rankedLines) {
+      incrementEmailSectionCount(rankedCountByChannel, line.channel);
+    }
+    for (const line of selectedLines) {
+      const group = selectedLinesByChannel.get(line.channel) ?? [];
+      group.push(line);
+      selectedLinesByChannel.set(line.channel, group);
+    }
+
+    const categories: GrantDigestCategory[] = emailSectionOrder
+      .map((channel) => ({
+        id: channel,
+        label: EMAIL_CHANNEL_LABELS[channel],
+        totalCount: rankedCountByChannel[channel],
         viewAllUrl: digestViewAllUrl,
-        items: selectedLines.map((line) => line.scholarship)
-      }
-    ];
+        items: (selectedLinesByChannel.get(channel) ?? []).map((line) => line.scholarship)
+      }))
+      .filter((category) => category.totalCount > 0 && category.items.length > 0);
 
     emailDigestAttempts += 1;
     logGrantNotify('digest-send-start', {
@@ -761,7 +961,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       uniqueLines: uniqueLines.length,
       selectedLines: selectedLines.length,
       fresh: fresh.length,
-      tail: tail.length,
+      tail: 0,
       rankedIds: rankedIds.length
     });
     const r = await sendGrantDigestBatchEmail({
@@ -784,9 +984,12 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       );
     } else if (r.skipped !== 'unsubscribed') {
       for (const line of selectedLines) {
-        await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
+        if (line.channel !== 'recommended') {
+          await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
+        }
         emailSent += 1;
       }
+      await recordDigestItemHistory(admin, uid, selectedLines);
       emailDigestSentUsers += 1;
       logGrantNotify('digest-send-ok', {
         userId: uid,

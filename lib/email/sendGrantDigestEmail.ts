@@ -1,5 +1,8 @@
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
-import { formatScholarshipAwardDisplay, scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import {
+  formatScholarshipAwardDisplay,
+  scholarshipPublicPath
+} from '@/app/scholarships/scholarshipsData';
 import {
   buildMarketingUnsubscribeListHeaderUrl,
   buildMarketingUnsubscribePageUrl
@@ -8,6 +11,10 @@ import { postResend } from '@/lib/email/postResend';
 import { resolveResendFrom } from '@/lib/email/resendEnvelope';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
+import {
+  countryLabelFromCode,
+  dedupeHostCountryCodesForDisplay
+} from '@/lib/scholarships/countryEligibility/countries';
 
 const EMAIL_SITE_ORIGIN_FALLBACK = 'https://scholarshiptop.com';
 
@@ -33,7 +40,7 @@ export const GRANT_DIGEST_DEMO_CHANNEL_LABELS = [
 ] as const;
 
 export type GrantDigestCategory = {
-  id: 'best' | 'easy_apply' | 'hot_deadlines' | 'saved_filters';
+  id: 'best' | 'easy_apply' | 'hot_deadlines' | 'saved_filters' | 'recommended';
   label: string;
   totalCount: number;
   viewAllUrl: string;
@@ -46,65 +53,86 @@ function formatDeadlineLabel(raw: string | null | undefined): string {
   return text;
 }
 
+function truncateBadge(text: string, max = 24): string {
+  const t = text.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  return `${t.slice(0, Math.max(0, max - 1)).trimEnd()}…`;
+}
+
+function firstDisplayCountry(codes: string[] | undefined): string | null {
+  const code = codes?.find((c) => /^[A-Z]{2}$/i.test(c.trim()));
+  return code ? countryLabelFromCode(code) : null;
+}
+
+function buildDigestBadgeHtml(label: string, value: string): string {
+  return `<td style="padding:0 6px 6px 0;">
+    <span style="display:inline-block;padding:5px 9px;border-radius:999px;border:1px solid #fed7aa;background:#fff7ed;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.2;font-weight:800;color:#9a3412;white-space:nowrap;">
+      ${escapeHtml(label)}: ${escapeHtml(truncateBadge(value))}
+    </span>
+  </td>`;
+}
+
+function buildScholarshipBadgesHtml(s: Scholarship, matchPercent: number | null): string {
+  const badges: string[] = [];
+  const eligible = firstDisplayCountry(s.applicantCountryCodes);
+  if (eligible) badges.push(buildDigestBadgeHtml('Eligible', eligible));
+
+  const hostCodes = dedupeHostCountryCodesForDisplay(s.hostCountryCodes ?? []);
+  const host = firstDisplayCountry(hostCodes);
+  if (host && host !== eligible) badges.push(buildDigestBadgeHtml('Study in', host));
+  if (matchPercent != null) badges.push(buildDigestBadgeHtml('Match', `${matchPercent}%`));
+
+  if (badges.length === 0) return '';
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 0;">
+    <tr>${badges.slice(0, 3).join('')}</tr>
+  </table>`;
+}
+
 function buildGrantListRowHtml(
   s: Scholarship,
-  origin: string,
-  categoryId: GrantDigestCategory['id']
+  href: string
 ): string {
-  const path = scholarshipPublicPath(s);
-  const href = `${origin.replace(/\/+$/, '')}${path}`;
   const title = escapeHtml(s.title?.trim() || 'Scholarship');
   const amountRaw = s.awardAmount ?? s.amount;
   const amount = escapeHtml(
     amountRaw?.trim() ? formatScholarshipAwardDisplay(amountRaw) : 'Amount varies'
   );
-  const deadline =
-    categoryId === 'hot_deadlines'
-      ? `<span style="display:block;margin-top:4px;font-size:12px;line-height:1.4;color:#a7f3d0;">Deadline: ${escapeHtml(formatDeadlineLabel(s.deadline))}</span>`
-      : '';
   const matchPercentRaw = s.profileMatchPercent;
   const matchPercent =
     typeof matchPercentRaw === 'number' && Number.isFinite(matchPercentRaw)
       ? Math.max(0, Math.min(100, Math.round(matchPercentRaw)))
       : null;
-  const matchLabel =
-    matchPercent != null
-      ? `<span style="display:block;margin-top:4px;font-size:12px;line-height:1.35;color:#9ca3af;">${escapeHtml(String(matchPercent))}% match</span>`
-      : '';
+  const badges = buildScholarshipBadgesHtml(s, matchPercent);
 
   return `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 10px;">
   <tr>
-    <td style="border-radius:12px;border:1px solid #374151;background:#111827;padding:12px 14px;">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-          <td valign="top" style="padding:0 8px 0 0;">
-            <a href="${escapeHtml(href)}" style="display:block;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.35;font-weight:700;color:#f3f4f6;text-decoration:none;word-break:break-word;">
-              ${title}
-            </a>
-            ${deadline}
-          </td>
-          <td valign="top" align="right" style="white-space:nowrap;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:700;color:#34d399;">
-            ${amount}
-            ${matchLabel}
-          </td>
-        </tr>
-      </table>
+    <td style="padding:0;">
+      <a href="${escapeHtml(href)}" style="display:block;border-radius:12px;border:1px solid #374151;background:#111827;padding:12px 14px;text-decoration:none;color:inherit;">
+        <span style="display:block;margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.35;font-weight:700;color:#f3f4f6;text-decoration:none;word-break:break-word;overflow-wrap:anywhere;">
+          ${title}
+        </span>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0;">
+          <tr>
+            <td style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:800;color:#34d399;word-break:break-word;overflow-wrap:anywhere;white-space:nowrap;">
+              ${amount}
+            </td>
+          </tr>
+        </table>
+        ${badges}
+      </a>
     </td>
   </tr>
 </table>`;
 }
 
-function buildCategorySectionHtml(
-  category: GrantDigestCategory,
-  origin: string
-): string {
+function buildCategorySectionHtml(category: GrantDigestCategory): string {
   if (category.totalCount <= 0 || category.items.length <= 0) return '';
 
   const visibleItems = category.items.slice(0, 4);
   const hiddenCount = Math.max(0, category.totalCount - visibleItems.length);
   const rows = visibleItems
-    .map((item) => buildGrantListRowHtml(item, origin, category.id))
+    .map((item) => buildGrantListRowHtml(item, category.viewAllUrl))
     .join('\n');
 
   const moreText =
@@ -135,7 +163,7 @@ function buildCategorySectionHtml(
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 18px;">
   <tr>
     <td style="border-radius:14px;border:1px solid #374151;background:#0f172a;padding:14px;">
-      <p style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:800;color:#34d399;text-transform:uppercase;letter-spacing:0.04em;">
+      <p style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:800;color:#34d399;text-transform:uppercase;letter-spacing:0.04em;text-align:center;">
         ${escapeHtml(category.label)} (${escapeHtml(String(category.totalCount))} new)
       </p>
       ${rows}
@@ -178,7 +206,7 @@ export async function sendGrantDigestBatchEmail(params: {
   const totalMatches = categories.reduce((sum, c) => sum + c.totalCount, 0);
 
   const extraHtml = categories
-    .map((category) => buildCategorySectionHtml(category, origin))
+    .map((category) => buildCategorySectionHtml(category))
     .join('\n');
 
   const titlesPreview = categories

@@ -1,5 +1,5 @@
 /**
- * Sends three production-style marketing emails (weekly digest, grant digest, provider outreach)
+ * Sends production-style marketing emails (grant digest, provider outreach)
  * so you can verify footers + List-Unsubscribe headers in a real inbox.
  *
  *   npx dotenv-cli -e .env.local -- npx tsx scripts/send-marketing-email-preview-samples.ts [email]
@@ -14,12 +14,10 @@ import {
   sendGrantDigestBatchEmail,
   type GrantDigestCategory
 } from '../lib/email/sendGrantDigestEmail';
-import { sendWeeklyFreeDigestEmail } from '../lib/email/sendWeeklyFreeDigestEmail';
 import {
   buildProviderPartnershipOutreachEmailHtml,
   buildProviderPartnershipOutreachEmailSubject
 } from '../lib/email/templates/providerPartnershipOutreachEmailHtml';
-import type { WeeklyFreeDigestPremiumRow } from '../lib/email/templates/weeklyFreeDigestEmailHtml';
 
 const DEFAULT_TO = 'loomany.self@gmail.com';
 const SITE = 'https://scholarshiptop.com';
@@ -54,49 +52,6 @@ async function main() {
   }
 
   const origin = SITE.replace(/\/+$/, '');
-  const premiumTeaser: WeeklyFreeDigestPremiumRow = {
-    title: 'Full-Tuition STEM Excellence Award',
-    amountLine: 'Amount: $40,000+ | Available for Premium members'
-  };
-
-  const topThree: Scholarship[] = [
-    fakeScholarship({
-      id: '00000000-0000-4000-8000-000000000001',
-      slug: 'sample-one',
-      title: 'International Education Scholarship',
-      awardAmountNumericSort: 25000,
-      aiMatchScore: 92
-    }),
-    fakeScholarship({
-      id: '00000000-0000-4000-8000-000000000002',
-      slug: 'sample-two',
-      title: 'Cecil M. Winn Endowed Scholarship',
-      awardAmountNumericSort: 12000,
-      aiMatchScore: 88
-    }),
-    fakeScholarship({
-      id: '00000000-0000-4000-8000-000000000003',
-      slug: 'sample-three',
-      title: 'Ryan Smith Guzman Memorial Scholarship',
-      awardAmountNumericSort: 8000,
-      aiMatchScore: 85
-    })
-  ];
-
-  console.log('1/3 Weekly free digest →', to);
-  const w = await sendWeeklyFreeDigestEmail({
-    toEmail: to,
-    firstName: 'Alex',
-    platformNewScholarships7d: 128,
-    profileMatchNewCount: 14,
-    topThree,
-    premiumTeaser
-  });
-  console.log('   ', w.ok ? 'sent' : 'fail', w.skipped ?? '');
-  if (!w.ok) process.exit(1);
-
-  await sleep(1500);
-
   const oneGrant: Scholarship = fakeScholarship({
     id: '00000000-0000-4000-8000-000000000099',
     slug: 'sample-grant-digest',
@@ -116,7 +71,7 @@ async function main() {
     }
   ];
 
-  console.log('2/3 Grant digest →', to);
+  console.log('1/2 Grant digest ->', to);
   const g = await sendGrantDigestBatchEmail({
     toEmail: to,
     categories,
@@ -137,7 +92,7 @@ async function main() {
   });
   const listUrl = buildMarketingUnsubscribeListHeaderUrl(origin, to);
 
-  console.log('3/3 Provider outreach →', to);
+  console.log('2/2 Provider outreach ->', to);
   const p = await postResend({
     to,
     subject,

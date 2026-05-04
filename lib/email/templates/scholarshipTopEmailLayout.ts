@@ -1,21 +1,5 @@
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
 
-/** Lucide-style graduation cap (stroke), orange — matches in-app brand. */
-const LOGO_CAP_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="display:block">
-  <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12 3.8 2.58 9.084a1 1 0 0 0 0 1.838L12 16.2l9.42-5.26a1 1 0 0 0 0-1.838z" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 16.2V22" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 22v-5" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="m12 16.2-4.5-2.7" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="m12 16.2 4.5-2.7" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`.trim();
-
-const EMERALD_CHECK_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="display:inline-block;vertical-align:middle;margin-right:8px">
-  <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2" fill="none"/>
-  <path d="m9 12 2 2 4-4" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`.trim();
-
 export type PremiumEmailLayoutOptions = {
   /** Shown in inbox preview (hidden in body). */
   preheader: string;
@@ -52,7 +36,6 @@ export function buildScholarshipTopPremiumEmailHtml(
 ): string {
   const origin = opts.siteOrigin.replace(/\/+$/, '');
   const unsub = opts.unsubscribeUrl || `${origin}/account`;
-  const preEscaped = escapeHtml(opts.preheader);
 
   const paragraphs = opts.bodyParagraphsHtml
     .map(
@@ -64,8 +47,8 @@ export function buildScholarshipTopPremiumEmailHtml(
   const accentBlock = opts.accentLine
     ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 20px;">
         <tr>
-          <td align="center" style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.5;color:#111827;font-weight:600;">
-            ${EMERALD_CHECK_SVG}<span style="vertical-align:middle;">${opts.accentLine}</span>
+          <td align="center" style="font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.5;color:#d1fae5;font-weight:600;">
+            ${escapeHtml(opts.accentLine)}
           </td>
         </tr>
       </table>`
@@ -87,9 +70,6 @@ export function buildScholarshipTopPremiumEmailHtml(
   <title>${escapeHtml(opts.headline)}</title>
 </head>
 <body style="margin:0;padding:0;background-color:#0b0f14;">
-  <div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0;color:#0b0f14;">
-    ${preEscaped}
-  </div>
   <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#0b0f14;">
     <tr>
       <td align="center" style="padding:40px 16px;">
@@ -100,9 +80,6 @@ export function buildScholarshipTopPremiumEmailHtml(
                 <tr>
                   <td align="center" style="padding-bottom:28px;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
-                      <tr>
-                        <td align="center" style="padding-bottom:10px;">${LOGO_CAP_SVG}</td>
-                      </tr>
                       <tr>
                         <td align="center" style="font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">
                           <span style="color:#f3f4f6;">Scholarship</span><span style="color:#f97316;">Top</span>

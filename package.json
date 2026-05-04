@@ -81,8 +81,6 @@
     "essay:manual-audit": "npx dotenv-cli -e .env.local -- npx tsx scripts/audit-manual-essay-guides.ts",
     "content:international-bulk": "npx dotenv-cli -e .env.local -- npx tsx scripts/run-international-content-bulk.ts",
     "essay:audit-fal": "npx dotenv-cli -e .env.local -- npx tsx scripts/audit-essay-fal-footprint.ts",
-    "weekly-free-digest:preview": "dotenv -e .env.local -- node scripts/preview-weekly-free-digest.mjs",
-    "weekly-free-digest:quick": "dotenv -e .env.local -- npx tsx scripts/quick-weekly-digest-email.ts",
     "provider-outreach:test": "dotenv -e .env.local -- npx tsx scripts/send-provider-outreach-emails.ts --test",
     "provider-outreach:test-samples": "dotenv -e .env.local -- npx tsx scripts/send-provider-outreach-emails.ts --test --test-samples 5",
     "provider-outreach:dry-run": "dotenv -e .env.local -- npx tsx scripts/send-provider-outreach-emails.ts --dry-run",

@@ -24,7 +24,6 @@ function baseProfile(over: Partial<ProfilesRow>): ProfilesRow {
     birth_year: null,
     date_of_birth: null,
     email_verified: false,
-    email_weekly_free_digest: false,
     email_notify_best_matches: false,
     email_notify_easy_apply: false,
     email_notify_hot_deadlines: false,
