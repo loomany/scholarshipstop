@@ -31,6 +31,42 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301);
   }
 
+  /** Wrong host prefix: compare pages are canonical under `/compare/...`, not `/scholarships/compare/...`. */
+  const schCompareState = pathname.match(
+    /^\/scholarships\/compare\/states\/([^/]+)\/?$/i
+  );
+  if (schCompareState?.[1]) {
+    const raw = decodeURIComponent(schCompareState[1]).trim();
+    const url = request.nextUrl.clone();
+    url.pathname = `/compare/states/${encodeURIComponent(raw)}`;
+    return NextResponse.redirect(url, 301);
+  }
+  const schCompareUni = pathname.match(
+    /^\/scholarships\/compare\/universities\/([^/]+)\/?$/i
+  );
+  if (schCompareUni?.[1]) {
+    const raw = decodeURIComponent(schCompareUni[1]).trim();
+    const url = request.nextUrl.clone();
+    url.pathname = `/compare/universities/${encodeURIComponent(raw)}`;
+    return NextResponse.redirect(url, 301);
+  }
+  if (
+    pathname === '/scholarships/compare/states' ||
+    pathname === '/scholarships/compare/states/'
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/compare/states';
+    return NextResponse.redirect(url, 301);
+  }
+  if (
+    pathname === '/scholarships/compare/universities' ||
+    pathname === '/scholarships/compare/universities/'
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/compare/universities';
+    return NextResponse.redirect(url, 301);
+  }
+
   if (
     host === 'iq.scholarshiptop.com' &&
     (pathname === '/' || pathname === '')

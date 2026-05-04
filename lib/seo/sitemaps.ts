@@ -25,6 +25,7 @@ import {
 import { getURL } from '@/utils/helpers';
 import { tabToHubPath } from '@/app/scholarships/scholarshipHubPath';
 import { allScholarshipCountrySeoRoutes } from '@/app/scholarships/scholarshipCountrySeo';
+import { isCompareHubSeoGenerationCanonicalPath } from '@/lib/seo/sitemapProgrammaticHubPath';
 
 export { isSeoDripFeedActive } from '@/lib/seo/seoDripFeed';
 
@@ -454,8 +455,13 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
   const generatedHubRows = await fetchSeoGenerationSitemapRows(3).catch(
     () => []
   );
+  // Compare battle paths in the queue use `compare/states/...` or `compare/universities/...`.
+  // They must not be prefixed with `/scholarships/`; canonical URLs live in `compare.xml`.
   const programmaticHubPages: MetadataRoute.Sitemap = generatedHubRows
     .filter((row) => canonicalPathAllowedInSeoSitemap(row.canonical_path))
+    .filter(
+      (row) => !isCompareHubSeoGenerationCanonicalPath(row.canonical_path)
+    )
     .map((row) => ({
       url: `${base}/scholarships/${row.canonical_path}`,
       lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
