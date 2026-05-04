@@ -196,6 +196,7 @@ export default function AssessmentEngine({
     startImmediately ? Date.now() : null
   );
   const [totalElapsedSeconds, setTotalElapsedSeconds] = useState(0);
+  const [restartNonce, setRestartNonce] = useState(0);
   const advancingRef = useRef(false);
   const completedRef = useRef(false);
   const advanceTimeoutRef = useRef<number | null>(null);
@@ -386,8 +387,14 @@ export default function AssessmentEngine({
       window.clearTimeout(advanceTimeoutRef.current);
       advanceTimeoutRef.current = null;
     }
+    try {
+      window.localStorage.removeItem(storageKey);
+    } catch {
+      // Ignore storage failures; state reset below is the source of truth.
+    }
     completedRef.current = false;
     advancingRef.current = false;
+    setRestartNonce((nonce) => nonce + 1);
     setAnswers({});
     setTimedOutQuestionIds([]);
     setCurrentIndex(0);
@@ -430,6 +437,7 @@ export default function AssessmentEngine({
 
           {draftHydrated && phase === 'assessment' && currentQuestion ? (
             <QuestionScreen
+              key={`${currentQuestion.id}-${restartNonce}`}
               question={currentQuestion}
               step={step}
               totalRemainingSeconds={totalRemainingSeconds}

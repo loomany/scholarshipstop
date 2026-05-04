@@ -26,6 +26,12 @@ services/content-hub/node_modules/
 # local batch outputs / large downloaded datasets
 classified_hosts_result.json
 classified_hosts_result.json*.bak
+classified_hosts_*_result.json
+hostless_provider_identity*_audit.json
+hostless_provider_identity_candidates.json
+remaining_hostless_audit.json
+audit-production-site.json
+final-audit-report.json
 host_classify_candidates_google.txt
 host_country_confident_updates.sql
 scripts/data/world_universities_and_domains.json

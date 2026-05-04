@@ -35,7 +35,13 @@ const ORB_SUBTITLE_PHRASE = 'Any language';
 function shouldHideAiNavigatorForCurrentHost(): boolean {
   if (typeof window === 'undefined') return false;
   const host = window.location.hostname.trim().toLowerCase();
-  return host === 'iq.scholarshiptop.com' || host.startsWith('iq.');
+  const pathname = window.location.pathname;
+  return (
+    host === 'iq.scholarshiptop.com' ||
+    host.startsWith('iq.') ||
+    pathname === '/iq' ||
+    pathname.startsWith('/iq/')
+  );
 }
 
 /** Straight line under “AI”: letter-by-letter reveal, looping (motion-reduced: all visible). */

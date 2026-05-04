@@ -19,15 +19,17 @@
  *   HIPO_UNIVERSITIES_JSON_URL — HIPO dataset URL override (optional)
  *   CLASSIFIED_HOSTS_RESULT_JSON — путь для чекпоинта и итога (совпадает с update_hosts_in_db.ts)
  *   WIKIDATA_ENABLED — 1/true (default) включает шаг Wikidata после HIPO; 0/false/off — выключить
- *   WIKIDATA_GAP_MS — пауза между запросами к wikidata.org (default 450)
+ *   WIKIDATA_GAP_MS — пауза между запросами к wikidata.org (default 200)
  *   WIKIDATA_SEARCH_LIMIT — сколько результатов поиска смотреть (default 8, max 20)
  *   WIKIDATA_USER_AGENT — обязательно осмысленный UA для больших прогонов (желание Wikimedia Foundation)
  *
  * OpenAI (gpt-4o-mini по умолчанию), если HIPO+Wikidata не дали ISO:
  *   OPENAI_HOST_CLASSIFY_ENABLED=1
  *   OPENAI_HOST_CLASSIFY_MODEL=gpt-4o-mini   (опционально)
- *   OPENAI_HOST_GAP_MS=250                   (пауза между вызовами API)
+ *   OPENAI_HOST_GAP_MS=0                    (пауза перед каждым backfill-батчем / между последовательными вызовами)
+ *   OPENAI_HOST_CONCURRENCY=8                 (параллельные запросы внутри одного backfill-батча; max 32)
  *   OPENAI_API_KEY
+ *   OPENAI_HOST_CLASSIFY_VERBOSE=1          (логировать каждый null от OpenAI; иначе только ✓ OK и сводка)
  *
  * Повторно только для строк чекпоинта без ISO (например после LocalDomainOnly):
  *   npx tsx scripts/classify_hosts.ts --openai-backfill
@@ -52,6 +54,7 @@ import {
 } from './wikidata-host-country';
 import {
   openaiHostClassifyEnabled,
+  openaiHostConcurrency,
   openaiHostGapMs,
   resolveHostCountryViaOpenAi
 } from './openai-host-country';
@@ -294,6 +297,32 @@ async function sleepMs(ms: number): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/** Run async mapper on items with at most `concurrency` in flight (order preserved in output). */
+async function mapWithConcurrency<T, R>(
+  items: readonly T[],
+  concurrency: number,
+  mapper: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+  if (items.length === 0) return [];
+  const limit = Math.max(1, Math.min(concurrency, items.length));
+  const out: R[] = new Array(items.length);
+  let cursor = 0;
+  const worker = async (): Promise<void> => {
+    for (;;) {
+      const idx = cursor++;
+      if (idx >= items.length) return;
+      out[idx] = await mapper(items[idx]!, idx);
+    }
+  };
+  await Promise.all(Array.from({ length: limit }, () => worker()));
+  return out;
+}
+
+function openAiVerboseNulls(): boolean {
+  const v = process.env.OPENAI_HOST_CLASSIFY_VERBOSE?.trim().toLowerCase();
+  return v === '1' || v === 'true' || v === 'yes';
+}
+
 async function main() {
   const { limit, fresh, flushEvery, noWikidata, openaiBackfill } = parseArgs();
   const supabase = serviceSupabase();
@@ -323,7 +352,7 @@ async function main() {
       );
     }
     console.log(
-      `OpenAI backfill: вкл (модель ${process.env.OPENAI_HOST_CLASSIFY_MODEL?.trim() || 'gpt-4o-mini'}, пауза ${openaiHostGapMs()}ms) — только строки чекпоинта без proposed ISO`
+      `OpenAI backfill: вкл (модель ${process.env.OPENAI_HOST_CLASSIFY_MODEL?.trim() || 'gpt-4o-mini'}, пауза ${openaiHostGapMs()}ms перед батчем, параллельно до ${openaiHostConcurrency()}) — только строки чекпоинта без proposed ISO`
     );
   } else if (openAiEnabled && openAiKey) {
     console.log(
@@ -410,6 +439,8 @@ async function main() {
 
   const results: ResultRow[] = [];
   let newClassifiedSinceStart = 0;
+  let openAiOkThisRun = 0;
+  let openAiMissThisRun = 0;
 
   /** Один новый результат по строке scholarships (ничего из чекпоинта). */
   const classifyCandidateRow = async (row: SchRow, uiIndexOneBased: number): Promise<ResultRow> => {
@@ -467,8 +498,24 @@ async function main() {
           if (normOa) {
             proposed = normOa;
             method = 'OpenAI';
+            openAiOkThisRun += 1;
+            const label = (row.provider_name?.trim() ?? row.official_source_name?.trim() ?? row.id).slice(
+              0,
+              72
+            );
+            console.log(
+              `  ✓ OpenAI OK — ${normOa} — строка ${uiIndexOneBased}/${total} — ${label}${label.length >= 72 ? '…' : ''}`
+            );
+          } else {
+            openAiMissThisRun += 1;
+            if (openAiVerboseNulls()) {
+              console.log(
+                `  · OpenAI null — строка ${uiIndexOneBased}/${total} — id=${row.id} — ${(row.provider_name?.trim() ?? '').slice(0, 56)}`
+              );
+            }
           }
         } catch (oaErr) {
+          openAiMissThisRun += 1;
           console.warn(`OpenAI ошибка (${row.id}):`, (oaErr as Error).message ?? oaErr);
         }
       }
@@ -494,56 +541,23 @@ async function main() {
     }
   };
 
-  if (total > 0 && classifyPlanned === 0 && !fresh) {
+  if (total > 0 && classifyPlanned === 0 && !fresh && !openaiBackfill) {
     const complete = candidates.map((sch) => checkpointById.get(sch.id)!);
     console.log(`\nУже есть полный результат по id (${total}). Синхронизируем порядок в файле → ${outPath}`);
     await writeClassifiedCheckpoint(outPath, complete);
     return;
   }
 
-  for (let i = 0; i < total; i += 1) {
-    const row = candidates[i]!;
-    const reusedRow = checkpointById.get(row.id);
-    let resultRow: ResultRow;
-    if (reusedRow && reusedRow.id === row.id) {
-      const emptyProposed =
-        reusedRow.proposed_host_country == null || reusedRow.proposed_host_country === '';
-      const backfillHere =
-        openaiBackfill && openAiEnabled && openAiKey && emptyProposed;
-      if (backfillHere) {
-        const sh = (row.provider_name?.trim() ?? '').slice(0, 64) || row.id;
-        console.log(`→ OpenAI backfill ${i + 1}/${total} (${sh})`);
-        const gap = openaiHostGapMs();
-        if (gap > 0) await sleepMs(gap);
-        let iso: string | null = null;
-        try {
-          iso = await resolveHostCountryViaOpenAi({
-            provider_name: row.provider_name ?? null,
-            official_source_name: row.official_source_name ?? null,
-            provider_url: row.provider_url ?? null
-          });
-        } catch (e) {
-          console.warn(`OpenAI backfill ошибка (${row.id}):`, (e as Error).message ?? e);
-        }
-        const norm = iso ? normalizeIso(iso) : null;
-        resultRow = {
-          id: row.id,
-          provider_name: row.provider_name ?? null,
-          proposed_host_country: norm,
-          method: norm ? 'OpenAI' : 'LocalDomainOnly'
-        };
-        newClassifiedSinceStart += 1;
-      } else {
-        resultRow = reusedRow;
-      }
-    } else {
-      resultRow = await classifyCandidateRow(row, i + 1);
-      newClassifiedSinceStart += 1;
-    }
+  const isOpenAiBackfillSlot = (idx: number): boolean => {
+    if (!openaiBackfill || !openAiEnabled || !openAiKey) return false;
+    const sch = candidates[idx]!;
+    const reused = checkpointById.get(sch.id);
+    if (!reused || reused.id !== sch.id) return false;
+    const empty = reused.proposed_host_country == null || reused.proposed_host_country === '';
+    return empty;
+  };
 
-    results.push(resultRow);
-
-    const done = i + 1;
+  const afterRowWritten = async (done: number): Promise<void> => {
     const shouldCheckpointWrite =
       done === total ||
       done % 500 === 0 ||
@@ -572,10 +586,90 @@ async function main() {
         `Обработано ${done}/${total} позиций в выборке (заново посчитано в этом запуске: ${newClassifiedSinceStart}/${classifyPlanned})…`
       );
     }
+  };
+
+  for (let i = 0; i < total; ) {
+    if (isOpenAiBackfillSlot(i)) {
+      let j = i + 1;
+      while (j < total && isOpenAiBackfillSlot(j)) j += 1;
+      const sliceRows = candidates.slice(i, j);
+      const gap = openaiHostGapMs();
+      if (gap > 0) await sleepMs(gap);
+      const conc = openaiHostConcurrency();
+      console.log(
+        `→ OpenAI backfill batch ${i + 1}–${j}/${total} (${sliceRows.length} строк, до ${conc} параллельных запросов)`
+      );
+      const norms = await mapWithConcurrency(sliceRows, conc, async (row) => {
+        try {
+          const iso = await resolveHostCountryViaOpenAi({
+            provider_name: row.provider_name ?? null,
+            official_source_name: row.official_source_name ?? null,
+            provider_url: row.provider_url ?? null
+          });
+          return normalizeIso(iso);
+        } catch (e) {
+          console.warn(`OpenAI backfill ошибка (${row.id}):`, (e as Error).message ?? e);
+          return null;
+        }
+      });
+      for (let bi = 0; bi < sliceRows.length; bi += 1) {
+        const row = sliceRows[bi]!;
+        const done = i + bi + 1;
+        const norm = norms[bi] ?? null;
+        const sh = (row.provider_name?.trim() ?? '').slice(0, 64) || row.id;
+        if (norm) {
+          openAiOkThisRun += 1;
+          console.log(
+            `  ✓ OpenAI OK (backfill) — ${norm} — ${done}/${total} — id=${row.id} — ${sh}${sh.length >= 64 ? '…' : ''}`
+          );
+        } else {
+          openAiMissThisRun += 1;
+          if (openAiVerboseNulls()) {
+            console.log(`  · OpenAI null (backfill) — ${done}/${total} — id=${row.id}`);
+          }
+        }
+        results.push({
+          id: row.id,
+          provider_name: row.provider_name ?? null,
+          proposed_host_country: norm,
+          method: norm ? 'OpenAI' : 'LocalDomainOnly'
+        });
+        newClassifiedSinceStart += 1;
+        await afterRowWritten(done);
+      }
+      i = j;
+      continue;
+    }
+
+    const row = candidates[i]!;
+    const reusedRow = checkpointById.get(row.id);
+    let resultRow: ResultRow;
+    if (reusedRow && reusedRow.id === row.id) {
+      resultRow = reusedRow;
+    } else {
+      resultRow = await classifyCandidateRow(row, i + 1);
+      newClassifiedSinceStart += 1;
+    }
+
+    results.push(resultRow);
+    const done = i + 1;
+    await afterRowWritten(done);
+    i += 1;
   }
 
   if (total === 0) {
     await writeClassifiedCheckpoint(outPath, results);
+  }
+  if (
+    openaiHostClassifyEnabled() &&
+    process.env.OPENAI_API_KEY?.trim() &&
+    openAiOkThisRun + openAiMissThisRun > 0
+  ) {
+    console.log(
+      `\n── OpenAI за этот запуск ──\n` +
+        `  Получили валидный ISO: ${openAiOkThisRun.toLocaleString()}\n` +
+        `  Без ISO (null / не распарсилось / ошибка после вызова): ${openAiMissThisRun.toLocaleString()}`
+    );
   }
   console.log(`\nГотово → ${results.length.toLocaleString()} записей сохранены в ${outPath}`);
 }

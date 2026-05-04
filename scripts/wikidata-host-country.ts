@@ -5,7 +5,7 @@
  *
  * Env:
  *   WIKIDATA_ENABLED — «1», «true», «yes», unset = on; «0», «false», «no» = off
- *   WIKIDATA_GAP_MS — pause between outbound requests (default 450)
+ *   WIKIDATA_GAP_MS — pause between outbound requests (default 200)
  *   WIKIDATA_USER_AGENT — custom UA string for all requests
  *   WIKIDATA_SEARCH_LIMIT — max search hits to inspect (default 8, max 20)
  */
@@ -28,9 +28,9 @@ export function wikidataLookupEnabled(cliNoWikidata: boolean): boolean {
 
 export function wikidataGapMs(): number {
   const raw = process.env.WIKIDATA_GAP_MS?.trim();
-  if (!raw?.length) return 450;
+  if (!raw?.length) return 200;
   const n = Number.parseInt(raw, 10);
-  return Number.isFinite(n) && n >= 50 ? Math.min(n, 10_000) : 450;
+  return Number.isFinite(n) && n >= 50 ? Math.min(n, 10_000) : 200;
 }
 
 function userAgent(): string {
