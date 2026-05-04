@@ -210,11 +210,6 @@ export function ProvidersHubToolbar({
           maxHeight: countriesPanelLayout.maxHeight
         }}
       >
-        <div className="border-b border-zinc-100 px-4 py-2">
-          <p className="text-xs font-medium tracking-wide text-zinc-500">
-            Страны
-          </p>
-        </div>
         <ul role="listbox" aria-label="Filter by country" className="py-1">
           {COUNTRY_OPTIONS.map((opt) => (
             <li key={opt.value} role="option">
