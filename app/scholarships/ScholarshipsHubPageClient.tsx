@@ -755,11 +755,24 @@ function ScholarshipsPageInner({
         (moreFiltersApplied.includeApplicantCountryCodes.size > 0 ||
           moreFiltersApplied.includeUnspecifiedApplicantCountries)
     );
+  /** Toolbar “I’m from” (`app_cc`) applies country without touching More filters — must paginate like manual country. */
+  const applicantCountryCodesFromListingUrl = useMemo(
+    () =>
+      parseHubListingCountryCodesParam(
+        new URLSearchParams(searchParamsString).get('app_cc')
+      ),
+    [searchParamsString]
+  );
+  const guestBestToolbarApplicantCountryActive =
+    activeTab === 'best-recommendation' &&
+    applicantCountryCodesFromListingUrl.length > 0;
+  const guestBestEffectiveManualCountryFilter =
+    guestBestHasManualCountryFilter || guestBestToolbarApplicantCountryActive;
   const shouldShowScholarshipQuestionsCta =
     hubTreatAsGuest &&
     shouldPromptScholarshipQuiz &&
     !guestCompletedScholarshipQuiz &&
-    !guestBestHasManualCountryFilter;
+    !guestBestEffectiveManualCountryFilter;
 
   /** Only when Hub guest Best tab wizard is active — drives list/cache refetch per field edit. */
   const guestBestWizardFingerprint = useMemo(() => {
@@ -2139,17 +2152,17 @@ function ScholarshipsPageInner({
   const rawPageParam = new URLSearchParams(searchParamsString).get('page');
   const pageFromUrl = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
-  /** Guests on Best recommendation only load page 1 unless they manually use catalog country filters. */
+  /** Guests on Best recommendation only load page 1 unless country filters come from More filters or toolbar `app_cc`. */
   const hubListingPage =
     catalogFreeTier &&
     activeTab === 'best-recommendation' &&
-    !guestBestHasManualCountryFilter
+    !guestBestEffectiveManualCountryFilter
       ? 1
       : pageFromUrl;
   const listPageForUi =
     catalogFreeTier &&
     activeTab === 'best-recommendation' &&
-    !guestBestHasManualCountryFilter
+    !guestBestEffectiveManualCountryFilter
       ? 1
       : currentPage;
 
@@ -2359,7 +2372,7 @@ function ScholarshipsPageInner({
       const ids = userListIdsRef.current;
       const sp = buildHubListingSearchParams({
         base: new URLSearchParams(searchParamsString),
-        page: guestBestHasManualCountryFilter ? pageFromUrl : 1,
+        page: guestBestEffectiveManualCountryFilter ? pageFromUrl : 1,
         tab: 'matches',
         meta: false,
         saved: ids.saved,
@@ -2408,6 +2421,17 @@ function ScholarshipsPageInner({
     const raw = guestBestTopExploreQuery.data?.scholarships ?? [];
     return applyGuestQuizMatchPercentToScholarships(raw, null);
   }, [guestBestTopExploreQuery.data]);
+
+  const guestBestExploreTotalPages = useMemo(() => {
+    const total = guestBestTopExploreQuery.data?.total;
+    if (total == null || total < 1) return 1;
+    return Math.max(1, Math.ceil(total / SCHOLARSHIPS_PAGE_SIZE));
+  }, [guestBestTopExploreQuery.data?.total]);
+
+  const guestBestExplorePageForUi = clampScholarshipListPage(
+    rawPageParam,
+    guestBestExploreTotalPages
+  );
 
   useEffect(() => {
     if (!guestBestCatalogFallbackActive) return;
@@ -2579,7 +2603,7 @@ function ScholarshipsPageInner({
   useEffect(() => {
     if (isAuthenticated) return;
     if (activeTab !== 'best-recommendation') return;
-    if (guestBestHasManualCountryFilter) return;
+    if (guestBestEffectiveManualCountryFilter) return;
     const n = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
     if (n > 1) {
       replaceListingParams({ page: 1, resetPage: false });
@@ -2589,7 +2613,7 @@ function ScholarshipsPageInner({
     activeTab,
     rawPageParam,
     replaceListingParams,
-    guestBestHasManualCountryFilter
+    guestBestEffectiveManualCountryFilter
   ]);
 
   const moreFiltersPanelContextNotices = useMemo((): ScholarshipsMoreFiltersContextNotice[] => {
@@ -2798,7 +2822,7 @@ function ScholarshipsPageInner({
     return () => window.clearTimeout(fallback);
   }, [isApplyingMoreFilters, listQuery.isFetching]);
 
-  const listControlsFetching = guestBestHasManualCountryFilter
+  const listControlsFetching = guestBestCatalogFallbackActive
     ? guestBestTopExploreQuery.isFetching
     : listQuery.isFetching;
 
@@ -3230,7 +3254,9 @@ function ScholarshipsPageInner({
     shouldShowScholarshipQuestionsCta;
   const showGuestBestExploreFallback =
     guestBestRecommendationStackedBrowsingUi &&
-    (shouldShowBestRecommendationWizard || guestBestHasManualCountryFilter);
+    (shouldShowBestRecommendationWizard ||
+      guestBestHasManualCountryFilter ||
+      guestBestToolbarApplicantCountryActive);
 
   const bestRecommendationWizardPendingHydration =
     activeTab === 'best-recommendation' &&
@@ -3501,7 +3527,8 @@ function ScholarshipsPageInner({
                           )}
                         </div>
                       ) : (
-                        <div className="relative z-0 flex flex-col gap-4">
+                        <>
+                          <div className="relative z-0 flex flex-col gap-4">
                           {guestBestStackExploreScholarships.map((s, index) => (
                             <div key={s.id} className="contents">
                               <ScholarshipCard
@@ -3537,6 +3564,14 @@ function ScholarshipsPageInner({
                             </div>
                           ))}
                         </div>
+                        {guestBestExploreTotalPages > 1 ? (
+                          <ScholarshipsPagination
+                            currentPage={guestBestExplorePageForUi}
+                            totalPages={guestBestExploreTotalPages}
+                            buildHref={buildPageHref}
+                          />
+                        ) : null}
+                        </>
                       )
                     ) : blockingListLoad ? (
                       <HubListSkeleton showApplyingLabel={blockingApplyLoad} />
