@@ -44,6 +44,7 @@ const EMAIL_COOLDOWN_HOURS = Math.max(
   1,
   Number(process.env.GRANT_NOTIFICATION_EMAIL_COOLDOWN_HOURS?.trim() || '24')
 );
+const EMAIL_RESEND_ALL = process.env.GRANT_NOTIFICATION_EMAIL_RESEND_ALL?.trim() === '1';
 /** Max grant cards per single digest email (remaining matches stay queued for the next run). */
 const GRANT_DIGEST_EMAIL_MAX_ITEMS = Math.max(
   1,
@@ -570,6 +571,8 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     process.env.NEXT_PUBLIC_SITE_URL?.trim()?.replace(/\/+$/, '') || 'https://scholarshiptop.com';
 
   async function getSeenEmailScholarshipIds(userId: string): Promise<Set<string>> {
+    if (EMAIL_RESEND_ALL) return new Set();
+
     const cached = seenEmailScholarshipIdsByUser.get(userId);
     if (cached) return cached;
 
@@ -632,6 +635,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       maxProfiles: MAX_PROFILES,
       maxOps: MAX_OPS,
       emailCooldownHours: EMAIL_COOLDOWN_HOURS,
+      emailResendAll: EMAIL_RESEND_ALL,
       digestMaxItems: GRANT_DIGEST_EMAIL_MAX_ITEMS,
       digestBestMaxItems: GRANT_DIGEST_BEST_MAX_ITEMS,
       digestMinTotalItems: GRANT_DIGEST_MIN_TOTAL_ITEMS,
@@ -749,7 +753,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
         if (wantsEmail) {
           const email = await getEmail(uid);
           if (email) {
-            const dup = await alreadySent(admin, uid, sid, ch, 'email');
+            const dup = EMAIL_RESEND_ALL ? false : await alreadySent(admin, uid, sid, ch, 'email');
             if (dup) {
               skippedDup += 1;
               emailDup += 1;
@@ -886,7 +890,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
   for (const [uid, lines] of pendingEmailByUser) {
     const email = await getEmail(uid);
     if (!email) continue;
-    if (await userHasRecentEmailDelivery(admin, uid)) {
+    if (!EMAIL_RESEND_ALL && (await userHasRecentEmailDelivery(admin, uid))) {
       emailSkippedCooldownUsers += 1;
       logGrantNotify('digest-skip-cooldown', {
         userId: uid,
