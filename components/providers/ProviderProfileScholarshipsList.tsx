@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import ScholarshipIqInlineCard from '@/components/scholarships/ScholarshipIqInlineCard';
 
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
+import ScholarshipEmailConfirmRequiredModal from '@/components/scholarships/ScholarshipEmailConfirmRequiredModal';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
@@ -35,17 +36,26 @@ type Props = {
   scholarships: Scholarship[];
   isAuthenticated: boolean;
   hasSubscription: boolean;
+  /**
+   * @default true — set from {@link AuthStatusProvider} when available.
+   */
+  authResolved?: boolean;
+  /** From {@link AuthStatusProvider} when the signed-in user must confirm email before grant details. */
+  needsEmailConfirmation?: boolean;
 };
 
 export function ProviderProfileScholarshipsList({
   scholarships,
   isAuthenticated,
-  hasSubscription
+  hasSubscription,
+  authResolved = true,
+  needsEmailConfirmation = false
 }: Props) {
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [emailConfirmModalOpen, setEmailConfirmModalOpen] = useState(false);
   const [registrationWallVariant, setRegistrationWallVariant] = useState<
     'scholarships' | 'essay' | 'locked-category'
   >('scholarships');
@@ -115,8 +125,21 @@ export function ProviderProfileScholarshipsList({
     setRegistrationWallVariant('locked-category');
     setRegistrationWallOpen(true);
   }, []);
+  const openLockedScholarshipWallForCard = useCallback(() => {
+    if (!isAuthenticated) {
+      openRegistrationWall('grant-guest');
+      return;
+    }
+    openLockedCategoryWall();
+  }, [isAuthenticated, openRegistrationWall, openLockedCategoryWall]);
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
+  }, []);
+  const openEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(true);
+  }, []);
+  const closeEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(false);
   }, []);
 
   const toggleSave = useCallback(
@@ -194,25 +217,38 @@ export function ProviderProfileScholarshipsList({
               subscriptionLocked={catalogFreeTier}
               isAuthenticated={isAuthenticated}
               hasSubscription={hasSubscription}
-              onSubscriptionLockedCategoryClick={openLockedCategoryWall}
-              onLockedScholarshipNavigate={openLockedCategoryWall}
-              onSubscriptionDetailNavigate={openLockedCategoryWall}
-              onGuestDetailNavigate={
+              authResolved={authResolved}
+              onSubscriptionLockedCategoryClick={openLockedScholarshipWallForCard}
+              onLockedScholarshipNavigate={openLockedScholarshipWallForCard}
+              onSubscriptionDetailNavigate={
                 catalogFreeTier
                   ? () => openRegistrationWall('card-unlock')
+                  : openLockedCategoryWall
+              }
+              onGuestDetailNavigate={
+                !isAuthenticated
+                  ? () => openRegistrationWall('grant-guest')
                   : undefined
               }
+              needsEmailConfirmation={needsEmailConfirmation}
+              onUnverifiedEmailDetailNavigate={openEmailConfirmWall}
             />
             {index === 0 ? <ScholarshipIqInlineCard /> : null}
           </div>
         ))}
       </div>
+      <ScholarshipEmailConfirmRequiredModal
+        open={emailConfirmModalOpen}
+        onClose={closeEmailConfirmWall}
+      />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
         variant={registrationWallVariant}
         contentMode={registrationWallContent}
-        signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
+        signedInWithoutSubscription={Boolean(
+          isAuthenticated && authResolved && !hasSubscription
+        )}
       />
     </>
   );

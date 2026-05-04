@@ -2,7 +2,9 @@
 
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import ScholarshipDetailPageClient from '@/app/scholarships/ScholarshipDetailPageClient';
-import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
+import AuthStatusProvider, {
+  type AuthBootstrapSnapshot
+} from '@/components/auth/AuthStatusProvider';
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import type { EssayListFields } from '@/lib/essays/essaysServer';
 import type { ComparePeerRow } from '@/lib/seo/comparePeersServer';
@@ -19,6 +21,8 @@ type ScholarshipDetailPageAuthBridgeProps = {
   initialRelatedHubLinks?: { href: string; label: string }[];
   /** Top peer universities for versus-page internal links. */
   initialComparePeers?: ComparePeerRow[];
+  /** RSC session snapshot — avoids paywall UI flash before client `getSession()`. */
+  initialAuthFromServer: AuthBootstrapSnapshot;
 };
 
 export default function ScholarshipDetailPageAuthBridge({
@@ -28,15 +32,17 @@ export default function ScholarshipDetailPageAuthBridge({
   initialRelatedArticles = [],
   initialRelatedEssays = [],
   initialRelatedHubLinks = [],
-  initialComparePeers = []
+  initialComparePeers = [],
+  initialAuthFromServer
 }: ScholarshipDetailPageAuthBridgeProps) {
   return (
-    <AuthStatusProvider>
-      {({ isAuthenticated, hasSubscription, authResolved }) => (
+    <AuthStatusProvider initialAuthFromServer={initialAuthFromServer}>
+      {({ isAuthenticated, hasSubscription, authResolved, needsEmailConfirmation }) => (
         <ScholarshipDetailPageClient
           isAuthenticated={isAuthenticated}
           hasSubscription={hasSubscription}
           authResolved={authResolved}
+          needsEmailConfirmation={needsEmailConfirmation}
           initialScholarship={initialScholarship}
           routeParam={routeParam}
           returnToHref={returnToHref}

@@ -1,5 +1,6 @@
 'use client';
 
+import { dismissRouteProgress } from '@/lib/navigation/dismissRouteProgress';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, Lock, X } from 'lucide-react';
@@ -44,6 +45,7 @@ export default function PremiumCompactModal({
     if (!isOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    dismissRouteProgress();
     return () => {
       document.body.style.overflow = previousOverflow;
     };

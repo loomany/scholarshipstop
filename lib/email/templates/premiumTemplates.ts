@@ -46,6 +46,7 @@ export function buildConfirmSignupEmailHtml(params: ConfirmSignupEmailParams): s
     ctaLabel: 'Confirm email',
     siteOrigin: origin,
     unsubscribeUrl: unsub,
+    /** No raw URL in body — spam folders often strip buttons; user moves to inbox or uses in-app resend. */
     secondaryLinkNote: ''
   });
 }
@@ -94,8 +95,7 @@ export function buildResetPasswordEmailHtml(params: ResetPasswordEmailParams): s
     ctaLabel: 'Reset password',
     siteOrigin: origin,
     unsubscribeUrl: unsub,
-    postCtaMutedText: 'Link expires in 24 hours.',
-    secondaryLinkNote: ''
+    postCtaMutedText: 'Link expires in 24 hours.'
   });
 }
 

@@ -37,6 +37,10 @@ import { ScholarshipsBrandLoading } from '@/components/scholarships/Scholarships
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
 import PremiumPaywallModal from '@/components/scholarships/PremiumPaywallModal';
+import ScholarshipEmailConfirmRequiredModal from '@/components/scholarships/ScholarshipEmailConfirmRequiredModal';
+import ScholarshipRegistrationWallModal, {
+  type ScholarshipRegistrationWallContentMode
+} from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import { buildScholarshipTagHubHref } from '@/app/scholarships/scholarshipTagHubLinks';
@@ -113,6 +117,11 @@ import {
   renderTextWithObscuredPhrases
 } from '@/lib/scholarships/renderObscuredProviderText';
 import { pickScholarshipLockedTitleBlurPhrase } from '@/lib/scholarships/subscriptionLockedCategory';
+import {
+  isLikelyProviderName,
+  resolveScholarshipProviderNameLocked,
+  resolveScholarshipTargetedCategoryLocked
+} from '@/lib/scholarships/scholarshipObscuring';
 import {
   resolveScholarshipCategorySlug,
   scholarshipDeadlineHasPassed,
@@ -212,15 +221,6 @@ function extractProviderNameFromMission(
   if (!match) return null;
 
   return match[1].trim();
-}
-
-function isLikelyProviderName(value: string | null | undefined): value is string {
-  const normalized = value?.trim().replace(/\s+/g, ' ');
-  if (!normalized) return false;
-  if (normalized.length > 120) return false;
-  if (normalized.split(/\s+/).length > 14) return false;
-  if (/[.!?]\s/.test(normalized) || /[•:]/.test(normalized)) return false;
-  return true;
 }
 
 function compactProviderDescription(value: string): string {
@@ -452,6 +452,16 @@ function similarScholarshipCardClassName(
 const similarScholarshipsGridClass =
   'grid list-none grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3';
 
+/** Blur-only overlay for stat cards — no lock affordance (locks stay on catalog flows). */
+function AuthNoSubDetailStatsBlur() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-[6] rounded-3xl bg-white/45 backdrop-blur-[5px]"
+      aria-hidden
+    />
+  );
+}
+
 function SimilarScholarshipDetailListItem({
   scholarship: s,
   highlightPrimary,
@@ -460,8 +470,12 @@ function SimilarScholarshipDetailListItem({
   eligibleForMatchPill,
   isAuthenticated,
   hasSubscription,
+  authResolved = true,
+  needsEmailConfirmation,
   onGuestDetailNavigate,
-  onLockedScholarshipNavigate
+  onSubscriptionDetailNavigate,
+  onLockedScholarshipNavigate,
+  onUnverifiedEmailDetailNavigate
 }: {
   scholarship: Scholarship;
   highlightPrimary: boolean;
@@ -471,15 +485,43 @@ function SimilarScholarshipDetailListItem({
   eligibleForMatchPill: boolean;
   isAuthenticated: boolean;
   hasSubscription: boolean;
+  authResolved?: boolean;
+  needsEmailConfirmation: boolean;
   onGuestDetailNavigate?: () => void;
+  onSubscriptionDetailNavigate?: () => void;
   onLockedScholarshipNavigate?: () => void;
+  onUnverifiedEmailDetailNavigate?: () => void;
 }) {
   const deadlinePassed = scholarshipDeadlineHasPassed(s);
   const simDd = getScholarshipDeadlineDisplayParts(s);
-  const targetedCategoryLocked = !hasSubscription;
-  const titleBlurPhrase = targetedCategoryLocked
+  /** Pessimistic until session resolves — matches hub cards and prevents title FOUC. */
+  const catalogSubscriptionLockedGate =
+    !authResolved || !hasSubscription;
+  const targetedCategoryLockedSimilar = resolveScholarshipTargetedCategoryLocked({
+    subscriptionLockedCatalog: catalogSubscriptionLockedGate,
+    hasSubscription,
+    scholarship: s
+  });
+  const titleBlurPhrase = targetedCategoryLockedSimilar
     ? pickScholarshipLockedTitleBlurPhrase(s.title, s.provider)
     : null;
+  const titlePremiumObscuredSimilar =
+    Boolean(titleBlurPhrase) && targetedCategoryLockedSimilar;
+  const providerNameLockedSimilar = resolveScholarshipProviderNameLocked({
+    hasSubscription,
+    providerRaw: s.provider
+  });
+  const providerBlurPhrasesSimilar = providerNameLockedSimilar
+    ? buildScholarshipProviderBlurPhrases(s)
+    : [];
+  const detailClickBudgetMode = resolveScholarshipDetailClickBudgetMode({
+    isAuthenticated,
+    hasSubscription,
+    authResolved
+  });
+  const detailNavigateBlocked =
+    detailClickBudgetMode != null &&
+    shouldBlockScholarshipDetailNavigation(detailClickBudgetMode);
 
   const showBestRecommendation =
     eligibleForMatchPill &&
@@ -637,15 +679,20 @@ function SimilarScholarshipDetailListItem({
           <span
             className={`block text-left text-base font-semibold leading-snug ${deadlinePassed ? 'text-zinc-500' : 'text-zinc-900'}`}
           >
-            {targetedCategoryLocked && titleBlurPhrase
+            {titlePremiumObscuredSimilar && titleBlurPhrase
               ? renderTextWithObscuredPhrases(s.title, [titleBlurPhrase], {
                   blurEntireWhenNoSubstringMatch: false,
                   lockedObscuredInteractive: false
                 })
-              : s.title}
+              : providerBlurPhrasesSimilar.length > 0
+                ? renderTextWithObscuredPhrases(s.title, providerBlurPhrasesSimilar, {
+                    blurEntireWhenNoSubstringMatch: false,
+                    lockedObscuredInteractive: false
+                  })
+                : s.title}
           </span>
           {s.provider ? (
-            !hasSubscription ? (
+            providerNameLockedSimilar ? (
               <span
                 className="mt-1.5 block text-left text-sm"
                 aria-label="Sponsor name hidden until you subscribe."
@@ -666,10 +713,10 @@ function SimilarScholarshipDetailListItem({
             )
           ) : null}
         </div>
-        <div className="flex w-[min(11rem,42%)] shrink-0 flex-col items-end gap-1.5 text-right">
+        <div className="flex w-[min(11rem,42%)] shrink-0 flex-col items-end gap-1.5">
           <span
             title={awardDisplay.lineTitle}
-            className={`block w-full max-w-full truncate text-base font-semibold leading-tight sm:text-[1.0625rem] ${
+            className={`block w-full max-w-full truncate text-right text-base font-semibold leading-tight sm:text-[1.0625rem] ${
               awardDisplay.isNumeric ? 'tabular-nums' : ''
             } ${
               !awardDisplay.isPlaceholder
@@ -683,81 +730,79 @@ function SimilarScholarshipDetailListItem({
           >
             {awardDisplay.line}
           </span>
-          <div
-            className={
-              deadlinePassed
-                ? 'w-full text-xs font-normal italic text-zinc-400'
-                : 'w-full text-xs font-medium text-zinc-700'
-            }
-          >
-            <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
-              {deadlinePassed ? 'Deadline passed' : 'Deadline'}
-            </span>
-            <span
-              className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
+          <div className="w-full text-right">
+            <div
+              className={
+                deadlinePassed
+                  ? 'text-xs font-normal italic text-zinc-400'
+                  : 'text-xs font-medium text-zinc-700'
+              }
             >
-              {simDd.primary}
-            </span>
-            {simDd.secondary && !deadlinePassed ? (
-              <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
-                {simDd.secondary}
+              <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
+                {deadlinePassed ? 'Deadline passed' : 'Deadline'}
               </span>
+              <span
+                className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
+              >
+                {simDd.primary}
+              </span>
+              {simDd.secondary && !deadlinePassed ? (
+                <span className="mt-0.5 block text-[11px] font-medium text-zinc-500">
+                  {simDd.secondary}
+                </span>
+              ) : null}
+            </div>
+            {recommendationPill ? (
+              <div className="mt-1.5 flex justify-end">{recommendationPill}</div>
             ) : null}
           </div>
         </div>
       </div>
-      {recommendationPill || grantLocationBadge || applicantCountryBadge ? (
+      {grantLocationBadge || applicantCountryBadge ? (
         <div
-          className="mt-2.5 flex w-full min-w-0 items-center justify-between gap-2 pb-0.5"
-          aria-label={
-            grantLocationBadge || applicantCountryBadge
-              ? 'Match score, host location, and eligibility'
-              : 'Match score'
-          }
+          className="mt-2.5 flex w-full min-w-0 justify-end pb-0.5"
+          aria-label="Host location and eligibility"
         >
-          <div className="min-w-0 shrink-0">{recommendationPill}</div>
-          {grantLocationBadge || applicantCountryBadge ? (
-            <div className="ml-auto flex min-w-0 flex-1 flex-nowrap justify-end gap-1.5 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>*]:shrink-0">
-              {grantLocationBadge ? (
-                grantLocationHubHref ? (
-                  <Link
-                    href={grantLocationHubHref}
-                    className={similarGeoHubLinkClass}
-                    title={`${grantLocationBadge.title} — browse matching scholarships`}
-                    aria-label={`Browse scholarships filtered by ${grantLocationBadge.text}`}
-                  >
-                    <span className="truncate">{grantLocationBadge.text}</span>
-                  </Link>
-                ) : (
-                  <span
-                    className={similarGrantGeoPillClass}
-                    title={grantLocationBadge.title}
-                  >
-                    <span className="truncate">{grantLocationBadge.text}</span>
-                  </span>
-                )
-              ) : null}
-              {applicantCountryBadge ? (
-                applicantCountryHubHref ? (
-                  <Link
-                    href={applicantCountryHubHref}
-                    className={similarGeoHubLinkClass}
-                    title={`${applicantCountryBadge.title} — browse matching scholarships`}
-                    aria-label={`Browse scholarships filtered by ${applicantCountryBadge.text}`}
-                  >
-                    <span className="truncate">{applicantCountryBadge.text}</span>
-                  </Link>
-                ) : (
-                  <span
-                    className={similarGrantGeoPillClass}
-                    title={applicantCountryBadge.title}
-                  >
-                    <span className="truncate">{applicantCountryBadge.text}</span>
-                  </span>
-                )
-              ) : null}
-            </div>
-          ) : null}
+          <div className="flex min-w-0 flex-nowrap justify-end gap-1.5 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>*]:shrink-0">
+            {grantLocationBadge ? (
+              grantLocationHubHref ? (
+                <Link
+                  href={grantLocationHubHref}
+                  className={similarGeoHubLinkClass}
+                  title={`${grantLocationBadge.title} — browse matching scholarships`}
+                  aria-label={`Browse scholarships filtered by ${grantLocationBadge.text}`}
+                >
+                  <span className="truncate">{grantLocationBadge.text}</span>
+                </Link>
+              ) : (
+                <span
+                  className={similarGrantGeoPillClass}
+                  title={grantLocationBadge.title}
+                >
+                  <span className="truncate">{grantLocationBadge.text}</span>
+                </span>
+              )
+            ) : null}
+            {applicantCountryBadge ? (
+              applicantCountryHubHref ? (
+                <Link
+                  href={applicantCountryHubHref}
+                  className={similarGeoHubLinkClass}
+                  title={`${applicantCountryBadge.title} — browse matching scholarships`}
+                  aria-label={`Browse scholarships filtered by ${applicantCountryBadge.text}`}
+                >
+                  <span className="truncate">{applicantCountryBadge.text}</span>
+                </Link>
+              ) : (
+                <span
+                  className={similarGrantGeoPillClass}
+                  title={applicantCountryBadge.title}
+                >
+                  <span className="truncate">{applicantCountryBadge.text}</span>
+                </span>
+              )
+            ) : null}
+          </div>
         </div>
       ) : null}
     </div>
@@ -769,19 +814,31 @@ function SimilarScholarshipDetailListItem({
         href={scholarshipPublicPath(s)}
         onClick={(e) => {
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-          if (targetedCategoryLocked) {
+          if (
+            authResolved &&
+            isAuthenticated &&
+            !hasSubscription &&
+            needsEmailConfirmation
+          ) {
             e.preventDefault();
-            onLockedScholarshipNavigate?.();
+            e.stopPropagation();
+            onUnverifiedEmailDetailNavigate?.();
             return;
           }
           const budgetMode = resolveScholarshipDetailClickBudgetMode({
             isAuthenticated,
-            hasSubscription
+            hasSubscription,
+            authResolved
           });
           if (!budgetMode) return;
           if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
             e.preventDefault();
-            onGuestDetailNavigate?.();
+            e.stopPropagation();
+            if (budgetMode === 'guest') {
+              onGuestDetailNavigate?.();
+            } else {
+              (onSubscriptionDetailNavigate ?? onGuestDetailNavigate)?.();
+            }
             return;
           }
           recordScholarshipDetailFreeNavigation(budgetMode);
@@ -1047,6 +1104,7 @@ export default function ScholarshipDetailPageClient({
   isAuthenticated = true,
   hasSubscription = false,
   authResolved = true,
+  needsEmailConfirmation = false,
   initialScholarship = null,
   initialRelatedArticles = [],
   initialRelatedEssays = [],
@@ -1058,6 +1116,7 @@ export default function ScholarshipDetailPageClient({
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
   authResolved?: boolean;
+  needsEmailConfirmation?: boolean;
   initialScholarship?: Scholarship | null;
   /** Published articles that reference this scholarship in `related_scholarships` (max 3). */
   initialRelatedArticles?: ContentPostListFields[];
@@ -1104,6 +1163,46 @@ export default function ScholarshipDetailPageClient({
     setPremiumPaywallOpen(false);
     router.push('/subscription');
   }, [router]);
+  const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [emailConfirmModalOpen, setEmailConfirmModalOpen] = useState(false);
+  const [registrationWallVariant, setRegistrationWallVariant] = useState<
+    'scholarships' | 'locked-category'
+  >('scholarships');
+  const [registrationWallContent, setRegistrationWallContent] =
+    useState<ScholarshipRegistrationWallContentMode>('hub');
+
+  const openRegistrationWall = useCallback(
+    (mode?: ScholarshipRegistrationWallContentMode) => {
+      setRegistrationWallVariant('scholarships');
+      setRegistrationWallContent(mode ?? 'hub');
+      setRegistrationWallOpen(true);
+    },
+    []
+  );
+
+  const openLockedCategoryWall = useCallback(() => {
+    setRegistrationWallVariant('locked-category');
+    setRegistrationWallOpen(true);
+  }, []);
+
+  const openLockedScholarshipWallForSimilar = useCallback(() => {
+    if (!isAuthenticated) {
+      openRegistrationWall('grant-guest');
+      return;
+    }
+    openLockedCategoryWall();
+  }, [isAuthenticated, openRegistrationWall, openLockedCategoryWall]);
+
+  const closeRegistrationWall = useCallback(() => {
+    setRegistrationWallOpen(false);
+  }, []);
+
+  const openEmailConfirmModal = useCallback(() => {
+    setEmailConfirmModalOpen(true);
+  }, []);
+  const closeEmailConfirmModal = useCallback(() => {
+    setEmailConfirmModalOpen(false);
+  }, []);
   const syncIdsFromStorage = useCallback(async () => {
     setIgnoredIds(getIgnoredScholarshipIds());
     setStartedIds(getStartedScholarshipIds());
@@ -1261,11 +1360,47 @@ export default function ScholarshipDetailPageClient({
     };
   }, [scholarship]);
 
+  useEffect(() => {
+    if (detailLoadState !== 'ok' || !scholarship?.id || !authResolved) return;
+    const mode = resolveScholarshipDetailClickBudgetMode({
+      isAuthenticated,
+      hasSubscription,
+      authResolved
+    });
+    if (mode !== 'guest') return;
+    if (!shouldBlockScholarshipDetailNavigation(mode)) return;
+    openRegistrationWall('grant-guest');
+  }, [
+    detailLoadState,
+    scholarship?.id,
+    isAuthenticated,
+    hasSubscription,
+    authResolved,
+    openRegistrationWall
+  ]);
+
   const premiumPaywallModal = (
     <PremiumPaywallModal
       isOpen={premiumPaywallOpen}
       onClose={closePremiumPaywall}
       onUpgradeClick={handlePremiumPaywallUpgrade}
+    />
+  );
+  const registrationWallModal = (
+    <ScholarshipRegistrationWallModal
+      open={registrationWallOpen}
+      onClose={closeRegistrationWall}
+      variant={registrationWallVariant}
+      contentMode={registrationWallContent}
+      signedInWithoutSubscription={Boolean(
+        isAuthenticated && authResolved && !hasSubscription
+      )}
+    />
+  );
+  const emailConfirmRequiredModal = (
+    <ScholarshipEmailConfirmRequiredModal
+      open={emailConfirmModalOpen}
+      onClose={closeEmailConfirmModal}
     />
   );
 
@@ -1297,6 +1432,8 @@ export default function ScholarshipDetailPageClient({
           </div>
         </section>
         {premiumPaywallModal}
+        {registrationWallModal}
+        {emailConfirmRequiredModal}
       </DarkTooltipProvider>
     );
   }
@@ -1314,6 +1451,8 @@ export default function ScholarshipDetailPageClient({
           </div>
         </section>
         {premiumPaywallModal}
+        {registrationWallModal}
+        {emailConfirmRequiredModal}
       </DarkTooltipProvider>
     );
   }
@@ -1338,6 +1477,8 @@ export default function ScholarshipDetailPageClient({
           </div>
         </section>
         {premiumPaywallModal}
+        {registrationWallModal}
+        {emailConfirmRequiredModal}
       </DarkTooltipProvider>
     );
   }
@@ -1429,7 +1570,16 @@ export default function ScholarshipDetailPageClient({
     scholarshipApplicantCountryBadge(scholarship),
     scholarshipHostCountryBadge(scholarship)
   ].filter((badge): badge is ScholarshipGeoBadge => badge !== null);
-  const targetedCategoryLocked = !hasSubscription;
+  /** Pessimistic until session resolves — matches hub cards and prevents title FOUC. */
+  const catalogSubscriptionLockedGate =
+    !authResolved || !hasSubscription;
+  const targetedCategoryLocked = resolveScholarshipTargetedCategoryLocked({
+    subscriptionLockedCatalog: catalogSubscriptionLockedGate,
+    hasSubscription,
+    scholarship
+  });
+  const authNoSubDetailPreviewBlur =
+    isAuthenticated && authResolved && !hasSubscription && !targetedCategoryLocked;
   const titleBlurPhrase = targetedCategoryLocked
     ? pickScholarshipLockedTitleBlurPhrase(scholarship.title, providerName)
     : null;
@@ -1469,7 +1619,10 @@ export default function ScholarshipDetailPageClient({
     );
 
   /** Provider identity and external links are visible only with an active subscription. */
-  const providerNameLocked = Boolean(providerNameFromRecord) && !hasSubscription;
+  const providerNameLocked = resolveScholarshipProviderNameLocked({
+    hasSubscription,
+    providerRaw: scholarship.provider
+  });
   const providerBlurPhrases = providerNameLocked
     ? buildScholarshipProviderBlurPhrases(scholarship)
     : [];
@@ -1910,7 +2063,8 @@ export default function ScholarshipDetailPageClient({
         </div>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="relative mt-8">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {hasDeadlineStat ? (
             <StatCard
               primary={deadlinePrimary}
@@ -1943,6 +2097,8 @@ export default function ScholarshipDetailPageClient({
             primary={String(reqCount)}
             secondary="Requirements"
           />
+        </div>
+        {authNoSubDetailPreviewBlur ? <AuthNoSubDetailStatsBlur /> : null}
         </div>
 
         <ScholarshipDetailGuestLockSection
@@ -3150,8 +3306,14 @@ export default function ScholarshipDetailPageClient({
                         eligibleForMatchPill
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
-                        onGuestDetailNavigate={openPremiumPaywall}
-                        onLockedScholarshipNavigate={openPremiumPaywall}
+                        authResolved={authResolved}
+                        needsEmailConfirmation={needsEmailConfirmation}
+                        onUnverifiedEmailDetailNavigate={openEmailConfirmModal}
+                        onGuestDetailNavigate={() => openRegistrationWall('grant-guest')}
+                        onSubscriptionDetailNavigate={() =>
+                          openRegistrationWall('card-unlock')
+                        }
+                        onLockedScholarshipNavigate={openLockedScholarshipWallForSimilar}
                       />
                     ))}
                   </ul>
@@ -3178,8 +3340,14 @@ export default function ScholarshipDetailPageClient({
                         eligibleForMatchPill={false}
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
-                        onGuestDetailNavigate={openPremiumPaywall}
-                        onLockedScholarshipNavigate={openPremiumPaywall}
+                        authResolved={authResolved}
+                        needsEmailConfirmation={needsEmailConfirmation}
+                        onUnverifiedEmailDetailNavigate={openEmailConfirmModal}
+                        onGuestDetailNavigate={() => openRegistrationWall('grant-guest')}
+                        onSubscriptionDetailNavigate={() =>
+                          openRegistrationWall('card-unlock')
+                        }
+                        onLockedScholarshipNavigate={openLockedScholarshipWallForSimilar}
                       />
                     ))}
                   </ul>
@@ -3201,8 +3369,14 @@ export default function ScholarshipDetailPageClient({
                       eligibleForMatchPill={isOpen}
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
-                      onGuestDetailNavigate={openPremiumPaywall}
-                      onLockedScholarshipNavigate={openPremiumPaywall}
+                      authResolved={authResolved}
+                      needsEmailConfirmation={needsEmailConfirmation}
+                      onUnverifiedEmailDetailNavigate={openEmailConfirmModal}
+                      onGuestDetailNavigate={() => openRegistrationWall('grant-guest')}
+                      onSubscriptionDetailNavigate={() =>
+                        openRegistrationWall('card-unlock')
+                      }
+                      onLockedScholarshipNavigate={openLockedScholarshipWallForSimilar}
                     />
                   );
                 })}
@@ -3224,6 +3398,8 @@ export default function ScholarshipDetailPageClient({
         </div>
     </section>
     {premiumPaywallModal}
+    {registrationWallModal}
+    {emailConfirmRequiredModal}
     </DarkTooltipProvider>
   );
 }

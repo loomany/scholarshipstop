@@ -3,7 +3,7 @@ import 'server-only';
 import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
-import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
+import { getServerTransactionalEmailSiteOrigin } from '@/utils/auth-email-redirect.server';
 
 const TELEGRAM_LINK_EMAIL_SUBJECT = 'Your ScholarshipTop Telegram login code';
 
@@ -21,7 +21,7 @@ export async function sendTelegramLinkCodeEmail(
     return { ok: false, skipped: 'RESEND_API_KEY not set' };
   }
 
-  const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
+  const origin = getServerTransactionalEmailSiteOrigin().replace(/\/+$/, '');
   const name = options?.displayName?.trim() || 'there';
 
   const codeBlock = `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:12px 0 20px;">

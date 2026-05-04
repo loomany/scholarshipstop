@@ -102,9 +102,16 @@ export function buildScholarshipTopPremiumEmailHtml(
                         : `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0 8px;">
                       <tr>
                         <td align="center">
-                          <a href="${escapeHtml(opts.ctaHref)}" style="display:inline-block;background-color:#10b981;color:#ffffff!important;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:12px;">
-                            ${escapeHtml(opts.ctaLabel)}
-                          </a>
+                          <!-- Bulletproof CTA: bgcolor on td + real <a> improves taps in Gmail / Apple Mail / in-app viewers. -->
+                          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+                            <tr>
+                              <td align="center" bgcolor="#10b981" style="border-radius:12px;">
+                                <a href="${escapeHtml(opts.ctaHref)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background-color:#10b981;color:#ffffff!important;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;line-height:1.25;text-decoration:none;padding:16px 32px;border-radius:12px;min-width:200px;text-align:center;mso-line-height-rule:exactly;">
+                                  ${escapeHtml(opts.ctaLabel)}
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                     </table>`

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import type { MouseEvent } from 'react';
 import { Info, Lock, Star } from 'lucide-react';
@@ -26,14 +27,18 @@ import {
   SCHOLARSHIP_PROVIDER_OBSCURE_CLASS
 } from '@/lib/constants/scholarshipActionUi';
 import {
-  renderTextWithObscuredPhrases,
-  renderTextWithObscuredProviderName
+  buildScholarshipProviderBlurPhrases,
+  renderTextWithObscuredPhrases
 } from '@/lib/scholarships/renderObscuredProviderText';
 import {
   getScholarshipCatalog,
   payoutMethodChipLabel,
   scholarshipCardChips
 } from '@/lib/scholarships/scholarshipCatalog';
+import {
+  resolveScholarshipProviderNameLocked,
+  resolveScholarshipTargetedCategoryLocked
+} from '@/lib/scholarships/scholarshipObscuring';
 import {
   isSubscriptionLockedScholarship,
   pickScholarshipLockedTitleBlurPhrase
@@ -75,6 +80,12 @@ type ScholarshipCardProps = {
   subscriptionLocked?: boolean;
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
+  /**
+   * When `false`, avoid treating a signed-in user as a guest for detail-click
+   * budget until auth/subscription has finished resolving.
+   * @default true
+   */
+  authResolved?: boolean;
   /** Hub listing tab — used for Hot Deadlines lock affordance. */
   listingTab?: ScholarshipListTabId;
   /** Open subscription modal when premium category chip is clicked. */
@@ -83,10 +94,14 @@ type ScholarshipCardProps = {
   onLockedScholarshipNavigate?: () => void;
   onSubscriptionDetailNavigate?: () => void;
   /**
-   * Guest-only: after ten free navigations to scholarship details,
-   * the next click opens the parent’s registration modal instead of navigating.
+   * Guests: first detail click is blocked; open parent’s registration wall (`grant-guest` mode).
    */
   onGuestDetailNavigate?: () => void;
+  /**
+   * Signed-in, no subscription: email not confirmed — block detail navigation and open parent modal.
+   */
+  needsEmailConfirmation?: boolean;
+  onUnverifiedEmailDetailNavigate?: () => void;
   /** Active applicant country filter, used to make the card badge match user intent. */
   selectedApplicantCountryCodes?: Set<string>;
   /** Optional listing URL used by the detail page Back link. */
@@ -95,6 +110,31 @@ type ScholarshipCardProps = {
 
 const METRIC_LABEL =
   'mt-1 text-[10px] font-normal leading-snug text-gray-500 sm:text-[11px] sm:normal-case';
+
+function AuthNoSubBlurUnlock({
+  onUnlock,
+  label
+}: {
+  onUnlock: () => void;
+  label: string;
+}) {
+  return (
+    <div className="pointer-events-none absolute inset-0 z-[6] flex items-center justify-center rounded-md bg-white/45 backdrop-blur-[5px]">
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onUnlock();
+        }}
+        className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-orange-200 bg-white text-orange-600 shadow-md transition hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+        aria-label={label}
+      >
+        <Lock className="h-5 w-5" strokeWidth={2.2} aria-hidden />
+      </button>
+    </div>
+  );
+}
 
 type ScholarshipCardChip = {
   key: string;
@@ -138,14 +178,18 @@ export default function ScholarshipCard({
   subscriptionLocked = false,
   isAuthenticated = false,
   hasSubscription = false,
+  authResolved = true,
   listingTab,
   onSubscriptionLockedCategoryClick,
   onLockedScholarshipNavigate,
   onSubscriptionDetailNavigate,
   onGuestDetailNavigate,
+  needsEmailConfirmation = false,
+  onUnverifiedEmailDetailNavigate,
   selectedApplicantCountryCodes = new Set(),
   returnToHref
 }: ScholarshipCardProps) {
+  const router = useRouter();
   const detailHref = useMemo(() => {
     const base = scholarshipPublicPath(scholarship);
     const safeReturnToHref = returnToHref?.trim();
@@ -395,9 +439,19 @@ export default function ScholarshipCard({
     () => scholarshipCardChips(scholarship).visible,
     [scholarship]
   );
-  const targetedCategoryLocked =
-    subscriptionLocked ||
-    (!hasSubscription && isSubscriptionLockedScholarship(scholarship));
+  const targetedCategoryLocked = resolveScholarshipTargetedCategoryLocked({
+    subscriptionLockedCatalog: subscriptionLocked,
+    hasSubscription,
+    scholarship
+  });
+  const detailClickBudgetMode = resolveScholarshipDetailClickBudgetMode({
+    isAuthenticated,
+    hasSubscription,
+    authResolved
+  });
+  const detailNavigateBlocked =
+    detailClickBudgetMode != null &&
+    shouldBlockScholarshipDetailNavigation(detailClickBudgetMode);
   const LOCKED_CARD_CATEGORY_IDS = new Set([
     'easy_apply',
     'quick_apply'
@@ -409,11 +463,19 @@ export default function ScholarshipCard({
     subscriptionLocked &&
     !showHotDeadlinesLockBadge &&
     easyApplyIds.some((id) => LOCKED_CARD_CATEGORY_IDS.has(id));
-  const showTargetedCategoryLockBadge = targetedCategoryLocked;
-  const showTopRightLockBadge =
+  const lockRowEligible =
     showHotDeadlinesLockBadge ||
     showEasyApplyLockBadge ||
-    showTargetedCategoryLockBadge;
+    targetedCategoryLocked;
+  const showTopRightLockBadge =
+    detailNavigateBlocked && lockRowEligible;
+  const authNoSubPreviewBlur =
+    isAuthenticated &&
+    !hasSubscription &&
+    !targetedCategoryLocked &&
+    !subscriptionLocked;
+  const openAuthNoSubPaywall =
+    onSubscriptionDetailNavigate ?? onGuestDetailNavigate;
   const topRightBadgeLabel =
     badgeLabelOverride?.trim() || (isUnread ? 'NEW' : null);
   const topRightBadgeAriaLabel = badgeLabelOverride?.trim()
@@ -433,9 +495,25 @@ export default function ScholarshipCard({
   const titleBlurPhrase = targetedCategoryLocked
     ? pickScholarshipLockedTitleBlurPhrase(scholarship.title, providerLine)
     : null;
-
-  const canSeeFullText = Boolean(isAuthenticated);
-  const providerNameObscured = Boolean(providerLine) && !canSeeFullText;
+  /** In-title blur token (production): any unpaid catalog viewer — until subscription. */
+  const titlePremiumObscured =
+    Boolean(titleBlurPhrase) && targetedCategoryLocked;
+  const cardPremiumHitLayerLocked =
+    targetedCategoryLocked && detailNavigateBlocked;
+  const providerNameLocked = resolveScholarshipProviderNameLocked({
+    hasSubscription,
+    providerRaw: scholarship.provider
+  });
+  const providerBlurPhrases = providerNameLocked
+    ? buildScholarshipProviderBlurPhrases(scholarship)
+    : [];
+  const lockedSummaryPhrases = [
+    ...providerBlurPhrases,
+    ...(targetedCategoryLocked && titleBlurPhrase ? [titleBlurPhrase] : [])
+  ];
+  const obscureSummaryLine =
+    (providerNameLocked || targetedCategoryLocked) &&
+    lockedSummaryPhrases.length > 0;
 
   const deadlineTooltipText = formatDeadlineTooltipText(scholarship);
 
@@ -495,49 +573,87 @@ export default function ScholarshipCard({
 
   const handleDetailLinkClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    if (targetedCategoryLocked) {
+    const budgetMode = resolveScholarshipDetailClickBudgetMode({
+      isAuthenticated,
+      hasSubscription,
+      authResolved
+    });
+    if (!budgetMode) return;
+    if (
+      budgetMode === 'signed-in-no-subscription' &&
+      needsEmailConfirmation &&
+      !hasSubscription
+    ) {
       e.preventDefault();
-      onLockedScholarshipNavigate?.();
+      e.stopPropagation();
+      onUnverifiedEmailDetailNavigate?.();
       return;
     }
-    const budgetMode = !isAuthenticated
-      ? resolveScholarshipDetailClickBudgetMode({
-          isAuthenticated,
-          hasSubscription
-        })
-      : null;
-    const onBlockedNavigate =
-      budgetMode === 'guest' || budgetMode === 'signed-in-no-subscription'
-        ? onGuestDetailNavigate ?? onSubscriptionDetailNavigate
-        : undefined;
-    if (!budgetMode || !onBlockedNavigate) return;
     if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
       e.preventDefault();
-      onBlockedNavigate();
+      e.stopPropagation();
+      if (budgetMode === 'guest') {
+        onGuestDetailNavigate?.();
+      } else {
+        (onSubscriptionDetailNavigate ?? onGuestDetailNavigate)?.();
+      }
       return;
     }
     recordScholarshipDetailFreeNavigation(budgetMode);
   };
 
   const handleLockedScholarshipButtonClick = () => {
+    if (!isAuthenticated) {
+      onGuestDetailNavigate?.() ?? onLockedScholarshipNavigate?.();
+      return;
+    }
+    if (!hasSubscription) {
+      if (needsEmailConfirmation) {
+        onUnverifiedEmailDetailNavigate?.();
+        return;
+      }
+      const budgetMode = resolveScholarshipDetailClickBudgetMode({
+        isAuthenticated,
+        hasSubscription,
+        authResolved
+      });
+      if (budgetMode && shouldBlockScholarshipDetailNavigation(budgetMode)) {
+        if (budgetMode === 'guest') {
+          onGuestDetailNavigate?.();
+        } else {
+          (onSubscriptionDetailNavigate ?? onGuestDetailNavigate)?.();
+        }
+        return;
+      }
+      if (budgetMode) {
+        recordScholarshipDetailFreeNavigation(budgetMode);
+      }
+      router.push(detailHref);
+      return;
+    }
     onLockedScholarshipNavigate?.();
   };
 
   const titleContent =
-    targetedCategoryLocked && titleBlurPhrase
+    titlePremiumObscured && titleBlurPhrase
       ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
           blurEntireWhenNoSubstringMatch: false,
           lockedObscuredInteractive: false
         })
-      : providerNameObscured
-        ? renderTextWithObscuredProviderName(scholarship.title, providerLine, {
-            blurEntireWhenNoSubstringMatch: false
-          })
+      : providerNameLocked && providerBlurPhrases.length > 0
+        ? renderTextWithObscuredPhrases(
+            scholarship.title,
+            providerBlurPhrases,
+            {
+              blurEntireWhenNoSubstringMatch: false,
+              lockedObscuredInteractive: false
+            }
+          )
         : scholarship.title;
 
   return (
     <article className={cardArticleClass} data-scholarship-card>
-      {targetedCategoryLocked ? (
+      {cardPremiumHitLayerLocked ? (
         <button
           type="button"
           onClick={handleLockedScholarshipButtonClick}
@@ -581,10 +697,10 @@ export default function ScholarshipCard({
                 </span>
               ) : null}
               {providerLine ? (
-                providerNameObscured ? (
+                providerNameLocked ? (
                   <span
                     className="inline-flex min-w-0 max-w-full items-center gap-1.5 text-gray-400"
-                    aria-label="Sponsor name hidden. Sign in and start a trial to see the provider."
+                    aria-label="Sponsor name hidden until you subscribe."
                   >
                     <Info className="h-3.5 w-3.5 shrink-0 text-gray-300" aria-hidden />
                     <span
@@ -651,8 +767,12 @@ export default function ScholarshipCard({
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (showTargetedCategoryLockBadge) {
-                      onLockedScholarshipNavigate?.();
+                    if (targetedCategoryLocked) {
+                      if (!isAuthenticated) {
+                        onGuestDetailNavigate?.() ?? onLockedScholarshipNavigate?.();
+                      } else {
+                        (onSubscriptionDetailNavigate ?? onGuestDetailNavigate)?.();
+                      }
                       return;
                     }
                     onSubscriptionLockedCategoryClick?.(
@@ -661,12 +781,12 @@ export default function ScholarshipCard({
                   }}
                   className="relative z-30 inline-flex h-5 w-[34px] shrink-0 items-center justify-center rounded-md bg-[#FF7A1A] text-white shadow-sm transition hover:bg-[#E6670C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB27D] focus-visible:ring-offset-1 pointer-events-auto"
                   title={
-                    showTargetedCategoryLockBadge
+                    targetedCategoryLocked
                       ? 'Premium subscription required'
                       : 'Start your free access to unlock this category'
                   }
                   aria-label={
-                    showTargetedCategoryLockBadge
+                    targetedCategoryLocked
                       ? 'Locked scholarship category. Open subscription plans.'
                       : 'Locked category. Start free access to unlock.'
                   }
@@ -683,14 +803,14 @@ export default function ScholarshipCard({
                 : 'text-gray-900 group-hover:text-gray-800'
             }`}
             title={
-              providerNameObscured
+              providerNameLocked
                 ? 'Scholarship title — sponsor name may be obscured until you subscribe.'
-                : targetedCategoryLocked && titleBlurPhrase
+                : titlePremiumObscured && titleBlurPhrase
                   ? 'Scholarship title preview. Upgrade to reveal the full program name.'
                   : scholarship.title
             }
           >
-            {targetedCategoryLocked ? (
+            {cardPremiumHitLayerLocked ? (
               <button
                 type="button"
                 onClick={handleLockedScholarshipButtonClick}
@@ -708,25 +828,37 @@ export default function ScholarshipCard({
               </Link>
             )}
           </h2>
-          <p
-            className="mt-1 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-400 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
-            title={
-              providerNameObscured
-                ? 'Summary preview. Sponsor name is hidden until you subscribe.'
-                : summaryLine
-            }
-            aria-label={
-              providerNameObscured
-                ? 'Scholarship summary. Sponsor name in the text is obscured until you subscribe.'
-                : undefined
-            }
-          >
-            {providerNameObscured
-              ? renderTextWithObscuredProviderName(summaryLine, providerLine, {
-                  blurEntireWhenNoSubstringMatch: false
-                })
-              : summaryLine}
-          </p>
+          <div className="relative">
+            <p
+              className="mt-1 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-400 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
+              title={
+                obscureSummaryLine
+                  ? 'Summary preview. Some details are hidden until you subscribe.'
+                  : summaryLine
+              }
+              aria-label={
+                obscureSummaryLine
+                  ? 'Scholarship summary. Some text is obscured until you subscribe.'
+                  : undefined
+              }
+            >
+              {obscureSummaryLine
+                ? renderTextWithObscuredPhrases(
+                    summaryLine,
+                    lockedSummaryPhrases,
+                    {
+                      blurEntireWhenNoSubstringMatch: false
+                    }
+                  )
+                : summaryLine}
+            </p>
+            {authNoSubPreviewBlur && openAuthNoSubPaywall ? (
+              <AuthNoSubBlurUnlock
+                onUnlock={openAuthNoSubPaywall}
+                label="Unlock full summary and details with a free account or plan"
+              />
+            ) : null}
+          </div>
           {hasApplicants ? (
             <p
               className="mt-1.5 min-w-0 truncate text-xs tabular-nums text-gray-500"
@@ -768,7 +900,7 @@ export default function ScholarshipCard({
         </div>
 
         {stackedListing ? (
-          <>
+          <div className="relative">
             <div className={deadlineBlockWrap}>
               <div
                 className={deadlineInner}
@@ -830,10 +962,16 @@ export default function ScholarshipCard({
                 <div className={cardActionsWrap}>{cardActionControls}</div>
               ) : null}
             </div>
-          </>
+            {authNoSubPreviewBlur && openAuthNoSubPaywall ? (
+              <AuthNoSubBlurUnlock
+                onUnlock={openAuthNoSubPaywall}
+                label="Unlock award and deadline with a free account or plan"
+              />
+            ) : null}
+          </div>
         ) : (
           <>
-            <div className="col-span-full space-y-3 border-t border-gray-200 pt-3 xl:hidden">
+            <div className="relative col-span-full space-y-3 border-t border-gray-200 pt-3 xl:hidden">
               <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:gap-3">
                 <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
                   <p
@@ -972,6 +1110,12 @@ export default function ScholarshipCard({
                   </div>
                 ) : null}
               </div>
+              {authNoSubPreviewBlur && openAuthNoSubPaywall ? (
+                <AuthNoSubBlurUnlock
+                  onUnlock={openAuthNoSubPaywall}
+                  label="Unlock award and deadline with a free account or plan"
+                />
+              ) : null}
             </div>
             <div className="hidden min-w-0 xl:col-start-2 xl:row-start-1 xl:row-span-2 xl:block xl:self-start xl:border-0 xl:pt-0">
               <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-stretch xl:gap-2">

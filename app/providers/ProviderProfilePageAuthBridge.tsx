@@ -13,11 +13,18 @@ export default function ProviderProfilePageAuthBridge({
 }: ProviderProfilePageAuthBridgeProps) {
   return (
     <AuthStatusProvider>
-      {({ isAuthenticated, hasSubscription }) => (
+      {({
+        isAuthenticated,
+        hasSubscription,
+        authResolved,
+        needsEmailConfirmation
+      }) => (
         <ProviderProfileScholarshipsList
           scholarships={scholarships}
           isAuthenticated={isAuthenticated}
           hasSubscription={hasSubscription}
+          authResolved={authResolved}
+          needsEmailConfirmation={needsEmailConfirmation}
         />
       )}
     </AuthStatusProvider>

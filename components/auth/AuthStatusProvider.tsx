@@ -14,8 +14,16 @@ import {
   type SubscriptionWithPriceAndProduct
 } from '@/lib/payments/subscriptionEntitlements';
 import { setScholarshipStorageUserScope } from '@/app/scholarships/userScopedStorage';
+import { scholarshipNeedsEmailConfirmation } from '@/lib/scholarships/scholarshipEmailConfirmationGate';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
+
+export type AuthBootstrapSnapshot = {
+  isAuthenticated: boolean;
+  hasSubscription: boolean;
+  /** When known from RSC (scholarship detail). */
+  needsEmailConfirmation?: boolean;
+};
 
 type AuthStatusProviderProps = {
   children: (state: {
@@ -23,15 +31,32 @@ type AuthStatusProviderProps = {
     isAuthenticated: boolean;
     hasSubscription: boolean;
     authResolved: boolean;
+    needsEmailConfirmation: boolean;
   }) => React.ReactNode;
+  /**
+   * When set (e.g. RSC on scholarship detail), first paint matches server session
+   * so paid users do not briefly see paywalled blur before `getSession()` resolves.
+   */
+  initialAuthFromServer?: AuthBootstrapSnapshot | null;
 };
 
 export default function AuthStatusProvider({
-  children
+  children,
+  initialAuthFromServer
 }: AuthStatusProviderProps) {
   const [user, setUser] = useState<User | null>(null);
-  const [hasSubscription, setHasSubscription] = useState(false);
-  const [authResolved, setAuthResolved] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => initialAuthFromServer?.isAuthenticated ?? false
+  );
+  const [hasSubscription, setHasSubscription] = useState(
+    () => initialAuthFromServer?.hasSubscription ?? false
+  );
+  const [authResolved, setAuthResolved] = useState(
+    () => initialAuthFromServer != null
+  );
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(
+    () => Boolean(initialAuthFromServer?.needsEmailConfirmation)
+  );
   const [subscriptionPaused, setSubscriptionPaused] = useState(false);
   const [pausedResumeUrl, setPausedResumeUrl] = useState<string | null>(null);
 
@@ -41,8 +66,10 @@ export default function AuthStatusProvider({
     const syncSubscription = async (nextUser: User | null) => {
       setUser(nextUser);
       setScholarshipStorageUserScope(nextUser?.id ?? null);
+      setIsAuthenticated(Boolean(nextUser));
       if (!nextUser) {
         setHasSubscription(false);
+        setNeedsEmailConfirmation(false);
         setSubscriptionPaused(false);
         setPausedResumeUrl(null);
         setAuthResolved(true);
@@ -66,6 +93,9 @@ export default function AuthStatusProvider({
           (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
         ) as SubscriptionWithPriceAndProduct | null;
         setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
+        setNeedsEmailConfirmation(
+          scholarshipNeedsEmailConfirmation(nextUser, profile?.email_verified)
+        );
         const paused = normalizeSubscriptionStatus(subscription?.status) === 'paused';
         setSubscriptionPaused(paused);
         setPausedResumeUrl(
@@ -73,6 +103,7 @@ export default function AuthStatusProvider({
         );
       } catch {
         setHasSubscription(false);
+        setNeedsEmailConfirmation(false);
         setSubscriptionPaused(false);
         setPausedResumeUrl(null);
       } finally {
@@ -129,9 +160,10 @@ export default function AuthStatusProvider({
       ) : null}
       {children({
         user,
-        isAuthenticated: Boolean(user),
+        isAuthenticated,
         hasSubscription,
-        authResolved
+        authResolved,
+        needsEmailConfirmation
       })}
     </>
   );

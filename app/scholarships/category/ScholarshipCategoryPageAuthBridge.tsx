@@ -23,7 +23,7 @@ export default function ScholarshipCategoryPageAuthBridge({
 }: ScholarshipCategoryPageAuthBridgeProps) {
   return (
     <AuthStatusProvider>
-      {({ isAuthenticated, hasSubscription, authResolved }) => (
+      {({ isAuthenticated, hasSubscription, authResolved, needsEmailConfirmation }) => (
         <ScholarshipCategoryPageClient
           categorySlug={categorySlug}
           pageTitle={pageTitle}
@@ -33,6 +33,7 @@ export default function ScholarshipCategoryPageAuthBridge({
           isAuthenticated={isAuthenticated}
           authResolved={authResolved}
           hasSubscription={hasSubscription}
+          needsEmailConfirmation={needsEmailConfirmation}
           initialPayload={initialPayload}
         />
       )}

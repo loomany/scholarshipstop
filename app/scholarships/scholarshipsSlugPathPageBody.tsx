@@ -58,6 +58,7 @@ import {
   getScholarshipDetailServer,
   redactPremiumScholarshipFields
 } from '@/lib/scholarships/scholarshipDetailServer';
+import { fetchScholarshipDetailServerAuthSnapshot } from '@/lib/scholarships/scholarshipDetailServerAuth';
 import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
 import { relatedScholarshipHubLinks } from '@/lib/seo/relatedScholarshipHubLinks';
@@ -333,6 +334,8 @@ export default async function ScholarshipsSlugPathPageBody({
     const initialComparePeers = await fetchComparePeersForInstitution(
       scholarship.institutionId
     );
+    const initialAuthFromServer =
+      await fetchScholarshipDetailServerAuthSnapshot();
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
@@ -344,6 +347,7 @@ export default async function ScholarshipsSlugPathPageBody({
           initialRelatedEssays={initialRelatedEssays}
           initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
           initialComparePeers={initialComparePeers}
+          initialAuthFromServer={initialAuthFromServer}
         />
       </>
     );
@@ -381,6 +385,8 @@ export default async function ScholarshipsSlugPathPageBody({
     const initialComparePeers = await fetchComparePeersForInstitution(
       scholarship.institutionId
     );
+    const initialAuthFromServer =
+      await fetchScholarshipDetailServerAuthSnapshot();
     return (
       <>
         <h1 className="sr-only">{scholarship.title}</h1>
@@ -392,6 +398,7 @@ export default async function ScholarshipsSlugPathPageBody({
           initialRelatedEssays={initialRelatedEssays}
           initialRelatedHubLinks={relatedScholarshipHubLinks(scholarship)}
           initialComparePeers={initialComparePeers}
+          initialAuthFromServer={initialAuthFromServer}
         />
       </>
     );

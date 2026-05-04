@@ -34,7 +34,7 @@ import ScholarshipsHubShellSkeleton, {
 } from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ManageSavedFilterPresetModal from '@/components/scholarships/ManageSavedFilterPresetModal';
 import SaveFilterPresetModal from '@/components/scholarships/SaveFilterPresetModal';
-import { ScholarshipsEmailConfirmationBanner } from '@/components/scholarships/ScholarshipsEmailConfirmationBanner';
+import ScholarshipEmailConfirmRequiredModal from '@/components/scholarships/ScholarshipEmailConfirmRequiredModal';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
@@ -310,6 +310,7 @@ function ScholarshipsPageInner({
   isAuthenticated,
   authResolved = true,
   hasSubscription = false,
+  needsEmailConfirmation = false,
   initialPayload = null,
   routeScope = null,
   currentPathname = '/scholarships',
@@ -321,6 +322,7 @@ function ScholarshipsPageInner({
   /** False until Supabase session is known — avoids guest URL normalization racing ahead of login. */
   authResolved?: boolean;
   hasSubscription?: boolean;
+  needsEmailConfirmation?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
   currentPathname?: string;
@@ -470,6 +472,13 @@ function ScholarshipsPageInner({
   >('scholarships');
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
+  const [emailConfirmModalOpen, setEmailConfirmModalOpen] = useState(false);
+  const openEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(true);
+  }, []);
+  const closeEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(false);
+  }, []);
   const [bestRecommendationWizardStore, setBestRecommendationWizardStore] =
     useState<BestRecommendationWizardStore | null>(null);
   const [bestRecommendationWizardHydrated, setBestRecommendationWizardHydrated] =
@@ -532,6 +541,15 @@ function ScholarshipsPageInner({
     setRegistrationWallVariant('locked-category');
     setRegistrationWallOpen(true);
   }, []);
+
+  /** Route premium-only catalog affordances to free-account signup for guests. */
+  const openLockedScholarshipWallForCard = useCallback(() => {
+    if (!isAuthenticated) {
+      openRegistrationWall('grant-guest');
+      return;
+    }
+    openLockedCategoryWall();
+  }, [isAuthenticated, openRegistrationWall, openLockedCategoryWall]);
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
@@ -3401,7 +3419,6 @@ function ScholarshipsPageInner({
         lead={
           leadContent ?? (
             <div className="space-y-5 sm:space-y-6">
-              <ScholarshipsEmailConfirmationBanner />
               <div className="space-y-0">
                 <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
                   {hubListingPageTitle}
@@ -3544,18 +3561,27 @@ function ScholarshipsPageInner({
                                 subscriptionLocked={catalogFreeTier}
                                 isAuthenticated={isAuthenticated}
                                 hasSubscription={hasSubscription}
+                                authResolved={authResolved}
                                 listingTab="best-recommendation"
                                 selectedApplicantCountryCodes={selectedApplicantCountryCodes}
                                 onSubscriptionLockedCategoryClick={
-                                  openLockedCategoryWall
+                                  openLockedScholarshipWallForCard
                                 }
-                                onLockedScholarshipNavigate={openLockedCategoryWall}
-                                onSubscriptionDetailNavigate={openLockedCategoryWall}
-                                onGuestDetailNavigate={
+                                onLockedScholarshipNavigate={
+                                  openLockedScholarshipWallForCard
+                                }
+                                onSubscriptionDetailNavigate={
                                   catalogFreeTier
                                     ? () => openRegistrationWall('card-unlock')
+                                    : openLockedCategoryWall
+                                }
+                                onGuestDetailNavigate={
+                                  !isAuthenticated
+                                    ? () => openRegistrationWall('grant-guest')
                                     : undefined
                                 }
+                                needsEmailConfirmation={needsEmailConfirmation}
+                                onUnverifiedEmailDetailNavigate={openEmailConfirmWall}
                                 returnToHref={currentListingHref}
                               />
                               {shouldShowIqInlineCard(index) ? (
@@ -3637,18 +3663,27 @@ function ScholarshipsPageInner({
                                 subscriptionLocked={catalogFreeTier}
                                 isAuthenticated={isAuthenticated}
                                 hasSubscription={hasSubscription}
+                                authResolved={authResolved}
                                 listingTab="best-recommendation"
                                 selectedApplicantCountryCodes={selectedApplicantCountryCodes}
                                 onSubscriptionLockedCategoryClick={
-                                  openLockedCategoryWall
+                                  openLockedScholarshipWallForCard
                                 }
-                                onLockedScholarshipNavigate={openLockedCategoryWall}
-                                onSubscriptionDetailNavigate={openLockedCategoryWall}
-                                onGuestDetailNavigate={
+                                onLockedScholarshipNavigate={
+                                  openLockedScholarshipWallForCard
+                                }
+                                onSubscriptionDetailNavigate={
                                   catalogFreeTier
                                     ? () => openRegistrationWall('card-unlock')
+                                    : openLockedCategoryWall
+                                }
+                                onGuestDetailNavigate={
+                                  !isAuthenticated
+                                    ? () => openRegistrationWall('grant-guest')
                                     : undefined
                                 }
+                                needsEmailConfirmation={needsEmailConfirmation}
+                                onUnverifiedEmailDetailNavigate={openEmailConfirmWall}
                                 returnToHref={currentListingHref}
                               />
                               {shouldShowIqInlineCard(index) ? (
@@ -3795,16 +3830,27 @@ function ScholarshipsPageInner({
                       subscriptionLocked={catalogFreeTier}
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
+                      authResolved={authResolved}
                       listingTab={activeTab}
                       selectedApplicantCountryCodes={selectedApplicantCountryCodes}
-                      onSubscriptionLockedCategoryClick={openLockedCategoryWall}
-                      onLockedScholarshipNavigate={openLockedCategoryWall}
-                      onSubscriptionDetailNavigate={openLockedCategoryWall}
-                      onGuestDetailNavigate={
+                      onSubscriptionLockedCategoryClick={
+                        openLockedScholarshipWallForCard
+                      }
+                      onLockedScholarshipNavigate={
+                        openLockedScholarshipWallForCard
+                      }
+                      onSubscriptionDetailNavigate={
                         catalogFreeTier
                           ? () => openRegistrationWall('card-unlock')
+                          : openLockedCategoryWall
+                      }
+                      onGuestDetailNavigate={
+                        !isAuthenticated
+                          ? () => openRegistrationWall('grant-guest')
                           : undefined
                       }
+                      needsEmailConfirmation={needsEmailConfirmation}
+                      onUnverifiedEmailDetailNavigate={openEmailConfirmWall}
                       returnToHref={currentListingHref}
                     />
                     {shouldShowIqInlineCard(index) ? (
@@ -3865,6 +3911,10 @@ function ScholarshipsPageInner({
         onApply={applyManagedSavedFilterPreset}
         onDelete={deleteManagedSavedFilterPreset}
       />
+      <ScholarshipEmailConfirmRequiredModal
+        open={emailConfirmModalOpen}
+        onClose={closeEmailConfirmWall}
+      />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
@@ -3882,6 +3932,7 @@ export default function ScholarshipsHubPageClient({
   isAuthenticated = false,
   authResolved = true,
   hasSubscription = false,
+  needsEmailConfirmation = false,
   initialPayload = null,
   routeScope = null,
   currentPathname = '/scholarships',
@@ -3893,6 +3944,7 @@ export default function ScholarshipsHubPageClient({
   isAuthenticated?: boolean;
   authResolved?: boolean;
   hasSubscription?: boolean;
+  needsEmailConfirmation?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
   routeScope?: LongTailRouteScopePayload | null;
   currentPathname?: string;
@@ -3910,6 +3962,7 @@ export default function ScholarshipsHubPageClient({
           isAuthenticated={isAuthenticated}
           authResolved={authResolved}
           hasSubscription={hasSubscription}
+          needsEmailConfirmation={needsEmailConfirmation}
           initialPayload={initialPayload}
           routeScope={routeScope}
           currentPathname={currentPathname}

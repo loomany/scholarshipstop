@@ -80,6 +80,32 @@ function isLocalDevelopmentOrigin(origin: string): boolean {
 }
 
 /**
+ * Base URL for links inside outbound transactional email (Resend).
+ * Prefer `NEXT_PUBLIC_SITE_URL` / `SITE_URL` when they point at a public host — avoids
+ * `localhost` in real inboxes when verification is triggered from local dev or a request
+ * whose `Host` header is loopback. Same idea as {@link getServerAuthResetPasswordUrl}.
+ */
+export function getServerTransactionalEmailSiteOrigin(): string {
+  const envCandidates = [
+    process.env.NEXT_PUBLIC_SITE_URL?.trim(),
+    process.env.SITE_URL?.trim()
+  ].filter((s): s is string => Boolean(s));
+
+  for (const raw of envCandidates) {
+    const origin = normalizeSiteOrigin(raw);
+    if (!isLocalDevelopmentOrigin(origin)) {
+      return origin;
+    }
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    return SITE_ORIGIN_FALLBACK;
+  }
+
+  return getServerAuthSiteOrigin();
+}
+
+/**
  * Return URL for Supabase `redirectTo` on password reset.
  * When `NEXT_PUBLIC_SITE_URL` is set to your public domain (e.g. production), reset links in
  * emails use that host even if the forgot-password form was submitted from local dev — avoiding

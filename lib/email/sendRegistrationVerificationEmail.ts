@@ -7,7 +7,7 @@ import {
   EMAIL_SUBJECT_CONFIRM_SIGNUP
 } from '@/lib/email/templates/premiumTemplates';
 import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
-import { getServerAuthSiteOrigin } from '@/utils/auth-email-redirect.server';
+import { getServerTransactionalEmailSiteOrigin } from '@/utils/auth-email-redirect.server';
 
 export type SendRegistrationVerificationOptions = {
   /** Shown in “Hi {name}!” — optional first name from profile. */
@@ -31,7 +31,7 @@ export async function sendRegistrationVerificationEmail(
   }
 
   const token = createEmailVerificationToken(userId);
-  const origin = getServerAuthSiteOrigin().replace(/\/+$/, '');
+  const origin = getServerTransactionalEmailSiteOrigin().replace(/\/+$/, '');
   const link = `${origin}/auth/verify-email?token=${encodeURIComponent(token)}`;
 
   const html = buildConfirmSignupEmailHtml({

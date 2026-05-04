@@ -162,12 +162,14 @@ function parseStored(raw: string): StoredOnboardingDraft | null {
         o.step4 && typeof o.step4 === 'object'
           ? (o.step4 as Record<string, unknown>)
           : {};
+      const step4HasCountryState =
+        version === 7 || version === 8;
       const stateFromStep4 =
-        version === 7 && typeof s4next.state === 'string'
+        step4HasCountryState && typeof s4next.state === 'string'
           ? s4next.state
           : '';
       const countryCodeFromStep4 =
-        version === 7 && typeof s4next.countryCode === 'string'
+        step4HasCountryState && typeof s4next.countryCode === 'string'
           ? s4next.countryCode
           : '';
       if (version === 6 && activeStep > 3) {

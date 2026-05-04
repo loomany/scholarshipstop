@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
+import ScholarshipEmailConfirmRequiredModal from '@/components/scholarships/ScholarshipEmailConfirmRequiredModal';
 import ScholarshipIqInlineCard from '@/components/scholarships/ScholarshipIqInlineCard';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
@@ -46,22 +47,27 @@ function ContentHubArticleMatchedScholarshipCardsInner({
   scholarships,
   showIqAdAfterFirst = false,
   isAuthenticated,
-  hasSubscription
+  hasSubscription,
+  authResolved,
+  needsEmailConfirmation
 }: Props & {
   isAuthenticated: boolean;
   hasSubscription: boolean;
+  authResolved: boolean;
+  needsEmailConfirmation: boolean;
 }) {
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [emailConfirmModalOpen, setEmailConfirmModalOpen] = useState(false);
   const [registrationWallVariant, setRegistrationWallVariant] = useState<
     'scholarships' | 'essay' | 'locked-category'
   >('scholarships');
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
   const { profile: currentMatchProfile } =
-    useCurrentUserScholarshipMatchProfile(isAuthenticated);
+    useCurrentUserScholarshipMatchProfile(isAuthenticated && authResolved);
 
   const refreshSavedIds = useCallback(async () => {
     if (!isAuthenticated) {
@@ -122,11 +128,24 @@ function ContentHubArticleMatchedScholarshipCardsInner({
     setRegistrationWallVariant('locked-category');
     setRegistrationWallOpen(true);
   }, []);
+  const openLockedScholarshipWallForCard = useCallback(() => {
+    if (!isAuthenticated) {
+      openRegistrationWall('grant-guest');
+      return;
+    }
+    openLockedCategoryWall();
+  }, [isAuthenticated, openRegistrationWall, openLockedCategoryWall]);
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
+  const openEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(true);
+  }, []);
+  const closeEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(false);
+  }, []);
 
-  const catalogFreeTier = !hasSubscription;
+  const catalogFreeTier = authResolved && !hasSubscription;
 
   const toggleSave = useCallback(
     async (id: string) => {
@@ -193,14 +212,23 @@ function ContentHubArticleMatchedScholarshipCardsInner({
                 subscriptionLocked={catalogFreeTier}
                 isAuthenticated={isAuthenticated}
                 hasSubscription={hasSubscription}
-                onSubscriptionLockedCategoryClick={openLockedCategoryWall}
-                onLockedScholarshipNavigate={openLockedCategoryWall}
-                onSubscriptionDetailNavigate={openLockedCategoryWall}
-                onGuestDetailNavigate={
+                authResolved={authResolved}
+                onSubscriptionLockedCategoryClick={
+                  openLockedScholarshipWallForCard
+                }
+                onLockedScholarshipNavigate={openLockedScholarshipWallForCard}
+                onSubscriptionDetailNavigate={
                   catalogFreeTier
                     ? () => openRegistrationWall('card-unlock')
+                    : openLockedCategoryWall
+                }
+                onGuestDetailNavigate={
+                  !isAuthenticated
+                    ? () => openRegistrationWall('grant-guest')
                     : undefined
                 }
+                needsEmailConfirmation={needsEmailConfirmation}
+                onUnverifiedEmailDetailNavigate={openEmailConfirmWall}
               />
             </div>
             {showIqAdAfterFirst && index === 0 ? (
@@ -211,12 +239,18 @@ function ContentHubArticleMatchedScholarshipCardsInner({
           </li>
         ))}
       </ul>
+      <ScholarshipEmailConfirmRequiredModal
+        open={emailConfirmModalOpen}
+        onClose={closeEmailConfirmWall}
+      />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
         variant={registrationWallVariant}
         contentMode={registrationWallContent}
-        signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
+        signedInWithoutSubscription={Boolean(
+          isAuthenticated && authResolved && !hasSubscription
+        )}
       />
     </>
   );
@@ -225,11 +259,18 @@ function ContentHubArticleMatchedScholarshipCardsInner({
 export default function ContentHubArticleMatchedScholarshipCards(props: Props) {
   return (
     <AuthStatusProvider>
-      {({ isAuthenticated, hasSubscription }) => (
+      {({
+        isAuthenticated,
+        hasSubscription,
+        authResolved,
+        needsEmailConfirmation
+      }) => (
         <ContentHubArticleMatchedScholarshipCardsInner
           {...props}
           isAuthenticated={isAuthenticated}
           hasSubscription={hasSubscription}
+          authResolved={authResolved}
+          needsEmailConfirmation={needsEmailConfirmation}
         />
       )}
     </AuthStatusProvider>

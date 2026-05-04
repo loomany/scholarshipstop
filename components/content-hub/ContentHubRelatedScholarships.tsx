@@ -111,6 +111,7 @@ function ScholarshipLinkCardCompact({
         if (!budgetMode) return;
         if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
           e.preventDefault();
+          e.stopPropagation();
           onDetailNavigateBlocked();
           return;
         }
@@ -186,6 +187,7 @@ function ScholarshipLinkCardFeatured({
         if (!budgetMode) return;
         if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
           e.preventDefault();
+          e.stopPropagation();
           onDetailNavigateBlocked();
           return;
         }
@@ -207,6 +209,9 @@ export default function ContentHubRelatedScholarships({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasSubscription, setHasSubscription] = useState(false);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [registrationWallContent, setRegistrationWallContent] = useState<
+    'grant-guest' | 'card-unlock'
+  >('grant-guest');
 
   useEffect(() => {
     let cancelled = false;
@@ -245,9 +250,12 @@ export default function ContentHubRelatedScholarships({
     };
   }, []);
 
-  const openRegistrationWall = useCallback(() => {
+  const openDetailBlockedWall = useCallback(() => {
+    setRegistrationWallContent(
+      isAuthenticated ? 'card-unlock' : 'grant-guest'
+    );
     setRegistrationWallOpen(true);
-  }, []);
+  }, [isAuthenticated]);
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
@@ -290,7 +298,7 @@ export default function ContentHubRelatedScholarships({
               item={item}
               isAuthenticated={isAuthenticated}
               hasSubscription={hasSubscription}
-              onDetailNavigateBlocked={openRegistrationWall}
+              onDetailNavigateBlocked={openDetailBlockedWall}
             />
           ) : (
             <ScholarshipLinkCardCompact
@@ -300,7 +308,7 @@ export default function ContentHubRelatedScholarships({
               item={item}
               isAuthenticated={isAuthenticated}
               hasSubscription={hasSubscription}
-              onDetailNavigateBlocked={openRegistrationWall}
+              onDetailNavigateBlocked={openDetailBlockedWall}
             />
           )
         )}
@@ -308,7 +316,7 @@ export default function ContentHubRelatedScholarships({
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
-        contentMode="card-unlock"
+        contentMode={registrationWallContent}
         signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
       />
     </section>

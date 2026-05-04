@@ -28,6 +28,7 @@ import {
 } from '@/app/scholarships/userScopedStorage';
 import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profileMatchBadge';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
+import ScholarshipEmailConfirmRequiredModal from '@/components/scholarships/ScholarshipEmailConfirmRequiredModal';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
@@ -37,6 +38,7 @@ import {
   type SubscriptionWithPriceAndProduct
 } from '@/lib/payments/subscriptionEntitlements';
 import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
+import { scholarshipNeedsEmailConfirmation } from '@/lib/scholarships/scholarshipEmailConfirmationGate';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
 
@@ -57,17 +59,20 @@ export default function CompareInstitutionScholarshipColumns({
 }: CompareInstitutionScholarshipColumnsProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasSubscription, setHasSubscription] = useState(false);
+  const [authResolved, setAuthResolved] = useState(false);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+  const [emailConfirmModalOpen, setEmailConfirmModalOpen] = useState(false);
   const [registrationWallVariant, setRegistrationWallVariant] = useState<
     'scholarships' | 'essay' | 'locked-category'
   >('scholarships');
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
   const { profile: currentMatchProfile } =
-    useCurrentUserScholarshipMatchProfile(isAuthenticated);
+    useCurrentUserScholarshipMatchProfile(isAuthenticated && authResolved);
 
   const refreshSavedIds = useCallback(async () => {
     if (!isAuthenticated) {
@@ -99,35 +104,46 @@ export default function CompareInstitutionScholarshipColumns({
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const supabase = createClient();
-      const {
-        data: { session }
-      } = await supabase.auth.getSession();
-      if (cancelled) return;
-      setScholarshipStorageUserScope(session?.user?.id ?? null);
-      setIsAuthenticated(Boolean(session?.user?.id));
-      if (!session?.user?.id) {
-        setHasSubscription(false);
-        return;
+      try {
+        const supabase = createClient();
+        const {
+          data: { session }
+        } = await supabase.auth.getSession();
+        if (cancelled) return;
+        setScholarshipStorageUserScope(session?.user?.id ?? null);
+        setIsAuthenticated(Boolean(session?.user?.id));
+        if (!session?.user?.id) {
+          setHasSubscription(false);
+          setNeedsEmailConfirmation(false);
+          return;
+        }
+        const [{ data: profile }, { data: subscriptions }] = await Promise.all([
+          supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .maybeSingle<Database['public']['Tables']['profiles']['Row']>(),
+          supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', session.user.id)
+            .order('created', { ascending: false })
+            .limit(20)
+        ]);
+        if (cancelled) return;
+        const subscription = pickCanonicalSubscription(
+          (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
+        ) as SubscriptionWithPriceAndProduct | null;
+        setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
+        setNeedsEmailConfirmation(
+          scholarshipNeedsEmailConfirmation(
+            session.user,
+            profile?.email_verified
+          )
+        );
+      } finally {
+        if (!cancelled) setAuthResolved(true);
       }
-      const [{ data: profile }, { data: subscriptions }] = await Promise.all([
-        supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .maybeSingle<Database['public']['Tables']['profiles']['Row']>(),
-        supabase
-          .from('subscriptions')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .order('created', { ascending: false })
-          .limit(20)
-      ]);
-      if (cancelled) return;
-      const subscription = pickCanonicalSubscription(
-        (subscriptions ?? []) as Database['public']['Tables']['subscriptions']['Row'][]
-      ) as SubscriptionWithPriceAndProduct | null;
-      setHasSubscription(hasActiveSubscriptionAccess(profile ?? null, subscription));
     })();
     return () => {
       cancelled = true;
@@ -166,11 +182,24 @@ export default function CompareInstitutionScholarshipColumns({
     setRegistrationWallVariant('locked-category');
     setRegistrationWallOpen(true);
   }, []);
+  const openLockedScholarshipWallForCard = useCallback(() => {
+    if (!isAuthenticated) {
+      openRegistrationWall('grant-guest');
+      return;
+    }
+    openLockedCategoryWall();
+  }, [isAuthenticated, openRegistrationWall, openLockedCategoryWall]);
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
   }, []);
+  const openEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(true);
+  }, []);
+  const closeEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(false);
+  }, []);
 
-  const catalogFreeTier = !hasSubscription;
+  const catalogFreeTier = authResolved && !hasSubscription;
 
   const toggleSave = useCallback(
     async (id: string) => {
@@ -237,12 +266,21 @@ export default function CompareInstitutionScholarshipColumns({
           subscriptionLocked={catalogFreeTier}
           isAuthenticated={isAuthenticated}
           hasSubscription={hasSubscription}
-          onSubscriptionLockedCategoryClick={openLockedCategoryWall}
-          onLockedScholarshipNavigate={openLockedCategoryWall}
-          onSubscriptionDetailNavigate={openLockedCategoryWall}
-          onGuestDetailNavigate={
-            catalogFreeTier ? () => openRegistrationWall('card-unlock') : undefined
+          authResolved={authResolved}
+          onSubscriptionLockedCategoryClick={openLockedScholarshipWallForCard}
+          onLockedScholarshipNavigate={openLockedScholarshipWallForCard}
+          onSubscriptionDetailNavigate={
+            catalogFreeTier
+              ? () => openRegistrationWall('card-unlock')
+              : openLockedCategoryWall
           }
+          onGuestDetailNavigate={
+            !isAuthenticated
+              ? () => openRegistrationWall('grant-guest')
+              : undefined
+          }
+          needsEmailConfirmation={needsEmailConfirmation}
+          onUnverifiedEmailDetailNavigate={openEmailConfirmWall}
         />
       </div>
       {href ? (
@@ -354,12 +392,18 @@ export default function CompareInstitutionScholarshipColumns({
         )}
       </section>
 
+      <ScholarshipEmailConfirmRequiredModal
+        open={emailConfirmModalOpen}
+        onClose={closeEmailConfirmWall}
+      />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}
         onClose={closeRegistrationWall}
         variant={registrationWallVariant}
         contentMode={registrationWallContent}
-        signedInWithoutSubscription={Boolean(isAuthenticated && !hasSubscription)}
+        signedInWithoutSubscription={Boolean(
+          isAuthenticated && authResolved && !hasSubscription
+        )}
       />
     </>
   );

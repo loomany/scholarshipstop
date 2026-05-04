@@ -4,7 +4,11 @@ import { onboardingStepHref } from '@/lib/onboarding/onboardingResume';
 import ScholarshipLockedCategoryModal from '@/components/scholarships/ScholarshipLockedCategoryModal';
 import ScholarshipSubscriptionOfferModal from '@/components/scholarships/ScholarshipSubscriptionOfferModal';
 
-export type ScholarshipRegistrationWallContentMode = 'hub' | 'card-unlock';
+export type ScholarshipRegistrationWallContentMode =
+  | 'hub'
+  | 'card-unlock'
+  /** Guest clicked a grant — emphasize free account, CTA to onboarding (not payment-first). */
+  | 'grant-guest';
 
 type ScholarshipRegistrationWallModalProps = {
   open: boolean;
@@ -44,9 +48,12 @@ export default function ScholarshipRegistrationWallModal({
   } else if (variant === 'essay') {
     notice =
       'AI Essay Mentor is available only on Quarterly and Yearly plans. Monthly unlocks the premium scholarship database only.';
+  } else if (contentMode === 'grant-guest') {
+    notice =
+      "It's free to join. Save grants, see deadlines and eligibility at a glance, and pick up where you left off—no credit card required to get started.";
   } else if (contentMode === 'card-unlock') {
     notice =
-      "You've used your free previews. Continue with trial access — we will open plan selection after sign-up.";
+      "You've viewed your free scholarship previews. Upgrade to keep browsing every detail—or start a trial from your account.";
   } else {
     notice =
       'Unlock filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor right after sign-up.';
@@ -71,6 +78,7 @@ export default function ScholarshipRegistrationWallModal({
       marketingMode={marketingMode}
       copyVariant={copyVariant}
       signedInWithoutSubscription={signedInWithoutSubscription}
+      grantScholarshipPitch={contentMode === 'grant-guest'}
     />
   );
 }

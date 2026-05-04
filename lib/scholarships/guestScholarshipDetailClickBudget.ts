@@ -1,11 +1,15 @@
 import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
 
-/** Guest and signed-in without subscription: scholarship detail views are paywalled immediately. */
-const FREE_DETAIL_NAVIGATIONS = 0;
+/** Guests never get free navigations from this counter — the wall opens on first grant click. */
+const GUEST_FREE_DETAIL_NAVIGATIONS = 0;
+
+/** Signed-in users without subscription: scholarship detail previews before subscription wall. */
+export const AUTH_NO_SUB_FREE_DETAIL_VIEWS = 10;
 
 const GUEST_STORAGE_KEY = 'scholarshipGuestDetailFreeClicksUsed';
-/** Same cap as guest; scoped per user when signed in (see `storageKeyForMode`). */
-const AUTH_NO_SUBSCRIPTION_STORAGE_KEY = GUEST_STORAGE_KEY;
+
+/** Separate from guest key so counts never mix. */
+const AUTH_NO_SUBSCRIPTION_STORAGE_BASE = 'scholarshipAuthNoSubDetailViewsUsed';
 
 export type ScholarshipDetailClickBudgetMode =
   | 'guest'
@@ -14,21 +18,29 @@ export type ScholarshipDetailClickBudgetMode =
 function storageKeyForMode(mode: ScholarshipDetailClickBudgetMode): string {
   return mode === 'guest'
     ? GUEST_STORAGE_KEY
-    : getScopedScholarshipStorageKey(AUTH_NO_SUBSCRIPTION_STORAGE_KEY);
+    : getScopedScholarshipStorageKey(AUTH_NO_SUBSCRIPTION_STORAGE_BASE);
 }
 
-function freeNavigationsForMode(_mode: ScholarshipDetailClickBudgetMode): number {
-  return FREE_DETAIL_NAVIGATIONS;
+function freeNavigationsForMode(
+  mode: ScholarshipDetailClickBudgetMode
+): number {
+  return mode === 'signed-in-no-subscription'
+    ? AUTH_NO_SUB_FREE_DETAIL_VIEWS
+    : GUEST_FREE_DETAIL_NAVIGATIONS;
 }
 
 export function resolveScholarshipDetailClickBudgetMode(options: {
   isAuthenticated: boolean;
   hasSubscription: boolean;
+  /**
+   * When `false`, subscription/session is still loading on the client — avoid
+   * treating a signed-in user as `guest` (0 free detail opens).
+   */
+  authResolved?: boolean;
 }): ScholarshipDetailClickBudgetMode | null {
+  if (options.authResolved === false) return null;
   if (!options.isAuthenticated) return 'guest';
-  // Authenticated users should navigate freely across scholarship pages.
-  // Essay-specific gating is handled separately in essay flows.
-  if (!options.hasSubscription) return null;
+  if (!options.hasSubscription) return 'signed-in-no-subscription';
   return null;
 }
 
@@ -51,11 +63,15 @@ export function shouldBlockScholarshipDetailNavigation(
 export function recordScholarshipDetailFreeNavigation(
   mode: ScholarshipDetailClickBudgetMode
 ): void {
+  const cap = freeNavigationsForMode(mode);
   const next = getScholarshipDetailFreeClicksUsed(mode) + 1;
-  localStorage.setItem(
-    storageKeyForMode(mode),
-    String(Math.min(next, freeNavigationsForMode(mode)))
-  );
+  localStorage.setItem(storageKeyForMode(mode), String(Math.min(next, cap)));
+}
+
+/** Remaining detail opens for signed-in users without subscription (0 once blocked). */
+export function getAuthNoSubScholarshipDetailViewsRemaining(): number {
+  const used = getScholarshipDetailFreeClicksUsed('signed-in-no-subscription');
+  return Math.max(0, AUTH_NO_SUB_FREE_DETAIL_VIEWS - used);
 }
 
 export function getGuestScholarshipDetailFreeClicksUsed(): number {

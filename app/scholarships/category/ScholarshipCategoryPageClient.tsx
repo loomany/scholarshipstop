@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { HubListSkeleton } from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipCategoryListingBreadcrumbs from '@/components/scholarships/ScholarshipCategoryListingBreadcrumbs';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
+import ScholarshipEmailConfirmRequiredModal from '@/components/scholarships/ScholarshipEmailConfirmRequiredModal';
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
@@ -99,6 +100,7 @@ type Props = {
   /** When true and user is signed out, hide My scholarships sidebar. */
   authResolved?: boolean;
   hasSubscription?: boolean;
+  needsEmailConfirmation?: boolean;
   initialPayload?: InitialScholarshipsPayload | null;
 };
 
@@ -144,6 +146,7 @@ export default function ScholarshipCategoryPageClient({
   isAuthenticated = false,
   authResolved = false,
   hasSubscription = false,
+  needsEmailConfirmation = false,
   initialPayload = null
 }: Props) {
   const pathname = usePathname();
@@ -196,6 +199,13 @@ export default function ScholarshipCategoryPageClient({
   >('scholarships');
   const [registrationWallContent, setRegistrationWallContent] =
     useState<ScholarshipRegistrationWallContentMode>('hub');
+  const [emailConfirmModalOpen, setEmailConfirmModalOpen] = useState(false);
+  const openEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(true);
+  }, []);
+  const closeEmailConfirmWall = useCallback(() => {
+    setEmailConfirmModalOpen(false);
+  }, []);
   const { profile: currentMatchProfile } =
     useCurrentUserScholarshipMatchProfile(isAuthenticated);
   const catalogFreeTier = authResolved && !hasSubscription;
@@ -213,6 +223,14 @@ export default function ScholarshipCategoryPageClient({
     setRegistrationWallVariant('locked-category');
     setRegistrationWallOpen(true);
   }, []);
+
+  const openLockedScholarshipWallForCard = useCallback(() => {
+    if (!isAuthenticated) {
+      openRegistrationWall('grant-guest');
+      return;
+    }
+    openLockedCategoryWall();
+  }, [isAuthenticated, openRegistrationWall, openLockedCategoryWall]);
 
   const closeRegistrationWall = useCallback(() => {
     setRegistrationWallOpen(false);
@@ -912,17 +930,26 @@ export default function ScholarshipCategoryPageClient({
                     subscriptionLocked={catalogFreeTier}
                     isAuthenticated={isAuthenticated}
                     hasSubscription={hasSubscription}
+                    authResolved={authResolved}
                     selectedApplicantCountryCodes={
                       moreFiltersApplied?.includeApplicantCountryCodes
                     }
-                    onSubscriptionLockedCategoryClick={openLockedCategoryWall}
-                    onLockedScholarshipNavigate={openLockedCategoryWall}
-                    onSubscriptionDetailNavigate={openLockedCategoryWall}
-                    onGuestDetailNavigate={
+                    onSubscriptionLockedCategoryClick={
+                      openLockedScholarshipWallForCard
+                    }
+                    onLockedScholarshipNavigate={openLockedScholarshipWallForCard}
+                    onSubscriptionDetailNavigate={
                       catalogFreeTier
                         ? () => openRegistrationWall('card-unlock')
+                        : openLockedCategoryWall
+                    }
+                    onGuestDetailNavigate={
+                      !isAuthenticated
+                        ? () => openRegistrationWall('grant-guest')
                         : undefined
                     }
+                    needsEmailConfirmation={needsEmailConfirmation}
+                    onUnverifiedEmailDetailNavigate={openEmailConfirmWall}
                   />
                 ))}
               </div>
@@ -956,6 +983,10 @@ export default function ScholarshipCategoryPageClient({
         }
         hasSubscription={hasSubscription}
         onSubscriptionLockedAction={openLockedCategoryWall}
+      />
+      <ScholarshipEmailConfirmRequiredModal
+        open={emailConfirmModalOpen}
+        onClose={closeEmailConfirmWall}
       />
       <ScholarshipRegistrationWallModal
         open={registrationWallOpen}

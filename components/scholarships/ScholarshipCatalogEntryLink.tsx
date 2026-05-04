@@ -24,6 +24,7 @@ export default function ScholarshipCatalogEntryLink({
     onClick?.(event);
     if (!resolved) {
       event.preventDefault();
+      event.stopPropagation();
     }
   };
 

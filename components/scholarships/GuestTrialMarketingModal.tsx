@@ -1,8 +1,9 @@
 'use client';
 
+import { dismissRouteProgress } from '@/lib/navigation/dismissRouteProgress';
 import { useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { Check, X } from 'lucide-react';
+import { Check, Lock, X } from 'lucide-react';
 
 export type GuestTrialMarketingModalProps = {
   open: boolean;
@@ -25,6 +26,10 @@ export type GuestTrialMarketingModalProps = {
    * Ignored for `classic-trial` (essay upsell has its own copy).
    */
   signedInWithoutSubscription?: boolean;
+  /**
+   * Guest chose a grant from the catalog — headline/subcopy emphasize free account signup.
+   */
+  grantScholarshipPitch?: boolean;
 };
 
 const BULLETS = [
@@ -40,6 +45,25 @@ const ESSAY_BULLETS = [
   'Unlimited essay generations'
 ] as const;
 
+/** Same deck as `PremiumCompactModal` — signed-in users without a plan (e.g. save filters). */
+const SIGNED_IN_PREMIUM_ACCESS_BULLETS = [
+  {
+    id: 'ai-essay-mentor',
+    title: '🤖 AI Essay Mentor:',
+    body: 'Craft winning applications in minutes (on select plans).'
+  },
+  {
+    id: 'full-grant-visibility',
+    title: '🔑 Full Grant Visibility:',
+    body: 'Unblur all grant names, external links, and deadlines.'
+  },
+  {
+    id: 'exclusive-matches',
+    title: '🎯 Exclusive Matches:',
+    body: 'Lock in your criteria and get notified about matching opportunities.'
+  }
+] as const;
+
 export default function GuestTrialMarketingModal({
   open,
   onClose,
@@ -48,7 +72,8 @@ export default function GuestTrialMarketingModal({
   onSecondaryAction,
   onPrimaryClick,
   copyVariant = 'modern-free-account',
-  signedInWithoutSubscription = false
+  signedInWithoutSubscription = false,
+  grantScholarshipPitch = false
 }: GuestTrialMarketingModalProps) {
   const dismiss = useCallback(() => {
     onSecondaryAction?.();
@@ -59,6 +84,7 @@ export default function GuestTrialMarketingModal({
     if (!open) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    dismissRouteProgress();
     return () => {
       document.body.style.overflow = prev;
     };
@@ -76,6 +102,8 @@ export default function GuestTrialMarketingModal({
   if (!open) return null;
   const isClassicTrial = copyVariant === 'classic-trial';
   const isSignedInUpsell = !isClassicTrial && signedInWithoutSubscription;
+  const isGrantGuestPitch =
+    !isClassicTrial && !isSignedInUpsell && grantScholarshipPitch;
 
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6">
@@ -93,7 +121,9 @@ export default function GuestTrialMarketingModal({
         className={`relative z-10 w-full rounded-2xl border border-zinc-200 bg-white shadow-2xl ${
           isClassicTrial
             ? 'max-w-sm p-4 sm:p-5'
-            : 'max-w-md p-5 sm:p-6'
+            : isGrantGuestPitch
+              ? 'max-w-sm p-5 sm:p-6'
+              : 'max-w-md p-5 sm:p-6'
         }`}
       >
         <button
@@ -106,117 +136,181 @@ export default function GuestTrialMarketingModal({
         </button>
 
         <div className="px-1 text-center">
-          <h2
-            id="guest-trial-modal-title"
-            className={`font-bold tracking-tight text-zinc-900 ${
-              isClassicTrial ? 'text-[1.7rem] sm:text-[1.95rem]' : 'text-xl sm:text-[1.4rem]'
-            }`}
-          >
-            {isClassicTrial
-              ? 'Unlock AI Essay Mentor'
-              : isSignedInUpsell
-                ? 'Save filters with a plan'
-                : 'Keep Exploring Scholarships 🚀'}
-          </h2>
-          <p
-            className={`mt-2 text-zinc-500 ${
-              isClassicTrial ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
-            }`}
-          >
-            {isClassicTrial
-              ? 'AI Essay Mentor is available only on Quarterly and Yearly plans. Upgrade to access mentor chat, voice interview, and full draft generation.'
-              : isSignedInUpsell
-                ? 'Saved filter presets and other premium tools are included with a Standard Grants subscription. Choose a plan to continue.'
-                : "You've reached your guest limit. Create a 100% free profile to continue browsing our database."}
-          </p>
-
-          <h3
-            className={`font-bold text-zinc-900 ${
-              isClassicTrial ? 'mt-4 text-[0.98rem] sm:text-base' : 'mt-5 text-base sm:text-lg'
-            }`}
-          >
-            {isClassicTrial
-              ? 'What you unlock on Quarterly/Yearly:'
-              : isSignedInUpsell
-                ? 'What you unlock on a plan:'
-                : "What's inside your free profile:"}
-          </h3>
-
-          <ul
-            className={`rounded-xl border border-zinc-100 bg-zinc-50/80 text-left text-zinc-800 ${
-              isClassicTrial
-                ? 'mt-3 space-y-1.5 px-3 py-2 text-[0.95rem] sm:text-sm'
-                : 'mt-3.5 space-y-2 px-3.5 py-2.5 text-sm sm:text-[0.9375rem]'
-            }`}
-          >
-            {(isClassicTrial ? ESSAY_BULLETS : BULLETS).map((line) => (
-              <li key={line} className="flex gap-2.5">
-                <Check
-                  className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
-                  strokeWidth={2.5}
+          {isGrantGuestPitch ? (
+            <>
+              <h2
+                id="guest-trial-modal-title"
+                className="text-lg font-bold tracking-tight text-zinc-900 sm:text-xl"
+              >
+                Create a free account to view scholarship details
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-[0.9375rem]">
+                To continue, create your free account. It takes less than 1 minute.
+              </p>
+              <div className="mt-6">
+                <Link
+                  href={primaryHref}
+                  onClick={() => {
+                    onPrimaryClick?.();
+                    onClose();
+                  }}
+                  className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 text-sm font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 sm:text-base"
+                >
+                  Create Free Account
+                </Link>
+              </div>
+              <p className="mt-3 text-xs text-zinc-400 sm:text-sm">
+                Free account • Less than 1 minute
+              </p>
+            </>
+          ) : isSignedInUpsell ? (
+            <>
+              <h2
+                id="guest-trial-modal-title"
+                className="flex items-center justify-center gap-2 pr-8 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl"
+              >
+                Unlock Premium Access
+                <Lock
+                  className="h-4 w-4 shrink-0 text-[#ff7b00]"
+                  strokeWidth={2.3}
                   aria-hidden
                 />
-                <span>{line}</span>
-              </li>
-            ))}
-          </ul>
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-600 sm:text-base">
+                This is a premium-only feature. Upgrade now to see all grants, access
+                advanced tools, and use our powerful AI Essay Mentor.
+              </p>
 
-          <p
-            className={`rounded-xl border border-orange-100 bg-orange-50/80 px-3 text-left font-medium leading-relaxed text-orange-950 ${
-              isClassicTrial
-                ? 'mt-3 py-1.5 text-[0.9rem] sm:text-xs'
-                : 'mt-3.5 py-2 text-xs sm:text-sm'
-            }`}
-          >
-            {isClassicTrial
-              ? 'Monthly unlocks premium scholarships only. AI Essay Mentor tools require Quarterly or Yearly.'
-              : isSignedInUpsell
-                ? 'Subscribers can save custom filter presets, get personalized matches, and use advanced catalog tools.'
-                : 'Join thousands of students and get your own personal dashboard to track your application progress.'}
-          </p>
+              <ul className="mt-4 space-y-2.5 text-left text-zinc-700">
+                {SIGNED_IN_PREMIUM_ACCESS_BULLETS.map((feature) => (
+                  <li key={feature.id} className="flex items-start gap-2.5 text-sm">
+                    <Check
+                      className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+                      strokeWidth={2.5}
+                      aria-hidden
+                    />
+                    <p className="leading-relaxed">
+                      <span className="font-semibold text-zinc-900">{feature.title}</span>{' '}
+                      {feature.body}
+                    </p>
+                  </li>
+                ))}
+              </ul>
 
-          <p
-            className={`font-medium text-zinc-700 ${
-              isClassicTrial ? 'mt-3 text-[0.9rem] sm:text-xs' : 'mt-3.5 text-xs sm:text-sm'
-            }`}
-          >
-            {isClassicTrial
-              ? '⚡ Instant access after payment'
-              : isSignedInUpsell
-                ? '⚡ Choose a plan and keep your saved filters in sync'
-                : '⚡ Takes less than 10 seconds'}
-          </p>
+              <div className="mt-5">
+                <Link
+                  href={primaryHref}
+                  onClick={() => {
+                    onPrimaryClick?.();
+                    onClose();
+                  }}
+                  className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 text-sm font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 sm:text-base"
+                >
+                  🚀 View Premium Plans
+                </Link>
+              </div>
 
-          <div className={isClassicTrial ? 'mt-4' : 'mt-5'}>
-            <Link
-              href={primaryHref}
-              onClick={() => {
-                onPrimaryClick?.();
-                onClose();
-              }}
-              className={`inline-flex w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 ${
-                isClassicTrial ? 'h-10 text-sm' : 'h-11 text-sm sm:text-base'
-              }`}
-            >
-              {isClassicTrial
-                ? '👉 View Quarterly & Yearly Plans'
-                : isSignedInUpsell
-                  ? '👉 View subscription plans'
-                  : '👉 Create Free Account'}
-            </Link>
-          </div>
+              <p className="mt-3 text-center text-xs text-zinc-400 sm:text-sm">
+                Secure payment • Cancel anytime
+              </p>
+            </>
+          ) : (
+            <>
+              <h2
+                id="guest-trial-modal-title"
+                className={`font-bold tracking-tight text-zinc-900 ${
+                  isClassicTrial ? 'text-[1.7rem] sm:text-[1.95rem]' : 'text-xl sm:text-[1.4rem]'
+                }`}
+              >
+                {isClassicTrial ? 'Unlock AI Essay Mentor' : 'Keep Exploring Scholarships 🚀'}
+              </h2>
+              <p
+                className={`mt-2 text-zinc-500 ${
+                  isClassicTrial ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
+                }`}
+              >
+                {isClassicTrial
+                  ? 'AI Essay Mentor is available only on Quarterly and Yearly plans. Upgrade to access mentor chat, voice interview, and full draft generation.'
+                  : "You've reached your guest limit. Create a 100% free profile to continue browsing our database."}
+              </p>
 
-          <p
-            className={`text-zinc-400 ${
-              isClassicTrial ? 'mt-2 text-[0.8rem] sm:text-xs' : 'mt-2.5 text-xs sm:text-sm'
-            }`}
-          >
-            {isClassicTrial
-              ? 'Secure payment • Cancel anytime'
-              : isSignedInUpsell
-                ? 'Secure payment • Cancel anytime'
-                : '100% Free • No credit card required'}
-          </p>
+              <h3
+                className={`font-bold text-zinc-900 ${
+                  isClassicTrial ? 'mt-4 text-[0.98rem] sm:text-base' : 'mt-5 text-base sm:text-lg'
+                }`}
+              >
+                {isClassicTrial
+                  ? 'What you unlock on Quarterly/Yearly:'
+                  : "What's inside your free profile:"}
+              </h3>
+
+              <ul
+                className={`rounded-xl border border-zinc-100 bg-zinc-50/80 text-left text-zinc-800 ${
+                  isClassicTrial
+                    ? 'mt-3 space-y-1.5 px-3 py-2 text-[0.95rem] sm:text-sm'
+                    : 'mt-3.5 space-y-2 px-3.5 py-2.5 text-sm sm:text-[0.9375rem]'
+                }`}
+              >
+                {(isClassicTrial ? ESSAY_BULLETS : BULLETS).map((line) => (
+                  <li key={line} className="flex gap-2.5">
+                    <Check
+                      className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+                      strokeWidth={2.5}
+                      aria-hidden
+                    />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <p
+                className={`rounded-xl border border-orange-100 bg-orange-50/80 px-3 text-left font-medium leading-relaxed text-orange-950 ${
+                  isClassicTrial
+                    ? 'mt-3 py-1.5 text-[0.9rem] sm:text-xs'
+                    : 'mt-3.5 py-2 text-xs sm:text-sm'
+                }`}
+              >
+                {isClassicTrial
+                  ? 'Monthly unlocks premium scholarships only. AI Essay Mentor tools require Quarterly or Yearly.'
+                  : 'Join thousands of students and get your own personal dashboard to track your application progress.'}
+              </p>
+
+              <p
+                className={`font-medium text-zinc-700 ${
+                  isClassicTrial ? 'mt-3 text-[0.9rem] sm:text-xs' : 'mt-3.5 text-xs sm:text-sm'
+                }`}
+              >
+                {isClassicTrial ? '⚡ Instant access after payment' : '⚡ Takes less than 10 seconds'}
+              </p>
+
+              <div className={isClassicTrial ? 'mt-4' : 'mt-5'}>
+                <Link
+                  href={primaryHref}
+                  onClick={() => {
+                    onPrimaryClick?.();
+                    onClose();
+                  }}
+                  className={`inline-flex w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 ${
+                    isClassicTrial ? 'h-10 text-sm' : 'h-11 text-sm sm:text-base'
+                  }`}
+                >
+                  {isClassicTrial
+                    ? '👉 View Quarterly & Yearly Plans'
+                    : '👉 Create Free Account'}
+                </Link>
+              </div>
+
+              <p
+                className={`text-zinc-400 ${
+                  isClassicTrial ? 'mt-2 text-[0.8rem] sm:text-xs' : 'mt-2.5 text-xs sm:text-sm'
+                }`}
+              >
+                {isClassicTrial
+                  ? 'Secure payment • Cancel anytime'
+                  : '100% Free • No credit card required'}
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -13,6 +13,8 @@ type ScholarshipSubscriptionOfferModalProps = {
   marketingMode?: GuestTrialMarketingModalProps['marketingMode'];
   copyVariant?: GuestTrialMarketingModalProps['copyVariant'];
   signedInWithoutSubscription?: boolean;
+  /** Guest clicked a catalog grant — hero copy aimed at free account / signup. */
+  grantScholarshipPitch?: boolean;
 };
 
 /**
@@ -28,7 +30,8 @@ export default function ScholarshipSubscriptionOfferModal({
   onPrimaryClick,
   marketingMode = 'trial',
   copyVariant = 'modern-free-account',
-  signedInWithoutSubscription = false
+  signedInWithoutSubscription = false,
+  grantScholarshipPitch = false
 }: ScholarshipSubscriptionOfferModalProps) {
   return (
     <GuestTrialMarketingModal
@@ -41,6 +44,7 @@ export default function ScholarshipSubscriptionOfferModal({
       marketingMode={marketingMode}
       copyVariant={copyVariant}
       signedInWithoutSubscription={signedInWithoutSubscription}
+      grantScholarshipPitch={grantScholarshipPitch}
     />
   );
 }
