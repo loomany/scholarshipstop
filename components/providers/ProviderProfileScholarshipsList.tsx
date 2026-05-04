@@ -191,7 +191,7 @@ export function ProviderProfileScholarshipsList({
               onToggleSave={toggleSave}
               onHide={ignoreScholarship}
               showCardActions
-              subscriptionLocked={false}
+              subscriptionLocked={catalogFreeTier}
               isAuthenticated={isAuthenticated}
               hasSubscription={hasSubscription}
               onSubscriptionLockedCategoryClick={openLockedCategoryWall}

@@ -112,10 +112,7 @@ import {
   buildScholarshipProviderBlurPhrases,
   renderTextWithObscuredPhrases
 } from '@/lib/scholarships/renderObscuredProviderText';
-import {
-  isSubscriptionLockedScholarship,
-  pickScholarshipLockedTitleBlurPhrase
-} from '@/lib/scholarships/subscriptionLockedCategory';
+import { pickScholarshipLockedTitleBlurPhrase } from '@/lib/scholarships/subscriptionLockedCategory';
 import {
   resolveScholarshipCategorySlug,
   scholarshipDeadlineHasPassed,
@@ -479,8 +476,7 @@ function SimilarScholarshipDetailListItem({
 }) {
   const deadlinePassed = scholarshipDeadlineHasPassed(s);
   const simDd = getScholarshipDeadlineDisplayParts(s);
-  const targetedCategoryLocked =
-    !hasSubscription && isSubscriptionLockedScholarship(s);
+  const targetedCategoryLocked = !hasSubscription;
   const titleBlurPhrase = targetedCategoryLocked
     ? pickScholarshipLockedTitleBlurPhrase(s.title, s.provider)
     : null;
@@ -1433,8 +1429,7 @@ export default function ScholarshipDetailPageClient({
     scholarshipApplicantCountryBadge(scholarship),
     scholarshipHostCountryBadge(scholarship)
   ].filter((badge): badge is ScholarshipGeoBadge => badge !== null);
-  const targetedCategoryLocked =
-    !hasSubscription && isSubscriptionLockedScholarship(scholarship);
+  const targetedCategoryLocked = !hasSubscription;
   const titleBlurPhrase = targetedCategoryLocked
     ? pickScholarshipLockedTitleBlurPhrase(scholarship.title, providerName)
     : null;

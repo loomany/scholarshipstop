@@ -3514,7 +3514,7 @@ function ScholarshipsPageInner({
                                 showCardActions={scholarshipTabShowsCardActions(
                                   'best-recommendation'
                                 )}
-                                subscriptionLocked={false}
+                                subscriptionLocked={catalogFreeTier}
                                 isAuthenticated={isAuthenticated}
                                 hasSubscription={hasSubscription}
                                 listingTab="best-recommendation"
@@ -3563,9 +3563,8 @@ function ScholarshipsPageInner({
                                   the answers you just added.
                                 </p>
                                 <p className="mt-1 text-sm text-[#8C5A2B]">
-                                  Open two scholarship details for free. On the
-                                  third one, we&apos;ll ask you to create an
-                                  account.
+                                  Unlock Premium to open scholarship details,
+                                  external links, and deadlines.
                                 </p>
                               </div>
                               <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[148px]">
@@ -3600,7 +3599,7 @@ function ScholarshipsPageInner({
                                 showCardActions={scholarshipTabShowsCardActions(
                                   'best-recommendation'
                                 )}
-                                subscriptionLocked={false}
+                                subscriptionLocked={catalogFreeTier}
                                 isAuthenticated={isAuthenticated}
                                 hasSubscription={hasSubscription}
                                 listingTab="best-recommendation"
@@ -3720,8 +3719,7 @@ function ScholarshipsPageInner({
                           the answers you just added.
                         </p>
                         <p className="mt-1 text-sm text-[#8C5A2B]">
-                          Open two scholarship details for free. On the third one, we&apos;ll ask you
-                          to create an account.
+                          Unlock Premium to open scholarship details, external links, and deadlines.
                         </p>
                       </div>
                       <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[148px]">
@@ -3759,7 +3757,7 @@ function ScholarshipsPageInner({
                       }
                       ignoreAction={activeTab === 'ignored' ? 'restore' : 'hide'}
                       showCardActions={scholarshipTabShowsCardActions(activeTab)}
-                      subscriptionLocked={false}
+                      subscriptionLocked={catalogFreeTier}
                       isAuthenticated={isAuthenticated}
                       hasSubscription={hasSubscription}
                       listingTab={activeTab}

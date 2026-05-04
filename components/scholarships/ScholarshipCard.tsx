@@ -71,7 +71,7 @@ type ScholarshipCardProps = {
    * Use inside narrow containers (e.g. landing preview) where `xl:` grid would break layout.
    */
   stackedListing?: boolean;
-  /** Signed-in user without active subscription. */
+  /** Any user without active subscription: all scholarship detail navigation is paywalled. */
   subscriptionLocked?: boolean;
   isAuthenticated?: boolean;
   hasSubscription?: boolean;
@@ -396,7 +396,8 @@ export default function ScholarshipCard({
     [scholarship]
   );
   const targetedCategoryLocked =
-    !hasSubscription && isSubscriptionLockedScholarship(scholarship);
+    subscriptionLocked ||
+    (!hasSubscription && isSubscriptionLockedScholarship(scholarship));
   const LOCKED_CARD_CATEGORY_IDS = new Set([
     'easy_apply',
     'quick_apply'

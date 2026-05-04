@@ -1,7 +1,7 @@
 import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
 
-/** Guest and signed-in without subscription: same free detail views before paywall. */
-const FREE_DETAIL_NAVIGATIONS = 10;
+/** Guest and signed-in without subscription: scholarship detail views are paywalled immediately. */
+const FREE_DETAIL_NAVIGATIONS = 0;
 
 const GUEST_STORAGE_KEY = 'scholarshipGuestDetailFreeClicksUsed';
 /** Same cap as guest; scoped per user when signed in (see `storageKeyForMode`). */

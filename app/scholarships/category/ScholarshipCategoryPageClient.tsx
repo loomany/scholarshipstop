@@ -909,7 +909,7 @@ export default function ScholarshipCategoryPageClient({
                     ignoreAction="hide"
                     reported={reportedIds.includes(s.id)}
                     onToggleReport={toggleReport}
-                    subscriptionLocked={false}
+                    subscriptionLocked={catalogFreeTier}
                     isAuthenticated={isAuthenticated}
                     hasSubscription={hasSubscription}
                     selectedApplicantCountryCodes={

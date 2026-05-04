@@ -234,7 +234,7 @@ export default function CompareInstitutionScholarshipColumns({
           onHide={ignoreScholarship}
           showCardActions
           stackedListing
-          subscriptionLocked={false}
+          subscriptionLocked={catalogFreeTier}
           isAuthenticated={isAuthenticated}
           hasSubscription={hasSubscription}
           onSubscriptionLockedCategoryClick={openLockedCategoryWall}
