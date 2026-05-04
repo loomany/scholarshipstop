@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
+import { headers } from 'next/headers';
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
 import { fontSans } from '@/lib/fonts';
@@ -22,6 +23,12 @@ import HomeAiNavigatorWidget from '@/components/home/HomeAiNavigatorWidget';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import dynamic from 'next/dynamic';
 import 'styles/main.css';
+
+const AI_NAVIGATOR_BLOCKED_HOSTNAMES = new Set(['iq.scholarshiptop.com']);
+
+function normalizeRequestHost(value: string | null): string {
+  return (value ?? '').split(',')[0]?.trim().toLowerCase().replace(/:\d+$/, '') ?? '';
+}
 
 /** Client-only: `usePathname` / `useSearchParams` can throw with Turbopack SSR (`useContext` null). */
 const AnalyticsTracker = dynamic(
@@ -112,6 +119,11 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
+  const requestHeaders = headers();
+  const requestHost = normalizeRequestHost(
+    requestHeaders.get('x-forwarded-host') ?? requestHeaders.get('host')
+  );
+  const showAiNavigator = !AI_NAVIGATOR_BLOCKED_HOSTNAMES.has(requestHost);
   const siteUrl = getURL().replace(/\/$/, '');
   const publisherId = `${siteUrl}#scholarshiptop-publisher`;
   const websiteId = `${siteUrl}#website`;
@@ -198,7 +210,7 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
           </main>
           <SiteFooter />
         </div>
-        <HomeAiNavigatorWidget />
+        {showAiNavigator ? <HomeAiNavigatorWidget /> : null}
         <Suspense fallback={null}>
           <Toaster />
         </Suspense>
