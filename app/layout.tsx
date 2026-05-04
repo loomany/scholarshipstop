@@ -24,10 +24,12 @@ import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import dynamic from 'next/dynamic';
 import 'styles/main.css';
 
-const AI_NAVIGATOR_BLOCKED_HOSTNAMES = new Set(['iq.scholarshiptop.com']);
-
 function normalizeRequestHost(value: string | null): string {
   return (value ?? '').split(',')[0]?.trim().toLowerCase().replace(/:\d+$/, '') ?? '';
+}
+
+function shouldHideAiNavigatorForHost(host: string): boolean {
+  return host === 'iq.scholarshiptop.com' || host.startsWith('iq.');
 }
 
 /** Client-only: `usePathname` / `useSearchParams` can throw with Turbopack SSR (`useContext` null). */
@@ -123,7 +125,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   const requestHost = normalizeRequestHost(
     requestHeaders.get('x-forwarded-host') ?? requestHeaders.get('host')
   );
-  const showAiNavigator = !AI_NAVIGATOR_BLOCKED_HOSTNAMES.has(requestHost);
+  const showAiNavigator = !shouldHideAiNavigatorForHost(requestHost);
   const siteUrl = getURL().replace(/\/$/, '');
   const publisherId = `${siteUrl}#scholarshiptop-publisher`;
   const websiteId = `${siteUrl}#website`;
