@@ -518,22 +518,47 @@ export default function ScholarshipCard({
     recordScholarshipDetailFreeNavigation(budgetMode);
   };
 
+  const handleLockedScholarshipButtonClick = () => {
+    onLockedScholarshipNavigate?.();
+  };
+
+  const titleContent =
+    targetedCategoryLocked && titleBlurPhrase
+      ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
+          blurEntireWhenNoSubstringMatch: false,
+          lockedObscuredInteractive: false
+        })
+      : providerNameObscured
+        ? renderTextWithObscuredProviderName(scholarship.title, providerLine, {
+            blurEntireWhenNoSubstringMatch: false
+          })
+        : scholarship.title;
+
   return (
     <article className={cardArticleClass} data-scholarship-card>
-      <Link
-        href={detailHref}
-        onClick={handleDetailLinkClick}
-        tabIndex={-1}
-        aria-hidden="true"
-        className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A1A]/50"
-        aria-label={
-          targetedCategoryLocked
-            ? `Locked scholarship: ${scholarship.title}`
-            : `View scholarship: ${scholarship.title}`
-        }
-      >
-        <span className="sr-only">{scholarship.title}</span>
-      </Link>
+      {targetedCategoryLocked ? (
+        <button
+          type="button"
+          onClick={handleLockedScholarshipButtonClick}
+          tabIndex={-1}
+          aria-hidden="true"
+          className="absolute inset-0 z-0 rounded-xl bg-transparent p-0 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A1A]/50"
+          aria-label={`Locked scholarship: ${scholarship.title}`}
+        >
+          <span className="sr-only">{scholarship.title}</span>
+        </button>
+      ) : (
+        <Link
+          href={detailHref}
+          onClick={handleDetailLinkClick}
+          tabIndex={-1}
+          aria-hidden="true"
+          className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A1A]/50"
+          aria-label={`View scholarship: ${scholarship.title}`}
+        >
+          <span className="sr-only">{scholarship.title}</span>
+        </Link>
+      )}
       <div
         className={`relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] pointer-events-none ${deadlinePassed ? 'bg-zinc-400' : 'bg-gray-900'}`}
         aria-hidden
@@ -664,22 +689,23 @@ export default function ScholarshipCard({
                   : scholarship.title
             }
           >
-            <Link
-              href={detailHref}
-              onClick={handleDetailLinkClick}
-              className="relative z-10 text-inherit no-underline outline-none pointer-events-auto focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-[#FF7A1A]/50 focus-visible:ring-offset-2"
-            >
-              {targetedCategoryLocked && titleBlurPhrase
-                ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
-                    blurEntireWhenNoSubstringMatch: false,
-                    lockedObscuredInteractive: false
-                  })
-                : providerNameObscured
-                ? renderTextWithObscuredProviderName(scholarship.title, providerLine, {
-                    blurEntireWhenNoSubstringMatch: false
-                  })
-                : scholarship.title}
-            </Link>
+            {targetedCategoryLocked ? (
+              <button
+                type="button"
+                onClick={handleLockedScholarshipButtonClick}
+                className="relative z-10 bg-transparent p-0 text-left text-inherit outline-none pointer-events-auto focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-[#FF7A1A]/50 focus-visible:ring-offset-2"
+              >
+                {titleContent}
+              </button>
+            ) : (
+              <Link
+                href={detailHref}
+                onClick={handleDetailLinkClick}
+                className="relative z-10 text-inherit no-underline outline-none pointer-events-auto focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-[#FF7A1A]/50 focus-visible:ring-offset-2"
+              >
+                {titleContent}
+              </Link>
+            )}
           </h2>
           <p
             className="mt-1 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-400 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
