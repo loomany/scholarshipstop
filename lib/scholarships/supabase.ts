@@ -240,7 +240,7 @@ const PUBLIC_LISTING_CARD_SELECT_COLUMNS = LISTING_CARD_SELECT_COLUMNS.filter(
       'ai_match_band',
       'raw_data'
     ].includes(col)
-);
+).concat('host_program_location_unspecified');
 
 /**
  * Public anon listing payload. Must match `public.scholarships_safe_listing`.
@@ -407,6 +407,9 @@ function socialLinksFromRow(row: ScholarshipRow): Scholarship['socialLinks'] {
 }
 
 export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
+  const listingRow = row as ScholarshipRow & {
+    host_program_location_unspecified?: boolean | null;
+  };
   const eligibility = eligibilityFromRow(
     row.requirements_text,
     row.requirements_count
@@ -552,6 +555,8 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     citizenshipStatuses: jsonStringArray(row.citizenship_statuses),
     applicantCountryCodes: jsonStringArray(row.applicant_country_codes),
     hostCountryCodes: jsonStringArray(row.host_country_codes),
+    hostProgramLocationUnspecified:
+      listingRow.host_program_location_unspecified === true,
     locationScope: row.location_scope?.trim() || undefined,
     stateCodes: jsonStringArray(row.state_codes),
     institutionTypes: jsonStringArray(row.institution_types),

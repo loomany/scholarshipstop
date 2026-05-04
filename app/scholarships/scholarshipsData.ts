@@ -134,6 +134,8 @@ export type Scholarship = {
   citizenshipStatuses?: string[];
   applicantCountryCodes?: string[];
   hostCountryCodes?: string[];
+  /** Listing view flag: no valid ISO2 host/program country is known. */
+  hostProgramLocationUnspecified?: boolean;
   locationScope?: string | null;
   stateCodes?: string[];
   institutionTypes?: string[];
