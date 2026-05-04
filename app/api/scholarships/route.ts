@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { createPublicClient } from '@/utils/supabase/public';
 import {
   parseDeadlineFromParam,
+  parseHubListingBooleanParam,
   parseHubListingCountryCodesParam,
   parseSortFromParam,
   SCHOLARSHIPS_PAGE_SIZE
@@ -273,6 +274,9 @@ async function handleList(
   const hostCountryCodesFromUrl = parseHubListingCountryCodesParam(
     searchParams.get('host_cc')
   );
+  const hostUnspecifiedFromUrl = parseHubListingBooleanParam(
+    searchParams.get('host_unspecified')
+  );
   const hostCountryCodesFromBody = Array.isArray(seoBody?.hostCountryCodes)
     ? seoBody.hostCountryCodes
     : [];
@@ -289,6 +293,9 @@ async function handleList(
     moreFilters.citizenshipAudience === 'any'
   ) {
     moreFilters.citizenshipAudience = 'international_friendly';
+  }
+  if (hostUnspecifiedFromUrl) {
+    moreFilters.includeUnspecifiedHostCountries = true;
   }
 
   const lt =

@@ -2,6 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { defaultMoreFiltersFromBounds } from '@/app/scholarships/moreFilters';
+import {
+  buildScholarshipListSearchParams,
+  parseHubListingBooleanParam
+} from '@/app/scholarships/scholarshipListUrl';
 import { moreFiltersFromJson, moreFiltersToJson } from '@/lib/scholarships/scholarshipListApiCodec';
 
 test('eligibility and education filters roundtrip through moreFilters JSON codec', () => {
@@ -49,6 +53,22 @@ test('include unspecified host country flag roundtrips through moreFilters JSON 
 
   assert.equal(encoded.includeUnspecifiedHostCountries, true);
   assert.equal(decoded.includeUnspecifiedHostCountries, true);
+});
+
+test('unspecified host country filter is represented in listing URLs', () => {
+  const withUnspecified = buildScholarshipListSearchParams(new URLSearchParams(), {
+    hostUnspecified: true
+  });
+
+  assert.equal(withUnspecified.get('host_unspecified'), '1');
+  assert.equal(parseHubListingBooleanParam(withUnspecified.get('host_unspecified')), true);
+
+  const withHostCountry = buildScholarshipListSearchParams(withUnspecified, {
+    hostCc: 'GB'
+  });
+
+  assert.equal(withHostCountry.get('host_cc'), 'GB');
+  assert.equal(withHostCountry.has('host_unspecified'), false);
 });
 
 test('applicant country and unspecified country flag roundtrip through moreFilters JSON codec', () => {

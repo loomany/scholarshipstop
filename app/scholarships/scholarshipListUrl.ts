@@ -95,6 +95,14 @@ export function parseHubListingCountryCodesParam(
   return out;
 }
 
+export function parseHubListingBooleanParam(
+  raw: string | null | undefined
+): boolean {
+  if (!raw?.trim()) return false;
+  const v = raw.trim().toLowerCase();
+  return v === '1' || v === 'true' || v === 'yes';
+}
+
 export function parseCategoriesFromParam(
   raw: string | null
 ): Set<ScholarshipCategoryId> {
@@ -189,6 +197,8 @@ export function buildScholarshipListSearchParams(
     appCc?: string | null;
     /** Scholarship host-country filter. Single or comma-separated ISO2. */
     hostCc?: string | null;
+    /** Host/program country is not specified in source data. */
+    hostUnspecified?: boolean | null;
   }
 ): URLSearchParams {
   const p = new URLSearchParams(base.toString());
@@ -278,6 +288,16 @@ export function buildScholarshipListSearchParams(
       p.delete('host_cc');
     } else {
       p.set('host_cc', v);
+      p.delete('host_unspecified');
+    }
+  }
+
+  if (patch.hostUnspecified !== undefined) {
+    if (patch.hostUnspecified) {
+      p.set('host_unspecified', '1');
+      p.delete('host_cc');
+    } else {
+      p.delete('host_unspecified');
     }
   }
 

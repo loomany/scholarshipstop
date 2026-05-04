@@ -104,6 +104,7 @@ import {
   SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF,
   buildScholarshipTabHref,
   clampScholarshipListPage,
+  parseHubListingBooleanParam,
   parseDeadlineFromParam,
   type ScholarshipAudienceParam,
   parseHubListingCountryCodesParam,
@@ -1410,6 +1411,10 @@ function ScholarshipsPageInner({
     for (const code of fromUrlApp) {
       m.includeApplicantCountryCodes.add(code);
     }
+    const urlParams = new URLSearchParams(searchParamsString);
+    if (parseHubListingBooleanParam(urlParams.get('host_unspecified'))) {
+      m.includeUnspecifiedHostCountries = true;
+    }
     return m;
   }, [
     userOverlayMoreFilters,
@@ -2629,7 +2634,10 @@ function ScholarshipsPageInner({
   }, [moreFiltersApplied, emptyMoreFiltersState]);
 
   const commitMoreFiltersApply = useCallback(
-    (next: MoreFiltersState, opts?: { hostCc?: string | null }) => {
+    (
+      next: MoreFiltersState,
+      opts?: { hostCc?: string | null; hostUnspecified?: boolean | null }
+    ) => {
       setMoreFiltersApplied(next);
       if (activeTab === 'recommended') {
         const nextWithBase =
@@ -2690,6 +2698,9 @@ function ScholarshipsPageInner({
         audience: next.citizenshipAudience,
         appCc: appCcSorted.length > 0 ? appCcSorted : null,
         ...(opts && 'hostCc' in opts ? { hostCc: opts.hostCc } : {}),
+        ...(opts && 'hostUnspecified' in opts
+          ? { hostUnspecified: opts.hostUnspecified }
+          : {}),
         resetPage: true
       });
     },
@@ -2757,7 +2768,10 @@ function ScholarshipsPageInner({
       setIsApplyingListControls(true);
       applyingListControlsSawFetchRef.current = false;
       applyingListControlsBaseSearchRef.current = searchParamsString;
-      commitMoreFiltersApply(basis, { hostCc });
+      commitMoreFiltersApply(basis, {
+        hostCc,
+        hostUnspecified: includeUnspecifiedHost && normalized.length === 0
+      });
     },
     [
       commitMoreFiltersApply,

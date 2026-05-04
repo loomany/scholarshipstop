@@ -20,6 +20,7 @@ export function buildScholarshipTagHubHref(opts: {
   categoryIds?: Set<ScholarshipCategoryId> | ScholarshipCategoryId[] | null;
   appCountryCode?: string | null;
   hostCountryCode?: string | null;
+  hostUnspecified?: boolean | null;
 }): string {
   const ids =
     opts.categoryIds == null
@@ -37,7 +38,9 @@ export function buildScholarshipTagHubHref(opts: {
     appCc:
       opts.appCountryCode !== undefined ? opts.appCountryCode : undefined,
     hostCc:
-      opts.hostCountryCode !== undefined ? opts.hostCountryCode : undefined
+      opts.hostCountryCode !== undefined ? opts.hostCountryCode : undefined,
+    hostUnspecified:
+      opts.hostUnspecified !== undefined ? opts.hostUnspecified : undefined
   });
   const { pathname, search } = buildHubCatalogBrowserUrl(
     merged.toString(),

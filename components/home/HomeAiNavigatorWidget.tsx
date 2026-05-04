@@ -31,6 +31,14 @@ const DOT_ANGLES = [0, 52, 108, 163, 221, 276, 322] as const;
 const DRIFT_ANGLES = [0, 108, 221, 322] as const;
 
 const ORB_SUBTITLE_PHRASE = 'Any language';
+const AI_NAVIGATOR_BLOCKED_HOSTNAMES = new Set(['iq.scholarshiptop.com']);
+
+function shouldHideAiNavigatorForCurrentHost(): boolean {
+  if (typeof window === 'undefined') return false;
+  return AI_NAVIGATOR_BLOCKED_HOSTNAMES.has(
+    window.location.hostname.trim().toLowerCase()
+  );
+}
 
 /** Straight line under “AI”: letter-by-letter reveal, looping (motion-reduced: all visible). */
 function OrbSubtitleTypewriter() {
@@ -238,6 +246,8 @@ export default function HomeAiNavigatorWidget() {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
+    if (shouldHideAiNavigatorForCurrentHost()) return;
+
     const mount = document.createElement('div');
     mount.dataset.stAiFabPortal = '';
     document.body.appendChild(mount);

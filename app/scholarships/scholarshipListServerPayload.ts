@@ -23,6 +23,7 @@ import {
 import {
   parseDeadlineFromParam,
   parseAudienceFromParam,
+  parseHubListingBooleanParam,
   parseHubListingCountryCodesParam,
   parseSortFromParam,
   SCHOLARSHIPS_PAGE_SIZE
@@ -71,6 +72,11 @@ export async function fetchInitialHubScholarshipsPayload(
   const searchParams = new URLSearchParams(searchParamsString);
   const appCc = parseHubListingCountryCodesParam(searchParams.get('app_cc'));
   const hostCc = parseHubListingCountryCodesParam(searchParams.get('host_cc'));
+  const hostUnspecified = parseHubListingBooleanParam(
+    searchParams.get('host_unspecified')
+  );
+  const moreFilters = defaultMoreFiltersFromBounds(defaultBounds);
+  moreFilters.includeUnspecifiedHostCountries = hostUnspecified;
   let req = scholarshipListRequestFromParts({
     page: getSearchParamValue(searchParams, 'page'),
     limit: SCHOLARSHIPS_PAGE_SIZE,
@@ -86,7 +92,7 @@ export async function fetchInitialHubScholarshipsPayload(
     saved: null,
     started: null,
     submitted: null,
-    moreFilters: defaultMoreFiltersFromBounds(defaultBounds),
+    moreFilters,
     appCountryCodesFromUrl: appCc.length > 0 ? appCc : null,
     hostCountryCodesFromUrl: hostCc.length > 0 ? hostCc : null,
     longTailLegacySlugs: [],

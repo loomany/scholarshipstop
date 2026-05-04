@@ -10,6 +10,7 @@ const HUB_LISTING_URL_KEYS = [
   'deadline',
   'email_ids',
   'host_cc',
+  'host_unspecified',
   'limit',
   'page',
   'q',
