@@ -230,48 +230,6 @@ export interface Database {
           user_id: string
           scholarship_id: string
           section: string
-          digest_kind?: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          scholarship_id?: string
-          section?: string
-          digest_kind?: string
-          created_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "grant_email_digest_items_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "grant_email_digest_items_scholarship_id_fkey"
-            columns: ["scholarship_id"]
-            isOneToOne: false
-            referencedRelation: "scholarships"
-            referencedColumns: ["id"]
-          }
-        ]
-      },
-      grant_email_digest_items: {
-        Row: {
-          id: string
-          user_id: string
-          scholarship_id: string
-          section: string
-          digest_kind: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          scholarship_id: string
-          section: string
           digest_kind: string
           created_at?: string
         }
