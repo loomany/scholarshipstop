@@ -400,7 +400,7 @@ export default function AssessmentEngine({
 
   return (
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] text-slate-950">
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-2.5 sm:px-6 sm:py-5 lg:px-8">
+      <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-6xl flex-col px-4 pb-2.5 pt-[calc(4rem+env(safe-area-inset-top,0px)+0.75rem)] sm:px-6 sm:pb-5 sm:pt-[calc(4rem+env(safe-area-inset-top,0px)+1rem)] md:min-h-[calc(100dvh-5rem)] md:pt-[calc(5rem+env(safe-area-inset-top,0px)+1rem)] lg:px-8">
         <ProgressHeader
           progress={
             !draftHydrated
@@ -515,13 +515,10 @@ function ProgressHeader({
 }) {
   return (
     <header className="mx-auto w-full border-b border-slate-200 pb-3 sm:pb-5 lg:pb-4">
-      <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+      <div className="flex items-center gap-3 sm:gap-4">
         <p className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold tabular-nums text-slate-600 shadow-sm sm:py-1.5 sm:text-sm">
           Step {step} of {TOTAL_QUESTIONS}
         </p>
-      </div>
-
-      <div className="mt-3 flex items-center gap-3 sm:mt-5 sm:gap-4 lg:mt-4">
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-200 sm:h-2">
           <div
             className="h-full rounded-full bg-slate-950 transition-all duration-500"
