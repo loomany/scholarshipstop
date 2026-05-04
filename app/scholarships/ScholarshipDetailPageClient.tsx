@@ -335,6 +335,103 @@ function requirementChips(s: Scholarship): string[] {
   return out;
 }
 
+type ScholarshipGeoBadge = {
+  key: string;
+  text: string;
+  title: string;
+  href: string | null;
+};
+
+function scholarshipIsoCodes(codes: string[] | undefined): string[] {
+  return Array.from(
+    new Set(
+      (codes ?? [])
+        .map((code) => code.trim().toUpperCase())
+        .filter((code) => /^[A-Z]{2}$/.test(code))
+    )
+  ).sort();
+}
+
+function scholarshipApplicantCountryBadge(s: Scholarship): ScholarshipGeoBadge | null {
+  const codes = scholarshipIsoCodes(s.applicantCountryCodes);
+  const hostCodes = scholarshipIsoCodes(s.hostCountryCodes);
+  if (
+    s.internationalFriendlyListing === true &&
+    hostCodes.length === 1 &&
+    codes.length === 1 &&
+    hostCodes[0] === codes[0]
+  ) {
+    return null;
+  }
+
+  if (codes.length === 1) {
+    const code = codes[0]!;
+    const label = countryLabelFromCode(code);
+    return {
+      key: `applicant-country-${code}`,
+      text: `Eligible: ${label}`,
+      title: `Eligibility tied to applicants linked to ${label}`,
+      href:
+        scholarshipApplicantCountrySeoHref(code) ??
+        buildScholarshipTagHubHref({ appCountryCode: code })
+    };
+  }
+
+  if (codes.length > 1) {
+    return {
+      key: 'applicant-country-multi',
+      text: `Eligible: ${codes.length} countries`,
+      title: `Eligibility tied to applicants from ${codes.length} countries`,
+      href: null
+    };
+  }
+
+  return null;
+}
+
+function scholarshipHostCountryBadge(s: Scholarship): ScholarshipGeoBadge | null {
+  const hostCodes = dedupeHostCountryCodesForDisplay(scholarshipIsoCodes(s.hostCountryCodes));
+  const hasStateSignal = (s.stateCodes ?? []).some((code) =>
+    /^[A-Z]{2}$/i.test(code.trim())
+  );
+
+  if (hostCodes.includes('US') || hasStateSignal) {
+    const label = countryLabelFromCode('US');
+    return {
+      key: 'host-country-us',
+      text: `Study in: ${label}`,
+      title: `Study opportunity in ${label}`,
+      href:
+        scholarshipHostCountrySeoHref('US') ??
+        buildScholarshipTagHubHref({ hostCountryCode: 'US' })
+    };
+  }
+
+  if (hostCodes.length === 1) {
+    const code = hostCodes[0]!;
+    const label = countryLabelFromCode(code);
+    return {
+      key: `host-country-${code}`,
+      text: `Study in: ${label}`,
+      title: `Study opportunity in ${label}`,
+      href:
+        scholarshipHostCountrySeoHref(code) ??
+        buildScholarshipTagHubHref({ hostCountryCode: code })
+    };
+  }
+
+  if (hostCodes.length > 1) {
+    return {
+      key: 'host-country-multi',
+      text: `Study in: ${hostCodes.length} countries`,
+      title: `Study opportunities spanning ${hostCodes.length} countries`,
+      href: null
+    };
+  }
+
+  return null;
+}
+
 /**
  * Similar cards: optional teal ring on the primary open pick (first actionable recommendation).
  */
@@ -1332,6 +1429,10 @@ export default function ScholarshipDetailPageClient({
   const providerProfileHref = providerSlugTrimmed
     ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
     : null;
+  const detailGeoBadges = [
+    scholarshipApplicantCountryBadge(scholarship),
+    scholarshipHostCountryBadge(scholarship)
+  ].filter((badge): badge is ScholarshipGeoBadge => badge !== null);
   const targetedCategoryLocked =
     !hasSubscription && isSubscriptionLockedScholarship(scholarship);
   const titleBlurPhrase = targetedCategoryLocked
@@ -1779,6 +1880,37 @@ export default function ScholarshipDetailPageClient({
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-600 md:text-lg">
               {obscureDetailLine(heroIntro)}
             </p>
+          ) : null}
+          {detailGeoBadges.length > 0 ? (
+            <div
+              className="mt-4 flex flex-wrap items-center gap-2"
+              aria-label="Scholarship country eligibility and study destination"
+            >
+              {detailGeoBadges.map((badge) => {
+                const className =
+                  'inline-flex max-w-full items-center rounded-full border border-orange-200/90 bg-orange-50/80 px-3 py-1.5 text-xs font-bold leading-tight text-orange-900 ring-1 ring-orange-100/80 transition sm:text-sm';
+
+                return badge.href ? (
+                  <Link
+                    key={badge.key}
+                    href={badge.href}
+                    className={`${className} no-underline hover:border-orange-300 hover:bg-orange-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2`}
+                    title={`${badge.title} - browse matching scholarships`}
+                    aria-label={`Browse scholarships filtered by ${badge.text}`}
+                  >
+                    <span className="truncate">{badge.text}</span>
+                  </Link>
+                ) : (
+                  <span
+                    key={badge.key}
+                    className={className}
+                    title={badge.title}
+                  >
+                    <span className="truncate">{badge.text}</span>
+                  </span>
+                );
+              })}
+            </div>
           ) : null}
         </div>
         </div>
