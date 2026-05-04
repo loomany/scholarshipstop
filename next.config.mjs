@@ -13,11 +13,50 @@ const nextConfig = {
       { source: '/sitemaps/:slug.xml', destination: '/sitemaps/:slug' }
     ];
   },
-  /** Old site / CMS paths that still appear in Search Console → canonical home. */
+  /**
+   * Old site / CMS paths that still appear in Search Console.
+   * Legacy WP `/pay-for-college/*` has no App Router pages — was returning 404.
+   */
   async redirects() {
     return [
       { source: '/home', destination: '/', permanent: true },
       { source: '/home/', destination: '/', permanent: true },
+
+      {
+        source: '/pay-for-college/bigfuture-scholarships',
+        destination: '/scholarships/hub/matches',
+        permanent: true
+      },
+      {
+        source: '/pay-for-college/bigfuture-scholarships/',
+        destination: '/scholarships/hub/matches',
+        permanent: true
+      },
+      {
+        source: '/pay-for-college/college-costs',
+        destination: '/compare',
+        permanent: true
+      },
+      {
+        source: '/pay-for-college/college-costs/',
+        destination: '/compare',
+        permanent: true
+      },
+      {
+        source: '/pay-for-college',
+        destination: '/resources',
+        permanent: true
+      },
+      {
+        source: '/pay-for-college/',
+        destination: '/resources',
+        permanent: true
+      },
+      {
+        source: '/pay-for-college/:path*',
+        destination: '/resources',
+        permanent: true
+      },
       {
         source:
           '/study-in-canada-vanier-canadian-scholarships-for-international-students-2019',
