@@ -421,6 +421,7 @@ export async function loadProviderProfilePage(
     providerId,
     slug: slugForScholarships,
     displayName,
+    hqState: providerRow?.state?.trim() || null,
     officialUrl,
     aiDescription,
     aiSources,

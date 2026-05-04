@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache';
 
 import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
 import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
+import type { ProvidersHubCountryBucket } from '@/lib/providers/providersHubCountryFilter';
 import { createPublicClient } from '@/utils/supabase/public';
 
 export type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
@@ -35,6 +36,7 @@ const fetchProviderHubListingCached = unstable_cache(
   async (
     token: string,
     stateCode: string,
+    country: ProvidersHubCountryBucket,
     page: number,
     pageSize: number
   ): Promise<ProviderHubFetchResult> => {
@@ -50,7 +52,12 @@ const fetchProviderHubListingCached = unstable_cache(
       .order('scholarship_count', { ascending: false })
       .range(from, from + pageSize - 1);
 
-    if (stateCode) {
+    if (country === 'us') {
+      dataQuery = dataQuery.not('state', 'is', null);
+    } else if (country === 'other') {
+      dataQuery = dataQuery.is('state', null);
+    }
+    if (stateCode && country !== 'other') {
       dataQuery = dataQuery.filter('state', 'eq', stateCode);
     }
     if (token.length > 0) {
@@ -71,21 +78,29 @@ const fetchProviderHubListingCached = unstable_cache(
 
     return { rows, total: count ?? 0 };
   },
-  ['provider-hub-listing-v2'],
+  ['provider-hub-listing-v3'],
   { revalidate: 300 }
 );
 
 export async function fetchProviderHubListing(options: {
   qRaw: string | undefined;
   stateRaw: string | undefined;
+  country?: ProvidersHubCountryBucket;
   page?: number;
   pageSize?: number;
 }): Promise<ProviderHubFetchResult> {
   const token = sanitizeSearchToken(options.qRaw ?? '');
   const stateCode = normalizeStateFilter(options.stateRaw);
+  const country = options.country ?? 'all';
   const pageSize = options.pageSize ?? 9;
   const page = Math.max(1, Math.floor(options.page ?? 1) || 1);
-  return fetchProviderHubListingCached(token, stateCode ?? '', page, pageSize);
+  return fetchProviderHubListingCached(
+    token,
+    stateCode ?? '',
+    country,
+    page,
+    pageSize
+  );
 }
 
 export async function countUnenrichedProviders(): Promise<number> {

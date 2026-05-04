@@ -377,6 +377,10 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     { url: `${base}/resources`, lastModified: new Date() },
     { url: `${base}/essays`, lastModified: new Date() },
     { url: `${base}/providers`, lastModified: new Date() },
+    ...Object.values(SEO_ROUTE_STATE_CODE_TO_SLUG).map((stateSlug) => ({
+      url: `${base}/providers/${stateSlug}`,
+      lastModified: new Date()
+    })),
     { url: `${base}${tabToHubPath('matches')}`, lastModified: new Date() },
     { url: `${base}${tabToHubPath('easy-apply')}`, lastModified: new Date() },
     {

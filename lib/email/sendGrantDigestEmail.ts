@@ -65,11 +65,7 @@ function firstDisplayCountry(codes: string[] | undefined): string | null {
 }
 
 function buildDigestBadgeHtml(label: string, value: string): string {
-  return `<td style="padding:0 6px 6px 0;">
-    <span style="display:inline-block;padding:5px 9px;border-radius:999px;border:1px solid #fed7aa;background:#fff7ed;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.2;font-weight:800;color:#9a3412;white-space:nowrap;">
-      ${escapeHtml(label)}: ${escapeHtml(truncateBadge(value))}
-    </span>
-  </td>`;
+  return `<span style="display:inline-block;margin:0 6px 6px 0;padding:5px 9px;border-radius:999px;border:1px solid #fed7aa;background:#fff7ed;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.2;font-weight:800;color:#9a3412;white-space:nowrap;">${escapeHtml(label)}: ${escapeHtml(truncateBadge(value))}</span>`;
 }
 
 function buildScholarshipBadgesHtml(s: Scholarship, matchPercent: number | null): string {
@@ -83,9 +79,7 @@ function buildScholarshipBadgesHtml(s: Scholarship, matchPercent: number | null)
   if (matchPercent != null) badges.push(buildDigestBadgeHtml('Match', `${matchPercent}%`));
 
   if (badges.length === 0) return '';
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0 0;">
-    <tr>${badges.slice(0, 3).join('')}</tr>
-  </table>`;
+  return `<span style="display:block;margin:10px 0 0;">${badges.slice(0, 3).join('')}</span>`;
 }
 
 function buildGrantListRowHtml(
@@ -112,13 +106,9 @@ function buildGrantListRowHtml(
         <span style="display:block;margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.35;font-weight:700;color:#f3f4f6;text-decoration:none;word-break:break-word;overflow-wrap:anywhere;">
           ${title}
         </span>
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0;">
-          <tr>
-            <td style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:800;color:#34d399;word-break:break-word;overflow-wrap:anywhere;white-space:nowrap;">
-              ${amount}
-            </td>
-          </tr>
-        </table>
+        <span style="display:block;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35;font-weight:800;color:#34d399;text-decoration:none;word-break:break-word;overflow-wrap:anywhere;">
+          ${amount}
+        </span>
         ${badges}
       </a>
     </td>

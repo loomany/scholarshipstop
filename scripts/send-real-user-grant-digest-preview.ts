@@ -92,6 +92,16 @@ function matchesStudyAbroadIntent(s: Scholarship, profile: ProfileRow): boolean 
   );
 }
 
+function hasHostCountry(s: Scholarship, country: string): boolean {
+  return Boolean(s.hostCountryCodes?.some((code) => code.trim().toUpperCase() === country));
+}
+
+function isInternationalFriendly(s: Scholarship): boolean {
+  if (s.internationalFriendlyListing) return true;
+  if ((s.applicantCountryCodes?.length ?? 0) >= 3) return true;
+  return s.locationScope?.trim().toLowerCase() === 'global';
+}
+
 function uniqueById(items: Scholarship[]): Scholarship[] {
   const seen = new Set<string>();
   const out: Scholarship[] = [];
@@ -101,6 +111,29 @@ function uniqueById(items: Scholarship[]): Scholarship[] {
     out.push(item);
   }
   return out;
+}
+
+function takeCategory(
+  id: GrantDigestCategory['id'],
+  label: string,
+  items: Scholarship[],
+  limit: number,
+  viewAllUrl: string,
+  usedIds: Set<string>
+): GrantDigestCategory | null {
+  const unique = uniqueById(items)
+    .filter((item) => !usedIds.has(item.id))
+    .sort((a, b) => score(b) - score(a));
+  const selected = unique.slice(0, limit);
+  for (const item of selected) usedIds.add(item.id);
+  if (selected.length === 0) return null;
+  return {
+    id,
+    label,
+    totalCount: unique.length,
+    viewAllUrl,
+    items: selected
+  };
 }
 
 async function findUserIdByEmail(email: string): Promise<string | null> {
@@ -261,57 +294,104 @@ async function main() {
   const selectedEasy = uniqueById(easy).sort((a, b) => score(b) - score(a)).slice(0, 4);
   const selectedHot = uniqueById(hot).sort((a, b) => score(b) - score(a)).slice(0, 4);
 
-  const rankedIds = [
-    ...selectedBest,
-    ...selectedRecommended,
-    ...selectedSaved,
-    ...selectedEasy,
-    ...selectedHot
-  ].map((s) => s.id);
-  const token = createGrantDigestToken(rankedIds);
   const origin =
     process.env.NEXT_PUBLIC_SITE_URL?.trim()?.replace(/\/+$/, '') || 'https://scholarshiptop.com';
-  const viewAllUrl = token
-    ? `${origin}/scholarships/email-digest/${encodeURIComponent(token)}`
-    : `${origin}/scholarships`;
+  const fallbackViewAllUrl = `${origin}/scholarships`;
 
-  const categories: GrantDigestCategory[] = [
+  let categories: GrantDigestCategory[] = [
     {
       id: 'best',
       label: 'Best recommendations',
       totalCount: best.length,
-      viewAllUrl,
+      viewAllUrl: fallbackViewAllUrl,
       items: selectedBest
     },
     {
       id: 'recommended',
       label: 'Recommended for you',
       totalCount: recommended.length,
-      viewAllUrl,
+      viewAllUrl: fallbackViewAllUrl,
       items: selectedRecommended
     },
     {
       id: 'saved_filters',
       label: 'Saved filters',
       totalCount: saved.length,
-      viewAllUrl,
+      viewAllUrl: fallbackViewAllUrl,
       items: selectedSaved
     },
     {
       id: 'easy_apply',
       label: 'Easy apply',
       totalCount: easy.length,
-      viewAllUrl,
+      viewAllUrl: fallbackViewAllUrl,
       items: selectedEasy
     },
     {
       id: 'hot_deadlines',
       label: 'Hot deadlines',
       totalCount: hot.length,
-      viewAllUrl,
+      viewAllUrl: fallbackViewAllUrl,
       items: selectedHot
     }
   ].filter((category) => category.totalCount > 0 && category.items.length > 0);
+
+  const fallbackScored = applyProfileMatchPercentToScholarships(fallbackPool, profile)
+    .filter((s) => !seenIds.has(s.id))
+    .sort((a, b) => score(b) - score(a));
+  if (categories.length === 0) {
+    const fallbackUsedIds = new Set<string>();
+    categories = profileCountry(profile)
+      ? [
+          takeCategory(
+            'recommended',
+            'Worth checking today',
+            fallbackScored.filter((item) => isInternationalFriendly(item)),
+            2,
+            fallbackViewAllUrl,
+            fallbackUsedIds
+          ),
+          takeCategory(
+            'best',
+            'Popular scholarships',
+            fallbackScored,
+            2,
+            fallbackViewAllUrl,
+            fallbackUsedIds
+          )
+        ].filter((category): category is GrantDigestCategory => category != null)
+      : [
+          takeCategory(
+            'recommended',
+            'International friendly USA',
+            fallbackScored.filter((item) => isInternationalFriendly(item) && hasHostCountry(item, 'US')),
+            2,
+            fallbackViewAllUrl,
+            fallbackUsedIds
+          ),
+          takeCategory(
+            'best',
+            'Global opportunities',
+            fallbackScored.filter((item) => isInternationalFriendly(item)),
+            2,
+            fallbackViewAllUrl,
+            fallbackUsedIds
+          )
+        ].filter((category): category is GrantDigestCategory => category != null);
+  }
+
+  const rankedIds = [
+    ...categories.flatMap((category) => category.items.map((item) => item.id)),
+    ...fallbackScored.map((item) => item.id)
+  ];
+  const token = createGrantDigestToken(rankedIds);
+  const viewAllUrl = token
+    ? `${origin}/scholarships/email-digest/${encodeURIComponent(token)}`
+    : fallbackViewAllUrl;
+  categories = categories.map((category) => ({
+    ...category,
+    viewAllUrl
+  }));
 
   console.log(
     JSON.stringify({

@@ -1,25 +1,17 @@
 /**
- * Hub listing budgets for providers / compare.
+ * Hub listing budgets for compare (and similar). Provider profile clicks are unlimited.
  * `guest` scope: global localStorage keys.
  * `account` scope: same caps, keys scoped per signed-in user (see `userScopedStorage`).
  */
 
 import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
 
-const PROVIDER_KEY = 'scholarshipGuestProviderHubNavigationsUsed';
 const COMPARE_KEY = 'scholarshipGuestCompareHubNavigationsUsed';
 
 /** Free navigations before the trial modal (11th click is blocked). */
-const FREE_PROVIDER_NAVIGATIONS = 10;
 const FREE_COMPARE_NAVIGATIONS = 10;
 
 export type HubBudgetScope = 'guest' | 'account';
-
-function providerStorageKey(scope: HubBudgetScope): string {
-  return scope === 'account'
-    ? getScopedScholarshipStorageKey(PROVIDER_KEY)
-    : PROVIDER_KEY;
-}
 
 function compareStorageKey(scope: HubBudgetScope): string {
   return scope === 'account'
@@ -37,28 +29,6 @@ function readCount(key: string, cap: number): number {
 
 function writeCount(key: string, value: number, cap: number): void {
   localStorage.setItem(key, String(Math.min(value, cap)));
-}
-
-export function getGuestProviderHubNavigationsUsed(
-  scope: HubBudgetScope = 'guest'
-): number {
-  return readCount(providerStorageKey(scope), FREE_PROVIDER_NAVIGATIONS);
-}
-
-export function shouldBlockGuestProviderHubNavigation(
-  scope: HubBudgetScope = 'guest'
-): boolean {
-  // Signed-in users should not hit guest hub paywalls.
-  if (scope === 'account') return false;
-  return getGuestProviderHubNavigationsUsed(scope) >= FREE_PROVIDER_NAVIGATIONS;
-}
-
-export function recordGuestProviderHubNavigation(
-  scope: HubBudgetScope = 'guest'
-): void {
-  if (scope === 'account') return;
-  const next = getGuestProviderHubNavigationsUsed(scope) + 1;
-  writeCount(providerStorageKey(scope), next, FREE_PROVIDER_NAVIGATIONS);
 }
 
 export function getGuestCompareHubNavigationsUsed(

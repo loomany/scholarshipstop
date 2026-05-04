@@ -24,6 +24,7 @@ import {
   stateLabelFromSlug,
   stateSlugFromCode
 } from '@/lib/seo/stateCompareSlug';
+import { formatInstitutionStateLabel } from '@/lib/seo/institutionLocationLabel';
 import {
   comparisonGrantCountsOk,
   contentJsonAsRecord,
@@ -201,6 +202,8 @@ export default async function UniversityComparePage({
   const stateSlugB = stateCodeB ? stateSlugFromCode(stateCodeB) : null;
   const stateLabelA = stateSlugA ? stateLabelFromSlug(stateSlugA) : null;
   const stateLabelB = stateSlugB ? stateLabelFromSlug(stateSlugB) : null;
+  const compareHeaderStateA = formatInstitutionStateLabel(instA);
+  const compareHeaderStateB = formatInstitutionStateLabel(instB);
   const relatedContentPromise = fetchCompareRelatedContent({
     instAName: instA.name,
     instBName: instB.name,
@@ -399,13 +402,33 @@ export default async function UniversityComparePage({
           </span>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
-              <p className="text-sm font-medium text-gray-500">Institution A</p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm font-medium text-gray-500">Institution A</p>
+                {compareHeaderStateA ? (
+                  <p
+                    className="max-w-[min(100%,12rem)] shrink-0 text-right text-sm font-medium text-gray-500 sm:max-w-[14rem]"
+                    title={compareHeaderStateA}
+                  >
+                    {compareHeaderStateA}
+                  </p>
+                ) : null}
+              </div>
               <p className="mt-2 text-xl font-bold leading-tight text-gray-900">
                 {instA.name}
               </p>
             </div>
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
-              <p className="text-sm font-medium text-gray-500">Institution B</p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm font-medium text-gray-500">Institution B</p>
+                {compareHeaderStateB ? (
+                  <p
+                    className="max-w-[min(100%,12rem)] shrink-0 text-right text-sm font-medium text-gray-500 sm:max-w-[14rem]"
+                    title={compareHeaderStateB}
+                  >
+                    {compareHeaderStateB}
+                  </p>
+                ) : null}
+              </div>
               <p className="mt-2 text-xl font-bold leading-tight text-gray-900">
                 {instB.name}
               </p>

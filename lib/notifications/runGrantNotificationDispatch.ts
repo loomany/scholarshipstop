@@ -210,7 +210,7 @@ async function userHasRecentEmailDelivery(
 async function recordDigestItemHistory(
   admin: SupabaseClient<Database>,
   userId: string,
-  lines: { scholarshipId: string; channel: EmailSectionId }[]
+  lines: { scholarshipId: string; channel: EmailSectionId; isFallback?: boolean }[]
 ): Promise<void> {
   if (lines.length === 0) return;
   const { error } = await admin.from('grant_email_digest_items').insert(
@@ -218,7 +218,7 @@ async function recordDigestItemHistory(
       user_id: userId,
       scholarship_id: line.scholarshipId,
       section: line.channel,
-      digest_kind: line.channel === 'recommended' ? 'fallback' : 'direct'
+      digest_kind: line.isFallback || line.channel === 'recommended' ? 'fallback' : 'direct'
     }))
   );
   if (error) {
@@ -271,6 +271,16 @@ function profileIntentMatchesScholarship(s: Scholarship, profile: ProfileRow): b
   if (!applicantCountry) return false;
   if (!hasCountryCode(s.applicantCountryCodes, applicantCountry)) return false;
   return scholarshipHasPreferredHost(s, normalizedPreferredHostCountryCodes(profile));
+}
+
+function hasHostCountry(s: Scholarship, country: string): boolean {
+  return Boolean(s.hostCountryCodes?.some((code) => code.trim().toUpperCase() === country));
+}
+
+function isInternationalFriendly(s: Scholarship): boolean {
+  if (s.internationalFriendlyListing) return true;
+  if ((s.applicantCountryCodes?.length ?? 0) >= 3) return true;
+  return s.locationScope?.trim().toLowerCase() === 'global';
 }
 
 export async function profileMatchesBest(
@@ -563,6 +573,8 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     scholarship: Scholarship;
     channel: EmailSectionId;
     firstName: string | null;
+    sectionLabel?: string;
+    isFallback?: boolean;
   };
   const pendingEmailByUser = new Map<string, PendingEmailLine[]>();
   const scoredScholarshipCache = new Map<string, Map<string, Scholarship>>();
@@ -849,12 +861,53 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
     if (!hasAnyEmailChannel) continue;
 
     const existing = pendingEmailByUser.get(uid) ?? [];
+    const profileCountry = normalizedProfileCountryCode(profile);
     const existingRecommendedCount = existing.filter((line) => line.channel === 'recommended').length;
 
     const seenScholarshipIds = await getSeenEmailScholarshipIds(uid);
     const existingScholarshipIds = new Set(existing.map((line) => line.scholarshipId));
+    if (!profileCountry && existing.length === 0) {
+      const missingCountryScored = applyProfileMatchPercentToScholarships(
+        fallbackScholarships,
+        profile
+      ).filter((s) => !seenScholarshipIds.has(s.id) && !existingScholarshipIds.has(s.id));
+      const missingCountryLines: PendingEmailLine[] = [
+        ...missingCountryScored
+          .filter((s) => isInternationalFriendly(s) && hasHostCountry(s, 'US'))
+          .sort((a, b) => scoreForEmailOrdering(b) - scoreForEmailOrdering(a))
+          .slice(0, 2)
+          .map((s) => ({
+            scholarshipId: s.id,
+            scholarship: s,
+            channel: 'recommended' as const,
+            sectionLabel: 'International friendly USA',
+            isFallback: true,
+            firstName: profile.first_name ?? null
+          })),
+        ...missingCountryScored
+          .filter((s) => isInternationalFriendly(s))
+          .sort((a, b) => scoreForEmailOrdering(b) - scoreForEmailOrdering(a))
+          .slice(0, 4)
+          .map((s) => ({
+            scholarshipId: s.id,
+            scholarship: s,
+            channel: 'best' as const,
+            sectionLabel: 'Global opportunities',
+            isFallback: true,
+            firstName: profile.first_name ?? null
+          }))
+      ];
+      const uniqueMissingCountryLines = Array.from(
+        new Map(missingCountryLines.map((line) => [line.scholarshipId, line])).values()
+      ).slice(0, 4);
+      if (uniqueMissingCountryLines.length > 0) {
+        pendingEmailByUser.set(uid, uniqueMissingCountryLines);
+        fallbackUsers += 1;
+      }
+      continue;
+    }
+
     const fallbackTarget = Math.max(0, GRANT_DIGEST_FALLBACK_MAX_ITEMS - existingRecommendedCount);
-    if (fallbackTarget <= 0) continue;
 
     const fallbackLines: PendingEmailLine[] = applyProfileMatchPercentToScholarships(
       fallbackScholarships,
@@ -872,12 +925,45 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
         scholarshipId: s.id,
         scholarship: s,
         channel: 'recommended' as const,
+        isFallback: true,
         firstName: profile.first_name ?? null
       }));
 
     if (fallbackLines.length > 0) {
       pendingEmailByUser.set(uid, [...existing, ...fallbackLines]);
       fallbackUsers += 1;
+    } else if (existing.length === 0) {
+      const noItemsScored = applyProfileMatchPercentToScholarships(fallbackScholarships, profile)
+        .filter((s) => !seenScholarshipIds.has(s.id) && !existingScholarshipIds.has(s.id))
+        .sort((a, b) => scoreForEmailOrdering(b) - scoreForEmailOrdering(a));
+      const noItemsLines: PendingEmailLine[] = [
+        ...noItemsScored
+          .filter((s) => isInternationalFriendly(s))
+          .slice(0, 2)
+          .map((s) => ({
+            scholarshipId: s.id,
+            scholarship: s,
+            channel: 'recommended' as const,
+            sectionLabel: 'Worth checking today',
+            isFallback: true,
+            firstName: profile.first_name ?? null
+          })),
+        ...noItemsScored.slice(0, 4).map((s) => ({
+          scholarshipId: s.id,
+          scholarship: s,
+          channel: 'best' as const,
+          sectionLabel: 'Popular scholarships',
+          isFallback: true,
+          firstName: profile.first_name ?? null
+        }))
+      ];
+      const uniqueNoItemsLines = Array.from(
+        new Map(noItemsLines.map((line) => [line.scholarshipId, line])).values()
+      ).slice(0, 4);
+      if (uniqueNoItemsLines.length > 0) {
+        pendingEmailByUser.set(uid, uniqueNoItemsLines);
+        fallbackUsers += 1;
+      }
     }
   }
 
@@ -931,14 +1017,9 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
 
     freshSelected += selectedLines.filter((line) => !seenScholarshipIds.has(line.scholarshipId)).length;
 
-    const rankedIds = rankedLines.map((line) => line.scholarshipId);
-    const token = createGrantDigestToken(rankedIds);
-    const digestViewAllUrl = token
-      ? `${publicOrigin}/scholarships/email-digest/${encodeURIComponent(token)}`
-      : `${publicOrigin}/scholarships?tab=best-recommendation&scope=catalog&sort=best_recommendation`;
-
     const rankedCountByChannel = createEmailSectionCounts();
     const selectedLinesByChannel = new Map<EmailSectionId, PendingEmailLine[]>();
+    const sectionLabelByChannel = new Map<EmailSectionId, string>();
     for (const line of rankedLines) {
       incrementEmailSectionCount(rankedCountByChannel, line.channel);
     }
@@ -946,12 +1027,23 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       const group = selectedLinesByChannel.get(line.channel) ?? [];
       group.push(line);
       selectedLinesByChannel.set(line.channel, group);
+      if (line.sectionLabel && !sectionLabelByChannel.has(line.channel)) {
+        sectionLabelByChannel.set(line.channel, line.sectionLabel);
+      }
     }
+    const selectedIds = [
+      ...selectedLines.map((line) => line.scholarshipId),
+      ...rankedLines.map((line) => line.scholarshipId)
+    ];
+    const token = createGrantDigestToken(selectedIds);
+    const digestViewAllUrl = token
+      ? `${publicOrigin}/scholarships/email-digest/${encodeURIComponent(token)}`
+      : `${publicOrigin}/scholarships?tab=best-recommendation&scope=catalog&sort=best_recommendation`;
 
     const categories: GrantDigestCategory[] = emailSectionOrder
       .map((channel) => ({
         id: channel,
-        label: EMAIL_CHANNEL_LABELS[channel],
+        label: sectionLabelByChannel.get(channel) ?? EMAIL_CHANNEL_LABELS[channel],
         totalCount: rankedCountByChannel[channel],
         viewAllUrl: digestViewAllUrl,
         items: (selectedLinesByChannel.get(channel) ?? []).map((line) => line.scholarship)
@@ -966,7 +1058,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       selectedLines: selectedLines.length,
       fresh: fresh.length,
       tail: 0,
-      rankedIds: rankedIds.length
+      rankedIds: selectedIds.length
     });
     const r = await sendGrantDigestBatchEmail({
       toEmail: email,
@@ -988,7 +1080,7 @@ export async function runGrantNotificationDispatch(): Promise<GrantNotificationD
       );
     } else if (r.skipped !== 'unsubscribed') {
       for (const line of selectedLines) {
-        if (line.channel !== 'recommended') {
+        if (line.channel !== 'recommended' && !line.isFallback) {
           await recordDelivery(admin, uid, line.scholarshipId, line.channel, 'email');
         }
         emailSent += 1;

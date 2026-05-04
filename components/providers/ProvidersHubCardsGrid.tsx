@@ -1,11 +1,9 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment } from 'react';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
 
-import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
-import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 
 import { ProvidersHubCard } from './ProvidersHubCard';
@@ -68,36 +66,14 @@ function ProvidersGridIqAssessmentCard() {
 }
 
 export function ProvidersHubCardsGrid({ rows }: Props) {
-  const [offerOpen, setOfferOpen] = useState(false);
-  const openOffer = useCallback(() => setOfferOpen(true), []);
-
   return (
-    <AuthStatusProvider>
-      {({ isAuthenticated, hasSubscription, authResolved }) => (
-        <>
-          <ul className="mt-10 grid list-none grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {rows.map((row, index) => (
-              <Fragment key={row.slug}>
-                <ProvidersHubCard
-                  row={row}
-                  isAuthenticated={isAuthenticated}
-                  hasSubscription={hasSubscription}
-                  authResolved={authResolved}
-                  onSubscriptionRequired={openOffer}
-                />
-                {index === 2 ? <ProvidersGridIqAssessmentCard /> : null}
-              </Fragment>
-            ))}
-          </ul>
-          <ScholarshipRegistrationWallModal
-            open={offerOpen}
-            onClose={() => setOfferOpen(false)}
-            signedInWithoutSubscription={
-              Boolean(isAuthenticated && authResolved && !hasSubscription)
-            }
-          />
-        </>
-      )}
-    </AuthStatusProvider>
+    <ul className="mt-10 grid list-none grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {rows.map((row, index) => (
+        <Fragment key={row.slug}>
+          <ProvidersHubCard row={row} />
+          {index === 2 ? <ProvidersGridIqAssessmentCard /> : null}
+        </Fragment>
+      ))}
+    </ul>
   );
 }

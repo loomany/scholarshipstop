@@ -12,6 +12,8 @@ export type ProviderProfilePayload = {
   providerId: string | null;
   slug: string;
   displayName: string;
+  /** USPS state code when known (US HQ), from `providers.state`. */
+  hqState: string | null;
   officialUrl: string | null;
   aiDescription: string | null;
   aiSources: string[];

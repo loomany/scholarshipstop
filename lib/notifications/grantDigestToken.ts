@@ -4,6 +4,7 @@ import { createHmac, timingSafeEqual } from 'crypto';
 
 const DIGEST_TOKEN_VERSION = 1;
 const DEFAULT_TOKEN_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+const MAX_DIGEST_TOKEN_IDS = 24;
 
 type DigestTokenPayload = {
   v: number;
@@ -38,7 +39,7 @@ export function createGrantDigestToken(
 ): string | null {
   const secret = signingSecret();
   if (!secret) return null;
-  const ids = Array.from(new Set(scholarshipIds.filter(Boolean)));
+  const ids = Array.from(new Set(scholarshipIds.filter(Boolean))).slice(0, MAX_DIGEST_TOKEN_IDS);
   if (ids.length === 0) return null;
   const payload: DigestTokenPayload = {
     v: DIGEST_TOKEN_VERSION,

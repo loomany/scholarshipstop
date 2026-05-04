@@ -3,6 +3,7 @@ import { JWT } from 'google-auth-library';
 import type { Database } from '@/types_db';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { buildProviderProfileScholarshipsHref } from '@/lib/providers/providerProfilePagination';
+import { SEO_ROUTE_STATE_SLUG_TO_CODE } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { getURL } from '@/utils/helpers';
@@ -257,7 +258,16 @@ function inferGoogleIndexingKindFromUrl(url: string): GoogleIndexingContentKind 
     }
     if (pathname.startsWith('/compare/')) return 'page';
     if (pathname.startsWith('/resources/')) return 'resource';
-    if (pathname.startsWith('/providers/')) return 'provider';
+    if (pathname.startsWith('/providers/')) {
+      const rest = pathname.slice('/providers/'.length);
+      const seg = decodeURIComponent(rest.split('/')[0] ?? '')
+        .trim()
+        .toLowerCase();
+      if (seg && SEO_ROUTE_STATE_SLUG_TO_CODE[seg]) {
+        return 'page';
+      }
+      return 'provider';
+    }
     if (pathname.startsWith('/essays/')) return 'essay';
     return null;
   } catch {

@@ -10,11 +10,22 @@ import { ProviderProfileTableOfContents } from '@/components/providers/ProviderP
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
 import { ProviderOfficialWebsiteGate } from '@/components/providers/ProviderOfficialWebsiteGate';
 import { ProviderProfileScholarshipsScroll } from '@/components/providers/ProviderProfileScholarshipsScroll';
+import { ProvidersHubPageContent } from '@/components/providers/ProvidersHubPageContent';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
+import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
 import {
   getCachedProviderProfilePage,
   resolveProviderProfileSlug
 } from '@/lib/providers/providerProfileServer';
+import { formatProviderHqLocationLine } from '@/lib/providers/providerHubRegionLabel';
+import type { ProvidersHubSearchParams } from '@/lib/providers/providersHubSearchParams';
+import {
+  parseProvidersHubListingInputs,
+  providersHubStatePathIsSeoIndexable
+} from '@/lib/providers/providersHubSearchParams';
+import { buildProvidersHubHref } from '@/lib/providers/providersHubUrl';
+import { getProvidersHubStateCodeFromPathSegment } from '@/lib/providers/providersHubStatePath';
+import { SEO_ROUTE_STATE_CODE_TO_SLUG } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { getURL } from '@/utils/helpers';
 import {
   buildProviderProfileScholarshipsHref,
@@ -114,13 +125,40 @@ function providerProfileSourceLabel(href: string, index: number): string {
 
 type PageProps = {
   params: { id: string };
-  searchParams?: { page?: string | string[] };
+  searchParams?: ProvidersHubSearchParams;
 };
 
 export async function generateMetadata({
   params,
   searchParams
 }: PageProps): Promise<Metadata> {
+  const stateCode = getProvidersHubStateCodeFromPathSegment(params.id);
+  if (stateCode) {
+    const stateName = US_STATE_CODE_TO_NAME[stateCode];
+    const seg = SEO_ROUTE_STATE_CODE_TO_SLUG[stateCode];
+    const path = `/providers/${seg}`;
+    const canonicalUrl = getCanonical(path);
+    const title = `Scholarship providers in ${stateName} | ScholarshipTop`;
+    const description = `Browse organizations and foundations offering scholarships with ties to ${stateName}.`;
+    const indexFromQuery = providersHubStatePathIsSeoIndexable(
+      searchParams
+    );
+    return {
+      title,
+      description,
+      alternates: { canonical: canonicalUrl },
+      ...(indexFromQuery
+        ? {}
+        : { robots: { index: false, follow: true } }),
+      openGraph: {
+        title,
+        description,
+        url: canonicalUrl,
+        type: 'website'
+      }
+    };
+  }
+
   const slug = await resolveProviderProfileSlug(params.id);
   const data = slug ? await getCachedProviderProfilePage(slug, 1) : null;
   if (!data) {
@@ -155,6 +193,34 @@ export default async function ProviderProfilePage({
   params,
   searchParams
 }: PageProps) {
+  const stateCode = getProvidersHubStateCodeFromPathSegment(params.id);
+  if (stateCode) {
+    const canonicalSlug = SEO_ROUTE_STATE_CODE_TO_SLUG[stateCode];
+    const seg = decodeURIComponent(params.id).trim().toLowerCase();
+    const hubSearchParams: ProvidersHubSearchParams = searchParams ?? {};
+    const { q, countryBucket, currentPage } = parseProvidersHubListingInputs(
+      hubSearchParams,
+      stateCode
+    );
+    if (canonicalSlug !== seg) {
+      permanentRedirect(
+        buildProvidersHubHref({
+          q: q ?? undefined,
+          state: stateCode,
+          country: countryBucket,
+          page: currentPage > 1 ? currentPage : undefined
+        })
+      );
+    }
+    return (
+      <ProvidersHubPageContent
+        searchParams={hubSearchParams}
+        pathStateCode={stateCode}
+        stateSlug={canonicalSlug}
+      />
+    );
+  }
+
   const currentPage = parseProviderProfilePageParam(searchParams?.page);
   const slug = await resolveProviderProfileSlug(params.id);
   if (!slug) notFound();
@@ -283,6 +349,7 @@ export default async function ProviderProfilePage({
       : null;
   const formattedAwardPool = formatProviderAwardPool(data.totalAwardAmount);
   const formattedLastUpdated = formatProviderProfileDate(data.lastUpdatedAt);
+  const profileLocationLine = formatProviderHqLocationLine(data.hqState);
   const showAwardPool =
     data.totalScholarshipCount > 3 && formattedAwardPool != null;
 
@@ -318,7 +385,7 @@ export default async function ProviderProfilePage({
                 Verified Provider
               </span>
             </div>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
                   Active scholarships
@@ -347,6 +414,16 @@ export default async function ProviderProfilePage({
                   </p>
                   <p className="mt-1 text-xl font-bold text-gray-900">
                     {formattedLastUpdated}
+                  </p>
+                </div>
+              ) : null}
+              {profileLocationLine ? (
+                <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
+                    Location
+                  </p>
+                  <p className="mt-1 text-xl font-bold leading-snug text-gray-900">
+                    {profileLocationLine}
                   </p>
                 </div>
               ) : null}
