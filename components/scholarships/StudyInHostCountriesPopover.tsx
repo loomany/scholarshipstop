@@ -45,7 +45,7 @@ export function StudyInHostCountriesPopover({
           type="button"
           className={cn(className)}
           title={title}
-          aria-label={`${title}. Open menu to pick a location.`}
+          aria-label={`${title}. Open menu to pick a study destination.`}
           onClick={(e) => e.stopPropagation()}
           onPointerDown={(e) => e.stopPropagation()}
         >
@@ -67,9 +67,9 @@ export function StudyInHostCountriesPopover({
           )}
           onPointerDownOutside={(e) => e.stopPropagation()}
         >
-          <nav aria-label="Program location pages">
+          <nav aria-label="Study destination pages">
             <p className="border-b border-gray-100 px-2 pb-1.5 text-[10px] font-semibold tracking-wide text-gray-500">
-              Location:
+              Study in:
             </p>
             <ul className="mt-1 max-h-[min(16rem,50vh)] overflow-y-auto py-0.5">
               {items.map(({ code, label, href }) => (

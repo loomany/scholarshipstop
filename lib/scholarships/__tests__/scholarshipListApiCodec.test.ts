@@ -30,6 +30,27 @@ test('eligibility and education filters roundtrip through moreFilters JSON codec
   assert.deepEqual(decoded.includeEducationLevels, new Set(['undergraduate', 'graduate']));
 });
 
+test('include unspecified host country flag roundtrips through moreFilters JSON codec', () => {
+  const base = defaultMoreFiltersFromBounds({
+    amountMin: 0,
+    amountMax: 10000,
+    applicantsMin: 0,
+    applicantsMax: 1000
+  });
+  base.includeUnspecifiedHostCountries = true;
+
+  const encoded = moreFiltersToJson(base);
+  const decoded = moreFiltersFromJson(encoded, {
+    amountMin: 0,
+    amountMax: 10000,
+    applicantsMin: 0,
+    applicantsMax: 1000
+  });
+
+  assert.equal(encoded.includeUnspecifiedHostCountries, true);
+  assert.equal(decoded.includeUnspecifiedHostCountries, true);
+});
+
 test('applicant country and unspecified country flag roundtrip through moreFilters JSON codec', () => {
   const base = defaultMoreFiltersFromBounds({
     amountMin: 0,

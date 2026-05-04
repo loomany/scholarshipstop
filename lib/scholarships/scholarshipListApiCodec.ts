@@ -11,6 +11,7 @@ export type MoreFiltersJson = Omit<
   | 'includeLocationLabels'
   | 'includeApplicantCountryCodes'
   | 'includeUnspecifiedApplicantCountries'
+  | 'includeUnspecifiedHostCountries'
   | 'includeEasyApply'
   | 'citizenshipAudience'
   | 'filterUniversityInput'
@@ -38,6 +39,7 @@ export type MoreFiltersJson = Omit<
   includeLocationLabels: string[];
   includeApplicantCountryCodes?: string[];
   includeUnspecifiedApplicantCountries?: boolean;
+  includeUnspecifiedHostCountries?: boolean;
   includeEasyApply: string[];
 };
 
@@ -68,6 +70,7 @@ export function moreFiltersToJson(f: MoreFiltersState): MoreFiltersJson {
     includeLocationLabels: Array.from(f.includeLocationLabels),
     includeApplicantCountryCodes: Array.from(f.includeApplicantCountryCodes),
     includeUnspecifiedApplicantCountries: f.includeUnspecifiedApplicantCountries,
+    includeUnspecifiedHostCountries: f.includeUnspecifiedHostCountries,
     includeEasyApply: Array.from(f.includeEasyApply)
   };
 }
@@ -121,6 +124,7 @@ export function moreFiltersFromJson(
     ),
     includeUnspecifiedApplicantCountries:
       raw.includeUnspecifiedApplicantCountries === true,
+    includeUnspecifiedHostCountries: raw.includeUnspecifiedHostCountries === true,
     includeEasyApply: new Set(raw.includeEasyApply ?? []),
     filterStateInput:
       typeof raw.filterStateInput === 'string' ? raw.filterStateInput : '',

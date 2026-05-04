@@ -10,6 +10,7 @@
  *
  * Flags:
  *   --confident-only — в БД только строки с method Wikidata или LocalDomain (и валидный ISO).
+ *   --include-openai — вместе с --confident-only разрешить method OpenAI (gpt-4o-mini и т.д.).
  *   --all-methods — по умолчанию: любой method при валидном proposed (как раньше).
  */
 
@@ -33,21 +34,32 @@ type InputRow = {
 };
 
 const CONFIDENT_METHODS = new Set(['Wikidata', 'LocalDomain']);
+const OPENAI_METHOD = 'OpenAI';
 
-function parseArgs(): { confidentOnly: boolean } {
+function parseArgs(): { confidentOnly: boolean; includeOpenAi: boolean } {
   const argv = process.argv.slice(2);
   let confidentOnly = process.env.UPDATE_HOSTS_CONFIDENT_ONLY === '1';
+  let includeOpenAi =
+    process.env.UPDATE_HOSTS_INCLUDE_OPENAI === '1' ||
+    process.env.UPDATE_HOSTS_INCLUDE_OPENAI === 'true';
   for (const a of argv) {
     if (a === '--confident-only') confidentOnly = true;
     if (a === '--all-methods') confidentOnly = false;
+    if (a === '--include-openai') includeOpenAi = true;
   }
-  return { confidentOnly };
+  return { confidentOnly, includeOpenAi };
 }
 
-function methodAllowsDbWrite(method: string | undefined, confidentOnly: boolean): boolean {
+function methodAllowsDbWrite(
+  method: string | undefined,
+  confidentOnly: boolean,
+  includeOpenAi: boolean
+): boolean {
   if (!confidentOnly) return true;
   const m = typeof method === 'string' ? method.trim() : '';
-  return CONFIDENT_METHODS.has(m);
+  if (CONFIDENT_METHODS.has(m)) return true;
+  if (includeOpenAi && m === OPENAI_METHOD) return true;
+  return false;
 }
 
 type UpsertPayload = {
@@ -77,7 +89,8 @@ async function fetchApplicantCodesByScholarshipIds(
   ids: string[]
 ): Promise<Map<string, string[]>> {
   const out = new Map<string, string[]>();
-  const chunkSize = 500;
+  /** PostgREST encodes `.in('id', …)` in the URL; 500 UUIDs exceeds typical 8–16KB header limits. */
+  const chunkSize = 80;
   for (let i = 0; i < ids.length; i += chunkSize) {
     const chunk = ids.slice(i, i + chunkSize);
     const { data, error } = await supabase
@@ -147,7 +160,7 @@ async function runUpdatesLimitedParallel(
 }
 
 async function main() {
-  const { confidentOnly } = parseArgs();
+  const { confidentOnly, includeOpenAi } = parseArgs();
   const path = resultJsonPath();
   const rawText = await readFile(path, 'utf-8');
   const parsed = JSON.parse(rawText) as unknown;
@@ -172,7 +185,7 @@ async function main() {
       skippedBadCode += 1;
       continue;
     }
-    if (!methodAllowsDbWrite(row.method, confidentOnly)) {
+    if (!methodAllowsDbWrite(row.method, confidentOnly, includeOpenAi)) {
       skippedMethod += 1;
       continue;
     }
@@ -181,7 +194,13 @@ async function main() {
 
   console.log(`Файл: ${path}`);
   console.log(
-    `Режим: ${confidentOnly ? 'только Wikidata + LocalDomain (--confident-only или UPDATE_HOSTS_CONFIDENT_ONLY=1)' : 'все method при валидном ISO (--all-methods)'}`
+    `Режим: ${
+      confidentOnly
+        ? `только уверенные методы (--confident-only): Wikidata + LocalDomain${
+            includeOpenAi ? ' + OpenAI (--include-openai)' : ''
+          }`
+        : 'все method при валидном ISO (--all-methods)'
+    }`
   );
   console.log(`Всего объектов в JSON: ${parsed.length.toLocaleString()}`);
   console.log(`К записи (proposed ≠ null и валидный ISO Alpha-2): ${valid.length.toLocaleString()}`);
@@ -236,30 +255,15 @@ async function main() {
 
   for (const batch of batches) {
     batchIndex += 1;
-    const payload = batch.map(({ id, host_country_codes, applicant_country_codes }) => ({
-      id,
-      host_country_codes,
-      applicant_country_codes
-    }));
-
-    const { error } = await supabase.from('scholarships').upsert(payload, { onConflict: 'id' });
-
-    if (!error) {
-      okRows += batch.length;
-      console.log(`Батч ${batchIndex}/${batches.length} — upsert OK (${batch.length} строк)`);
-      continue;
-    }
-
-    console.warn(
-      `\nБатч ${batchIndex}/${batches.length} upsert: ${error.message}\nОткат к UPDATE пачками по ${FALLBACK_CONCURRENCY}…`
-    );
-
+    /** Partial `upsert` hits NOT NULL columns (e.g. `source`); only `UPDATE` by id is valid. */
     const fb = { ok: 0, fail: 0 };
     await runUpdatesLimitedParallel(supabase, batch, FALLBACK_CONCURRENCY, fb);
     okRows += fb.ok;
     failedRows += fb.fail;
     console.log(
-      `  Fallback завершён: +${fb.ok} ок, ${fb.fail ? `−${fb.fail} ошибок` : 'ошибок нет'}`
+      `Батч ${batchIndex}/${batches.length} — UPDATE ${batch.length} строк: +${fb.ok} ок${
+        fb.fail ? `, −${fb.fail} ошибок` : ''
+      }`
     );
   }
 

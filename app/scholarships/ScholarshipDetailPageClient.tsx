@@ -449,7 +449,7 @@ function SimilarScholarshipDetailListItem({
       const usLabel = countryLabelFromCode('US');
       return {
         key: 'grant-location-us' as const,
-        text: `Location: ${usLabel}`,
+        text: `Study in: ${usLabel}`,
         title: `Study opportunity in ${usLabel}`
       };
     }
@@ -457,14 +457,14 @@ function SimilarScholarshipDetailListItem({
       const label = countryLabelFromCode(hostCodes[0]!);
       return {
         key: `grant-location-${hostCodes[0]}`,
-        text: `Location: ${label}`,
+        text: `Study in: ${label}`,
         title: `Study opportunity in ${label}`
       };
     }
     if (hostCodes.length > 1) {
       return {
         key: 'grant-location-multi' as const,
-        text: `Location: ${hostCodes.length} countries`,
+        text: `Study in: ${hostCodes.length} countries`,
         title: `Study opportunities spanning ${hostCodes.length} countries`
       };
     }

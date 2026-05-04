@@ -23,6 +23,16 @@
  *   WIKIDATA_SEARCH_LIMIT — сколько результатов поиска смотреть (default 8, max 20)
  *   WIKIDATA_USER_AGENT — обязательно осмысленный UA для больших прогонов (желание Wikimedia Foundation)
  *
+ * OpenAI (gpt-4o-mini по умолчанию), если HIPO+Wikidata не дали ISO:
+ *   OPENAI_HOST_CLASSIFY_ENABLED=1
+ *   OPENAI_HOST_CLASSIFY_MODEL=gpt-4o-mini   (опционально)
+ *   OPENAI_HOST_GAP_MS=250                   (пауза между вызовами API)
+ *   OPENAI_API_KEY
+ *
+ * Повторно только для строк чекпоинта без ISO (например после LocalDomainOnly):
+ *   npx tsx scripts/classify_hosts.ts --openai-backfill
+ *   (требует OPENAI_HOST_CLASSIFY_ENABLED=1 и OPENAI_API_KEY)
+ *
  * Output: classified_hosts_result.json под process.cwd(), если CLASSIFIED_HOSTS_RESULT_JSON не задан.
  * Бэкапы: перед каждой записью чекпоинта текущее содержимое копируется в *.bak (последнее откатное).
  * При --fresh перед обнулением отдельно пишется *.before-fresh.bak — не перезаписывается дальнейшими flush.
@@ -40,6 +50,11 @@ import {
   wikidataGapMs,
   wikidataLookupEnabled
 } from './wikidata-host-country';
+import {
+  openaiHostClassifyEnabled,
+  openaiHostGapMs,
+  resolveHostCountryViaOpenAi
+} from './openai-host-country';
 
 const HIPO_DEFAULT_URL =
   'https://raw.githubusercontent.com/Hipo/university-domains-list/master/world_universities_and_domains.json';
@@ -48,8 +63,8 @@ const RESULT_FILENAME = 'classified_hosts_result.json';
 const PAGE_SIZE = 500;
 const DEFAULT_FLUSH_EVERY = 50;
 
-/** `LLM` оставлен в типе только для совместимости со старыми чекпоинтами (больше не выставляется). */
-type Method = 'LocalDomain' | 'Wikidata' | 'LLM' | 'LocalDomainOnly';
+/** `LLM` — совместимость со старыми чекпоинтами; `OpenAI` — gpt-4o-mini (или OPENAI_HOST_CLASSIFY_MODEL). */
+type Method = 'LocalDomain' | 'Wikidata' | 'LLM' | 'LocalDomainOnly' | 'OpenAI';
 
 type ResultRow = {
   id: string;
@@ -97,7 +112,11 @@ async function writeClassifiedCheckpoint(primary: string, rows: ResultRow[]): Pr
 
 function isMethod(s: string): s is Method {
   return (
-    s === 'LocalDomain' || s === 'Wikidata' || s === 'LLM' || s === 'LocalDomainOnly'
+    s === 'LocalDomain' ||
+    s === 'Wikidata' ||
+    s === 'LLM' ||
+    s === 'LocalDomainOnly' ||
+    s === 'OpenAI'
   );
 }
 
@@ -145,12 +164,14 @@ function parseArgs(): {
   fresh: boolean;
   flushEvery: number;
   noWikidata: boolean;
+  openaiBackfill: boolean;
 } {
   const argv = process.argv.slice(2);
   let limit: number | null = null;
   let flushEvery = DEFAULT_FLUSH_EVERY;
   let fresh = false;
   let noWikidata = false;
+  let openaiBackfill = false;
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i]!;
     if (a.startsWith('--limit=')) {
@@ -163,9 +184,11 @@ function parseArgs(): {
       fresh = true;
     } else if (a === '--no-wikidata') {
       noWikidata = true;
+    } else if (a === '--openai-backfill') {
+      openaiBackfill = true;
     }
   }
-  return { limit, fresh, flushEvery, noWikidata };
+  return { limit, fresh, flushEvery, noWikidata, openaiBackfill };
 }
 
 function jsonStringArray(value: unknown): string[] {
@@ -266,8 +289,13 @@ function lookupCountryByDomain(domainMap: Map<string, string>, host: string | nu
   return null;
 }
 
+async function sleepMs(ms: number): Promise<void> {
+  if (ms <= 0) return;
+  await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function main() {
-  const { limit, fresh, flushEvery, noWikidata } = parseArgs();
+  const { limit, fresh, flushEvery, noWikidata, openaiBackfill } = parseArgs();
   const supabase = serviceSupabase();
   const outPath = classifiedHostsOutputPath();
 
@@ -284,6 +312,25 @@ async function main() {
     );
   } else {
     console.log('Wikidata lookup: выкл');
+  }
+
+  const openAiEnabled = openaiHostClassifyEnabled();
+  const openAiKey = Boolean(process.env.OPENAI_API_KEY?.trim());
+  if (openaiBackfill) {
+    if (!openAiEnabled || !openAiKey) {
+      throw new Error(
+        '--openai-backfill требует OPENAI_HOST_CLASSIFY_ENABLED=1 и OPENAI_API_KEY в окружении'
+      );
+    }
+    console.log(
+      `OpenAI backfill: вкл (модель ${process.env.OPENAI_HOST_CLASSIFY_MODEL?.trim() || 'gpt-4o-mini'}, пауза ${openaiHostGapMs()}ms) — только строки чекпоинта без proposed ISO`
+    );
+  } else if (openAiEnabled && openAiKey) {
+    console.log(
+      `OpenAI host fallback: вкл после HIPO+Wikidata (модель ${process.env.OPENAI_HOST_CLASSIFY_MODEL?.trim() || 'gpt-4o-mini'}, пауза ${openaiHostGapMs()}ms)`
+    );
+  } else if (openAiEnabled && !openAiKey) {
+    console.warn('OPENAI_HOST_CLASSIFY_ENABLED=1, но OPENAI_API_KEY пуст — шаг OpenAI пропускается');
   }
 
   const candidates: SchRow[] = [];
@@ -407,6 +454,25 @@ async function main() {
         }
       }
 
+      if (!proposed && openaiHostClassifyEnabled() && process.env.OPENAI_API_KEY?.trim()) {
+        try {
+          const gap = openaiHostGapMs();
+          if (gap > 0) await sleepMs(gap);
+          const oaIso = await resolveHostCountryViaOpenAi({
+            provider_name: row.provider_name ?? null,
+            official_source_name: row.official_source_name ?? null,
+            provider_url: row.provider_url ?? null
+          });
+          const normOa = oaIso ? normalizeIso(oaIso) : null;
+          if (normOa) {
+            proposed = normOa;
+            method = 'OpenAI';
+          }
+        } catch (oaErr) {
+          console.warn(`OpenAI ошибка (${row.id}):`, (oaErr as Error).message ?? oaErr);
+        }
+      }
+
       if (!proposed) {
         method = 'LocalDomainOnly';
       }
@@ -440,7 +506,36 @@ async function main() {
     const reusedRow = checkpointById.get(row.id);
     let resultRow: ResultRow;
     if (reusedRow && reusedRow.id === row.id) {
-      resultRow = reusedRow;
+      const emptyProposed =
+        reusedRow.proposed_host_country == null || reusedRow.proposed_host_country === '';
+      const backfillHere =
+        openaiBackfill && openAiEnabled && openAiKey && emptyProposed;
+      if (backfillHere) {
+        const sh = (row.provider_name?.trim() ?? '').slice(0, 64) || row.id;
+        console.log(`→ OpenAI backfill ${i + 1}/${total} (${sh})`);
+        const gap = openaiHostGapMs();
+        if (gap > 0) await sleepMs(gap);
+        let iso: string | null = null;
+        try {
+          iso = await resolveHostCountryViaOpenAi({
+            provider_name: row.provider_name ?? null,
+            official_source_name: row.official_source_name ?? null,
+            provider_url: row.provider_url ?? null
+          });
+        } catch (e) {
+          console.warn(`OpenAI backfill ошибка (${row.id}):`, (e as Error).message ?? e);
+        }
+        const norm = iso ? normalizeIso(iso) : null;
+        resultRow = {
+          id: row.id,
+          provider_name: row.provider_name ?? null,
+          proposed_host_country: norm,
+          method: norm ? 'OpenAI' : 'LocalDomainOnly'
+        };
+        newClassifiedSinceStart += 1;
+      } else {
+        resultRow = reusedRow;
+      }
     } else {
       resultRow = await classifyCandidateRow(row, i + 1);
       newClassifiedSinceStart += 1;

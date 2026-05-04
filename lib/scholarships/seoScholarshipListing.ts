@@ -110,6 +110,8 @@ export function mergeMoreFilterStates(
     includeUnspecifiedApplicantCountries:
       a.includeUnspecifiedApplicantCountries ||
       b.includeUnspecifiedApplicantCountries,
+    includeUnspecifiedHostCountries:
+      a.includeUnspecifiedHostCountries || b.includeUnspecifiedHostCountries,
     includeEasyApply: new Set(
       Array.from(a.includeEasyApply).concat(Array.from(b.includeEasyApply))
     ),

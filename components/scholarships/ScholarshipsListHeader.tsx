@@ -14,7 +14,6 @@ import {
   ChevronDown,
   Globe2,
   LayoutGrid,
-  MapPin,
   Search,
   SlidersHorizontal,
   X
@@ -51,8 +50,10 @@ type ScholarshipsListHeaderProps = {
   /** Host / program-location country counts (`host_country_codes`). */
   hostCountryCounts?: CountryCountRow[];
   hostCountryCountsLoading?: boolean;
+  unspecifiedHostCountryCount?: number;
   appliedHostCountryCodes?: Set<string>;
-  onApplyHostCountries?: (next: Set<string>) => void;
+  appliedIncludeUnspecifiedHostCountry?: boolean;
+  onApplyHostCountries?: (next: Set<string>, includeUnspecifiedHost: boolean) => void;
   appliedCategoryIds: Set<ScholarshipCategoryId>;
   onApplyCategories: (next: Set<ScholarshipCategoryId>) => void;
   sortBy: SortOption;
@@ -230,7 +231,9 @@ function ScholarshipsListHeader({
   onApplyCountries,
   hostCountryCounts = [],
   hostCountryCountsLoading = false,
+  unspecifiedHostCountryCount = 0,
   appliedHostCountryCodes = new Set(),
+  appliedIncludeUnspecifiedHostCountry = false,
   onApplyHostCountries,
   appliedCategoryIds,
   onApplyCategories,
@@ -278,6 +281,8 @@ function ScholarshipsListHeader({
   const [draftHostCountryCodes, setDraftHostCountryCodes] = useState<
     Set<string>
   >(() => new Set());
+  const [draftIncludeUnspecifiedHost, setDraftIncludeUnspecifiedHost] =
+    useState(false);
   const [categoryPanelLayout, setCategoryPanelLayout] =
     useState<CategoryPanelLayout | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -406,7 +411,7 @@ function ScholarshipsListHeader({
       });
   }, [destinationSearch, hostCountryCounts, hostSortSelection]);
 
-  /** Location: rows with scholarships in the current filtered list (for “Select all”). */
+  /** Study destination: rows with scholarships in the current filtered list (for “Select all”). */
   const selectableFilteredHostCodes = useMemo(
     () => filteredHostRows.filter((c) => c.count > 0).map((c) => c.code),
     [filteredHostRows]
@@ -418,6 +423,28 @@ function ScholarshipsListHeader({
       draftHostCountryCodes.has(code)
     );
   }, [draftHostCountryCodes, selectableFilteredHostCodes]);
+
+  const showUnspecifiedHostRow = useMemo(() => {
+    if (
+      unspecifiedHostCountryCount <= 0 &&
+      !appliedIncludeUnspecifiedHostCountry
+    ) {
+      return false;
+    }
+    const q = destinationSearch.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      'open / not country-specific'.includes(q) ||
+      'unspecified'.includes(q) ||
+      q.includes('not specif') ||
+      q.includes('study') ||
+      q.includes('destination')
+    );
+  }, [
+    appliedIncludeUnspecifiedHostCountry,
+    destinationSearch,
+    unspecifiedHostCountryCount
+  ]);
 
   const showUnspecifiedCountryRow = useMemo(() => {
     if (
@@ -461,11 +488,14 @@ function ScholarshipsListHeader({
         : '';
 
   const activeHostCountryCount = appliedHostCountryCodes.size;
-  const showHostCountryBadge = activeHostCountryCount > 0;
+  const showHostCountryBadge =
+    activeHostCountryCount > 0 || appliedIncludeUnspecifiedHostCountry;
   const hostCountryBadgeCaption =
-    activeHostCountryCount > 0
-      ? formatIsoCodesForFilterBadge(appliedHostCountryCodes)
-      : '';
+    activeHostCountryCount === 0 && appliedIncludeUnspecifiedHostCountry
+      ? 'Not specified'
+      : activeHostCountryCount > 0
+        ? formatIsoCodesForFilterBadge(appliedHostCountryCodes)
+        : '';
 
   const sortTriggerLabel = SORT_TRIGGER_LABEL[sortBy];
 
@@ -740,7 +770,7 @@ function ScholarshipsListHeader({
                     className={`${CATALOG_CONTROL_BAR_BTN_COMPACT} w-full max-w-full sm:w-auto sm:max-w-[min(100%,12.5rem)]`}
                   >
                     <Globe2 className="h-4 w-4 shrink-0 text-gray-600" />
-                    <span className="min-w-0 truncate">{"I'm from"}</span>
+                    <span className="min-w-0 truncate">I&apos;m from (citizenship)</span>
                     {showCountryBadge && countryBadgeCaption ? (
                       <span className="font-medium tabular-nums tracking-wide text-gray-600">
                         ({countryBadgeCaption})
@@ -829,12 +859,12 @@ function ScholarshipsListHeader({
                                     <Globe2 className="h-4.5 w-4.5" strokeWidth={2.25} aria-hidden />
                                   </span>
                                   <span className="min-w-0 flex-1">
-                                    <span className="flex flex-wrap items-center gap-2">
-                                      <span className="text-sm font-semibold leading-snug text-emerald-950">
+                                    <span className="block text-center">
+                                      <span className="inline-block whitespace-nowrap text-sm font-semibold leading-snug text-emerald-950">
                                         Citizenship not specified
                                       </span>
                                     </span>
-                                    <span className="mt-1 block text-xs leading-snug text-emerald-700/90">
+                                    <span className="mt-1 block text-left text-[11px] leading-[1.35] text-emerald-600/85">
                                       Grants without explicit country eligibility in our
                                       database. Local or other restrictions may still
                                       apply—please verify before you apply.
@@ -931,7 +961,7 @@ function ScholarshipsListHeader({
                     <button
                       type="button"
                       disabled={!onApplyHostCountries}
-                      title="Program location (host country)"
+                      title="Study destination"
                       onClick={() => {
                         setSortOpen(false);
                         setCategoriesOpen(false);
@@ -940,6 +970,9 @@ function ScholarshipsListHeader({
                           const next = !open;
                           if (next) {
                             setDraftHostCountryCodes(new Set(appliedHostCountryCodes));
+                            setDraftIncludeUnspecifiedHost(
+                              appliedIncludeUnspecifiedHostCountry
+                            );
                             setDestinationSearch('');
                           }
                           return next;
@@ -949,13 +982,16 @@ function ScholarshipsListHeader({
                       aria-haspopup="dialog"
                       className={`${CATALOG_CONTROL_BAR_BTN_COMPACT} w-full max-w-full sm:w-auto sm:max-w-[min(100%,12.5rem)]`}
                     >
-                      <MapPin className="h-4 w-4 shrink-0 text-gray-600" />
-                      <span className="min-w-0 truncate">Location</span>
-                      {showHostCountryBadge && hostCountryBadgeCaption ? (
-                        <span className="font-medium tabular-nums tracking-wide text-gray-600">
-                          ({hostCountryBadgeCaption})
-                        </span>
-                      ) : null}
+                      <Globe2 className="h-4 w-4 shrink-0 text-gray-600" />
+                      <span className="min-w-0 truncate">
+                        Study in
+                        {showHostCountryBadge && hostCountryBadgeCaption ? (
+                          <span className="font-medium tabular-nums tracking-wide text-gray-600">
+                            {' '}
+                            ({hostCountryBadgeCaption})
+                          </span>
+                        ) : null}
+                      </span>
                       <ChevronDown
                         className={`h-4 w-4 shrink-0 text-gray-500 transition ${destinationOpen ? 'rotate-180' : ''}`}
                       />
@@ -963,15 +999,16 @@ function ScholarshipsListHeader({
                     {destinationOpen ? (
                       <div
                         role="dialog"
-                        aria-label="Filter by program location"
+                        aria-label="Filter by study destination"
                         className="absolute top-[calc(100%+0.5rem)] z-[80] flex max-h-[min(32rem,min(85dvh,calc(100svh-7rem)))] w-[min(22rem,calc(100vw-1rem))] max-w-[calc(100vw-1rem)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 left-1/2 -translate-x-1/2 max-sm:left-auto max-sm:right-0 max-sm:translate-x-0 sm:left-0 sm:translate-x-0"
                       >
                         <div className="border-b border-zinc-100 px-4 py-3">
                           <h2 className="text-base font-semibold text-zinc-900">
-                            Program location
+                            Study destination
                           </h2>
                           <p className="mt-0.5 text-xs leading-relaxed text-zinc-500">
-                            Narrow to grants and scholarships hosted in your target country.
+                            Choose the country where you want to study, or browse awards with
+                            unspecified locations.
                           </p>
                         </div>
                         <div className="px-4 py-3">
@@ -1003,8 +1040,57 @@ function ScholarshipsListHeader({
                                 </div>
                               ))}
                             </li>
-                          ) : filteredHostRows.length > 0 ? (
-                            filteredHostRows.map((country) => {
+                          ) : showUnspecifiedHostRow || filteredHostRows.length > 0 ? (
+                            <>
+                              {showUnspecifiedHostRow ? (
+                                <li>
+                                  <label
+                                    className={`group flex items-center gap-3 rounded-2xl border border-emerald-200/80 bg-gradient-to-b from-white to-emerald-50/80 px-3 py-3 shadow-[0_10px_28px_-22px_rgba(16,185,129,0.42)] ring-1 ring-emerald-100/70 transition ${
+                                      unspecifiedHostCountryCount <= 0 &&
+                                      !draftIncludeUnspecifiedHost
+                                        ? 'cursor-not-allowed opacity-50'
+                                        : 'cursor-pointer hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-[0_14px_34px_-22px_rgba(16,185,129,0.5)]'
+                                    }`}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={draftIncludeUnspecifiedHost}
+                                      onChange={() =>
+                                        setDraftIncludeUnspecifiedHost((prev) => {
+                                          const next = !prev;
+                                          if (
+                                            next &&
+                                            unspecifiedHostCountryCount <= 0
+                                          ) {
+                                            return prev;
+                                          }
+                                          if (next) setDraftHostCountryCodes(new Set());
+                                          return next;
+                                        })
+                                      }
+                                      className="scholarship-filter-checkbox h-4 w-4 shrink-0"
+                                    />
+                                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-white text-emerald-700 shadow-[0_6px_18px_-12px_rgba(16,185,129,0.5)] transition group-hover:border-emerald-300 group-hover:text-emerald-800">
+                                      <Globe2 className="h-4.5 w-4.5" strokeWidth={2.25} aria-hidden />
+                                    </span>
+                                    <span className="min-w-0 flex-1">
+                                      <span className="block text-center">
+                                        <span className="inline-block whitespace-nowrap text-sm font-semibold leading-snug text-emerald-950">
+                                          Any / Unspecified location
+                                        </span>
+                                      </span>
+                                      <span className="mt-1 block text-left text-xs leading-relaxed text-emerald-600/85">
+                                        Grants with no explicit study country recorded. Please
+                                        verify the official location before you apply.
+                                      </span>
+                                    </span>
+                                    <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-semibold tabular-nums text-emerald-800 ring-1 ring-emerald-200">
+                                      {unspecifiedHostCountryCount.toLocaleString()}
+                                    </span>
+                                  </label>
+                                </li>
+                              ) : null}
+                              {filteredHostRows.map((country) => {
                               const hostOptionDisabled =
                                 country.count <= 0 &&
                                 !draftHostCountryCodes.has(country.code);
@@ -1031,6 +1117,7 @@ function ScholarshipsListHeader({
                                         next.add(country.code);
                                         return next;
                                       });
+                                      setDraftIncludeUnspecifiedHost(false);
                                     }}
                                     className="scholarship-filter-checkbox h-4 w-4 shrink-0"
                                   />
@@ -1043,7 +1130,8 @@ function ScholarshipsListHeader({
                                 </label>
                               </li>
                             );
-                            })
+                            })}
+                            </>
                           ) : (
                             <li className="px-3 py-6 text-center text-sm text-zinc-500">
                               No location data yet for this catalog.
@@ -1055,7 +1143,10 @@ function ScholarshipsListHeader({
                             <button
                               type="button"
                               className="text-sm font-medium text-zinc-500 transition hover:text-zinc-800"
-                              onClick={() => setDraftHostCountryCodes(new Set())}
+                              onClick={() => {
+                                setDraftHostCountryCodes(new Set());
+                                setDraftIncludeUnspecifiedHost(false);
+                              }}
                             >
                               Clear
                             </button>
@@ -1075,6 +1166,7 @@ function ScholarshipsListHeader({
                                   }
                                   return next;
                                 });
+                                setDraftIncludeUnspecifiedHost(false);
                               }}
                             >
                               Select all
@@ -1084,7 +1176,10 @@ function ScholarshipsListHeader({
                             type="button"
                             className={`${scholarshipCategoriesApplyButtonClass} inline-flex w-full min-w-0 shrink-0 items-center justify-center gap-1.5 sm:w-auto`}
                             onClick={() => {
-                              onApplyHostCountries?.(new Set(draftHostCountryCodes));
+                              onApplyHostCountries?.(
+                                new Set(draftHostCountryCodes),
+                                draftIncludeUnspecifiedHost
+                              );
                               setDestinationOpen(false);
                             }}
                           >

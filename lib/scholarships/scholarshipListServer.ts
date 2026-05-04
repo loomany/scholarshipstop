@@ -124,6 +124,8 @@ export type ScholarshipListMeta = {
   countryCounts: Array<{ code: string; label: string; count: number }>;
   /** Active rows grouped by ISO2 in `scholarships.host_country_codes`. */
   hostCountryCounts: Array<{ code: string; label: string; count: number }>;
+  /** Rows with no valid ISO2 program/host country in our data (see `host_program_location_unspecified`). */
+  unspecifiedHostCountryCount: number;
   unspecifiedApplicantCountryCount: number;
   /** Hub: filled when personalized match index is available. */
   profileMatchSummary?: {
@@ -258,7 +260,10 @@ let applicantCountryCountsCache:
   | null = null;
 let hostCountryCountsCache:
   | {
-      value: { hostCountryCounts: ScholarshipListMeta['hostCountryCounts'] };
+      value: {
+        hostCountryCounts: ScholarshipListMeta['hostCountryCounts'];
+        unspecifiedHostCountryCount: number;
+      };
       expiresAt: number;
     }
   | null = null;
@@ -325,6 +330,7 @@ function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMet
     hostCountryCounts: (meta.hostCountryCounts ?? []).map((country) => ({
       ...country
     })),
+    unspecifiedHostCountryCount: meta.unspecifiedHostCountryCount ?? 0,
     unspecifiedApplicantCountryCount: meta.unspecifiedApplicantCountryCount ?? 0,
     profileMatchSummary: meta.profileMatchSummary
       ? { ...meta.profileMatchSummary }
@@ -1228,14 +1234,35 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
   }
 }
 
+/**
+ * When aggregating country histograms over the listing filter stack, fetch only the
+ * jsonb array column(s) needed — not the full public card projection (large JSON per row).
+ */
+type ListingCountryAggregateSelect = 'applicant_country_codes' | 'host_country_codes';
+
 function baseSelect(
   supabase: ServerSupabaseClient,
   head: boolean,
-  req: Pick<ScholarshipListRequest, 'catalogSubjectCategoryId'>
+  req: Pick<ScholarshipListRequest, 'catalogSubjectCategoryId'>,
+  listingAggregateColumns?: ListingCountryAggregateSelect
 ) {
-  const sel = req.catalogSubjectCategoryId
-    ? publicScholarshipListSelectWithCatalogSubjectJoin()
-    : PUBLIC_LIST_CARD_SELECT;
+  let sel: string;
+  if (!head && listingAggregateColumns) {
+    const catalogJoin = 'scholarship_categories!inner(category_id)';
+    if (listingAggregateColumns === 'applicant_country_codes') {
+      sel = req.catalogSubjectCategoryId
+        ? `applicant_country_codes,${catalogJoin}`
+        : 'applicant_country_codes';
+    } else {
+      sel = req.catalogSubjectCategoryId
+        ? `host_country_codes,host_program_location_unspecified,${catalogJoin}`
+        : 'host_country_codes,host_program_location_unspecified';
+    }
+  } else {
+    sel = req.catalogSubjectCategoryId
+      ? publicScholarshipListSelectWithCatalogSubjectJoin()
+      : PUBLIC_LIST_CARD_SELECT;
+  }
   if (head) {
     return listingFrom(supabase).select(sel, { count: 'exact', head: true });
   }
@@ -1300,6 +1327,8 @@ function applyCommonFilters(req: ScholarshipListRequest, q: any): any {
       (c) => `host_country_codes.cs.${JSON.stringify([c])}`
     );
     q = q.or(hostParts.join(','));
+  } else if (req.moreFilters.includeUnspecifiedHostCountries) {
+    q = q.eq('host_program_location_unspecified', true);
   }
   if (!seoListing) {
     for (const slug of req.longTailLegacySlugs) {
@@ -1487,8 +1516,9 @@ function buildCountryCrossFilterMetaCacheKey(req: ScholarshipListRequest): strin
     .sort()
     .join(',');
   const unspec = req.moreFilters.includeUnspecifiedApplicantCountries ? '1' : '0';
+  const hostUnspec = req.moreFilters.includeUnspecifiedHostCountries ? '1' : '0';
   const mf = JSON.stringify(moreFiltersToJson(req.moreFilters));
-  return `crossHost:${host}|crossApp:${app}|crossAppUnspec:${unspec}|mf:${mf}`;
+  return `crossHost:${host}|crossApp:${app}|crossAppUnspec:${unspec}|crossHostUnspec:${hostUnspec}|mf:${mf}`;
 }
 
 /** Homepage / global keys: all active rows (no hub listing filters). */
@@ -1535,21 +1565,32 @@ async function aggregateApplicantCountryCountsGlobalActive(
 
 async function aggregateHostCountryCountsGlobalActive(
   supabase: ServerSupabaseClient
-): Promise<Map<string, number>> {
+): Promise<{
+  counts: Map<string, number>;
+  unspecifiedHostCountryCount: number;
+}> {
   const counts = new Map<string, number>();
+  let unspecifiedHostCountryCount = 0;
   const pageSize = 1000;
   let from = 0;
 
   for (;;) {
     const { data, error } = await listingFrom(supabase)
-      .select('host_country_codes')
+      .select('host_country_codes,host_program_location_unspecified')
       .eq('is_active', true)
       .range(from, from + pageSize - 1);
     if (error) throw new Error(postgrestErrorToMessage(error));
-    const rows = (data ?? []) as Array<{ host_country_codes?: unknown }>;
+    const rows = (data ?? []) as Array<{
+      host_country_codes?: unknown;
+      host_program_location_unspecified?: unknown;
+    }>;
     if (rows.length === 0) break;
 
     for (const row of rows) {
+      if (row.host_program_location_unspecified === true) {
+        unspecifiedHostCountryCount += 1;
+        continue;
+      }
       const codes = Array.isArray(row.host_country_codes) ? row.host_country_codes : [];
       for (const raw of codes) {
         const code = String(raw).trim().toUpperCase();
@@ -1561,7 +1602,7 @@ async function aggregateHostCountryCountsGlobalActive(
     from += pageSize;
   }
 
-  return counts;
+  return { counts, unspecifiedHostCountryCount };
 }
 
 /**
@@ -1631,29 +1672,34 @@ export async function fetchHostCountryCounts(
   listingRequest?: ScholarshipListRequest | null
 ): Promise<{
   hostCountryCounts: ScholarshipListMeta['hostCountryCounts'];
+  unspecifiedHostCountryCount: number;
 }> {
   if (listingRequest) {
-    const map = await aggregateHostCountryCountsFromListingBasis(
-      supabase,
-      hostCountryMetaListingBasisRequest(listingRequest)
-    );
+    const { counts: map, unspecifiedHostCountryCount } =
+      await aggregateHostCountryCountsFromListingBasis(
+        supabase,
+        hostCountryMetaListingBasisRequest(listingRequest)
+      );
     const shape = await fetchHostCountryCounts(supabase);
     return {
       hostCountryCounts: shape.hostCountryCounts.map((row) => ({
         ...row,
         count: map.get(row.code) ?? 0
-      }))
+      })),
+      unspecifiedHostCountryCount
     };
   }
 
   const cached = readTtlValue(hostCountryCountsCache);
   if (cached) {
     return {
-      hostCountryCounts: cached.hostCountryCounts.map((country) => ({ ...country }))
+      hostCountryCounts: cached.hostCountryCounts.map((country) => ({ ...country })),
+      unspecifiedHostCountryCount: cached.unspecifiedHostCountryCount
     };
   }
 
-  const map = await aggregateHostCountryCountsGlobalActive(supabase);
+  const { counts: map, unspecifiedHostCountryCount } =
+    await aggregateHostCountryCountsGlobalActive(supabase);
   const hostCountryCounts = [...map.entries()]
     .map(([code, count]) => ({
       code,
@@ -1664,12 +1710,13 @@ export async function fetchHostCountryCounts(
 
   hostCountryCountsCache = {
     value: {
-      hostCountryCounts: hostCountryCounts.map((country) => ({ ...country }))
+      hostCountryCounts: hostCountryCounts.map((country) => ({ ...country })),
+      unspecifiedHostCountryCount
     },
     expiresAt: Date.now() + APPLICANT_COUNTRY_COUNTS_CACHE_TTL_MS
   };
 
-  return { hostCountryCounts };
+  return { hostCountryCounts, unspecifiedHostCountryCount };
 }
 
 export async function fetchHomeScholarshipCatalogStats(
@@ -1775,13 +1822,18 @@ export function applyCatalogOnlyListingNormalization(
   return { ...req, listScope: 'catalog' };
 }
 
+type BuildScholarshipListFilterQueryOpts = {
+  listingAggregateColumns?: ListingCountryAggregateSelect;
+};
+
 function buildScholarshipListFilterQuery(
   supabase: ServerSupabaseClient,
   head: boolean,
-  req: ScholarshipListRequest
+  req: ScholarshipListRequest,
+  opts?: BuildScholarshipListFilterQueryOpts
 ): any {
   const r = effectiveListingRequest(req);
-  let q: any = baseSelect(supabase, head, r);
+  let q: any = baseSelect(supabase, head, r, opts?.listingAggregateColumns);
   q = applyCommonFilters(r, q);
   q = applyTabScopeFixed(r, q);
   return q;
@@ -1802,6 +1854,8 @@ function applicantCountryMetaListingBasisRequest(
   if (hadApplicantIso) {
     moreFilters.includeUnspecifiedApplicantCountries = false;
   }
+  /** Same for host-location facet: drop “unspecified host” narrow while tallying applicant ISOs. */
+  moreFilters.includeUnspecifiedHostCountries = false;
   return { ...r, moreFilters };
 }
 
@@ -1813,9 +1867,15 @@ function hostCountryMetaListingBasisRequest(
   req: ScholarshipListRequest
 ): ScholarshipListRequest {
   const r = effectiveListingRequest(req);
+  const moreFilters = cloneMoreFilters(r.moreFilters);
+  const hadHostIso = r.hostCountryCodesFilter.length > 0;
+  if (hadHostIso || r.moreFilters.includeUnspecifiedHostCountries) {
+    moreFilters.includeUnspecifiedHostCountries = false;
+  }
   return {
     ...r,
-    hostCountryCodesFilter: []
+    hostCountryCodesFilter: [],
+    moreFilters
   };
 }
 
@@ -1832,7 +1892,9 @@ async function aggregateApplicantCountryCountsFromListingBasis(
   let from = 0;
 
   for (;;) {
-    const q: any = buildScholarshipListFilterQuery(supabase, false, basis);
+    const q: any = buildScholarshipListFilterQuery(supabase, false, basis, {
+      listingAggregateColumns: 'applicant_country_codes'
+    });
     const { data, error } = await q.range(from, from + pageSize - 1);
     if (error) throw new Error(postgrestErrorToMessage(error));
     const rows = (data ?? []) as Array<{ applicant_country_codes?: unknown }>;
@@ -1862,19 +1924,32 @@ async function aggregateApplicantCountryCountsFromListingBasis(
 async function aggregateHostCountryCountsFromListingBasis(
   supabase: ServerSupabaseClient,
   basis: ScholarshipListRequest
-): Promise<Map<string, number>> {
+): Promise<{
+  counts: Map<string, number>;
+  unspecifiedHostCountryCount: number;
+}> {
   const counts = new Map<string, number>();
+  let unspecifiedHostCountryCount = 0;
   const pageSize = 1000;
   let from = 0;
 
   for (;;) {
-    const q: any = buildScholarshipListFilterQuery(supabase, false, basis);
+    const q: any = buildScholarshipListFilterQuery(supabase, false, basis, {
+      listingAggregateColumns: 'host_country_codes'
+    });
     const { data, error } = await q.range(from, from + pageSize - 1);
     if (error) throw new Error(postgrestErrorToMessage(error));
-    const rows = (data ?? []) as Array<{ host_country_codes?: unknown }>;
+    const rows = (data ?? []) as Array<{
+      host_country_codes?: unknown;
+      host_program_location_unspecified?: unknown;
+    }>;
     if (rows.length === 0) break;
 
     for (const row of rows) {
+      if (row.host_program_location_unspecified === true) {
+        unspecifiedHostCountryCount += 1;
+        continue;
+      }
       const codes = Array.isArray(row.host_country_codes) ? row.host_country_codes : [];
       for (const raw of codes) {
         const code = String(raw).trim().toUpperCase();
@@ -1886,7 +1961,7 @@ async function aggregateHostCountryCountsFromListingBasis(
     from += pageSize;
   }
 
-  return counts;
+  return { counts, unspecifiedHostCountryCount };
 }
 
 const SIDEBAR_COUNT_TIMING_ENABLED =
@@ -2822,6 +2897,7 @@ export function createDeferredScholarshipListMeta(
     categoryCounts,
     countryCounts: [],
     hostCountryCounts: [],
+    unspecifiedHostCountryCount: 0,
     unspecifiedApplicantCountryCount: 0,
     personalizedMatchReady: Boolean(
       buildScholarshipProfileFilterSeed(req.personalizedProfile ?? null)
@@ -3077,7 +3153,7 @@ export async function fetchScholarshipListMeta(
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
   const effectiveReq = sidebarGlobalCountsBasisRequest(req, b);
   const crossCcKey = buildCountryCrossFilterMetaCacheKey(req);
-  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v12-listingAlignedCountryMeta|${crossCcKey}`;
+  const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v13-hostUnspecifiedMeta|${crossCcKey}`;
   const cached = readTtlValue(listMetaCache.get(cacheKey));
   if (cached) {
     return cloneScholarshipListMeta(cached);
@@ -3112,11 +3188,13 @@ export async function fetchScholarshipListMeta(
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) categoryCounts[id] = 0;
   }
 
-  const [{ countryCounts, unspecifiedApplicantCountryCount }, { hostCountryCounts }] =
-    await Promise.all([
-      fetchApplicantCountryCounts(supabase, req),
-      fetchHostCountryCounts(supabase, req)
-    ]);
+  const [
+    { countryCounts, unspecifiedApplicantCountryCount },
+    { hostCountryCounts, unspecifiedHostCountryCount }
+  ] = await Promise.all([
+    fetchApplicantCountryCounts(supabase, req),
+    fetchHostCountryCounts(supabase, req)
+  ]);
 
   const meta: ScholarshipListMeta = {
     filterBounds: b,
@@ -3124,6 +3202,7 @@ export async function fetchScholarshipListMeta(
     categoryCounts,
     countryCounts,
     hostCountryCounts,
+    unspecifiedHostCountryCount,
     unspecifiedApplicantCountryCount,
     personalizedMatchReady: Boolean(
       buildScholarshipProfileFilterSeed(req.personalizedProfile ?? null)

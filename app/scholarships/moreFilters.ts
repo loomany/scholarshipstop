@@ -60,6 +60,8 @@ export type MoreFiltersState = {
   includeLocationLabels: Set<string>;
   includeApplicantCountryCodes: Set<string>;
   includeUnspecifiedApplicantCountries: boolean;
+  /** Program / host location: no ISO2 in `host_country_codes` (null, empty, or only invalid tokens). */
+  includeUnspecifiedHostCountries: boolean;
   includeEasyApply: Set<string>;
   /**
    * Optional U.S. state (type full name; must match canonical list to narrow SQL).
@@ -303,6 +305,7 @@ export function defaultMoreFiltersFromBounds(bounds: {
     includeLocationLabels: new Set(),
     includeApplicantCountryCodes: new Set(),
     includeUnspecifiedApplicantCountries: false,
+    includeUnspecifiedHostCountries: false,
     includeEasyApply: new Set(),
     filterStateInput: '',
     filterUniversityInput: '',
@@ -397,6 +400,11 @@ export function scholarshipPassesMoreFilters(
       return false;
     }
   }
+  if (f.includeUnspecifiedHostCountries) {
+    const raw = s.hostCountryCodes ?? [];
+    const hasValidIso = raw.some((c) => /^[A-Z]{2}$/.test(String(c).trim().toUpperCase()));
+    if (hasValidIso) return false;
+  }
   if (!matchesEasyApply(s, f.includeEasyApply)) return false;
   if (!matchesFilterStateInput(s, f.filterStateInput)) return false;
   if (f.citizenshipAudience === 'international_friendly') {
@@ -463,6 +471,7 @@ export function moreFiltersHasProfileOrQuizListingSignals(
   if (mf.includeLocationLabels.size > 0) return true;
   if (mf.includeApplicantCountryCodes.size > 0) return true;
   if (mf.includeUnspecifiedApplicantCountries) return true;
+  if (mf.includeUnspecifiedHostCountries) return true;
   if (mf.includeEasyApply.size > 0) return true;
   if (mf.profileSchoolLevelSlug.trim().length > 0) return true;
   if (mf.profileFieldOfStudySlug.trim().length > 0) return true;
@@ -500,6 +509,7 @@ export function countMoreFilterSelections(
   n += f.includeLocationLabels.size;
   n += f.includeApplicantCountryCodes.size;
   if (f.includeUnspecifiedApplicantCountries) n++;
+  if (f.includeUnspecifiedHostCountries) n++;
   n += f.includeEasyApply.size;
   if (f.filterStateInput.trim() !== '') n++;
   if (f.filterUniversitySlug?.trim()) n++;
@@ -573,6 +583,9 @@ export function countMoreFilterDeltaFromBaseline(
     f.includeUnspecifiedApplicantCountries !==
     baseline.includeUnspecifiedApplicantCountries
   ) {
+    n++;
+  }
+  if (f.includeUnspecifiedHostCountries !== baseline.includeUnspecifiedHostCountries) {
     n++;
   }
   n += setSymmetricDiffCount(f.includeEasyApply, baseline.includeEasyApply);

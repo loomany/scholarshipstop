@@ -215,7 +215,7 @@ export default function ScholarshipCard({
       const usLabel = countryLabelFromCode('US');
       return {
         key: 'grant-location-us',
-        text: `Location: ${usLabel}`,
+        text: `Study in: ${usLabel}`,
         title: `Study opportunity in ${usLabel}`
       };
     }
@@ -223,14 +223,14 @@ export default function ScholarshipCard({
       const label = countryLabelFromCode(hostCodes[0]!);
       return {
         key: `grant-location-${hostCodes[0]}`,
-        text: `Location: ${label}`,
+        text: `Study in: ${label}`,
         title: `Study opportunity in ${label}`
       };
     }
     if (hostCodes.length > 1) {
       return {
         key: 'grant-location-multi',
-        text: `Location: ${hostCodes.length} countries`,
+        text: `Study in: ${hostCodes.length} countries`,
         title: `Study opportunities spanning ${hostCodes.length} countries`,
         hostCodes: [...hostCodes]
       };

@@ -1974,6 +1974,7 @@ function ScholarshipsPageInner({
   const hostCountryCounts = listMeta?.hostCountryCounts ?? [];
   const unspecifiedApplicantCountryCount =
     listMeta?.unspecifiedApplicantCountryCount ?? 0;
+  const unspecifiedHostCountryCount = listMeta?.unspecifiedHostCountryCount ?? 0;
   const appliedHostCountryCodes = useMemo(
     () =>
       new Set(
@@ -2549,6 +2550,7 @@ function ScholarshipsPageInner({
             categoryCounts: sidebarMeta.categoryCounts,
             countryCounts: sidebarMeta.countryCounts,
             hostCountryCounts: sidebarMeta.hostCountryCounts,
+            unspecifiedHostCountryCount: sidebarMeta.unspecifiedHostCountryCount,
             unspecifiedApplicantCountryCount:
               sidebarMeta.unspecifiedApplicantCountryCount,
             deferredCounts: false
@@ -2627,7 +2629,7 @@ function ScholarshipsPageInner({
   }, [moreFiltersApplied, emptyMoreFiltersState]);
 
   const commitMoreFiltersApply = useCallback(
-    (next: MoreFiltersState) => {
+    (next: MoreFiltersState, opts?: { hostCc?: string | null }) => {
       setMoreFiltersApplied(next);
       if (activeTab === 'recommended') {
         const nextWithBase =
@@ -2687,6 +2689,7 @@ function ScholarshipsPageInner({
         deadline: next.deadlinePreset,
         audience: next.citizenshipAudience,
         appCc: appCcSorted.length > 0 ? appCcSorted : null,
+        ...(opts && 'hostCc' in opts ? { hostCc: opts.hostCc } : {}),
         resetPage: true
       });
     },
@@ -2739,18 +2742,30 @@ function ScholarshipsPageInner({
   );
 
   const onApplyHostCountries = useCallback(
-    (nextCodes: Set<string>) => {
+    (nextCodes: Set<string>, includeUnspecifiedHost: boolean) => {
       const normalized = Array.from(nextCodes)
         .map((c) => c.trim().toUpperCase())
         .filter((c) => /^[A-Z]{2}$/.test(c))
         .sort();
       const hostCc = normalized.length > 0 ? normalized.join(',') : null;
+      const basis = cloneMoreFilters(
+        moreFiltersApplied ??
+          moreFiltersBaseline ??
+          defaultMoreFiltersFromBounds(filterBounds)
+      );
+      basis.includeUnspecifiedHostCountries = includeUnspecifiedHost;
       setIsApplyingListControls(true);
       applyingListControlsSawFetchRef.current = false;
       applyingListControlsBaseSearchRef.current = searchParamsString;
-      replaceListingParams({ hostCc, resetPage: true });
+      commitMoreFiltersApply(basis, { hostCc });
     },
-    [replaceListingParams, searchParamsString]
+    [
+      commitMoreFiltersApply,
+      filterBounds,
+      moreFiltersApplied,
+      moreFiltersBaseline,
+      searchParamsString
+    ]
   );
 
   useEffect(() => {
@@ -3397,6 +3412,10 @@ function ScholarshipsPageInner({
                 hostCountryCounts={hostCountryCounts}
                 hostCountryCountsLoading={!sidebarCountsReady}
                 appliedHostCountryCodes={appliedHostCountryCodes}
+                appliedIncludeUnspecifiedHostCountry={
+                  hubListingBodyMoreFilters.includeUnspecifiedHostCountries === true
+                }
+                unspecifiedHostCountryCount={unspecifiedHostCountryCount}
                 onApplyHostCountries={onApplyHostCountries}
                 appliedCountryCodes={
                   hubListingBodyMoreFilters.includeApplicantCountryCodes

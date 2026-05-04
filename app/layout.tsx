@@ -16,7 +16,6 @@ import {
   GoogleTagManagerNoScript
 } from '@/components/analytics/GoogleTagManager';
 import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
-import GptTrafficTracker from '@/components/analytics/GptTrafficTracker';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
 import { ScholarshipOnboardingDraftPostAuthSync } from '@/components/onboarding/ScholarshipOnboardingDraftPostAuthSync';
 import HomeAiNavigatorWidget from '@/components/home/HomeAiNavigatorWidget';
@@ -36,6 +35,12 @@ const NavigationProgress = dynamic(
     import('@/components/ui/NavigationProgress').then((m) => ({
       default: m.NavigationProgress
     })),
+  { ssr: false }
+);
+
+/** Same Turbopack pitfall as AnalyticsTracker — `usePathname` needs client-only mount. */
+const GptTrafficTracker = dynamic(
+  () => import('@/components/analytics/GptTrafficTracker'),
   { ssr: false }
 );
 

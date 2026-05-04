@@ -25,7 +25,7 @@ function titleCaseSlug(seg: string): string {
 function describeToken(t: SeoRouteToken): string {
   switch (t.kind) {
     case 'location':
-      return `Location: ${t.label}`;
+      return `Study in: ${t.label}`;
     case 'eligibility':
       return `Eligibility bucket: ${t.id.replace(/_/g, ' ')}`;
     case 'education':
