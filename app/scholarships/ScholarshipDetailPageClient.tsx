@@ -98,6 +98,7 @@ import {
   scholarshipSavedButtonClass,
   scholarshipSaveButtonClass
 } from '@/lib/constants/scholarshipActionUi';
+import { SHOW_SCHOLARSHIP_APPLICANT_COUNT_UI } from '@/lib/constants/scholarshipApplicantCountUi';
 import { useScholarshipDetailInitialData } from '@/app/scholarships/ScholarshipDetailInitialDataContext';
 import { postScholarshipsList } from '@/app/scholarships/scholarshipListFetch';
 import { markScholarshipViewed } from '@/app/scholarships/viewedScholarships';
@@ -1534,6 +1535,7 @@ export default function ScholarshipDetailPageClient({
   const hasAwardStat = Boolean(awardCatalogText);
 
   const hasApplicantsStat =
+    SHOW_SCHOLARSHIP_APPLICANT_COUNT_UI &&
     typeof scholarship.applicantCount === 'number' &&
     !Number.isNaN(scholarship.applicantCount);
 

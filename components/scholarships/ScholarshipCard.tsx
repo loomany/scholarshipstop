@@ -53,6 +53,7 @@ import {
   resolveScholarshipDetailClickBudgetMode,
   shouldBlockScholarshipDetailNavigation
 } from '@/lib/scholarships/guestScholarshipDetailClickBudget';
+import { SHOW_SCHOLARSHIP_APPLICANT_COUNT_UI } from '@/lib/constants/scholarshipApplicantCountUi';
 import { dismissRouteProgress } from '@/lib/navigation/dismissRouteProgress';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCatalogChipRow';
@@ -497,6 +498,7 @@ export default function ScholarshipCard({
   const payoutLine = payoutMethodChipLabel(scholarship.payoutMethod);
 
   const hasApplicants =
+    SHOW_SCHOLARSHIP_APPLICANT_COUNT_UI &&
     scholarship.applicantCount != null &&
     !Number.isNaN(scholarship.applicantCount);
 
